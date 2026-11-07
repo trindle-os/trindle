@@ -1,0 +1,34 @@
+# Asks the person at the screen before a Thunderbolt or USB4 device connects, and lets in by itself the ones they allowed always.
+[Unit]
+Description=Ask before Thunderbolt and USB4 devices connect
+After=systemd-udevd.service systemd-logind.service
+
+[Service]
+ExecStart=/usr/lib/trindle/libexec/trindle-thunder
+Restart=on-failure
+RestartSec=1
+CapabilityBoundingSet=CAP_DAC_READ_SEARCH
+AmbientCapabilities=CAP_DAC_READ_SEARCH
+StateDirectory=trindle-thunder
+StateDirectoryMode=0700
+RuntimeDirectory=trindle-thunder
+RuntimeDirectoryMode=0755
+UMask=0077
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+RestrictAddressFamilies=AF_UNIX AF_NETLINK
+SystemCallArchitectures=native
+SystemCallFilter=@system-service

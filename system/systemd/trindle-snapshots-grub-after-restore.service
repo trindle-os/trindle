@@ -1,0 +1,10 @@
+[Unit]
+Description=Trindle: list the snapshots in the boot menu after a restore
+ConditionPathExists=/var/lib/trindle/grub-refresh
+ConditionKernelCommandLine=!trindle.snapshot
+
+[Service]
+Type=oneshot
+ExecStartPre=-/usr/lib/trindle/libexec/trindle-admin snapshot-finish-restore
+ExecStart=/usr/sbin/update-grub
+ExecStartPost=/bin/rm -f /var/lib/trindle/grub-refresh

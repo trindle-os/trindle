@@ -1,0 +1,27 @@
+# Lets the person at the computer read a game controller's raw reports (hidraw), which Steam and many games use for PlayStation, Switch and Xbox pads.
+# Only known controllers, only the person at the seat; nothing here touches /dev/uinput.
+ACTION=="remove", GOTO="trindle_pads_end"
+SUBSYSTEM!="hidraw", GOTO="trindle_pads_end"
+
+# Valve (Steam Controller, Steam Deck) and 8BitDo: whole makers, they make controllers only.
+ATTRS{idVendor}=="28de", TAG+="uaccess"
+ATTRS{idVendor}=="2dc8", TAG+="uaccess"
+KERNELS=="0003:000028DE:*", TAG+="uaccess"
+KERNELS=="0005:000028DE:*", TAG+="uaccess"
+KERNELS=="0005:00002DC8:*", TAG+="uaccess"
+
+# Sony DualShock 4 and DualSense, wired and Bluetooth.
+ATTRS{idVendor}=="054c", ATTRS{idProduct}=="05c4|09cc|0ba0|0ce6|0df2", TAG+="uaccess"
+KERNELS=="0003:0000054C:000005C4.*|0003:0000054C:000009CC.*|0003:0000054C:00000BA0.*|0003:0000054C:00000CE6.*|0003:0000054C:00000DF2.*", TAG+="uaccess"
+KERNELS=="0005:0000054C:000005C4.*|0005:0000054C:000009CC.*|0005:0000054C:00000CE6.*|0005:0000054C:00000DF2.*", TAG+="uaccess"
+
+# Nintendo Switch Pro Controller, Joy-Con and the charging grip.
+ATTRS{idVendor}=="057e", ATTRS{idProduct}=="2006|2007|2009|200e", TAG+="uaccess"
+KERNELS=="0003:0000057E:00002006.*|0003:0000057E:00002007.*|0003:0000057E:00002009.*|0003:0000057E:0000200E.*", TAG+="uaccess"
+KERNELS=="0005:0000057E:00002006.*|0005:0000057E:00002007.*|0005:0000057E:00002009.*|0005:0000057E:0000200E.*", TAG+="uaccess"
+
+# Microsoft Xbox One and Series pads (wired and Bluetooth); Microsoft's other products are left alone.
+ATTRS{idVendor}=="045e", ATTRS{idProduct}=="02d1|02dd|02e0|02e3|02ea|02fd|0b00|0b05|0b12|0b13", TAG+="uaccess"
+KERNELS=="0005:0000045E:000002E0.*|0005:0000045E:000002FD.*|0005:0000045E:00000B13.*|0005:0000045E:00000B12.*|0005:0000045E:00000B05.*", TAG+="uaccess"
+
+LABEL="trindle_pads_end"

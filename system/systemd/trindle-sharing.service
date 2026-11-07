@@ -1,0 +1,11 @@
+# Opens the firewall to shared folders from the home network, and starts Samba's server, only while a folder is shared and "Let other computers connect" is on.
+[Unit]
+Description=Trindle: shared folders follow what is shared
+After=trindle-firewall.service network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/trindle/libexec/trindle-admin sharing-apply
+
+[Install]
+WantedBy=multi-user.target

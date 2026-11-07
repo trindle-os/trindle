@@ -1,0 +1,3 @@
+# dpkg typed by hand and Debian's daily security updates unlock the system files for their own run (spec.
+pre-invoke=if [ -x /usr/lib/trindle/libexec/trindle-admin ]; then /usr/lib/trindle/libexec/trindle-admin dpkg-pre-invoke || true; fi
+post-invoke=if [ -x /usr/lib/trindle/libexec/trindle-admin ]; then /usr/lib/trindle/libexec/trindle-admin dpkg-post-invoke || true; fi

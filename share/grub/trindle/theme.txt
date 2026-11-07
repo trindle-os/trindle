@@ -1,0 +1,78 @@
+# Trindle: the boot menu's look. The page of Trindle's own look, the Trindle
+# mark and name, Trindle Sans, and the chosen line a box with its edge. The
+# colours here, background.png and the select_ pictures are written from
+# share/style.css by the test draw_the_boot_menu, never by hand. Installed
+# in /boot/grub/themes/trindle by tools/system-files.sh, which makes the .pf2
+# fonts from Trindle Sans. GRUB names a font by family, style and size, and
+# the bold made from the font's own bold weight keeps the style "Regular",
+# so it is "Trindle Sans Bold Regular" here.
+title-text: ""
+desktop-image: "background.png"
+desktop-color: "#0a111e"
+terminal-font: "Trindle Sans Regular 16"
+# Once something is chosen, GRUB's text area covers the whole screen, dark,
+# rather than a black box over half the menu.
+terminal-left: "0"
+terminal-top: "0"
+terminal-width: "100%"
+terminal-height: "100%"
+terminal-border: "0"
+
++ image {
+    left = 50%-56
+    top = 12%
+    width = 112
+    height = 112
+    file = "logo.png"
+}
+
++ label {
+    left = 0
+    top = 12%+130
+    width = 100%
+    height = 44
+    align = "center"
+    text = "Trindle"
+    font = "Trindle Sans Bold Regular 30"
+    color = "#ecf2fb"
+}
+
++ boot_menu {
+    left = 50%-320
+    top = 38%
+    width = 640
+    height = 46%
+    item_font = "Trindle Sans Regular 18"
+    item_color = "#aebdd4"
+    selected_item_font = "Trindle Sans Bold Regular 18"
+    selected_item_color = "#ecf2fb"
+    item_height = 44
+    item_padding = 22
+    item_spacing = 6
+    icon_width = 0
+    icon_height = 0
+    item_icon_space = 0
+    selected_item_pixmap_style = "select_*.png"
+    scrollbar = false
+}
+
++ label {
+    id = "__timeout__"
+    left = 0
+    top = 88%
+    width = 100%
+    align = "center"
+    font = "Trindle Sans Regular 16"
+    color = "#aebdd4"
+    text = "Starting in %d"
+}
+
++ label {
+    left = 0
+    top = 92%
+    width = 100%
+    align = "center"
+    font = "Trindle Sans Regular 14"
+    color = "#aebdd4"
+    text = "Up and down to choose, Enter to start"
+}

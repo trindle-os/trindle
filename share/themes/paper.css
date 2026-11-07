@@ -1,0 +1,120 @@
+/* Paper: a theme that comes with Trindle. One file, made
+   only from the names Trindle's own sheet already has.
+
+   The idea: a calm light look, like sheets of warm white paper on a
+   desk. The page is a soft cream rather than a hard white, so a bright
+   screen does not glare; cards are paper lying on it, each with the
+   faintest shadow and a hairline edge; words are a warm near-black.
+
+   Who it is for: bright rooms, daylight and windows behind the screen,
+   and anyone who finds light words on a dark screen hard to read.
+
+   One look, light. Works with any highlight colour: a pale one, such as
+   yellow, is deepened until it can be found on white. */
+
+:root {
+  --trindle-theme-name: "Paper";
+  --trindle-theme-about: "Warm white paper on a cream desk, for bright rooms. A light look.";
+  --trindle-theme-author: "Trindle";
+  --trindle-theme-version: "0.1";
+  --trindle-theme-look: light;
+}
+
+/* Cream behind, paper on it, and a slightly toned box in a card. */
+:root {
+  --trindle-page: #ece6d9;
+  --trindle-card: #fbf8f1;
+  --trindle-box: #f1ecdf;
+  --trindle-box-more: #e6dfcf;
+  --trindle-text: #25211a;
+  --trindle-text-quiet: #5a5245;
+  --trindle-shade-red: #a3231b;
+  --trindle-bad: #c93a2f;
+  /* A typing box is the whitest thing on the page, with a clear brown rim. */
+  --trindle-typing-box: #ffffff;
+  --trindle-typing-box-edge: #857a67;
+}
+
+/* Paper has an edge and lies on the desk: a hairline and the lightest of
+   shadows on a card, a soft warm one under what floats. */
+:root {
+  --trindle-edge: rgba(92, 70, 30, 0.13);
+  --trindle-box-edge: rgba(92, 70, 30, 0.10);
+  --trindle-side-line: #d9d1c0;
+  --trindle-shadow: #3d2f17;
+  --trindle-card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.10);
+  --trindle-float-shadow: 0 14px 34px 0 rgba(0, 0, 0, 0.20), 0 2px 6px 0 rgba(0, 0, 0, 0.12);
+  --trindle-control: #e3dccd;
+  --trindle-hover: #ebe5d6;
+  --trindle-band: rgba(92, 70, 30, 0.045);
+  --trindle-well: #ddd6c6;
+  --trindle-picked: mix(var(--trindle-highlight), #fffdf8, 0.84);
+  --trindle-on-picked: mix(var(--trindle-highlight), #1c1608, 0.74);
+  --trindle-highlight-text: shade(var(--trindle-highlight), 0.42);
+}
+
+/* Crisp, like a cut sheet: small corners. */
+:root {
+  --trindle-card-corner: 6;
+  --trindle-box-corner: 5;
+  --trindle-float-corner: 8;
+  --trindle-card-gap: 10;
+}
+
+/* The small parts. The knob is white, as paper is; the label on pointing
+   is a dark slip so it shows on anything. */
+:root {
+  --trindle-knob: #ffffff;
+  --trindle-knob-shadow: rgba(40, 28, 8, 0.30);
+  --trindle-knob-off: #6b6254;
+  --trindle-label-background: #2b2720;
+  --trindle-label-ink: #f8f4ec;
+  --trindle-label-shadow-strength: 0.28;
+  --trindle-glow-strength: 0.5;
+  --trindle-selection: 0.3;
+}
+
+/* Windows and the ring. */
+:root {
+  --trindle-title-background: #fbf8f1;
+  --trindle-title-ink: #25211a;
+  --trindle-title-border: #d9d1c0;
+  --trindle-title-away-background: #ece6d9;
+  --trindle-title-away-ink: #5a5245;
+  --trindle-title-away-border: #d9d1c0;
+  --trindle-window-edge: rgba(60, 45, 15, 0.16);
+  --trindle-ring-dim: 0.24;
+}
+
+/* The rest of what this theme is drawn with. A theme takes whatever it
+   does not name from Trindle's own look, which changed on 11 October
+   2026; these are the values it gave before, named here so that this
+   theme looks as it did. */
+:root {
+  --trindle-card-padding: 16;
+  --trindle-page-title-weight: 500;
+  --trindle-section-weight: 500;
+  --trindle-title-tighten: 0.01;
+  --trindle-label-edge: transparent;
+  --trindle-label-shadow-y: 4;
+  --trindle-label-shadow-blur: 10;
+  --trindle-label-padding-x: 10;
+  --trindle-label-padding-y: 5;
+  --trindle-focus-offset: 2;
+  --trindle-switch-width: 40;
+  --trindle-switch-height: 22;
+  --trindle-switch-knob: 16;
+  --trindle-glow-width: 3;
+  --trindle-row-corner: var(--trindle-box-corner);
+  --trindle-snug-padding: 3;
+  --trindle-menu-padding: 6;
+  --trindle-menu-title-pad: 12;
+}
+
+/* The areas of a window: each on its own step of grey, no lines. */
+:root {
+  --trindle-top-bar: mix(var(--trindle-page), var(--trindle-text), 0.07);
+  --trindle-side-bar: mix(var(--trindle-page), var(--trindle-card), 0.65);
+  --trindle-foot: var(--trindle-page);
+  --trindle-area-line: transparent;
+}

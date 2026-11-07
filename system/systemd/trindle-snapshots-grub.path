@@ -1,0 +1,8 @@
+[Unit]
+Description=Trindle: the boot menu's snapshots follow the snapshots
+
+[Path]
+PathChanged=/.snapshots
+
+[Install]
+WantedBy=multi-user.target

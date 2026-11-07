@@ -1,0 +1,11 @@
+#!/bin/sh
+# After the package's own copies are gone.
+set -e
+
+if [ "$1" = remove ]; then
+    for f in /usr/lib/os-release /etc/issue /etc/issue.net; do
+        dpkg-divert --package trindle --quiet --remove --rename "$f" || true
+    done
+fi
+
+exit 0

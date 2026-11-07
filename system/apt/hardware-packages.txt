@@ -1,0 +1,85 @@
+# Firmware and driver packages for hardware Debian stable alone leaves out
+# (20 October 2026: compatibility first). One per line. The
+# image installs every one, and the trindle package recommends every one.
+# Only Debian stable and trixie-backports (see trindle-backports.pref); the
+# names marked backports come from there, the rest from stable.
+# Left out on purpose: firmware-qcom-dsp, firmware-qcom-soc,
+# firmware-marvell-prestera, firmware-netronome (phones, boards, switches).
+
+# Wi-Fi, Bluetooth and network chips
+firmware-mediatek            # backports: MediaTek and Ralink, MT7902 among them
+firmware-realtek             # backports
+firmware-iwlwifi             # backports: Intel Wi-Fi and Bluetooth
+firmware-atheros             # backports: Qualcomm Atheros
+firmware-brcm80211           # backports: Broadcom
+firmware-libertas            # backports
+firmware-ti-connectivity     # backports
+firmware-zd1211
+bluez-firmware
+usb-modeswitch
+
+# Graphics
+firmware-amd-graphics        # backports
+firmware-intel-graphics      # backports
+firmware-intel-misc          # backports
+firmware-misc-nonfree        # backports
+firmware-nvidia-graphics     # backports
+firmware-nvidia-gsp
+
+# Sound
+firmware-sof-signed
+firmware-intel-sound         # backports
+firmware-cirrus              # backports
+
+# Processor fixes
+intel-microcode
+amd64-microcode
+
+# Older and server network cards and devices
+firmware-bnx2
+firmware-bnx2x
+firmware-cavium
+firmware-myricom
+firmware-netxen
+firmware-qlogic
+firmware-samsung             # backports
+firmware-siano               # backports
+firmware-ipw2x00
+firmware-ivtv
+
+# So Trindle can tell which add-on driver a computer needs, and enrol its key
+nvidia-detect
+mokutil
+
+# Scanners (20 October 2026: as many drivers as possible). libsane1
+# carries all of SANE's backends; airscan covers network scanners that need
+# no driver; libsane-hpaio is hplip's scanner part.
+libsane1
+sane-utils
+sane-airscan
+hplip
+libsane-hpaio
+
+# Printers: the pieces of printer-driver-all, named, because the image
+# installs without recommended packages and would otherwise leave them out.
+printer-driver-all
+printer-driver-brlaser
+printer-driver-c2050
+printer-driver-c2esp
+printer-driver-cjet
+printer-driver-dymo
+printer-driver-escpr
+printer-driver-foo2zjs
+printer-driver-fujixerox
+printer-driver-gutenprint
+printer-driver-hpcups
+printer-driver-indexbraille
+printer-driver-m2300w
+printer-driver-min12xxw
+printer-driver-oki
+printer-driver-pnm2ppa
+printer-driver-postscript-hp
+printer-driver-ptouch
+printer-driver-pxljr
+printer-driver-sag-gdi
+printer-driver-splix

@@ -1,0 +1,18 @@
+#!/bin/sh
+# Some touch screens (the ELAN ones in ThinkPads among them) stay silent after the computer wakes from sleep.
+[ "$1" = post ] || exit 0
+for driver in /sys/bus/i2c/drivers/i2c_hid_acpi /sys/bus/i2c/drivers/i2c_hid_of; do
+    for dev in "$driver"/i2c-* "$driver"/[0-9]*-*; do
+        [ -e "$dev" ] || continue
+        touch=no
+        for node in "$dev"/*/input/input*/event*; do
+            [ -e "$node" ] || continue
+            udevadm info -q property -p "$node" 2>/dev/null | grep -q '^ID_INPUT_TOUCHSCREEN=1' && touch=yes
+        done
+        [ "$touch" = yes ] || continue
+        name=$(basename "$dev")
+        echo "$name" > "$driver/unbind"
+        echo "$name" > "$driver/bind"
+    done
+done
+exit 0

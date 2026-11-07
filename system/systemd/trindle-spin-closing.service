@@ -1,0 +1,11 @@
+# The turning Trindle mark while the computer shuts down or restarts, so the screen is never simply black and nobody wonders whether it has stopped.
+[Unit]
+Description=Trindle's turning mark while the computer shuts down
+DefaultDependencies=no
+ConditionKernelCommandLine=!nosplash
+Before=shutdown.target umount.target final.target
+After=greetd.service
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/trindle/bin/trindle-unlock --spin-closing

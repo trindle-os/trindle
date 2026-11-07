@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Report a problem
+Comment=Write down what went wrong and keep a report to send
+Exec=trindle-report
+Icon=dialog-warning-symbolic
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=report;problem;bug;feedback;
+StartupNotify=false
+StartupWMClass=org.trindle.report

@@ -1,0 +1,142 @@
+# Every line of the administrator's helper that loses a failure, by its own words: the file, the
+# function and the line as it is written, a tab between them. Read by src/admin/kept.rs, which says
+# why. A line is put here only once it has been looked at and its place has its reason in KEPT.
+admin/accounts.rs	valid_name_ok	valid_name(name).is_ok()
+admin/accounts.rs	group_members	let Ok(c) = CString::new(group) else { return Vec::new() };
+admin/accounts.rs	regular_user	let min = std::fs::read_to_string("/etc/login.defs").unwrap_or_default().lines()
+admin/accounts.rs	regular_user	(w.next() == Some("UID_MIN")).then(|| w.next().and_then(|v| v.parse::<u32>().ok())).flatten()
+admin/accounts.rs	regular_user	.next().unwrap_or(1000);
+admin/accounts.rs	read_password	std::io::stdin().read_line(&mut line).map_err(|_| t!("admin-password-none"))?;
+admin/accounts.rs	read_password	let pw = line.strip_suffix('\n').unwrap_or(&line).to_string();
+admin/accounts.rs	delete	let caller = std::env::var("PKEXEC_UID").ok().and_then(|u| u.parse().ok()).and_then(name_of);
+admin/accounts.rs	delete_checked	let _ = run(&["loginctl", "terminate-user", name], None);
+admin/dns.rs	dns_on	let _ = run(&["nmcli", "general", "reload", "conf"], None);
+admin/dns.rs	dns_on	if tailscale::installed() && run(&["systemctl", "is-active", "--quiet", tailscale::SERVICE], None).is_ok() {
+admin/dns.rs	dns_on	let text = dns::nm_drop_in(true, check).unwrap_or_default();
+admin/dns.rs	dns_on	let _ = run(&["nmcli", "general", "reload", "conf"], None);
+admin/dns.rs	dns_on	let _ = std::fs::remove_file(before);
+admin/dns.rs	dns_on	if etc.symlink_metadata().is_ok() {
+admin/dns.rs	dns_on	let _ = std::fs::remove_file(&tmp);
+admin/dns.rs	dns_off	if before.symlink_metadata().is_ok() {
+admin/dns.rs	dns_off	let text = dns::NETWORK_FILES.iter().filter_map(|f| std::fs::read_to_string(f).ok())
+admin/dns.rs	dns_off	.find(|t| t.contains("nameserver")).unwrap_or_default();
+admin/dns.rs	dns_off	let _ = run(&["nmcli", "general", "reload"], None);
+admin/dns.rs	dns_off	if passed_on.symlink_metadata().is_ok() {
+admin/dns.rs	dns_off	if tailscale::installed() && run(&["systemctl", "is-active", "--quiet", tailscale::SERVICE], None).is_ok() {
+admin/dns.rs	dns_allow	let _ = run(&["resolvectl", "flush-caches"], None);
+admin/firewall.rs	firewall_apply	let let_through = firewall::parse_entitled(&std::fs::read_to_string(at(firewall::PLUGINS)).unwrap_or_default());
+admin/home_room.rs	open_folder	std::fs::OpenOptions::new().read(true).custom_flags(libc::O_DIRECTORY | libc::O_NOFOLLOW).open(path).ok()
+admin/home_room.rs	without	let packed = self.packed.iter().filter(|(at, _)| other.packed.binary_search_by_key(at, |p| p.0).is_err())
+admin/home_room.rs	only_in_snapshots	let skip = snapshots.strip_prefix(live).ok().and_then(|p| std::ffi::CString::new(p.to_str()?).ok());
+admin/home_snapshots.rs	now	SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_secs() as i64).unwrap_or(0)
+admin/home_snapshots.rs	days_of	arg.parse::<u32>().ok().filter(|d| home::KEEP_CHOICES.contains(d))
+admin/home_snapshots.rs	folder_there	std::fs::symlink_metadata(folder()).is_ok_and(|m| m.is_dir())
+admin/home_snapshots.rs	ensure_config	if std::fs::symlink_metadata(folder()).is_ok() && !folder_there() {
+admin/home_snapshots.rs	ensure_config	let template = std::fs::read_to_string(at(home::SNAPPER_TEMPLATE)).unwrap_or_default();
+admin/home_snapshots.rs	on	let _ = run(&["systemctl", "start", home::TIMER], None);
+admin/home_snapshots.rs	daily	if !folder_there() || home::possible_here().is_err() {
+admin/machine.rs	charge_limit_with	let _ = run(&["systemctl", "disable", charge::SERVICE], None);
+admin/mod.rs	watched	let _ = e.read_to_end(&mut bytes);
+admin/mod.rs	watched	let err = said.join().unwrap_or_default().trim().to_string();
+admin/mod.rs	read_line	out.read_until(b'\n', line).is_ok_and(|n| n > 0)
+admin/mod.rs	apt_share	let percent: f64 = parts.find_map(|p| p.trim().parse().ok())?;
+admin/mod.rs	reading	return answer.unwrap_or_default();
+admin/mod.rs	reading	Command::new(argv[0]).args(&argv[1..]).env("LC_ALL", "C").stderr(Stdio::null()).output().map(|o| String::from_utf8_lossy(&o.stdout).into_owned()).unwrap_or_default()
+admin/packages.rs	tidy	let _ = run(&argv, None);
+admin/packages.rs	installed_version	.stderr(Stdio::null()).output().ok().filter(|o| o.status.success())?;
+admin/packages.rs	is_installed	.stderr(std::process::Stdio::null()).status().is_ok_and(|s| s.success())
+admin/packages.rs	installed_version	return installed_version_in(&answer.unwrap_or_default());
+admin/read_only.rs	after_panic	let ours = File::open(at(STATE)).and_then(|mut f| f.read_to_string(&mut said)).is_ok()
+admin/read_only.rs	dpkg_at_work	let Ok(file) = File::open(at(DPKG_LOCK)) else { return false };
+admin/read_only.rs	before_dpkg	held => held.ok(),
+admin/read_only.rs	folder	std::fs::symlink_metadata(at(path)).is_ok_and(|m| m.is_dir())
+admin/read_only.rs	leave_open	let _ = note(&mut state, "");
+admin/read_only.rs	local_writable	let Ok(mounts) = mounts else { return Ok(()) };
+admin/read_only.rs	relock	if closed.is_ok() {
+admin/read_only.rs	relock	let unbound = mounts.as_ref().is_ok_and(|m| bound(m, place).is_none());
+admin/shares.rs	caller	let uid = std::env::var("PKEXEC_UID").ok().and_then(|u| u.parse().ok()).ok_or(t!("admin-pkexec-only"))?;
+admin/shares.rs	user_folder	Err(_) => dir.create(at).map_err(|e| t!("admin-path-error", path = at.display().to_string(), why = e.to_string()))?,
+admin/shares.rs	write	Err(_) => dir.create(private).map_err(|e| t!("admin-path-error", path = PRIVATE, why = e.to_string()))?,
+admin/shares.rs	write	let _ = std::fs::remove_file(&path);
+admin/shares.rs	drop	let _ = std::fs::remove_file(&self.0);
+admin/shares.rs	read_login	std::io::stdin().take(MAX_INPUT).read_to_string(&mut text).map_err(|_| t!("admin-login-unreadable"))?;
+admin/shares.rs	mount	let _ = std::fs::remove_dir(&at);
+admin/shares.rs	mount	let _ = quiet(&["systemctl".into(), "start".into(), smb::tidy_unit(p.uid)]);
+admin/shares.rs	nfs_mount	let _ = std::fs::remove_dir(&at);
+admin/shares.rs	nfs_mount	let _ = quiet(&["systemctl".into(), "start".into(), smb::tidy_unit(p.uid)]);
+admin/shares.rs	unmount	let _ = tx.send(quiet(&["umount".into(), "-i".into(), target.to_string_lossy().into_owned()]));
+admin/shares.rs	unmount	Err(_) => detach_all(vec![at.clone()], STOP_LIMIT, detach).map_err(|_| t!("admin-share-not-answering").to_string())?,
+admin/shares.rs	unmount	let _ = std::fs::remove_dir(&at);
+admin/shares.rs	detach	let c = CString::new(at.as_os_str().as_encoded_bytes()).map_err(|_| std::io::ErrorKind::InvalidInput)?;
+admin/shares.rs	detach_all	let _ = std::fs::remove_dir(&path);
+admin/shares.rs	detach_all	let _ = tx.send((path, r));
+admin/shares.rs	detach_all	Err(_) => break,
+admin/shares.rs	unmount_all	let p = match (std::env::var("PKEXEC_UID").is_ok(), args) {
+admin/shares.rs	unmount_all	(false, [uid]) => person_by_uid(uid.parse().map_err(|_| t!("admin-user-id-invalid"))?)?,
+admin/sharing.rs	group_id	let name = std::ffi::CString::new(sharing::GROUP).ok()?;
+admin/sharing.rs	setup	let _ = run(&["systemctl", "disable", "--now", unit], None);
+admin/sharing.rs	setup	let _ = run(&["systemctl", "disable", sharing::SERVICE], None);
+admin/snapshots.rs	number	arg.parse::<u32>().ok().filter(|n| *n > 0).ok_or_else(|| t!("admin-snapshot-number-invalid").into())
+admin/snapshots.rs	root_place	let out = std::process::Command::new("findmnt").args(["-no", "UUID", "/"]).output().ok()?;
+admin/snapshots.rs	root_place	let fstab = std::fs::read_to_string("/etc/fstab").unwrap_or_default();
+admin/snapshots.rs	unmount_top	let _ = run(&["umount", &top.to_string_lossy()], None);
+admin/snapshots.rs	unmount_top	let _ = std::fs::remove_dir(top);
+admin/snapshots.rs	copy_snapshot	let _ = run(&["btrfs", "subvolume", "delete", &path_text(fresh)], None);
+admin/snapshots.rs	copy_snapshot	let _ = std::fs::remove_dir(fresh.join(".snapshots"));
+admin/snapshots.rs	undo	let _ = run(&["btrfs", "subvolume", "delete", &path_text(self.fresh)], None);
+admin/snapshots.rs	put_in_place	Err(_) => {}
+admin/snapshots.rs	top	self.current.parent().unwrap_or(self.current)
+admin/snapshots.rs	finish	let Ok(aside) = std::fs::read_to_string(&mark) else { return Ok(()) };
+admin/snapshots.rs	finish	let _ = std::fs::remove_dir(current.join(".snapshots"));
+admin/snapshots.rs	aside_name	self.aside.file_name().unwrap_or_default().to_string_lossy().to_string()
+admin/snapshots.rs	forget_in	if p.exists() && run(&["btrfs", "subvolume", "delete", &p.to_string_lossy()], None).is_err() {
+admin/snapshots.rs	chrono_stamp	std::process::Command::new("date").arg("+%Y-%m-%d-%H%M").output().ok()
+admin/snapshots.rs	chrono_stamp	.filter(|s| !s.is_empty()).unwrap_or_else(|| "earlier".into())
+admin/sources.rs	use_source	let _ = run(&["apt-get", "-q", "update"], None);
+admin/sources.rs	after	if p.exists() && std::fs::remove_file(&p).is_ok() {
+admin/sources.rs	after	let _ = run(&["apt-get", "-q", "update"], None);
+admin/sources.rs	before	let _ = replace(Path::new("/etc/default/claude-desktop"), b"CLAUDE_DESKTOP_ADD_REPO=\"false\"\n", 0o644);
+admin/sources.rs	remove	if let Ok(out) = std::process::Command::new("systemctl")
+admin/sources.rs	remove	let _ = run(&["systemctl", "disable", "--now", unit], None);
+admin/sources.rs	remove	.filter(|p| run(&["dpkg-query", "-W", "-f=${Status}", p], None).is_ok())
+admin/sources.rs	remove	let _ = run(&tidy, None);
+admin/sources.rs	remove	let _ = std::fs::remove_file("/etc/default/claude-desktop");
+admin/tailscale.rs	tailscale_on	let user = std::env::var("PKEXEC_UID").ok().and_then(|u| u.parse().ok()).and_then(name_of)
+admin/tailscale.rs	tailscale_set	if last.is_ok() {
+admin/updates.rs	driver_off	let text = std::fs::read_to_string(at(DRIVERS_FAILED)).unwrap_or_default();
+common/charge.rs	batteries_in	let Ok(dir) = std::fs::read_dir(root) else { return Vec::new() };
+common/charge.rs	batteries_in	let mut out: Vec<PathBuf> = dir.flatten().map(|e| e.path())
+common/charge.rs	batteries_in	.filter(|p| std::fs::read_to_string(p.join("type")).is_ok_and(|t| t.trim() == "Battery"))
+common/charge.rs	laptop_in	let Ok(dir) = std::fs::read_dir(root) else { return false };
+common/charge.rs	laptop_in	dir.flatten().map(|e| e.path()).any(|p| {
+common/charge.rs	laptop_in	std::fs::read_to_string(p.join("type")).is_ok_and(|t| t.trim() == "Battery")
+common/charge.rs	laptop_in	&& !std::fs::read_to_string(p.join("scope")).is_ok_and(|s| s.trim() == "Device")
+common/charge.rs	plugged_in	let Ok(dir) = std::fs::read_dir(root) else { return true };
+common/charge.rs	plugged_in	dir.flatten().map(|e| e.path()).any(|p| {
+common/charge.rs	plugged_in	std::fs::read_to_string(p.join("type")).is_ok_and(|t| matches!(t.trim(), "Mains" | "USB"))
+common/charge.rs	plugged_in	&& std::fs::read_to_string(p.join("online")).is_ok_and(|o| o.trim() == "1")
+common/charge.rs	framework_held	let param = std::fs::read_to_string(FWK_PARAM).ok()?;
+common/charge.rs	framework_held	std::fs::read_dir(PLATFORM).ok()?.flatten()
+common/charge.rs	framework_wake	let _ = std::fs::write(FWK_PARAM, "Y\n");
+common/charge.rs	framework_wake	let _ = std::fs::write("/sys/bus/platform/drivers/cros-charge-control/bind", name);
+common/charge.rs	framework	std::fs::read_to_string(VENDOR).is_ok_and(|v| v.trim() == "Framework")
+common/charge.rs	tell	return Err(told.err().unwrap_or_else(|| t!("charge-not-allowed").to_string()));
+common/rfkill.rs	state_in	let is = |dir: &Path, file: &str, want: &str| std::fs::read_to_string(dir.join(file)).is_ok_and(|t| t.trim() == want);
+common/rfkill.rs	state_in	for entry in std::fs::read_dir(states).into_iter().flatten().flatten() {
+voice/setup.rs	run	if status.success() { Ok(()) } else { Err(format!("{program} {} did not work", args.first().unwrap_or(&""))) }
+voice/setup.rs	sha256	Command::new("sha256sum").arg(path).output().ok()
+voice/setup.rs	sha256	.map(|o| String::from_utf8_lossy(&o.stdout).split_whitespace().next().unwrap_or("").to_string())
+voice/setup.rs	sha256	.unwrap_or_default()
+voice/setup.rs	installed_package	.stderr(std::process::Stdio::null()).status().is_ok_and(|s| s.success())
+voice/setup.rs	build_whisper	let lib = Path::new(WHISPER).parent().unwrap_or(Path::new("/"));
+voice/setup.rs	build_whisper	if std::fs::read_to_string(lib.join(".version")).is_ok_and(|v| v.trim() == WHISPER_VERSION) {
+voice/setup.rs	build_whisper	let _ = std::fs::remove_dir_all(&tmp);
+voice/setup.rs	build_in	let jobs = std::thread::available_parallelism().map(|n| n.get()).unwrap_or(2).to_string();
+voice/setup.rs	fetch_model	let _ = std::fs::remove_dir_all(&tmp);
+voice/setup.rs	remove	let lib = Path::new(WHISPER).parent().unwrap_or(Path::new("/nonexistent"));
+voice/setup.rs	remove	let model = Path::new(MODEL).parent().unwrap_or(Path::new("/nonexistent"));
+voice/setup.rs	install	let _ = std::fs::remove_file(LEFT_FILE);
+voice/setup.rs	remove_tools	let _ = std::fs::remove_file(LEFT_FILE);
+voice/setup.rs	tools_left	let noted = std::fs::read_to_string(LEFT_FILE).unwrap_or_default();
+voice/setup.rs	main	let _ = std::io::Write::flush(&mut std::io::stdout());
+voice/setup.rs	main	let _ = std::io::stdin().read_line(&mut String::new());

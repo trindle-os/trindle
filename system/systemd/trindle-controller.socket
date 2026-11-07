@@ -1,0 +1,22 @@
+# The door to trindle-controller, which makes game controllers for the
+# compositor alone. systemd holds it open and starts the service on the first
+# knock, so nothing runs until a controller is wanted. Only root and the input
+# group (the person Trindle's installer made, and the login screen) may
+# knock; the service then checks who is really there.
+[Unit]
+Description=Door for making game controllers for the compositor
+
+[Socket]
+ListenSequentialPacket=/run/trindle/controller.sock
+SocketUser=root
+SocketGroup=input
+SocketMode=0660
+DirectoryMode=0755
+RemoveOnStop=yes
+Backlog=8
+# The kernel names the sender of every frame, so no other process holding a
+# connection's descriptor is taken for the one that was let in.
+PassCredentials=yes
+
+[Install]
+WantedBy=sockets.target

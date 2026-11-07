@@ -1,0 +1,4 @@
+# Not a back door.
+-auth sufficient pam_pocketkey.so socket=/run/trindle-pocketkey/user.sock
+auth include login
+-auth optional pam_pocketkey.so record socket=/run/trindle-pocketkey/user.sock

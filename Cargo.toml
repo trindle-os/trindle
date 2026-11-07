@@ -1,0 +1,136 @@
+[package]
+name = "trindle"
+version = "0.9.0-beta.1"
+edition = "2021"
+rust-version = "1.85"
+resolver = "3"
+license = "GPL-3.0-or-later"
+description = "Trindle: a small desktop in one circle, for Debian, with its own Wayland compositor"
+repository = "https://trindle.org/code"
+
+[workspace]
+members = ["."]
+exclude = ["vendor"]
+
+[workspace.dependencies]
+wayland-client = "0.31"
+wayland-protocols = { version = "0.32", features = ["client", "staging", "unstable"] }
+wayland-protocols-wlr = { version = "0.3", features = ["client"] }
+wayland-scanner = "0.31"
+serde = { version = "1", features = ["derive"] }
+flate2 = "1"
+libc = "0.2"
+xkbcommon = "0.8"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp", "bmp", "tiff", "gif"] }
+tiny-skia = { version = "0.12", default-features = false, features = ["std", "simd"] }
+resvg = { version = "0.49", default-features = false }
+accesskit = "=0.25.0"
+zbus = "5"
+zeroize = "1.9"
+wayland-server = { version = "0.31", features = ["libwayland_1_23"] }
+wayland-protocols-misc = { version = "0.3", features = ["client"] }
+x11rb = { version = "0.13", features = ["res"] }
+
+[lib]
+name = "trindle_shared"
+path = "src/shared.rs"
+
+[[bin]]
+name = "trindle"
+path = "src/main.rs"
+
+[[bin]]
+name = "trindle-compose"
+path = "src/compose/main.rs"
+
+[[bin]]
+name = "trindle-unlock"
+path = "src/unlock/main.rs"
+
+[dependencies]
+trindle-toolkit = { git = "https://github.com/trindle-os/trindle-toolkit", rev = "3b1e06bc4d4ccb94b9d7b876feecc37aa4765e74" }
+wayland-client.workspace = true
+wayland-protocols.workspace = true
+wayland-protocols-wlr.workspace = true
+wayland-scanner.workspace = true
+serde.workspace = true
+serde_json = "1"
+toml = { version = "1", default-features = false, features = ["parse", "serde"] }
+quick-xml = "0.41"
+flate2.workspace = true
+libc.workspace = true
+ab_glyph = "0.2"
+
+smithay = { version = "0.7", default-features = false, features = [
+    "desktop", "wayland_frontend", "use_system_lib",
+    "backend_egl", "backend_libinput", "backend_udev", "backend_drm", "backend_gbm",
+    "backend_session_libseat", "backend_winit",
+    "renderer_gl", "renderer_pixman", "renderer_multi",
+    "xwayland",
+] }
+wayland-server.workspace = true
+libdisplay-info = "0.2"
+drm = "0.14"
+xcursor = "0.3"
+xkbcommon.workspace = true
+x11rb.workspace = true
+tracing = { version = "0.1", features = ["max_level_trace", "release_max_level_info"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+thiserror = "1"
+bitflags = "2"
+image.workspace = true
+tiny-skia.workspace = true
+resvg.workspace = true
+encoding_rs = "=0.8.35"
+spellbook = "0.4"
+zbus.workspace = true
+blocking = "=1.6.2"
+argon2 = "0.5.3"
+chacha20poly1305 = { version = "0.10.1", default-features = false, features = ["alloc"] }
+getrandom = "0.3"
+blake2 = "0.10.6"
+zeroize.workspace = true
+aes = { version = "0.8.4", features = ["zeroize"] }
+cbc = "0.1.2"
+md-5 = "0.10.6"
+sha2 = "0.10.9"
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
+ring = "0.17"
+rustls-native-certs = "0.8.4"
+
+[features]
+publisher = []
+test-catalogue = ["publisher"]
+
+[dev-dependencies]
+trindle-toolkit = { git = "https://github.com/trindle-os/trindle-toolkit", rev = "3b1e06bc4d4ccb94b9d7b876feecc37aa4765e74", features = ["testing"] }
+trindle-help = { git = "https://github.com/trindle-os/trindle-help", rev = "fade3efb59e4381a58812ce1957a365b9503ad22" }
+wayland-protocols-misc.workspace = true
+accesskit.workspace = true
+
+[lints]
+workspace = true
+
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+
+[workspace.lints.clippy]
+undocumented_unsafe_blocks = "deny"
+missing_safety_doc = "deny"
+type_complexity = "allow"
+too_many_arguments = "allow"
+
+[profile.dev.package.argon2]
+opt-level = 3
+[profile.dev.package.blake2]
+opt-level = 3
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 4
+strip = "debuginfo"
+panic = "abort"
+
+[patch.crates-io]
+smithay = { path = "vendor/smithay" }

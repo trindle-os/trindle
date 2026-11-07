@@ -1,0 +1,38 @@
+#!/bin/sh
+# Trindle is built and tested on Debian 13 only.
+set -e
+
+id=""
+codename=""
+if [ -r /etc/os-release ]; then
+    . /etc/os-release
+    id=${ID:-}
+    codename=${VERSION_CODENAME:-}
+fi
+
+if { [ "$id" != debian ] && [ "$id" != trindle ]; } || [ "$codename" != trixie ]; then
+    what=${PRETTY_NAME:-this system}
+    cat >&2 <<WARN
+
+Trindle is built and tested on Debian 13 (trixie) only.
+
+This computer says it is: $what
+
+It may well work. Nothing has been tested on Debian testing or unstable, on
+Ubuntu, or on anything built from them, and a login screen that will not start
+is harder to undo than it sounds. Keep a way back before you restart.
+
+WARN
+    sleep 5
+fi
+
+case "$1" in
+    install|upgrade)
+        dpkg-divert --package trindle --quiet --add --rename \
+            --divert /etc/kernel/postinst.d/dkms.distrib /etc/kernel/postinst.d/dkms || true
+        dpkg-divert --package trindle --quiet --add --rename --divert /usr/lib/os-release.distrib /usr/lib/os-release || true
+        dpkg-divert --package trindle --quiet --add --rename --divert /etc/issue.distrib /etc/issue || true
+        dpkg-divert --package trindle --quiet --add --rename --divert /etc/issue.net.distrib /etc/issue.net || true ;;
+esac
+
+exit 0

@@ -1,0 +1,97 @@
+
+# machine translated (Vietnamese), not yet reviewed by a person.
+
+# Name of the Your plugins page, in the page list and as its heading.
+settings-plugins-title = Plugin của bạn
+
+# Words people may search for to find the Your plugins page, separated by spaces.
+settings-plugins-keywords = plugin tiện ích bổ sung tiện ích mở rộng đã cài gỡ cài đặt
+
+# Help line at the foot of the Your plugins page.
+# SAFETY: needs a human review before it ships
+settings-plugins-help = Plugin bổ sung thêm cho Trindle: một biểu tượng trong vòng tròn, cài đặt ở đây, thông báo, hoặc thứ chạy từ lúc đăng nhập. Mỗi plugin chạy trong môi trường cách ly, không được phép gì cho đến khi bạn cho phép trong Quyền, nút ở cuối tiêu đề trang này sẽ mở trang đó. Thẻ của mỗi plugin ở đây chứa cài đặt riêng của nó; bấm hai lần vào thùng rác trên thẻ để gỡ plugin đó.
+
+# Red words when the window that asks what a plugin may use could not be opened.
+settings-plugins-window-failed = Không mở được cửa sổ hỏi plugin được dùng những gì.
+
+# Under About it: the plugin's version number is { $v }.
+settings-plugins-version = Phiên bản { $v }.
+
+# Under About it when the plugin is allowed all it asks: the version is { $v } and { $settled } says what is allowed.
+settings-plugins-version-settled = Phiên bản { $v }. { $settled }
+
+# Help text of a plugin's card when it asks for nothing: the plugin's name is { $name }.
+# SAFETY: needs a human review before it ships
+settings-plugins-asks-nothing = { $name } không xin gì cả, nên nó chạy cách ly và không được phép gì.
+
+# Help text of a plugin's card: its name is { $name }, { $list } is what it asks for, { $allowed } of { $asks } are allowed.
+# SAFETY: needs a human review before it ships
+settings-plugins-asks-for =
+    { $asks ->
+       *[other] { $name } xin { $list }; đã cho phép { $allowed } trên { $asks }. Nó chạy cách ly, chỉ với những gì bạn cho phép.
+    }
+
+# Under the line that tells a plugin needs more allowed, beside its Allow button.
+# SAFETY: needs a human review before it ships
+settings-plugins-needs-more = Nút Cho phép hiện từng thứ nó xin, kèm một công tắc.
+
+# Heading of the line about a plugin on its card.
+settings-plugins-about-it = Giới thiệu
+
+# Tip of the button that changes what a plugin may use.
+# SAFETY: needs a human review before it ships
+settings-plugins-change = Đổi những gì nó được dùng
+
+# Tip of the button that removes a plugin.
+# SAFETY: needs a human review before it ships
+settings-plugins-remove = Gỡ plugin này
+
+# Red words when a plugin could not be removed.
+settings-plugins-not-removed = Không gỡ được.
+
+# Faint words in an empty typing box whose label is too long to show.
+settings-plugins-type-here = Nhập ở đây
+
+# Note on a plugin's card when the plugin has no settings: its name is { $name }.
+settings-plugins-no-settings = { $name } không có cài đặt riêng.
+
+# Note on a plugin's card when none of its settings show now: its name is { $name }.
+settings-plugins-no-settings-now = { $name } hiện không có cài đặt nào để hiện.
+
+# Headline of the Your plugins page: how many plugins are installed and { $list } their names.
+settings-plugins-installed =
+    { $n ->
+        [0] Chưa cài plugin nào.
+       *[other] Đã cài { $n } plugin: { $list }.
+    }
+
+# Heading of the card shown when no plugin is installed.
+settings-plugins-group = Plugin
+
+# Heading of the line shown when no plugin is installed.
+settings-plugins-none = Chưa cài gì
+
+# Under the None installed heading.
+settings-plugins-none-sub = Ứng dụng có plugin để thêm.
+
+# Tip of the button at the end of the page's title that opens the Permissions page.
+settings-plugins-open-permissions = Mở Quyền
+
+# Said at the top of a plugin's card while its service has not yet answered; the plugin's name is {$name}.
+settings-plugins-rows-asking = Đang hỏi { $name }.
+
+# Said at the top of a plugin's card, and in red under a row, when its service does not answer; the plugin's name is {$name}.
+settings-plugins-rows-silent = { $name } không trả lời. Dịch vụ của nó có thể đã dừng.
+
+# Said beside a row after the plugin kept the change.
+settings-plugins-rows-saved = Đã lưu.
+
+# Red words under a row when the plugin's service would not take the change; the plugin's name is {$name}.
+settings-plugins-rows-refused = { $name } không chấp nhận điều đó.
+
+# Red words under a row when the change failed and the plugin gave no reason; the plugin's name is {$name}.
+settings-plugins-rows-failed = { $name } không làm được việc đó.
+
+# Red words under a row when the change failed; the plugin's name is {$name} and the reason it gave is {$why}.
+settings-plugins-rows-failed-why = { $name } không làm được việc đó: { $why }.
+

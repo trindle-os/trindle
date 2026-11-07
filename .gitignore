@@ -1,0 +1,10 @@
+*.trindle-tmp
+target/
+.rust-review-results/
+__pycache__/
+.publish/
+
+# Each developer's own: a [patch] pointing the toolkit at a checkout beside this one.
+.cargo/config.toml
+
+themes-proposed/

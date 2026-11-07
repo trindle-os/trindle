@@ -1,0 +1,124 @@
+#!/bin/sh
+# What has to happen on the computer itself, once the files are in place.
+set -e
+
+[ "$1" = configure ] || exit 0
+
+for g in video render input; do
+    getent group "$g" >/dev/null 2>&1 && usermod -aG "$g" _greetd 2>/dev/null || true
+done
+
+if [ -x /usr/lib/trindle/dkms-hook ]; then
+    install -m 755 /usr/lib/trindle/dkms-hook /etc/kernel/postinst.d/dkms
+    rm -f /etc/kernel/postinst.d/dkms.dpkg-dist
+fi
+
+if [ -x /usr/lib/trindle/bin/trindle ]; then
+    for name in $(/usr/lib/trindle/bin/trindle --names 2>/dev/null); do
+        ln -sfn /usr/lib/trindle/bin/trindle "/usr/bin/$name"
+    done
+fi
+
+install -d -m 1777 /var/lib/trindle/login-scales
+install -d -m 1777 /var/lib/trindle/login-remaps
+
+systemd-sysusers trindle-dns.conf >/dev/null 2>&1 || true
+if [ -d /run/systemd/system ]; then
+    systemctl daemon-reload >/dev/null 2>&1 || true
+    systemctl try-restart trindle-dns.service >/dev/null 2>&1 || true
+    [ -e /etc/trindle/charge-limit ] && systemctl start trindle-charge-limit.service >/dev/null 2>&1 || true
+    udevadm control --reload >/dev/null 2>&1 || true
+    if [ -d /sys/bus/thunderbolt ] && ls /sys/bus/thunderbolt/devices | grep -q '^domain'; then
+        systemctl restart trindle-thunder.service >/dev/null 2>&1 || true
+    fi
+    if [ -d /sys/bus/usb/devices ]; then
+        systemctl restart trindle-usb-retry.service >/dev/null 2>&1 || true
+    fi
+    systemctl start trindle-controller.socket >/dev/null 2>&1 || true
+    if command -v loginctl >/dev/null 2>&1 && command -v runuser >/dev/null 2>&1 && [ -x /usr/bin/trindle-boxed ]; then
+        loginctl list-users --no-legend 2>/dev/null | while read -r uid name _; do
+            [ "$uid" -ge 1000 ] 2>/dev/null || continue
+            run=/run/user/$uid
+            sock=$(ls "$run"/wayland-* 2>/dev/null | grep -v '\.lock$' | head -n 1)
+            [ -n "$sock" ] || continue
+            setsid runuser -u "$name" -- env XDG_RUNTIME_DIR="$run" WAYLAND_DISPLAY="$(basename "$sock")" \
+                /usr/bin/trindle-boxed --restart-parts-after-update >/dev/null 2>&1 </dev/null &
+        done
+    fi
+fi
+
+[ -d /usr/share/icons/hicolor ] && gtk-update-icon-cache -qf /usr/share/icons/hicolor 2>/dev/null || true
+[ -d /usr/share/applications ] && update-desktop-database -q /usr/share/applications 2>/dev/null || true
+
+if [ -d /run/systemd/system ]; then
+    current=$(readlink /etc/systemd/system/display-manager.service 2>/dev/null || true)
+    if [ -L /etc/systemd/system/display-manager.service ] && [ ! -e /etc/systemd/system/display-manager.service ]; then
+        rm -f /etc/systemd/system/display-manager.service
+        current=""
+    fi
+    case "$current" in
+        *greetd.service|"") ;;
+        *) deb-systemd-invoke stop "$(basename "$current")" >/dev/null 2>&1 || true
+           systemctl disable "$(basename "$current")" >/dev/null 2>&1 || true ;;
+    esac
+    systemctl enable greetd.service >/dev/null 2>&1 || true
+    systemctl set-default graphical.target >/dev/null 2>&1 || true
+    [ -d /var/log/journal ] || systemctl restart systemd-journald >/dev/null 2>&1 || true
+    systemctl enable unattended-upgrades >/dev/null 2>&1 || true
+fi
+
+systemctl mask rpcbind.service rpcbind.socket nfs-blkmap.service nfs-client.target >/dev/null 2>&1 || true
+
+auto=/etc/apt/apt.conf.d/20auto-upgrades
+[ -f "$auto" ] && sed -i 's/^\(APT::Periodic::Unattended-Upgrade\) "1";/\1 "0";/' "$auto"
+rm -f /etc/apt/apt.conf.d/51trindle-updates
+off=/etc/apt/apt.conf.d/53trindle-no-update-checks
+[ -f "$off" ] && printf '%s\n' "// Check for updates is off in Trindle. Debian's security updates are not affected." > "$off"
+rm -f /etc/grub.d/12_trindle_older_kernel /etc/apt/apt.conf.d/53trindle-keep-older-kernel
+
+list=/usr/share/trindle/protected-packages.txt
+if [ -f "$list" ] && command -v apt-mark >/dev/null 2>&1; then
+    names=$(sed -e 's/#.*//' "$list")
+    set -f
+    have=$(dpkg-query -W -f='${db:Status-Abbrev}\t${binary:Package}\n' $names 2>/dev/null | awk -F'\t' '$1 ~ /^ii/ {print $2}')
+    set +f
+    [ -z "$have" ] || echo "$have" | xargs apt-mark manual >/dev/null 2>&1 || true
+fi
+
+sed -i -E '/^UUID=[^ ]+ \/mnt\/games [^ ]+ [^ ]*nosuid/!s|^(UUID=[^ ]+ /mnt/games [^ ]+ )nofail(,nodev)?|\1nofail,nosuid,nodev|' /etc/fstab || echo "trindle: could not tighten the games drive line in /etc/fstab" >&2
+
+command -v glib-compile-schemas >/dev/null 2>&1 && glib-compile-schemas /usr/share/glib-2.0/schemas >/dev/null 2>&1 || true
+
+command -v update-grub >/dev/null 2>&1 && [ -d /boot/grub ] && update-grub >/dev/null 2>&1 || true
+small=/etc/initramfs-tools/conf.d/trindle-small
+if [ -d /run/systemd/system ] && [ -d /etc/initramfs-tools/conf.d ] && [ ! -e "$small" ] \
+    && [ -f /usr/share/trindle/initramfs-small.conf ] && ! grep -qw boot=live /proc/cmdline; then
+    cp /usr/share/trindle/initramfs-small.conf "$small"
+fi
+resume=/etc/initramfs-tools/conf.d/resume
+if [ -f /etc/default/grub.d/trindle-resume.cfg ] && [ -f "$resume" ]; then
+    sed -i 's/^RESUME=UUID=.*/RESUME=none/' "$resume"
+fi
+chip=/etc/trindle/chip.sh
+if [ -f "$chip" ] && ! grep -q '^trap ' "$chip" && [ -f /etc/crypttab ]; then
+    id=$(awk '$1 == "trindle" { sub(/^UUID=/, "", $2); print $2 }' /etc/crypttab)
+    if [ -n "$id" ]; then
+        part=/dev/disk/by-uuid/$id
+        cat > "$chip" <<CHIP
+#!/bin/sh
+set -e
+[ -s /etc/trindle/tpm-key ] || exit 0
+trap 'shred -u /etc/trindle/tpm-key 2>/dev/null || rm -f /etc/trindle/tpm-key; systemctl disable trindle-chip.service 2>/dev/null || true' EXIT
+trap 'exit 1' HUP INT TERM
+clevis luks list -d $part | grep -q tpm2 || clevis luks bind -y -k /etc/trindle/tpm-key -d $part tpm2 '{"pcr_bank":"sha256","pcr_ids":"7"}'
+update-initramfs -u -k all
+CHIP
+        chmod 700 "$chip"
+    fi
+fi
+
+command -v pam-auth-update >/dev/null 2>&1 && pam-auth-update --package >/dev/null 2>&1 || true
+
+command -v update-initramfs >/dev/null 2>&1 && update-initramfs -u >/dev/null 2>&1 || true
+
+exit 0

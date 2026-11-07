@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="trindle_screens_v1">
+  <copyright>
+    Copyright 2026 the Trindle authors. GNU General Public License version 3
+    or later.
+  </copyright>
+
+  <description summary="the screens that are plugged in, and how they are set">
+    How Display settings, the start-up scale and About this computer learn
+    which screens there are, what each can do and how each is set, and how
+    they change the arrangement.
+
+    A program is first told about every screen, then, whenever anything
+    changes, about the screens that changed. Each batch ends with "settled",
+    which carries a serial number. To change the arrangement a program makes a
+    plan quoting the latest serial, describes every screen in it, and
+    applies it. If the screens changed in between, the plan is turned away as
+    stale, so a change is never made from an out-of-date picture.
+
+    A plan is applied whole or not at all. Offered only to programs the
+    compositor trusts with the screens.
+  </description>
+
+  <interface name="trindle_screens_manager_v1" version="1">
+    <description summary="where the screens are asked about"/>
+
+    <request name="destroy" type="destructor">
+      <description summary="no more news of the screens is wanted">
+        Screens and plans already made are not affected.
+      </description>
+    </request>
+
+    <request name="plan">
+      <description summary="start a new arrangement">
+        Nothing changes until the plan is applied.
+      </description>
+      <arg name="id" type="new_id" interface="trindle_screen_plan_v1" summary="the new plan"/>
+      <arg name="serial" type="uint" summary="the serial of the last settled event the plan was made from"/>
+    </request>
+
+    <event name="screen">
+      <description summary="a screen is plugged in">
+        Its description follows on the screen, and the batch ends with
+        "settled".
+      </description>
+      <arg name="screen" type="new_id" interface="trindle_screen_v1" summary="the new screen"/>
+    </event>
+
+    <event name="settled">
+      <description summary="everything sent so far is complete">
+        The serial goes up whenever any screen changes.
+      </description>
+      <arg name="serial" type="uint" summary="the arrangement's serial number"/>
+    </event>
+  </interface>
+
+  <interface name="trindle_screen_v1" version="1">
+    <description summary="one screen">
+      A change to a screen arrives as "clear" followed by its whole
+      description again, so a program replaces what it knew rather than
+      patching it.
+    </description>
+
+    <enum name="turn">
+      <description summary="which way up the picture is drawn">
+        The numbers are the ones wl_output uses for its transform.
+      </description>
+      <entry name="upright" value="0"/>
+      <entry name="quarter" value="1" summary="turned a quarter, to the left"/>
+      <entry name="half" value="2" summary="upside down"/>
+      <entry name="three_quarters" value="3"/>
+      <entry name="mirrored" value="4" summary="mirrored left to right"/>
+      <entry name="mirrored_quarter" value="5"/>
+      <entry name="mirrored_half" value="6"/>
+      <entry name="mirrored_three_quarters" value="7"/>
+    </enum>
+
+    <enum name="mode_flag" bitfield="true">
+      <entry name="preferred" value="1" summary="the size and rate the screen asks for"/>
+    </enum>
+
+    <request name="destroy" type="destructor">
+      <description summary="forget this screen"/>
+    </request>
+
+    <event name="clear">
+      <description summary="what was said about this screen no longer holds">
+        A new description follows: identity, size_mm, one mode for each way
+        it can be driven and then layout.
+      </description>
+    </event>
+
+    <event name="identity">
+      <description summary="what the screen is">
+        The name is the connector, such as HDMI-A-1, the same one wl_output
+        gives. Words that are not known are empty.
+      </description>
+      <arg name="name" type="string" summary="the connector's name"/>
+      <arg name="description" type="string" summary="maker, model and connector in words"/>
+      <arg name="make" type="string" summary="the maker"/>
+      <arg name="model" type="string" summary="the model"/>
+      <arg name="serial_number" type="string" summary="the serial number"/>
+    </event>
+
+    <event name="size_mm">
+      <description summary="how big the screen is">
+        Millimetres across and down. Both are 0 when the screen does not say.
+      </description>
+      <arg name="width" type="int" summary="across"/>
+      <arg name="height" type="int" summary="down"/>
+    </event>
+
+    <event name="mode">
+      <description summary="one way the screen can be driven">
+        Sent once for each, in the order the screen lists them; the first is
+        number 0. A refresh of 0 means the rate is not known.
+      </description>
+      <arg name="width" type="int" summary="pixels across"/>
+      <arg name="height" type="int" summary="pixels down"/>
+      <arg name="millihertz" type="int" summary="pictures a second in thousandths: 60 Hz is 60000"/>
+      <arg name="flags" type="uint" summary="mode_flag"/>
+    </event>
+
+    <event name="layout">
+      <description summary="how the screen is set now">
+        The position is that of its top-left corner in the layout, counted
+        in the layout's own units (real pixels divided by the scale).
+      </description>
+      <arg name="on" type="uint" summary="1 if it is lit, 0 if it is switched off"/>
+      <arg name="mode" type="uint" summary="the number of the mode in use, or 4294967295 when off"/>
+      <arg name="x" type="int" summary="its position across"/>
+      <arg name="y" type="int" summary="its position down"/>
+      <arg name="turn" type="uint" summary="which way up, as the turn enum numbers it"/>
+      <arg name="scale_120ths" type="uint" summary="the scale, in 120ths: 1.25 is 150"/>
+      <arg name="varies_rate" type="uint" summary="1 if it varies its refresh rate to suit the picture"/>
+    </event>
+
+    <event name="unplugged">
+      <description summary="the screen has gone">
+        Nothing more is sent for it. The program should destroy the object.
+      </description>
+    </event>
+  </interface>
+
+  <interface name="trindle_screen_plan_v1" version="1">
+    <description summary="a new arrangement of the screens">
+      Describe every screen that is plugged in with "screen", then "apply"
+      (or "check" to ask without changing anything). A screen left out, or
+      named twice, or a plan that would leave every screen off, is refused.
+    </description>
+
+    <enum name="outcome">
+      <entry name="applied" value="0" summary="done"/>
+      <entry name="refused" value="1" summary="the arrangement cannot be used; the words say why"/>
+      <entry name="stale" value="2" summary="the screens changed since the plan's serial; look again"/>
+    </enum>
+
+    <request name="destroy" type="destructor">
+      <description summary="finish with this plan">
+        Whether or not it was applied.
+      </description>
+    </request>
+
+    <request name="screen">
+      <description summary="say how one screen should be">
+        If it is to be off, the rest is ignored. If a size is given (width and
+        height above 0) the screen is switched on at the listed mode of that
+        size and the nearest rate within a hertz of the one asked for; a rate
+        of 0 means the one the screen prefers, else the fastest. A size of 0
+        keeps the mode in use now, or the preferred one for a screen that was
+        off. The scale is in 120ths and is kept to between a quarter and
+        ten.
+      </description>
+      <arg name="screen" type="object" interface="trindle_screen_v1" summary="the screen"/>
+      <arg name="on" type="uint" summary="1 to light it, 0 to switch it off"/>
+      <arg name="width" type="int" summary="pixels across, or 0"/>
+      <arg name="height" type="int" summary="pixels down, or 0"/>
+      <arg name="millihertz" type="int" summary="pictures a second in thousandths, or 0"/>
+      <arg name="x" type="int" summary="position across"/>
+      <arg name="y" type="int" summary="position down"/>
+      <arg name="turn" type="uint" summary="which way up, as the turn enum of trindle_screen_v1 numbers it"/>
+      <arg name="scale_120ths" type="uint" summary="the scale, in 120ths"/>
+      <arg name="varies_rate" type="uint" summary="1 to vary the refresh rate"/>
+    </request>
+
+    <request name="apply">
+      <description summary="make the arrangement">
+        Answered by "outcome". A plan can be applied once.
+      </description>
+    </request>
+
+    <request name="check">
+      <description summary="ask whether the arrangement would be accepted">
+        Answered by "outcome", with nothing changed.
+      </description>
+    </request>
+
+    <event name="outcome">
+      <description summary="how the plan went"/>
+      <arg name="outcome" type="uint" enum="outcome" summary="what happened"/>
+      <arg name="why" type="string" summary="a few words saying why, empty if it was applied"/>
+    </event>
+  </interface>
+</protocol>

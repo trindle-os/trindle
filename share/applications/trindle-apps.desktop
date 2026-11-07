@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Apps
+Comment=Install and remove applications from Flathub
+Keywords=install;software;applications;flathub;appimage;updates;
+Exec=trindle-apps
+Icon=trindle-store
+Terminal=false
+Type=Application
+Categories=System;PackageManager;
+StartupNotify=false
+StartupWMClass=org.trindle.Store

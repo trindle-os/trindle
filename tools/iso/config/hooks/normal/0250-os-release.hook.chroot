@@ -1,0 +1,7 @@
+#!/bin/sh
+# live-build copies Debian's os-release over /etc/os-release at bootstrap.
+set -e
+dpkg-divert --quiet --local --remove --no-rename /etc/os-release 2>/dev/null || true
+rm -f /etc/os-release
+ln -s ../usr/lib/os-release /etc/os-release
+grep -q '^ID=trindle$' /etc/os-release || { echo "os-release is not Trindle's" >&2; exit 1; }

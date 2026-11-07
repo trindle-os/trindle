@@ -1,0 +1,13 @@
+#!/bin/sh
+# Debian's DKMS hook, run so a driver that will not build never stops the kernel.
+d=/etc/kernel/postinst.d/dkms.distrib
+state=/var/lib/trindle/dkms-failed
+[ -x "$d" ] || { rm -f "$state"; exit 0; }
+if "$d" "$@"; then
+    rm -f "$state"
+    exit 0
+fi
+mkdir -p /var/lib/trindle
+dkms status -k "$1" 2>/dev/null | grep -v ': installed' | sed 's|[/,:].*||' | sort -u > "$state" || true
+[ -s "$state" ] || echo dkms > "$state"
+exit 0

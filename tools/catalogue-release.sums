@@ -1,0 +1,8 @@
+# The built plugin packages that go in Trindle's first catalogue release:
+# SHA-256, the name published, where it is built. Read only by
+# tools/catalogue-release.sh gather. Change a line only after looking at why
+# the package was rebuilt. Not built, not listed: trindle-scan, trindle-talk,
+# trindle-screen-reader (no plugin archive exists yet).
+f2ba832d2a51b57651fe5a83211b805993ac1ba0760d01ddf2aa35ac2d7aabf7 org.trindle.Flow.tar.zst /home/user/src/trindle-flow/target/plugin/org.trindle.Flow.tar.zst
+9bf111febee1a90d2c9f9ee0573d33bd28329b7778bc3a0196f740654c1dc582 org.trindle.Snippets.tar.zst /home/user/src/trindle-snippets/dist/trindle-plugin/org.trindle.Snippets.tar.zst
+e5f59517840168e2493558eed716bc6146b0e560a93236cd305e3f67f5140ce5 org.trindle.Scan.tar.zst /home/user/src/trindle-scan/target/plugin-out/org.trindle.Scan.tar.zst

@@ -1,0 +1,49 @@
+#!/bin/sh
+# Taking Trindle off again.
+set -e
+
+case "$1" in
+    remove|deconfigure) ;;
+    *) exit 0 ;;
+esac
+
+if [ "$1" = remove ]; then
+    rm -f /etc/kernel/postinst.d/dkms
+    dpkg-divert --package trindle --quiet --remove --rename /etc/kernel/postinst.d/dkms || true
+fi
+
+if [ "$1" = remove ]; then
+    /usr/lib/trindle/libexec/trindle-admin system-read-only off >/dev/null 2>&1 || true
+    rm -f /etc/trindle/read-only-system
+fi
+
+case "$(readlink /etc/resolv.conf 2>/dev/null)" in
+    /run/trindle-dns/*) /usr/lib/trindle/libexec/trindle-admin dns-off >/dev/null 2>&1 || true ;;
+    *) if [ -e /etc/trindle/dns-resolved ]; then
+           /usr/lib/trindle/libexec/trindle-admin dns-off >/dev/null 2>&1 || true
+       fi ;;
+esac
+
+if [ -d /run/systemd/system ]; then
+    systemctl stop trindle-thunder.service >/dev/null 2>&1 || true
+    systemctl stop trindle-usb-retry.service >/dev/null 2>&1 || true
+fi
+
+command -v pam-auth-update >/dev/null 2>&1 && pam-auth-update --package --remove trindle-keyring >/dev/null 2>&1 || true
+
+if [ -x /usr/lib/trindle/bin/trindle ]; then
+    for name in $(/usr/lib/trindle/bin/trindle --names 2>/dev/null); do
+        link=/usr/bin/$name
+        if [ -L "$link" ] && [ "$(readlink "$link")" = /usr/lib/trindle/bin/trindle ]; then
+            rm -f "$link"
+        fi
+    done
+fi
+
+if [ -d /run/systemd/system ] && [ "$(readlink /etc/systemd/system/display-manager.service 2>/dev/null)" ]; then
+    case "$(readlink /etc/systemd/system/display-manager.service)" in
+        *greetd.service) systemctl disable greetd.service >/dev/null 2>&1 || true ;;
+    esac
+fi
+
+exit 0

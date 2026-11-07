@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Application
+Name=Terminal
+GenericName=Terminal
+Comment=Type commands
+TryExec=alacritty
+Exec=alacritty
+Icon=Alacritty
+Terminal=false
+Categories=System;TerminalEmulator;
+Keywords=shell;prompt;command;commandline;alacritty;
+StartupNotify=true
+StartupWMClass=Alacritty
+Actions=New;
+
+[Desktop Action New]
+Name=New terminal
+Exec=alacritty

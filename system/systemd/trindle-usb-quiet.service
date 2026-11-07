@@ -1,0 +1,34 @@
+# Lets go of external USB hubs cleanly just before a restart, so a hub that keeps its own power through a warm restart is not left in a bad state.
+[Unit]
+Description=Let go of external USB hubs before a restart
+DefaultDependencies=no
+ConditionPathExists=/sys/bus/usb/devices
+Before=umount.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/trindle/libexec/trindle-usb-retry --before-restart
+TimeoutStartSec=5
+CapabilityBoundingSet=
+NoNewPrivileges=yes
+ProtectSystem=strict
+ReadWritePaths=/sys/devices
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+RestrictAddressFamilies=AF_UNIX
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+IPAddressDeny=any
+
+[Install]
+WantedBy=reboot.target kexec.target

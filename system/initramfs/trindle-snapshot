@@ -1,0 +1,21 @@
+#!/bin/sh
+# When booted with trindle.snapshot=N, mount a tmpfs overlay over the read-only snapshot.
+PREREQ=""
+prereqs() { echo "$PREREQ"; }
+case "$1" in prereqs) prereqs; exit 0 ;; esac
+read -r cmdline < /proc/cmdline
+case " $cmdline " in
+    *" trindle.snapshot="*) ;;
+    *) exit 0 ;;
+esac
+modprobe overlay 2>/dev/null
+mkdir -p /run/trindle-snapshot/lower /run/trindle-snapshot/rw
+mount -n -o move "${rootmnt}" /run/trindle-snapshot/lower || exit 0
+mount -n -t tmpfs -o mode=0755 tmpfs /run/trindle-snapshot/rw
+mkdir -p /run/trindle-snapshot/rw/upper /run/trindle-snapshot/rw/work
+if ! mount -n -t overlay overlay \
+    -o lowerdir=/run/trindle-snapshot/lower,upperdir=/run/trindle-snapshot/rw/upper,workdir=/run/trindle-snapshot/rw/work \
+    "${rootmnt}"; then
+    mount -n -o move /run/trindle-snapshot/lower "${rootmnt}"
+fi
+exit 0

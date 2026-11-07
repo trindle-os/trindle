@@ -1,0 +1,6 @@
+Name: Trindle keyring (opens it with the login password)
+Default: yes
+Priority: 0
+Auth-Type: Additional
+Auth:
+	optional	pam_exec.so expose_authtok quiet /usr/bin/trindle-keyring --pam-auth

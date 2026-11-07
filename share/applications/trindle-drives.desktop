@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Drives
+Comment=Drives and USB sticks: space, health, names, formatting and parts
+Exec=trindle-drives
+Icon=trindle-drives
+Terminal=false
+Type=Application
+Categories=System;
+Keywords=disk;disks;drive;drives;usb;format;partition;mount;
+StartupNotify=false
+StartupWMClass=org.trindle.Drives

@@ -1,0 +1,15 @@
+# Locks the system files (spec.
+[Unit]
+Description=Trindle: system files locked
+ConditionPathExists=/etc/trindle/read-only-system
+DefaultDependencies=no
+After=local-fs.target
+Before=sysinit.target shutdown.target
+Conflicts=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/trindle/libexec/trindle-admin system-lock
+
+[Install]
+WantedBy=sysinit.target

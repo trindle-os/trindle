@@ -1,0 +1,197 @@
+/* Bold: a theme that comes with Trindle. One file, made
+   only from the names Trindle's own sheet already has.
+
+   The idea: as easy to see as Trindle can be made. Black behind, white
+   words, a clear pale edge round every card and box so nothing depends
+   on telling two dark greys apart, bigger and heavier words, and bigger
+   typing boxes, dropdowns, switches and rows that are easier to find
+   and to hit. The keyboard's ring is as thick as it goes.
+
+   Round icon buttons stay the size they are: a row of ten of them, as
+   in the highlight picker, has no room to grow in a window of the usual
+   size.
+
+   Who it is for: people with low vision, tired eyes, a small or distant
+   screen, or a shaky hand on the mouse.
+
+   Contrast: ordinary and quiet words stand more than 7 to one from
+   everything they sit on (WCAG AAA); edges stand more than 3 to one.
+
+   One look, dark. Works with any highlight colour. */
+
+:root {
+  --trindle-theme-name: "Bold";
+  --trindle-theme-about: "Black and white with clear edges, bigger words and bigger things to press. For low vision.";
+  --trindle-theme-author: "Trindle";
+  --trindle-theme-version: "0.1";
+  --trindle-theme-look: dark;
+}
+
+/* Black, and two steps up from it, each with an edge of its own. */
+:root {
+  --trindle-page: #000000;
+  --trindle-card: #141414;
+  --trindle-box: #262626;
+  --trindle-box-more: #383838;
+  --trindle-text: #ffffff;
+  --trindle-text-quiet: #e2e2e2;
+  --trindle-shade-red: #ffb8b0;
+  --trindle-bad: #ff5b4f;
+  --trindle-typing-box: #000000;
+  --trindle-typing-box-edge: #ffffff;
+  --trindle-edge: #8f8f8f;
+  --trindle-box-edge: #b8b8b8;
+  --trindle-control-edge: #b8b8b8;
+  --trindle-side-line: #8f8f8f;
+  --trindle-control: #262626;
+  --trindle-hover: #383838;
+  /* On black a band cannot be darker, so every second row is lighter. */
+  --trindle-band: rgba(255, 255, 255, 0.08);
+  --trindle-well: #000000;
+  --trindle-picked: mix(#000000, var(--trindle-highlight), 0.42);
+  --trindle-on-picked: #ffffff;
+  --trindle-float-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.9);
+}
+
+/* Bigger words, and a little heavier, so thin strokes do not fade. */
+:root {
+  --trindle-page-title-size: 40;
+  --trindle-page-title-weight: 700;
+  --trindle-section-size: 27;
+  --trindle-section-weight: 700;
+  --trindle-lead-size: 23;
+  --trindle-lead-weight: 600;
+  --trindle-heading-size: 19;
+  --trindle-heading-weight: 700;
+  --trindle-headline-size: 17;
+  --trindle-headline-weight: 500;
+  --trindle-figure-size: 19;
+  --trindle-text-size: 17;
+  --trindle-text-weight: 500;
+  --trindle-form-label-size: 17;
+  --trindle-form-label-weight: 700;
+  --trindle-note-size: 15;
+  --trindle-note-weight: 500;
+  --trindle-column-heading-size: 15;
+  --trindle-column-heading-weight: 700;
+  --trindle-action-size: 16;
+  --trindle-action-weight: 800;
+  --trindle-rich-row-weight: 700;
+  --trindle-title-tighten: 0;
+}
+
+/* Bigger things to hit, and more room between them. */
+:root {
+  --trindle-button-height: 44;
+  --trindle-entry-height: 44;
+  --trindle-dropdown-height: 44;
+  --trindle-icon-size: 18;
+  --trindle-action-padding: 22;
+  --trindle-ring-button-size: 32;
+  --trindle-ring-app-edge: 5;
+  --trindle-i-size: 30;
+  --trindle-switch-width: 60;
+  --trindle-switch-height: 32;
+  --trindle-switch-knob: 24;
+  --trindle-knob: #000000;
+  --trindle-knob-off: #ffffff;
+  --trindle-slider-track: 10;
+  /* A side bar's names are bigger, so the room round them is less:
+     nothing is cut short in a window of the usual size. */
+  --trindle-entry-padding: 10;
+  --trindle-sidebar-room: 6;
+  --trindle-entry-eye: 34;
+  --trindle-row-height: 50;
+  --trindle-rich-row-height: 68;
+  --trindle-rich-row-icon: 32;
+  --trindle-menu-row: 44;
+  --trindle-menu-icon: 20;
+  --trindle-menu-width: 340;
+  --trindle-dropdown-row: 42;
+  --trindle-tabs-padding: 4;
+  --trindle-chip-padding-y: 5;
+  --trindle-state-dot: 22;
+  --trindle-gap: 12;
+  --trindle-card-gap: 12;
+  --trindle-card-corner: 8;
+  --trindle-box-corner: 6;
+}
+
+/* Where the keyboard is, what the pointer is on, what was just saved and
+   what is being typed: all as plain as they go. */
+:root {
+  --trindle-focus-width: 4;
+  --trindle-focus-offset: 3;
+  --trindle-hover-edge: 3;
+  --trindle-caret: 3;
+  --trindle-selection: 0.55;
+  --trindle-glow-width: 6;
+  --trindle-glow-strength: 0.9;
+  --trindle-glow-time: 2400ms;
+  --trindle-lit-edge: 5;
+  --trindle-working-line: 5;
+  --trindle-spinner: 44;
+  --trindle-spinner-line: 6;
+  --trindle-scrollbar: 8;
+  --trindle-scrollbar-hover: 14;
+  /* The label on pointing: black on white, large, and it stays longer. */
+  --trindle-label-background: #ffffff;
+  --trindle-label-ink: #000000;
+  --trindle-label-size: 16;
+  --trindle-label-weight: 700;
+  --trindle-label-padding-x: 14;
+  --trindle-label-padding-y: 8;
+  --trindle-label-stays: 4000ms;
+  --trindle-remove-armed: 6s;
+}
+
+/* Apps' lists, with room for the bigger words. */
+:root {
+  --trindle-apps-tile-least: 340px;
+  --trindle-apps-card-least: 420px;
+  --trindle-app-action-width: 170px;
+  --trindle-bento-words: 360px;
+  --trindle-fill-bar: 14;
+}
+
+/* Windows and the ring. This high-contrast look keeps lines where the
+   others part the areas by steps of grey alone. A clear line parts the
+   bar across a window's top, the bar down its side and the line at its
+   foot from the work between them. Of Folders' two
+   panes, the one in use has a white edge, thicker than the grey one
+   every card has. */
+:root {
+  --trindle-top-bar: #1f1f1f;
+  --trindle-area-line: #8f8f8f;
+  --trindle-area-line-width: 2;
+  --trindle-current-card-edge: #ffffff;
+  --trindle-current-card-edge-width: 3;
+  --trindle-title-background: #000000;
+  --trindle-title-ink: #ffffff;
+  --trindle-title-border: #b8b8b8;
+  --trindle-title-away-background: #141414;
+  --trindle-title-away-ink: #e2e2e2;
+  --trindle-title-away-border: #8f8f8f;
+  --trindle-window-edge: rgba(255, 255, 255, 0.55);
+  --trindle-ring-dim: 0.7;
+}
+
+/* The rest of what this theme is drawn with. A theme takes whatever it
+   does not name from Trindle's own look, which changed on 11 October
+   2026; these are the values it gave before, named here so that this
+   theme looks as it did. */
+:root {
+  --trindle-card-padding: 16;
+  --trindle-shadow: #000000;
+  --trindle-card-shadow: none;
+  --trindle-typing-box-shadow: none;
+  --trindle-label-edge: transparent;
+  --trindle-label-shadow-y: 4;
+  --trindle-label-shadow-blur: 10;
+  --trindle-label-shadow-strength: 0.45;
+  --trindle-knob-shadow: rgba(0, 0, 0, 0);
+  --trindle-row-corner: var(--trindle-box-corner);
+  --trindle-snug-padding: 3;
+  --trindle-menu-padding: 6;
+  --trindle-menu-title-pad: 12;
+}

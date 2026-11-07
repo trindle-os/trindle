@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Settings
+Comment=Display, sound, network and the rest of this computer
+Exec=trindle-settings
+Icon=trindle-settings
+Terminal=false
+Type=Application
+Categories=Settings;System;
+StartupNotify=false
+StartupWMClass=org.trindle.Settings

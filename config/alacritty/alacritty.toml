@@ -1,0 +1,3 @@
+# Your terminal's settings.
+[general]
+import = ["/usr/share/trindle/alacritty/trindle.toml"]

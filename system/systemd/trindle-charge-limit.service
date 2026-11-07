@@ -1,0 +1,12 @@
+# Tells the laptop's firmware again, at every start, to stop charging at 80%, for laptops that forget.
+[Unit]
+Description=Stop charging the battery at 80%
+ConditionPathExists=/etc/trindle/charge-limit
+After=systemd-udev-settle.service systemd-modules-load.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/trindle/libexec/trindle-admin charge-apply
+
+[Install]
+WantedBy=multi-user.target

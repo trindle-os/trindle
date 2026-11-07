@@ -1,0 +1,10 @@
+#!/bin/sh
+# Put Trindle in place inside the image, as a package, so a computer installed from this image updates it with apt like anything else.
+set -e
+cd /opt/trindle
+DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends -o Dpkg::Options::=--force-confnew /opt/trindle/debs/*.deb
+
+apt-mark hold trindle >/dev/null
+
+cd /
+rm -rf /opt/trindle

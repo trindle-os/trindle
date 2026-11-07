@@ -1,0 +1,7 @@
+# Where new versions of Trindle come from.
+Types: deb
+URIs: https://apt.trindle.org
+Suites: stable
+Components: main
+Architectures: amd64 arm64
+Signed-By: /usr/share/keyrings/trindle-archive-keyring.gpg

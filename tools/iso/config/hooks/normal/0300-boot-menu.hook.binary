@@ -1,0 +1,56 @@
+#!/bin/sh
+# Trindle's look and wording for the menu shown when the stick starts.
+set -e
+
+# Hooks for the image run inside the image folder itself.
+theme=../chroot/boot/grub/themes/trindle
+if [ -d "$theme" ]; then
+    rm -rf boot/grub/live-theme
+    mkdir -p boot/grub/live-theme
+    cp "$theme"/* boot/grub/live-theme/
+    cp "$theme"/background.png boot/grub/splash.png
+fi
+
+# The picture above the menu on an older computer, which uses a small fixed
+# size. The newer menu keeps the full-size background from the theme above:
+# putting this one there instead leaves it stretched and blocky.
+own=../config/includes.chroot/opt/trindle/share/iso/splash.png
+if [ -f "$own" ]; then
+    for target in isolinux/splash.png splash.png; do
+        [ -e "$target" ] && cp "$own" "$target"
+    done
+fi
+
+for cfg in boot/grub/*.cfg isolinux/*.cfg syslinux/*.cfg; do
+    [ -f "$cfg" ] || continue
+    sed -i \
+        -e 's/Live system (\([a-z0-9]*\) fail-safe mode)/Try Trindle (safe graphics)/g' \
+        -e 's/Live system (autodetect) (fail-safe mode)/Try Trindle (safe graphics)/g' \
+        -e 's/Live system (autodetect)/Try Trindle/g' \
+        -e 's/Live system ([a-z0-9]*)/Try Trindle/g' \
+        -e 's/Live system, kernel/Try Trindle, kernel/g' \
+        -e 's/Debian GNU\/Linux/Trindle/g' \
+        "$cfg"
+done
+
+# Starting from the stick shows the Trindle mark on a dark screen at once,
+# while the system loads from the stick, and then the same mark turning; not
+# a black screen or lines of text. Whatever GRUB prints once "Try Trindle"
+# is chosen is black on black.
+if [ -f boot/grub/grub.cfg ]; then
+    sed -i '/^[[:space:]]*linux[[:space:]].*quiet splash/i\	set color_normal=black/black\n	background_image /boot/grub/live-theme/starting.png' boot/grub/grub.cfg
+fi
+
+if [ -f boot/grub/config.cfg ]; then
+    # No start-up beep, and a little longer to read the menu.
+    sed -i -e '/insmod play/d' -e '/^play /d' boot/grub/config.cfg
+    # live-build writes a fixed 800x600 before the screen is set up, which is
+    # what leaves the menu stretched across a wide screen. It has to be changed
+    # where it stands: anything appended runs after gfxterm has already started.
+    sed -i -e 's/^\( *\)set gfxmode=800x600/\1set gfxmode=auto/' boot/grub/config.cfg
+    for font in boot/grub/live-theme/*.pf2; do
+        [ -f "$font" ] || continue
+        printf 'loadfont /boot/grub/live-theme/%s\n' "$(basename "$font")" >> boot/grub/config.cfg
+    done
+    printf 'set timeout=10\n' >> boot/grub/config.cfg
+fi

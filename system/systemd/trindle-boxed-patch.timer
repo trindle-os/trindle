@@ -1,0 +1,10 @@
+[Unit]
+Description=Security fixes for the packages inside app folders, at the system's own time
+
+[Timer]
+OnCalendar=*-*-* 6:00
+RandomizedDelaySec=60m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

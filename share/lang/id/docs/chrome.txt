@@ -1,0 +1,11 @@
+# machine translated (Indonesian), not yet reviewed by a person.
+# The words around each help page: English = translation, one a line.
+Trindle help = Bantuan Trindle
+help = bantuan
+Skip to the page = Lompat ke halaman
+Search the help = Cari di bantuan
+Search, such as printer or Wi-Fi = Cari, misalnya printer atau Wi-Fi
+Search = Cari
+On this page = Di halaman ini
+Page not found = Halaman tidak ditemukan
+Trindle help. No cookies, no tracking, no outside fonts or scripts. = Bantuan Trindle. Tanpa cookie, tanpa pelacakan, tanpa font atau skrip luar.

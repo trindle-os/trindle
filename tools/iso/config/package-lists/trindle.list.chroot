@@ -1,0 +1,10 @@
+# The desktop itself comes from the Trindle package's own Depends, which are built from packages.txt, so nothing is restated here and the two cannot drift.
+
+linux-image-amd64
+
+sudo
+live-boot live-config live-config-systemd
+
+parted dosfstools e2fsprogs btrfs-progs ntfs-3g rsync cryptsetup cryptsetup-initramfs
+clevis clevis-luks clevis-initramfs clevis-tpm2 tpm2-tools os-prober snapper busybox
+grub-efi-amd64 grub-efi-amd64-signed grub-pc-bin shim-signed efibootmgr

@@ -1,0 +1,45 @@
+# Trindle's look and habits for Alacritty, the terminal.
+
+[window]
+padding = { x = 8, y = 8 }
+dynamic_title = true
+
+[font]
+normal = { family = "monospace" }
+size = 11.0
+
+[colors.primary]
+background = "#0e0f13"
+foreground = "#f4f4f6"
+
+[colors.normal]
+black = "#343844"
+red = "#f34236"
+green = "#4bae4f"
+yellow = "#fbc711"
+blue = "#2295f1"
+magenta = "#b36ae2"
+cyan = "#26c6da"
+white = "#c2c2cc"
+
+[colors.bright]
+black = "#7e8494"
+red = "#ff6b61"
+green = "#7bd67e"
+yellow = "#ffd84d"
+blue = "#64b5f6"
+magenta = "#ce93d8"
+cyan = "#80deea"
+white = "#fafafa"
+
+[colors.selection]
+text = "#09090b"
+background = "#fbc711"
+
+[selection]
+save_to_clipboard = true
+
+[mouse]
+bindings = [
+    { mouse = "Right", action = "Paste" },
+]

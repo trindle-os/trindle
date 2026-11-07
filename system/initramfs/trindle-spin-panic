@@ -1,0 +1,10 @@
+#!/bin/sh
+# The start could not go on.
+PREREQ=""
+prereqs() { echo "$PREREQ"; }
+case "${1:-}" in
+    prereqs) prereqs; exit 0 ;;
+esac
+
+[ -x /usr/bin/trindle-unlock ] && /usr/bin/trindle-unlock --spin-stop
+exit 0

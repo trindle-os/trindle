@@ -1,0 +1,11 @@
+# One look a day at the snapshots of the home folders.
+[Unit]
+Description=Trindle: earlier versions of everyone's files
+ConditionPathIsDirectory=/home/.snapshots
+ConditionKernelCommandLine=!trindle.snapshot
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/trindle/libexec/trindle-admin home-snapshots-daily
+Nice=19
+IOSchedulingClass=idle

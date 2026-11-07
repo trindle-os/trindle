@@ -1,0 +1,12 @@
+# The turning Trindle mark, carried on once the full system has taken over from the start-up image.
+[Unit]
+Description=Trindle's turning mark while the computer starts
+DefaultDependencies=no
+ConditionKernelCommandLine=!nosplash
+After=systemd-journald.socket
+Before=sysinit.target shutdown.target
+Conflicts=shutdown.target
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/trindle/bin/trindle-unlock --spin

@@ -1,0 +1,24 @@
+#!/bin/sh
+# Puts Trindle's start-up screens in the start-up image.
+PREREQ=""
+prereqs() { echo "$PREREQ"; }
+case "${1:-}" in
+    prereqs) prereqs; exit 0 ;;
+esac
+
+. /usr/share/initramfs-tools/hook-functions
+
+unlock=/usr/lib/trindle/bin/trindle-unlock
+[ -x "$unlock" ] || exit 0
+
+copy_exec "$unlock" /usr/bin/trindle-unlock
+
+force_load evdev
+copy_modules_dir kernel/drivers/hid
+copy_modules_dir kernel/drivers/input/mouse
+manual_add_modules psmouse usbhid
+
+[ -d "${DESTDIR}/lib/cryptsetup" ] || exit 0
+
+rm -f "${DESTDIR}/lib/cryptsetup/askpass" "${DESTDIR}/usr/lib/cryptsetup/askpass"
+copy_exec "$unlock" /lib/cryptsetup/askpass

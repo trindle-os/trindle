@@ -1,0 +1,5 @@
+crate: smithay
+version: 0.7.0
+source: https://crates.io/crates/smithay/0.7.0 (https://github.com/Smithay/smithay)
+sha256 of the unmodified smithay-0.7.0.crate: 740cea6927892bc182d5bf70c8f79806c8bc9f68f2fb96e55a30be171b63af98
+changed: 23 upstream files edited, plus examples and benches left out; every change is listed in TRINDLE.md

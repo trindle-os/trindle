@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="trindle_workspaces_v1">
+  <copyright>
+    Copyright 2026 the Trindle authors. GNU General Public License version 3
+    or later.
+  </copyright>
+
+  <description summary="how many workspaces there are, and which one is showing">
+    Trindle has one row of numbered workspaces, shared by every screen. This
+    tells a program how long the row is and which workspace is showing, and
+    lets it ask to go to another. Offered only to programs the compositor
+    trusts with the window list.
+  </description>
+
+  <interface name="trindle_workspaces_manager_v1" version="1">
+    <description summary="the row of workspaces">
+      The row is announced when this is bound, and again whenever its length
+      or the workspace showing changes. Workspaces have no names: the first is
+      number 1 and is index 0.
+    </description>
+
+    <request name="destroy" type="destructor">
+      <description summary="no more news of the row is wanted"/>
+    </request>
+
+    <request name="go">
+      <description summary="show another workspace">
+        Does nothing if there is no workspace at that index. The compositor
+        answers with a new "row" once it has gone there.
+      </description>
+      <arg name="index" type="uint" summary="the workspace to show, counting from 0"/>
+    </request>
+
+    <event name="row">
+      <description summary="the row as it stands">
+        Always sent whole, so a program never has to put pieces together.
+      </description>
+      <arg name="count" type="uint" summary="how many workspaces there are"/>
+      <arg name="showing" type="uint" summary="the index of the one showing"/>
+    </event>
+  </interface>
+</protocol>

@@ -1,0 +1,14 @@
+# Started by trindle-admin when a person first opens a Windows or Samba share in Folders.
+[Unit]
+Description=Close the shared folders user %i opened, when they log out
+BindsTo=user@%i.service
+After=user@%i.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/true
+ExecStop=/usr/lib/trindle/libexec/trindle-admin smb-unmount-all %i
+TimeoutStopSec=10
+SendSIGKILL=yes
+KillMode=control-group
