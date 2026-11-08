@@ -1,0 +1,50 @@
+# Trindle's look and habits for Alacritty, the terminal. Read through the
+# import in each person's own alacritty.toml, so anything they set there wins.
+
+[window]
+padding = { x = 8, y = 8 }
+dynamic_title = true
+
+[font]
+normal = { family = "monospace" }
+size = 11.0
+
+# Trindle's dark colours: the near-black page, its box and quiet greys, and
+# the highlight colours.
+[colors.primary]
+background = "#0e0f13"
+foreground = "#f4f4f6"
+
+[colors.normal]
+black = "#343844"
+red = "#f34236"
+green = "#4bae4f"
+yellow = "#fbc711"
+blue = "#2295f1"
+magenta = "#b36ae2"
+cyan = "#26c6da"
+white = "#c2c2cc"
+
+[colors.bright]
+black = "#7e8494"
+red = "#ff6b61"
+green = "#7bd67e"
+yellow = "#ffd84d"
+blue = "#64b5f6"
+magenta = "#ce93d8"
+cyan = "#80deea"
+white = "#fafafa"
+
+[colors.selection]
+text = "#09090b"
+background = "#fbc711"
+
+# Selecting text copies it; a right click pastes. Ctrl+Shift+C and V copy
+# and paste too, and Ctrl with + and - make the text bigger and smaller.
+[selection]
+save_to_clipboard = true
+
+[mouse]
+bindings = [
+    { mouse = "Right", action = "Paste" },
+]

@@ -1,0 +1,10 @@
+[Unit]
+Description=Security fixes for the packages inside app folders
+ConditionACPower=true
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/trindle-boxed --patch
+Nice=10
+IOSchedulingClass=idle

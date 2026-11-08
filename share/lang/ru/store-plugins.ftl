@@ -1,0 +1,125 @@
+# machine translated (Russian), not yet reviewed by a person.
+
+# Tip of the round button that opens a plugin's settings.
+store-plugins-open-settings = Открыть настройки плагина
+
+# Red words under the plugin catalogue when starting again did not work; the reason follows.
+store-plugins-not-done = Не выполнено: { $why }
+
+# Line of the built-in Pocketkey row.
+
+# Said on a plugin's row when its update asks for a new permission and so waits for the person.
+# SAFETY: needs a human review before it ships
+store-plugins-waits-for-you = Этому обновлению нужно новое разрешение. Оно ждёт вашего решения.
+
+# On a plugin's row: the version it has and the one that is ready.
+store-plugins-waiting = Сейчас версия { $mine }, готова { $new }
+
+# On a plugin's row: the same, and what the new one asks for that the old one did not; the list and the note that it waits follow.
+# SAFETY: needs a human review before it ships
+store-plugins-waiting-more = Сейчас версия { $mine }, готова { $new }. Она просит больше, чем раньше: { $more }. { $waits }
+
+# Said after who is putting updates in, on the Updates and Plugins pages.
+store-plugins-come-back = Кнопки здесь вернутся, когда всё закончится.
+
+# Line under the title of the Plugins page while the lists are read.
+store-plugins-looking = Поиск плагинов…
+
+# Line under the title of the Plugins page when there are no plugins at all.
+store-plugins-none = Плагинов не установлено, и пока ничего не предлагается.
+
+# Line under the title of the Plugins page when none are installed and some are on offer.
+store-plugins-none-ready =
+    { $n ->
+        [one] Плагинов пока не установлено; { $n } готов к установке.
+        [few] Плагинов пока не установлено; { $n } готовы к установке.
+        [many] Плагинов пока не установлено; { $n } готовы к установке.
+       *[other] Плагинов пока не установлено; { $n } готового к установке.
+    }
+
+# How many plugins are installed, as part of a line.
+store-plugins-count-installed =
+    { $n ->
+        [one] установлен { $n } плагин
+        [few] установлено { $n } плагина
+        [many] установлено { $n } плагинов
+       *[other] установлено { $n } плагина
+    }
+
+# How many plugins have an update waiting, as part of a line.
+store-plugins-count-have-update =
+    { $n ->
+        [one] у { $n } есть обновление
+        [few] у { $n } есть обновления
+        [many] у { $n } есть обновления
+       *[other] у { $n } есть обновления
+    }
+
+# How many plugins have an update held back, as part of a line.
+store-plugins-count-held =
+    { $n ->
+        [one] { $n } обновление отложено
+        [few] { $n } обновления отложены
+        [many] { $n } обновлений отложено
+       *[other] { $n } обновления отложено
+    }
+
+# Line under the title of the Plugins page: how many are installed, with some updates held back.
+store-plugins-line-held = { $installed }; { $held }.
+
+# Line under the title of the Plugins page: how many are installed.
+store-plugins-line-installed = { $installed }.
+
+# Line under the title of the Plugins page: all are up to date.
+store-plugins-line-current = { $installed }, все обновлены.
+
+# Line under the title of the Plugins page: some have updates waiting.
+store-plugins-line-updates = { $installed }, и { $have }.
+
+# The same, with some updates held back.
+store-plugins-line-updates-held = { $installed }, и { $have }; { $held }.
+
+# On a plugin's card when it asks for nothing.
+store-plugins-asks-nothing = Ничего не запрашивает.
+
+# On a plugin's card: what it asks for.
+# SAFETY: needs a human review before it ships
+store-plugins-asks = Что запрашивает: { $list }.
+
+# Title of the Plugins page.
+store-plugins-title = Плагины
+
+# On a plugin's card: the new version is ready and held back is not said.
+store-plugins-version-ready = Установлена версия { $mine }; готова { $new }.
+
+# On a plugin's card: its installed version.
+store-plugins-version-installed = Версия { $version }, установлена.
+
+# On a plugin's card: the version on offer.
+store-plugins-version-offered = Версия { $version }.
+
+# On a plugin's card: the version held back, with the end of the sentence.
+store-plugins-version-held = { $words }.
+
+# Tip of the round button that installs a plugin.
+# SAFETY: needs a human review before it ships
+store-plugins-install = Установить { $name }
+
+# Tip of the round button that releases a plugin whose updates are held back.
+store-plugins-release = Снять отсрочку обновлений { $name }
+
+# Tip of the round button that updates a plugin to a version.
+store-plugins-update-to = Обновить до { $version }
+
+# Heading of the card that says where plugins come from.
+store-plugins-where = Откуда берутся плагины
+
+# Information on the card that says where plugins come from.
+store-plugins-come-from = Плагины берутся только из собственного списка Trindle, который читается с trindle.org при каждом открытии этой страницы. Чтобы предложить плагин, отправьте его: каждый проверяется до публикации.
+
+# Red words under a plugin that went in but whose background part is not running; the reason follows.
+store-plugins-not-running = Плагин установлен, но его фоновая часть не работает: { $why }
+
+# Red words under a plugin that could not be removed; the reason follows.
+# SAFETY: needs a human review before it ships
+store-plugins-not-removed = Не удалось удалить: { $why }

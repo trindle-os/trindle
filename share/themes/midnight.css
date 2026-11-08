@@ -1,0 +1,106 @@
+/* Midnight: a theme that comes with Trindle. One file, made
+   only from the names Trindle's own sheet already has.
+
+   The idea: dark and flat, in steps of grey. Solid greys, each a step
+   lighter than the one below: the page, a card on it, a box inside a
+   card. No lines, no edges, no glow, and no shadow except on what floats.
+   The step in grey is the only boundary; the one edge is a typing box's.
+   Small corners and a little less room.
+
+   Where it comes from: this was Trindle's own look until 11 October
+   2026, when the blue look took its place. Every value here is the one
+   Trindle's own sheet had before, for each name that changed, so
+   choosing Midnight gives that look back.
+
+   Who it is for: people who want black and grey with no colour in it
+   but their highlight, and anyone who liked Trindle as it was.
+
+   One look, dark. Works with any highlight colour. */
+
+:root {
+  --trindle-theme-name: "Midnight";
+  --trindle-theme-about: "Dark and flat, in steps of grey: black and grey, no edges, small corners.";
+  --trindle-theme-author: "Trindle";
+  --trindle-theme-version: "1.0";
+  --trindle-theme-look: dark;
+}
+
+/* The greys, darkest to lightest, and the words on them. */
+:root {
+  --trindle-page: #121212;
+  --trindle-card: #1f1f1f;
+  --trindle-box: #2c2c2c;
+  --trindle-box-more: mix(var(--trindle-box), var(--trindle-text), 0.06);
+  --trindle-text: #e5e5e5;
+  --trindle-text-quiet: #b3b3b3;
+  --trindle-shade-red: #ff8a80;
+  /* A typing box: darker than its card, with the one edge in the look. */
+  --trindle-typing-box: var(--trindle-page);
+  --trindle-typing-box-edge: #8c8c8c;
+  --trindle-typing-box-shadow: none;
+}
+
+/* No edges, and no shadow except under what floats. The one line kept
+   runs down a side bar's far edge. */
+:root {
+  --trindle-edge: transparent;
+  --trindle-box-edge: transparent;
+  --trindle-side-line: #262626;
+  --trindle-shadow: #000000;
+  --trindle-card-shadow: none;
+  --trindle-float-shadow: 0 10px 28px 0 rgba(0, 0, 0, 0.55);
+  --trindle-hover: var(--trindle-box);
+  --trindle-band: rgba(0, 0, 0, 0.2);
+  --trindle-well: shade(var(--trindle-page), 0.6);
+  --trindle-control: var(--trindle-card);
+}
+
+/* Small corners, and things a little closer. */
+:root {
+  --trindle-card-corner: 8;
+  --trindle-box-corner: 6;
+  --trindle-row-corner: var(--trindle-box-corner);
+  --trindle-card-gap: 8;
+  --trindle-card-padding: 16;
+  --trindle-snug-padding: 3;
+  --trindle-menu-padding: 6;
+  --trindle-menu-title-pad: 12;
+}
+
+/* The small parts: a flat knob, a narrower glow when a box saves itself,
+   and the label on pointing as a plain pill in the box colour. */
+:root {
+  --trindle-switch-width: 40;
+  --trindle-switch-height: 22;
+  --trindle-switch-knob: 16;
+  --trindle-knob: #111111;
+  --trindle-knob-shadow: rgba(0, 0, 0, 0);
+  --trindle-knob-off: var(--trindle-text-quiet);
+  --trindle-focus-offset: 2;
+  --trindle-glow-width: 3;
+  --trindle-glow-strength: 0.35;
+  --trindle-label-background: var(--trindle-box);
+  --trindle-label-ink: var(--trindle-text);
+  --trindle-label-edge: transparent;
+  --trindle-label-shadow-y: 4;
+  --trindle-label-shadow-blur: 10;
+  --trindle-label-shadow-strength: 0.45;
+  --trindle-label-padding-x: 10;
+  --trindle-label-padding-y: 5;
+}
+
+/* Type: names of pages and their parts a touch heavier. */
+:root {
+  --trindle-page-title-weight: 500;
+  --trindle-section-weight: 500;
+  --trindle-title-tighten: 0.01;
+}
+
+/* Windows and the ring. */
+:root {
+  --trindle-title-background: var(--trindle-page);
+  --trindle-title-border: var(--trindle-side-line);
+  --trindle-title-away-border: var(--trindle-side-line);
+  --trindle-window-edge: rgba(255, 255, 255, 0.10);
+  --trindle-ring-dim: 0.38;
+}

@@ -1,0 +1,21 @@
+# Trindle's own choices for GNOME settings other programs read.
+#
+# Put away, fill the screen and close, at the right of every window that
+# draws its own title bar, as on the ones Trindle draws itself. GNOME's own
+# choice is close alone.
+[org.gnome.desktop.wm.preferences]
+button-layout=':minimize,maximize,close'
+
+# The terminal that programs asking the desktop for one open: Alacritty,
+# Trindle's terminal. GNOME's choice is a terminal Trindle does not have, so
+# those commands did nothing.
+[org.gnome.desktop.default-applications.terminal]
+exec='alacritty'
+exec-arg='-e'
+
+# The round icons, for the login screen and for anyone whose own
+# icon theme trindle-icons has not made yet. It points each person at that
+# one, "Trindle", at login: the icons it makes for apps the set lacks, over
+# the set chosen in Settings, Appearance.
+[org.gnome.desktop.interface]
+icon-theme='Trindle-Circle'

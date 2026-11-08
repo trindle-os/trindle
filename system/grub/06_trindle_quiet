@@ -1,0 +1,35 @@
+#!/bin/sh
+# Trindle: starting the system shows the Trindle mark on a dark screen at
+# once, while GRUB loads the system, and then the same mark turning, rather
+# than a black screen and GRUB's "Loading Linux ..." lines.
+#
+# Debian's menu entries print those lines with no setting to stop them, and
+# every entry calls load_video first. This gives load_video the same body as
+# GRUB's own and has it write in black on black from then on. Only a start
+# that has been chosen is affected: the menu and the editor keep their colours.
+cat <<'CFG'
+# The mark from the moment GRUB starts, through the hidden menu's wait, so
+# the screen is never simply black.
+insmod regexp
+if regexp --set=1:trindle_dir '^(.*)/theme.txt$' "$theme"; then
+  background_image "$trindle_dir/starting.png"
+fi
+function load_video {
+  set color_normal=black/black
+  insmod regexp
+  if regexp --set=1:trindle_dir '^(.*)/theme.txt$' "$theme"; then
+    background_image "$trindle_dir/starting.png"
+  fi
+  if [ x$feature_all_video_module = xy ]; then
+    insmod all_video
+  else
+    insmod efi_gop
+    insmod efi_uga
+    insmod ieee1275_fb
+    insmod vbe
+    insmod vga
+    insmod video_bochs
+    insmod video_cirrus
+  fi
+}
+CFG

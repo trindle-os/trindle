@@ -1,0 +1,18 @@
+# Locks the system files (spec: A read-only system): at each start, straight
+# after the disks are mounted and before anything else starts, and every two
+# minutes from the timer, unless a software change is under way. Switched on
+# by `trindle-admin system-read-only on`.
+[Unit]
+Description=Trindle: system files locked
+ConditionPathExists=/etc/trindle/read-only-system
+DefaultDependencies=no
+After=local-fs.target
+Before=sysinit.target shutdown.target
+Conflicts=shutdown.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/trindle/libexec/trindle-admin system-lock
+
+[Install]
+WantedBy=sysinit.target

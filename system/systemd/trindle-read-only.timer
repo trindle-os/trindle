@@ -1,0 +1,17 @@
+# Locks the system files again after a helper that was killed part-way.
+# No default dependencies: a timer is ordered before the service it starts,
+# and by default after sysinit.target, which that service comes before. The
+# loop made systemd drop the lock at every start.
+[Unit]
+Description=Trindle: system files locked again, every two minutes
+DefaultDependencies=no
+Conflicts=shutdown.target
+Before=shutdown.target
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=2min
+AccuracySec=15s
+
+[Install]
+WantedBy=timers.target

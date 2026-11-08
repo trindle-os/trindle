@@ -1,0 +1,4 @@
+# Your terminal's settings. Trindle's own come first, from the file below;
+# anything you add under it takes their place. See man 5 alacritty.
+[general]
+import = ["/usr/share/trindle/alacritty/trindle.toml"]

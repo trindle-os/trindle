@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Eye dropper
+Comment=Take a colour from anywhere on the screen and copy it as a hex code
+Exec=trindle-eye-dropper
+Icon=com.github.finefindus.eyedropper
+Terminal=false
+Type=Application
+Categories=Utility;Graphics;
+Keywords=colour;color;picker;eyedropper;hex;pipette;
+StartupNotify=false
+StartupWMClass=org.trindle.EyeDropperList

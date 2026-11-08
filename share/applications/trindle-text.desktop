@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Text
+Comment=Write and change plain text and Markdown files
+Exec=trindle-text %U
+Icon=accessories-text-editor
+Terminal=false
+Type=Application
+Categories=Utility;TextEditor;
+Keywords=text;editor;notes;markdown;plain;
+MimeType=text/plain;text/markdown;text/x-markdown;text/x-log;text/csv;text/tab-separated-values;text/x-readme;text/x-changelog;text/x-copying;text/x-install;text/x-authors;text/x-credits;text/x-makefile;text/x-cmake;text/x-c;text/x-csrc;text/x-chdr;text/x-c++src;text/x-c++hdr;text/x-rust;text/x-python;text/x-python3;text/x-perl;text/x-ruby;text/x-go;text/x-java;text/x-lua;text/x-sql;text/x-tex;text/x-patch;text/x-diff;text/css;text/javascript;text/x-yaml;application/x-yaml;application/toml;text/x-toml;application/json;application/xml;text/xml;application/x-shellscript;text/x-shellscript;application/x-desktop;text/x-systemd-unit;text/x-ini;text/x-gettext-translation;application/x-subrip;
+StartupNotify=false
+StartupWMClass=org.trindle.Text

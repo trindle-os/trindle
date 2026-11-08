@@ -1,0 +1,12 @@
+# The session's environment, read by Trindle's compositor before it starts
+# anything. No keyboard layout here: trindle-session sets it, and a person's
+# own choices from Settings go in ~/.config/trindle/environment, read after
+# this file.
+XDG_CURRENT_DESKTOP=Trindle
+XDG_SESSION_DESKTOP=trindle
+MOZ_ENABLE_WAYLAND=1
+GDK_BACKEND=wayland
+ELECTRON_OZONE_PLATFORM_HINT=wayland
+SDL_VIDEODRIVER=wayland
+XCURSOR_THEME=Adwaita
+XCURSOR_SIZE=24

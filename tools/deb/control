@@ -1,0 +1,19 @@
+Package: trindle
+Version: @VERSION@
+Architecture: @ARCH@
+Maintainer: Trindle <distro@trindle.org>
+Installed-Size: @SIZE@
+Depends: @DEPENDS@
+Recommends: @RECOMMENDS@
+Suggests: alacritty
+Replaces: trindle-portal, trindle-snapshots
+Section: x11
+Priority: optional
+Homepage: https://trindle.org
+Description: A small desktop that lives in one ring
+ Trindle is a mouse-driven desktop for Debian. There is no menu bar and no
+ dock along the edges: the apps, the settings, the clock and the tray all live
+ in one ring, which appears when it is called for and goes away when it is not.
+ .
+ This package holds the desktop itself, which is one program, together with the
+ login screen, the session, the boot menu theme and the disk-password screen.

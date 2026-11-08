@@ -1,0 +1,7 @@
+[terminal]
+# VT 7 only, so consoles 1-6 keep a text login as a fallback.
+vt = 7
+
+[default_session]
+command = "/usr/bin/trindle-greeter-session"
+user = "_greetd"

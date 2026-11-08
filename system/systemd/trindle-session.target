@@ -1,0 +1,8 @@
+# Up while someone is logged in to Trindle, so the programs a person's own
+# services start with the desktop (graphical-session.target) start at login
+# and stop cleanly at logout, before the desktop they draw on goes away.
+[Unit]
+Description=Trindle desktop session
+BindsTo=graphical-session.target
+Wants=graphical-session-pre.target
+After=graphical-session-pre.target

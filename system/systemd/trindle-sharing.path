@@ -1,0 +1,11 @@
+# Whenever a folder is shared, or stops being shared, from Folders or
+# Settings, the firewall's door for shared folders and Samba's server follow.
+# Nothing runs while nothing changes.
+[Unit]
+Description=Trindle: shared folders open the door only while there are some
+
+[Path]
+PathChanged=/var/lib/samba/usershares
+
+[Install]
+WantedBy=multi-user.target

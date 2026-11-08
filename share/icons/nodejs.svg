@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- Node.js, drawn round like the rest: its hexagon, open on one side. -->
+  <circle cx="24" cy="25" r="22" fill="#000000" opacity="0.2"/>
+  <circle cx="24" cy="24" r="22" fill="#3c873a"/>
+  <path d="M24 10.5l11.7 6.75v13.5L24 37.5l-11.7-6.75v-13.5z"
+        fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M19 29V19h1.5L28 29V19" fill="none" stroke="#ffffff" stroke-width="3"
+        stroke-linejoin="round" stroke-linecap="round"/>
+</svg>

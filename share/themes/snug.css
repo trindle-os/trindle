@@ -1,0 +1,227 @@
+/* Snug: a theme that comes with Trindle. One file, made
+   only from the names Trindle's own sheet already has.
+
+   The idea: more on the screen. Smaller words, shorter rows and buttons,
+   less room round everything, nearly square corners, and a thin edge
+   round each card in place of the room that used to part them. The
+   greys are a cool slate, like a workbench.
+
+   Who it is for: small laptop screens, and people who keep long lists
+   and many settings in view and would rather see more than scroll.
+
+   Its words are smaller, never below Trindle's least of 12 points. On a
+   touch screen every button is still as easy to hit as before: that is
+   not a look, and no theme changes it.
+
+   Two looks, dark and light. The light one is the same slate in daylight:
+   pale cool greys with the same thin edges, since cards sit as close in
+   the light as in the dark. Works with any highlight colour. */
+
+:root {
+  --trindle-theme-name: "Snug";
+  --trindle-theme-about: "Smaller and closer together, square and cool grey. More fits on a small screen.";
+  --trindle-theme-author: "Trindle";
+  --trindle-theme-version: "0.1";
+  --trindle-theme-look: both;
+}
+
+/* Cool slate, three steps, and a thin edge to part cards that sit close. */
+:root {
+  --trindle-page: #14171b;
+  --trindle-card: #1d2126;
+  --trindle-box: #282d34;
+  --trindle-box-more: #323841;
+  --trindle-text: #e1e5ea;
+  --trindle-text-quiet: #a7afb9;
+  --trindle-typing-box: #111418;
+  --trindle-typing-box-edge: #7f8a97;
+  --trindle-edge: #2c323a;
+  --trindle-box-edge: #363d46;
+  --trindle-side-line: #2c323a;
+  --trindle-float-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.55);
+  --trindle-well: #0b0d10;
+}
+
+/* Square, and close. */
+:root {
+  --trindle-card-corner: 3;
+  --trindle-box-corner: 2;
+  --trindle-row-corner: 2;
+  --trindle-float-corner: 4;
+  --trindle-card-gap: 4;
+  --trindle-gap: 8;
+  --trindle-page-padding: 12;
+  --trindle-card-padding: 10;
+  --trindle-snug-padding: 2;
+  --trindle-sidebar-room: 6;
+  --trindle-line-padding: 3;
+  --trindle-menu-padding: 3;
+  --trindle-menu-title-pad: 6;
+}
+
+/* Smaller words. */
+:root {
+  --trindle-page-title-size: 24;
+  --trindle-page-title-weight: 600;
+  --trindle-section-size: 18;
+  --trindle-section-weight: 600;
+  --trindle-lead-size: 16;
+  --trindle-heading-size: 14;
+  --trindle-headline-size: 14;
+  --trindle-figure-size: 14;
+  --trindle-big-figure-size: 28;
+  --trindle-text-size: 13;
+  --trindle-form-label-size: 13;
+  --trindle-note-size: 12;
+  --trindle-column-heading-size: 12;
+  --trindle-action-size: 12;
+  --trindle-label-size: 11;
+}
+
+/* Smaller parts. */
+:root {
+  --trindle-button-height: 28;
+  --trindle-icon-size: 14;
+  --trindle-action-padding: 12;
+  --trindle-action-gap: 6;
+  --trindle-ring-button-size: 22;
+  --trindle-i-size: 18;
+  --trindle-switch-width: 32;
+  --trindle-switch-height: 18;
+  --trindle-switch-knob: 12;
+  --trindle-slider-track: 4;
+  --trindle-entry-padding: 8;
+  --trindle-entry-eye: 24;
+  --trindle-tabs-padding: 2;
+  --trindle-chip-padding-x: 8;
+  --trindle-chip-padding-y: 1;
+  --trindle-row-height: 28;
+  --trindle-rich-row-height: 40;
+  --trindle-rich-row-gap: 0;
+  --trindle-rich-row-icon: 20;
+  --trindle-scrollbar: 3;
+  --trindle-scrollbar-hover: 6;
+  --trindle-spinner: 24;
+  --trindle-spinner-line: 3;
+  --trindle-lit-edge: 2;
+  --trindle-working-line: 2;
+  --trindle-state-dot: 12;
+  --trindle-menu-width: 220;
+  --trindle-menu-row: 26;
+  --trindle-menu-icon: 14;
+  --trindle-dropdown-row: 26;
+  --trindle-glow-width: 2;
+  --trindle-label-padding-x: 7;
+  --trindle-label-padding-y: 3;
+  --trindle-label-gap: 4;
+}
+
+/* Lists and pictures take less room too. */
+:root {
+  --trindle-bento-words: 220px;
+  --trindle-bento-figure-words: 120px;
+  --trindle-picture-height: 160;
+  --trindle-apps-tile-least: 220px;
+  --trindle-apps-tile-icon: 36px;
+  --trindle-apps-row-icon: 26px;
+  --trindle-apps-card-least: 280px;
+  --trindle-app-icon: 36px;
+  --trindle-app-action-width: 100px;
+  --trindle-app-rating-ring: 52px;
+  --trindle-app-rating-figure: 40px;
+  --trindle-app-rating-bar: 6px;
+  --trindle-preview-panel: 240;
+  --trindle-preview-picture: 150;
+  --trindle-drive-card: 240;
+  --trindle-fill-bar: 6;
+}
+
+/* Windows: the bar across the top is a step darker than the page, the
+   side bar a step lighter and the foot the page's own shade, parted by
+   those steps alone. */
+:root {
+  --trindle-top-bar: shade(var(--trindle-page), 0.55);
+  --trindle-side-bar: mix(var(--trindle-page), var(--trindle-card), 0.65);
+  --trindle-foot: var(--trindle-page);
+  --trindle-area-line: transparent;
+  --trindle-title-background: #14171b;
+  --trindle-title-ink: #e1e5ea;
+  --trindle-title-border: #2c323a;
+  --trindle-title-away-background: #14171b;
+  --trindle-title-away-ink: #a7afb9;
+  --trindle-title-away-border: #2c323a;
+}
+
+/* The rest of what this theme is drawn with. A theme takes whatever it
+   does not name from Trindle's own look, which changed on 11 October
+   2026; these are the values it gave before, named here so that this
+   theme looks as it did. */
+:root {
+  --trindle-shade-red: #ff8a80;
+  --trindle-control: var(--trindle-card);
+  --trindle-hover: var(--trindle-box);
+  --trindle-band: rgba(0, 0, 0, 0.2);
+  --trindle-shadow: #000000;
+  --trindle-card-shadow: none;
+  --trindle-typing-box-shadow: none;
+  --trindle-title-tighten: 0.01;
+  --trindle-label-background: var(--trindle-box);
+  --trindle-label-ink: var(--trindle-text);
+  --trindle-label-edge: transparent;
+  --trindle-label-shadow-y: 4;
+  --trindle-label-shadow-blur: 10;
+  --trindle-label-shadow-strength: 0.45;
+  --trindle-focus-offset: 2;
+  --trindle-knob: #111111;
+  --trindle-knob-shadow: rgba(0, 0, 0, 0);
+  --trindle-knob-off: var(--trindle-text-quiet);
+  --trindle-glow-strength: 0.35;
+  --trindle-ring-dim: 0.38;
+  --trindle-window-edge: rgba(255, 255, 255, 0.10);
+}
+
+/* The light look. It restates every colour the dark look above names,
+   because a theme's own dark values would otherwise show through. Corners,
+   room and sizes are the same in both looks. */
+@media (prefers-color-scheme: light) {
+  :root {
+    --trindle-page: #e3e7ec;
+    --trindle-card: #f6f8fa;
+    --trindle-box: #e9edf1;
+    --trindle-box-more: #dce1e7;
+    --trindle-text: #12161b;
+    --trindle-text-quiet: #46505b;
+    --trindle-shade-red: #a3231b;
+    --trindle-bad: #c93a2f;
+    --trindle-typing-box: #ffffff;
+    --trindle-typing-box-edge: #6f7a87;
+    --trindle-edge: #c2c9d2;
+    --trindle-box-edge: #cbd1d9;
+    --trindle-side-line: #c2c9d2;
+    --trindle-float-shadow: 0 8px 22px 0 rgba(18, 28, 40, 0.20);
+    --trindle-well: #d2d8df;
+    --trindle-top-bar: mix(var(--trindle-page), var(--trindle-text), 0.07);
+    --trindle-side-bar: mix(var(--trindle-page), var(--trindle-card), 0.65);
+    --trindle-foot: var(--trindle-page);
+    --trindle-area-line: transparent;
+    --trindle-title-background: #f6f8fa;
+    --trindle-title-ink: #12161b;
+    --trindle-title-border: #c2c9d2;
+    --trindle-title-away-background: #e3e7ec;
+    --trindle-title-away-ink: #46505b;
+    --trindle-title-away-border: #c2c9d2;
+    --trindle-control: var(--trindle-card);
+    --trindle-hover: var(--trindle-box);
+    --trindle-band: rgba(18, 28, 40, 0.05);
+    --trindle-shadow: #10161e;
+    --trindle-card-shadow: none;
+    --trindle-typing-box-shadow: none;
+    --trindle-label-background: #272d35;
+    --trindle-label-ink: #eef1f4;
+    --trindle-label-shadow-strength: 0.30;
+    --trindle-knob-off: #5f6b78;
+    --trindle-glow-strength: 0.5;
+    --trindle-ring-dim: 0.22;
+    --trindle-window-edge: rgba(18, 28, 40, 0.16);
+  }
+}

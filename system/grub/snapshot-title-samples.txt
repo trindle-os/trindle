@@ -1,0 +1,15 @@
+# Made-up samples for the snapshot titles (src/common/snapshot_title.rs):
+# zone | snapper date (UTC) | winter or summer time | the clock label expected
+# The zones are invented; their offsets are in the test.
+Britain-like | 2026-10-04 09:34:12 | summer | Sun 4 Oct, 10:34
+Britain-like | 2026-01-15 09:34:12 | winter | Thu 15 Jan, 09:34
+Britain-like | 2026-06-30 23:30:00 | summer | Wed 1 Jul, 00:30
+Britain-like | 2026-12-31 23:59:00 | winter | Thu 31 Dec, 23:59
+Nepal-like | 2026-10-04 20:30:00 | summer | Mon 5 Oct, 02:15
+Nepal-like | 2026-01-15 09:34:12 | winter | Thu 15 Jan, 15:19
+Newfoundland-like | 2026-03-01 03:00:00 | winter | Sat 28 Feb, 23:30
+Newfoundland-like | 2026-07-01 02:00:00 | summer | Tue 30 Jun, 23:30
+Lord-Howe-like | 2026-01-14 20:00:00 | summer | Thu 15 Jan, 07:00
+Lord-Howe-like | 2026-07-14 20:00:00 | winter | Wed 15 Jul, 06:30
+Lord-Howe-like | 2026-02-28 13:30:00 | summer | Sun 1 Mar, 00:30
+Britain-like | 2024-02-29 12:00:00 | winter | Thu 29 Feb, 12:00

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="trindle_own_press_v1">
+  <description summary="which presses the person made themselves">
+    Trindle's compositor tells a program which of the keys, clicks and
+    touches it is passed were made by the person on a real device, as
+    against a made-up mouse or keyboard. A program binds the global and is
+    then sent an event before each such press, on the same connection, so
+    the event is always there before the press it speaks of. Nothing is
+    sent for any other press: "not the person's" is the rule.
+
+    Offered only to programs outside every box.
+  </description>
+
+  <interface name="trindle_own_press_v1" version="3">
+    <description summary="the person's own presses, named as they are made">
+      For as long as this object lives, the compositor names each press
+      the person made that it passes to this program.
+    </description>
+
+    <request name="destroy" type="destructor">
+      <description summary="stop being told"/>
+    </request>
+
+    <event name="own">
+      <description summary="the press with this number is the person's own">
+        Sent just before a key, a pointer button or a touch is passed to a
+        surface of this program, when the person made it. The serial is the
+        one that press carries, going down or coming up.
+      </description>
+      <arg name="serial" type="uint" summary="the serial of the press"/>
+    </event>
+
+    <event name="refused" since="2">
+      <description summary="a press that was not the person's was kept from this surface">
+        Sent when the compositor kept a made-up key, click or touch back
+        from this surface of the program: a question only the person may
+        answer was out, or the surface is one only the person may press.
+        The program says why where the person is working. Sent at most
+        once a second to a program.
+      </description>
+      <arg name="surface" type="object" interface="wl_surface" summary="the surface the press was kept from"/>
+    </event>
+
+    <event name="was" since="3">
+      <description summary="the key really pressed behind a changed one">
+        Sent just before a key or a pointer button is passed to a surface
+        of this program, when the person's own change of keys and buttons
+        made it from another: the code is the kernel's number for the key
+        or button really pressed. Sent whoever made the press; it says
+        nothing of whose it was.
+      </description>
+      <arg name="serial" type="uint" summary="the serial of the press"/>
+      <arg name="code" type="uint" summary="the key or button really pressed"/>
+    </event>
+  </interface>
+</protocol>

@@ -1,0 +1,104 @@
+# Debian 13 packages, installed by install.sh with --no-install-recommends.
+# README.md must list the same packages (checked by a test in src/main.rs).
+# The two Trindle icon sets are not in Debian: tools/apt/build.sh puts
+# them in Trindle's own repository and tools/iso/build.sh in the image.
+
+# Compositor: trindle-compose is Trindle's own, these are what it needs
+xwayland                     # older X11 programs
+libseat1                     # the screen, keyboard and mouse, handed over by logind
+libinput10                   # keyboard, mouse, touchpad and touchscreen
+libgbm1                      # buffers the graphics card draws into
+libdisplay-info2             # what each screen says it can do
+libegl1                      # drawing with the graphics card, or the processor without one
+libegl-mesa0                 # the graphics driver behind it (no recommends are installed)
+libgles2                     # what the compositor draws with
+libgl1-mesa-dri              # the drivers themselves, and llvmpipe for no graphics chip
+libpixman-1-0                # the compositor's cursor and fallback drawing
+libxkbcommon0                # keyboard layouts in the compositor
+
+# Desktop
+trindle-folders              # the file manager, a package of its own
+trindle-help                 # Help, a package of its own; one of the programs a person cannot uninstall
+trindle-voice                # speech for the screen reader and Talk: /usr/bin/trindle-voice, 253 MB of models in /usr/share/trindle-voice, a user socket unit starts it on first use; its copyright file carries the model licence (BigScience OpenRAIL-M)
+trindle-toolkit-lang         # the Toolkit's words in every language, shared with Folders and Help
+gvfs-backends                # network places and phones for other programs: Folders speaks its own, but GTK programs and Flatpak apps allowed to (Firefox, Text Editor) reach shares, phones and web addresses through it; kept
+wvkbd                        # keyboard on screen, for touch
+xdg-terminal-exec            # how other programs start a terminal app: Trindle starts terminals itself, but GLib (a file opened by a Flatpak app, a GTK program) knows only a few terminals by name and asks this for any other; kept
+libvpx9                      # moving wallpapers, played by Trindle itself
+
+# Applications
+flatpak                      # Flathub apps
+bubblewrap                   # debs in their own folder (trindle-boxed)
+passt                        # pasta: the limited network of a plugin allowed home-network (store/home_net.rs)
+zstd                         # app settings backups
+unzip                        # fonts added in Settings
+xdg-desktop-portal           # Flatpak file and link access
+hunspell-en-gb               # spelling in Text, British English
+
+# AppImages
+libfuse2t64                  # older AppImages
+fuse3                        # newer AppImages
+
+# Login
+greetd                       # login manager
+
+# Runtime
+curl                         # release download
+ca-certificates              # TLS for the download
+adwaita-icon-theme           # GTK fallback icons
+fonts-noto-core              # wide language coverage
+fonts-dejavu-core            # monospace
+fonts-noto-color-emoji       # colour emoji
+xdg-utils                    # xdg-open
+xdg-user-dirs                # makes Documents, Downloads and the rest
+gvfs-fuse                    # gives what those programs open on a network place an ordinary path, so a program that only takes paths can open it too; kept with gvfs-backends
+p11-kit                      # certificate store used by Flatpak
+libglib2.0-bin               # gio, default apps
+dbus-user-session            # session bus
+gsettings-desktop-schemas    # GTK theme, font, dark mode keys
+dconf-gsettings-backend      # GSettings storage
+trindle-circle-icon-theme  # the round app icons, the default; from Trindle's own repository
+papirus-icon-theme           # what both build on, and the pictures inside the icons Trindle makes
+librsvg2-common              # SVG icons in GTK programs
+
+# System services
+pipewire-audio               # sound
+libasound2-plugins           # lets a boxed program that opens ALSA reach the sound guard (pulse plugin)
+network-manager              # networking
+network-manager-config-connectivity-debian # spots Wi-Fi that wants a sign-in first, through Debian's own check; always on
+wpasupplicant                # Wi-Fi: NetworkManager finds no network without it
+modemmanager                 # mobile broadband, on laptops with a SIM: NetworkManager cannot use a modem without it; kept so Trindle works on any computer
+bluez                        # Bluetooth
+upower                       # battery
+power-profiles-daemon        # power modes
+polkitd                      # authorization
+pkexec                       # runs trindle-admin
+cups                         # printing
+cups-client                  # lpstat, lpadmin, lp
+cups-filters                 # driverless printer discovery
+printer-driver-all           # drivers for older printers
+hplip                        # HP printers and scanners
+libsane1                     # scanner support
+libsane-common               # scanner support files
+ipp-usb                      # scanners and printers that need no driver, over USB
+sane-airscan                 # scanners that need no driver, over the network
+libsane-hpaio                # HP scanners
+sane-utils                   # scanner tools
+avahi-daemon                 # network printer discovery
+nftables                     # the firewall that keeps out connections this computer did not ask for
+fwupd                        # firmware updates for the computer and its parts
+fwupd-amd64-signed           # the signed piece fwupd starts at boot to put new firmware in place
+unattended-upgrades          # Debian's security fixes, installed by themselves every day unless Check for updates is switched off
+systemd-timesyncd            # network time
+systemd-coredump             # keeps the details of a crash, for a report the person chooses to send
+locales                      # languages
+xkb-data                     # keyboard layouts
+console-setup                # the chosen keyboard at the disk-password screen
+
+# Drives: the Drives window does all its work through UDisks, which needs these
+# to make, check, resize and rename each kind of drive
+udisks2                      # drives: mounting, formatting and their parts
+exfatprogs                   # exFAT, for drives shared with Windows and Macs
+dosfstools                   # FAT, for small sticks and older devices
+ntfs-3g                      # NTFS: making, resizing and repairing Windows drives
+eject                        # ejecting discs and memory cards

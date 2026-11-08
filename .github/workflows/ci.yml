@@ -1,0 +1,21 @@
+name: checks
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build tools and libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pkg-config libpam0g-dev libxkbcommon-dev libpixman-1-dev \
+            libseat-dev libinput-dev libudev-dev libgbm-dev libdrm-dev libdisplay-info-dev
+      - name: Build
+        run: cargo build --release --locked
+      - name: Test
+        run: cargo test --release --locked
+      - name: Clippy
+        run: cargo clippy --release --locked -- -D warnings

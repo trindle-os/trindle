@@ -1,0 +1,8 @@
+[Unit]
+Description=Trindle: list the snapshots in the boot menu
+# Keep the real boot menu when booted from a snapshot.
+ConditionKernelCommandLine=!trindle.snapshot
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/update-grub

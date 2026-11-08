@@ -1,0 +1,48 @@
+# Tries a USB port that failed to start ("unable to enumerate USB device")
+# once more, by switching it off and on, and notes it for Settings. Each port
+# is tried once per boot. A computer without a USB bus never runs it.
+[Unit]
+Description=Try a USB port that failed to start once more
+ConditionPathExists=/sys/bus/usb/devices
+After=systemd-udevd.service
+
+[Service]
+ExecStart=/usr/lib/trindle/libexec/trindle-usb-retry
+Restart=on-failure
+RestartSec=5
+# Root, to write the port's disable file, with one power kept: reading the
+# kernel's log.
+CapabilityBoundingSet=CAP_SYSLOG
+AmbientCapabilities=CAP_SYSLOG
+# Kept across a restart of the service, so a port is never tried twice.
+RuntimeDirectory=trindle-usb-retry
+RuntimeDirectoryMode=0755
+RuntimeDirectoryPreserve=yes
+UMask=0022
+NoNewPrivileges=yes
+ProtectSystem=strict
+# The ports' own files, and the controller driver's bind and unbind, used once
+# for a controller that has nothing else on it.
+ReadWritePaths=/sys/devices -/sys/bus/pci/drivers/xhci_hcd
+ProtectHome=yes
+PrivateTmp=yes
+# Only the kernel's log is let through from /dev.
+PrivateDevices=no
+DevicePolicy=closed
+DeviceAllow=/dev/kmsg r
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictNamespaces=yes
+RestrictRealtime=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+MemoryDenyWriteExecute=yes
+RestrictAddressFamilies=AF_UNIX
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+IPAddressDeny=any
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Install a package
+Comment=Install a Debian package you have downloaded
+Exec=trindle-apps --deb %f
+Icon=trindle-deb
+Terminal=false
+Type=Application
+NoDisplay=true
+MimeType=application/vnd.debian.binary-package;application/x-deb;
+StartupNotify=false
+StartupWMClass=org.trindle.Store

@@ -1,0 +1,68 @@
+#!/bin/sh
+# The parts that belong to the stick only; the installer takes them out again.
+set -e
+user=trindle
+
+mkdir -p /etc/trindle
+cat > /etc/trindle/greetd.toml <<'CONF'
+[terminal]
+vt = 7
+
+[default_session]
+command = "/usr/bin/trindle-greeter-session"
+user = "_greetd"
+
+# Running from the stick: straight to the desktop, no password.
+[initial_session]
+command = "/usr/bin/trindle-session"
+user = "trindle"
+CONF
+
+mkdir -p /etc/sudoers.d /usr/local/share/applications
+printf '%s ALL=(ALL) NOPASSWD: ALL\n' "$user" > /etc/sudoers.d/live
+chmod 440 /etc/sudoers.d/live
+
+cat > /usr/local/share/applications/trindle-installer.desktop <<'DESK'
+[Desktop Entry]
+Type=Application
+Name=Install
+Comment=Put Trindle on this computer's own disk
+Exec=trindle-installer
+Icon=trindle
+Terminal=false
+Categories=System;
+DESK
+
+# The welcome window, shown once each time the stick is started.
+mkdir -p /etc/skel/.config/autostart
+cat > /etc/skel/.config/autostart/trindle-live-welcome.desktop <<'AUTO'
+[Desktop Entry]
+Type=Application
+Name=Welcome to Trindle
+Exec=trindle-live-welcome
+Terminal=false
+AUTO
+
+# In the ring from the start, so it is one press away while trying Trindle.
+mkdir -p /etc/skel/.config/trindle
+if ! grep -qs trindle-installer /etc/skel/.config/trindle/favourites; then
+    printf 'trindle-installer.desktop\n' >> /etc/skel/.config/trindle/favourites
+fi
+
+# Nothing is kept on the stick: the clipboard forgets at every restart, and
+# the screen does not lock, since the live account has no password to unlock it.
+printf 'clipboard_forget=reboot\nlock=off\ntheme=dark\n' >> /etc/skel/.config/trindle/trindle.conf
+
+# The live account, made last of all: an account copies /etc/skel as it is at
+# the moment it is created, so everything above has to be in place first.
+# Making it here rather than leaving it to live-config keeps the automatic
+# login working.
+if ! id "$user" >/dev/null 2>&1; then
+    useradd -m -s /bin/bash -c "Trindle" \
+        -G sudo,audio,video,input,netdev,plugdev,cdrom,dialout,lpadmin "$user"
+fi
+# No password on the stick: nothing asks for one, and the screen never locks.
+passwd -l "$user"
+
+# apt's own cache of package lists, rebuilt the first time apt runs.
+rm -f /var/cache/apt/*.bin

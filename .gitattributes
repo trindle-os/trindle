@@ -1,0 +1,2 @@
+# The translation files are words, not code: GitHub leaves them out of the language bar.
+*.ftl linguist-documentation

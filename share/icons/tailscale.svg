@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- Tailscale, drawn round like the rest of the icons: its nine dots, the
+       middle row and centre column bright. -->
+  <circle cx="24" cy="25" r="22" fill="#000000" opacity="0.2"/>
+  <circle cx="24" cy="24" r="22" fill="#242424"/>
+  <g fill="#ffffff">
+    <circle cx="15" cy="15" r="3.6" opacity="0.28"/>
+    <circle cx="24" cy="15" r="3.6" opacity="0.28"/>
+    <circle cx="33" cy="15" r="3.6" opacity="0.28"/>
+    <circle cx="15" cy="24" r="3.6"/>
+    <circle cx="24" cy="24" r="3.6"/>
+    <circle cx="33" cy="24" r="3.6"/>
+    <circle cx="15" cy="33" r="3.6" opacity="0.28"/>
+    <circle cx="24" cy="33" r="3.6"/>
+    <circle cx="33" cy="33" r="3.6" opacity="0.28"/>
+  </g>
+</svg>

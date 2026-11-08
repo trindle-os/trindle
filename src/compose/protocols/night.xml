@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="trindle_night_v1">
+  <copyright>
+    Copyright 2026 the Trindle authors. GNU General Public License version 3
+    or later.
+  </copyright>
+
+  <description summary="warm the colours of a screen for the evening">
+    How trindle-nightlight tints the screens. A program says how much of its
+    full brightness each of red, green and blue should keep, and the
+    compositor sets the screen's colour tables to match, whatever size those
+    tables are. Nothing here lets a program set any other kind of colour
+    curve.
+
+    One program at a time holds a screen. When it lets go, or ends, the
+    screen's own colours come back at once, so a tint never outlives the
+    program that asked for it. Offered only to programs the compositor
+    trusts with the screens.
+  </description>
+
+  <interface name="trindle_night_manager_v1" version="1">
+    <description summary="where tints are asked for"/>
+
+    <request name="destroy" type="destructor">
+      <description summary="no more tints will be asked for">
+        Tints already made are not affected.
+      </description>
+    </request>
+
+    <request name="tint">
+      <description summary="hold a screen's colours">
+        The tint is answered with "refused" if the screen cannot be tinted or
+        another program holds it. Otherwise the screen is held until the
+        tint is destroyed, and keeps its own colours until "warm".
+      </description>
+      <arg name="id" type="new_id" interface="trindle_night_v1" summary="the new tint"/>
+      <arg name="output" type="object" interface="wl_output" summary="the screen to tint"/>
+    </request>
+  </interface>
+
+  <interface name="trindle_night_v1" version="1">
+    <description summary="the tint on one screen"/>
+
+    <enum name="reason">
+      <entry name="taken" value="1" summary="another program holds this screen's colours"/>
+      <entry name="unsupported" value="2" summary="the screen's colours cannot be changed"/>
+    </enum>
+
+    <request name="destroy" type="destructor">
+      <description summary="let go of the screen">
+        The screen's own colours come back.
+      </description>
+    </request>
+
+    <request name="warm">
+      <description summary="set the tint">
+        Each share is how much of full brightness that colour keeps, from 0
+        to 65535. A share below a tenth of that is raised to a tenth, so a
+        mistake can never turn a screen black. Does nothing if this tint was
+        refused.
+      </description>
+      <arg name="red" type="uint" summary="red's share"/>
+      <arg name="green" type="uint" summary="green's share"/>
+      <arg name="blue" type="uint" summary="blue's share"/>
+    </request>
+
+    <event name="refused">
+      <description summary="the screen is not held">
+        The tint does nothing from now on. It should be destroyed.
+      </description>
+      <arg name="reason" type="uint" enum="reason" summary="why not"/>
+    </event>
+  </interface>
+</protocol>

@@ -1,0 +1,11 @@
+# machine translated (German), not yet reviewed by a person.
+# The words around each help page: English = translation, one a line.
+Trindle help = Trindle-Hilfe
+help = Hilfe
+Skip to the page = Zur Seite springen
+Search the help = In der Hilfe suchen
+Search, such as printer or Wi-Fi = Suchen, zum Beispiel Drucker oder WLAN
+Search = Suchen
+On this page = Auf dieser Seite
+Page not found = Seite nicht gefunden
+Trindle help. No cookies, no tracking, no outside fonts or scripts. = Trindle-Hilfe. Keine Cookies, kein Tracking, keine externen Schriften oder Skripte.

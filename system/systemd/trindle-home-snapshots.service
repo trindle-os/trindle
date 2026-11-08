@@ -1,0 +1,15 @@
+# One look a day at the snapshots of the home folders: copies whose time is
+# up go, and the day's copy is taken while that is switched on in Settings,
+# Snapshots and the disk is not nearly full. Only where the snapshots'
+# folder is there, and never while started from a snapshot.
+[Unit]
+Description=Trindle: earlier versions of everyone's files
+ConditionPathIsDirectory=/home/.snapshots
+ConditionKernelCommandLine=!trindle.snapshot
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/trindle/libexec/trindle-admin home-snapshots-daily
+# Measuring the room they take reads a lot of the disk; nothing waits for it.
+Nice=19
+IOSchedulingClass=idle

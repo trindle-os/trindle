@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Trindle
+Comment=Trindle, the desktop in one circle
+Exec=/usr/bin/trindle-session
+Type=Application
+DesktopNames=Trindle

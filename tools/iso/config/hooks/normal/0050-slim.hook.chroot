@@ -1,0 +1,28 @@
+#!/bin/sh
+# Everything a desktop never reads, left out before the packages go on: the
+# manuals and the package documentation, except Trindle's own notices.
+# Translations stay, because the installer lets people choose their language
+# and they would be no use gone.
+#
+# This runs before the other hooks, so what they install lands without it too.
+set -e
+
+mkdir -p /etc/dpkg/dpkg.cfg.d
+cat > /etc/dpkg/dpkg.cfg.d/trindle-slim <<'CFG'
+path-exclude /usr/share/doc/*
+path-include /usr/share/doc/*/copyright
+path-include /usr/share/doc/*/changelog.Debian.*
+path-include /usr/share/doc/trindle/*
+path-exclude /usr/share/man/*
+path-exclude /usr/share/groff/*
+path-exclude /usr/share/info/*
+path-exclude /usr/share/lintian/*
+path-exclude /usr/share/linda/*
+CFG
+
+# What is already on the image from the bootstrap.
+find /usr/share/doc -mindepth 1 -maxdepth 1 -type d | while read -r d; do
+    find "$d" -type f ! -name copyright ! -name 'changelog.Debian.*' -delete 2>/dev/null || true
+done
+rm -rf /usr/share/man/* /usr/share/info/* /usr/share/groff/* /usr/share/lintian/* 2>/dev/null || true
+find /usr/share/doc -type d -empty -delete 2>/dev/null || true

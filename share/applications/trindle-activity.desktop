@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Activity
+Comment=What is running, and what is using the memory and the processor
+Exec=trindle-activity
+Icon=trindle-activity
+Terminal=false
+Type=Application
+Categories=System;Monitor;
+Keywords=task manager;system monitor;processes;cpu;memory;busy;running;stop;
+StartupNotify=false
+StartupWMClass=org.trindle.Activity

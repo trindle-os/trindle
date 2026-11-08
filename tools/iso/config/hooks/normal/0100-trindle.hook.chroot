@@ -1,0 +1,19 @@
+#!/bin/sh
+# Put Trindle in place inside the image, as a package, so a computer installed
+# from this image updates it with apt like anything else.
+set -e
+cd /opt/trindle
+# The Trindle package is built outside the image (it needs cargo, fontconfig and the
+# program's libraries, which the image does not have yet) and is put in debs/ with the
+# others by tools/iso/build.sh. The icon sets it depends on are not in Debian either.
+DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends -o Dpkg::Options::=--force-confnew /opt/trindle/debs/*.deb
+
+# This image ships the Trindle built from this source. live-build's own
+# upgrade step at the end would otherwise swap it for the published package
+# whenever the two carry the same version number, and the image would quietly
+# ship last week's Trindle. Held until the installer lets go of it again.
+apt-mark hold trindle >/dev/null
+
+# The copy that was built from is not needed again.
+cd /
+rm -rf /opt/trindle
