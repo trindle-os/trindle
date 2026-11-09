@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Welcome
+Comment=A short tour of Trindle, and apps to choose
+Exec=trindle-welcome
+Icon=trindle
+Terminal=false
+Type=Application
+Categories=System;
+Keywords=tour;start;begin;new;first;help;introduction;getting started;choose apps;
+StartupNotify=false
+StartupWMClass=org.trindle.Welcome

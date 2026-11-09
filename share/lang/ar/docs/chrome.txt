@@ -1,0 +1,11 @@
+# machine translated (Arabic), not yet reviewed by a person.
+# The words around each help page: English = translation, one a line.
+Trindle help = مساعدة Trindle
+help = المساعدة
+Skip to the page = انتقل إلى الصفحة
+Search the help = ابحث في المساعدة
+Search, such as printer or Wi-Fi = ابحث، مثلاً عن طابعة أو Wi-Fi
+Search = بحث
+On this page = في هذه الصفحة
+Page not found = الصفحة غير موجودة
+Trindle help. No cookies, no tracking, no outside fonts or scripts. = مساعدة Trindle. بلا ملفات تعريف ارتباط ولا تتبّع ولا خطوط أو سكربتات خارجية.

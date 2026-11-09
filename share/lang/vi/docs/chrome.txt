@@ -1,0 +1,11 @@
+# machine translated (Vietnamese), not yet reviewed by a person.
+# The words around each help page: English = translation, one a line.
+Trindle help = Trợ giúp Trindle
+help = trợ giúp
+Skip to the page = Chuyển đến trang
+Search the help = Tìm trong trợ giúp
+Search, such as printer or Wi-Fi = Tìm kiếm, ví dụ máy in hoặc Wi-Fi
+Search = Tìm kiếm
+On this page = Trên trang này
+Page not found = Không tìm thấy trang
+Trindle help. No cookies, no tracking, no outside fonts or scripts. = Trợ giúp Trindle. Không cookie, không theo dõi, không phông chữ hay tập lệnh bên ngoài.

@@ -1,0 +1,11 @@
+# machine translated (Hindi), not yet reviewed by a person.
+# The words around each help page: English = translation, one a line.
+Trindle help = Trindle सहायता
+help = सहायता
+Skip to the page = पेज पर जाएँ
+Search the help = सहायता में खोजें
+Search, such as printer or Wi-Fi = खोजें, जैसे प्रिंटर या Wi-Fi
+Search = खोजें
+On this page = इस पेज पर
+Page not found = पेज नहीं मिला
+Trindle help. No cookies, no tracking, no outside fonts or scripts. = Trindle सहायता। कोई कुकी नहीं, कोई ट्रैकिंग नहीं, कोई बाहरी फ़ॉन्ट या स्क्रिप्ट नहीं।

@@ -1,0 +1,189 @@
+[package]
+name = "trindle"
+version = "0.9.0-beta.1"
+edition = "2021"
+rust-version = "1.85"
+# Resolve dependency versions compatible with rust-version.
+resolver = "3"
+license = "GPL-3.0-or-later"
+description = "Trindle: a small desktop in one circle, for Debian, with its own Wayland compositor"
+repository = "https://trindle.org/code"
+
+# The Trindle Toolkit is a library of its own (the trindle-toolkit repository), so
+# other programs can use it; Trindle calls it `toolkit`. It is pinned to one
+# commit below; working on both at once, a `[patch]` in an untracked
+# .cargo/config.toml points it at a checkout beside this one (README, Building it).
+[workspace]
+members = ["."]
+# Smithay is only patched in.
+exclude = ["vendor"]
+
+# Versions named once.
+[workspace.dependencies]
+wayland-client = "0.31"
+wayland-protocols = { version = "0.32", features = ["client", "staging", "unstable"] }
+wayland-protocols-wlr = { version = "0.3", features = ["client"] }
+wayland-scanner = "0.31"
+serde = { version = "1", features = ["derive"] }
+flate2 = "1"
+libc = "0.2"
+xkbcommon = "0.8"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "webp", "bmp", "tiff", "gif"] }
+tiny-skia = { version = "0.12", default-features = false, features = ["std", "simd"] }
+resvg = { version = "0.49", default-features = false }
+accesskit = "=0.25.0"
+zbus = "5"
+zeroize = "1.9"
+wayland-server = { version = "0.31", features = ["libwayland_1_23"] }
+wayland-protocols-misc = { version = "0.3", features = ["client"] }
+x11rb = { version = "0.13", features = ["res"] }
+
+[lib]
+name = "trindle_shared"
+path = "src/shared.rs"
+
+# One binary; the trindle-* commands are symlinks and argv[0] selects the tool.
+[[bin]]
+name = "trindle"
+path = "src/main.rs"
+
+# The compositor: draws every window and the desktop, from the login screen
+# on. Its own program, so the rest of Trindle never loads what drawing the
+# screen directly needs.
+[[bin]]
+name = "trindle-compose"
+path = "src/compose/main.rs"
+
+# The disk-password screen shown while the computer starts. It is its own
+# small program because it must run in the initramfs, before the desktop is there.
+[[bin]]
+name = "trindle-unlock"
+path = "src/unlock/main.rs"
+
+[dependencies]
+trindle-toolkit = { git = "https://github.com/trindle-os/trindle-toolkit", rev = "ee42b004259aea50e57280388d547fc0556b72be" }
+wayland-client.workspace = true
+wayland-protocols.workspace = true
+wayland-protocols-wlr.workspace = true
+# Trindle's own small protocols' code, from their XML (the compositor's
+# input capture).
+wayland-scanner.workspace = true
+serde.workspace = true
+serde_json = "1"
+toml = { version = "1", default-features = false, features = ["parse", "serde"] }
+quick-xml = "0.41"
+flate2.workspace = true
+libc.workspace = true
+ab_glyph = "0.2"
+
+# The compositor's own. Its source began as Smithay's example compositor,
+# anvil (MIT).
+smithay = { version = "0.7", default-features = false, features = [
+    "desktop", "wayland_frontend", "use_system_lib",
+    "backend_egl", "backend_libinput", "backend_udev", "backend_drm", "backend_gbm",
+    "backend_session_libseat", "backend_winit",
+    "renderer_gl", "renderer_pixman", "renderer_multi",
+    "xwayland",
+] }
+# For a busy program's messages to wait in more room than libwayland's
+# 4 KB (compose/limits.rs, `SLOW_CLIENT_ROOM`): the call is in libwayland
+# 1.23, which Debian 13 has.
+wayland-server.workspace = true
+libdisplay-info = "0.2"
+drm = "0.14"
+xcursor = "0.3"
+xkbcommon.workspace = true
+# Force close asks the X server who really owns a window.
+x11rb.workspace = true
+tracing = { version = "0.1", features = ["max_level_trace", "release_max_level_info"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+thiserror = "1"
+bitflags = "2"
+image.workspace = true
+# Trindle's own drawing (spec, Drawing): painting into the buffers the
+# compositor shows, in plain Rust.
+tiny-skia.workspace = true
+resvg.workspace = true
+# Trindle Text: files read and written in the encoding they came in (0.8.35
+# is the last that builds on Rust 1.85), and spelling checked with the
+# Hunspell dictionaries already on the computer.
+encoding_rs = "=0.8.35"
+spellbook = "0.4"
+# D-Bus: calls, properties, signals and our own objects, read on one thread
+# of its own and handed to the loop.
+zbus.workspace = true
+# zbus's helper threads, held at 1.6.2: in 1.7.0 a thread with nothing to do
+# no longer ends, and wakes twice a second for as long as the program runs,
+# in every program that has ever opened a bus. Let go once that is mended.
+blocking = "=1.6.2"
+# The keyring's file: a key made slowly from the login password, and the
+# secrets sealed with it.
+argon2 = "0.5.3"
+chacha20poly1305 = { version = "0.10.1", default-features = false, features = ["alloc"] }
+getrandom = "0.3"
+# The clear index's hashes of attribute values, and wiping keys from memory.
+blake2 = "0.10.6"
+zeroize.workspace = true
+# Opening GNOME's keyring files when a person moves over. Held below the
+# newest because those need a newer Rust than Debian's.
+aes = { version = "0.8.4", features = ["zeroize"] }
+cbc = "0.1.2"
+md-5 = "0.10.6"
+sha2 = "0.10.9"
+# Secure DNS: TLS in plain Rust on ring's crypto, checked against the
+# system's own certificate store.
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
+# Already in the build through rustls; named here for the catalogue key.
+ring = "0.17"
+rustls-native-certs = "0.8.4"
+
+# Neither is ever on in a release. `publisher` adds the commands that make
+# and sign a plugin catalogue to trindle-plugin; `test-catalogue` is a build
+# with its own test key and address for trying a submission, and implies it.
+[features]
+publisher = []
+test-catalogue = ["publisher"]
+
+[dev-dependencies]
+# What the tests read of the toolkit: see its "testing" feature.
+trindle-toolkit = { git = "https://github.com/trindle-os/trindle-toolkit", rev = "ee42b004259aea50e57280388d547fc0556b72be", features = ["testing"] }
+trindle-help = { git = "https://github.com/trindle-os/trindle-help", rev = "c6a73764d1e85a3992e910fd869072b86d561f38" }
+# The stand-in keyboard a test types with; already built for the compositor.
+wayland-protocols-misc.workspace = true
+# The tree of named parts a window tells a screen reader, as the tests read it.
+accesskit.workspace = true
+
+# An unsafe block without a written reason is refused, and the reason has to say
+# something: this crate reaches C libraries and the framebuffer in seventy-odd
+# places, and each one is a promise the compiler cannot check.
+[lints]
+workspace = true
+
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+
+[workspace.lints.clippy]
+undocumented_unsafe_blocks = "deny"
+missing_safety_doc = "deny"
+# Matters of taste in the toolkit and Smithay code: shared callbacks are spelt out
+# where they are made, and drawing takes its coordinates one by one.
+type_complexity = "allow"
+too_many_arguments = "allow"
+
+# The keyring's slow key takes seconds unoptimised, which makes its tests crawl.
+[profile.dev.package.argon2]
+opt-level = 3
+[profile.dev.package.blake2]
+opt-level = 3
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 4
+strip = "debuginfo"
+panic = "abort"
+
+# Smithay 0.7.0 with one change, listed in vendor/smithay/TRINDLE.md: shared
+# memory pictures go back to their program as soon as they are on the GPU.
+[patch.crates-io]
+smithay = { path = "vendor/smithay" }

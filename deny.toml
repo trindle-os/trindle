@@ -1,0 +1,48 @@
+# What `cargo deny check` holds the dependencies to: licences that sit with
+# GPL-3.0-or-later, crates.io as the only registry, the toolkit's own git
+# repository as the only git source, and no known vulnerability.
+
+[graph]
+targets = ["x86_64-unknown-linux-gnu"]
+
+[advisories]
+# A crate no longer looked after is flagged only when Trindle names it itself;
+# the deeper ones are listed by `cargo audit` for whoever updates them.
+unmaintained = "workspace"
+ignore = [
+    # quick-xml 0.38 (slow duplicate-attribute check; unbounded namespace list in
+    # NsReader) comes only through accesskit_unix 0.23, atspi-common and
+    # zbus-lockstep, which read the AT-SPI interface files shipped inside atspi
+    # itself, never XML from outside. Goes with accesskit_unix 0.24 in the toolkit.
+    { id = "RUSTSEC-2026-0194", reason = "quick-xml 0.38 reads only atspi's own interface files" },
+    { id = "RUSTSEC-2026-0195", reason = "quick-xml 0.38 reads only atspi's own interface files" },
+    # cgmath 0.18 comes only through smithay. RUSTSEC-2026-0197 is Matrix{2,3,4}::swap_columns
+    # with two equal indices; neither Trindle nor the vendored smithay calls swap_columns.
+    # RUSTSEC-2026-0196 only says it is unmaintained.
+    { id = "RUSTSEC-2026-0197", reason = "cgmath swap_columns is never called" },
+    { id = "RUSTSEC-2026-0196", reason = "cgmath is unmaintained; it comes only through smithay" },
+]
+
+[licenses]
+allow = [
+    "GPL-3.0-or-later",
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "ISC",
+    "Zlib",
+    "Unicode-3.0",
+    "MPL-2.0",
+]
+confidence-threshold = 0.9
+
+[bans]
+multiple-versions = "allow"
+
+[sources]
+unknown-registry = "deny"
+unknown-git = "deny"
+# Not met while a local [patch] stands in for it (.cargo/config.toml).
+allow-git = ["https://github.com/trindle-os/trindle-toolkit", "https://github.com/trindle-os/trindle-help"]

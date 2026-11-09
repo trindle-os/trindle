@@ -1,0 +1,11 @@
+# machine translated (Swahili), not yet reviewed by a person.
+# The words around each help page: English = translation, one a line.
+Trindle help = Msaada wa Trindle
+help = msaada
+Skip to the page = Ruka hadi ukurasa
+Search the help = Tafuta kwenye msaada
+Search, such as printer or Wi-Fi = Tafuta, kwa mfano printa au Wi-Fi
+Search = Tafuta
+On this page = Kwenye ukurasa huu
+Page not found = Ukurasa haukupatikana
+Trindle help. No cookies, no tracking, no outside fonts or scripts. = Msaada wa Trindle. Hakuna vidakuzi, hakuna ufuatiliaji, hakuna fonti au hati za nje.

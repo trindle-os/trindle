@@ -1,0 +1,9 @@
+PRETTY_NAME="Trindle @VERSION@ (based on Debian GNU/Linux 13)"
+NAME="Trindle"
+VERSION_ID="@VERSION@"
+VERSION="@VERSION@"
+VERSION_CODENAME=trixie
+ID=trindle
+ID_LIKE=debian
+HOME_URL="https://trindle.org"
+BUG_REPORT_URL="https://trindle.buildmorphic.com"

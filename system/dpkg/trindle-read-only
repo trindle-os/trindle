@@ -1,0 +1,6 @@
+# dpkg typed by hand and Debian's daily security updates unlock the system
+# files for their own run (spec: A read-only system). Each does nothing once
+# Trindle's program is gone, so dpkg never fails for want of it; a lock that
+# does not take is left to the two-minute watchdog.
+pre-invoke=if [ -x /usr/lib/trindle/libexec/trindle-admin ]; then /usr/lib/trindle/libexec/trindle-admin dpkg-pre-invoke || true; fi
+post-invoke=if [ -x /usr/lib/trindle/libexec/trindle-admin ]; then /usr/lib/trindle/libexec/trindle-admin dpkg-post-invoke || true; fi

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- ChatGPT, drawn round like the rest: the interlocking knot, in outline. -->
+  <circle cx="24" cy="25" r="22" fill="#000000" opacity="0.2"/>
+  <circle cx="24" cy="24" r="22" fill="#10a37f"/>
+  <g fill="none" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M24 12.5l9.5 5.5v11L24 34.5 14.5 29V18z"/>
+    <path d="M24 12.5v11l9.5 5.5"/>
+    <path d="M24 23.5L14.5 29"/>
+  </g>
+</svg>

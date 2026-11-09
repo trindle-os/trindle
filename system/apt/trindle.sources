@@ -1,0 +1,8 @@
+# Where new versions of Trindle come from. Debian's own sources are
+# untouched: this adds Trindle itself and nothing else.
+Types: deb
+URIs: https://apt.trindle.org
+Suites: stable
+Components: main
+Architectures: amd64 arm64
+Signed-By: /usr/share/keyrings/trindle-archive-keyring.gpg

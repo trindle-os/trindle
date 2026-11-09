@@ -1,0 +1,11 @@
+# machine translated (Bengali), not yet reviewed by a person.
+# The words around each help page: English = translation, one a line.
+Trindle help = Trindle সহায়তা
+help = সহায়তা
+Skip to the page = পাতায় যান
+Search the help = সহায়তায় খুঁজুন
+Search, such as printer or Wi-Fi = খুঁজুন, যেমন প্রিন্টার বা Wi-Fi
+Search = খুঁজুন
+On this page = এই পাতায়
+Page not found = পাতা পাওয়া যায়নি
+Trindle help. No cookies, no tracking, no outside fonts or scripts. = Trindle সহায়তা। কুকি নেই, ট্র্যাকিং নেই, বাইরের ফন্ট বা স্ক্রিপ্ট নেই।

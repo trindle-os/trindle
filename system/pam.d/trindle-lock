@@ -1,0 +1,11 @@
+# Not a back door: Pocketkey is an optional plugin the person downloads that lets a phone they paired say yes instead of typing the password. This does nothing unless that plugin is installed and switched on, only root can use it, and the typed password always works.
+# Trindle Pocketkey's phone check, when it is installed. The leading dash
+# makes PAM skip this line quietly when the module is not there, and the
+# module itself steps aside whenever the phone cannot answer, so the
+# password below always works.
+-auth sufficient pam_pocketkey.so socket=/run/trindle-pocketkey/user.sock
+auth include login
+# Reached only once the typed password was accepted: tells Pocketkey, so its
+# "ask for the password again after" time starts afresh. Skipped when the
+# phone answered above, and quietly when the module is not there.
+-auth optional pam_pocketkey.so record socket=/run/trindle-pocketkey/user.sock

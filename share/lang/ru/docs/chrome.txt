@@ -1,0 +1,11 @@
+# machine translated (Russian), not yet reviewed by a person.
+# The words around each help page: English = translation, one a line.
+Trindle help = Справка Trindle
+help = справка
+Skip to the page = Перейти к странице
+Search the help = Искать в справке
+Search, such as printer or Wi-Fi = Поиск, например принтер или Wi-Fi
+Search = Поиск
+On this page = На этой странице
+Page not found = Страница не найдена
+Trindle help. No cookies, no tracking, no outside fonts or scripts. = Справка Trindle. Без cookie, без слежения, без внешних шрифтов и скриптов.

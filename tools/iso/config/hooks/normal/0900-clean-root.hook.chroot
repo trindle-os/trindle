@@ -1,0 +1,4 @@
+#!/bin/sh
+# An empty ssh folder left in the administrator's home by the build does not belong in the image.
+set -e
+rmdir ~root/.ssh 2>/dev/null || true

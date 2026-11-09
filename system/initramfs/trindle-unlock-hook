@@ -1,0 +1,34 @@
+#!/bin/sh
+# Puts Trindle's start-up screens in the start-up image: the turning mark
+# shown while the computer starts, and, on an encrypted disk, the password
+# screen in place of the plain text prompt. Only the start-up image is
+# changed; the installed system keeps cryptsetup's own askpass.
+PREREQ=""
+prereqs() { echo "$PREREQ"; }
+case "${1:-}" in
+    prereqs) prereqs; exit 0 ;;
+esac
+
+. /usr/share/initramfs-tools/hook-functions
+
+unlock=/usr/lib/trindle/bin/trindle-unlock
+[ -x "$unlock" ] || exit 0
+
+# The turning mark, started by scripts/init-top/trindle-spin.
+copy_exec "$unlock" /usr/bin/trindle-unlock
+
+# The mouse, the touchpad and the touchscreen, so the eye in the password box
+# can be clicked. evdev is what lets a program read them, and nothing loads it
+# on its own. The drivers are all of them, not a guess at which: a wireless
+# receiver or an odd touchpad needs its own, and together they come to under
+# two megabytes. udev loads the ones the hardware asks for.
+force_load evdev
+copy_modules_dir kernel/drivers/hid
+copy_modules_dir kernel/drivers/input/mouse
+manual_add_modules psmouse usbhid
+
+[ -d "${DESTDIR}/lib/cryptsetup" ] || exit 0
+
+# copy_exec leaves a file that is already there, so take cryptsetup's out first.
+rm -f "${DESTDIR}/lib/cryptsetup/askpass" "${DESTDIR}/usr/lib/cryptsetup/askpass"
+copy_exec "$unlock" /lib/cryptsetup/askpass

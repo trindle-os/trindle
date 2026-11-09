@@ -1,0 +1,6 @@
+# What `cargo audit` lets pass, each with its reason; deny.toml says the same.
+[advisories]
+# quick-xml 0.38 comes only through accesskit_unix 0.23 (atspi-common,
+# zbus-lockstep), which reads atspi's own interface files, never XML from
+# outside. Goes with accesskit_unix 0.24 in the toolkit.
+ignore = ["RUSTSEC-2026-0194", "RUSTSEC-2026-0195"]

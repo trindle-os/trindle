@@ -1,0 +1,17 @@
+Sounds and wallpapers
+
+The two event sounds (open.flac and close.flac) are made by Trindle's own
+program tools/gen-sounds.rs, as soft sine chimes. No recording or sample from
+anyone else is in them.
+
+Eight wallpapers, the pictures in the style of earlier painters, were made
+for Trindle with AI image tools, with the Trindle mark in each. They are not
+copies of any painting. The image tool's terms, checked on 19 October 2026,
+do not claim ownership of what it makes and do not restrict commercial use.
+The other wallpapers, still and moving, are made from nothing but the Trindle
+mark.
+
+All of them belong to the Trindle project and are under the GNU General Public
+License, version 3 or any later version. The law on copyright in AI-made
+images differs between countries, and Trindle does not promise that copyright
+exists in the eight.

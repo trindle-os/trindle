@@ -1,0 +1,11 @@
+# machine translated (Simplified Chinese), not yet reviewed by a person.
+# The words around each help page: English = translation, one a line.
+Trindle help = Trindle 帮助
+help = 帮助
+Skip to the page = 跳到页面内容
+Search the help = 搜索帮助
+Search, such as printer or Wi-Fi = 搜索，例如打印机或 Wi-Fi
+Search = 搜索
+On this page = 本页内容
+Page not found = 找不到页面
+Trindle help. No cookies, no tracking, no outside fonts or scripts. = Trindle 帮助。没有 Cookie，没有跟踪，没有外部字体或脚本。

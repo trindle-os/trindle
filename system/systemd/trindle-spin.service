@@ -1,0 +1,15 @@
+# The turning Trindle mark, carried on once the full system has taken over
+# from the start-up image. The one started in the start-up image cannot see
+# the screen any more after that hand-over; this one takes over from it and
+# goes on until the login screen or the desktop has the screen.
+[Unit]
+Description=Trindle's turning mark while the computer starts
+DefaultDependencies=no
+ConditionKernelCommandLine=!nosplash
+After=systemd-journald.socket
+Before=sysinit.target shutdown.target
+Conflicts=shutdown.target
+
+[Service]
+Type=simple
+ExecStart=/usr/lib/trindle/bin/trindle-unlock --spin

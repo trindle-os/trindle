@@ -1,0 +1,3 @@
+# Starts trindle-thunder once a Thunderbolt or USB4 controller shows up, so it
+# is there to ask before any device behind it connects.
+ACTION=="add", SUBSYSTEM=="thunderbolt", ENV{DEVTYPE}=="thunderbolt_domain", TAG+="systemd", ENV{SYSTEMD_WANTS}+="trindle-thunder.service"

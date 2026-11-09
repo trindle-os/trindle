@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<protocol name="trindle_windows_v1">
+  <copyright>
+    Copyright 2026 the Trindle authors. GNU General Public License version 3
+    or later.
+  </copyright>
+
+  <description summary="the windows that are open, and a way to act on them">
+    How the ring and the panel know which windows are open and what state
+    each is in, and how they bring one forward, put it away, make it fill
+    the screen or ask it to close. Offered only to programs the compositor
+    trusts with the window list (not to a plugin that was not allowed it).
+
+    A window is announced the moment it opens and, from then on, every
+    change to it arrives as a group of events that ends with "done". The
+    program should treat what came since the last "done" as one change.
+    Windows put away (minimised, or hidden by the desktop) stay on the list
+    until they close.
+  </description>
+
+  <interface name="trindle_windows_manager_v1" version="1">
+    <description summary="where the window list is asked for">
+      Binding this is asking for the list. A window object is sent for every
+      window already open, and then one for each that opens later.
+    </description>
+
+    <request name="destroy" type="destructor">
+      <description summary="no more windows are wanted">
+        The window objects already sent stay usable until they are destroyed.
+      </description>
+    </request>
+
+    <event name="window">
+      <description summary="a window is open">
+        Its details follow, ending with "done" on the window.
+      </description>
+      <arg name="window" type="new_id" interface="trindle_window_v1" summary="the new window"/>
+    </event>
+  </interface>
+
+  <interface name="trindle_window_v1" version="1">
+    <description summary="one open window">
+      Until the compositor sends "gone", requests act on the window it stands
+      for. After "gone" they do nothing.
+    </description>
+
+    <enum name="flag" bitfield="true">
+      <description summary="what a window is doing">
+        The compositor reports all four; a program can ask to change the last
+        three.
+      </description>
+      <entry name="active" value="1" summary="has the keyboard, and is on top"/>
+      <entry name="minimized" value="2" summary="put away"/>
+      <entry name="maximized" value="4" summary="fills the space it is given"/>
+      <entry name="fullscreen" value="8" summary="fills its whole screen"/>
+    </enum>
+
+    <request name="destroy" type="destructor">
+      <description summary="forget this window">
+        Nothing more is sent for it. The window itself is not touched.
+      </description>
+    </request>
+
+    <request name="raise">
+      <description summary="bring it to the front">
+        Takes the desktop to the window's workspace, brings the window back
+        if it was put away, puts it on top and gives it the keyboard.
+      </description>
+    </request>
+
+    <request name="close">
+      <description summary="ask it to close">
+        The same as pressing its own close button, so it may ask about
+        unsaved work. Asked again after it has had a while to close and has
+        not, the program is ended instead.
+      </description>
+    </request>
+
+    <request name="change">
+      <description summary="turn flags on or off">
+        Both are sets of flags. Each flag in turn_on is turned on and each in
+        turn_off is turned off. Asking for a flag to be both on and off, and
+        any flag that cannot be asked for (active), does nothing for that
+        flag. A change the window cannot take (a put-away window cannot be
+        maximised) is ignored.
+      </description>
+      <arg name="turn_on" type="uint" summary="flags to turn on"/>
+      <arg name="turn_off" type="uint" summary="flags to turn off"/>
+    </request>
+
+    <event name="title">
+      <description summary="what the window is called"/>
+      <arg name="title" type="string" summary="the title, as the window set it"/>
+    </event>
+
+    <event name="app_id">
+      <description summary="which program the window belongs to"/>
+      <arg name="app_id" type="string" summary="the program's identifier, empty if it gave none"/>
+    </event>
+
+    <event name="flags">
+      <description summary="what the window is doing now"/>
+      <arg name="flags" type="uint" summary="every flag that is on"/>
+    </event>
+
+    <event name="parent">
+      <description summary="the window this one belongs to">
+        A dialog names the window it opened over. Sent only when it changes,
+        and as null when the window has none.
+      </description>
+      <arg name="parent" type="object" interface="trindle_window_v1" allow-null="true" summary="the parent, or null"/>
+    </event>
+
+    <event name="enter">
+      <description summary="the window is showing on a screen"/>
+      <arg name="output" type="object" interface="wl_output" summary="the screen"/>
+    </event>
+
+    <event name="leave">
+      <description summary="the window is no longer showing on a screen"/>
+      <arg name="output" type="object" interface="wl_output" summary="the screen"/>
+    </event>
+
+    <event name="done">
+      <description summary="the details above are complete"/>
+    </event>
+
+    <event name="gone">
+      <description summary="the window has closed">
+        Nothing more is sent for it. The program should destroy the object.
+      </description>
+    </event>
+  </interface>
+</protocol>

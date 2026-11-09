@@ -1,0 +1,11 @@
+# machine translated (Turkish), not yet reviewed by a person.
+# The words around each help page: English = translation, one a line.
+Trindle help = Trindle yardım
+help = yardım
+Skip to the page = Sayfaya geç
+Search the help = Yardımda ara
+Search, such as printer or Wi-Fi = Ara, örneğin yazıcı veya Wi-Fi
+Search = Ara
+On this page = Bu sayfada
+Page not found = Sayfa bulunamadı
+Trindle help. No cookies, no tracking, no outside fonts or scripts. = Trindle yardım. Çerez yok, izleme yok, dış yazı tipi veya betik yok.

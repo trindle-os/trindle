@@ -1,0 +1,136 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: Trindle
+Source: https://trindle.org
+
+Files: *
+Copyright: the Trindle project
+License: GPL-3+
+
+Files: src/compose/*
+Copyright: 2017 Victor Berger and Victoria Brekenfeld
+           the Trindle project
+Comment: Trindle's compositor began as anvil, the example compositor of
+ Smithay (MIT), and has been changed by Trindle since. Every file that began
+ there carries a header saying so. Trindle's changes are under GPL-3+.
+License: MIT and GPL-3+
+
+Files: src/compose/drm_extras/*
+Copyright: Bartłomiej Maryńczak
+           the Trindle project
+Comment: From smithay-drm-extras, changed by Trindle.
+License: MIT and GPL-3+
+
+Files: vendor/smithay/*
+Copyright: 2017 Victor Berger and Victoria Brekenfeld
+Comment: Smithay 0.7.0 from crates.io with the changes listed in
+ vendor/smithay/TRINDLE.md.
+License: MIT
+
+Files: share/fonts/trindle-sans/*
+Copyright: 2016 The Inter Project Authors (https://github.com/rsms/inter)
+           The Radio Canada Project Authors (https://github.com/cbcrc/radiocanadafonts)
+Comment: Trindle Sans is a renamed build of Inter 4.1 with Radio Canada's
+ pound sign. Both licences are installed beside the fonts, in
+ /usr/share/fonts/truetype/trindle-sans/.
+License: OFL-1.1
+
+Files: share/wallpapers/*
+Copyright: the Trindle project
+Comment: Eight were made for Trindle with AI image tools, in the style of Dutch,
+ French, English and Spanish masters, with the Trindle logo included; the
+ others are made from nothing but the Trindle mark. The image
+ tool's terms (checked 19 Oct 2026) do not claim ownership of its outputs
+ and do not restrict commercial use. See
+ /usr/share/doc/trindle/sounds-and-wallpapers.txt.
+License: GPL-3+
+
+Files: share/sounds/*
+Copyright: the Trindle project
+Comment: Made by Trindle's own tools/gen-sounds.rs; see
+ /usr/share/doc/trindle/sounds-and-wallpapers.txt.
+License: GPL-3+
+
+Files: share/tour/*
+       share/iso/splash.png
+       src/compose/resources/cursor.png
+Copyright: the Trindle project
+Comment: Pictures of Trindle, and its fallback pointer, made for Trindle.
+License: GPL-3+
+
+Files: share/icons/apps/*
+Copyright: the Trindle project
+Comment: The logos of Trindle's own sister programs, made for Trindle.
+License: GPL-3+
+
+Files: share/icons/chatgpt.svg
+       share/icons/claude-desktop.svg
+       share/icons/docker.svg
+       share/icons/github-symbolic.svg
+       share/icons/nodejs.svg
+       share/icons/tailscale.svg
+Copyright: the Trindle project (the drawing only)
+Comment: Drawn by Trindle in the style of other firms' marks. The marks
+ themselves are trademarks of their owners. No permission from them is
+ claimed. They are shown only to stand for those programs.
+License: GPL-3+
+
+Files: system/apt/hardware-packages.txt
+Copyright: the makers of each firmware and driver, as Debian's packages say
+Comment: Trindle's images include firmware and processor updates from Debian's
+ non-free-firmware section, and the trindle package recommends them. They are
+ not free software: they cannot be changed, and each is under its maker's
+ licence. Trindle does not alter them and takes none from anywhere but
+ Debian. Debian leaves out any it cannot lawfully pass on. The licence of
+ each is in /usr/share/doc/<package name>/copyright on the computer once the
+ package is installed, for example /usr/share/doc/firmware-mediatek/copyright.
+License: other
+ Each firmware package carries its own licence in its copyright file. Read
+ it there before changing or passing on any of the firmware.
+
+Files: Cargo.lock
+Copyright: the authors of the Rust libraries listed in THIRD-PARTY.txt
+Comment: Every Rust library compiled into Trindle's programs, with its
+ version, its declared licence and its licence and copyright files, is listed
+ in /usr/share/doc/trindle/THIRD-PARTY.txt. That file is made from Cargo.lock
+ by tools/licences.sh. spellbook (MPL-2.0) is used unmodified; its source is
+ at https://github.com/helix-editor/spellbook.
+License: MIT or Apache-2.0 or BSD or ISC or Zlib or MPL-2.0 or Unicode-3.0
+ Each library is under the licence it declares in THIRD-PARTY.txt.
+
+License: GPL-3+
+ This program is free software: you can redistribute it and/or modify it
+ under the terms of the GNU General Public License as published by the Free
+ Software Foundation, either version 3 of the License, or (at your option)
+ any later version.
+ .
+ This program is distributed in the hope that it will be useful, but WITHOUT
+ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ more details.
+ .
+ On Debian systems, the full text of the GNU General Public License version
+ 3 can be found in /usr/share/common-licenses/GPL-3.
+
+License: MIT
+ Permission is hereby granted, free of charge, to any person obtaining a
+ copy of this software and associated documentation files (the "Software"),
+ to deal in the Software without restriction, including without limitation
+ the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ and/or sell copies of the Software, and to permit persons to whom the
+ Software is furnished to do so, subject to the following conditions:
+ .
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ DEALINGS IN THE SOFTWARE.
+
+License: OFL-1.1
+ This Font Software is licensed under the SIL Open Font License, Version
+ 1.1. The full text is installed beside the fonts, in
+ /usr/share/fonts/truetype/trindle-sans/OFL.txt and OFL-RadioCanada.txt.

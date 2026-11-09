@@ -1,0 +1,61 @@
+// Fetching apt's lists changes nothing on the computer, so the person at it
+// may do that without a password, the same as asking for firmware updates.
+// Opening and closing a Windows or Samba share from Folders is like plugging
+// in a USB stick: the person at the computer may do it without the
+// administrator's password, as udisks allows for drives. trindle-admin
+// itself only ever mounts a cifs share in that person's own folder under
+// /run/media, owned by them, and only closes their own.
+// Closing the ports a plugin had open for the home network only keeps more
+// out, so it asks for nothing either; trindle-admin closes only the asking
+// person's own plugin. Opening them still asks for the password.
+// Everything else trindle-admin does still asks.
+polkit.addRule(function(action, subject) {
+    if (action.id != "org.trindle.admin" || !subject.local || !subject.active) {
+        return polkit.Result.NOT_HANDLED;
+    }
+    var helper = "/usr/lib/trindle/libexec/trindle-admin";
+    // polkit leaves command_line out when the program asking sends none;
+    // without a string here the tests below throw and polkit asks nothing.
+    var line = action.lookup("command_line") || "";
+    if (line == helper + " apt-refresh" || line == helper + " smb-unmount-all" ||
+        line.indexOf(helper + " smb-mount ") == 0 || line.indexOf(helper + " smb-unmount ") == 0 ||
+        /^\/usr\/lib\/trindle\/libexec\/trindle-admin firewall-plugin-close [A-Za-z0-9.-]+$/.test(line)) {
+        return polkit.Result.YES;
+    }
+    return polkit.Result.NOT_HANDLED;
+});
+
+// Nothing changes a drive unasked (11 October 2026). UDisks' own answers
+// let the person at the computer format, erase or repartition a drive that
+// plugs in with no password at all. Every action of UDisks' that changes a
+// drive, a part of one, or what the computer does with it at start-up is
+// answered here with an administrator's password, whichever program asks.
+// Mounting, unmounting, unlocking, removing safely and powering off are not
+// on the list and stay as UDisks has them. Drives takes back what polkit
+// keeps of this as each change ends, so every change is asked for afresh.
+// The list is the one in src/common/drive_leave.rs; a test holds the two
+// together.
+polkit.addRule(function(action, subject) {
+    var changing = [
+        "org.freedesktop.udisks2.modify-device",
+        "org.freedesktop.udisks2.modify-device-system",
+        "org.freedesktop.udisks2.modify-device-other-seat",
+        "org.freedesktop.udisks2.modify-drive-settings",
+        "org.freedesktop.udisks2.modify-system-configuration",
+        "org.freedesktop.udisks2.filesystem-fstab",
+        "org.freedesktop.udisks2.filesystem-take-ownership",
+        "org.freedesktop.udisks2.ata-secure-erase",
+        "org.freedesktop.udisks2.nvme-format-namespace",
+        "org.freedesktop.udisks2.nvme-sanitize",
+        "org.freedesktop.udisks2.manage-swapspace",
+        "org.freedesktop.udisks2.manage-md-raid",
+        "org.freedesktop.udisks2.encrypted-change-passphrase",
+        "org.freedesktop.udisks2.encrypted-change-passphrase-system",
+        "org.freedesktop.udisks2.open-device",
+        "org.freedesktop.udisks2.open-device-system"
+    ];
+    if (changing.indexOf(action.id) < 0 || !subject.local || !subject.active) {
+        return polkit.Result.NOT_HANDLED;
+    }
+    return polkit.Result.AUTH_ADMIN_KEEP;
+});

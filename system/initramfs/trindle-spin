@@ -1,0 +1,18 @@
+#!/bin/sh
+# The turning Trindle mark, from the moment there is a screen until the login
+# screen or the desktop takes it over. First of all, before udev: the screen
+# the firmware left is there from the start, and every moment of black before
+# the mark appears is a moment the computer looks stopped. Not with "nosplash", which the safe
+# graphics start uses, so there is always a plain way to see what is going on.
+PREREQ=""
+prereqs() { echo "$PREREQ"; }
+case "${1:-}" in
+    prereqs) prereqs; exit 0 ;;
+esac
+
+[ -x /usr/bin/trindle-unlock ] || exit 0
+case " $(cat /proc/cmdline) " in
+    *" nosplash "*) exit 0 ;;
+esac
+/usr/bin/trindle-unlock --spin </dev/null >/dev/null 2>&1 &
+exit 0

@@ -1,0 +1,22 @@
+# Programs and libraries that people who cannot see or hear the screen
+# rely on. Trindle never ships them; it only never takes them away. A name
+# may end in * to cover a family. Used by trindle-admin's tidying (never
+# autoremoved, marked as chosen) and by the package's postinst.
+orca
+speech-dispatcher*
+espeak-ng*
+libespeak-ng*
+python3-speechd
+python3-brlapi
+brltty
+libbrlapi*
+liblouis*
+python3-louis
+gir1.2-gtk-3.0
+gir1.2-atspi-2.0
+gir1.2-atk-1.0
+gir1.2-wnck-3.0
+gir1.2-gstreamer-1.0
+xkbset
+at-spi2-core
+libatspi*

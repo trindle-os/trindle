@@ -1,0 +1,15 @@
+supertonic-duration_predictor.onnx	https://huggingface.co/Supertone/supertonic-2/resolve/75e6727618a02f323c720cba9478152d4bc16ca4/onnx/duration_predictor.onnx
+supertonic-text_encoder.onnx	https://huggingface.co/Supertone/supertonic-2/resolve/75e6727618a02f323c720cba9478152d4bc16ca4/onnx/text_encoder.onnx
+supertonic-vector_estimator.onnx	https://huggingface.co/Supertone/supertonic-2/resolve/75e6727618a02f323c720cba9478152d4bc16ca4/onnx/vector_estimator.onnx
+supertonic-vocoder.onnx	https://huggingface.co/Supertone/supertonic-2/resolve/75e6727618a02f323c720cba9478152d4bc16ca4/onnx/vocoder.onnx
+supertonic-unicode_indexer.json	https://huggingface.co/Supertone/supertonic-2/resolve/75e6727618a02f323c720cba9478152d4bc16ca4/onnx/unicode_indexer.json
+supertonic-voice-M1.json	https://huggingface.co/Supertone/supertonic-2/resolve/75e6727618a02f323c720cba9478152d4bc16ca4/voice_styles/M1.json
+supertonic-voice-M2.json	https://huggingface.co/Supertone/supertonic-2/resolve/75e6727618a02f323c720cba9478152d4bc16ca4/voice_styles/M2.json
+supertonic-voice-M3.json	https://huggingface.co/Supertone/supertonic-2/resolve/75e6727618a02f323c720cba9478152d4bc16ca4/voice_styles/M3.json
+supertonic-voice-M4.json	https://huggingface.co/Supertone/supertonic-2/resolve/75e6727618a02f323c720cba9478152d4bc16ca4/voice_styles/M4.json
+supertonic-voice-M5.json	https://huggingface.co/Supertone/supertonic-2/resolve/75e6727618a02f323c720cba9478152d4bc16ca4/voice_styles/M5.json
+supertonic-voice-F1.json	https://huggingface.co/Supertone/supertonic-2/resolve/75e6727618a02f323c720cba9478152d4bc16ca4/voice_styles/F1.json
+supertonic-voice-F2.json	https://huggingface.co/Supertone/supertonic-2/resolve/75e6727618a02f323c720cba9478152d4bc16ca4/voice_styles/F2.json
+supertonic-voice-F3.json	https://huggingface.co/Supertone/supertonic-2/resolve/75e6727618a02f323c720cba9478152d4bc16ca4/voice_styles/F3.json
+supertonic-voice-F4.json	https://huggingface.co/Supertone/supertonic-2/resolve/75e6727618a02f323c720cba9478152d4bc16ca4/voice_styles/F4.json
+supertonic-voice-F5.json	https://huggingface.co/Supertone/supertonic-2/resolve/75e6727618a02f323c720cba9478152d4bc16ca4/voice_styles/F5.json
