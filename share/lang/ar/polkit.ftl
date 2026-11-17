@@ -19,19 +19,28 @@ polkit-cancel = إلغاء
 
 # SAFETY: needs a human review before it ships
 # Said when the password typed is not accepted, and the question is asked again.
-polkit-not-accepted = كلمة المرور غير مقبولة. حاول مرة أخرى.
+polkit-not-accepted = كلمة المرور هذه غير صحيحة. حاول مرة أخرى.
 
 # Name a screen reader speaks for the password question window.
-polkit-spoken = المصادقة
+polkit-spoken = كلمة مرورك
 
 # Under the password box, when other requests for a password are waiting for
 # this one to end. { $n } is how many.
 polkit-waiting-behind =
     { $n ->
-        [zero] لا طلبات أخرى تنتظر انتهاء هذا الطلب.
-        [one] هناك طلب آخر ينتظر انتهاء هذا الطلب.
-        [two] هناك طلبان آخران ينتظران انتهاء هذا الطلب.
-        [few] هناك { $n } طلبات أخرى تنتظر انتهاء هذا الطلب.
-        [many] هناك { $n } طلبًا آخر ينتظر انتهاء هذا الطلب.
-       *[other] هناك { $n } طلب آخر ينتظر انتهاء هذا الطلب.
+        [zero] لا طلبات أخرى تنتظر.
+        [one] هناك طلب آخر ينتظر.
+        [two] هناك طلبان آخران ينتظران.
+        [few] هناك { $n } طلبات أخرى تنتظر.
+        [many] هناك { $n } طلبًا آخر ينتظر.
+       *[other] هناك { $n } طلب آخر ينتظر.
     }
+
+# Under the heading, when Drives asks for the password to take the snapshot before making room.
+polkit-reason-drives-snapshot = تحتاج الأقراص إلى كلمة مرور مسؤول لأخذ لقطة قبل توفير المساحة.
+
+# Under the heading, when Drives asks for the password to switch a swap file off before making room.
+polkit-reason-drives-swap-off = تحتاج الأقراص إلى كلمة مرور مسؤول لإيقاف ملف التبديل أثناء توفير المساحة.
+
+# Under the heading, when Drives asks for the password to switch a swap file back on.
+polkit-reason-drives-swap-on = تحتاج الأقراص إلى كلمة مرور مسؤول لتشغيل ملف التبديل من جديد.

@@ -42,7 +42,7 @@ settings-window-no-page = Aucune page ne correspond. Essayez un mot plus court, 
 settings-window-theme-refused = {"  "}{ $id }  { $name } (inutilisable : { $why })
 
 # Printed in a terminal when trindle-settings --theme is given no theme name.
-settings-window-theme-name = Donnez le nom d'un thème, par exemple : trindle-settings --theme default
+settings-window-theme-name = Saisissez un nom de thème, par exemple : trindle-settings --theme default
 
 # Printed in a terminal after trindle-settings --theme worked; theme is the theme's name.
 settings-window-theme-now = Le thème est maintenant { $theme }.
@@ -51,14 +51,14 @@ settings-window-theme-now = Le thème est maintenant { $theme }.
 settings-window-theme-own = Celui de Trindle
 
 # Printed in a terminal when the theme could not be chosen; error says why and ends with a full stop.
-settings-window-themes-list = { $error } trindle-settings --themes les liste.
+settings-window-themes-list = { $error } Lancez trindle-settings --themes pour voir la liste.
 
 # Printed in a terminal when trindle-settings --keys is not given the word default.
-settings-window-keys-how = Pour remettre chaque touche et chaque bouton : trindle-settings --keys default
+settings-window-keys-how = Pour remettre chaque touche et chaque bouton à la normale, lancez : trindle-settings --keys default
 
 # Printed in a terminal after every key and button was put back.
-settings-window-keys-back = Chaque touche et chaque bouton est remis comme indiqué.
+settings-window-keys-back = Chaque touche et chaque bouton est revenu à la normale.
 
 # Printed in a terminal when the keys could not be put back; error says why.
-settings-window-keys-failed = Les touches n'ont pas pu être remises : { $error }
+settings-window-keys-failed = Trindle n'a pas pu remettre les touches : { $error }
 

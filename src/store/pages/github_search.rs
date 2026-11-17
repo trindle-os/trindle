@@ -18,13 +18,40 @@ pub(super) fn github_typed(s: &mut Store, text: String) {
     g.turn += 1;
     g.asked = false;
     g.found.clear();
-    let words: Vec<String> = g.text.to_lowercase().split_whitespace().map(String::from).collect();
-    g.hub_found = hub::search(&s.hub.clone().unwrap_or_default(), &words);
+    let words = super::mixed::words_of(&g.text);
+    g.hub_found = if g.with_hub { hub::search(&s.appimagehub.list.clone().unwrap_or_default(), &words) } else { Vec::new() };
     crate::store::browse::fetch_icons(s);
 }
 
+pub(super) fn tick_place(s: &mut Store, place: Place, on: bool) {
+    match place {
+        Place::Flathub => s.github.no_flathub = !on,
+        Place::Hub => s.github.with_hub = on,
+        Place::GitHub => s.github.with_github = on,
+    }
+    let words = super::mixed::words_of(&s.github.text);
+    let g = &mut s.github;
+    g.hub_found = if g.with_hub { hub::search(&s.appimagehub.list.clone().unwrap_or_default(), &words) } else { Vec::new() };
+    if !g.with_github {
+        g.turn += 1;
+        (g.asked, g.waiting, g.error, g.checking, g.left) = (false, false, None, 0, 0);
+        g.found.clear();
+    }
+    crate::store::browse::fetch_icons(s);
+}
+
+#[derive(Clone, Copy)]
+pub(super) enum Place {
+    Flathub,
+    Hub,
+    GitHub,
+}
+
 pub(super) fn ask_github(s: &mut Store) {
-    let words: Vec<String> = s.github.text.to_lowercase().split_whitespace().map(String::from).collect();
+    if !s.github.with_github {
+        return;
+    }
+    let words = super::mixed::words_of(&s.github.text);
     if words.is_empty() {
         return;
     }
@@ -163,7 +190,7 @@ fn fetch_repo(s: &mut Store, f: &github::Found) {
     }
     let from = CameFrom::of(f);
     begin(s, &key, |d| d.by_steps());
-    s.said.remove(&key);
+    s.words.said.remove(&key);
     with_release(s, repo, move |s, res| {
         let file = res.and_then(|rel| chosen(&rel, listed).cloned().ok_or_else(|| t!("store-gh-nothing-installs").to_string()));
         match file {
@@ -188,18 +215,17 @@ fn fetch_file(s: &mut Store, key: &str, file: &github::Download, from: CameFrom)
     if !s.dials.contains_key(key) {
         begin(s, key, |d| d.by_steps());
     }
-    s.said.remove(key);
+    s.words.said.remove(key);
     s.working += 1;
     let (k, k2) = (key.to_string(), key.to_string());
-    let heard = s.heard(move |s, line| {
-        if let Some(d) = s.dials.get_mut(&k) {
-            d.heard(line);
-        }
-    });
+    let heard = s.heard_if(move |s, line| s.dials.get_mut(&k).is_some_and(|d| d.hear(line)));
+    let (kind, shown) = (file.kind.clone(), file.name.clone());
     github::install(file, heard, s.then(move |s: &mut Store, res: Result<Option<std::path::PathBuf>, String>| {
         s.job_over();
         settle(s, &k2, res.is_ok(), "");
         match res {
+
+            Ok(Some(bundle)) if kind == github::Kind::Flatpak => super::flatpak_page::offer_bundle(s, bundle, shown),
             Ok(fetched) => {
                 s.say(&k2, t!("store-added"), Tone::Plain);
                 if let Some(file) = fetched {
@@ -215,14 +241,14 @@ pub fn github_opened(s: &mut Store) {
 
     close_key_box(s);
     look_for_key(s);
-    let pending = s.pending_github.take();
+    let pending = s.opening.github.take();
     let search = move |s: &mut Store| {
         if let Some(words) = pending {
             github_typed(s, words);
             ask_github(s);
         }
     };
-    if s.hub.is_some() {
+    if s.appimagehub.list.is_some() {
         return search(s);
     }
     hub::fetch(s.then(move |s: &mut Store, found: Vec<github::Found>| {

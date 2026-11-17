@@ -5,6 +5,9 @@
 
 use std::path::PathBuf;
 
+use quick_xml::events::Event;
+use quick_xml::Reader;
+
 pub const BUILT_IN: &[&str] =
     &["A-Tab", "A-S-Tab", "A-F4", "W-a", "W-Left", "W-Right", "W-Up", "W-Down", "F11"];
 
@@ -139,27 +142,44 @@ fn key_named(word: &str) -> Option<String> {
     NAMED.iter().find(|n| n.eq_ignore_ascii_case(name)).map(|n| (*n).to_string())
 }
 
-pub fn rc_combos(text: &str) -> Vec<Combo> {
-    let mut open = String::new();
-    let mut rest = text;
-    while let Some(i) = rest.find("<!--") {
-        open.push_str(&rest[..i]);
-        rest = match rest[i..].find("-->") {
-            Some(j) => &rest[i + j + 3..],
-            None => "",
-        };
-    }
-    open.push_str(rest);
-    let mut found = Vec::new();
-    for tag in open.split("<keybind").skip(1) {
-        let Some(tag) = tag.split('>').next() else { continue };
-        if let Some(i) = tag.find("key=\"") {
-            if let Some(key) = tag[i + 5..].split('"').next().and_then(Combo::from_rc) {
-                found.push(key);
+#[derive(Debug, Default, PartialEq)]
+pub struct Bind {
+    pub key: String,
+    pub list: Option<String>,
+    pub action: String,
+    pub command: String,
+}
+
+pub fn binds(text: &str) -> Vec<Bind> {
+    let mut reader = Reader::from_str(text);
+    reader.config_mut().trim_text(true);
+    let mut found: Vec<Bind> = Vec::new();
+    let mut open: Option<Bind> = None;
+    let attr = |e: &quick_xml::events::BytesStart, name: &str| -> Option<String> {
+        e.attributes().flatten().find(|a| a.key.as_ref() == name.as_bytes())
+            .and_then(|a| a.normalized_value(quick_xml::XmlVersion::Implicit1_0).ok().map(|v| v.to_string()))
+    };
+    loop {
+        match reader.read_event() {
+            Ok(Event::Eof) | Err(_) => break,
+            Ok(Event::Start(e)) if e.name().as_ref() == b"keybind" => {
+                open = attr(&e, "key").map(|key| Bind { key, list: attr(&e, "list"), ..Bind::default() });
             }
+            Ok(Event::Start(e) | Event::Empty(e)) if e.name().as_ref() == b"action" => {
+                if let Some(b) = open.as_mut().filter(|b| b.action.is_empty()) {
+                    b.action = attr(&e, "name").unwrap_or_default();
+                    b.command = attr(&e, "command").unwrap_or_default();
+                }
+            }
+            Ok(Event::End(e)) if e.name().as_ref() == b"keybind" => found.extend(open.take()),
+            _ => {}
         }
     }
     found
+}
+
+pub fn rc_combos(text: &str) -> Vec<Combo> {
+    binds(text).iter().filter_map(|b| Combo::from_rc(&b.key)).collect()
 }
 
 pub fn kept(files: &[PathBuf]) -> Vec<Combo> {
@@ -226,6 +246,9 @@ mod tests {
         assert_eq!(found.len(), 2, "{found:?}");
         assert!(found.contains(&Combo::from_rc("C-A-t").unwrap()));
         assert!(!found.contains(&Combo::from_rc("C-q").unwrap()));
+
+        let odd = rc_combos("<keyboard><keybind key='C-A-y'><action name=\"Close\"/></keybind>\n<keybind\n  key=\"C-A-z\">\n<action name=\"Close\"/></keybind></keyboard>");
+        assert_eq!(odd, [Combo::from_rc("C-A-y").unwrap(), Combo::from_rc("C-A-z").unwrap()]);
 
         let own = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("config/desktop/shortcuts.xml");
         let all = kept(&[own]);

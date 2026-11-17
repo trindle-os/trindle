@@ -7,13 +7,13 @@ settings-appearance-title = Mwonekano
 settings-appearance-keywords = rangi lafudhi mandhari mwonekano giza mwanga mwangaza jua aikoni fonti kielekezi skrini msomaji kipofu soma kwa sauti ufikivu lebo vidokezo majina kuelekeza
 
 # Introduction under the heading of the appearance page, and the words behind the page i.
-settings-appearance-help = Mwanga au giza, rangi, aikoni, fonti, kielekezi na kusomewa skrini kwa sauti. Baadhi ya programu hugundua mabadiliko baada ya kufunguliwa tena tu.
+settings-appearance-help = Chagua mwanga au giza, rangi, aikoni, fonti na kielekezi, au washa kisomaji cha skrini. Baadhi ya programu huonyesha mabadiliko baada ya kuzifungua tena.
 
 # Question along the bottom of the page while a theme is on trial.
 settings-appearance-foot-keep = Kuweka mwonekano huu?
 
 # Small words beside the question along the bottom while a theme is on trial.
-settings-appearance-foot-escape = Escape hurudi nyuma sasa.
+settings-appearance-foot-escape = Escape hutendua sasa.
 
 # Name of the dark look, on a theme's button and in the top sentence.
 settings-appearance-look-dark = Giza
@@ -37,7 +37,7 @@ settings-appearance-sample-spoken = Jinsi { $name } inavyoonekana, { $look }
 settings-appearance-aloud-look = Mwonekano wa { $look }.
 
 # Sentence at the top of the page when a theme cannot be used; { $theme } is its name and { $why } the reason.
-settings-appearance-top-unusable = Mwonekano wa Trindle wenyewe, kwa sababu mandhari ya { $theme } haiwezi kutumika. { $why }
+settings-appearance-top-unusable = Mwonekano wa Trindle wenyewe unatumika kwa sababu mandhari ya { $theme } haiwezi kutumika. { $why }
 
 # Sentence at the top of the page for a theme that has dark and light looks; { $theme } is the theme, { $look } dark or light, { $accent } the highlight colour and { $shape } round or square.
 settings-appearance-top-theme-look = Mandhari ya { $theme }, { $look }, yenye rangi ya { $accent } na aikoni za { $shape }.
@@ -49,25 +49,28 @@ settings-appearance-top-theme = Mandhari ya { $theme }, yenye rangi ya { $accent
 settings-appearance-top-look = { $look }, yenye rangi ya { $accent } na aikoni za { $shape }.
 
 # Shape of the icons in the top sentence.
+settings-appearance-shape-square = mraba
+
+# Shape of the icons in the top sentence.
 settings-appearance-shape-round = duara
 
 # Name of Trindle's own highlight colour, first in the list of colours.
 settings-appearance-trindle-yellow = Njano ya Trindle
 
 # Start of the words behind the i of the reading the screen card.
-settings-appearance-reading-says = Husema kilicho kwenye skrini na unachoandika. Super, Alt na S pamoja pia huiwasha na kuizima.
+settings-appearance-reading-says = Kisomaji cha skrini husoma kwa sauti kilicho kwenye skrini na unachoandika. Bonyeza Super, Alt na S pamoja ili kukiwasha au kukizima.
 
 # Red words under the icon shape line when the icons could not be remade.
-settings-appearance-no-icons = Aikoni hazikuweza kutengenezwa upya, kwa hiyo baadhi zinabaki na umbo la zamani. Chagua seti tena ili kujaribu mara nyingine.
+settings-appearance-no-icons = Trindle haikuweza kusasisha aikoni zote, kwa hiyo baadhi bado zina umbo la zamani. Chagua seti tena ili ujaribu tena.
 
 # Small words on a theme's tile when Trindle made some of its colours clearer.
-settings-appearance-corrected = Baadhi ya rangi zilifanywa kusomeka vizuri zaidi.
+settings-appearance-corrected = Trindle imefanya baadhi ya maandishi kusomeka kwa urahisi zaidi.
 
 # Said aloud when a theme is tried; { $theme } is its name and { $seconds } how long until the old look comes back.
 settings-appearance-aloud-trying =
     { $seconds ->
-        [one] Inajaribu mandhari ya { $theme }. Mwonekano uliokuwa nao utarudi baada ya sekunde { $seconds } usipobonyeza Weka. Escape hurudi nyuma sasa.
-       *[other] Inajaribu mandhari ya { $theme }. Mwonekano uliokuwa nao utarudi baada ya sekunde { $seconds } usipobonyeza Weka. Escape hurudi nyuma sasa.
+        [one] Inajaribu mandhari ya { $theme }. Mwonekano uliokuwa nao utarudi baada ya sekunde { $seconds } usipobonyeza Weka. Bonyeza Escape ili kurudi sasa.
+       *[other] Inajaribu mandhari ya { $theme }. Mwonekano uliokuwa nao utarudi baada ya sekunde { $seconds } usipobonyeza Weka. Bonyeza Escape ili kurudi sasa.
     }
 
 # Name of Trindle's own theme when none is named.
@@ -89,23 +92,13 @@ settings-appearance-chooser-title = Chagua mandhari
 settings-appearance-chooser-filter = Mandhari
 
 # Green words under the Add a theme line after a theme was added; { $name } is its name.
-settings-appearance-added = { $name } iko kwenye orodha hapo juu. Ibonyeze ili kuitumia.
+settings-appearance-added = { $name } sasa iko kwenye orodha hapo juu.
 
 # Red words under the Theme line when a theme could not be removed.
-settings-appearance-not-removed = Mandhari haikuweza kuondolewa.
+settings-appearance-not-removed = Haikuweza kuondoa mandhari.
 
 # Red words under the theme tiles when a theme cannot be used; { $theme } is its name and { $why } the reason.
-settings-appearance-cannot-use = Mandhari ya { $theme } haiwezi kutumika. { $why }
-
-# Heading of the line saying a theme is tried first.
-settings-appearance-tried-first = Mandhari hujaribiwa kwanza
-
-# Small words under that line; { $seconds } is how long Keep is asked for.
-settings-appearance-tried-first-about =
-    { $seconds ->
-        [one] Weka huulizwa chini ya dirisha kwa sekunde { $seconds }.
-       *[other] Weka huulizwa chini ya dirisha kwa sekunde { $seconds }.
-    }
+settings-appearance-cannot-use = Trindle haiwezi kutumia mandhari ya { $theme }. { $why }
 
 # Name of the bin button that removes one of the person's own themes.
 # SAFETY: needs a human review before it ships
@@ -127,25 +120,22 @@ settings-appearance-looking = Inatafuta mandhari
 settings-appearance-theme-card = Mandhari
 
 # Words behind the i of the Theme card.
-settings-appearance-theme-about = Mandhari ni mwonekano mzima katika faili moja: rangi, pembe, ukubwa na nafasi. Bonyeza moja ili kuijaribu: kila dirisha la Trindle hubadilika mara moja, na mwonekano uliokuwa nao hurudi wenyewe baada ya sekunde 30 usipobonyeza Weka, kwa hiyo mandhari isiyoweza kusomwa haibaki kamwe. Mandhari yenye mwonekano wa giza na wa mwanga ina Giza na Mwanga kando ya picha yake; Mwanga ni rahisi kuona kwenye jua kali, na programu kutoka Apps huuchukua zinapofunguliwa tena. Mandhari yenye mwonekano mmoja haina vitufe hivyo. Rangi yako ya kuangazia inabaki yako kwenye kila mandhari. Mandhari unayoongeza husomwa tu, haiendeshwi kamwe, na maneno ambayo yangekuwa magumu kusoma hufanywa wazi zaidi. Kutoka terminal, trindle-settings --theme default hurudisha mwonekano wa Trindle wenyewe kila mara.
+settings-appearance-theme-about = Mandhari ni mwonekano mzima katika faili moja: rangi, pembe, ukubwa na nafasi. Bonyeza mandhari ili uijaribu. Kila dirisha la Trindle hubadilika mara moja. Usipobonyeza Weka, mwonekano uliokuwa nao hurudi wenyewe baada ya sekunde 30, kwa hiyo hutakwama kamwe na mandhari usiyoweza kuisoma. Mandhari ikiwa na mwonekano wa giza na wa mwanga, vitufe vya Giza na Mwanga vinaonekana kando ya picha yake. Mwanga ni rahisi kuona kwenye jua kali, na programu kutoka Apps huutumia zinapofunguliwa tena. Mandhari yenye mwonekano mmoja haina vitufe hivyo. Rangi yako ya kuangazia inabaki yako kwenye kila mandhari. Trindle husoma tu mandhari unayoongeza na haiiendeshi kamwe, na hufanya maneno magumu kusoma kuwa wazi zaidi. Ili kurudisha mwonekano wa Trindle wenyewe kutoka terminal, endesha trindle-settings --theme default.
 
 # Heading of the line holding the theme tiles.
 settings-appearance-theme-line = Mandhari
 
-# Small words under that line.
-settings-appearance-theme-line-about = Mwonekano mzima. Giza au Mwanga ziko kando ya mandhari yenye vyote viwili.
-
 # Small words under the Add a theme line.
-settings-appearance-add-theme-about = Faili moja ya .css, kama ile aliyoshiriki mtu.
+settings-appearance-add-theme-about = Faili moja ya .css, kama ile ambayo mtu amekushirikisha.
 
 # Words of the link that opens help about what a theme file holds.
-settings-appearance-theme-file-help = Faili ya mandhari ina nini
+settings-appearance-theme-file-help = Kilicho ndani ya faili ya mandhari
 
 # Red words under the colour box when what was typed is not a colour.
-settings-appearance-hex-bad = Herufi sita za 0-9 na a-f, kama #fbc711.
+settings-appearance-hex-bad = Tumia 0-9 na a-f, kama #fbc711.
 
 # Spoken description of the small dot that shows the colour typed.
-settings-appearance-dot = Rangi iliyoandikwa
+settings-appearance-dot = Rangi uliyoandika
 
 # Placeholder of the box for typing a colour code.
 settings-appearance-hex-code = Msimbo wa hex
@@ -163,16 +153,10 @@ settings-appearance-any-colour-about = Tarakimu sita au nane, kama #fbc711.
 settings-appearance-colour-title = Rangi
 
 # Words behind the i of the Colour card.
-settings-appearance-colour-about = Rangi ya kuangazia huashiria vitufe, swichi, duara linalojaa na mahali ulipo. Madirisha ya Trindle yenyewe hubadilika mara moja; pete hubadilika inapofunguliwa tena. Rangi nyeusi mno kuonekana kwenye kadi hufanywa nyepesi hadi isomeke, na kwenye mwonekano wa mwanga ile iliyofifia mno hufanywa nyeusi. Giza au Mwanga huchaguliwa kwenye kigae cha mandhari yenyewe, chini ya Mandhari.
+settings-appearance-colour-about = Rangi ya kuangazia huashiria vitufe, swichi, pete inapojaa na mahali ulipo. Madirisha ya Trindle yenyewe hubadilika mara moja, na pete hubadilika inapofunguliwa tena. Rangi ikiwa nyeusi mno kuonekana kwenye kadi, Trindle huiwasha hadi isomeke. Kwenye mwonekano wa mwanga, Trindle huifanya nyeusi rangi iliyofifia mno. Chagua Giza au Mwanga kwenye kigae cha mandhari yenyewe, chini ya Mandhari.
 
 # Heading of the line with the highlight colour swatches.
 settings-appearance-highlight = Kuangazia
-
-# Small words under that line.
-settings-appearance-highlight-about = Vitufe, swichi na mahali ulipo.
-
-# Small words under the read the screen aloud switch when a screen reader is installed.
-settings-appearance-reader-on = Super, Alt na S pia huiwasha na kuizima.
 
 # Heading of the line, and name of its switch, for reading the screen aloud.
 settings-appearance-reader = Soma skrini kwa sauti
@@ -180,17 +164,17 @@ settings-appearance-reader = Soma skrini kwa sauti
 # Heading of the line, and name of its switch, for keeping labels while pointing.
 settings-appearance-labels = Weka lebo wakati wa kuelekeza
 
-# Small words under that line.
-settings-appearance-labels-about = Jina la kitufe linabaki unapokielekezea.
-
 # Title of the Reading the screen card.
 settings-appearance-reading-title = Kusoma skrini
 
 # Words behind the i of that card; { $says } is the first sentences, from the key reading-says.
-settings-appearance-reading-about = { $says } Jina la kitufe kwa kawaida hupotea baada ya sekunde moja na nusu; likiwekwa, hubaki kwa muda wote kielekezi kikiwa juu yake. Skrini inaposomwa kwa sauti, kila kitufe huonyesha jina lake chini yake.
+settings-appearance-reading-about = { $says } Jina la kitufe kwa kawaida hupotea baada ya sekunde moja na nusu. Ukiweka lebo, hubaki kwa muda wote kielekezi kikiwa juu ya kitufe. Skrini inaposomwa kwa sauti, kila kitufe huonyesha jina lake chini yake.
 
 # Name of the set of round icons.
 settings-appearance-icons-circles = Duara
+
+# Name of the set of square icons.
+settings-appearance-icons-squares = Miraba
 
 # Words beside the turning ring while the icons are remade.
 settings-appearance-icons-working = Inabadilisha aikoni
@@ -204,14 +188,11 @@ settings-appearance-icons-set = Aikoni za { $name }
 # Heading of the line for the shape of the icons.
 settings-appearance-shape = Umbo
 
-# Small words under that line.
-settings-appearance-shape-about = Aikoni za Trindle, duara au mraba.
-
 # Title of the Icons card.
 settings-appearance-icons-title = Aikoni
 
 # Words behind the i of the Icons card.
-settings-appearance-icons-about = Aikoni za Trindle huja za duara au mraba. Programu ambazo Aikoni za Trindle hazina huchorewa aikoni inayolingana, na pete na paneli huchorwa upya kwa umbo jipya.
+settings-appearance-icons-about = Aikoni za Trindle huja za duara au za mraba. Trindle isipokuwa na aikoni ya programu, hutengeneza inayolingana. Pete pia hutumia umbo jipya.
 
 # Name of the list of font families, and heading of the font line.
 settings-appearance-font = Fonti
@@ -222,14 +203,8 @@ settings-appearance-font-default = Chaguo-msingi
 # Name of the list of font sizes.
 settings-appearance-font-size = Ukubwa wa fonti
 
-# Small words under the font line.
-settings-appearance-font-about = Maneno kwenye madirisha ya programu.
-
 # Name of the button that adds fonts, and heading of its line.
 settings-appearance-add-fonts = Ongeza fonti
-
-# Small words under the Add fonts line.
-settings-appearance-add-fonts-about = Faili ya .ttf au .otf, au zip ya hizo.
 
 # Words of the link that opens help about what a font file must contain.
 settings-appearance-fonts-help = Faili lazima iwe na nini
@@ -238,28 +213,28 @@ settings-appearance-fonts-help = Faili lazima iwe na nini
 settings-appearance-text-title = Maandishi
 
 # Words behind the i of the Text card.
-settings-appearance-text-about = Fonti ambayo programu hutumia kwa maneno yake, na ukubwa wake. Fonti zilizoongezwa hapa, faili ya .ttf au .otf au zip ya hizo, huungana na orodha ya fonti kwa ajili yako peke yako; baadhi ya programu hugundua baada ya kufunguliwa tena tu.
+settings-appearance-text-about = Fonti na ukubwa ambao programu hutumia kwa maneno yake. Fonti unazoongeza hapa, kama faili za .ttf au .otf au zip yake, huongezwa kwenye orodha ya fonti kwa ajili yako tu. Baadhi ya programu huzionyesha baada ya kuzifungua tena tu.
 
 # Title of the window for choosing font files.
 settings-appearance-chooser-fonts = Chagua fonti
 
 # Red words when a font could not be replaced; { $name } is the file name.
 # SAFETY: needs a human review before it ships
-settings-appearance-font-not-replaced = { $name } haikuweza kubadilishwa.
+settings-appearance-font-not-replaced = Haikuweza kubadilisha { $name }.
 
 # Green words after one font took the place of the one there; { $name } is the file name.
 # SAFETY: needs a human review before it ships
-settings-appearance-font-replaced-one = { $name } imebadilishwa. Programu zitakazoanzishwa kuanzia sasa zinaitumia.
+settings-appearance-font-replaced-one = Trindle imebadilisha { $name }. Programu utakazoanzisha kuanzia sasa zitaitumia.
 
 # Green words after several fonts took the place of the ones there; { $n } of { $total } were done.
 # SAFETY: needs a human review before it ships
-settings-appearance-font-replaced-some = Zimebadilishwa { $n } kati ya { $total }. Programu zitakazoanzishwa kuanzia sasa zinazitumia.
+settings-appearance-font-replaced-some = Trindle imebadilisha fonti { $n } kati ya { $total }. Programu utakazoanzisha kuanzia sasa zitazitumia.
 
 # Green words after fonts were added; { $n } is how many.
 settings-appearance-fonts-added =
     { $n ->
-        [one] Fonti { $n } iko kwenye orodha hapo juu. Ichague hapo juu.
-       *[other] Fonti { $n } ziko kwenye orodha hapo juu. Zichague hapo juu.
+        [one] Fonti { $n } sasa iko kwenye orodha hapo juu.
+       *[other] Fonti { $n } sasa ziko kwenye orodha hapo juu.
     }
 
 # Green words after added fonts were already in the list.
@@ -285,12 +260,6 @@ settings-appearance-cursor = Kielekezi
 
 # Name of the list of cursor sizes, and heading of its line.
 settings-appearance-cursor-size = Ukubwa wa kielekezi
-
-# Small words under the cursor line.
-settings-appearance-cursor-about = Jinsi kielekezi kinavyochorwa.
-
-# Small words under the cursor size line.
-settings-appearance-cursor-size-about = Kikubwa ni rahisi kukipata.
 
 # Title of the Pointer card.
 settings-appearance-pointer-title = Kielekezi

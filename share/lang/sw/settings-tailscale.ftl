@@ -15,11 +15,11 @@ settings-tailscale-last-online = ilikuwa mtandaoni mara ya mwisho { $day }
 
 # Shown beside the Use Tailscale switch while the password is asked for, when Tailscale is already installed.
 # SAFETY: needs a human review before it ships
-settings-tailscale-waiting = Inasubiri nenosiri...
+settings-tailscale-waiting = Inasubiri nenosiri lako…
 
 # Shown beside the Use Tailscale switch while the password is asked for, before Tailscale is installed.
 # SAFETY: needs a human review before it ships
-settings-tailscale-waiting-install = Inasubiri nenosiri, kisha itasakinisha Tailscale...
+settings-tailscale-waiting-install = Inasubiri nenosiri lako kabla ya kusakinisha Tailscale…
 
 # Shown beside the switch after Tailscale is turned on.
 settings-tailscale-done-on = Tailscale imewashwa
@@ -28,13 +28,13 @@ settings-tailscale-done-on = Tailscale imewashwa
 settings-tailscale-done-off = Tailscale imezimwa
 
 # Shown under the Sign in line once the browser is being opened.
-settings-tailscale-opening = Inafungua ukurasa wa kuingia kwenye kivinjari chako...
+settings-tailscale-opening = Inafungua ukurasa wa kuingia kwenye kivinjari chako…
 
 # Red words under the Sign in line when Tailscale could not be started.
 settings-tailscale-not-started = Tailscale haikuweza kuanzishwa.
 
 # Red words under the Sign out line when signing out did not work.
-settings-tailscale-sign-out-failed = Tailscale haikukubali kutoka.
+settings-tailscale-sign-out-failed = Tailscale haikuweza kutoka.
 
 # Headline of the page while Tailscale is being asked how it is.
 settings-tailscale-top-asking = Inauliza Tailscale…
@@ -67,20 +67,14 @@ settings-tailscale-title = Tailscale
 settings-tailscale-keywords = tailscale vpn mtandao wa faragha vifaa mbali tailnet
 
 # Help text at the top of the page.
-settings-tailscale-help = Tailscale huunganisha kompyuta na simu zako mwenyewe kuwa mtandao mmoja wa faragha, popote kila kimoja kilipo. Hakuna kitu chake kinachosakinishwa hadi uiwashe, na ikiwa imezimwa haitumii kumbukumbu.
-
-# Small line under the Use Tailscale switch before Tailscale is installed.
-settings-tailscale-switch-sub-first = Huisakinisha kutoka chanzo cha Tailscale yenyewe.
-
-# Small line under the Use Tailscale switch once Tailscale is installed.
-settings-tailscale-switch-sub = Imezimwa: imesimamishwa, haianzi na kompyuta.
+settings-tailscale-help = Tailscale huunganisha kompyuta na simu zako mwenyewe kuwa mtandao mmoja wa faragha, popote zilipo. Hakuna kinachosakinishwa hadi uiwashe, na ikiwa imezimwa haitumii kumbukumbu.
 
 # Text of the switch that turns Tailscale on or off, and heading of its line.
 settings-tailscale-switch = Tumia Tailscale
 
 # Help text (i button) of the Tailscale card when Tailscale is off or has not answered.
 # SAFETY: needs a human review before it ships
-settings-tailscale-about-plain = Mara ya kwanza inapowashwa, Tailscale husakinishwa kutoka chanzo cha programu cha Tailscale yenyewe, kisha huanzishwa. Huduma yake ya usuli hutumia kumbukumbu inapowashwa, kwa hiyo hufanya kazi tu hii ikiwa imewashwa. Hii ikiwa imezimwa, Tailscale husimamishwa na haianzi na kompyuta. Ngome ya moto huruhusu vifaa vyako mwenyewe vya Tailscale kuingia, na kuzuia kila kitu kingine kama hapo awali.
+settings-tailscale-about-plain = Mara ya kwanza unapoiwasha, Trindle husakinisha Tailscale kutoka chanzo cha programu cha Tailscale yenyewe, kisha huianzisha. Huduma ya usuli ya Tailscale hutumia kumbukumbu inapofanya kazi, kwa hiyo hufanya kazi tu hii ikiwa imewashwa. Hii ikiwa imezimwa, Tailscale husimamishwa na haianzi na kompyuta. Ngome ya moto huruhusu vifaa vyako mwenyewe vya Tailscale kuingia, na kuzuia kila kitu kingine kama hapo awali.
 
 # Help text (i button) of the Tailscale card when Tailscale is on but not yet connected.
 # SAFETY: needs a human review before it ships
@@ -92,9 +86,6 @@ settings-tailscale-about-connected = { settings-tailscale-about-plain } Kutoka h
 
 # Line in the devices card when there are no other devices.
 settings-tailscale-no-devices = Hakuna vifaa vingine bado
-
-# Small line under "No other devices yet".
-settings-tailscale-no-devices-sub = Ingia kwenye kifaa kingine kwa akaunti ile ile.
 
 # Shown on the devices card while Tailscale is off.
 settings-tailscale-waits-off = Washa Tailscale ili uone vifaa vyako.
@@ -121,29 +112,20 @@ settings-tailscale-this-computer = Kompyuta hii
 # SAFETY: needs a human review before it ships
 settings-tailscale-sign-in = Ingia
 
-# Small line under the Sign in line.
-settings-tailscale-sign-in-sub = Hufungua ukurasa wa kuingia kwenye kivinjari chako.
-
 # Heading of the line that joins the private network again, and tip of its round button.
 settings-tailscale-connect = Unganisha
 
-# Small line under the Connect line.
-settings-tailscale-connect-sub = Hujiunga tena na mtandao wako wa faragha.
-
 # Heading of the line that says the firewall lets the person's own devices in.
 # SAFETY: needs a human review before it ships
-settings-tailscale-firewall = Vifaa vyako mwenyewe vinaingia
+settings-tailscale-firewall = Vifaa vyako vinaweza kuingia
 
 # Small line under that heading.
 # SAFETY: needs a human review before it ships
-settings-tailscale-firewall-sub = Kila kitu kingine kinazuiwa, kama hapo awali.
+settings-tailscale-firewall-sub = Ngome ya moto bado inazuia vingine.
 
 # Heading of the line that signs out, and tip of its button.
 # SAFETY: needs a human review before it ships
 settings-tailscale-sign-out = Toka
-
-# Small line under the Sign out line.
-settings-tailscale-sign-out-sub = Huondoka kwenye mtandao wako wa faragha.
 
 # Heading of the card with the Tailscale switch.
 settings-tailscale-card = Tailscale
@@ -152,4 +134,4 @@ settings-tailscale-card = Tailscale
 settings-tailscale-devices = Vifaa vyako
 
 # Help text (i button) of the Your devices card.
-settings-tailscale-devices-about = Kila kifaa kilichoingia kwenye mtandao wako wa faragha, pamoja na anwani yake juu yake, kinachotumia na wakati kilipokuwa mtandaoni mara ya mwisho. Ili kuongeza kimoja, sakinisha Tailscale kwenye simu yako au kompyuta nyingine na uingie kwa akaunti ile ile.
+settings-tailscale-devices-about = Kila kifaa kilichoingia kwenye mtandao wako wa faragha, pamoja na anwani yake kwenye mtandao huo, kinachotumia na wakati kilipokuwa mtandaoni mara ya mwisho. Ili kuongeza kifaa, sakinisha Tailscale kwenye simu yako au kompyuta nyingine na uingie kwa akaunti ile ile.

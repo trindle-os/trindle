@@ -1,0 +1,129 @@
+## What an app can be allowed to do, and what goes wrong without it. Each
+## permission has a name (said after "asks for", as in "Weather asks for
+## the internet and sound"), the line under its switch, and for some a warning.
+
+access-network-name = 互联网
+access-network-without = 它无法访问互联网或附近的其他电脑。
+access-sound-name = 声音
+access-sound-without = 它不会发出声音。
+access-microphone-name = 你的麦克风
+access-microphone-without = 它听不到你的声音。
+access-sound-and-microphone-name = 声音和麦克风
+access-sound-and-microphone-without = 它不会发出声音，也听不到你的声音。
+access-files-name = 你的文档、下载、图片、音乐、视频和桌面文件夹
+access-files-without = 它无法打开你的文件，也无法保存到你的文件夹。
+access-home-name = 你主文件夹中的所有内容，包括隐藏的设置文件
+access-home-without = 它无法打开你的文件，也无法保存到你的文件夹。
+access-devices-name = 你的摄像头和其他接入的设备
+access-devices-without = 它无法看到你，也无法使用你插入的设备。
+access-bluetooth-name = 耳机等蓝牙设备
+access-bluetooth-without = 它无法通过蓝牙连接任何设备。
+access-notifications-name = 通知
+access-notifications-without = 有事发生时，它无法通知你。
+access-background-name = 登录时自动启动
+access-background-without = 它只会在你打开时运行。
+access-screen-name = 你屏幕的截图、你复制的内容，以及像键盘一样替你输入
+access-screen-without = 它无法随时查看其他窗口，也无法读取你复制的内容。
+access-x11-name = 用较旧的方式绘制窗口，这样它就能监视其他旧程序以及在其中输入的内容
+access-x11-without = 它的窗口无法打开。
+access-computer-name = 在它的隔离环境之外运行，可使用你自己能访问的一切
+access-computer-without = 你在其中输入的内容只会留在它的隔离环境里，所以 sudo 和你自己的文件在那里无法使用。
+access-control-name = 控制你的键盘、鼠标和剪贴板
+access-control-without = 它无法移动指针、输入文字或共享你复制的内容。
+access-capture-name = 与另一台电脑共享你的鼠标和键盘
+access-capture-without = 指针无法移到另一台电脑上。
+access-copied-name = 你复制的文件
+access-copied-without = 它无法读取你复制的文件，也无法把它们发送到另一台电脑。
+access-summon-name = 在全屏窗口上方打开圆环，就像你按下了快捷键一样
+access-summon-without = 它的按键和点击只会在桌面上打开圆环，不会在全屏窗口上方打开。
+access-listen-name = 被本地网络中的其他电脑访问
+access-listen-without = 本地网络中的其他电脑无法发现它或连接它。
+access-home-network-name = 仅限本地网络中的设备
+access-home-network-without = 它将无法发现或连接本地网络中的打印机、扫描仪或其他设备。
+access-usb-devices-name = 扫描仪和 USB 设备
+access-usb-devices-without = 它无法使用接在这台电脑上的扫描仪。
+access-expand-name = 在你输入时展开简短代码
+access-expand-without = 它的简短代码不会在你输入时展开。
+access-accessibility-name = 朗读每个窗口的内容
+access-accessibility-without = 它无法朗读你的窗口内容。
+access-unnamed-name = 它没有说明的某些内容
+
+access-control-warning = 它可以像你本人一样输入文字、点击并读取你复制的内容。只对你信任的插件允许这一项。
+access-capture-warning = 指针在另一台电脑上时，你输入和点击的所有内容都会发送给这个插件。只对你信任的插件允许这一项。
+access-copied-warning = 在允许期间，它只能读取你复制的那些文件，其他一概不能读取。只对你信任的插件允许这一项。
+access-summon-warning = 它可以在你不按任何键的情况下，把会接收你所有输入的圆环打开在游戏或视频上方。只对你信任的插件允许这一项。
+access-home-network-warning = 它可以连接本地网络中的每台设备，包括你的路由器，但无法访问互联网。只对你信任的插件允许这一项。
+access-usb-devices-warning = 它可以使用启动时已插入的扫描仪和图像设备，但不能使用其他 USB 设备。只对你信任的插件允许这一项。
+access-expand-warning = Trindle 会留意你输入的内容里有没有简短代码，并替你输入对应的文字。插件看不到你输入的内容。只对你信任的插件允许这一项。
+access-accessibility-warning = 它可以读取你屏幕上的所有内容。和其他屏幕阅读器一样，它也可以在其他窗口里按按钮和输入文字，不过它自己没有键盘或鼠标。只对你信任的插件允许这一项。
+
+## Titles (for a tooltip) and the line under a switch, which says what switching it off means.
+access-network-title = 互联网
+access-network-off = 关闭后，它无法访问互联网或附近的其他电脑。
+access-sound-title = 播放声音
+access-sound-off = 关闭后没有声音。
+access-microphone-title = 你的麦克风
+access-microphone-off = 关闭后，它听不到你的声音。
+access-sound-and-microphone-title = 播放声音并使用你的麦克风
+access-sound-and-microphone-off = 关闭后，它不会发出声音，也听不到你的声音。
+access-files-title = 你的文档、下载、图片、音乐、视频和桌面文件夹
+access-files-off = 关闭后，它无法打开你的文件，也无法保存到你的文件夹。
+access-home-title = 你主文件夹中的所有内容，包括隐藏的设置文件
+access-home-off = 关闭后，它无法打开你的文件，也无法保存到你的文件夹。
+access-devices-title = 你的摄像头和其他接入的设备
+access-devices-off = 关闭后，它无法使用你的摄像头或任何你插入的设备。
+access-bluetooth-title = 蓝牙，用于耳机和附近的其他设备
+access-bluetooth-off = 关闭后，它无法通过蓝牙连接任何设备。
+access-notifications-title = 显示通知
+access-notifications-off = 关闭后，它无法在有事发生时通知你。
+access-background-title = 登录时自动启动
+access-background-off = 关闭后，它只在你打开时运行。
+access-screen-title = 截取你的屏幕、读取你复制的内容，并像键盘一样输入文字
+access-screen-off = 关闭后，它无法随时查看其他窗口或读取你复制的内容。
+access-x11-title = 用较旧的方式绘制窗口，这样它就能监视其他旧程序以及在其中输入的内容
+access-x11-off = 关闭后，它的窗口无法打开。
+access-computer-title = 在它的隔离环境之外运行，可使用你自己能访问的一切
+access-computer-off = 关闭后，你在其中输入的内容只会留在它的隔离环境里，所以 sudo 和你自己的文件在那里无法使用。
+access-control-title = 控制你的键盘、鼠标和剪贴板
+access-control-off = 关闭后，它无法移动指针、输入文字或共享你复制的内容。
+access-capture-title = 与另一台电脑共享你的鼠标和键盘
+access-capture-off = 关闭后，指针无法移到另一台电脑上。
+access-copied-title = 读取你复制的文件
+access-copied-off = 关闭后，它无法读取你复制的文件，也无法把它们发送到另一台电脑。
+access-summon-title = 在全屏窗口上方打开圆环，就像你按下了快捷键一样
+access-summon-off = 关闭后，它的按键和点击只会在桌面上打开圆环，不会在全屏窗口上方打开。
+access-listen-title = 让本地网络中的其他电脑访问它
+access-listen-off = 关闭后，本地网络中的其他电脑无法发现它或连接它。
+access-home-network-title = 仅访问本地网络中的设备
+access-home-network-off = 关闭后，它无法发现或连接本地网络中的打印机、扫描仪或其他设备。
+access-usb-devices-title = 使用扫描仪和 USB 设备
+access-usb-devices-off = 关闭后，它无法使用接在这台电脑上的扫描仪。
+access-expand-title = 在你输入时展开简短代码
+access-expand-off = 关闭后，Trindle 不会在你输入时展开它的简短代码。
+access-accessibility-title = 读取每个窗口显示的内容并朗读出来
+access-accessibility-off = 关闭后，它无法朗读你的窗口内容。
+access-unnamed-title = 它没有说明的某些内容
+
+## The few words on a plugin's row of the Permissions page.
+access-note-acts-as-you = 它可以代表你操作
+access-note-home-network = 它可以连接本地网络中的每台设备
+access-note-usb-devices = 它可以使用扫描仪和图像设备
+access-note-expand = 它可以在你的窗口中输入文字
+access-note-accessibility = 它可以读取你屏幕上的所有内容
+
+access-listen-detail = { $ports }，仅限本地网络中的电脑访问。同时需要允许它使用互联网。
+
+## A request that is unusual for the kind of app that makes it.
+access-unusual = 对{ $kind }来说，这很不寻常。只有在你信任这个应用来源时才允许。
+access-kind-terminal = 终端
+access-kind-calculator = 计算器
+access-kind-photo = 照片应用
+access-kind-text-editor = 文本编辑器
+access-kind-browser = 网页浏览器
+access-kind-office = 办公应用
+access-kind-graphics = 图形应用
+access-kind-game = 游戏
+access-kind-sound-video = 音频和视频应用
+access-kind-programming = 编程工具
+access-kind-utility = 实用工具
+access-kind-other = 这样的应用

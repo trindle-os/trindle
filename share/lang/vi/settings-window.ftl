@@ -26,10 +26,10 @@ settings-window-group-about = Giới thiệu
 settings-window-in-apps = Trong Ứng dụng
 
 # Small grey heading over the row a search finds that opens the Folders program's settings.
-settings-window-in-folders = Trong Thư mục
+settings-window-in-folders = Trong Folders
 
 # The side bar row that opens the Folders program at its own settings.
-settings-window-in-folders-name = Cài đặt riêng của Thư mục
+settings-window-in-folders-name = Cài đặt riêng của Folders
 
 # Words the Settings search matches the Folders settings row by, in lower case, separated by spaces.
 settings-window-in-folders-keywords =
@@ -42,7 +42,7 @@ settings-window-no-page = Không có trang nào khớp. Hãy thử từ ngắn h
 settings-window-theme-refused = {"  "}{ $id }  { $name } (không dùng được: { $why })
 
 # Printed in a terminal when trindle-settings --theme is given no theme name.
-settings-window-theme-name = Hãy nêu tên một chủ đề, ví dụ: trindle-settings --theme default
+settings-window-theme-name = Hãy gõ tên một chủ đề, ví dụ: trindle-settings --theme default
 
 # Printed in a terminal after trindle-settings --theme worked; theme is the theme's name.
 settings-window-theme-now = Chủ đề hiện là { $theme }.
@@ -51,13 +51,13 @@ settings-window-theme-now = Chủ đề hiện là { $theme }.
 settings-window-theme-own = của riêng Trindle
 
 # Printed in a terminal when the theme could not be chosen; error says why and ends with a full stop.
-settings-window-themes-list = { $error } trindle-settings --themes liệt kê các chủ đề.
+settings-window-themes-list = { $error } Hãy chạy trindle-settings --themes để xem danh sách.
 
 # Printed in a terminal when trindle-settings --keys is not given the word default.
-settings-window-keys-how = Để đặt lại mọi phím và nút: trindle-settings --keys default
+settings-window-keys-how = Để đặt lại mọi phím và nút về bình thường, hãy chạy: trindle-settings --keys default
 
 # Printed in a terminal after every key and button was put back.
-settings-window-keys-back = Mọi phím và nút đã trở lại như được in ra.
+settings-window-keys-back = Mọi phím và nút đã trở lại bình thường.
 
 # Printed in a terminal when the keys could not be put back; error says why.
-settings-window-keys-failed = Không thể đặt lại các phím: { $error }
+settings-window-keys-failed = Trindle không đặt lại được các phím: { $error }

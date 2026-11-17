@@ -5,8 +5,8 @@ use crate::toolkit::t;
 
 fn snap(name: &str, s: &mut Store) {
     let w = 1278u32;
-    s.across = w as f32;
-    s.tall = 692.0;
+    s.size.across = w as f32;
+    s.size.tall = 692.0;
     let mut ui = Ui::new(s.whole(settings()), Theme::new(false, "#fbc711"));
 
     let h = (ui.natural_height(w as f32).ceil() as u32).clamp(692, 1000);
@@ -28,8 +28,8 @@ fn detail_page(online: bool) -> Store {
     let mut s = with_updates(stocked());
     let a = app(2);
     s.online = online;
-    s.facts.insert(a.id.clone(), Some(pages::install::AppFacts { download: "45 MB".into(), version: "3.2.1".into() }));
-    s.said_about.insert(a.id.clone(), Vec::new());
+    s.heard.facts.answer(a.id.clone(), Some(pages::install::AppFacts { download: "45 MB".into(), version: "3.2.1".into() }));
+    s.heard.reviews.insert(a.id.clone(), Vec::new());
     s.detail = Some(a);
     s
 }
@@ -66,18 +66,18 @@ fn shoot_apps_failures() {
     snap("picture-offline", &mut detail_page(false));
 
     let mut s = detail_page(true);
-    s.said.insert(app(2).id, (t!("store-flatpak-refused").into(), Tone::Problem));
+    s.words.said.insert(app(2).id, (t!("store-flatpak-refused").into(), Tone::Problem));
     snap("install-refused", &mut s);
 
     let mut s = updates_page();
-    s.said.insert(update_page::app_key("org.example.App4"), (t!("store-not-updated-said", why = "Not enough disk space"), Tone::Problem));
+    s.words.said.insert(update_page::app_key("org.example.App4"), (t!("store-not-updated-said", why = "Not enough disk space"), Tone::Problem));
     snap("update-not-updated", &mut s);
     let mut s = updates_page();
-    s.said.insert(update_page::app_key("org.example.App1"), (t!("store-upd-flatpak-said", words = t!("store-upd-held-not-told"), why = "Unable to load metadata"), Tone::Problem));
+    s.words.said.insert(update_page::app_key("org.example.App1"), (t!("store-upd-flatpak-said", words = t!("store-upd-held-not-told"), why = "Unable to load metadata"), Tone::Problem));
     snap("held-not-told", &mut s);
     let mut s = updates_page();
     let because = t!("common-updating-because", why = t!("common-refused-why-cancelled"));
-    s.said.insert(DEVICE.into(), (t!("common-updating-not-installed", why = because), Tone::Problem));
+    s.words.said.insert(DEVICE.into(), (t!("common-updating-not-installed", why = because), Tone::Problem));
     snap("firmware-failed", &mut s);
 
     let mut s = stocked();
@@ -87,26 +87,26 @@ fn shoot_apps_failures() {
     snap("github-limit", &mut s);
     let at = key_button_at(&mut s, 1278, 692);
     s.github = pages::made_up::github_key(std::mem::take(&mut s.github), Some(at), false, None);
-    s.said.insert("gh:key".into(), (t!("store-gh-key-refused").into(), Tone::Problem));
+    s.words.said.insert("gh:key".into(), (t!("store-gh-key-refused").into(), Tone::Problem));
     snap("github-key-refused", &mut s);
 
     let mut s = stocked();
     s.view = View::Backup;
     s.backup = pages::made_up::backup();
-    s.said.insert("bk:make".into(), (t!("store-backup-not-made", why = t!("store-because-space")), Tone::Problem));
+    s.words.said.insert("bk:make".into(), (t!("store-backup-not-made", why = t!("store-because-space")), Tone::Problem));
     snap("backup-not-made", &mut s);
-    s.said.clear();
-    s.said.insert("bk:back".into(), (refusal::nothing(t!("store-because-not-trindle")), Tone::Problem));
-    s.behind.insert("bk:back".into(), vec!["/home/john/Downloads/holiday.fmpack".into()]);
+    s.words.said.clear();
+    s.words.said.insert("bk:back".into(), (refusal::nothing(t!("store-because-not-trindle")), Tone::Problem));
+    s.words.behind.insert("bk:back".into(), vec!["/home/john/Downloads/holiday.fmpack".into()]);
     snap("backup-nothing-put-back", &mut s);
-    s.said.clear();
+    s.words.said.clear();
     s.backup = pages::shots_support::backup_waiting();
     snap("backup-http-card", &mut s);
 
     let mut s = stocked();
     s.view = View::Sources;
     s.sources = pages::shots_support::source_form("http://apt.example.org/debian", "trixie", "https://apt.example.org/key.gpg", "example-tool");
-    s.said.insert("src:custom".into(), (t!("store-src-bad-address").into(), Tone::Problem));
+    s.words.said.insert("src:custom".into(), (t!("store-src-bad-address").into(), Tone::Problem));
     snap("source-refused", &mut s);
 
     let events = Loop::new();
@@ -145,7 +145,7 @@ fn updates_failures() {
     let mut s = stocked();
     s.view = View::Updates;
     s.upd = update_page::made_up(&[], 0, true, &[], &[], &[]);
-    s.said.insert("up:system".into(), ("example-package-3 could not be set up.".into(), Tone::Problem));
+    s.words.said.insert("up:system".into(), ("example-package-3 could not be set up.".into(), Tone::Problem));
     snap("updates-restart-and-a-failure", &mut s);
 }
 
@@ -187,13 +187,13 @@ fn backup_pictures() {
     s.view = View::Backup;
     s.backup = pages::made_up::backup();
     snap("move-your-apps", &mut s);
-    s.said.insert("bk:back".into(), (refusal::nothing(t!("store-because-in-the-way")), Tone::Problem));
-    s.behind.insert("bk:back".into(), vec!["/home/john/.config/example.conf".into(), "/home/john/.local/share/example".into()]);
-    s.behind_open.insert("bk:back".into());
+    s.words.said.insert("bk:back".into(), (refusal::nothing(t!("store-because-in-the-way")), Tone::Problem));
+    s.words.behind.insert("bk:back".into(), vec!["/home/john/.config/example.conf".into(), "/home/john/.local/share/example".into()]);
+    s.words.open.insert("bk:back".into());
     snap("backup-behind-open", &mut s);
-    s.said.insert("bk:back".into(), (t!("store-not-installed-failed", failed = "Notes, Clock"), Tone::Problem));
-    s.behind_open.clear();
-    s.behind.clear();
+    s.words.said.insert("bk:back".into(), (t!("store-not-installed-failed", failed = "Notes, Clock"), Tone::Problem));
+    s.words.open.clear();
+    s.words.behind.clear();
     snap("backup-not-installed", &mut s);
     let mut s = without_catalogue(false);
     s.view = View::Backup;

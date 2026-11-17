@@ -8,15 +8,15 @@ use serde_json::Value;
 
 use crate::toolkit::t;
 
-const REPORTS_BASE: &str = "https://buildmorphic.com/api/reports/";
-
 pub const REPORTS_URL: &str = "https://buildmorphic.com/api/reports/trindle";
 
-const OWNERS: [(&str, &str); 1] = [("trindle-pocketkey", "trindle-pocketkey")];
+pub const OWN: &str = "trindle";
 
-pub const COMMUNITY_URL: &str = "https://trindle-community.buildmorphic.com";
+pub const FOLDERS_PROGRAM: &str = "trindle-folders";
 
 pub const SHEETS_URL: &str = "https://buildmorphic.com/communities/trindle-community/sheets";
+
+pub const COMMUNITY_URL: &str = "https://trindle.buildmorphic.com";
 
 const AGENT: &str = "Trindle";
 
@@ -28,43 +28,37 @@ pub struct Server {
     pub status: String,
 }
 
-pub fn slug_for(program: &str) -> String {
-    match OWNERS.iter().find(|(start, _)| program.starts_with(start)) {
-        Some((_, slug)) => (*slug).to_string(),
-        None => plugin_slug(program).unwrap_or_else(|| "trindle".to_string()),
-    }
-}
-
-const PLUGIN_SLUGS: [(&str, &str); 9] = [
+const PLUGIN_SLUGS: [(&str, &str); 8] = [
     ("Flow", "trindle-flow"),
     ("Scan", "trindle-scan"),
     ("Talk", "trindle-talk"),
     ("Voice", "trindle-voice"),
     ("Snippets", "trindle-snippets"),
-    ("Downloader", "trindle-downloader"),
     ("CrashReports", "trindle-crash-reports"),
     ("ScreenReader", "trindle-screen-reader"),
-    ("PocketKey", "trindle-pocketkey"),
+    ("Keyboard", "trindle-keyboard"),
 ];
 
-fn plugin_slug(program: &str) -> Option<String> {
-    let id = program.strip_prefix("trindle-plugin ")?;
-    let name = id.strip_prefix(["org.", "trindle", "."].concat().as_str())?;
-    PLUGIN_SLUGS.iter().find(|(n, _)| *n == name).map(|(_, slug)| (*slug).to_string())
+pub fn project_of(program: &str) -> Option<&'static str> {
+    if program == FOLDERS_PROGRAM {
+        return Some(FOLDERS_PROGRAM);
+    }
+    let name = program.strip_prefix("trindle-plugin ")?.strip_prefix("org.trindle.")?;
+    PLUGIN_SLUGS.iter().find(|(n, _)| *n == name).map(|(_, slug)| *slug)
+}
+
+pub fn slug_for(program: &str) -> String {
+    project_of(program).unwrap_or(OWN).to_string()
 }
 
 pub fn slug_of(body: &str) -> String {
     let named = serde_json::from_str::<Value>(body).ok().and_then(|v| v.get("project").and_then(Value::as_str).map(str::to_string));
-    named.filter(|n| OWNERS.iter().map(|o| o.1).chain(PLUGIN_SLUGS.iter().map(|p| p.1)).any(|known| known == n)).unwrap_or_else(|| "trindle".to_string())
+    named.filter(|n| n == FOLDERS_PROGRAM || PLUGIN_SLUGS.iter().any(|p| p.1 == n)).unwrap_or_else(|| OWN.to_string())
 }
 
 impl Server {
     pub fn live() -> Server {
         Server::at(REPORTS_URL)
-    }
-
-    pub fn of_slug(slug: &str) -> Server {
-        Server::at(&format!("{REPORTS_BASE}{slug}"))
     }
 
     pub fn at(address: &str) -> Server {
@@ -87,8 +81,13 @@ fn request(url: &str, body: Option<&str>) -> Result<(u16, String), String> {
     #[cfg(test)]
     ASKED.with(|n| n.set(n.get() + 1));
     let mut command = Command::new("curl");
-    command.args(["-sS", "--max-time", "20", "--proto", if cfg!(test) { "=http,https" } else { "=https" }, "--noproxy", "127.0.0.1,localhost",
-                  "-A", AGENT, "-H", "Accept: application/json", "-H", "Expect:", "-w", "\n%{http_code}"]);
+
+    let limit = (20 + body.map_or(0, str::len) / 50_000).to_string();
+    command.args(["-sS", "--max-time", limit.as_str(), "--proto", if cfg!(test) { "=http,https" } else { "=https" }]);
+    if cfg!(test) {
+        command.args(["--noproxy", "127.0.0.1,localhost"]);
+    }
+    command.args(["-A", AGENT, "-H", "Accept: application/json", "-H", "Expect:", "-w", "\n%{http_code}"]);
     if body.is_some() {
         command.args(["-X", "POST", "-H", "Content-Type: application/json", "--data-binary", "@-"]);
     }
@@ -120,7 +119,7 @@ fn error_of(body: &str, otherwise: &str) -> String {
 
 pub fn accepting(server: &Server) -> bool {
 
-    if cfg!(test) && server.post.starts_with(REPORTS_BASE) {
+    if cfg!(test) && server.post.starts_with(REPORTS_URL) {
         return false;
     }
     let Ok((200, body)) = request(&server.status, None) else { return false };
@@ -128,14 +127,15 @@ pub fn accepting(server: &Server) -> bool {
 }
 
 pub fn post(server: &Server, body: &str) -> Answer {
-    if cfg!(test) && server.post.starts_with(REPORTS_BASE) {
+    if cfg!(test) && server.post.starts_with(REPORTS_URL) {
         return Answer::Later(t!("report-not-taken").to_string());
     }
     match request(&server.post, Some(body)) {
         Ok((201, said)) => Answer::Taken(bug_number(&said)),
         Ok((429, said)) => Answer::Later(error_of(&said, t!("report-too-many"))),
         Ok((n, said)) if (500..600).contains(&n) => Answer::Later(error_of(&said, &t!("report-answered", code = n))),
-        Ok((n, said)) => Answer::Refused(error_of(&said, &t!("report-answered", code = n))),
+        Ok((n @ (400 | 403 | 413), said)) => Answer::Refused(error_of(&said, &t!("report-answered", code = n))),
+        Ok((n, said)) => Answer::Later(error_of(&said, &t!("report-answered", code = n))),
         Err(why) => Answer::Later(why),
     }
 }

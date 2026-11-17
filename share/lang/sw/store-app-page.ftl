@@ -18,7 +18,7 @@ store-app-state-removing = Inaondolewa
 store-app-state-downloading = Inapakuliwa
 
 # The state beside the dot while Flatpak is putting the fetched app in.
-store-app-state-putting-in = Inawekwa
+store-app-state-putting-in = Inasakinishwa
 
 # The state beside the dot while the app's own update goes in.
 store-app-state-updating = Inasasishwa
@@ -65,7 +65,7 @@ store-app-remove = Ondoa
 store-app-open-round = Fungua
 
 # Main button that releases an app whose updates are held back.
-store-app-release = Achia
+store-app-release = Ruhusu masasisho
 
 # Main button that updates the app.
 store-app-update = Sasisha
@@ -83,13 +83,13 @@ store-app-website = Tovuti
 store-app-no-pictures = Programu hii haina picha.
 
 # In the picture frame when the picture could not be fetched.
-store-app-picture-missed = Picha hii haikuweza kupakuliwa.
+store-app-picture-missed = Trindle haikuweza kupata picha hii.
 
 # In the picture frame while the picture is being fetched.
-store-app-picture-fetching = Inapakua picha…
+store-app-picture-fetching = Inapata picha…
 
 # In the picture frame when the computer has no internet.
-store-app-picture-offline = Picha haziwezi kupakuliwa wakati kompyuta hii haijaunganishwa na intaneti.
+store-app-picture-offline = Unganisha kwenye intaneti ili kuona picha.
 
 # Between the picture buttons: which picture, when it has no caption.
 store-app-picture-of = Picha { $at } kati ya { $n }
@@ -164,13 +164,13 @@ store-app-review-no-title = Hakuna kichwa
 store-app-people-none = Bado hakuna aliyeandika kuhusu programu hii.
 
 # Under What people say when there is no internet.
-store-app-people-offline = Wanachosema watu hakiwezi kupakuliwa wakati kompyuta hii haijaunganishwa na intaneti.
+store-app-people-offline = Unganisha kwenye intaneti ili kusoma maoni.
 
 # Under What people say while reviews are being fetched.
-store-app-people-looking = Inatafuta wanachosema watu…
+store-app-people-looking = Inapakia maoni…
 
 # Name of the card of reviews.
-store-app-people = Wanachosema watu
+store-app-people = Maoni
 
 # Facts line: when the app's project was made.
 store-app-fact-created = Ilitengenezwa

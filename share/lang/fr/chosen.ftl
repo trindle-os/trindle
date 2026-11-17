@@ -19,7 +19,7 @@ chosen-act-name-kept = Ce nom est réservé au système.
 chosen-act-name-long = Ce nom est trop long.
 
 # Red words under the name box, and at the foot of Folders, when a rename fails: the item's name, then the reason.
-chosen-inplace-not-renamed = { $name } n’a pas pu être renommé : { $why }.
+chosen-inplace-not-renamed = Trindle n’a pas pu renommer { $name } : { $why }.
 
 # Red words under the name box, and at the foot of Folders, when a name is already used in that place; the kind is the word folder or file.
 chosen-inplace-taken =

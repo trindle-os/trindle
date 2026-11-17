@@ -7,8 +7,8 @@
 
 use std::path::Path;
 
-const OWN: [&str; 27] = [
-    "activity", "apps", "boxed", "disks", "drives", "eyedropperlist", "filechooser", "files", "folders", "greeter", "help",
+const OWN: [&str; 28] = [
+    "activity", "admin", "apps", "boxed", "disks", "drives", "eyedropperlist", "filechooser", "files", "folders", "greeter", "help",
     "installer", "portal", "report", "ring", "screenshot", "settings", "store", "text", "welcome",
 
     "test",

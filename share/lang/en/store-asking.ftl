@@ -5,11 +5,11 @@
 # Heading of the permission window, naming the app.
 store-ask-title = What { $app } may use
 # Under the list of switches in the permission window when one or more is on already.
-store-ask-above-on = Each switch shows what is allowed now. You can change these later in Apps, Permissions.
+store-ask-above-on = You can change these later in Settings, Permissions.
 # Under the list of switches in the permission window when all start off.
-store-ask-above-off = Each switch stays off until you press it. You can change these later in Apps, Permissions.
+store-ask-above-off = Nothing is allowed yet. You can change these later in Settings, Permissions.
 # Note under the list of switches, since a .deb names nothing it wants.
-store-ask-worked-out = Worked out from the app itself
+store-ask-worked-out = Based on what the app asks for
 # Tip of the button that turns every switch on.
 store-ask-allow-all = Allow all
 # Main button of the permission window that keeps the choices and closes it.

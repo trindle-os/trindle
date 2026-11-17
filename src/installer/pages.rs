@@ -1,7 +1,7 @@
 //! The installer's pages and the parts they are built from.
 
 use super::{ABOUT_YOU, BESIDE_WIDTH, DISK_PASSWORD, DONE, Installer, MARK, MARKS, MARK_GAP, Msg, READY, RUNNING, SWAP_WIDTH, tour};
-use super::plan::{self, Lock, Where};
+use super::plan::{self, Disk, Lock, Where};
 use crate::common::terms;
 use crate::toolkit::colour::Colour;
 use crate::toolkit::t;
@@ -9,6 +9,7 @@ use crate::toolkit::theme;
 use crate::toolkit::tiles::{standard_ring_with, tile_head};
 use crate::toolkit::widget::{button, card, column, drawing, entry, form_label, heading, headline, icon_circle, item, label, lead,
                              list, main_action, note, page_title, row, scroll, slider, space, switch, Length, Node, Pen, Tone};
+use zeroize::Zeroizing;
 use tiny_skia::{Paint, PixmapMut, Transform};
 
 pub(super) fn matching<'a>(items: &'a [(String, String)], find: &str) -> Vec<&'a (String, String)> {
@@ -38,8 +39,9 @@ impl Installer {
     fn radio(&self, words: &str, chosen: bool, pick: Option<Msg>) -> Node<Msg> {
         let icon = if chosen { "radio-checked-symbolic" } else { "radio-symbolic" };
         let mut b = button(icon, words).on(chosen);
-        if let Some(m) = pick {
-            b = b.on_press(m);
+        match pick {
+            Some(m) => b = b.on_press(m),
+            None => b = b.off(true),
         }
         row(vec![b, label(words).width(Length::Fill)]).gap(12.0)
     }
@@ -48,8 +50,8 @@ impl Installer {
         column(vec![form_label(name), what]).gap(4.0).width(Length::Fill)
     }
 
-    pub(super) fn password(&self, text: &str, name: &str, key: &str, change: fn(String) -> Msg) -> Node<Msg> {
-        entry(text, name, change).key(key).secret()
+    pub(super) fn password(&self, text: &str, name: &str, key: &str, change: fn(Zeroizing<String>) -> Msg) -> Node<Msg> {
+        entry(text, name, move |t| change(Zeroizing::new(t))).key(key).secret()
     }
 
     pub(super) fn field(&self, at: usize, icon: &str, name: &str, items: &[(String, String)], chosen: &str) -> Node<Msg> {
@@ -65,7 +67,7 @@ impl Installer {
         card(column(vec![
             head,
             entry(self.find[at].clone(), name, move |t| Msg::Find(at, t)).key(format!("find-{at}")),
-            scroll(format!("scroll-{at}"), list(rows, place, move |i| Msg::Pick(at, i)).key(format!("list-{at}"))),
+            scroll(format!("scroll-{at}"), list(rows, place, move |i| Msg::Pick(at, i)).called(name).key(format!("list-{at}"))),
         ]).gap(8.0)).width(Length::Fill).height(Length::Fill)
     }
 
@@ -138,18 +140,20 @@ impl Installer {
     pub(super) fn privacy(&self) -> Node<Msg> {
         let chip = self.machine.chip;
         let lock = self.plan.lock;
-        let words = if chip {
-            t!("installer-privacy-chip")
-        } else {
-            t!("installer-privacy-no-chip")
+        let words = match (lock, chip) {
+            (Lock::None, true) => t!("installer-privacy-chip-none"),
+            (Lock::None, false) => t!("installer-privacy-no-chip-none"),
+            (_, true) => t!("installer-privacy-chip"),
+            (_, false) => t!("installer-privacy-no-chip"),
         };
+        let chip_choice = self.radio(t!("installer-privacy-chip-choice"), lock == Lock::Chip, chip.then_some(Msg::Lock(Lock::Chip)));
+        let chip_choice = if chip { chip_choice } else { column(vec![chip_choice, note(t!("installer-privacy-chip-off"))]).gap(4.0) };
         let choices = card(column(vec![
             tile_head("system-lock-screen-symbolic", t!("installer-privacy-locked"), Vec::new()),
             self.radio(t!("installer-privacy-none"), lock == Lock::None, Some(Msg::Lock(Lock::None))),
             self.radio(t!("installer-privacy-password"), lock == Lock::Password,
                        Some(Msg::Lock(Lock::Password))),
-            self.radio(t!("installer-privacy-chip-choice"), lock == Lock::Chip,
-                       chip.then_some(Msg::Lock(Lock::Chip))),
+            chip_choice,
         ]).gap(12.0));
         let about = card(column(vec![
             tile_head("dialog-information-symbolic", t!("installer-privacy-about"), Vec::new()),
@@ -170,8 +174,19 @@ impl Installer {
             self.labelled(t!("installer-same-again"), self.password(&self.disk_two, t!("installer-same-again"), "disk-two", Msg::DiskTwo)
                 .shown(self.suggested)),
         ];
+        let (score, guess) = plan::password_strength(&self.disk_one);
+        let accent = self.accent;
+        let meter = drawing((MARKS as f32 * MARK.0 + (MARKS - 1) as f32 * MARK_GAP, theme_entry()),
+                            t!("installer-strength"), move |canvas, pen| marks(canvas, pen, score as usize, accent));
+        items.push(row(vec![form_label(t!("installer-strength")), meter]).gap(12.0));
+        if !guess.is_empty() {
+            items.push(note(guess));
+        }
         if plan::mistyped(&self.disk_one, &self.disk_two) {
             items.push(label(t!("installer-mismatch")).tone(Tone::Problem));
+        }
+        if self.suggest_failed {
+            items.push(label(t!("installer-suggest-failed")).tone(Tone::Problem));
         }
         let keep = card(column(vec![
             tile_head("dialog-warning-symbolic", t!("installer-disk-write-down"), Vec::new()),
@@ -221,11 +236,15 @@ impl Installer {
     pub(super) fn ready(&self) -> Node<Msg> {
         let p = &self.plan;
         let name = &self.name;
-        let (words, tone) = ready_sentence(&p.target);
+        let disk = self.machine.disks.iter().find(|d| d.dev == p.disk());
+        let (words, tone) = ready_sentence(&p.target, disk);
+
+        let swap = if p.swap { format!(" {}", t!("installer-ready-swap", gb = self.machine.memory)) } else { String::new() };
         let target = match &p.target {
-            Some(Where::Erase { disk }) => (t!("installer-ready-whole", disk = disk), t!("installer-ready-whole-text", name = name)),
+            Some(Where::Erase { disk: dev }) => (t!("installer-ready-whole", disk = disk.map_or(dev.clone(), Disk::named)),
+                                                 format!("{}{swap}", t!("installer-ready-whole-text", name = name))),
             Some(Where::Beside { part, leave }) => (t!("installer-ready-beside", part = part),
-                t!("installer-ready-beside-text", part = part, size = plan::size(*leave), name = name)),
+                format!("{}{swap}", t!("installer-ready-beside-text", part = part, size = plan::size(*leave), name = name))),
             None => (t!("installer-ready-no-disk").into(), t!("installer-ready-no-disk-text").into()),
         };
         let lock = match p.lock {
@@ -379,11 +398,12 @@ fn theme_entry() -> f32 {
     crate::toolkit::theme::sheet().entry_height
 }
 
-pub(super) fn ready_sentence(target: &Option<Where>) -> (String, Tone) {
-    match target {
-        Some(Where::Erase { disk }) => (t!("installer-ready-replaced", disk = disk), Tone::Warn),
-        Some(Where::Beside { part, .. }) => (t!("installer-ready-kept", part = part), Tone::Warn),
-        None => (t!("installer-ready-none").into(), Tone::Problem),
+pub(super) fn ready_sentence(target: &Option<Where>, shown: Option<&Disk>) -> (String, Tone) {
+    match (target, shown) {
+        (Some(Where::Erase { .. }), Some(d)) => (t!("installer-ready-replaced-known", disk = d.named(), holds = d.holds()), Tone::Warn),
+        (Some(Where::Erase { disk }), None) => (t!("installer-ready-replaced", disk = disk), Tone::Warn),
+        (Some(Where::Beside { part, .. }), _) => (t!("installer-ready-kept", part = part), Tone::Warn),
+        (None, _) => (t!("installer-ready-none").into(), Tone::Problem),
     }
 }
 

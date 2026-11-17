@@ -46,6 +46,10 @@ fn pages(rows: &[Row], room: f32) -> Vec<Vec<&Row>> {
 }
 
 pub fn render(fonts: &Fonts, blocks: &[Block], title: &str) -> Vec<u8> {
+    write(&page_pictures(fonts, blocks), title)
+}
+
+fn page_pictures(fonts: &Fonts, blocks: &[Block]) -> Vec<Vec<u8>> {
     let width = PAGE.0 as f32 - 2.0 * MARGIN;
     let laid = Lay::new(fonts, BODY, mono(&fonts.families())).lay(blocks, width);
     let ink = Palette::print();
@@ -60,9 +64,9 @@ pub fn render(fonts: &Fonts, blocks: &[Block], title: &str) -> Vec<u8> {
         }
 
         let rgb: Vec<u8> = pixmap.data().chunks_exact(4).flat_map(|p| [p[0], p[1], p[2]]).collect();
-        pictures.push(rgb);
+        pictures.push(squeeze(&rgb));
     }
-    write(&pictures, title)
+    pictures
 }
 
 fn squeeze(bytes: &[u8]) -> Vec<u8> {
@@ -93,9 +97,16 @@ fn pdf_string(s: &str) -> Vec<u8> {
 }
 
 fn write(pictures: &[Vec<u8>], title: &str) -> Vec<u8> {
+    let blank;
+    let pictures = if pictures.is_empty() {
+        blank = [squeeze(&vec![255u8; (PAGE.0 * PAGE.1 * 3) as usize])];
+        &blank[..]
+    } else {
+        pictures
+    };
     let mut out: Vec<u8> = b"%PDF-1.4\n%\xE2\xE3\xCF\xD3\n".to_vec();
     let mut offsets: Vec<usize> = Vec::new();
-    let count = pictures.len().max(1);
+    let count = pictures.len();
 
     let page_obj = |i: usize| 4 + i * 3;
     let object = |out: &mut Vec<u8>, offsets: &mut Vec<usize>, body: &[u8]| {
@@ -111,9 +122,7 @@ fn write(pictures: &[Vec<u8>], title: &str) -> Vec<u8> {
     info.extend_from_slice(&pdf_string(title));
     info.extend_from_slice(b" /Producer (Trindle Text) >>");
     object(&mut out, &mut offsets, &info);
-    let blank = vec![255u8; (PAGE.0 * PAGE.1 * 3) as usize];
-    for i in 0..count {
-        let picture = pictures.get(i).unwrap_or(&blank);
+    for (i, data) in pictures.iter().enumerate() {
         let n = page_obj(i);
         let page = format!(
             "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 {} {}] /Resources << /XObject << /Im0 {} 0 R >> >> /Contents {} 0 R >>",
@@ -123,7 +132,6 @@ fn write(pictures: &[Vec<u8>], title: &str) -> Vec<u8> {
             n + 2
         );
         object(&mut out, &mut offsets, page.as_bytes());
-        let data = squeeze(picture);
         let mut image = format!(
             "<< /Type /XObject /Subtype /Image /Width {} /Height {} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /FlateDecode /Length {} >>\nstream\n",
             PAGE.0,
@@ -131,7 +139,7 @@ fn write(pictures: &[Vec<u8>], title: &str) -> Vec<u8> {
             data.len()
         )
         .into_bytes();
-        image.extend_from_slice(&data);
+        image.extend_from_slice(data);
         image.extend_from_slice(b"\nendstream");
         object(&mut out, &mut offsets, &image);
         let draw = format!("q {} 0 0 {} 0 0 cm /Im0 Do Q", POINTS.0, POINTS.1);
@@ -153,6 +161,16 @@ fn write(pictures: &[Vec<u8>], title: &str) -> Vec<u8> {
 mod tests {
     use super::*;
     use crate::text::markdown;
+
+    #[test]
+    fn pages_are_held_compressed_and_an_empty_document_still_has_a_page() {
+        let fonts = Fonts::new();
+        let all = page_pictures(&fonts, &markdown::parse("# Short\n\nwords\n"));
+        assert_eq!(all.len(), 1);
+        assert!(all[0].len() < 1 << 20, "a page is held as {} bytes, not as raw colours", all[0].len());
+        let pdf = render(&fonts, &[], "Empty");
+        assert_eq!(String::from_utf8_lossy(&pdf).matches("/Type /Page ").count(), 1);
+    }
 
     #[test]
     fn a_pdf_with_its_pages() {

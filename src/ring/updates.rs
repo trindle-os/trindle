@@ -22,6 +22,7 @@ use crate::settings::ui::{UPDATE_ICON, UP_TO_DATE_ICON};
 use crate::toolkit::event::Flow;
 use crate::toolkit::widget::{button, Node};
 
+use super::attention::{self, Need};
 use super::ctx::{msg, Ctx, Msg};
 use crate::toolkit::t;
 
@@ -32,6 +33,14 @@ const FIRST_SECS: u64 = 90;
 const STALE_SECS: u64 = 10 * 60;
 
 const FIRMWARE_SECS: u64 = 24 * 60 * 60;
+
+fn due(looked: Option<Instant>) -> bool {
+    looked.is_none() || stale(looked)
+}
+
+fn stale(looked: Option<Instant>) -> bool {
+    looked.is_some_and(|t| t.elapsed().as_secs() > STALE_SECS)
+}
 
 fn count_lines(text: &str, keep: impl Fn(&str) -> bool) -> usize {
     text.lines().filter(|l| keep(l)).count()
@@ -149,9 +158,9 @@ fn counted(apt: &str, flatpaks: &str, firmware: &[String], plugins: &[Pending], 
     }
 }
 
-pub fn waiting(_ctx: &Rc<Ctx>, firmware: Option<Vec<String>>, net: bool, done: impl FnOnce(Waiting, Vec<String>) + 'static) {
-    capture(&["apt", "list", "--upgradable"], None, move |_, apt, _| {
-        capture(&flatpak_args(net), None, move |_, apps, _| {
+pub fn waiting(firmware: Option<Vec<String>>, net: bool, done: impl FnOnce(Waiting, Vec<String>) + 'static) {
+    capture(&super::plain(&["apt", "list", "--upgradable"]), None, move |_, apt, _| {
+        capture(&super::plain(&flatpak_args(net)), None, move |_, apps, _| {
 
             run::on_thread(move || plugins_pending(net), move |plugins| {
                 let answer = move |firmware: Vec<String>| {
@@ -251,6 +260,12 @@ impl Updates {
                   held_at: held::changed_at(), other: None, off: !update_checks::on() }
     }
 
+    pub fn look_if_due(&mut self) {
+        if due(self.looked.get()) {
+            self.look();
+        }
+    }
+
     pub fn look(&mut self) {
         self.looked.set(Some(Instant::now()));
         let keep = self.firmware.clone();
@@ -263,7 +278,7 @@ impl Updates {
         let ctx = self.ctx.clone();
         self.off = !update_checks::on();
         let net = update_checks::may_ask_network(false, !self.off);
-        waiting(&self.ctx, firmware, net, move |w, devices| ctx.face(move |f| (f.updates.last, f.updates.firmware) = (w, devices)));
+        waiting(firmware, net, move |w, devices| ctx.face(move |f| (f.updates.last, f.updates.firmware) = (w, devices)));
     }
 
     pub fn notice(&mut self) -> bool {
@@ -286,16 +301,18 @@ impl Updates {
         self.other
     }
 
-    pub fn button(&self, size: f32) -> Option<Node<Msg>> {
+    pub fn button(&self, size: f32) -> Node<Msg> {
 
-        if self.looked.get().is_some_and(|t| t.elapsed().as_secs() > STALE_SECS) {
+        if stale(self.looked.get()) {
             self.looked.set(Some(Instant::now()));
             self.ctx.face(|f| f.updates.look());
         }
         let unchecked = unchecked(self.last, self.other, self.off);
         let icon = if stand(self.last, self.other) == Stand::UpToDate && !unchecked { UP_TO_DATE_ICON } else { UPDATE_ICON };
         let name = if unchecked { t!("ring-updates-off").into() } else { named(self.last, self.other) };
-        Some(button(icon, name).size(size).on_press(msg(|f| f.updates.press())))
+        let node = button(icon, name).size(size).on_press(msg(|f| f.updates.press()));
+        let need = attention::when(stand(self.last, self.other) == Stand::Waiting, Need::Update);
+        attention::filled(node, icon, need, size)
     }
 
     fn press(&mut self) {
@@ -324,9 +341,22 @@ fn look_later(ctx: &Weak<Ctx>) {
 
 #[cfg(test)]
 mod tests {
-    use super::{ask_firmware, named, opens, stand, Opens, Pending, Stand, Waiting, FIRMWARE_SECS};
+    use super::{ask_firmware, due, named, opens, stand, Opens, Pending, Stand, Waiting, FIRMWARE_SECS, STALE_SECS};
     use crate::common::updating::{self, Lock, Who};
-    use std::time::Instant;
+    use std::time::{Duration, Instant};
+
+    #[test]
+    fn opening_the_ring_looks_for_updates_only_when_the_last_look_is_stale() {
+        assert!(due(None));
+        assert!(!due(Some(Instant::now())));
+        let old = Instant::now().checked_sub(Duration::from_secs(STALE_SECS + 1)).expect("the computer has been up longer than STALE_SECS");
+        assert!(due(Some(old)));
+        assert!(!super::stale(None), "the button never starts a first look");
+        let view = include_str!("view/mod.rs");
+        let opened = &view[view.find("fn opened(&mut self").expect("opened")..];
+        let opened = &opened[..opened.find("\n    }\n").expect("end of opened")];
+        assert!(opened.contains("self.updates.look_if_due();") && !opened.contains("self.updates.look();"));
+    }
 
     #[test]
     fn fwupd_is_asked_once_a_day_unless_it_offered_something() {
@@ -450,7 +480,7 @@ mod tests {
         assert_eq!(w(3, 2, 0).words(), "Install 5 updates");
         assert_eq!(w(0, 0, 1).words(), "See the firmware update");
         assert_eq!(w(0, 0, 2).words(), "See 2 firmware updates");
-        assert_eq!(w(3, 0, 1).words(), "See 4 updates, firmware among them");
+        assert_eq!(w(3, 0, 1).words(), "See 4 updates, including firmware");
     }
 
     use crate::plugins::catalogue::{Entry, Offer};
@@ -495,7 +525,7 @@ mod tests {
         assert_eq!((w.total(), w.plugins, w.look), (1, 0, 0));
 
         let w = super::counted(APT, "", &["abc".to_string()], &found, &none);
-        assert_eq!(w.words(), "See 4 updates, firmware among them");
+        assert_eq!(w.words(), "See 4 updates, including firmware");
     }
 
     #[test]
@@ -504,8 +534,8 @@ mod tests {
         let look = |plugins, look| Waiting { plugins, look, ..Waiting::default() };
 
         assert!(look(0, 1).only_a_look() && look(0, 2).only_a_look());
-        assert_eq!(look(0, 1).words(), "See the plugin update, which asks for more than before");
-        assert_eq!(look(0, 2).words(), "See 2 plugin updates, which ask for more than before");
+        assert_eq!(look(0, 1).words(), "See the plugin update, which asks for more permissions than before");
+        assert_eq!(look(0, 2).words(), "See 2 plugin updates, which ask for more permissions than before");
         assert_eq!(stand(look(0, 1), None), Stand::Waiting, "it still waits, so the button says so");
 
         assert!(!look(1, 1).only_a_look());
@@ -514,9 +544,9 @@ mod tests {
         assert!(!Waiting::default().only_a_look());
 
         assert_eq!(Waiting::default().spoken(), "Everything is up to date");
-        assert_eq!(look(2, 0).spoken(), "2 waiting: the updates button beside Apps puts them in");
-        assert_eq!(look(0, 1).spoken(), "1 waiting: 1 plugin update needs a look in Apps");
-        assert_eq!(look(1, 2).spoken(), "3 waiting: the updates button beside Apps puts 1 in, and 2 plugin updates need a look in Apps");
+        assert_eq!(look(2, 0).spoken(), "2 updates are waiting. Use the updates button beside Apps to install them.");
+        assert_eq!(look(0, 1).spoken(), "1 update is waiting. 1 plugin update needs a look in Apps.");
+        assert_eq!(look(1, 2).spoken(), "3 updates are waiting. Use the updates button beside Apps to install 1 of them. 2 plugin updates need a look in Apps.");
 
         let installed = [mine("org.example.One", "1.0", &["network"]), mine("org.example.Three", "3.0", &["network"])];
         let offers = [offer("org.example.One", "1.1", &["network"]), offer("org.example.Three", "3.1", &["network", "microphone"])];
@@ -546,7 +576,7 @@ mod tests {
 
         let look = source.split_once("pub fn look(").unwrap().1.split_once("\n    }\n").unwrap().0;
         assert!(look.contains("may_ask_network(false, !self.off)"));
-        assert_eq!(source.matches("waiting(&self.ctx,").count(), 1, "one look, and the timers, the stale look and the held look all go through it");
+        assert_eq!(source.matches("waiting(firmware, net,").count(), 1, "one look, and the timers, the stale look and the held look all go through it");
         let new = source.split_once("pub fn new(").unwrap().1.split_once("\n    }\n").unwrap().0;
         assert!(new.contains("look_later"), "the timers only call look, which decides");
 

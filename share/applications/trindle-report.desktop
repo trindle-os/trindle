@@ -2,7 +2,7 @@
 Name=Report a problem
 Comment=Write down what went wrong and keep a report to send
 Exec=trindle-report
-Icon=dialog-warning-symbolic
+Icon=trindle-report
 Terminal=false
 Type=Application
 Categories=Utility;

@@ -138,7 +138,8 @@ pub struct Kept {
 
 struct Shot {
     number: u64,
-    pid: u32,
+
+    pidfd: Option<std::os::fd::OwnedFd>,
 
     pulse: Option<std::fs::File>,
     heard: Option<u64>,
@@ -171,6 +172,10 @@ mod tests {
             assert!(kept.split(',').any(|part| part == format!("{LOG}=info")), "{kept}");
             assert!(kept.starts_with("warn,"), "{kept}");
             assert!(kept.contains(&format!("{}=info", crate::capture::LOG)), "{kept}");
+            assert!(kept.contains(&format!("{}=info", crate::lock::LOG)), "{kept}");
+            assert!(kept.contains(&format!("{}=info", crate::shell::FULL_SCREEN_LOG)), "{kept}");
+
+            assert!(kept.contains(&format!("{}=info", crate::udev::SCREENS_BACK_LOG)), "{kept}");
             assert_eq!(kept.contains(&format!("{}=info", crate::rest::LOG)), rest, "{kept}");
 
             assert!(kept.parse::<tracing_subscriber::EnvFilter>().is_ok(), "{kept}");

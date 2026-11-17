@@ -11,19 +11,16 @@ disks-about-tip = 关于此页面
 disks-help-1 = 这台电脑内部和插入的每个驱动器，都画成一条由各个分区组成的横条。每个分区的宽度对应它的大小，填充的长度对应已用的空间，所以已满的分区一眼就能看出来。
 
 # Second paragraph of the longer words that open from the i beside the title.
-disks-help-2 = 图下方，每个驱动器都有一张卡片。你可以打开分区、挂载或卸载它，也可以安全移除驱动器或将其断电。分区上的铅笔会弹出它的更改项：名称、专属文件夹、是否在开机时就绪、大小、检查和修复、格式化或删除。空闲空间中的加号用来新建分区。
+disks-help-2 = 图下方，每个驱动器都有一张卡片。你可以打开分区、挂载或卸载分区、安全移除驱动器，或将驱动器断电。分区上的铅笔可以让你重命名、选择文件夹、设为开机时挂载、调整大小、检查、修复、格式化或删除它。空闲空间中的加号用来新建分区。
 
 # Third paragraph of the longer words that open from the i beside the title.
-disks-help-3 = 系统所在的驱动器会显示出来，但不会提供任何会擦除或移动内容的更改。对任何驱动器的每次更改，每次都会要求输入管理员密码。眼睛图标可以让驱动器或分区在 Folders 和圆环中隐藏：它仍会留在这里，显示为灰色，但并没有被锁定。
-
-# Sentence under the title of the main card, saying what the picture of the drives shows.
-disks-map-caption = 每个驱动器的每个分区，填充的长度对应已用的空间。
+disks-help-3 = 你可以看到系统所在的驱动器，但不能对它做任何会擦除或移动内容的更改。对任何驱动器的每次更改，每次都会要求输入管理员密码。眼睛图标可以让驱动器或分区在 Folders 和圆环中隐藏。它仍会留在这里，显示为灰色，也没有被锁定。
 
 # Title of the main card, which draws every drive as a bar of its parts.
 disks-your-drives = 你的驱动器
 
 # Red sentence at the top of the page when the list of drives could not be read at all.
-disks-cannot-read = 目前无法读取驱动器。
+disks-cannot-read = 现在无法读取驱动器。
 
 # Tip of the round button that asks for the list of drives again, on the card shown when the drive service is missing.
 disks-try-again = 重试
@@ -47,7 +44,7 @@ disks-missing = { $what }不可用。请用以下命令安装：sudo apt install
 disks-headline-loading = 正在查看驱动器…
 
 # Red sentence at the top of the page when a drive says it is failing. { $name } is the drive's name.
-disks-headline-failing = { $name } 正在损坏。请立即把想保留的内容复制出来。
+disks-headline-failing = { $name } 正在损坏。请立即把想保留的文件复制到另一个驱动器。
 
 # Sentence at the top of the page when a drive has worn-out or damaged spots. { $name } is the drive's name; { $troubles } lists what is wrong.
 disks-headline-look = { $name } 需要查看：{ $troubles }。
@@ -55,29 +52,29 @@ disks-headline-look = { $name } 需要查看：{ $troubles }。
 # Sentence at the top of the page when nothing is wrong. { $plugged } is how many drives are plugged in from outside.
 disks-headline-calm =
     { $plugged ->
-        [0] 驱动器及其上的空间。
-       *[other] 驱动器及其上的空间，另有 { $plugged } 个已插入的驱动器。
+        [0] 你的驱动器及其上的空间。
+       *[other] 你的驱动器及其上的空间，另有 { $plugged } 个驱动器已插入。
     }
 
 # Red sentence at the top of the page when the computer's own disk is almost full. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-full =
     { $plugged ->
-        [0] 快满了：这台电脑只剩 { $free } 可用。请尽快删除或移走一些文件。
-       *[other] 快满了：这台电脑只剩 { $free } 可用，另有 { $plugged } 个已插入的驱动器。请尽快删除或移走一些文件。
+        [0] 这台电脑快满了，只剩 { $free } 可用。请尽快删除或移走一些文件。
+       *[other] 这台电脑快满了，只剩 { $free } 可用。已插入 { $plugged } 个驱动器。请尽快删除或移走一些文件。
     }
 
 # Sentence at the top of the page when the computer's own disk is filling up. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-getting-full =
     { $plugged ->
-        [0] 空间渐满：这台电脑还有 { $free } 可用。
-       *[other] 空间渐满：这台电脑还有 { $free } 可用，另有 { $plugged } 个已插入的驱动器。
+        [0] 这台电脑空间渐满，还有 { $free } 可用。
+       *[other] 这台电脑空间渐满，还有 { $free } 可用。已插入 { $plugged } 个驱动器。
     }
 
 # Sentence at the top of the page when the computer's own disk has plenty of room. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-plenty =
     { $plugged ->
-        [0] 空间充足：这台电脑还有 { $free } 可用。
-       *[other] 空间充足：这台电脑还有 { $free } 可用，另有 { $plugged } 个已插入的驱动器。
+        [0] 这台电脑空间充足，还有 { $free } 可用。
+       *[other] 这台电脑空间充足，还有 { $free } 可用。已插入 { $plugged } 个驱动器。
     }
 
 # Title of the card with the ring for the disk the system is on.
@@ -89,7 +86,7 @@ disks-ring-files = 你的文件
 # Sentence on a ring's card. { $free } is the free space; { $place } is system for the disk the system is on, or files for the place that holds your own files.
 disks-ring-still-free =
     { $place ->
-        [system] 系统所在位置还有 { $free } 可用。
+        [system] 系统所在的磁盘还有 { $free } 可用。
        *[files] 存放你自己文件的位置还有 { $free } 可用。
     }
 
@@ -100,21 +97,21 @@ disks-ring-tip = { $name }：已用 { $full }，共 { $whole }，可用 { $free 
 disks-ring-of = 共 { $whole }
 
 # Health reading in the line under the picture when no drive has taken a reading yet.
-disks-health-none = 没有读数，驱动器没有报告自身状况
+disks-health-none = 驱动器还没有报告任何健康读数
 
 # Health reading in the line under the picture when the one drive that has taken a reading is fine.
-disks-health-one = 状况良好，由驱动器自己报告
+disks-health-one = 状况良好，由驱动器自检得出
 
 # Health reading in the line under the picture when every drive is fine. { $n } is how many drives say so.
 disks-health-all =
     { $n ->
-       *[other] 状况良好，全部 { $n } 个驱动器都这样报告
+       *[other] 全部 { $n } 个驱动器都通过了自检
     }
 
 # Health reading in the line under the picture when some drives need a look. { $n } is how many.
 disks-health-look =
     { $n ->
-       *[other] 有 { $n } 个需要查看，请见其卡片
+       *[other] 有 { $n } 个需要查看：请见其卡片
     }
 
 # Line under the picture of the drives. { $n } is how many drives there are; { $total } is their size together; { $health } says how healthy they are.
@@ -178,7 +175,7 @@ disks-kind-crypto-open = 已加密，已解锁
 disks-kind-crypto-locked = 已加密，已锁定
 
 # Kind of a part that holds other parts.
-disks-kind-container = 包含其他分区
+disks-kind-container = 包含分区
 
 # Kind of a part that has no filesystem on it.
 disks-kind-none = 没有文件系统
@@ -216,13 +213,13 @@ disks-trouble-temperature = 温度过高
 disks-trouble-wearing-out = 正在磨损
 
 # Trouble a drive reports when it has made itself read-only.
-disks-trouble-readonly = 已自行变为只读
+disks-trouble-readonly = 已变为只读
 
 # Trouble a drive reports about the memory it uses to back up its work.
 disks-trouble-volatile = 其内存备份已失效
 
 # Trouble a drive reports when part of it has made itself read-only.
-disks-trouble-pmr = 其一部分已自行变为只读
+disks-trouble-pmr = 部分已变为只读
 
 # Trouble a drive reports when it has been used past what its maker expects.
 disks-trouble-worn = 磨损已超出厂商的预期
@@ -255,7 +252,7 @@ disks-health-ok = 状况良好
 disks-health-line = { $state }，{ $readings }
 
 # Line under a drive's name when its case answers but the drive inside it does not.
-disks-no-answer = 驱动器没有响应
+disks-no-answer = 没有响应
 
 # Red words on a drive's card when its case answers but the drive inside it does not.
 disks-no-answer-help = 外壳有响应，但里面的驱动器没有。请拔下它，等待十秒，再用自带的线缆插到蓝色接口或 USB-C 接口；如果仍是这样，里面的驱动器可能松脱或已损坏。
@@ -276,14 +273,14 @@ disks-erase-whole = 擦除整个驱动器
 disks-eye-show =
     { $what ->
         [drive] 显示此驱动器
-       *[part] 显示此分区
+       *[partition] 显示此分区
     }
 
 # Tip of the eye that hides a drive or part. { $what } is drive or part; { $lock } is the note that hiding does not protect it.
 disks-eye-hide =
     { $what ->
         [drive] 隐藏此驱动器。{ $lock }
-       *[part] 隐藏此分区。{ $lock }
+       *[partition] 隐藏此分区。{ $lock }
     }
 
 # Note on the card of a hidden drive. { $lock } is the note that hiding does not protect it.
@@ -291,10 +288,10 @@ disks-hidden-note = 已在 Folders 和圆环中隐藏。{ $lock }
 
 # SAFETY: needs a human review before it ships
 # Note on the card of the drive the system runs from.
-disks-system-note = 系统从这里运行：这里的任何内容都不能擦除。
+disks-system-note = 系统运行在它上面，所以这里的任何内容都不能擦除。
 
 # Note on the card of a drive that has no partition table.
-disks-no-table = 没有分区表：整个驱动器都是空闲的。
+disks-no-table = 这个驱动器没有分区表，所以整个驱动器都是空闲的。
 
 # Part of the line under a part's name, when it holds files but is not mounted.
 disks-part-not-mounted = 未挂载
@@ -319,7 +316,7 @@ disks-mount = 挂载
 disks-unmount = 卸载
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = 更改
+disks-change-it = 进行更改
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = 名称
@@ -349,7 +346,7 @@ disks-folder-note = 它的文件出现的位置。留空则由电脑选择。
 disks-mount-startup = 开机时挂载
 
 # Note under the row with the switch for mounting a part at start-up.
-disks-startup-note = 电脑每次启动时它都已就绪。如果它不在，电脑照常启动。
+disks-startup-note = 电脑每次启动时都会挂载它。如果它不在，电脑照常启动。
 
 # Spoken name of the sliders that choose a size in gigabytes, for resizing a part and for making a new one.
 disks-size-gb = 大小（GB）
@@ -386,11 +383,11 @@ disks-room-tip = 腾出空间
 
 # SAFETY: needs a human review before it ships
 # Warning shown after the first press of the make room button. { $name } is the part; { $drive } is the drive; { $size } is the room asked for.
-disks-room-warning = 请再点按一次：{ $drive } 上的 { $name } 将在创建快照后减少 { $size }
+disks-room-warning = 请再点按一次，从 { $drive } 上的 { $name } 中腾出 { $size }。Trindle 会先创建快照。
 
 # SAFETY: needs a human review before it ships
 # Note under the row that makes room.
-disks-room-note = 在使用中、创建快照之后缩小，并留出空闲空间。
+disks-room-note = Trindle 会先创建快照，再在使用中缩小分区。腾出的空间保持空闲。
 
 # Tip of the button that checks a part for faults.
 disks-check-tip = 检查是否有故障
@@ -401,9 +398,6 @@ disks-repair-tip = 修复
 
 # Label of the row where a part is checked and repaired.
 disks-faults = 故障
-
-# Note under the Faults row.
-disks-faults-note = 查找其文件存放方式中的故障并加以纠正。运行期间它会被卸载。
 
 # SAFETY: needs a human review before it ships
 # Warning shown after the first press of the repair button. { $name } is the part; { $drive } is the drive.
@@ -420,14 +414,6 @@ disks-format = 格式化
 disks-format-tip = 格式化
 
 # SAFETY: needs a human review before it ships
-# Note under the row that erases the whole drive.
-disks-format-whole = 重新开始，作为一个占满整个驱动器的分区。
-
-# SAFETY: needs a human review before it ships
-# Note under the row that formats one part.
-disks-format-part = 只擦除此分区上的所有内容。
-
-# SAFETY: needs a human review before it ships
 # Warning shown after the first press of the format or erase button. { $words } names what is erased.
 disks-format-warning = 请再点按一次：{ $words }上的所有内容都将被擦除
 
@@ -438,13 +424,9 @@ disks-part-where = { $drive } 上的 { $name }，{ $size }
 # Spoken name of the button that deletes a part, which is also what it says after the first press. { $name } is the part; { $size } is its size; { $drive } is the drive.
 disks-delete-name = 删除 { $drive } 上的 { $name }，{ $size }
 
-# SAFETY: needs a human review before it ships
 # Label of the row where a part is deleted.
-disks-delete-label = 删除此分区
-
 # SAFETY: needs a human review before it ships
-# Note under the row that deletes a part.
-disks-delete-note = 它的空间会变为空闲，可用于新建分区，或让前一个分区扩展进来。
+disks-delete-label = 删除分区
 
 # Tip of the round button on free space that opens the box for making a new part.
 disks-new-part-tip = 在这里新建分区
@@ -452,15 +434,12 @@ disks-new-part-tip = 在这里新建分区
 # Label of the row where a new part is made.
 disks-new-part = 新分区
 
-# Note under the row where a new part is made.
-disks-new-part-note = 在这块空闲空间中创建，并格式化后即可使用。
-
 # Tip of the button that makes a new part.
 disks-make-tip = 创建
 
 # SAFETY: needs a human review before it ships
 # Warning shown after the first press of the button that makes a new part. { $size } is the size asked for; { $drive } is the drive.
-disks-make-warning = 请再点按一次，在 { $drive } 上创建 { $size } 的分区
+disks-make-warning = 请再点按一次，在 { $drive } 上新建一个 { $size } 的分区
 
 # SAFETY: needs a human review before it ships
 # Title of the box for erasing a whole drive. { $name } is the drive.
@@ -503,7 +482,7 @@ disks-safe-remove = 可以安全移除
 disks-powering-off = 正在断电
 
 # Words on a drive's row when it has been powered off.
-disks-off-safe = 已关闭：可以拔下
+disks-off-safe = 可以安全拔下
 
 # Words on a row while a part is being renamed.
 disks-renaming = 正在重命名
@@ -512,7 +491,7 @@ disks-renaming = 正在重命名
 disks-renamed = 已重命名
 
 # Words on a row when the person emptied the folder box, so the computer chooses the folder.
-disks-folder-auto = 电脑重新自行选择文件夹
+disks-folder-auto = 现在由电脑为你选择文件夹
 
 # Words on a row when a part has been given a folder. { $dir } is the folder.
 disks-folder-appears = 它出现在 { $dir }
@@ -521,7 +500,7 @@ disks-folder-appears = 它出现在 { $dir }
 disks-startup-on = 开机时挂载到 { $dir }
 
 # Words on a row when a part is set not to mount at start-up.
-disks-startup-off = 开机时不处理
+disks-startup-off = 开机时不挂载
 
 # Words on a row while a folder or start-up choice is being saved.
 disks-saving = 正在保存
@@ -533,22 +512,31 @@ disks-resizing = 正在调整大小
 disks-resized = 已调整为 { $size }
 
 # Red words on the row that makes room, when the files to make smaller cannot be found.
-disks-room-files-missing = 找不到这些文件，所以无法腾出空间。
+disks-room-files-missing = Trindle 找不到这些文件，所以无法腾出空间。
 
 # Words on a row while the snapshot is taken before room is made.
 disks-snapshot-taking = 正在创建快照
 
 # Red words when the snapshot taken before making room could not be found afterwards.
-disks-snapshot-missing = 之后找不到该快照。
+disks-snapshot-missing = Trindle 之后找不到该快照。
 
-# Red words when the snapshot before making room failed. { $why } is why, as a sentence.
+# Red words when the snapshot, or switching off the swap file, before making room failed. { $why } is why, as a sentence.
 disks-snapshot-failed = { $why } 没有调整任何大小。
 
 # Red words when things changed while the snapshot was being taken.
-disks-snapshot-changed = 创建快照期间情况发生了变化，所以没有调整任何大小。
+disks-snapshot-changed = 创建快照期间情况发生了变化，所以 Trindle 没有调整任何大小。
 
 # Words on a row while room is being made.
 disks-making-room = 正在腾出空间
+
+# Words on a row while the swap file is switched off before room is made.
+disks-swap-off-doing = 正在关闭交换文件
+
+# Words on a row while the swap file is switched back on after room is made.
+disks-swap-on-doing = 正在重新开启交换文件
+
+# Red words when the swap file couldn't be switched back on after making room. { $done } is how making room went, { $why } why the swap file is still off, both as sentences.
+disks-swap-still-off = { $done } 重启前交换文件会保持关闭。{ $why }
 
 # Words on a row when room has been made. { $size } is how much.
 disks-room-made = 已腾出 { $size } 空间
@@ -561,7 +549,7 @@ disks-repaired = 已修复
 
 # SAFETY: needs a human review before it ships
 # Red words when some faults could not be put right.
-disks-repair-failed = 有些故障无法纠正。请把想保留的内容复制出来。
+disks-repair-failed = Trindle 无法修复一些故障。请把想保留的文件复制到另一个驱动器。
 
 # Words on a row while a part is being checked.
 disks-checking = 正在检查
@@ -588,7 +576,7 @@ disks-new-part-missing = 找不到新分区。
 disks-service-unreachable = 无法连接驱动器服务。
 
 # Red words when the identifier of a freshly formatted part could not be read.
-disks-uuid-unread = 无法读取新分区的标识符。
+disks-uuid-unread = Trindle 无法读取新分区的标识符。
 
 # Words on a row while a part is being deleted.
 disks-deleting = 正在删除
@@ -603,7 +591,7 @@ disks-making-it = 正在创建
 disks-made = 已创建
 
 # Red words under an eye when hiding or showing could not be kept. { $why } is the system's reason.
-disks-hide-failed = 无法保存该设置：{ $why }
+disks-hide-failed = 无法保存：{ $why }
 
 # Words on a row while a change is being made. { $doing } says what is being done.
 disks-working = { $doing }…
@@ -621,7 +609,7 @@ disks-name-empty = 请先给它起个名字。
 # Red words under the folder name box when it is too long. { $max } is the most letters allowed.
 disks-name-too-long =
     { $max ->
-       *[other] 名称太长：最多 { $max } 个字符。
+       *[other] 名称太长。请控制在 { $max } 个字符以内。
     }
 
 # Red words under the folder name box when it has letters that are not allowed.
@@ -636,7 +624,7 @@ disks-name-taken = { $dir } 已被占用。
 # Red words under a part's name box when the name is too long for its kind of file system. { $max } is the most letters allowed.
 disks-label-too-long =
     { $max ->
-       *[other] 名称对此类型来说太长：最多 { $max } 个字符。
+       *[other] 名称对这个分区来说太长。请控制在 { $max } 个字符以内。
     }
 
 # Red words under a part's name box when a FAT name has marks that are not allowed.
@@ -645,8 +633,8 @@ disks-label-fat-marks = FAT 名称不能包含 * ? . , ; : / \ | + = < > [ ] 或
 # Red words under the Size row when the kind of part must be mounted before it can be resized. { $way } is larger or smaller.
 disks-resize-mount-first =
     { $way ->
-        [larger] 请先挂载它：这种类型只能在挂载时扩大。
-       *[smaller] 请先挂载它：这种类型只能在挂载时缩小。
+        [larger] 请先挂载它。这种分区只能在挂载时扩大。
+       *[smaller] 请先挂载它。这种分区只能在挂载时缩小。
     }
 
 # Red words under the Size row when the kind of part cannot be resized. { $way } is larger or smaller.
@@ -658,35 +646,35 @@ disks-resize-cannot =
 
 # SAFETY: needs a human review before it ships
 # Red words when the password box was closed with no password. Said whole, as a sentence.
-disks-no-password = 没有提供密码，所以没有任何改动。
+disks-no-password = 你没有输入密码，所以没有任何改动。
 
 # SAFETY: needs a human review before it ships
 # Red words when the password box was closed with no password, after some steps of a change were already done.
-disks-no-password-part-way = 没有提供密码，所以工作在中途停止了。
+disks-no-password-part-way = 你没有输入密码，所以工作在中途停止了。
 
 # Red words when another change is pressed while one is still being made.
 disks-one-at-a-time = 另一项更改仍在进行中。请在它完成后再试。
 
 # SAFETY: needs a human review before it ships
 # Red words when it could not be made sure that the password would be asked for.
-disks-not-sure = 无法确认会要求输入密码，所以没有任何改动。
+disks-not-sure = Trindle 无法确认会要求输入密码，所以没有任何改动。
 
 # SAFETY: needs a human review before it ships
 # Red words after how a change ended, when the password just given could not be taken back.
-disks-standing = 刚才输入的密码无法收回，所以几分钟内对驱动器的另一项更改可能不会再要求输入密码。正在再次尝试收回。
+disks-standing = Trindle 无法撤销你刚才输入的密码，所以几分钟内对驱动器的另一项更改可能不会要求输入密码。Trindle 正在再次尝试。
 
 # SAFETY: needs a human review before it ships
 # Words after how a change ended, when the password just given has been taken back after all.
-disks-taken-back = 刚才输入的密码现已收回：下一次更改会要求输入密码。
+disks-taken-back = 你刚才输入的密码现已撤销，所以下一次更改会要求输入密码。
 
 # Red words when a change could not be started because there is no drive service to ask.
-disks-no-service = 无法连接驱动器服务，所以没有任何改动。
+disks-no-service = Trindle 无法连接驱动器服务，所以没有任何改动。
 
 # Red words said the next time Drives opens, about a change it was closed or ended in the middle of.
 disks-closed = 进行此项更改时，“驱动器”被关闭了。
 
 # Words on the row of a change still being made when the window is asked to close.
-disks-stays-open = “驱动器”会保持打开，直到此项更改完成，以便说明结果。
+disks-stays-open = “驱动器”会保持打开，直到此项更改完成，这样你可以看到结果。
 
 # Red words for a refusal. { $reason } says why, without a full stop.
 disks-nothing-changed = { $reason }，所以没有任何改动。
@@ -695,7 +683,7 @@ disks-nothing-changed = { $reason }，所以没有任何改动。
 disks-part-way = { $reason }，所以工作在中途停止了。
 
 # Reason given when the drive service could not be asked, without a full stop.
-disks-service-not-asked = 无法向驱动器服务发出请求
+disks-service-not-asked = 无法询问驱动器服务
 
 # Red words when a change stopped part-way for a reason that was not a refusal. { $why } is the reason, as a sentence.
 disks-failed-part-way = { $why } 工作在中途停止了。
@@ -725,19 +713,19 @@ disks-still-unmounted = 为此已卸载 { $dev }，现在仍未挂载：请在�
 disks-may-be-unmounted = { $dev } 可能已被卸载：请查看它的行。
 
 # Red words about a part that could not be mounted again because that needs a password. { $dev } is the part.
-disks-put-back-password = 为此已卸载 { $dev }，再次挂载它需要单独的密码：请在它的行中挂载。
+disks-put-back-password = 为此已卸载 { $dev }。请在它的行中重新挂载，并在询问时输入它的密码。
 
 # Red words about a part that could not be mounted again. { $dev } is the part; { $why } is why.
 disks-put-back-failed = 为此已卸载 { $dev }，且无法重新挂载（{ $why }）：请在它的行中挂载。
 
 # Red words under a freshly formatted part whose folder could not be kept. { $dir } is the folder; { $why } is why, as a sentence.
-disks-folder-not-kept = 已格式化，但没有再次为它设置文件夹 { $dir }。{ $why } 请在它的行中重新选择文件夹。
+disks-folder-not-kept = 格式化已完成，但 Trindle 无法再次为它设置文件夹 { $dir }。{ $why } 请在它的行中重新选择文件夹。
 
 # Red words when a drive is in use and cannot be unmounted.
 disks-busy = 仍有东西在使用它。请关闭所有显示其文件的窗口或程序，然后再试。
 
 # Red words when there is not enough room for what is on a part at the size asked for.
-disks-no-room = 按该大小，空间不足以容纳其上的内容。
+disks-no-room = 这个大小对其中已有的文件来说太小了。
 
 # Step of a change. { $dev } is the part.
 disks-step-unmount = 卸载 { $dev }
@@ -746,7 +734,7 @@ disks-step-unmount = 卸载 { $dev }
 disks-step-mount = 重新挂载 { $dev }
 
 # Step of a change.
-disks-step-eject = 关闭驱动器以便移除
+disks-step-eject = 为移除驱动器做准备
 
 # Step of a change.
 disks-step-power-off = 将驱动器断电
@@ -755,13 +743,13 @@ disks-step-power-off = 将驱动器断电
 disks-step-format = 格式化 { $dev }
 
 # Step of a change.
-disks-step-create = 创建新分区
+disks-step-create = 创建分区
 
 # Step of a change. { $dev } is the part.
 disks-step-delete = 删除 { $dev }
 
 # Step of a change. { $dev } is the part.
-disks-step-resize-part = 调整分区 { $dev } 的大小
+disks-step-resize-part = 调整 { $dev } 的大小
 
 # Step of a change. { $dev } is the part.
 disks-step-resize = 调整 { $dev } 上内容的大小
@@ -785,64 +773,61 @@ disks-step-other = 对 { $dev } 执行步骤 { $method }
 disks-room-ext-offline = 这个 { $kind } 分区只能在未使用时缩小，所以无法在这里从中腾出空间。
 
 # Red words under the Make room row for an xfs part.
-disks-room-xfs-fixed = 这个 xfs 分区无法缩小。
+disks-room-xfs-fixed = xfs 分区无法缩小。
 
 # Red words under the Make room row for any other kind of part in use. { $kind } is the kind of file system.
 disks-room-other-kind = 这个 { $kind } 分区在使用中无法缩小。
 
 # Red words under the Make room row when a snapshot cannot be taken of the part.
-disks-room-no-snapshot = 只能为系统自己的磁盘创建快照，所以无法在这里腾出空间。
+disks-room-no-snapshot = Trindle 只能为系统自己的磁盘创建快照，所以无法在这里腾出空间。
 
 # Red words under the Make room row.
-disks-room-not-in-table = 它不是驱动器分区表中的分区，所以无法从中腾出空间。
+disks-room-not-in-table = 它不是驱动器分区表中的分区，所以 Trindle 无法从中腾出空间。
 
 # Red words under the Make room row.
-disks-room-no-online-shrink = 驱动器服务无法在使用中缩小这里的 Btrfs，所以无法腾出空间。
+disks-room-no-online-shrink = 驱动器服务无法在使用中缩小这里的 Btrfs，所以 Trindle 无法腾出空间。
 
 # Red words under the Make room row.
-disks-room-holds-parts = 它包含其他分区，所以无法从中腾出空间。
+disks-room-holds-parts = 它包含其他分区，所以 Trindle 无法从中腾出空间。
 
 # Red words under the Make room row.
-disks-room-not-gpt = 它所在的驱动器没有 GPT 分区表，所以无法从中腾出空间。
+disks-room-not-gpt = 它所在的驱动器没有 GPT 分区表，所以 Trindle 无法从中腾出空间。
 
 # Red words under the Make room row.
 disks-room-mount-first = 请先挂载它：Btrfs 需要在挂载时缩小。
 
 # Red words under the Make room row.
-disks-room-mounts-not-one = 它没有恰好挂载在一个位置，所以无法腾出空间。
+disks-room-mounts-not-one = 它没有挂载，所以 Trindle 无法腾出空间。
 
 # Red words under the Make room row.
-disks-room-read-only = 它以只读方式挂载，所以无法腾出空间。
+disks-room-read-only = 它以只读方式挂载，所以 Trindle 无法腾出空间。
 
 # Red words under the Make room row.
-disks-room-read-only-unknown = 无法确定它是否只读，所以无法腾出空间。
+disks-room-read-only-unknown = Trindle 无法确定它是否只读，所以无法腾出空间。
 
 # Red words under the Make room row.
-disks-room-many-drives = 这些文件分布在不止一个驱动器上，所以无法腾出空间。
+disks-room-many-drives = 这些文件分布在不止一个驱动器上，所以 Trindle 无法腾出空间。
 
 # Red words under the Make room row.
-disks-room-drives-unknown = 无法确定这些文件分布在几个驱动器上，所以无法腾出空间。
+disks-room-drives-unknown = Trindle 无法确定这些文件分布在几个驱动器上，所以无法腾出空间。
 
 # Red words under the Make room row.
-disks-room-swap-file = 上面有交换文件，所以无法腾出空间。
+disks-room-swap-unknown = Trindle 无法确定上面是否有交换文件，所以无法腾出空间。
 
 # Red words under the Make room row.
-disks-room-swap-unknown = 无法确定上面是否有交换文件，所以无法腾出空间。
+disks-room-used-unknown = Trindle 无法读取它已用了多少，所以无法腾出空间。
 
 # Red words under the Make room row.
-disks-room-used-unknown = 无法读取它已用了多少，所以无法腾出空间。
+disks-room-area-unknown = 驱动器服务没有说明文件系统有多大，所以 Trindle 无法检查它，也无法腾出空间。
 
 # Red words under the Make room row.
-disks-room-area-unknown = 驱动器服务没有说明文件区域有多大，所以无法检查，也无法腾出空间。
+disks-room-open-missing = Trindle 找不到它已解锁的副本，所以无法腾出空间。
 
 # Red words under the Make room row.
-disks-room-open-missing = 找不到它已打开的副本，所以无法腾出空间。
+disks-room-encryption-sizes = 为加密给出的大小不一致，所以 Trindle 无法腾出空间。
 
 # Red words under the Make room row.
-disks-room-encryption-sizes = 为加密给出的大小不一致，所以无法腾出空间。
-
-# Red words under the Make room row.
-disks-room-sizes = 为它给出的大小不一致，所以无法腾出空间。
+disks-room-sizes = 为它给出的大小不一致，所以 Trindle 无法腾出空间。
 
 # Red words under the Make room row. { $used } is how much the files use.
 disks-room-too-little = 它保存了 { $used }，需要保留的比这更多，所以能释放的空间太少。
@@ -854,7 +839,7 @@ disks-room-sizes-unread = 无法读取它的大小。
 disks-room-range = 可以腾出从 { $least } 到 { $most } 的空间。
 
 # Red words when making room was stopped. { $what } says what was found wrong, without a full stop.
-disks-room-stopped = { $what }，所以工作已停止。
+disks-room-stopped = { $what }，所以 Trindle 已停止。
 
 # What was found wrong while making room.
 disks-room-check-unmounted = 这些文件不再处于挂载状态
@@ -863,30 +848,30 @@ disks-room-check-unmounted = 这些文件不再处于挂载状态
 disks-room-check-part = 分区为 { $is }，本应为 { $should }
 
 # What was found wrong while making room.
-disks-room-check-open = 加密的已打开副本大小不对
+disks-room-check-open = 加密的已解锁副本大小不对
 
 # What was found wrong while making room. { $is } is the size the files' area has; { $should } is the size it should have.
-disks-room-check-area = 文件区域为 { $is }，本应为 { $should }
+disks-room-check-area = 文件系统为 { $is }，本应为 { $should }
 
 # What was found wrong while making room.
-disks-room-check-area-small = 文件区域比已用的内容还小
+disks-room-check-area-small = 文件系统比已用的内容还小
 
 # What was found wrong while making room.
-disks-room-check-fit = 容纳者与被容纳者不再匹配
+disks-room-check-fit = 文件系统已装不进分区
 
 # Red words when making room was stopped because the drive service no longer lists something. { $what } is part, copy or files.
 disks-room-gone =
     { $what ->
-        [part] 驱动器服务不再列出该分区，所以工作已停止。
-        [copy] 驱动器服务不再列出已打开的副本，所以工作已停止。
+        [partition] 驱动器服务不再列出该分区，所以工作已停止。
+        [copy] 驱动器服务不再列出已解锁的副本，所以工作已停止。
        *[files] 驱动器服务不再列出该文件系统，所以工作已停止。
     }
 
 # Step of making room, in the account of one that stopped part-way.
-disks-room-step-files = 缩小文件区域
+disks-room-step-files = 缩小文件系统
 
 # Step of making room, in the account of one that stopped part-way.
-disks-room-step-open = 缩小加密的已打开副本
+disks-room-step-open = 缩小加密的已解锁副本
 
 # Step of making room, in the account of one that stopped part-way.
 disks-room-step-part = 缩小分区
@@ -897,6 +882,9 @@ disks-room-step-check = 检查大小
 # Description the snapshot taken before making room is saved under, which Settings lists. { $dev } is the part; { $at } is a number that tells it from another.
 disks-room-snapshot-note = 在 { $dev } 下腾出空间之前（{ $at }）
 
+# Red words when the swap file is back on after making room, but Trindle met a problem doing it. { $done } is how making room went, { $why } the problem, both as sentences.
+disks-swap-on-but = { $done } { $why }
+
 # Red words when another change is pressed while one is still being made.
 disks-change-going = 正在进行更改。
 
@@ -906,4 +894,3 @@ disks-resize-warning-shrink = 请再点一次：{ $drive } 上的 { $name } 将�
 
 # Red words under the size when a Windows part was hibernated or left in fast start-up and so is not made smaller. { $name } is the part.
 disks-windows-asleep = { $name } 上的 Windows 处于休眠状态或停留在快速启动状态，缩小它可能会丢失其中的文件。请启动 Windows，选择“重启”，然后再试一次。
-

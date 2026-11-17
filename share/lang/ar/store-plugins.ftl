@@ -5,18 +5,18 @@
 store-plugins-open-settings = افتح إعداداتها
 
 # Red words under the plugin catalogue when starting again did not work; the reason follows.
-store-plugins-not-done = لم يتم: { $why }
+store-plugins-not-done = فشل: { $why }
 
 # Said on a plugin's row when its update asks for a new permission and so waits for the person.
 # SAFETY: needs a human review before it ships
-store-plugins-waits-for-you = يحتاج هذا التحديث إلى إذن جديد. وهو بانتظارك.
+store-plugins-waits-for-you = يحتاج هذا التحديث إلى إذن جديد، لذلك ينتظر أن تسمح به.
 
 # On a plugin's row: the version it has and the one that is ready.
-store-plugins-waiting = الإصدار { $mine } حاليًا، والإصدار { $new } جاهز
+store-plugins-waiting = الإصدار { $new } جاهز. لديك الإصدار { $mine }.
 
 # On a plugin's row: the same, and what the new one asks for that the old one did not; the list and the note that it waits follow.
 # SAFETY: needs a human review before it ships
-store-plugins-waiting-more = الإصدار { $mine } حاليًا، والإصدار { $new } جاهز. يطلب أكثر مما سبق: { $more }. { $waits }
+store-plugins-waiting-more = لديك الإصدار { $mine }. الإصدار { $new } يحتاج إلى أذونات أكثر: { $more }. { $waits }
 
 # Said after who is putting updates in, on the Updates and Plugins pages.
 store-plugins-come-back = ستعود الأزرار هنا عندما ينتهي.
@@ -25,17 +25,17 @@ store-plugins-come-back = ستعود الأزرار هنا عندما ينتهي
 store-plugins-looking = جارٍ البحث عن الإضافات…
 
 # Line under the title of the Plugins page when there are no plugins at all.
-store-plugins-none = لا توجد إضافات مثبّتة، ولا توجد إضافات معروضة بعد.
+store-plugins-none = لا توجد إضافات مثبّتة، ولا توجد إضافات متاحة بعد.
 
 # Line under the title of the Plugins page when none are installed and some are on offer.
 store-plugins-none-ready =
     { $n ->
-        [zero] لا توجد إضافات مثبّتة بعد؛ ولا واحدة جاهزة للتثبيت.
-        [one] لا توجد إضافات مثبّتة بعد؛ إضافة واحدة جاهزة للتثبيت.
-        [two] لا توجد إضافات مثبّتة بعد؛ إضافتان جاهزتان للتثبيت.
-        [few] لا توجد إضافات مثبّتة بعد؛ { $n } إضافات جاهزة للتثبيت.
-        [many] لا توجد إضافات مثبّتة بعد؛ { $n } إضافة جاهزة للتثبيت.
-       *[other] لا توجد إضافات مثبّتة بعد؛ { $n } إضافة جاهزة للتثبيت.
+        [zero] لا توجد إضافات مثبّتة بعد. ولا واحدة جاهزة للتثبيت.
+        [one] لا توجد إضافات مثبّتة بعد. إضافة واحدة جاهزة للتثبيت.
+        [two] لا توجد إضافات مثبّتة بعد. إضافتان جاهزتان للتثبيت.
+        [few] لا توجد إضافات مثبّتة بعد. { $n } إضافات جاهزة للتثبيت.
+        [many] لا توجد إضافات مثبّتة بعد. { $n } إضافة جاهزة للتثبيت.
+       *[other] لا توجد إضافات مثبّتة بعد. { $n } إضافة جاهزة للتثبيت.
     }
 
 # How many plugins are installed, as part of a line.
@@ -72,7 +72,7 @@ store-plugins-count-held =
     }
 
 # Line under the title of the Plugins page: how many are installed, with some updates held back.
-store-plugins-line-held = { $installed }؛ { $held }.
+store-plugins-line-held = { $installed }. { $held }.
 
 # Line under the title of the Plugins page: how many are installed.
 store-plugins-line-installed = { $installed }.
@@ -84,7 +84,7 @@ store-plugins-line-current = { $installed }، وكلها محدّثة.
 store-plugins-line-updates = { $installed }، و{ $have }.
 
 # The same, with some updates held back.
-store-plugins-line-updates-held = { $installed }، و{ $have }؛ { $held }.
+store-plugins-line-updates-held = { $installed }، و{ $have }. { $held }.
 
 # On a plugin's card when it asks for nothing.
 store-plugins-asks-nothing = لا تطلب شيئًا.
@@ -97,10 +97,10 @@ store-plugins-asks = ما تطلبه: { $list }.
 store-plugins-title = الإضافات
 
 # On a plugin's card: the new version is ready and held back is not said.
-store-plugins-version-ready = الإصدار { $mine } مثبّت؛ والإصدار { $new } جاهز.
+store-plugins-version-ready = الإصدار { $mine } مثبّت. الإصدار { $new } جاهز.
 
 # On a plugin's card: its installed version.
-store-plugins-version-installed = الإصدار { $version }، مثبّت.
+store-plugins-version-installed = الإصدار { $version } مثبّت.
 
 # On a plugin's card: the version on offer.
 store-plugins-version-offered = الإصدار { $version }.
@@ -112,7 +112,7 @@ store-plugins-version-held = { $words }.
 store-plugins-install = ثبّت { $name }
 
 # Tip of the round button that releases a plugin whose updates are held back.
-store-plugins-release = أطلق { $name }
+store-plugins-release = السماح بالتحديثات لـ{ $name }
 
 # Tip of the round button that updates a plugin to a version.
 store-plugins-update-to = حدّث إلى { $version }
@@ -121,7 +121,7 @@ store-plugins-update-to = حدّث إلى { $version }
 store-plugins-where = من أين تأتي الإضافات
 
 # Information on the card that says where plugins come from.
-store-plugins-come-from = تأتي الإضافات من قائمة Trindle نفسها فقط، وتُقرأ من trindle.org في كل مرة تُفتح فيها هذه الصفحة. لعرض إضافة، قدّمها: تُختبر كل واحدة قبل أن تُنشر.
+store-plugins-come-from = تأتي الإضافات من قائمة Trindle نفسها فقط، ويقرؤها Trindle من trindle.org في كل مرة تُفتح فيها هذه الصفحة. يمكنك تقديم إضافة إلى القائمة. تُختبر كل إضافة قبل أن تظهر.
 
 # Red words under a plugin that went in but whose background part is not running; the reason follows.
 store-plugins-not-running = تم تثبيتها، لكن جزءها الذي يعمل في الخلفية لا يعمل: { $why }

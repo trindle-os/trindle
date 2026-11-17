@@ -191,7 +191,7 @@ fn the_keyboard_lands_on_the_first_button_when_a_circle_is_given_it() {
     let mut ui = laid(&c);
     let tree = ui.access("Notification");
     let names: Vec<String> = tree.nodes.iter().filter(|(_, n)| n.role() == accesskit::Role::Button).map(|(_, n)| n.label().unwrap_or("").to_string()).collect();
-    assert_eq!(names[1..], ["Snooze for 10 minutes", "Snooze for 1 hour", "Snooze for 6 hours", "Snooze for next morning", "Back to the message"]);
+    assert_eq!(names[1..], ["Snooze for 10 minutes", "Snooze for 1 hour", "Snooze for 6 hours", "Snooze until morning", "Back to the message"]);
     assert_eq!(ui.input(&key(Keysym::space, false), now).messages, vec![Msg::Act(Act::Pick(circles::Snooze::Minutes10))]);
 }
 
@@ -413,4 +413,11 @@ fn a_sideways_wheel_step_scrolls_nothing() {
     let wheel = |y: f32| Input::Scroll { x: 1.0, y, steps: true };
     assert_eq!(c.intercept(&wheel(0.0), false), None);
     assert_eq!(c.intercept(&wheel(1.0), false), Some(Msg::Scroll(WHEEL_LINES)));
+}
+
+#[test]
+fn the_corner_setting_is_read_again_only_when_a_second_has_passed() {
+    assert!(corner_due(0, CORNER_LOOK_MS) && corner_due(5_000, 5_000 + CORNER_LOOK_MS));
+    assert!(!corner_due(5_000, 5_000) && !corner_due(5_000, 5_000 + CORNER_LOOK_MS - 1));
+    assert!(corner_due(5_000, 4_000), "a clock that went back reads it");
 }

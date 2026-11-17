@@ -173,8 +173,8 @@ fn choices_to_offer(wants: &Wants, screens: Vec<cast_capture::Screen>, windows: 
         choices.extend(screens.into_iter().map(Choice::Screen));
     }
     choices.extend(windows.into_iter().map(|w| {
-        let icon = crate::common::apps::find_for_window(&apps, &w.app_id).and_then(|e| e.icon.clone());
-        Choice::Window(w, icon)
+        let icon = crate::common::apps::window_icon(crate::common::apps::find_for_window(&apps, &w.app_id), &w.app_id);
+        Choice::Window(w, Some(icon))
     }));
     choices
 }

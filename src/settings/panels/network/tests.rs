@@ -21,7 +21,7 @@ fn a_network_keeps_its_place_when_it_is_joined() {
     n.shown.active_ap = "/ap/3".into();
     n.shown.saved.insert("Cafe on the corner".into(), "/saved/3".into());
     n.shown.aps.get_mut("Cafe on the corner").unwrap().strength = 99;
-    n.shown.aps.insert("A new one".into(), Ap { path: "/ap/9".into(), strength: 100, secure: true });
+    n.shown.aps.insert("A new one".into(), Ap { path: "/ap/9".into(), strength: 100, secure: true, enterprise: false });
     n.arrange();
     assert_eq!(lines(&n), ["Home", "Number 14", "Home guests", "Cafe on the corner", "Printer setup", "A new one"],
                "no line moved, and the new one is last");
@@ -51,38 +51,9 @@ fn the_networks_card_stays_greyed_with_wifi_off() {
 }
 
 #[test]
-fn the_sharing_card_lists_each_share_with_a_stop_button() {
-    use crate::settings::ui::Do;
-    let events = crate::toolkit::event::Loop::new();
-    let asks = events.post(|_: Do| {});
-    let kit = Kit::new(events.clone(), asks, None, None);
-    let mut n = Network::default();
-    let said = |n: &Network| n.sharing_card(&kit).said();
-    assert!(said(&n).iter().any(|w| w.starts_with("Looking")));
-    n.shared = Some(Err(Problem::NoSamba));
-    assert!(said(&n).contains(&"No folders are shared".to_string()));
-    let home = crate::common::files::home();
-    n.shared = Some(Ok(vec![
-        Shared { name: "photos".into(), path: home.join("Photos"), write: false, guests: false },
-        Shared { name: "music".into(), path: "/srv/music".into(), write: true, guests: true },
-    ]));
-    let words = said(&n);
-    assert_eq!(words[0], "Sharing");
-    for w in ["photos", "~/Photos: open with your password", "button: Stop sharing photos",
-              "music", "/srv/music: anyone at home can change", "button: Stop sharing music"] {
-        assert!(words.contains(&w.to_string()), "{w}: {words:?}");
-    }
-
-    assert!(words.contains(&"Not reachable yet".to_string()));
-    n.sharing = true;
-    assert!(!said(&n).contains(&"Not reachable yet".to_string()));
-    assert!(said(&n).iter().all(|w| !w.contains('\u{2014}')));
-}
-
-#[test]
 fn the_connection_in_one_sentence() {
     let home = ("Home".to_string(), 80);
-    assert_eq!(headline_words(true, Some(&home), false), ("Connected to Home, strong signal.".to_string(), Tone::Plain));
+    assert_eq!(headline_words(true, Some(&home), false), ("Connected to Home. The signal is strong.".to_string(), Tone::Plain));
     let far = ("Home".to_string(), 20);
     assert_eq!(headline_words(true, Some(&far), false).1, Tone::Warn);
     assert_eq!(headline_words(true, None, true).0, "Connected by cable.");
@@ -120,21 +91,21 @@ fn a_join_is_joined_only_once_the_network_says_so() {
 
 #[test]
 fn why_a_join_failed_is_said_in_words_that_say_what_to_do() {
-    assert_eq!(join_failed_words(7, Password::Typed), "That password was not accepted. Try it again.");
-    assert_eq!(join_failed_words(8, Password::Typed), "That password was not accepted. Try it again.");
+    assert_eq!(join_failed_words(7, Password::Typed), "That password wasn't accepted. Try it again.");
+    assert_eq!(join_failed_words(8, Password::Typed), "That password wasn't accepted. Try it again.");
     assert_eq!(join_failed_words(11, Password::Kept),
-               "The password kept for this network was not accepted. Forget the network with the bin, then join it again.");
-    assert_eq!(join_failed_words(53, Password::None), "That network could not be found. Check its name, and that it is in range.");
-    assert_eq!(join_failed_words(17, Password::Typed), "The network let this computer in but gave it no address. Try again, or restart the router.");
+               "The saved password for this network wasn't accepted. Use the bin button to forget the network, then join it again.");
+    assert_eq!(join_failed_words(53, Password::None), "Trindle couldn't find that network. Check its name, and check it is in range.");
+    assert_eq!(join_failed_words(17, Password::Typed), "This computer joined the network but didn't get an address. Try again, or restart the router.");
 
-    let honest = "The network did not let this computer join. Move closer to it, then try again.";
+    let honest = "This computer couldn't join the network. Move closer to the router, then try again.";
     assert_eq!(join_failed_words(8, Password::None), honest);
     assert_eq!(join_failed_words(0, Password::Typed), honest);
     assert_eq!(join_failed_words(999, Password::Kept), honest);
 
     let bad = Failed::new("org.freedesktop.NetworkManager.Settings.Connection.InvalidProperty", "802-11-wireless-security.psk: property is invalid");
-    assert_eq!(refused_words(&bad), "That password is not one a Wi-Fi network can have. Check it, then try again.");
-    assert_eq!(refused_words(&Failed::new("org.freedesktop.NetworkManager.UnknownDevice", "Device not found")), "The network could not be joined.");
+    assert_eq!(refused_words(&bad), "That can't be a Wi-Fi password. Check it, then try again.");
+    assert_eq!(refused_words(&Failed::new("org.freedesktop.NetworkManager.UnknownDevice", "Device not found")), "Couldn't join the network.");
 }
 
 #[test]
@@ -150,7 +121,7 @@ fn a_wrong_password_is_said_under_its_network_and_the_box_stays_to_try_again() {
         k.say(&ap_key("Number 14"), "Joining...", true, true);
         n.join_ended(k, joining(Password::Typed), Join::Failed(REASON_NO_PASSWORD));
     });
-    assert_eq!(s.red(&key).as_deref(), Some("That password was not accepted. Try it again."));
+    assert_eq!(s.red(&key).as_deref(), Some("That password wasn't accepted. Try it again."));
     assert!(!s.glows(&key));
     assert!(s.page::<Network, _>(|n, _| n.asking == Some(Asking::Password("Number 14".into()))), "the box is still there");
 
@@ -179,6 +150,60 @@ fn the_headline_follows_the_language_and_falls_back_word_by_word() {
     let french = "settings-network-top-cable = Connecté par câble.\n";
     with_catalogue(Catalogue::new(Bundle::from_text("fr", french), english()), || {
         assert_eq!(headline_words(true, None, true).0, "Connecté par câble.");
-        assert_eq!(headline_words(false, None, false).0, "Wi-Fi is off, so this computer is not connected.");
+        assert_eq!(headline_words(false, None, false).0, "Wi-Fi is off, so this computer isn't connected.");
     });
+}
+
+#[test]
+fn a_password_typed_and_not_sent_is_cleared_when_the_page_is_left() {
+    use crate::settings::ui::stand::Stand;
+    let mut s = Stand::new(Box::new(Network::made_up()));
+    s.page::<Network, _>(|n, k| {
+        n.asking = Some(Asking::Password("Number 14".into()));
+        n.pass_typed = "half-typed".into();
+        n.hidden(k);
+        assert!(n.pass_typed.is_empty() && n.asking.is_none());
+    });
+}
+
+#[test]
+fn a_second_wifi_adapter_does_not_run_into_the_firsts_counts() {
+    use crate::settings::ui::stand::Stand;
+    let mut s = Stand::new(Box::new(Network::made_up()));
+    let wifi = || -> crate::toolkit::bus::Props {
+        std::iter::once(("DeviceType".to_string(), zbus::zvariant::Value::from(2u32 ).try_into().unwrap())).collect()
+    };
+    s.page::<Network, _>(|n, k| {
+        n.wifi_device = None;
+        n.next = Found { waiting: 2, ..Found::default() };
+        n.got_device(k, "/device/1", wifi());
+        assert_eq!((n.wifi_device.as_deref(), n.next.waiting), (Some("/device/1"), 2), "the first adapter is being read");
+        n.got_device(k, "/device/2", wifi());
+        assert_eq!((n.wifi_device.as_deref(), n.next.waiting), (Some("/device/1"), 1), "the second adapter took the page's device or was read as well");
+    });
+}
+
+#[test]
+fn a_network_that_needs_a_username_says_so_and_asks_for_no_password() {
+    use crate::settings::ui::stand::Stand;
+    let mut s = Stand::new(Box::new(Network::made_up()));
+    let ap = Ap { path: "/ap/20".into(), strength: 70, secure: true, enterprise: true };
+    s.page::<Network, _>(|n, k| {
+        n.connect(k, "University", &ap);
+        assert!(n.asking.is_none(), "a password box was opened for a network that cannot use one");
+    });
+    assert_eq!(s.red(&ap_key("University")).as_deref(), Some("This network needs a username as well as a password. Trindle can't join those yet."));
+}
+
+#[test]
+fn no_line_under_a_network_control_explains_it() {
+    use crate::settings::ui::Do;
+    let events = crate::toolkit::event::Loop::new();
+    let asks = events.post(|_: Do| {});
+    let kit = Kit::new(events, asks, None, None);
+    let mut said = Network::made_up().view(&kit).said().join("|");
+    said.push_str(&Network::flipped().remove(1).view(&kit).said().join("|"));
+    for old in ["Type the exact name, with capitals.", "Trindle checks again each time you open this page."] {
+        assert!(!said.contains(old), "{old} is still on the page");
+    }
 }

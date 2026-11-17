@@ -7,17 +7,17 @@ settings-display-title = Skrini
 settings-display-keywords = skrini kifuatiliaji azimio ukubwa kipimo kuza kubwa ndogo zungusha mzunguko mwanga wa usiku joto mwanga wa buluu jioni macho
 
 # Introduction under the heading of the display page, and the words behind the page i.
-settings-display-help = Mabadiliko hutumika mara moja. Skrini ikiharibika, usifanye kitu: itarudi yenyewe baada ya sekunde 15 isipokuwa ubonyeze Weka. Mwanga wa usiku hufanya skrini iwe na joto zaidi jioni.
+settings-display-help = Mabadiliko hutumika mara moja. Skrini ikiharibika, usifanye kitu. Itarudi yenyewe baada ya sekunde 15 isipokuwa ubonyeze Weka. Mwanga wa usiku hufanya skrini iwe na joto zaidi jioni.
 
 # Question along the bottom of the page while a change of displays waits to be kept.
 # SAFETY: needs a human review before it ships
 settings-display-foot-keep = Weka mpangilio huu?
 
 # Sentence at the top of the page while the displays are being found.
-settings-display-looking = Inaangalia skrini…
+settings-display-looking = Inakagua skrini…
 
 # Sentence at the top of the page when no display was found.
-settings-display-none-found = Hakuna skrini iliyopatikana.
+settings-display-none-found = Skrini haijapatikana.
 
 # First half of the sentence at the top of the page: no display is in use.
 settings-display-used-none = Hakuna skrini inayotumika
@@ -95,32 +95,20 @@ settings-display-rotation-of = Mzunguko wa { $display }
 # Heading of the resolution line.
 settings-display-resolution = Azimio
 
-# Small words under that line.
-settings-display-resolution-about = Inaonyesha nukta ngapi, na mara ngapi.
-
 # Heading of the size line.
 settings-display-size = Ukubwa
 
-# Small words under that line.
-settings-display-size-about = Kila kitu kinaonekana kikubwa kiasi gani kwenye skrini hii.
-
 # Heading of the rotation line.
 settings-display-rotation = Mzunguko
-
-# Small words under that line.
-settings-display-rotation-about = Kwa skrini iliyosimamishwa ubavuni.
 
 # Heading of the line, and name of its switch, that turns a display on or off.
 settings-display-use = Tumia skrini hii
 
 # Small words under that line for the only display in use.
-settings-display-use-only = Skrini pekee inayotumika haiwezi kuzimwa.
-
-# Small words under that line otherwise.
-settings-display-use-off = Imezimwa, hakuna kinachoonyeshwa juu yake.
+settings-display-use-only = Huwezi kuzima skrini pekee inayotumika.
 
 # Words behind the i of a display's card.
-settings-display-card-about = Mabadiliko hutumika mara moja. Skrini ikiharibika, usifanye kitu: itarudi yenyewe baada ya sekunde 15 isipokuwa ubonyeze Weka. Azimio linalopendekezwa ni la skrini yenyewe; ukubwa wa kawaida ni ule ambao Trindle ilichagua kwa skrini hii.
+settings-display-card-about = Mabadiliko hutumika mara moja. Skrini ikiharibika, usifanye kitu. Itarudi yenyewe baada ya sekunde 15 isipokuwa ubonyeze Weka. Azimio linalopendekezwa ni lile ambalo skrini imetengenezewa. Ukubwa wa kawaida ni ule ambao Trindle ilichagua kwa skrini hii.
 
 # Name of the list of where a display sits, and heading of its line when there are more than two displays; { $display } is the display.
 settings-display-place-name = Weka { $display }
@@ -135,13 +123,13 @@ settings-display-relative = { $display } kulingana na { $other }
 settings-display-arrangement-title = Mpangilio
 
 # Words behind the i of that card.
-settings-display-arrangement-about = Mahali skrini zinapokaa kando ya nyingine, ili kielekezi kihame kutoka moja hadi inayofuata kupitia ukingo wanaoshiriki.
+settings-display-arrangement-about = Weka mahali skrini zinapokaa kando ya nyingine, ili kielekezi kiweze kuvuka ukingo wanaoshiriki.
 
 # Small words on that card while fewer than two displays are in use.
-settings-display-arrangement-waits = Tumia skrini mbili ili kuweka moja kando ya nyingine.
+settings-display-arrangement-waits = Unahitaji skrini mbili ili kuweka moja kando ya nyingine.
 
 # Red words when the desktop refused a change of displays and gave no reason.
-settings-display-refused = Eneo-kazi lilikataa.
+settings-display-refused = Haikuweza kubadilishwa.
 
 # Said aloud after the displays changed; { $seconds } is how long until they go back.
 # SAFETY: needs a human review before it ships
@@ -155,41 +143,31 @@ settings-display-aloud-changed =
 settings-display-not-undone = Mabadiliko hayakuweza kutenguliwa. { $why }
 
 # Red words when the arrangement could not be kept for the next login.
-settings-display-not-kept = Mpangilio unatumika sasa, lakini haukuweza kuhifadhiwa kwa kuingia kunakofuata.
+settings-display-not-kept = Mpangilio unatumika sasa, lakini Trindle haikuweza kuuhifadhi kwa kuingia kunakofuata.
 
 # Heading of the line under the picture of the displays when the desktop refused a change.
 settings-display-nothing-changed = Hakuna kilichobadilishwa
 
 # Small words under that line.
-settings-display-refused-change = Eneo-kazi lilikataa mabadiliko.
+settings-display-refused-change = Haikuweza kufanya mabadiliko hayo.
 
 # Heading of the line under the picture of the displays.
 settings-display-apply-at-once = Mabadiliko hutumika mara moja
-
-# Small words under that line; { $seconds } is how long Keep is asked for.
-settings-display-keep-asked =
-    { $seconds ->
-        [one] Weka huulizwa chini ya dirisha kwa sekunde { $seconds }.
-       *[other] Weka huulizwa chini ya dirisha kwa sekunde { $seconds }.
-    }
 
 # Title of the night light card.
 settings-display-night-title = Mwanga wa usiku
 
 # Words behind the i of that card.
-settings-display-night-about = Skrini inakuwa na joto zaidi jioni, jambo linalopunguza uchovu wa macho. Hufuata jua kuzama na kuchomoza, kulingana na eneo la saa, au saa ulizoweka mwenyewe; eneo la saa lisiposema kompyuta hii iko wapi, saa zilizowekwa hutumika.
+settings-display-night-about = Skrini inakuwa na joto zaidi jioni, jambo linalopunguza uchovu wa macho. Hufuata jua kuzama na kuchomoza, kulingana na eneo lako la saa, au saa unazoweka mwenyewe. Trindle isipoweza kujua uko wapi kupitia eneo lako la saa, hutumia saa ulizoweka.
 
 # Heading of the night light line, and name of its switch.
 settings-display-night = Mwanga wa usiku
-
-# Small words under that line.
-settings-display-night-about-line = Rangi zenye joto zaidi jioni.
 
 # Small words under the When line; { $zone } is the time zone.
 settings-display-when-zone = Jua kuzama na kuchomoza katika { $zone }.
 
 # Small words under the When line when the time zone gives no place.
-settings-display-when-no-place = Eneo la saa halitoi mahali: saa zilizowekwa.
+settings-display-when-no-place = Trindle inatumia saa zilizowekwa kwa sababu haijui jua linazama saa ngapi.
 
 # Choice in the When list: from sunset to sunrise.
 settings-display-when-sun = Jua kuzama hadi kuchomoza
@@ -209,9 +187,6 @@ settings-display-to = Hadi
 # Heading of the warmth line, and name of its slider.
 settings-display-warmth = Joto
 
-# Small words under the warmth line.
-settings-display-warmth-about = Skrini inakuwa na joto kiasi gani usiku.
-
 # Small word under the left end of the warmth slider.
 settings-display-little = Kidogo
 
@@ -230,8 +205,8 @@ settings-display-one-display-tip = { $name }, { $res }
 # Spoken description of the picture of the displays when several are in use; { $n } is how many.
 settings-display-many-displays-tip =
     { $n ->
-        [one] Skrini { $n }, kando kwa kando kama zilivyopangwa
-       *[other] Skrini { $n }, kando kwa kando kama zilivyopangwa
+        [one] Skrini { $n }
+       *[other] Skrini { $n }, kama zilivyopangwa
     }
 
 # Word drawn in the picture of the displays when none is in use.
@@ -241,25 +216,25 @@ settings-display-no-display = Hakuna skrini
 settings-display-your-displays = Skrini zako
 
 # Small words under Nothing to show on when the desktop listed no displays.
-settings-display-listed-none = Eneo-kazi halikuorodhesha skrini yoyote.
+settings-display-listed-none = Trindle haikupata skrini yoyote.
 
 # Title of the card shown when no display was found.
 settings-display-none-title = Hakuna skrini zilizopatikana
 
 # Heading of the line in that card.
-settings-display-none-heading = Hakuna cha kuonyeshia
+settings-display-none-heading = Hakuna skrini iliyopatikana
 
 # Title of the card about the graphics card.
 settings-display-graphics-title = Michoro
 
 # Words behind the i of that card.
-settings-display-graphics-about = Kompyuta hii ina kadi ya NVIDIA, inayotumia dereva huria. Kila kitu kinafanya kazi. Kwenye kadi ya kuanzia mwaka 2022 hivi itahisi polepole, kwa sababu dereva huria hawezi kuongeza kasi ya kadi. Dereva wa NVIDIA mwenyewe anaweza kusakinishwa.
+settings-display-graphics-about = Kompyuta hii ina kadi ya michoro ya NVIDIA inayotumia dereva huria. Inafanya kazi, lakini kadi ya kuanzia mwaka 2022 hivi itahisi polepole, kwa sababu dereva huria hawezi kuongeza kasi ya kadi. Unaweza kusakinisha dereva wa NVIDIA mwenyewe badala yake.
 
 # Heading of the line about an NVIDIA card on the open driver.
-settings-display-nvidia = Kadi ya NVIDIA, kwenye dereva huria
+settings-display-nvidia = Kadi ya NVIDIA yenye dereva huria
 
 # Small words under that line.
-settings-display-nvidia-about = Inafanya kazi; kadi ya kuanzia 2022 huhisi polepole.
+settings-display-nvidia-about = Kadi za kuanzia 2022 huenda zikawa polepole.
 
 # Words of the link that opens help about the NVIDIA driver.
 settings-display-nvidia-help = Cha kufanya kuhusu hili

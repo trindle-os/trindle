@@ -13,13 +13,13 @@ settings-bluetooth-cause-not-ready = { $could_not } Bluetooth غير مشغَّ�
 settings-bluetooth-cause-auth-failed = { $could_not } لم يُقبل رمز PIN أو الرقم. حاول مرة أخرى.
 
 # Said in red when the pairing was turned down; the first sentence says what could not be done.
-settings-bluetooth-cause-turned-down = { $could_not } تم رفضه، هنا أو على الجهاز الآخر.
+settings-bluetooth-cause-turned-down = { $could_not } رُفض الاقتران، سواء هنا أو على الجهاز الآخر.
 
 # Said in red when the other device did not answer in time; the first sentence says what could not be done.
 settings-bluetooth-cause-timeout = { $could_not } لم يردّ الجهاز الآخر في الوقت المناسب. ضعه في وضع الاقتران ثم حاول مرة أخرى.
 
 # Said in red when the same thing is already being done; the first sentence says what could not be done.
-settings-bluetooth-cause-in-progress = { $could_not } هذا قيد التنفيذ بالفعل. انتظر قليلًا.
+settings-bluetooth-cause-in-progress = { $could_not } يقوم Trindle بذلك بالفعل. انتظر قليلًا.
 
 # Said in red when the device did not answer; the first sentence says what could not be done.
 settings-bluetooth-cause-no-answer = { $could_not } لم يردّ الجهاز. تأكد من أنه مشغَّل وقريب ثم حاول مرة أخرى.
@@ -31,7 +31,7 @@ settings-bluetooth-cause-not-available = { $could_not } الجهاز غير جا
 settings-bluetooth-the-bus = ناقل النظام
 
 # Headline of the page while Bluetooth is looked for.
-settings-bluetooth-top-looking = جارٍ البحث عن Bluetooth…
+settings-bluetooth-top-looking = جارٍ فحص Bluetooth…
 
 # Headline of the page when the Bluetooth service is not running.
 settings-bluetooth-top-gone = Bluetooth لا يعمل على هذا الحاسوب.
@@ -40,16 +40,22 @@ settings-bluetooth-top-gone = Bluetooth لا يعمل على هذا الحاسو
 settings-bluetooth-top-off = Bluetooth متوقف.
 
 # Headline of the page when Bluetooth is off at a switch or key on the computer itself.
-settings-bluetooth-top-hard = Bluetooth متوقف على الحاسوب نفسه.
+settings-bluetooth-top-hard = Bluetooth متوقف بسبب مفتاح أو زر في الحاسوب.
 
 # Headline of the page when the computer has no Bluetooth.
 settings-bluetooth-top-none = لا يوجد Bluetooth في هذا الحاسوب.
 
+# Headline of the page when the computer has an adapter that Bluetooth has not finished setting up.
+settings-bluetooth-top-starting = جارٍ بدء Bluetooth…
+
+# Headline of the page when the adapter was there a moment ago and has gone.
+settings-bluetooth-top-lost = اختفى مهايئ Bluetooth.
+
 # Headline of the page when Bluetooth is on and searching.
-settings-bluetooth-top-searching = يعمل، ويبحث عن أجهزة قريبة…
+settings-bluetooth-top-searching = يعمل ويبحث عن أجهزة…
 
 # Headline of the page when Bluetooth is on and nothing is connected.
-settings-bluetooth-top-idle = يعمل، ولا شيء متصل الآن.
+settings-bluetooth-top-idle = يعمل، لكن لا شيء متصل.
 
 # Headline of the page when Bluetooth is on and devices are connected; the names are already joined into a list.
 settings-bluetooth-top-connected =
@@ -63,46 +69,46 @@ settings-bluetooth-top-connected =
     }
 
 # Help text (i button) of the Bluetooth card.
-settings-bluetooth-card-about = المفتاح يشغّل Bluetooth في هذا الحاسوب أو يوقفه؛ وتحته اسم المحوّل. ما دام خيار الظهور للأجهزة الأخرى مفعّلًا، تستطيع الأجهزة القريبة العثور على هذا الحاسوب.
+settings-bluetooth-card-about = الاسم الموجود تحت المفتاح هو اسم محوّل Bluetooth لديك. ما دام خيار الظهور للأجهزة الأخرى مفعّلًا، تستطيع الأجهزة القريبة العثور على هذا الحاسوب.
 
 # Heading of the Bluetooth card, of its switch's line, and the name of its switch.
 settings-bluetooth-title = Bluetooth
 
-# Small line under the Bluetooth switch when Bluetooth is blocked by the system.
-settings-bluetooth-switched-off = متوقف.
-
 # Heading of the line with the switch that makes this computer visible, and the name of that switch.
 settings-bluetooth-visible = ظاهر للأجهزة الأخرى
-
-# Small line under the Visible to other devices switch.
-settings-bluetooth-visible-sub = تستطيع الأجهزة القريبة العثور على هذا الحاسوب.
 
 # Heading of the card when Bluetooth is off at a switch on the computer itself.
 settings-bluetooth-hard-line = متوقف على الحاسوب نفسه
 
 # Small line under it.
-settings-bluetooth-hard-line-sub = بمفتاح أو زر. شغّله أولًا.
+settings-bluetooth-hard-line-sub = استخدم مفتاح الحاسوب أو زره لتشغيله.
 
 # Heading of the card when the computer has no Bluetooth adapter.
 settings-bluetooth-no-adapter = لا يوجد محوّل Bluetooth
 
 # Help text (i button) of that card.
-settings-bluetooth-no-adapter-about = لم يُعثر على محوّل Bluetooth في هذا الحاسوب. المحوّل الذي يُوصل بمنفذ USB يظهر هنا بمجرد توصيله.
+settings-bluetooth-no-adapter-about = لم يعثر Trindle على محوّل Bluetooth في هذا الحاسوب. إذا وصلت محوّلًا بمنفذ USB فسيظهر هنا فورًا.
 
 # Line in that card.
 settings-bluetooth-none-found = لم يُعثر على أي محوّل
 
+# Line in the no-adapter card while Bluetooth finishes setting up the adapter.
+settings-bluetooth-starting = جارٍ البدء
+
+# Line in the no-adapter card when the adapter was there a moment ago.
+settings-bluetooth-lost = اختفى المهايئ
+
 # Small line under it.
-settings-bluetooth-none-found-sub = محوّل USB يظهر هنا بمجرد توصيله.
+settings-bluetooth-lost-sub = يواصل Trindle البحث ويعرضه هنا إذا عاد. وإن لم يعد، فأعد تشغيل الحاسوب.
 
 # Shown beside the Bluetooth switch while the password is asked for.
-settings-bluetooth-waiting = بانتظار كلمة المرور...
+settings-bluetooth-waiting = بانتظار كلمة مرورك…
 
 # Said in red when this computer could not be made visible to other devices.
-settings-bluetooth-visible-failed = تعذّر إظهار هذا الحاسوب للأجهزة الأخرى.
+settings-bluetooth-visible-failed = تعذّر على Trindle إظهار هذا الحاسوب للأجهزة الأخرى.
 
 # Said in red when this computer could not be hidden from other devices.
-settings-bluetooth-hidden-failed = تعذّر إخفاء هذا الحاسوب عن الأجهزة الأخرى.
+settings-bluetooth-hidden-failed = تعذّر على Trindle إخفاء هذا الحاسوب عن الأجهزة الأخرى.
 
 # Shown on the two device lists while Bluetooth is off.
 settings-bluetooth-switch-on-first = شغّل Bluetooth لاستخدام هذه.
@@ -110,18 +116,15 @@ settings-bluetooth-switch-on-first = شغّل Bluetooth لاستخدام هذه.
 # Line in the My devices card when nothing is paired.
 settings-bluetooth-none-paired = لا جهاز مقترن بعد
 
-# Small line under it.
-settings-bluetooth-none-paired-sub = ابحث عن أجهزة لتقرن واحدًا.
-
 # Heading of the card that lists paired devices.
 settings-bluetooth-mine = أجهزتي
 
 # Help text (i button) of the My devices card.
 # SAFETY: needs a human review before it ships
-settings-bluetooth-mine-about = الأجهزة المقترنة بهذا الحاسوب، ومع كل منها بطاريته إن ذُكرت. المتصلة عند فتح الصفحة تأتي أولًا، ويبقى كل سطر في مكانه ما دامت الصفحة مفتوحة. الأزرار المستديرة توصل جهازًا أو تقطع اتصاله؛ وسلة المهملات تنساه، فيلزم اقترانه من جديد.
+settings-bluetooth-mine-about = الأجهزة المقترنة بهذا الحاسوب، مع مستوى بطارية كل جهاز حيث يمكن قراءته. الأجهزة المتصلة عند فتح الصفحة تأتي أولًا، ويبقى الترتيب كما هو ما دامت الصفحة مفتوحة. إذا اخترت نسيان جهاز، فستحتاج إلى اقترانه من جديد.
 
 # Line in the Nearby card while the search runs.
-settings-bluetooth-looking = جارٍ البحث عن أجهزة...
+settings-bluetooth-looking = جارٍ البحث عن أجهزة…
 
 # Tip of the button that stops the search.
 settings-bluetooth-stop-looking = أوقف البحث
@@ -129,17 +132,14 @@ settings-bluetooth-stop-looking = أوقف البحث
 # Heading of the line that starts the search, and tip of its button.
 settings-bluetooth-look = ابحث عن أجهزة
 
-# Small line under it.
-settings-bluetooth-look-sub = ضع الجهاز الآخر في وضع الاقتران أولًا.
-
 # Heading of the card that lists devices nearby.
 settings-bluetooth-nearby = القريبة
 
 # Help text (i button) of the Nearby card.
-settings-bluetooth-nearby-about = اضغط ابحث عن أجهزة، وضع الجهاز الآخر في وضع الاقتران، ثم اضغط اقتران بجانبه. تُرتَّب الأجهزة القريبة من الأقوى إشارة عند فتح الصفحة، ويُضاف كل جهاز جديد في النهاية. بعضها يعرض رقمًا لتقارنه بالرقم هنا، وبعضها يطلب رمز PIN، وغالبًا ما يكون في تعليماته، أو 0000.
+settings-bluetooth-nearby-about = اضغط ابحث عن أجهزة، وضع الجهاز الآخر في وضع الاقتران، ثم اضغط اقتران بجانبه. عند فتح الصفحة يظهر الجهاز صاحب أقوى إشارة أولًا، ويُضاف كل جهاز جديد في النهاية. بعض الأجهزة يعرض رقمًا لتقارنه بالرقم هنا. وبعضها يطلب رمز PIN، وغالبًا ما يكون في التعليمات المرفقة به، أو 0000.
 
 # Said in red when the search could not be stopped.
-settings-bluetooth-stop-failed = تعذّر إيقاف البحث عن الأجهزة.
+settings-bluetooth-stop-failed = تعذّر على Trindle إيقاف البحث عن الأجهزة.
 
 # Said in red when the search could not be started.
 settings-bluetooth-start-failed = تعذّر البحث عن الأجهزة.
@@ -174,19 +174,19 @@ settings-bluetooth-disconnect-failed = تعذّر قطع الاتصال.
 settings-bluetooth-forget-failed = تعذّر نسيانه.
 
 # Shown under a device while it is being paired.
-settings-bluetooth-pairing = جارٍ الاقتران...
+settings-bluetooth-pairing = جارٍ الاقتران…
 
 # Said in red when a device could not be paired.
 settings-bluetooth-pair-failed = تعذّر الاقتران.
 
 # Shown under a device while it is being connected.
-settings-bluetooth-connecting = جارٍ الاتصال...
+settings-bluetooth-connecting = جارٍ الاتصال…
 
 # Said in red when a device could not be connected.
 settings-bluetooth-connect-failed = تعذّر الاتصال.
 
 # Said under a device that paired but could not be set to connect by itself.
-settings-bluetooth-not-trusted = تم الاتصال، لكن تعذّر ضبطه ليتصل من تلقاء نفسه في المرة القادمة. صِلْه من هنا عندما تريده.
+settings-bluetooth-not-trusted = تم الاتصال، لكن تعذّر على Trindle ضبطه ليتصل من تلقاء نفسه في المرة القادمة. صِلْه من هنا عندما تريد استخدامه.
 
 # Said under a device that shows a code to be typed on it; the code is already written.
 settings-bluetooth-type-code = اكتب { $code } على الجهاز، ثم اضغط Enter عليه.
@@ -216,27 +216,27 @@ settings-bluetooth-cancel = إلغاء
 
 # Help line above the box where a device's PIN is typed.
 # SAFETY: needs a human review before it ships
-settings-bluetooth-pin-help = اكتب رمز PIN لهذا الجهاز. غالبًا ما يكون في تعليماته، أو 0000.
+settings-bluetooth-pin-help = اكتب رمز PIN لهذا الجهاز. غالبًا ما يكون في التعليمات. وإن لم تجده فجرّب 0000.
 
 # Words the settings search looks for on this page (not shown).
 settings-bluetooth-keywords = headphones mouse keyboard pair devices wireless سماعات فأرة لوحة مفاتيح اقتران أجهزة لاسلكي
 
 # Help text at the top of the page.
-settings-bluetooth-help = اضغط بحث، وضع الجهاز الآخر في وضع الاقتران، ثم اضغط اقتران بجانبه.
+settings-bluetooth-help = اضغط ابحث عن أجهزة، وضع الجهاز الآخر في وضع الاقتران، ثم اضغط اقتران بجانبه.
 
 # Said in red under the Bluetooth switch when restarting the sound service after Bluetooth came back on failed; $why is the system's own reason.
-settings-bluetooth-sound-failed = تعذّرت إعادة تشغيل صوت Bluetooth، لذا قد تعمل السماعات بجودة أساسية حتى تسجّل الدخول مرة أخرى. { $why }
+settings-bluetooth-sound-failed = تعذّر على Trindle إعادة تشغيل صوت Bluetooth، لذا قد يكون صوت السماعات أسوأ من المعتاد حتى تسجّل الدخول مرة أخرى. { $why }
 
 # Tooltip of the help button beside the Bluetooth switch.
-settings-bluetooth-sound-help = لماذا يبدو صوت السماعات أساسيًا بعد إيقاف Bluetooth وتشغيله
+settings-bluetooth-sound-help = لماذا يصبح صوت السماعات أسوأ بعد إيقاف Bluetooth وتشغيله
 
 
 
 # Said in red when a device is no longer in BlueZ's list; the first sentence says what could not be done.
-settings-bluetooth-cause-gone = { $could_not } لم يعد الجهاز معروفًا. ابحث عنه مرة أخرى.
+settings-bluetooth-cause-gone = { $could_not } هذا الجهاز لم يعد محفوظًا في هذا الحاسوب. ابحث عنه مرة أخرى.
 
 # Said in red when a paired device's saved pairing is refused; the first sentence says what could not be done.
-settings-bluetooth-cause-old-pairing = { $could_not } لم يعد الاقتران المحفوظ مقبولًا. انسَ الجهاز ثم اقترن به من جديد.
+settings-bluetooth-cause-old-pairing = { $could_not } لم يعد الجهاز يقبل الاقتران المحفوظ. انسَ الجهاز ثم اقترن به من جديد.
 
 # Said in red under a device that connected and then dropped at once.
 settings-bluetooth-dropped = اتصل ثم انقطع الاتصال. قد يكون الاقتران المحفوظ قديمًا.
@@ -245,8 +245,7 @@ settings-bluetooth-dropped = اتصل ثم انقطع الاتصال. قد يك�
 settings-bluetooth-pair-again = انسَ الجهاز واقترن من جديد
 
 # Said under Look for devices after a device was forgotten to be paired afresh.
-settings-bluetooth-forgotten-pair = تم النسيان. ضع الجهاز في وضع الاقتران، ثم اضغط اقتران عندما يظهر أدناه.
+settings-bluetooth-forgotten-pair = نُسي الجهاز. ضعه في وضع الاقتران، ثم اضغط اقتران عندما يظهر أدناه.
 
 # Tooltip of the button that opens Help from a failed connection.
 settings-bluetooth-more = المزيد عن هذا
-

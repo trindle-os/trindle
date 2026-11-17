@@ -319,7 +319,8 @@ fn try_in_house(label: &str, allowed: &[&str], exe: &Path, tools: Option<&Tools>
         ..Gates::default()
     };
     let allowed: Vec<String> = allowed.iter().map(|s| s.to_string()).collect();
-    let command: Vec<String> = ["/probe", "--exact", PROBE_ENTRY, "--nocapture", "--test-threads=1"].map(String::from).into();
+    let probe_out = format!("{PROBE}=/out/result");
+    let command: Vec<String> = ["/usr/bin/env", &probe_out, "/probe", "--exact", PROBE_ENTRY, "--nocapture", "--test-threads=1"].map(String::from).into();
     std::env::set_var(PROBE, "/out/result");
     let room = tools.map(|t| Room::prepare_on(t, &run, Some("h0"), None).unwrap_or_else(|e| panic!("{label}: {e:?}")));
     let mut pasta_pid = None;
@@ -389,7 +390,7 @@ fn the_room_outer_entry() {
     let missing = Tools { pasta: PathBuf::from("/nonexistent/pasta"), unshare: tools.unshare.clone(), keeper: tools.keeper.clone() };
     let run = dir.join("missing-run");
     match Room::prepare_on(&missing, &run, Some("h0"), None) {
-        Err(Refused::Because(why)) => all.push(format!("missing.refused={}", why == "pasta is not installed")),
+        Err(Refused::Because(why)) => all.push(format!("missing.refused={}", why == "pasta isn't installed")),
         Err(other) => all.push(format!("missing.refused={other:?}")),
         Ok(_) => all.push("missing.refused=made a room".into()),
     }

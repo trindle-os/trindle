@@ -25,28 +25,28 @@ impl Store {
         if self.view != View::Updates || self.detail.is_some() || (self.spot_target() == SPOT && self.firmware.is_empty()) {
             return None;
         }
-        if matches!(self.pending_spot.as_deref(), Some(SPOT | SPOT_PLUGINS)) {
+        if matches!(self.spot.asked.as_deref(), Some(SPOT | SPOT_PLUGINS)) {
             return Some(true);
         }
-        self.spot_kept.filter(|t| *t > Instant::now()).map(|_| false)
+        self.spot.kept.filter(|t| *t > Instant::now()).map(|_| false)
     }
 
     fn spot_target(&self) -> &'static str {
-        match self.pending_spot.as_deref() {
+        match self.spot.asked.as_deref() {
             Some(SPOT_PLUGINS) => SPOT_PLUGINS,
             Some(SPOT) => SPOT,
-            _ => self.spot_last,
+            _ => self.spot.last,
         }
     }
 
     fn spot_lit(&mut self) {
-        self.spot_last = self.spot_target();
-        self.pending_spot = None;
-        self.spot_kept = Some(Instant::now() + SPOT_KEPT);
+        self.spot.last = self.spot_target();
+        self.spot.asked = None;
+        self.spot.kept = Some(Instant::now() + SPOT_KEPT);
         let (asks, back) = (self.asks.clone(), self.asks.clone());
         let lp = self.events.clone();
         if !crate::common::graphics::moving() {
-            self.lit = 1.0;
+            self.fade_in.lit = 1.0;
             self.events.after(SPOT_LIT, move || { back.send(Do::Lit(0.0)); });
             return;
         }

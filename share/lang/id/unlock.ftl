@@ -7,7 +7,7 @@ unlock-title-default = Kata sandi disk
 
 # Heading of the box in place of cryptsetup's own wording ("Please unlock disk ...", "Enter passphrase").
 # SAFETY: needs a human review before it ships
-unlock-title-encryption = Masukkan kata sandi enkripsi
+unlock-title-encryption = Masukkan kata sandi disk
 
 # Key hint under the box: Tab, or the eye, shows the typed password.
 unlock-show = Tampilkan
@@ -24,4 +24,3 @@ unlock-turn-off = Matikan
 # Red line inside the card when Enter is pressed with nothing typed.
 # SAFETY: needs a human review before it ships
 unlock-type-first = Ketik kata sandi, lalu tekan Enter
-

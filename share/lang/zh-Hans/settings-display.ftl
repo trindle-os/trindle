@@ -9,17 +9,17 @@ settings-display-keywords = 屏幕 显示器 分辨率 大小 缩放 放大 缩�
 
 # Introduction under the heading of the display page, and the words behind the page i.
 # SAFETY: needs a human review before it ships
-settings-display-help = 更改会立即生效。如果屏幕显示异常，请不要操作：15 秒后会自动恢复，除非你点击“保留”。夜间模式会在晚上让屏幕颜色变暖。
+settings-display-help = 更改会立即生效。如果屏幕显示异常，请不要操作。15 秒后会自动恢复，除非你点击“保留”。夜间模式会在晚上让屏幕颜色变暖。
 
 # Question along the bottom of the page while a change of displays waits to be kept.
 # SAFETY: needs a human review before it ships
 settings-display-foot-keep = 保留此布局吗？
 
 # Sentence at the top of the page while the displays are being found.
-settings-display-looking = 正在查看显示器…
+settings-display-looking = 正在检查显示器…
 
 # Sentence at the top of the page when no display was found.
-settings-display-none-found = 没有找到显示器。
+settings-display-none-found = 找不到显示器。
 
 # First half of the sentence at the top of the page: no display is in use.
 settings-display-used-none = 没有正在使用的显示器
@@ -96,33 +96,21 @@ settings-display-rotation-of = { $display }的旋转
 # Heading of the resolution line.
 settings-display-resolution = 分辨率
 
-# Small words under that line.
-settings-display-resolution-about = 显示多少个点，刷新多快。
-
 # Heading of the size line.
 settings-display-size = 大小
 
-# Small words under that line.
-settings-display-size-about = 此屏幕上的所有内容看起来有多大。
-
 # Heading of the rotation line.
 settings-display-rotation = 旋转
-
-# Small words under that line.
-settings-display-rotation-about = 适用于竖放的屏幕。
 
 # Heading of the line, and name of its switch, that turns a display on or off.
 settings-display-use = 使用此显示器
 
 # Small words under that line for the only display in use.
-settings-display-use-only = 唯一正在使用的显示器无法关闭。
-
-# Small words under that line otherwise.
-settings-display-use-off = 已关闭，上面不显示任何内容。
+settings-display-use-only = 不能关闭正在使用的唯一一台显示器。
 
 # Words behind the i of a display's card.
 # SAFETY: needs a human review before it ships
-settings-display-card-about = 更改会立即生效。如果屏幕显示异常，请不要操作：15 秒后会自动恢复，除非你点击“保留”。推荐的分辨率是屏幕自身的分辨率；标准大小是 Trindle 为此屏幕选择的大小。
+settings-display-card-about = 更改会立即生效。如果屏幕显示异常，请不要操作。15 秒后会自动恢复，除非你点击“保留”。推荐的分辨率是这块屏幕最适合的分辨率。标准大小是 Trindle 为此屏幕选择的大小。
 
 # Name of the list of where a display sits, and heading of its line when there are more than two displays; { $display } is the display.
 settings-display-place-name = 放置{ $display }
@@ -137,13 +125,13 @@ settings-display-relative = { $display }相对于{ $other }
 settings-display-arrangement-title = 排列
 
 # Words behind the i of that card.
-settings-display-arrangement-about = 显示器彼此相邻的位置，这样指针就能越过它们共用的边缘从一个移到另一个。
+settings-display-arrangement-about = 设置显示器彼此相邻的位置，这样指针就能越过它们共用的边缘移动。
 
 # Small words on that card while fewer than two displays are in use.
-settings-display-arrangement-waits = 使用两台显示器时，才能将一台放在另一台旁边。
+settings-display-arrangement-waits = 需要两台显示器，才能把一台放在另一台旁边。
 
 # Red words when the desktop refused a change of displays and gave no reason.
-settings-display-refused = 桌面拒绝了此更改。
+settings-display-refused = 无法更改。
 
 # Said aloud after the displays changed; { $seconds } is how long until they go back.
 # SAFETY: needs a human review before it ships
@@ -153,44 +141,34 @@ settings-display-aloud-changed =
     }
 
 # Red words when a change of displays could not be undone; { $why } is the desktop's reason.
-settings-display-not-undone = 无法撤销此更改。{ $why }
+settings-display-not-undone = 无法撤销更改。{ $why }
 
 # Red words when the arrangement could not be kept for the next login.
-settings-display-not-kept = 此排列现已生效，但无法保留到下次登录。
+settings-display-not-kept = 此排列现已生效，但 Trindle 无法保存到下次登录。
 
 # Heading of the line under the picture of the displays when the desktop refused a change.
 settings-display-nothing-changed = 未做任何更改
 
 # Small words under that line.
-settings-display-refused-change = 桌面拒绝了此更改。
+settings-display-refused-change = 无法进行此更改。
 
 # Heading of the line under the picture of the displays.
 settings-display-apply-at-once = 更改会立即生效
-
-# Small words under that line; { $seconds } is how long Keep is asked for.
-# SAFETY: needs a human review before it ships
-settings-display-keep-asked =
-    { $seconds ->
-       *[other] 窗口底部会询问是否保留，等待 { $seconds } 秒。
-    }
 
 # Title of the night light card.
 settings-display-night-title = 夜间模式
 
 # Words behind the i of that card.
-settings-display-night-about = 屏幕在晚上变暖，对眼睛更友好。它根据时区推算日落和日出时间，也可以使用你自己设定的时间；如果时区无法确定这台电脑的位置，则使用设定的时间。
+settings-display-night-about = 屏幕在晚上变暖，对眼睛更友好。它根据你的时区推算日落和日出时间，也可以使用你自己设定的时间。如果 Trindle 无法根据时区判断你在哪里，就会使用你设定的时间。
 
 # Heading of the night light line, and name of its switch.
 settings-display-night = 夜间模式
-
-# Small words under that line.
-settings-display-night-about-line = 晚上使用更暖的颜色。
 
 # Small words under the When line; { $zone } is the time zone.
 settings-display-when-zone = { $zone }的日落和日出。
 
 # Small words under the When line when the time zone gives no place.
-settings-display-when-no-place = 时区没有给出位置：使用设定的时间。
+settings-display-when-no-place = Trindle 不知道日落时间，所以使用设定的时间。
 
 # Choice in the When list: from sunset to sunrise.
 settings-display-when-sun = 日落到日出
@@ -210,9 +188,6 @@ settings-display-to = 到
 # Heading of the warmth line, and name of its slider.
 settings-display-warmth = 暖度
 
-# Small words under the warmth line.
-settings-display-warmth-about = 晚上屏幕变暖的程度。
-
 # Small word under the left end of the warmth slider.
 settings-display-little = 稍暖
 
@@ -231,7 +206,7 @@ settings-display-one-display-tip = { $name }，{ $res }
 # Spoken description of the picture of the displays when several are in use; { $n } is how many.
 settings-display-many-displays-tip =
     { $n ->
-       *[other] { $n } 台显示器，按排列方式并排
+       *[other] { $n } 台显示器，按当前排列
     }
 
 # Word drawn in the picture of the displays when none is in use.
@@ -241,26 +216,25 @@ settings-display-no-display = 无显示器
 settings-display-your-displays = 你的显示器
 
 # Small words under Nothing to show on when the desktop listed no displays.
-settings-display-listed-none = 桌面没有列出任何显示器。
+settings-display-listed-none = Trindle 没有找到任何显示器。
 
 # Title of the card shown when no display was found.
 settings-display-none-title = 未找到显示器
 
 # Heading of the line in that card.
-settings-display-none-heading = 没有可显示的地方
+settings-display-none-heading = 没有找到显示器
 
 # Title of the card about the graphics card.
 settings-display-graphics-title = 显卡
 
 # Words behind the i of that card.
-settings-display-graphics-about = 这台电脑有一块 NVIDIA 显卡，使用开源驱动。一切都能正常工作。如果是 2022 年前后及以后的显卡，会感觉较慢，因为开源驱动无法提高显卡的速度。可以安装 NVIDIA 自己的驱动。
+settings-display-graphics-about = 这台电脑有一块 NVIDIA 显卡，使用开源驱动。它能正常工作，但 2022 年及以后的显卡会感觉较慢，因为开源驱动无法提高显卡的速度。你可以改为安装 NVIDIA 自己的驱动。
 
 # Heading of the line about an NVIDIA card on the open driver.
 settings-display-nvidia = NVIDIA 显卡，使用开源驱动
 
 # Small words under that line.
-settings-display-nvidia-about = 可以使用；2022 年及以后的显卡会感觉较慢。
+settings-display-nvidia-about = 2022 年及以后的显卡可能运行较慢。
 
 # Words of the link that opens help about the NVIDIA driver.
 settings-display-nvidia-help = 应该怎么做
-

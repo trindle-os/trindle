@@ -1,0 +1,129 @@
+## What an app can be allowed to do, and what goes wrong without it. Each
+## permission has a name (said after "asks for", as in "Weather asks for
+## the internet and sound"), the line under its switch, and for some a warning.
+
+access-network-name = ইন্টারনেট
+access-network-without = এটি ইন্টারনেটে বা কাছের অন্য কম্পিউটারে পৌঁছাতে পারবে না।
+access-sound-name = শব্দ
+access-sound-without = এটি কোনো শব্দ করবে না।
+access-microphone-name = আপনার মাইক্রোফোন
+access-microphone-without = এটি আপনার কথা শুনতে পাবে না।
+access-sound-and-microphone-name = শব্দ ও আপনার মাইক্রোফোন
+access-sound-and-microphone-without = এটি শব্দ করবে না এবং আপনার কথা শুনতে পাবে না।
+access-files-name = আপনার ডকুমেন্ট, ডাউনলোড, ছবি, গান, ভিডিও ও ডেস্কটপ ফোল্ডার
+access-files-without = এটি আপনার ফাইল খুলতে বা আপনার ফোল্ডারে সংরক্ষণ করতে পারবে না।
+access-home-name = আপনার হোম ফোল্ডারের সবকিছু, লুকানো সেটিংস ফাইলসহ
+access-home-without = এটি আপনার ফাইল খুলতে বা আপনার ফোল্ডারে সংরক্ষণ করতে পারবে না।
+access-devices-name = আপনার ক্যামেরা ও প্লাগ করা অন্য ডিভাইস
+access-devices-without = এটি আপনাকে দেখতে বা আপনার প্লাগ করা কিছু ব্যবহার করতে পারবে না।
+access-bluetooth-name = হেডফোনের মতো Bluetooth ডিভাইস
+access-bluetooth-without = এটি Bluetooth-এ কিছুর সঙ্গে যুক্ত হতে পারবে না।
+access-notifications-name = বিজ্ঞপ্তি
+access-notifications-without = কিছু ঘটলে এটি আপনাকে জানাতে পারবে না।
+access-background-name = লগ ইন করলে নিজে থেকে চালু হওয়া
+access-background-without = আপনি খুলে রাখলে তবেই এটি চলবে।
+access-screen-name = আপনার স্ক্রিনের ছবি, আপনি যা কপি করেন তা, এবং কিবোর্ডের মতো করে আপনার হয়ে টাইপ করা
+access-screen-without = এটি অন্য উইন্ডো দেখতে বা আপনার কপি করা জিনিস যখন-তখন পড়তে পারবে না।
+access-x11-name = পুরনো পদ্ধতিতে নিজের উইন্ডো আঁকা, যাতে এটি অন্য পুরনো অ্যাপ এবং সেগুলোতে যা টাইপ করা হয় তা দেখতে পারে
+access-x11-without = এর উইন্ডো খুলবে না।
+access-computer-name = নিজের বাক্সের বাইরে কাজ করা, আপনি নিজে যা যা ধরতে পারেন সবকিছু নিয়ে
+access-computer-without = আপনি এতে যা টাইপ করেন তা এর বাক্সের ভেতরেই থাকে, তাই সেখানে sudo ও আপনার নিজের ফাইল কাজ করবে না।
+access-control-name = আপনার কিবোর্ড, মাউস ও ক্লিপবোর্ডের নিয়ন্ত্রণ
+access-control-without = এটি পয়েন্টার সরাতে, টাইপ করতে বা আপনার কপি করা জিনিস শেয়ার করতে পারবে না।
+access-capture-name = আপনার মাউস ও কিবোর্ড অন্য কম্পিউটারের সঙ্গে শেয়ার করা
+access-capture-without = পয়েন্টার অন্য কম্পিউটারে যেতে পারবে না।
+access-copied-name = আপনি যে ফাইল কপি করেন সেগুলো
+access-copied-without = এটি আপনার কপি করা ফাইল পড়তে পারবে না, তাই সেগুলো অন্য কম্পিউটারে নিয়ে যেতেও পারবে না।
+access-summon-name = কী চাপার মতো করে পূর্ণ পর্দার উইন্ডোর ওপর রিং খোলা
+access-summon-without = এর কী ও ক্লিক শুধু ডেস্কটপে রিং খুলবে, পূর্ণ পর্দার উইন্ডোর ওপর কখনোই নয়।
+access-listen-name = আপনার স্থানীয় নেটওয়ার্কের অন্য কম্পিউটারের যোগাযোগ করতে পারা
+access-listen-without = আপনার স্থানীয় নেটওয়ার্কের অন্য কম্পিউটার একে খুঁজে পাবে না বা এর সঙ্গে যুক্ত হতে পারবে না।
+access-home-network-name = শুধু আপনার স্থানীয় নেটওয়ার্কের ডিভাইস
+access-home-network-without = এটি স্থানীয় নেটওয়ার্কের প্রিন্টার, স্ক্যানার বা অন্য ডিভাইস খুঁজে পাবে না বা তাদের সঙ্গে কথা বলতে পারবে না।
+access-usb-devices-name = স্ক্যানার ও USB ডিভাইস
+access-usb-devices-without = এই কম্পিউটারে লাগানো স্ক্যানার এটি ব্যবহার করতে পারবে না।
+access-expand-name = টাইপ করার সময় ছোট কোড পূর্ণ করে দেওয়া
+access-expand-without = টাইপ করার সময় এর ছোট কোড পূর্ণ হবে না।
+access-accessibility-name = প্রতিটি উইন্ডো জোরে পড়ে শোনানো
+access-accessibility-without = এটি আপনার উইন্ডো জোরে পড়ে শোনাতে পারবে না।
+access-unnamed-name = এমন কিছু যার নাম সে বলেনি
+
+access-control-warning = এটি আপনার মতো করেই টাইপ করতে, ক্লিক করতে এবং আপনার কপি করা জিনিস পড়তে পারে। শুধু বিশ্বাসযোগ্য প্লাগইনের জন্যই এটির অনুমতি দিন।
+access-capture-warning = পয়েন্টার অন্য কম্পিউটারে থাকলে আপনি যা টাইপ ও ক্লিক করেন সবই এই প্লাগইনের কাছে যায়। শুধু বিশ্বাসযোগ্য প্লাগইনের জন্যই এটির অনুমতি দিন।
+access-copied-warning = অনুমতি থাকা পর্যন্ত এটি আপনার কপি করা ফাইলগুলোই পড়তে পারে, আর কিছু নয়। শুধু বিশ্বাসযোগ্য প্লাগইনের জন্যই এটির অনুমতি দিন।
+access-summon-warning = আপনি কোনো কী না চাপলেও এটি রিংকে, যা আপনার টাইপ করা সবকিছু নেয়, কোনো গেম বা সিনেমার ওপর তুলে আনতে পারে। শুধু বিশ্বাসযোগ্য প্লাগইনের জন্যই এটির অনুমতি দিন।
+access-home-network-warning = এটি আপনার স্থানীয় নেটওয়ার্কের প্রতিটি ডিভাইসের সঙ্গে, রাউটারসহ, যোগাযোগ করতে পারে, কিন্তু ইন্টারনেটের সঙ্গে নয়। শুধু বিশ্বাসযোগ্য প্লাগইনের জন্যই এটির অনুমতি দিন।
+access-usb-devices-warning = চালু হওয়ার সময় যে স্ক্যানার ও ছবি তোলার ডিভাইস লাগানো থাকে এটি সেগুলো ব্যবহার করতে পারে, অন্য কোনো USB ডিভাইস নয়। শুধু বিশ্বাসযোগ্য প্লাগইনের জন্যই এটির অনুমতি দিন।
+access-expand-warning = Trindle আপনার টাইপ করা লেখায় ছোট কোড খোঁজে এবং আপনার হয়ে সেগুলোর শব্দ টাইপ করে দেয়। প্লাগইন কখনো আপনার টাইপ করা লেখা দেখতে পায় না। শুধু বিশ্বাসযোগ্য প্লাগইনের জন্যই এটির অনুমতি দিন।
+access-accessibility-warning = এটি আপনার স্ক্রিনের সবকিছু পড়তে পারে। যেকোনো স্ক্রিন রিডারের মতো এটি অন্য উইন্ডোতে বোতাম চাপতে ও লেখা টাইপ করতেও পারে, যদিও এর নিজের কোনো কিবোর্ড বা মাউস নেই। শুধু বিশ্বাসযোগ্য প্লাগইনের জন্যই এটির অনুমতি দিন।
+
+## Titles (for a tooltip) and the line under a switch, which says what switching it off means.
+access-network-title = ইন্টারনেট
+access-network-off = বন্ধ থাকলে এটি ইন্টারনেটে বা কাছের অন্য কম্পিউটারে পৌঁছাতে পারবে না।
+access-sound-title = শব্দ চালানো
+access-sound-off = বন্ধ থাকলে কোনো শব্দ হবে না।
+access-microphone-title = আপনার মাইক্রোফোন
+access-microphone-off = বন্ধ থাকলে এটি আপনার কথা শুনতে পাবে না।
+access-sound-and-microphone-title = শব্দ চালানো ও আপনার মাইক্রোফোন ব্যবহার করা
+access-sound-and-microphone-off = বন্ধ থাকলে এটি শব্দ করবে না এবং আপনার কথা শুনতে পাবে না।
+access-files-title = আপনার ডকুমেন্ট, ডাউনলোড, ছবি, গান, ভিডিও ও ডেস্কটপ ফোল্ডার
+access-files-off = বন্ধ থাকলে এটি আপনার ফাইল খুলতে বা আপনার ফোল্ডারে সংরক্ষণ করতে পারবে না।
+access-home-title = আপনার হোম ফোল্ডারের সবকিছু, লুকানো সেটিংস ফাইলসহ
+access-home-off = বন্ধ থাকলে এটি আপনার ফাইল খুলতে বা আপনার ফোল্ডারে সংরক্ষণ করতে পারবে না।
+access-devices-title = আপনার ক্যামেরা ও প্লাগ করা অন্য ডিভাইস
+access-devices-off = বন্ধ থাকলে এটি আপনার ক্যামেরা বা প্লাগ করা কিছুই ব্যবহার করতে পারবে না।
+access-bluetooth-title = হেডফোন ও কাছের অন্য জিনিসের জন্য Bluetooth
+access-bluetooth-off = বন্ধ থাকলে এটি Bluetooth-এ কিছুর সঙ্গে যুক্ত হতে পারবে না।
+access-notifications-title = বিজ্ঞপ্তি দেখানো
+access-notifications-off = বন্ধ থাকলে কিছু ঘটলে এটি আপনাকে জানাতে পারবে না।
+access-background-title = লগ ইন করলে নিজে থেকে চালু হওয়া
+access-background-off = বন্ধ থাকলে এটি শুধু আপনি খুলে রাখলেই চলবে।
+access-screen-title = আপনার স্ক্রিনের ছবি তোলা, আপনি যা কপি করেন তা পড়া এবং কিবোর্ডের মতো টাইপ করা
+access-screen-off = বন্ধ থাকলে এটি ইচ্ছেমতো অন্য উইন্ডো দেখতে বা আপনার কপি করা জিনিস পড়তে পারবে না।
+access-x11-title = পুরনো পদ্ধতিতে নিজের উইন্ডো আঁকা, যাতে এটি অন্য পুরনো অ্যাপ এবং সেগুলোতে যা টাইপ করা হয় তা দেখতে পারে
+access-x11-off = বন্ধ থাকলে এর উইন্ডো খুলবে না।
+access-computer-title = নিজের বাক্সের বাইরে কাজ করা, আপনি নিজে যা যা ধরতে পারেন সবকিছু নিয়ে
+access-computer-off = বন্ধ থাকলে আপনি এতে যা টাইপ করেন তা এর বাক্সের ভেতরেই থাকে, তাই সেখানে sudo ও আপনার নিজের ফাইল কাজ করবে না।
+access-control-title = আপনার কিবোর্ড, মাউস ও ক্লিপবোর্ডের নিয়ন্ত্রণ
+access-control-off = বন্ধ থাকলে এটি পয়েন্টার সরাতে, টাইপ করতে বা আপনার কপি করা জিনিস শেয়ার করতে পারবে না।
+access-capture-title = আপনার মাউস ও কিবোর্ড অন্য কম্পিউটারের সঙ্গে শেয়ার করা
+access-capture-off = বন্ধ থাকলে পয়েন্টার অন্য কম্পিউটারে যেতে পারবে না।
+access-copied-title = আপনি যে ফাইল কপি করেন সেগুলো পড়া
+access-copied-off = বন্ধ থাকলে এটি আপনার কপি করা ফাইল পড়তে বা অন্য কম্পিউটারে পাঠাতে পারবে না।
+access-summon-title = কী চাপার মতো করে পূর্ণ পর্দার উইন্ডোর ওপর রিং খোলা
+access-summon-off = বন্ধ থাকলে এর কী ও ক্লিক শুধু ডেস্কটপে রিং খুলবে, পূর্ণ পর্দার উইন্ডোর ওপর কখনোই নয়।
+access-listen-title = আপনার স্থানীয় নেটওয়ার্কের অন্য কম্পিউটারকে এতে পৌঁছাতে দেওয়া
+access-listen-off = বন্ধ থাকলে আপনার স্থানীয় নেটওয়ার্কের অন্য কম্পিউটার একে খুঁজে পাবে না বা এর সঙ্গে যুক্ত হতে পারবে না।
+access-home-network-title = শুধু আপনার স্থানীয় নেটওয়ার্কের ডিভাইসে পৌঁছানো
+access-home-network-off = বন্ধ থাকলে এটি স্থানীয় নেটওয়ার্কের প্রিন্টার, স্ক্যানার বা অন্য ডিভাইস খুঁজে পাবে না বা যুক্ত হতে পারবে না।
+access-usb-devices-title = স্ক্যানার ও USB ডিভাইস ব্যবহার করা
+access-usb-devices-off = বন্ধ থাকলে এই কম্পিউটারে লাগানো স্ক্যানার এটি ব্যবহার করতে পারবে না।
+access-expand-title = টাইপ করার সময় ছোট কোড পূর্ণ করে দেওয়া
+access-expand-off = বন্ধ থাকলে Trindle টাইপ করার সময় এর ছোট কোড পূর্ণ করবে না।
+access-accessibility-title = প্রতিটি উইন্ডোতে যা দেখা যায় তা পড়ে জোরে শোনানো
+access-accessibility-off = বন্ধ থাকলে এটি আপনার উইন্ডো জোরে পড়তে পারবে না।
+access-unnamed-title = এমন কিছু যার নাম সে বলেনি
+
+## The few words on a plugin's row of the Permissions page.
+access-note-acts-as-you = এটি আপনার হয়ে কাজ করতে পারে
+access-note-home-network = এটি আপনার স্থানীয় নেটওয়ার্কের প্রতিটি ডিভাইসে পৌঁছাতে পারে
+access-note-usb-devices = এটি স্ক্যানার ও ছবি তোলার ডিভাইস ব্যবহার করতে পারে
+access-note-expand = এটি আপনার উইন্ডোতে টাইপ করতে পারে
+access-note-accessibility = এটি আপনার স্ক্রিনের সবকিছু পড়তে পারে
+
+access-listen-detail = { $ports }, শুধু আপনার স্থানীয় নেটওয়ার্কের কম্পিউটার থেকে। এর জন্য ইন্টারনেটের অনুমতিও লাগবে।
+
+## A request that is unusual for the kind of app that makes it.
+access-unusual = { $kind } জন্য এটি অস্বাভাবিক। এই অ্যাপ কোথা থেকে এসেছে তা বিশ্বাস করলে তবেই অনুমতি দিন।
+access-kind-terminal = একটি টার্মিনালের
+access-kind-calculator = একটি ক্যালকুলেটরের
+access-kind-photo = একটি ছবির অ্যাপের
+access-kind-text-editor = একটি টেক্সট এডিটরের
+access-kind-browser = একটি ওয়েব ব্রাউজারের
+access-kind-office = একটি অফিস অ্যাপের
+access-kind-graphics = একটি গ্রাফিক্স অ্যাপের
+access-kind-game = একটি গেমের
+access-kind-sound-video = একটি শব্দ ও ভিডিও অ্যাপের
+access-kind-programming = একটি প্রোগ্রামিং টুলের
+access-kind-utility = একটি ইউটিলিটির
+access-kind-other = এই ধরনের একটি অ্যাপের

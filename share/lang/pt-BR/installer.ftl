@@ -31,7 +31,7 @@ installer-stop-done = Concluído
 installer-getting-ready = Preparando
 
 # Red line at the foot when the installer's helper could not be started.
-installer-no-start = O instalador não conseguiu iniciar: { $why }
+installer-no-start = Não foi possível iniciar o instalador: { $why }
 
 # Written to the error output when the plan sent to the helper could not be read.
 installer-plan-unreadable = Não foi possível ler o plano.
@@ -79,23 +79,26 @@ installer-missing-time = Escolha um fuso horário
 # Note beside Next on the disk page while no disk is chosen.
 installer-missing-disk = Escolha onde o Trindle vai
 
+# Note beside Next on the disk page while the disks are read again, after one turned out not to be the disk shown.
+installer-disks-rereading = Lendo os discos de novo
+
 # Note beside Next on the disk password page while no password has been typed twice.
-installer-missing-disk-password = Digite a senha do disco duas vezes, igual nas duas
+installer-missing-disk-password = Digite a senha do disco duas vezes. As duas devem ser iguais
 
 # Note beside Next on the account page while the sign-in name is not good.
-installer-missing-username = É preciso um nome de usuário
+installer-missing-username = Digite um nome de usuário
 
 # Note beside Next on the account page while the computer's name is not good.
 installer-missing-hostname = Dê um nome a este computador
 
 # Note beside Next on the account page while no password has been typed twice.
-installer-missing-password = Digite sua senha duas vezes, igual nas duas
+installer-missing-password = Digite sua senha duas vezes. As duas devem ser iguais
 
 # Title of the first page.
 installer-welcome-title = Boas-vindas ao { $name }
 
 # Sentence under the title of the first page.
-installer-welcome-help = Escolha seu idioma; o teclado e o horário o acompanham, e você pode mudar qualquer um.
+installer-welcome-help = Escolha seu idioma, e o Trindle ajusta o teclado e o fuso horário a ele; você pode mudar qualquer um dos dois.
 
 # Head of the card for choosing the language, and the name of its search box.
 installer-language = Idioma
@@ -114,10 +117,10 @@ installer-disks-title = Onde o { $name } vai
 
 # Sentence under the title of the disk page.
 # SAFETY: needs a human review before it ships
-installer-disks-help = Tudo no disco que você escolher é substituído, a menos que você abra espaço ao lado do que já está lá.
+installer-disks-help = Tudo no disco que você escolher é substituído, a menos que você escolha instalar ao lado do que já está lá.
 
 # Shown on the disk page when no disk is big enough.
-installer-disks-none = Nenhum disco grande o bastante foi encontrado. O Trindle precisa de 20 GB.
+installer-disks-none = O Trindle não encontrou um disco grande o bastante. Ele precisa de 20 GB.
 
 # Name and words of the choice to erase a whole disk.
 # SAFETY: needs a human review before it ships
@@ -127,7 +130,7 @@ installer-disks-whole = Usar o disco inteiro, substituindo tudo nele
 installer-disks-share = Manter { $what } e compartilhar o disco
 
 # Under the slider that decides how much of a shared partition is kept: the size each side gets.
-installer-disks-split = { $kept } ficam para o que existe agora, { $mine } para o Trindle
+installer-disks-split = { $kept } ficam para o que existe agora, e { $mine } são para o Trindle
 
 # A partition or disk with its size, such as the name of a disk and how big it is.
 installer-named-size = { $name }, { $size }
@@ -160,16 +163,16 @@ installer-swap-title = Um arquivo de swap de { $gb } GB
 installer-swap-switch = Criar um arquivo de swap
 
 # Under the swap file's head when Secure Boot is on.
-installer-swap-secure-boot = O Secure Boot está ligado, então este computador não pode hibernar, mas o arquivo de swap ainda ajuda quando a memória acaba. Ele só é criado se o disco tiver bastante espaço sobrando.
+installer-swap-secure-boot = O Secure Boot está ligado, então este computador não pode hibernar, mas o arquivo de swap ainda ajuda quando a memória acaba. O Trindle só o cria se o disco tiver bastante espaço sobrando.
 
 # Under the swap file's head when the computer can hibernate.
-installer-swap-note = Espaço para hibernar, mantendo tudo aberto com o computador desligado, e um recurso para quando a memória acabar. Sem ele, o computador não pode hibernar. Ele só é criado se o disco tiver bastante espaço sobrando.
+installer-swap-note = Um arquivo de swap permite que o computador hiberne, o que mantém tudo aberto com a energia desligada. Ele também dá ao computador espaço extra quando a memória acaba. Sem ele, o computador não pode hibernar. O Trindle só cria um se o disco tiver bastante espaço sobrando.
 
 # Title of the page about encrypting the disk.
 installer-privacy-title = Criptografar o disco
 
 # Sentence under the title of that page.
-installer-privacy-help = Um disco criptografado não pode ser lido por quem o tirar deste computador.
+installer-privacy-help = Ninguém consegue ler um disco criptografado se o tirar deste computador.
 
 # Head of the card with the three choices.
 installer-privacy-locked = Como o disco é trancado
@@ -187,16 +190,16 @@ installer-privacy-chip-choice = Criptografar e deixar o chip TPM deste computado
 installer-privacy-about = Sobre o chip
 
 # In the card about the chip, on a computer that has one.
-installer-privacy-chip = Este computador tem um chip TPM. A primeira inicialização após a instalação pede a senha uma vez, enquanto o chip aprende este computador; depois disso ele destranca o disco sozinho e nada é digitado. Guarde a senha: ela é a forma de entrar se o chip for trocado ou o disco for movido para outro computador.
+installer-privacy-chip = Este computador tem um chip TPM. Na primeira vez que ele inicia depois da instalação, pede a senha uma vez enquanto o chip é configurado. Depois disso o chip destranca o disco e você não digita nada. Guarde a senha, porque você vai precisar dela se o chip for trocado ou o disco for movido para outro computador.
 
 # In the card about the chip, on a computer that has none Trindle can use.
-installer-privacy-no-chip = Este computador não tem um chip TPM que o Trindle possa usar, então a senha será pedida toda vez que ele iniciar. Em um computador que tenha um, o chip pode destrancar o disco sozinho.
+installer-privacy-no-chip = Este computador não tem um chip TPM que o Trindle possa usar, então ele vai pedir a senha toda vez que iniciar. Em um computador com chip, o chip pode destrancar o disco sozinho.
 
 # Title of the disk password page.
 installer-disk-title = A senha do disco
 
 # Sentence under the title of the disk password page.
-installer-disk-help = Ela é digitada antes de qualquer outra coisa quando o computador inicia.
+installer-disk-help = Você a digita antes de qualquer outra coisa quando o computador inicia.
 
 # Head of the card with the disk password boxes, and the name of the first box.
 installer-disk-password = Senha do disco
@@ -205,7 +208,7 @@ installer-disk-password = Senha do disco
 installer-disk-suggest = Sugerir uma frase secreta
 
 # Label and name of the second box of a password, where it is typed again.
-installer-same-again = A mesma de novo
+installer-same-again = Digite de novo
 
 # Red line under the password boxes when the two do not match.
 installer-mismatch = As duas senhas não correspondem.
@@ -216,13 +219,13 @@ installer-disk-write-down = Anote-a
 
 # Words in that card.
 # SAFETY: needs a human review before it ships
-installer-disk-write-down-text = Anote esta senha no papel e guarde-a em um lugar seguro, longe do computador. Sem ela, o disco não pode ser aberto, nem por você nem por mais ninguém, nunca. Não há como entrar de novo. Quatro palavras comuns formam uma frase secreta fácil de digitar e difícil de adivinhar.
+installer-disk-write-down-text = Anote esta senha no papel e guarde-a em um lugar seguro, longe do computador. Sem ela, ninguém poderá abrir o disco, nem você. Não há como entrar de novo. Uma frase secreta de quatro palavras comuns é fácil de digitar e difícil de adivinhar.
 
 # Title of the account page.
 installer-you-title = Sobre você
 
 # Sentence under the title of the account page.
-installer-you-help = Esta é a conta com a qual você entra.
+installer-you-help = Esta é a conta com a qual você faz login.
 
 # Head of the card with the name boxes.
 installer-account = Sua conta
@@ -246,19 +249,19 @@ installer-password = Senha
 installer-strength = Quão difícil é de adivinhar
 
 # Red line under the account boxes: the sign-in name is empty.
-installer-user-needed = É preciso um nome de usuário.
+installer-user-needed = Digite um nome de usuário.
 
 # Red line under the account boxes: a name is too long.
 installer-name-too-long = Esse nome é longo demais.
 
 # Red line under the account boxes: the sign-in name does not start with a small letter.
-installer-user-start = Comece com uma letra minúscula.
+installer-user-start = Comece com uma letra a-z.
 
 # Red line under the account boxes: the sign-in name uses letters it may not.
-installer-user-letters = Só letras minúsculas, números, - e _.
+installer-user-letters = Use só a-z, 0-9, - e _.
 
 # Red line under the account boxes: the sign-in name belongs to the system.
-installer-user-taken = Esse nome já é usado pelo sistema.
+installer-user-taken = O sistema já usa esse nome.
 
 # Red line under the account boxes: the computer's name is empty.
 installer-host-needed = Dê um nome a este computador.
@@ -302,26 +305,26 @@ installer-guess-years =
     }
 
 # Under the strength meter: the password is too strong to guess in any time worth saying.
-installer-guess-never = Um computador precisaria de mais tempo do que a história registrada para adivinhar isto.
+installer-guess-never = Um computador levaria mais tempo do que toda a história registrada para adivinhar isto.
 
 # Title of the Ready page.
 installer-ready-title = Pronto para instalar
 
 # Head of the card that lists what will happen.
-installer-ready-nothing-changed = Nada foi alterado ainda
+installer-ready-nothing-changed = Nada mudou ainda
 
 # Head of the card about security updates.
 installer-ready-security = Atualizações de segurança
 
 # In the card about security updates.
-installer-ready-security-text = O { $name } instala as correções de segurança do Debian sozinho todo dia. Isso não pode ser desativado.
+installer-ready-security-text = O { $name } instala as correções de segurança do Debian sozinho todo dia. Você pode desativar isso em Configurações, Sobre este computador.
 
 # Sentence under the title when a whole disk will be replaced.
 # SAFETY: needs a human review before it ships
 installer-ready-replaced = Tudo em { $disk } será substituído.
 
 # Sentence under the title when the install goes beside what is there.
-installer-ready-kept = Tudo em { $part } é mantido, mas faça um backup antes: reduzi-la pode perder arquivos se a energia acabar.
+installer-ready-kept = Tudo em { $part } é mantido, mas faça um backup antes. Uma queda de energia durante a redução pode causar perda de arquivos.
 
 # Sentence under the title when no disk has been chosen.
 installer-ready-none = Nenhum disco foi escolhido ainda.
@@ -338,13 +341,13 @@ installer-ready-whole-text = Tudo nele é substituído pelo { $name }.
 installer-ready-beside = Ao lado de { $part }
 
 # Words of that row.
-installer-ready-beside-text = { $part } é reduzida, até { $size }, e o { $name } vai no espaço liberado.
+installer-ready-beside-text = { $part } é reduzida para { $size }, e o { $name } é instalado no espaço liberado.
 
 # Name of a row in the list when no disk is chosen.
 installer-ready-no-disk = Nenhum disco
 
 # Words of that row.
-installer-ready-no-disk-text = Nenhum disco escolhido.
+installer-ready-no-disk-text = Escolha um disco.
 
 # Name of a row in the list: the disk will not be encrypted.
 installer-ready-plain = Não criptografado
@@ -359,7 +362,19 @@ installer-ready-locked = Criptografado
 installer-ready-locked-password = Você digita a senha dele toda vez que o computador inicia.
 
 # Words of that row when the TPM chip unlocks the disk.
-installer-ready-locked-chip = A senha uma vez, e depois o chip TPM deste computador o destranca.
+installer-ready-locked-chip = Você digita a senha uma vez, e depois o chip TPM deste computador destranca o disco.
+
+# Added to the end of the disk's row on the last page when a swap file is to be made, with its size in GB.
+installer-ready-swap = Mais um arquivo de swap de { $gb } GB.
+
+# Under the choice to let the TPM chip unlock the disk, on a computer with no usable chip.
+installer-privacy-chip-off = Precisa de um chip TPM que o Trindle possa usar.
+
+# In the card about the chip when the disk is not being encrypted, on a computer that has a chip.
+installer-privacy-chip-none = Este computador tem um chip TPM, que pode desbloquear um disco criptografado.
+
+# In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
+installer-privacy-no-chip-none = Este computador não tem um chip TPM que o Trindle possa usar.
 
 # Words of the language row: the keyboard and time zone chosen.
 installer-ready-language = Teclado { $keyboard }, horário { $zone }.
@@ -380,34 +395,34 @@ installer-done-help = Retire o pendrive e reinicie.
 installer-done-keep = Guarde bem a senha do disco
 
 # In that card when the TPM chip unlocks the disk.
-installer-keep-chip = O disco está criptografado. A primeira inicialização pede a senha do disco uma vez, enquanto o chip aprende este computador; depois disso ele abre sozinho. Anote essa senha no papel e guarde-a em um lugar seguro, longe deste computador. Sem ela, o disco não pode ser aberto, nem por você nem por mais ninguém, nunca.
+installer-keep-chip = O disco está criptografado. Na primeira vez que o computador inicia, ele pede a senha do disco uma vez enquanto o chip é configurado. Depois disso o disco abre sozinho. Anote essa senha no papel e guarde-a em um lugar seguro, longe deste computador. Sem ela, ninguém poderá abrir o disco, nem você.
 
 # In that card when the password is typed at each start.
-installer-keep-password = O disco está criptografado. Anote agora a senha do disco no papel, se ainda não o fez, e guarde-a em um lugar seguro, longe deste computador. Sem ela, o disco não pode ser aberto, nem por você nem por mais ninguém, nunca.
+installer-keep-password = O disco está criptografado. Se ainda não o fez, anote agora a senha do disco no papel e guarde-a em um lugar seguro, longe deste computador. Sem ela, ninguém poderá abrir o disco, nem você.
 
 # Title of the first slide.
 installer-slide-ring = Tudo em um círculo
 
 # Words of the first slide.
-installer-slide-ring-text = Mova o ponteiro até a borda da tela e dê um clique duplo, e o anel abre: seus programas ao redor, a hora e as chaves no meio.
+installer-slide-ring-text = Mova o ponteiro até a borda da tela e dê um clique duplo para abrir o anel. Seus programas ficam ao redor, e a hora e os interruptores ficam no meio.
 
 # Title of the second slide.
-installer-slide-snapshots = Desfaça o que uma atualização estragou
+installer-slide-snapshots = Desfaça uma atualização com problema
 
 # Words of the second slide.
-installer-slide-snapshots-text = Um instantâneo do sistema é feito antes e depois de cada mudança de software. As Configurações restauram o sistema inteiro para qualquer um deles, e o menu de inicialização pode fazer isso quando o computador não inicia.
+installer-slide-snapshots-text = O Trindle faz um instantâneo do sistema antes e depois de cada mudança de software. Em Configurações, você pode restaurar o sistema inteiro para qualquer um deles. Se o computador não iniciar, dá para fazer isso pelo menu de inicialização.
 
 # Title of the third slide.
 installer-slide-apps = Aplicativos que não atrapalham
 
 # Words of the third slide.
-installer-slide-apps-text = Aplicativos do Flathub, os próprios do Debian, AppImages e fontes de software em um só lugar, com backups que você pode levar para outro computador.
+installer-slide-apps-text = Aplicativos do Flathub, os próprios aplicativos do Debian, AppImages e fontes de software ficam todos em um só lugar, com backups que você pode levar para outro computador.
 
 # Title of the fourth slide.
-installer-slide-yours = Do seu jeito, rapidamente
+installer-slide-yours = Deixe do seu jeito
 
 # Words of the fourth slide.
-installer-slide-yours-text = Claro ou escuro, seus próprios sons e uma área de transferência que lembra o que você copiou.
+installer-slide-yours-text = Escolha claro ou escuro, defina seus próprios sons e use uma área de transferência que lembra o que você copiou.
 
 # Title of the fifth slide.
 installer-slide-small = Pequeno e silencioso
@@ -422,19 +437,19 @@ installer-tour-ring = O anel é toda a área de trabalho
 installer-tour-ring-corner = Ponha o ponteiro neste canto e o anel abre
 
 # Note on the ring picture, at the time.
-installer-tour-ring-time = A hora e a data, no meio
+installer-tour-ring-time = A hora e a data ficam no meio
 
 # Note on the ring picture, at the programs.
 installer-tour-ring-programs = Seus programas ficam ao redor
 
 # Note on the ring picture, at the switches.
-installer-tour-ring-switches = Som, tela, todos os seus aplicativos, manter ativo e desligar
+installer-tour-ring-switches = Interruptores para som, tela, todos os seus aplicativos, manter ativo e desligar
 
 # Title of the tour slide about Settings.
 installer-tour-settings = Configurações, em palavras simples
 
 # Note on the Settings picture, at the search box.
-installer-tour-settings-search = Digite aqui para achar uma configuração sem procurar
+installer-tour-settings-search = Digite aqui para achar uma configuração
 
 # Note on the Settings picture, at Network.
 installer-tour-settings-network = Em Rede você entra em uma rede Wi-Fi
@@ -452,37 +467,37 @@ installer-tour-apps = Aplicativos, para todo o resto
 installer-tour-apps-search = Procure um programa pelo nome ou pelo que ele faz
 
 # Note on the Apps picture, at the list.
-installer-tour-apps-many = Milhares de programas, gratuitos, do Flathub e do Debian
+installer-tour-apps-many = Milhares de programas gratuitos, do Flathub e do Debian
 
 # Note on the Apps picture, at updates.
 installer-tour-apps-updates = Atualizações para tudo, inclusive o próprio Trindle
 
 # Title of the tour slide about voice control.
-installer-tour-voice = Você pode falar com ele
+installer-tour-voice = Fale com o computador
 
 # Note on the voice picture, at where voice control lives.
-installer-tour-voice-where = O controle por voz fica aqui: Configurações, depois Anel
+installer-tour-voice-where = O controle por voz fica em Configurações, depois Anel
 
 # Note on the voice picture, at the button that adds voice.
-installer-tour-voice-add = Pressione Adicionar voz uma vez. Ocupa cerca de 150 MB e leva alguns minutos
+installer-tour-voice-add = Pressione Adicionar controle por voz uma vez. O download tem cerca de 150 MB e leva alguns minutos
 
 # Note on the voice picture, about what to say.
 installer-tour-voice-say = Depois toque no meio do anel e diga o nome de um aplicativo, “mais alto” ou “configurações de Wi-Fi”
 
 # Note on the voice picture, about where speech is understood.
-installer-tour-voice-private = O que você diz é entendido neste computador e não vai para nenhum outro lugar
+installer-tour-voice-private = O Trindle entende sua fala neste computador, e ela nunca é enviada para outro lugar
 
 # Title of the tour slide about snapshots.
-installer-tour-snapshots = Um caminho de volta, antes de qualquer mudança
+installer-tour-snapshots = Volte a antes de uma mudança
 
 # Note on the snapshots picture, about when a snapshot is taken.
-installer-tour-snapshots-before = O computador faz um instantâneo antes de cada atualização
+installer-tour-snapshots-before = O Trindle faz um instantâneo antes de cada atualização
 
 # Note on the snapshots picture, about going back.
-installer-tour-snapshots-back = Se algo quebrar, volte a como era, pelo menu de inicialização
+installer-tour-snapshots-back = Se algo quebrar, você pode voltar a como era pelo menu de inicialização
 
 # Name of the picture of the ring, and the head of its card.
-installer-live-caption = O anel, onde tudo mora
+installer-live-caption = O anel, com tudo dentro dele
 
 # Sentence under the title of the welcome from a stick.
 installer-live-help = Você está executando a partir do pendrive, então nada neste computador foi alterado.
@@ -497,19 +512,19 @@ installer-live-open = Abra o anel
 installer-live-open-line = Dê um clique duplo na borda da tela, ou pressione Super.
 
 # Name of the second thing to do.
-installer-live-speak = Fale com ele
+installer-live-speak = Use sua voz
 
 # Line under it when voice control is there.
 installer-live-speak-line = Toque no meio do anel e diga o que você quer.
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = Adicione a voz em Configurações, Anel, depois toque no meio e fale.
+installer-live-speak-add = Pressione Adicionar controle por voz em Configurações, em Anel. Depois toque no meio e fale.
 
 # Name of the third thing to do.
 installer-live-tab = Tudo no anel
 
 # Line under it.
-installer-live-tab-line = O que está aberto, suas notificações e a área de transferência estão todos ali.
+installer-live-tab-line = Você encontra ali o que está aberto, suas notificações e a área de transferência.
 
 # The choice of the dark look.
 installer-live-dark = Escuro
@@ -533,7 +548,7 @@ installer-step-room = Abrindo espaço
 installer-step-prepare = Preparando o disco
 
 # Foot of the install page while a place is made beside another system.
-installer-step-place = Criando um lugar para o Trindle
+installer-step-place = Abrindo espaço para o Trindle
 
 # Foot of the install page while the disk is looked at.
 installer-step-check = Verificando o que já está no disco
@@ -542,10 +557,10 @@ installer-step-check = Verificando o que já está no disco
 installer-step-smaller = Reduzindo o outro sistema
 
 # Foot of the install page while the disk is encrypted.
-installer-step-lock = Trancando o disco
+installer-step-lock = Criptografando o disco
 
 # Foot of the install page while the TPM chip is set up.
-installer-step-chip = Configurando o chip do computador
+installer-step-chip = Configurando o chip TPM
 
 # Foot of the install page while the system is copied.
 installer-step-copy = Copiando o Trindle para o disco
@@ -557,7 +572,7 @@ installer-step-settings = Gravando as configurações
 installer-step-account = Criando sua conta
 
 # Foot of the install page while the stick's own parts are taken out.
-installer-step-live-parts = Retirando as partes do pendrive
+installer-step-live-parts = Removendo os extras do pendrive
 
 # Foot of the install page while the start-up files are made.
 installer-step-startup = Criando os arquivos de inicialização
@@ -590,10 +605,10 @@ installer-not-a-disk-here = { $dev } não é um disco neste computador.
 installer-no-disk-chosen = Nenhum disco foi escolhido.
 
 # Red line at the foot: the sign-in name cannot be used.
-installer-bad-username = Esse nome de usuário não pode ser usado pelo Trindle.
+installer-bad-username = O Trindle não pode usar esse nome de usuário.
 
 # Red line at the foot: the computer's name cannot be used.
-installer-bad-hostname = Esse nome de computador não pode ser usado pelo Trindle.
+installer-bad-hostname = O Trindle não pode usar esse nome de computador.
 
 # Red line at the foot: the language cannot be used.
 installer-bad-language = O Trindle não pode usar esse idioma.
@@ -605,31 +620,31 @@ installer-bad-keyboard = O Trindle não pode usar esse teclado.
 installer-bad-timezone = O Trindle não pode usar esse fuso horário.
 
 # Red line at the foot: the person's name has something that cannot be written.
-installer-bad-fullname = Esse nome contém algo que o Trindle não consegue gravar.
+installer-bad-fullname = Esse nome tem um caractere que o Trindle não pode usar.
 
 # Red line at the foot: a password has a line break in it.
-installer-bad-password = Uma senha não pode conter uma quebra de linha.
+installer-bad-password = Uma senha não pode ter quebra de linha.
 
 # Red line at the foot: the second half of the installer was not started as root.
-installer-needs-root = A segunda metade do instalador precisa ser executada como root.
+installer-needs-root = A segunda parte do instalador precisa ser executada como root.
 
 # Red line at the foot: there is no boot partition to share.
-installer-no-boot-partition = Este disco não tem uma partição de inicialização para compartilhar, então o Trindle não pode ir ao lado do que já está aqui.
+installer-no-boot-partition = Este disco não tem uma partição de inicialização para compartilhar, então o Trindle não pode ser instalado ao lado do que já existe nele.
 
 # Red line at the foot: the partition just made cannot be found.
-installer-new-part-missing = Não foi possível encontrar a nova parte do disco.
+installer-new-part-missing = O Trindle não encontrou a nova partição.
 
 # Red line at the foot: the size of a partition cannot be read.
 installer-size-unreadable = Não foi possível ler o tamanho de { $part }.
 
 # Red line at the foot: a partition of this kind cannot be made smaller.
-installer-cannot-shrink = O Trindle não consegue reduzir uma partição { $fs }.
+installer-cannot-shrink = O Trindle não consegue reduzir partições { $fs }.
 
 # Red line at the foot: a partition of a kind that is not known cannot be made smaller.
-installer-cannot-shrink-unknown = O Trindle não consegue reduzir uma partição desconhecida.
+installer-cannot-shrink-unknown = O Trindle não consegue reduzir uma partição de tipo desconhecido.
 
 # Red line at the foot: encrypting needs a password and there is none.
-installer-disk-password-needed = É preciso uma senha para criptografar o disco.
+installer-disk-password-needed = Você precisa de uma senha para criptografar o disco.
 
 # Red line at the foot: the copy of the system could not start.
 installer-copy-no-start = Não foi possível copiar o sistema: { $why }
@@ -638,19 +653,19 @@ installer-copy-no-start = Não foi possível copiar o sistema: { $why }
 installer-copy-failed = Não foi possível copiar o sistema. { $why }
 
 # Red line at the foot: there is not enough room for a swap file.
-installer-swap-no-room = Não há espaço para um arquivo de swap.
+installer-swap-no-room = Sem espaço para um arquivo de swap.
 
 # Red line at the foot: the swap file's place on the disk cannot be read.
-installer-swap-unreadable = Não foi possível ler o lugar do arquivo de swap no disco.
+installer-swap-unreadable = O Trindle não conseguiu ler onde o arquivo de swap está no disco.
 
 # Red line at the foot: the new partitions could not be named in the table of disks.
-installer-fstab-unidentified = Não foi possível identificar as novas partições.
+installer-fstab-unidentified = O Trindle não conseguiu identificar as novas partições.
 
 # Red line at the foot: the time zone could not be set.
 installer-timezone-failed = Não foi possível definir o fuso horário: { $why }
 
 # Red line at the foot: the boot menu could not be installed.
-installer-boot-failed = Não foi possível instalar o menu de inicialização neste computador.
+installer-boot-failed = O Trindle não conseguiu instalar o menu de inicialização neste computador.
 
 # Name of that button after one press, when a second press goes ahead.
 installer-sure = Tem certeza?
@@ -658,7 +673,7 @@ installer-sure = Tem certeza?
 
 
 # Note on the ring picture, at the tab at the edge.
-installer-tour-ring-foot = O que está aberto, a área de transferência e um botão que limpa a tela
+installer-tour-ring-foot = Veja o que está aberto, use a área de transferência e limpe a tela com um botão
 
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } é o pendrive de onde o Trindle está rodando.
@@ -667,7 +682,7 @@ installer-disk-is-stick = { $dev } é o pendrive de onde o Trindle está rodando
 installer-disk-in-use = { $dev } está em uso. Feche o que o estiver usando e tente de novo.
 
 # Said beside how far the install has got, once it has started.
-installer-started = Instalação iniciada
+installer-started = Instalando
 
 # The button that ends an install under way.
 installer-halt = Parar
@@ -679,7 +694,7 @@ installer-halt-sure = Parar a instalação? O conteúdo antigo do disco já foi 
 installer-halting = Parando
 
 # When Stop could not let go of the disk.
-installer-halt-stuck = Não foi possível liberar o disco. Reinicie o computador para tentar de novo.
+installer-halt-stuck = O Trindle não conseguiu liberar o disco. Reinicie o computador para tentar de novo.
 
 # The copy is done and the person is still answering.
 installer-step-waiting = Copiado. Aguardando as suas respostas.
@@ -693,17 +708,43 @@ installer-already-running = Outro instalador já está em execução neste compu
 installer-memory-short = O Trindle precisa de pelo menos 1 GB de memória, e este computador tem menos.
 
 # Shown beside the disabled Next button on the privacy page, and as the reason the install will not start, when the disk is to be encrypted on a computer that did not start by UEFI.
-installer-lock-needs-uefi = Um disco só pode ser criptografado em um computador que inicia por UEFI, e este não inicia.
+installer-lock-needs-uefi = Você só pode criptografar um disco em um computador que inicia por UEFI, e este não inicia.
 
 # Red words when the Windows partition chosen to share the disk was hibernated or left in Windows' fast start-up; { $part } is the partition.
-installer-windows-asleep = O Windows em { $part } foi hibernado ou deixado na inicialização rápida, então reduzi-la pode fazer com que perca seus arquivos. Inicie o Windows, escolha Reiniciar e tente de novo.
+installer-windows-asleep = O Windows em { $part } foi hibernado ou desligado com a inicialização rápida. Reduzir o tamanho agora pode fazer o Windows perder arquivos. Inicie o Windows, escolha Reiniciar e tente de novo.
 
 # Red words on the last page when the snapshots could not be set up; { $why } is the reason.
-installer-snapshots-failed = O Trindle está instalado, mas não foi possível configurar os instantâneos: { $why }
+installer-snapshots-failed = O Trindle está instalado, mas não conseguiu configurar os instantâneos: { $why }
 
 # Red words on the last page when the boot menu could not be made after setting up snapshots; { $why } is the reason.
-installer-snapshots-menu-failed = O Trindle está instalado, mas não foi possível fazer o menu de inicialização listar os instantâneos: { $why }
+installer-snapshots-menu-failed = O Trindle está instalado, mas não conseguiu adicionar os instantâneos ao menu de inicialização: { $why }
 
 # Head of the card on the last page that lists what could not be done.
 installer-done-problems = Nem tudo foi configurado
 
+# Red line under the disk password boxes: the computer gave no random numbers, so no passphrase could be made.
+installer-suggest-failed = O Trindle não conseguiu criar uma senha. Digite a sua.
+
+# Red line at the foot: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev } não é o disco que foi mostrado. Volte e escolha o disco de novo.
+
+# Red line at the foot: a disk with an old-style partition table cannot be shared with.
+installer-no-gpt = { $dev } não usa uma tabela de partições GPT, então o Trindle não pode ser instalado ao lado do que já existe nele.
+
+# Red line at the foot: the boot partition on the disk is too small to share.
+installer-boot-partition-small = A partição de inicialização deste disco é pequena demais para ser compartilhada, então o Trindle não pode ser instalado ao lado do que já existe nele.
+
+# Note on the last page: the swap file was not made, with why.
+installer-swap-failed = O Trindle foi instalado, mas não conseguiu criar o arquivo de swap: { $why }
+
+# Red line at the foot: a partition's identity could not be read after it was made.
+installer-uuid-missing = O Trindle não conseguiu identificar { $dev } depois de configurá-lo.
+
+# Words on the last page: the disk that will be replaced, with what it holds.
+installer-ready-replaced-known = Tudo em { $disk } será substituído ({ $holds }).
+
+# A disk named with its model and size, then its place such as /dev/sda.
+installer-disk-named = { $what }, { $dev }
+
+# Red line at the foot: a program the installer runs stopped before it had all it was given.
+installer-run-stopped = { $program } parou antes de ter tudo de que precisava: { $why }

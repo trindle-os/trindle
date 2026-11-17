@@ -8,10 +8,10 @@ settings-snap-title = Schnappschüsse
 settings-snap-keywords = schnappschüsse schnappschuss snapshot snapshots wiederherstellen rückgängig zurücksetzen zurückrollen sicherung backup update kaputt btrfs snapper bootmenü grub frühere versionen ältere version vorherige gelöschte datei zurückholen home kopien
 
 # Help line at the foot of the Snapshots page.
-settings-snap-help = Das System, wie es vor und nach jeder Softwareänderung war, und wann immer du einen machst. Beim Wiederherstellen wird das ganze System ab dem nächsten Start auf diesen Stand zurückgesetzt; deine eigenen Dateien bleiben unverändert, wenn der Home-Ordner einen eigenen Teil der Festplatte hat, wie ihn der Installer von Trindle anlegt. Wenn der Computer nicht startet, wähle im Bootmenü Trindle-Schnappschüsse. Frühere Versionen hält jeden Tag eine Kopie der eigenen Dateien aller Personen vor, getrennt von den Schnappschüssen des Systems.
+settings-snap-help = Ein Schnappschuss ist eine Kopie des Systems, wie es vor und nach jeder Softwareänderung war, und immer, wenn du einen machst. Beim Wiederherstellen eines Schnappschusses ist das ganze System ab dem nächsten Neustart wieder so, wie es war. Deine eigenen Dateien bleiben unverändert, wenn dein Home-Ordner einen eigenen Teil der Festplatte hat, wie ihn der Installer von Trindle anlegt. Wenn der Computer nicht startet, wähle im Bootmenü Trindle-Schnappschüsse. Frühere Versionen hält jeden Tag eine Kopie der eigenen Dateien aller Personen vor, getrennt von den Schnappschüssen des Systems.
 
 # Red words under the Earlier versions switch when a daily copy was skipped because the disk is nearly full.
-settings-snap-nearly-full = Es wurde keine Kopie gemacht: Die Festplatte ist fast voll.
+settings-snap-nearly-full = Trindle hat keine Kopie gemacht, weil die Festplatte fast voll ist.
 
 # Time of a snapshot taken today: { $time } is the hour and minute.
 settings-snap-today = heute um { $time }
@@ -23,13 +23,13 @@ settings-snap-yesterday = gestern um { $time }
 settings-snap-on = am { $date }
 
 # Red words when the computer would not restart on its own after a restore.
-settings-snap-not-restart = Der Computer wollte nicht neu starten. Starte ihn stattdessen über den Ring neu.
+settings-snap-not-restart = Der Computer ließ sich nicht neu starten. Starte ihn stattdessen über den Ring neu.
 
 # Said beside the Take a snapshot line while it works.
 settings-snap-taking = Ein Schnappschuss wird gemacht
 
 # Said beside the set aside line while the space is freed.
-settings-snap-freeing = Wird freigegeben ...
+settings-snap-freeing = Wird freigegeben …
 
 # Said beside the set aside line once the space is freed.
 settings-snap-freed = Freigegeben
@@ -40,7 +40,7 @@ settings-snap-restoring = Wird wiederhergestellt
 
 # Said beside a snapshot once it is restored: { $n } is the snapshot's number.
 # SAFETY: needs a human review before it ships
-settings-snap-restored = Das System ist ab dem nächsten Start Schnappschuss { $n }. Was seitdem geändert wurde, wird beiseitegelegt, nicht verloren.
+settings-snap-restored = Beim nächsten Neustart ist das System so, wie es in Schnappschuss { $n } war. Was seitdem geändert wurde, wird beiseitegelegt, nicht verloren.
 
 # Said beside a snapshot while it is deleted.
 # SAFETY: needs a human review before it ships
@@ -52,13 +52,13 @@ settings-snap-deleted = Gelöscht
 
 # Said beside a setting while the administrator's password is awaited.
 # SAFETY: needs a human review before it ships
-settings-snap-waiting = Warte auf das Passwort ...
+settings-snap-waiting = Warte auf dein Passwort …
 
 # Said beside the Earlier versions switch once it is turned on.
 settings-snap-copy-daily = Jeden Tag wird eine Kopie gemacht
 
 # Said beside the Earlier versions switch once it is turned off.
-settings-snap-no-more = Es werden keine mehr gemacht
+settings-snap-no-more = Keine weiteren Kopien
 
 # Said beside the list of how long copies are kept once the choice is saved.
 settings-snap-kept = Behalten
@@ -86,7 +86,7 @@ settings-snap-first-soon = Die erste wird innerhalb eines Tages gemacht.
 settings-snap-they-take = Sie belegen { $size }, gemessen { $when }.
 
 # Under the number of earlier copies when their room has not been measured.
-settings-snap-measured-daily = Ihr Platzbedarf wird einmal am Tag gemessen.
+settings-snap-measured-daily = Ihr Platzbedarf wird täglich gemessen.
 
 # Tip of the button that clears all earlier copies, and its label while working.
 # SAFETY: needs a human review before it ships
@@ -97,13 +97,13 @@ settings-snap-earlier = Frühere Versionen
 
 # Help text of the Earlier versions card (the information button).
 # SAFETY: needs a human review before it ships
-settings-snap-earlier-about = Trindle kann jeden Tag eine Kopie der Dateien aller Personen behalten, wie sie an dem Tag waren. So lässt sich eine ältere Version einer Datei oder eine versehentlich gelöschte in Ordner öffnen oder zurückholen. Jede Person kann in einer Kopie nur lesen, was sie an dem Tag lesen konnte, ein privates Home bleibt also privat; eine Datei, die damals für andere offen war, bleibt in dieser Kopie für sie offen, bis sie verschwindet. Die Kopien sind getrennt von den Schnappschüssen des Systems: Das Wiederherstellen des Systems ändert nie deine Dateien, und diese ändern nie das System. Der Preis ist Platz: Eine Datei, die du löschst oder änderst, belegt ihren Platz weiter, bis die letzte Kopie, die sie enthält, verschwunden ist, darum wird die Festplatte durch Löschen nicht sofort frei. Das Leeren der Kopien gibt den Platz jetzt frei, für alle auf diesem Computer, und lässt sich nicht rückgängig machen. Solange die Festplatte fast voll ist, wird keine Kopie gemacht. Für Änderungen daran ist das Passwort eines Administrators nötig.
+settings-snap-earlier-about = Trindle kann jeden Tag eine Kopie der Dateien aller Personen behalten. So kannst du in Folders eine ältere Version einer Datei öffnen oder eine versehentlich gelöschte zurückholen. In einer Kopie sieht jede Person nur, was sie an dem Tag sehen konnte, darum bleiben private Home-Ordner privat. Eine Datei, die damals für andere offen war, bleibt in dieser Kopie für sie offen, bis die Kopie entfernt wird. Diese Kopien sind getrennt von den Schnappschüssen des Systems, und keine von beiden ändert die andere. Sie belegen aber Festplattenplatz. Eine Datei, die du löschst oder änderst, belegt ihren Platz weiter, bis die letzte Kopie, die sie enthält, entfernt wird. Das Leeren der Kopien gibt den Platz sofort für alle frei, und du kannst es nicht rückgängig machen. Solange die Festplatte fast voll ist, wird keine Kopie gemacht. Um etwas davon zu ändern, brauchst du das Passwort eines Administrators.
 
 # Label of the switch for keeping earlier versions, and heading of its line.
 settings-snap-keep-earlier = Frühere Versionen deiner Dateien behalten
 
 # Under the keep earlier versions switch: { $time } is how long deleted files stay, such as a week.
-settings-snap-deleted-stay = Gelöschte Dateien bleiben { $time }, bevor ihr Platz freigegeben wird.
+settings-snap-deleted-stay = Gelöschte Dateien werden { $time } aufbewahrt, dann wird ihr Platz freigegeben.
 
 # Heading of the line with the list of how long each day's copy is kept.
 settings-snap-keep-each = Die Kopie jedes Tages behalten für
@@ -112,19 +112,19 @@ settings-snap-keep-each = Die Kopie jedes Tages behalten für
 settings-snap-how-long = Wie lange die Kopie jedes Tages behalten wird
 
 # Headline of the Snapshots page while the snapshots are read.
-settings-snap-looking = Die Schnappschüsse werden angesehen …
+settings-snap-looking = Die Schnappschüsse werden geprüft …
 
 # Headline of the Snapshots page when the snapshots could not be read.
 settings-snap-not-read = Die Schnappschüsse konnten nicht gelesen werden.
 
 # Headline of the Snapshots page when the computer started from a snapshot: { $n } is its number.
-settings-snap-started-from = Von Schnappschuss { $n } gestartet, darum wird nichts, was jetzt getan wird, behalten.
+settings-snap-started-from = Du hast von Schnappschuss { $n } gestartet, darum wird nichts behalten, was du jetzt tust.
 
 # Headline of the Snapshots page: how many snapshots there are and { $when } the time of the newest.
 settings-snap-go-back =
     { $n ->
-        [one] { $n } Schnappschuss zum Zurückgehen, der neueste von { $when }.
-       *[other] { $n } Schnappschüsse zum Zurückgehen, der neueste von { $when }.
+        [one] Du kannst zu { $n } Schnappschuss von { $when } zurückgehen.
+       *[other] Du kannst zu { $n } Schnappschüssen zurückgehen. Der neueste ist von { $when }.
     }
 
 # Headline of the Snapshots page when there are none yet.
@@ -135,7 +135,7 @@ settings-snap-kept-until-deleted = { $what }, behalten bis zum Löschen
 
 # Tip of the button that restores the system to a snapshot, and its label while working.
 # SAFETY: needs a human review before it ships
-settings-snap-restore-this = Das System auf diesen Stand zurücksetzen
+settings-snap-restore-this = Diesen Schnappschuss wiederherstellen
 
 # Tip of the button that deletes a snapshot.
 # SAFETY: needs a human review before it ships
@@ -147,9 +147,6 @@ settings-snap-restart-now = Jetzt neu starten
 # Under the heading when snapshots are not set up on a Btrfs computer.
 settings-snap-not-set-up-sub = Sie sind noch nicht eingerichtet.
 
-# Under the To have them heading when snapshots are not set up.
-settings-snap-reinstall = Installiere das Paket trindle neu.
-
 # Help text of the No snapshots card when snapshots are not set up on a Btrfs computer.
 settings-snap-not-set-up-about = Schnappschüsse sind nicht eingerichtet. Wenn du das Paket trindle neu installierst, werden sie eingerichtet: sudo apt install --reinstall trindle.
 
@@ -157,13 +154,10 @@ settings-snap-not-set-up-about = Schnappschüsse sind nicht eingerichtet. Wenn d
 settings-snap-another-kind = eine andere Art
 
 # Under the heading when the computer does not use Btrfs: { $fs } is the kind it uses.
-settings-snap-need-btrfs = Sie brauchen Btrfs; dieser Computer nutzt { $fs }.
-
-# Under the To have them heading when the computer does not use Btrfs.
-settings-snap-choose-btrfs = Wähle beim Installieren von Debian Btrfs.
+settings-snap-need-btrfs = Schnappschüsse brauchen Btrfs. Dieser Computer nutzt { $fs }.
 
 # Help text of the No snapshots card when the computer does not use Btrfs: { $fs } is the kind it uses.
-settings-snap-need-btrfs-about = Schnappschüsse brauchen das System auf Btrfs, und dieser Computer nutzt { $fs }. Wähle beim Installieren von Debian Btrfs für das System, um sie zu haben.
+settings-snap-need-btrfs-about = Schnappschüsse brauchen das System auf Btrfs, und dieser Computer nutzt { $fs }. Um sie zu bekommen, wähle beim Installieren von Debian Btrfs für das System.
 
 # Headline of the Snapshots page when the computer has none.
 settings-snap-no-snapshots = Auf diesem Computer gibt es keine Schnappschüsse.
@@ -174,11 +168,8 @@ settings-snap-no-snapshots-title = Keine Schnappschüsse
 # Heading of the line shown when the computer has no snapshots.
 settings-snap-no-snapshots-line = Keine Schnappschüsse auf diesem Computer
 
-# Heading of the line saying how to have snapshots.
-settings-snap-to-have = Um sie zu haben
-
 # Shown in place of the list while the snapshots are read.
-settings-snap-looking-short = Suche läuft …
+settings-snap-looking-short = Wird geladen …
 
 # Heading of the line shown when the snapshots could not be read; the reason is under it.
 settings-snap-not-read-line = Die Schnappschüsse konnten nicht gelesen werden
@@ -186,31 +177,22 @@ settings-snap-not-read-line = Die Schnappschüsse konnten nicht gelesen werden
 # Heading of the line shown when there are no snapshots yet.
 settings-snap-none-line = Noch keine
 
-# Under the None yet heading.
-settings-snap-none-line-sub = Vor jeder Softwareänderung wird einer gemacht.
-
 # Help text of the Snapshots card (the information button).
 # SAFETY: needs a human review before it ships
-settings-snap-list-about = Mit jedem Schnappschuss kann das ganze System ab dem nächsten Start auf den damaligen Stand zurückgesetzt oder er kann gelöscht werden. Beides muss zweimal gedrückt werden und braucht das Passwort eines Administrators. Nach einer Wiederherstellung erscheint daneben eine Schaltfläche zum Neustart.
+settings-snap-list-about = Mit jedem Schnappschuss kannst du das ganze System beim nächsten Neustart auf den damaligen Stand zurücksetzen. Zum Wiederherstellen oder Löschen brauchst du das Passwort eines Administrators.
 
 # Tip of the button that takes a snapshot now, and heading of its line.
 settings-snap-take-now = Jetzt einen Schnappschuss machen
 
 # Under the Take a snapshot now heading when the computer started from a snapshot.
-settings-snap-not-while = Nicht, solange von einem Schnappschuss gestartet wurde.
-
-# Under the Take a snapshot now heading.
-settings-snap-kept-until-you = Wird behalten, bis du ihn löschst.
+settings-snap-not-while = Starte zuerst normal neu, um das zu tun.
 
 # Heading of the line about systems set aside by restoring: how many there are.
 settings-snap-set-aside =
     { $n ->
-        [one] Ein System durch Wiederherstellen beiseitegelegt
-       *[other] { $n } Systeme durch Wiederherstellen beiseitegelegt
+        [one] Ein altes System nach einer Wiederherstellung beiseitegelegt
+       *[other] { $n } alte Systeme nach Wiederherstellungen beiseitegelegt
     }
-
-# Under the set aside heading.
-settings-snap-free-space = Gib den Platz frei, wenn alles in Ordnung ist.
 
 # Tip of the button that frees the space the set aside systems use.
 # SAFETY: needs a human review before it ships
@@ -221,13 +203,13 @@ settings-snap-take-one = Einen machen
 
 # Help text of the Take one card (the information button).
 # SAFETY: needs a human review before it ships
-settings-snap-take-about = Mach einen Schnappschuss, bevor du etwas ausprobierst, das du vielleicht rückgängig machen willst; einer, den du machst, wird behalten, bis du ihn löschst. Solange der Computer von einem Schnappschuss gestartet ist, würde nichts Gemachtes behalten, starte darum zuerst normal neu. Jede Wiederherstellung legt beiseite, wie das System kurz davor war, darum geht nichts verloren; gib den Platz frei, den sie belegen, wenn alles in Ordnung ist.
+settings-snap-take-about = Mach einen Schnappschuss, bevor du etwas ausprobierst, das du vielleicht rückgängig machen willst. Schnappschüsse, die du machst, bleiben, bis du sie löschst. Wenn du von einem Schnappschuss gestartet hast, starte zuerst normal neu, sonst wird dein neuer Schnappschuss nicht behalten. Jede Wiederherstellung legt das System beiseite, wie es kurz davor war, darum geht nichts verloren. Sind die Systemdateien gesperrt, können nur Installationen und Updates sie ändern, und von jeder gibt es einen Schnappschuss davor und danach. Um die Sperre zu ändern, brauchst du das Passwort eines Administrators.
 
 # Heading of a line on the Before restoring card: { $n } is the number of the snapshot started from.
 settings-snap-started-line = Von Schnappschuss { $n } gestartet
 
 # Under the Started from snapshot heading.
-settings-snap-nothing-kept = Nichts, was jetzt getan wird, bleibt erhalten.
+settings-snap-nothing-kept = Änderungen bleiben nicht erhalten.
 
 # Heading of a line on the Before restoring card.
 settings-snap-files-too = Deine Dateien sind auch in den Schnappschüssen
@@ -240,7 +222,7 @@ settings-snap-before = Vor dem Wiederherstellen
 
 # Help text of the Before restoring card (the information button).
 # SAFETY: needs a human review before it ships
-settings-snap-before-about = Wenn von einem Schnappschuss gestartet wurde, bleibt nichts, was jetzt getan wird: Wenn das System so sein soll, drücke in der Liste bei ihm auf Wiederherstellen und starte dann neu. Auf diesem Computer kann der Home-Ordner Teil des Systems sein, und dann setzt das Wiederherstellen eines Schnappschusses auch deine eigenen Dateien auf den damaligen Stand zurück, kopiere darum zuerst alles Neue an einen sicheren Ort.
+settings-snap-before-about = Weil du von einem Schnappschuss gestartet hast, wird nichts behalten, was du jetzt tust. Damit das System so bleibt, drücke in der Liste bei ihm auf „Diesen Schnappschuss wiederherstellen“ und starte dann neu. Auf diesem Computer kann der Home-Ordner Teil des Systems sein. Wenn ja, setzt das Wiederherstellen eines Schnappschusses auch deine eigenen Dateien auf den damaligen Stand zurück, kopiere darum zuerst alles Neue an einen sicheren Ort.
 
 
 
@@ -255,4 +237,3 @@ settings-snap-locked-now = Gesperrt
 
 # Said beside the System files locked switch once it is turned off.
 settings-snap-unlocked-now = Entsperrt
-

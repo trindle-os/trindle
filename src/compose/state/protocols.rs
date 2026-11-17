@@ -1,6 +1,6 @@
 // Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
-use super::{AnvilState, Backend, ClientState};
+use super::{Compose, Backend, ClientState};
 
 use std::sync::Arc;
 
@@ -49,10 +49,10 @@ use smithay::{
     wayland::xwayland_keyboard_grab::XWaylandKeyboardGrabHandler,
 };
 
-impl<BackendData: Backend> OutputHandler for AnvilState<BackendData> {}
-delegate_output!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+impl<BackendData: Backend> OutputHandler for Compose<BackendData> {}
+delegate_output!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend> XdgActivationHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> XdgActivationHandler for Compose<BackendData> {
     fn activation_state(&mut self) -> &mut XdgActivationState {
         &mut self.xdg_activation_state
     }
@@ -101,9 +101,9 @@ mod activation_tests {
     }
 }
 
-delegate_xdg_activation!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_xdg_activation!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend> XdgDecorationHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> XdgDecorationHandler for Compose<BackendData> {
     fn new_decoration(&mut self, toplevel: ToplevelSurface) {
         use xdg_decoration::zv1::server::zxdg_toplevel_decoration_v1::Mode;
 
@@ -136,13 +136,13 @@ impl<BackendData: Backend> XdgDecorationHandler for AnvilState<BackendData> {
         }
     }
 }
-delegate_xdg_decoration!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_xdg_decoration!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-delegate_xdg_shell!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
-delegate_layer_shell!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
-delegate_presentation!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_xdg_shell!(@<BackendData: Backend + 'static> Compose<BackendData>);
+delegate_layer_shell!(@<BackendData: Backend + 'static> Compose<BackendData>);
+delegate_presentation!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend> FractionalScaleHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> FractionalScaleHandler for Compose<BackendData> {
     fn new_fractional_scale(
         &mut self,
         surface: smithay::reexports::wayland_server::protocol::wl_surface::WlSurface,
@@ -179,9 +179,9 @@ impl<BackendData: Backend> FractionalScaleHandler for AnvilState<BackendData> {
         });
     }
 }
-delegate_fractional_scale!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_fractional_scale!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend + 'static> SecurityContextHandler for AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> SecurityContextHandler for Compose<BackendData> {
     fn context_created(&mut self, source: SecurityContextListenerSource, security_context: SecurityContext) {
         self.handle
             .insert_source(source, move |client_stream, _, data| {
@@ -199,9 +199,9 @@ impl<BackendData: Backend + 'static> SecurityContextHandler for AnvilState<Backe
             .expect("Failed to init wayland socket source");
     }
 }
-delegate_security_context!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_security_context!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend + 'static> XWaylandKeyboardGrabHandler for AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> XWaylandKeyboardGrabHandler for Compose<BackendData> {
     fn keyboard_focus_for_xsurface(&self, surface: &WlSurface) -> Option<KeyboardFocusTarget> {
         let elem = self
             .space
@@ -210,24 +210,24 @@ impl<BackendData: Backend + 'static> XWaylandKeyboardGrabHandler for AnvilState<
         Some(KeyboardFocusTarget::Window(elem.0.clone()))
     }
 }
-delegate_xwayland_keyboard_grab!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_xwayland_keyboard_grab!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-delegate_xwayland_shell!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_xwayland_shell!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend> XdgForeignHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> XdgForeignHandler for Compose<BackendData> {
     fn xdg_foreign_state(&mut self) -> &mut XdgForeignState {
         &mut self.xdg_foreign_state
     }
 }
-smithay::delegate_xdg_foreign!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+smithay::delegate_xdg_foreign!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-smithay::delegate_single_pixel_buffer!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+smithay::delegate_single_pixel_buffer!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-smithay::delegate_fifo!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+smithay::delegate_fifo!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-smithay::delegate_commit_timing!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+smithay::delegate_commit_timing!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend> ImageCaptureHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> ImageCaptureHandler for Compose<BackendData> {
     fn image_capture_state(&mut self) -> &mut ImageCaptureState {
         &mut self.image_capture_state
     }
@@ -239,16 +239,16 @@ impl<BackendData: Backend> ImageCaptureHandler for AnvilState<BackendData> {
         Some(crate::panel::capture_size(&window, self.window_scale(&window)))
     }
 }
-delegate_image_capture!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_image_capture!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend> smithay::wayland::foreign_toplevel_list::ForeignToplevelListHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> smithay::wayland::foreign_toplevel_list::ForeignToplevelListHandler for Compose<BackendData> {
     fn foreign_toplevel_list_state(&mut self) -> &mut smithay::wayland::foreign_toplevel_list::ForeignToplevelListState {
         &mut self.toplevel_list_state
     }
 }
-smithay::delegate_foreign_toplevel_list!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+smithay::delegate_foreign_toplevel_list!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend + 'static> ScreensHandler for AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> ScreensHandler for Compose<BackendData> {
     fn screens_state(&mut self) -> &mut ScreensState {
         &mut self.screens_state
     }
@@ -259,9 +259,9 @@ impl<BackendData: Backend + 'static> ScreensHandler for AnvilState<BackendData> 
         BackendData::apply_output_config(self, plan, test_only)
     }
 }
-crate::delegate_screens!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+crate::delegate_screens!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend + 'static> OutputPowerHandler for AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> OutputPowerHandler for Compose<BackendData> {
     fn output_power_state(&mut self) -> &mut OutputPowerState {
         &mut self.output_power_state
     }
@@ -272,9 +272,9 @@ impl<BackendData: Backend + 'static> OutputPowerHandler for AnvilState<BackendDa
         BackendData::set_output_power(self, output, on)
     }
 }
-crate::delegate_output_power!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+crate::delegate_output_power!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend + 'static> NightHandler for AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> NightHandler for Compose<BackendData> {
     fn night_state(&mut self) -> &mut NightState {
         &mut self.night_state
     }
@@ -285,11 +285,11 @@ impl<BackendData: Backend + 'static> NightHandler for AnvilState<BackendData> {
         self.backend_data.set_gamma(output, table)
     }
 }
-crate::delegate_night!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+crate::delegate_night!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend + 'static> VirtualPointerHandler for AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> VirtualPointerHandler for Compose<BackendData> {
     fn virtual_pointer(&mut self, client: &Client, action: PointerAction) {
         self.virtual_input(crate::virtual_input::maker(client), action.into());
     }
 }
-crate::delegate_virtual_pointer!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+crate::delegate_virtual_pointer!(@<BackendData: Backend + 'static> Compose<BackendData>);

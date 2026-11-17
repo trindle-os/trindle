@@ -9,6 +9,7 @@ use smithay::reexports::wayland_protocols_wlr::virtual_pointer::v1::server::{
     zwlr_virtual_pointer_manager_v1::{self, ZwlrVirtualPointerManagerV1},
     zwlr_virtual_pointer_v1::{self, ZwlrVirtualPointerV1},
 };
+use super::Filtered;
 use smithay::reexports::wayland_server::protocol::wl_pointer;
 use smithay::reexports::wayland_server::{Client, DataInit, Dispatch, DisplayHandle, GlobalDispatch, New, Resource, WEnum};
 
@@ -31,10 +32,6 @@ pub trait VirtualPointerHandler {
 
 pub struct VirtualPointerManagerState;
 
-pub struct VirtualPointerGlobalData {
-    filter: Box<dyn for<'c> Fn(&'c Client) -> bool + Send + Sync>,
-}
-
 #[derive(Default)]
 pub struct VirtualPointerData {
     pending: Mutex<Pending>,
@@ -54,31 +51,31 @@ impl VirtualPointerManagerState {
 
     pub fn new<D, F>(display: &DisplayHandle, filter: F) -> Self
     where
-        D: GlobalDispatch<ZwlrVirtualPointerManagerV1, VirtualPointerGlobalData> + 'static,
+        D: GlobalDispatch<ZwlrVirtualPointerManagerV1, Filtered> + 'static,
         F: for<'c> Fn(&'c Client) -> bool + Send + Sync + 'static,
     {
-        display.create_global::<D, ZwlrVirtualPointerManagerV1, _>(VERSION, VirtualPointerGlobalData { filter: Box::new(filter) });
+        display.create_global::<D, ZwlrVirtualPointerManagerV1, _>(VERSION, Filtered::new(filter));
         Self
     }
 }
 
-impl<D> GlobalDispatch<ZwlrVirtualPointerManagerV1, VirtualPointerGlobalData, D> for VirtualPointerManagerState
+impl<D> GlobalDispatch<ZwlrVirtualPointerManagerV1, Filtered, D> for VirtualPointerManagerState
 where
-    D: GlobalDispatch<ZwlrVirtualPointerManagerV1, VirtualPointerGlobalData> + Dispatch<ZwlrVirtualPointerManagerV1, ()> + 'static,
+    D: GlobalDispatch<ZwlrVirtualPointerManagerV1, Filtered> + Dispatch<ZwlrVirtualPointerManagerV1, ()> + 'static,
 {
     fn bind(
         _state: &mut D,
         _dh: &DisplayHandle,
         _client: &Client,
         resource: New<ZwlrVirtualPointerManagerV1>,
-        _global_data: &VirtualPointerGlobalData,
+        _global_data: &Filtered,
         data_init: &mut DataInit<'_, D>,
     ) {
         data_init.init(resource, ());
     }
 
-    fn can_view(client: Client, global_data: &VirtualPointerGlobalData) -> bool {
-        (global_data.filter)(&client)
+    fn can_view(client: Client, global_data: &Filtered) -> bool {
+        global_data.can_view(&client)
     }
 }
 
@@ -211,7 +208,7 @@ fn collect_scroll(pointer: &ZwlrVirtualPointerV1, pending: &mut Pending, request
 macro_rules! delegate_virtual_pointer {
     ($(@<$( $lt:tt $( : $clt:tt $(+ $dlt:tt )* )? ),+>)? $ty: ty) => {
         smithay::reexports::wayland_server::delegate_global_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
-            smithay::reexports::wayland_protocols_wlr::virtual_pointer::v1::server::zwlr_virtual_pointer_manager_v1::ZwlrVirtualPointerManagerV1: $crate::protocols::virtual_pointer::VirtualPointerGlobalData
+            smithay::reexports::wayland_protocols_wlr::virtual_pointer::v1::server::zwlr_virtual_pointer_manager_v1::ZwlrVirtualPointerManagerV1: $crate::protocols::Filtered
         ] => $crate::protocols::virtual_pointer::VirtualPointerManagerState);
         smithay::reexports::wayland_server::delegate_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
             smithay::reexports::wayland_protocols_wlr::virtual_pointer::v1::server::zwlr_virtual_pointer_manager_v1::ZwlrVirtualPointerManagerV1: ()

@@ -272,6 +272,8 @@ pub(super) struct MetaBitmap {
     offset: u32,
 }
 
+/// # Safety
+/// `data` must point to `room` writable bytes, aligned for four-byte words.
 pub(super) unsafe fn write_pointer(data: *mut u8, room: usize, pointer: &PointerMeta) {
     let (w, h) = pointer.size;
     let fits = pointer.over && w > 0 && h > 0 && pointer.picture.len() >= (w * h * 4) as usize

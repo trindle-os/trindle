@@ -1,8 +1,7 @@
-//! Not a back door: Pocketkey is an optional plugin that lets a phone the person paired say yes instead of typing the password. This part only asks a root-owned socket that exists once the person installs that plugin; the password always works.
 //! Trindle Pocketkey is a plugin the person downloads; it lets a paired phone
-//! stand in for the password. Nothing here shows or does anything until its
-//! daemon is installed, running and switched on, and only a root-owned socket
-//! is believed.
+//! stand in for the password, which always works too. Nothing here shows or
+//! does anything until its daemon is installed, running and switched on, and
+//! only a root-owned socket is believed.
 
 use std::ffi::CStr;
 
@@ -142,10 +141,10 @@ mod tests {
             assert_eq!(reauth_words(*secs), said);
         }
         assert_eq!(REAUTH[0], 0, "Never is first");
-        assert_eq!(due_words(3600), "Password needed again: it has been more than 1 hour.");
-        assert_eq!(due_words(1800), "Password needed again: it has been more than 30 minutes.");
-        assert_eq!(due_words(21600), "Password needed again: it has been more than 6 hours.");
-        assert_eq!(due_words(604800), "Password needed again: it has been more than 1 week.");
+        assert_eq!(due_words(3600), "It has been more than 1 hour, so you need to type your password again.");
+        assert_eq!(due_words(1800), "It has been more than 30 minutes, so you need to type your password again.");
+        assert_eq!(due_words(21600), "It has been more than 6 hours, so you need to type your password again.");
+        assert_eq!(due_words(604800), "It has been more than 1 week, so you need to type your password again.");
         assert_eq!(parse_due("yes 14400"), Some(14400), "an older stored choice is still read");
     }
 

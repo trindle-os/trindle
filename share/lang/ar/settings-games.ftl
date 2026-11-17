@@ -9,13 +9,13 @@ settings-games-title = الألعاب
 settings-games-keywords = ألعاب لعبة ستيم بروتون طقطقة تقطع صوت مخزن قرص مكتبة قفل منقسم يد تحكم جويستيك أزرار مفاتيح تغيير إعادة تعيين تبديل عصا زناد اتجاهات xbox playstation nintendo games steam proton crackle stutter sound buffer drive library split lock game controller gamepad joystick pad buttons keys change remap swap stick trigger d-pad
 
 # What the page is for, in the help.
-settings-games-help = إعدادات تساعد الألعاب على العمل جيدًا. يحتفظ Steam بإعداداته الخاصة داخل Steam. اضغط زرًا على يد التحكم فيصعد إلى أعلى القائمة مضيئًا على الصورة. ثم اضغط المفتاح في لوحة المفاتيح الذي يجب أن يصبحه. ويمكن أن يصبح الزر زرًا آخر، أو لا شيء، من قائمته. تحتفظ كل يد تحكم بتغييراتها حسب صنعها وطرازها، وتقرأ الألعاب يد التحكم بعد تغييرها. يوقف Escape تغييرًا بدأته.
+settings-games-help = إعدادات تساعد الألعاب على العمل جيدًا. غيّر إعدادات Steam الخاصة في Steam نفسه. لتغيير زر في يد التحكم، اضغطه. سيصعد إلى أعلى القائمة ويضيء في الصورة. ثم اضغط مفتاح لوحة المفاتيح الذي يجب أن يصبحه. ويمكن أن يصبح الزر زرًا آخر، أو لا شيء، من قائمته. يحتفظ Trindle بالتغييرات لكل صنع وطراز من أيدي التحكم، وتستخدم الألعاب يد التحكم بعد تغييرها. اضغط Escape لإلغاء تغيير بدأته.
 
 # The sentence at the top of the page.
 settings-games-top = مساعدة للألعاب التي تطقطق أو تتقطع أو تحتاج مساحة أكبر.
 
 # Shown beside a switch while the person is asked for the password.
-settings-games-waiting = بانتظار كلمة المرور...
+settings-games-waiting = بانتظار كلمة مرورك…
 
 # The card holding the sound and split-lock switches.
 settings-games-smooth = ألعاب أكثر سلاسة
@@ -42,7 +42,7 @@ settings-games-sound-done-off = المخزن الأكبر متوقف
 settings-games-split = إصلاح تقطع الألعاب القديمة
 
 # Under the split-lock switch.
-settings-games-split-sub = تتقطع الألعاب القديمة أقل؛ وقد يبطئ برنامج واحد بقية البرامج.
+settings-games-split-sub = تتقطع الألعاب القديمة أقل، لكن قد يبطئ برنامج واحد بقية البرامج.
 
 # After the split-lock switch is turned on.
 settings-games-split-done-on = إصلاح التقطع يعمل
@@ -54,7 +54,7 @@ settings-games-split-done-off = إصلاح التقطع متوقف
 settings-games-drive-title = قرص الألعاب
 
 # What that card is for.
-settings-games-drive-about = قرص ثانٍ للألعاب، جاهز عند كل تشغيل.
+settings-games-drive-about = قرص ثانٍ للألعاب، جاهز في كل مرة تشغّل فيها الحاسوب.
 
 # A drive with no name of its own.
 settings-games-drive-unnamed = قرص
@@ -62,14 +62,11 @@ settings-games-drive-unnamed = قرص
 # One drive in the list: its name, size and kind of filesystem.
 settings-games-drive-name = { $name }، { $size }، { $fs }
 
-# Under a drive that can be used for games.
-settings-games-drive-ready = جاهز للألعاب
-
 # The button that makes a drive the games drive.
 settings-games-drive-use = استخدامه للألعاب
 
 # Under the drive in use for games.
-settings-games-drive-in-use = قرص الألعاب، في { $place }
+settings-games-drive-in-use = قرص الألعاب في { $place }
 
 # The button that stops using a drive for games.
 settings-games-drive-stop = التوقف عن استخدامه للألعاب
@@ -82,9 +79,6 @@ settings-games-drive-forgotten = لم يعد مستخدمًا للألعاب
 
 # When there is no second drive.
 settings-games-drive-none = لا قرص ثانيًا
-
-# Under that.
-settings-games-drive-none-sub = ركّب قرصًا ثانيًا أو وصّله لتحتفظ بالألعاب عليه.
 
 # When the drives could not be listed.
 settings-games-drive-unread = تعذّر سرد الأقراص
@@ -99,16 +93,16 @@ settings-games-drive-steam = أضفه في Steam
 settings-games-drive-steam-sub = في Steam: الإعدادات، التخزين، إضافة قرص.
 
 # Why a Windows-formatted drive cannot be used.
-settings-games-drive-windows = تنسيق Windows: تتعطل الألعاب عليه. هيّئه لنظام Linux.
+settings-games-drive-windows = هذا القرص مهيأ لنظام Windows، ولا تعمل الألعاب عليه جيدًا. هيّئه لنظام Linux.
 
 # Why a locked drive cannot be used.
-settings-games-drive-locked = مقفل: افتح قفله في الأقراص أولًا.
+settings-games-drive-locked = افتح قفله في الأقراص أولًا.
 
 # Why a part that holds no files cannot be used.
-settings-games-drive-not-files = لا يحوي ملفات
+settings-games-drive-not-files = ليس للملفات
 
 # Why an unknown kind of drive cannot be used.
-settings-games-drive-unknown = ليس تنسيقًا تعمل منه الألعاب
+settings-games-drive-unknown = لا يمكن تشغيل الألعاب منه
 
 
 
@@ -116,7 +110,7 @@ settings-games-drive-unknown = ليس تنسيقًا تعمل منه الألع�
 settings-games-steam-title = ألعاب Steam
 
 # What that card is for.
-settings-games-steam-about = إصلاحات للألعاب المنفردة. يجب إغلاق Steam لتغييرها.
+settings-games-steam-about = إصلاحات للألعاب الفردية. أغلق Steam قبل تغييرها.
 
 # Shown, and beside every control, while Steam is open.
 settings-games-steam-open = Steam مفتوح
@@ -128,16 +122,16 @@ settings-games-steam-open-sub = أغلق Steam لتغيير هذه.
 settings-games-game-running = اللعبة قيد التشغيل
 
 # Under a game's name.
-settings-games-game-sub = رسومات أقوى، وProton المجتمعي، وبداية جديدة. تنقل البداية الجديدة إعداد Windows الخاص باللعبة إلى سلة المحذوفات، وتذهب معه الحفظات المخزنة بداخله ما لم تكن في Steam Cloud.
+settings-games-game-sub = تنقل البداية الجديدة إعدادها وحفظاتها المحلية إلى سلة المحذوفات.
 
 # The switch for a game: use the stronger graphics chip.
-settings-games-stronger = استخدام الرسومات الأقوى
+settings-games-stronger = استخدام الرسومات الأسرع
 
 # After that switch is turned on.
-settings-games-stronger-on = الرسومات الأقوى مفعّلة
+settings-games-stronger-on = الرسومات الأسرع مفعّلة
 
 # After that switch is turned off.
-settings-games-stronger-off = الرسومات الأقوى متوقفة
+settings-games-stronger-off = الرسومات الأسرع متوقفة
 
 # The switch for a game: use the community Proton build.
 settings-games-proton-one = استخدام Proton المجتمعي
@@ -146,16 +140,16 @@ settings-games-proton-one = استخدام Proton المجتمعي
 settings-games-proton-all = Proton المجتمعي لكل الألعاب
 
 # Under that.
-settings-games-proton-all-sub = يُثبَّت في أول مرة. يمكن لكل لعبة أن تختار.
+settings-games-proton-all-sub = يُثبَّت عندما تحتاج إليه لعبة لأول مرة.
 
 # While the community Proton build is being installed.
-settings-games-proton-installing = جارٍ تثبيت Proton المجتمعي...
+settings-games-proton-installing = جارٍ تثبيت Proton المجتمعي…
 
 # After a game or all games are given community Proton.
 settings-games-proton-on = تم اختيار Proton المجتمعي
 
 # After the choice is given back to Steam.
-settings-games-proton-off = Steam يختار من جديد
+settings-games-proton-off = استخدم اختيار Steam
 
 # When community Proton was not found after installing.
 settings-games-proton-missing = تعذّر العثور على Proton المجتمعي.
@@ -164,7 +158,7 @@ settings-games-proton-missing = تعذّر العثور على Proton المجت
 settings-games-fresh = بداية جديدة
 
 # After a fresh start.
-settings-games-fresh-done = نُقل إلى سلة المحذوفات. ينشئ Steam واحدًا جديدًا عند التشغيل التالي.
+settings-games-fresh-done = الإعداد في سلة المحذوفات. ينشئ Steam إعدادًا جديدًا عند تشغيل اللعبة في المرة التالية.
 
 # When the game had no Windows setup to move.
 settings-games-fresh-none = لا شيء لنقله
@@ -172,6 +166,8 @@ settings-games-fresh-none = لا شيء لنقله
 # When no Steam games are installed.
 settings-games-none = لم يُعثر على ألعاب Steam
 
-# Under that.
-settings-games-none-sub = الألعاب التي تثبّتها في Steam تُعرض هنا.
+# Red words when community Proton could not be installed.
+settings-games-proton-not-installed = تعذّر على Trindle تثبيت Proton المجتمعي.
 
+# Red words when Steam's settings could not be changed for a game.
+settings-games-proton-not-changed = تعذّر على Trindle تغيير إعدادات Steam.

@@ -63,7 +63,7 @@ fn put_keys_back(how: Option<&str>) -> i32 {
         eprintln!("{}", t!("settings-window-keys-how"));
         return 2;
     }
-    match crate::common::remap::save(&crate::common::remap::Table::default()) {
+    match crate::common::remap::reset() {
         Ok(()) => {
             println!("{}", t!("settings-window-keys-back"));
             0

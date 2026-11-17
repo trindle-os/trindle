@@ -14,7 +14,7 @@ voice-brighter = Mais brilho
 voice-dimmer = Menos brilho
 
 # Said under the ring when the request is to let the screen rest again.
-voice-keep-awake-off = A tela pode descansar de novo
+voice-keep-awake-off = A tela pode apagar de novo
 
 # Said under the ring when the screen is kept awake.
 voice-keep-awake-on = Mantendo a tela ligada
@@ -23,7 +23,7 @@ voice-keep-awake-on = Mantendo a tela ligada
 voice-updates = Procurando atualizações
 
 # Said under the ring when nothing was heard at all.
-voice-nothing-heard = Não ouvi nada. Toque no meio do anel e fale.
+voice-nothing-heard = O Trindle não conseguiu ouvir você. Toque no meio do anel e fale.
 
 # Said under the ring when the volume goes up.
 voice-louder = Mais alto
@@ -86,7 +86,7 @@ voice-showing-app = Mostrando { $name }
 voice-opening-app = Abrindo { $name }
 
 # Said under the ring when the request was heard but not understood; what was heard comes in.
-voice-heard-unknown = Ouvi “{ $heard }”, mas não soube o que fazer
+voice-heard-unknown = O Trindle não reconheceu o comando “{ $heard }”
 
 # Said in the ring when voice has not been added yet.
 voice-optional = A voz é um extra opcional. Adicione-a em Configurações, na página Anel.
@@ -95,31 +95,31 @@ voice-optional = A voz é um extra opcional. Adicione-a em Configurações, na p
 voice-switched-off = A voz está desligada. Ligue-a em Configurações, na página Anel.
 
 # Said in the ring when the microphone cannot be opened; the reason comes after it.
-voice-mic-failed = Não foi possível abrir o microfone: { $why }
+voice-mic-failed = O Trindle não conseguiu acessar o microfone: { $why }
 
 # Said in the ring when the microphone's recorder would not start.
-voice-mic-not-started = Não foi possível abrir o microfone: o pw-record não iniciou
+voice-mic-not-started = O Trindle não conseguiu acessar o microfone porque o programa de gravação não iniciou
 
 # Said in the ring when listening stopped and nothing was recorded.
 voice-nothing-recorded = Nada foi gravado.
 
 # Said in the ring when the recording had no speech in it.
-voice-nothing-heard-after = Não ouvi nada. Toque no meio do anel e fale.
+voice-nothing-heard-after = O Trindle não conseguiu ouvir você. Toque no meio do anel e fale.
 
 # Said in the ring when the speech engine failed and gave no reason.
 voice-whisper-failed = O Whisper falhou
 
 # Progress line while the build tools are added for the build; the names of the packages come in.
-voice-installing-tools = Instalando ferramentas de compilação por enquanto: { $names }
+voice-installing-tools = Instalando ferramentas de compilação temporariamente: { $names }
 
 # Progress line while whisper.cpp is built; its version comes in.
-voice-building = Compilando o whisper.cpp { $version } para a voz (um ou dois minutos)
+voice-building = Compilando o whisper.cpp { $version } para o controle por voz. Isso leva um ou dois minutos.
 
 # Progress line while the speech model is downloaded (148 MB).
 voice-fetching-model = Baixando o modelo de fala (148 MB)
 
 # Progress line while the build tools are taken away again.
-voice-removing-tools = Removendo as ferramentas de compilação de novo
+voice-removing-tools = Removendo as ferramentas de compilação agora
 
 # Said once voice is added and ready to use.
 voice-ready = O controle por voz está pronto. Abra o anel, toque no meio e fale.
@@ -132,3 +132,14 @@ voice-press-enter = Pressione Enter para fechar.
 
 # Shown when the command is run with neither install nor remove.
 voice-usage = uso: trindle-voice-setup install | remove
+
+# Said when a step of the voice set-up fails. { $program } is the program that was run, with its first word.
+voice-step-failed = { $program } não funcionou.
+
+# Said when the whisper.cpp download isn't the one Trindle checks for, so nothing is built from it.
+voice-whisper-fingerprint = O download do whisper.cpp não é o que o Trindle esperava, então não foi compilado.
+
+# Said when the speech model download isn't the one Trindle checks for, so it isn't installed.
+voice-model-fingerprint = O download do modelo de fala não é o que o Trindle esperava, então não foi instalado.
+# The reason after "Trindle couldn't access the microphone:" when the session has no private folder to keep a recording in.
+voice-no-private-folder = nenhuma pasta privada está disponível.

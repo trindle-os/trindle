@@ -279,7 +279,7 @@ fn the_walls_clear_the_environment_and_hide_the_home() {
         shared: vec![Share { path: "/home/john/Projects".into(), read_only: false }, Share { path: "/home/john/Docs".into(), read_only: true }],
         trindle: "/usr/bin/trindle".into(), broker: Some("/run/x/broker.sock".into()), program: Some("/home/john/.local/bin/claude".into()),
         cwd: "/home/john/Projects".into(), env: vec![("LANG".into(), "C".into())], seccomp: 5, secrets: Some(6),
-        hide_dirs: vec!["/run/user".into()], hide_files: vec!["/run/docker.sock".into()], no_network: false, proxy: None, extra: vec![],
+        hide_dirs: vec!["/mnt".into()], run_kept: vec!["/run/systemd/resolve/stub-resolv.conf".into()], no_network: false, proxy: None, extra: vec![],
     };
     let a = walls(&f, &["claude".to_string()]);
     let line = a.join(" ");
@@ -288,7 +288,9 @@ fn the_walls_clear_the_environment_and_hide_the_home() {
     assert!(at("--clearenv") < at("--setenv LANG") && at("--setenv LANG") < at("--args 6"));
     assert!(at("--tmpfs /home") < at("--bind /data/ai/home /home/john") && at("--bind /data/ai/home /home/john") < at("--bind /home/john/Projects /home/john/Projects"));
     assert!(line.contains("--ro-bind /home/john/Docs /home/john/Docs"), "read only share: {line}");
-    assert!(line.contains("--tmpfs /run/user") && line.contains("--ro-bind /dev/null /run/docker.sock"));
+    assert!(line.contains("--tmpfs /mnt"));
+    assert!(at("--ro-bind / /") < at("--tmpfs /run ") && at("--tmpfs /run ") < at("--ro-bind /run/systemd/resolve/stub-resolv.conf /run/systemd/resolve/stub-resolv.conf"),
+            "all of /run is covered, then only the name servers' file comes back: {line}");
     assert!(line.contains("--unshare-pid") && line.contains("--disable-userns") && line.contains("--seccomp 5") && line.contains("--new-session"));
     assert!(line.contains("--ro-bind /home/john/.local/bin/claude /home/john/.local/bin/claude"));
     assert!(!a.iter().any(|w| w == "abc"), "typed values never go on the command line");
@@ -320,7 +322,7 @@ fn only_the_person_can_type_a_key_in_and_never_a_reserved_name() {
     let room = make_room("typed");
     set_typed_env(&room.root, "ANTHROPIC_API_KEY=sk-1\nOTHER_TOKEN=x=y").unwrap();
     assert_eq!(typed_env(&room.root), [("ANTHROPIC_API_KEY".to_string(), "sk-1".to_string()), ("OTHER_TOKEN".to_string(), "x=y".to_string())]);
-    for bad in ["PATH=/x", "LD_PRELOAD=/x", "HOME=/x", "lower=x", "NO_EQUALS", "NODE_OPTIONS=--require x", "TRINDLE_FENCE_BROKER=/x", "BASH_ENV=/x"] {
+    for bad in ["PATH=/x", "LD_PRELOAD=/x", "HOME=/x", "lower=x", "NO_EQUALS", "NODE_OPTIONS=--require x", "TRINDLE_FENCE_BROKER=/x", "BASH_ENV=/x", "1KEY=x", &format!("{}=x", "A".repeat(65))] {
         assert!(set_typed_env(&room.root, bad).is_err(), "{bad}");
     }
 
@@ -340,15 +342,15 @@ fn a_folder_is_shared_only_when_it_is_plainly_not_personal() {
     };
     for (rel, why) in [(".", "The whole home folder stays private."), (".ssh", "Hidden folders always stay private."),
                        (".gnupg", "Hidden folders always stay private."), (".mozilla", "Hidden folders always stay private."),
-                       ("Work_Repos/.git", "Hidden folders always stay private."), ("snap", "It keeps passwords or mail, so it stays private."),
-                       ("Mail/inbox", "It keeps passwords or mail, so it stays private.")] {
+                       ("Work_Repos/.git", "Hidden folders always stay private."), ("snap", "This folder holds passwords or mail, so it stays private."),
+                       ("Mail/inbox", "This folder holds passwords or mail, so it stays private.")] {
         let p = if rel == "." { h.clone() } else { make(rel) };
         assert_eq!(shareable(&p, h).unwrap_err(), why, "{rel}");
     }
-    assert_eq!(shareable(h.parent().unwrap(), h).unwrap_err(), "It holds your home folder, so it stays private.");
+    assert_eq!(shareable(h.parent().unwrap(), h).unwrap_err(), "This folder contains your home folder, so it stays private.");
     assert_eq!(shareable(Path::new("/usr"), h).unwrap_err(), "Only folders inside your home folder can be shared.");
-    assert_eq!(shareable(&h.join("nothing"), h).unwrap_err(), "Choose a folder that is there.");
-    assert_eq!(shareable(&h.join("Work_Repos/hello.txt"), h).unwrap_err(), "Choose a folder that is there.");
+    assert_eq!(shareable(&h.join("nothing"), h).unwrap_err(), "Choose a folder that exists.");
+    assert_eq!(shareable(&h.join("Work_Repos/hello.txt"), h).unwrap_err(), "Choose a folder that exists.");
 
     assert_eq!(shareable(&h.join("Work_Repos/link_dir"), h).unwrap_err(), "Hidden folders always stay private.");
     assert!(shareable(&h.join("Work_Repos"), h).is_ok());
@@ -417,6 +419,16 @@ fn stub(answer: Answer) -> (Approver, Arc<Mutex<Vec<(String, String)>>>) {
         s.lock().unwrap().push((kind.to_string(), text.to_string()));
         answer
     }), seen)
+}
+
+#[test]
+fn a_request_up_to_the_limit_arrives_whole_and_a_bigger_one_is_refused_unsent() {
+    let room = make_room("broker-size");
+    let (no, _) = stub(Answer::No);
+    let socket = start(&room.base, &room.root, &room.home, Some(no)).unwrap();
+    let padded = |n: usize| ask(&socket, "ssh", &["unlisted.example.com".to_string(), "x".repeat(n)]);
+    assert_eq!(padded(15_000), 255, "judged: an unlisted computer is never dialled");
+    assert_eq!(padded(20_000), 1, "not sent");
 }
 
 #[test]

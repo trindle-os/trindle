@@ -37,7 +37,7 @@ ring-snooze-for-1-hour = Ahirisha kwa saa 1
 ring-snooze-for-6-hours = Ahirisha kwa saa 6
 
 # Tip and screen reader name of the snooze choice for the next morning.
-ring-snooze-for-next-morning = Ahirisha hadi asubuhi ijayo
+ring-snooze-for-next-morning = Ahirisha hadi asubuhi
 
 # Tip of the button on the snooze page that goes back to the notification's message.
 ring-act-back = Rudi kwenye ujumbe
@@ -91,7 +91,7 @@ ring-crash-stopped = { $name } imesimama bila kutarajiwa
 ring-drive-gone = Diski hiyo haipo tena
 
 # Title of the notice when a drive could not be opened; the reason follows under it.
-ring-drive-not-opened = { $name } haikuweza kufunguliwa
+ring-drive-not-opened = Imeshindwa kufungua { $name }
 
 # Choice for what closing the laptop lid does: sleep.
 ring-lid-sleep = Lala
@@ -109,7 +109,7 @@ ring-lid-nothing = Hakuna
 ring-lid-shut-down = Zima
 
 # Reason the system lists beside Trindle's hold on the lid switch (shown by tools that list what stops sleep).
-ring-lid-reason = Kufunga kifuniko hufanya kile Mipangilio, Nguvu inasema
+ring-lid-reason = Unaweza kuchagua kinachotokea ukifunga kifuniko katika Mipangilio, chini ya Nguvu.
 
 # Notice at the foot of the screen for a few seconds when the magnifier starts.
 ring-magnify-hint = Shikilia popote ili kukuza
@@ -126,14 +126,14 @@ ring-mic-off-tip = Zima maikrofoni kwa programu zote
 
 # Tip of the switch in the ring that turns the microphone back on.
 # SAFETY: needs a human review before it ships
-ring-mic-on-tip = Washa maikrofoni tena
+ring-mic-on-tip = Washa maikrofoni
 
 # Line in the ring when something other than the person pressed the microphone switch on.
 # SAFETY: needs a human review before it ships
-ring-mic-own-press = Ni kubonyeza kwako mwenyewe tu kunakoweza kuwasha maikrofoni tena.
+ring-mic-own-press = Ni wewe tu unayeweza kuwasha maikrofoni tena.
 
 # Line in the ring when the microphone switch could not be changed; the reason follows.
-ring-mic-not-changed = Swichi ya maikrofoni haikuweza kubadilishwa: { $why }
+ring-mic-not-changed = Trindle haikuweza kubadilisha swichi ya maikrofoni: { $why }
 
 # Notice when a notification was clicked and no program could be found for it.
 ring-goes-no-program = Hakuna programu iliyopatikana
@@ -151,7 +151,7 @@ ring-notes-copied = Imenakiliwa kwa msaidizi wako
 ring-notes-name = Arifa
 
 # Said when a pinned notification has been held long enough and now follows the pointer.
-ring-notes-moving = Inasogezwa. Achilia ili kuiweka, Escape ili kuirudisha.
+ring-notes-moving = Arifa inasogezwa. Achilia ili kuiweka, au bonyeza Escape ili kuirudisha.
 
 # Said when a pinned notification has been dropped or moved by keys.
 ring-notes-moved = Imesogezwa
@@ -193,7 +193,11 @@ ring-plugin-needs = { $name } inahitaji ruhusa yako
 
 # Line under the notice that a plugin needs permission: none of the permissions it asks for are given.
 # SAFETY: needs a human review before it ships
-ring-plugin-cannot-work = Haiwezi kufanya kazi bado: 0 kati ya { $asks } zimeruhusiwa.
+ring-plugin-cannot-work =
+    { $asks ->
+        [one] Haiwezi kufanya kazi bado. Hujaruhusu ruhusa moja inayoomba.
+       *[other] Haiwezi kufanya kazi bado. Hujaruhusu hata moja kati ya ruhusa { $asks } inazoomba.
+    }
 
 # Said to a screen reader when a notification was copied; $said is what the circle said.
 ring-copied-said = Imenakiliwa. { $said }
@@ -214,3 +218,5 @@ ring-outside-body =
        *[other] { $names } na wengine { $more }
     }
 
+# Said under the magnifier when the screen picture it took has the wrong size.
+ring-magnify-wrong-size = Picha ilikuwa na ukubwa usio sahihi.

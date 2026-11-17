@@ -4,5 +4,5 @@
 terms-accept = Я согласен с [лицензионным соглашением](eula)
 
 # In the foot, while the box is not ticked, saying why the button beside it is off.
-terms-needed = Поставьте отметку, чтобы продолжить
+terms-needed = Требуется согласие
 

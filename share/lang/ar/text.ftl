@@ -47,7 +47,7 @@ text-find-replace-key = بحث واستبدال (Ctrl+H)
 text-go-to-line-key = انتقل إلى سطر (Ctrl+G)
 
 # Button in the menu for a Markdown file that shows it as it will look finished, with its shortcut.
-text-finished-key = المظهر النهائي (Ctrl+E)
+text-finished-key = معاينة (Ctrl+E)
 
 # Button in the menu for a Markdown file that exports it as a web page. Also the title of the chooser for that.
 text-export-html = تصدير كصفحة ويب
@@ -71,7 +71,7 @@ text-close-tab = إغلاق { $name }
 text-close-bar = إغلاق الشريط
 
 # Words the screen reader gives the button that shows the finished look of the text, with its shortcut.
-text-finished-look = المظهر النهائي
+text-finished-look = معاينة
 
 # Menu item that copies everything in the text.
 text-copy-all = نسخ كل النص
@@ -205,10 +205,10 @@ text-go-to-line = انتقل إلى سطر
 text-back = العودة إلى النص
 
 # Words on the spelling bar, after the word: the word was added to the person's own words.
-text-spell-added = أصبحت الآن من كلماتك
+text-spell-added = أُضيفت إلى كلماتك
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are no suggestions.
-text-spell-none = ليست في القاموس، وليس فيه ما يشبهها
+text-spell-none = ليست في القاموس، ولا توجد اقتراحات
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are suggestions.
 text-spell-offers = ليست في القاموس. هل تقصد إحدى هذه؟
@@ -239,16 +239,16 @@ text-starting = البدء
 text-when-opens = عند فتح النص
 
 # First choice: Text opens the files it had open last time.
-text-reopen = أعد فتح ملفات المرة السابقة
+text-reopen = أعد فتح الملفات السابقة
 
 # Second choice: Text opens with an empty page.
-text-start-blank = ابدأ بصفحة فارغة
+text-start-blank = ابدأ من جديد
 
 # Note under the start choice: work not saved to a file is kept whichever choice is made.
-text-keep-note = العمل غير المحفوظ في ملف يبقى دائمًا ويعود في الحالتين.
+text-keep-note = يبقى عملك غير المحفوظ ويُسترجع أيًّا كان الخيار الذي تختاره.
 
 # Heading of the group on the settings page for how the text looks.
-text-showing = عرض النص
+text-showing = مظهر النص
 
 # Label of the size slider: how big the text is.
 text-size = الحجم
@@ -284,19 +284,27 @@ text-read-as = اقرأ الملف بوصفه
 text-save-in = احفظ بترميز
 
 # Note under the save encoding: the next save writes the file in this encoding.
-text-next-save = سيكتب الحفظ التالي الملف بهذا الترميز.
+text-next-save = سيستخدم الملف هذا الترميز في المرة القادمة التي تحفظه فيها.
 
 # Words saying the text has changes that are not saved to its file. $path is the file.
-text-changes-not-saved = في { $name } تغييرات لم تُحفظ في ملفه.
+text-changes-not-saved = في { $name } تغييرات غير محفوظة.
 
 # Words saying the text has changes and no file yet.
-text-not-saved = لم يُحفظ هذا النص في ملف.
+text-not-saved = هذا النص غير محفوظ في ملف.
 
 # Heading of the question shown before closing a tab with changes. $name is the tab's file name.
 text-save-named = هل تحفظ { $name }؟
 
 # Words in the question before closing: how many other tabs with changes are left after this one. $left is the number.
-text-more-after = يبقى { $left } بعد هذا.
+text-more-after =
+    { $left ->
+        [one] علامة تبويب أخرى للحفظ.
+        [two] علامتا تبويب أخريان للحفظ.
+        [few] { $left } علامات تبويب أخرى للحفظ.
+        [many] { $left } علامة تبويب أخرى للحفظ.
+        [zero] { $left } علامة تبويب أخرى للحفظ.
+       *[other] { $left } علامة تبويب أخرى للحفظ.
+    }
 
 # Button in the question before closing that closes the tab without saving it.
 # SAFETY: needs a human review before it ships
@@ -315,55 +323,55 @@ text-is-folder = { $name } مجلد.
 text-too-big = { $name } أكبر من أن يُفتح هنا.
 
 # Shown when a file could not be opened. $name is the file's path and $reason why.
-text-cannot-open = تعذّر فتح { $name }: { $reason }
+text-cannot-open = تعذّر على Trindle فتح { $name }: { $reason }
 
 # Shown when a file could not be written. $name is the file's path and $reason why.
-text-cannot-write = تعذّرت الكتابة في { $name }: { $reason }
+text-cannot-write = تعذّر على Trindle الكتابة في { $name }: { $reason }
 
 # Shown when a file could not be saved. $name is the file's path and $reason why.
-text-cannot-save = تعذّر حفظ { $name }: { $reason }
+text-cannot-save = تعذّر على Trindle حفظ { $name }: { $reason }
 
 # Shown when a file could not be read again. $name is the file's path and $reason why.
 text-cannot-read = تعذّرت قراءة { $name }: { $reason }
 
 # Shown when the list of open work could not be written. $folder is the folder and $reason why.
-text-work-not-kept = تعذّر حفظ العمل في { $folder }: { $reason }
+text-work-not-kept = تعذّر على Trindle حفظ عملك في { $folder }: { $reason }
 
 # Shown when the settings could not be saved. $reason says why.
 text-settings-not-saved = تعذّر حفظ الإعدادات: { $reason }
 
 # Shown when a word could not be added to the person's own words. $word is the word and $reason why.
-text-word-not-added = تعذّرت إضافة { $word } إلى كلماتك: { $reason }
+text-word-not-added = تعذّر على Trindle إضافة { $word } إلى قاموسك: { $reason }
 
 # Shown when the list of recent files could not be cleared. $reason says why.
-text-list-not-cleared = تعذّر مسح القائمة: { $reason }
+text-list-not-cleared = تعذّر على Trindle مسح القائمة: { $reason }
 
 # Shown when the file chooser could not be opened.
 text-chooser-failed = تعذّر فتح منتقي الملفات.
 
 # Shown when the file chooser cannot be used because there is no session bus.
-text-no-bus = لا يمكن اختيار الملفات دون ناقل الجلسة.
+text-no-bus = لا يستطيع Trindle فتح منتقي الملفات الآن.
 
 # Shown when the spelling language asked for is not on the computer. $lang is its name.
 text-no-dictionary = لا يوجد قاموس باسم { $lang }.
 
 # Shown when a spelling dictionary could not be read. $lang is its name and $reason why.
-text-dictionary-unreadable = تعذّرت قراءة قاموس { $lang }: { $reason }
+text-dictionary-unreadable = تعذّر على Trindle قراءة قاموس { $lang }: { $reason }
 
 # Shown when a save was stopped and the text it held before was kept in a folder. $reason says what went wrong and $path is where the old text is kept.
-text-kept-before = { $reason }. ما كان فيه من قبل محفوظ في { $path }.
+text-kept-before = { $reason }. النص القديم محفوظ في { $path }.
 
 # Shown when a save was stopped part way and the old text is kept. $why says why, and $path is where the old text is kept.
-text-kept-before-that = { $why } ما كان فيه قبل ذلك الحفظ محفوظ في { $path }.
+text-kept-before-that = { $why } النص الذي كان قبل ذلك الحفظ موجود في { $path }.
 
 # Shown when a save was stopped and what was kept of it cannot be read. $name is the file's path.
-text-saved-unreadable = كان { $name } قيد الحفظ عندما أُوقف النص، وتعذّرت قراءة ما حُفظ من الحفظ.
+text-saved-unreadable = أُغلق النص أثناء حفظ { $name }، وتعذّر على Trindle قراءة الجزء الذي حُفظ.
 
 # Shown when a save was stopped and the file has changed since. $name is the file's path.
-text-saved-changed = كان { $name } قيد الحفظ عندما أُوقف النص، وقد تغيّر منذ ذلك الحين، لذلك تُرك كما هو.
+text-saved-changed = أُغلق النص أثناء حفظ { $name }. وقد تغيّر الملف منذ ذلك الحين، لذلك تركه Trindle كما هو.
 
 # Shown when a save was stopped and the old text could not be put back. $name is the file's path, $reason why, and $path where the old text is kept.
-text-saved-not-put-back = كان { $name } قيد الحفظ عندما أُوقف النص، وتعذّر إرجاعه كما كان: { $reason }. ما كان فيه قبل ذلك الحفظ محفوظ في { $path }.
+text-saved-not-put-back = أُغلق النص أثناء حفظ { $name }، وتعذّر على Trindle إرجاع الملف كما كان: { $reason }. النص الذي كان قبل ذلك الحفظ في { $path }.
 
 # Quiet word beside what was just saved, exported or changed.
 text-done = تم
@@ -371,10 +379,13 @@ text-done = تم
 # Suggested file name in the Save as chooser for text never saved before.
 text-untitled-file = بلا عنوان.txt
 
+# The misspelt word, shown in quotation marks on the spelling bar. { $word } is the word.
+text-spell-word = ‘{ $word }’
+
 
 
 # Line under the Save button when the file was changed by something else after Text opened, saved or reloaded it. Nothing has been saved.
-text-changed-elsewhere = تغيّر في مكان آخر منذ فتحته.
+text-changed-elsewhere = تغيّر هذا الملف منذ فتحته.
 
 # Button beside that line: save the words here over the changed file.
 text-save-anyway = احفظ على أي حال
@@ -382,3 +393,4 @@ text-save-anyway = احفظ على أي حال
 # Button beside that line: read the file again from disk and drop the unsaved changes here.
 text-reload = إعادة التحميل
 
+text-link-not-opened = لا تُفتح من هنا إلا عناوين الويب.

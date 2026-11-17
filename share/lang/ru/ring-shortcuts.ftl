@@ -85,10 +85,10 @@ ring-shortcuts-list = Показать список быстрых клавиш
 ring-shortcuts-console = Переключиться на текстовую консоль
 
 # The keys that switch to a text console.
-ring-shortcuts-console-keys = Ctrl+Alt+F1 – F12
+ring-shortcuts-console-keys = Ctrl+Alt+F1 до F12
 
 # Words for the keys the screen reader takes while it is on.
-ring-shortcuts-reader-keys = Собственные клавиши экранного диктора, пока он включён
+ring-shortcuts-reader-keys = Клавиши экранного диктора, пока он включён
 
 # The keys the screen reader takes while it is on.
 ring-shortcuts-reader-keys-keys = Caps Lock, Insert

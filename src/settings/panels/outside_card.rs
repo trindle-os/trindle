@@ -5,7 +5,7 @@
 
 use std::path::PathBuf;
 
-use super::users::banded_rows;
+use crate::toolkit::widget::banded_list;
 use crate::common::outside::{self, Fine, Kind};
 use crate::settings::ui::{group, line, on, Kit, Msg};
 use crate::store::downloaded;
@@ -101,8 +101,8 @@ impl Outside {
             on::<Permissions>(move |me, k| me.outside.switched(k, FILES_KEY, outside::FILES, b))
         });
         let mut rows = vec![
-            line(t!("settings-outside-network")).sub(t!("settings-outside-once")).key(NETWORK_KEY).control(net).node(kit),
-            line(t!("settings-outside-files")).sub(t!("settings-outside-once")).key(FILES_KEY).control(files).node(kit),
+            line(t!("settings-outside-network")).key(NETWORK_KEY).control(net).node(kit),
+            line(t!("settings-outside-files")).key(FILES_KEY).control(files).node(kit),
         ];
         let fine: Vec<Node<Msg>> = self
             .fine
@@ -121,14 +121,14 @@ impl Outside {
         if fine.is_empty() {
             rows.push(line(t!("settings-outside-no-fine")).node(kit));
         } else {
-            rows.extend(banded_rows(fine));
+            rows.extend(banded_list(fine));
         }
-        let outside_card = group(t!("settings-outside-heading")).icon("security-high-symbolic").about(t!("settings-outside-about")).rows(rows).node(kit);
+        let outside_card = group(t!("settings-outside-heading")).icon("security-high-symbolic").about(format!("{} {}", t!("settings-outside-about"), t!("settings-outside-once"))).rows(rows).node(kit);
 
         let boxed = switch(self.boxed, t!("settings-downloads-box"), |b| {
             on::<Permissions>(move |me, k| me.outside.switched(k, BOXED_KEY, downloaded::SETTING, b))
         });
-        let mut rows = vec![line(t!("settings-downloads-box")).sub(t!("settings-downloads-box-sub")).key(BOXED_KEY).control(boxed).node(kit)];
+        let mut rows = vec![line(t!("settings-downloads-box")).key(BOXED_KEY).control(boxed).node(kit)];
         let types: Vec<Node<Msg>> = self
             .seen
             .iter()
@@ -139,15 +139,15 @@ impl Outside {
                     let name = name.clone();
                     on::<Permissions>(move |me, k| me.outside.open_as_normal(k, &name, b))
                 });
-                line(t!("settings-downloads-type", kind = kind.as_str())).sub(t!("settings-downloads-normal-sub")).key(format!("outside:type:{kind}")).control(sw).node(kit)
+                line(t!("settings-downloads-type", kind = kind.as_str())).key(format!("outside:type:{kind}")).control(sw).node(kit)
             })
             .collect();
         if types.is_empty() {
             rows.push(line(t!("settings-downloads-none")).node(kit));
         } else {
-            rows.extend(banded_rows(types));
+            rows.extend(banded_list(types));
         }
-        let downloads = group(t!("settings-downloads-heading")).icon("folder-download-symbolic").about(t!("settings-downloads-about")).rows(rows).node(kit);
+        let downloads = group(t!("settings-downloads-heading")).icon("folder-download-symbolic").about(format!("{} {}", t!("settings-downloads-about"), t!("settings-downloads-normal-sub"))).rows(rows).node(kit);
         vec![outside_card, downloads]
     }
 }
@@ -188,8 +188,8 @@ mod tests {
         downloaded::remember_in(&top.join("downloads-seen"), &["pdf".to_string(), "png".to_string()]).unwrap();
         let o = with(&top);
         let said: Vec<String> = o.cards(&kit()).into_iter().flat_map(|c| c.said()).collect();
-        assert!(said.contains(&"button: Say it again for vlc".to_string()), "{said:?}");
-        for want in ["switch: Say when a program reaches the network", "switch: Say when a program has your files open",
+        assert!(said.contains(&"button: Stop ignoring vlc".to_string()), "{said:?}");
+        for want in ["switch: Tell me when programs use the network", "switch: Tell me when programs open my files",
                      "switch: Open downloaded files in a box", "switch: Open pdf files as normal", "switch: Open png files as normal"] {
             assert!(said.contains(&want.to_string()), "{want}: {said:?}");
         }

@@ -31,12 +31,14 @@ pub const BORDER: i32 = 2;
 pub const HEADER_BAR_HEIGHT: i32 = BORDER + TITLE_HEIGHT;
 const BUTTON: i32 = 32;
 
-const MAX_TITLE_WIDTH: i32 = 16_384;
+const MAX_TITLE_PIXELS: i32 = 8_192;
 const BUTTON_GAP: i32 = 6;
+
+const TITLE_MAX_BYTES: usize = 1024;
+const TITLE_MAX_CHARS: usize = 256;
 
 pub(crate) const FONT_PX: f32 = 10.0 * 96.0 / 72.0;
 const FONT: &[u8] = include_bytes!("../../../share/fonts/trindle-sans/TrindleSans-Variable.ttf");
-
 use crate::pointer::DOUBLE_CLICK_MS;
 
 static LOOK: Mutex<Option<(Theme, i32)>> = Mutex::new(None);
@@ -199,7 +201,7 @@ impl HeaderBar {
         let (theme, radius) = theme();
         let colours = if look.active { theme.active } else { theme.inactive };
 
-        let look = Look { width: look.width.clamp(1, MAX_TITLE_WIDTH), scale: look.scale.clamp(1, 4), ..look };
+        let look = drawable(look);
         let fresh = self.drawn.as_ref().is_some_and(|d| d.look == look && d.theme == theme && d.radius == radius);
         if !fresh {
             let pixels = paint(&look, &theme, radius);
@@ -361,9 +363,7 @@ fn write_title(px: &mut [Paint], pw: usize, ph: usize, look: &Look, colour: [f32
         return;
     }
     if chars_width(&font, size, &text) > room {
-        while !text.is_empty() && chars_width(&font, size, &text) + chars_width(&font, size, &['…']) > room {
-            text.pop();
-        }
+        text.truncate(fit_len(&font, size, &text, room - chars_width(&font, size, &['…'])));
         while text.last().is_some_and(|c| c.is_whitespace()) {
             text.pop();
         }
@@ -375,6 +375,41 @@ fn write_title(px: &mut [Paint], pw: usize, ph: usize, look: &Look, colour: [f32
     let middle = (BORDER as f32 + TITLE_HEIGHT as f32 / 2.0) * look.scale as f32;
     let baseline = (middle + 0.36 * size.y).round();
     draw_chars(px, pw, ph, &font, size, &text, colour, pen, baseline);
+}
+
+fn drawable(look: Look) -> Look {
+    let scale = look.scale.clamp(1, 4);
+    Look { width: look.width.clamp(1, MAX_TITLE_PIXELS / scale), scale, ..look }
+}
+
+pub(crate) fn capped_title(mut title: String) -> String {
+    let end = title
+        .char_indices()
+        .map(|(i, c)| i + c.len_utf8())
+        .take(TITLE_MAX_CHARS)
+        .take_while(|&end| end <= TITLE_MAX_BYTES)
+        .last()
+        .unwrap_or(0);
+    title.truncate(end);
+    title
+}
+
+fn fit_len(font: &FontRef, size: PxScale, text: &[char], room: f32) -> usize {
+    let scaled = font.as_scaled(size);
+    let mut total = 0.0;
+    let mut last = None;
+    for (i, c) in text.iter().enumerate() {
+        let id = scaled.glyph_id(*c);
+        if let Some(prev) = last {
+            total += scaled.kern(prev, id);
+        }
+        total += scaled.h_advance(id);
+        if total > room {
+            return i;
+        }
+        last = Some(id);
+    }
+    text.len()
 }
 
 pub(crate) fn face(weight: f32) -> Option<FontRef<'static>> {
@@ -489,6 +524,34 @@ mod tests {
                 }
             }
         }
+    }
+
+    #[test]
+    fn a_very_wide_window_gets_a_title_bar_that_can_be_drawn() {
+        for scale in [1, 2, 4, 40, -3] {
+            let look = drawable(Look { width: i32::MAX, scale, ..look(None) });
+            assert!(look.width * look.scale <= MAX_TITLE_PIXELS, "scale {scale}");
+        }
+        assert_eq!(drawable(Look { width: 300, scale: 2, ..look(None) }).width, 300);
+    }
+
+    #[test]
+    fn a_huge_title_is_capped_and_fitted_in_one_pass() {
+        let huge = "W\u{e9}".repeat(500_000);
+        let title = capped_title(huge);
+        assert!(title.len() <= TITLE_MAX_BYTES && title.chars().count() <= TITLE_MAX_CHARS);
+        assert!(title.starts_with("W\u{e9}W"));
+        assert_eq!(capped_title("\u{e9}".repeat(TITLE_MAX_BYTES)).len(), TITLE_MAX_CHARS * 2);
+        let font = face(400.0).unwrap();
+        let size = PxScale::from(FONT_PX);
+        let text: Vec<char> = title.chars().collect();
+        let n = fit_len(&font, size, &text, 100.0);
+        assert!(n > 0 && n < text.len());
+        assert!(chars_width(&font, size, &text[..n]) <= 100.0);
+        assert!(chars_width(&font, size, &text[..=n]) > 100.0);
+        assert_eq!(fit_len(&font, size, &text, -1.0), 0);
+        let bytes = paint(&Look { title, ..look(None) }, &Theme::default(), 10);
+        assert_eq!(bytes.len(), (300 * HEADER_BAR_HEIGHT * 4) as usize);
     }
 
     #[test]

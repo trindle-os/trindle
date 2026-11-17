@@ -8,7 +8,7 @@ settings-datetime-keywords = saa eneo la saa kanda tarehe
 
 # Help line at the foot of the Date and time page.
 # SAFETY: needs a human review before it ships
-settings-datetime-help = Eneo la saa na saa ya kiotomatiki huhitaji nenosiri la msimamizi.
+settings-datetime-help = Kubadilisha eneo la saa au saa ya kiotomatiki kunahitaji nenosiri la msimamizi.
 
 # Spoken name of the picture of the clock at the top of the page.
 settings-datetime-time-now = Saa sasa
@@ -41,7 +41,7 @@ settings-datetime-minute = Dakika
 settings-datetime-no-time = Saa haikuweza kuwekwa.
 
 # Red words when the time was set by hand while automatic time is on.
-settings-datetime-keeps-right = Saa hujirekebisha yenyewe kwa sasa. Izime hiyo hapo juu, kisha weka saa kwa mkono.
+settings-datetime-keeps-right = Saa hujiweka yenyewe kiotomatiki. Zima hiyo hapo juu, kisha weka saa kwa mkono.
 
 # Red words when the system's message bus could not be reached.
 settings-datetime-no-bus = Basi la mfumo halikuweza kufikiwa.
@@ -50,7 +50,7 @@ settings-datetime-no-bus = Basi la mfumo halikuweza kufikiwa.
 settings-datetime-not-answering = Huduma ya saa haijibu.
 
 # Red words when automatic time could not be turned on.
-settings-datetime-ntp-on-failed = Saa haikuweza kuambiwa ijirekebishe yenyewe.
+settings-datetime-ntp-on-failed = Saa ya kiotomatiki haikuweza kuwashwa.
 
 # Red words when automatic time could not be turned off.
 settings-datetime-ntp-off-failed = Saa ya kiotomatiki haikuweza kuzimwa.
@@ -68,10 +68,10 @@ settings-datetime-it-is = Ni saa { $time } tarehe { $date }.
 settings-datetime-service-down = Huduma ya saa haijibu, kwa hiyo saa haiwezi kubadilishwa hapa.
 
 # Headline of the page when the clock is automatic and in step: { $time } is the time and { $date } the date.
-settings-datetime-it-is-right = Ni saa { $time } tarehe { $date }, na saa hujirekebisha yenyewe.
+settings-datetime-it-is-right = Ni saa { $time } tarehe { $date }. Saa hujiweka yenyewe kiotomatiki.
 
 # Headline of the page when the clock is automatic but not yet in step: { $time } is the time and { $date } the date.
-settings-datetime-it-is-checks = Ni saa { $time } tarehe { $date }. Saa hujikagua yenyewe ikifika kwenye intaneti.
+settings-datetime-it-is-checks = Ni saa { $time } tarehe { $date }. Saa itajiweka yenyewe kompyuta ikiunganishwa kwenye intaneti.
 
 # Headline of the page when the clock is set by hand: { $time } is the time and { $date } the date.
 settings-datetime-it-is-hand = Ni saa { $time } tarehe { $date }. Saa imewekwa kwa mkono.
@@ -86,7 +86,7 @@ settings-datetime-city-region-offset = { $city }, { $region }, { $offset }
 settings-datetime-tip = Ni saa { $time } tarehe { $date }, { $zone }.
 
 # Help text of the clock card when the time service is not answering or not yet read.
-settings-datetime-ring-about = Saa iliyo katikati ya duara huandikwa kwa saa 24 au 12, na au bila sekunde. Saa ya duara pekee ndiyo hufuata hili; tarehe na saa kwenye programu hufuata miundo iliyochaguliwa kwenye Eneo na lugha.
+settings-datetime-ring-about = Saa iliyo katikati ya duara inaweza kuonyesha saa 24 au 12, na au bila sekunde. Hii hubadilisha saa ya duara pekee. Tarehe na saa kwenye programu hufuata miundo uliyochagua kwenye Eneo na lugha.
 
 # Heading of the card with the clock settings.
 settings-datetime-the-clock = Saa
@@ -94,11 +94,8 @@ settings-datetime-the-clock = Saa
 # Heading of the line shown when the time service is not answering.
 settings-datetime-service-down-line = Huduma ya saa haijibu
 
-# Under Set the time automatically when the internet can be used.
-settings-datetime-from-internet = Kutoka kwenye intaneti, ikiwa imeunganishwa.
-
 # Under Set the time automatically when the time service is not installed.
-settings-datetime-needs-timesyncd = Inahitaji systemd-timesyncd iwe imesakinishwa.
+settings-datetime-needs-timesyncd = Sakinisha systemd-timesyncd kwanza.
 
 # Label of the switch for automatic time, and heading of its line.
 settings-datetime-set-auto = Weka saa kiotomatiki
@@ -112,16 +109,13 @@ settings-datetime-set-date-time = Weka tarehe na saa
 # Heading of the line for setting the time by hand.
 settings-datetime-by-hand = Weka saa kwa mkono
 
-# Under the Set the time by hand heading.
-settings-datetime-by-hand-sub = Zima saa ya kiotomatiki kwanza, kama ilivyo sasa.
-
 # Help text of the clock card (the information button) when the time service can keep the time from the internet.
 # SAFETY: needs a human review before it ships
-settings-datetime-about = Ikiwekwa kiotomatiki, saa hukaguliwa dhidi ya seva za saa kwenye intaneti kompyuta inapounganishwa, na hujirekebisha yenyewe. Ikizimwa, tarehe na saa huandikwa kwa mkono. Eneo la saa pia huambia mwanga wa usiku jua linapozama. Vyote viwili huhitaji nenosiri la msimamizi. Saa iliyo katikati ya duara huandikwa kwa saa 24 au 12, na au bila sekunde. Saa ya duara pekee ndiyo hufuata hili; tarehe na saa kwenye programu hufuata miundo iliyochaguliwa kwenye Eneo na lugha.
+settings-datetime-about = Saa ya kiotomatiki ikiwa imewashwa, saa hujikagua yenyewe dhidi ya seva za saa kwenye intaneti kila kompyuta inapounganishwa. Ikizimwa, unaandika tarehe na saa kwa mkono. Eneo la saa pia huambia mwanga wa usiku jua linapozama. Vyote viwili huhitaji nenosiri la msimamizi. Saa iliyo katikati ya duara inaweza kuonyesha saa 24 au 12, na au bila sekunde. Hii hubadilisha saa ya duara pekee. Tarehe na saa kwenye programu hufuata miundo uliyochagua kwenye Eneo na lugha.
 
 # Help text of the clock card (the information button) when the time service is not installed.
 # SAFETY: needs a human review before it ships
-settings-datetime-about-no-ntp = Ikiwekwa kiotomatiki, saa hukaguliwa dhidi ya seva za saa kwenye intaneti kompyuta inapounganishwa, na hujirekebisha yenyewe. Ikizimwa, tarehe na saa huandikwa kwa mkono. Eneo la saa pia huambia mwanga wa usiku jua linapozama. Vyote viwili huhitaji nenosiri la msimamizi. Kupata saa kutoka kwenye intaneti kunahitaji systemd-timesyncd: sudo apt install systemd-timesyncd Saa iliyo katikati ya duara huandikwa kwa saa 24 au 12, na au bila sekunde. Saa ya duara pekee ndiyo hufuata hili; tarehe na saa kwenye programu hufuata miundo iliyochaguliwa kwenye Eneo na lugha.
+settings-datetime-about-no-ntp = Saa ya kiotomatiki ikiwa imewashwa, saa hujikagua yenyewe dhidi ya seva za saa kwenye intaneti kila kompyuta inapounganishwa. Ikizimwa, unaandika tarehe na saa kwa mkono. Eneo la saa pia huambia mwanga wa usiku jua linapozama. Vyote viwili huhitaji nenosiri la msimamizi. Ili kupata saa kutoka kwenye intaneti, unahitaji systemd-timesyncd: sudo apt install systemd-timesyncd. Saa iliyo katikati ya duara inaweza kuonyesha saa 24 au 12, na au bila sekunde. Hii hubadilisha saa ya duara pekee. Tarehe na saa kwenye programu hufuata miundo uliyochagua kwenye Eneo na lugha.
 
 # An item in the list of ways to write the ring's clock: { $time } is the time written that way and { $what } its name.
 settings-datetime-clock-option = { $time }  ({ $what })
@@ -131,6 +125,3 @@ settings-datetime-show-as = Onyesha kama
 
 # Heading of the line for the ring's clock.
 settings-datetime-rings-clock = Saa ya duara
-
-# Under The ring's clock heading.
-settings-datetime-rings-clock-sub = Jinsi duara linavyoandika saa.

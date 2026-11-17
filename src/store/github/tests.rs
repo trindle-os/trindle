@@ -6,10 +6,10 @@ use super::*;
 #[test]
 fn keeps_only_files_for_this_computer() {
     let assets = serde_json::json!([
-        {"name": "App-1.0-x86_64.AppImage", "browser_download_url": "u1", "size": 5},
-        {"name": "App-1.0-aarch64.AppImage", "browser_download_url": "u2", "size": 5},
-        {"name": "app.flatpak", "browser_download_url": "u3", "size": 5},
-        {"name": "App-1.0.tar.gz", "browser_download_url": "u4", "size": 5},
+        {"name": "App-1.0-x86_64.AppImage", "browser_download_url": "https://example.org/u1", "size": 5},
+        {"name": "App-1.0-aarch64.AppImage", "browser_download_url": "https://example.org/u2", "size": 5},
+        {"name": "app.flatpak", "browser_download_url": "https://example.org/u3", "size": 5},
+        {"name": "App-1.0.tar.gz", "browser_download_url": "https://example.org/u4", "size": 5},
     ]);
     let names: Vec<String> = pick_files(&assets).into_iter().map(|f| f.name).collect();
     if std::env::consts::ARCH == "aarch64" {
@@ -17,6 +17,18 @@ fn keeps_only_files_for_this_computer() {
     } else {
         assert_eq!(names, vec!["App-1.0-x86_64.AppImage", "app.flatpak"]);
     }
+}
+
+#[test]
+fn a_download_address_must_be_https() {
+    let assets = serde_json::json!([
+        {"name": "a.AppImage", "browser_download_url": "-o/home/x", "size": 5},
+        {"name": "b.AppImage", "browser_download_url": "http://example.org/b", "size": 5},
+        {"name": "c.AppImage", "browser_download_url": "file:///etc/shadow", "size": 5},
+        {"name": "d.AppImage", "browser_download_url": "https://example.org/d", "size": 5},
+    ]);
+    let urls: Vec<String> = pick_files(&assets).into_iter().map(|f| f.url).collect();
+    assert_eq!(urls, vec!["https://example.org/d".to_string()]);
 }
 
 fn kept(name: &str) -> Kept {
@@ -76,7 +88,7 @@ fn what_github_answered_is_not_asked_again_while_it_is_fresh() {
     assert_eq!(k.search("example", at).map(|f| f.len()), Some(5));
     let _ = std::fs::remove_dir_all(&k.dir);
     let said = half_words(half.missed.as_deref().unwrap());
-    assert!(said.starts_with("Only projects with an AppImage were searched for: GitHub did not answer the search for Flatpaks. GitHub has stopped answering"), "{said}");
+    assert!(said.starts_with("Trindle only searched for projects with an AppImage, because GitHub didn't answer the search for Flatpaks. GitHub has stopped answering"), "{said}");
 
     let k = kept("failures");
     for e in [limit_words(false, Some(600), false), "GitHub could not be reached.".to_string(), "GitHub has no releases for this project.".to_string()] {
@@ -98,12 +110,12 @@ fn the_limit_is_said_in_plain_words_with_when_it_ends_and_where_the_key_goes() {
     let now = 1_000;
 
     let said = answered("403", "0 2380 core ", "{}", now, false).unwrap_err();
-    assert_eq!(said, "GitHub has stopped answering for now: it answers 60 questions an hour from one address without a key. \
-                      It will answer again in about 23 minutes. A GitHub key raises that to 5,000: press the key at the top right of Search GitHub.");
+    assert_eq!(said, "GitHub has stopped answering for now, because it allows 60 requests an hour from one address without a key. \
+                      It will answer again in about 23 minutes. A GitHub key raises that to 5,000. Press the key button at the top right of Search.");
     assert!(is_limit(&said) && !said.contains("below") && !said.contains('\u{2014}'));
 
     let said = answered("403", "0 1030 core ", "{}", now, true).unwrap_err();
-    assert!(said.contains("5,000 questions an hour with your key") && said.contains("in about a minute") && !said.contains("press the key"), "{said}");
+    assert!(said.contains("5,000 requests an hour that your key allows") && said.contains("in about a minute") && !said.contains("Press the key"), "{said}");
 
     let said = answered("403", "0 1045 search ", "{}", now, false).unwrap_err();
     assert!(said.contains("10 searches a minute") && said.contains("in about a minute") && !said.contains("press the key"), "{said}");
@@ -115,7 +127,7 @@ fn the_limit_is_said_in_plain_words_with_when_it_ends_and_where_the_key_goes() {
     assert!(is_limit(&said) && said.contains("Try again later."), "{said}");
 
     let blocked = answered("403", "41 2380 core ", r#"{"message":"Repository access blocked"}"#, now, false).unwrap_err();
-    assert_eq!(blocked, "GitHub refused this: Repository access blocked.");
+    assert_eq!(blocked, "GitHub blocked this: Repository access blocked.");
     assert!(!is_limit(&blocked) && !blocked.contains("key"));
     assert!(!is_limit(&answered("403", "41 2380 core ", "{}", now, true).unwrap_err()));
     let no_leave = answered("403", "%header{x-ratelimit-remaining} ", r#"{"message":"Resource not accessible by personal access token"}"#, now, true).unwrap_err();
@@ -124,15 +136,15 @@ fn the_limit_is_said_in_plain_words_with_when_it_ends_and_where_the_key_goes() {
     assert!(is_limit(&answered("403", "41 2380 core ", r#"{"message":"You have exceeded a secondary rate limit."}"#, now, false).unwrap_err()));
     assert!(is_limit(&answered("403", "41 2380 core 60", "{}", now, false).unwrap_err()));
 
-    assert!(answered("401", "", r#"{"message":"Bad credentials"}"#, now, true).unwrap_err().starts_with("GitHub did not accept the key."));
+    assert!(answered("401", "", r#"{"message":"Bad credentials"}"#, now, true).unwrap_err().starts_with("GitHub didn't accept the key."));
     assert_eq!(answered("401", "", r#"{"message":"Bad credentials"}"#, now, false).unwrap_err(), "Bad credentials");
 
     assert_eq!(failure(&said), Failure::Limit);
     assert_eq!((failure(no_files()), failure(no_releases())), (Failure::Nothing, Failure::Nothing));
     assert_eq!(failure(&answered("404", "59 2380 core ", "{}", now, false).unwrap_err()), Failure::Nothing);
     assert_eq!((failure("GitHub could not be reached."), failure(&blocked)), (Failure::Unread, Failure::Unread));
-    assert_eq!(unread_words(1, "GitHub could not be reached."), "1 project found could not be looked at, so it is not listed: GitHub could not be reached.");
-    assert_eq!(unread_words(3, ""), "3 projects found could not be looked at, so they are not listed.");
+    assert_eq!(unread_words(1, "GitHub could not be reached."), "Trindle couldn't look at 1 project it found, so it isn't listed: GitHub could not be reached.");
+    assert_eq!(unread_words(3, ""), "Trindle couldn't look at 3 projects it found, so they aren't listed.");
     assert!(answered("200", "59 2380 core ", "[]", now, false).is_ok());
     assert!(!is_limit(&answered("404", "59 2380 core ", "{}", now, false).unwrap_err()));
     assert_eq!(answered("500", "", r#"{"message":"Made up"}"#, now, false).unwrap_err(), "Made up");
@@ -156,11 +168,11 @@ fn a_key_kept_after_the_deadline_is_heard_of_and_told() {
 
     for removing in [false, true] {
         let meanwhile = waiting_words(removing);
-        assert!(meanwhile.contains("has not answered yet") && meanwhile.contains("this line will say so") && !meanwhile.contains("Could not"), "{meanwhile}");
+        assert!(meanwhile.contains("hasn't answered yet") && meanwhile.contains("this message will say so") && !meanwhile.contains("Could not"), "{meanwhile}");
         let (good, ok) = late_words(removing, &Ok(()));
-        assert!(ok && good.starts_with("The keyring answered late: the key is") && good.ends_with(if removing { "removed." } else { "kept." }), "{good}");
+        assert!(ok && good.starts_with("The keyring answered late, and the key has been") && good.ends_with(if removing { "removed." } else { "saved." }), "{good}");
         let (bad, ok) = late_words(removing, &Err(key::locked_words().into()));
-        assert!(!ok && bad.contains("answered late and did not") && bad.ends_with(key::locked_words()), "{bad}");
+        assert!(!ok && bad.contains("answered late and didn't") && bad.ends_with(key::locked_words()), "{bad}");
     }
 }
 
@@ -175,7 +187,7 @@ fn a_key_kept_that_cannot_be_sent_is_said_and_never_passed_over() {
             assert!(key.is_none(), "{kept:?} is handed on to be dropped later");
             assert_ne!(is, KeyIs::Stored, "{kept:?}");
             let said = is.trouble().unwrap_or_else(|| panic!("{kept:?}: nothing is said of it"));
-            assert!(said.contains("cannot be sent") && said.contains("Remove it"), "{said}");
+            assert!(said.contains("can't send your saved GitHub key") && said.contains("Remove the key"), "{said}");
             assert!(!said.contains(kept), "the key itself is never shown");
         }
 
@@ -303,18 +315,18 @@ fn a_locked_keyring_is_said_as_locked() {
         assert_eq!(is, KeyIs::Hidden(key::locked_words().into()));
         assert!(!is.words().contains("No key is stored"), "{}", is.words());
         assert_eq!(is.trouble().as_deref(), Some("The keyring is locked. Log out and in again, or unlock it, then try again. \
-                                                  So GitHub is asked without a key, whether or not one is stored."));
+                                                  So Trindle uses GitHub without a key, even if one is saved."));
         assert_eq!(is.words(), is.trouble().unwrap(), "the key's box says the same");
 
         let old = dir.join("github-key");
         std::fs::write(&old, "example-key-old\n").unwrap();
         old_file(Some(old.clone()));
         let (key, is) = key_within(Asking::here());
-        assert_eq!(key.as_deref().map(String::as_str), Some("example-key-old"));
+        assert!(key.is_none(), "a plain file is not a place a key is used from");
         assert_eq!(is, KeyIs::Plain(key::locked_words().into()));
         assert!(old.exists());
-        assert_eq!(is.trouble().as_deref(), Some("Your GitHub key is still in a plain file on this computer, and is used from there: \
-                                                  it could not be moved into the keyring. The keyring is locked. Log out and in again, or unlock it, then try again."));
+        assert_eq!(is.trouble().as_deref(), Some("Your GitHub key is still in an old plain file on this computer, which Trindle no longer reads. \
+                                                  The keyring is locked. Log out and in again, or unlock it, then try again."));
         old_file(None);
         key::pretend(None);
     });
@@ -335,7 +347,7 @@ fn no_keyring_at_all_is_said_as_that() {
     let (key, is) = key_within(Asking::here());
     assert!(key.is_none());
     assert_eq!(is, KeyIs::NoKeyring);
-    assert_eq!(is.words(), "There is no keyring on this computer, so no key can be kept");
+    assert_eq!(is.words(), "This computer has no keyring, so it can't store a key");
     assert_eq!(is.trouble(), None, "nothing could be stored, so nothing is missing from a search");
     assert_eq!(set_within(Asking::here(), Zeroizing::new("example-key".into())), Err(key::missing_words().to_string()));
 
@@ -346,9 +358,9 @@ fn no_keyring_at_all_is_said_as_that() {
     std::fs::write(&old, "example-key-old\n").unwrap();
     old_file(Some(old.clone()));
     let (key, is) = key_within(Asking::here());
-    assert_eq!(key.as_deref().map(String::as_str), Some("example-key-old"));
+    assert!(key.is_none());
     assert_eq!(is, KeyIs::Plain(key::missing_words().into()));
-    assert!(is.trouble().unwrap().starts_with("Your GitHub key is still in a plain file on this computer"));
+    assert!(is.trouble().unwrap().starts_with("Your GitHub key is still in an old plain file on this computer"));
 
     assert_eq!(set_within(Asking::here(), Zeroizing::new(String::new())), Ok(()));
     assert!(!old.exists());
@@ -391,7 +403,7 @@ fn a_keyring_that_has_hung_holds_nobody_and_is_said() {
     assert!(key.is_none());
     assert_eq!(is, KeyIs::Hidden(key::silent_words().into()));
     assert!(took >= Duration::from_secs(1) && took < Duration::from_secs(4), "{took:?}");
-    assert_eq!(is.trouble().as_deref(), Some("The keyring did not answer in time. So GitHub is asked without a key, whether or not one is stored."));
+    assert_eq!(is.trouble().as_deref(), Some("The keyring didn't answer in time. So Trindle uses GitHub without a key, even if one is saved."));
     assert_eq!(set_within(Asking::here(), Zeroizing::new("example-key".into())), Err(key::silent_words().to_string()));
 
     let began = Instant::now();
@@ -406,7 +418,7 @@ fn a_key_that_is_not_one_line_is_refused_in_words() {
         key::pretend(Some(address));
         for bad in ["example\nkey", "example\r\nkey", "example key", "example\tkey", "example\u{0}key"] {
             let refused = set_within(Asking::here(), Zeroizing::new(bad.into())).unwrap_err();
-            assert!(refused.starts_with("A key is one line with no spaces in it"), "{bad:?}: {refused}");
+            assert!(refused.starts_with("A key is one line with no spaces"), "{bad:?}: {refused}");
             assert_eq!(key_within(Asking::here()).1, KeyIs::None, "{bad:?}: nothing was kept");
         }
 
@@ -449,9 +461,9 @@ fn a_question_carries_the_key_on_curls_input_and_nowhere_else() {
 
     std::fs::write(dir.join("answer"), "{}\n403 0 2380 core ").unwrap();
     let with = ask(&curl, url, Some("example-key")).unwrap_err();
-    assert!(is_limit(&with) && with.contains("with your key"), "{with}");
+    assert!(is_limit(&with) && with.contains("your key allows"), "{with}");
     let without = ask(&curl, url, None).unwrap_err();
-    assert!(is_limit(&without) && without.contains("without a key") && !without.contains("with your key"), "{without}");
+    assert!(is_limit(&without) && without.contains("without a key") && !without.contains("your key allows"), "{without}");
 
     let broken = ask(&curl, url, Some("example\nkey")).unwrap_err();
     assert!(!read("input").contains("Authorization") && !read("input").contains("example"));
@@ -478,10 +490,8 @@ fn reads_a_projects_name_and_dates() {
 #[test]
 fn a_file_nobody_checks_is_said_so_wherever_one_is_offered() {
 
-    assert!(super::says_unchecked(1) && super::says_unchecked(2));
-    assert!(!super::says_unchecked(0));
     let said = super::unchecked();
-    assert!(said.contains("nobody has checked") && said.contains("Downloaded securely"));
+    assert!(said.contains("nobody has checked") && said.contains("downloaded securely"));
     assert_eq!(said.matches(". ").count(), 0, "one sentence");
     assert!(said.ends_with('.') && !said.contains("  "));
 

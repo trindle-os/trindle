@@ -50,7 +50,7 @@ fn a_change_stopped_part_way_says_what_was_done_and_what_was_not() {
 
     type Run<'a> = (&'a dyn Fn() -> Act, bool, String, Vec<(&'static str, &'static str, bool)>);
     let runs: Vec<Run> = vec![
-        (&erase, true, String::new(), vec![("Format", "erasing the whole drive", true), ("CreatePartitionAndFormat", "making the new part", true)]),
+        (&erase, true, String::new(), vec![("Format", "erasing the whole drive", true), ("CreatePartitionAndFormat", t!("disks-step-create"), true)]),
         (&delete, false, String::new(), vec![("Unmount", "unmounting Photos", false), ("Delete", "deleting Photos", true)]),
         (&rename, false, "/b/Photos:name".to_string(),
          vec![("Unmount", "unmounting Photos", false), ("SetLabel", "renaming Photos", true), ("Mount", "mounting Photos again", false)]),
@@ -65,12 +65,15 @@ fn a_change_stopped_part_way_says_what_was_done_and_what_was_not() {
                     rig.d.act(start());
                 }
                 rig.d.act(start());
-                let (words, red) = rig.said("/d/usb", row).expect("words");
+                let changed = steps[..at].iter().any(|s| s.2);
+                let refused = error == DISMISSED;
+                let Some((words, red)) = rig.said("/d/usb", row) else {
+                    assert!(refused && !changed, "only a closed box that changed nothing says nothing");
+                    continue;
+                };
                 let case = format!("{} stopped at {} by {}: {words}", steps.last().expect("steps").0, steps[at].0, error.1);
                 assert!(red, "{case}");
                 let asked: Vec<String> = rig.log.borrow().iter().filter(|l| !l.starts_with("polkit")).cloned().collect();
-                let changed = steps[..at].iter().any(|s| s.2);
-                let refused = error == DISMISSED;
                 assert_eq!(words.contains("nothing changed"), refused && !changed, "{case}");
 
                 let mut want: Vec<String> = steps[..=at].iter().map(|s| s.0.to_string()).collect();
@@ -113,7 +116,10 @@ fn a_part_unmounted_for_a_change_that_stopped_is_mounted_again_or_said_to_be_unm
         rig.d.texts.insert("/b/Photos:name".into(), "Holiday".into());
         rig.fails.borrow_mut().insert(at, error);
         rig.d.act(start());
-        let (words, red) = rig.said("/d/usb", row).expect("words");
+        let Some((words, red)) = rig.said("/d/usb", row) else {
+            assert!(error == DISMISSED && again, "only a closed box that changed nothing says nothing");
+            continue;
+        };
         let case = format!("stopped at {at} by {}: {words}", error.1);
         assert!(red && words.contains(said), "{case}");
         assert_eq!(words.matches("was unmounted for this").count(), usize::from(!again), "{case}");
@@ -237,7 +243,7 @@ fn a_change_that_cannot_be_started_says_so() {
     rig.d.bus = None;
     rig.d.act(Act::Rename { drive: "/d/usb".into(), vol: "/b/Photos".into() });
     let (words, red) = rig.d.told("/d/usb", "/b/Photos:name").map(|(words, tone)| (words, matches!(tone, Tone::Problem))).expect("the row says why");
-    assert!(red && words.contains("could not be reached") && words.contains("nothing changed"), "{words}");
+    assert!(red && words.contains("couldn't reach") && words.contains("nothing changed"), "{words}");
     assert!(rig.d.working.is_empty() && rig.d.busy == 0, "nothing is left turning");
 }
 
@@ -283,7 +289,7 @@ fn a_password_that_cannot_be_taken_back_is_said_in_red_and_tried_again() {
     let (words, red) = rig.said("/d/usb", &row).expect("words");
     assert_eq!(words, plan::standing_words("Formatted"));
     assert!(red, "never good news alone while the password still stands");
-    assert!(words.starts_with("Formatted. The password just given could not be taken back"), "{words}");
+    assert!(words.starts_with("Formatted. Trindle couldn't cancel the password you just gave"), "{words}");
     let mut asked = vec!["polkit: what leave is kept?".to_string(), "Format".to_string()];
     asked.extend(std::iter::repeat_n("polkit: no answer".to_string(), TAKE_BACK_TRIES as usize));
     assert_eq!(rig.log.borrow()[..asked.len()], asked[..], "taken back before, then tried {TAKE_BACK_TRIES} times after");
@@ -327,7 +333,10 @@ fn a_wrong_password_is_not_a_closed_box_and_a_part_left_unmounted_is_named() {
         rig.fails.borrow_mut().insert("Delete", error);
         rig.log.borrow_mut().clear();
         rig.d.act(delete());
-        let (words, red) = rig.said("/d/usb", "").expect("words");
+        let Some((words, red)) = rig.said("/d/usb", "") else {
+            assert_eq!(kind, Refused::Cancelled, "only a closed box says nothing");
+            continue;
+        };
         assert!(red);
         assert_eq!(words, plan::refusal_words(kind));
         assert_eq!(rig.log.borrow().clone(), vec!["polkit: what leave is kept?", "Unmount", "Delete", "Mount", "polkit: what leave is kept?"],
@@ -335,23 +344,22 @@ fn a_wrong_password_is_not_a_closed_box_and_a_part_left_unmounted_is_named() {
         heard.push(words);
     }
     refused::pretend(None);
-    assert_eq!(heard[0], plan::no_password());
-    assert!(heard[1..].iter().all(|w| !w.contains("No password was given")), "{heard:?}");
+    assert!(heard.iter().all(|w| !w.contains("You didn't enter a password")), "{heard:?}");
     heard.sort();
     heard.dedup();
-    assert_eq!(heard.len(), 4, "each in words of its own");
+    assert_eq!(heard.len(), 3, "each in words of its own");
 
     rig.fails.borrow_mut().insert("Delete", DISMISSED);
     rig.fails.borrow_mut().insert("Mount", ("org.freedesktop.UDisks2.Error.Failed", "Example reason"));
     rig.d.act(delete());
     let (words, red) = rig.said("/d/usb", "").expect("words");
     assert!(red);
-    assert_eq!(words, format!("{} Photos was unmounted for this and could not be mounted again (Example reason): mount it from its row.", plan::no_password()));
+    assert_eq!(words, format!("{} Photos was unmounted for this and could not be mounted again (Example reason). Mount it from its row.", plan::no_password()));
 
     rig.fails.borrow_mut().insert("Mount", ("org.freedesktop.UDisks2.Error.NotAuthorizedCanObtain", "Not authorized to perform operation"));
     rig.d.act(delete());
     let (words, _) = rig.said("/d/usb", "").expect("words");
-    assert_eq!(words, format!("{} Photos was unmounted for this, and mounting it again needs a password of its own: mount it from its row.", plan::no_password()));
+    assert_eq!(words, format!("{} Photos was unmounted for this. Mount it again from its row and enter its password when asked.", plan::no_password()));
 
     rig.fails.borrow_mut().clear();
     rig.fails.borrow_mut().insert("Delete", ("org.freedesktop.UDisks2.Error.Failed", "Example reason"));
@@ -377,7 +385,7 @@ fn a_folder_that_could_not_be_kept_is_said_under_the_formatted_row() {
     d.busy = 1;
     d.carry_known(carried("/mnt/example"), "");
     let (words, tone) = d.told("/d/usb", "/b/Photos").expect("said under the row");
-    assert_eq!(words, "Formatted, but it was not given its folder /mnt/example again. The new part's identifier could not be read. \
+    assert_eq!(words, "Formatting is done, but Trindle couldn't give it the folder /mnt/example again. Trindle couldn't read the new partition's identifier. \
                        Choose the folder again from its row.");
     assert!(matches!(tone, Tone::Problem) && d.busy == 0 && d.ran.is_empty());
 
@@ -389,6 +397,7 @@ fn a_folder_that_could_not_be_kept_is_said_under_the_formatted_row() {
     assert_eq!(rig.log.borrow().clone(), vec!["polkit: what leave is kept?", "AddConfigurationItem", "polkit: what leave is kept?"]);
 
     rig.fails.borrow_mut().clear();
+    rig.log.borrow_mut().clear();
     rig.d.said.clear();
     rig.d.busy = 1;
     rig.d.carry_known(carried("/mnt/example"), "uuid-new");

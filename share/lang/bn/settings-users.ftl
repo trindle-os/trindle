@@ -13,10 +13,10 @@ settings-users-help = মানুষ যোগ করা, পাসওয়া
 
 # Beside a change that is waiting for the administrator's password to be typed.
 # SAFETY: needs a human review before it ships
-settings-users-waiting = পাসওয়ার্ডের অপেক্ষায়...
+settings-users-waiting = আপনার পাসওয়ার্ডের অপেক্ষায়…
 
 # Headline of the Users page when nobody on the computer is an administrator.
-settings-users-sum-nobody-admin = এখানে কেউ প্রশাসক নন, তাই সবার জন্য কিছু ইনস্টল বা বদলানো যাবে না।
+settings-users-sum-nobody-admin = এখানে কেউ প্রশাসক নন, তাই সবার জন্য কেউ কিছু ইনস্টল বা বদলাতে পারবেন না।
 
 # Headline of the Users page when you are the only person and an administrator.
 settings-users-sum-only-you = শুধু আপনিই এই কম্পিউটার ব্যবহার করেন, এবং আপনি এর প্রশাসক।
@@ -49,7 +49,7 @@ settings-users-sum-admins =
 settings-users-this-is-you = এটি আপনি।
 
 # Under a person's name on their card when the card is someone else's: the name shown is their login name.
-settings-users-login-name = তাঁর লগইন নাম।
+settings-users-login-name = লগইন নাম
 
 # Tip of the round button on a person's card that picks their picture, and title of the window that opens.
 settings-users-choose-picture = একটি ছবি বেছে নিন
@@ -63,7 +63,7 @@ settings-users-change-password = পাসওয়ার্ড বদলান
 
 # Tip of the round button on a person's card that deletes them and their files.
 # SAFETY: needs a human review before it ships
-settings-users-delete = ফাইলসহ মুছুন
+settings-users-delete = অ্যাকাউন্ট ও ফাইল মুছুন
 
 # Said beside a person once they are deleted.
 # SAFETY: needs a human review before it ships
@@ -73,13 +73,9 @@ settings-users-deleted = মুছে ফেলা হয়েছে
 # SAFETY: needs a human review before it ships
 settings-users-administrator = প্রশাসক
 
-# Under the Administrator line: what an administrator can do.
-# SAFETY: needs a human review before it ships
-settings-users-admin-can = সবার জন্য জিনিস ইনস্টল ও বদলাতে পারেন।
-
 # Tip of the administrator switch on your own card, and said when you press it: you cannot remove your own administrator rights.
 # SAFETY: needs a human review before it ships
-settings-users-cannot-take-away = আপনি নিজের থেকে এটি সরাতে পারবেন না।
+settings-users-cannot-take-away = আপনি নিজের প্রশাসক অধিকার সরাতে পারবেন না।
 
 # Said beside a person after they are made an administrator.
 # SAFETY: needs a human review before it ships
@@ -91,7 +87,7 @@ settings-users-admin-no-longer = আর প্রশাসক নন
 
 # Help text for a person's card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-person-about = তাঁর ছবি, তাঁর পাসওয়ার্ড এবং, আপনি ছাড়া যে কারও জন্য, ফাইলসহ তাঁকে মুছে ফেলা নামের পাশের গোল বোতামে থাকে। প্রশাসক প্রোগ্রাম ইনস্টল করতে ও সবার জন্য জিনিস বদলাতে পারেন; আপনি নিজের থেকে এটি সরাতে পারবেন না। প্রতিটি বদলে প্রশাসকের পাসওয়ার্ড চাওয়া হয়।
+settings-users-person-about = প্রশাসক প্রোগ্রাম ইনস্টল করতে ও সবার জন্য জিনিস বদলাতে পারেন। আপনি নিজের প্রশাসক অধিকার সরাতে পারবেন না। প্রতিটি বদলের জন্য প্রশাসকের পাসওয়ার্ড লাগে।
 
 # Typing box in the change password form, for your own current password.
 # SAFETY: needs a human review before it ships
@@ -103,7 +99,7 @@ settings-users-new-password = নতুন পাসওয়ার্ড
 
 # Typing box in the change password form where the new password is typed again.
 # SAFETY: needs a human review before it ships
-settings-users-again = আবার
+settings-users-again = আবার লিখুন
 
 # Button in the change password form that saves the new password.
 settings-users-save = সংরক্ষণ
@@ -118,11 +114,11 @@ settings-users-cancel = বাতিল করুন
 
 # Red words in the change password form when your current password was left empty.
 # SAFETY: needs a human review before it ships
-settings-users-need-current = আপনার বর্তমান পাসওয়ার্ডও দিন, যাতে আপনার সংরক্ষিত লগইন কাজ করতে থাকে।
+settings-users-need-current = আপনার বর্তমান পাসওয়ার্ডও লিখুন, যাতে আপনার সংরক্ষিত লগইন কাজ করতে থাকে।
 
 # Red words in the change password form when the new password is too short.
 # SAFETY: needs a human review before it ships
-settings-users-at-least-8 = অনুগ্রহ করে অন্তত ৮টি অক্ষর দিন।
+settings-users-at-least-8 = অন্তত ৮টি অক্ষর ব্যবহার করুন।
 
 # Red words in the change password form when the two new passwords differ.
 # SAFETY: needs a human review before it ships
@@ -134,7 +130,7 @@ settings-users-password-changed = পাসওয়ার্ড বদলেছ
 
 # Red words after a password change when the saved logins could not take the new password.
 # SAFETY: needs a human review before it ships
-settings-users-not-rekeyed = পাসওয়ার্ড বদলেছে, কিন্তু সংরক্ষিত লগইন এখনও পুরোনোটি দিয়ে খোলে।
+settings-users-not-rekeyed = পাসওয়ার্ড বদলেছে, কিন্তু আপনার সংরক্ষিত লগইন এখনও পুরোনো পাসওয়ার্ড ব্যবহার করছে।
 
 # Red words when the chosen file is not a picture the page can use.
 settings-users-png-please = অনুগ্রহ করে PNG, JPG বা WebP দিন।
@@ -146,21 +142,17 @@ settings-users-picture-not-changed = ছবিটি বদলানো যা�
 settings-users-saved = সংরক্ষিত
 
 # Red words when your new picture works at login but could not be copied to your home folder.
-settings-users-picture-not-shared = ছবিটি লগইনে দেখা যায়, কিন্তু আপনার অন্য প্রোগ্রামকে দেওয়া যায়নি।
+settings-users-picture-not-shared = আপনার ছবি লগইন পর্দায় দেখা যায়, কিন্তু Trindle সেটি আপনার অন্য প্রোগ্রামের সঙ্গে শেয়ার করতে পারেনি।
 
 # Heading of the form for adding a person.
 settings-users-add-someone = কাউকে যোগ করুন
 
 # Help text for the Add someone form (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-add-about = অন্য কারও জন্য নতুন অ্যাকাউন্ট: তাঁর পুরো নাম, ছোট হাতের অক্ষর ও সংখ্যার একটি লগইন নাম যা অক্ষর দিয়ে শুরু, এবং অন্তত ৮টি অক্ষরের একটি পাসওয়ার্ড। তিনি সঙ্গে সঙ্গে লগ ইন করতে পারেন। প্রশাসক প্রোগ্রাম ইনস্টল করতে ও সবার জন্য জিনিস বদলাতে পারেন।
+settings-users-add-about = তাঁর পুরো নাম, একটি লগইন নাম এবং অন্তত ৮টি অক্ষরের একটি পাসওয়ার্ড লিখুন। লগইন নামে শুধু ছোট হাতের অক্ষর ও সংখ্যা থাকতে পারে, এবং অক্ষর দিয়ে শুরু করতে হবে। তিনি সঙ্গে সঙ্গে লগ ইন করতে পারেন। প্রশাসক প্রোগ্রাম ইনস্টল করতে ও সবার জন্য জিনিস বদলাতে পারেন।
 
 # Heading of the line in the Add someone form that holds the button.
 settings-users-new-account = নতুন অ্যাকাউন্ট
-
-# Under the New account heading.
-# SAFETY: needs a human review before it ships
-settings-users-new-account-sub = তিনি এই পাসওয়ার্ড দিয়ে সঙ্গে সঙ্গে লগ ইন করতে পারেন।
 
 # Typing box in the Add someone form for the person's full name.
 settings-users-full-name = পুরো নাম
@@ -194,23 +186,19 @@ settings-users-saved-logins = সংরক্ষিত লগইন
 
 # Help text for the Saved logins card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-keyring-about = মেইল বা Wi-Fi-এর মতো যেসব পাসওয়ার্ড প্রোগ্রাম আপনার জন্য রাখে তা একটি কিরিংয়ে থাকে, যা আপনার লগইনের সঙ্গে খোলে। লগইনের সময় প্রত্যেকে নিজে থেকেই Trindle-এর কিরিংয়ে চলে যান। আপনারটি সরানো না গেলে, সরানোর সময় প্রতিটি সংরক্ষিত লগইন কপি হয়, আপনার লগইনে না খোলা যেকোনো কিরিংয়ের পাসওয়ার্ড চাওয়া হয়, এবং GNOME-এর ফাইল যেমন আছে তেমনই থাকে।
+settings-users-keyring-about = মেইল বা Wi-Fi-এর মতো যেসব পাসওয়ার্ড প্রোগ্রাম আপনার জন্য রাখে তা একটি কিরিংয়ে থাকে, যা আপনি লগ ইন করলে খোলে। লগ ইন করার সময় Trindle আপনার কিরিং নিজের কিরিংয়ে সরিয়ে নেয়। তা না হলে আপনি এখান থেকে সরাতে পারেন। প্রতিটি সংরক্ষিত লগইন কপি হয়। আপনার লগইনে খোলে না এমন কিরিংয়ের পাসওয়ার্ড আপনার কাছে চাওয়া হতে পারে। GNOME-এর ফাইল যেমন আছে তেমনই থাকে।
 
 # Heading of the line on the Saved logins card when the logins are kept by Trindle's keyring.
 # SAFETY: needs a human review before it ships
-settings-users-kept-trindle = Trindle-এর কিরিংয়ে রাখা
+settings-users-kept-trindle = Trindle-এর কিরিংয়ে
 
 # Heading of the line on the Saved logins card when the logins are kept by GNOME's keyring.
 # SAFETY: needs a human review before it ships
-settings-users-kept-gnome = GNOME-এর কিরিংয়ে রাখা
-
-# Under the heading when the logins are kept by Trindle's keyring.
-# SAFETY: needs a human review before it ships
-settings-users-opens-login = আপনার লগইনের সঙ্গে খোলে।
+settings-users-kept-gnome = GNOME-এর কিরিংয়ে
 
 # Under the heading when the logins are still kept by GNOME's keyring.
 # SAFETY: needs a human review before it ships
-settings-users-could-not-move = আপনার লগইন এগুলো সরাতে পারেনি।
+settings-users-could-not-move = Trindle লগইনের সময় এগুলো সরাতে পারেনি।
 
 # Tip of the button that moves saved logins to Trindle's keyring.
 # SAFETY: needs a human review before it ships
@@ -221,7 +209,7 @@ settings-users-move-keyring = Trindle-এর কিরিংয়ে সরা�
 settings-users-your-password = আপনার পাসওয়ার্ড
 
 # Tip of the button that starts moving the saved logins.
-settings-users-go-ahead = এগিয়ে যান
+settings-users-go-ahead = এখনই সরান
 
 # Typing box for the password of one GNOME keyring that stayed shut: the keyring's name is { $name }.
 # SAFETY: needs a human review before it ships
@@ -229,10 +217,10 @@ settings-users-password-for = { $name }-এর পাসওয়ার্ড
 
 # Red words when the move of saved logins was started without a password.
 # SAFETY: needs a human review before it ships
-settings-users-your-password-please = অনুগ্রহ করে আপনার পাসওয়ার্ড দিন।
+settings-users-your-password-please = আপনার পাসওয়ার্ড লিখুন।
 
 # Said beside the Saved logins line while they are copied.
-settings-users-copying = আপনার সংরক্ষিত লগইন কপি করা হচ্ছে...
+settings-users-copying = আপনার সংরক্ষিত লগইন কপি করা হচ্ছে…
 
 # Said beside the Saved logins line when the copy is done: how many logins were copied.
 settings-users-copied = { $n }টি কপি হয়েছে
@@ -240,19 +228,18 @@ settings-users-copied = { $n }টি কপি হয়েছে
 # Red words when keyrings stayed shut: the keyrings' names are { $names } and there are { $n } of them.
 settings-users-nothing-moved =
     { $n ->
-        [one] এখনও কিছু সরেনি: { $names }-এর নিজস্ব পাসওয়ার্ড লাগবে।
-       *[other] এখনও কিছু সরেনি: { $names }-এর প্রতিটির নিজস্ব পাসওয়ার্ড লাগবে।
+        [one] এখনও কিছু সরানো হয়নি। { $names }-এর পাসওয়ার্ড লিখুন।
+       *[other] এখনও কিছু সরানো হয়নি। { $names }-এর পাসওয়ার্ডগুলো লিখুন।
     }
 
 # Red words when the move of saved logins stopped unexpectedly.
-settings-users-stopped = মাঝপথে থেমে গেছে।
+settings-users-stopped = এটি শেষ হয়নি।
 
 # Words in place of the people while the accounts are still being read.
-settings-users-looking-accounts = অ্যাকাউন্ট দেখা হচ্ছে…
+settings-users-looking-accounts = অ্যাকাউন্ট পরীক্ষা করা হচ্ছে…
 
 # Heading of the placeholder card shown while the accounts are being read.
 settings-users-people = মানুষ
 
 # Under the Administrator line of the placeholder card.
-settings-users-looking = খোঁজা হচ্ছে…
-
+settings-users-looking = লোড হচ্ছে…

@@ -5,7 +5,7 @@
 screenshot-name = Ekran görüntüsü
 
 # Note on the overlay before any part is chosen.
-screenshot-drag = Saklanacak bölümün üzerine sürükleyin
+screenshot-drag = Saklanacak bölümün üzerinden sürükleyin
 
 # Name of the round button that keeps the whole screen.
 screenshot-whole = Tüm ekran
@@ -57,7 +57,7 @@ screenshot-tool-circle = Daire
 screenshot-tool-highlighter = Fosforlu kalem
 
 # Name of the drawing tool that writes words.
-screenshot-tool-words = Yazı
+screenshot-tool-words = Metin
 
 # Name of the drawing tool that puts numbered spots.
 screenshot-tool-numbers = Numaralar
@@ -108,19 +108,19 @@ screenshot-not-saved = Ekran görüntüsü kaydedilmedi
 screenshot-not-copied = Ekran görüntüsü kopyalanmadı
 
 # Words of that notice.
-screenshot-clipboard-refused = Pano bunu kabul etmedi.
+screenshot-clipboard-refused = Trindle bunu kopyalayamadı.
 
 # Words of the notice that the screenshot could not be saved: the picture was not made.
-screenshot-no-picture = resim oluşturulamadı
+screenshot-no-picture = Ekran görüntüsü alınamadı.
 
 # Words of the notice that the screenshot could not be saved: no bus to ask on.
-screenshot-no-bus = sorulacak bir oturum veriyolu yok
+screenshot-no-bus = Trindle nereye kaydedileceğini soramıyor.
 
 # Words of the notice that the screenshot could not be saved: the file chooser could not be asked.
-screenshot-no-chooser = dosya seçiciye sorulamadı
+screenshot-no-chooser = Dosya seçici açılamadı.
 
 # Words of the notice that the screenshot could not be saved: every file name was taken.
-screenshot-no-free-name = boş ad yok
+screenshot-no-free-name = Boş ad yok
 
 # Words of the notice that the screenshot could not be saved: the path and why it failed.
 screenshot-write-failed = { $path }: { $why }
@@ -129,26 +129,26 @@ screenshot-write-failed = { $path }: { $why }
 screenshot-eye-title = Renk seçici
 
 # Words that float beside the i of the eye dropper's window.
-screenshot-eye-help = Renk seçiciye basın, sonra imlecin altındaki rengi almak için ekranda herhangi bir yere tıklayın. Escape vazgeçirir. Her renk hemen onaltılık kod olarak kopyalanır ve aşağıdaki listede, en yenisi başta olacak şekilde saklanır; böylece sonra yeniden kopyalanabilir.
+screenshot-eye-help = Renk seçiciye basın, sonra imlecin altındaki rengi almak için ekranda herhangi bir yere tıklayın. Vazgeçmek için Esc tuşuna basın. Her renk hemen onaltılık kod olarak kopyalanır ve aşağıdaki listeye, en yenisi başta olacak şekilde eklenir; böylece sonra yeniden kopyalayabilirsiniz.
 
 # Name of the i button beside the title.
 screenshot-eye-about = Renk seçici hakkında
 
 # Name of the main button that takes a colour.
-screenshot-eye-take = Renk al
+screenshot-eye-take = Renk seç
 
 # Sentence under the title while no colour has been taken.
-screenshot-eye-none = Ekranın herhangi bir yerinden renk alın.
+screenshot-eye-none = Ekrandan bir renk seçin.
 
 # Sentence under the title once colours have been taken.
 screenshot-eye-taken =
     { $n ->
-        [one] Bir renk alındı: { $newest }.
-       *[other] { $n } renk alındı; en yenisi { $newest }.
+        [one] Bir renk seçildi: { $newest }.
+       *[other] { $n } renk seçildi. En yenisi { $newest }.
     }
 
 # Shown in the big card while no colour has been taken.
-screenshot-eye-latest-empty = Aldığınız renk burada, büyük ve kopyalamaya hazır olarak görünür.
+screenshot-eye-latest-empty = Henüz renk seçilmedi.
 
 # Name of the card that holds the latest colour.
 screenshot-eye-latest = Son renk
@@ -158,10 +158,10 @@ screenshot-eye-latest = Son renk
 screenshot-eye-clear = Listeyi temizle
 
 # Head of the card with the list of colours taken.
-screenshot-eye-list = Alınan renkler
+screenshot-eye-list = Renkleriniz
 
 # Shown in the list card while no colour has been taken.
-screenshot-eye-list-empty = Renk seçiciyle alınan renkler burada, en yenisi başta olmak üzere saklanır.
+screenshot-eye-list-empty = Henüz renk seçilmedi.
 
 # Name of the round button that takes a colour out of the list.
 # SAFETY: needs a human review before it ships
@@ -175,10 +175,10 @@ screenshot-eye-damaged = Renk seçici renkleri
 screenshot-pick-title = Ekranınız { $app } ile paylaşılsın mı?
 
 # Sentence under the title when several things can be picked.
-screenshot-pick-many = Bir ya da daha fazlasını seçin. Uygulama durana ya da kapanana kadar yalnızca seçtikleriniz paylaşılır.
+screenshot-pick-many = Bir ya da daha fazlasını seçin. Uygulama paylaşmayı durdurana ya da kapanana kadar yalnızca seçtikleriniz paylaşılır.
 
 # Sentence under the title when one thing can be picked.
-screenshot-pick-one = Birini seçin. Uygulama durana ya da kapanana kadar yalnızca seçtiğiniz paylaşılır.
+screenshot-pick-one = Birini seçin. Uygulama paylaşmayı durdurana ya da kapanana kadar yalnızca seçtiğiniz paylaşılır.
 
 # Heading over the screens that can be shared.
 screenshot-pick-screens = Ekranlar
@@ -193,7 +193,7 @@ screenshot-pick-nothing = Paylaşılacak bir şey yok.
 screenshot-pick-desktop = Tüm masaüstü
 
 # Words under that choice.
-screenshot-pick-desktop-detail = Her ekran, bulundukları düzende
+screenshot-pick-desktop-detail = Tüm ekranlar, düzenlendikleri gibi
 
 # Words under a screen's choice: its size in pixels.
 screenshot-pick-size = { $width } x { $height }
@@ -232,11 +232,11 @@ screenshot-portal-name = Ad
 
 # Heading when an unknown program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks-unknown = Bir program kim olduğunuzu soruyor
+screenshot-account-asks-unknown = Bir program bilgilerinizi istiyor
 
 # Heading when a program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks = { $who } kim olduğunuzu soruyor
+screenshot-account-asks = { $who } bilgilerinizi istiyor
 
 # Name the screen reader gives to the person's picture.
 screenshot-account-picture = Resminiz
@@ -248,7 +248,7 @@ screenshot-account-signed-in = { $id } olarak oturum açıldı
 screenshot-apps-search = Uygulama ara
 
 # Shown when no app can open the file.
-screenshot-apps-none = Burada bunu açabilecek uygulama yok
+screenshot-apps-none = Bunu açabilecek uygulama yok
 
 # Name of the switch that remembers the choice.
 screenshot-apps-always = Bu tür dosyalar için her zaman bu uygulamayı kullan
@@ -307,7 +307,7 @@ screenshot-wallpaper-ask = Bu resim duvar kağıdınız olarak ayarlansın mı?
 
 # Heading when a program offers a wallpaper.
 # SAFETY: needs a human review before it ships
-screenshot-wallpaper-asks = { $who } yeni bir duvar kağıdı öneriyor
+screenshot-wallpaper-asks = { $who } duvar kâğıdını ayarlamak istiyor
 
 # Name the screen reader gives to the picture offered.
 screenshot-wallpaper-picture = Yeni duvar kağıdı
@@ -371,7 +371,7 @@ screenshot-print-from = { $who } uygulamasından yazdır
 screenshot-print-failed = Yazdırılamadı
 
 # Words of that notice when the choices made were not kept.
-screenshot-print-lost = Seçimleri saklanmadı. Yeniden yazdırın.
+screenshot-print-lost = Ayarlar kaydedilemedi. Yeniden yazdırın.
 
 # Line in the menu on a file or folder: change its name.
 screenshot-chooser-rename = Yeniden adlandır
@@ -415,7 +415,7 @@ screenshot-chooser-no-folder = O klasör yok.
 
 # Words under the box when saving would replace a file.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-ask = { $name } zaten var. Bunu yerine koymak için Değiştir düğmesine ya da yeniden Enter'a basın.
+screenshot-chooser-replace-ask = { $name } zaten var. Değiştirmek için Değiştir düğmesine ya da yeniden Enter'a basın.
 
 # Words under the box when a key is pressed on Recent, which is not a folder.
 screenshot-chooser-recent-not-folder = Son kullanılanlar bir klasör değil. Önce bir klasör açın.
@@ -457,53 +457,53 @@ screenshot-chooser-replace = Değiştir
 
 # What the screen reader says for the button that replaces a folder.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-spoken = Değiştir: zaten orada olan klasör Çöp kutusuna gider
+screenshot-chooser-replace-spoken = Değiştir. Mevcut klasör Çöp kutusuna taşınır.
 
 # Name of the main button that merges two folders.
 # SAFETY: needs a human review before it ships
 screenshot-chooser-merge = Birleştir
 
 # Words in the question when folders are being pasted.
-screenshot-chooser-rest-folders = Zaten var olan her klasör için aynı yanıt.
+screenshot-chooser-rest-folders = Var olan her klasör için bunu uygula.
 
 # Words in the question when files are being pasted.
-screenshot-chooser-rest-files = Zaten var olan her dosya için aynı yanıt.
+screenshot-chooser-rest-files = Var olan her dosya için bunu uygula.
 
 # Name of the switch that gives the same answer to the rest.
 # SAFETY: needs a human review before it ships
 screenshot-chooser-same = Kalanlar için de aynısını yap
 
 # Words under the box after Cut.
-screenshot-chooser-was-cut = { $what } kesildi. Bir klasöre yapıştırın.
+screenshot-chooser-was-cut = Taşımaya hazır: { $what }
 
 # Words under the box after Copy.
-screenshot-chooser-was-copied = { $what } kopyalandı. Bir klasöre yapıştırın.
+screenshot-chooser-was-copied = Kopyalamaya hazır: { $what }
 
 # Words under the box when Paste is pressed and there is nothing to paste.
 screenshot-chooser-nothing-cut = Kesilen ya da kopyalanan bir şey yok.
 
 # Words under the box when Paste is pressed while a paste is still going.
-screenshot-chooser-paste-busy = Bir yapıştırma hâlâ sürüyor.
+screenshot-chooser-paste-busy = Trindle hâlâ yapıştırıyor.
 
 # Red line after some items could not be moved.
 screenshot-chooser-not-moved =
     { $n ->
-        [one] Bir öğe taşınamadı: { $names }.
-       *[other] { $n } öğe taşınamadı: { $names }.
+        [one] Trindle bir öğeyi taşıyamadı: { $names }.
+       *[other] Trindle { $n } öğeyi taşıyamadı: { $names }.
     }
 
 # Red line after some items could not be copied.
 screenshot-chooser-not-copied =
     { $n ->
-        [one] Bir öğe kopyalanamadı: { $names }.
-       *[other] { $n } öğe kopyalanamadı: { $names }.
+        [one] Trindle bir öğeyi kopyalayamadı: { $names }.
+       *[other] Trindle { $n } öğeyi kopyalayamadı: { $names }.
     }
 
 # Red line after some items could not be put in the Trash.
 screenshot-chooser-not-trashed =
     { $n ->
-        [one] Bir öğe Çöp kutusuna konamadı: { $names }.
-       *[other] { $n } öğe Çöp kutusuna konamadı: { $names }.
+        [one] Trindle bir öğeyi Çöp kutusuna taşıyamadı: { $names }.
+       *[other] Trindle { $n } öğeyi Çöp kutusuna taşıyamadı: { $names }.
     }
 
 # Name of the box where a file or folder is renamed.
@@ -517,10 +517,10 @@ screenshot-chooser-items =
     }
 
 # Title of the notice when an email could not be started.
-screenshot-mail-failed = E-posta başlatılamadı
+screenshot-mail-failed = E-posta oluşturulamadı
 
 # Why: no mail program is chosen or installed.
-screenshot-mail-no-app = Posta programı ayarlanmamış. Ayarlar, Varsayılan uygulamalar bölümünden bir tane seçin.
+screenshot-mail-no-app = Bir posta programı seçmediniz. Ayarlar, Varsayılan uygulamalar bölümünden bir tane seçin.
 
 # Why: a program asked to attach more files than allowed.
 screenshot-mail-too-many = Eklenecek dosya sayısı çok fazla.
@@ -532,13 +532,13 @@ screenshot-mail-too-big = Dosyalar eklenemeyecek kadar büyük.
 screenshot-mail-bad-file = Bir dosya eklenemedi.
 
 # Why: an address was not a plain address.
-screenshot-mail-bad-address = Bir adres geçerli değildi.
+screenshot-mail-bad-address = Bir adres geçerli değil.
 
 # Why: the subject was too long or had odd characters.
-screenshot-mail-bad-subject = Konu geçerli değildi.
+screenshot-mail-bad-subject = Konu geçerli değil.
 
 # Why: the words were too long or had odd characters.
-screenshot-mail-bad-words = Metin geçerli değildi.
+screenshot-mail-bad-words = Metin geçerli değil.
 
 # Why: no private place to keep the files.
 screenshot-mail-no-place = Dosyalar güvenle saklanamadı.
@@ -567,7 +567,12 @@ screenshot-chooser-pin-not-kept = Sabitleme kaydedilemedi.
 # Red line after some items could not be deleted.
 screenshot-chooser-not-deleted =
     { $n ->
-        [one] Bir öğe silinemedi: { $names }.
-       *[other] { $n } öğe silinemedi: { $names }.
+        [one] Trindle bir öğeyi silemedi: { $names }.
+       *[other] Trindle { $n } öğeyi silemedi: { $names }.
     }
 
+# What the screen reader says for the list of places down the left of the file chooser.
+screenshot-chooser-places = Konumlar
+
+# What the screen reader says for the list of files and folders in the file chooser.
+screenshot-chooser-files = Dosyalar

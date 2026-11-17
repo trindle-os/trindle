@@ -1,0 +1,9 @@
+extends: substitution
+message: "Write '%s', not '%s'; it reads and translates better."
+level: error
+ignorecase: true
+nonword: true
+swap:
+  '\be\.g\.': for example
+  '\bi\.e\.': that is
+  '\betc\.': and so on

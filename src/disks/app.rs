@@ -14,6 +14,9 @@ impl Drives {
             Do::Objects(o) => self.got(o),
             Do::Cap { kind, method, yes } => self.cap(&kind, method, yes),
             Do::Done { drive, row, res, standing } => {
+                if let Some(files) = self.swapped.remove(&spot(&drive, &row)) {
+                    return self.swap_back(drive, row, files, res, standing);
+                }
                 self.working.remove(&spot(&drive, &row));
                 match (res, standing) {
                     (Ok(w), false) => self.say(&drive, &row, w, true),
@@ -29,6 +32,11 @@ impl Drives {
             Do::TookBack { drive, row, said, left, done } => self.took_back(drive, row, said, left, done),
             Do::Carry(carried) => self.carry_folder(carried),
             Do::Snapped { drive, vol, row, want, desc, res } => self.snapped(&drive, &vol, &row, want, &desc, res),
+            Do::SwappedOff { drive, vol, row, want, files, res } => self.swapped_off(&drive, &vol, &row, want, files, res),
+            Do::SwappedOn { drive, row, res, standing } => {
+                self.snapping = false;
+                self.handle(Do::Done { drive, row, res, standing });
+            }
             Do::CarryKnown { carried, uuid } => self.carry_known(carried, &uuid),
             Do::Soon(n) => {
                 if n == self.soon && self.busy == 0 {

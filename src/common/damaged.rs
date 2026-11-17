@@ -136,17 +136,16 @@ mod tests {
     }
 
     #[test]
-    fn each_of_the_six_lesser_files_is_set_aside_when_damaged() {
-        use crate::{common::{app_choice, clipboard}, ring::store, screenshot::{colours, file_chooser::kept}, text};
+    fn each_of_the_five_lesser_files_is_set_aside_when_damaged() {
+        use crate::{common::{app_choice, clipboard}, screenshot::{colours, file_chooser::kept}, text};
         let d = dir("six");
         let _ = take_notes();
         let junk: &[u8] = &[0xff, 0xfe, b'{', 0x00];
-        let names = ["index.json", "usage", "app-choices", "file-chooser-folders", "colours", "recent"];
+        let names = ["index.json", "app-choices", "file-chooser-folders", "colours", "recent"];
         for name in names {
             std::fs::write(d.join(name), junk).unwrap();
         }
         assert!(clipboard::load_from(&d.join("index.json")).is_empty());
-        assert!(store::usage_in(&d.join("usage")).is_empty());
         assert!(app_choice::read(&d.join("app-choices")).is_empty());
         assert!(kept::folders_read(&d.join("file-chooser-folders")).is_empty());
         assert!(colours::load_from(&d.join("colours")).is_empty());
@@ -155,10 +154,10 @@ mod tests {
             assert!(!d.join(name).exists() && d.join(format!("{name}.damaged")).exists(), "{name}");
         }
         let said = take_notes();
-        for what in [clipboard::DAMAGED, store::USAGE_DAMAGED, app_choice::DAMAGED, kept::folders_damaged(), "Eye dropper colours", text::store::recent_damaged()] {
+        for what in [clipboard::damaged(), app_choice::damaged(), kept::folders_damaged(), "Eye dropper colours", text::store::recent_damaged()] {
             assert!(said.contains(&words(what)), "{what}");
         }
-        assert_eq!(words("Clipboard history"), "Clipboard history reset: file damaged, kept beside it.");
+        assert_eq!(words("Clipboard history"), "Clipboard history was reset, because its file was damaged. The damaged file has been kept next to it.");
     }
 
     #[test]

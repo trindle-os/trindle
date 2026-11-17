@@ -8,25 +8,25 @@ settings-audio-title = Audio
 settings-audio-keywords = sonido volumen altavoces auriculares cascos micrófono mic silenciar probar
 
 # Introduction under the heading of the audio page, and the words behind the page i.
-settings-audio-help = Elige qué altavoces o auriculares reproducen el sonido y qué micrófono escucha.
+settings-audio-help = Elige qué altavoces o auriculares reproducen el sonido y qué micrófono usar.
 
 # Red sentence at the top of the page when PipeWire, the sound system, is not installed.
-settings-audio-top-missing = No hay sonido: PipeWire no está instalado.
+settings-audio-top-missing = No hay sonido porque PipeWire no está instalado.
 
 # Red sentence at the top of the page when PipeWire is installed but not answering.
-settings-audio-top-failed = No hay sonido: PipeWire no responde.
+settings-audio-top-failed = No hay sonido porque PipeWire, el servicio de sonido, no responde.
 
 # Red sentence at the top of the page when there are no speakers or headphones.
-settings-audio-top-no-output = No se encontraron altavoces ni auriculares.
+settings-audio-top-no-output = No hay altavoces ni auriculares.
 
 # Plain sentence at the top of the page while the page is still finding out about sound.
-settings-audio-top-listening = Escuchando sonido…
+settings-audio-top-listening = Comprobando el sonido…
 
 # Warning at the top of the page when sound is muted; { $device } is the speakers or headphones.
-settings-audio-top-muted = El sonido está silenciado, así que { $device } no suena.
+settings-audio-top-muted = { $device } está silenciado.
 
 # Warning at the top of the page when the volume is at nothing; { $device } is the speakers or headphones.
-settings-audio-top-down = El volumen está al mínimo, así que { $device } no suena.
+settings-audio-top-down = El volumen de { $device } está al mínimo.
 
 # Sentence at the top of the page when all is well; { $device } is the speakers or headphones and { $percent } the volume.
 settings-audio-top-playing = El sonido se reproduce por { $device } al { $percent }%.
@@ -38,10 +38,10 @@ settings-audio-out-title = Altavoces y auriculares
 settings-audio-in-title = Micrófono
 
 # Heading of the line shown when no speakers or headphones are found.
-settings-audio-out-none = No hay dispositivos de salida
+settings-audio-out-none = No se encontraron altavoces
 
 # Heading of the line shown when no microphone is found.
-settings-audio-in-none = No hay dispositivos de entrada
+settings-audio-in-none = No hay micrófono
 
 # Small words under that line for speakers.
 settings-audio-out-plug = Conecta altavoces o auriculares.
@@ -52,17 +52,11 @@ settings-audio-in-plug = Conecta un micrófono o unos auriculares con micrófono
 # Heading of the line with the list of devices.
 settings-audio-device = Dispositivo
 
-# Small words under the device line for speakers.
-settings-audio-out-device-about = Dónde suena el sonido.
-
-# Small words under the device line for microphones.
-settings-audio-in-device-about = Lo que escucha.
-
 # Name of the list of speakers and headphones.
 settings-audio-out-device-name = Dónde suena el sonido
 
 # Name of the list of microphones.
-settings-audio-in-device-name = Lo que escucha
+settings-audio-in-device-name = Micrófono
 
 # Heading of the volume line.
 settings-audio-volume = Volumen
@@ -82,32 +76,20 @@ settings-audio-out-mute-name = Silenciar el sonido
 # Name of the switch that mutes the microphone.
 settings-audio-in-mute-name = Silenciar el micrófono
 
-# Small words under the mute line for the speakers.
-settings-audio-mute-out-about = En silencio, conservando el volumen.
-
-# Small words under the mute line for the microphone.
-settings-audio-mute-in-about = No se oye nada mientras está activado.
-
 # Heading of the line that plays a test sound.
 settings-audio-test = Probar
-
-# Small words under the test line.
-settings-audio-test-about = Reproduce un timbre corto por este dispositivo.
 
 # Name of the button that plays a test sound.
 settings-audio-test-button = Reproducir un sonido de prueba
 
 # Words behind the i of the speakers card.
-settings-audio-out-about = Elige qué altavoces o auriculares reproducen el sonido. El volumen y el silencio de aquí son los mismos que las teclas del teclado y el círculo de sonido del anillo.
+settings-audio-out-about = Elige qué altavoces o auriculares reproducen el sonido. El volumen y el silencio de aquí funcionan igual que las teclas de tu teclado y el círculo de sonido del anillo.
 
 # Heading of the line with the microphone level bar.
 settings-audio-level = Nivel
 
-# Small words under the level line.
-settings-audio-level-about = Habla y la barra se mueve cuando te oye.
-
 # Words behind the i of the microphone card.
-settings-audio-in-about = Elige qué micrófono escucha. La barra de nivel sigue lo que oye mientras esta página está abierta; no se graba ni se guarda nada.
+settings-audio-in-about = Elige qué micrófono usar. Mientras esta página está abierta, la barra muestra el sonido que capta. Trindle no graba ni guarda nada.
 
 # Title of the card shown when PipeWire is not answering.
 settings-audio-failed-title = Sonido
@@ -116,19 +98,19 @@ settings-audio-failed-title = Sonido
 settings-audio-failed-heading = PipeWire no responde
 
 # Small words under that line.
-settings-audio-failed-about = Puede que el sonido no se haya iniciado en esta sesión.
+settings-audio-failed-about = Puede que el sonido no se haya iniciado cuando iniciaste sesión.
 
 # Red words under the volume line when the volume could not be changed.
-settings-audio-no-volume = No se pudo cambiar el volumen. Puede que el sonido no se haya iniciado; cierra sesión y vuelve a entrar, y luego inténtalo de nuevo.
+settings-audio-no-volume = Trindle no pudo cambiar el volumen. Puede que el sonido no se haya iniciado. Cierra sesión y vuelve a entrar, y luego inténtalo de nuevo.
 
 # Red words under the mute line when the sound could not be muted.
-settings-audio-no-mute = No se pudo silenciar el sonido. Puede que el sonido no se haya iniciado; cierra sesión y vuelve a entrar, y luego inténtalo de nuevo.
+settings-audio-no-mute = Trindle no pudo silenciar el sonido. Puede que el sonido no se haya iniciado. Cierra sesión y vuelve a entrar, y luego inténtalo de nuevo.
 
 # Red words under the mute line when the sound could not be turned back on.
-settings-audio-no-unmute = No se pudo volver a activar el sonido. Puede que el sonido no se haya iniciado; cierra sesión y vuelve a entrar, y luego inténtalo de nuevo.
+settings-audio-no-unmute = Trindle no pudo volver a activar el sonido. Puede que el sonido no se haya iniciado. Cierra sesión y vuelve a entrar, y luego inténtalo de nuevo.
 
 # Red words under the device line when the device could not be chosen.
-settings-audio-not-chosen = No se pudo elegir ese dispositivo.
+settings-audio-not-chosen = No se pudo cambiar a ese dispositivo.
 
 # Red words under the test line when the test sound would not play.
 settings-audio-test-failed = El sonido de prueba no se reprodujo por este dispositivo.
@@ -156,15 +138,14 @@ settings-audio-kind-speakers = altavoces
 # Heading of the line shown while Bluetooth plays the sound.
 settings-audio-bt-now = El sonido va a Bluetooth
 
-# Words under that heading.
-settings-audio-bt-now-about = Cambia a los altavoces; Bluetooth sigue conectado.
-
 # Tooltip of the button that moves the sound to the speakers; { $device } is the speakers, kind included.
 settings-audio-use-speakers = Reproducir por { $device }
 
 # Heading of the line when Bluetooth devices are connected but have no sound output; { $names } lists them.
-settings-audio-bt-silent = { $names }: conectado, pero sin salida de sonido.
+settings-audio-bt-silent = { $names }: conectado, pero no puede reproducir sonido.
 
 # Words under that heading.
-settings-audio-bt-silent-about = Puede que su perfil de sonido esté desactivado. Desconéctalo y vuelve a conectarlo.
+settings-audio-bt-silent-about = Puede que su sonido no esté configurado. Desconéctalo y vuelve a conectarlo.
 
+# Red words when the sound devices could not be read.
+settings-audio-not-read = Trindle no encontró los dispositivos de sonido.

@@ -3,13 +3,13 @@
 ## Quick pages (src/ring/quick/)
 
 # Tip of the pin button on a clipboard or notification item that is not pinned: keeps it for good.
-ring-quick-pin = Pin: keep it for good
+ring-quick-pin = Pin it to keep it
 # Tip of the pin button on a clipboard or notification item that is pinned.
 ring-quick-unpin = Unpin
 # Tip of the bin button that forgets one clipboard item or notification; it asks twice.
 ring-quick-forget-one = Forget this one
 # Tip of the bin button that forgets everything on the page except what is pinned; it asks twice.
-ring-quick-forget-all = Forget everything but the pinned ones
+ring-quick-forget-all = Clear everything except pinned items
 # Name of the volume slider for the speakers on the sound page.
 ring-quick-speakers = Speakers
 # Name of the volume slider for the microphone on the sound page.
@@ -55,7 +55,7 @@ ring-quick-bt-switch = Bluetooth
 # Line on the Bluetooth page when Bluetooth is switched off.
 ring-quick-bt-off = Bluetooth is off.
 # Line on the Bluetooth page while it looks for devices and none is found yet.
-ring-quick-bt-searching = Searching... put the device into pairing mode.
+ring-quick-bt-searching = Searching… Put the device into pairing mode.
 # Tip of the button beside a connected Bluetooth device that disconnects it.
 ring-quick-bt-disconnect = Disconnect
 # Tip of the button beside a paired Bluetooth device that connects it.
@@ -65,21 +65,21 @@ ring-quick-bt-pair = Pair and connect
 # Name used for a Bluetooth device that has no name of its own.
 ring-quick-bt-device = Bluetooth device
 # Line under the Bluetooth page while pairing with a device.
-ring-quick-bt-pairing = Pairing with { $name }...
+ring-quick-bt-pairing = Pairing with { $name }…
 # Line under the Bluetooth page while connecting a device.
-ring-quick-bt-connecting = Connecting { $name }...
+ring-quick-bt-connecting = Connecting { $name }…
 # Line under the Bluetooth page while disconnecting a device.
-ring-quick-bt-disconnecting = Disconnecting { $name }...
+ring-quick-bt-disconnecting = Disconnecting { $name }…
 # Line under the Bluetooth page when connecting or disconnecting did not work.
-ring-quick-bt-failed = That did not work. Is it switched on and near by?
+ring-quick-bt-failed = That didn't work. Is it switched on and nearby?
 # Line under the Bluetooth page when pairing failed because the codes were not accepted.
-ring-quick-bt-codes = Not paired: the codes were not accepted.
+ring-quick-bt-codes = Couldn't pair. The codes didn't work.
 # Line under the Bluetooth page when pairing failed.
-ring-quick-bt-not-paired = Not paired. Is it in pairing mode and near by?
+ring-quick-bt-not-paired = It didn't pair. Is it in pairing mode and nearby?
 # Line under the Bluetooth page when pairing worked but connecting did not.
-ring-quick-bt-paired-not-connected = Paired, but it did not connect. Try again in a moment.
+ring-quick-bt-paired-not-connected = It paired, but it didn't connect. Try again in a moment.
 # Question in the ring when a Bluetooth device wants a PIN typed.
-ring-quick-bt-ask-pin = Type the PIN for this device. It is often in its instructions, or 0000.
+ring-quick-bt-ask-pin = Type the PIN for this device. You can often find it in the device's instructions, or try 0000.
 # Typing box for the PIN of a Bluetooth device, shown quietly while empty.
 ring-quick-bt-pin-box = PIN
 # Button in the ring that sends the PIN and pairs, or agrees to pair.
@@ -101,7 +101,7 @@ ring-quick-wifi-switch = Wi-Fi
 # Line on the Wi-Fi page when Wi-Fi is switched off.
 ring-quick-wifi-off = Wi-Fi is off.
 # Line on the Wi-Fi page while it looks for networks.
-ring-quick-wifi-looking = Looking for networks...
+ring-quick-wifi-looking = Looking for networks…
 # Tip of the button beside the Wi-Fi network in use that leaves it.
 ring-quick-wifi-disconnect = Disconnect
 # Tip of the button beside a Wi-Fi network that joins it.
@@ -111,17 +111,19 @@ ring-quick-wifi-password-box = Password
 # Button in the ring that joins a Wi-Fi network with the typed password.
 ring-quick-wifi-join = Join
 # Line under the Wi-Fi page while joining a network.
-ring-quick-wifi-joining = Joining { $ssid }...
+ring-quick-wifi-joining = Joining { $ssid }…
 # Question text in the ring when the Wi-Fi password was not accepted.
-ring-quick-wifi-wrong-password = That password did not work.
+ring-quick-wifi-wrong-password = That password didn't work.
 # Line under the Wi-Fi page when joining failed and the system gave no reason.
-ring-quick-wifi-failed = Could not join.
+ring-quick-wifi-failed = Couldn't join.
+# Line under the Wi-Fi page when leaving the network did not work.
+ring-quick-wifi-leave-failed = Couldn't disconnect.
 # Line on the battery page when the computer has no battery.
 ring-quick-battery-none = No battery in this computer.
 # Line under a quick page when the screen has no brightness control.
 ring-quick-brightness-fixed = This screen's brightness can't be changed from here
 # Line on the clipboard page when nothing has been copied yet.
-ring-quick-clip-empty = Nothing copied yet. What you copy is kept here.
+ring-quick-clip-empty = Nothing copied yet.
 # Line on the clipboard page for a copied picture.
 ring-quick-clip-picture = A picture
 # Tip of the button that copies a clipboard item again.
@@ -129,7 +131,7 @@ ring-quick-clip-again = Copy this again
 # Typing box at the top of the clipboard page that filters the items, shown quietly while empty.
 ring-quick-clip-filter = Filter
 # Line on the notifications page when nothing has been said yet.
-ring-quick-notes-empty = Nothing has been said yet.
+ring-quick-notes-empty = No notifications yet.
 # Tip of the button on one notification's page that goes back to the list.
 ring-quick-notes-back = Back to all notifications
 # Tip of the copy button for a moment after it was pressed.
@@ -141,7 +143,7 @@ ring-quick-charging-full = Charging: full in about { $time }
 # Line on the battery page while charging, when the time is not known.
 ring-quick-charging = Charging
 # Line on the battery page on battery, with the time left and the power in watts.
-ring-quick-on-battery-left = On battery: about { $time } left, using { $rate } W
+ring-quick-on-battery-left = On battery power. About { $time } left, using { $rate } W.
 # Line on the battery page on battery, when the time is not known.
 ring-quick-on-battery = On battery
 # Line on the battery page when the battery is full.
@@ -151,9 +153,9 @@ ring-quick-plugged = Plugged in, not charging
 # Line on the battery page about how much charge the battery still holds. The health is good, worn, or something else for worn out.
 ring-quick-health =
     { $how ->
-        [good] Health: good. It holds { $capacity }% of what it did when new.
-        [worn] Health: worn. It holds { $capacity }% of what it did when new.
-       *[old] Health: worn out: time for a new one. It holds { $capacity }% of what it did when new.
+        [good] The battery is in good health. It can now store { $capacity }% of the charge it could when new.
+        [worn] The battery is worn. It can now store { $capacity }% of the charge it could when new.
+       *[old] The battery is worn out, so it's time for a new one. It can now store { $capacity }% of the charge it could when new.
     }
 # Line on the battery page about how many times the battery has been charged.
 ring-quick-cycles =
@@ -162,9 +164,9 @@ ring-quick-cycles =
        *[other] Charged { $cycles } times.
     }
 # Tip of the button that turns notification circles off.
-ring-quick-notes-on = Notifications are on: turn them off
+ring-quick-notes-on = Notifications on. Switch them off
 # Tip of the button that turns notification circles back on.
-ring-quick-notes-off = Notifications are off: turn them on
+ring-quick-notes-off = Notifications off. Switch them on
 # A time of under an hour on the battery page.
 ring-quick-minutes = { $m } min
 # A time of whole hours on the battery page.

@@ -28,8 +28,9 @@ const BEST_EFFORT: &[(&str, &str, &str, &str)] = &[
     ("refresh.rs", "collect_aps", NO_BUS, "part of the same refresh"),
     ("refresh.rs", "scan", NOT_LOOKED_AT, "asks for a fresh look for networks as the page opens; the list in hand is shown either way"),
     ("power.rs", "shown", THROWN_AWAY, "listens for the battery changing; without it the battery is read as the page opens"),
+    ("looking.rs", "play", THROWN_AWAY, "a film's thread that failed says it is over all the same, and the preview stops"),
+    ("display.rs", "idle", NOT_LOOKED_AT, "the tests' stand-in for the desktop, which asks and keeps nothing"),
 
-    ("audio.rs", "test_sound", THROWN_AWAY, "makes the scratch folder; the test sound says so if it then cannot play"),
     ("audio.rs", "stop", THROWN_AWAY, "ends the microphone meter as the page closes"),
     ("bluetooth.rs", "hidden", NOT_LOOKED_AT, "hands the pairing agent back as the page closes"),
     ("bluetooth.rs", "ask_bluez", NOT_LOOKED_AT, "offers BlueZ this page's pairing agent; refused, pairing is asked in the ring instead"),
@@ -41,7 +42,6 @@ const BEST_EFFORT: &[(&str, &str, &str, &str)] = &[
     ("fonts_icons.rs", "icon_set", STARTED_UNSEEN, "asks the ring to redraw with the new icons"),
     ("ring.rs", "voice_change", STARTED_UNSEEN, "asks the ring to take up voice"),
     ("ring.rs", "save_and_restart", STARTED_UNSEEN, "asks the ring to take up the change"),
-
 ];
 
 fn pages() -> Vec<PathBuf> {

@@ -13,13 +13,13 @@ chosen-act-name-empty = Ad boş olamaz.
 chosen-act-name-slash = Ad eğik çizgi içeremez.
 
 # Red words under a name being typed when it is . or ..
-chosen-act-name-kept = Bu ad sistem için ayrılmıştır.
+chosen-act-name-kept = Bu adı sistem kullanıyor.
 
 # Red words under a name being typed when it is too long.
 chosen-act-name-long = Bu ad çok uzun.
 
 # Red words under the name box, and at the foot of Folders, when a rename fails: the item's name, then the reason.
-chosen-inplace-not-renamed = { $name } yeniden adlandırılamadı: { $why }.
+chosen-inplace-not-renamed = Trindle { $name } adını değiştiremedi: { $why }.
 
 # Red words under the name box, and at the foot of Folders, when a name is already used in that place; the kind is the word folder or file.
 chosen-inplace-taken =

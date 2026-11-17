@@ -2,7 +2,6 @@
 //! launcher named and iconed from its embedded .desktop and .DirIcon.
 
 use crate::toolkit::t;
-use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 
@@ -58,8 +57,9 @@ pub fn found() -> Vec<PathBuf> {
 }
 
 fn extract(path: &Path, pattern: &str, into: &Path) {
-    let child = Command::new(path).args(["--appimage-extract", pattern]).current_dir(into)
-        .stdout(Stdio::null()).stderr(Stdio::null()).spawn();
+    let Some(boxed) = crate::common::run::find("trindle-boxed") else { return };
+    let child = Command::new(boxed).arg("--appimage-read").arg(path).arg(into).arg(pattern)
+        .stdin(Stdio::null()).stdout(Stdio::null()).stderr(Stdio::null()).spawn();
     if let Ok(mut c) = child {
 
         for _ in 0..200 {
@@ -69,6 +69,7 @@ fn extract(path: &Path, pattern: &str, into: &Path) {
             std::thread::sleep(std::time::Duration::from_millis(100));
         }
         let _ = c.kill();
+        let _ = c.wait();
     }
 }
 
@@ -153,6 +154,10 @@ pub fn exec_line(path: &Path) -> String {
     format!("trindle-boxed --appimage \"{}\" %U", path.display())
 }
 
+pub fn start_words(path: &Path) -> [String; 3] {
+    ["trindle-boxed".into(), "--appimage".into(), path.display().to_string()]
+}
+
 pub fn launcher_for(path: &Path) -> PathBuf {
     launchers().join(format!("{PREFIX}{}.desktop", slug(&path.file_name().unwrap_or_default().to_string_lossy())))
 }
@@ -161,13 +166,6 @@ pub fn sync() -> usize {
     let _ = std::fs::create_dir_all(launchers());
     let mut wanted = std::collections::HashSet::new();
     for path in found() {
-        if let Ok(meta) = std::fs::metadata(&path) {
-            let mut perms = meta.permissions();
-            if perms.mode() & 0o100 == 0 {
-                perms.set_mode(perms.mode() | 0o755);
-                let _ = std::fs::set_permissions(&path, perms);
-            }
-        }
         let target = launcher_for(&path);
         wanted.insert(target.file_name().unwrap_or_default().to_string_lossy().to_string());
         let mtime = std::fs::metadata(&path).and_then(|m| m.modified()).ok()
@@ -209,24 +207,16 @@ pub fn add(source: &Path) -> std::io::Result<Put> {
     } else {
         crate::common::copies::copy_in(source, &store(), name)?
     };
-    if let Put::Made(at) | Put::Already(at) = &put {
-        ready(at)?;
+    if matches!(put, Put::Made(_) | Put::Already(_)) {
+        sync();
     }
     Ok(put)
 }
 
 pub fn replace(taken: &Taken) -> std::io::Result<PathBuf> {
     crate::common::copies::replace(taken)?;
-    ready(&taken.there)?;
-    Ok(taken.there.clone())
-}
-
-fn ready(dest: &Path) -> std::io::Result<()> {
-    let mut perms = std::fs::metadata(dest)?.permissions();
-    perms.set_mode(perms.mode() | 0o755);
-    std::fs::set_permissions(dest, perms)?;
     sync();
-    Ok(())
+    Ok(taken.there.clone())
 }
 
 pub fn remove(path: &Path) -> std::io::Result<()> {
@@ -256,6 +246,12 @@ mod tests {
         let words = crate::common::keyfile::command_words(&line).unwrap();
         assert_eq!(words[..2], ["trindle-boxed", "--appimage"]);
         assert_eq!(words[2], "/home/john/.appimage/Obsidian-1.6.7-x86_64.AppImage");
+    }
+
+    #[test]
+    fn open_starts_the_file_in_its_box() {
+        let words = super::start_words(std::path::Path::new("/home/john/.appimage/A.AppImage"));
+        assert_eq!(words, ["trindle-boxed", "--appimage", "/home/john/.appimage/A.AppImage"]);
     }
 
     #[test]

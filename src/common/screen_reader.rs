@@ -1,55 +1,28 @@
-//! The screen reader: the one place Trindle's own reader will plug in.
+//! The screen reader: the one place Trindle asks about its own reader.
 
+use crate::toolkit::t;
 use super::files::{set_setting, setting};
 
 pub const KEY: &str = "screen_reader";
 
-pub const NONE_YET: &str = "No screen reader is installed.";
+pub fn none_yet() -> &'static str { t!("common-reader-none-yet") }
 
-pub trait Backend: Sync {
-    fn is_installed(&self) -> bool;
-    fn is_running(&self) -> bool;
-    fn start(&self);
-    fn stop(&self);
-}
-
-const EXE: &str = "/usr/lib/trindle/plugins/org.trindle.ScreenReader/bin/trindle-screen-reader";
-
-struct Reader;
-
-impl Backend for Reader {
-    fn is_installed(&self) -> bool {
-        std::path::Path::new(EXE).is_file()
-    }
-    fn is_running(&self) -> bool {
-        std::process::Command::new(EXE).arg("status").stdout(std::process::Stdio::null()).status().is_ok_and(|s| s.success())
-    }
-    fn start(&self) {
-        super::run::spawn(&[EXE, "start"]);
-    }
-    fn stop(&self) {
-        super::run::spawn(&[EXE, "stop"]);
-    }
-}
-
-const BACKEND: Option<&dyn Backend> = Some(&Reader);
+pub const EXE: &str = "/usr/lib/trindle/plugins/org.trindle.ScreenReader/bin/trindle-screen-reader";
 
 pub fn on() -> bool {
     setting(KEY) == "on"
 }
 
 pub fn installed() -> bool {
-    BACKEND.is_some_and(|b| b.is_installed())
+    std::path::Path::new(EXE).is_file()
 }
 
 pub fn running() -> bool {
-    BACKEND.is_some_and(|b| b.is_running())
+    std::process::Command::new(EXE).arg("status").stdout(std::process::Stdio::null()).status().is_ok_and(|s| s.success())
 }
 
 pub fn start() {
-    if let Some(b) = BACKEND {
-        b.start();
-    }
+    super::run::spawn(&[EXE, "start"]);
 }
 
 pub fn start_for_login() {
@@ -63,9 +36,7 @@ fn login_command() -> [&'static str; 5] {
 }
 
 pub fn stop() {
-    if let Some(b) = BACKEND {
-        b.stop();
-    }
+    super::run::spawn(&[EXE, "stop"]);
 }
 
 pub fn set(on: bool, own: bool) -> std::io::Result<()> {
@@ -90,7 +61,7 @@ fn turn(on: bool, mark: impl Fn(bool) -> std::io::Result<()>, save: impl Fn(bool
         mark(true)?;
         if let Err(e) = save(true) {
             return Err(match mark(false) {
-                Err(undo) => std::io::Error::new(e.kind(), format!("{e}; and its mark could not be taken away again: {undo}")),
+                Err(undo) => std::io::Error::new(e.kind(), t!("common-screen-reader-undo-failed", error = e.to_string(), undo = undo.to_string()).to_string()),
                 Ok(()) => e,
             });
         }
@@ -155,7 +126,7 @@ mod tests {
 
     #[test]
     fn the_words_say_none_is_installed_and_installed_follows_the_file() {
-        assert!(super::NONE_YET.contains("No screen reader"));
+        assert!(super::none_yet().contains("No screen reader"));
         assert_eq!(super::installed(), std::path::Path::new(super::EXE).is_file());
     }
 

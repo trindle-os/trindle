@@ -15,11 +15,24 @@ pub(crate) fn read_flatpaks(s: &mut Store, cached: bool, then: impl FnOnce(&mut 
         }
         then(s);
     });
-    let mut argv = vec!["flatpak", "remote-ls", "--user", "--updates", "--columns=ref,origin,version,download-size,name"];
+    asked_in_both(cached, move |ok, out| back((ok, out)));
+}
+
+fn asked_in_both(cached: bool, done: impl FnOnce(bool, String) + 'static) {
+    run::capture(&crate::store::progress::english(&remote_ls_argv("--user", cached)), None, move |ok, mut out, _| {
+        run::capture(&crate::store::progress::english(&remote_ls_argv("--system", cached)), None, move |ok_system, more, _| {
+            out.push_str(&more);
+            done(ok && ok_system, out);
+        });
+    });
+}
+
+pub(super) fn remote_ls_argv(installation: &'static str, cached: bool) -> Vec<&'static str> {
+    let mut argv = vec!["flatpak", "remote-ls", installation, "--updates", "--columns=ref,origin,version,download-size,name"];
     if cached {
         argv.push("--cached");
     }
-    run::capture(&argv, None, move |ok, out, _| back((ok, out)));
+    argv
 }
 
 pub(super) fn flatpaks_heard(s: &mut Store, cached: bool, ok: bool, out: &str) -> bool {
@@ -61,7 +74,7 @@ pub(super) fn read_system(s: &mut Store, then: impl FnOnce(&mut Store) + 'static
             });
             let mut argv = vec!["apt-cache", "show", "--no-all-versions"];
             argv.extend(names.iter().map(String::as_str));
-            run::capture(&argv, None, move |_, out, _| back(out));
+            run::capture(&crate::store::progress::english(&argv), None, move |_, out, _| back(out));
         }));
     }));
 }

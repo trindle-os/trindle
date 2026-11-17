@@ -1,0 +1,6 @@
+extends: existence
+message: "Clipped note style ('%s'); write a whole sentence."
+level: warning
+scope: raw
+tokens:
+  - '(?m)^(?:Rejected|Refused|Off|On|Not saved|Can''t \w+|Failed|Kept|Left as is): '

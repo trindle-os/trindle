@@ -1,17 +1,24 @@
-//! Blocking: adverts and bad sites kept out for the whole computer, and name
-//! lookups made private, on one switch. The work is done by trindle-dns; see
-//! common/dns.rs. The page reads what it last wrote, once a second while on
-//! screen.
+//! Firewall and blocking: everything that keeps things out. The firewall's
+//! switch first, then the ports opened by hand and sharing with other
+//! computers at home, then adverts and bad sites kept out for the whole
+//! computer and name lookups made private, on one switch (trindle-dns; see
+//! common/dns.rs). The page reads what it last wrote, once a second while
+//! on screen.
+
+mod ports;
+mod sharing;
+#[cfg(test)]
+mod firewall_tests;
 
 use crate::common::dns::{self, Private, Provider, Status};
-use crate::common::run::{admin_error, admin_helper, capture};
-use crate::settings::panels::network::banded;
-use crate::settings::ui::{dropdown, group, headline, line, on, page, Kit, Msg, Page};
+use crate::toolkit::widget::banded_list;
+use crate::settings::ui::{admin_step, dropdown, group, headline, line, on, page, Kit, Msg, Page};
 use crate::toolkit::t;
 use crate::toolkit::tiles::stat;
 use crate::toolkit::widget::{button, column, entry, scroll, switch, Length, Node};
 
 const SWITCH: &str = "blocking:switch";
+const FIREWALL: &str = "blocking:firewall";
 const PROVIDER: &str = "blocking:provider";
 const ADD: &str = "blocking:add";
 
@@ -27,12 +34,27 @@ fn fitted(key: &str, rows: Vec<Node<Msg>>, lines: usize) -> Node<Msg> {
 
 #[derive(Default)]
 pub struct Blocking {
+
+    firewall: bool,
+
+    not_in_force: bool,
+
+    sharing: bool,
+
+    shared: Option<Result<Vec<crate::common::sharing::Shared>, crate::common::sharing::Problem>>,
+
+    own_ports: Vec<crate::common::firewall::Door>,
+
+    port_typed: String,
+    port_proto: usize,
     on: bool,
     busy: bool,
     status: Option<Status>,
     provider: Option<Provider>,
     allowed: Vec<String>,
     typed: String,
+
+    minute: u64,
 }
 
 fn ago(then: u64, now: u64) -> String {
@@ -50,41 +72,71 @@ fn now() -> u64 {
 }
 
 impl Blocking {
+
+    fn look_at(&mut self, minute: u64) -> bool {
+        if self.busy {
+            return false;
+        }
+        let before = (self.firewall, self.sharing, self.own_ports.clone(), self.on, self.status.clone(), self.provider, self.allowed.clone());
+        self.look();
+        let moved = self.status.is_some() && std::mem::replace(&mut self.minute, minute) != minute;
+        moved || before != (self.firewall, self.sharing, self.own_ports.clone(), self.on, self.status.clone(), self.provider, self.allowed.clone())
+    }
+
     fn look(&mut self) {
+        self.firewall = crate::common::firewall::on();
+        self.sharing = crate::common::firewall::sharing();
+        self.read_ports();
         self.on = dns::on();
         self.status = if self.on { dns::status() } else { None };
         self.provider = Some(dns::provider());
         self.allowed = dns::allowed();
     }
 
-    fn admin(&mut self, kit: &mut Kit, key: &'static str, args: Vec<String>, success: &'static str) {
+    fn admin(&mut self, kit: &mut Kit, key: &'static str, args: &[&str], success: &'static str) {
         self.busy = true;
-        let back = kit.then::<Blocking, (bool, String, String)>(move |me, k, (ok, _, err)| {
+        admin_step::<Blocking>(kit, key, args, t!("settings-blocking-waiting"), success, |me, _, _| {
             me.busy = false;
-            let err = admin_error(&err);
-            k.done(key, if ok { None } else { Some(&err) }, success);
             me.look();
         });
-        let helper = admin_helper();
-        let mut argv = vec!["pkexec", helper.as_str()];
-        argv.extend(args.iter().map(String::as_str));
-        capture(&argv, None, move |ok, out, err| back((ok, out, err)));
+    }
+
+    fn set_firewall(&mut self, kit: &mut Kit, on: bool) {
+        self.firewall = on;
+
+        self.not_in_force = false;
+        self.admin(kit, FIREWALL, &["firewall", if on { "on" } else { "off" }],
+                   if on { t!("settings-firewall-done-on") } else { t!("settings-firewall-done-off") });
+    }
+
+    fn firewall_card(&self, kit: &Kit) -> Node<Msg> {
+        let toggle = switch(self.firewall, t!("settings-firewall-switch"), |v| on::<Blocking>(move |me, k| me.set_firewall(k, v)))
+            .off_because(crate::common::ui::wait_while(self.busy));
+        group(t!("settings-firewall")).icon("security-high-symbolic")
+            .about(t!("settings-firewall-about"))
+            .rows(vec![line(t!("settings-firewall-switch"))
+                .sub(match (self.firewall, self.not_in_force) {
+                    (true, true) => t!("settings-firewall-not-in-force"),
+                    (true, false) => "",
+                    (false, _) => t!("settings-firewall-off-sub"),
+                })
+                .key(FIREWALL).control(toggle).node(kit)])
+            .node(kit)
     }
 
     fn set(&mut self, kit: &mut Kit, on: bool) {
         self.on = on;
-        kit.say(SWITCH, t!("settings-blocking-waiting"), true, true);
-        self.admin(kit, SWITCH, vec![if on { "dns-on" } else { "dns-off" }.into()],
+        self.admin(kit, SWITCH, &[if on { "dns-on" } else { "dns-off" }],
                    if on { t!("settings-blocking-done-on") } else { t!("settings-blocking-done-off") });
     }
 
     fn choose(&mut self, kit: &mut Kit, p: Provider) {
         self.provider = Some(p);
-        self.admin(kit, PROVIDER, vec!["dns-provider".into(), p.key().into()], t!("settings-blocking-saved"));
+        self.admin(kit, PROVIDER, &["dns-provider", p.key()], t!("settings-blocking-saved"));
     }
 
     fn allow(&mut self, kit: &mut Kit, key: &'static str, site: String, add: bool) {
-        self.admin(kit, key, vec!["dns-allow".into(), if add { "add" } else { "remove" }.into(), site], t!("settings-blocking-saved"));
+        self.admin(kit, key, &["dns-allow", if add { "add" } else { "remove" }, &site], t!("settings-blocking-saved"));
     }
 
     fn add_typed(&mut self, kit: &mut Kit) {
@@ -96,7 +148,7 @@ impl Blocking {
         self.allow(kit, ADD, site, true);
     }
 
-    fn top(&self, kit: &Kit) -> Node<Msg> {
+    fn top(&self) -> Node<Msg> {
         let words = match &self.status {
             _ if !self.on => t!("settings-blocking-top-off").to_string(),
             None => t!("settings-blocking-top-starting").to_string(),
@@ -108,7 +160,7 @@ impl Blocking {
                 Private::Starting => t!("settings-blocking-top-on").to_string(),
             },
         };
-        headline(kit, words)
+        headline(words)
     }
 
     fn figures(&self) -> Vec<Node<Msg>> {
@@ -137,17 +189,21 @@ impl Blocking {
         ]
     }
 
+    fn still_blocked(&self) -> Vec<&String> {
+        self.status.as_ref().map(|s| s.recent.iter().filter(|n| !self.allowed.contains(n)).collect()).unwrap_or_default()
+    }
+
     fn recent(&self, kit: &Kit) -> Node<Msg> {
-        let names = self.status.as_ref().map(|s| s.recent.as_slice()).unwrap_or(&[]);
+        let names = self.still_blocked();
         let lines = names.len().max(1);
         let rows: Vec<Node<Msg>> = if names.is_empty() {
-            vec![line(t!("settings-blocking-nothing")).sub(t!("settings-blocking-nothing-sub")).node(kit)]
+            vec![line(t!("settings-blocking-nothing")).node(kit)]
         } else {
-            banded(names.iter().filter(|n| !self.allowed.contains(n)).map(|n| {
-                let site = n.clone();
+            banded_list(names.iter().map(|n| {
+                let site = n.to_string();
                 let through = button("list-add-symbolic", t!("settings-blocking-let-through")).off_because(crate::common::ui::wait_while(self.busy))
                     .on_press(on::<Blocking>(move |me, kit| me.allow(kit, ADD, site.clone(), true)));
-                line(n.clone()).control(through).node(kit)
+                line(n.to_string()).control(through).node(kit)
             }).collect())
         };
         group(t!("settings-blocking-recent")).icon("action-unavailable-symbolic")
@@ -163,9 +219,9 @@ impl Blocking {
             .on_submit(on::<Blocking>(|me, kit| me.add_typed(kit)));
         let add = button("list-add-symbolic", t!("settings-blocking-let-through")).off_because(crate::common::ui::wait_while(self.busy))
             .on_press(on::<Blocking>(|me, kit| me.add_typed(kit)));
-        let mut rows = vec![line(t!("settings-blocking-add")).sub(t!("settings-blocking-add-sub"))
+        let mut rows = vec![line(t!("settings-blocking-add"))
             .control(add).below(typed).key(ADD).node(kit)];
-        rows.extend(banded(self.allowed.iter().map(|s| {
+        rows.extend(banded_list(self.allowed.iter().map(|s| {
             let site = s.clone();
             let take = crate::toolkit::widget::remove("list-remove-symbolic", t!("settings-blocking-block-again")).key(format!("unallow:{site}")).off_because(crate::common::ui::wait_while(self.busy))
                 .on_press(on::<Blocking>(move |me, kit| me.allow(kit, ADD, site.clone(), false)));
@@ -195,33 +251,31 @@ impl Page for Blocking {
     fn help(&self) -> &'static str {
         t!("settings-blocking-help")
     }
-    fn shown(&mut self, _kit: &mut Kit) {
+    fn shown(&mut self, kit: &mut Kit) {
         self.look();
+
+        self.not_in_force = self.firewall && crate::common::run::text(&["systemctl", "show", "-p", "Result", "--value", "trindle-firewall.service"]).trim() != "success";
+        self.read_shared(kit);
     }
     fn second(&mut self, _kit: &mut Kit) -> bool {
-        if !self.busy {
-            self.look();
-        }
-        !self.busy
+        self.look_at(now() / 60)
     }
     fn view(&self, kit: &Kit) -> Node<Msg> {
 
-        let mut items = vec![self.top(kit)];
+        let mut items = vec![self.top(), self.firewall_card(kit), self.ports_card(kit), self.sharing_card(kit)];
         let toggle = switch(self.on, t!("settings-blocking-switch"), |v| on::<Blocking>(move |me, k| me.set(k, v)))
             .off_because(crate::common::ui::wait_while(self.busy));
         let options: Vec<String> = Provider::ALL.iter().map(|p| p.label().to_string()).collect();
         let chosen = self.provider.and_then(|p| Provider::ALL.iter().position(|&q| q == p));
-        let pick = dropdown(kit, PROVIDER, options, chosen, t!("settings-blocking-where"),
+        let pick = dropdown(PROVIDER, options, chosen, t!("settings-blocking-where"),
                             |i| on::<Blocking>(move |me, k| me.choose(k, Provider::ALL[i])));
-        items.push(group(t!("settings-blocking-title")).icon("security-high-symbolic")
+        items.push(group(t!("settings-blocking-card")).icon("action-unavailable-symbolic")
             .about(t!("settings-blocking-card-about"))
             .span(5, 7)
             .rows(vec![
                 line(t!("settings-blocking-switch"))
-                    .sub(t!("settings-blocking-switch-sub"))
                     .key(SWITCH).control(toggle).node(kit),
                 line(t!("settings-blocking-private"))
-                    .sub(t!("settings-blocking-private-sub"))
                     .key(PROVIDER).below(pick).node(kit),
             ])
             .node(kit));
@@ -230,7 +284,6 @@ impl Page for Blocking {
         items.push(self.recent(kit));
         items.push(self.let_through(kit));
         page(kit, self.title(), self.help(), items)
-
     }
 }
 
@@ -250,13 +303,37 @@ impl Blocking {
                               recent: ["ads.example.com", "tracker.example.net", "pixel.example.org", "metrics.example.com"]
                                   .iter().map(|s| s.to_string()).collect() };
         Blocking { on: true, busy: false, status: Some(status), provider: Some(Provider::Quad9),
-                   allowed: vec!["shop.example.com".into(), "news.example.org".into()], typed: String::new() }
+                   allowed: vec!["shop.example.com".into(), "news.example.org".into()], typed: String::new(),
+                   firewall: true, not_in_force: false, sharing: false,
+                   shared: Some(Ok(vec![crate::common::sharing::Shared { name: "photos".into(), path: "/home/john/Photos".into(),
+                                                                          write: false, guests: false }])),
+                   own_ports: vec![crate::common::firewall::parse_own("tcp:37666").unwrap()],
+                   port_typed: String::new(), port_proto: 0, minute: 0 }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::ago;
+    use super::{ago, Blocking};
+
+    #[test]
+    fn a_page_left_open_finds_nothing_new_each_second() {
+        let mut page = Blocking::default();
+        page.look_at(7);
+        let news: Vec<bool> = (0..5).map(|_| page.look_at(7)).collect();
+        assert!(news.iter().all(|n| !n), "an unchanged page was drawn again: {news:?}");
+    }
+
+    #[test]
+    fn sites_let_through_are_not_in_the_recently_blocked_list() {
+        let mut page = Blocking::made_up();
+        assert_eq!(page.still_blocked().len(), 4);
+        page.allowed = page.status.as_ref().unwrap().recent.clone();
+        assert!(page.still_blocked().is_empty());
+        page.status = None;
+        assert!(page.still_blocked().is_empty());
+    }
+
     use crate::common::thousands;
 
     #[test]

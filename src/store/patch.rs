@@ -107,7 +107,7 @@ pub fn to_refresh(carried: &[(String, String, String)], security: &HashMap<Strin
 }
 
 fn policy(package: &str) -> Vec<String> {
-    let out = Command::new("apt-cache").args(["policy", "--", package]).stderr(Stdio::null()).output();
+    let out = crate::common::run::parsed(&mut Command::new("apt-cache")).args(["policy", "--", package]).stderr(Stdio::null()).output();
     out.map(|o| security_versions(&String::from_utf8_lossy(&o.stdout))).unwrap_or_default()
 }
 
@@ -116,12 +116,12 @@ fn fetch(fix: &Fix, into: &Path) -> Result<String, String> {
     let ok = Command::new("apt-get").args(["download", "-q", "--", &format!("{}={}", fix.package, fix.new)])
         .current_dir(into).stdout(Stdio::null()).stderr(Stdio::null()).status().is_ok_and(|s| s.success());
     if !ok {
-        return Err(format!("{} {} could not be fetched", fix.package, fix.new));
+        return Err(crate::toolkit::t!("store-patch-not-fetched", package = &fix.package, version = &fix.new).to_string());
     }
     let deb = std::fs::read_dir(into).map_err(|e| e.to_string())?.flatten().map(|e| e.path())
         .find(|p| p.extension().is_some_and(|x| x == "deb") && parts::field_of(&parts::control_of(p), "Package") == fix.package)
-        .ok_or("the fetched package was not found")?;
-    let key = parts::make(&deb);
+        .ok_or_else(|| crate::toolkit::t!("store-patch-not-found").to_string())?;
+    let key = parts::make_from_apt(&deb);
     let _ = std::fs::remove_file(&deb);
     key
 }
@@ -180,8 +180,10 @@ fn refresh_box(name: &str, security: &HashMap<String, Vec<String>>, downloads: &
                 }
             },
         };
+        let arch = parts::field_of(&parts::control(&key), "Architecture");
         for k in keys.iter_mut() {
-            if parts::field_of(&parts::control(k), "Package") == fix.package {
+            let kept = parts::control(k);
+            if parts::field_of(&kept, "Package") == fix.package && parts::field_of(&kept, "Architecture") == arch {
                 *k = key.clone();
                 changed = true;
             }

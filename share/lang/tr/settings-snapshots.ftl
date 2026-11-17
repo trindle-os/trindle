@@ -9,10 +9,10 @@ settings-snap-keywords = anlık görüntü anlık görüntüler snapshot geri y�
 
 # Help line at the foot of the Snapshots page.
 # SAFETY: needs a human review before it ships
-settings-snap-help = Sistemin her yazılım değişikliğinden önceki ve sonraki hali ve siz bir tane aldığınızda. Birini geri yüklemek, bir sonraki başlatmadan itibaren tüm sistemi ona döndürür; ev klasörünün diskte kendine ait bir bölümü varsa (Trindle'ın kurucusu böyle yapar) kendi dosyalarınıza dokunulmaz. Bilgisayar başlamazsa önyükleme menüsünden Trindle anlık görüntüleri'ni seçin. Önceki sürümler, sistemin anlık görüntülerinden ayrı olarak herkesin kendi dosyalarının bir kopyasını her gün saklar.
+settings-snap-help = Anlık görüntü, sistemin bir kopyasıdır: her yazılım değişikliğinden önce ve sonra, bir de siz her aldığınızda alınır. Bir anlık görüntüyü geri yüklemek, bir sonraki yeniden başlatmada tüm sistemi eski haline döndürür. Ev klasörünüzün diskte kendine ait bir bölümü varsa (Trindle'ın kurucusu böyle kurar) kendi dosyalarınız olduğu gibi kalır. Bilgisayar açılmazsa önyükleme menüsünden Trindle anlık görüntüleri'ni seçin. Önceki sürümler, sistemin anlık görüntülerinden ayrı olarak herkesin kendi dosyalarının günlük bir kopyasını saklar.
 
 # Red words under the Earlier versions switch when a daily copy was skipped because the disk is nearly full.
-settings-snap-nearly-full = Kopya alınmadı: disk neredeyse dolu.
+settings-snap-nearly-full = Disk neredeyse dolu olduğu için Trindle kopya almadı.
 
 # Time of a snapshot taken today: { $time } is the hour and minute.
 settings-snap-today = bugün saat { $time }
@@ -30,7 +30,7 @@ settings-snap-not-restart = Bilgisayar yeniden başlatılamadı. Bunun yerine ha
 settings-snap-taking = Anlık görüntü alınıyor
 
 # Said beside the set aside line while the space is freed.
-settings-snap-freeing = Boşaltılıyor...
+settings-snap-freeing = Boşaltılıyor…
 
 # Said beside the set aside line once the space is freed.
 settings-snap-freed = Boşaltıldı
@@ -41,7 +41,7 @@ settings-snap-restoring = Geri yükleniyor
 
 # Said beside a snapshot once it is restored: { $n } is the snapshot's number.
 # SAFETY: needs a human review before it ships
-settings-snap-restored = Bir sonraki başlatmadan itibaren sistem { $n } numaralı anlık görüntü olacak. O zamandan beri değişen her şey bir kenara ayrılır, kaybolmaz.
+settings-snap-restored = Bir sonraki yeniden başlatmada sistem, { $n } numaralı anlık görüntüdeki haline dönecek. O zamandan beri değişen her şey bir kenara ayrılır, kaybolmaz.
 
 # Said beside a snapshot while it is deleted.
 # SAFETY: needs a human review before it ships
@@ -53,7 +53,7 @@ settings-snap-deleted = Silindi
 
 # Said beside a setting while the administrator's password is awaited.
 # SAFETY: needs a human review before it ships
-settings-snap-waiting = Parola bekleniyor...
+settings-snap-waiting = Parolanız bekleniyor…
 
 # Said beside the Earlier versions switch once it is turned on.
 settings-snap-copy-daily = Her gün bir kopya alınır
@@ -87,7 +87,7 @@ settings-snap-first-soon = İlki bir gün içinde alınır.
 settings-snap-they-take = { $size } yer kaplıyorlar, ölçüm zamanı: { $when }.
 
 # Under the number of earlier copies when their room has not been measured.
-settings-snap-measured-daily = Kapladıkları yer günde bir kez ölçülür.
+settings-snap-measured-daily = Kapladıkları yer her gün ölçülür.
 
 # Tip of the button that clears all earlier copies, and its label while working.
 # SAFETY: needs a human review before it ships
@@ -98,13 +98,13 @@ settings-snap-earlier = Önceki sürümler
 
 # Help text of the Earlier versions card (the information button).
 # SAFETY: needs a human review before it ships
-settings-snap-earlier-about = Trindle, herkesin dosyalarının her günkü halinin bir kopyasını saklayabilir; böylece bir dosyanın eski bir sürümü ya da yanlışlıkla silinmiş bir dosya Klasörler'den açılabilir ya da geri konabilir. Herkes bir kopyada yalnızca o gün okuyabildiğini okuyabilir, yani özel bir ev klasörü özel kalır; o gün başkalarına açık olan bir dosya da kopyada, kopya silinene kadar onlara açık kalır. Kopyalar sistemin anlık görüntülerinden ayrıdır: sistemi geri yüklemek dosyalarınızı asla değiştirmez, bunlar da sistemi değiştirmez. Bedeli yerdir: sildiğiniz ya da değiştirdiğiniz bir dosya, onu tutan son kopya gidene kadar yer kaplamaya devam eder, bu yüzden bir şeyleri silmek diski hemen boşaltmaz. Kopyaları temizlemek yeri şimdi boşaltır, bu bilgisayardaki herkes için, ve geri alınamaz. Disk neredeyse doluyken kopya alınmaz. Bunlardan herhangi birini değiştirmek bir yönetici parolası gerektirir.
+settings-snap-earlier-about = Trindle, herkesin dosyalarının günlük bir kopyasını saklayabilir. Böylece bir dosyanın eski bir sürümünü ya da yanlışlıkla sildiğiniz bir dosyayı Folders'tan açabilir ya da geri alabilirsiniz. Bir kopyada herkes yalnızca o gün görebildiklerini görür, yani özel ev klasörleri özel kalır. O gün başkalarına açık olan bir dosya da, kopya kaldırılana kadar o kopyada onlara açık kalır. Bu kopyalar sistemin anlık görüntülerinden ayrıdır ve biri ötekini değiştirmez. Disk alanı kullanırlar. Sildiğiniz ya da değiştirdiğiniz bir dosya, onu tutan son kopya kaldırılana kadar yer kaplamaya devam eder. Kopyaları temizlemek alanı hemen boşaltır, bu bilgisayardaki herkes için, ve geri alınamaz. Disk neredeyse doluyken kopya alınmaz. Bunlardan herhangi birini değiştirmek için bir yönetici parolası gerekir.
 
 # Label of the switch for keeping earlier versions, and heading of its line.
 settings-snap-keep-earlier = Dosyalarınızın önceki sürümlerini sakla
 
 # Under the keep earlier versions switch: { $time } is how long deleted files stay, such as a week.
-settings-snap-deleted-stay = Silinen dosyalar, yerleri boşaltılmadan önce { $time } kalır.
+settings-snap-deleted-stay = Silinen dosyalar { $time } saklanır, sonra yerleri boşaltılır.
 
 # Heading of the line with the list of how long each day's copy is kept.
 settings-snap-keep-each = Her günün kopyasını şu kadar sakla
@@ -113,19 +113,19 @@ settings-snap-keep-each = Her günün kopyasını şu kadar sakla
 settings-snap-how-long = Her günün kopyasının ne kadar saklanacağı
 
 # Headline of the Snapshots page while the snapshots are read.
-settings-snap-looking = Anlık görüntülere bakılıyor…
+settings-snap-looking = Anlık görüntüler denetleniyor…
 
 # Headline of the Snapshots page when the snapshots could not be read.
 settings-snap-not-read = Anlık görüntüler okunamadı.
 
 # Headline of the Snapshots page when the computer started from a snapshot: { $n } is its number.
-settings-snap-started-from = { $n } numaralı anlık görüntüden başlatıldı, bu yüzden şimdi yapılan hiçbir şey saklanmaz.
+settings-snap-started-from = { $n } numaralı anlık görüntüden başlattınız, bu yüzden şimdi yaptığınız hiçbir şey saklanmaz.
 
 # Headline of the Snapshots page: how many snapshots there are and { $when } the time of the newest.
 settings-snap-go-back =
     { $n ->
-        [one] Geri dönülecek { $n } anlık görüntü var, en yenisi { $when } tarihli.
-       *[other] Geri dönülecek { $n } anlık görüntü var, en yenisi { $when } tarihli.
+        [one] { $when } tarihli { $n } anlık görüntüye geri dönebilirsiniz.
+       *[other] { $n } anlık görüntüye geri dönebilirsiniz. En yenisi { $when } tarihli.
     }
 
 # Headline of the Snapshots page when there are none yet.
@@ -136,7 +136,7 @@ settings-snap-kept-until-deleted = { $what }, silinene kadar saklanır
 
 # Tip of the button that restores the system to a snapshot, and its label while working.
 # SAFETY: needs a human review before it ships
-settings-snap-restore-this = Sistemi buna geri yükle
+settings-snap-restore-this = Bu anlık görüntüyü geri yükle
 
 # Tip of the button that deletes a snapshot.
 # SAFETY: needs a human review before it ships
@@ -148,9 +148,6 @@ settings-snap-restart-now = Şimdi yeniden başlat
 # Under the heading when snapshots are not set up on a Btrfs computer.
 settings-snap-not-set-up-sub = Henüz kurulmadı.
 
-# Under the To have them heading when snapshots are not set up.
-settings-snap-reinstall = trindle paketini yeniden kurun.
-
 # Help text of the No snapshots card when snapshots are not set up on a Btrfs computer.
 settings-snap-not-set-up-about = Anlık görüntüler kurulu değil. trindle paketini yeniden kurmak onları kurar: sudo apt install --reinstall trindle.
 
@@ -158,10 +155,7 @@ settings-snap-not-set-up-about = Anlık görüntüler kurulu değil. trindle pak
 settings-snap-another-kind = başka bir tür
 
 # Under the heading when the computer does not use Btrfs: { $fs } is the kind it uses.
-settings-snap-need-btrfs = Btrfs gerekir; bu bilgisayar { $fs } kullanıyor.
-
-# Under the To have them heading when the computer does not use Btrfs.
-settings-snap-choose-btrfs = Debian'ı kurarken Btrfs'yi seçin.
+settings-snap-need-btrfs = Anlık görüntüler için Btrfs gerekir. Bu bilgisayar { $fs } kullanıyor.
 
 # Help text of the No snapshots card when the computer does not use Btrfs: { $fs } is the kind it uses.
 settings-snap-need-btrfs-about = Anlık görüntüler için sistemin Btrfs üzerinde olması gerekir ve bu bilgisayar { $fs } kullanıyor. Onlara sahip olmak için Debian'ı kurarken sistem için Btrfs'yi seçin.
@@ -175,11 +169,8 @@ settings-snap-no-snapshots-title = Anlık görüntü yok
 # Heading of the line shown when the computer has no snapshots.
 settings-snap-no-snapshots-line = Bu bilgisayarda anlık görüntü yok
 
-# Heading of the line saying how to have snapshots.
-settings-snap-to-have = Onlara sahip olmak için
-
 # Shown in place of the list while the snapshots are read.
-settings-snap-looking-short = Aranıyor…
+settings-snap-looking-short = Yükleniyor…
 
 # Heading of the line shown when the snapshots could not be read; the reason is under it.
 settings-snap-not-read-line = Anlık görüntüler okunamadı
@@ -187,31 +178,22 @@ settings-snap-not-read-line = Anlık görüntüler okunamadı
 # Heading of the line shown when there are no snapshots yet.
 settings-snap-none-line = Henüz yok
 
-# Under the None yet heading.
-settings-snap-none-line-sub = Her yazılım değişikliğinden önce bir tane alınır.
-
 # Help text of the Snapshots card (the information button).
 # SAFETY: needs a human review before it ships
-settings-snap-list-about = Her anlık görüntü, bir sonraki başlatmadan itibaren tüm sistemi o zamanki haline döndürebilir ya da silinebilir. İkisi de iki kez basılmasını ister ve bir yönetici parolası gerektirir. Geri yüklemeden sonra yanında yeniden başlatma düğmesi görünür.
+settings-snap-list-about = Her anlık görüntü, bir sonraki yeniden başlatmada tüm sistemi eski haline döndürebilir. Birini geri yüklemek ya da silmek için bir yönetici parolası gerekir.
 
 # Tip of the button that takes a snapshot now, and heading of its line.
 settings-snap-take-now = Şimdi anlık görüntü al
 
 # Under the Take a snapshot now heading when the computer started from a snapshot.
-settings-snap-not-while = Bir anlık görüntüden başlatılmışken olmaz.
-
-# Under the Take a snapshot now heading.
-settings-snap-kept-until-you = Siz silene kadar saklanır.
+settings-snap-not-while = Bunu yapmak için normal şekilde yeniden başlatın.
 
 # Heading of the line about systems set aside by restoring: how many there are.
 settings-snap-set-aside =
     { $n ->
-        [one] Geri yükleme ile kenara ayrılmış bir sistem
-       *[other] Geri yükleme ile kenara ayrılmış { $n } sistem
+        [one] Geri yüklemeden sonra kenara ayrılmış bir eski sistem
+       *[other] Geri yüklemelerden sonra kenara ayrılmış { $n } eski sistem
     }
-
-# Under the set aside heading.
-settings-snap-free-space = Her şey yolundayken yeri boşaltın.
 
 # Tip of the button that frees the space the set aside systems use.
 # SAFETY: needs a human review before it ships
@@ -221,13 +203,13 @@ settings-snap-free-them = Kapladıkları yeri boşalt
 settings-snap-take-one = Bir tane al
 
 # Help text of the Take one card (the information button).
-settings-snap-take-about = Geri almak isteyebileceğiniz bir şeyi denemeden önce anlık görüntü alın; aldığınız, siz silene kadar saklanır. Bilgisayar bir anlık görüntüden başlatılmışken alınan hiçbir şey saklanmaz, bu yüzden önce normal şekilde yeniden başlatın. Her geri yükleme, sistemin hemen öncesindeki halini kenara ayırır, bu yüzden hiçbir şey kaybolmaz; her şey yolundayken kapladıkları yeri boşaltın.
+settings-snap-take-about = Geri almak isteyebileceğiniz bir şeyi denemeden önce anlık görüntü alın. Aldığınız anlık görüntüler siz silene kadar saklanır. Bir anlık görüntüden başlattıysanız önce normal şekilde yeniden başlatın, yoksa yeni anlık görüntünüz saklanmaz. Her geri yükleme, sistemin hemen öncesindeki halini kenara ayırır, bu yüzden hiçbir şey kaybolmaz. Sistem dosyaları kilitliyken onları yalnızca kurulumlar ve güncellemeler değiştirebilir ve her birinden önce ve sonra bir anlık görüntü alınır. Kilidi değiştirmek için bir yönetici parolası gerekir.
 
 # Heading of a line on the Before restoring card: { $n } is the number of the snapshot started from.
 settings-snap-started-line = { $n } numaralı anlık görüntüden başlatıldı
 
 # Under the Started from snapshot heading.
-settings-snap-nothing-kept = Şimdi yapılan hiçbir şey saklanmaz.
+settings-snap-nothing-kept = Değişiklikler saklanmaz.
 
 # Heading of a line on the Before restoring card.
 settings-snap-files-too = Dosyalarınız da anlık görüntülerde
@@ -241,7 +223,7 @@ settings-snap-before = Geri yüklemeden önce
 
 # Help text of the Before restoring card (the information button).
 # SAFETY: needs a human review before it ships
-settings-snap-before-about = Bir anlık görüntüden başlatıldığında şimdi yapılan hiçbir şey saklanmaz: sistemin böyle kalmasını istiyorsanız listede onun için geri yükle'ye basın, sonra yeniden başlatın. Bu bilgisayarda ev klasörü sistemin bir parçası olabilir; o durumda bir anlık görüntüyü geri yüklemek kendi dosyalarınızı da o zamanki haline döndürür, bu yüzden önce yeni olan her şeyi güvenli bir yere kopyalayın.
+settings-snap-before-about = Bir anlık görüntüden başlattığınız için şimdi yaptığınız hiçbir şey saklanmaz. Sistemin böyle kalmasını istiyorsanız listede yanındaki Bu anlık görüntüyü geri yükle düğmesine basın, sonra yeniden başlatın. Bu bilgisayarda ev klasörü sistemin bir parçası olabilir. Öyleyse bir anlık görüntüyü geri yüklemek kendi dosyalarınızı da o zamanki haline döndürür, bu yüzden önce yeni olan her şeyi güvenli bir yere kopyalayın.
 
 
 # Name of the switch that keeps the system's own files read-only.
@@ -255,4 +237,3 @@ settings-snap-locked-now = Kilitli
 
 # Said beside the System files locked switch once it is turned off.
 settings-snap-unlocked-now = Kilidi açık
-

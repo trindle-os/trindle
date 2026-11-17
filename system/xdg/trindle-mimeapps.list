@@ -47,6 +47,9 @@ application/x-deb=trindle-deb.desktop
 # An AppImage is added to Trindle's apps; Open with offers the others.
 application/vnd.appimage=trindle-appimage.desktop
 application/x-iso9660-appimage=trindle-appimage.desktop
+# A Flatpak reference or bundle shows what the program will reach, then installs on Install.
+application/vnd.flatpak.ref=trindle-flatpak.desktop
+application/vnd.flatpak=trindle-flatpak.desktop
 # Text opens plain text, Markdown, logs, notes and source code.
 text/plain=trindle-text.desktop
 text/markdown=trindle-text.desktop

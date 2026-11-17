@@ -6,11 +6,13 @@ use std::path::PathBuf;
 
 use crate::common::files::{read_env, set_setting, setting};
 use crate::common::language_names::{self, Tongue};
-use crate::common::run::{self, captured, on_thread};
-use crate::settings::session_env;
-use crate::settings::ui::{confirm, not_saved, dropdown, group, headline, job, line, on, page, Kit, Msg, Page, INSTALL_ICON};
+use crate::common::live_language;
+use crate::common::run::{captured, on_thread};
+use crate::settings::{session_env, Settings};
+use crate::settings::ui::Do;
+use crate::settings::ui::{admin_run, confirm, not_saved, dropdown, group, headline, job, line, on, page, Kit, Msg, Page, INSTALL_ICON};
 use crate::toolkit::t;
-use crate::toolkit::tiles::fill_bar;
+use crate::toolkit::tiles::fill_bar_good;
 use crate::toolkit::widget::Node;
 
 mod words;
@@ -302,11 +304,10 @@ impl Region {
 
         kit.start(ADD, t!("settings-region-installing")).expect(30.0);
         kit.hush(ADD);
-        let helper = run::admin_helper();
-        let back = kit.then::<Region, (bool, String, String)>(|me, k, (ok, _out, err)| {
-            if !ok {
+        let back = kit.then::<Region, Result<(), String>>(|me, k, done| {
+            if let Err(why) = done {
                 k.finish(ADD, false, "");
-                k.say(ADD, &run::admin_error(&err), false, false);
+                k.say(ADD, &why, false, false);
                 return;
             }
 
@@ -314,7 +315,7 @@ impl Region {
             me.pending = true;
             me.load(k);
         });
-        run::capture(&["pkexec", &helper, "locale", &name], None, move |ok, out, err| back((ok, out, err)));
+        admin_run(&["locale", &name], back);
     }
 
     fn language(&self, kit: &Kit) -> Node<Msg> {
@@ -325,14 +326,11 @@ impl Region {
         let at_lang = codes.iter().position(|c| *c == self.lang);
         let at_fmt = codes.iter().position(|c| *c == self.fmt);
         let lang_codes = codes.clone();
-        let lang = dropdown(kit, "LANG", labels.clone(), at_lang, t!("settings-region-language"), move |i| {
+        let lang = dropdown("LANG", labels.clone(), at_lang, t!("settings-region-language"), move |i| {
             let v = lang_codes[i].clone();
-            on::<Region>(move |me, k| {
-                session_env::update(&[("LANG", Some(&v))], k, "LANG", later());
-                me.told(k);
-            })
+            on::<Region>(move |me, k| me.choose_lang(k, &v))
         });
-        let fmt = dropdown(kit, "formats", labels, at_fmt, t!("settings-region-formats"), move |i| {
+        let fmt = dropdown("formats", labels, at_fmt, t!("settings-region-formats"), move |i| {
             let v = codes[i].clone();
             on::<Region>(move |me, k| {
                 let changes: Vec<(&str, Option<&str>)> = FORMATS.iter().map(|f| (*f, Some(v.as_str()))).collect();
@@ -341,10 +339,10 @@ impl Region {
             })
         });
         group(t!("settings-region-language")).span(5, 8).icon("preferences-desktop-locale-symbolic")
-            .about(t!("settings-region-language-about"))
+            .about([t!("settings-region-language-about"), t!("settings-region-language-sub")].join(" "))
             .rows(vec![
-                line(t!("settings-region-language")).sub(t!("settings-region-language-sub")).key("LANG").control(lang).node(kit),
-                line(t!("settings-region-formats")).sub(t!("settings-region-formats-sub")).key("formats").control(fmt).node(kit),
+                line(t!("settings-region-language")).key("LANG").control(lang).node(kit),
+                line(t!("settings-region-formats")).key("formats").control(fmt).node(kit),
 
                 line(t!("settings-region-date-number")).sub(t!("settings-region-date-and-number", date = &self.date, number = &self.number)).node(kit),
                 line(t!("settings-region-money-paper")).sub(self.money_words()).node(kit),
@@ -369,19 +367,15 @@ impl Region {
         let options: Vec<String> = codes.iter().map(|c| if c == "auto" { t!("settings-language-auto").to_string() } else { named(c) }).collect();
         let own = self.own.trim();
         let at = codes.iter().position(|c| if own.is_empty() { c == "auto" } else { c.eq_ignore_ascii_case(own) });
-        let pick = dropdown(kit, "language", options, at, t!("settings-language-pick-tip"), move |i| {
+        let pick = dropdown("language", options, at, t!("settings-language-pick-tip"), move |i| {
             let v = codes[i].clone();
-            on::<Region>(move |me, k| {
-                if k.settle("language", set_setting("language", &v), not_saved()).is_some() {
-                    me.own = v.clone();
-                }
-            })
+            on::<Region>(move |me, k| me.choose_own(k, &v))
         });
-        let mut rows = vec![line(t!("settings-language-pick")).sub(t!("settings-language-next-start")).key("language").control(pick).node(kit),
-                            line(t!("settings-language-how-complete")).sub(t!("settings-language-how-complete-sub")).node(kit)];
+        let mut rows = vec![line(t!("settings-language-pick")).key("language").control(pick).node(kit),
+                            line(t!("settings-language-how-complete")).node(kit)];
         for tongue in &self.tongues {
             let tip = t!("settings-language-share", done = tongue.done, all = tongue.all);
-            let mut one = line(tongue.name.clone()).below(fill_bar(Some(tongue.share()), tip));
+            let mut one = line(tongue.name.clone()).below(fill_bar_good(Some(tongue.share()), tip));
             if tongue.code != "en" && language_names::VARIANTS.contains(&tongue.code.as_str()) {
                 one = one.sub(t!("settings-language-variant"));
             } else if tongue.machine {
@@ -395,7 +389,31 @@ impl Region {
             }
         }
         group(t!("settings-language-heading")).span(5, 8).icon("preferences-desktop-locale-symbolic")
-            .about(t!("settings-language-about")).rows(rows).node(kit)
+            .about([t!("settings-language-about"), t!("settings-language-next-start")].join(" ")).rows(rows).node(kit)
+    }
+
+    fn choose_lang(&mut self, kit: &mut Kit, code: &str) {
+        if session_env::update(&[("LANG", Some(code))], kit, "LANG", later()) {
+            self.relanguage(kit, None);
+        }
+        self.told(kit);
+    }
+
+    fn choose_own(&mut self, kit: &mut Kit, code: &str) {
+        if kit.settle("language", set_setting("language", code), not_saved()).is_some() {
+            self.own = code.to_string();
+            self.relanguage(kit, None);
+            self.told(kit);
+        }
+    }
+
+    pub(super) fn relanguage(&mut self, kit: &mut Kit, changed: Option<&str>) {
+        let tags = live_language::for_choice(&self.own, &saved().0);
+        let in_use = changed.is_some_and(|c| tags.iter().any(|t| t.eq_ignore_ascii_case(c)));
+        if in_use || live_language::differs(&tags) {
+            live_language::switch(tags);
+            kit.asks.send(Do::Then(Box::new(Settings::relanguage)));
+        }
     }
 
     fn money_words(&self) -> String {
@@ -408,18 +426,17 @@ impl Region {
         }
         kit.start(ADD, t!("settings-region-removing")).expect(30.0);
         kit.hush(ADD);
-        let helper = run::admin_helper();
-        let back = kit.then::<Region, (bool, String, String)>(|me, k, (ok, _out, err)| {
-            if !ok {
+        let back = kit.then::<Region, Result<(), String>>(|me, k, done| {
+            if let Err(why) = done {
                 k.finish(ADD, false, "");
-                k.say(ADD, &run::admin_error(&err), false, false);
+                k.say(ADD, &why, false, false);
                 return;
             }
             k.finish(ADD, true, t!("settings-region-removed-done"));
             me.pending = true;
             me.load(k);
         });
-        run::capture(&["pkexec", &helper, "locale-remove", &name], None, move |ok, out, err| back((ok, out, err)));
+        admin_run(&["locale-remove", &name], back);
     }
 
     fn kept(&self, kit: &Kit) -> Node<Msg> {
@@ -432,7 +449,7 @@ impl Region {
                 row.sub(t!("settings-region-in-use-stays")).node(kit)
             } else {
                 let name = n.clone();
-                row.control(confirm(kit, &format!("language-{n}"), "user-trash-symbolic", t!("settings-region-remove-language"),
+                row.control(confirm(&format!("language-{n}"), "user-trash-symbolic", t!("settings-region-remove-language"),
                                     move |me: &mut Region, k| me.remove(k, name.clone()))).node(kit)
             }
         }).collect();
@@ -448,19 +465,18 @@ impl Region {
                                   line(t!("settings-region-installed")).sub(t!("settings-region-count", n = self.count)).node(kit)]).node(kit);
         }
         let labels: Vec<String> = self.add.iter().map(|(_, l)| l.clone()).collect();
-        let pick = dropdown(kit, "add-pick", labels, Some(self.pick), t!("settings-region-install-another"),
+        let pick = dropdown("add-pick", labels, Some(self.pick), t!("settings-region-install-another"),
                             |i| on::<Region>(move |me, _k| me.pick = i));
         let go = job(kit, ADD, INSTALL_ICON, t!("settings-region-install-this"),
                      on::<Region>(|me, k| me.install(k)));
         let n = self.add.len();
         card.rows(vec![
-            line(t!("settings-region-install-another")).sub(t!("settings-region-needs-password")).key(ADD).controls(vec![pick, go]).node(kit),
+            line(t!("settings-region-install-another")).key(ADD).controls(vec![pick, go]).node(kit),
             line(t!("settings-region-ready")).sub(t!("settings-region-more", n = n))
                 .node(kit),
             line(t!("settings-region-installed")).sub(t!("settings-region-count", n = self.count)).node(kit),
         ]).node(kit)
     }
-
 }
 
 impl Page for Region {
@@ -485,8 +501,12 @@ impl Page for Region {
         }
         self.load(kit);
     }
+
+    fn conf_changed(&mut self, _kit: &mut Kit) {
+        self.own = setting("language");
+    }
     fn view(&self, kit: &Kit) -> Node<Msg> {
-        let mut items = vec![headline(kit, self.head.clone())];
+        let mut items = vec![headline(self.head.clone())];
         if self.loaded {
             items.extend([self.language(kit), self.tongue(kit), self.own_words(kit), self.adding(kit), self.kept(kit)]);
         } else {
@@ -537,10 +557,141 @@ mod font_tests {
     fn the_missing_font_note_follows_the_language_and_falls_back_to_english() {
         use crate::toolkit::lang::{english, with_catalogue, Bundle, Catalogue};
         let args = || t!("fonts-missing", language = "Hindi", package = "fonts-noto-core");
-        assert_eq!(args(), "Hindi needs a font that is not installed yet. Install the package fonts-noto-core to see it properly.");
+        assert_eq!(args(), "Hindi needs a font that isn't installed yet. Install the package fonts-noto-core to show it properly.");
         let made_up = "fonts-missing = { $language }: manque { $package }.\n";
         with_catalogue(Catalogue::new(Bundle::from_text("fr", made_up), english()), || {
             assert_eq!(args(), "Hindi: manque fonts-noto-core.");
         });
+    }
+}
+
+#[cfg(test)]
+mod switch_now_tests {
+    use super::*;
+    use crate::common::live_language::switched;
+    use crate::common::shipped_languages::in_language;
+    use crate::settings::ui::Page;
+    use crate::toolkit::ui::App;
+    use std::cell::RefCell;
+    use std::rc::Rc;
+
+    fn settings(events: &crate::toolkit::event::Loop) -> (Settings, Rc<RefCell<Vec<Do>>>) {
+        let got: Rc<RefCell<Vec<Do>>> = Rc::default();
+        let (keep, ev) = (got.clone(), events.clone());
+        let asks = events.post(move |d: Do| {
+            keep.borrow_mut().push(d);
+            ev.quit();
+        });
+        let pages: Vec<Box<dyn Page>> = vec![Box::new(Region::made_up()), Box::new(crate::settings::panels::thanks::Thanks::default())];
+        (Settings { kit: Kit::new(events.clone(), asks, None, None), pages, current: 0, search: String::new(), tall: 800.0 }, got)
+    }
+
+    #[test]
+    fn choosing_a_language_shows_settings_in_it_at_once() {
+        if crate::common::scratch_home::inside().is_none() {
+            return crate::common::scratch_home::rerun(module_path!(), "choosing_a_language_shows_settings_in_it_at_once");
+        }
+        std::env::remove_var("LC_ALL");
+        std::env::remove_var("LC_MESSAGES");
+        let events = crate::toolkit::event::Loop::new();
+        let (mut s, got) = settings(&events);
+        type Pick = fn(&mut Region, &mut Kit);
+        let own: Pick = |r, k| r.choose_own(k, "fr");
+        let system: Pick = |r, k| {
+            r.choose_own(k, "auto");
+            r.choose_lang(k, "de_DE.UTF-8");
+        };
+        for (pick, tag, title) in [(own, "fr", "R\u{e9}glages"), (system, "de", "Einstellungen")] {
+            let behind: *const dyn Page = &*s.pages[1];
+            s.with::<Region>(pick);
+            assert_eq!(switched(), Some(vec![tag.to_string()]), "{tag}: the words were not switched");
+
+            for _ in 0..50 {
+                if !std::ptr::addr_eq(behind, &*s.pages[1]) {
+                    break;
+                }
+                let ev = events.clone();
+                events.after(std::time::Duration::from_millis(200), move || ev.quit());
+                events.run();
+                let told: Vec<Do> = got.borrow_mut().drain(..).collect();
+                for d in told {
+                    if let Do::Then(f) = d {
+                        f(&mut s);
+                    }
+                }
+            }
+            assert!(!std::ptr::addr_eq(behind, &*s.pages[1]), "{tag}: the page behind keeps the old words");
+            in_language(tag, || {
+                assert_eq!(s.window_title().as_deref(), Some(title), "{tag}");
+                assert_eq!(s.window_title(), None, "the title is told once");
+            });
+        }
+        assert_eq!(setting("language"), "auto");
+        assert_eq!(session_env::get("LANG").as_deref(), Some("de_DE.UTF-8"));
+        s.with::<Region>(|r, k| r.choose_own(k, "tlh"));
+        assert_eq!(switched(), None, "no words for it: nothing changes");
+    }
+}
+
+#[cfg(test)]
+mod picked_language_tests {
+    use crate::toolkit::lang::choice_from;
+
+    #[test]
+    fn each_language_picked_is_the_one_a_program_starts_in() {
+        let lang = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("share/lang");
+        let mut tried = 0;
+        for dir in std::fs::read_dir(lang).unwrap().flatten().filter(|d| d.path().is_dir()) {
+            let code = dir.file_name().to_string_lossy().into_owned();
+            let tags = choice_from(Some(code.clone()), None, None, Some("en_GB.UTF-8".into()));
+            assert_eq!(tags.first(), Some(&code), "{code} picked, but programs would start in {tags:?}");
+            tried += 1;
+        }
+        assert!(tried >= 15, "only {tried} languages were tried");
+        assert_eq!(choice_from(Some("auto".into()), None, None, Some("de_DE.UTF-8".into())).first().map(String::as_str), Some("de-DE"));
+    }
+}
+
+#[cfg(test)]
+mod show_the_minimum_tests {
+    const GONE: &[&str] = &[
+        "settings-region-formats-sub", "settings-region-needs-password", "settings-language-how-complete-sub", "settings-words-language-sub",
+        "settings-ring-open-click", "settings-ring-open-super", "settings-ring-favourites-about", "settings-ring-notify-show-about",
+        "settings-ring-clip-forget-about", "settings-ring-voice-about", "settings-snap-to-have", "settings-snap-reinstall",
+        "settings-snap-choose-btrfs", "settings-snap-none-line-sub", "settings-snap-kept-until-you", "settings-snap-free-space",
+        "settings-sounds-moment-login-about", "settings-sounds-moment-plug-about", "settings-sounds-moment-unplug-about",
+        "settings-sounds-moment-battery-about", "settings-sounds-moment-notification-about", "settings-sounds-add-formats",
+        "settings-sounds-none-yet-about", "settings-startup-command-about", "settings-startup-none-about", "settings-startup-app-about",
+        "settings-startup-cmd-about", "settings-tailscale-switch-sub-first", "settings-tailscale-switch-sub", "settings-tailscale-no-devices-sub",
+        "settings-tailscale-sign-in-sub", "settings-tailscale-connect-sub", "settings-tailscale-sign-out-sub", "settings-users-admin-can",
+        "settings-users-new-account-sub", "settings-users-opens-login", "settings-wallpaper-wallpaper-about", "settings-wallpaper-picture-about",
+        "settings-wallpaper-fit-about", "settings-wallpaper-colour-shown", "settings-wallpaper-rotate-about", "settings-wallpaper-every-about",
+        "settings-wallpaper-order-about", "settings-wallpaper-next-about", "settings-wallpaper-no-pictures-about",
+    ];
+    const PANELS: &[&str] = &[
+        include_str!("region.rs"), include_str!("region/words.rs"), include_str!("ring.rs"), include_str!("snapshots.rs"), include_str!("sounds.rs"),
+        include_str!("startup.rs"), include_str!("tailscale.rs"), include_str!("users.rs"), include_str!("wallpaper/cards.rs"),
+    ];
+
+    #[test]
+    fn no_line_under_a_control_only_explains_it() {
+        let lang = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("share/lang");
+        for dir in std::fs::read_dir(lang).unwrap().flatten().filter(|d| d.path().is_dir()) {
+            for file in std::fs::read_dir(dir.path()).unwrap().flatten() {
+                let text = std::fs::read_to_string(file.path()).unwrap_or_default();
+                for line in text.lines() {
+                    let key = line.split(" =").next().unwrap_or("");
+                    assert!(!GONE.contains(&key), "{} still has {key}", file.path().display());
+                }
+            }
+        }
+        for code in PANELS {
+            let code = code.split("\n#[cfg(test)]").next().unwrap();
+            for at in code.match_indices(".sub(t!(\"") {
+                let key = code[at.0 + 8..].split('"').next().unwrap();
+                let explains = key.ends_with("-about") || key.ends_with("-sub");
+                assert!(!explains || key == "settings-tailscale-firewall-sub", "a line under a control explains it: {key}");
+            }
+        }
     }
 }

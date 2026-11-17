@@ -105,10 +105,10 @@ fn shoot_drives_failures_more() {
     open(&mut d, &part);
     snap("room-other-kind", &d);
     let mut d = made(room_window("btrfs", false));
-    d.world = || room::World { swaps: "Filename\tType\tSize\tUsed\tPriority\n/swapfile file 100 0 -2\n".into(), ..made_up_world() };
+    d.world = || room::World { swaps: None, ..made_up_world() };
     let (_, part) = system_part(&d);
     open(&mut d, &part);
-    snap("room-swap-file", &d);
+    snap("room-swap-unknown", &d);
 
     let mut d = made(sample());
     said(&mut d, "/d/old", "/b/Backup", plan::no_service().into());

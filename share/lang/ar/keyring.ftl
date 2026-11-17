@@ -30,15 +30,15 @@ keyring-checking = جارٍ التحقق…
 
 # SAFETY: needs a human review before it ships
 # Under the title when no keyring exists yet and a program wants to keep a password.
-keyring-why-none = يريد برنامج حفظ كلمة مرور بأمان. اكتب كلمة مرور تسجيل الدخول لبدء سلسلة المفاتيح؛ ومن الآن ستُفتح تلقائيًا عند تسجيل الدخول.
+keyring-why-none = يريد برنامج حفظ كلمة مرور بأمان. اكتب كلمة مرور تسجيل الدخول لبدء سلسلة المفاتيح. بعد ذلك ستُفتح من تلقاء نفسها عند تسجيل الدخول.
 
 # SAFETY: needs a human review before it ships
 # Under the title when the keyring was made with a different password from the login one.
-keyring-why-old = كلمة مرور تسجيل الدخول ليست التي أُنشئت بها سلسلة المفاتيح هذه. اكتب القديمة مرة واحدة؛ وبعدها ستُفتح تلقائيًا عند تسجيل الدخول.
+keyring-why-old = كلمة مرور تسجيل الدخول ليست التي أُنشئت بها سلسلة المفاتيح هذه. اكتب القديمة مرة واحدة. بعد ذلك ستُفتح سلسلة المفاتيح من تلقاء نفسها عند تسجيل الدخول.
 
 # SAFETY: needs a human review before it ships
 # Under the title when no password was typed at log in, for example with a fingerprint or automatic log in.
-keyring-why-no-login = لم تُكتب كلمة مرور عند تسجيل الدخول (بصمة إصبع أو تسجيل دخول تلقائي)، فلم تُفتح سلسلة المفاتيح تلقائيًا. اكتب كلمة مرور تسجيل الدخول.
+keyring-why-no-login = لم تكتب كلمة مرور عند تسجيل الدخول (استخدمت بصمة الإصبع أو تسجيل الدخول التلقائي)، لذلك لم تُفتح سلسلة المفاتيح من تلقاء نفسها. اكتب كلمة مرور تسجيل الدخول.
 
 # SAFETY: needs a human review before it ships
 # Under the title when a program asks for a saved password and the keyring is shut.
@@ -52,7 +52,7 @@ keyring-stopped = توقفت سلسلة المفاتيح
 keyring-not-the-keyring-password = هذه ليست كلمة مرور سلسلة المفاتيح
 
 # Shown under the box when the keyring file is damaged and has been left as it is.
-keyring-damaged-left = ملف سلسلة المفاتيح تالف، لذلك تُرك كما هو
+keyring-damaged-left = ملف سلسلة المفاتيح تالف، لذلك لم يغيّره Trindle
 
 # SAFETY: needs a human review before it ships
 # Shown under the box when the password is not the person's login password.
@@ -73,18 +73,20 @@ keyring-error-locked = سلسلة المفاتيح مقفلة
 keyring-error-wrong-password = كلمة المرور هذه لا تفتح سلسلة المفاتيح
 
 # Said when the collection or item asked for is not there.
-keyring-error-no-such = لا توجد مجموعة أو عنصر بهذا الاسم
+keyring-error-no-such = هذا العنصر غير موجود
 
 # Said when the keyring file cannot be read as a keyring.
 keyring-error-damaged = ملف سلسلة المفاتيح تالف
 
 
 # Under the reason, naming the program that asked, when the keyring can find its name.
-keyring-asked-by = طلبه { $program }
+keyring-asked-by = بطلب من { $program }
 
 # Told to a program that asked while the keyring was taking over from the one before and many calls already waited.
-keyring-starting = سلسلة المفاتيح تبدأ. اطلب مرة أخرى.
+keyring-starting = سلسلة المفاتيح تبدأ. حاول مرة أخرى.
 
 # The program in "Asked for by", for a program on the bus: $name is the name it gives itself, which anything can claim.
 keyring-named-itself = برنامج يسمّي نفسه { $name }
 
+# Said to a program that gave a password with letters the keyring can't read, so no keyring is made with it.
+keyring-password-unreadable = كلمة المرور هذه فيها أحرف لا تستطيع سلسلة المفاتيح قراءتها

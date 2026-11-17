@@ -18,7 +18,17 @@ const AUTH: u32 = 8;
 const LOAD_MODULE: u32 = 51;
 const UNLOAD_MODULE: u32 = 52;
 
-const REFUSED: &[u32] = &[CREATE_RECORD_STREAM, EXIT, LOAD_MODULE, UNLOAD_MODULE];
+const REFUSED: &[u32] = &[
+    CREATE_RECORD_STREAM, EXIT, LOAD_MODULE, UNLOAD_MODULE,
+    36, 38, 39, 40,
+    44, 45,
+    48, 49, 50,
+    53, 54, 55, 56,
+    67, 68,
+    70, 71,
+    87,
+    90, 96, 97, 98, 99, 100,
+];
 
 const NOT_ALLOWED: u32 = 1;
 
@@ -144,6 +154,24 @@ mod tests {
         p.extend_from_slice(&tag.to_be_bytes());
         p.extend_from_slice(rest);
         frame(COMMAND, &p)
+    }
+
+    #[test]
+    fn a_box_with_sound_cannot_change_devices_or_other_programs_streams() {
+        for cmd in [36u32, 38, 39, 40, 44, 45, 48, 49, 50, 67, 68, 70, 71, 87, 96, 98] {
+            let mut p = vec![TAG_U32];
+            p.extend_from_slice(&cmd.to_be_bytes());
+            p.push(TAG_U32);
+            p.extend_from_slice(&7u32.to_be_bytes());
+            assert_eq!(judge(&mut p), Err(7), "command {cmd}");
+        }
+        for cmd in [3u32, 4, 9, 13, 37, 41, 69] {
+            let mut p = vec![TAG_U32];
+            p.extend_from_slice(&cmd.to_be_bytes());
+            p.push(TAG_U32);
+            p.extend_from_slice(&7u32.to_be_bytes());
+            assert_eq!(judge(&mut p), Ok(()), "command {cmd}");
+        }
     }
 
     #[test]

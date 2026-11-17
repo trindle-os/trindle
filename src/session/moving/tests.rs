@@ -125,7 +125,7 @@ fn a_film_larger_than_the_screen_is_left_out() {
     let file = dir.join("huge.webm");
     std::fs::write(&file, film(7680, 4320, 4 + 10, &[7; 10])).unwrap();
     let o = over_on(&file, Some((3840, 2160)));
-    assert!(o.pixels && crate::session::wallpaper_limits::refusal(o).as_deref() == Some("1 left out: larger than 4K."), "{o:?}");
+    assert!(o.pixels && crate::session::wallpaper_limits::refusal(o).as_deref() == Some("Trindle left out 1 picture because it's larger than 4K."), "{o:?}");
     std::fs::remove_dir_all(&dir).unwrap();
 }
 
@@ -537,4 +537,13 @@ fn how_long_a_frame_takes_in_this_process_and_through_the_decoders() {
             }
         }
     }
+}
+
+#[test]
+fn a_frames_time_from_the_file_never_wraps() {
+    assert_eq!(block_time(1000, -5, 1_000_000), 995_000_000);
+    assert_eq!(block_time(3, -10, 1_000_000), 0);
+    assert_eq!(block_time(u64::MAX, 32767, u64::MAX), u64::MAX);
+    assert_eq!(block_time(i64::MAX as u64, 32767, 3), u64::MAX);
+    assert_eq!(block_time(5, 5, u64::MAX), u64::MAX);
 }

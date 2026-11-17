@@ -21,5 +21,22 @@ pub mod virtual_pointer;
 pub mod windows;
 pub mod workspaces;
 
+use smithay::reexports::wayland_server::Client;
+
+pub struct Filtered {
+    filter: Box<dyn for<'c> Fn(&'c Client) -> bool + Send + Sync>,
+}
+
+impl Filtered {
+
+    pub fn new(filter: impl for<'c> Fn(&'c Client) -> bool + Send + Sync + 'static) -> Self {
+        Filtered { filter: Box::new(filter) }
+    }
+
+    pub fn can_view(&self, client: &Client) -> bool {
+        (self.filter)(client)
+    }
+}
+
 #[cfg(test)]
 mod tests;

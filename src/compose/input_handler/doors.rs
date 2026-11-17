@@ -1,7 +1,7 @@
 // Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
 use super::{KeyAction, MOUSE_BUTTONS};
-use crate::{state::Backend, AnvilState};
+use crate::{state::Backend, Compose};
 
 use smithay::backend::input::{InputBackend, InputEvent};
 
@@ -9,7 +9,7 @@ pub(super) fn moves_pointer<B: InputBackend>(event: &InputEvent<B>) -> bool {
     matches!(event, InputEvent::PointerMotion { .. } | InputEvent::PointerMotionAbsolute { .. } | InputEvent::TabletToolAxis { .. })
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     pub(super) fn by_hand(&mut self, moves: bool, handle: impl FnOnce(&mut Self)) {
         let before = std::mem::replace(&mut self.ring.by_hand, true);
@@ -54,16 +54,13 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         match event {
             InputEvent::Keyboard { event } => match self.keyboard_key_to_action::<B>(event) {
                 action @ (KeyAction::None | KeyAction::Bound(_) | KeyAction::Expand(..)) => self.process_common_key_action(action),
-                action => tracing::warn!(?action, output_name, "Key action unsupported on on output backend."),
+                action => tracing::warn!(?action, output_name, "Key action unsupported on this output backend."),
             },
 
             InputEvent::PointerMotionAbsolute { event } => {
-                let output = self
-                    .space
-                    .outputs()
-                    .find(|o| o.name() == output_name)
-                    .unwrap()
-                    .clone();
+                let Some(output) = self.space.outputs().find(|o| o.name() == output_name).cloned() else {
+                    return;
+                };
                 self.on_pointer_move_absolute_windowed::<B>(event, &output)
             }
             InputEvent::PointerButton { event } => self.on_pointer_button::<B>(event),

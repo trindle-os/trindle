@@ -6,7 +6,8 @@ use std::path::{Path, PathBuf};
 use std::process::Command;
 use crate::store::parts;
 use crate::common::x11_rooms::{self};
-use super::walls::{ALSA_PULSE, Gates, engine_for, sys_args, walls};
+use super::bus::{Band, Bus};
+use super::walls::{ALSA_PULSE, Gates, engine_for, real_dir, sys_args, walls};
 use super::x11::{XNext, own_x11, tell, tell_would_not_start, x_next};
 
 pub fn run_boxed(at: &Path, app_id: &str, allowed: &[String], command: &[String]) -> i32 {
@@ -14,10 +15,18 @@ pub fn run_boxed(at: &Path, app_id: &str, allowed: &[String], command: &[String]
 }
 
 pub fn run_boxed_extra(at: &Path, app_id: &str, allowed: &[String], extra: &[String], command: &[String]) -> i32 {
+    run_boxed_loop(at, app_id, allowed, extra, command, false)
+}
+
+pub fn run_boxed_bus(at: &Path, app_id: &str, allowed: &[String], extra: &[String], command: &[String]) -> i32 {
+    run_boxed_loop(at, app_id, allowed, extra, command, true)
+}
+
+fn run_boxed_loop(at: &Path, app_id: &str, allowed: &[String], extra: &[String], command: &[String], bus: bool) -> i32 {
     let mut tries = 0;
     loop {
         tries += 1;
-        let (code, told) = run_boxed_once(at, app_id, allowed, extra, command);
+        let (code, told) = run_boxed_once(at, app_id, allowed, extra, command, bus);
         match x_next(told, tries) {
             XNext::Done => return code,
             XNext::Again => eprintln!("trindle-boxed: {app_id}: its Xwayland ended under it; starting it again"),
@@ -29,10 +38,18 @@ pub fn run_boxed_extra(at: &Path, app_id: &str, allowed: &[String], extra: &[Str
     }
 }
 
-fn run_boxed_once(at: &Path, app_id: &str, allowed: &[String], extra: &[String], command: &[String]) -> (i32, Option<x11_rooms::Told>) {
+fn run_boxed_once(at: &Path, app_id: &str, allowed: &[String], extra: &[String], command: &[String], bus: bool) -> (i32, Option<x11_rooms::Told>) {
     let has = |k: &str| allowed.iter().any(|w| w == k);
-    let Some(run) = run_folder(app_id) else { return (1, None) };
+
+    let Some(folder) = RunFolder::make(app_id) else { return (1, None) };
+    let run = folder.0.clone();
     let mut start = Start { gates: Gates { sys: sys_args(), extra: extra.to_vec(), ..Gates::default() }, keep: Vec::new() };
+
+    let band = if bus { lend_band(app_id) } else { None };
+
+    let _bus = if bus { Bus::start(&run, band.as_ref().map(|b| &b.0)).map_err(|why| eprintln!("trindle-boxed: {app_id}: no session bus: {why}")).ok() } else { None };
+    start.gates.bus = _bus.as_ref().map(Bus::socket);
+    start.gates.starter = band.as_ref().filter(|_| _bus.is_some()).map(|(b, exe)| (super::start::Host::now(exe.clone()), *b.pids().start()));
     if start.own_wayland(&run, app_id, allowed).is_none() {
         return (1, None);
     }
@@ -62,21 +79,104 @@ fn run_boxed_once(at: &Path, app_id: &str, allowed: &[String], extra: &[String],
 
     let _in_use = in_use_rows(app_id, allowed, room.is_some(), !start.gates.usb.is_empty());
     let code = start.launch(room, app_id, (at, allowed, command));
-    let _ = std::fs::remove_dir_all(&run);
     (code, x11_held.as_ref().and_then(|h| h.told(code)))
 }
 
-fn run_folder(app_id: &str) -> Option<PathBuf> {
-    let base = crate::store::pulse_guard::runtime_dir();
+fn lend_band(app_id: &str) -> Option<(Band, String)> {
 
-    let short: String = app_id.chars().take(24).collect();
-    let run = base.join("trindle-boxed").join(format!("{short}-{}", std::process::id()));
-    let _ = std::fs::remove_dir_all(&run);
-    if let Err(e) = std::fs::create_dir_all(&run) {
-        eprintln!("trindle-boxed: {}: {e}", run.display());
+    let exe = std::env::current_exe().ok().map(|e| e.to_string_lossy().trim_end_matches(" (deleted)").to_string());
+    let Some(exe) = exe.filter(|e| Path::new(e).is_file()) else {
+        eprintln!("trindle-boxed: {app_id}: Trindle's own program cannot be found, so it has no tray icon");
         return None;
+    };
+    let Some(band) = Band::take(&boxed_runs().join(BANDS_AT)) else {
+        eprintln!("trindle-boxed: {app_id}: too many boxes are running for another tray icon");
+        return None;
+    };
+    Some((band, exe))
+}
+
+const BANDS_AT: &str = "bands";
+
+fn boxed_runs() -> PathBuf {
+    crate::store::pulse_guard::runtime_dir().join("trindle-boxed")
+}
+
+static LIVE: std::sync::Mutex<Vec<PathBuf>> = std::sync::Mutex::new(Vec::new());
+
+pub(super) struct RunFolder(pub(super) PathBuf);
+
+impl RunFolder {
+
+    pub(super) fn make(app_id: &str) -> Option<RunFolder> {
+        let base = boxed_runs();
+        sweep(&base, |pid| Path::new(&format!("/proc/{pid}")).exists());
+
+        let short: String = app_id.chars().take(24).collect();
+        let run = base.join(format!("{short}-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&run);
+        if let Err(e) = std::fs::create_dir_all(&run) {
+            eprintln!("trindle-boxed: {}: {e}", run.display());
+            return None;
+        }
+        clean_on_stop();
+        LIVE.lock().unwrap_or_else(|e| e.into_inner()).push(run.clone());
+        Some(RunFolder(run))
     }
-    Some(run)
+}
+
+impl Drop for RunFolder {
+    fn drop(&mut self) {
+        let _ = std::fs::remove_dir_all(&self.0);
+        LIVE.lock().unwrap_or_else(|e| e.into_inner()).retain(|p| *p != self.0);
+    }
+}
+
+pub(super) fn sweep(base: &Path, alive: impl Fn(u32) -> bool) {
+    for e in std::fs::read_dir(base).into_iter().flatten().flatten() {
+        let name = e.file_name().to_string_lossy().into_owned();
+        let Some(pid) = name.rsplit_once('-').and_then(|(_, p)| p.parse::<u32>().ok()) else { continue };
+        if !alive(pid) && real_dir(&e.path()) {
+            let _ = std::fs::remove_dir_all(e.path());
+        }
+    }
+}
+
+const STOPS: [i32; 3] = [libc::SIGTERM, libc::SIGINT, libc::SIGHUP];
+
+static STOPPED: std::sync::atomic::AtomicI32 = std::sync::atomic::AtomicI32::new(-1);
+
+extern "C" fn on_stop(sig: libc::c_int) {
+    let byte = sig as u8;
+    // SAFETY: write is async-signal-safe and writes the one byte it is given.
+    unsafe { libc::write(STOPPED.load(std::sync::atomic::Ordering::Relaxed), (&byte as *const u8).cast(), 1) };
+}
+
+fn clean_on_stop() {
+    static ONCE: std::sync::Once = std::sync::Once::new();
+    ONCE.call_once(|| {
+        let Some((read, write)) = crate::store::secctx::close_pipe() else { return };
+        STOPPED.store(std::os::fd::IntoRawFd::into_raw_fd(write), std::sync::atomic::Ordering::Relaxed);
+        std::thread::spawn(move || {
+            let mut byte = [0u8];
+            if !matches!(std::io::Read::read(&mut std::fs::File::from(read), &mut byte), Ok(1)) {
+                return;
+            }
+            for run in LIVE.lock().unwrap_or_else(|e| e.into_inner()).iter() {
+                let _ = std::fs::remove_dir_all(run);
+            }
+            let sig = libc::c_int::from(byte[0]);
+            // SAFETY: puts the signal's own ending back and sends it to this process.
+            unsafe {
+                libc::signal(sig, libc::SIG_DFL);
+                libc::raise(sig);
+            }
+        });
+        for sig in STOPS {
+            // SAFETY: the handler only writes one byte to a pipe.
+            unsafe { libc::signal(sig, on_stop as *const () as libc::sighandler_t) };
+        }
+    });
 }
 
 struct Start {

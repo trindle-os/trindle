@@ -47,7 +47,7 @@ text-find-replace-key = Rechercher et remplacer (Ctrl+H)
 text-go-to-line-key = Aller à la ligne (Ctrl+G)
 
 # Button in the menu for a Markdown file that shows it as it will look finished, with its shortcut.
-text-finished-key = Aspect final (Ctrl+E)
+text-finished-key = Aperçu (Ctrl+E)
 
 # Button in the menu for a Markdown file that exports it as a web page. Also the title of the chooser for that.
 text-export-html = Exporter en page web
@@ -71,7 +71,7 @@ text-close-tab = Fermer { $name }
 text-close-bar = Fermer la barre
 
 # Words the screen reader gives the button that shows the finished look of the text, with its shortcut.
-text-finished-look = Aspect final
+text-finished-look = Aperçu
 
 # Menu item that copies everything in the text.
 text-copy-all = Copier tout le texte
@@ -187,10 +187,10 @@ text-go-to-line = Aller à la ligne
 text-back = Retour au texte
 
 # Words on the spelling bar, after the word: the word was added to the person's own words.
-text-spell-added = fait maintenant partie de vos mots
+text-spell-added = a été ajouté à vos mots
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are no suggestions.
-text-spell-none = n'est pas dans le dictionnaire, qui n'a rien de proche
+text-spell-none = n'est pas dans le dictionnaire, et il n'y a aucune suggestion
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are suggestions.
 text-spell-offers = n'est pas dans le dictionnaire. Vouliez-vous dire l'un de ceux-ci ?
@@ -221,16 +221,16 @@ text-starting = Démarrage
 text-when-opens = À l'ouverture de Text
 
 # First choice: Text opens the files it had open last time.
-text-reopen = Rouvrir les fichiers de la dernière fois
+text-reopen = Rouvrir les fichiers précédents
 
 # Second choice: Text opens with an empty page.
-text-start-blank = Commencer avec une page vide
+text-start-blank = Repartir de zéro
 
 # Note under the start choice: work not saved to a file is kept whichever choice is made.
-text-keep-note = Le travail non enregistré dans un fichier est toujours conservé et revient dans les deux cas.
+text-keep-note = Votre travail non enregistré est conservé et restauré, quelle que soit l'option choisie.
 
 # Heading of the group on the settings page for how the text looks.
-text-showing = Affichage du texte
+text-showing = Apparence du texte
 
 # Label of the size slider: how big the text is.
 text-size = Taille
@@ -266,22 +266,26 @@ text-read-as = Lire le fichier comme
 text-save-in = Enregistrer en
 
 # Note under the save encoding: the next save writes the file in this encoding.
-text-next-save = Le prochain enregistrement écrit le fichier dans cet encodage.
+text-next-save = Le fichier utilisera cet encodage au prochain enregistrement.
 
 # SAFETY: needs a human review before it ships
 # Words saying the text has changes that are not saved to its file. $path is the file.
-text-changes-not-saved = { $name } a des modifications non enregistrées dans son fichier.
+text-changes-not-saved = { $name } a des modifications non enregistrées.
 
 # SAFETY: needs a human review before it ships
 # Words saying the text has changes and no file yet.
-text-not-saved = Ce texte n'a pas été enregistré dans un fichier.
+text-not-saved = Ce texte n'est pas enregistré dans un fichier.
 
 # SAFETY: needs a human review before it ships
 # Heading of the question shown before closing a tab with changes. $name is the tab's file name.
 text-save-named = Enregistrer { $name } ?
 
 # Words in the question before closing: how many other tabs with changes are left after this one. $left is the number.
-text-more-after = { $left } de plus après celui-ci.
+text-more-after =
+    { $left ->
+        [one] Encore { $left } onglet à enregistrer.
+       *[other] Encore { $left } onglets à enregistrer.
+    }
 
 # SAFETY: needs a human review before it ships
 # Button in the question before closing that closes the tab without saving it.
@@ -301,55 +305,55 @@ text-is-folder = { $name } est un dossier.
 text-too-big = { $name } est trop gros pour être ouvert ici.
 
 # Shown when a file could not be opened. $name is the file's path and $reason why.
-text-cannot-open = { $name } n'a pas pu être ouvert : { $reason }
+text-cannot-open = Trindle n'a pas pu ouvrir { $name } : { $reason }
 
 # Shown when a file could not be written. $name is the file's path and $reason why.
-text-cannot-write = { $name } n'a pas pu être écrit : { $reason }
+text-cannot-write = Trindle n'a pas pu écrire { $name } : { $reason }
 
 # Shown when a file could not be saved. $name is the file's path and $reason why.
-text-cannot-save = { $name } n'a pas pu être enregistré : { $reason }
+text-cannot-save = Trindle n'a pas pu enregistrer { $name } : { $reason }
 
 # Shown when a file could not be read again. $name is the file's path and $reason why.
-text-cannot-read = { $name } n'a pas pu être relu : { $reason }
+text-cannot-read = Impossible de lire { $name } : { $reason }
 
 # Shown when the list of open work could not be written. $folder is the folder and $reason why.
-text-work-not-kept = Le travail n'a pas pu être conservé dans { $folder } : { $reason }
+text-work-not-kept = Trindle n'a pas pu enregistrer votre travail dans { $folder } : { $reason }
 
 # Shown when the settings could not be saved. $reason says why.
-text-settings-not-saved = Les réglages n'ont pas pu être enregistrés : { $reason }
+text-settings-not-saved = Impossible d'enregistrer les réglages : { $reason }
 
 # Shown when a word could not be added to the person's own words. $word is the word and $reason why.
-text-word-not-added = { $word } n'a pas pu être ajouté à vos mots : { $reason }
+text-word-not-added = Trindle n'a pas pu ajouter { $word } à votre dictionnaire : { $reason }
 
 # Shown when the list of recent files could not be cleared. $reason says why.
-text-list-not-cleared = La liste n'a pas pu être vidée : { $reason }
+text-list-not-cleared = Trindle n'a pas pu vider la liste : { $reason }
 
 # Shown when the file chooser could not be opened.
-text-chooser-failed = Le sélecteur de fichiers n'a pas pu être ouvert.
+text-chooser-failed = Impossible d'ouvrir le sélecteur de fichiers.
 
 # Shown when the file chooser cannot be used because there is no session bus.
-text-no-bus = Les fichiers ne peuvent pas être choisis sans bus de session.
+text-no-bus = Trindle ne peut pas ouvrir le sélecteur de fichiers pour le moment.
 
 # Shown when the spelling language asked for is not on the computer. $lang is its name.
 text-no-dictionary = Il n'y a pas de dictionnaire nommé { $lang }.
 
 # Shown when a spelling dictionary could not be read. $lang is its name and $reason why.
-text-dictionary-unreadable = Le dictionnaire { $lang } n'a pas pu être lu : { $reason }
+text-dictionary-unreadable = Trindle n'a pas pu lire le dictionnaire { $lang } : { $reason }
 
 # Shown when a save was stopped and the text it held before was kept in a folder. $reason says what went wrong and $path is where the old text is kept.
-text-kept-before = { $reason }. Ce qu'il contenait avant est conservé dans { $path }.
+text-kept-before = { $reason }. L'ancien texte est enregistré dans { $path }.
 
 # Shown when a save was stopped part way and the old text is kept. $why says why, and $path is where the old text is kept.
-text-kept-before-that = { $why } Ce qu'il contenait avant cet enregistrement est conservé dans { $path }.
+text-kept-before-that = { $why } Le texte d'avant cet enregistrement se trouve dans { $path }.
 
 # Shown when a save was stopped and what was kept of it cannot be read. $name is the file's path.
-text-saved-unreadable = { $name } était en cours d'enregistrement quand Text a été arrêté, et ce qui a été conservé de l'enregistrement est illisible.
+text-saved-unreadable = Text s'est fermé pendant l'enregistrement de { $name }, et Trindle ne peut pas lire la partie qui avait été enregistrée.
 
 # Shown when a save was stopped and the file has changed since. $name is the file's path.
-text-saved-changed = { $name } était en cours d'enregistrement quand Text a été arrêté, et il a été modifié depuis, il est donc laissé tel quel.
+text-saved-changed = Text s'est fermé pendant l'enregistrement de { $name }. Le fichier a changé depuis, Trindle l'a donc laissé tel quel.
 
 # Shown when a save was stopped and the old text could not be put back. $name is the file's path, $reason why, and $path where the old text is kept.
-text-saved-not-put-back = { $name } était en cours d'enregistrement quand Text a été arrêté, et n'a pas pu être remis comme avant : { $reason }. Ce qu'il contenait avant cet enregistrement est conservé dans { $path }.
+text-saved-not-put-back = Text s'est fermé pendant l'enregistrement de { $name }, et Trindle n'a pas pu remettre le fichier comme avant : { $reason }. Le texte d'avant cet enregistrement se trouve dans { $path }.
 
 # Quiet word beside what was just saved, exported or changed.
 text-done = Terminé
@@ -357,10 +361,13 @@ text-done = Terminé
 # Suggested file name in the Save as chooser for text never saved before.
 text-untitled-file = Sans titre.txt
 
+# The misspelt word, shown in quotation marks on the spelling bar. { $word } is the word.
+text-spell-word = « { $word } »
+
 
 
 # Line under the Save button when the file was changed by something else after Text opened, saved or reloaded it. Nothing has been saved.
-text-changed-elsewhere = Modifié ailleurs depuis son ouverture.
+text-changed-elsewhere = Ce fichier a changé depuis son ouverture.
 
 # Button beside that line: save the words here over the changed file.
 text-save-anyway = Enregistrer quand même
@@ -368,3 +375,5 @@ text-save-anyway = Enregistrer quand même
 # Button beside that line: read the file again from disk and drop the unsaved changes here.
 text-reload = Recharger
 
+# Shown when a link in the finished look is pressed and is not a web address, or no browser started.
+text-link-not-opened = Seules les adresses web s'ouvrent d'ici.

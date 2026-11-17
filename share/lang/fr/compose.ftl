@@ -17,3 +17,25 @@ compose-stopped-shot = La capture d'écran s'est arrêtée et a été fermée.
 
 # Tip of the round button on that notice, which starts the stopped part again.
 compose-stopped-try-again = Réessayer
+
+# Sent to Flow when you try its PIN and the screen isn't locked.
+compose-flow-not-locked = L'écran n'est pas verrouillé.
+
+# Sent to Flow when you try its PIN and no PIN is set.
+compose-flow-no-pin = Aucun code PIN n'est défini.
+
+# Sent to Flow when you try its PIN after the time allowed for it has run out.
+compose-flow-late = Le temps accordé pour le code PIN est écoulé.
+
+# Sent to Flow when the wrong PIN has been tried too many times.
+compose-flow-too-many = Trop d'essais.
+
+# Sent to Flow when what was typed isn't a PIN of 4 digits.
+compose-flow-not-a-pin = Un code PIN compte 4 chiffres.
+
+# Sent to Flow when the PIN is wrong. { $left } is the tries left.
+compose-flow-wrong-pin =
+    { $left ->
+        [one] Code PIN incorrect. 1 essai restant.
+       *[other] Code PIN incorrect. { $left } essais restants.
+    }

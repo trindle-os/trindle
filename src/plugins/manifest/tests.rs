@@ -24,12 +24,12 @@ fn the_validator_says_what_is_wrong() {
     let dir = folder_with("bad", &bad);
     std::os::unix::fs::symlink("/etc/passwd", dir.join("peek")).unwrap();
     let problems = check(&dir).unwrap_err().join("\n");
-    for said in ["Interface=2", "inside the plugin's folder, not /usr/bin/sh", "camera", "slider", "peek links outside"] {
+    for said in ["Interface=2", "inside the plugin's folder, not /usr/bin/sh", "camera", "slider", "peek is a link that leads outside"] {
         assert!(problems.contains(said), "{said} not in: {problems}");
     }
     let _ = std::fs::remove_dir_all(&dir);
     let none = folder_with("none", "[Plugin]\nInterface=1\nId=a.b\nName=A\nVersion=1\n");
-    assert!(check(&none).unwrap_err()[0].contains("hooks into nothing"));
+    assert!(check(&none).unwrap_err()[0].contains("doesn't connect to anything"));
     let _ = std::fs::remove_dir_all(&none);
 }
 
@@ -52,7 +52,7 @@ fn a_plugin_may_ask_to_control_the_keyboard_mouse_and_clipboard() {
     let _ = std::fs::remove_dir_all(&dir);
 
     let a = crate::common::access::ask("control");
-    assert_eq!(a.name, "control your keyboard, mouse and clipboard");
+    assert_eq!(a.name, "control of your keyboard, mouse and clipboard");
     assert!(crate::common::access::warning("control").unwrap().contains("trust"));
 }
 
@@ -61,7 +61,7 @@ fn a_plugin_may_ask_to_share_the_mouse_and_keyboard_apart_from_control() {
     let dir = folder_with("capture", &GOOD.replace("network;notifications", "network;control;capture"));
     assert_eq!(check(&dir).unwrap().asks, ["network", "control", "capture"]);
     let a = crate::common::access::ask("capture");
-    assert_eq!(a.name, "share your mouse and keyboard with another computer");
+    assert_eq!(a.name, "sharing your mouse and keyboard with another computer");
     assert!(crate::common::access::warning("capture").unwrap().contains("trust"));
 }
 
@@ -82,25 +82,33 @@ fn the_validator_checks_the_ring_menu() {
     let twice = says(&MENU.replace("connect;disconnect", "connect;connect"), "m-twice");
     assert!(twice.contains("names connect twice"), "{twice}");
     let odd = says(&MENU.replace("connect;disconnect", "connect;dis connect"), "m-odd");
-    assert!(odd.contains("Menu id dis connect may only have"), "{odd}");
+    assert!(odd.contains("menu ID dis connect can only contain"), "{odd}");
     let no_run = says(&MENU.replace("Run=bin/go connect\n", ""), "m-run");
     assert!(no_run.contains("[Menu connect] needs Run"), "{no_run}");
+}
+
+#[test]
+fn a_background_part_with_no_run_is_refused() {
+    let with = |run: &str| GOOD.replace("network;notifications", "network;notifications;background") + &format!("\n[Background]\n{run}");
+    assert!(says(&with("Other=1\n"), "bg-none").contains("[Background] needs Run"));
+    assert!(says(&with("Run=\n"), "bg-empty").contains("[Background] needs Run"));
+    assert_eq!(says(&with("Run=bin/go --keep\n"), "bg-ok"), "");
 }
 
 #[test]
 fn what_a_plugin_calls_things_is_plain_words_of_a_sensible_length() {
     let base = |from: &str, to: &str| says(&GOOD.replace(from, to), "plain");
     for (from, to, said) in [
-        ("Name=Weather", "Name=Wea\u{202e}ther", "Name is plain words"),
-        ("Name=Weather", &format!("Name={}", "W".repeat(49)), "Name is plain words"),
-        ("Name=Weather", "Name=Wea\u{7}ther", "Name is plain words"),
-        ("Version=1.0", &format!("Version={}", "1".repeat(33)), "Version is plain words"),
-        ("Permissions=", "Summary=Two  spaces\nPermissions=", "Summary is plain words"),
-        ("Permissions=", &format!("Summary={}\nPermissions=", "s".repeat(201)), "Summary is plain words"),
-        ("Label=Weather", &format!("Label={}", "L".repeat(49)), "[Ring] Label is plain words"),
-        ("Label=Town", "Label=To\u{200b}wn", "Label is plain words"),
-        ("Choices=Celsius;Fahrenheit", &format!("Choices=Celsius;{}", "F".repeat(49)), "Choices are at most"),
-        ("Choices=Celsius;Fahrenheit", "Choices=Celsius;Fah\u{202e}renheit", "Choices are at most"),
+        ("Name=Weather", "Name=Wea\u{202e}ther", "Name must be plain text on one line"),
+        ("Name=Weather", &format!("Name={}", "W".repeat(49)), "Name must be plain text on one line"),
+        ("Name=Weather", "Name=Wea\u{7}ther", "Name must be plain text on one line"),
+        ("Version=1.0", &format!("Version={}", "1".repeat(33)), "Version must be plain text on one line"),
+        ("Permissions=", "Summary=Two  spaces\nPermissions=", "Summary must be plain text on one line"),
+        ("Permissions=", &format!("Summary={}\nPermissions=", "s".repeat(201)), "Summary must be plain text on one line"),
+        ("Label=Weather", &format!("Label={}", "L".repeat(49)), "[Ring] Label must be plain text on one line"),
+        ("Label=Town", "Label=To\u{200b}wn", "Label must be plain text on one line"),
+        ("Choices=Celsius;Fahrenheit", &format!("Choices=Celsius;{}", "F".repeat(49)), "can have at most"),
+        ("Choices=Celsius;Fahrenheit", "Choices=Celsius;Fah\u{202e}renheit", "can have at most"),
     ] {
         let got = base(from, to);
         assert!(got.contains(said), "{said:?} not in: {got}");
@@ -115,7 +123,7 @@ fn a_ring_menu_has_at_most_eight_items() {
     for i in &ids {
         ini += &format!("\n[Menu {i}]\nLabel=Item {i}\nRun=bin/go {i}\n");
     }
-    assert!(says(&ini, "m-nine").contains("at most 8 are allowed"));
+    assert!(says(&ini, "m-nine").contains("At most 8 are allowed"));
     let eight = ini.replace(";i8", "").replace("\n[Menu i8]\nLabel=Item i8\nRun=bin/go i8\n", "");
     assert_eq!(says(&eight, "m-eight"), "");
 }
@@ -126,13 +134,13 @@ fn a_choice_may_take_its_choices_from_a_file_of_the_plugin() {
     assert_eq!(p.fields[0].choices_from.as_deref(), Some("found.txt"));
 
     let none = says(&FOUND.replace("ChoicesFrom=found.txt\n", ""), "f-none");
-    assert!(none.contains("needs Choices with two or more, or ChoicesFrom a file"), "{none}");
+    assert!(none.contains("needs Choices with two or more options, or ChoicesFrom, a file"), "{none}");
 
     let both = FOUND.replace("ChoicesFrom=found.txt", "Choices=a;b\nChoicesFrom=found.txt\nDefault=a");
     assert_eq!(says(&both, "f-both"), "");
     for bad in ["../found.txt", "/etc/passwd", "a/b", ".hidden", "found txt", "f\u{1b}x", &"x".repeat(65), "..", "a;b"] {
         let got = says(&FOUND.replace("found.txt", bad), "f-bad");
-        assert!(got.contains("ChoicesFrom is a file name in the plugin's home"), "{bad:?}: {got}");
+        assert!(got.contains("ChoicesFrom must name a file in the plugin's folder"), "{bad:?}: {got}");
     }
 }
 
@@ -150,7 +158,7 @@ fn what_a_newer_version_asks_for_beyond_the_one_installed() {
     assert!(asks_more(&old, &v(&["network", "listen"]), None).is_empty());
 
     assert_eq!(asks_more(&old, &v(&["network", "listen", "files", "control"]), None),
-               ["your Documents, Downloads, Pictures, Music, Videos and Desktop folders", "control your keyboard, mouse and clipboard"]);
+               ["your Documents, Downloads, Pictures, Music, Videos and Desktop folders", "control of your keyboard, mouse and clipboard"]);
 
     for ports in [&["tcp:24810", "udp:24811", "tcp:24812"][..], &["tcp:24810"], &["tcp:24810", "udp:24899"]] {
         assert_eq!(asks_more(&old, &old.asks, Some(&d(ports))), [other_ports().to_string()], "{ports:?}");
@@ -240,21 +248,21 @@ fn the_validator_refuses_a_bad_show_when_in_plain_words() {
     let long = format!("role={}", "x".repeat(49));
     let huge = format!("role={}", "x".repeat(200));
     for (field, when, said) in [
-        ("side", "role", "[Field side] ShowWhen is written field=value"),
-        ("side", "=controls", "the field's name may only have letters"),
-        ("side", "ro le=controls", "the field's name may only have letters"),
-        ("side", "../role=controls", "the field's name may only have letters"),
-        ("side", "role=", "needs a value of plain words"),
-        ("side", long.as_str(), "needs a value of plain words"),
-        ("side", huge.as_str(), "is at most 128 characters"),
-        ("side", "town=a\u{1b}[31mb", "needs a value of plain words"),
-        ("side", "town=a\u{202e}b", "needs a value of plain words"),
-        ("side", "town=a  b", "needs a value of plain words"),
+        ("side", "role", "[Field side] ShowWhen must use field=value"),
+        ("side", "=controls", "the field's name can only have letters"),
+        ("side", "ro le=controls", "the field's name can only have letters"),
+        ("side", "../role=controls", "the field's name can only have letters"),
+        ("side", "role=", "needs a plain text value on one line"),
+        ("side", long.as_str(), "needs a plain text value on one line"),
+        ("side", huge.as_str(), "ShowWhen can be at most 128 characters"),
+        ("side", "town=a\u{1b}[31mb", "needs a plain text value on one line"),
+        ("side", "town=a\u{202e}b", "needs a plain text value on one line"),
+        ("side", "town=a  b", "needs a plain text value on one line"),
         ("side", "side=left", "names its own field"),
         ("side", "nowhere=1", "names the field nowhere, which is not in this plugin's Fields"),
         ("side", "speed=true", "names the field speed, which comes after it in Fields"),
         ("role", "side=left", "names the field side, which comes after it in Fields"),
-        ("side", "on=yes", "names the switch on, so its value is true or false"),
+        ("side", "on=yes", "names the switch on, so its value must be true or false"),
         ("side", "role=Controls", "is not one of the Choices of role"),
         ("side", "role=controls;controlled", "is not one of the Choices of role"),
     ] {

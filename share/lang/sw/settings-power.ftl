@@ -8,7 +8,7 @@ settings-power-title = Nishati
 settings-power-keywords = betri lala zima anzisha upya toka skrini imezimwa kimya hafifisha funga nenosiri pin kahawa zuia kulala chaji kikomo 80 afya ya betri battery suspend sleep shut down restart log out screen off idle dim lock password keypad caffeine keep awake charge charging limit battery health
 
 # Introduction under the heading of the power page, and the words behind the page i.
-settings-power-help = Betri, hali ya nishati, na wakati skrini inapofifia, kufungwa na kuzimwa, kwenye kompyuta mpakato tofauti kwa betri yake na kwa chaja. Kikombe kwenye kichupo huweka skrini ikiwa macho. Kufunga, kuanzisha upya na kuzima viko hapa pia.
+settings-power-help = Chagua hali ya nishati, na wakati skrini inapofifia, kufungwa na kuzimwa. Kwenye kompyuta mpakato unaweka haya kando kwa betri na kwa chaja. Kikombe kwenye pete huweka skrini macho. Unaweza pia kufunga, kuanzisha upya na kuzima kutoka hapa.
 
 # Choice in a list of how long to wait.
 settings-power-time-never = Kamwe
@@ -77,32 +77,20 @@ settings-power-lid-shut-down = Zima
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-dim = Hafifisha skrini baada ya
 
-# Small words under an idle timer line.
-settings-power-timer-dim-about = Mwendo wowote hurudisha mwangaza.
-
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-clock = Onyesha saa inayosogea baada ya
 
-# Small words under an idle timer line.
-settings-power-timer-clock-about = Saa peke yake, ikisogea polepole.
-
 # Heading of an idle timer line, and the name of its lists.
-settings-power-timer-off = Zima skrini baada ya
-
-# Small words under an idle timer line.
-settings-power-timer-off-about = Kitufe chochote au mwendo huiwasha tena.
+settings-power-timer-off = Skrini kuzimwa baada ya
 
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-suspend = Lalisha baada ya
 
-# Small words under an idle timer line.
-settings-power-timer-suspend-about = Ikiachwa kwa muda huu, hulala.
-
 # Red words under the keep the screen awake switch when turning it on could not be saved.
-settings-power-no-awake = Skrini haikuweza kuwekwa macho: chaguo halikuweza kuhifadhiwa.
+settings-power-no-awake = Trindle haikuweza kuweka skrini macho kwa sababu haikuweza kuhifadhi chaguo lako.
 
 # Red words under the keep the screen awake switch when turning it off could not be saved.
-settings-power-no-sleep = Kuweka skrini macho hakukuweza kuzimwa: chaguo halikuweza kuhifadhiwa.
+settings-power-no-sleep = Trindle haikuweza kuhifadhi chaguo lako, kwa hiyo skrini itabaki macho.
 
 # Name of the power mode that saves the battery.
 settings-power-profile-saver = Kiokoa betri
@@ -135,10 +123,10 @@ settings-power-hours-minutes = saa { $h } dak { $m }
 settings-power-minutes = dak { $m }
 
 # Sentence at the top of the page on a computer with no battery.
-settings-power-top-no-battery = Imechomekwa: kompyuta hii haina betri ya kutunza.
+settings-power-top-no-battery = Imechomekwa. Kompyuta hii haina betri.
 
 # Sentence at the top of the page on a computer with no battery; { $mode } is the power mode.
-settings-power-top-no-battery-mode = Imechomekwa, katika hali ya { $mode }: hakuna betri ya kutunza.
+settings-power-top-no-battery-mode = Imechomekwa, katika hali ya { $mode }. Kompyuta hii haina betri.
 
 # Sentence at the top of the page while charging; { $percent } is how full.
 settings-power-top-charging = Inachaji, { $percent }%.
@@ -159,16 +147,13 @@ settings-power-top-battery = Betri iko { $percent }%.
 settings-power-top-battery-left = Betri iko { $percent }%, imebaki takriban { $left }.
 
 # Sentence at the top of the page while the battery is being read.
-settings-power-top-looking = Inaangalia betri…
+settings-power-top-looking = Inakagua betri…
 
 # Red words under the power mode line when the mode could not be changed.
-settings-power-mode-failed = Hali ya nishati haikuweza kubadilishwa.
+settings-power-mode-failed = Haikuweza kubadilisha hali ya nishati.
 
 # Heading of the power mode line, and the name of its list.
 settings-power-mode = Hali ya nishati
-
-# Small words under the power mode line.
-settings-power-mode-about = Kiokoa huendesha kwa ubaridi zaidi; utendaji kwa kasi zaidi.
 
 # Said in green under a line after its choice was kept.
 settings-power-saved = Imehifadhiwa
@@ -179,17 +164,11 @@ settings-power-warn-name = Onya betri ikishuka hadi
 # Heading of the line for the battery warning.
 settings-power-warn = Onya ikishuka hadi
 
-# Small words under the battery warning line.
-settings-power-warn-about = Mara moja, katikati ya skrini.
-
 # Choice in the list of battery levels: never warn.
 settings-power-never = Kamwe
 
 # Heading of the line, and name of its switch, for stopping charging at 80%.
 settings-power-limit = Acha kuchaji kwa 80%
-
-# Small words under the charge limit line.
-settings-power-limit-about = Ni laini zaidi kwa betri inayokaa imechomekwa mara nyingi.
 
 # Title of the battery card on a laptop.
 settings-power-card-battery = Betri
@@ -198,11 +177,11 @@ settings-power-card-battery = Betri
 settings-power-card-looking-after = Kutunza betri
 
 # Words behind the i of the battery card.
-settings-power-battery-about = Kiokoa betri huendesha kwa ubaridi zaidi na hufanya betri idumu kwa muda mrefu; utendaji huendesha kwa kasi zaidi; sawia iko katikati ya hizo mbili. Onyo hujitokeza katikati ya skrini mara moja, betri inapopungua. Kuacha kwa 80% ni laini zaidi kwa betri ya kompyuta mpakato inayokaa imechomekwa mara nyingi: huchaji hadi 80% na si zaidi, na hudumu miaka mingi zaidi. Izime kabla ya siku ya kuwa mbali na soketi.
+settings-power-battery-about = Kiokoa betri huendesha kwa ubaridi zaidi na hufanya betri idumu kwa muda mrefu. Utendaji huendesha kwa kasi zaidi. Sawia iko katikati ya hizo mbili. Onyo hujitokeza mara moja, katikati ya skrini, betri inapopungua. Kuacha kwa 80% ni bora kwa kompyuta mpakato inayokaa imechomekwa mara nyingi, na husaidia betri idumu miaka mingi zaidi. Izime kabla ya siku ya kuwa mbali na soketi.
 
 # Words under the charge limit line while the password window is open.
 # SAFETY: needs a human review before it ships
-settings-power-limit-waiting = Inasubiri nenosiri...
+settings-power-limit-waiting = Inasubiri nenosiri lako…
 
 # Green words under the charge limit line after charging was limited to 80%.
 settings-power-limit-on = Inaacha kwa 80%
@@ -213,26 +192,20 @@ settings-power-limit-off = Huchaji hadi kujaa
 # Heading of the keep the screen awake line, and name of its switch.
 settings-power-awake = Weka skrini macho
 
-# Small words under the keep the screen awake line.
-settings-power-awake-about = Kikombe kwenye kichupo hufanya vivyo hivyo.
-
 # Title of the card about dimming and the moving clock.
 settings-power-screen-title = Skrini
 
 # Words behind the i of the Screen card.
-settings-power-screen-about = Wakati Weka skrini macho imewashwa, hakuna kati ya haya linalotokea; kikombe kwenye kichupo pia huiwasha na kuizima. Kufifisha: mwendo wowote hurudisha mwangaza; ni skrini zenye mwangaza wao wenyewe tu, kama za kompyuta mpakato, zinazofifia. Saa inayosogea: skrini huwa giza ikiwa na saa tu juu yake, ikisogea polepole, na kitufe chochote au mwendo hurudisha kila kitu. Kwenye kompyuta mpakato kila muda huwekwa mara mbili, kwa betri yake na kwa chaja.
+settings-power-screen-about = Wakati Weka skrini macho imewashwa, hakuna kati ya haya linalotokea. Kikombe kwenye pete pia huiwasha na kuizima. Ni skrini zenye udhibiti wao wenyewe wa mwangaza tu, kama za kompyuta mpakato, zinazoweza kufifia. Saa inayosogea hufanya skrini kuwa giza na kuonyesha saa tu, ikisogea polepole. Kusogeza kipanya au kubonyeza kitufe hurudisha kila kitu. Kwenye kompyuta mpakato, unaweka kila muda mara mbili: mara moja kwa betri na mara moja kwa chaja.
 
 # Title of the card about turning the screen off and sleeping.
 settings-power-sleep-title = Skrini kuzimwa na kulala
 
 # Words behind the i of the Screen off and sleep card.
-settings-power-sleep-about = Kitufe chochote au mwendo huwasha skrini tena. Kulalisha huweka kompyuta usingizini hadi uiamshe. Kwenye kompyuta mpakato kila muda huwekwa mara mbili, kwa betri yake na kwa chaja. Ukiwa na skrini ya pili imechomekwa, kufunga kifuniko hakufanyi kitu, hivyo unaweza kuendelea na skrini kubwa.
+settings-power-sleep-about = Kubonyeza kitufe au kusogeza kipanya huwasha skrini tena. Kulalisha husimamisha kompyuta hadi uiamshe. Kwenye kompyuta mpakato, unaweka kila muda mara mbili: mara moja kwa betri na mara moja kwa chaja. Ikiwa skrini ya pili imechomekwa, kufunga kifuniko hakufanyi kitu, hivyo unaweza kuendelea na skrini kubwa.
 
 # Heading of the line for what closing the lid does.
 settings-power-lid = Kifuniko kikifungwa
-
-# Small words under that line.
-settings-power-lid-about = Hakuna kinachotokea ukiwa na skrini ya pili.
 
 # Caption above a list that applies while the laptop runs on its battery.
 settings-power-when-battery = Ikitumia betri
@@ -250,63 +223,44 @@ settings-power-named-charger = { $title }: ikiwa imechomekwa
 # SAFETY: needs a human review before it ships
 settings-power-lock = Funga skrini
 
-# Small words under the lock the screen line.
-# SAFETY: needs a human review before it ships
-settings-power-lock-about = Nenosiri lako au PIN hukurudisha ndani.
-
 # Heading of the lock after line, and the name of its list.
 settings-power-lock-after-name = Funga baada ya
-
-# Small words under the lock after line.
-settings-power-lock-after-about = Ikiachwa kwa muda huu, bila kujali mengine yaliyowekwa.
 
 # Heading of the line, and name of its switch, for locking when the computer sleeps.
 # SAFETY: needs a human review before it ships
 settings-power-lock-sleep = Funga kompyuta inapolala
-
-# Small words under that line.
-settings-power-lock-sleep-about = Ili iamke ikiwa imefungwa kila wakati.
 
 # Heading of the line, and name of its button, that locks the screen now.
 # SAFETY: needs a human review before it ships
 settings-power-lock-now = Funga sasa
 
 # Small words under the lock now line.
-settings-power-lock-now-about = Pia Super na L pamoja.
+settings-power-lock-now-about = Au bonyeza Super na L.
 
 # Red words under the lock now line when the lock screen would not start.
-settings-power-lock-now-failed = Skrini haikuweza kufungwa: skrini ya kufunga haikuanza.
+settings-power-lock-now-failed = Trindle haikuweza kufunga skrini kwa sababu skrini ya kufunga haikuanza.
 
 # Title of the locking card.
 settings-power-lock-title = Kufunga
 
 # Words behind the i of the locking card.
 # SAFETY: needs a human review before it ships
-settings-power-lock-card-about = Ukiwa mbali, skrini hujifunga, na nenosiri lako, au PIN ya tarakimu nne ukichagua moja, hukurudisha ndani. Hakuna kinachoonekana kwenye skrini hadi hapo. Kuingia kunahitaji nenosiri lako kila wakati. Funga baada ya ni muda ambao kompyuta huachwa kabla ya kujifunga, bila kujali nyakati za skrini na usingizi; hadi wakati huo, kurudi hakuhitaji PIN. Kuzima kufunga pia husahau PIN. Tarakimu nne ni za haraka zaidi kuandika kuliko nenosiri lako: baada ya muda uliochaguliwa kwa PIN kufanya kazi, au baada ya makosa matano, nenosiri lako linahitajika badala yake. Pipa huacha kutumia PIN.
+settings-power-lock-card-about = Ukiwa mbali, skrini hujifunga. Hakuna kinachoonekana juu yake hadi uifungue kwa nenosiri lako, au kwa PIN ya tarakimu nne ukiweka moja. Kuingia kunahitaji nenosiri lako kila wakati. Funga baada ya ni muda ambao kompyuta inaweza kuachwa kabla ya kujifunga, bila kujali nyakati za skrini na usingizi. Hadi wakati huo, hauhitaji PIN unaporudi. Kuzima kufunga pia huondoa PIN. Baada ya muda ulioweka kwenye PIN inafanya kazi kwa, au baada ya makosa matano, unahitaji nenosiri lako badala yake.
 
 # Heading of the line for adding a PIN.
 # SAFETY: needs a human review before it ships
 settings-power-pin-add = Fungua kwa PIN pia
 
-# Small words under that line.
-settings-power-pin-add-about = Tarakimu nne, haraka kuliko nenosiri lako.
-
 # Heading of the line, and name of its list, for how long a PIN works after the screen locks.
 # SAFETY: needs a human review before it ships
 settings-power-pin-works-name = PIN inafanya kazi kwa
-
-# Small words under that line.
-settings-power-pin-works-about = Kisha nenosiri lako linahitajika badala yake.
 
 # Name of the bin button that stops using a PIN.
 # SAFETY: needs a human review before it ships
 settings-power-pin-stop = Acha kutumia PIN
 
 # Heading of the line shown when a PIN is kept.
-settings-power-pin-kept = PIN imehifadhiwa
-
-# Small words under that line.
-settings-power-pin-kept-about = Andika tarakimu nne mpya ili kuibadilisha.
+settings-power-pin-kept = PIN imewekwa
 
 # Placeholder of the box for typing a new PIN.
 settings-power-pin-new = PIN mpya
@@ -314,45 +268,51 @@ settings-power-pin-new = PIN mpya
 # Name of the button that keeps the PIN typed.
 settings-power-pin-keep = Hifadhi PIN hii
 
+# Placeholder of the box for typing your account password before a PIN is saved.
+settings-power-pin-password = Nenosiri lako
+
+# Red words under the PIN box when no password was typed.
+settings-power-pin-need-password = Andika nenosiri lako kwanza, kisha hifadhi PIN.
+
+# Red words under the PIN box when the password typed was wrong.
+settings-power-pin-wrong-password = Nenosiri hilo si sahihi, kwa hiyo Trindle haikuhifadhi PIN.
+
 # Red words under the PIN line when the PIN could not be removed.
 # SAFETY: needs a human review before it ships
-settings-power-pin-not-removed = PIN haikuweza kuondolewa, kwa hiyo bado inafungua skrini.
+settings-power-pin-not-removed = Trindle haikuweza kuondoa PIN, kwa hiyo bado inafungua skrini.
 
 # Red words under the PIN box when it is not the right length; { $n } is how many digits a PIN has.
 settings-power-pin-digits =
     { $n ->
-        [one] PIN ni tarakimu { $n }.
-       *[other] PIN ni tarakimu { $n }.
+        [one] Tumia tarakimu { $n }.
+       *[other] Tumia tarakimu { $n }.
     }
 
 # Heading of the log out line, and name of its round button.
 # SAFETY: needs a human review before it ships
 settings-power-log-out = Toka
 
-# Small words under the log out line.
-settings-power-log-out-about = Kurudi kwenye skrini ya kuingia.
-
 # Title of the card with log out, suspend, restart and shut down.
 settings-power-session-title = Kipindi
 
 # Words behind the i of the session card.
 # SAFETY: needs a human review before it ships
-settings-power-session-about = Kutoka hufunga kila dirisha na kurudi kwenye skrini ya kuingia. Lalisha huweka kompyuta usingizini hadi uiamshe. Kila kitufe huuliza mara mbili, kama chaguo la nishati kwenye duara, kwa hiyo kuteleza hakufanyi kitu.
+settings-power-session-about = Kutoka hufunga kila dirisha na kukurudisha kwenye skrini ya kuingia. Lalisha husimamisha kompyuta hadi uiamshe. Kila kitufe kinahitaji kubonyezwa mara ya pili ili kuthibitisha, kama chaguo za nishati kwenye pete, kwa hiyo kuteleza mara moja hakufanyi kitu.
 
 # Red words under a session button when the system bus is not there.
-settings-power-no-bus = Basi ya mfumo haipatikani.
+settings-power-no-bus = Haiwezi kufikia huduma ya mfumo.
 
 # Red words under a session button when the computer would not do it.
-settings-power-would-not = Kompyuta haikukubali kufanya hivyo.
+settings-power-would-not = Kompyuta haikuweza kufanya hivyo.
 
 # Spoken description of the battery picture while the battery is being read.
-settings-power-art-looking-tip = Inaangalia betri.
+settings-power-art-looking-tip = Inakagua betri.
 
 # Spoken description of the battery picture; { $percent } is how full and { $state } what it is doing, such as Charging.
 settings-power-art-tip = Betri iko { $percent }%. { $state }
 
 # Word drawn in the empty battery picture while the battery is being read.
-settings-power-art-looking = Inaangalia
+settings-power-art-looking = Inapakia
 
 # Word drawn under the battery figure when its state is not known.
 settings-power-art-battery = Betri
@@ -365,10 +325,10 @@ settings-power-art-left =
     }
 
 # Spoken description of the battery range bar when there is no warning; { $top } is the percent it charges to.
-settings-power-limits-tip = Huchaji hadi { $top }%; hakuna onyo.
+settings-power-limits-tip = Huchaji hadi { $top }%, hakuna onyo.
 
 # Spoken description of the battery range bar; { $top } is the percent it charges to and { $warn } where a warning comes.
-settings-power-limits-tip-warn = Huchaji hadi { $top }%; onyo kwa { $warn }%.
+settings-power-limits-tip-warn = Huchaji hadi { $top }%, na onyo kwa { $warn }%.
 
 # A length of time in the list of how long a PIN works, in minutes; { $n } is the number.
 settings-power-pin-minutes =

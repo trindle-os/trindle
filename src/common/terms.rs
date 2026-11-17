@@ -55,7 +55,11 @@ mod tests {
     #[test]
     fn every_language_links_the_word_to_the_text() {
         for dir in std::fs::read_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/share/lang")).unwrap() {
-            let file = dir.unwrap().path().join("terms.ftl");
+            let dir = dir.unwrap().path();
+            if crate::common::language_names::VARIANTS.iter().any(|v| dir.ends_with(v)) {
+                continue;
+            }
+            let file = dir.join("terms.ftl");
             let text = std::fs::read_to_string(&file).unwrap();
             assert!(text.lines().any(|l| l.starts_with("terms-accept = ") && l.contains("](eula)")), "{file:?}");
         }

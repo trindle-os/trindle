@@ -7,7 +7,7 @@ settings-about-title = About this computer
 # Words the Settings search matches the About page by, in lower case.
 settings-about-keywords = hostname computer name network name about system version debian trindle memory ram processor cpu disk graphics screen model kernel rolling release activity running programs busy task manager system monitor disks drives usb space updates upgrade check automatic automatically security fixes
 # Text behind the info button of the About page.
-settings-about-help = This computer's name, as other computers on the network see it, what it is made of, and how long it takes to start. What it is doing right now, and which programs are using the memory and the processor, is in Activity, and the drives and the space on them in Drives, each a window of its own: the arrows in More detail open them.
+settings-about-help = This page shows this computer's name as other computers on the network see it, what it is made of, and how long it takes to start. Activity shows what the computer is doing right now and which programs use the memory and processor. Drives shows your drives and their space. Each opens in its own window. Use the arrows in More detail to open them.
 # What is shown when a fact about the computer cannot be found.
 settings-about-unknown = Unknown
 # The processor line; model is its name and cores how many threads it runs at once.
@@ -61,91 +61,69 @@ settings-about-up-days =
        *[other] { $n } days
     }
 # Red words under the computer name box when the name is not allowed.
-settings-about-name-bad = Letters, numbers and hyphens only, not starting or ending with a hyphen.
+settings-about-name-bad = Use letters, numbers and hyphens only. Don't start or end with a hyphen.
 # Words under the computer name box while the password window is open.
-settings-about-name-waiting = Waiting for the password...
+settings-about-name-waiting = Waiting for your password…
 # Red words under the computer name box when renaming failed.
-settings-about-name-failed = The computer could not be renamed.
+settings-about-name-failed = Couldn't rename the computer.
 # Words under the computer name box after renaming worked.
-settings-about-name-done = Programs already open see the new name after the next login.
+settings-about-name-done = Programs that are already open will use the new name after you next log in.
 # Placeholder and spoken name of the typing box for the computer's name.
 settings-about-name-entry = Computer name
 # Tip of the save button beside the computer name box.
 settings-about-rename = Rename this computer
 # Bold line of the computer name setting.
 settings-about-name = Computer name
-# Quiet line under the computer name setting.
-settings-about-name-sub = Letters, numbers and hyphens.
 # Heading of the card with the computer's name.
 settings-about-name-group = Name
 # Text behind the info button of the Name card.
-settings-about-name-about = How this computer appears on the network, and at the prompt in a Terminal. Letters, numbers and hyphens, not starting or ending with a hyphen. Changing it asks for your password.
+settings-about-name-about = This is the computer's name on the network and at the prompt in a Terminal. Use letters, numbers and hyphens, but don't start or end with a hyphen. You need to enter your password to change it.
 # Heading of the card about the computer's hardware.
 settings-about-hardware = The computer
 # Text behind the info button of the hardware card.
-settings-about-hardware-about = The maker and model, the processor and how many threads it runs at once, the graphics, and each screen in use with its size and refresh rate.
-# Quiet line under the maker and model.
-settings-about-hw-computer = The computer
-# Quiet line under the processor.
-settings-about-hw-processor = The processor
-# Quiet line under the graphics.
-settings-about-hw-graphics = Draws the pictures
-# Quiet line under the screens.
-settings-about-hw-screen = The screen
+settings-about-hardware-about = This shows the computer's maker and model, its processor and its graphics. It also shows how many threads the processor can run at once, and each screen in use with its size and refresh rate.
 # Heading of the card with the switch for looking for updates.
 settings-about-updates = Updates
 # Text behind the info button of the updates card.
-settings-about-updates-about = Trindle looks for new versions of apps, plugins, firmware and itself soon after you log in and every few hours, and Debian's security fixes go in every day. Switched off, Trindle looks only when you press Check for updates in Apps, or the updates button on the ring. Debian's security fixes have their own switch; switched off, they no longer install by themselves and known faults stay open until you update. Changing either switch asks for your administrator's password, so the computer's own services see the choice too.
+settings-about-updates-about = Trindle checks for new versions of apps, plugins, firmware and itself soon after you log in, then every few hours. If you switch this off, Trindle only checks when you press Check for updates in Apps, or the updates button on the ring. Debian's security fixes install every day and have their own switch. If you switch that off, they no longer install by themselves, and known security holes stay unfixed until you update. Changing either switch needs your administrator's password, so the whole computer uses your choice.
 # Bold line of the switch for looking for updates by itself; also the switch's name for a screen reader.
 settings-about-updates-by-itself = Check for updates
 # Words under the Check for updates switch while the password window is open.
-settings-about-updates-waiting = Waiting for the password...
-# Quiet line under that switch.
-settings-about-updates-by-itself-sub = Off, nothing looks unless you ask.
+settings-about-updates-waiting = Waiting for your password…
 # Bold line of the switch for Debian's security fixes; also the switch's name for a screen reader.
 settings-about-security = Security updates
-# Quiet line under the Security updates switch when it is on.
-settings-about-security-sub = Security fixes install by themselves every day.
 # Warning line under the Security updates switch when it is off.
 settings-about-security-off = Security fixes no longer install by themselves.
 # Heading of the card about the software.
 settings-about-software = The software
 # Text behind the info button of the software card.
-settings-about-software-about = Trindle is a desktop on top of Debian, which looks after the programs underneath. The kernel is the part that talks to the hardware, and Trindle's own compositor draws the desktop, on Wayland.
-# Quiet line under the Debian version.
-settings-about-sw-debian = Runs underneath
-# Quiet line under the kernel version.
-settings-about-sw-kernel = The kernel
+settings-about-software-about = Trindle is a desktop that runs on top of Debian, which looks after the programs underneath. The kernel is the part that works with the hardware. Trindle's own compositor draws the desktop, using Wayland.
 # Bold line naming Trindle's compositor.
 settings-about-sw-compositor = Trindle's own compositor
-# Quiet line under the compositor line.
-settings-about-sw-compositor-sub = Draws the desktop, on Wayland
 # Bold line saying how many apps are installed; n is the count.
 settings-about-sw-apps =
     { $n ->
         [one] { $n } app
        *[other] { $n } apps
     }
-# Quiet line under the number of apps.
-settings-about-sw-apps-sub = Installed, ready in the ring
 # Heading of the card with the ways to Activity and Drives.
 settings-about-more = More detail
 # Text behind the info button of the More detail card.
-settings-about-more-about = What it is doing right now, and which programs are using the memory and the processor, is in Activity. Every drive, how full and how healthy it is, and USB sticks, are in Drives.
+settings-about-more-about = Activity shows what the computer is doing right now and which programs use the memory and processor. Drives shows every drive, how full and healthy it is, and any USB sticks.
 # Bold line of the setting that opens Activity.
 settings-about-activity = See what is running
-# Quiet line under the setting that opens Activity.
-settings-about-activity-sub = Programs using memory and the processor.
 # Tip of the arrow that opens the Activity program.
 settings-about-activity-name = Activity
 # Bold line of the setting that opens Drives.
 settings-about-drives = Drives and space
-# Quiet line under the setting that opens Drives.
-settings-about-drives-sub = Every drive, how full and healthy it is.
 # Tip of the arrow that opens the Drives program.
 settings-about-drives-name = Drives
 # Red words under the start-up times line when the file could not be saved.
-settings-about-times-failed = The start-up times could not be saved to Downloads.
+settings-about-times-failed = Trindle couldn't save the start-up times to Downloads.
+# First line of the saved start-up times file: the two columns, separated by a comma.
+settings-about-times-heading = Date and time,Seconds
+# File name of the saved start-up times, in Downloads.
+settings-about-times-file = Trindle start-up times.csv
 # Words under the start-up times line after the file was saved; file is the file's name.
 settings-about-times-saved = In Downloads, as { $file }
 # Label of the word button that saves every start-up time.
@@ -153,16 +131,45 @@ settings-about-times-save = Save
 # Spoken name of the Save button for the start-up times.
 settings-about-times-save-spoken = Save every start-up time to Downloads
 # Bold line of the setting that saves the start-up times.
-settings-about-times-keep = Every start, to keep
-# Quiet line under that setting.
+settings-about-times-keep = Save each start time
+# Added after the words behind the i of its card.
 settings-about-times-keep-sub = Saved to Downloads as a spreadsheet.
 # The sentence over the chart of the last ten start-up times.
-settings-about-times-chart = Each column is one start, the newest on the right.
+settings-about-times-chart = Each column is one start. The newest is on the right.
 # Heading of the card with the last ten start-up times.
-settings-about-times = The last ten starts
+settings-about-times = Last ten start-ups
 # Text behind the info button of the start-up times card.
-settings-about-times-about = Each start is timed from the power button to the login screen, leaving out any time spent typing the disk password. The newest is at the top.
+settings-about-times-about = Trindle times each start-up from the power button to the login screen. Time spent typing the disk password isn't counted. The newest is at the top.
 # Heading of the memory tile.
 settings-about-memory = Memory
 # Heading of the disk tile.
 settings-about-disk = Disk
+
+## Problem reports card (src/settings/panels/report_card.rs)
+
+# Heading of the card on About that holds the switch and the optional names for problem reports.
+settings-about-reports = Problem reports
+# Text behind the round i of that card. Buildmorphic is the community that helps build Trindle; keep its name.
+settings-about-reports-about = Reports go to Buildmorphic, the community that helps build Trindle. You can join with just an email address. You earn credit and levels for problems you're first to report, even if you can't fix them. A report contains only a fixed list of details, and nothing is sent until you press Send. A username or GitHub name is optional, and your username is never your email address.
+# Switch: whether Trindle asks about problems and about sharing reports. Name of the switch for the screen reader too.
+settings-about-reports-offer = Offer to send a report when something goes wrong
+# Box for the optional Buildmorphic username, also its name for the screen reader. Buildmorphic is a name.
+settings-about-reports-name = Buildmorphic username
+# Box for the optional GitHub name, also its name for the screen reader. GitHub is a name.
+settings-about-reports-github = GitHub name
+# Name of the round button that opens the Buildmorphic community website, and of its line.
+settings-about-reports-community = About the community
+# Said under the switch when it is turned off and reports that were waiting to be sent were deleted; n is how many.
+settings-about-reports-deleted =
+    { $n ->
+        [one] Off. { $n } waiting report deleted.
+       *[other] Off. { $n } waiting reports deleted.
+    }
+# Said in red under the switch when it is turned off but some waiting reports could not be deleted; n is how many.
+settings-about-reports-kept =
+    { $n ->
+        [one] Off. { $n } waiting report could not be deleted.
+       *[other] Off. { $n } waiting reports could not be deleted.
+    }
+# Said in red under the switch when it is turned off but the Reporting add-on could not delete the reports it keeps; the reason follows.
+settings-about-reports-addon-kept = Off, but the Reporting add-on's waiting reports weren't deleted.

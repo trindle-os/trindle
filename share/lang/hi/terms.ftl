@@ -5,4 +5,4 @@
 terms-accept = मैं [EULA](eula) से सहमत हूँ
 
 # In the foot, while the box is not ticked, saying why the button beside it is off.
-terms-needed = आगे बढ़ने के लिए बॉक्स पर टिक करें
+terms-needed = सहमति ज़रूरी है

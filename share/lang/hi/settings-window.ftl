@@ -25,10 +25,10 @@ settings-window-group-about = जानकारी
 settings-window-in-apps = ऐप्स में
 
 # Small grey heading over the row a search finds that opens the Folders program's settings.
-settings-window-in-folders = फ़ोल्डर में
+settings-window-in-folders = Folders में
 
 # The side bar row that opens the Folders program at its own settings.
-settings-window-in-folders-name = फ़ोल्डर की अपनी सेटिंग
+settings-window-in-folders-name = Folders की अपनी सेटिंग
 
 # Words the Settings search matches the Folders settings row by, in lower case, separated by spaces.
 settings-window-in-folders-keywords =
@@ -41,7 +41,7 @@ settings-window-no-page = कोई पन्ना मेल नहीं ख�
 settings-window-theme-refused = {"  "}{ $id }  { $name } (इस्तेमाल नहीं हो सकता: { $why })
 
 # Printed in a terminal when trindle-settings --theme is given no theme name.
-settings-window-theme-name = किसी थीम का नाम दें, जैसे: trindle-settings --theme default
+settings-window-theme-name = थीम का नाम लिखें, उदाहरण के लिए: trindle-settings --theme default
 
 # Printed in a terminal after trindle-settings --theme worked; theme is the theme's name.
 settings-window-theme-now = थीम अब { $theme } है।
@@ -50,13 +50,13 @@ settings-window-theme-now = थीम अब { $theme } है।
 settings-window-theme-own = Trindle की अपनी
 
 # Printed in a terminal when the theme could not be chosen; error says why and ends with a full stop.
-settings-window-themes-list = { $error } trindle-settings --themes उन्हें सूचीबद्ध करता है।
+settings-window-themes-list = { $error } सूची देखने के लिए trindle-settings --themes चलाएँ।
 
 # Printed in a terminal when trindle-settings --keys is not given the word default.
-settings-window-keys-how = हर कुंजी और बटन को वापस पहले जैसा करने के लिए: trindle-settings --keys default
+settings-window-keys-how = हर कुंजी और बटन को सामान्य करने के लिए यह चलाएँ: trindle-settings --keys default
 
 # Printed in a terminal after every key and button was put back.
-settings-window-keys-back = हर कुंजी और बटन वैसा ही हो गया है जैसा छपा है।
+settings-window-keys-back = हर कुंजी और बटन सामान्य हो गया है।
 
 # Printed in a terminal when the keys could not be put back; error says why.
-settings-window-keys-failed = कुंजियाँ वापस नहीं की जा सकीं: { $error }
+settings-window-keys-failed = Trindle कुंजियाँ वापस नहीं कर सका: { $error }

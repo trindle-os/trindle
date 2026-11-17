@@ -8,7 +8,7 @@ use crate::common::files::data_home;
 use super::install::{install_with};
 use super::launchers::{is_terminal, put_launchers, take_launchers};
 use super::needs::{answered, candidate, debs_in, download, providers};
-use super::run::{plain_command, run_boxed};
+use super::run::{plain_command, run_boxed_bus};
 use super::x11::{run_own_x11};
 use super::{FIRST_APPS, allow, allowed, categories, folder, lines_at, mark_asked, version, write_kept_lines};
 
@@ -146,6 +146,7 @@ pub fn main(args: Vec<String>) -> i32 {
         "--gather" if !arg(2).is_empty() => return gather(Path::new(arg(2)), &args[3..]),
         "--own-x11" if args.len() > 3 => return run_own_x11(arg(2), &args[3..]),
         "--appimage" if !arg(2).is_empty() => return crate::store::loose::appimage(Path::new(arg(2)), &args[3..]),
+        "--appimage-read" if args.len() > 4 => return crate::store::loose::appimage_read(Path::new(arg(2)), Path::new(arg(3)), arg(4)),
         "--ai" if !arg(2).is_empty() => return crate::store::fence::main_for(arg(2), &args[3..]),
         "--ai-share" if !arg(2).is_empty() => return crate::store::fence::share_main(arg(2)),
         "--ai-approve" if args.len() > 3 => return crate::store::fence_window::main(arg(2), arg(3)),
@@ -158,7 +159,7 @@ pub fn main(args: Vec<String>) -> i32 {
         eprintln!("trindle-boxed: give a package installed in its own folder, then the command to run");
         return 2;
     };
-    if version(name).is_none() {
+    if !crate::store::deb::valid_name(name) || version(name).is_none() {
         eprintln!("trindle-boxed: {name} is not installed in its own folder");
         return 1;
     }
@@ -169,5 +170,5 @@ pub fn main(args: Vec<String>) -> i32 {
         eprintln!("trindle-boxed: could not start {}: {e}", args[2]);
         return 1;
     }
-    run_boxed(&folder(name), name, &allowed, &args[2..])
+    run_boxed_bus(&folder(name), name, &allowed, &[], &args[2..])
 }

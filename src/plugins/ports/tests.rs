@@ -18,7 +18,7 @@ fn the_validator_refuses_ports_it_should() {
     let problems = |perms: &str, listen: &str| -> String {
         listening("badlisten", &with_listen(perms, &format!("\n[Network]\nListen={listen}\n"))).unwrap_err().join("\n")
     };
-    assert!(problems("network;listen", "icmp:2000").contains("not a protocol"));
+    assert!(problems("network;listen", "icmp:2000").contains("isn't tcp or udp"));
     assert!(problems("network;listen", "TCP:2000").contains("small letters"));
     assert!(problems("network;listen", "tcp").contains("protocol:port"));
     assert!(problems("network;listen", "tcp:80").contains("1024 to 65535"));

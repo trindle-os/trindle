@@ -20,22 +20,35 @@ fn a_lock_let_go_while_a_program_is_being_started_is_free_a_moment_later() {
     use std::os::unix::process::CommandExt;
     let dir = kept_dir("handed");
     let held = lock_taken(&dir);
+
+    let (mut there, mut go) = ([0; 2], [0; 2]);
+    // SAFETY: each call is handed a pair of ints of its own to fill.
+    assert!(unsafe { libc::pipe2(there.as_mut_ptr(), libc::O_CLOEXEC) == 0 && libc::pipe2(go.as_mut_ptr(), libc::O_CLOEXEC) == 0 });
     let mut starting = Command::new("true");
     // SAFETY: the closure runs in the new process before the program
 
     unsafe {
-        starting.pre_exec(|| {
-            libc::usleep(300_000);
+        starting.pre_exec(move || {
+            let mut byte = 0u8;
+            libc::write(there[1], (&raw const byte).cast(), 1);
+            libc::read(go[0], (&raw mut byte).cast(), 1);
             Ok(())
         })
     };
     let slow = std::thread::spawn(move || starting.status());
-
-    std::thread::sleep(Duration::from_millis(100));
+    let mut byte = 0u8;
+    // SAFETY: one byte read into, and written from, a byte of this function's own.
+    assert_eq!(unsafe { libc::read(there[0], (&raw mut byte).cast(), 1) }, 1, "the new process is there");
     drop(held);
     assert!(!lock_free(&dir), "the program being started still has its copy");
+    // SAFETY: the write end of a pipe this test owns, and one live byte of this function's own.
+    assert_eq!(unsafe { libc::write(go[1], (&raw const byte).cast(), 1) }, 1);
     assert!(comes_free(&dir), "and it is free once that program has begun");
     let _ = slow.join();
+    for fd in there.into_iter().chain(go) {
+        // SAFETY: the four ends made above, closed once.
+        unsafe { libc::close(fd) };
+    }
     let _ = std::fs::remove_dir_all(&dir);
 }
 
@@ -171,7 +184,7 @@ fn a_keeper_goes_on_in_a_session_that_is_left_and_a_failed_swap_starts_it_again(
 #[test]
 fn a_renewed_keeper_trusts_only_the_lock_it_really_holds() {
     use std::os::fd::AsRawFd;
-    let dir = kept_dir("handed");
+    let dir = kept_dir("renewed");
     let held = take_lock(&dir).expect("the lock is free");
     let say = |n: i32| vec![format!("{KEEPING}{n}")];
     assert_eq!(lock_handed_on(&dir, &say(held.as_raw_fd())), Some(held.as_raw_fd()));

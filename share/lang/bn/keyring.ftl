@@ -51,7 +51,7 @@ keyring-stopped = কীরিং বন্ধ হয়ে গেছে
 keyring-not-the-keyring-password = এটি কীরিংয়ের পাসওয়ার্ড নয়
 
 # Shown under the box when the keyring file is damaged and has been left as it is.
-keyring-damaged-left = কীরিং ফাইলটি নষ্ট, তাই এটি যেমন আছে তেমনই রাখা হয়েছে
+keyring-damaged-left = কীরিং ফাইলটি নষ্ট, তাই Trindle এটিতে কোনো পরিবর্তন করেনি
 
 # Shown under the box when the password is not the person's login password.
 # SAFETY: needs a human review before it ships
@@ -73,18 +73,21 @@ keyring-error-locked = কীরিং বন্ধ (তালা দেওয�
 keyring-error-wrong-password = এই পাসওয়ার্ডে কীরিং খোলে না
 
 # Said when the collection or item asked for is not there.
-keyring-error-no-such = এমন কোনো সংগ্রহ বা জিনিস নেই
+keyring-error-no-such = ওই জিনিসটি নেই
 
 # Said when the keyring file cannot be read as a keyring.
 keyring-error-damaged = কীরিং ফাইলটি নষ্ট
 
 
 # Under the reason, naming the program that asked, when the keyring can find its name.
-keyring-asked-by = { $program } চেয়েছে
+keyring-asked-by = অনুরোধ করেছে: { $program }
 
 # Told to a program that asked while the keyring was taking over from the one before and many calls already waited.
-keyring-starting = কিরিং চালু হচ্ছে। আবার চেষ্টা করুন।
+keyring-starting = কীরিং চালু হচ্ছে। আবার চেষ্টা করুন।
 
 # The program in "Asked for by", for a program on the bus: $name is the name it gives itself, which anything can claim.
 keyring-named-itself = একটি প্রোগ্রাম যে নিজেকে { $name } বলে
 
+
+# Said to a program that gave a password with letters the keyring can't read, so no keyring is made with it.
+keyring-password-unreadable = ওই পাসওয়ার্ডে এমন অক্ষর আছে যা কীরিং পড়তে পারে না

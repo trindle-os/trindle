@@ -4,7 +4,7 @@
 settings-language-heading = لغة Trindle
 
 # Words under the heading of that card.
-settings-language-about = اختر اللغة التي تُكتب بها برامج Trindle. ما لم يُترجم بعد يظهر بالإنجليزية.
+settings-language-about = اختر لغة برامج Trindle. أي شيء لم يُترجم بعد يظهر بالإنجليزية.
 
 # Title of the line with the list of languages.
 settings-language-pick = لغة Trindle
@@ -12,17 +12,14 @@ settings-language-pick = لغة Trindle
 # Tip of the list of languages, and its screen reader name.
 settings-language-pick-tip = اختر لغة برامج Trindle
 
-# Words under the list of languages: when a new choice is taken up.
-settings-language-next-start = يستخدمها كل برنامج عند بدء تشغيله في المرة القادمة.
+# Added to the language card's i: when a new choice is taken up.
+settings-language-next-start = الإعدادات تستخدمه الآن، وباقي البرامج في المرة القادمة التي تبدأ فيها.
 
 # Entry in the list of languages: use the language the computer is set to.
-settings-language-auto = اتبع النظام
+settings-language-auto = لغة النظام
 
 # Title of the group of bars showing how much of each language is translated.
 settings-language-how-complete = مقدار ما تُرجم
-
-# Words under that title.
-settings-language-how-complete-sub = الشريط الممتلئ يعني أن كل كلمة مترجمة.
 
 # Tip and screen reader name of a bar under a language: how many of the English words it has (done and all are counts).
 settings-language-share =
@@ -41,4 +38,3 @@ settings-language-variant = الكلمات المختلفة عن الإنجلي�
 
 # Under a language whose words were made by machine and not yet checked by a person.
 settings-language-machine = مترجم آليًا
-

@@ -5,7 +5,7 @@
 
 use std::cell::{Cell, RefCell};
 use std::rc::{Rc, Weak};
-use std::time::{Duration, Instant};
+use std::time::Duration;
 
 use super::ctx::Ctx;
 use crate::common::files::setting;
@@ -13,6 +13,7 @@ use crate::settings::ui::icon_in;
 use crate::toolkit::bus::{self, Bus, Listen};
 use crate::toolkit::colour::Colour;
 use crate::toolkit::event::{Flow, Loop};
+use crate::toolkit::motion::{tween, Ease, Tween};
 use crate::toolkit::text::Style;
 use crate::toolkit::theme::{self, Theme};
 use crate::toolkit::ui::{App, Shown};
@@ -41,7 +42,6 @@ const MARGIN: f32 = 32.0;
 
 const LINE: f32 = 1.3;
 const FADE: Duration = Duration::from_millis(200);
-const FRAME: Duration = Duration::from_millis(16);
 const CHARGER_SECONDS: u64 = 4;
 const POLL: Duration = Duration::from_secs(60);
 
@@ -124,7 +124,7 @@ struct BatteryAlert {
 
     hide_timer: Cell<u32>,
     seen: Cell<f32>,
-    fading: Cell<u32>,
+    fading: RefCell<Option<Tween>>,
     _listens: RefCell<Vec<Listen>>,
 }
 
@@ -132,7 +132,7 @@ pub fn start(ctx: &Rc<Ctx>) {
     let me = Rc::new_cyclic(|me| BatteryAlert {
         ctx: ctx.clone(), me: me.clone(), shown: RefCell::new(None),
         warned: Cell::new(false), warning: Cell::new(false), plugged: Cell::new(None),
-        hide_timer: Cell::new(0), seen: Cell::new(0.0), fading: Cell::new(0), _listens: RefCell::new(Vec::new()),
+        hide_timer: Cell::new(0), seen: Cell::new(0.0), fading: RefCell::new(None), _listens: RefCell::new(Vec::new()),
     });
     if let Some(bus) = &ctx.system {
         let mut listens = Vec::new();
@@ -271,25 +271,31 @@ impl BatteryAlert {
     }
 
     fn fade(&self, inwards: bool) {
-        let this = self.fading.get() + 1;
-        self.fading.set(this);
-        let (from, began, w) = (self.seen.get(), Instant::now(), self.me.clone());
-        self.ctx.lp.every(FRAME, move || {
-            let Some(a) = w.upgrade() else { return Flow::Stop };
-            if a.fading.get() != this {
-                return Flow::Stop;
-            }
-            let t = (began.elapsed().as_secs_f32() / FADE.as_secs_f32()).min(1.0);
-            let seen = if inwards { from + (1.0 - from) * t } else { from * (1.0 - t) };
+        if let Some(t) = self.fading.borrow_mut().take() {
+            t.stop();
+        }
+        let (from, step, done) = (self.seen.get(), self.me.clone(), self.me.clone());
+        let to = if inwards { 1.0 } else { 0.0 };
+        let t = tween(&self.ctx.lp, FADE.as_millis() as u64, Ease::Out, move |k| {
+            let Some(a) = step.upgrade() else { return };
+            let seen = from + (to - from) * k;
             a.seen.set(seen);
-            if let Some(shown) = &*a.shown.borrow() {
+            let shown = a.shown.borrow();
+            if let Some(shown) = &*shown {
                 shown.set_shown(seen);
-                if t >= 1.0 && !inwards {
+            }
+        }, move || {
+            if inwards {
+                return;
+            }
+            if let Some(a) = done.upgrade() {
+                let shown = a.shown.borrow();
+                if let Some(shown) = &*shown {
                     shown.window.set_visible(false);
                 }
             }
-            if t < 1.0 { Flow::Continue } else { Flow::Stop }
         });
+        *self.fading.borrow_mut() = Some(t);
     }
 }
 

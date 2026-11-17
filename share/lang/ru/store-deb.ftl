@@ -16,7 +16,7 @@ store-deb-ready = { $name } готов к установке в отдельну
 store-deb-elsewhere = Этот пакет предназначен для компьютеров { $arch }, поэтому на этот его установить нельзя.
 
 # Red words at the top of the window when the package is Trindle itself.
-store-deb-trindle = Это сам Trindle. Он обновляется на странице «Обновления» раздела «Приложения», а не из файла.
+store-deb-trindle = Это сам Trindle. Обновляйте его на странице «Обновления» в разделе «Приложения», а не из файла.
 
 # Red words at the top of the window for a driver or a background service.
 store-deb-service = { $name } является драйвером или фоновой службой, которые не работают из отдельной папки, поэтому установить его здесь нельзя.
@@ -36,7 +36,7 @@ store-deb-where = Откуда он взялся
 
 # SAFETY: needs a human review before it ships
 # Tip and spoken name of the round button that removes the package and what it saved.
-store-deb-remove = Удалить его и всё, что он сохранил
+store-deb-remove = Удалить его и его данные
 
 # Word beside the ring while the package goes in.
 store-deb-installing = Установка
@@ -52,7 +52,7 @@ store-deb-update = Обновить
 
 # SAFETY: needs a human review before it ships
 # Heading of the card for a package not installed yet.
-store-deb-goes-in = Устанавливается в отдельную папку, по умолчанию с ограничениями
+store-deb-goes-in = Устанавливается в собственную папку с ограничениями
 
 # SAFETY: needs a human review before it ships
 # Under that heading.
@@ -61,14 +61,11 @@ store-deb-goes-in-note = Пароль не нужен. Пока вы не раз
 # Heading of the card for a package installed at this version.
 store-deb-same-version = Версия { $version } установлена в отдельную папку
 
-# Under that heading.
-store-deb-same-version-note = Переустановите её, если она перестала работать как следует.
-
 # Heading of the card for a package installed at another version.
 store-deb-other-version = Версия { $version } установлена в отдельную папку
 
 # Under that heading: the version this brings.
-store-deb-other-version-note = Установка этого пакета обновит её до версии { $version }, сохранив то, что она сохранила.
+store-deb-other-version-note = Это обновит её до версии { $version }, а сохранённые данные останутся.
 
 # Facts line: how big the package is once installed.
 store-deb-fact-size = Размер после установки
@@ -86,7 +83,7 @@ store-deb-installing-note = Установка в отдельную папку.
 store-deb-done = Установлено в отдельную папку. Вы найдёте его в кольце.
 
 # Red words at the top of the window when parts the package needs could not be found; the parts follow.
-store-deb-missing = Установлено в отдельную папку, но не удалось найти эти компоненты, поэтому программа может не запуститься: { $parts }.
+store-deb-missing = Установлено в отдельную папку, но этих компонентов не хватает, поэтому программа может не запуститься: { $parts }.
 
 # SAFETY: needs a human review before it ships
 # Words at the top of the window once the package is removed.
@@ -108,7 +105,7 @@ store-parts-not-deb = { $path } не является пакетом Debian, к�
 store-parts-not-unpacked = Не удалось распаковать { $path }.
 
 # Red words when the program is not one kept in a box.
-store-loose-not-boxed = Эта программа не хранится в отдельной папке.
+store-loose-not-boxed = Эта программа не работает в отдельной папке.
 
 # Name of Trindle's own terminal in the ring.
 store-boxed-terminal = Терминал
@@ -117,7 +114,7 @@ store-boxed-terminal = Терминал
 store-boxed-x-off = Старые программы выключены
 
 # Body of that notice: where to turn them on.
-store-boxed-x-off-where = Параметры, Разрешения
+store-boxed-x-off-where = Настройки, Разрешения
 
 # Title of the notice when too many older programs are open.
 store-boxed-x-many = Слишком много старых программ
@@ -130,16 +127,16 @@ store-boxed-x-could-not-open = Не удалось открыть { $app }
 
 # SAFETY: needs a human review before it ships
 # Body of the notice the first time a terminal opens outside its box.
-store-boxed-terminal-told = Терминал имеет доступ к большей части вашего компьютера, чем другие приложения, потому что это нужно для его работы. Вводите только понятные вам команды и только от людей, которым доверяете.
+store-boxed-terminal-told = Терминал имеет доступ к большей части вашего компьютера, чем другие приложения. Вводите только понятные вам команды и только от людей, которым доверяете.
 
-# Title of the notice when a plugin allowed the home network has none.
-store-boxed-home-off = Домашняя сеть выключена
+# Title of the notice when a plugin allowed the local network has none.
+store-boxed-home-off = Нет локальной сети
 
 # Body of that notice: the plugin's name and why.
 store-boxed-home-off-why = У { $app } нет сети: { $why }
 
 # Why a plugin allowed the home network has none: Trindle could not find its own program.
-store-boxed-home-why-self = не удалось найти собственную программу
+store-boxed-home-why-self = отсутствует программа Trindle
 
 # The same: the unshare program is missing.
 store-boxed-home-why-unshare = unshare не установлена
@@ -148,16 +145,16 @@ store-boxed-home-why-unshare = unshare не установлена
 store-boxed-home-why-pasta = pasta не установлена
 
 # The same: the network room was not made.
-store-boxed-home-why-not-made = не удалось создать для неё сетевое пространство
+store-boxed-home-why-not-made = её сеть не была настроена
 
 # The same: the room was not a new one, so it was left alone.
-store-boxed-home-why-not-new = её сетевое пространство не было новым
+store-boxed-home-why-not-new = её сеть уже существовала
 
 # The same: the filter that keeps a box from making a room of its own could not be made.
-store-boxed-home-why-filter = не удалось создать фильтр системных вызовов
+store-boxed-home-why-filter = Trindle не смог настроить защитный фильтр
 
 # The same: the room's rules would not load.
-store-boxed-home-why-rules = правила пространства не загрузились
+store-boxed-home-why-rules = правила её сети не загрузились
 
 # The same: a program would not start, with its name and the reason.
 store-boxed-home-why-would-not-start = { $program } не запустилась: { $why }
@@ -166,12 +163,23 @@ store-boxed-home-why-would-not-start = { $program } не запустилась:
 store-boxed-home-why-pasta-said = pasta сообщила: { $why }
 
 # The same: pasta could not join the room and said nothing.
-store-boxed-home-why-pasta-no-join = pasta не смогла присоединиться к пространству
+store-boxed-home-why-pasta-no-join = pasta не смогла её подключить
+
+# Said when an app can't be installed because its package has a link as a top folder. { $name } is the folder.
+store-parts-link = Верхняя папка { $name } это ссылка, поэтому пакет использовать нельзя.
+
+# Said when an app can't be installed in a box because it is a driver or a background service. { $name } is the app.
+store-boxed-driver = { $name } это драйвер или фоновая служба. Такие программы не работают из собственной папки, поэтому он не установлен.
 
 
 # Title of the notice when a program was given a downloaded file and run in a box with no internet.
 store-downloaded-opened = Открыто без интернета
 
 # Body of that notice: why, and what the program was given.
-store-downloaded-why = Файл был скачан, поэтому у программы есть только он, только для чтения.
+store-downloaded-why = Поскольку файл был скачан, программа может только читать этот один файл.
 
+# Title of the notice when the desktop could not be asked for a display for an older program.
+store-boxed-x-unasked = Старые программы не могут открыться
+
+# Body of that notice: what to do.
+store-boxed-x-unasked-why = Выйдите из системы и войдите снова, затем повторите попытку

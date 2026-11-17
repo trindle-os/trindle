@@ -53,7 +53,7 @@ pub fn to_html(blocks: &[Block], title: &str) -> String {
         block_html(b, &mut body);
     }
     format!(
-        "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n\
+        "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\">\n\
          <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n\
          <meta name=\"generator\" content=\"Trindle Text\">\n<title>{}</title>\n<style>\n{CSS}</style>\n</head>\n<body>\n<main>\n{body}</main>\n</body>\n</html>\n",
         escape(title)

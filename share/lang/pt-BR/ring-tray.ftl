@@ -14,16 +14,20 @@ ring-updates-none = Tudo está atualizado
 # Answer to a spoken question about updates when the updates button installs them all; "it" for one, "them" for more.
 ring-updates-spoken-all =
     { $n ->
-        [one] { $n } em espera: o botão de atualizações ao lado de Aplicativos a instala
-        [many] { $n } de atualizações em espera: o botão de atualizações ao lado de Aplicativos as instala
-       *[other] { $n } em espera: o botão de atualizações ao lado de Aplicativos as instala
+        [one] { $n } atualização está em espera. Use o botão de atualizações ao lado de Aplicativos para instalá-la.
+        [many] { $n } de atualizações estão em espera. Use o botão de atualizações ao lado de Aplicativos para instalá-las.
+       *[other] { $n } atualizações estão em espera. Use o botão de atualizações ao lado de Aplicativos para instalá-las.
     }
 
 # Answer to a spoken question about updates when only plugin updates that need a look wait; the clause that follows says so.
-ring-updates-spoken-look = { $n } em espera: { $look }
+ring-updates-spoken-look =
+    { $n ->
+        [one] { $n } atualização está em espera. { $look }.
+       *[other] { $n } atualizações estão em espera. { $look }.
+    }
 
 # Answer to a spoken question about updates when some install and some need a look; the last clause says which need a look.
-ring-updates-spoken-mixed = { $n } em espera: o botão de atualizações ao lado de Aplicativos instala { $put }, e { $look }
+ring-updates-spoken-mixed = { $n } atualizações estão em espera. Use o botão de atualizações ao lado de Aplicativos para instalar { $put } delas. { $look }.
 
 # Name and tip of the updates button when only firmware updates wait: the button takes the person to them.
 ring-updates-see-firmware =
@@ -36,9 +40,9 @@ ring-updates-see-firmware =
 # Name and tip of the updates button when firmware updates wait among others: the button takes the person to them.
 ring-updates-see-among =
     { $n ->
-        [one] Ver { $n } atualização, com firmware entre elas
-        [many] Ver { $n } de atualizações, com firmware entre elas
-       *[other] Ver { $n } atualizações, com firmware entre elas
+        [one] Ver { $n } atualização, incluindo firmware
+        [many] Ver { $n } de atualizações, incluindo firmware
+       *[other] Ver { $n } atualizações, incluindo firmware
     }
 
 # Name and tip of the updates button when updates wait that it will install.
@@ -52,9 +56,9 @@ ring-updates-install =
 # Name and tip of the updates button when only plugin updates that ask for more than before wait.
 ring-updates-see-plugin =
     { $n ->
-        [one] Ver a atualização de plugin, que pede mais do que antes
-        [many] Ver { $n } de atualizações de plugins, que pedem mais do que antes
-       *[other] Ver { $n } atualizações de plugins, que pedem mais do que antes
+        [one] Ver a atualização de plugin, que pede mais permissões do que antes
+        [many] Ver { $n } de atualizações de plugins, que pedem mais permissões do que antes
+       *[other] Ver { $n } atualizações de plugins, que pedem mais permissões do que antes
     }
 
 # Name and tip of the updates button when some updates install and some plugin updates need a look; the clause after the semicolon says which.
@@ -106,13 +110,13 @@ ring-tray-vpn = Conectado por uma VPN
 ring-tray-wired = Cabeada
 
 # Name of the network button when connected by cable but the internet is not reachable.
-ring-tray-wired-limited = Cabeada, conectividade limitada
+ring-tray-wired-limited = Cabo, sem internet
 
 # Name of the network button on Wi-Fi: the network's name and its signal strength.
 ring-tray-wifi = { $name }, sinal { $strength }%
 
 # Name of the network button on Wi-Fi when the internet is not reachable.
-ring-tray-wifi-limited = { $name }, sinal { $strength }%, conectividade limitada
+ring-tray-wifi-limited = { $name }, sinal { $strength }%, acesso limitado
 
 # Name of the Bluetooth button when Bluetooth is off.
 ring-tray-bt-off = O Bluetooth está desligado
@@ -136,13 +140,12 @@ ring-tray-none = Nenhum ícone da bandeja
 ring-tray-show = Mostrar no anel
 
 # Line of a tray icon's menu: take the icon out of the ring's row.
-ring-tray-take-out = Tirar do anel
+ring-tray-take-out = Remover do anel
 
 # Quiet words in a tray icon's menu in place of Show in the ring, when the row is full.
-ring-tray-full = Já há quatro no anel. Tire um primeiro.
+ring-tray-full = Já há quatro ícones no anel. Tire um primeiro.
 
 
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = A verificação está desligada
-

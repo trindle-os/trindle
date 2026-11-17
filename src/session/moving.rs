@@ -53,6 +53,11 @@ pub struct Clip {
     looks: usize,
 }
 
+fn block_time(cluster: u64, rel: i64, scale: u64) -> u64 {
+    let ticks = i64::try_from(cluster).unwrap_or(i64::MAX).saturating_add(rel);
+    (ticks.max(0) as u64).saturating_mul(scale)
+}
+
 struct Pieces<'a> {
     file: &'a File,
     from: u64,
@@ -206,7 +211,7 @@ impl Scan {
             }
             let rel = i16::from_be_bytes([head[0], head[1]]) as i64;
             self.frames.push((data + n + 3, len as u32));
-            self.times.push((self.cluster_time as i64 + rel).max(0) as u64 * self.scale);
+            self.times.push(block_time(self.cluster_time, rel, self.scale));
         }
         Some(true)
     }

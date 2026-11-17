@@ -9,8 +9,7 @@ use super::sheet;
 pub type Rgb = (f64, f64, f64);
 
 fn named(name: &str) -> Rgb {
-    let [r, g, b, _] = sheet::layers().colour(name, false).unwrap_or([0.5, 0.5, 0.5, 1.0]);
-    (r as f64, g as f64, b as f64)
+    named_in(name, false)
 }
 
 pub const MICROPHONE_NAME: &str = "trindle-busy";

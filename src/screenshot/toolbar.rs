@@ -1,6 +1,6 @@
 //! The small card of round buttons floating beside the chosen part: the
-//! drawing tools, undo and redo on the top row; colours, thicknesses and
-//! what to do with the picture below. The tools have no icons in the icon
+//! drawing tools, undo and redo on the top row; colours and thicknesses
+//! below them, and what to do with the picture on a row of its own. The tools have no icons in the icon
 //! set, so each is drawn here, in the button's own colour, so it lights up
 //! with the button like any icon would.
 
@@ -62,30 +62,36 @@ pub fn card_of<M: Clone + 'static>(now: &Now, wrap: fn(Act) -> M) -> Node<M> {
     top.push(redo);
 
     let colour_names = colour_names();
-    let mut foot: Vec<Node<M>> = COLOURS.iter().enumerate()
+    let mut middle: Vec<Node<M>> = COLOURS.iter().enumerate()
         .map(|(i, (c, _))| {
             let c = *c;
             button("", colour_names[i]).face(move |canvas, r, ink, _| swatch(canvas, r, c, ink))
                 .on(c == now.colour).on_press(wrap(Act::Colour(i)))
         })
         .collect();
-    foot.push(gap());
+    middle.push(gap());
     let thickness_names = thickness_names();
-    foot.extend(THICKNESS.iter().enumerate().map(|(i, (t, _))| {
+    middle.extend(THICKNESS.iter().enumerate().map(|(i, (t, _))| {
         let t = *t;
         button("", thickness_names[i]).face(move |canvas, r, ink, _| dot(canvas, r, t, ink))
             .on(t == now.thick).on_press(wrap(Act::Thick(i)))
     }));
-    foot.push(gap());
-    foot.push(button("edit-copy-symbolic", t!("screenshot-copy")).on_press(wrap(Act::Copy)));
 
-    foot.push(word_button(t!("screenshot-save")).on_press(wrap(Act::Save)));
-    foot.push(word_button(t!("screenshot-save-as")).on_press(wrap(Act::SaveAs)));
-    foot.push(button("view-pin-symbolic", t!("screenshot-pin")).on_press(wrap(Act::Pin)));
-    foot.push(gap());
-    foot.push(button("window-close-symbolic", t!("screenshot-cancel")).on_press(wrap(Act::Cancel)));
+    let foot = vec![
+        button("edit-copy-symbolic", t!("screenshot-copy")).on_press(wrap(Act::Copy)),
+        word_button(t!("screenshot-save")).on_press(wrap(Act::Save)),
+        word_button(t!("screenshot-save-as")).on_press(wrap(Act::SaveAs)),
+        button("view-pin-symbolic", t!("screenshot-pin")).on_press(wrap(Act::Pin)),
+        space(),
+        gap(),
+        button("window-close-symbolic", t!("screenshot-cancel")).on_press(wrap(Act::Cancel)),
+    ];
 
-    let rows = vec![row(top).gap(SPACING).width(Length::Fill), row(foot).gap(SPACING).width(Length::Shrink)];
+    let rows = vec![
+        row(top).gap(SPACING).width(Length::Fill),
+        row(middle).gap(SPACING).width(Length::Shrink),
+        row(foot).gap(SPACING).width(Length::Fill),
+    ];
     card(column(rows).gap(SPACING * 2.0).width(Length::Shrink)).width(Length::Shrink)
 }
 
@@ -256,6 +262,30 @@ mod tests {
     }
 
     #[test]
+    fn the_card_keeps_every_word_whole_in_every_language() {
+        use crate::common::shipped_languages::{in_language, tags};
+        let english = card_width();
+        for tag in tags() {
+            in_language(&tag, || {
+                let width = card_width();
+                assert!(width <= english + 1.0, "{tag}: the card is {width} wide, English {english}");
+            });
+        }
+    }
+
+    fn card_width() -> f32 {
+        let now = Now { tool: Some(Tool::Pen), colour: COLOURS[1].0, thick: THICKNESS[1].0, undo: true, redo: true };
+        let card: Node<Act> = card_of(&now, |a| a);
+        let node = crate::toolkit::widget::layers(vec![crate::toolkit::widget::space(), crate::toolkit::widget::placed(card.floats(), |_, _| (24.0, 24.0))]);
+        let mut ui = Ui::new(node, Theme::new(false, crate::common::style::DEFAULT_ACCENT));
+        ui.places_at((1600, 300));
+        let wrong = ui.squeezed_or_touching();
+        assert!(wrong.is_empty(), "{}: {wrong:?}", crate::toolkit::lang::chosen_tag());
+        let ends = ui.round_and_worded().into_iter().map(|(_, r)| r.x + r.w);
+        ends.fold(0.0, f32::max) - 24.0
+    }
+
+    #[test]
     fn the_screenshot_follows_the_language_and_falls_back_word_by_word() {
         use crate::toolkit::lang::{english, with_catalogue, Bundle, Catalogue};
         let french = "screenshot-tool-pen = Crayon\nscreenshot-undo = Annuler\nscreenshot-eye-taken =\n    { $n ->\n        [one] Une couleur prise : { $newest }.\n       *[other] { $n } couleurs prises ; la dernière est { $newest }.\n    }\n";
@@ -281,7 +311,7 @@ mod tests {
             crate::toolkit::widget::placed(card.floats(), |_, _| (24.0, 24.0)),
         ]);
         let mut ui = Ui::new(node, Theme::new(false, crate::common::style::DEFAULT_ACCENT));
-        let mut pix = tiny_skia::Pixmap::new(760, 160).unwrap();
+        let mut pix = tiny_skia::Pixmap::new(760, 200).unwrap();
         ui.paint(&mut pix.as_mut(), 1.0);
         pix.save_png(std::path::Path::new(&dir).join("toolbar.png")).unwrap();
     }

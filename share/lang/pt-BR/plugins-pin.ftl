@@ -10,7 +10,7 @@ plugins-pin-not-saved = O PIN não é salvo
 plugins-pin-no-answer = Sem resposta do outro computador.
 
 # Red words on the PIN card when the unlocking command refused without saying why.
-plugins-pin-not-unlocked = Não desbloqueado.
+plugins-pin-not-unlocked = Ainda bloqueado.
 
 # Name the screen reader gives to the four dots on the PIN card.
 plugins-pin-dots = PIN

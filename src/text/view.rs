@@ -162,7 +162,7 @@ impl Text {
         } else {
             t!("text-spell-offers")
         };
-        let mut items = vec![label(format!("\u{2018}{}\u{2019}", s.word)), note(said)];
+        let mut items = vec![label(t!("text-spell-word", word = &s.word).to_string()), note(said)];
         if let Some(t) = self.noted_at("spell") {
             items.push(t);
         }
@@ -301,7 +301,7 @@ impl Text {
                 item(name).icon("text-x-generic-symbolic").detail(folder)
             })
             .collect();
-        let body = if rows.is_empty() { note(t!("text-files-here")) } else { list(rows, None, Msg::Recent).height(Length::Fill) };
+        let body = if rows.is_empty() { note(t!("text-files-here")) } else { list(rows, None, Msg::Recent).called(t!("text-recent-files")).height(Length::Fill) };
         column(vec![
             row(vec![
                 title(t!("text-recent-files")),
@@ -367,7 +367,7 @@ impl Text {
             .gap(10.0),
         );
         let font = card(
-            column(vec![title(t!("text-font")), scroll("fonts", list(fonts, chosen, Msg::Font)).height(Length::Fixed(300.0))]).gap(10.0),
+            column(vec![title(t!("text-font")), scroll("fonts", list(fonts, chosen, Msg::Font).called(t!("text-font"))).height(Length::Fixed(300.0))]).gap(10.0),
         );
         column(vec![row(head).gap(4.0), scroll("settings", column(vec![grid(320.0, vec![starting, showing, spelling, font]).width(Length::Fill)]))])
             .gap(12.0)
@@ -382,7 +382,7 @@ impl Text {
             column(vec![
                 title(t!("text-read-as")),
                 if tab.path.is_some() {
-                    list(names(), now, Msg::ReadAs).height(Length::Fill)
+                    list(names(), now, Msg::ReadAs).called(t!("text-read-as")).height(Length::Fill)
                 } else {
                     note(t!("text-no-file"))
                 },
@@ -394,7 +394,7 @@ impl Text {
             column(vec![
                 title(t!("text-save-in")),
                 note(t!("text-next-save")),
-                list(names(), now, Msg::SaveIn).height(Length::Fill),
+                list(names(), now, Msg::SaveIn).called(t!("text-save-in")).height(Length::Fill),
             ])
             .gap(10.0)
             .height(Length::Fill),

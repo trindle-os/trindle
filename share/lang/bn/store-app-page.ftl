@@ -17,7 +17,7 @@ store-app-state-removing = সরানো হচ্ছে
 store-app-state-downloading = ডাউনলোড হচ্ছে
 
 # The state beside the dot while Flatpak is putting the fetched app in.
-store-app-state-putting-in = বসানো হচ্ছে
+store-app-state-putting-in = ইনস্টল হচ্ছে
 
 # The state beside the dot while the app's own update goes in.
 store-app-state-updating = আপডেট হচ্ছে
@@ -26,7 +26,7 @@ store-app-state-updating = আপডেট হচ্ছে
 store-app-state-held = ইনস্টল করা, আপডেট আটকে রাখা
 
 # The state beside the dot for an installed app whose updates are held back.
-store-app-state-held-version = ইনস্টল করা, সংস্করণ { $version }-এ আটকে রাখা
+store-app-state-held-version = ইনস্টল করা, সংস্করণ { $version }-এ আপডেট আটকে রাখা
 
 # The state beside the dot for an installed app with an update waiting; the end says what waits.
 store-app-state-waiting = ইনস্টল করা, { $waits }
@@ -64,7 +64,7 @@ store-app-remove = সরান
 store-app-open-round = খুলুন
 
 # Main button that releases an app whose updates are held back.
-store-app-release = ছেড়ে দিন
+store-app-release = আপডেট চালু করুন
 
 # Main button that updates the app.
 store-app-update = আপডেট করুন
@@ -82,13 +82,13 @@ store-app-website = ওয়েবসাইট
 store-app-no-pictures = এই অ্যাপের কোনো ছবি নেই।
 
 # In the picture frame when the picture could not be fetched.
-store-app-picture-missed = এই ছবিটি আনা যায়নি।
+store-app-picture-missed = Trindle এই ছবিটি আনতে পারেনি।
 
 # In the picture frame while the picture is being fetched.
 store-app-picture-fetching = ছবি আনা হচ্ছে…
 
 # In the picture frame when the computer has no internet.
-store-app-picture-offline = এই কম্পিউটার ইন্টারনেটে সংযুক্ত না থাকলে ছবি আনা যায় না।
+store-app-picture-offline = ছবি দেখতে ইন্টারনেটে সংযুক্ত হন।
 
 # Between the picture buttons: which picture, when it has no caption.
 store-app-picture-of = { $n }টির মধ্যে ছবি { $at }
@@ -100,7 +100,7 @@ store-app-picture-of-caption = { $n }টির মধ্যে ছবি { $at }
 store-app-picture-earlier = আগের ছবি
 
 # Tip of the round button that shows the picture after.
-store-app-picture-later = পরের ছবি
+store-app-picture-later = পরবর্তী ছবি
 
 # Licence shown in Facts for an app that is not open source.
 store-app-proprietary = মালিকানাধীন
@@ -163,13 +163,13 @@ store-app-review-no-title = শিরোনাম নেই
 store-app-people-none = এই অ্যাপ নিয়ে এখনও কেউ লেখেননি।
 
 # Under What people say when there is no internet.
-store-app-people-offline = এই কম্পিউটার ইন্টারনেটে সংযুক্ত না থাকলে মানুষের মতামত আনা যায় না।
+store-app-people-offline = রিভিউ পড়তে ইন্টারনেটে সংযুক্ত হন।
 
 # Under What people say while reviews are being fetched.
-store-app-people-looking = মানুষের মতামত খোঁজা হচ্ছে…
+store-app-people-looking = রিভিউ লোড হচ্ছে…
 
 # Name of the card of reviews.
-store-app-people = মানুষ যা বলছে
+store-app-people = রিভিউ
 
 # Facts line: when the app's project was made.
 store-app-fact-created = তৈরি

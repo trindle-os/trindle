@@ -43,14 +43,14 @@ impl Face {
         let ws = self.windows.as_ref()?;
         let wins: Vec<Window> = ws.windows().into_iter().filter(|w| !(w.title.is_empty() && w.app_id.is_empty())).collect();
         let all = self.ctx.apps();
-        let wins = open_windows::grouped(wins, |w| apps::find_for_window(&all, &w.app_id).map(|a| a.name.clone()).unwrap_or_else(|| w.app_id.to_lowercase()));
+        let wins = open_windows::grouped(wins, |w| self.ctx.app_for_window(&all, &w.app_id).map(|a| a.name.clone()).unwrap_or_else(|| w.app_id.to_lowercase()));
         let half = self.size.0.min(self.size.1) / 2.0 - MARGIN;
         let ring = open_windows::ring(wins.len(), self.lay.disc_radius, half, &open_windows::Sizes::of(crate::toolkit::theme::sheet()))?;
         Some((ring, wins))
     }
 
-    fn window_words(apps: &[Program], w: &Window) -> (String, String) {
-        let program = apps::find_for_window(apps, &w.app_id).map(|a| a.name.clone()).unwrap_or_else(|| w.app_id.clone());
+    fn window_words(&self, apps: &[Program], w: &Window) -> (String, String) {
+        let program = self.ctx.app_for_window(apps, &w.app_id).map(|a| a.name.clone()).unwrap_or_else(|| w.app_id.clone());
         (program, w.title.clone())
     }
 
@@ -73,12 +73,12 @@ impl Face {
         let all = self.ctx.apps();
         let mut looks = Vec::with_capacity(wins.len());
         for win in wins {
-            let (program, title) = Self::window_words(&all, win);
-            let app = apps::find_for_window(&all, &win.app_id);
+            let (program, title) = self.window_words(&all, win);
+            let app = self.ctx.app_for_window(&all, &win.app_id);
             let used = using::window_uses(&self.using, &all, using::known_plugin, &win.app_id);
             looks.push(Look {
                 program: program.clone(),
-                icons: app.map(|a| a.icons()).unwrap_or_else(|| vec![apps::generic_icon_for(&win.app_id, &win.app_id)]),
+                icons: apps::window_icons(app, &win.app_id),
                 name: open_windows::tab_words(&if title.is_empty() { program } else { title }, &used),
                 front: win.active && !win.minimized,
                 hot: self.win_hover.as_ref() == Some(&win.handle),
@@ -269,8 +269,8 @@ impl Face {
         let hover = self.win_hover.as_ref()?;
         let win = wins?.iter().find(|w| &w.handle == hover)?;
         let all = self.ctx.apps();
-        let (program, title) = Self::window_words(&all, win);
-        let icons = apps::find_for_window(&all, &win.app_id).map(|a| a.icons()).unwrap_or_else(|| vec![apps::generic_icon_for(&win.app_id, &win.app_id)]);
+        let (program, title) = self.window_words(&all, win);
+        let icons = apps::window_icons(self.ctx.app_for_window(&all, &win.app_id), &win.app_id);
         let picture = if self.watching.as_ref() == Some(hover) { self.win_picture.clone() } else { None };
         let shown = open_windows::without_program(&title, &program);
         let name = if title.is_empty() { program } else { format!("{program}, {title}") };
@@ -295,7 +295,7 @@ impl Face {
             b.size(size).on_press(msg(move |f| f.window_do(&h, which)))
         };
         let all = self.ctx.apps();
-        let (program, what) = Self::window_words(&all, &win);
+        let (program, what) = self.window_words(&all, &win);
         let name = if what.is_empty() { program } else { what };
         let mut tools = vec![press(first, WinAct::Minimise), press(second, WinAct::Maximise), press(third, WinAct::Close)];
         let mut items = vec![title(open_windows::shown_title(&name).chars().take(MENU_TITLE_CHARS).collect::<String>())];
@@ -306,7 +306,7 @@ impl Face {
             let star = button(if fav { "starred-symbolic" } else { "non-starred-symbolic" }, words).on(fav).off(full);
             tools.push(press(star, WinAct::Star));
         }
-        if let Some(app) = apps::find_for_window(&all, &win.app_id) {
+        if let Some(app) = self.ctx.app_for_window(&all, &win.app_id) {
             tools.push(startup_button(&app.path).size(size));
         }
         items.push(row(tools).gap(8.0));
@@ -330,7 +330,7 @@ impl Face {
             WinAct::Maximise => ws.maximize(&w),
             WinAct::Star => {
                 let all = self.ctx.apps();
-                let Some(app) = apps::find_for_window(&all, &w.app_id) else { return };
+                let Some(app) = self.ctx.app_for_window(&all, &w.app_id) else { return };
                 let on = !self.favourites.contains(&app.id);
                 if on && self.favourites.len() >= store::MAX_FAVOURITES {
                     return;

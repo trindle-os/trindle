@@ -34,9 +34,9 @@ use smithay::{
     },
 };
 
-use crate::{state::{AnvilState, Backend}, ClientState};
+use crate::{state::{Compose, Backend}, ClientState};
 
-impl<BackendData: Backend> CompositorHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> CompositorHandler for Compose<BackendData> {
     fn compositor_state(&mut self) -> &mut CompositorState {
         &mut self.compositor_state
     }
@@ -68,10 +68,20 @@ impl<BackendData: Backend> CompositorHandler for AnvilState<BackendData> {
 
         self.keyboard_to_new_layer(surface);
         ensure_initial_configure(surface, &self.space, &mut self.popups);
-        self.refit_login_screen();
-        self.fit_windows_to_room();
-        self.refresh_pointer_focus();
+
+        if changes_the_layout(smithay::wayland::compositor::get_role(surface)) {
+
+            self.panel_stale = true;
+            self.refit_login_screen();
+            self.fit_windows_to_room();
+            self.refresh_pointer_focus();
+        }
     }
+}
+
+fn changes_the_layout(role: Option<&str>) -> bool {
+    use smithay::wayland::{compositor::SUBSURFACE_ROLE, seat::CURSOR_IMAGE_ROLE, selection::data_device::DND_ICON_ROLE};
+    !matches!(role, Some(r) if r == SUBSURFACE_ROLE || r == CURSOR_IMAGE_ROLE || r == DND_ICON_ROLE)
 }
 
 fn give_layer_a_size(surface: &WlSurface) {
@@ -90,7 +100,7 @@ fn give_layer_a_size(surface: &WlSurface) {
     });
 }
 
-fn wait_for_dmabuf<BackendData: Backend>(state: &mut AnvilState<BackendData>, surface: &WlSurface) {
+fn wait_for_dmabuf<BackendData: Backend>(state: &mut Compose<BackendData>, surface: &WlSurface) {
     let mut acquire_point = None;
     let maybe_dmabuf = with_states(surface, |surface_data| {
         acquire_point.clone_from(
@@ -113,8 +123,7 @@ fn wait_for_dmabuf<BackendData: Backend>(state: &mut AnvilState<BackendData>, su
     });
     if let Some(dmabuf) = maybe_dmabuf {
         if let Some(acquire_point) = acquire_point {
-            if let Ok((blocker, source)) = acquire_point.generate_blocker() {
-                let client = surface.client().unwrap();
+            if let (Ok((blocker, source)), Some(client)) = (acquire_point.generate_blocker(), surface.client()) {
                 let res = state.handle.insert_source(source, move |_, _, data| {
                     let dh = data.display_handle.clone();
                     data.client_compositor_state(&client).blocker_cleared(data, &dh);
@@ -141,7 +150,7 @@ fn wait_for_dmabuf<BackendData: Backend>(state: &mut AnvilState<BackendData>, su
     }
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     fn ring_panel_committed(&mut self, surface: &WlSurface) {
         if crate::trusted::is_ours(surface) {
@@ -180,8 +189,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
                         .take()
                 });
 
-                if let Some(buffer_offset) = buffer_offset {
-                    let current_loc = self.space.element_location(&window).unwrap();
+                if let (Some(buffer_offset), Some(current_loc)) = (buffer_offset, self.space.element_location(&window)) {
                     place_keeping_order(&mut self.space, window, current_loc + buffer_offset);
                 }
             }
@@ -262,8 +270,9 @@ pub(super) fn ensure_initial_configure(surface: &WlSurface, space: &Space<Window
         };
 
         if !popup.is_initial_configure_sent() {
-
-            popup.send_configure().expect("initial configure failed");
+            if let Err(err) = popup.send_configure() {
+                tracing::warn!(?err, "a menu's first configure was refused");
+            }
         }
 
         return;
@@ -314,4 +323,19 @@ fn configure_window(surface: &WlSurface, window: &WindowElement) {
             data.resize_state = ResizeState::NotResizing;
         }
     });
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn only_windows_and_panels_fit_and_hit_test_on_a_commit() {
+        for role in [Some("subsurface"), Some("cursor_image"), Some("dnd_icon")] {
+            assert!(!changes_the_layout(role), "{role:?}");
+        }
+        for role in [None, Some("xdg_toplevel"), Some("zwlr_layer_surface_v1"), Some("xdg_popup")] {
+            assert!(changes_the_layout(role), "{role:?}");
+        }
+    }
 }

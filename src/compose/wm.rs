@@ -11,7 +11,7 @@ use smithay::utils::{Logical, Point, Rectangle};
 use crate::config::Action;
 use crate::focus::KeyboardFocusTarget;
 use crate::shell::WindowElement;
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
 
 pub(crate) const READER_COMMAND: &str = "trindle-settings --screen-reader";
 
@@ -50,7 +50,7 @@ pub fn squeezed(frame: Rectangle<i32, Logical>, room: Rectangle<i32, Logical>, s
     Some(Rectangle::new((frame.loc.x, y).into(), (frame.size.w, h).into()))
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     pub fn do_action(&mut self, action: Action) {
         let focused = self.focused_window();
@@ -160,14 +160,6 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         Some((output, Rectangle::new(geo.loc + zone.loc, zone.size)))
     }
 
-    fn is_maximized(window: &WindowElement) -> bool {
-        match (window.0.toplevel(), window.0.x11_surface()) {
-            (Some(t), _) => t.current_state().states.contains(xdg_toplevel::State::Maximized),
-            (_, Some(x)) => x.is_maximized(),
-            _ => false,
-        }
-    }
-
     fn place(&mut self, window: &WindowElement, area: Rectangle<i32, Logical>, maximized: bool) {
         let gap = self.config.gap;
         let area = Rectangle::new(
@@ -202,6 +194,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
             }
         } else if let Some(x11) = window.0.x11_surface() {
             let _ = x11.set_maximized(maximized);
+            self.panel_stale = true;
             let _ = x11.configure(content);
         }
         self.space.map_element(window.clone(), area.loc, true);
@@ -221,6 +214,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
             }
         } else if let Some(x11) = window.0.x11_surface() {
             let _ = x11.set_maximized(false);
+            self.panel_stale = true;
             if let (Some(r), Some(loc)) = (was, loc) {
                 let _ = x11.configure(Rectangle::new(loc + window.deco_offset(), r.size));
             }
@@ -232,7 +226,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
 
     fn is_placed(window: &WindowElement) -> bool {
         let snapped = window.0.user_data().get::<Before>().is_some_and(|b| b.0.borrow().is_some());
-        Self::is_maximized(window) || snapped
+        window.is_maximized() || snapped
     }
 
     pub fn toggle_maximize(&mut self, window: &WindowElement) {
@@ -274,7 +268,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         if window.is_fullscreen() {
             return;
         }
-        if Self::is_maximized(window) {
+        if window.is_maximized() {
             self.place(window, room, true);
             return;
         }

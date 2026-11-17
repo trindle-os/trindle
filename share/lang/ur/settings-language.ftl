@@ -5,7 +5,7 @@
 settings-language-heading = Trindle کی زبان
 
 # Words under the heading of that card.
-settings-language-about = وہ زبان چنیں جس میں Trindle کے اپنے پروگرام لکھے جائیں۔ جو ابھی ترجمہ نہیں ہوا وہ انگریزی میں دکھائی دے گا۔
+settings-language-about = Trindle کے اپنے پروگراموں کی زبان چنیں۔ جو ابھی ترجمہ نہیں ہوا وہ انگریزی میں دکھائی دے گا۔
 
 # Title of the line with the list of languages.
 settings-language-pick = Trindle کی زبان
@@ -13,17 +13,14 @@ settings-language-pick = Trindle کی زبان
 # Tip of the list of languages, and its screen reader name.
 settings-language-pick-tip = Trindle کے پروگراموں کے لیے زبان چنیں
 
-# Words under the list of languages: when a new choice is taken up.
-settings-language-next-start = ہر پروگرام اگلی بار شروع ہونے پر اسے استعمال کرے گا۔
+# Added to the language card's i: when a new choice is taken up.
+settings-language-next-start = سیٹنگز اسے ابھی استعمال کرتی ہے، دوسرے پروگرام اگلی بار شروع ہونے پر۔
 
 # Entry in the list of languages: use the language the computer is set to.
-settings-language-auto = سسٹم کے مطابق
+settings-language-auto = سسٹم کی زبان
 
 # Title of the group of bars showing how much of each language is translated.
 settings-language-how-complete = کتنا ترجمہ ہو چکا ہے
-
-# Words under that title.
-settings-language-how-complete-sub = بھری ہوئی پٹی کا مطلب ہے ہر لفظ کا ترجمہ ہو چکا ہے۔
 
 # Tip and screen reader name of a bar under a language: how many of the English words it has (done and all are counts).
 settings-language-share =

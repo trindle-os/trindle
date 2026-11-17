@@ -2,7 +2,7 @@
 Name=Trindle AppImage manager
 Comment=Add an AppImage you have downloaded to your apps
 Exec=trindle-apps --appimage %f
-Icon=trindle-apps
+Icon=trindle-appimage
 Terminal=false
 Type=Application
 MimeType=application/vnd.appimage;application/x-iso9660-appimage;

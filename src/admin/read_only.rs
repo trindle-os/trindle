@@ -346,12 +346,21 @@ fn take() -> Result<File, Taken> {
     let file = std::fs::OpenOptions::new().read(true).write(true).create(true).truncate(false)
         .mode(0o600).custom_flags(libc::O_NOFOLLOW).open(at(STATE))
         .map_err(|e| Taken::Unusable(e.to_string()))?;
-    // SAFETY: the descriptor is open for as long as `file` lives.
-    if unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) } != 0 {
+
+    for tries_left in (0..5).rev() {
+        // SAFETY: the descriptor is open for as long as `file` lives.
+        if unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) } == 0 {
+            return Ok(file);
+        }
         let e = std::io::Error::last_os_error();
-        return Err(if e.raw_os_error() == Some(libc::EWOULDBLOCK) { Taken::Busy } else { Taken::Unusable(e.to_string()) });
+        if e.raw_os_error() != Some(libc::EWOULDBLOCK) {
+            return Err(Taken::Unusable(e.to_string()));
+        }
+        if tries_left > 0 {
+            std::thread::sleep(std::time::Duration::from_millis(20));
+        }
     }
-    Ok(file)
+    Err(Taken::Busy)
 }
 
 fn note(file: &mut File, text: &str) -> Result<(), String> {
@@ -489,6 +498,19 @@ mod tests {
         assert_eq!(s.ran(), [RW_USR, RW_OPT, "dpkg --configure -a"], "the inner close leaves it open");
         drop(outer);
         assert_eq!(s.ran(), [RW_USR, RW_OPT, "dpkg --configure -a", RO_USR, RO_OPT]);
+    }
+
+    #[test]
+    fn a_hold_let_go_a_moment_later_is_not_taken_for_a_helper_at_work() {
+        let s = StandIn::all_well("ro-linger");
+        set_up(&s);
+        let other = take().ok().expect("the first hold");
+        let letting_go = std::thread::spawn(move || {
+            std::thread::sleep(std::time::Duration::from_millis(10));
+            drop(other);
+        });
+        assert!(take().is_ok(), "a hold gone within the wait is no helper at work");
+        letting_go.join().unwrap();
     }
 
     #[test]

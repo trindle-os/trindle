@@ -7,10 +7,10 @@ use smithay::{
 
 use super::resize::{ResizeEdge, Resizing};
 use crate::shell::WindowElement;
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
 
 pub struct TouchResizeSurfaceGrab<BackendData: Backend + 'static> {
-    pub start_data: TouchGrabStartData<AnvilState<BackendData>>,
+    pub start_data: TouchGrabStartData<Compose<BackendData>>,
     pub window: WindowElement,
     pub edges: ResizeEdge,
     pub initial_window_location: Point<i32, Logical>,
@@ -30,13 +30,13 @@ impl<BackendData: Backend> TouchResizeSurfaceGrab<BackendData> {
     }
 }
 
-impl<BackendData: Backend> TouchGrab<AnvilState<BackendData>> for TouchResizeSurfaceGrab<BackendData> {
+impl<BackendData: Backend> TouchGrab<Compose<BackendData>> for TouchResizeSurfaceGrab<BackendData> {
     fn down(
         &mut self,
-        _data: &mut AnvilState<BackendData>,
-        _handle: &mut smithay::input::touch::TouchInnerHandle<'_, AnvilState<BackendData>>,
+        _data: &mut Compose<BackendData>,
+        _handle: &mut smithay::input::touch::TouchInnerHandle<'_, Compose<BackendData>>,
         _focus: Option<(
-            <AnvilState<BackendData> as smithay::input::SeatHandler>::TouchFocus,
+            <Compose<BackendData> as smithay::input::SeatHandler>::TouchFocus,
             Point<f64, Logical>,
         )>,
         _event: &smithay::input::touch::DownEvent,
@@ -46,14 +46,15 @@ impl<BackendData: Backend> TouchGrab<AnvilState<BackendData>> for TouchResizeSur
 
     fn up(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut smithay::input::touch::TouchInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut smithay::input::touch::TouchInnerHandle<'_, Compose<BackendData>>,
         event: &smithay::input::touch::UpEvent,
-        _seq: Serial,
+        seq: Serial,
     ) {
         if event.slot != self.start_data.slot {
             return;
         }
+        handle.up(data, event, seq);
         handle.unset_grab(self, data);
 
         if !self.window.alive() {
@@ -65,10 +66,10 @@ impl<BackendData: Backend> TouchGrab<AnvilState<BackendData>> for TouchResizeSur
 
     fn motion(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut smithay::input::touch::TouchInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut smithay::input::touch::TouchInnerHandle<'_, Compose<BackendData>>,
         _focus: Option<(
-            <AnvilState<BackendData> as smithay::input::SeatHandler>::TouchFocus,
+            <Compose<BackendData> as smithay::input::SeatHandler>::TouchFocus,
             Point<f64, Logical>,
         )>,
         event: &smithay::input::touch::MotionEvent,
@@ -90,16 +91,16 @@ impl<BackendData: Backend> TouchGrab<AnvilState<BackendData>> for TouchResizeSur
 
     fn frame(
         &mut self,
-        _data: &mut AnvilState<BackendData>,
-        _handle: &mut smithay::input::touch::TouchInnerHandle<'_, AnvilState<BackendData>>,
+        _data: &mut Compose<BackendData>,
+        _handle: &mut smithay::input::touch::TouchInnerHandle<'_, Compose<BackendData>>,
         _seq: Serial,
     ) {
     }
 
     fn cancel(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut smithay::input::touch::TouchInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut smithay::input::touch::TouchInnerHandle<'_, Compose<BackendData>>,
         seq: Serial,
     ) {
         handle.cancel(data, seq);
@@ -108,8 +109,8 @@ impl<BackendData: Backend> TouchGrab<AnvilState<BackendData>> for TouchResizeSur
 
     fn shape(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut smithay::input::touch::TouchInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut smithay::input::touch::TouchInnerHandle<'_, Compose<BackendData>>,
         event: &smithay::input::touch::ShapeEvent,
         seq: Serial,
     ) {
@@ -118,17 +119,17 @@ impl<BackendData: Backend> TouchGrab<AnvilState<BackendData>> for TouchResizeSur
 
     fn orientation(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut smithay::input::touch::TouchInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut smithay::input::touch::TouchInnerHandle<'_, Compose<BackendData>>,
         event: &smithay::input::touch::OrientationEvent,
         seq: Serial,
     ) {
         handle.orientation(data, event, seq);
     }
 
-    fn start_data(&self) -> &smithay::input::touch::GrabStartData<AnvilState<BackendData>> {
+    fn start_data(&self) -> &smithay::input::touch::GrabStartData<Compose<BackendData>> {
         &self.start_data
     }
 
-    fn unset(&mut self, _data: &mut AnvilState<BackendData>) {}
+    fn unset(&mut self, _data: &mut Compose<BackendData>) {}
 }

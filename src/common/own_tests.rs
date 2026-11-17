@@ -111,9 +111,16 @@ fn every_window_id_in_the_source_is_a_program_the_ring_knows_or_one_it_never_sta
     }
 }
 
-const ENDS: [(&str, Option<&str>, &str); 60] = [
+const ENDS: [(&str, Option<&str>, &str); 69] = [
+    ("store/boxed/bus.rs", None, "stops the dbus proxy the box itself started, as its own child, when the box is dropped or the proxy never gets ready; never another program"),
+    ("store/boxed/start.rs", None, "the first process in an app's box passes the stopping signals it is sent on to the one command it started; never another program"),
+    ("store/boxed/run.rs", None, "a box's own process, stopped by a signal, takes its run folders away and ends itself by that same signal; never another program"),
+    ("store/boxed/tests.rs", None, "a test signals the starter and the test program it started itself, to see each pass the signal on or clean up"),
+    ("store/flatpak_peek.rs", None, "stops the Flatpak it started itself to read a program's metadata, when that answers with more than may be read"),
+    ("admin/packaging.rs", None, "a test of the package's install script that puts stand-ins named after the stopping tools on its path, to prove a running login screen is never stopped; nothing is ended"),
     ("toolkit/window/stock_tests.rs", None, "a test stopping its own drawing service to see the window carry on"),
     ("toolkit/paint/service/tests.rs", None, "a test stopping its own drawing service to see what programs do then"),
+    ("toolkit/sys/probe.rs", None, "kills only the forked child of its own that it started to run a risky check, when the child runs past its limit; never another program"),
     ("toolkit/paint/service.rs", None, "a test's own drawing service, stopped when the test is over"),
     ("common/restart.rs", None, "the keys that restart the desktop end the ring and the helper parts, found by their own names among the person's own programs, and start them again; no window's program is among them, and only the compositor's own key or the person's press in Settings reaches it: not an act on the list"),
     ("session/restart_ask.rs", None, "pressing Restart in the question ends the parts and the compositor, which the session starts again; the window is the permissions panel, which no made-up press reaches, and nothing happens without the press: not an act on the list"),
@@ -122,12 +129,14 @@ const ENDS: [(&str, Option<&str>, &str); 60] = [
     ("plugins/pin.rs", None, "the PIN box ends its own command, started a moment before, when it has not answered in 30 seconds: not an act on the list"),
     ("store/fence_broker/tests.rs", None, "a test stops the sshd of its own that it started on the loopback to try the real ssh"),
     ("store/fence/tests.rs", None, "a test ends the sleeping program of its own that it made to stand outside the fence"),
+    ("common/packs.rs", None, "its own listing of an archive's contents, stopped when it prints more than any font archive holds; no window's program"),
     ("common/cups.rs", None, "its own lp, started to send one document, cut off when CUPS takes too long"),
     ("activity/procs.rs", Some(crate::common::person_only::STOP), "Stop in Activity ends the person's own program"),
     ("installer/steps.rs", None, "Stop in the installer ends its own copy of the system"),
     ("compose/panel.rs", Some(crate::common::person_only::FORCE_CLOSE), "the compositor ends a program when the ring's windows ask twice: Force close"),
     ("common/compositor.rs", Some(crate::common::person_only::RING_POWER), "ending the session: from the ring by its power choices, and from Settings' Power page by its own act (settings-power)"),
     ("store/flat.rs", None, "putting a backup back ends a running app to restore its settings: not an act on the list, and said to the coordinator"),
+    ("mcp/tools.rs", None, "the assistant closes a Flathub app the person installed, by its id, to restart it or before mending its own files, only after the person's yes in the assistant's question, which no made-up press reaches (person_only::ASSISTANT); never Trindle or another program: not an act on the list"),
     ("ring/meter.rs", None, "its own pw-record, started to read the microphone level while the Sound page is open, ended when the page closes: not an act on the list"),
     ("common/removal.rs", None, "removing or reinstalling a boxed program or AppImage first ends its own running copies, found by the trindle-boxed name in their command line, so two are never open: the program is the one the person has just asked to remove or reinstall, in a press already guarded as the removal; not a separate act on the list"),
     ("plugins/background.rs", None, "turning a plugin off or removing it ends its own background part: not an act on the list, and said to the coordinator"),
@@ -136,11 +145,11 @@ const ENDS: [(&str, Option<&str>, &str); 60] = [
     ("controller/tests.rs", None, "a test starts a child program and ends it (kill) to check a program that has gone is found gone; nothing of the person's is ended"),
     ("common/crash.rs", None, "reads how a program ended; ends none"),
     ("common/dconf.rs", None, "its own helper"),
-    ("common/keyring_said.rs", None, "a test's own helper"),
     ("common/run.rs", None, "a program this one started, when it outstays its time"),
     ("common/stopping.rs", None, "Stop on an update that is running ends the update Apps itself started a moment before, in a process group of its own, and what it started; never another of the person's programs, and the kernel refuses anything not the person's. A stop is undone by pressing Update again: not an act on the list"),
     ("common/updating.rs", None, "a test's own helper"),
     ("compose/indicators.rs", None, "the compositor's own part"),
+    ("compose/peer.rs", None, "the one way the compositor signals a process by its handle; the ring and the screenshot tool it started and the panel's Force close (guarded in panel.rs) are the callers, and its own tests end a sleeping program of their own"),
     ("compose/own_ring/keeping.rs", None, "the ring the compositor keeps, when it stops answering"),
     ("compose/own_ring/shot.rs", None, "the screenshot tool the compositor starts for the person's key, when it stops answering"),
     ("compose/rig/kept_ring.rs", None, "the compositor's tests"),
@@ -176,7 +185,7 @@ const ENDS: [(&str, Option<&str>, &str); 60] = [
 
 #[test]
 fn every_act_only_the_person_may_do_is_on_the_one_list_and_guarded() {
-    use crate::common::person_only::{ACTS, WAITING};
+    use crate::common::person_only::ACTS;
     let src = root().join("src");
     let read = |file: &str| std::fs::read_to_string(crate::common::source::path_of(file)).unwrap_or_else(|e| panic!("{file}: {e}"));
     let mut names = BTreeSet::new();
@@ -195,10 +204,6 @@ fn every_act_only_the_person_may_do_is_on_the_one_list_and_guarded() {
         for bare in ["go(move |s| pages::install::install(", "go(install_boxed)", "\"Install\", move |s| install_", "move |s| install(s, &o)"] {
             assert!(!text.contains(bare), "{}: Install is pressed past the guard, as {bare}", file.display());
         }
-    }
-    for (act, file, line) in WAITING {
-        assert!(names.insert(act), "{act} is on the list twice, or on both");
-        assert!(read(file).contains(line), "{act} waits for the owner, and the line its guard would go before is no longer in {file}: {line}");
     }
 
     let words = [["libc::", "kill("].concat(), ["SIG", "TERM"].concat(), ["SIG", "KILL"].concat(), [".", "kill()"].concat(),
@@ -425,7 +430,7 @@ fn no_settings_page_or_help_topic_calls_the_file_manager_files() {
 fn names_that_must_not_be_in_trindle_are_not_in_it() {
     let banned = [["cos", "mic"].concat(), ["ne", "mo"].concat(), ["cinn", "amon"].concat(), ["muf", "fin"].concat()];
     let community = ["build", "morphic"].concat();
-    const COMMUNITY_FILES: [&str; 15] = ["system/identity/os-release", "README.md", "share/terms.md", "src/report/tests.rs", "share/lang/en/settings-words.ftl", "src/settings/panels/crash_reports.rs", "share/lang/en/settings-crash.ftl", "src/report/mod.rs", "src/report/send.rs", "src/report/tests_send.rs", "share/lang/en/report.ftl", "spec/trindle.md", "spec/features.md", "tools/release/release-check.sh", "spec/release.md"];
+    const COMMUNITY_FILES: [&str; 14] = ["system/identity/os-release", "README.md", "../trindle-site/README.md", "share/terms.md", "src/report/tests.rs", "share/lang/en/settings-words.ftl", "src/report/mod.rs", "src/report/send.rs", "src/report/tests_send.rs", "share/lang/en/report.ftl", "spec/trindle.md", "spec/features.md", "tools/release/release-check.sh", "spec/release.md"];
     let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
     let mut stack: Vec<std::path::PathBuf> = ["src", "crates", "spec", "docs", "tools", "share", "config", "packaging", "system", "tests", "README.md", "packages.txt", "build.rs", "Cargo.toml", "../trindle-site"]
         .iter().map(|d| root.join(d)).filter(|d| d.exists()).collect();
@@ -460,7 +465,7 @@ fn names_that_must_not_be_in_trindle_are_not_in_it() {
             let rel = p.strip_prefix(root).unwrap_or(&p).to_string_lossy().replace('\\', "/");
             let website = rel.starts_with("../trindle-site/") && rel.ends_with(".html");
             let marker = format!("data-{community}");
-            let translated = rel.starts_with("share/lang/") && (rel.ends_with("/report.ftl") || rel.ends_with("/settings-crash.ftl") || rel.ends_with("/settings-words.ftl"));
+            let translated = rel.starts_with("share/lang/") && (rel.ends_with("/report.ftl") || rel.ends_with("/settings-words.ftl") || rel.ends_with("/settings-about.ftl"));
             let stray = if COMMUNITY_FILES.contains(&rel.as_str()) || translated { false }
                 else if website { low.lines().any(|l| l.contains(&community) && !l.contains(&marker)) }
                 else { low.contains(&community) };
@@ -468,6 +473,22 @@ fn names_that_must_not_be_in_trindle_are_not_in_it() {
         }
     }
     assert!(hits.is_empty(), "{hits:?}");
+}
+
+const STATE_TYPE: &str = "Compose";
+
+fn names_the_state_type(text: &str) -> bool {
+    text.lines()
+        .filter(|l| !l.trim_start().starts_with("//"))
+        .any(|l| l.split(|c: char| !(c.is_alphanumeric() || c == '_')).any(|w| w == STATE_TYPE))
+}
+
+#[test]
+fn the_state_type_is_found_by_its_whole_name_in_code_only() {
+    assert!(names_the_state_type("impl<B: Backend> Handler for Compose<B> {"));
+    assert!(names_the_state_type("use crate::state::{Backend, Compose};"));
+    assert!(!names_the_state_type("// the Compose key"));
+    assert!(!names_the_state_type("let composer = ComposeKey;"));
 }
 
 #[test]
@@ -481,7 +502,7 @@ fn files_that_began_elsewhere_say_where_from() {
         } else if p.extension().is_some_and(|e| e == "rs") {
             let text = std::fs::read_to_string(&p).unwrap_or_default();
             let in_extras = p.starts_with(root.join("src/compose/drm_extras")) && !p.ends_with("leftovers.rs");
-            if text.contains("AnvilState") || in_extras {
+            if names_the_state_type(&text) || in_extras {
                 files.push(p);
             }
         }

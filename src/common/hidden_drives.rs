@@ -4,6 +4,7 @@
 //! read and written here, by code that travels with Folders: it needs
 //! nothing of the Drives program. With no file, nothing is hidden.
 
+use crate::toolkit::t;
 use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
@@ -12,7 +13,7 @@ use crate::toolkit::bus::{self as dbus, Props};
 
 pub const FILE: &str = "hidden-drives.conf";
 
-pub const NOT_A_LOCK: &str = "Hiding does not lock or protect it. A twin of it, one that says exactly the same of itself, is hidden with it.";
+pub fn not_a_lock() -> &'static str { t!("common-drive-not-a-lock") }
 
 pub fn file() -> PathBuf {
     config_path(FILE)
@@ -28,11 +29,11 @@ pub fn read_in(file: &Path) -> BTreeSet<String> {
 
 pub fn set_in(file: &Path, key: &str, hidden: bool) -> std::io::Result<()> {
     if key.trim().is_empty() || !super::files::fits_a_line(key) {
-        return Err(std::io::Error::new(std::io::ErrorKind::InvalidInput, "this drive has no name of its own to remember it by"));
+        return Err(std::io::Error::new(std::io::ErrorKind::InvalidInput, t!("common-hidden-no-name").to_string()));
     }
     let key = key.trim();
     let was = read_small(file)
-        .map_err(|e| std::io::Error::new(e.kind(), format!("the list of hidden drives was left as it is, because {e}")))?;
+        .map_err(|e| std::io::Error::new(e.kind(), t!("common-hidden-left", error = e.to_string()).to_string()))?;
     let there = was.lines().any(|l| l.trim() == key);
     if there == hidden {
         return Ok(());
@@ -132,7 +133,7 @@ mod tests {
         std::fs::write(&file, &was).unwrap();
         assert!(try_read_in(&file).is_err());
         let e = set_in(&file, "drive:Other-456", true).unwrap_err();
-        assert_eq!(e.to_string(), "the list of hidden drives was left as it is, because the file that keeps it is not text and cannot be read");
+        assert_eq!(e.to_string(), "The list of hidden drives was left as it was: the file it's saved in isn't text, so it can't be read");
         assert!(set_in(&file, "drive:Example-123", false).is_err());
         assert_eq!(std::fs::read(&file).unwrap(), was, "the drives hidden before are all still there");
 
@@ -154,7 +155,7 @@ mod tests {
         assert!(hides(&BTreeSet::from([part_key(&part, None)]), "drive:Another-0002", &part_key(&part, None)));
 
         assert_ne!(drive_key(&props(&[("Id", "Example-SSD-0001")])), drive_key(&props(&[("Id", "Example-SSD-0002")])));
-        assert!(NOT_A_LOCK.starts_with("Hiding does not lock or protect it.") && NOT_A_LOCK.contains("twin") && NOT_A_LOCK.contains("is hidden with it"));
+        assert!(not_a_lock().starts_with("Hiding does not lock or protect it.") && not_a_lock().contains("twin") && not_a_lock().contains("is hidden with it"));
     }
 
     #[test]

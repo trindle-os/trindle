@@ -7,7 +7,7 @@ settings-wallpaper-title = Wallpaper
 # Words a person might type into the Settings search to find the wallpaper page; separate them with spaces.
 settings-wallpaper-keywords = background picture slideshow photo
 # Introduction under the heading of the wallpaper page, and the words behind the page i.
-settings-wallpaper-help = A plain colour, or one picture, or a folder so the picture changes by itself at the time you set.
+settings-wallpaper-help = Use a plain colour, one picture, or a folder of pictures that change as often as you choose.
 
 ## Lists
 
@@ -30,7 +30,7 @@ settings-wallpaper-every-1d = 1 day
 # Choice in the list of how the picture fits the screen.
 settings-wallpaper-fit-fill = Fill the screen
 # Choice in the list of how the picture fits the screen.
-settings-wallpaper-fit-fit = Fit, whole picture shown
+settings-wallpaper-fit-fit = Fit the whole picture
 # Choice in the list of how the picture fits the screen.
 settings-wallpaper-fit-center = Centre, actual size
 # Choice in the list of how the picture fits the screen.
@@ -42,7 +42,7 @@ settings-wallpaper-order-shuffle = Shuffled
 # Choice in the list of the order pictures change in: by file name.
 settings-wallpaper-order-name = By file name
 # Red words when the program that draws the wallpaper would not start.
-settings-wallpaper-no-changer = The wallpaper could not be changed: its program would not start.
+settings-wallpaper-no-changer = Trindle couldn't start the program that changes the wallpaper.
 
 ## Sentences about the pictures
 
@@ -71,9 +71,9 @@ settings-wallpaper-file-own = { $name }, one of the pictures that come with Trin
 # Under the large picture when there is only a colour.
 settings-wallpaper-plain-below = A plain colour, set below.
 # Under the large picture when the picture or folder has gone.
-settings-wallpaper-gone-below = Nothing there any more. Choose a picture or a folder.
+settings-wallpaper-gone-below = The picture or folder is no longer there. Choose another.
 # Sentence about the wallpaper when it is a plain colour.
-settings-wallpaper-plain = A plain colour, with no picture.
+settings-wallpaper-plain = Just a plain colour.
 # Sentence about the wallpaper when Trindle's own pictures change; { $every } is how often, { $used } of { $all } pictures are used and { $extra } is any added sentences, each after a space.
 settings-wallpaper-changing-own =
     { $all ->
@@ -89,15 +89,15 @@ settings-wallpaper-changing-folder =
 # Sentence about the wallpaper when its folder has no pictures; { $folder } is the folder.
 settings-wallpaper-empty-folder-choose = The folder { $folder } has no pictures in it. Choose another.
 # Added to the sentence about the wallpaper when a folder holds more than Trindle looks through.
-settings-wallpaper-more-than-looked-at = The folder holds more than Trindle looks through, so some of its pictures may be left out.
+settings-wallpaper-more-than-looked-at = The folder has more pictures than Trindle can check, so some may be left out.
 # Sentence about the wallpaper for one of Trindle's own pictures; { $name } is its name.
 settings-wallpaper-file-own-said = { $name }, one of the pictures that come with Trindle.
 # Sentence about the wallpaper for one chosen picture; { $name } is its name, written to read in the middle of a sentence.
-settings-wallpaper-file-one = One picture, { $name }, all the time.
+settings-wallpaper-file-one = { $name } is always shown.
 # Sentence about the wallpaper when the chosen picture cannot be used; { $why } is the reason.
-settings-wallpaper-file-refused = The picture is not used. { $why } Trindle's own is shown.
+settings-wallpaper-file-refused = Trindle isn't using that picture. { $why } Trindle's own picture is shown instead.
 # Sentence about the wallpaper when the picture has gone.
-settings-wallpaper-file-gone = The picture is not there any more. Choose a picture or a folder.
+settings-wallpaper-file-gone = The picture isn't there any more. Choose a picture or a folder.
 
 ## Lines and buttons
 
@@ -121,12 +121,8 @@ settings-wallpaper-on-screen = On the screen
 settings-wallpaper-card-title = Wallpaper
 # Heading of the wallpaper line, and name of its switch.
 settings-wallpaper-wallpaper = Wallpaper
-# Small words under the wallpaper line.
-settings-wallpaper-wallpaper-about = Off, the screen is a plain colour.
 # Heading of the line for choosing where the picture comes from.
 settings-wallpaper-picture = Picture
-# Small words under that line.
-settings-wallpaper-picture-about = One picture, a folder, or Trindle's own.
 # Name of the round button that chooses one picture.
 settings-wallpaper-choose-picture-button = Choose a picture
 # Name of the round button that chooses a folder of pictures.
@@ -135,51 +131,37 @@ settings-wallpaper-choose-folder = Choose a folder
 settings-wallpaper-own-pictures = Trindle's own pictures
 # Heading of the fit line.
 settings-wallpaper-fit = Fit
-# Small words under that line.
-settings-wallpaper-fit-about = How it fits the screen.
 # Name of the list of how the picture fits the screen.
 settings-wallpaper-fit-name = How it fits the screen
 # Heading of the colour line.
 settings-wallpaper-colour = Colour
-# Small words under the colour line when the colour can be seen.
-settings-wallpaper-colour-shown = Seen alone, or round a picture.
 # Small words under the colour line when a picture covers it.
-settings-wallpaper-colour-hidden = Hidden: the picture covers the screen.
+settings-wallpaper-colour-hidden = Hidden by the picture.
 # Placeholder and name of the box for typing the colour as a hex code; the example is a code.
-settings-wallpaper-colour-hex = The colour as a hex code, such as #09090b
+settings-wallpaper-colour-hex = A hex code, such as #09090b
 # Words behind the i of the Wallpaper card.
-settings-wallpaper-card-about = A plain colour, or one picture, or a folder so the picture changes by itself at the time you set. The colour is seen on its own with no picture, and round a picture that does not cover the screen; type it as a hex code, such as #09090b.
+settings-wallpaper-card-about = Use a plain colour, one picture, or a folder of pictures that change as often as you choose. The colour shows on its own when there is no picture, and around a picture that doesn't cover the screen. Type it as a hex code, such as #09090b.
 # Small words on the cards that are greyed while the wallpaper is off.
 settings-wallpaper-waits = Switch on Wallpaper to use these.
 # Heading of the line, and name of its switch, for changing the picture now and then.
 settings-wallpaper-rotate = Change the picture now and then
-# Small words under that line.
-settings-wallpaper-rotate-about = Every picture in a folder, in turn.
 # Heading of the line, and name of its list, for how long each picture stays.
 settings-wallpaper-every = Change every
-# Small words under that line.
-settings-wallpaper-every-about = How long each picture stays.
 # Heading of the line, and name of its list, for the order pictures change in.
 settings-wallpaper-order = Order
-# Small words under the order line.
-settings-wallpaper-order-about = Shuffled, or by file name.
 # Heading of the line, and name of its button, for moving to the next picture.
-settings-wallpaper-next = Next picture now
-# Small words under that line.
-settings-wallpaper-next-about = Skips to the next one at once.
+settings-wallpaper-next = Next picture
 # Title of the Changing pictures card.
 settings-wallpaper-changing-title = Changing pictures
 # Words behind the i of that card.
-settings-wallpaper-changing-about = Uses every picture in a folder, one after another, changing at the time chosen here, shuffled or by file name.
+settings-wallpaper-changing-about = Shows every picture in a folder, one after another, as often as you choose here, shuffled or by file name.
 # Words behind the i of the Pictures card when pictures change by themselves.
-settings-wallpaper-pictures-rotating = Only the lit pictures are used. Press one to dim it and it is passed over from then on; press it again to bring it back. Nothing is ever deleted, so you can change your mind. The picture on screen now is the one in the large picture.
+settings-wallpaper-pictures-rotating = Trindle uses every picture that isn't dimmed. Press a picture to skip it, and press it again to bring it back. Nothing is deleted. The large picture is the one on screen now.
 # Words behind the i of the Pictures card when one picture is on.
-settings-wallpaper-pictures-one = Press a picture to put it on the screen. Nothing is ever deleted.
+settings-wallpaper-pictures-one = Press a picture to use it.
 # Title of the Pictures card.
 settings-wallpaper-pictures-title = Pictures
 # Spoken description of the empty frame shown when there are no pictures.
 settings-wallpaper-no-pictures-name = No pictures yet
 # Heading of the line shown when there are no pictures to choose from.
 settings-wallpaper-no-pictures = No pictures to choose from
-# Small words under that line.
-settings-wallpaper-no-pictures-about = Choose a folder of pictures above.

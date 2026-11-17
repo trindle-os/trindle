@@ -8,16 +8,13 @@ disks-title = Sürücüler
 disks-about-tip = Bu sayfa hakkında
 
 # First paragraph of the longer words that open from the i beside the title.
-disks-help-1 = Bu bilgisayarın içindeki veya takılı olan her sürücü, bölümlerinden oluşan bir çubuk olarak çizilir. Her bölüm büyüklüğü kadar geniştir ve kullanıldığı kadar dolu gösterilir; böylece dolu bir bölüm kolayca fark edilir.
+disks-help-1 = Bu, bilgisayarın içindeki veya takılı her sürücüyü, bölümlerine ayrılmış bir çubuk olarak gösterir. Her bölümün genişliği boyutunu, koyuluğu ise ne kadar dolu olduğunu gösterir; böylece dolu bir bölüm kolayca fark edilir.
 
 # Second paragraph of the longer words that open from the i beside the title.
-disks-help-2 = Resmin altında her sürücünün bir kartı vardır. Bir bölümü açın, bağlayın veya bağlantısını kesin, ya da bir sürücüyü güvenle çıkarın veya kapatın. Bir bölümdeki kalem, değişikliklerini açar: adı, kendi klasörü ve açılışta hazır olup olmadığı, boyutu, denetlenmesi ve onarılması, biçimlendirilmesi veya silinmesi. Boş alandaki artı yeni bir bölüm oluşturur.
+disks-help-2 = Resmin altında her sürücünün bir kartı vardır. Bir bölümü açabilir, bağlayabilir veya bağlantısını kesebilir, bir sürücüyü güvenle çıkarabilir ya da kapatabilirsiniz. Bir bölümdeki kalemle adını değiştirebilir, klasörünü seçebilir, açılışta bağlanmasını sağlayabilir, boyutunu değiştirebilir, denetleyebilir, onarabilir, biçimlendirebilir veya silebilirsiniz. Boş alandaki artı yeni bir bölüm oluşturur.
 
 # Third paragraph of the longer words that open from the i beside the title.
-disks-help-3 = Sistemin çalıştığı sürücü gösterilir ancak bir şeyleri silen veya taşıyan hiçbir değişiklik için sunulmaz. Herhangi bir sürücüde yapılan her değişiklik, her seferinde bir yöneticinin parolasını ister. Göz, bir sürücüyü veya bölümü Klasörler'den ve halkadan gizler: burada gri olarak kalır ve kilitlenmez.
-
-# Sentence under the title of the main card, saying what the picture of the drives shows.
-disks-map-caption = Her sürücünün her bölümü, kullanıldığı kadar dolu.
+disks-help-3 = Sistemin çalıştığı sürücüyü görebilirsiniz, ancak üzerinde bir şeyleri silen veya taşıyan hiçbir değişiklik yapamazsınız. Bir sürücüde yapılan her değişiklik, her seferinde bir yöneticinin parolasını ister. Göz, bir sürücüyü veya bölümü Folders'tan ve halkadan gizler. Burada gri olarak kalır ve kilitlenmez.
 
 # Title of the main card, which draws every drive as a bar of its parts.
 disks-your-drives = Sürücüleriniz
@@ -32,7 +29,7 @@ disks-try-again = Yeniden dene
 disks-look-again = Yeniden bak
 
 # Line shown on the main card when the computer lists no drive at all.
-disks-no-drives = Hiç sürücü bulunamadı. Bir sürücü takın, burada görünür.
+disks-no-drives = Hiç sürücü bulunamadı. Bir sürücü takın, burada görünecek.
 
 # Name of the program that is missing, in the red words when the drive service cannot be reached.
 disks-missing-service = Sürücü hizmeti
@@ -41,13 +38,13 @@ disks-missing-service = Sürücü hizmeti
 disks-missing-bus = Sistem veriyolu
 
 # Red words on the card shown when what Drives needs is not there. { $what } is the name of the missing program; { $package } is the package to install.
-disks-missing = { $what } kullanılamıyor. Şununla kurun: sudo apt install { $package }
+disks-missing = { $what } kullanılamıyor. Kurmak için şunu çalıştırın: sudo apt install { $package }
 
 # Sentence at the top of the page while the first look at the drives is being taken.
 disks-headline-loading = Sürücülere bakılıyor…
 
 # Red sentence at the top of the page when a drive says it is failing. { $name } is the drive's name.
-disks-headline-failing = { $name } bozuluyor. Saklamak istediğiniz her şeyi şimdi ondan kopyalayın.
+disks-headline-failing = { $name } bozuluyor. Saklamak istediğiniz dosyaları şimdi başka bir sürücüye kopyalayın.
 
 # Sentence at the top of the page when a drive has worn-out or damaged spots. { $name } is the drive's name; { $troubles } lists what is wrong.
 disks-headline-look = { $name } sürücüsüne bakmak gerekiyor: { $troubles }.
@@ -55,33 +52,33 @@ disks-headline-look = { $name } sürücüsüne bakmak gerekiyor: { $troubles }.
 # Sentence at the top of the page when nothing is wrong. { $plugged } is how many drives are plugged in from outside.
 disks-headline-calm =
     { $plugged ->
-        [0] Sürücüler ve üzerlerindeki alan.
-        [one] Sürücüler ve üzerlerindeki alan, ayrıca takılı bir sürücü.
-       *[other] Sürücüler ve üzerlerindeki alan, ayrıca takılı { $plugged } sürücü.
+        [0] Sürücüleriniz ve üzerlerindeki alan.
+        [one] Sürücüleriniz ve üzerlerindeki alan; bir sürücü takılı.
+       *[other] Sürücüleriniz ve üzerlerindeki alan; { $plugged } sürücü takılı.
     }
 
 # Red sentence at the top of the page when the computer's own disk is almost full. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-full =
     { $plugged ->
-        [0] Neredeyse dolu: bu bilgisayarda yalnızca { $free } boş. Yakında bazı dosyaları silin veya taşıyın.
-        [one] Neredeyse dolu: bu bilgisayarda yalnızca { $free } boş, ayrıca takılı bir sürücü var. Yakında bazı dosyaları silin veya taşıyın.
-       *[other] Neredeyse dolu: bu bilgisayarda yalnızca { $free } boş, ayrıca takılı { $plugged } sürücü var. Yakında bazı dosyaları silin veya taşıyın.
+        [0] Bu bilgisayar neredeyse dolu, yalnızca { $free } boş. Yakında bazı dosyaları silin veya taşıyın.
+        [one] Bu bilgisayar neredeyse dolu, yalnızca { $free } boş. Bir sürücü takılı. Yakında bazı dosyaları silin veya taşıyın.
+       *[other] Bu bilgisayar neredeyse dolu, yalnızca { $free } boş. { $plugged } sürücü takılı. Yakında bazı dosyaları silin veya taşıyın.
     }
 
 # Sentence at the top of the page when the computer's own disk is filling up. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-getting-full =
     { $plugged ->
-        [0] Doluyor: bu bilgisayarda { $free } boş.
-        [one] Doluyor: bu bilgisayarda { $free } boş, ayrıca takılı bir sürücü var.
-       *[other] Doluyor: bu bilgisayarda { $free } boş, ayrıca takılı { $plugged } sürücü var.
+        [0] Bu bilgisayar doluyor, { $free } boş.
+        [one] Bu bilgisayar doluyor, { $free } boş. Bir sürücü takılı.
+       *[other] Bu bilgisayar doluyor, { $free } boş. { $plugged } sürücü takılı.
     }
 
 # Sentence at the top of the page when the computer's own disk has plenty of room. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-plenty =
     { $plugged ->
-        [0] Bol yer var: bu bilgisayarda { $free } boş.
-        [one] Bol yer var: bu bilgisayarda { $free } boş, ayrıca takılı bir sürücü var.
-       *[other] Bol yer var: bu bilgisayarda { $free } boş, ayrıca takılı { $plugged } sürücü var.
+        [0] Bu bilgisayarda bol yer var, { $free } boş.
+        [one] Bu bilgisayarda bol yer var, { $free } boş. Bir sürücü takılı.
+       *[other] Bu bilgisayarda bol yer var, { $free } boş. { $plugged } sürücü takılı.
     }
 
 # Title of the card with the ring for the disk the system is on.
@@ -93,7 +90,7 @@ disks-ring-files = Dosyalarınız
 # Sentence on a ring's card. { $free } is the free space; { $place } is system for the disk the system is on, or files for the place that holds your own files.
 disks-ring-still-free =
     { $place ->
-        [system] Sistemin bulunduğu yerde { $free } hâlâ boş.
+        [system] Sistemin bulunduğu diskte { $free } hâlâ boş.
        *[files] Kendi dosyalarınız için { $free } hâlâ boş.
     }
 
@@ -104,23 +101,23 @@ disks-ring-tip = { $name }: %{ $full } dolu, { $whole } içinde { $free } boş
 disks-ring-of = / { $whole }
 
 # Health reading in the line under the picture when no drive has taken a reading yet.
-disks-health-none = Okuma yok, sürücüler durumlarını bildirmiyor
+disks-health-none = Sürücüler henüz bir sağlık bilgisi göndermedi
 
 # Health reading in the line under the picture when the one drive that has taken a reading is fine.
-disks-health-one = Sağlıklı, sürücünün kendisinin bildirdiği gibi
+disks-health-one = Sağlıklı, sürücünün kendi denetimine göre
 
 # Health reading in the line under the picture when every drive is fine. { $n } is how many drives say so.
 disks-health-all =
     { $n ->
-        [one] Sağlıklı, { $n } sürücünün hepsinin bildirdiği gibi
-       *[other] Sağlıklı, { $n } sürücünün hepsinin bildirdiği gibi
+        [one] Sağlıklı, sürücünün kendi denetimine göre
+       *[other] { $n } sürücünün tümü kendi denetimlerini geçti
     }
 
 # Health reading in the line under the picture when some drives need a look. { $n } is how many.
 disks-health-look =
     { $n ->
-        [one] { $n } sürücüye bakmak gerekiyor, kartına bakın
-       *[other] { $n } sürücüye bakmak gerekiyor, kartlarına bakın
+        [one] { $n } sürücüye bakmak gerekiyor: kartına bakın
+       *[other] { $n } sürücüye bakmak gerekiyor: kartlarına bakın
     }
 
 # Line under the picture of the drives. { $n } is how many drives there are; { $total } is their size together; { $health } says how healthy they are.
@@ -185,7 +182,7 @@ disks-kind-crypto-open = Şifreli, kilidi açık
 disks-kind-crypto-locked = Şifreli, kilitli
 
 # Kind of a part that holds other parts.
-disks-kind-container = Başka bölümler içerir
+disks-kind-container = Bölümleri barındırır
 
 # Kind of a part that has no filesystem on it.
 disks-kind-none = Dosya sistemi yok
@@ -223,16 +220,16 @@ disks-trouble-temperature = çok sıcak
 disks-trouble-wearing-out = eskiyor
 
 # Trouble a drive reports when it has made itself read-only.
-disks-trouble-readonly = kendini salt okunur yaptı
+disks-trouble-readonly = salt okunur duruma geçti
 
 # Trouble a drive reports about the memory it uses to back up its work.
 disks-trouble-volatile = bellek yedeği bozuldu
 
 # Trouble a drive reports when part of it has made itself read-only.
-disks-trouble-pmr = bir kısmı kendini salt okunur yaptı
+disks-trouble-pmr = bir kısmı salt okunur duruma geçti
 
 # Trouble a drive reports when it has been used past what its maker expects.
-disks-trouble-worn = üreticinin beklediğinden fazla yıpranmış
+disks-trouble-worn = beklenen ömrünü aşacak kadar yıpranmış
 
 # Trouble a drive reports about damaged spots. { $n } is how many.
 disks-health-damaged =
@@ -252,7 +249,7 @@ disks-health-hours =
     }
 
 # How a drive says it is when it is failing, on its card.
-disks-health-failing = Bozuluyor: saklamak istediğiniz her şeyi şimdi ondan kopyalayın
+disks-health-failing = Bozuluyor. Saklamak istediğiniz her şeyi şimdi ondan kopyalayın
 
 # How a drive says it is when something is wrong, on its card. { $troubles } lists what is wrong.
 disks-health-attention = Dikkat gerekiyor: { $troubles }
@@ -264,10 +261,10 @@ disks-health-ok = Sağlıklı
 disks-health-line = { $state }, { $readings }
 
 # Line under a drive's name when its case answers but the drive inside it does not.
-disks-no-answer = Yanıt veren sürücü yok
+disks-no-answer = Yanıt vermiyor
 
 # Red words on a drive's card when its case answers but the drive inside it does not.
-disks-no-answer-help = Kutu yanıt veriyor, ancak içindeki sürücü vermiyor. Çıkarın, on saniye bekleyin ve kendi kablosuyla mavi veya USB-C bir bağlantı noktasına takın; böyle kalırsa içindeki sürücü gevşemiş veya bozulmuş olabilir.
+disks-no-answer-help = Sürücünün kutusu bağlı, ancak içindeki sürücü yanıt vermiyor. Çıkarın, on saniye bekleyin, sonra kendi kablosuyla mavi veya USB-C bir bağlantı noktasına takın. Böyle kalırsa içindeki sürücü gevşemiş veya bozulmuş olabilir.
 
 # Tip of the round button on a drive's card that takes the drive out safely.
 disks-remove-safely = Güvenle çıkar
@@ -283,25 +280,25 @@ disks-erase-whole = Sürücünün tamamını sil
 disks-eye-show =
     { $what ->
         [drive] Bu sürücüyü göster
-       *[part] Bu bölümü göster
+       *[partition] Bu bölümü göster
     }
 
 # Tip of the eye that hides a drive or part. { $what } is drive or part; { $lock } is the note that hiding does not protect it.
 disks-eye-hide =
     { $what ->
         [drive] Bu sürücüyü gizle. { $lock }
-       *[part] Bu bölümü gizle. { $lock }
+       *[partition] Bu bölümü gizle. { $lock }
     }
 
 # Note on the card of a hidden drive. { $lock } is the note that hiding does not protect it.
-disks-hidden-note = Klasörler'den ve halkadan gizli. { $lock }
+disks-hidden-note = Folders'tan ve halkadan gizli. { $lock }
 
 # SAFETY: needs a human review before it ships
 # Note on the card of the drive the system runs from.
-disks-system-note = Sistem bundan çalışır: burada hiçbir şey silinemez.
+disks-system-note = Sistem bundan çalışır, bu yüzden burada hiçbir şey silinemez.
 
 # Note on the card of a drive that has no partition table.
-disks-no-table = Bölüm tablosu yok: sürücünün tamamı boş.
+disks-no-table = Bu sürücüde bölüm tablosu yok, bu yüzden tamamı boş.
 
 # Part of the line under a part's name, when it holds files but is not mounted.
 disks-part-not-mounted = bağlı değil
@@ -325,7 +322,7 @@ disks-mount = Bağla
 disks-unmount = Bağlantıyı kes
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = Değiştir
+disks-change-it = Değişiklik yap
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = Ad
@@ -355,7 +352,7 @@ disks-folder-note = Dosyalarının göründüğü yer. Bilgisayarın seçmesi i�
 disks-mount-startup = Açılışta bağla
 
 # Note under the row with the switch for mounting a part at start-up.
-disks-startup-note = Bilgisayar her başladığında hazır olur. Orada değilse bilgisayar yine de başlar.
+disks-startup-note = Bilgisayar her başladığında bağlar. Orada değilse bilgisayar yine de başlar.
 
 # Spoken name of the sliders that choose a size in gigabytes, for resizing a part and for making a new one.
 disks-size-gb = GB cinsinden boyut
@@ -374,14 +371,14 @@ disks-size = Boyut
 
 # SAFETY: needs a human review before it ships
 # Said above the Format and Erase buttons at all times. { $words } names what is erased.
-disks-format-erases = Bu, { $words } üzerindeki her şeyi siler. Geri alınamaz.
+disks-format-erases = Bu, { $words } üzerindeki her şeyi siler. Bunu geri alamazsınız.
 
 # SAFETY: needs a human review before it ships
 # Warning shown after the first press of the resize button. { $name } is the part; { $drive } is the drive; { $from } is its size now; { $to } is the size asked for.
-disks-resize-warning = Yeniden tıklayın: { $drive } üzerindeki { $name }, { $from } boyutundan { $to } boyutuna geçer
+disks-resize-warning = { $drive } üzerindeki { $name } boyutunu { $from } yerine { $to } yapmak için yeniden tıklayın
 
 # Label of the row where room is made for a new part under a part that is in use.
-disks-room-label = Yeni bir bölüm için yer aç
+disks-room-label = Yeni bölüm için yer
 
 # Spoken name of the slider that chooses how much room to make.
 disks-room-gb = GB cinsinden yer
@@ -391,10 +388,10 @@ disks-room-tip = Yer aç
 
 # SAFETY: needs a human review before it ships
 # Warning shown after the first press of the make room button. { $name } is the part; { $drive } is the drive; { $size } is the room asked for.
-disks-room-warning = Yeniden tıklayın: { $drive } üzerindeki { $name }, bir anlık görüntüden sonra { $size } kaybeder
+disks-room-warning = { $drive } üzerindeki { $name } alanından { $size } almak için yeniden tıklayın. Trindle önce bir anlık görüntü alır.
 
 # Note under the row that makes room.
-disks-room-note = Kullanılırken, bir anlık görüntüden sonra küçültülür ve boş alan bırakılır.
+disks-room-note = Trindle bir anlık görüntü alır, sonra bölümü kullanımdayken küçültür. Boşalan alan boş bırakılır.
 
 # Tip of the button that checks a part for faults.
 disks-check-tip = Hatalara karşı denetle
@@ -404,9 +401,6 @@ disks-repair-tip = Onar
 
 # Label of the row where a part is checked and repaired.
 disks-faults = Hatalar
-
-# Note under the Faults row.
-disks-faults-note = Dosyalarının saklanma biçimindeki hataları arar ve düzeltir. Bu çalışırken bağlantısı kesilir.
 
 # SAFETY: needs a human review before it ships
 # Warning shown after the first press of the repair button. { $name } is the part; { $drive } is the drive.
@@ -423,15 +417,9 @@ disks-format = Biçimlendir
 # Tip of the button that formats a part.
 disks-format-tip = Biçimlendir
 
-# Note under the row that erases the whole drive.
-disks-format-whole = Sürücüyü tamamını dolduran tek bir bölüm olarak baştan başlatır.
-
-# Note under the row that formats one part.
-disks-format-part = Yalnızca bu bölümdeki her şeyi siler.
-
 # SAFETY: needs a human review before it ships
 # Warning shown after the first press of the format or erase button. { $words } names what is erased.
-disks-format-warning = Yeniden tıklayın: { $words } üzerindeki her şey silinir
+disks-format-warning = { $words } üzerindeki her şeyi silmek için yeniden tıklayın
 
 # Names a part in the warning before it is formatted. { $name } is the part; { $size } is its size; { $drive } is the drive.
 disks-part-where = { $drive } üzerindeki { $name }, { $size }
@@ -440,13 +428,9 @@ disks-part-where = { $drive } üzerindeki { $name }, { $size }
 # Spoken name of the button that deletes a part, which is also what it says after the first press. { $name } is the part; { $size } is its size; { $drive } is the drive.
 disks-delete-name = { $drive } üzerindeki { $name } ({ $size }) bölümünü sil
 
-# SAFETY: needs a human review before it ships
 # Label of the row where a part is deleted.
-disks-delete-label = Bu bölümü sil
-
 # SAFETY: needs a human review before it ships
-# Note under the row that deletes a part.
-disks-delete-note = Alanı boşalır; yeni bir bölüm için veya öncekinin büyümesi için hazır olur.
+disks-delete-label = Bölümü sil
 
 # Tip of the round button on free space that opens the box for making a new part.
 disks-new-part-tip = Burada yeni bir bölüm oluştur
@@ -454,14 +438,11 @@ disks-new-part-tip = Burada yeni bir bölüm oluştur
 # Label of the row where a new part is made.
 disks-new-part = Yeni bölüm
 
-# Note under the row where a new part is made.
-disks-new-part-note = Bu boş alanda oluşturulur ve kullanıma hazır biçimlendirilir.
-
 # Tip of the button that makes a new part.
 disks-make-tip = Oluştur
 
 # Warning shown after the first press of the button that makes a new part. { $size } is the size asked for; { $drive } is the drive.
-disks-make-warning = { $drive } üzerinde { $size } boyutunda bir bölüm oluşturmak için yeniden tıklayın
+disks-make-warning = { $drive } üzerinde { $size } boyutunda yeni bir bölüm oluşturmak için yeniden tıklayın
 
 # SAFETY: needs a human review before it ships
 # Title of the box for erasing a whole drive. { $name } is the drive.
@@ -501,7 +482,7 @@ disks-safe-remove = Çıkarmak güvenli
 disks-powering-off = Kapatılıyor
 
 # Words on a drive's row when it has been powered off.
-disks-off-safe = Kapalı: çıkarmak güvenli
+disks-off-safe = Çıkarmak güvenli
 
 # Words on a row while a part is being renamed.
 disks-renaming = Yeniden adlandırılıyor
@@ -510,7 +491,7 @@ disks-renaming = Yeniden adlandırılıyor
 disks-renamed = Yeniden adlandırıldı
 
 # Words on a row when the person emptied the folder box, so the computer chooses the folder.
-disks-folder-auto = Klasörünü yine bilgisayar seçer
+disks-folder-auto = Klasör artık sizin için seçilir
 
 # Words on a row when a part has been given a folder. { $dir } is the folder.
 disks-folder-appears = { $dir } içinde görünür
@@ -519,7 +500,7 @@ disks-folder-appears = { $dir } içinde görünür
 disks-startup-on = Açılışta { $dir } içine bağlanır
 
 # Words on a row when a part is set not to mount at start-up.
-disks-startup-off = Açılışta dokunulmaz
+disks-startup-off = Açılışta bağlanmaz
 
 # Words on a row while a folder or start-up choice is being saved.
 disks-saving = Kaydediliyor
@@ -531,22 +512,31 @@ disks-resizing = Yeniden boyutlandırılıyor
 disks-resized = { $size } boyutuna getirildi
 
 # Red words on the row that makes room, when the files to make smaller cannot be found.
-disks-room-files-missing = Dosyalar bulunamadı, bu yüzden yer açılamaz.
+disks-room-files-missing = Trindle dosyaları bulamadı, bu yüzden yer açamıyor.
 
 # Words on a row while the snapshot is taken before room is made.
 disks-snapshot-taking = Anlık görüntü alınıyor
 
 # Red words when the snapshot taken before making room could not be found afterwards.
-disks-snapshot-missing = Anlık görüntü sonradan bulunamadı.
+disks-snapshot-missing = Trindle anlık görüntüyü sonradan bulamadı.
 
-# Red words when the snapshot before making room failed. { $why } is why, as a sentence.
+# Red words when the snapshot, or switching off the swap file, before making room failed. { $why } is why, as a sentence.
 disks-snapshot-failed = { $why } Hiçbir şey yeniden boyutlandırılmadı.
 
 # Red words when things changed while the snapshot was being taken.
-disks-snapshot-changed = Anlık görüntü alınırken bir şeyler değişti, bu yüzden hiçbir şey yeniden boyutlandırılmadı.
+disks-snapshot-changed = Trindle anlık görüntü alırken bir şeyler değişti, bu yüzden hiçbir şey yeniden boyutlandırılmadı.
 
 # Words on a row while room is being made.
 disks-making-room = Yer açılıyor
+
+# Words on a row while the swap file is switched off before room is made.
+disks-swap-off-doing = Takas dosyası kapatılıyor
+
+# Words on a row while the swap file is switched back on after room is made.
+disks-swap-on-doing = Takas dosyası yeniden açılıyor
+
+# Red words when the swap file couldn't be switched back on after making room. { $done } is how making room went, { $why } why the swap file is still off, both as sentences.
+disks-swap-still-off = { $done } Takas dosyası, yeniden başlatana kadar kapalı kalır. { $why }
 
 # Words on a row when room has been made. { $size } is how much.
 disks-room-made = { $size } yer açıldı
@@ -558,7 +548,7 @@ disks-repairing = Onarılıyor
 disks-repaired = Onarıldı
 
 # Red words when some faults could not be put right.
-disks-repair-failed = Bazı hatalar düzeltilemedi. Saklamak istediğiniz her şeyi kopyalayın.
+disks-repair-failed = Trindle bazı hataları onaramadı. Saklamak istediğiniz dosyaları başka bir sürücüye kopyalayın.
 
 # Words on a row while a part is being checked.
 disks-checking = Denetleniyor
@@ -567,7 +557,7 @@ disks-checking = Denetleniyor
 disks-no-faults = Hata bulunamadı
 
 # Red words when the check found faults.
-disks-faults-found = Hata bulundu: onarmak için anahtar simgesine basın.
+disks-faults-found = Hata bulundu. Onarmak için anahtar simgesine basın.
 
 # SAFETY: needs a human review before it ships
 # Words on a row while a part or drive is being formatted.
@@ -587,7 +577,7 @@ disks-new-part-missing = Yeni bölüm bulunamadı.
 disks-service-unreachable = Sürücü hizmetine ulaşılamadı.
 
 # Red words when the identifier of a freshly formatted part could not be read.
-disks-uuid-unread = Yeni bölümün tanımlayıcısı okunamadı.
+disks-uuid-unread = Trindle yeni bölümün tanımlayıcısını okuyamadı.
 
 # SAFETY: needs a human review before it ships
 # Words on a row while a part is being deleted.
@@ -604,7 +594,7 @@ disks-making-it = Oluşturuluyor
 disks-made = Oluşturuldu
 
 # Red words under an eye when hiding or showing could not be kept. { $why } is the system's reason.
-disks-hide-failed = Bu saklanamadı: { $why }
+disks-hide-failed = Kaydedilemedi: { $why }
 
 # Words on a row while a change is being made. { $doing } says what is being done.
 disks-working = { $doing }…
@@ -621,8 +611,8 @@ disks-name-empty = Önce bir ad verin.
 # Red words under the folder name box when it is too long. { $max } is the most letters allowed.
 disks-name-too-long =
     { $max ->
-        [one] Bu ad çok uzun: en çok { $max } harf.
-       *[other] Bu ad çok uzun: en çok { $max } harf.
+        [one] Bu ad çok uzun. En çok { $max } harf olsun.
+       *[other] Bu ad çok uzun. En çok { $max } harf olsun.
     }
 
 # Red words under the folder name box when it has letters that are not allowed.
@@ -637,8 +627,8 @@ disks-name-taken = { $dir } zaten kullanımda.
 # Red words under a part's name box when the name is too long for its kind of file system. { $max } is the most letters allowed.
 disks-label-too-long =
     { $max ->
-        [one] Bu ad bu tür için çok uzun: en çok { $max } harf.
-       *[other] Bu ad bu tür için çok uzun: en çok { $max } harf.
+        [one] Bu ad bu bölüm için çok uzun. En çok { $max } harf olsun.
+       *[other] Bu ad bu bölüm için çok uzun. En çok { $max } harf olsun.
     }
 
 # Red words under a part's name box when a FAT name has marks that are not allowed.
@@ -647,8 +637,8 @@ disks-label-fat-marks = FAT adları * ? . , ; : / \ | + = < > [ ] veya " içerem
 # Red words under the Size row when the kind of part must be mounted before it can be resized. { $way } is larger or smaller.
 disks-resize-mount-first =
     { $way ->
-        [larger] Önce bağlayın: bu tür yalnızca bağlıyken büyütülebilir.
-       *[smaller] Önce bağlayın: bu tür yalnızca bağlıyken küçültülebilir.
+        [larger] Önce bağlayın. Bu tür bir bölüm yalnızca bağlıyken büyütülebilir.
+       *[smaller] Önce bağlayın. Bu tür bir bölüm yalnızca bağlıyken küçültülebilir.
     }
 
 # Red words under the Size row when the kind of part cannot be resized. { $way } is larger or smaller.
@@ -660,11 +650,11 @@ disks-resize-cannot =
 
 # SAFETY: needs a human review before it ships
 # Red words when the password box was closed with no password. Said whole, as a sentence.
-disks-no-password = Parola verilmedi, bu yüzden hiçbir şey değişmedi.
+disks-no-password = Parola girmediniz, bu yüzden hiçbir şey değişmedi.
 
 # SAFETY: needs a human review before it ships
 # Red words when the password box was closed with no password, after some steps of a change were already done.
-disks-no-password-part-way = Parola verilmedi, bu yüzden iş yarıda kaldı.
+disks-no-password-part-way = Parola girmediniz, bu yüzden iş yarıda kaldı.
 
 # Red words when another change is pressed while one is still being made.
 disks-change-going = Bir değişiklik yapılıyor.
@@ -673,24 +663,24 @@ disks-one-at-a-time = Başka bir değişiklik hâlâ yapılıyor. Bittiğinde ye
 
 # SAFETY: needs a human review before it ships
 # Red words when it could not be made sure that the password would be asked for.
-disks-not-sure = Parolanın sorulacağından emin olunamadı, bu yüzden hiçbir şey değişmedi.
+disks-not-sure = Trindle parolanızı soracağından emin olamadı, bu yüzden hiçbir şey değişmedi.
 
 # SAFETY: needs a human review before it ships
 # Red words after how a change ended, when the password just given could not be taken back.
-disks-standing = Az önce verilen parola geri alınamadı; bu yüzden birkaç dakika boyunca bir sürücüde yapılacak başka bir değişiklik parola istemeyebilir. Yeniden deneniyor.
+disks-standing = Trindle az önce verdiğiniz parolayı iptal edemedi. Birkaç dakika boyunca bir sürücüde yapılacak başka bir değişiklik parola istemeyebilir. Trindle yeniden deniyor.
 
 # SAFETY: needs a human review before it ships
 # Words after how a change ended, when the password just given has been taken back after all.
-disks-taken-back = Verilen parola şimdi geri alındı: bir sonraki değişiklik parola isteyecek.
+disks-taken-back = Verdiğiniz parola şimdi iptal edildi, bu yüzden bir sonraki değişiklik parola isteyecek.
 
 # Red words when a change could not be started because there is no drive service to ask.
-disks-no-service = Sürücü hizmetine ulaşılamadı, bu yüzden hiçbir şey değişmedi.
+disks-no-service = Trindle sürücü hizmetine ulaşamadı, bu yüzden hiçbir şey değişmedi.
 
 # Red words said the next time Drives opens, about a change it was closed or ended in the middle of.
 disks-closed = Bu değişiklik yapılırken Sürücüler kapatıldı.
 
 # Words on the row of a change still being made when the window is asked to close.
-disks-stays-open = Nasıl bittiğini söyleyebilmek için bu bitene kadar Sürücüler açık kalır.
+disks-stays-open = Sürücüler bu bitene kadar açık kalacak, böylece nasıl geçtiğini görebilirsiniz.
 
 # Red words for a refusal. { $reason } says why, without a full stop.
 disks-nothing-changed = { $reason }, bu yüzden hiçbir şey değişmedi.
@@ -723,25 +713,25 @@ disks-list-not-known = Bilinmiyor: { $steps }.
 disks-left-unmounted = { $dev } bunun için bağlantısı kesildi ve şimdi bağlı değil.
 
 # Red words about a part that was unmounted for a change that did nothing to the drive. { $dev } is the part.
-disks-still-unmounted = { $dev } bunun için bağlantısı kesildi ve hâlâ bağlı değil: satırından bağlayın.
+disks-still-unmounted = { $dev } bunun için bağlantıdan çıkarıldı ve hâlâ bağlı değil. Satırından yeniden bağlayın.
 
 # Red words about a part that the step that stopped may have unmounted. { $dev } is the part.
-disks-may-be-unmounted = { $dev } bağlantısı kesilmiş olabilir: satırına bakın.
+disks-may-be-unmounted = { $dev } bağlantıdan çıkarılmış olabilir. Satırına bakın.
 
 # Red words about a part that could not be mounted again because that needs a password. { $dev } is the part.
-disks-put-back-password = { $dev } bunun için bağlantısı kesildi ve yeniden bağlamak ayrı bir parola gerektiriyor: satırından bağlayın.
+disks-put-back-password = { $dev } bunun için bağlantıdan çıkarıldı. Satırından yeniden bağlayın ve istendiğinde parolasını girin.
 
 # Red words about a part that could not be mounted again. { $dev } is the part; { $why } is why.
-disks-put-back-failed = { $dev } bunun için bağlantısı kesildi ve yeniden bağlanamadı ({ $why }): satırından bağlayın.
+disks-put-back-failed = { $dev } bunun için bağlantıdan çıkarıldı ve yeniden bağlanamadı ({ $why }). Satırından bağlayın.
 
 # Red words under a freshly formatted part whose folder could not be kept. { $dir } is the folder; { $why } is why, as a sentence.
-disks-folder-not-kept = Biçimlendirildi, ancak { $dir } klasörü yeniden verilmedi. { $why } Klasörü satırından yeniden seçin.
+disks-folder-not-kept = Biçimlendirme bitti, ancak Trindle { $dir } klasörünü ona yeniden veremedi. { $why } Klasörü satırından yeniden seçin.
 
 # Red words when a drive is in use and cannot be unmounted.
 disks-busy = Bir şey hâlâ onu kullanıyor. Dosyalarını gösteren pencereleri veya programları kapatın, sonra yeniden deneyin.
 
 # Red words when there is not enough room for what is on a part at the size asked for.
-disks-no-room = Üzerindekiler için istenen boyutta yeterli yer yok.
+disks-no-room = Bu boyut, üzerindeki dosyalar için çok küçük.
 
 # Step of a change. { $dev } is the part.
 disks-step-unmount = { $dev } bağlantısını kesme
@@ -750,7 +740,7 @@ disks-step-unmount = { $dev } bağlantısını kesme
 disks-step-mount = { $dev } yeniden bağlama
 
 # Step of a change.
-disks-step-eject = çıkarılacak sürücüyü kapatma
+disks-step-eject = sürücüyü çıkarmaya hazırlama
 
 # Step of a change.
 disks-step-power-off = sürücüyü kapatma
@@ -759,13 +749,13 @@ disks-step-power-off = sürücüyü kapatma
 disks-step-format = { $dev } biçimlendirme
 
 # Step of a change.
-disks-step-create = yeni bölümü oluşturma
+disks-step-create = bölüm oluşturma
 
 # Step of a change. { $dev } is the part.
 disks-step-delete = { $dev } silme
 
 # Step of a change. { $dev } is the part.
-disks-step-resize-part = { $dev } bölümünü yeniden boyutlandırma
+disks-step-resize-part = { $dev } yeniden boyutlandırılıyor
 
 # Step of a change. { $dev } is the part.
 disks-step-resize = { $dev } üzerindekileri yeniden boyutlandırma
@@ -780,85 +770,82 @@ disks-step-check = { $dev } denetleme
 disks-step-rename = { $dev } yeniden adlandırma
 
 # Step of a change. { $dev } is the part.
-disks-step-fstab = { $dev } klasör ve açılış seçimini kaydetme
+disks-step-fstab = { $dev } için klasör ve açılış ayarlarını kaydetme
 
 # Step of a change that has no words of its own. { $method } is what the drive service was asked; { $dev } is the part.
 disks-step-other = { $dev } üzerinde { $method } adımı
 
 # Red words under the Make room row for a part of a kind that cannot be made smaller in use, and that can when it is not in use. { $kind } is the kind of file system.
-disks-room-ext-offline = Bu { $kind } bölümü yalnızca kullanımda değilken küçültülebilir, bu yüzden buradan yer açılamaz.
+disks-room-ext-offline = Bu { $kind } bölümü yalnızca kullanımda değilken küçültülebilir, bu yüzden Trindle buradan yer açamaz.
 
 # Red words under the Make room row for an xfs part.
-disks-room-xfs-fixed = Bu xfs bölümü küçültülemez.
+disks-room-xfs-fixed = xfs bölümleri küçültülemez.
 
 # Red words under the Make room row for any other kind of part in use. { $kind } is the kind of file system.
 disks-room-other-kind = Bu { $kind } bölümü kullanımdayken küçültülemez.
 
 # Red words under the Make room row when a snapshot cannot be taken of the part.
-disks-room-no-snapshot = Anlık görüntü yalnızca sistemin kendi diskinden alınabilir, bu yüzden burada yer açılamaz.
+disks-room-no-snapshot = Trindle yalnızca sistemin kendi diskinin anlık görüntüsünü alabilir, bu yüzden burada yer açamaz.
 
 # Red words under the Make room row.
-disks-room-not-in-table = Bir sürücünün tablosundaki bir bölüm değil, bu yüzden bundan yer açılamaz.
+disks-room-not-in-table = Bu, bir sürücünün bölüm tablosunda yer alan bir bölüm değil, bu yüzden Trindle bundan yer açamaz.
 
 # Red words under the Make room row.
-disks-room-no-online-shrink = Sürücü hizmeti burada kullanımdayken Btrfs'yi küçültemez, bu yüzden yer açılamaz.
+disks-room-no-online-shrink = Sürücü hizmeti Btrfs'yi burada kullanımdayken küçültemez, bu yüzden Trindle yer açamaz.
 
 # Red words under the Make room row.
-disks-room-holds-parts = Başka bölümler içeriyor, bu yüzden bundan yer açılamaz.
+disks-room-holds-parts = İçinde başka bölümler var, bu yüzden Trindle bundan yer açamaz.
 
 # Red words under the Make room row.
-disks-room-not-gpt = Sürücüsünde GPT tablosu yok, bu yüzden bundan yer açılamaz.
+disks-room-not-gpt = Sürücüsünde GPT bölüm tablosu yok, bu yüzden Trindle bundan yer açamaz.
 
 # Red words under the Make room row.
 disks-room-mount-first = Önce bağlayın: Btrfs bağlıyken küçültülür.
 
 # Red words under the Make room row.
-disks-room-mounts-not-one = Tam olarak tek bir yere bağlı değil, bu yüzden yer açılamaz.
+disks-room-mounts-not-one = Bağlı değil, bu yüzden Trindle yer açamaz.
 
 # Red words under the Make room row.
-disks-room-read-only = Salt okunur bağlı, bu yüzden yer açılamaz.
+disks-room-read-only = Salt okunur bağlı, bu yüzden Trindle yer açamaz.
 
 # Red words under the Make room row.
-disks-room-read-only-unknown = Salt okunur olup olmadığı anlaşılamadı, bu yüzden yer açılamaz.
+disks-room-read-only-unknown = Trindle salt okunur olup olmadığını anlayamadı, bu yüzden yer açamıyor.
 
 # Red words under the Make room row.
-disks-room-many-drives = Dosyalar birden fazla sürücüye yayılmış, bu yüzden yer açılamaz.
+disks-room-many-drives = Dosyalar birden fazla sürücüye yayılmış, bu yüzden Trindle yer açamaz.
 
 # Red words under the Make room row.
-disks-room-drives-unknown = Dosyaların kaç sürücüye yayıldığı anlaşılamadı, bu yüzden yer açılamaz.
+disks-room-drives-unknown = Trindle dosyaların kaç sürücüye yayıldığını anlayamadı, bu yüzden yer açamıyor.
 
 # Red words under the Make room row.
-disks-room-swap-file = Üzerinde bir takas dosyası var, bu yüzden yer açılamaz.
+disks-room-swap-unknown = Trindle üzerinde bir takas dosyası olup olmadığını anlayamadı, bu yüzden yer açamıyor.
 
 # Red words under the Make room row.
-disks-room-swap-unknown = Üzerinde bir takas dosyası olup olmadığı anlaşılamadı, bu yüzden yer açılamaz.
+disks-room-used-unknown = Trindle ne kadarının kullanımda olduğunu okuyamadı, bu yüzden yer açamıyor.
 
 # Red words under the Make room row.
-disks-room-used-unknown = Ne kadarının kullanımda olduğu okunamadı, bu yüzden yer açılamaz.
+disks-room-area-unknown = Sürücü hizmeti dosya sisteminin ne kadar büyük olduğunu söylemiyor, bu yüzden Trindle onu denetleyemez ve yer açamaz.
 
 # Red words under the Make room row.
-disks-room-area-unknown = Sürücü hizmeti dosyaların alanının ne kadar büyük olduğunu söylemiyor, bu yüzden denetlenemedi ve yer açılamaz.
+disks-room-open-missing = Trindle kilidi açılmış kopyasını bulamadı, bu yüzden yer açamıyor.
 
 # Red words under the Make room row.
-disks-room-open-missing = Açık kopyası bulunamadı, bu yüzden yer açılamaz.
+disks-room-encryption-sizes = Şifreleme için verilen boyutlar uyuşmuyor, bu yüzden Trindle yer açamaz.
 
 # Red words under the Make room row.
-disks-room-encryption-sizes = Şifreleme için verilen boyutlar uyuşmuyor, bu yüzden yer açılamaz.
-
-# Red words under the Make room row.
-disks-room-sizes = Bunun için verilen boyutlar uyuşmuyor, bu yüzden yer açılamaz.
+disks-room-sizes = Bunun için verilen boyutlar uyuşmuyor, bu yüzden Trindle yer açamaz.
 
 # Red words under the Make room row. { $used } is how much the files use.
-disks-room-too-little = { $used } içeriyor ve bundan fazlasının saklanması gerekiyor, bu yüzden çok az yer boşaltılabilir.
+disks-room-too-little = Üzerinde { $used } var ve bundan fazlasını tutması gerekiyor, bu yüzden boşaltılacak yer çok az.
 
 # Red words under the Make room row.
 disks-room-sizes-unread = Boyutları okunamadı.
 
 # Red words under the Make room row when the room asked for is out of range. { $least } and { $most } are the smallest and largest room.
-disks-room-range = { $least } ile { $most } arasında yer açılabilir.
+disks-room-range = { $least } ile { $most } arasında yer açabilirsiniz.
 
 # Red words when making room was stopped. { $what } says what was found wrong, without a full stop.
-disks-room-stopped = { $what }, bu yüzden iş durduruldu.
+disks-room-stopped = { $what }, bu yüzden Trindle durdu.
 
 # What was found wrong while making room.
 disks-room-check-unmounted = Dosyalar artık bağlı değil
@@ -867,30 +854,30 @@ disks-room-check-unmounted = Dosyalar artık bağlı değil
 disks-room-check-part = Bölüm { $is } boyutunda ve { $should } olmalı
 
 # What was found wrong while making room.
-disks-room-check-open = Şifrelemenin açık kopyası olması gereken boyutta değil
+disks-room-check-open = Şifrelemenin kilidi açılmış kopyası olması gereken boyutta değil
 
 # What was found wrong while making room. { $is } is the size the files' area has; { $should } is the size it should have.
-disks-room-check-area = Dosyaların alanı { $is } boyutunda ve { $should } olmalı
+disks-room-check-area = Dosya sistemi { $is } boyutunda ve { $should } olmalı
 
 # What was found wrong while making room.
-disks-room-check-area-small = Dosyaların alanı kullanımdakinden küçük
+disks-room-check-area-small = Dosya sistemi kullanımdakinden küçük
 
 # What was found wrong while making room.
-disks-room-check-fit = İçeriği taşıyan alan artık sığmıyor
+disks-room-check-fit = Dosya sistemi artık sığmıyor
 
 # Red words when making room was stopped because the drive service no longer lists something. { $what } is part, copy or files.
 disks-room-gone =
     { $what ->
-        [part] Bölüm artık sürücü hizmetinin listesinde yok, bu yüzden iş durduruldu.
-        [copy] Açık kopya artık sürücü hizmetinin listesinde yok, bu yüzden iş durduruldu.
+        [partition] Bölüm artık sürücü hizmetinin listesinde yok, bu yüzden iş durduruldu.
+        [copy] Kilidi açılmış kopya artık sürücü hizmetinin listesinde yok, bu yüzden iş durduruldu.
        *[files] Dosya sistemi artık sürücü hizmetinin listesinde yok, bu yüzden iş durduruldu.
     }
 
 # Step of making room, in the account of one that stopped part-way.
-disks-room-step-files = dosyaların alanını küçültme
+disks-room-step-files = dosya sistemini küçültme
 
 # Step of making room, in the account of one that stopped part-way.
-disks-room-step-open = şifrelemenin açık kopyasını küçültme
+disks-room-step-open = şifrelemenin kilidi açılmış kopyasını küçültme
 
 # Step of making room, in the account of one that stopped part-way.
 disks-room-step-part = bölümü küçültme
@@ -899,11 +886,13 @@ disks-room-step-part = bölümü küçültme
 disks-room-step-check = boyutları denetleme
 
 # Description the snapshot taken before making room is saved under, which Settings lists. { $dev } is the part; { $at } is a number that tells it from another.
-disks-room-snapshot-note = { $dev } altında yer açmadan önce ({ $at })
+disks-room-snapshot-note = { $dev } üzerinde yer açmadan önce ({ $at })
+
+# Red words when the swap file is back on after making room, but Trindle met a problem doing it. { $done } is how making room went, { $why } the problem, both as sentences.
+disks-swap-on-but = { $done } { $why }
 
 # Warning shown after the first press of the resize button when the part gets smaller. { $name } is the part; { $drive } is the drive; { $from } is its size now; { $to } is the size asked for.
-disks-resize-warning-shrink = Yeniden tıklayın: { $drive } üzerindeki { $name } { $from } boyutundan { $to } boyutuna düşecek. Önce dosyalarını yedekleyin, çünkü küçültme sırasında elektrik kesilirse dosyalar kaybolabilir.
+disks-resize-warning-shrink = { $drive } üzerindeki { $name } boyutunu { $from } yerine { $to } yapmak için yeniden tıklayın. Önce dosyalarını yedekleyin, çünkü küçülürken elektrik kesilirse dosyalar kaybolabilir.
 
 # Red words under the size when a Windows part was hibernated or left in fast start-up and so is not made smaller. { $name } is the part.
 disks-windows-asleep = { $name } üzerindeki Windows hazırda bekletilmiş ya da hızlı başlatma durumunda bırakılmış, bu yüzden küçültmek dosyalarının kaybolmasına yol açabilir. Windows'u başlatın, Yeniden başlat'ı seçin, sonra yeniden deneyin.
-

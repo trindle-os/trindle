@@ -54,6 +54,7 @@ pub struct Space<E: SpaceElement> {
     elements: Vec<InnerElement<E>>,
     outputs: Vec<Output>,
     span: tracing::Span,
+    changes: u64,
 }
 
 impl<E: SpaceElement> PartialEq for Space<E> {
@@ -81,6 +82,7 @@ impl<E: SpaceElement> Default for Space<E> {
             elements: Default::default(),
             outputs: Default::default(),
             span,
+            changes: 0,
         }
     }
 }
@@ -89,6 +91,12 @@ impl<E: SpaceElement + PartialEq> Space<E> {
     /// Gets the id of this space
     pub fn id(&self) -> usize {
         self.id
+    }
+
+    /// Goes up whenever an element is mapped, moved, raised or unmapped,
+    /// an output is mapped or unmapped, or an element enters or leaves an output.
+    pub fn changes(&self) -> u64 {
+        self.changes
     }
 
     /// Map a [`SpaceElement`] and move it to top of the stack
@@ -133,6 +141,7 @@ impl<E: SpaceElement + PartialEq> Space<E> {
     }
 
     fn insert_elem(&mut self, elem: InnerElement<E>, activate: bool) {
+        self.changes = self.changes.wrapping_add(1);
         if activate {
             elem.element.set_activate(true);
             for e in self.elements.iter() {
@@ -151,6 +160,7 @@ impl<E: SpaceElement + PartialEq> Space<E> {
     pub fn unmap_elem(&mut self, element: &E) {
         if let Some(pos) = self.elements.iter().position(|inner| &inner.element == element) {
             let elem = self.elements.remove(pos);
+            self.changes = self.changes.wrapping_add(1);
             for output in elem.outputs.keys() {
                 elem.element.output_leave(output);
             }
@@ -257,6 +267,7 @@ impl<E: SpaceElement + PartialEq> Space<E> {
     /// *Note:* Remapping an output does reset it's damage memory.
     pub fn map_output<P: Into<Point<i32, Logical>>>(&mut self, output: &Output, location: P) {
         let location = location.into();
+        self.changes = self.changes.wrapping_add(1);
         set_output_location(self.id, output, location);
         if !self.outputs.contains(output) {
             debug!(parent: &self.span, output = output.name(), "Mapping output at {:?}", location);
@@ -277,6 +288,7 @@ impl<E: SpaceElement + PartialEq> Space<E> {
             return;
         }
         debug!(parent: &self.span, output = output.name(), "Unmapping output");
+        self.changes = self.changes.wrapping_add(1);
         set_output_location(self.id, output, None);
         self.outputs.retain(|o| o != output);
     }
@@ -328,7 +340,9 @@ impl<E: SpaceElement + PartialEq> Space<E> {
     /// wayland socket flush.
     #[profiling::function]
     pub fn refresh(&mut self) {
+        let before = self.elements.len();
         self.elements.retain(|e| e.alive());
+        let mut changed = self.elements.len() != before;
 
         let outputs = self
             .outputs
@@ -348,15 +362,18 @@ impl<E: SpaceElement + PartialEq> Space<E> {
                     // output_enter expects the overlap to be relative to the element
                     overlap.loc -= bbox.loc;
                     let old = e.outputs.insert(output.clone(), overlap);
+                    changed |= old.is_none();
                     if old.is_none() || matches!(old, Some(old_overlap) if old_overlap != overlap) {
                         e.element.output_enter(output, overlap);
                     }
                 } else if e.outputs.remove(output).is_some() {
+                    changed = true;
                     e.element.output_leave(output);
                 }
             }
             e.outputs.retain(|output, _| {
                 if !outputs.iter().any(|(o, _)| o == output) {
+                    changed = true;
                     e.element.output_leave(output);
                     false
                 } else {
@@ -365,6 +382,9 @@ impl<E: SpaceElement + PartialEq> Space<E> {
             });
         }
 
+        if changed {
+            self.changes = self.changes.wrapping_add(1);
+        }
         self.elements.iter().for_each(|e| e.element.refresh());
         for (output, _) in outputs {
             output.cleanup();

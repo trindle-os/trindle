@@ -2,11 +2,13 @@
 //! computer, and run inside bubblewrap. Nothing here needs a password.
 
 pub mod added;
+pub mod bus;
 pub mod first_apps;
 pub mod install;
 pub mod launchers;
 pub mod needs;
 pub mod run;
+pub mod start;
 pub mod walls;
 pub mod x11;
 #[cfg(test)]

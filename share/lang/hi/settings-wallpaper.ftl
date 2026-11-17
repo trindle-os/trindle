@@ -8,7 +8,7 @@ settings-wallpaper-title = वॉलपेपर
 settings-wallpaper-keywords = पृष्ठभूमि तस्वीर स्लाइडशो फ़ोटो background picture slideshow photo
 
 # Introduction under the heading of the wallpaper page, and the words behind the page i.
-settings-wallpaper-help = एक सादा रंग, या एक तस्वीर, या एक फ़ोल्डर ताकि तस्वीर आपके तय किए समय पर अपने-आप बदलती रहे।
+settings-wallpaper-help = एक सादा रंग, एक तस्वीर, या तस्वीरों का फ़ोल्डर इस्तेमाल करें, जिनकी तस्वीरें आपके चुने अंतराल पर बदलती हैं।
 
 # Choice in the list of how long each picture stays.
 settings-wallpaper-every-10s = 10 सेकंड
@@ -38,7 +38,7 @@ settings-wallpaper-every-1d = 1 दिन
 settings-wallpaper-fit-fill = स्क्रीन भरें
 
 # Choice in the list of how the picture fits the screen.
-settings-wallpaper-fit-fit = समाएँ, पूरी तस्वीर दिखे
+settings-wallpaper-fit-fit = पूरी तस्वीर समाएँ
 
 # Choice in the list of how the picture fits the screen.
 settings-wallpaper-fit-center = बीच में, असली आकार
@@ -56,7 +56,7 @@ settings-wallpaper-order-shuffle = बेतरतीब
 settings-wallpaper-order-name = फ़ाइल के नाम से
 
 # Red words when the program that draws the wallpaper would not start.
-settings-wallpaper-no-changer = वॉलपेपर बदला नहीं जा सका: उसका प्रोग्राम शुरू नहीं हुआ।
+settings-wallpaper-no-changer = Trindle वह प्रोग्राम शुरू नहीं कर सका जो वॉलपेपर बदलता है।
 
 # Under the large picture, when counting; { $used } of { $all } pictures are used.
 settings-wallpaper-count =
@@ -89,10 +89,10 @@ settings-wallpaper-file-own = { $name }, Trindle के साथ आने व�
 settings-wallpaper-plain-below = एक सादा रंग, नीचे सेट किया गया।
 
 # Under the large picture when the picture or folder has gone.
-settings-wallpaper-gone-below = अब वहाँ कुछ नहीं है। तस्वीर या फ़ोल्डर चुनें।
+settings-wallpaper-gone-below = तस्वीर या फ़ोल्डर अब वहाँ नहीं है। कोई और चुनें।
 
 # Sentence about the wallpaper when it is a plain colour.
-settings-wallpaper-plain = एक सादा रंग, कोई तस्वीर नहीं।
+settings-wallpaper-plain = बस एक सादा रंग।
 
 # Sentence about the wallpaper when Trindle's own pictures change; { $every } is how often, { $used } of { $all } pictures are used and { $extra } is any added sentences, each after a space.
 settings-wallpaper-changing-own =
@@ -112,16 +112,16 @@ settings-wallpaper-changing-folder =
 settings-wallpaper-empty-folder-choose = फ़ोल्डर { $folder } में कोई तस्वीर नहीं है। दूसरा चुनें।
 
 # Added to the sentence about the wallpaper when a folder holds more than Trindle looks through.
-settings-wallpaper-more-than-looked-at = फ़ोल्डर में उससे ज़्यादा है जितना Trindle देखता है, इसलिए उसकी कुछ तस्वीरें छूट सकती हैं।
+settings-wallpaper-more-than-looked-at = फ़ोल्डर में उससे ज़्यादा तस्वीरें हैं जितनी Trindle जाँच सकता है, इसलिए कुछ छूट सकती हैं।
 
 # Sentence about the wallpaper for one of Trindle's own pictures; { $name } is its name.
 settings-wallpaper-file-own-said = { $name }, Trindle के साथ आने वाली तस्वीरों में से एक।
 
 # Sentence about the wallpaper for one chosen picture; { $name } is its name, written to read in the middle of a sentence.
-settings-wallpaper-file-one = हमेशा एक ही तस्वीर, { $name }।
+settings-wallpaper-file-one = { $name } हमेशा दिखती है।
 
 # Sentence about the wallpaper when the chosen picture cannot be used; { $why } is the reason.
-settings-wallpaper-file-refused = तस्वीर इस्तेमाल नहीं की जा रही। { $why } Trindle की अपनी तस्वीर दिखाई जा रही है।
+settings-wallpaper-file-refused = Trindle उस तस्वीर को इस्तेमाल नहीं कर रहा। { $why } उसकी जगह Trindle की अपनी तस्वीर दिखाई जा रही है।
 
 # Sentence about the wallpaper when the picture has gone.
 settings-wallpaper-file-gone = तस्वीर अब वहाँ नहीं है। तस्वीर या फ़ोल्डर चुनें।
@@ -156,14 +156,8 @@ settings-wallpaper-card-title = वॉलपेपर
 # Heading of the wallpaper line, and name of its switch.
 settings-wallpaper-wallpaper = वॉलपेपर
 
-# Small words under the wallpaper line.
-settings-wallpaper-wallpaper-about = बंद होने पर स्क्रीन एक सादा रंग होती है।
-
 # Heading of the line for choosing where the picture comes from.
 settings-wallpaper-picture = तस्वीर
-
-# Small words under that line.
-settings-wallpaper-picture-about = एक तस्वीर, एक फ़ोल्डर, या Trindle की अपनी।
 
 # Name of the round button that chooses one picture.
 settings-wallpaper-choose-picture-button = तस्वीर चुनें
@@ -177,26 +171,20 @@ settings-wallpaper-own-pictures = Trindle की अपनी तस्वीर
 # Heading of the fit line.
 settings-wallpaper-fit = बैठाना
 
-# Small words under that line.
-settings-wallpaper-fit-about = यह स्क्रीन पर कैसे बैठती है।
-
 # Name of the list of how the picture fits the screen.
 settings-wallpaper-fit-name = यह स्क्रीन पर कैसे बैठती है
 
 # Heading of the colour line.
 settings-wallpaper-colour = रंग
 
-# Small words under the colour line when the colour can be seen.
-settings-wallpaper-colour-shown = अकेला दिखता है, या तस्वीर के चारों ओर।
-
 # Small words under the colour line when a picture covers it.
-settings-wallpaper-colour-hidden = छिपा है: तस्वीर स्क्रीन को ढक लेती है।
+settings-wallpaper-colour-hidden = तस्वीर से छिपा है।
 
 # Placeholder and name of the box for typing the colour as a hex code; the example is a code.
-settings-wallpaper-colour-hex = रंग हेक्स कोड के रूप में, जैसे #09090b
+settings-wallpaper-colour-hex = एक हेक्स कोड, जैसे #09090b
 
 # Words behind the i of the Wallpaper card.
-settings-wallpaper-card-about = एक सादा रंग, या एक तस्वीर, या एक फ़ोल्डर ताकि तस्वीर आपके तय किए समय पर अपने-आप बदलती रहे। रंग अकेला तब दिखता है जब कोई तस्वीर न हो, और उस तस्वीर के चारों ओर जो स्क्रीन को नहीं ढकती; इसे हेक्स कोड के रूप में लिखें, जैसे #09090b।
+settings-wallpaper-card-about = एक सादा रंग, एक तस्वीर, या तस्वीरों का फ़ोल्डर इस्तेमाल करें, जिनकी तस्वीरें आपके चुने अंतराल पर बदलती हैं। रंग अकेला तब दिखता है जब कोई तस्वीर न हो, और उस तस्वीर के चारों ओर जो स्क्रीन को नहीं ढकती। इसे हेक्स कोड के रूप में लिखें, जैसे #09090b।
 
 # Small words on the cards that are greyed while the wallpaper is off.
 settings-wallpaper-waits = इन्हें इस्तेमाल करने के लिए वॉलपेपर चालू करें।
@@ -204,38 +192,26 @@ settings-wallpaper-waits = इन्हें इस्तेमाल करन
 # Heading of the line, and name of its switch, for changing the picture now and then.
 settings-wallpaper-rotate = समय-समय पर तस्वीर बदलें
 
-# Small words under that line.
-settings-wallpaper-rotate-about = फ़ोल्डर की हर तस्वीर, बारी-बारी से।
-
 # Heading of the line, and name of its list, for how long each picture stays.
 settings-wallpaper-every = हर इतने में बदलें
-
-# Small words under that line.
-settings-wallpaper-every-about = हर तस्वीर कितनी देर रहती है।
 
 # Heading of the line, and name of its list, for the order pictures change in.
 settings-wallpaper-order = क्रम
 
-# Small words under the order line.
-settings-wallpaper-order-about = बेतरतीब, या फ़ाइल के नाम से।
-
 # Heading of the line, and name of its button, for moving to the next picture.
-settings-wallpaper-next = अभी अगली तस्वीर
-
-# Small words under that line.
-settings-wallpaper-next-about = तुरंत अगली पर चला जाता है।
+settings-wallpaper-next = अगली तस्वीर
 
 # Title of the Changing pictures card.
 settings-wallpaper-changing-title = बदलती तस्वीरें
 
 # Words behind the i of that card.
-settings-wallpaper-changing-about = फ़ोल्डर की हर तस्वीर एक के बाद एक इस्तेमाल करता है, यहाँ चुने समय पर बदलते हुए, बेतरतीब या फ़ाइल के नाम से।
+settings-wallpaper-changing-about = फ़ोल्डर की हर तस्वीर एक के बाद एक दिखाता है, जितनी बार आप यहाँ चुनें, बेतरतीब या फ़ाइल के नाम के क्रम में।
 
 # Words behind the i of the Pictures card when pictures change by themselves.
-settings-wallpaper-pictures-rotating = केवल रोशन तस्वीरें इस्तेमाल होती हैं। एक को दबाने से वह धुँधली हो जाती है और आगे से छोड़ दी जाती है; उसे वापस लाने के लिए फिर दबाएँ। कुछ भी कभी मिटाया नहीं जाता, इसलिए आप अपना मन बदल सकते हैं। स्क्रीन पर अभी की तस्वीर वही है जो बड़ी तस्वीर में है।
+settings-wallpaper-pictures-rotating = Trindle हर उस तस्वीर को इस्तेमाल करता है जो धुँधली नहीं है। किसी तस्वीर को छोड़ने के लिए उसे दबाएँ, और वापस लाने के लिए फिर दबाएँ। कुछ भी मिटाया नहीं जाता। बड़ी तस्वीर वही है जो अभी स्क्रीन पर है।
 
 # Words behind the i of the Pictures card when one picture is on.
-settings-wallpaper-pictures-one = किसी तस्वीर को स्क्रीन पर लगाने के लिए उसे दबाएँ। कुछ भी कभी मिटाया नहीं जाता।
+settings-wallpaper-pictures-one = किसी तस्वीर को इस्तेमाल करने के लिए उसे दबाएँ।
 
 # Title of the Pictures card.
 settings-wallpaper-pictures-title = तस्वीरें
@@ -245,7 +221,3 @@ settings-wallpaper-no-pictures-name = अभी कोई तस्वीर न
 
 # Heading of the line shown when there are no pictures to choose from.
 settings-wallpaper-no-pictures = चुनने के लिए कोई तस्वीर नहीं
-
-# Small words under that line.
-settings-wallpaper-no-pictures-about = ऊपर से तस्वीरों का फ़ोल्डर चुनें।
-

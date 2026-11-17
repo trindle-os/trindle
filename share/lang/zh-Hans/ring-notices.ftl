@@ -37,7 +37,7 @@ ring-snooze-for-1-hour = 推迟 1 小时
 ring-snooze-for-6-hours = 推迟 6 小时
 
 # Tip and screen reader name of the snooze choice for the next morning.
-ring-snooze-for-next-morning = 推迟到明早
+ring-snooze-for-next-morning = 推迟到早上
 
 # Tip of the button on the snooze page that goes back to the notification's message.
 ring-act-back = 返回消息
@@ -62,7 +62,7 @@ ring-act-copied = 已复制
 ring-act-copy = 复制消息
 
 # Line under the title of the notice that says one of Trindle's programs crashed.
-ring-crash-click = 点击即可交给您的助手。
+ring-crash-click = 点击即可交给你的助手。
 
 # Name of Trindle's own main program in the crash notice.
 ring-crash-trindle = Trindle
@@ -110,7 +110,7 @@ ring-lid-nothing = 什么也不做
 ring-lid-shut-down = 关机
 
 # Reason the system lists beside Trindle's hold on the lid switch (shown by tools that list what stops sleep).
-ring-lid-reason = 合上盖子会按“设置”中“电源”的选择执行
+ring-lid-reason = 你可以在“设置”的“电源”中选择合上盖子时的行为。
 
 # Notice at the foot of the screen for a few seconds when the magnifier starts.
 ring-magnify-hint = 在任意位置按住即可放大
@@ -127,14 +127,14 @@ ring-mic-off-tip = 为所有程序关闭麦克风
 
 # SAFETY: needs a human review before it ships
 # Tip of the switch in the ring that turns the microphone back on.
-ring-mic-on-tip = 重新打开麦克风
+ring-mic-on-tip = 打开麦克风
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when something other than the person pressed the microphone switch on.
-ring-mic-own-press = 只有您自己亲手按下才能重新打开麦克风。
+ring-mic-own-press = 只有你自己才能重新打开麦克风。
 
 # Line in the ring when the microphone switch could not be changed; the reason follows.
-ring-mic-not-changed = 无法更改麦克风开关：{ $why }
+ring-mic-not-changed = Trindle 无法更改麦克风开关：{ $why }
 
 # Notice when a notification was clicked and no program could be found for it.
 ring-goes-no-program = 找不到程序
@@ -146,13 +146,13 @@ ring-goes-other-program = 由其他程序发送
 ring-goes-not-started = 无法启动
 
 # Notice after a click on a crash notification: its details were copied for an assistant.
-ring-notes-copied = 已为您的助手复制
+ring-notes-copied = 已为你的助手复制
 
 # Screen reader name of a notification circle.
 ring-notes-name = 通知
 
 # Said when a pinned notification has been held long enough and now follows the pointer.
-ring-notes-moving = 正在移动。松开即放下，按 Escape 放回原处。
+ring-notes-moving = 正在移动通知。松开即放下，按 Escape 放回原处。
 
 # Said when a pinned notification has been dropped or moved by keys.
 ring-notes-moved = 已移动
@@ -170,7 +170,7 @@ ring-notify-seconds =
     }
 
 # Choice in Settings, Ring: the notification circle stays until it is closed.
-ring-notify-until-closed = 直到您关闭
+ring-notify-until-closed = 直到你关闭
 
 # Time under a notification from yesterday.
 ring-notify-yesterday = 昨天 { $clock }
@@ -189,15 +189,18 @@ ring-notify-top-right = 右上角
 
 # SAFETY: needs a human review before it ships
 # Title of the notice when a plugin that asks for permissions has been given none.
-ring-plugin-needs = { $name } 需要您的许可
+ring-plugin-needs = { $name } 需要你的允许
 
 # SAFETY: needs a human review before it ships
 # Line under the notice that a plugin needs permission: none of the permissions it asks for are given.
-ring-plugin-cannot-work = 它暂时无法工作：已允许 0 项，共 { $asks } 项。
+ring-plugin-cannot-work =
+    { $asks ->
+        [1] 它暂时无法工作。它请求的那一项权限，你还没有允许。
+       *[other] 它暂时无法工作。它请求的 { $asks } 项权限，你一项都没有允许。
+    }
 
 # Said to a screen reader when a notification was copied; $said is what the circle said.
 ring-copied-said = 已复制。{ $said }
-
 
 
 # Title of the notice for ordinary programs that have just reached the network; the program names are under it, and Allow means this is fine.
@@ -213,3 +216,5 @@ ring-outside-body =
        *[other] { $names } 以及另外 { $more } 个
     }
 
+# Said under the magnifier when the screen picture it took has the wrong size.
+ring-magnify-wrong-size = 图片大小不对。

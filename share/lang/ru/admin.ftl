@@ -10,7 +10,7 @@ admin-login-too-long = Слишком длинное имя для входа.
 admin-user-none = Пользователя «{ $name }» нет.
 
 # Red words in Settings when the account asked about is the system's own and not a person's. { $name } is the login name.
-admin-user-system = «{ $name }» - системная учётная запись, её не трогаем.
+admin-user-system = «{ $name }» - системная учётная запись, поэтому Trindle не стала её менять.
 
 # Red words in Settings when no password reached the helper that sets it.
 # SAFETY: needs a human review before it ships
@@ -28,14 +28,14 @@ admin-password-short =
 
 # Red words in Settings when a new password has a line break in it.
 # SAFETY: needs a human review before it ships
-admin-password-line-break = Пароль не может содержать перевод строки.
+admin-password-line-break = В пароле не может быть перевода строки.
 
 # Red words in Settings when the login name chosen for a new person is taken. { $name } is the login name.
 admin-user-exists = «{ $name }» уже существует.
 
 # Red words in Settings when the only administrator is asked to stop being one. { $name } is the login name.
 # SAFETY: needs a human review before it ships
-admin-user-only-admin = «{ $name }» - единственный администратор, поэтому остаётся им.
+admin-user-only-admin = «{ $name }» - единственный администратор, поэтому должен остаться администратором.
 
 # Red words in Settings when a person tries to delete the account they are signed in to.
 # SAFETY: needs a human review before it ships
@@ -43,7 +43,7 @@ admin-delete-self = Нельзя удалить свою учётную запи
 
 # Red words in Settings when an account was deleted but its picture on the login screen could not be removed. { $name } is the login name; { $why } is the system's reason.
 # SAFETY: needs a human review before it ships
-admin-delete-picture-kept = «{ $name }» удалён, но его картинка для экрана входа осталась: { $why }
+admin-delete-picture-kept = Учётная запись «{ $name }» удалена, но Trindle не удалось убрать картинку для экрана входа: { $why }
 
 # Red words in Settings when the picture chosen for the login screen is too big.
 admin-picture-large = Слишком большая картинка.
@@ -52,7 +52,7 @@ admin-picture-large = Слишком большая картинка.
 admin-picture-not-ours = Эта картинка создана не Trindle.
 
 # Red words in Settings when the folder of login pictures could not be opened to the login screen. { $why } is the system's reason.
-admin-picture-folder = Не удалось открыть папку с картинками для экрана входа: { $why }
+admin-picture-folder = Trindle не удалось дать экрану входа доступ к папке с картинками: { $why }
 
 # Red words in Settings when the language chosen has a name that cannot be one.
 admin-language-invalid = Это не название языка.
@@ -64,35 +64,35 @@ admin-language-list = Не удалось прочитать список язы
 admin-language-unknown = Язык «{ $code }» неизвестен Debian.
 
 # Red words in Settings when the computer name typed is not allowed.
-admin-hostname-invalid = Имя компьютера состоит из букв, цифр и дефисов, не длиннее 63 знаков, и не начинается и не заканчивается дефисом.
+admin-hostname-invalid = В имени компьютера можно использовать только буквы, цифры и дефисы. Оно может быть не длиннее 63 знаков и не должно начинаться или заканчиваться дефисом.
 
 # Red words in Settings when the 80% charging limit is on but could not be kept for the next start. { $why } is the system's reason.
-admin-charge-limit-lost = Ограничение пока включено, но пропадёт после выключения компьютера: { $why }
+admin-charge-limit-lost = Ограничение заряда пока включено, но пропадёт после выключения компьютера: { $why }
 
 # Red words in Settings when charging was set to full but the limit could not be taken off for good. { $why } is the system's reason.
-admin-charge-limit-returns = Зарядка пока полная, но ограничение вернётся при следующем запуске: { $why }
+admin-charge-limit-returns = Зарядка до полной пока включена, но ограничение вернётся при следующем запуске компьютера: { $why }
 
 # Red words in Settings when a radio's block would not come off. { $words } is why; { $said } is what the system added.
 admin-radio-refused = { $words } { $said }
 
 # Red words in Settings when the switch that lets other computers connect could not be put off. { $why } is the system's reason.
 # SAFETY: needs a human review before it ships
-admin-sharing-still-on = Другие компьютеры всё ещё могут подключаться, так как переключатель не удалось выключить: { $why }
+admin-sharing-still-on = Другие компьютеры всё ещё могут подключаться, потому что не удалось выключить общий доступ: { $why }
 
 # Red words in Settings when a plugin's id is not one.
 admin-plugin-id-invalid = Это не идентификатор плагина.
 
 # Red words in Settings when the person a firewall step is for is not known.
-admin-person-unknown = Этот пользователь неизвестен.
+admin-person-unknown = Такого пользователя нет.
 
 # Red words in Settings when the folder of the person a step is for is not known.
-admin-person-folder-unknown = Папка этого пользователя неизвестна.
+admin-person-folder-unknown = У этого пользователя нет папки.
 
 # Red words in Settings when the list of plugins let through the firewall could not be kept. { $why } is the system's reason.
 admin-plugins-list-not-kept = Не удалось сохранить список разрешённых плагинов: { $why }.
 
 # Red words in Settings when the plugin a firewall step is for was not found.
-admin-plugin-not-found = Плагин не найден.
+admin-plugin-not-found = Такого плагина нет.
 
 # Red words in Settings and Apps when Debian's updates were not installed because Trindle's own version could not be read.
 admin-update-version-unknown = Ничего не обновлено: не удалось узнать, какая версия Trindle стоит на этом компьютере, поэтому обновление самой Trindle нельзя было исключить.
@@ -110,7 +110,7 @@ admin-step-installing-trindle = Установка Trindle
 admin-package-invalid = Это не имя пакета.
 
 # Red words when the package to remove is not installed.
-admin-package-not-installed = Не сделано: он не установлен.
+admin-package-not-installed = Этот пакет не установлен.
 
 # Red words in Settings when the firmware device asked for is not one fwupd knows.
 admin-device-invalid = Это устройство неизвестно fwupd.
@@ -119,7 +119,7 @@ admin-device-invalid = Это устройство неизвестно fwupd.
 admin-install-and-lists = { $first }; { $lists }
 
 # Red words in Settings when Tailscale cannot be turned on because it is not known who asked.
-admin-tailscale-who = Не удалось узнать, кто запросил Tailscale.
+admin-tailscale-who = Trindle не знает, кто запросил Tailscale.
 
 # Red words in Settings when the site blocking did not start in time.
 admin-blocking-late = Блокировка не запустилась вовремя.
@@ -140,7 +140,7 @@ admin-server-unknown = Такого сервера нет.
 admin-tool-error = { $tool }: { $why }
 
 # Red words when a tool stopped before it was given everything. { $tool } is the tool's name; { $why } is the system's reason.
-admin-tool-stopped = { $tool } остановился, не получив всех данных, поэтому это нельзя считать выполненным: { $why }
+admin-tool-stopped = { $tool } остановился, не получив всего нужного, поэтому работа не завершена: { $why }
 
 # Red words when a tool a step runs failed and said nothing. { $tool } is the tool's name.
 admin-tool-failed = { $tool } завершился с ошибкой.
@@ -150,26 +150,26 @@ admin-tool-failed = { $tool } завершился с ошибкой.
 admin-file-not-removed = Не удалось удалить { $path }: { $why }
 
 # Red words when a system file could not be read, so nothing was changed. { $why } is the system's reason; { $path } is the file.
-admin-file-not-read = Ничего не изменено, потому что { $why }: { $path }
+admin-file-not-read = Ничего не изменено, потому что не удалось прочитать { $path }: { $why }
 
 # Red words when a step failed and what it had done could not be put back either. { $why } is the first failure; { $problem } is the second.
 # SAFETY: needs a human review before it ships
 admin-undone-failed = { $why } Вернуть всё, как было, тоже не удалось: { $problem }
 
 # Red words in Settings when the time chosen for keeping earlier versions is not one on offer.
-admin-home-keep-invalid = Снимки нельзя хранить так долго или так мало.
+admin-home-keep-invalid = Недопустимый срок хранения прежних версий.
 
 # Red words in Settings when the folder the earlier versions are kept in is not there.
-admin-home-folder-missing = Папки со снимками нет.
+admin-home-folder-missing = Прежние версии не найдены.
 
 # Red words in Settings when something that is not a folder is where the earlier versions would go.
-admin-home-folder-blocked = На месте папки со снимками лежит не папка.
+admin-home-folder-blocked = На месте папки с прежними версиями лежит файл.
 
 # Red words in Folders when it is not known who asked for a step.
-admin-caller-unknown = Не удалось узнать, кто запросил действие.
+admin-caller-unknown = Неизвестно, кто запросил.
 
 # Red words when a step that must go through the administrator's password was started another way.
-admin-pkexec-only = Это запускается только через pkexec.
+admin-pkexec-only = Работает только через pkexec.
 
 # Red words in Folders when the name of the computer to connect to is not a computer's name.
 admin-share-computer-invalid = Это не имя компьютера.
@@ -190,10 +190,10 @@ admin-share-not-yours = Здесь можно закрыть только сво
 admin-share-not-open = Там не открыта ни одна общая папка.
 
 # Red words in Folders when the folder shares open in has been changed by something else. { $path } is the folder.
-admin-share-folder-changed = { $path } не в том виде, в каком её оставила Trindle, поэтому там ничего не подключено.
+admin-share-folder-changed = Что-то изменилось в { $path } после настройки Trindle, поэтому там ничего не подключено.
 
 # Red words in Folders when the private folder the login is kept in has been changed by something else. { $path } is the folder.
-admin-share-private-changed = { $path } не в том виде, в каком её оставила Trindle.
+admin-share-private-changed = { $path } изменено после настройки Trindle.
 
 # Red words when a folder could not be made. { $path } is the folder; { $why } is the system's reason.
 admin-path-error = { $path }: { $why }
@@ -211,10 +211,10 @@ admin-login-unreadable = Не удалось прочитать данные д�
 admin-mounts-unreadable = Не удалось прочитать, что подключено к этому компьютеру: { $why }
 
 # Red words in Folders when a shared folder cannot be closed because a program is using it.
-admin-share-busy = Какая-то программа ещё использует эту папку. Сначала закройте её.
+admin-share-busy = Какая-то программа ещё использует эту папку. Закройте её и повторите попытку.
 
 # Red words in Folders when a shared folder's computer does not answer while it is being closed.
-admin-share-not-answering = Этот компьютер не отвечает. Папка закроется, когда вы выйдете из системы.
+admin-share-not-answering = Этот компьютер не отвечает. Общая папка закроется, когда вы выйдете из системы.
 
 # Red words when the number given for a person is not a user number.
 admin-user-id-invalid = Это не номер пользователя.
@@ -262,10 +262,10 @@ admin-step-fetching-key = Получение ключа подписи
 admin-step-adding-source = Добавление источника и чтение его списка
 
 # Red words in Apps when a source could not be used and an earlier one was kept. { $why } is the reason.
-admin-source-unusable = Источник нельзя использовать. { $why }
+admin-source-unusable = Не удалось использовать источник. { $why }
 
 # Red words in Apps when a source could not be used and so was taken away again. { $why } is the reason.
-admin-source-unusable-removed = Источник нельзя использовать, поэтому он снова удалён. { $why }
+admin-source-unusable-removed = Не удалось использовать источник, поэтому он снова удалён. { $why }
 
 # Red words in Apps when the person could not be let switch Tailscale on or off. { $user } is the login name; { $why } is the reason.
 # SAFETY: needs a human review before it ships
@@ -283,7 +283,7 @@ admin-source-claude-kvm = «{ $user }» не удалось разрешить �
 admin-source-docker = «{ $user }» не удалось разрешить использовать его без пароля: { $why }
 
 # Red words in Apps when a program was installed but its setting up did not finish. { $name } is the program; { $why } is the reason.
-admin-source-set-up-failed = «{ $name }» установлен, но его настройка не завершена: { $why }
+admin-source-set-up-failed = «{ $name }» установлен, но Trindle не удалось завершить его настройку: { $why }
 
 # Line of the progress while a program is installed.
 admin-step-installing-it = Установка
@@ -298,7 +298,7 @@ admin-source-arch = «{ $name }» не предназначен для этог�
 admin-step-setting-up = Настройка
 
 # Red words in Apps when the address of a custom source is not an https address.
-admin-source-address = Адрес должен начинаться с https:// и не содержать ничего лишнего.
+admin-source-address = Каждый адрес должен быть обычным веб-адресом, который начинается с https://.
 
 # Red words in Apps when the suite or components of a custom source are not plain words.
 admin-source-words = Набор (suite) и компоненты должны быть простыми словами.
@@ -324,7 +324,7 @@ admin-snapshot-missing = Снимка { $n } нет на диске.
 
 # Red words in Settings when a restore did not begin because the snapshot could not be made ready. { $why } is the reason.
 # SAFETY: needs a human review before it ships
-admin-restore-not-ready = Ничего не изменено: снимок не удалось подготовить. { $why }
+admin-restore-not-ready = Ничего не изменено, потому что не удалось подготовить снимок. { $why }
 
 # Red words in Settings when the present system could not be set aside during a restore. { $why } is the reason.
 # SAFETY: needs a human review before it ships
@@ -332,7 +332,7 @@ admin-restore-aside = Не удалось отложить в сторону т�
 
 # Red words in Settings when a restore failed and the present system could not be put back under its name. { $aside } is the name it now has; { $sub } is the name it needs; { $why } is the reason.
 # SAFETY: needs a human review before it ships
-admin-restore-stranded = текущая система теперь называется { $aside }, а не { $sub }, и компьютер не запустится, пока ей снова не вернут имя { $sub }: { $why }
+admin-restore-stranded = Текущая система теперь называется { $aside }, а не { $sub }, и компьютер не запустится, пока ей снова не вернут имя { $sub }: { $why }
 
 # Red words in Settings when the earlier snapshots could not be moved into the restored system. { $why } is the reason.
 # SAFETY: needs a human review before it ships
@@ -358,9 +358,9 @@ admin-tidied-away = Эти программы больше никому не н�
 admin-update-kept-back = Установлены не все обновления. Отложены: { $list }.
 
 # Red words after an update when a driver (DKMS) would not build for the new kernel. The kernel and the rest of the update went in. { $driver } is the driver, { $feature } what is off. Help address updates-driver-off.
-admin-driver-off-known = Отключено: { $feature }. Его драйвер ({ $driver }, DKMS) пока не собирается для нового ядра.
+admin-driver-off-known = Отключено: { $feature }, потому что драйвер ({ $driver }, DKMS) пока не собирается для нового ядра Linux.
 
-admin-driver-off = Драйвер ({ $driver }, DKMS) пока не собирается для нового ядра, поэтому то, что он даёт, отключено.
+admin-driver-off = Драйвер ({ $driver }, DKMS) пока не собирается для нового ядра Linux. Функции, которым он нужен, отключены.
 
 # Said once after the drivers that are off.
 admin-driver-off-rest = Ядро и остальные обновления установлены.
@@ -368,7 +368,7 @@ admin-driver-off-rest = Ядро и остальные обновления ус
 # The feature that the v4l2loopback driver gives.
 admin-driver-virtual-camera = виртуальная камера
 
-admin-language-in-use = { $code } это язык, на котором запускается этот компьютер, поэтому он остаётся.
+admin-language-in-use = { $code } - язык, на котором запускается этот компьютер, поэтому его нельзя удалить.
 
 
 
@@ -385,7 +385,7 @@ admin-games-drive-busy = Накопитель используется. Закр
 admin-system-busy = Сейчас выполняется другое изменение программ. Попробуйте снова, когда оно закончится.
 
 # The read-only system could not be opened for a software change; nothing was changed.
-admin-system-not-opened = Ничего не изменено: систему не удалось разблокировать: { $why }
+admin-system-not-opened = Ничего не изменено, потому что систему не удалось разблокировать: { $why }
 
 # The read-only system could not be locked again after a change.
 admin-system-left-open = Систему не удалось заблокировать снова. Она будет заблокирована при следующем запуске: { $why }
@@ -397,9 +397,57 @@ admin-system-local-locked = Не удалось оставить /usr/local до
 admin-system-root-only = Это может запустить только root, и не через pkexec.
 
 # Switching the read-only system on where the system's disk is not Btrfs.
-admin-system-needs-btrfs = Нужна Btrfs.
+admin-system-needs-btrfs = Для этого нужна Btrfs.
 
 
 # Red words in Settings when a restore swapped the systems but could not finish tidying up. { $why } is the reason.
-admin-restore-finish-later = Снимок установлен на место, и компьютер запустится с него. Убрать старую систему не удалось, это будет повторено при следующем запуске: { $why }
+admin-restore-finish-later = Снимок установлен на место, и компьютер запустится с него. Trindle не удалось закончить уборку старой системы. Попытка повторится при следующем запуске компьютера: { $why }
 
+
+# Red words in Settings when too many ports are open already. { $most } is a number.
+admin-ports-too-many = Можно открыть не более { $most } портов.
+
+# Red words in Settings when the list of open ports could not be kept. { $why } is the system's reason.
+admin-ports-not-kept = Не удалось сохранить список открытых портов: { $why }.
+
+# Red words in Settings when the firewall could not be switched off. { $why } is the system's reason.
+admin-firewall-still-on = Брандмауэр всё ещё включён: { $why }
+
+# Red line when a plugin now asks for other network ports than the ones the administrator's password was typed for.
+admin-plugin-ports-changed = Этому плагину теперь нужны другие сетевые порты, не те, что вы разрешили. Разрешите ему ещё раз, чтобы он мог их открыть.
+
+# Red words when a program is asked to be set up for someone other than the person asking.
+admin-source-not-you = Программу можно добавить только для того человека, который об этом просит.
+
+# Red words when a snapshot is put back and the name for the system set aside is already used. 
+admin-restore-name-taken = Только что другое восстановление заняло это имя. Подождите несколько секунд и попробуйте ещё раз.
+
+# Said when a shared folder can't be disconnected. { $path } is the folder, { $error } the system's reason.
+admin-share-not-closed = Не удалось отключить { $path }: { $error }
+
+# Said when shared folders don't answer while they are being disconnected. { $n } is how many.
+admin-shares-left =
+    { $n ->
+        [one] { $n } общая папка не ответила, поэтому осталась подключённой. Она отключится при выключении компьютера.
+        [few] { $n } общие папки не ответили, поэтому остались подключёнными. Они отключатся при выключении компьютера.
+        [many] { $n } общих папок не ответили, поэтому остались подключёнными. Они отключатся при выключении компьютера.
+       *[other] { $n } общей папки не ответили, поэтому остались подключёнными. Они отключатся при выключении компьютера.
+    }
+
+# Red words in Drives when a swap file could not be switched off before making room. { $path } is the file, { $why } the system's reason.
+admin-swap-not-off = Не удалось отключить файл подкачки { $path }: { $why }
+
+# Red words in Drives when a swap file could not be switched back on after making room. { $path } is the file, { $why } the system's reason.
+admin-swap-not-on = Не удалось снова включить файл подкачки { $path }: { $why }
+
+# Red words when Drives asks about a swap file that the system's own settings don't name.
+admin-swap-not-listed = { $path } не входит в файлы подкачки системы.
+
+# Red words when a swap file, or a folder above it, could be changed or read by someone other than the administrator. { $why } is that file or folder.
+admin-swap-not-safe = Trindle не будет использовать файл подкачки { $path }: { $why } могут изменить или прочитать другие.
+
+# Red words in Drives when, after making room, Trindle couldn't find where the swap file now starts, which waking from hibernation needs.
+admin-swap-resume-unread = Не найдено, где теперь файл подкачки, поэтому выход из гибернации может не сработать.
+
+# Said when the swap file moved and the running system couldn't be told: hibernation is refused until the computer restarts.
+admin-swap-resume-restart = Гибернация снова заработает после перезагрузки.

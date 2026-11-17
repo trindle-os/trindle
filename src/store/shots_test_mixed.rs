@@ -22,11 +22,11 @@ fn feed() -> Vec<Found> {
 
 fn mixed_store(name: &str) -> Store {
     let mut s = stocked();
-    s.hub = Some(Rc::new(feed()));
-    s.hub_asked = true;
-    s.show = Show::Both;
-    s.warning_off = false;
-    s.conf = std::env::temp_dir().join(format!("trindle-mixed-{}-{name}", std::process::id())).join("trindle.conf");
+    s.appimagehub.list = Some(Rc::new(feed()));
+    s.appimagehub.asked = true;
+    s.prefs.show = Show::Both;
+    s.prefs.warning_off = false;
+    s.prefs.conf = std::env::temp_dir().join(format!("trindle-mixed-{}-{name}", std::process::id())).join("trindle.conf");
     s
 }
 
@@ -47,7 +47,7 @@ fn the_selector_filters_the_one_grid_on_discover_a_kind_and_results() {
     for view in views() {
         s.view = view.clone();
         for (show, flat, image) in [(Show::Both, true, true), (Show::Flatpaks, true, false), (Show::AppImages, false, true)] {
-            s.show = show;
+            s.prefs.show = show;
             let tiles = kinds(&s);
             let name = view.nav_key();
             assert_eq!(tiles.iter().any(|t| t.0), flat, "{name} {show:?}: Flatpaks");
@@ -82,7 +82,7 @@ fn both_kinds_share_one_order() {
 #[test]
 fn discover_has_the_popular_appimages_and_the_rest_the_whole_feed() {
     let mut s = mixed_store("popular");
-    s.show = Show::AppImages;
+    s.prefs.show = Show::AppImages;
     s.view = View::Home;
     let home: Vec<String> = kinds(&s).into_iter().map(|t| t.1).collect();
     assert_eq!(home, ["Obsidian", "VLC", "KeePassXC"], "the popular list's order; names the feed lacks are left out");
@@ -92,7 +92,7 @@ fn discover_has_the_popular_appimages_and_the_rest_the_whole_feed() {
     s.view = View::Search("zebra".into());
     assert_eq!(kinds(&s).len(), 1, "and in a search");
 
-    s.hub = None;
+    s.appimagehub.list = None;
     s.view = View::Home;
     assert!(kinds(&s).is_empty());
 }
@@ -100,10 +100,10 @@ fn discover_has_the_popular_appimages_and_the_rest_the_whole_feed() {
 #[test]
 fn the_choice_is_one_setting_for_all_three_pages_and_is_kept() {
     let mut s = mixed_store("kept");
-    assert_eq!(crate::store::formats::show_in(&s.conf), Show::Both, "starts on Both");
+    assert_eq!(crate::store::formats::show_in(&s.prefs.conf), Show::Both, "starts on Both");
     s.view = View::Home;
     mixed::set_show(&mut s, Show::AppImages);
-    assert_eq!(crate::store::formats::show_in(&s.conf), Show::AppImages, "kept in the file");
+    assert_eq!(crate::store::formats::show_in(&s.prefs.conf), Show::AppImages, "kept in the file");
     for view in views() {
         s.view = view.clone();
         assert!(!kinds(&s).is_empty() && kinds(&s).iter().all(|t| !t.0), "{}: the choice made on Discover holds", view.nav_key());
@@ -114,7 +114,7 @@ fn the_choice_is_one_setting_for_all_three_pages_and_is_kept() {
         s.view = view.clone();
         assert!(kinds(&s).iter().all(|t| t.0), "{}: and the choice made on results", view.nav_key());
     }
-    assert_eq!(crate::store::formats::show_in(&s.conf), Show::Flatpaks);
+    assert_eq!(crate::store::formats::show_in(&s.prefs.conf), Show::Flatpaks);
 }
 
 #[test]
@@ -124,13 +124,13 @@ fn offline_the_flatpaks_show_with_one_line_saying_why_no_appimages_are() {
     for (online, line) in [(false, offline), (true, silent)] {
         for view in views() {
             let mut s = mixed_store("offline");
-            (s.hub, s.online, s.view) = (Some(Rc::new(Vec::new())), online, view.clone());
+            (s.appimagehub.list, s.online, s.view) = (Some(Rc::new(Vec::new())), online, view.clone());
             let said = words(&mut s);
             assert_eq!(said.iter().filter(|w| w.as_str() == line).count(), 1, "{} online {online}: one line", view.nav_key());
             assert!(!kinds(&s).is_empty() && kinds(&s).iter().all(|t| t.0), "the Flatpaks show as they do");
-            s.show = Show::Flatpaks;
+            s.prefs.show = Show::Flatpaks;
             assert!(!words(&mut s).iter().any(|w| w == line), "Flatpaks only: nothing said of AppImages");
-            s.show = Show::AppImages;
+            s.prefs.show = Show::AppImages;
             let said = words(&mut s);
             assert_eq!(said.iter().filter(|w| w.as_str() == line).count(), 1, "AppImages only: the page's sentence, once");
             assert!(kinds(&s).is_empty());
@@ -138,7 +138,7 @@ fn offline_the_flatpaks_show_with_one_line_saying_why_no_appimages_are() {
     }
 
     let mut s = mixed_store("fetching");
-    (s.hub, s.show) = (None, Show::AppImages);
+    (s.appimagehub.list, s.prefs.show) = (None, Show::AppImages);
     assert!(words(&mut s).iter().any(|w| w.as_str() == t!("store-browse-fetching")));
 }
 
@@ -166,21 +166,28 @@ fn the_warning_comes_every_time_until_its_tick_is_set() {
     assert!(appimage_warning::showing(&s), "and it comes again");
     press(&mut s, "OK");
     assert!(!appimage_warning::showing(&s) && installed.get() == 1, "OK installs");
-    assert!(!s.warning_off && !crate::store::formats::warning_off_in(&s.conf), "not ticked: still wanted");
+    assert!(!s.prefs.warning_off && !crate::store::formats::warning_off_in(&s.prefs.conf), "not ticked: still wanted");
     try_install(&mut s);
     assert!(appimage_warning::showing(&s), "so it comes again");
     appimage_warning::ticked(&mut s, true);
     press(&mut s, "OK");
     assert_eq!(installed.get(), 2);
-    assert!(s.warning_off && crate::store::formats::warning_off_in(&s.conf), "the tick is kept");
+    assert!(s.prefs.warning_off && crate::store::formats::warning_off_in(&s.prefs.conf), "the tick is kept");
     try_install(&mut s);
     assert!(!appimage_warning::showing(&s) && installed.get() == 3, "ticked: installs at once, no card");
+
+    let arrived = Rc::new(std::cell::Cell::new(0));
+    let count = arrived.clone();
+    appimage_warning::before_arriving(&mut s, move |_| count.set(count.get() + 1));
+    assert!(appimage_warning::showing(&s) && arrived.get() == 0, "a ticked-away warning still asks for a file that arrives");
+    press(&mut s, "OK");
+    assert_eq!(arrived.get(), 1);
 
     let mut other = mixed_store("warning-cancel");
     try_install(&mut other);
     appimage_warning::ticked(&mut other, true);
     press(&mut other, "Cancel");
-    assert!(!other.warning_off && !crate::store::formats::warning_off_in(&other.conf));
+    assert!(!other.prefs.warning_off && !crate::store::formats::warning_off_in(&other.prefs.conf));
 }
 
 #[test]
@@ -190,7 +197,7 @@ fn the_card_is_over_the_page_and_nothing_touches() {
     let before = words(&mut s).len();
     appimage_warning::before(&mut s, |_| {});
     for w in [760, 1278, 1920] {
-        s.across = w as f32;
+        s.size.across = w as f32;
         let mut ui = Ui::new(s.whole(settings()), Theme::new(false, "#fbc711"));
         ui.lay_at(w, 692);
         let wrong = ui.squeezed_or_touching();
@@ -239,7 +246,7 @@ fn button_press(s: &mut Store, tip: &str) -> Option<Msg> {
 }
 
 fn pixels(s: &mut Store, w: u32, h: u32) -> tiny_skia::Pixmap {
-    s.across = w as f32;
+    s.size.across = w as f32;
     let mut ui = Ui::new(s.whole(settings()), Theme::new(false, "#fbc711"));
     let mut pix = tiny_skia::Pixmap::new(w, h).unwrap();
     ui.paint(&mut pix.as_mut(), 1.0);
@@ -265,7 +272,7 @@ fn discover_takes_one_of_each_in_turn() {
     let all = kinds(&s);
     assert_eq!(all.iter().map(|t| t.0).collect::<Vec<_>>(), [true, false, false, false], "one Flatpak, then the AppImages on alone");
 
-    s.show = Show::AppImages;
+    s.prefs.show = Show::AppImages;
     assert_eq!(kinds(&s).len(), 3);
 }
 
@@ -274,25 +281,25 @@ fn the_headline_counts_what_is_chosen_and_names_where() {
     let count = |n: usize| t!("store-grid-apps-count", n = n, count = crate::common::thousands(n as u64));
     let said = |s: &mut Store, starts: &str| words(s).iter().filter(|w| w.starts_with(starts)).count();
     let mut s = mixed_store("headline");
-    let (flat, listed) = (s.apps.len(), s.hub.as_ref().unwrap().len());
+    let (flat, listed) = (s.apps.len(), s.appimagehub.list.as_ref().unwrap().len());
     s.view = View::Home;
     for (show, want) in [(Show::Both, format!("{} to choose from on Flathub and AppImageHub; ", count(flat + listed))),
                          (Show::Flatpaks, format!("{} to choose from on Flathub; ", count(flat))),
                          (Show::AppImages, format!("{} to choose from on AppImageHub.", count(listed)))] {
-        s.show = show;
+        s.prefs.show = show;
         assert_eq!(said(&mut s, &want), 1, "{show:?}: {want}");
         assert_eq!(words(&mut s).iter().filter(|w| w.contains(" to choose from")).count(), 1, "{show:?}: one headline");
     }
 
-    s.show = Show::Both;
-    s.hub = None;
+    s.prefs.show = Show::Both;
+    s.appimagehub.list = None;
     assert_eq!(said(&mut s, &format!("{} to choose from on Flathub; ", count(flat))), 1);
-    s.hub = Some(Rc::new(feed()));
+    s.appimagehub.list = Some(Rc::new(feed()));
 
     for view in [views()[1].clone(), views()[2].clone()] {
         s.view = view.clone();
         for show in Show::ALL {
-            s.show = show;
+            s.prefs.show = show;
             let n = kinds(&s).len();
             assert!(n > 0, "{} {show:?}", view.nav_key());
             assert_eq!(said(&mut s, &format!("{}.", count(n))), 1, "{} {show:?}: {n}", view.nav_key());
@@ -300,7 +307,7 @@ fn the_headline_counts_what_is_chosen_and_names_where() {
     }
 
     s.view = views()[1].clone();
-    let by = |s: &mut Store, show| { s.show = show; kinds(s).len() };
+    let by = |s: &mut Store, show| { s.prefs.show = show; kinds(s).len() };
     let (both, flatpaks, appimages) = (by(&mut s, Show::Both), by(&mut s, Show::Flatpaks), by(&mut s, Show::AppImages));
     assert!(flatpaks > 0 && appimages > 0 && both == flatpaks + appimages);
 }
@@ -392,7 +399,7 @@ fn an_appimage_page_keeps_its_places_in_every_state() {
                     with_installed(&mut t, vec![installed_image("Photos Plus", "Photos_Plus-1.2.AppImage", CameFrom::GitHub("john-smith/photos-plus".into()))]);
                 }
                 _ => {
-                    t.said.insert("gh:john-smith/photos-plus".into(), ("The release could not be fetched. ".repeat(5), Tone::Problem));
+                    t.words.said.insert("gh:john-smith/photos-plus".into(), ("The release could not be fetched. ".repeat(5), Tone::Problem));
                 }
             }
             states.push(t);
@@ -442,10 +449,11 @@ fn an_installed_appimage_shows_open_on_its_tile_and_its_page() {
 
     assert!(button_press(&mut s, "Open Obsidian").is_some() && button_press(&mut s, "Install Obsidian").is_none());
     assert!(button_press(&mut s, "Install VLC").is_some() && button_press(&mut s, "Open VLC").is_none());
+    let boxed_start = |f: &std::path::Path| vec!["trindle-boxed".to_string(), "--appimage".to_string(), f.display().to_string()];
     started_so_far();
     let open = button_press(&mut s, "Open Obsidian").unwrap();
     (open.0)(&mut s);
-    assert_eq!(started_so_far(), std::slice::from_ref(&file), "the tile's Open starts the file Installed lists");
+    assert_eq!(started_so_far(), [boxed_start(&file)], "the tile's Open starts the file Installed lists, in its box");
 
     answered(&mut s, &obsidian);
     s.image = Some(obsidian.clone());
@@ -453,7 +461,7 @@ fn an_installed_appimage_shows_open_on_its_tile_and_its_page() {
     assert!(tips.iter().any(|t| t == "Open") && !tips.iter().any(|t| t == "Install"), "{tips:?}");
     assert!(words(&mut s).iter().any(|w| w == "Installed"), "and says it is installed");
     (button_press(&mut s, "Open").unwrap().0)(&mut s);
-    assert_eq!(started_so_far(), std::slice::from_ref(&file), "the page's Open too");
+    assert_eq!(started_so_far(), [boxed_start(&file)], "the page's Open too");
 
     s.image = None;
     s.view = View::Installed;
@@ -462,7 +470,7 @@ fn an_installed_appimage_shows_open_on_its_tile_and_its_page() {
     for m in opens {
         (m.0)(&mut s);
     }
-    assert!(started_so_far().contains(&file), "Installed starts it the same way");
+    assert!(started_so_far().contains(&boxed_start(&file)), "Installed starts it the same way");
 }
 
 #[test]
@@ -523,7 +531,7 @@ fn a_tile_in_the_middle_of_a_mixed_grid_behaves_while_it_goes_in() {
 fn iconed(s: &mut Store, rows: &mut [Found]) {
     for (n, f) in rows.iter_mut().enumerate() {
         f.icon = format!("https://example.org/icons/{n}.png");
-        s.shots.insert(f.icon.clone(), Some(Rc::new(image::open(icon(n)).unwrap())));
+        s.heard.shots.insert(f.icon.clone(), Some(Rc::new(image::open(icon(n)).unwrap())));
     }
 }
 
@@ -532,7 +540,7 @@ pub(super) fn mixed_and_image_pages() {
     let mut rows: Vec<Found> = ["Obsidian", "VLC", "Audacity", "Bitwarden", "Joplin"].iter().map(|n| Found { summary: LONG.into(), stars: Some(4210), ..found(n, &[]) }).collect();
     let mut s = mixed_store("pages");
     iconed(&mut s, &mut rows);
-    s.hub = Some(Rc::new(rows.clone()));
+    s.appimagehub.list = Some(Rc::new(rows.clone()));
     s.view = View::Home;
     shoot("discover-mixed", &mut s);
     let f = rows[0].clone();
@@ -550,9 +558,9 @@ pub(super) fn mixed_and_image_pages() {
     shoot("image-page-from-results", &mut s);
     s.view = View::Home;
     s.owned = Default::default();
-    s.said.insert(key.into(), ("The release could not be fetched: GitHub did not answer.".into(), Tone::Problem));
+    s.words.said.insert(key.into(), ("The release could not be fetched: GitHub did not answer.".into(), Tone::Problem));
     shoot("image-page-failed", &mut s);
-    s.said.clear();
+    s.words.said.clear();
     s.github = pages::made_up::unreleased(pages::GitHubPage::default(), "john-smith/obsidian");
     shoot("image-page-nothing-to-install", &mut s);
     s.image = Some(Found { name: "Elsewhere".into(), site: "https://example.org/get".into(), summary: LONG.into(), listed: true, ..Found::default() });
@@ -572,8 +580,8 @@ fn shoot_flatpaks_and_appimages_side_by_side() {
         .map(|(n, name)| Found { summary: LINES[n % LINES.len()].into(), ..found(name, &[categories()[0].0]) }).collect();
     let shot = |name: &str, s: &mut Store, full: bool| {
         let w = 1278u32;
-        s.across = w as f32;
-        s.tall = 692.0;
+        s.size.across = w as f32;
+        s.size.tall = 692.0;
         let mut ui = Ui::new(s.whole(settings()), Theme::new(false, "#fbc711"));
         let h = (ui.natural_height(w as f32).ceil() as u32).clamp(692, if full { 2600 } else { 692 });
         let mut pix = tiny_skia::Pixmap::new(w, h).unwrap();
@@ -583,13 +591,13 @@ fn shoot_flatpaks_and_appimages_side_by_side() {
     };
     let mut s = mixed_store("shots");
     iconed(&mut s, &mut named_feed);
-    s.hub = Some(Rc::new(named_feed));
+    s.appimagehub.list = Some(Rc::new(named_feed));
     for (name, show) in [("discover-both", Show::Both), ("discover-flatpaks", Show::Flatpaks), ("discover-appimages", Show::AppImages)] {
-        s.show = show;
+        s.prefs.show = show;
         s.view = View::Home;
         shot(name, &mut s, true);
     }
-    s.show = Show::Both;
+    s.prefs.show = Show::Both;
     s.view = View::Search("o".into());
     shot("results-both", &mut s, true);
     s.view = View::Home;
@@ -598,8 +606,8 @@ fn shoot_flatpaks_and_appimages_side_by_side() {
     appimage_warning::ticked(&mut s, true);
     shot("discover-warning-ticked", &mut s, false);
     appimage_warning::cancel(&mut s);
-    (s.hub, s.online) = (Some(Rc::new(Vec::new())), false);
+    (s.appimagehub.list, s.online) = (Some(Rc::new(Vec::new())), false);
     shot("discover-offline-both", &mut s, true);
-    s.show = Show::AppImages;
+    s.prefs.show = Show::AppImages;
     shot("discover-offline-appimages", &mut s, false);
 }

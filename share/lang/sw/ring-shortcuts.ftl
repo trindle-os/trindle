@@ -90,7 +90,7 @@ ring-shortcuts-console = Badilisha kwenda kiweko cha maandishi
 ring-shortcuts-console-keys = Ctrl+Alt+F1 hadi F12
 
 # Words for the keys the screen reader takes while it is on.
-ring-shortcuts-reader-keys = Funguo za kisoma skrini chenyewe, kikiwa kimewashwa
+ring-shortcuts-reader-keys = Funguo za kisoma skrini kikiwa kimewashwa
 
 # The keys the screen reader takes while it is on.
 ring-shortcuts-reader-keys-keys = Caps Lock, Insert

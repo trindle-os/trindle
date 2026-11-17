@@ -7,7 +7,7 @@ settings-default-apps-title = Programu chaguo-msingi
 settings-default-apps-keywords = kivinjari barua pepe faili picha muziki video pdf kalenda fungua kwa terminali browser mail email files pictures music terminal
 
 # Introduction under the heading of the default apps page, and the words behind the page i.
-settings-default-apps-help = Programu ipi hufungua viungo vya wavuti, barua pepe, picha, kalenda na vingine. Terminali huchaguliwa katika ~/.config/xdg-terminals.list; isipochaguliwa, Trindle hutumia ya kwanza iliyosakinishwa.
+settings-default-apps-help = Chagua programu itakayofungua viungo vya wavuti, barua pepe, picha, kalenda na kadhalika. Terminali unaichagua katika ~/.config/xdg-terminals.list. Usipochagua, Trindle hutumia ya kwanza iliyosakinishwa.
 
 # Name of a kind of thing to open, as the heading of a line and the name of its list on the default apps page.
 settings-default-apps-kind-web = Wavuti
@@ -67,45 +67,37 @@ settings-default-apps-kind-calendar-in-sentence = kalenda
 settings-default-apps-card-internet = Mtandao
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-internet-about = Programu inayofungua kiungo cha wavuti kilichobofywa popote, ile inayoandika barua pepe anwani ikibofywa, na ile inayofungua mwaliko wa kalenda.
+settings-default-apps-card-internet-about = Chagua programu zitakazofungua viungo vya wavuti, anwani za barua pepe na mialiko ya kalenda.
 
 # Title of a card on the default apps page.
 settings-default-apps-card-files = Faili na hati
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-files-about = Programu inayofungua folda, faili ya maandishi matupu na hati ya PDF unapofungua moja kutoka Folda, eneo-kazi au programu nyingine.
+settings-default-apps-card-files-about = Chagua programu zitakazofungua folda, faili za maandishi matupu na hati za PDF.
 
 # Title of a card on the default apps page.
 settings-default-apps-card-media = Picha na sauti
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-media-about = Programu inayofungua picha, wimbo au video unapofungua moja.
+settings-default-apps-card-media-about = Chagua programu zitakazofungua picha, muziki na video.
 
 # Sentence at the top of the page when every kind has a program; { $web } is the program that opens web links.
-settings-default-apps-all-set-web = Kila kitu kina programu ya kukifungua; { $web } hufungua viungo vya wavuti.
+settings-default-apps-all-set-web = Kila kitu kina programu ya kukifungua, na { $web } hufungua viungo vya wavuti.
 
 # Sentence at the top of the page when every kind has a program and the one for web links is not known.
 settings-default-apps-all-set = Kila kitu kina programu ya kukifungua.
 
 # Sentence at the top of the page when one kind has no program chosen; { $kind } is its name in lower case.
-settings-default-apps-one-missing = Bado hakuna programu iliyochaguliwa kufungua { $kind }.
+settings-default-apps-one-missing = Chagua programu ya kufungua { $kind }.
 
 # Sentence at the top of the page when several kinds have no program chosen; { $kinds } is their names as a list joined with "or".
 settings-default-apps-many-missing = Bado hakuna programu iliyochaguliwa kufungua { $kinds }.
 
 # Small words under a kind that no installed program can open.
-settings-default-apps-none-installed = Hakuna kilichosakinishwa kinachoweza kufungua hivi bado.
+settings-default-apps-none-installed = Hakuna programu iliyosakinishwa inayofungua hivi bado.
 
 # First choice in a list when no program is chosen for that kind yet.
 settings-default-apps-not-chosen = Bado haijachaguliwa
 
-# Small words under a kind with a program list; { $n } is how many programs can open it.
-settings-default-apps-can-open =
-    { $n ->
-        [one] Programu moja pekee inayoweza.
-       *[other] Programu { $n } zinaweza kufungua hivi.
-    }
-
 # Said in green under a kind's list after the choice was kept.
 settings-default-apps-saved = Imehifadhiwa
-

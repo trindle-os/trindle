@@ -1,11 +1,11 @@
-//! Ring favorites and their order; also editable from the ring's context menu.
+//! Ring: how it opens, its notifications, clipboard history and voice; it only counts the favourites.
 
 use crate::common::clipboard;
 use crate::common::files::set_setting;
-use crate::common::run::spawn;
+use crate::common::run::{self, spawn};
 use crate::ring::notify;
 use crate::settings::pictures;
-use crate::settings::ui::{confirm, dropdown, group, headline, line, on, page, Kit, Msg, Page, INSTALL_ICON, not_saved};
+use crate::settings::ui::{confirm, dropdown, group, headline, line, on, page, why, Kit, Msg, Page, INSTALL_ICON, not_saved};
 use crate::toolkit::tiles::picture;
 use crate::store::updates::admin_watching;
 use crate::toolkit::widget::{button, note, row, switch, Length, Node};
@@ -39,7 +39,7 @@ const RING_ICON: &str = "view-app-grid-symbolic";
 
 impl Ring {
 
-    fn read(&mut self) {
+    fn read(&mut self, kit: &Kit) {
         self.window_names = crate::common::files::setting("ring_window_names") != "no";
         self.showing = notify::showing();
         self.long = notify::how_long_setting();
@@ -49,8 +49,11 @@ impl Ring {
         self.voice_on = crate::voice::enabled();
         self.tools_left = self.voice_installed && !crate::voice::setup::tools_left().is_empty();
         self.favourites = crate::ring::store::favourites().len();
-        let kept = clipboard::list();
-        self.copied = (kept.len(), kept.iter().filter(|i| i.pinned).count());
+        let counted = kit.then_if::<Ring, (usize, usize)>(|me, _, copied| std::mem::replace(&mut me.copied, copied) != copied);
+        run::on_thread(|| {
+            let kept = clipboard::list();
+            (kept.len(), kept.iter().filter(|i| i.pinned).count())
+        }, counted);
     }
 
     fn sum_up(&self) -> String {
@@ -58,11 +61,7 @@ impl Ring {
     }
 
     fn opening(&self, kit: &Kit) -> Node<Msg> {
-        let how = line(t!("settings-ring-open-click"))
-            .sub(t!("settings-ring-open-super"))
-            .node(kit);
         let names = line(t!("settings-ring-names"))
-            .sub(t!("settings-ring-names-about"))
             .key("ring_window_names")
             .control(switch(self.window_names, t!("settings-ring-names"), |now| on::<Ring>(move |me, k| {
                 if k.settle("ring_window_names", set_setting("ring_window_names", if now { "yes" } else { "no" }), not_saved()).is_some() {
@@ -72,18 +71,15 @@ impl Ring {
             .node(kit);
 
         let n = self.favourites;
-        let favourites = line(t!("settings-ring-favourites", n = n))
-            .sub(t!("settings-ring-favourites-about"))
-            .node(kit);
+        let favourites = line(t!("settings-ring-favourites", n = n)).node(kit);
         group(t!("settings-ring-opening")).icon(RING_ICON)
-            .about(t!("settings-ring-opening-about"))
-            .rows(vec![how, names, favourites])
+            .about([t!("settings-ring-opening-about"), t!("settings-ring-names-about")].join(" "))
+            .rows(vec![names, favourites])
             .node(kit)
     }
 
     fn notifications(&self, kit: &Kit) -> Node<Msg> {
         let show = line(t!("settings-ring-notify-show"))
-            .sub(t!("settings-ring-notify-show-about"))
             .key("notifications")
             .control(switch(self.showing, t!("settings-ring-notify-show"), |now| on::<Ring>(move |me, k| {
                 if k.settle("notifications", notify::set_showing(now), not_saved()).is_some() {
@@ -92,7 +88,7 @@ impl Ring {
             })))
             .node(kit);
         let chosen = notify::how_long_choices().iter().position(|(v, _)| *v == self.long);
-        let pick = dropdown(kit, "notification_seconds", notify::how_long_choices().iter().map(|(_, w)| w.to_string()).collect(),
+        let pick = dropdown("notification_seconds", notify::how_long_choices().iter().map(|(_, w)| w.to_string()).collect(),
                             chosen, t!("settings-ring-notify-long"), |i| {
             let value = notify::how_long_choices()[i].0;
             on::<Ring>(move |me, k| {
@@ -102,12 +98,11 @@ impl Ring {
             })
         });
         let long = line(t!("settings-ring-notify-long"))
-            .sub(t!("settings-ring-notify-long-about"))
             .key("notification_seconds")
             .control(pick)
             .node(kit);
         let corner = notify::corner_choices().iter().position(|(v, _)| *v == self.corner);
-        let where_ = dropdown(kit, "notification_corner", notify::corner_choices().iter().map(|(_, w)| w.to_string()).collect(),
+        let where_ = dropdown("notification_corner", notify::corner_choices().iter().map(|(_, w)| w.to_string()).collect(),
                               corner, t!("settings-ring-notify-where"), |i| {
             let value = notify::corner_choices()[i].0;
             on::<Ring>(move |me, k| {
@@ -117,19 +112,18 @@ impl Ring {
             })
         });
         let place = line(t!("settings-ring-notify-where"))
-            .sub(t!("settings-ring-notify-where-about"))
             .key("notification_corner")
             .control(where_)
             .node(kit);
         group(t!("settings-ring-notify-title")).icon("preferences-system-notifications-symbolic")
-            .about(t!("settings-ring-notify-about"))
+            .about([t!("settings-ring-notify-about"), t!("settings-ring-notify-long-about"), t!("settings-ring-notify-where-about")].join(" "))
             .rows(vec![show, long, place])
             .node(kit)
     }
 
     fn clipboard(&self, kit: &Kit) -> Node<Msg> {
         let chosen = clipboard::forget_choices().iter().position(|(v, _)| *v == self.forget);
-        let pick = dropdown(kit, "clipboard_forget", clipboard::forget_choices().iter().map(|(_, w)| w.to_string()).collect(),
+        let pick = dropdown("clipboard_forget", clipboard::forget_choices().iter().map(|(_, w)| w.to_string()).collect(),
                             chosen, t!("settings-ring-clip-forget"), |i| {
             let value = clipboard::forget_choices()[i].0;
             on::<Ring>(move |me, k| {
@@ -139,7 +133,6 @@ impl Ring {
             })
         });
         let forget = line(t!("settings-ring-clip-forget"))
-            .sub(t!("settings-ring-clip-forget-about"))
             .key("clipboard_forget")
             .control(pick)
             .node(kit);
@@ -156,7 +149,7 @@ impl Ring {
             let adding = self.working == Some(INSTALL);
             let sub = if adding { t!("settings-ring-voice-adding") } else if self.working == Some(TOOLS) { t!("settings-ring-voice-removing-tools") } else { t!("settings-ring-voice-removing") };
             let ring = row(vec![d.node(), note(d.words()).tone(d.tone())]).gap(8.0).width(Length::Shrink);
-            return self.voice_card(kit, vec![line(t!("settings-ring-voice-control")).sub(sub).key(VOICE).control(ring).node(kit)]);
+            return self.voice_card(kit, vec![line(t!("settings-ring-voice-control")).sub(sub).key(VOICE).control(ring).node(kit)], "");
         }
         let rows = if self.voice_installed {
             let toggle = switch(self.voice_on, t!("settings-ring-voice-control"), |now| on::<Ring>(move |me, k| {
@@ -165,20 +158,18 @@ impl Ring {
                 }
             }));
             let control = line(t!("settings-ring-voice-control"))
-                .sub(t!("settings-ring-voice-about"))
                 .key("voice-switch")
                 .control(toggle)
                 .node(kit);
             let remove = line(t!("settings-ring-voice-remove"))
-                .sub(t!("settings-ring-voice-remove-about"))
                 .key(VOICE)
-                .control(confirm::<Ring>(kit, VOICE, "user-trash-symbolic", t!("settings-ring-voice-remove"), |me, k| me.voice_change(k, REMOVE)))
+                .control(confirm::<Ring>(VOICE, "user-trash-symbolic", t!("settings-ring-voice-remove"), |me, k| me.voice_change(k, REMOVE)))
                 .node(kit);
             let mut rows = vec![control, remove];
             if self.tools_left {
                 rows.push(line(t!("settings-ring-voice-tools-left"))
                     .key(TOOLS)
-                    .control(confirm::<Ring>(kit, TOOLS, "user-trash-symbolic", t!("settings-ring-voice-tools-remove"), |me, k| me.voice_change(k, TOOLS)))
+                    .control(confirm::<Ring>(TOOLS, "user-trash-symbolic", t!("settings-ring-voice-tools-remove"), |me, k| me.voice_change(k, TOOLS)))
                     .node(kit));
             }
             rows
@@ -186,17 +177,17 @@ impl Ring {
             let add = button(INSTALL_ICON, t!("settings-ring-voice-add"))
                 .on_press(on::<Ring>(|me, k| me.voice_change(k, INSTALL)));
             vec![line(t!("settings-ring-voice-control"))
-                .sub(t!("settings-ring-voice-optional"))
                 .key(VOICE)
                 .control(add)
                 .node(kit)]
         };
-        self.voice_card(kit, rows)
+        let cost = if self.voice_installed { t!("settings-ring-voice-remove-about") } else { t!("settings-ring-voice-optional") };
+        self.voice_card(kit, rows, cost)
     }
 
-    fn voice_card(&self, kit: &Kit, rows: Vec<Node<Msg>>) -> Node<Msg> {
+    fn voice_card(&self, kit: &Kit, rows: Vec<Node<Msg>>, cost: &str) -> Node<Msg> {
         group(t!("settings-ring-voice-title")).icon("audio-input-microphone-symbolic")
-            .about(t!("settings-ring-voice-card-about"))
+            .about(format!("{} {cost}", t!("settings-ring-voice-card-about")).trim_end().to_string())
             .rows(rows)
             .node(kit)
     }
@@ -213,12 +204,8 @@ impl Ring {
         } else {
             dial.expect(3.0);
         }
-        let heard = kit.heard::<Ring>(|_, k, l| {
-            if let Some(d) = k.dial(VOICE) {
-                d.heard(l);
-            }
-        });
-        let done = kit.then::<Ring, Result<(), String>>(|me, k, res| {
+        let heard = kit.heard_if::<Ring>(|_, k, l| k.dial(VOICE).is_some_and(|d| d.hear(l)));
+        let done = kit.then::<Ring, Result<(), String>>(move |me, k, res| {
             me.working = None;
             match res {
 
@@ -228,14 +215,22 @@ impl Ring {
                 }
                 Err(err) => {
                     k.finish(VOICE, false, "");
-                    let why = err.trim_start_matches("trindle-voice: ").trim_start_matches("trindle-admin: ").to_string();
-                    k.say(VOICE, &why, false, true);
+                    k.say(VOICE, &voice_failed(verb, &err), false, true);
                 }
             }
-            me.read();
+            me.read(k);
         });
         admin_watching(&[verb], heard, done);
     }
+}
+
+fn voice_failed(verb: &str, err: &str) -> String {
+    let could_not = match verb {
+        INSTALL => t!("settings-ring-voice-not-added"),
+        TOOLS => t!("settings-ring-voice-tools-not-removed"),
+        _ => t!("settings-ring-voice-not-removed"),
+    };
+    why(err, could_not)
 }
 
 #[cfg(test)]
@@ -272,15 +267,15 @@ impl Page for Ring {
     fn help(&self) -> &'static str {
         t!("settings-ring-help")
     }
-    fn shown(&mut self, _kit: &mut Kit) {
-        self.read();
+    fn shown(&mut self, kit: &mut Kit) {
+        self.read(kit);
     }
-    fn conf_changed(&mut self, _kit: &mut Kit) {
-        self.read();
+    fn conf_changed(&mut self, kit: &mut Kit) {
+        self.read(kit);
     }
     fn view(&self, kit: &Kit) -> Node<Msg> {
         page(kit, self.title(), self.help(), vec![
-            headline(kit, self.sum_up()),
+            headline(self.sum_up()),
 
             self.opening(kit),
             picture(RING_ICON, t!("settings-ring-picture"), pictures::ring()),
@@ -288,5 +283,17 @@ impl Page for Ring {
             self.clipboard(kit),
             self.voice(kit),
         ])
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_voice_change_that_failed_is_said_in_the_pages_own_words() {
+        assert_eq!(voice_failed(INSTALL, "trindle-voice: whisper.cpp build exited 2"), t!("settings-ring-voice-not-added"));
+        assert_eq!(voice_failed(TOOLS, "trindle-admin: apt-get busy"), t!("settings-ring-voice-tools-not-removed"));
+        assert_eq!(voice_failed("voice-remove", "x"), t!("settings-ring-voice-not-removed"));
     }
 }

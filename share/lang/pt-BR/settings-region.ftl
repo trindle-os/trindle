@@ -10,7 +10,7 @@ settings-region-keywords = idioma língua locale país região formatos data moe
 settings-region-help = O idioma e os formatos passam a valer na próxima vez que você entrar.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = Saia e entre de novo para ver.
+settings-region-later = Entre de novo para ver em todo lugar.
 
 # Shown while the page reads the computer.
 settings-region-looking = Verificando…
@@ -39,7 +39,7 @@ settings-region-installed-done = Instalado
 settings-region-everything-in = Tudo está em { $lang }.
 
 # Headline when the formats differ from the language: the names are { $lang } and { $fmt }.
-settings-region-menus-in = Os menus estão em { $lang }; datas e números são escritos como em { $fmt }.
+settings-region-menus-in = Os menus estão em { $lang }. Datas e números seguem o estilo de { $fmt }.
 
 # Headline when a change is saved but waits for the next login: { $words } is the sentence so far.
 settings-region-with-wait = { $words } Saia e entre de novo para ver a mudança.
@@ -54,13 +54,10 @@ settings-region-language = Idioma
 settings-region-formats = Formatos
 
 # Help text of the Language card (the information button).
-settings-region-language-about = O idioma é aquele em que ficam os menus e as mensagens. Os formatos são como datas, horas, números, moeda, medidas e tamanho de papel são escritos, e podem seguir os costumes de outro país. Ambos passam a valer na próxima vez que você entrar.
+settings-region-language-about = O idioma é usado nos menus e nas mensagens. Os formatos definem como datas, horas, números, moeda e medidas são escritos, e também o tamanho do papel. Eles podem seguir o estilo de outro país. Ambos passam a valer na próxima vez que você entrar.
 
 # Under the Language heading.
-settings-region-language-sub = Menus e mensagens, a partir do próximo login.
-
-# Under the Formats heading.
-settings-region-formats-sub = Datas, números, moeda e tamanho de papel.
+settings-region-language-sub = Menus e mensagens mudam no próximo login.
 
 # Heading of the line that shows a date and a number in the chosen formats.
 settings-region-date-number = Uma data e um número
@@ -76,7 +73,7 @@ settings-region-add = Adicionar um idioma
 
 # Help text of the Add a language card (the information button).
 # SAFETY: needs a human review before it ships
-settings-region-add-about = Instala outro idioma, para que possa ser escolhido para os menus ou os formatos. Prepará-lo leva um pouco de tempo e precisa da senha de um administrador.
+settings-region-add-about = Instala outro idioma, para que você possa escolhê-lo para os menus ou os formatos. A instalação leva um pouco de tempo e precisa da senha de um administrador.
 
 # Heading of the line shown when every language is already installed.
 settings-region-all-installed = Todos os idiomas já estão instalados
@@ -97,11 +94,7 @@ settings-region-install-another = Instalar outro
 
 # Tip of the button that installs the chosen language.
 # SAFETY: needs a human review before it ships
-settings-region-install-this = Instalar este idioma (pede sua senha)
-
-# Under the Install another heading.
-# SAFETY: needs a human review before it ships
-settings-region-needs-password = Precisa da senha de um administrador.
+settings-region-install-this = Instalar este idioma
 
 # Heading of the line saying how many more languages can be made.
 settings-region-ready = Pronto para adicionar
@@ -109,9 +102,9 @@ settings-region-ready = Pronto para adicionar
 # Under the Ready to add heading: how many more languages can be made.
 settings-region-more =
     { $n ->
-        [one] Mais { $n } idioma que este computador pode preparar.
-        [many] Mais { $n } de idiomas que este computador pode preparar.
-       *[other] Mais { $n } idiomas que este computador pode preparar.
+        [one] Você pode instalar mais { $n } idioma.
+        [many] Você pode instalar mais { $n } de idiomas.
+       *[other] Você pode instalar mais { $n } idiomas.
     }
 
 settings-region-removing = Removendo
@@ -122,7 +115,6 @@ settings-region-remove-language = Remover este idioma
 
 settings-region-kept = Idiomas deste computador
 
-settings-region-kept-about = Todos os idiomas instalados aqui. Remova os que você não usa; o que você está usando fica. Pede a senha de administrador.
+settings-region-kept-about = Todos os idiomas instalados neste computador. Remova os que você não usa, exceto o que está usando. Remover um precisa da senha do administrador.
 
-settings-region-in-use-stays = Em uso, então fica
-
+settings-region-in-use-stays = Está em uso.

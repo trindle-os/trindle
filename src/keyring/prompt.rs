@@ -18,7 +18,7 @@ const SIZE: (u32, u32) = (440, 240);
 
 #[derive(Clone)]
 enum Msg {
-    Pass(String),
+    Pass(Zeroizing<String>),
     Submit,
     Cancel,
     Answer(Result<(), String>),
@@ -48,7 +48,7 @@ impl App for Prompt {
         match msg {
             Msg::Pass(t) => {
                 if !self.busy {
-                    self.password = Zeroizing::new(t);
+                    self.password = t;
                 }
             }
             Msg::Submit => {
@@ -79,7 +79,7 @@ impl App for Prompt {
     }
 
     fn view(&self) -> Node<Msg> {
-        let password = entry(self.password.to_string(), t!("keyring-password"), Msg::Pass).key("pass")
+        let password = entry(self.password.to_string(), t!("keyring-password"), |t| Msg::Pass(Zeroizing::new(t))).key("pass")
             .secret().first().grab(self.turn).width(Length::Fill);
         let password = if self.busy { password } else { password.on_submit(Msg::Submit) };
         let said = match &self.said {

@@ -46,7 +46,7 @@ License: GPL-3+
 
 Files: share/sounds/*
 Copyright: the Trindle project
-Comment: Made by Trindle's own tools/gen-sounds.rs; see
+Comment: Made for Trindle by its author; see
  /usr/share/doc/trindle/sounds-and-wallpapers.txt.
 License: GPL-3+
 

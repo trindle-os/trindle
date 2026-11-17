@@ -14,20 +14,17 @@ settings-pads-top-picked = এখন { $name }-এর জন্য কী চা
 # Heading of the line shown when no game controller is plugged in.
 settings-pads-none = কোনোটি লাগানো নেই
 
-# Small words under that line.
-settings-pads-none-about = একটি লাগান, তার বোতামগুলো এখানে দেখা যাবে।
-
 # Name of the list that chooses which controller is shown; { $title } is the one shown now.
 settings-pads-which = কোন কন্ট্রোলার
 
 # What the picture is, for the screen reader.
-settings-pads-picture = { $title }-এর ছবি, প্রতিটি বোতাম চাপলে জ্বলে ওঠে
+settings-pads-picture = { $title }-এর ছবি। প্রতিটি বোতাম চাপলে জ্বলে ওঠে।
 
 # Title of the card of the controller's buttons.
 settings-pads-buttons-title = বোতাম
 
 # Words behind the i of that card.
-settings-pads-buttons-about = প্রতিটি বোতাম, ট্রিগার এবং স্টিক ও d-pad-এর প্রতিটি দিক। সবশেষে যেটি চেপেছেন সেটি উপরে থাকে। কী-তে বদলানো বোতাম, কন্ট্রোলার সমর্থন নেই এমন গেমে সেই কী টাইপ করে।
+settings-pads-buttons-about = প্রতিটি বোতাম ও ট্রিগার, এবং স্টিক ও d-pad-এর প্রতিটি দিক। সবশেষে যেটি চেপেছেন সেটি ওপরে থাকে। কোনো বোতামকে কী-তে বদলালে, কন্ট্রোলার সমর্থন নেই এমন গেমে সেটি সেই কী টাইপ করে।
 
 # Name of the round button that starts changing a button; { $name } is the button.
 settings-pads-change = { $name } একটি কী-তে বদলান
@@ -36,7 +33,7 @@ settings-pads-change = { $name } একটি কী-তে বদলান
 settings-pads-stop = { $name } বদলানো থামান
 
 # Name of the list of what a button becomes; { $name } is the button.
-settings-pads-choose = { $name } যা হবে
+settings-pads-choose = { $name } কী করে
 
 # What the list says while a button waits for its key: the clue, and a choice that does nothing.
 settings-pads-waiting = একটি কী চাপুন বা একটি বোতাম বেছে নিন
@@ -67,13 +64,13 @@ settings-pads-stick-left = বাঁ
 settings-pads-stick-right = ডান
 
 # Title of the card of the ready-made changes.
-settings-pads-quick-title = তৈরি বদল
+settings-pads-quick-title = সাধারণ বদল
 
 # Title of the card of changes that are not one button into another.
 settings-pads-other-title = অন্যান্য বদল
 
 # Words behind the i of that card.
-settings-pads-other-about = উল্টে দেওয়া স্টিক, বদলাবদলি করা স্টিক এবং ডেড জোন। এভাবে লিখুন: Left Stick dead zone = 10%, অথবা Right Stick Y = inverted।
+settings-pads-other-about = স্টিক উল্টে দিন বা বদলাবদলি করুন, অথবা ডেড জোন ঠিক করুন। বদলটি এভাবে লিখুন: Left Stick dead zone = 10%, অথবা Right Stick Y = inverted।
 
 
 
@@ -97,12 +94,10 @@ settings-pads-middle-click = মাঝের ক্লিক
 settings-pads-profiles-title = প্রোফাইল
 
 # Words behind the i of that card.
-settings-pads-profiles-about = প্রোফাইল হলো কিছু বদলের একটি সেট। সাধারণ কিছুই বদলায় না, তাই যে গেমের নিজের কন্ট্রোলার সমর্থন আছে সে কন্ট্রোলারটিকে যেমন আছে তেমন দেখে। প্রতিটি Steam গেম সাধারণ ব্যবহার করে, যতক্ষণ না আপনি এখানে তার জন্য একটি প্রোফাইল বাছেন, আর গেমটি চালু হলে প্রোফাইল নিজে থেকে বদলে যায়। অন্য যেকোনো গেম হলো সেই গেম, যা Steam চালু করেনি।
+settings-pads-profiles-about = প্রোফাইল হলো কিছু বদলের একটি সেট। সাধারণ কিছুই বদলায় না, তাই যে গেমের নিজের কন্ট্রোলার সমর্থন আছে সে কন্ট্রোলারটিকে যেমন আছে তেমন দেখে। প্রতিটি Steam গেম সাধারণ ব্যবহার করে, যতক্ষণ না আপনি এখানে তার জন্য একটি প্রোফাইল বাছেন। গেমটি চালু হলে Trindle সেই প্রোফাইলে চলে যায়। অন্য যেকোনো গেম মানে সেই গেম, যা Steam চালু করেনি।
 
 # The one switch that turns every controller change off at once.
 settings-pads-changes = কন্ট্রোলারের বদল
-
-settings-pads-changes-sub = বন্ধ থাকলে প্রতিটি কন্ট্রোলার যেমন আছে তেমন থাকে।
 
 # The game whose profile is shown.
 settings-pads-game = গেম
@@ -118,8 +113,6 @@ settings-pads-profile = প্রোফাইল
 
 settings-pads-standard = সাধারণ
 
-settings-pads-standard-sub = কোনো বদল নেই।
-
 settings-pads-profile-add = একটি প্রোফাইল যোগ করুন
 
 settings-pads-profile-remove = { $name } সরান
@@ -129,7 +122,7 @@ settings-pads-profile-name = প্রোফাইলের নাম
 # The name a new profile is given.
 settings-pads-profile-new = প্রোফাইল { $n }
 
-settings-pads-profile-empty = প্রোফাইলের একটি নাম লাগবে।
+settings-pads-profile-empty = প্রোফাইলের একটি নাম লিখুন।
 
 settings-pads-profile-standard = "সাধারণ" নামটি নেওয়া আছে।
 
@@ -143,7 +136,16 @@ settings-pads-not-a-game = এটি Steam অ্যাপের নম্বর
 settings-pads-standard-why = সাধারণ কিছুই বদলায় না। আগে একটি প্রোফাইল যোগ করুন।
 
 # The headline while the shown game uses Standard, and while all changes are off.
-settings-pads-top-standard = সাধারণ: কন্ট্রোলার যেমন আছে তেমন।
+settings-pads-top-standard = সাধারণ ব্যবহার হচ্ছে, কোনো বদল ছাড়া।
 
 settings-pads-top-off = কন্ট্রোলারের বদল বন্ধ আছে।
 
+
+# Heading of the line shown when the file of changed controller buttons could not be read.
+settings-pads-unread = Trindle আপনার বদলানো বোতামগুলো পড়তে পারেনি
+
+# Small words under that line; { $why } is the reason.
+settings-pads-unread-about = তত দিন প্রতিটি বোতাম স্বাভাবিকভাবে কাজ করবে, আর কিছু সংরক্ষণ হবে না। { $why }
+
+# Shown beside a change that was not saved because the file of changed buttons could not be read.
+settings-pads-not-saved-unread = সংরক্ষণ হয়নি। বদলানো বোতামের ফাইলটি পড়া যায়নি, তাই সেটি যেমন ছিল তেমন রাখা হয়েছে।

@@ -3,21 +3,19 @@
 ## The language of Trindle's programs (src/settings/panels/region.rs)
 
 # Heading of the card on the Region and language page where the person picks the language Trindle's own programs and Settings are written in.
-settings-language-heading = Language of Trindle
+settings-language-heading = Trindle's language
 # Words under the heading of that card.
-settings-language-about = Pick the language Trindle's own programs are written in. Anything not yet translated shows in English.
+settings-language-about = Pick the language for Trindle's own programs. Anything that isn't translated yet shows in English.
 # Title of the line with the list of languages.
 settings-language-pick = Trindle's language
 # Tip of the list of languages, and its screen reader name.
 settings-language-pick-tip = Choose the language for Trindle's programs
-# Words under the list of languages: when a new choice is taken up.
-settings-language-next-start = Used by each program when it next starts.
+# Added to the language card's i: when a new choice is taken up.
+settings-language-next-start = Settings uses it now, other programs the next time they start.
 # Entry in the list of languages: use the language the computer is set to.
-settings-language-auto = Follow the system
+settings-language-auto = System language
 # Title of the group of bars showing how much of each language is translated.
 settings-language-how-complete = How much is translated
-# Words under that title.
-settings-language-how-complete-sub = A full bar means every word is translated.
 # Tip and screen reader name of a bar under a language: how many of the English words it has (done and all are counts).
 settings-language-share =
     { $all ->

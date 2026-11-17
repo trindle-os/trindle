@@ -44,9 +44,21 @@ pub fn set_in(conf: &Path, on: bool) -> std::io::Result<()> {
     update_env(conf, &[(KEY, Some(if on { "yes" } else { "no" }))])
 }
 
+pub fn tip(on: bool) -> String {
+    if on { crate::toolkit::t!("common-auto-updates-on") } else { crate::toolkit::t!("common-auto-updates-off") }.to_string()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn the_switch_says_whether_it_is_on_or_off() {
+        crate::common::shipped_languages::in_language("en", || {
+            assert_eq!(tip(true), "Auto updates on");
+            assert_eq!(tip(false), "Auto updates off");
+        });
+    }
 
     #[test]
     fn on_by_default_and_off_with_their_own_switch() {

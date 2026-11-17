@@ -3,7 +3,7 @@
 use std::ffi::{c_int, c_void};
 use std::os::fd::AsRawFd;
 use std::sync::atomic::Ordering;
-use std::time::{Duration, Instant, SystemTime};
+use std::time::{Duration, Instant};
 
 use wayland_client::{Connection, EventQueue, QueueHandle};
 use wayland_client::globals::{registry_queue_init, GlobalList};
@@ -11,7 +11,7 @@ use wayland_client::protocol::{wl_compositor, wl_output, wl_seat, wl_shm};
 use wayland_protocols::ext::session_lock::v1::client::ext_session_lock_manager_v1::ExtSessionLockManagerV1;
 use zeroize::Zeroizing;
 
-use crate::common::pocketkey;
+use crate::common::{pin, pocketkey};
 use crate::toolkit::t;
 use crate::toolkit::text::Fonts;
 
@@ -19,6 +19,7 @@ use super::{add_screen, give_surface, keyboard, unlock, CHECKED, HINT, Mode, Sta
 use super::input::{answer_counts, CHECK_LIMIT, CHECK_OK, CHECK_PHONE_NO, CHECK_WRONG};
 use super::picture::{make_cursor, redraw};
 use super::reveal::Eye;
+use super::tries::{boot_now, Tries};
 
 const LONGEST_WAIT_MS: c_int = 1000;
 
@@ -47,11 +48,12 @@ pub fn main(args: Vec<String>) -> i32 {
     let mut state = first_state(compositor, shm, args.iter().any(|a| a == "--resting"));
     add_outputs(&mut state, &globals, &qh);
     let _ = queue.roundtrip(&mut state);
+
+    let Some(pipe) = make_pipe() else { return 1 };
     if let Some(code) = take_lock(&mut state, &mut queue, &qh, &manager) {
         return code;
     }
     go_to_background();
-    let Some(pipe) = make_pipe() else { return 1 };
     let failed = serve(&mut state, &mut queue, &qh, pipe[0]);
 
     let _ = queue.roundtrip(&mut state);
@@ -62,13 +64,17 @@ pub fn main(args: Vec<String>) -> i32 {
 fn first_state(compositor: wl_compositor::WlCompositor, shm: wl_shm::WlShm, resting: bool) -> State {
     let mut state = State {
         compositor, shm, lock: None, screens: Vec::new(), locked: false, refused: false,
-        mode: Mode::Password, entered: Zeroizing::new(String::new()), reader: super::reader_events::Reader::new(), eye: Eye::default(), message: String::new(), wrong: false, tries: 0,
-        locked_at: SystemTime::now(), checking: false, check_since: None, check_turn: 0, done: false, pointer_on: None, pointer_at: (0.0, 0.0), flash: None,
+        mode: Mode::Password, entered: Zeroizing::new(String::new()), reader: super::reader_events::Reader::new(), eye: Eye::default(), message: String::new(), wrong: false,
+        tries: Tries::load(&super::tries::file(), boot_now().unwrap_or(0)),
+        pin_minutes: pin::is_set().then(pin::minutes),
+        user: super::input::account_name(),
+        checking: false, check_since: None, check_turn: 0, outstanding: None, done: false, pointer_on: None, pointer_at: (0.0, 0.0), flash: None,
         cursor: None, xkb_ctx: keyboard::new_context(), xkb_state: std::ptr::null_mut(), minute: -1,
 
         resting: resting.then(|| {
             let moving = crate::session::screensaver::moving_for().unwrap_or(0.0);
-            Instant::now().checked_sub(Duration::from_secs_f64(moving)).unwrap_or_else(Instant::now)
+
+            Duration::try_from_secs_f64(moving).ok().and_then(|d| Instant::now().checked_sub(d)).unwrap_or_else(Instant::now)
         }),
         rest_pointer: None,
         phone: false,
@@ -229,6 +235,13 @@ fn check_answered(state: &mut State, qh: &QueueHandle<State>, answers: c_int) {
     // SAFETY: two bytes into a local array, from the reading end of the
 
     let got = unsafe { libc::read(answers, byte.as_mut_ptr() as *mut c_void, 2) };
+
+    if got == 2 && state.outstanding.is_some_and(|(turn, _)| turn == byte[1]) {
+        state.outstanding = None;
+        if byte[0] == CHECK_WRONG {
+            state.count_wrong(false);
+        }
+    }
     if !answer_counts(got, byte[1], state.check_turn, state.checking) {
 
     } else if byte[0] == CHECK_OK {

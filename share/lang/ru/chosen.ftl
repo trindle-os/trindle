@@ -13,7 +13,7 @@ chosen-act-name-empty = Имя не может быть пустым.
 chosen-act-name-slash = Имя не может содержать косую черту.
 
 # Red words under a name being typed when it is . or ..
-chosen-act-name-kept = Это имя зарезервировано для системы.
+chosen-act-name-kept = Это имя занято системой.
 
 # Red words under a name being typed when it is too long.
 chosen-act-name-long = Это имя слишком длинное.
@@ -24,8 +24,8 @@ chosen-inplace-not-renamed = Не удалось переименовать «{ 
 # Red words under the name box, and at the foot of Folders, when a name is already used in that place; the kind is the word folder or file.
 chosen-inplace-taken =
     { $kind ->
-        [folder] Папка «{ $name }» уже существует.
-       *[other] Файл «{ $name }» уже существует.
+        [folder] Папка «{ $name }» здесь уже есть.
+       *[other] Файл «{ $name }» здесь уже есть.
     }
 
 # First part of the path bar in Folders when the folder is inside the home folder: the home folder.

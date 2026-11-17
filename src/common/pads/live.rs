@@ -73,7 +73,7 @@ impl Live {
         !self.files.is_empty()
     }
 
-    pub fn poll(&mut self) -> Vec<From> {
+    pub fn poll(&mut self) -> (Vec<From>, bool) {
         let mut pressed = Vec::new();
         let mut events: Vec<(usize, u16, u16, i32)> = Vec::new();
         for (i, file) in self.files.iter_mut().enumerate() {
@@ -87,6 +87,7 @@ impl Live {
                 }
             }
         }
+        let moved = !events.is_empty();
         for (i, kind, code, value) in events {
             if kind == EV_ABS && !self.axes.contains_key(&code) {
                 let mut info = [0i32; 6];
@@ -98,7 +99,7 @@ impl Live {
             }
             pressed.extend(self.feed(kind, code, value));
         }
-        pressed
+        (pressed, moved)
     }
 
     pub fn feed(&mut self, kind: u16, code: u16, value: i32) -> Option<From> {

@@ -26,10 +26,10 @@ settings-window-group-about = Sobre
 settings-window-in-apps = Em Aplicativos
 
 # Small grey heading over the row a search finds that opens the Folders program's settings.
-settings-window-in-folders = Em Pastas
+settings-window-in-folders = No Folders
 
 # The side bar row that opens the Folders program at its own settings.
-settings-window-in-folders-name = Configurações próprias de Pastas
+settings-window-in-folders-name = Configurações próprias do Folders
 
 # Words the Settings search matches the Folders settings row by, in lower case, separated by spaces.
 settings-window-in-folders-keywords =
@@ -42,7 +42,7 @@ settings-window-no-page = Nenhuma página corresponde. Tente uma palavra mais cu
 settings-window-theme-refused = {"  "}{ $id }  { $name } (não pode ser usado: { $why })
 
 # Printed in a terminal when trindle-settings --theme is given no theme name.
-settings-window-theme-name = Informe o nome de um tema, como: trindle-settings --theme default
+settings-window-theme-name = Digite o nome de um tema, por exemplo: trindle-settings --theme default
 
 # Printed in a terminal after trindle-settings --theme worked; theme is the theme's name.
 settings-window-theme-now = O tema agora é { $theme }.
@@ -51,13 +51,13 @@ settings-window-theme-now = O tema agora é { $theme }.
 settings-window-theme-own = o próprio do Trindle
 
 # Printed in a terminal when the theme could not be chosen; error says why and ends with a full stop.
-settings-window-themes-list = { $error } trindle-settings --themes mostra a lista.
+settings-window-themes-list = { $error } Execute trindle-settings --themes para ver a lista.
 
 # Printed in a terminal when trindle-settings --keys is not given the word default.
-settings-window-keys-how = Para restaurar todas as teclas e botões: trindle-settings --keys default
+settings-window-keys-how = Para voltar todas as teclas e botões ao normal, execute: trindle-settings --keys default
 
 # Printed in a terminal after every key and button was put back.
-settings-window-keys-back = Todas as teclas e botões voltaram ao que está impresso.
+settings-window-keys-back = Todas as teclas e botões voltaram ao normal.
 
 # Printed in a terminal when the keys could not be put back; error says why.
-settings-window-keys-failed = Não foi possível restaurar as teclas: { $error }
+settings-window-keys-failed = O Trindle não conseguiu restaurar as teclas: { $error }

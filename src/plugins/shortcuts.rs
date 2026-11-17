@@ -60,7 +60,7 @@ pub(super) fn parse(at: &Path, kf: &KeyFile, kept: &dyn Fn() -> Vec<Combo>, prob
             continue;
         }
         let label = text(kf, &group, "Label");
-        if label.chars().count() > MENU_LABEL_MAX || !is_plain(&label, MENU_LABEL_MAX) {
+        if !is_plain(&label, MENU_LABEL_MAX) {
             problems.push(t!("plugins-label-short-line", group = &group, max = MENU_LABEL_MAX));
         }
         let keys = match Combo::typed(&text(kf, &group, "Keys")) {
@@ -80,9 +80,6 @@ pub(super) fn parse(at: &Path, kf: &KeyFile, kept: &dyn Fn() -> Vec<Combo>, prob
         };
         let run = text(kf, &group, "Run");
         let argv = command(at, &group, &run, problems);
-        if argv.is_none() && run.is_empty() {
-            problems.push(t!("plugins-shortcut-needs-run", group = &group));
-        }
         if let (Some(keys), Some(run)) = (keys, argv) {
             let label = if label.is_empty() { id.clone() } else { label };
             all.push(Shortcut { id, label, keys, run });
@@ -293,9 +290,9 @@ mod tests {
 
         let five = "Shortcuts=a;b;c;d;e\n\n".to_string() + &["a", "b", "c", "d", "e"].iter().enumerate()
             .fold(String::new(), |mut s, (i, n)| { let _ = write!(s, "[Shortcut {n}]\nKeys=Ctrl+Alt+F{}\nRun=bin/one {n}\n", i + 5); s });
-        assert!(says(&five).contains("at most 4"), "{}", says(&five));
+        assert!(says(&five).contains("At most 4"), "{}", says(&five));
         let bad = [
-            ("Shortcuts=a b\n\n[Shortcut a b]\nKeys=Ctrl+Alt+S\nRun=bin/one\n", "Shortcut id a b"),
+            ("Shortcuts=a b\n\n[Shortcut a b]\nKeys=Ctrl+Alt+S\nRun=bin/one\n", "shortcut ID a b can only contain"),
             ("Shortcuts=a;a\n\n[Shortcut a]\nKeys=Ctrl+Alt+S\nRun=bin/one\n", "names a twice"),
             ("Shortcuts=a\n", "no [Shortcut a] part"),
             ("Shortcuts=a\n\n[Shortcut a]\nRun=bin/one\n", "needs Keys"),
@@ -307,7 +304,7 @@ mod tests {
             ("Shortcuts=a\n\n[Shortcut a]\nKeys=Ctrl+Alt+S\nRun=../x\n", "inside the plugin's folder"),
             ("Shortcuts=a\n\n[Shortcut a]\nKeys=Ctrl+Alt+S\nRun=bin/nothing\n", "inside the plugin's folder"),
             ("Shortcuts=a\n\n[Shortcut a]\nKeys=Ctrl+Alt+S\nRun=bin/one\nLabel=0123456789012345678901234567890123\n", "at most 32"),
-            ("Shortcuts=a;b\n\n[Shortcut a]\nKeys=Ctrl+Alt+S\nRun=bin/one\n[Shortcut b]\nKeys=ctrl+alt+s\nRun=bin/one\n", "another shortcut of the plugin's"),
+            ("Shortcuts=a;b\n\n[Shortcut a]\nKeys=Ctrl+Alt+S\nRun=bin/one\n[Shortcut b]\nKeys=ctrl+alt+s\nRun=bin/one\n", "used by another shortcut in this plugin"),
         ];
         for (extra, said) in bad {
             let got = says(extra);
@@ -320,7 +317,7 @@ mod tests {
 
         for keys in ["Ctrl+Alt+T", "Super+L", "Alt+Tab", "Super+Left", "Super+Space"] {
             let got = says(&ONE.replace("Ctrl+Alt+S", keys));
-            assert!(got.contains("already a shortcut of Trindle's"), "{keys}: {got}");
+            assert!(got.contains("already one of Trindle's shortcuts"), "{keys}: {got}");
         }
     }
 
@@ -369,7 +366,7 @@ mod tests {
 
         let weird = KeyFile::parse("[org.a.Alpha]\ngo=rm -rf\n");
         let all = bindings_of(std::slice::from_ref(&a), &weird, &kept(), &[]);
-        assert!(all[0].keys.is_none() && all[0].refused.as_deref().is_some_and(|r| r.contains("not a shortcut")));
+        assert!(all[0].keys.is_none() && all[0].refused.as_deref().is_some_and(|r| r.contains("isn't a valid shortcut")));
 
         let kf = KeyFile::parse("[org.a.Alpha]\ngo=Ctrl+Alt+H\n");
         let all = bindings_of(&[a], &kf, &kept(), &[]);

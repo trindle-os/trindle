@@ -8,10 +8,10 @@ settings-plugins-keywords = plugins complementos extensões instalados remover c
 
 # Help line at the foot of the Your plugins page.
 # SAFETY: needs a human review before it ships
-settings-plugins-help = Plugins acrescentam coisas ao Trindle: um ícone no anel, configurações aqui, notificações ou algo que roda desde o login. Cada um roda isolado, sem permissão para nada até você permitir em Permissões, que o botão no fim do título desta página abre. O cartão de cada plugin aqui guarda suas próprias configurações; a lixeira em um cartão, pressionada duas vezes, remove esse plugin.
+settings-plugins-help = Plugins acrescentam coisas ao Trindle. Um plugin pode adicionar um ícone ao anel, configurações aqui, notificações ou algo que começa quando você entra. Cada plugin roda isolado e não pode usar nada até você permitir em Permissões. O botão ao lado do título da página abre Permissões. Para remover um plugin, pressione a lixeira no cartão dele duas vezes.
 
 # Red words when the window that asks what a plugin may use could not be opened.
-settings-plugins-window-failed = Não foi possível abrir a janela que pergunta o que ele pode usar.
+settings-plugins-window-failed = O Trindle não conseguiu abrir a janela que pergunta o que o plugin pode usar.
 
 # Under About it: the plugin's version number is { $v }.
 settings-plugins-version = Versão { $v }.
@@ -26,17 +26,12 @@ settings-plugins-asks-nothing = { $name } não pede nada, então roda isolado, s
 # SAFETY: needs a human review before it ships
 settings-plugins-asks-for =
     { $asks ->
-        [one] { $name } pede { $list }; { $allowed } de { $asks } permitidos. Roda isolado, só com o que você permitir.
-        [many] { $name } pede { $list }; { $allowed } de { $asks } permitidos. Roda isolado, só com o que você permitir.
-       *[other] { $name } pede { $list }; { $allowed } de { $asks } permitidos. Roda isolado, só com o que você permitir.
+        [one] { $name } pede { $list }. Você permitiu { $allowed } de { $asks }. Roda isolado, só com o que você permitir.
+       *[other] { $name } pede { $list }. Você permitiu { $allowed } de { $asks }. Roda isolado, só com o que você permitir.
     }
 
-# Under the line that tells a plugin needs more allowed, beside its Allow button.
-# SAFETY: needs a human review before it ships
-settings-plugins-needs-more = Permitir mostra cada coisa que ele pede, com um interruptor.
-
 # Heading of the line about a plugin on its card.
-settings-plugins-about-it = Sobre ele
+settings-plugins-about-it = Sobre
 
 # Tip of the button that changes what a plugin may use.
 # SAFETY: needs a human review before it ships
@@ -74,14 +69,11 @@ settings-plugins-group = Plugins
 # Heading of the line shown when no plugin is installed.
 settings-plugins-none = Nenhum instalado
 
-# Under the None installed heading.
-settings-plugins-none-sub = Aplicativos tem plugins para adicionar.
-
 # Tip of the button at the end of the page's title that opens the Permissions page.
 settings-plugins-open-permissions = Abrir Permissões
 
 # Said at the top of a plugin's card while its service has not yet answered; the plugin's name is {$name}.
-settings-plugins-rows-asking = Perguntando a { $name }.
+settings-plugins-rows-asking = Perguntando a { $name }…
 
 # Said at the top of a plugin's card, and in red under a row, when its service does not answer; the plugin's name is {$name}.
 settings-plugins-rows-silent = { $name } não está respondendo. O serviço dele pode estar parado.
@@ -97,4 +89,3 @@ settings-plugins-rows-failed = { $name } não conseguiu fazer isso.
 
 # Red words under a row when the change failed; the plugin's name is {$name} and the reason it gave is {$why}.
 settings-plugins-rows-failed-why = { $name } não conseguiu fazer isso: { $why }.
-

@@ -142,3 +142,35 @@ fn a_job_that_panics_gives_its_place_back() {
         assert_eq!(COUNT.load(Ordering::SeqCst), 0);
     }
 }
+
+#[test]
+fn a_flood_of_computers_is_kept_to_the_most_and_their_names_are_cut() {
+    use super::finder::Finder;
+    use super::limits::{MOST_DEVICES, MOST_TEXT};
+    let finder = Finder::new();
+    let long = "n".repeat(10_000);
+    let props: std::collections::BTreeMap<String, String> =
+        [("FriendlyName".to_string(), long.clone())].into();
+    for i in 0..MOST_DEVICES * 3 {
+        finder.record(&format!("urn:{i}"), "10.0.0.1".into(), "eth0", &props, Some(vec![long.clone(); 100]));
+    }
+    let (count, name, types) = finder.shape();
+    assert_eq!(count, MOST_DEVICES);
+    assert_eq!(name, MOST_TEXT);
+    assert!(types <= 16);
+}
+
+#[test]
+fn a_full_table_lets_go_of_computers_not_heard_from_for_an_hour() {
+    use super::finder::Finder;
+    use super::limits::MOST_DEVICES;
+    let finder = Finder::new();
+    let props = std::collections::BTreeMap::new();
+    for i in 0..MOST_DEVICES {
+        finder.record_at(1000, &format!("urn:{i}"), "10.0.0.1".into(), "eth0", &props, None);
+    }
+    finder.record_at(1100, "urn:new", "10.0.0.2".into(), "eth0", &props, None);
+    assert_eq!(finder.shape().0, MOST_DEVICES, "still full a little later: the new one is refused");
+    finder.record_at(1000 + 3600, "urn:new", "10.0.0.2".into(), "eth0", &props, None);
+    assert_eq!(finder.shape().0, 1, "an hour on, the unheard are let go and the new one is in");
+}

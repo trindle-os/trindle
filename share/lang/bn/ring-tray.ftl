@@ -14,15 +14,19 @@ ring-updates-none = সবকিছু হালনাগাদ আছে
 # Answer to a spoken question about updates when the updates button installs them all; "it" for one, "them" for more.
 ring-updates-spoken-all =
     { $n ->
-        [one] { $n }টি অপেক্ষায় আছে: অ্যাপের পাশের আপডেট বোতামটি সেটি ইনস্টল করে দেবে
-       *[other] { $n }টি অপেক্ষায় আছে: অ্যাপের পাশের আপডেট বোতামটি সেগুলো ইনস্টল করে দেবে
+        [one] { $n }টি আপডেট অপেক্ষায় আছে। এটি ইনস্টল করতে অ্যাপের পাশের আপডেট বোতাম ব্যবহার করুন।
+       *[other] { $n }টি আপডেট অপেক্ষায় আছে। এগুলো ইনস্টল করতে অ্যাপের পাশের আপডেট বোতাম ব্যবহার করুন।
     }
 
 # Answer to a spoken question about updates when only plugin updates that need a look wait; the clause that follows says so.
-ring-updates-spoken-look = { $n }টি অপেক্ষায় আছে: { $look }
+ring-updates-spoken-look =
+    { $n ->
+        [one] { $n }টি আপডেট অপেক্ষায় আছে। { $look }।
+       *[other] { $n }টি আপডেট অপেক্ষায় আছে। { $look }।
+    }
 
 # Answer to a spoken question about updates when some install and some need a look; the last clause says which need a look.
-ring-updates-spoken-mixed = { $n }টি অপেক্ষায় আছে: অ্যাপের পাশের আপডেট বোতামটি { $put }টি ইনস্টল করে দেবে, আর { $look }
+ring-updates-spoken-mixed = { $n }টি আপডেট অপেক্ষায় আছে। এগুলোর { $put }টি ইনস্টল করতে অ্যাপের পাশের আপডেট বোতাম ব্যবহার করুন। { $look }।
 
 # Name and tip of the updates button when only firmware updates wait: the button takes the person to them.
 ring-updates-see-firmware =
@@ -34,8 +38,8 @@ ring-updates-see-firmware =
 # Name and tip of the updates button when firmware updates wait among others: the button takes the person to them.
 ring-updates-see-among =
     { $n ->
-        [one] { $n }টি আপডেট দেখুন, এর মধ্যে ফার্মওয়্যার আছে
-       *[other] { $n }টি আপডেট দেখুন, এর মধ্যে ফার্মওয়্যার আছে
+        [one] { $n }টি আপডেট দেখুন, ফার্মওয়্যারসহ
+       *[other] { $n }টি আপডেট দেখুন, ফার্মওয়্যারসহ
     }
 
 # Name and tip of the updates button when updates wait that it will install.
@@ -101,13 +105,13 @@ ring-tray-vpn = ভিপিএনের মাধ্যমে সংযুক�
 ring-tray-wired = তারযুক্ত
 
 # Name of the network button when connected by cable but the internet is not reachable.
-ring-tray-wired-limited = তারযুক্ত, সীমিত সংযোগ
+ring-tray-wired-limited = তারযুক্ত, কিন্তু ইন্টারনেট নেই
 
 # Name of the network button on Wi-Fi: the network's name and its signal strength.
 ring-tray-wifi = { $name }, সিগন্যাল { $strength }%
 
 # Name of the network button on Wi-Fi when the internet is not reachable.
-ring-tray-wifi-limited = { $name }, সিগন্যাল { $strength }%, সীমিত সংযোগ
+ring-tray-wifi-limited = { $name }, সিগন্যাল { $strength }%, সীমিত অ্যাক্সেস
 
 # Name of the Bluetooth button when Bluetooth is off.
 ring-tray-bt-off = Bluetooth বন্ধ আছে
@@ -131,13 +135,12 @@ ring-tray-none = কোনো ট্রে আইকন নেই
 ring-tray-show = রিংয়ে দেখান
 
 # Line of a tray icon's menu: take the icon out of the ring's row.
-ring-tray-take-out = রিং থেকে বের করুন
+ring-tray-take-out = রিং থেকে সরান
 
 # Quiet words in a tray icon's menu in place of Show in the ring, when the row is full.
-ring-tray-full = রিংয়ে আগে থেকেই চারটি আছে। আগে একটি বের করুন।
+ring-tray-full = রিংয়ে আগে থেকেই চারটি আইকন আছে। আগে একটি বের করুন।
 
 
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = দেখা বন্ধ আছে
-

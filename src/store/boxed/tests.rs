@@ -10,7 +10,7 @@ use crate::common::x11_rooms::{self};
 use super::added::{came_with_trindle, size_of_tree};
 use super::first_apps::to_offer;
 use super::install::{install_with, remove};
-use super::launchers::{is_terminal, launcher, launchers_of};
+use super::launchers::{bare, is_terminal, key_value, launcher, launchers_of, may_write};
 use super::needs::{debs_in, providers_in, wants_from};
 use super::run::{loader, plain_command, run_boxed};
 use super::walls::{Gates, OWN_FOLDERS, engine_for, sys_args_for, walls};
@@ -61,9 +61,28 @@ fn a_name_no_package_has_is_answered_by_the_packages_that_provide_it() {
 #[test]
 fn a_launcher_starts_it_boxed() {
     let text = "[Desktop Entry]\nName=Foot\nExec=foot %U\nTryExec=foot\nIcon=foot\n[Desktop Action new]\nExec=foot --new\n";
-    let out = launcher("foot", text, false, |i| (i == "foot").then(|| PathBuf::from("/f/foot.svg")));
+    let out = launcher("foot", text, false, |i| (i == "foot").then(|| PathBuf::from("/f/foot.svg"))).unwrap();
     assert_eq!(out, "[Desktop Entry]\nX-Trindle-Boxed=foot\nName=Foot\nExec=trindle-boxed foot foot %U\n\
                      Icon=/f/foot.svg\n[Desktop Action new]\nExec=trindle-boxed foot foot --new\n");
+}
+
+#[test]
+fn a_launcher_spaced_any_way_still_starts_it_boxed() {
+    let text = "[Desktop Entry]\nName=Evil\nExec =sh -c 'curl x | sh'\n Exec=two\n\tTryExec = evil\nDBusActivatable =true\n\
+                Exec[de]=sh -c bad\nIcon = evil\n[Desktop Action a]\nExec\t=\tthree --flag\n";
+    let out = launcher("evil", text, false, |_| None).expect("every command could be boxed");
+    for l in out.lines() {
+        if let Some((k, _)) = key_value(l) {
+            assert!(!matches!(bare(k), "TryExec" | "DBusActivatable"), "{l}");
+            if bare(k) == "Exec" {
+                assert!(l.starts_with("Exec=trindle-boxed evil "), "{l}");
+            }
+        }
+    }
+    assert!(out.contains("Exec=trindle-boxed evil sh -c 'curl x | sh'\n"), "{out}");
+    assert!(out.contains("Exec=trindle-boxed evil three --flag\n"), "{out}");
+    assert!(!out.contains("Exec[de]"), "{out}");
+    assert!(launcher("evil", "[Desktop Entry]\nExec=   \n", false, |_| None).is_none(), "an empty command is refused whole");
 }
 
 #[test]
@@ -93,7 +112,7 @@ fn a_folder_s_size_is_its_plain_files_and_follows_no_link() {
 fn our_terminal_is_called_terminal() {
     let text = "[Desktop Entry]\nName=Alacritty\nName[de]=Alacritty\nIcon=Alacritty\nExec=alacritty\n\
                 Categories=System;TerminalEmulator;\n[Desktop Action New]\nName=New Terminal\nExec=alacritty\n";
-    let out = launcher("alacritty", text, true, |_| Some(PathBuf::from("/a/Alacritty.svg")));
+    let out = launcher("alacritty", text, true, |_| Some(PathBuf::from("/a/Alacritty.svg"))).unwrap();
     assert_eq!(out, "[Desktop Entry]\nX-Trindle-Boxed=alacritty\nName=Terminal\nIcon=utilities-terminal\n\
                      Exec=trindle-boxed alacritty alacritty\nCategories=System;TerminalEmulator;\n\
                      [Desktop Action New]\nName=New Terminal\nExec=trindle-boxed alacritty alacritty\n");
@@ -155,7 +174,10 @@ fn nothing_is_let_through_until_allowed() {
     assert!(open.contains("--ro-bind /run/guard ") && !open.contains("pipewire-0"), "{open}");
     let tuned = Gates { pulse: Some("/run/guard".into()), alsa: Some("/run/asound.conf".into()), ..Gates::default() };
     let alsa = walls(&folder("foot"), &["sound".into()], &tuned, &["foot".into()]).join(" ");
-    assert!(alsa.contains("--ro-bind /run/asound.conf /etc/trindle-asound.conf --setenv ALSA_CONFIG_PATH /etc/trindle-asound.conf"), "{alsa}");
+
+    let at = alsa.split("--ro-bind /run/asound.conf ").nth(1).and_then(|r| r.split(' ').next()).unwrap_or_default();
+    assert!(at.ends_with("/trindle-asound.conf") && !at.starts_with("/etc/") && !at.starts_with("/usr/"), "{alsa}");
+    assert!(alsa.contains(&format!("--setenv ALSA_CONFIG_PATH {at}")), "{alsa}");
     let mic = walls(&folder("foot"), &["sound".into(), "microphone".into()], &gates, &["foot".into()]).join(" ");
     assert!(mic.contains("pipewire-0") && !mic.contains("/run/guard"), "{mic}");
 }
@@ -223,7 +245,8 @@ fn nothing_but_the_exact_word_files_lets_the_folders_in_and_never_the_hidden_one
         let rel = Path::new(&w[1]).strip_prefix(&h).expect("inside the home");
         assert!(OWN_FOLDERS.iter().any(|f| Path::new(f) == rel), "{rel:?}");
     }
-    assert!(!a.iter().any(|x| x.contains("/.ssh") || x.contains("/.gnupg") || x.contains("/.config")), "{}", a.join(" "));
+    let binds: Vec<&String> = a.iter().enumerate().filter(|(i, _)| *i < 2 || a[i - 2] != "--setenv").map(|(_, x)| x).collect();
+    assert!(!binds.iter().any(|x| x.contains("/.ssh") || x.contains("/.gnupg") || x.contains("/.config")), "{}", a.join(" "));
 }
 
 #[test]
@@ -395,5 +418,311 @@ fn a_box_reaches_the_accessibility_bus_only_when_allowed() {
     }
     for spelled in ["Accessibility", "accessibilty", "accessibility ", "a11y", "read-screen", "accessibility;", "access"] {
         assert!(!run(&[spelled], &gates).contains("at-spi"), "{spelled}");
+    }
+}
+
+#[test]
+fn a_package_does_not_take_over_another_launcher() {
+    let dir = std::env::temp_dir().join(format!("trindle-launcher-over-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&dir);
+    std::fs::create_dir_all(&dir).unwrap();
+    let free = dir.join("free.desktop");
+    let mine = dir.join("mine.desktop");
+    let other = dir.join("other.desktop");
+    let yours = dir.join("yours.desktop");
+    let link = dir.join("link.desktop");
+    std::fs::write(&mine, format!("[Desktop Entry]\n{MARK}pkg\n")).unwrap();
+    std::fs::write(&other, format!("[Desktop Entry]\n{MARK}another\n")).unwrap();
+    std::fs::write(&yours, "[Desktop Entry]\nName=Browser\n").unwrap();
+    std::os::unix::fs::symlink(&mine, &link).unwrap();
+    assert!(may_write(&free, "pkg") && may_write(&mine, "pkg"));
+    assert!(!may_write(&other, "pkg") && !may_write(&yours, "pkg") && !may_write(&link, "pkg"));
+    let _ = std::fs::remove_dir_all(&dir);
+}
+
+#[test]
+fn an_option_is_not_a_package_name() {
+    for bad in ["--ai", "--own-x11", "-x", ".hidden", "a/b", ""] {
+        assert!(!crate::store::deb::valid_name(bad), "{bad}");
+        assert!(remove(bad).is_err(), "{bad}");
+    }
+}
+
+#[test]
+fn a_box_is_never_lent_the_desktops_own_display() {
+    assert!(matches!(super::x11::unasked("zoom", "no desktop to ask"), (None, None)));
+}
+
+#[test]
+fn a_link_is_not_a_folder_of_the_box() {
+    let dir = std::env::temp_dir().join(format!("trindle-walls-link-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&dir);
+    std::fs::create_dir_all(dir.join("real")).unwrap();
+    std::os::unix::fs::symlink(&dir, dir.join("usr")).unwrap();
+    assert!(super::walls::real_dir(&dir.join("real")) && !super::walls::real_dir(&dir.join("usr")) && !super::walls::real_dir(&dir.join("none")));
+    let _ = std::fs::remove_dir_all(&dir);
+}
+
+#[test]
+fn a_box_is_not_given_the_sessions_secrets() {
+    let host: Vec<(String, String)> = [("LANG", "en_GB.UTF-8"), ("GITHUB_TOKEN", "x"), ("AWS_SECRET_ACCESS_KEY", "y"), ("ODD_NAME", "z")]
+        .iter().map(|(k, v)| (k.to_string(), v.to_string())).collect();
+    let a = super::walls::clean_env_args(&host);
+    assert_eq!(a[0], "--clearenv");
+    assert!(a.windows(3).any(|w| w == ["--setenv", "LANG", "en_GB.UTF-8"]));
+    assert!(!a.iter().any(|x| x.contains("TOKEN") || x.contains("SECRET") || x.contains("ODD_NAME")), "{a:?}");
+    let line = walls(Path::new("/data/x"), &[], &Gates::default(), &["true".to_string()]);
+    assert_eq!(line.iter().position(|x| x == "--clearenv").map(|i| i < line.iter().position(|x| x == "--setenv").unwrap_or(usize::MAX)), Some(true));
+}
+
+#[test]
+fn a_box_starts_where_its_caller_asked_or_else_in_its_home() {
+    let last_chdir = |a: &[String]| a.windows(2).rev().find(|w| w[0] == "--chdir").map(|w| w[1].clone()).unwrap();
+    let asked = Gates { extra: ["--bind", "/tmp/x", "/out", "--chdir", "/out"].map(String::from).to_vec(), ..Gates::default() };
+    assert_eq!(last_chdir(&walls(&folder("reader"), &[], &asked, &["read".into()])), "/out", "the AppImage reader unpacks into /out");
+    let plain = walls(&folder("reader"), &[], &Gates::default(), &["read".into()]);
+    assert_ne!(last_chdir(&plain), "/out");
+}
+
+#[test]
+fn the_walls_hold_exactly_one_chdir_and_it_is_the_callers() {
+    let count = |a: &[String]| a.iter().filter(|x| *x == "--chdir").count();
+    let asked = Gates { extra: ["--bind", "/tmp/x", "/out", "--chdir", "/out"].map(String::from).to_vec(), ..Gates::default() };
+    let line = walls(&folder("reader"), &[], &asked, &["read".into()]);
+    assert_eq!(line.iter().filter(|x| *x == "/out").count(), 2, "the bind keeps its /out");
+    let sep = line.iter().position(|x| x == "--").unwrap();
+    assert_eq!(line[sep - 2..sep], ["--chdir", "/out"]);
+    assert_eq!(count(&line[..sep]), 1, "{line:?}");
+
+    let odd = Gates { extra: ["--setenv", "--chdir", "/x"].map(String::from).to_vec(), ..Gates::default() };
+    let line = walls(&folder("reader"), &[], &odd, &["read".into()]);
+    let sep = line.iter().position(|x| x == "--").unwrap();
+    assert_eq!(line[sep - 2], "--chdir");
+    assert_ne!(line[sep - 1], "/x");
+    assert!(line.windows(3).any(|w| w == ["--setenv", "--chdir", "/x"]), "the value stays with its option");
+
+    for (option, values) in [("--file", &["9", "--chdir"][..]), ("--bind-fd", &["9", "--chdir"]), ("--ro-bind-fd", &["9", "--chdir"]),
+                             ("--args", &["--chdir"]), ("--argv0", &["--chdir"])] {
+        let mut extra = vec![option.to_string()];
+        extra.extend(values.iter().map(|v| v.to_string()));
+        extra.extend(["--chdir", "/x"].map(String::from));
+        let line = walls(&folder("reader"), &[], &Gates { extra: extra.clone(), ..Gates::default() }, &["read".into()]);
+        let sep = line.iter().position(|x| x == "--").unwrap();
+        assert_eq!(line[sep - 2..sep], ["--chdir", "/x"], "{option}: {line:?}");
+        assert!(line.windows(extra.len() - 2).any(|w| w == &extra[..extra.len() - 2]), "{option}: its values stay with it: {line:?}");
+    }
+}
+
+#[test]
+fn a_box_with_a_band_is_started_by_trindles_own_program_and_one_without_is_not() {
+    use super::start::INSIDE_AT;
+    use super::start::Host;
+    let exe = "/usr/lib/trindle/bin/trindle".to_string();
+    let after = |a: &[String]| a[a.iter().position(|x| x == "--").unwrap() + 1..].to_vec();
+    let on = Gates { starter: Some((Host { exe: exe.clone(), ..Host::default() }, 128)), ..Gates::default() };
+    let a = walls(Path::new("/data/x"), &[], &on, &["app".to_string(), "--x".to_string()]);
+    assert!(a.windows(3).any(|w| w == ["--ro-bind", exe.as_str(), INSIDE_AT]), "{a:?}");
+    assert_eq!(after(&a), [INSIDE_AT, "128", "--", "app", "--x"], "a program with no loader is run as it is");
+    let libs = vec!["/usr/lib/x86_64-linux-gnu".to_string(), "/opt/odd".to_string()];
+    let host = Host { exe: exe.clone(), loader: Some("ld-linux-x86-64.so.2".into()), libs };
+    let a = walls(Path::new("/data/x"), &[], &Gates { starter: Some((host, 128)), ..Gates::default() }, &["app".to_string()]);
+    for w in [["--ro-bind", "/usr/lib/x86_64-linux-gnu", "/run/trindle-box-libs/0"], ["--ro-bind", "/opt/odd", "/run/trindle-box-libs/1"]] {
+        assert!(a.windows(3).any(|x| x == w), "{w:?} in {a:?}");
+    }
+    assert_eq!(after(&a), ["/run/trindle-box-libs/0/ld-linux-x86-64.so.2", "--library-path", "/run/trindle-box-libs/0:/run/trindle-box-libs/1",
+                           INSIDE_AT, "128", "--", "app"], "run by the host's loader on the host's libraries");
+    let off = walls(Path::new("/data/x"), &[], &Gates::default(), &["app".to_string()]);
+    assert!(!off.iter().any(|x| x == INSIDE_AT), "{off:?}");
+    assert_eq!(off[off.iter().position(|x| x == "--").unwrap() + 1..], ["app"]);
+}
+
+#[test]
+fn the_loader_and_the_library_folders_are_read_from_the_maps() {
+    use super::start::loaded;
+    let maps = "55d0-55d1 r--p 00000000 fd:01 12 /usr/lib/trindle/bin/trindle\n\
+                7f00-7f01 r-xp 00000000 fd:01 34 /usr/lib/x86_64-linux-gnu/libc.so.6 (deleted)\n\
+                7f10-7f11 r--p 00000000 fd:01 35 /usr/lib/x86_64-linux-gnu/libm.so.6\n\
+                7f20-7f21 r--p 00000000 fd:01 36 /opt/my libs/libodd.so\n\
+                7f30-7f31 r--p 00000000 00:00 0 [heap]\n\
+                7f40-7f41 r--p 00000000 fd:01 37 /usr/share/locale/locale-archive\n\
+                7fa0-7fa1 r--p 00000000 fd:01 38 /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2\n";
+    let (loader, dirs) = loaded(maps, 0x7fa0).unwrap();
+    assert_eq!(loader, "ld-linux-x86-64.so.2");
+    assert_eq!(dirs, ["/usr/lib/x86_64-linux-gnu", "/opt/my libs"]);
+    assert_eq!(loaded(maps, 0), None, "a program built static has no loader");
+    assert_eq!(loaded(maps, 0x1234), None, "nor is one made up where nothing is mapped");
+    let many = (0..9).map(|i| format!("7f{i}0-7f{i}1 r--p 0 fd:01 1 /l{i}/libx.so\n")).collect::<Vec<_>>().concat();
+    assert_eq!(loaded(&format!("{many}7fa0-7fa1 r--p 0 fd:01 1 /l/ld.so\n"), 0x7fa0), None, "too many folders");
+}
+
+fn fake_package(name: &str, put: &[(&str, Option<&str>)]) -> PathBuf {
+    let at = std::env::temp_dir().join(format!("trindle-{name}-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&at);
+    std::fs::create_dir_all(at.join("home")).unwrap();
+    for (path, text) in put {
+        let file = at.join("files").join(path);
+        std::fs::create_dir_all(file.parent().unwrap()).unwrap();
+        match text {
+            Some(t) => std::fs::write(&file, t).unwrap(),
+            None => assert!(Command::new("mkfifo").arg(&file).status().unwrap().success()),
+        }
+    }
+    at
+}
+
+fn run_box(args: &[String]) -> (Option<i32>, String, String) {
+    let out = Command::new("timeout").arg("20").arg("bwrap").args(args).output().unwrap();
+    (out.status.code(), String::from_utf8_lossy(&out.stdout).into_owned(), String::from_utf8_lossy(&out.stderr).into_owned())
+}
+
+#[test]
+fn a_packages_own_file_wins_over_the_computers_and_both_stay_read_only() {
+    crate::common::needs::program("bwrap");
+    let at = fake_package("wins", &[("usr/bin/env", Some("the package's env")), ("etc/passwd", Some("the package's passwd")),
+                                    ("usr/share/trindle-wins/only", Some("only the package's"))]);
+    assert!(Path::new("/usr/bin/env").is_file() && Path::new("/etc/passwd").is_file(), "the computer has both");
+    let script = "cat /usr/bin/env /etc/passwd /usr/share/trindle-wins/only; test -x /usr/bin/cat || exit 3; \
+                  touch /usr/bin/x 2>/dev/null && exit 4; touch /etc/x 2>/dev/null && exit 5; exit 0";
+    let (code, out, err) = run_box(&walls(&at, &[], &Gates::default(), &["/bin/sh".into(), "-c".into(), script.into()]));
+    assert_eq!(code, Some(0), "{err}");
+    assert_eq!(out, "the package's envthe package's passwdonly the package's");
+    let _ = std::fs::remove_dir_all(&at);
+}
+
+#[test]
+fn a_package_with_its_own_c_library_does_not_stop_the_starter() {
+    crate::common::needs::program("bwrap");
+    use super::start::{Host, INSIDE_AT};
+    let host = Host::now(std::env::current_exe().unwrap().to_string_lossy().into_owned());
+    let (Some(loader), Some(first)) = (host.loader.clone(), host.libs.first().cloned()) else { panic!("this test program has a loader: {host:?}") };
+    let maps = std::fs::read_to_string("/proc/self/maps").unwrap();
+    let libc = maps.lines().filter_map(|l| l.find('/').map(|i| &l[i..])).find(|p| p.rsplit('/').next().is_some_and(|f| f.starts_with("libc.so")))
+        .expect("the host's C library").to_string();
+    assert!(libc.starts_with("/usr/"), "the C library is in the box's /usr: {libc}");
+    let at = fake_package("own-libc", &[(&libc[1..], Some("not a library"))]);
+
+    let app: Vec<String> = [format!("/run/trindle-box-libs/0/{loader}"), "--library-path".into(), "/run/trindle-box-libs/0".into(),
+                            "/bin/sh".into(), "-c".into(), "exit 7".into()].into();
+    let (code, _, err) = run_box(&walls(&at, &[], &Gates { starter: Some((host.clone(), 64)), ..Gates::default() }, &app));
+    assert_eq!(code, Some(7), "the starter ran and gave the app's code: {err}");
+    let plain = walls(&at, &[], &Gates::default(), &["/bin/sh".into(), "-c".into(), "exit 7".into()]);
+    assert_ne!(run_box(&plain).0, Some(7), "the package's C library is the box's: its own sh cannot load");
+
+    let mut args = walls(&at, &[], &Gates { starter: Some((Host { libs: vec![first], ..host }, 64)), ..Gates::default() }, &app);
+    let sep = args.iter().position(|x| x == "--").unwrap();
+    args.drain(sep + 1..sep + 4);
+    assert_eq!(args[sep + 1], INSIDE_AT);
+    let (old, _, err) = run_box(&args);
+    assert_ne!(old, Some(7), "run from the box's /usr it fails: {err}");
+    let _ = std::fs::remove_dir_all(&at);
+}
+
+#[test]
+fn a_packages_preload_list_never_stops_the_starter() {
+    crate::common::needs::program("bwrap");
+    use super::start::Host;
+    let host = Host::now(std::env::current_exe().unwrap().to_string_lossy().into_owned());
+    let starter = Gates { starter: Some((host, 64)), ..Gates::default() };
+    let app: Vec<String> = ["/bin/sh".into(), "-c".into(), "test -e /etc/trindle-own && exit 6; exit 7".into()].into();
+    for (kind, at) in [("fifo", fake_package("preload-fifo", &[("etc/ld.so.preload", None)])),
+                       ("file", fake_package("preload-file", &[("etc/ld.so.preload", Some("/nowhere/libmissing.so\n"))]))] {
+        let (code, _, err) = run_box(&walls(&at, &[], &starter, &app));
+        assert_eq!(code, Some(7), "{kind}: {err}");
+        assert!(!err.contains("libmissing"), "{kind}: nothing was preloaded: {err}");
+        let _ = std::fs::remove_dir_all(&at);
+    }
+    let at = fake_package("preload-link", &[("etc/trindle-own", Some("x")), ("etc/held", None)]);
+    std::os::unix::fs::symlink("held", at.join("files/etc/ld.so.preload")).unwrap();
+    let (code, _, err) = run_box(&walls(&at, &[], &starter, &app));
+    assert_eq!(code, Some(7), "link: the computer's /etc, with none of the package's: {err}");
+    let _ = std::fs::remove_dir_all(&at);
+}
+
+#[test]
+fn a_packages_launchers_and_icons_never_lead_out_of_its_files() {
+    use super::launchers::{icon_in, own_file, read_at_most};
+    let at = fake_package("launcher-links", &[("usr/share/applications/a.desktop", Some("[Desktop Entry]\n")),
+                                              ("usr/share/applications/held.desktop", None),
+                                              ("usr/share/icons/hicolor/48x48/apps/real.png", Some("png"))]);
+    let (files, apps) = (at.join("files"), at.join("files/usr/share/applications"));
+    std::fs::write(at.join("secret"), "the person's").unwrap();
+    let theme = files.join("usr/share/icons/hicolor");
+    for (link, to) in [(apps.join("out.desktop"), at.join("secret")), (apps.join("zero.desktop"), "/dev/zero".into()),
+                       (apps.join("in.desktop"), "a.desktop".into()), (theme.join("48x48/apps/out.png"), at.join("secret")),
+                       (theme.join("48x48/apps/in.png"), "real.png".into())] {
+        std::os::unix::fs::symlink(to, link).unwrap();
+    }
+    assert!(own_file(&files, &apps.join("a.desktop")).is_some() && own_file(&files, &apps.join("in.desktop")).is_some());
+    for refused in ["out.desktop", "zero.desktop", "held.desktop", "none.desktop"] {
+        assert_eq!(own_file(&files, &apps.join(refused)), None, "{refused}");
+    }
+    assert_eq!(icon_in(&files, "out"), None, "an icon that leads out is not used");
+    assert!(icon_in(&files, "in").is_some_and(|p| p.ends_with("48x48/apps/real.png")));
+    std::fs::write(at.join("big"), "x".repeat(65)).unwrap();
+    assert_eq!(read_at_most(&at.join("big"), 64), None);
+    assert_eq!(read_at_most(&at.join("big"), 65).map(|t| t.len()), Some(65));
+    let _ = std::fs::remove_dir_all(&at);
+}
+
+#[test]
+fn the_starter_gives_its_commands_ending_and_passes_signals_on() {
+    use std::os::unix::process::CommandExt;
+    use super::start::STARTER;
+    let run = |code: &str| Command::new(std::env::current_exe().unwrap()).arg0(STARTER).args(["64", "--", "sh", "-c", code]).status().unwrap();
+    assert_eq!(run("exit 3").code(), Some(3));
+    assert_eq!(run("kill -KILL $$").code(), Some(128 + libc::SIGKILL));
+    assert_eq!(Command::new(std::env::current_exe().unwrap()).arg0(STARTER).args(["x", "sh"]).status().unwrap().code(), Some(1), "a wrong line starts nothing");
+    let mut held = Command::new(std::env::current_exe().unwrap()).arg0(STARTER)
+        .args(["64", "--", "sh", "-c", "trap 'exit 9' TERM; while :; do sleep 0.05; done"]).spawn().unwrap();
+    std::thread::sleep(std::time::Duration::from_millis(500));
+    // SAFETY: signals the starter just made, which is still running.
+    unsafe { libc::kill(held.id() as i32, libc::SIGTERM) };
+    assert_eq!(held.wait().unwrap().code(), Some(9), "the command heard it and ended its own way");
+}
+
+#[test]
+fn a_run_folder_left_by_a_box_that_has_gone_is_swept_away() {
+    let base = std::env::temp_dir().join(format!("trindle-sweep-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&base);
+    for d in ["appimage-bitty-41", "probe-app-42", "bands", "odd-name"] {
+        std::fs::create_dir_all(base.join(d)).unwrap();
+    }
+    std::fs::write(base.join("appimage-bitty-41/asound.conf"), "x").unwrap();
+    std::os::unix::fs::symlink(base.join("bands"), base.join("link-43")).unwrap();
+    super::run::sweep(&base, |pid| pid == 42);
+    let left: HashSet<String> = std::fs::read_dir(&base).unwrap().flatten().map(|e| e.file_name().to_string_lossy().into_owned()).collect();
+    assert_eq!(left, ["probe-app-42", "bands", "odd-name", "link-43"].map(String::from).into());
+    assert!(base.join("bands").is_dir(), "a link is never followed");
+    let _ = std::fs::remove_dir_all(&base);
+}
+
+const STOP_INSIDE: &str = "TRINDLE_RUN_FOLDER_STOP_INSIDE";
+
+#[test]
+fn a_stopped_box_takes_its_run_folder_away() {
+    use std::os::unix::process::ExitStatusExt;
+    if let Some(runtime) = std::env::var_os(STOP_INSIDE) {
+        assert!(crate::store::pulse_guard::runtime_dir() == Path::new(&runtime), "only the scratch folder");
+        let folder = super::run::RunFolder::make("appimage-probe").unwrap();
+        std::fs::write(folder.0.join("asound.conf"), "x").unwrap();
+        std::thread::sleep(std::time::Duration::from_secs(30));
+        return;
+    }
+    for sig in [libc::SIGTERM, libc::SIGINT, libc::SIGHUP] {
+        let runtime = std::env::temp_dir().join(format!("trindle-stop-{}-{sig}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&runtime);
+        std::fs::create_dir_all(&runtime).unwrap();
+        let mut child = Command::new(std::env::current_exe().unwrap())
+            .args(["--exact", "store::boxed::tests::a_stopped_box_takes_its_run_folder_away", "--nocapture"])
+            .env(STOP_INSIDE, &runtime).env("XDG_RUNTIME_DIR", &runtime).spawn().unwrap();
+        let made = |r: &Path| std::fs::read_dir(r.join("trindle-boxed")).into_iter().flatten().flatten()
+            .any(|e| e.path().join("asound.conf").exists());
+        assert!((0..200).any(|_| { std::thread::sleep(std::time::Duration::from_millis(25)); made(&runtime) }), "the folder was made");
+        // SAFETY: signals the child just started, which is still running.
+        unsafe { libc::kill(child.id() as i32, sig) };
+        assert_eq!(child.wait().unwrap().signal(), Some(sig), "it ended by the signal, as it would have");
+        let left: Vec<_> = std::fs::read_dir(runtime.join("trindle-boxed")).unwrap().flatten().map(|e| e.file_name()).collect();
+        assert!(left.is_empty(), "{sig}: {left:?}");
+        let _ = std::fs::remove_dir_all(&runtime);
     }
 }

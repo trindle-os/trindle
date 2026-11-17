@@ -39,11 +39,6 @@ fn enabled() -> bool {
     ENABLED.load(Ordering::Relaxed) && std::env::var("TRINDLE_DRAWING").map_or(true, |d| d != "light")
 }
 
-fn span(d: Duration) -> Duration {
-    let slow = std::env::var("TRINDLE_SLOW").ok().and_then(|v| v.parse::<u32>().ok()).unwrap_or(1).max(1);
-    d * slow
-}
-
 fn ease_out(t: f64) -> f64 {
     1.0 - (1.0 - t.clamp(0.0, 1.0)).powi(3)
 }
@@ -296,6 +291,28 @@ where
     }
 }
 
+#[allow(clippy::mutable_key_type)]
+fn remember<R>(output: &Output, id: ObjectId, pieces: &[Rc<WindowRenderElement<R>>], scale: Scale<f64>)
+where
+    R: Renderer + ImportAll + ImportMem,
+    R::TextureId: Clone + 'static,
+{
+    let sig = || pieces.iter().map(|p| (p.id().clone(), p.current_commit(), p.geometry(scale)));
+    LAST.with(|l| {
+        let mut l = l.borrow_mut();
+        let name = output.name();
+        if !l.contains_key(&name) {
+            l.insert(name.clone(), HashMap::new());
+        }
+        let windows = l.get_mut(&name).expect("just made");
+        if windows.get(&id).and_then(|b| b.downcast_ref::<Last<R::TextureId>>()).is_some_and(|last| last.is_still(sig())) {
+            return;
+        }
+        let kept = pieces.iter().map(|p| keep(p, scale)).collect();
+        windows.insert(id, Box::new(Last { sig: sig().collect(), kept }));
+    });
+}
+
 fn moving<R>(pieces: &[Rc<WindowRenderElement<R>>], alpha: f32, centre: Point<i32, Physical>, by: f64,
              shift: Point<i32, Physical>) -> Vec<Moving<R>>
 where
@@ -310,18 +327,18 @@ where
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
-enum Kind2 {
+enum Arriving {
     Opening,
 
     Restoring(Point<f64, Logical>),
 }
 
 #[derive(Default)]
-struct Motion(RefCell<Option<(Instant, Kind2)>>);
+struct Motion(RefCell<Option<(Instant, Arriving)>>);
 
 thread_local! {
 
-    static LAST: RefCell<HashMap<(String, ObjectId), Box<dyn std::any::Any>>> = RefCell::new(HashMap::new());
+    static LAST: RefCell<HashMap<String, HashMap<ObjectId, Box<dyn std::any::Any>>>> = RefCell::new(HashMap::new());
 
     static GOING: RefCell<Vec<(ObjectId, Instant, Option<Point<f64, Logical>>)>> = const { RefCell::new(Vec::new()) };
 
@@ -341,12 +358,12 @@ fn key(window: &WindowElement) -> Option<ObjectId> {
     window.wl_surface().map(|s| s.id())
 }
 
-fn set(window: &WindowElement, kind: Option<Kind2>) {
+fn set(window: &WindowElement, kind: Option<Arriving>) {
     let motion = window.user_data().get_or_insert(Motion::default);
     *motion.0.borrow_mut() = kind.map(|k| (Instant::now(), k));
 }
 
-fn motion(window: &WindowElement) -> Option<(Instant, Kind2)> {
+fn motion(window: &WindowElement) -> Option<(Instant, Arriving)> {
     window.user_data().get::<Motion>().and_then(|m| *m.0.borrow())
 }
 
@@ -356,10 +373,10 @@ pub fn tab_point(output_geo: Rectangle<i32, Logical>) -> Point<f64, Logical> {
 
 pub fn restoring(window: &WindowElement, tab: Point<f64, Logical>) {
     if let Some(id) = key(window) {
-        GOING.with(|g| g.borrow_mut().retain(|(w, _, _)| *w != id));
+        call_back(&id);
     }
     if enabled() {
-        set(window, Some(Kind2::Restoring(tab)));
+        set(window, Some(Arriving::Restoring(tab)));
     }
 }
 
@@ -380,6 +397,10 @@ fn go(window: &WindowElement, tab: Option<Point<f64, Logical>>) {
         return;
     }
     set(window, None);
+    send_away(id, tab);
+}
+
+fn send_away(id: ObjectId, tab: Option<Point<f64, Logical>>) {
     GOING.with(|g| {
         let mut g = g.borrow_mut();
         g.retain(|(w, _, _)| *w != id);
@@ -387,8 +408,32 @@ fn go(window: &WindowElement, tab: Option<Point<f64, Logical>>) {
     });
 }
 
+fn call_back(id: &ObjectId) {
+    GOING.with(|g| g.borrow_mut().retain(|(w, _, _)| w != id));
+}
+
 fn forget(id: &ObjectId) {
-    LAST.with(|l| l.borrow_mut().retain(|(_, w), _| w != id));
+    LAST.with(|l| l.borrow_mut().values_mut().for_each(|windows| drop(windows.remove(id))));
+}
+
+fn settle(done: &[(ObjectId, bool)]) {
+    GOING.with(|g| g.borrow_mut().retain(|(w, _, _)| !done.iter().any(|(d, _)| d == w)));
+    for (id, closed) in done {
+        if *closed {
+            forget(id);
+        }
+    }
+}
+
+struct Last<T> {
+    sig: Vec<(Id, CommitCounter, Rectangle<i32, Physical>)>,
+    kept: Vec<Kept<T>>,
+}
+
+impl<T> Last<T> {
+    fn is_still(&self, now: impl ExactSizeIterator<Item = (Id, CommitCounter, Rectangle<i32, Physical>)>) -> bool {
+        self.sig.len() == now.len() && self.sig.iter().zip(now).all(|(a, b)| *a == b)
+    }
 }
 
 fn middle<R>(pieces: &[Rc<WindowRenderElement<R>>], scale: Scale<f64>) -> Point<i32, Physical>
@@ -418,22 +463,21 @@ where
 {
 
     if window.user_data().get::<Motion>().is_none() {
-        set(window, enabled().then_some(Kind2::Opening));
+        set(window, enabled().then_some(Arriving::Opening));
     }
     let pieces: Vec<Rc<WindowRenderElement<R>>> =
         AsRenderElements::<R>::render_elements::<WindowRenderElement<R>>(window, renderer, location, scale, 1.0)
             .into_iter().map(Rc::new).collect();
-    if let Some(id) = key(window) {
-        let kept: Vec<Kept<R::TextureId>> = pieces.iter().map(|p| keep(p, scale)).collect();
-        LAST.with(|l| l.borrow_mut().insert((output.name(), id), Box::new(kept)));
+    if let Some(id) = key(window).filter(|_| enabled()) {
+        remember(output, id, &pieces, scale);
     }
     let centre = middle(&pieces, scale);
     let (alpha, by, shift) = match motion(window) {
         Some((start, kind)) => {
-            let length = span(match kind {
-                Kind2::Opening => OPEN,
+            let length = match kind {
+                Arriving::Opening => OPEN,
                 _ => AWAY,
-            });
+            };
             let t = start.elapsed().as_secs_f64() / length.as_secs_f64();
             if t >= 1.0 {
                 set(window, None);
@@ -442,8 +486,8 @@ where
                 moved();
                 let p = ease_out(t);
                 match kind {
-                    Kind2::Opening => (p as f32, SMALL + (1.0 - SMALL) * p, Point::default()),
-                    Kind2::Restoring(tab) => {
+                    Arriving::Opening => (p as f32, SMALL + (1.0 - SMALL) * p, Point::default()),
+                    Arriving::Restoring(tab) => {
                         let tab = to_local(tab, output_geo, scale);
                         let away = tab - centre;
 
@@ -468,15 +512,15 @@ where
     let going: Vec<(ObjectId, Instant, Option<Point<f64, Logical>>)> = GOING.with(|g| g.borrow().clone());
     let mut done = Vec::new();
     for (id, start, tab) in going {
-        let length = span(if tab.is_some() { AWAY } else { CLOSE });
+        let length = if tab.is_some() { AWAY } else { CLOSE };
         let t = start.elapsed().as_secs_f64() / length.as_secs_f64();
         if t >= 1.0 {
             done.push((id, tab.is_none()));
             continue;
         }
         let kept: Option<Vec<Kept<R::TextureId>>> = LAST.with(|l| {
-            l.borrow().get(&(output.name(), id.clone()))
-                .and_then(|b| b.downcast_ref::<Vec<Kept<R::TextureId>>>()).cloned()
+            l.borrow().get(&output.name()).and_then(|windows| windows.get(&id))
+                .and_then(|b| b.downcast_ref::<Last<R::TextureId>>()).map(|last| last.kept.clone())
         });
         let Some(kept) = kept else { continue };
         moved();
@@ -497,14 +541,7 @@ where
             RelocateRenderElement::from_element(e, shift, Relocate::Relative)
         }));
     }
-    if !done.is_empty() {
-        GOING.with(|g| g.borrow_mut().retain(|(w, _, _)| !done.iter().any(|(d, _)| d == w)));
-        for (id, closed) in &done {
-            if *closed {
-                forget(id);
-            }
-        }
-    }
+    settle(&done);
     out
 }
 
@@ -534,5 +571,54 @@ mod tests {
                 assert_eq!(b.size.h, 1, "by {by} at {x}");
             }
         }
+    }
+
+    fn stored(id: &ObjectId) {
+        LAST.with(|l| drop(l.borrow_mut().entry("DP-1".into()).or_default().insert(id.clone(), Box::new(0u8))));
+    }
+
+    fn is_stored(id: &ObjectId) -> bool {
+        LAST.with(|l| l.borrow().values().any(|w| w.contains_key(id)))
+    }
+
+    fn is_going(id: &ObjectId) -> bool {
+        GOING.with(|g| g.borrow().iter().any(|(w, _, _)| w == id))
+    }
+
+    #[test]
+    fn a_closed_window_is_gone_from_both_lists_when_its_way_out_is_over() {
+        let id = ObjectId::null();
+        stored(&id);
+        send_away(id.clone(), None);
+        assert!(is_going(&id) && is_stored(&id));
+        settle(&[(id.clone(), true)]);
+        assert!(!is_going(&id), "a closed window kept going for ever");
+        assert!(!is_stored(&id), "a closed window's pictures were never forgotten");
+    }
+
+    #[test]
+    fn a_minimized_window_keeps_what_it_showed_and_a_restore_cancels_its_going() {
+        let id = ObjectId::null();
+        stored(&id);
+        send_away(id.clone(), Some((10.0, 20.0).into()));
+        call_back(&id);
+        assert!(!is_going(&id), "a restored window was still going away");
+        send_away(id.clone(), Some((10.0, 20.0).into()));
+        settle(&[(id.clone(), false)]);
+        assert!(!is_going(&id));
+        assert!(is_stored(&id), "a minimized window lost its pictures before coming back");
+        forget(&id);
+    }
+
+    #[test]
+    fn what_a_window_showed_is_rebuilt_only_when_a_piece_changed() {
+        let (a, b) = (Id::new(), Id::new());
+        let place = Rectangle::new((0, 0).into(), (10, 10).into());
+        let last = Last::<()> { sig: vec![(a.clone(), CommitCounter::default(), place)], kept: Vec::new() };
+        let same = vec![(a.clone(), CommitCounter::default(), place)];
+        assert!(last.is_still(same.into_iter()));
+        assert!(!last.is_still(vec![(b, CommitCounter::default(), place)].into_iter()));
+        assert!(!last.is_still(vec![(a.clone(), CommitCounter::default(), Rectangle::new((1, 0).into(), (10, 10).into()))].into_iter()));
+        assert!(!last.is_still(Vec::new().into_iter()));
     }
 }

@@ -30,7 +30,7 @@ fn key_set(s: &Store, typed: String, removing: bool) -> impl FnOnce(github::Set,
     let back = s.then(move |s: &mut Store, (how, is): (github::Set, github::KeyIs)| {
         s.github.key_is = is;
         match how {
-            github::Set::Made => { s.said.remove("gh:key"); }
+            github::Set::Made => { s.words.said.remove("gh:key"); }
             github::Set::Not(e) => {
                 if s.github.key.is_empty() {
                     s.github.key = typed;
@@ -99,7 +99,7 @@ pub(crate) fn key_box(s: &Store) -> Option<Node<Msg>> {
         row(buttons).gap(theme::sheet().gap).centred(),
     ];
 
-    parts.extend(s.said.get("gh:key").filter(|(w, _)| !w.is_empty()).map(|(w, t)| if *t == Tone::Problem { crate::store::help::red(w.clone(), s.more("gh:key")) } else { note(w.clone()).tone(*t).width(Length::Fill) }));
+    parts.extend(s.words.said.get("gh:key").filter(|(w, _)| !w.is_empty()).map(|(w, t)| if *t == Tone::Problem { crate::store::help::red(w.clone(), s.more("gh:key")) } else { note(w.clone()).tone(*t).width(Length::Fill) }));
     let wide = theme::apps_list().card_least;
     let panel = card(column(parts).gap(theme::sheet().gap)).floats().width(Length::Fixed(wide));
     Some(crate::toolkit::widget::placed(panel, move |(w, h), (aw, ah)| {

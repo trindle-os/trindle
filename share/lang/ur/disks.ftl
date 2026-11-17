@@ -8,17 +8,14 @@ disks-title = ڈرائیوز
 disks-about-tip = اس صفحے کے بارے میں
 
 # First paragraph of the longer words that open from the i beside the title.
-disks-help-1 = اس کمپیوٹر میں لگی یا اس سے جڑی ہر ڈرائیو، اپنے پارٹیشنز کی پٹی کی صورت میں۔ ہر پارٹیشن اپنے سائز کے برابر چوڑا ہے اور جتنا استعمال ہوا اتنا بھرا ہے، اس لیے بھرا ہوا پارٹیشن آسانی سے نظر آ جاتا ہے۔
+disks-help-1 = یہ اس کمپیوٹر میں لگی یا اس سے جڑی ہر ڈرائیو کو ایک پٹی کی صورت میں دکھاتا ہے جو اس کے پارٹیشنز میں بٹی ہوتی ہے۔ ہر پارٹیشن کی چوڑائی اس کا سائز بتاتی ہے، اور اس کا گہرا حصہ بتاتا ہے کہ وہ کتنا بھرا ہے، اس لیے بھرا ہوا پارٹیشن آسانی سے نظر آ جاتا ہے۔
 
 # Second paragraph of the longer words that open from the i beside the title.
-disks-help-2 = تصویر کے نیچے ہر ڈرائیو کا ایک کارڈ ہے۔ کسی پارٹیشن کو کھولیں، ماؤنٹ یا ان ماؤنٹ کریں، یا ڈرائیو کو محفوظ طریقے سے نکالیں یا بند کر دیں۔ پارٹیشن پر قلم اس کی تبدیلیاں کھولتا ہے: اس کا نام، اس کا اپنا فولڈر اور یہ کہ آیا یہ شروع ہوتے ہی تیار ہو، اس کا سائز، اسے جانچنا اور درست کرنا، فارمیٹ کرنا یا مٹانا۔ خالی جگہ میں جمع کا نشان نیا پارٹیشن بناتا ہے۔
+disks-help-2 = تصویر کے نیچے ہر ڈرائیو کا ایک کارڈ ہے۔ آپ کسی پارٹیشن کو کھول سکتے ہیں، ماؤنٹ یا ان ماؤنٹ کر سکتے ہیں، ڈرائیو کو محفوظ طریقے سے نکال سکتے ہیں، یا اسے بند کر سکتے ہیں۔ پارٹیشن پر قلم سے آپ اس کا نام بدل سکتے ہیں، اس کا فولڈر چن سکتے ہیں، شروع ہوتے وقت اسے ماؤنٹ کروا سکتے ہیں، اس کا سائز بدل سکتے ہیں، اسے جانچ سکتے ہیں، درست کر سکتے ہیں، فارمیٹ کر سکتے ہیں یا مٹا سکتے ہیں۔ خالی جگہ میں جمع کا نشان نیا پارٹیشن بناتا ہے۔
 
 # Third paragraph of the longer words that open from the i beside the title.
 # SAFETY: needs a human review before it ships
-disks-help-3 = جس ڈرائیو سے نظام چلتا ہے وہ دکھائی جاتی ہے مگر کوئی ایسی تبدیلی اس کے لیے پیش نہیں کی جاتی جو چیزوں کو مٹائے یا ہٹائے۔ کسی بھی ڈرائیو میں ہر تبدیلی کے لیے ہر بار منتظم کا پاس ورڈ مانگا جاتا ہے۔ آنکھ ڈرائیو یا پارٹیشن کو فولڈرز اور حلقے سے چھپاتی ہے: وہ یہاں دھندلی حالت میں رہتی ہے، اور مقفل نہیں ہوتی۔
-
-# Sentence under the title of the main card, saying what the picture of the drives shows.
-disks-map-caption = ہر ڈرائیو کا ہر پارٹیشن، جتنا استعمال ہوا اتنا بھرا ہوا۔
+disks-help-3 = جس ڈرائیو سے نظام چلتا ہے وہ آپ کو نظر آتی ہے، مگر اس میں آپ کوئی ایسی تبدیلی نہیں کر سکتے جو چیزوں کو مٹائے یا ہٹائے۔ کسی بھی ڈرائیو میں ہر تبدیلی کے لیے ہر بار منتظم کا پاس ورڈ مانگا جاتا ہے۔ آنکھ ڈرائیو یا پارٹیشن کو Folders اور حلقے سے چھپاتی ہے۔ وہ یہاں دھندلی رہتی ہے اور مقفل نہیں ہوتی۔
 
 # Title of the main card, which draws every drive as a bar of its parts.
 disks-your-drives = آپ کی ڈرائیوز
@@ -42,13 +39,13 @@ disks-missing-service = ڈرائیو سروس
 disks-missing-bus = سسٹم بس
 
 # Red words on the card shown when what Drives needs is not there. { $what } is the name of the missing program; { $package } is the package to install.
-disks-missing = { $what } دستیاب نہیں ہے۔ اسے اس طرح انسٹال کریں: sudo apt install { $package }
+disks-missing = { $what } دستیاب نہیں ہے۔ اسے انسٹال کرنے کے لیے یہ چلائیں: sudo apt install { $package }
 
 # Sentence at the top of the page while the first look at the drives is being taken.
 disks-headline-loading = ڈرائیوز دیکھی جا رہی ہیں…
 
 # Red sentence at the top of the page when a drive says it is failing. { $name } is the drive's name.
-disks-headline-failing = { $name } خراب ہو رہی ہے۔ جو کچھ رکھنا چاہتے ہیں وہ ابھی اس سے نقل کر لیں۔
+disks-headline-failing = { $name } خراب ہو رہی ہے۔ جو فائلیں رکھنا چاہتے ہیں وہ ابھی کسی دوسری ڈرائیو پر نقل کر لیں۔
 
 # Sentence at the top of the page when a drive has worn-out or damaged spots. { $name } is the drive's name; { $troubles } lists what is wrong.
 disks-headline-look = { $name } کو دیکھنے کی ضرورت ہے: { $troubles }۔
@@ -56,33 +53,33 @@ disks-headline-look = { $name } کو دیکھنے کی ضرورت ہے: { $troub
 # Sentence at the top of the page when nothing is wrong. { $plugged } is how many drives are plugged in from outside.
 disks-headline-calm =
     { $plugged ->
-        [0] ڈرائیوز اور ان پر جگہ۔
-        [one] ڈرائیوز اور ان پر جگہ، اور ایک ڈرائیو لگی ہوئی۔
-       *[other] ڈرائیوز اور ان پر جگہ، اور { $plugged } ڈرائیوز لگی ہوئی۔
+        [0] آپ کی ڈرائیوز اور ان پر جگہ۔
+        [one] آپ کی ڈرائیوز اور ان پر جگہ، اور ایک ڈرائیو لگی ہوئی ہے۔
+       *[other] آپ کی ڈرائیوز اور ان پر جگہ، اور { $plugged } ڈرائیوز لگی ہوئی ہیں۔
     }
 
 # Red sentence at the top of the page when the computer's own disk is almost full. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-full =
     { $plugged ->
-        [0] تقریباً بھری ہوئی: اس کمپیوٹر پر صرف { $free } خالی ہے۔ جلد کچھ فائلیں مٹائیں یا منتقل کریں۔
-        [one] تقریباً بھری ہوئی: اس کمپیوٹر پر صرف { $free } خالی ہے، اور ایک ڈرائیو لگی ہوئی ہے۔ جلد کچھ فائلیں مٹائیں یا منتقل کریں۔
-       *[other] تقریباً بھری ہوئی: اس کمپیوٹر پر صرف { $free } خالی ہے، اور { $plugged } ڈرائیوز لگی ہوئی ہیں۔ جلد کچھ فائلیں مٹائیں یا منتقل کریں۔
+        [0] یہ کمپیوٹر تقریباً بھر چکا ہے، صرف { $free } خالی ہے۔ جلد کچھ فائلیں مٹائیں یا منتقل کریں۔
+        [one] یہ کمپیوٹر تقریباً بھر چکا ہے، صرف { $free } خالی ہے۔ ایک ڈرائیو لگی ہوئی ہے۔ جلد کچھ فائلیں مٹائیں یا منتقل کریں۔
+       *[other] یہ کمپیوٹر تقریباً بھر چکا ہے، صرف { $free } خالی ہے۔ { $plugged } ڈرائیوز لگی ہوئی ہیں۔ جلد کچھ فائلیں مٹائیں یا منتقل کریں۔
     }
 
 # Sentence at the top of the page when the computer's own disk is filling up. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-getting-full =
     { $plugged ->
-        [0] بھرتی جا رہی ہے: اس کمپیوٹر پر { $free } خالی ہے۔
-        [one] بھرتی جا رہی ہے: اس کمپیوٹر پر { $free } خالی ہے، اور ایک ڈرائیو لگی ہوئی ہے۔
-       *[other] بھرتی جا رہی ہے: اس کمپیوٹر پر { $free } خالی ہے، اور { $plugged } ڈرائیوز لگی ہوئی ہیں۔
+        [0] یہ کمپیوٹر بھرتا جا رہا ہے، { $free } خالی ہے۔
+        [one] یہ کمپیوٹر بھرتا جا رہا ہے، { $free } خالی ہے۔ ایک ڈرائیو لگی ہوئی ہے۔
+       *[other] یہ کمپیوٹر بھرتا جا رہا ہے، { $free } خالی ہے۔ { $plugged } ڈرائیوز لگی ہوئی ہیں۔
     }
 
 # Sentence at the top of the page when the computer's own disk has plenty of room. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-plenty =
     { $plugged ->
-        [0] کافی جگہ ہے: اس کمپیوٹر پر { $free } خالی ہے۔
-        [one] کافی جگہ ہے: اس کمپیوٹر پر { $free } خالی ہے، اور ایک ڈرائیو لگی ہوئی ہے۔
-       *[other] کافی جگہ ہے: اس کمپیوٹر پر { $free } خالی ہے، اور { $plugged } ڈرائیوز لگی ہوئی ہیں۔
+        [0] اس کمپیوٹر پر کافی جگہ ہے، { $free } خالی ہے۔
+        [one] اس کمپیوٹر پر کافی جگہ ہے، { $free } خالی ہے۔ ایک ڈرائیو لگی ہوئی ہے۔
+       *[other] اس کمپیوٹر پر کافی جگہ ہے، { $free } خالی ہے۔ { $plugged } ڈرائیوز لگی ہوئی ہیں۔
     }
 
 # Title of the card with the ring for the disk the system is on.
@@ -94,7 +91,7 @@ disks-ring-files = آپ کی فائلیں
 # Sentence on a ring's card. { $free } is the free space; { $place } is system for the disk the system is on, or files for the place that holds your own files.
 disks-ring-still-free =
     { $place ->
-        [system] { $free } ابھی خالی ہے، جہاں نظام ہے۔
+        [system] { $free } اس ڈسک پر ابھی خالی ہے جس پر نظام ہے۔
        *[files] { $free } ابھی خالی ہے، آپ کی اپنی فائلوں کے لیے۔
     }
 
@@ -105,23 +102,23 @@ disks-ring-tip = { $name }: { $full } بھری ہوئی، { $whole } میں سے
 disks-ring-of = { $whole } میں سے
 
 # Health reading in the line under the picture when no drive has taken a reading yet.
-disks-health-none = کوئی ریڈنگ نہیں، ڈرائیوز نہیں بتاتیں کہ ان کا حال کیسا ہے
+disks-health-none = ڈرائیوز نے ابھی تک صحت کی کوئی ریڈنگ نہیں بھیجی
 
 # Health reading in the line under the picture when the one drive that has taken a reading is fine.
-disks-health-one = صحت مند، جیسا ڈرائیو خود بتاتی ہے
+disks-health-one = صحت مند، ڈرائیو کی اپنی جانچ کے مطابق
 
 # Health reading in the line under the picture when every drive is fine. { $n } is how many drives say so.
 disks-health-all =
     { $n ->
-        [one] صحت مند، جیسا تمام { $n } ڈرائیوز بتاتی ہیں
-       *[other] صحت مند، جیسا تمام { $n } ڈرائیوز بتاتی ہیں
+        [one] صحت مند، ڈرائیو کی اپنی جانچ کے مطابق
+       *[other] تمام { $n } ڈرائیوز اپنی جانچ میں پاس ہوئیں
     }
 
 # Health reading in the line under the picture when some drives need a look. { $n } is how many.
 disks-health-look =
     { $n ->
-        [one] { $n } کو دیکھنے کی ضرورت ہے، اس کا کارڈ دیکھیں
-       *[other] { $n } کو دیکھنے کی ضرورت ہے، ان کے کارڈ دیکھیں
+        [one] { $n } کو دیکھنے کی ضرورت ہے: اس کا کارڈ دیکھیں
+       *[other] { $n } کو دیکھنے کی ضرورت ہے: ان کے کارڈ دیکھیں
     }
 
 # Line under the picture of the drives. { $n } is how many drives there are; { $total } is their size together; { $health } says how healthy they are.
@@ -186,7 +183,7 @@ disks-kind-crypto-open = خفیہ کاری شدہ، کھلا ہوا
 disks-kind-crypto-locked = خفیہ کاری شدہ، مقفل
 
 # Kind of a part that holds other parts.
-disks-kind-container = دوسرے پارٹیشنز رکھتا ہے
+disks-kind-container = پارٹیشنز رکھتا ہے
 
 # Kind of a part that has no filesystem on it.
 disks-kind-none = کوئی فائل سسٹم نہیں
@@ -224,16 +221,16 @@ disks-trouble-temperature = بہت گرم ہے
 disks-trouble-wearing-out = گھس رہی ہے
 
 # Trouble a drive reports when it has made itself read-only.
-disks-trouble-readonly = خود کو صرف پڑھنے والی بنا لیا ہے
+disks-trouble-readonly = صرف پڑھنے والی ہو گئی ہے
 
 # Trouble a drive reports about the memory it uses to back up its work.
 disks-trouble-volatile = اس کی میموری کا بیک اپ خراب ہو گیا ہے
 
 # Trouble a drive reports when part of it has made itself read-only.
-disks-trouble-pmr = اس کے ایک حصے نے خود کو صرف پڑھنے والا بنا لیا ہے
+disks-trouble-pmr = اس کا ایک حصہ صرف پڑھنے والا ہو گیا ہے
 
 # Trouble a drive reports when it has been used past what its maker expects.
-disks-trouble-worn = ساز کی توقع سے زیادہ گھس چکی ہے
+disks-trouble-worn = اپنی متوقع عمر سے زیادہ گھس چکی ہے
 
 # Trouble a drive reports about damaged spots. { $n } is how many.
 disks-health-damaged =
@@ -253,7 +250,7 @@ disks-health-hours =
     }
 
 # How a drive says it is when it is failing, on its card.
-disks-health-failing = خراب ہو رہی ہے: جو کچھ رکھنا چاہتے ہیں وہ ابھی اس سے نقل کر لیں
+disks-health-failing = خراب ہو رہی ہے۔ جو کچھ رکھنا چاہتے ہیں وہ ابھی اس سے نقل کر لیں
 
 # How a drive says it is when something is wrong, on its card. { $troubles } lists what is wrong.
 disks-health-attention = توجہ درکار ہے: { $troubles }
@@ -265,10 +262,10 @@ disks-health-ok = صحت مند
 disks-health-line = { $state }، { $readings }
 
 # Line under a drive's name when its case answers but the drive inside it does not.
-disks-no-answer = کوئی ڈرائیو جواب نہیں دے رہی
+disks-no-answer = جواب نہیں دے رہی
 
 # Red words on a drive's card when its case answers but the drive inside it does not.
-disks-no-answer-help = خول جواب دیتا ہے، مگر اس کے اندر کی ڈرائیو نہیں۔ اسے نکالیں، دس سیکنڈ رکیں اور اسے اس کی اپنی تار کے ساتھ نیلی یا USB-C پورٹ میں لگائیں؛ اگر یہی حال رہے تو ممکن ہے اندر کی ڈرائیو ڈھیلی ہو گئی ہو یا خراب ہو گئی ہو۔
+disks-no-answer-help = ڈرائیو کا خول جڑا ہوا ہے، مگر اس کے اندر کی ڈرائیو جواب نہیں دے رہی۔ اسے نکالیں، دس سیکنڈ رکیں، پھر اس کی اپنی تار کے ساتھ نیلی یا USB-C پورٹ میں لگائیں۔ اگر یہی حال رہے تو ہو سکتا ہے اندر کی ڈرائیو ڈھیلی ہو گئی ہو یا خراب ہو گئی ہو۔
 
 # Tip of the round button on a drive's card that takes the drive out safely.
 # SAFETY: needs a human review before it ships
@@ -286,25 +283,25 @@ disks-erase-whole = پوری ڈرائیو مٹائیں
 disks-eye-show =
     { $what ->
         [drive] یہ ڈرائیو دکھائیں
-       *[part] یہ پارٹیشن دکھائیں
+       *[partition] یہ پارٹیشن دکھائیں
     }
 
 # Tip of the eye that hides a drive or part. { $what } is drive or part; { $lock } is the note that hiding does not protect it.
 disks-eye-hide =
     { $what ->
         [drive] یہ ڈرائیو چھپائیں۔ { $lock }
-       *[part] یہ پارٹیشن چھپائیں۔ { $lock }
+       *[partition] یہ پارٹیشن چھپائیں۔ { $lock }
     }
 
 # Note on the card of a hidden drive. { $lock } is the note that hiding does not protect it.
-disks-hidden-note = فولڈرز اور حلقے سے چھپی ہوئی۔ { $lock }
+disks-hidden-note = Folders اور حلقے سے چھپی ہوئی۔ { $lock }
 
 # Note on the card of the drive the system runs from.
 # SAFETY: needs a human review before it ships
-disks-system-note = نظام اسی سے چلتا ہے: یہاں کچھ بھی مٹایا نہیں جا سکتا۔
+disks-system-note = نظام اسی سے چلتا ہے، اس لیے یہاں کچھ بھی مٹایا نہیں جا سکتا۔
 
 # Note on the card of a drive that has no partition table.
-disks-no-table = کوئی پارٹیشن ٹیبل نہیں: پوری ڈرائیو خالی ہے۔
+disks-no-table = اس ڈرائیو میں کوئی پارٹیشن ٹیبل نہیں، اس لیے پوری ڈرائیو خالی ہے۔
 
 # Part of the line under a part's name, when it holds files but is not mounted.
 disks-part-not-mounted = ماؤنٹ نہیں
@@ -328,7 +325,7 @@ disks-mount = ماؤنٹ کریں
 disks-unmount = ان ماؤنٹ کریں
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = بدلیں
+disks-change-it = تبدیلی کریں
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = نام
@@ -358,7 +355,7 @@ disks-folder-note = اس کی فائلیں کہاں ظاہر ہوتی ہیں۔ �
 disks-mount-startup = شروع ہوتے ہی ماؤنٹ کریں
 
 # Note under the row with the switch for mounting a part at start-up.
-disks-startup-note = کمپیوٹر شروع ہوتے ہی تیار۔ اگر یہ موجود نہ ہو تو بھی کمپیوٹر شروع ہو جاتا ہے۔
+disks-startup-note = کمپیوٹر شروع ہوتے ہی اسے ماؤنٹ کرتا ہے۔ اگر یہ موجود نہ ہو تو بھی کمپیوٹر شروع ہو جاتا ہے۔
 
 # Spoken name of the sliders that choose a size in gigabytes, for resizing a part and for making a new one.
 disks-size-gb = سائز GB میں
@@ -378,14 +375,14 @@ disks-size = سائز
 
 # Said above the Format and Erase buttons at all times. { $words } names what is erased.
 # SAFETY: needs a human review before it ships
-disks-format-erases = اس سے { $words } پر موجود سب کچھ مٹ جائے گا۔ اسے واپس نہیں کیا جا سکتا۔
+disks-format-erases = اس سے { $words } پر موجود سب کچھ مٹ جائے گا۔ آپ اسے واپس نہیں کر سکتے۔
 
 # Warning shown after the first press of the resize button. { $name } is the part; { $drive } is the drive; { $from } is its size now; { $to } is the size asked for.
 # SAFETY: needs a human review before it ships
-disks-resize-warning = دوبارہ کلک کریں: { $drive } پر { $name } کا سائز { $from } سے { $to } ہو جائے گا
+disks-resize-warning = { $drive } پر { $name } کا سائز { $from } سے { $to } کرنے کے لیے دوبارہ کلک کریں
 
 # Label of the row where room is made for a new part under a part that is in use.
-disks-room-label = نئے پارٹیشن کے لیے جگہ بنائیں
+disks-room-label = نئے پارٹیشن کے لیے جگہ
 
 # Spoken name of the slider that chooses how much room to make.
 disks-room-gb = جگہ GB میں
@@ -396,10 +393,10 @@ disks-room-tip = جگہ بنائیں
 
 # Warning shown after the first press of the make room button. { $name } is the part; { $drive } is the drive; { $size } is the room asked for.
 # SAFETY: needs a human review before it ships
-disks-room-warning = دوبارہ کلک کریں: { $drive } پر { $name } سے { $size } کم ہو جائے گا، اسنیپ شاٹ کے بعد
+disks-room-warning = { $drive } پر { $name } سے { $size } لینے کے لیے دوبارہ کلک کریں۔ Trindle پہلے اسنیپ شاٹ لیتا ہے۔
 
 # Note under the row that makes room.
-disks-room-note = استعمال کے دوران، اسنیپ شاٹ کے بعد چھوٹا کیا جاتا ہے، اور خالی جگہ چھوڑی جاتی ہے۔
+disks-room-note = Trindle اسنیپ شاٹ لیتا ہے، پھر استعمال کے دوران پارٹیشن کو چھوٹا کرتا ہے۔ جو جگہ خالی ہوتی ہے وہ خالی چھوڑ دی جاتی ہے۔
 
 # Tip of the button that checks a part for faults.
 disks-check-tip = خرابیوں کے لیے جانچیں
@@ -410,9 +407,6 @@ disks-repair-tip = مرمت کریں
 
 # Label of the row where a part is checked and repaired.
 disks-faults = خرابیاں
-
-# Note under the Faults row.
-disks-faults-note = یہ دیکھتا ہے کہ اس کی فائلیں جس طرح رکھی گئی ہیں اس میں کوئی خرابی تو نہیں، اور اسے درست کرتا ہے۔ اس دوران یہ ان ماؤنٹ رہتا ہے۔
 
 # Warning shown after the first press of the repair button. { $name } is the part; { $drive } is the drive.
 # SAFETY: needs a human review before it ships
@@ -429,17 +423,9 @@ disks-format = فارمیٹ
 # SAFETY: needs a human review before it ships
 disks-format-tip = فارمیٹ کریں
 
-# Note under the row that erases the whole drive.
-# SAFETY: needs a human review before it ships
-disks-format-whole = اسے ایک پارٹیشن کے طور پر نئے سرے سے شروع کرتا ہے، جو پوری ڈرائیو بھر دیتا ہے۔
-
-# Note under the row that formats one part.
-# SAFETY: needs a human review before it ships
-disks-format-part = صرف اس پارٹیشن کا سب کچھ مٹاتا ہے۔
-
 # Warning shown after the first press of the format or erase button. { $words } names what is erased.
 # SAFETY: needs a human review before it ships
-disks-format-warning = دوبارہ کلک کریں: { $words } پر سب کچھ مٹ جائے گا
+disks-format-warning = { $words } پر سب کچھ مٹانے کے لیے دوبارہ کلک کریں
 
 # Names a part in the warning before it is formatted. { $name } is the part; { $size } is its size; { $drive } is the drive.
 disks-part-where = { $drive } پر { $name }، { $size }
@@ -450,11 +436,7 @@ disks-delete-name = { $drive } پر { $name }، { $size } مٹائیں
 
 # Label of the row where a part is deleted.
 # SAFETY: needs a human review before it ships
-disks-delete-label = یہ پارٹیشن مٹائیں
-
-# Note under the row that deletes a part.
-# SAFETY: needs a human review before it ships
-disks-delete-note = اس کی جگہ خالی ہو جاتی ہے، نئے پارٹیشن کے لیے تیار یا اس سے پہلے والے کے بڑھنے کے لیے۔
+disks-delete-label = پارٹیشن حذف کریں
 
 # Tip of the round button on free space that opens the box for making a new part.
 disks-new-part-tip = یہاں نیا پارٹیشن بنائیں
@@ -462,15 +444,12 @@ disks-new-part-tip = یہاں نیا پارٹیشن بنائیں
 # Label of the row where a new part is made.
 disks-new-part = نیا پارٹیشن
 
-# Note under the row where a new part is made.
-disks-new-part-note = اس خالی جگہ میں بنایا جاتا ہے، اور استعمال کے لیے تیار فارمیٹ کیا جاتا ہے۔
-
 # Tip of the button that makes a new part.
 disks-make-tip = بنائیں
 
 # Warning shown after the first press of the button that makes a new part. { $size } is the size asked for; { $drive } is the drive.
 # SAFETY: needs a human review before it ships
-disks-make-warning = { $drive } پر { $size } کا پارٹیشن بنانے کے لیے دوبارہ کلک کریں
+disks-make-warning = { $drive } پر { $size } کا نیا پارٹیشن بنانے کے لیے دوبارہ کلک کریں
 
 # Title of the box for erasing a whole drive. { $name } is the drive.
 # SAFETY: needs a human review before it ships
@@ -480,7 +459,7 @@ disks-sheet-erase = { $name } مٹائیں
 disks-sheet-part = { $drive } پر { $size }
 
 # Title of the box for making a new part in free space.
-disks-sheet-new = ایک نیا پارٹیشن
+disks-sheet-new = نیا پارٹیشن
 
 # Line under the title of the box for making a new part. { $size } is the free space; { $drive } is the drive.
 disks-sheet-gap = { $drive } پر { $size } خالی
@@ -510,7 +489,7 @@ disks-safe-remove = نکالنا محفوظ ہے
 disks-powering-off = بند ہو رہی ہے
 
 # Words on a drive's row when it has been powered off.
-disks-off-safe = بند: نکالنا محفوظ ہے
+disks-off-safe = نکالنا محفوظ ہے
 
 # Words on a row while a part is being renamed.
 disks-renaming = نام بدلا جا رہا ہے
@@ -519,7 +498,7 @@ disks-renaming = نام بدلا جا رہا ہے
 disks-renamed = نام بدل دیا گیا
 
 # Words on a row when the person emptied the folder box, so the computer chooses the folder.
-disks-folder-auto = کمپیوٹر دوبارہ اس کا فولڈر خود چنتا ہے
+disks-folder-auto = اب فولڈر خود بخود چن لیا جاتا ہے
 
 # Words on a row when a part has been given a folder. { $dir } is the folder.
 disks-folder-appears = یہ { $dir } میں ظاہر ہوتا ہے
@@ -528,7 +507,7 @@ disks-folder-appears = یہ { $dir } میں ظاہر ہوتا ہے
 disks-startup-on = شروع ہوتے ہی { $dir } میں ماؤنٹ ہوتا ہے
 
 # Words on a row when a part is set not to mount at start-up.
-disks-startup-off = شروع ہوتے وقت اسے چھوڑ دیا جاتا ہے
+disks-startup-off = شروع ہوتے وقت ماؤنٹ نہیں ہوتا
 
 # Words on a row while a folder or start-up choice is being saved.
 disks-saving = محفوظ ہو رہا ہے
@@ -540,22 +519,31 @@ disks-resizing = سائز بدلا جا رہا ہے
 disks-resized = سائز { $size } ہو گیا
 
 # Red words on the row that makes room, when the files to make smaller cannot be found.
-disks-room-files-missing = فائلیں نہیں ملیں، اس لیے جگہ نہیں بنائی جا سکتی۔
+disks-room-files-missing = Trindle کو فائلیں نہیں ملیں، اس لیے وہ جگہ نہیں بنا سکتا۔
 
 # Words on a row while the snapshot is taken before room is made.
 disks-snapshot-taking = اسنیپ شاٹ لیا جا رہا ہے
 
 # Red words when the snapshot taken before making room could not be found afterwards.
-disks-snapshot-missing = اسنیپ شاٹ بعد میں نہیں ملا۔
+disks-snapshot-missing = Trindle کو اسنیپ شاٹ بعد میں نہیں ملا۔
 
-# Red words when the snapshot before making room failed. { $why } is why, as a sentence.
+# Red words when the snapshot, or switching off the swap file, before making room failed. { $why } is why, as a sentence.
 disks-snapshot-failed = { $why } کسی کا سائز نہیں بدلا گیا۔
 
 # Red words when things changed while the snapshot was being taken.
-disks-snapshot-changed = اسنیپ شاٹ لیتے وقت چیزیں بدل گئیں، اس لیے کسی کا سائز نہیں بدلا گیا۔
+disks-snapshot-changed = جب Trindle اسنیپ شاٹ لے رہا تھا تو کچھ بدل گیا، اس لیے کسی کا سائز نہیں بدلا گیا۔
 
 # Words on a row while room is being made.
 disks-making-room = جگہ بنائی جا رہی ہے
+
+# Words on a row while the swap file is switched off before room is made.
+disks-swap-off-doing = سواپ فائل بند ہو رہی ہے
+
+# Words on a row while the swap file is switched back on after room is made.
+disks-swap-on-doing = سواپ فائل دوبارہ چالو ہو رہی ہے
+
+# Red words when the swap file couldn't be switched back on after making room. { $done } is how making room went, { $why } why the swap file is still off, both as sentences.
+disks-swap-still-off = { $done } سواپ فائل ری اسٹارٹ تک بند رہے گی۔ { $why }
 
 # Words on a row when room has been made. { $size } is how much.
 disks-room-made = { $size } جگہ بنا دی گئی
@@ -567,7 +555,7 @@ disks-repairing = مرمت ہو رہی ہے
 disks-repaired = مرمت ہو گئی
 
 # Red words when some faults could not be put right.
-disks-repair-failed = کچھ خرابیاں درست نہیں ہو سکیں۔ جو کچھ رکھنا چاہتے ہیں وہ نقل کر لیں۔
+disks-repair-failed = Trindle کچھ خرابیاں ٹھیک نہیں کر سکا۔ جو فائلیں رکھنا چاہتے ہیں وہ کسی دوسری ڈرائیو پر نقل کر لیں۔
 
 # Words on a row while a part is being checked.
 disks-checking = جانچ ہو رہی ہے
@@ -576,7 +564,7 @@ disks-checking = جانچ ہو رہی ہے
 disks-no-faults = کوئی خرابی نہیں ملی
 
 # Red words when the check found faults.
-disks-faults-found = خرابیاں ملیں: انہیں درست کرنے کے لیے رینچ دبائیں۔
+disks-faults-found = خرابیاں ملیں۔ انہیں درست کرنے کے لیے رینچ دبائیں۔
 
 # Words on a row while a part or drive is being formatted.
 disks-formatting = فارمیٹ ہو رہا ہے
@@ -591,10 +579,10 @@ disks-erasing-whole = پوری ڈرائیو مٹانا
 disks-new-part-missing = نیا پارٹیشن نہیں ملا۔
 
 # Red words when the drive service could not be reached to give a formatted part its folder again.
-disks-service-unreachable = ڈرائیو سروس تک رسائی نہیں ہو سکی۔
+disks-service-unreachable = ڈرائیو سروس سے رابطہ نہیں ہو سکا۔
 
 # Red words when the identifier of a freshly formatted part could not be read.
-disks-uuid-unread = نئے پارٹیشن کی شناخت پڑھی نہیں جا سکی۔
+disks-uuid-unread = Trindle نئے پارٹیشن کی شناخت پڑھ نہیں سکا۔
 
 # Words on a row while a part is being deleted.
 disks-deleting = مٹایا جا رہا ہے
@@ -609,7 +597,7 @@ disks-making-it = بنایا جا رہا ہے
 disks-made = بنا دیا گیا
 
 # Red words under an eye when hiding or showing could not be kept. { $why } is the system's reason.
-disks-hide-failed = یہ محفوظ نہیں رکھا جا سکا: { $why }
+disks-hide-failed = یہ محفوظ نہیں ہو سکا: { $why }
 
 # Words on a row while a change is being made. { $doing } says what is being done.
 disks-working = { $doing }…
@@ -627,8 +615,8 @@ disks-name-empty = پہلے اسے کوئی نام دیں۔
 # Red words under the folder name box when it is too long. { $max } is the most letters allowed.
 disks-name-too-long =
     { $max ->
-        [one] یہ نام بہت لمبا ہے: زیادہ سے زیادہ { $max } حرف۔
-       *[other] یہ نام بہت لمبا ہے: زیادہ سے زیادہ { $max } حروف۔
+        [one] یہ نام بہت لمبا ہے۔ اسے { $max } حرف تک رکھیں۔
+       *[other] یہ نام بہت لمبا ہے۔ اسے { $max } حروف تک رکھیں۔
     }
 
 # Red words under the folder name box when it has letters that are not allowed.
@@ -643,8 +631,8 @@ disks-name-taken = { $dir } پہلے ہی استعمال میں ہے۔
 # Red words under a part's name box when the name is too long for its kind of file system. { $max } is the most letters allowed.
 disks-label-too-long =
     { $max ->
-        [one] یہ نام اس قسم کے لیے بہت لمبا ہے: زیادہ سے زیادہ { $max } حرف۔
-       *[other] یہ نام اس قسم کے لیے بہت لمبا ہے: زیادہ سے زیادہ { $max } حروف۔
+        [one] یہ نام اس پارٹیشن کے لیے بہت لمبا ہے۔ اسے { $max } حرف تک رکھیں۔
+       *[other] یہ نام اس پارٹیشن کے لیے بہت لمبا ہے۔ اسے { $max } حروف تک رکھیں۔
     }
 
 # Red words under a part's name box when a FAT name has marks that are not allowed.
@@ -653,8 +641,8 @@ disks-label-fat-marks = FAT کے ناموں میں * ? . , ; : / \ | + = < > [ ]
 # Red words under the Size row when the kind of part must be mounted before it can be resized. { $way } is larger or smaller.
 disks-resize-mount-first =
     { $way ->
-        [larger] پہلے اسے ماؤنٹ کریں: اس قسم کو ماؤنٹ ہونے کی حالت میں ہی بڑا کیا جا سکتا ہے۔
-       *[smaller] پہلے اسے ماؤنٹ کریں: اس قسم کو ماؤنٹ ہونے کی حالت میں ہی چھوٹا کیا جا سکتا ہے۔
+        [larger] پہلے اسے ماؤنٹ کریں۔ اس قسم کے پارٹیشن کو ماؤنٹ ہونے کی حالت میں ہی بڑا کیا جا سکتا ہے۔
+       *[smaller] پہلے اسے ماؤنٹ کریں۔ اس قسم کے پارٹیشن کو ماؤنٹ ہونے کی حالت میں ہی چھوٹا کیا جا سکتا ہے۔
     }
 
 # Red words under the Size row when the kind of part cannot be resized. { $way } is larger or smaller.
@@ -666,11 +654,11 @@ disks-resize-cannot =
 
 # Red words when the password box was closed with no password. Said whole, as a sentence.
 # SAFETY: needs a human review before it ships
-disks-no-password = کوئی پاس ورڈ نہیں دیا گیا، اس لیے کچھ نہیں بدلا۔
+disks-no-password = آپ نے پاس ورڈ نہیں دیا، اس لیے کچھ نہیں بدلا۔
 
 # Red words when the password box was closed with no password, after some steps of a change were already done.
 # SAFETY: needs a human review before it ships
-disks-no-password-part-way = کوئی پاس ورڈ نہیں دیا گیا، اس لیے کام بیچ میں رک گیا۔
+disks-no-password-part-way = آپ نے پاس ورڈ نہیں دیا، اس لیے کام بیچ میں رک گیا۔
 
 # Red words when another change is pressed while one is still being made.
 disks-change-going = ایک تبدیلی ہو رہی ہے۔
@@ -679,24 +667,24 @@ disks-one-at-a-time = ایک اور تبدیلی ابھی ہو رہی ہے۔ خ�
 
 # Red words when it could not be made sure that the password would be asked for.
 # SAFETY: needs a human review before it ships
-disks-not-sure = یہ یقینی نہیں بنایا جا سکا کہ پاس ورڈ مانگا جائے گا، اس لیے کچھ نہیں بدلا۔
+disks-not-sure = Trindle یقینی نہیں بنا سکا کہ وہ آپ سے پاس ورڈ مانگے گا، اس لیے کچھ نہیں بدلا۔
 
 # Red words after how a change ended, when the password just given could not be taken back.
 # SAFETY: needs a human review before it ships
-disks-standing = ابھی دیا گیا پاس ورڈ واپس نہیں لیا جا سکا، اس لیے چند منٹ تک ڈرائیو میں اگلی تبدیلی پاس ورڈ نہ مانگے۔ اسے دوبارہ واپس لینے کی کوشش ہو رہی ہے۔
+disks-standing = Trindle آپ کا ابھی دیا ہوا پاس ورڈ منسوخ نہیں کر سکا۔ چند منٹ تک ڈرائیو میں اگلی تبدیلی شاید پاس ورڈ نہ مانگے۔ Trindle دوبارہ کوشش کر رہا ہے۔
 
 # Words after how a change ended, when the password just given has been taken back after all.
 # SAFETY: needs a human review before it ships
-disks-taken-back = دیا گیا پاس ورڈ اب واپس لے لیا گیا ہے: اگلی تبدیلی پاس ورڈ مانگے گی۔
+disks-taken-back = آپ کا دیا ہوا پاس ورڈ اب منسوخ ہو گیا ہے، اس لیے اگلی تبدیلی پاس ورڈ مانگے گی۔
 
 # Red words when a change could not be started because there is no drive service to ask.
-disks-no-service = ڈرائیو سروس تک رسائی نہیں ہو سکی، اس لیے کچھ نہیں بدلا۔
+disks-no-service = Trindle ڈرائیو سروس تک نہیں پہنچ سکا، اس لیے کچھ نہیں بدلا۔
 
 # Red words said the next time Drives opens, about a change it was closed or ended in the middle of.
 disks-closed = یہ تبدیلی ہوتے وقت ڈرائیوز بند ہو گئی تھی۔
 
 # Words on the row of a change still being made when the window is asked to close.
-disks-stays-open = ڈرائیوز اس کے ختم ہونے تک کھلی رہتی ہے، تاکہ بتا سکے کہ یہ کیسے ختم ہوئی۔
+disks-stays-open = ڈرائیوز ایپ اس کے ختم ہونے تک کھلی رہے گی، تاکہ آپ دیکھ سکیں کہ کام کیسا رہا۔
 
 # Red words for a refusal. { $reason } says why, without a full stop.
 disks-nothing-changed = { $reason }، اس لیے کچھ نہیں بدلا۔
@@ -729,26 +717,26 @@ disks-list-not-known = معلوم نہیں: { $steps }۔
 disks-left-unmounted = { $dev } اس کام کے لیے ان ماؤنٹ کیا گیا تھا اور اب ماؤنٹ نہیں ہے۔
 
 # Red words about a part that was unmounted for a change that did nothing to the drive. { $dev } is the part.
-disks-still-unmounted = { $dev } اس کام کے لیے ان ماؤنٹ کیا گیا تھا اور اب بھی ان ماؤنٹ ہے: اسے اس کی قطار سے ماؤنٹ کریں۔
+disks-still-unmounted = { $dev } اس کام کے لیے ان ماؤنٹ کیا گیا تھا اور اب بھی ان ماؤنٹ ہے۔ اسے اس کی قطار سے ماؤنٹ کریں۔
 
 # Red words about a part that the step that stopped may have unmounted. { $dev } is the part.
-disks-may-be-unmounted = { $dev } شاید ان ماؤنٹ ہو گیا ہو: اس کی قطار دیکھیں۔
+disks-may-be-unmounted = { $dev } شاید ان ماؤنٹ ہو گیا ہو۔ اس کی قطار دیکھیں۔
 
 # Red words about a part that could not be mounted again because that needs a password. { $dev } is the part.
 # SAFETY: needs a human review before it ships
-disks-put-back-password = { $dev } اس کام کے لیے ان ماؤنٹ کیا گیا تھا، اور دوبارہ ماؤنٹ کرنے کے لیے اس کا اپنا پاس ورڈ درکار ہے: اسے اس کی قطار سے ماؤنٹ کریں۔
+disks-put-back-password = { $dev } اس کام کے لیے ان ماؤنٹ کیا گیا تھا۔ اسے اس کی قطار سے دوبارہ ماؤنٹ کریں اور پوچھے جانے پر اس کا پاس ورڈ لکھیں۔
 
 # Red words about a part that could not be mounted again. { $dev } is the part; { $why } is why.
-disks-put-back-failed = { $dev } اس کام کے لیے ان ماؤنٹ کیا گیا تھا اور دوبارہ ماؤنٹ نہیں ہو سکا ({ $why }): اسے اس کی قطار سے ماؤنٹ کریں۔
+disks-put-back-failed = { $dev } اس کام کے لیے ان ماؤنٹ کیا گیا تھا اور دوبارہ ماؤنٹ نہیں ہو سکا ({ $why })۔ اسے اس کی قطار سے ماؤنٹ کریں۔
 
 # Red words under a freshly formatted part whose folder could not be kept. { $dir } is the folder; { $why } is why, as a sentence.
-disks-folder-not-kept = فارمیٹ ہو گیا، لیکن اسے دوبارہ اس کا فولڈر { $dir } نہیں دیا گیا۔ { $why } اس کی قطار سے فولڈر دوبارہ چنیں۔
+disks-folder-not-kept = فارمیٹ ہو گیا، لیکن Trindle اسے دوبارہ فولڈر { $dir } نہیں دے سکا۔ { $why } اس کی قطار سے فولڈر دوبارہ چنیں۔
 
 # Red words when a drive is in use and cannot be unmounted.
 disks-busy = کوئی چیز اب بھی اسے استعمال کر رہی ہے۔ اس کی فائلیں دکھانے والی ونڈوز یا پروگرام بند کریں، پھر دوبارہ کوشش کریں۔
 
 # Red words when there is not enough room for what is on a part at the size asked for.
-disks-no-room = اس سائز پر اس میں موجود چیزوں کے لیے کافی جگہ نہیں ہے۔
+disks-no-room = یہ سائز اس میں پہلے سے موجود فائلوں کے لیے بہت چھوٹا ہے۔
 
 # Step of a change. { $dev } is the part.
 disks-step-unmount = { $dev } کو ان ماؤنٹ کرنا
@@ -757,7 +745,7 @@ disks-step-unmount = { $dev } کو ان ماؤنٹ کرنا
 disks-step-mount = { $dev } کو دوبارہ ماؤنٹ کرنا
 
 # Step of a change.
-disks-step-eject = نکالی جانے والی ڈرائیو کو بند کرنا
+disks-step-eject = ڈرائیو کو نکالنے کے لیے تیار کرنا
 
 # Step of a change.
 disks-step-power-off = ڈرائیو کو بند کرنا
@@ -766,13 +754,13 @@ disks-step-power-off = ڈرائیو کو بند کرنا
 disks-step-format = { $dev } کو فارمیٹ کرنا
 
 # Step of a change.
-disks-step-create = نیا پارٹیشن بنانا
+disks-step-create = پارٹیشن بنانا
 
 # Step of a change. { $dev } is the part.
 disks-step-delete = { $dev } کو مٹانا
 
 # Step of a change. { $dev } is the part.
-disks-step-resize-part = پارٹیشن { $dev } کا سائز بدلنا
+disks-step-resize-part = { $dev } کا سائز بدلنا
 
 # Step of a change. { $dev } is the part.
 disks-step-resize = { $dev } پر موجود چیزوں کا سائز بدلنا
@@ -787,85 +775,82 @@ disks-step-check = { $dev } کی جانچ کرنا
 disks-step-rename = { $dev } کا نام بدلنا
 
 # Step of a change. { $dev } is the part.
-disks-step-fstab = { $dev } کا فولڈر اور شروع ہوتے وقت کا انتخاب محفوظ کرنا
+disks-step-fstab = { $dev } کے فولڈر اور شروع ہوتے وقت کی سیٹنگز محفوظ کرنا
 
 # Step of a change that has no words of its own. { $method } is what the drive service was asked; { $dev } is the part.
 disks-step-other = { $dev } پر قدم { $method }
 
 # Red words under the Make room row for a part of a kind that cannot be made smaller in use, and that can when it is not in use. { $kind } is the kind of file system.
-disks-room-ext-offline = اس { $kind } پارٹیشن کو صرف تب چھوٹا کیا جا سکتا ہے جب یہ استعمال میں نہ ہو، اس لیے یہاں اس سے جگہ نہیں بنائی جا سکتی۔
+disks-room-ext-offline = اس { $kind } پارٹیشن کو صرف تب چھوٹا کیا جا سکتا ہے جب یہ استعمال میں نہ ہو، اس لیے Trindle یہاں اس سے جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row for an xfs part.
-disks-room-xfs-fixed = اس xfs پارٹیشن کو چھوٹا نہیں کیا جا سکتا۔
+disks-room-xfs-fixed = xfs پارٹیشن چھوٹے نہیں ہو سکتے۔
 
 # Red words under the Make room row for any other kind of part in use. { $kind } is the kind of file system.
 disks-room-other-kind = اس { $kind } پارٹیشن کو استعمال کے دوران چھوٹا نہیں کیا جا سکتا۔
 
 # Red words under the Make room row when a snapshot cannot be taken of the part.
-disks-room-no-snapshot = اسنیپ شاٹ صرف نظام کی اپنی ڈسک کا لیا جا سکتا ہے، اس لیے یہاں جگہ نہیں بنائی جا سکتی۔
+disks-room-no-snapshot = Trindle صرف نظام کی اپنی ڈسک کا اسنیپ شاٹ لے سکتا ہے، اس لیے یہاں جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row.
-disks-room-not-in-table = یہ ڈرائیو کی ٹیبل کا پارٹیشن نہیں ہے، اس لیے اس سے جگہ نہیں بنائی جا سکتی۔
+disks-room-not-in-table = یہ ڈرائیو کی پارٹیشن ٹیبل میں کوئی پارٹیشن نہیں ہے، اس لیے Trindle اس سے جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row.
-disks-room-no-online-shrink = ڈرائیو سروس یہاں استعمال کے دوران Btrfs کو چھوٹا نہیں کر سکتی، اس لیے جگہ نہیں بنائی جا سکتی۔
+disks-room-no-online-shrink = ڈرائیو سروس یہاں استعمال کے دوران Btrfs کو چھوٹا نہیں کر سکتی، اس لیے Trindle جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row.
-disks-room-holds-parts = اس میں دوسرے پارٹیشنز ہیں، اس لیے اس سے جگہ نہیں بنائی جا سکتی۔
+disks-room-holds-parts = اس کے اندر دوسرے پارٹیشنز ہیں، اس لیے Trindle اس سے جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row.
-disks-room-not-gpt = اس کی ڈرائیو میں GPT ٹیبل نہیں ہے، اس لیے اس سے جگہ نہیں بنائی جا سکتی۔
+disks-room-not-gpt = اس کی ڈرائیو میں GPT پارٹیشن ٹیبل نہیں ہے، اس لیے Trindle اس سے جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row.
 disks-room-mount-first = پہلے اسے ماؤنٹ کریں: Btrfs کو ماؤنٹ ہونے کی حالت میں چھوٹا کیا جاتا ہے۔
 
 # Red words under the Make room row.
-disks-room-mounts-not-one = یہ ٹھیک ایک جگہ ماؤنٹ نہیں ہے، اس لیے جگہ نہیں بنائی جا سکتی۔
+disks-room-mounts-not-one = یہ ماؤنٹ نہیں ہے، اس لیے Trindle جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row.
-disks-room-read-only = یہ صرف پڑھنے کے لیے ماؤنٹ ہے، اس لیے جگہ نہیں بنائی جا سکتی۔
+disks-room-read-only = یہ صرف پڑھنے کے لیے ماؤنٹ ہے، اس لیے Trindle جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row.
-disks-room-read-only-unknown = یہ معلوم نہیں ہو سکا کہ یہ صرف پڑھنے کے لیے ہے یا نہیں، اس لیے جگہ نہیں بنائی جا سکتی۔
+disks-room-read-only-unknown = Trindle یہ معلوم نہیں کر سکا کہ یہ صرف پڑھنے کے لیے ہے یا نہیں، اس لیے وہ جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row.
-disks-room-many-drives = فائلیں ایک سے زیادہ ڈرائیوز پر پھیلی ہیں، اس لیے جگہ نہیں بنائی جا سکتی۔
+disks-room-many-drives = فائلیں ایک سے زیادہ ڈرائیوز پر پھیلی ہوئی ہیں، اس لیے Trindle جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row.
-disks-room-drives-unknown = یہ معلوم نہیں ہو سکا کہ فائلیں کتنی ڈرائیوز پر پھیلی ہیں، اس لیے جگہ نہیں بنائی جا سکتی۔
+disks-room-drives-unknown = Trindle یہ معلوم نہیں کر سکا کہ فائلیں کتنی ڈرائیوز پر پھیلی ہیں، اس لیے وہ جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row.
-disks-room-swap-file = اس پر سواپ فائل موجود ہے، اس لیے جگہ نہیں بنائی جا سکتی۔
+disks-room-swap-unknown = Trindle یہ معلوم نہیں کر سکا کہ اس پر سواپ فائل ہے یا نہیں، اس لیے وہ جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row.
-disks-room-swap-unknown = یہ معلوم نہیں ہو سکا کہ اس پر سواپ فائل ہے یا نہیں، اس لیے جگہ نہیں بنائی جا سکتی۔
+disks-room-used-unknown = Trindle یہ پڑھ نہیں سکا کہ اس کا کتنا حصہ استعمال میں ہے، اس لیے وہ جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row.
-disks-room-used-unknown = یہ پڑھا نہیں جا سکا کہ اس کا کتنا حصہ استعمال میں ہے، اس لیے جگہ نہیں بنائی جا سکتی۔
+disks-room-area-unknown = ڈرائیو سروس نہیں بتاتی کہ فائل سسٹم کتنا بڑا ہے، اس لیے Trindle اسے جانچ نہیں سکتا اور جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row.
-disks-room-area-unknown = ڈرائیو سروس نہیں بتاتی کہ فائلوں کا رقبہ کتنا بڑا ہے، اس لیے جانچ نہیں ہو سکی اور جگہ نہیں بنائی جا سکتی۔
+disks-room-open-missing = Trindle کو اس کی ان لاک کی گئی نقل نہیں ملی، اس لیے وہ جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row.
-disks-room-open-missing = اس کی کھلی نقل نہیں ملی، اس لیے جگہ نہیں بنائی جا سکتی۔
+disks-room-encryption-sizes = خفیہ کاری کے لیے دیے گئے سائز آپس میں نہیں ملتے، اس لیے Trindle جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row.
-disks-room-encryption-sizes = خفیہ کاری کے لیے دیے گئے سائز آپس میں نہیں ملتے، اس لیے جگہ نہیں بنائی جا سکتی۔
-
-# Red words under the Make room row.
-disks-room-sizes = اس کے لیے دیے گئے سائز آپس میں نہیں ملتے، اس لیے جگہ نہیں بنائی جا سکتی۔
+disks-room-sizes = اس کے لیے دیے گئے سائز آپس میں نہیں ملتے، اس لیے Trindle جگہ نہیں بنا سکتا۔
 
 # Red words under the Make room row. { $used } is how much the files use.
-disks-room-too-little = اس میں { $used } ہے اور اس سے زیادہ رکھنا ضروری ہے، اس لیے بہت کم جگہ خالی ہو سکتی ہے۔
+disks-room-too-little = اس پر { $used } ہے اور اسے اس سے زیادہ رکھنا ہے، اس لیے خالی کرنے کے لیے بہت کم جگہ ہے۔
 
 # Red words under the Make room row.
 disks-room-sizes-unread = اس کے سائز پڑھے نہیں جا سکے۔
 
 # Red words under the Make room row when the room asked for is out of range. { $least } and { $most } are the smallest and largest room.
-disks-room-range = { $least } سے { $most } تک جگہ بنائی جا سکتی ہے۔
+disks-room-range = آپ { $least } سے { $most } تک جگہ بنا سکتے ہیں۔
 
 # Red words when making room was stopped. { $what } says what was found wrong, without a full stop.
-disks-room-stopped = { $what }، اس لیے کام روک دیا گیا۔
+disks-room-stopped = { $what }، اس لیے Trindle رک گیا۔
 
 # What was found wrong while making room.
 disks-room-check-unmounted = فائلیں اب ماؤنٹ نہیں ہیں
@@ -874,43 +859,45 @@ disks-room-check-unmounted = فائلیں اب ماؤنٹ نہیں ہیں
 disks-room-check-part = پارٹیشن { $is } ہے اور اسے { $should } ہونا چاہیے
 
 # What was found wrong while making room.
-disks-room-check-open = خفیہ کاری کی کھلی نقل کا سائز وہ نہیں جو ہونا چاہیے
+disks-room-check-open = خفیہ کاری کی ان لاک کی گئی نقل کا سائز وہ نہیں جو ہونا چاہیے
 
 # What was found wrong while making room. { $is } is the size the files' area has; { $should } is the size it should have.
-disks-room-check-area = فائلوں کا رقبہ { $is } ہے اور اسے { $should } ہونا چاہیے
+disks-room-check-area = فائل سسٹم { $is } ہے اور اسے { $should } ہونا چاہیے
 
 # What was found wrong while making room.
-disks-room-check-area-small = فائلوں کا رقبہ استعمال شدہ چیزوں سے چھوٹا ہے
+disks-room-check-area-small = فائل سسٹم استعمال شدہ چیزوں سے چھوٹا ہے
 
 # What was found wrong while making room.
-disks-room-check-fit = جو چیز جس میں رکھی ہے وہ اب اس میں پوری نہیں آتی
+disks-room-check-fit = فائل سسٹم اب پورا نہیں آتا
 
 # Red words when making room was stopped because the drive service no longer lists something. { $what } is part, copy or files.
 disks-room-gone =
     { $what ->
-        [part] ڈرائیو سروس اب پارٹیشن کی فہرست نہیں دیتی، اس لیے کام روک دیا گیا۔
-        [copy] ڈرائیو سروس اب کھلی نقل کی فہرست نہیں دیتی، اس لیے کام روک دیا گیا۔
+        [partition] ڈرائیو سروس اب پارٹیشن کی فہرست نہیں دیتی، اس لیے کام روک دیا گیا۔
+        [copy] ڈرائیو سروس اب ان لاک کی گئی نقل کی فہرست نہیں دیتی، اس لیے کام روک دیا گیا۔
        *[files] ڈرائیو سروس اب فائل سسٹم کی فہرست نہیں دیتی، اس لیے کام روک دیا گیا۔
     }
 
 # Step of making room, in the account of one that stopped part-way.
-disks-room-step-files = فائلوں کا رقبہ چھوٹا کرنا
+disks-room-step-files = فائل سسٹم کو چھوٹا کرنا
 
 # Step of making room, in the account of one that stopped part-way.
-disks-room-step-open = خفیہ کاری کی کھلی نقل کو چھوٹا کرنا
+disks-room-step-open = خفیہ کاری کی ان لاک کی گئی نقل کو چھوٹا کرنا
 
 # Step of making room, in the account of one that stopped part-way.
-disks-room-step-part = پارٹیشن کو چھوٹا کرنا
+disks-room-step-part = پارٹیشن چھوٹا کرنا
 
 # Step of making room, in the account of one that stopped part-way.
 disks-room-step-check = سائز جانچنا
 
 # Description the snapshot taken before making room is saved under, which Settings lists. { $dev } is the part; { $at } is a number that tells it from another.
-disks-room-snapshot-note = { $dev } کے نیچے جگہ بنانے سے پہلے ({ $at })
+disks-room-snapshot-note = { $dev } پر جگہ بنانے سے پہلے ({ $at })
+
+# Red words when the swap file is back on after making room, but Trindle met a problem doing it. { $done } is how making room went, { $why } the problem, both as sentences.
+disks-swap-on-but = { $done } { $why }
 
 # Warning shown after the first press of the resize button when the part gets smaller. { $name } is the part; { $drive } is the drive; { $from } is its size now; { $to } is the size asked for.
-disks-resize-warning-shrink = دوبارہ کلک کریں: { $drive } پر { $name } کا سائز { $from } سے { $to } ہو جائے گا۔ پہلے اس کی فائلوں کا بیک اپ لیں، کیونکہ چھوٹا ہوتے وقت بجلی جانے سے وہ ضائع ہو سکتی ہیں۔
+disks-resize-warning-shrink = { $drive } پر { $name } کا سائز { $from } سے { $to } کرنے کے لیے دوبارہ کلک کریں۔ پہلے اس کی فائلوں کا بیک اپ لیں، کیونکہ چھوٹا ہوتے وقت بجلی جانے سے وہ ضائع ہو سکتی ہیں۔
 
 # Red words under the size when a Windows part was hibernated or left in fast start-up and so is not made smaller. { $name } is the part.
 disks-windows-asleep = { $name } پر Windows ہائبرنیٹ تھا یا فاسٹ اسٹارٹ اپ میں چھوڑا گیا تھا، اس لیے اسے چھوٹا کرنے سے اس کی فائلیں ضائع ہو سکتی ہیں۔ Windows شروع کریں، ری اسٹارٹ چنیں، پھر دوبارہ کوشش کریں۔
-

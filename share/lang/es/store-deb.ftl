@@ -17,14 +17,14 @@ store-deb-ready = { $name } está listo para instalarse en su propia carpeta.
 store-deb-elsewhere = Este paquete es para equipos { $arch }, así que no se puede instalar en este.
 
 # Red words at the top of the window when the package is Trindle itself.
-store-deb-trindle = Esto es Trindle mismo. Se actualiza desde la página de actualizaciones de Apps, no desde un archivo.
+store-deb-trindle = Esto es Trindle mismo. Actualízalo desde la página de actualizaciones de Apps, no desde un archivo.
 
 # Red words at the top of the window for a driver or a background service.
-store-deb-service = { $name } es un controlador o un servicio en segundo plano, que no puede funcionar desde su propia carpeta, así que no se puede instalar aquí.
+store-deb-service = { $name } es un controlador o un servicio en segundo plano. No puede funcionar desde su propia carpeta, así que no se puede instalar aquí.
 
 # Words on the caution card above every package.
 # SAFETY: needs a human review before it ships
-store-deb-caution = Un paquete de fuera de Debian y de Trindle se instala en su propia carpeta, donde queda restringido pero no totalmente aislado. Instala solo paquetes de autores en los que confíes.
+store-deb-caution = Un paquete de fuera de Debian y de Trindle se instala en su propia carpeta. Allí queda restringido, pero no totalmente aislado. Instala solo paquetes de autores en los que confíes.
 
 # Words at the top of the window once the package is installed.
 store-deb-installed = { $name } está instalado en su propia carpeta.
@@ -37,7 +37,7 @@ store-deb-where = De dónde viene
 
 # Tip and spoken name of the round button that removes the package and what it saved.
 # SAFETY: needs a human review before it ships
-store-deb-remove = Eliminarlo y lo que guardó
+store-deb-remove = Eliminarlo junto con sus datos
 
 # Word beside the ring while the package goes in.
 store-deb-installing = Instalando
@@ -52,23 +52,20 @@ store-deb-reinstall = Reinstalar
 store-deb-update = Actualizar
 
 # Heading of the card for a package not installed yet.
-store-deb-goes-in = Se instala en su propia carpeta, restringido de forma predeterminada
+store-deb-goes-in = Se instala en su propia carpeta restringida
 
 # Under that heading.
 # SAFETY: needs a human review before it ships
-store-deb-goes-in-note = No hace falta contraseña. No puede acceder a internet, al sonido ni a tus archivos hasta que lo permitas.
+store-deb-goes-in-note = No hace falta contraseña. No puede usar internet ni el sonido, ni ver tus archivos, hasta que lo permitas.
 
 # Heading of the card for a package installed at this version.
 store-deb-same-version = La versión { $version } está instalada en su propia carpeta
-
-# Under that heading.
-store-deb-same-version-note = Reinstálalo ahí si ha dejado de funcionar bien.
 
 # Heading of the card for a package installed at another version.
 store-deb-other-version = La versión { $version } está instalada en su propia carpeta
 
 # Under that heading: the version this brings.
-store-deb-other-version-note = Instalar esto ahí lo actualiza a la versión { $version }, conservando lo que haya guardado.
+store-deb-other-version-note = Esto lo actualiza a la versión { $version } y conserva lo que haya guardado.
 
 # Facts line: how big the package is once installed.
 store-deb-fact-size = Tamaño una vez instalado
@@ -80,17 +77,17 @@ store-deb-fact-arch = Hecho para
 store-deb-no-description = Este paquete no tiene descripción.
 
 # Words at the top of the window while the package goes in.
-store-deb-installing-note = Instalando en su propia carpeta. Descargar lo que necesita puede llevar unos minutos.
+store-deb-installing-note = Instalando en su propia carpeta. Descargar las partes que necesita puede llevar unos minutos.
 
 # Words at the top of the window once the package is installed.
-store-deb-done = Instalado en su propia carpeta. Lo encontrarás en el anillo.
+store-deb-done = Se ha instalado en su propia carpeta. Lo encontrarás en el anillo.
 
 # Red words at the top of the window when parts the package needs could not be found; the parts follow.
-store-deb-missing = Instalado en su propia carpeta, pero no se encontraron estas partes, así que puede que no arranque: { $parts }.
+store-deb-missing = Se ha instalado en su propia carpeta, pero faltan estas partes, así que puede que no arranque: { $parts }.
 
 # Words at the top of the window once the package is removed.
 # SAFETY: needs a human review before it ships
-store-deb-removed = Eliminado de su propia carpeta, con todo lo que guardó.
+store-deb-removed = Se ha eliminado de su propia carpeta, con todo lo que guardó.
 
 # Red words when a file is not a Debian package.
 store-boxed-not-deb = Este archivo no es un paquete Debian que se pueda instalar.
@@ -108,7 +105,7 @@ store-parts-not-deb = { $path } no es un paquete Debian que se pueda instalar.
 store-parts-not-unpacked = No se pudo desempaquetar { $path }.
 
 # Red words when the program is not one kept in a box.
-store-loose-not-boxed = Ese programa no está guardado en una caja.
+store-loose-not-boxed = Ese programa no se ejecuta en una caja.
 
 # Name of Trindle's own terminal in the ring.
 store-boxed-terminal = Terminal
@@ -131,16 +128,16 @@ store-boxed-x-could-not-open = No se pudo abrir { $app }
 
 # Body of the notice the first time a terminal opens outside its box.
 # SAFETY: needs a human review before it ships
-store-boxed-terminal-told = El terminal puede acceder a más partes de tu equipo que otras aplicaciones, porque lo necesita para su trabajo. Escribe solo comandos que entiendas, de personas en las que confíes.
+store-boxed-terminal-told = El terminal puede acceder a más partes de tu equipo que otras aplicaciones. Escribe solo comandos que entiendas, de personas en las que confíes.
 
-# Title of the notice when a plugin allowed the home network has none.
-store-boxed-home-off = La red doméstica está desactivada
+# Title of the notice when a plugin allowed the local network has none.
+store-boxed-home-off = Sin red local
 
 # Body of that notice: the plugin's name and why.
 store-boxed-home-off-why = { $app } no tiene red: { $why }
 
 # Why a plugin allowed the home network has none: Trindle could not find its own program.
-store-boxed-home-why-self = no encontró su propio programa
+store-boxed-home-why-self = falta el programa de Trindle
 
 # The same: the unshare program is missing.
 store-boxed-home-why-unshare = unshare no está instalado
@@ -149,25 +146,31 @@ store-boxed-home-why-unshare = unshare no está instalado
 store-boxed-home-why-pasta = pasta no está instalado
 
 # The same: the network room was not made.
-store-boxed-home-why-not-made = no se creó su sala de red
+store-boxed-home-why-not-made = no se configuró su red
 
 # The same: the room was not a new one, so it was left alone.
-store-boxed-home-why-not-new = su sala de red no era nueva
+store-boxed-home-why-not-new = su red ya existía
 
 # The same: the filter that keeps a box from making a room of its own could not be made.
-store-boxed-home-why-filter = no se pudo crear el filtro de llamadas al sistema
+store-boxed-home-why-filter = Trindle no pudo configurar un filtro de seguridad
 
 # The same: the room's rules would not load.
-store-boxed-home-why-rules = no se cargaron las reglas de la sala
+store-boxed-home-why-rules = no se pudieron cargar sus reglas de red
 
 # The same: a program would not start, with its name and the reason.
-store-boxed-home-why-would-not-start = { $program } no arrancó: { $why }
+store-boxed-home-why-would-not-start = { $program } no pudo arrancar: { $why }
 
 # The same: pasta refused, with what it said.
 store-boxed-home-why-pasta-said = pasta dijo: { $why }
 
 # The same: pasta could not join the room and said nothing.
-store-boxed-home-why-pasta-no-join = pasta no pudo unirse a la sala
+store-boxed-home-why-pasta-no-join = pasta no pudo conectarla
+
+# Said when an app can't be installed because its package has a link as a top folder. { $name } is the folder.
+store-parts-link = La carpeta principal { $name } es un enlace, así que no se puede usar el paquete.
+
+# Said when an app can't be installed in a box because it is a driver or a background service. { $name } is the app.
+store-boxed-driver = { $name } es un controlador o un servicio en segundo plano. Esos no pueden funcionar desde su propia carpeta, así que no se instaló.
 
 
 
@@ -175,5 +178,10 @@ store-boxed-home-why-pasta-no-join = pasta no pudo unirse a la sala
 store-downloaded-opened = Abierto sin internet
 
 # Body of that notice: why, and what the program was given.
-store-downloaded-why = Se descargó, así que el programa tiene solo ese archivo, en solo lectura.
+store-downloaded-why = Como se descargó, el programa solo puede leer ese archivo.
 
+# Title of the notice when the desktop could not be asked for a display for an older program.
+store-boxed-x-unasked = Los programas antiguos no pueden abrirse
+
+# Body of that notice: what to do.
+store-boxed-x-unasked-why = Cierra sesión, vuelve a iniciarla y prueba otra vez

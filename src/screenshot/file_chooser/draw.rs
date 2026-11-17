@@ -58,7 +58,7 @@ impl Chooser {
 
     fn places_panel(&self, side_row: f32) -> Node<Msg> {
         let here = self.places.iter().position(|p| p.at == self.at);
-        let places = list(self.places.iter().map(|p| if p.folder { item(p.label.clone()).icon(p.icon).folder() } else { item(p.label.clone()).icon(p.icon) }).collect(), here, Msg::Place).here().row_height(side_row);
+        let places = list(self.places.iter().map(|p| if p.folder { item(p.label.clone()).icon(p.icon).folder() } else { item(p.label.clone()).icon(p.icon) }).collect(), here, Msg::Place).called(t!("screenshot-chooser-places")).here().row_height(side_row);
         card(scroll("places", column(vec![card(places).snug()]).padding(theme::sheet().sidebar_room)))
             .snug().side().width(Length::Fixed(SIDEBAR)).height(Length::Fill)
     }
@@ -86,7 +86,7 @@ impl Chooser {
             return column(vec![note(t!("screenshot-chooser-empty")), self.empty_room(row_height)]).width(Length::Fill).height(Length::Fill);
         }
         let rows = self.entries.iter().map(|e| self.row(e)).collect();
-        let l = list(rows, self.chosen, Msg::Choose).row_height(row_height).on_open(Msg::Open).on_menu(Msg::Menu).width(Length::Fill);
+        let l = list(rows, self.chosen, Msg::Choose).called(t!("screenshot-chooser-files")).row_height(row_height).on_open(Msg::Open).on_menu(Msg::Menu).width(Length::Fill);
         let l = if matches!(self.ask.mode, Mode::Open { many: true, .. }) { l.many(self.picked.clone(), Msg::Pick) } else { l };
 
         let rows = typing_over(l, self.rename_box(row_height));

@@ -1,7 +1,7 @@
 # machine translated (Russian), not yet reviewed by a person.
 
 # Title of the Help topic about approving a driver's key.
-key-enrol-title = Одобрение ключа драйвера при перезагрузке
+key-enrol-title = Одобрите ключ драйвера при перезагрузке
 
 # Words people might search for that topic by, in lower case, separated by spaces.
 key-enrol-keywords = secure boot key mok enroll enrol blue screen password driver nvidia virtualbox camera dkms mokutil black screen безопасная загрузка ключ синий экран пароль драйвер камера чёрный экран
@@ -17,7 +17,7 @@ key-enrol-why-addon = Дополнительный драйвер собирае
 key-enrol-step1 = Придумайте пароль только из латинских букв и цифр. На синем экране американская раскладка клавиатуры, поэтому символы могут находиться на других клавишах. Запишите пароль: он нужен один раз.
 
 # Step 2: the restart and how long the blue screen waits.
-key-enrol-step2 = Перезагрузите компьютер. Перед запуском Trindle появится синий экран с заголовком Enroll MOK. Он закрывается примерно через 10 секунд, поэтому будьте готовы нажать клавишу.
+key-enrol-step2 = Перезагрузите компьютер. Перед запуском Trindle появится синий экран Enroll MOK. На нажатие клавиши у вас около 10 секунд, поэтому будьте готовы.
 
 # Step 3: the first two screens.
 key-enrol-step3 = Выберите Enroll MOK, затем Continue.
@@ -27,7 +27,7 @@ key-enrol-step3 = Выберите Enroll MOK, затем Continue.
 key-enrol-step4 = Выберите Yes, затем введите пароль, который вы придумали.
 
 # Step 5: the last screen.
-key-enrol-step5 = Выберите Reboot. Драйвер загрузится, когда компьютер включится снова.
+key-enrol-step5 = Выберите Reboot. Драйвер загрузится после перезагрузки компьютера.
 
 # Tip after the steps: what happens when the blue screen is missed and how to be asked again.
 key-enrol-missed = Если пропустить синий экран, компьютер запустится без драйвера, как раньше. Ничего не сломано; выполните sudo mokutil --import /var/lib/dkms/mok.pub и перезагрузите компьютер, чтобы запрос появился снова.

@@ -17,7 +17,7 @@ use crate::common::faces::path_for;
 use crate::common::files::home;
 use crate::common::run;
 use crate::keyring::migrate as keyring;
-use crate::settings::ui::{confirm, group, headline, icon, line, on, page, why, Kit, Msg, Page, no_chooser};
+use crate::settings::ui::{admin_step, admin_step_secret, confirm, group, headline, icon, line, on, page, why, Kit, Msg, Page, no_chooser};
 use crate::toolkit::bus::Listen;
 use crate::toolkit::chooser::{self, Ask};
 use crate::toolkit::picture;
@@ -29,10 +29,6 @@ const ADMIN_GROUP: &CStr = c"sudo";
 const FACE_SIZE: u32 = 256;
 
 const FACE: f32 = 56.0;
-
-pub fn banded_rows(rows: Vec<Node<Msg>>) -> Vec<Node<Msg>> {
-    crate::toolkit::widget::banded_list(rows)
-}
 
 fn waiting() -> &'static str {
     t!("settings-users-waiting")
@@ -191,21 +187,13 @@ fn pipe_face(name: &str, data: &[u8]) -> Result<(bool, String), String> {
     Ok((out.status.success(), String::from_utf8_lossy(&out.stderr).trim().to_string()))
 }
 
-fn admin(kit: &mut Kit, key: &str, args: &[&str], success: &'static str, stdin: Option<String>,
+fn admin(kit: &mut Kit, key: &str, args: &[&str], success: &'static str, secret: Option<zeroize::Zeroizing<String>>,
          then: impl FnOnce(&mut Users, &mut Kit) + 'static) {
-    kit.say(key, waiting(), true, true);
-    let helper = run::admin_helper();
-    let mut argv = vec!["pkexec", helper.as_str()];
-    argv.extend_from_slice(args);
-    let k = key.to_string();
-    let done = kit.then::<Users, (bool, String)>(move |me, kit, (ok, err)| {
-        let err = run::admin_error(&err);
-        kit.done(&k, if ok { None } else { Some(&err) }, success);
-        if ok {
-            then(me, kit);
-        }
-    });
-    run::capture(&argv, stdin.as_deref(), move |ok, _out, err| done((ok, err)));
+    let then = move |me: &mut Users, kit: &mut Kit, ok: bool| if ok { then(me, kit) };
+    match secret {
+        Some(secret) => admin_step_secret::<Users>(kit, key, args, secret, waiting(), success, then),
+        None => admin_step::<Users>(kit, key, args, waiting(), success, then),
+    }
 }
 
 const SECRETS: &str = "org.freedesktop.secrets";
@@ -318,7 +306,7 @@ impl Users {
         })));
         if !mine {
             let (n, k) = (u.name.clone(), key.clone());
-            controls.push(confirm::<Users>(kit, &format!("users:delete:{}", u.name), "user-trash-symbolic",
+            controls.push(confirm::<Users>(&format!("users:delete:{}", u.name), "user-trash-symbolic",
                                            t!("settings-users-delete"), move |_, kit| {
                 admin(kit, &k, &["delete", n.as_str()], t!("settings-users-deleted"), None, |me, _| me.read());
             }));
@@ -344,7 +332,7 @@ impl Users {
                 admin(kit, &k, &["admin", n.as_str(), if on_now { "yes" } else { "no" }], success, None, |me, _| me.read());
             })
         }).off(stuck);
-        let adm_line = line(t!("settings-users-administrator")).sub(t!("settings-users-admin-can"))
+        let adm_line = line(t!("settings-users-administrator"))
             .control(adm).key(akey).node(kit);
         group(title).known_as(person_key(&u.name)).icon("avatar-default-symbolic")
             .about(t!("settings-users-person-about"))
@@ -403,7 +391,7 @@ impl Users {
         }
         self.close_password();
         let (k, new) = (key.clone(), a.clone());
-        admin(kit, &key, &["password", name.as_str()], t!("settings-users-password-changed"), Some(format!("{a}\n")), move |_, kit| {
+        admin(kit, &key, &["password", name.as_str()], t!("settings-users-password-changed"), Some(zeroize::Zeroizing::new(a.clone())), move |_, kit| {
             if mine {
                 rekey(kit, k, old, new);
             }
@@ -478,9 +466,9 @@ impl Users {
         let form = grid(220.0, vec![full, name, pw]).gap(8.0);
         group(t!("settings-users-add-someone")).icon("list-add-symbolic")
             .about(t!("settings-users-add-about"))
-            .rows(vec![line(t!("settings-users-new-account")).sub(t!("settings-users-new-account-sub"))
+            .rows(vec![line(t!("settings-users-new-account"))
                 .control(add).below(form).key(ADD_KEY).node(kit),
-                line(t!("settings-users-administrator")).sub(t!("settings-users-admin-can")).control(adm).node(kit)])
+                line(t!("settings-users-administrator")).control(adm).node(kit)])
             .node(kit)
     }
 
@@ -502,7 +490,7 @@ impl Users {
         let f = self.full.trim().to_string();
         let f = if f.is_empty() { n.clone() } else { f };
         let yes = if self.admin { "yes" } else { "no" };
-        admin(kit, ADD_KEY, &["add", n.as_str(), f.as_str(), yes], t!("settings-users-added"), Some(format!("{p}\n")), |me, _| {
+        admin(kit, ADD_KEY, &["add", n.as_str(), f.as_str(), yes], t!("settings-users-added"), Some(zeroize::Zeroizing::new(p.clone())), |me, _| {
             me.full.clear();
             me.name.clear();
             me.pw.clear();
@@ -515,8 +503,10 @@ impl Users {
     fn keyring_card(&self, kit: &Kit) -> Node<Msg> {
         let on_now = self.switched;
         let mut l = line(if on_now { t!("settings-users-kept-trindle") } else { t!("settings-users-kept-gnome") })
-            .sub(if on_now { t!("settings-users-opens-login") } else { t!("settings-users-could-not-move") })
             .key(KEYRING_KEY);
+        if !on_now {
+            l = l.sub(t!("settings-users-could-not-move"));
+        }
         if !on_now && !self.moving {
             l = l.control(button("document-send-symbolic", t!("settings-users-move-keyring")).on_press(on::<Users>(|me, _| {
                 me.open_keyring(String::new(), Vec::new());
@@ -528,6 +518,7 @@ impl Users {
         group(t!("settings-users-saved-logins")).icon("dialog-password-symbolic")
             .about(t!("settings-users-keyring-about"))
             .rows(vec![l.node(kit)])
+            .grows()
             .node(kit)
     }
 
@@ -625,7 +616,7 @@ impl Page for Users {
     }
     fn view(&self, kit: &Kit) -> Node<Msg> {
         let (words, _) = sum_up(&self.everyone, &self.me);
-        let mut items = vec![headline(kit, words)];
+        let mut items = vec![headline(words)];
 
         let mut people: Vec<&Person> = self.everyone.iter().collect();
         people.sort_by_key(|u| u.name != self.me);

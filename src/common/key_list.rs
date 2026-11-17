@@ -1,10 +1,7 @@
 //! The shortcut list: every key in force, in plain words, built from the places that bind them.
 //! One table of words, and the files and settings the compositor reads, are the only sources, so a shortcut cannot be bound and left off.
 
-use quick_xml::events::Event;
-use quick_xml::Reader;
-
-use super::combos::{self, Combo};
+use super::combos::{self, binds, Bind, Combo};
 use super::files;
 use crate::toolkit::t;
 
@@ -27,14 +24,6 @@ pub struct Entry {
     pub keys: Combo,
     pub group: Group,
     pub words: String,
-}
-
-#[derive(Debug, Default, PartialEq)]
-pub struct Bind {
-    pub key: String,
-    pub list: Option<String>,
-    pub action: String,
-    pub command: String,
 }
 
 const FIXED: &[(&str, &str)] = &[("console", "console-keys"), ("reader-keys", "reader-keys-keys")];
@@ -115,34 +104,6 @@ fn described(b: &Bind) -> String {
         _ => "other",
     };
     words_of(id).unwrap_or_default().to_string()
-}
-
-pub fn binds(text: &str) -> Vec<Bind> {
-    let mut reader = Reader::from_str(text);
-    reader.config_mut().trim_text(true);
-    let mut found: Vec<Bind> = Vec::new();
-    let mut open: Option<Bind> = None;
-    let attr = |e: &quick_xml::events::BytesStart, name: &str| -> Option<String> {
-        e.attributes().flatten().find(|a| a.key.as_ref() == name.as_bytes())
-            .and_then(|a| a.normalized_value(quick_xml::XmlVersion::Implicit1_0).ok().map(|v| v.to_string()))
-    };
-    loop {
-        match reader.read_event() {
-            Ok(Event::Eof) | Err(_) => break,
-            Ok(Event::Start(e)) if e.name().as_ref() == b"keybind" => {
-                open = attr(&e, "key").map(|key| Bind { key, list: attr(&e, "list"), ..Bind::default() });
-            }
-            Ok(Event::Start(e) | Event::Empty(e)) if e.name().as_ref() == b"action" => {
-                if let Some(b) = open.as_mut().filter(|b| b.action.is_empty()) {
-                    b.action = attr(&e, "name").unwrap_or_default();
-                    b.command = attr(&e, "command").unwrap_or_default();
-                }
-            }
-            Ok(Event::End(e)) if e.name().as_ref() == b"keybind" => found.extend(open.take()),
-            _ => {}
-        }
-    }
-    found
 }
 
 pub fn shown(c: &Combo) -> String {

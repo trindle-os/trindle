@@ -72,11 +72,7 @@ impl Region {
             me.words.asking = None;
             let Some(path) = path else { return k.unanswered(IMPORT) };
             let done = k.then::<Region, Result<String, sheet::Why>>(|me, k, res| match res {
-                Ok(tag) => {
-                    me.words_for(tag);
-                    k.say(IMPORT, t!("settings-words-imported"), true, false);
-                    me.load(k);
-                }
+                Ok(tag) => me.words_taken(k, tag),
                 Err(why) => k.say(IMPORT, &why.words(), false, true),
             });
 
@@ -86,6 +82,13 @@ impl Region {
         });
         self.words.asking = chooser::open(&bus, &kit.events, ask, back);
         kit.started(IMPORT, self.words.asking.is_some(), no_chooser());
+    }
+
+    fn words_taken(&mut self, kit: &mut Kit, tag: String) {
+        self.relanguage(kit, Some(&tag));
+        self.words_for(tag);
+        kit.say(IMPORT, t!("settings-words-imported"), true, false);
+        self.load(kit);
     }
 
     fn words_start(&mut self, kit: &mut Kit) {
@@ -112,6 +115,7 @@ impl Region {
             if me.own.trim().eq_ignore_ascii_case(&tag) && k.settle("language", set_setting("language", "auto"), not_saved()).is_some() {
                 me.own = "auto".to_string();
             }
+            me.relanguage(k, Some(&tag));
             me.words.tag.clear();
             me.load(k);
         });
@@ -120,12 +124,16 @@ impl Region {
 
     fn words_reset(&mut self, kit: &mut Kit) {
         let tag = self.words_tag();
-        let done = kit.then::<Region, std::io::Result<()>>(|me, k, res| {
-            if k.settle(RESET, res, t!("settings-words-not-saved")).is_some() {
-                me.load(k);
-            }
-        });
-        run::on_thread(move || sheet::reset(&sheet::base(), &tag), done);
+        let reset = tag.clone();
+        let done = kit.then::<Region, std::io::Result<()>>(move |me, k, res| me.words_reset_done(k, &tag, res));
+        run::on_thread(move || sheet::reset(&sheet::base(), &reset), done);
+    }
+
+    fn words_reset_done(&mut self, kit: &mut Kit, tag: &str, res: std::io::Result<()>) {
+        if kit.settle(RESET, res, t!("settings-words-not-saved")).is_some() {
+            self.relanguage(kit, Some(tag));
+            self.load(kit);
+        }
     }
 
     pub(super) fn own_words(&self, kit: &Kit) -> Node<Msg> {
@@ -133,7 +141,7 @@ impl Region {
         let tongues: Vec<(String, String)> = self.tongues.iter().filter(|t| sheet::tag_ok(&t.code)).map(|t| (t.code.clone(), t.name.clone())).collect();
         let at = tongues.iter().position(|(c, _)| *c == tag);
         let codes: Vec<String> = tongues.iter().map(|(c, _)| c.clone()).collect();
-        let pick = dropdown(kit, "words-language", tongues.iter().map(|(_, n)| n.clone()).collect(), at, t!("settings-words-language-tip"), move |i| {
+        let pick = dropdown("words-language", tongues.iter().map(|(_, n)| n.clone()).collect(), at, t!("settings-words-language-tip"), move |i| {
             let v = codes[i].clone();
             on::<Region>(move |me, _k| me.words_for(v.clone()))
         });
@@ -141,7 +149,7 @@ impl Region {
         let import = button(INSTALL_ICON, t!("settings-words-import")).on_press(on::<Region>(|me, k| me.words_import(k)));
         let own = sheet::own::is_own(&tag);
         let reset = if own {
-            confirm(kit, RESET, "edit-undo-symbolic", t!("settings-words-reset"), |me: &mut Region, k| me.words_remove(k))
+            confirm(RESET, "edit-undo-symbolic", t!("settings-words-reset"), |me: &mut Region, k| me.words_remove(k))
         } else {
             button("edit-undo-symbolic", t!("settings-words-reset")).on_press(on::<Region>(|me, k| me.words_reset(k)))
         };
@@ -149,23 +157,47 @@ impl Region {
             .on_submit(on::<Region>(|me, k| me.words_start(k)));
         let start = button("list-add-symbolic", t!("settings-words-start")).on_press(on::<Region>(|me, k| me.words_start(k)));
         let offer = button("mail-send-symbolic", t!("settings-words-offer")).on_press(crate::settings::ui::link(OFFER, crate::report::send::SHEETS_URL.to_string()));
+        let about = [t!("settings-words-about"), t!("settings-words-rule"), t!("settings-words-next-start"), t!("settings-words-start-sub"),
+                     t!("settings-words-export-sub"), t!("settings-words-import-sub"), t!("settings-words-offer-sub")].join(" ");
         let rows = vec![
-            line(t!("settings-words-rule")).sub(t!("settings-words-next-start")).node(kit),
-            line(t!("settings-words-language")).sub(t!("settings-words-language-sub")).key("words-language").control(pick).node(kit),
-            line(t!("settings-words-start")).sub(t!("settings-words-start-sub")).key(START).control(start).below(name).node(kit),
-            line(t!("settings-words-export")).sub(t!("settings-words-export-sub")).key(EXPORT).control(export).node(kit),
-            line(t!("settings-words-import")).sub(t!("settings-words-import-sub")).key(IMPORT).control(import).node(kit),
-            line(t!("settings-words-offer")).sub(t!("settings-words-offer-sub")).key(OFFER).control(offer).node(kit),
+            line(t!("settings-words-language")).key("words-language").control(pick).node(kit),
+            line(t!("settings-words-start")).key(START).control(start).below(name).node(kit),
+            line(t!("settings-words-export")).key(EXPORT).control(export).node(kit),
+            line(t!("settings-words-import")).key(IMPORT).control(import).node(kit),
+            line(t!("settings-words-offer")).key(OFFER).control(offer).node(kit),
             line(t!("settings-words-reset")).sub(if own { t!("settings-words-reset-own-sub") } else { t!("settings-words-reset-sub") }).key(RESET).control(reset).node(kit),
         ];
         group(t!("settings-words-heading")).span(5, 8).icon("preferences-desktop-locale-symbolic")
-            .about(t!("settings-words-about")).rows(rows).node(kit)
+            .about(about).rows(rows).node(kit)
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn new_words_for_the_language_in_use_show_at_once() {
+        use crate::common::live_language::switched;
+        if crate::common::scratch_home::inside().is_none() {
+            return crate::common::scratch_home::rerun(module_path!(), "new_words_for_the_language_in_use_show_at_once");
+        }
+        std::env::remove_var("LC_ALL");
+        std::env::remove_var("LC_MESSAGES");
+        let events = crate::toolkit::event::Loop::new();
+        let mut kit = Kit::new(events.clone(), events.post(|_| {}), None, None);
+
+        let mut region = Region { own: "en-GB".into(), ..Region::made_up() };
+        type Change = fn(&mut Region, &mut Kit, &str);
+        let taken: Change = |r, k, tag| r.words_taken(k, tag.to_string());
+        let reset: Change = |r, k, tag| r.words_reset_done(k, tag, Ok(()));
+        for (name, change) in [("taken", taken), ("reset", reset)] {
+            change(&mut region, &mut kit, "de");
+            assert_eq!(switched(), None, "{name}: words for a language not in use change nothing");
+            change(&mut region, &mut kit, "en");
+            assert_eq!(switched(), Some(vec!["en".to_string()]), "{name}: Settings keeps the old words");
+        }
+    }
 
     #[test]
     fn the_sheet_starts_on_the_language_the_programs_are_shown_in_when_none_is_chosen() {

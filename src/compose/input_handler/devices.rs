@@ -1,7 +1,7 @@
 // Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
 use super::{doors::{is_activity, moves_pointer}, sender, KeyAction};
-use crate::{focus::PointerFocusTarget, udev::UdevData, AnvilState};
+use crate::{focus::PointerFocusTarget, udev::UdevData, Compose};
 
 use smithay::{
     backend::{
@@ -27,7 +27,7 @@ use smithay::{
 };
 use tracing::{error, info};
 
-impl AnvilState<UdevData> {
+impl Compose<UdevData> {
 
     pub fn process_input_event<B: InputBackend>(&mut self, dh: &DisplayHandle, event: InputEvent<B>) {
         if self.from_a_program_not_allowed(&event) {
@@ -102,9 +102,7 @@ impl AnvilState<UdevData> {
 
             InputEvent::DeviceAdded { device } => self.add_input_device(dh, &device),
             InputEvent::DeviceRemoved { device } => self.remove_input_device(&device),
-            _ => {
-
-            }
+            _ => {}
         }
     }
 
@@ -381,13 +379,9 @@ impl AnvilState<UdevData> {
         &self,
         evt: &E,
     ) -> Option<Point<f64, Logical>> {
-        let output = self
-            .space
-            .outputs()
-            .find(|output| output.name().starts_with("eDP"))
-            .or_else(|| self.space.outputs().next());
-
-        let output = output?;
+        let wanted = screen_of(&evt.device());
+        let names: Vec<String> = self.space.outputs().map(|o| o.name()).collect();
+        let output = self.space.outputs().nth(screen_for(&names, wanted.as_deref())?)?;
         let output_geometry = self.space.output_geometry(output)?;
 
         let transform = output.current_transform();
@@ -484,4 +478,56 @@ impl AnvilState<UdevData> {
         handle.cancel(self);
     }
 
+}
+
+fn screen_for(names: &[String], wanted: Option<&str>) -> Option<usize> {
+    let named = wanted.and_then(|w| names.iter().position(|n| n == w));
+    named.or_else(|| names.iter().position(|n| n.starts_with("eDP"))).or(if names.is_empty() { None } else { Some(0) })
+}
+
+const MOST_REMEMBERED: usize = 64;
+
+fn screen_of<D: Device>(device: &D) -> Option<String> {
+    thread_local! {
+        static SEEN: std::cell::RefCell<std::collections::HashMap<String, Option<String>>> = std::cell::RefCell::default();
+    }
+    let id = device.id();
+    if let Some(known) = SEEN.with(|s| s.borrow().get(&id).cloned()) {
+        return known;
+    }
+    let found = device.syspath().and_then(|path| {
+        let udev = smithay::reexports::udev::Device::from_syspath(&path).ok()?;
+        udev.property_value("WL_OUTPUT").and_then(|v| v.to_str()).map(str::to_owned)
+    });
+    SEEN.with(|s| {
+        let mut s = s.borrow_mut();
+        if s.len() >= MOST_REMEMBERED {
+            s.clear();
+        }
+        s.insert(id, found.clone());
+    });
+    found
+}
+
+#[cfg(test)]
+mod screen_tests {
+    use super::screen_for;
+
+    fn names(list: &[&str]) -> Vec<String> {
+        list.iter().map(|n| n.to_string()).collect()
+    }
+
+    #[test]
+    fn a_touch_device_goes_to_the_screen_it_names() {
+        let screens = names(&["eDP-1", "DP-2", "HDMI-A-1"]);
+        assert_eq!(screen_for(&screens, Some("DP-2")), Some(1));
+    }
+
+    #[test]
+    fn a_device_naming_no_screen_goes_to_the_laptop_panel_else_the_first() {
+        assert_eq!(screen_for(&names(&["DP-2", "eDP-1"]), None), Some(1));
+        assert_eq!(screen_for(&names(&["DP-2", "eDP-1"]), Some("gone-1")), Some(1));
+        assert_eq!(screen_for(&names(&["DP-2", "HDMI-A-1"]), None), Some(0));
+        assert_eq!(screen_for(&[], Some("DP-2")), None);
+    }
 }

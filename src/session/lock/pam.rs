@@ -31,6 +31,7 @@ struct PamConv {
 extern "C" {
     fn pam_start(service: *const c_char, user: *const c_char, conv: *const PamConv, handle: *mut *mut c_void) -> c_int;
     fn pam_authenticate(handle: *mut c_void, flags: c_int) -> c_int;
+    fn pam_acct_mgmt(handle: *mut c_void, flags: c_int) -> c_int;
     fn pam_end(handle: *mut c_void, status: c_int) -> c_int;
 }
 
@@ -48,7 +49,12 @@ extern "C" fn converse(n: c_int, msgs: *mut *const PamMessage, out: *mut *mut Pa
         let password = data as *const c_char;
         for i in 0..n as usize {
             let m = *msgs.add(i);
-            if !m.is_null() && (*m).style == 1 {
+            if m.is_null() || !matches!((*m).style, 1 | 2) {
+                continue;
+            }
+            if is_question(m) {
+                (*replies.add(i)).resp = libc::strdup(c"no".as_ptr());
+            } else if (*m).style == 1 {
 
                 (*replies.add(i)).resp = libc::strdup(password);
             }
@@ -65,6 +71,8 @@ pub(crate) fn password_ok(user: &str, password: &str) -> bool {
     ok
 }
 
+/// # Safety
+/// `m` is a valid, non-null PAM message whose text is null or NUL-terminated.
 unsafe fn is_question(m: *const PamMessage) -> bool {
     // SAFETY: as the caller promised: `m` is valid and its text null or NUL-terminated.
     unsafe { !(*m).msg.is_null() && CStr::from_ptr((*m).msg) == pocketkey::QUESTION }
@@ -114,7 +122,11 @@ fn authenticate(user: &str, conv: &PamConv) -> bool {
         if pam_start(service.as_ptr(), user.as_ptr(), conv, &mut handle) != 0 {
             return false;
         }
-        let status = pam_authenticate(handle, 0);
+        let mut status = pam_authenticate(handle, 0);
+        if status == 0 {
+
+            status = pam_acct_mgmt(handle, 0);
+        }
         pam_end(handle, status);
         status == 0
     }
@@ -125,12 +137,18 @@ mod tests {
     use super::*;
     use crate::common::pocketkey;
 
+    type Converse = extern "C" fn(c_int, *mut *const PamMessage, *mut *mut PamResponse, *mut c_void) -> c_int;
+
     fn ask(msgs: &[(c_int, Option<&CStr>)]) -> (c_int, Vec<Option<String>>) {
+        ask_with(converse_phone, std::ptr::null_mut(), msgs)
+    }
+
+    fn ask_with(conv: Converse, data: *mut c_void, msgs: &[(c_int, Option<&CStr>)]) -> (c_int, Vec<Option<String>>) {
         let owned: Vec<PamMessage> =
             msgs.iter().map(|(style, m)| PamMessage { style: *style, msg: m.map_or(std::ptr::null(), |m| m.as_ptr()) }).collect();
         let ptrs: Vec<*const PamMessage> = owned.iter().map(|m| m as *const PamMessage).collect();
         let mut out: *mut PamResponse = std::ptr::null_mut();
-        let rc = converse_phone(ptrs.len() as c_int, ptrs.as_ptr() as *mut _, &mut out, std::ptr::null_mut());
+        let rc = conv(ptrs.len() as c_int, ptrs.as_ptr() as *mut _, &mut out, data);
         let mut answers = Vec::new();
         if !out.is_null() {
             // SAFETY: on success converse_phone calloc'd one reply per message,
@@ -163,12 +181,24 @@ mod tests {
     }
 
     #[test]
+    fn the_password_goes_only_to_a_password_prompt() {
+        let pw = c"example-password";
+        let data = pw.as_ptr() as *mut c_void;
+        let password = Some("example-password".to_string());
+        assert_eq!(ask_with(converse, data, &[(1, Some(c"Password:"))]), (0, vec![password.clone()]));
+        assert_eq!(ask_with(converse, data, &[(1, Some(pocketkey::QUESTION))]), (0, vec![Some("no".into())]));
+        assert_eq!(ask_with(converse, data, &[(2, Some(pocketkey::QUESTION)), (1, Some(c"Password:"))]),
+                   (0, vec![Some("no".into()), password]));
+        assert_eq!(ask_with(converse, data, &[(2, Some(c"Username:")), (4, Some(c"Hello"))]), (0, vec![None, None]));
+    }
+
+    #[test]
     fn without_the_pocketkey_module_the_lock_stack_is_the_password_alone() {
         let file = std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/system/pam.d/trindle-lock")).unwrap();
         let lines: Vec<&str> = file.lines().map(str::trim).filter(|l| !l.is_empty() && !l.starts_with('#')).collect();
 
         let (module, rest): (Vec<&str>, Vec<&str>) = lines.into_iter().partition(|l| l.contains("pam_pocketkey.so"));
         assert!(module.iter().all(|l| l.starts_with("-auth ")), "{module:?}");
-        assert_eq!(rest, ["auth include login"]);
+        assert_eq!(rest, ["auth include login", "account include login"]);
     }
 }

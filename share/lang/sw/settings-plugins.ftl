@@ -4,14 +4,14 @@
 settings-plugins-title = Programu jalizi zako
 
 # Words people may search for to find the Your plugins page, separated by spaces.
-settings-plugins-keywords = programu jalizi viongezi viendelezi vimewekwa ondoa mipangilio
+settings-plugins-keywords = programu jalizi viongezi vimewekwa ondoa mipangilio
 
 # Help line at the foot of the Your plugins page.
 # SAFETY: needs a human review before it ships
-settings-plugins-help = Programu jalizi huongeza kitu kwenye Trindle: aikoni kwenye pete, mipangilio hapa, arifa au kitu kinachoanza ukiingia. Kila moja hufanya kazi ikiwa imetengwa, bila kuruhusiwa chochote hadi uruhusu kwenye Ruhusa, ambayo kitufe mwishoni mwa kichwa cha ukurasa huu hufungua. Kadi ya kila programu jalizi hapa ina mipangilio yake; pipa kwenye kadi, likibonyezwa mara mbili, huondoa programu jalizi hiyo.
+settings-plugins-help = Programu jalizi huongeza kitu kwenye Trindle. Programu jalizi inaweza kuongeza aikoni kwenye pete, mipangilio hapa, arifa, au kitu kinachoanza unapoingia. Kila programu jalizi hufanya kazi kwenye sanduku lake na haiwezi kutumia chochote hadi uiruhusu kwenye Ruhusa. Kitufe kando ya kichwa cha ukurasa hufungua Ruhusa. Ili kuondoa programu jalizi, bonyeza pipa kwenye kadi yake mara mbili.
 
 # Red words when the window that asks what a plugin may use could not be opened.
-settings-plugins-window-failed = Dirisha linalouliza inachoweza kutumia halikuweza kufunguliwa.
+settings-plugins-window-failed = Trindle haikuweza kufungua dirisha linalouliza programu jalizi inaweza kutumia nini.
 
 # Under About it: the plugin's version number is { $v }.
 settings-plugins-version = Toleo { $v }.
@@ -21,22 +21,18 @@ settings-plugins-version-settled = Toleo { $v }. { $settled }
 
 # Help text of a plugin's card when it asks for nothing: the plugin's name is { $name }.
 # SAFETY: needs a human review before it ships
-settings-plugins-asks-nothing = { $name } haiombi chochote, kwa hiyo hufanya kazi ikiwa imetengwa bila kuruhusiwa chochote.
+settings-plugins-asks-nothing = { $name } haiombi chochote, kwa hiyo hufanya kazi kwenye sanduku lake bila kuruhusiwa chochote.
 
 # Help text of a plugin's card: its name is { $name }, { $list } is what it asks for, { $allowed } of { $asks } are allowed.
 # SAFETY: needs a human review before it ships
 settings-plugins-asks-for =
     { $asks ->
-        [one] { $name } inaomba { $list }; { $allowed } kati ya { $asks } imeruhusiwa. Hufanya kazi ikiwa imetengwa, na kile tu unachoruhusu.
-       *[other] { $name } inaomba { $list }; { $allowed } kati ya { $asks } zimeruhusiwa. Hufanya kazi ikiwa imetengwa, na kile tu unachoruhusu.
+        [one] { $name } inaomba { $list }. Umeruhusu { $allowed } kati ya { $asks }. Hufanya kazi kwenye sanduku lake na kile tu unachoruhusu.
+       *[other] { $name } inaomba { $list }. Umeruhusu { $allowed } kati ya { $asks }. Hufanya kazi kwenye sanduku lake na kile tu unachoruhusu.
     }
 
-# Under the line that tells a plugin needs more allowed, beside its Allow button.
-# SAFETY: needs a human review before it ships
-settings-plugins-needs-more = Ruhusu huonyesha kila kitu inachoomba, pamoja na swichi.
-
 # Heading of the line about a plugin on its card.
-settings-plugins-about-it = Kuhusu programu hii
+settings-plugins-about-it = Kuhusu
 
 # Tip of the button that changes what a plugin may use.
 # SAFETY: needs a human review before it ships
@@ -72,14 +68,11 @@ settings-plugins-group = Programu jalizi
 # Heading of the line shown when no plugin is installed.
 settings-plugins-none = Hakuna iliyowekwa
 
-# Under the None installed heading.
-settings-plugins-none-sub = Apps ina programu jalizi za kuongeza.
-
 # Tip of the button at the end of the page's title that opens the Permissions page.
 settings-plugins-open-permissions = Fungua Ruhusa
 
 # Said at the top of a plugin's card while its service has not yet answered; the plugin's name is {$name}.
-settings-plugins-rows-asking = Inamuuliza { $name }.
+settings-plugins-rows-asking = Inauliza { $name }…
 
 # Said at the top of a plugin's card, and in red under a row, when its service does not answer; the plugin's name is {$name}.
 settings-plugins-rows-silent = { $name } haijibu. Huduma yake inaweza kuwa imesimama.
@@ -95,4 +88,3 @@ settings-plugins-rows-failed = { $name } haikuweza kufanya hivyo.
 
 # Red words under a row when the change failed; the plugin's name is {$name} and the reason it gave is {$why}.
 settings-plugins-rows-failed-why = { $name } haikuweza kufanya hivyo: { $why }.
-

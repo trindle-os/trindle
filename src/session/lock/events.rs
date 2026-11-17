@@ -2,7 +2,7 @@
 
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
-use std::time::{Instant, SystemTime};
+use std::time::Instant;
 
 use wayland_client::{Connection, Dispatch, QueueHandle, WEnum};
 use wayland_client::globals::GlobalListContents;
@@ -48,11 +48,17 @@ impl Dispatch<ExtSessionLockV1, ()> for State {
         match event {
             ext_session_lock_v1::Event::Locked => {
                 state.locked = true;
-                state.locked_at = SystemTime::now();
+
+                if let Err(e) = state.tries.save(&super::tries::file()) {
+                    eprintln!("trindle-lock: the count of wrong tries was not kept: {e}");
+                }
                 state.reader.locked();
             }
             ext_session_lock_v1::Event::Finished => {
-                if !state.locked {
+                if state.locked {
+
+                    super::lock_ended();
+                } else {
                     state.refused = true;
                 }
                 state.done = true;

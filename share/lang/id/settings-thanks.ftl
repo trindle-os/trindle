@@ -8,7 +8,7 @@ settings-thanks-kind-underneath-it-all = Di balik semuanya
 settings-thanks-kind-the-desktop = Desktop
 
 # Heading of a card on the Thanks page that groups projects: "Drawing and letters".
-settings-thanks-kind-drawing-and-letters = Gambar dan huruf
+settings-thanks-kind-drawing-and-letters = Grafis dan font
 
 # Heading of a card on the Thanks page that groups projects: "Folders and drives".
 settings-thanks-kind-folders-and-drives = Folder dan drive
@@ -20,28 +20,28 @@ settings-thanks-kind-sound-networks-and-devices = Suara, jaringan, dan perangkat
 settings-thanks-kind-apps = Aplikasi
 
 # Short line under "Skrifa (Fontations)" on the Thanks page, used where its own description is long.
-settings-thanks-short-skrifa-fontations = Menyesuaikan huruf dengan piksel layar
+settings-thanks-short-skrifa-fontations = Membuat huruf tajam di layar
 
 # Short line under "Smithay" on the Thanks page, used where its own description is long.
-settings-thanks-short-smithay = Bahan pembuat compositor Trindle sendiri
+settings-thanks-short-smithay = Bahan pembuat sistem jendela Trindle
 
 # Short line under "Papirus" on the Thanks page, used where its own description is long.
 settings-thanks-short-papirus = Dasar dari Ikon Trindle
 
 # Short line under "HaGeZi's DNS Blocklists" on the Thanks page, used where its own description is long.
-settings-thanks-short-hagezi-s-dns-blocklists = Memeriksa asal paket yang diunduh
+settings-thanks-short-hagezi-s-dns-blocklists = Memblokir situs berbahaya dan memeriksa asal unduhan
 
 # Short line under "ab_glyph" on the Thanks page, used where its own description is long.
-settings-thanks-short-ab-glyph = Huruf pada bilah judul dan layar awal
+settings-thanks-short-ab-glyph = Menggambar huruf pada bilah judul dan layar awal
 
 # Short line under "ntfs-3g, exfatprogs, dosfstools" on the Thanks page, used where its own description is long.
 settings-thanks-short-ntfs-3g-exfatprogs-dosfstools = Drive yang bisa dibaca Windows dan kamera
 
 # What the project "Debian" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-debian = Sistem tempat semuanya berjalan
+settings-thanks-project-debian = Sistem tempat Trindle berjalan
 
 # What the project "Linux" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-linux = Kernel tempat semuanya berjalan
+settings-thanks-project-linux = Inti tempat semuanya berjalan
 
 # What the project "Rust" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-rust = Bahasa yang dipakai untuk menulis Trindle
@@ -50,10 +50,10 @@ settings-thanks-project-rust = Bahasa yang dipakai untuk menulis Trindle
 settings-thanks-project-tiny-skia = Menggambar jendela Trindle sendiri
 
 # What the project "rustybuzz" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-rustybuzz = Membentuk huruf di jendela Trindle sendiri
+settings-thanks-project-rustybuzz = Menata teks di jendela Trindle sendiri
 
 # What the project "Skrifa (Fontations)" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-skrifa-fontations = Menyesuaikan huruf di jendela Trindle sendiri dengan piksel layar
+settings-thanks-project-skrifa-fontations = Membuat huruf di jendela Trindle sendiri tajam di layar
 
 # What the project "resvg" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-resvg = Menggambar ikon
@@ -65,16 +65,16 @@ settings-thanks-project-accesskit = Memungkinkan pembaca layar membaca jendela T
 settings-thanks-project-zbus = Cara Trindle berbicara dengan bagian sistem lainnya
 
 # What the project "fontdb" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-fontdb = Menemukan jenis huruf
+settings-thanks-project-fontdb = Menemukan font
 
 # What the project "Smithay" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-smithay = Blok bangunan Rust untuk compositor Trindle sendiri, dan anvil, contoh yang menjadi awalnya
+settings-thanks-project-smithay = Blok bangunan Rust untuk sistem jendela Trindle, dan anvil, contoh tempat ia bermula
 
 # What the project "Alacritty" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-alacritty = Terminal, ditulis dengan Rust
 
 # What the project "systemd" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-systemd = Menyalakan komputer, memasukkan pengguna, dan menidurkannya
+settings-thanks-project-systemd = Menyalakan komputer, memasukkan Anda ke akun, dan menidurkannya
 
 # What the project "Mesa" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-mesa = Menjalankan chip grafis
@@ -86,46 +86,46 @@ settings-thanks-project-pipewire = Suara
 settings-thanks-project-networkmanager = Wi-Fi dan jaringan
 
 # What the project "libinput" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-libinput = Membaca mouse, touchpad, dan layar sentuh
+settings-thanks-project-libinput = Menangani mouse, touchpad, dan layar sentuh
 
 # What the project "wayland-rs" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-wayland-rs = Cara Trindle berbicara dengan compositor
+settings-thanks-project-wayland-rs = Cara Trindle berbicara dengan sistem jendelanya
 
 # What the project "Flatpak" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-flatpak = Menjalankan aplikasi di Aplikasi
 
 # What the project "Flathub" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-flathub = Asal aplikasi di Aplikasi
+settings-thanks-project-flathub = Dari mana Aplikasi mendapatkan aplikasinya
 
 # What the project "Inter" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-inter = Huruf yang menjadi dasar Trindle Sans
+settings-thanks-project-inter = Font yang menjadi dasar Trindle Sans
 
 # What the project "Radio Canada" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-radio-canada = Tanda pound di Trindle Sans
 
 # What the project "Papirus" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-papirus = Dasar dari Ikon Trindle, dan gambar di dalam ikon yang dibuat Trindle
+settings-thanks-project-papirus = Dasar dari Ikon Trindle, dan gambar di dalam ikon buatan Trindle sendiri
 
 # What the project "greetd" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-greetd = Pengelola layar masuk
+settings-thanks-project-greetd = Menjalankan layar masuk
 
 # What the project "Noto" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-noto = Huruf untuk setiap bahasa
+settings-thanks-project-noto = Font untuk setiap bahasa
 
 # What the project "Samba" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-samba = Membagikan folder di jaringan rumah
+settings-thanks-project-samba = Membagikan folder lewat jaringan
 
 # What the project "libarchive" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-libarchive = Membaca RAR, citra disk, dan arsip lain untuk Folders
+settings-thanks-project-libarchive = Membuat Folders bisa membuka file RAR, citra disk, dan arsip lain
 
 # What the project "AppImageHub" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-appimagehub = Daftar AppImage yang dicari Aplikasi
+settings-thanks-project-appimagehub = AppImage yang dicari Aplikasi
 
 # What the project "ODRS" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-odrs = Ulasan aplikasi di Aplikasi
 
 # What the project "HaGeZi's DNS Blocklists" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-hagezi-s-dns-blocklists = Memeriksa asal paket yang diunduh terhadap daftar Threat Intelligence-nya
+settings-thanks-project-hagezi-s-dns-blocklists = Memblokir iklan, pelacak, dan situs berbahaya, serta memeriksa asal paket yang diunduh memakai daftar Threat Intelligence-nya
 
 # What the project "xdg-desktop-portal" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-xdg-desktop-portal = Memungkinkan aplikasi membuka dan menyimpan file
@@ -147,25 +147,25 @@ settings-thanks-project-cups = Pencetakan
 
 # What the project "polkit" does in Trindle, the line under its name on the Thanks page (also on the website).
 # SAFETY: needs a human review before it ships
-settings-thanks-project-polkit = Meminta kata sandi sebelum perubahan sistem
+settings-thanks-project-polkit = Meminta kata sandi Anda sebelum perubahan sistem
 
 # What the project "Xwayland" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-xwayland = Menjalankan program X11 yang lebih lama
 
 # What the project "wvkbd" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-wvkbd = Papan ketik di layar, untuk sentuhan
+settings-thanks-project-wvkbd = Papan ketik di layar untuk sentuhan
 
 # What the project "snapper" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-snapper = Snapshot
 
 # What the project "Btrfs" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-btrfs = Tata letak disk yang memungkinkan snapshot
+settings-thanks-project-btrfs = Format disk yang memungkinkan snapshot
 
 # What the project "fwupd and the LVFS" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-fwupd-and-the-lvfs = Pembaruan firmware
 
 # What the project "GVfs" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-gvfs = Berbagi jaringan dan ponsel di program lain
+settings-thanks-project-gvfs = Memungkinkan program lain memakai berbagi jaringan dan ponsel
 
 # What the project "ntfs-3g, exfatprogs, dosfstools" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-ntfs-3g-exfatprogs-dosfstools = Memformat dan memeriksa drive yang bisa dibaca Windows dan kamera
@@ -180,16 +180,16 @@ settings-thanks-project-avahi = Menemukan printer di jaringan
 settings-thanks-project-hplip = Printer dan pemindai HP
 
 # What the project "whisper.cpp" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-whisper-cpp = Kendali suara, di komputer ini
+settings-thanks-project-whisper-cpp = Kendali suara di komputer ini
 
 # What the project "ab_glyph" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-ab-glyph = Huruf pada bilah judul dan layar awal, dan mengisi setiap huruf yang digambar Trindle
+settings-thanks-project-ab-glyph = Menggambar huruf pada bilah judul dan layar awal, dan menggambar bentuk setiap huruf yang ditampilkan Trindle
 
 # What the project "serde, quick-xml, flate2" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-serde-quick-xml-flate2 = Membaca katalog aplikasi
 
 # Where to read the licence of an included work, behind the info button of the Licences card on the Thanks page (paths are file names).
-settings-thanks-where-copyright = Baca di /usr/share/doc/trindle/copyright dan THIRD-PARTY.txt.
+settings-thanks-where-copyright = Lisensi ada di /usr/share/doc/trindle/copyright dan THIRD-PARTY.txt.
 
 # Name of an included work in the Licences card on the Thanks page: "The compositor".
 settings-thanks-included-the-compositor-name = Compositor
@@ -216,7 +216,7 @@ settings-thanks-included-screen-helpers = Berawal dari smithay-drm-extras, yang 
 settings-thanks-included-spellbook-name = spellbook
 
 # What the included work "spellbook" is in Trindle and its licence, the line under its name in the Licences card.
-settings-thanks-included-spellbook = Memeriksa ejaan di Teks, tanpa perubahan. MPL-2.0.
+settings-thanks-included-spellbook = Memeriksa ejaan di Teks. Dipakai tanpa perubahan. MPL-2.0.
 
 # Where to read the licence of "spellbook", behind the info button of the Licences card.
 settings-thanks-included-spellbook-where = Dipakai seperti yang diterbitkan dan tidak diubah. Sumbernya ada di github.com/helix-editor/spellbook. Baca lisensinya di /usr/share/doc/trindle/copyright dan THIRD-PARTY.txt.
@@ -228,7 +228,7 @@ settings-thanks-included-trindle-sans-name = Trindle Sans
 settings-thanks-included-trindle-sans = Inter 4.1 dengan tanda pound baru. SIL Open Font License 1.1.
 
 # Where to read the licence of "Trindle Sans", behind the info button of the Licences card.
-settings-thanks-included-trindle-sans-where = Tanda pound berasal dari Radio Canada. Baca di /usr/share/fonts/truetype/trindle-sans/.
+settings-thanks-included-trindle-sans-where = Tanda pound berasal dari Radio Canada. Lisensinya ada di /usr/share/fonts/truetype/trindle-sans/.
 
 # Name of an included work in the Licences card on the Thanks page: "Emoji and spelling lists".
 settings-thanks-included-emoji-and-spelling-lists-name = Daftar emoji dan ejaan
@@ -237,7 +237,7 @@ settings-thanks-included-emoji-and-spelling-lists-name = Daftar emoji dan ejaan
 settings-thanks-included-emoji-and-spelling-lists = Noto Color Emoji dan daftar Hunspell, dari Debian.
 
 # Where to read the licence of "Emoji and spelling lists", behind the info button of the Licences card.
-settings-thanks-included-emoji-and-spelling-lists-where = Font emoji berada di bawah SIL Open Font License; keduanya mempertahankan lisensinya masing-masing. Baca di /usr/share/doc/ di bawah nama masing-masing paket.
+settings-thanks-included-emoji-and-spelling-lists-where = Font emoji memakai SIL Open Font License. Daftar ejaan punya lisensinya sendiri. Baca di /usr/share/doc/ di bawah nama masing-masing paket.
 
 # Name of an included work in the Licences card on the Thanks page: "Alacritty".
 settings-thanks-included-alacritty-name = Alacritty
@@ -255,7 +255,7 @@ settings-thanks-included-voice-control-name = Kendali suara
 settings-thanks-included-voice-control = whisper.cpp (MIT) dan model Whisper.
 
 # Where to read the licence of "Voice control", behind the info button of the Licences card.
-settings-thanks-included-voice-control-where = Keduanya diambil ke komputer ini hanya saat kendali suara dinyalakan. Baca di folder tempat keduanya diunduh.
+settings-thanks-included-voice-control-where = Keduanya diunduh ke komputer ini hanya saat Anda menyalakan kendali suara. Lisensinya ada di folder tempat keduanya diunduh.
 
 # Name of an included work in the Licences card on the Thanks page: "Papirus icons".
 settings-thanks-included-papirus-icons-name = Ikon Papirus
@@ -270,7 +270,7 @@ settings-thanks-included-papirus-icons-where = Baca di /usr/share/doc/papirus-ic
 settings-thanks-included-firmware-name = Firmware
 
 # What the included work "Firmware" is in Trindle and its licence, the line under its name in the Licences card.
-settings-thanks-included-firmware = Firmware dari Debian. Bukan perangkat lunak bebas.
+settings-thanks-included-firmware = Firmware dari Debian, bukan perangkat lunak bebas.
 
 # Where to read the licence of "Firmware", behind the info button of the Licences card.
 settings-thanks-included-firmware-where = Setiap pembuat punya lisensinya sendiri. Baca di /usr/share/doc/ di bawah nama setiap paket firmware, misalnya firmware-mediatek.
@@ -283,7 +283,7 @@ settings-thanks-keywords = terima kasih kredit proyek sumber terbuka perangkat l
 
 # Text behind the info button of the Thanks page.
 settings-thanks-help =
-    Terima kasih kepada semua yang membangunnya. Jika salah satunya penting bagi Anda, ikon hati membawa Anda ke tempat mereka menerima donasi.
+    Terima kasih kepada semua yang membangun proyek ini. Jika salah satunya penting bagi Anda, klik ikon hati untuk melihat tempat Anda bisa berdonasi.
 
 # The sentence at the top of the Thanks page; n is how many projects are thanked.
 settings-thanks-headline =
@@ -304,7 +304,7 @@ settings-thanks-licences = Lisensi
 settings-thanks-trindle-licence = Perangkat lunak bebas di bawah GPL-3.0-or-later.
 
 # First sentence behind the info button of the Licences card.
-settings-thanks-licences-about = Apa yang menjadi awal atau disertakan Trindle mempertahankan lisensinya sendiri.
+settings-thanks-licences-about = Apa yang disertakan atau menjadi awal Trindle punya lisensinya sendiri.
 
 # One line behind the info button of the Licences card: the work's name and where its licence is read.
 settings-thanks-where = { $name }: { $where_read }
@@ -322,11 +322,10 @@ settings-thanks-rust-counts =
     }
 
 # Quiet line under the Rust libraries when the list of licences is not on this computer.
-settings-thanks-rust-missing = Daftar tidak ditemukan di komputer ini.
+settings-thanks-rust-missing = Trindle tidak menemukan daftar di komputer ini.
 
 # Tip of the button that opens the full list of licences as a text page.
-settings-thanks-open-list = Buka daftar lengkap sebagai halaman teks
+settings-thanks-open-list = Buka daftar lengkap sebagai teks
 
 # Red words under the Rust libraries line when the list could not be opened.
-settings-thanks-open-failed = Daftar tidak bisa dibuka.
-
+settings-thanks-open-failed = Tidak bisa membuka daftar.

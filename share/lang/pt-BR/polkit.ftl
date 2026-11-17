@@ -18,16 +18,24 @@ polkit-cancel = Cancelar
 
 # Said when the password typed is not accepted, and the question is asked again.
 # SAFETY: needs a human review before it ships
-polkit-not-accepted = Essa senha não foi aceita. Tente de novo.
+polkit-not-accepted = Essa senha não está certa. Tente de novo.
 
 # Name a screen reader speaks for the password question window.
-polkit-spoken = Autenticação
+polkit-spoken = Sua senha
 
 # Under the password box, when other requests for a password are waiting for
 # this one to end. { $n } is how many.
 polkit-waiting-behind =
     { $n ->
-        [one] Outro pedido está esperando por este.
-        [many] { $n } pedidos a mais estão esperando por este.
-       *[other] { $n } pedidos a mais estão esperando por este.
+        [one] Outro pedido está esperando.
+       *[other] { $n } outros pedidos estão esperando.
     }
+
+# Under the heading, when Drives asks for the password to take the snapshot before making room.
+polkit-reason-drives-snapshot = Unidades precisa da senha de um administrador para fazer um instantâneo antes de liberar espaço.
+
+# Under the heading, when Drives asks for the password to switch a swap file off before making room.
+polkit-reason-drives-swap-off = Unidades precisa da senha de um administrador para desligar o arquivo de swap enquanto libera espaço.
+
+# Under the heading, when Drives asks for the password to switch a swap file back on.
+polkit-reason-drives-swap-on = Unidades precisa da senha de um administrador para ligar o arquivo de swap de novo.

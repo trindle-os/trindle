@@ -37,7 +37,7 @@ impl KeyFile {
         let mut text = String::new();
         super::files::open_settings(path)?.take(LOAD_MOST + 1).read_to_string(&mut text)?;
         if text.len() as u64 > LOAD_MOST {
-            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "the file is too big to be read whole"));
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, crate::toolkit::t!("common-keyfile-too-big").to_string()));
         }
         Ok(KeyFile::parse(&text))
     }

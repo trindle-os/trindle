@@ -32,10 +32,10 @@ pub(super) enum Seen {
 }
 
 impl Seen {
-    pub(super) fn look(self) -> Look {
+    pub(super) fn look(self, icons: &Rc<Icons>) -> Look {
         match self {
             Seen::Named(name) => Look::Named(name),
-            Seen::Shape(name) => Look::shape(Rc::new(Icons::new()), name),
+            Seen::Shape(name) => Look::shape(icons.clone(), name),
             Seen::Pixels(px) => Look::Pixels { px, cache: RefCell::new(None) },
         }
     }

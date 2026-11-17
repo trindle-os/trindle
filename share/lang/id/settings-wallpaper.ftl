@@ -8,7 +8,7 @@ settings-wallpaper-title = Wallpaper
 settings-wallpaper-keywords = background picture slideshow photo latar belakang gambar foto tampilan slide
 
 # Introduction under the heading of the wallpaper page, and the words behind the page i.
-settings-wallpaper-help = Warna polos, atau satu gambar, atau folder agar gambar berganti sendiri pada waktu yang Anda atur.
+settings-wallpaper-help = Pakai warna polos, satu gambar, atau folder berisi gambar yang berganti sesering yang Anda pilih.
 
 # Choice in the list of how long each picture stays.
 settings-wallpaper-every-10s = 10 detik
@@ -38,7 +38,7 @@ settings-wallpaper-every-1d = 1 hari
 settings-wallpaper-fit-fill = Penuhi layar
 
 # Choice in the list of how the picture fits the screen.
-settings-wallpaper-fit-fit = Sesuaikan, seluruh gambar terlihat
+settings-wallpaper-fit-fit = Muatkan seluruh gambar
 
 # Choice in the list of how the picture fits the screen.
 settings-wallpaper-fit-center = Tengah, ukuran asli
@@ -56,7 +56,7 @@ settings-wallpaper-order-shuffle = Acak
 settings-wallpaper-order-name = Menurut nama file
 
 # Red words when the program that draws the wallpaper would not start.
-settings-wallpaper-no-changer = Wallpaper tidak dapat diganti: programnya tidak mau dimulai.
+settings-wallpaper-no-changer = Trindle tidak dapat memulai program yang mengganti wallpaper.
 
 # Under the large picture, when counting; { $used } of { $all } pictures are used.
 settings-wallpaper-count =
@@ -86,10 +86,10 @@ settings-wallpaper-file-own = { $name }, salah satu gambar bawaan Trindle
 settings-wallpaper-plain-below = Warna polos, diatur di bawah.
 
 # Under the large picture when the picture or folder has gone.
-settings-wallpaper-gone-below = Sudah tidak ada. Pilih gambar atau folder.
+settings-wallpaper-gone-below = Gambar atau folder itu sudah tidak ada. Pilih yang lain.
 
 # Sentence about the wallpaper when it is a plain colour.
-settings-wallpaper-plain = Warna polos, tanpa gambar.
+settings-wallpaper-plain = Hanya warna polos.
 
 # Sentence about the wallpaper when Trindle's own pictures change; { $every } is how often, { $used } of { $all } pictures are used and { $extra } is any added sentences, each after a space.
 settings-wallpaper-changing-own =
@@ -107,16 +107,16 @@ settings-wallpaper-changing-folder =
 settings-wallpaper-empty-folder-choose = Folder { $folder } tidak berisi gambar. Pilih yang lain.
 
 # Added to the sentence about the wallpaper when a folder holds more than Trindle looks through.
-settings-wallpaper-more-than-looked-at = Folder itu berisi lebih banyak daripada yang diperiksa Trindle, jadi sebagian gambarnya mungkin terlewat.
+settings-wallpaper-more-than-looked-at = Folder itu berisi lebih banyak gambar daripada yang dapat diperiksa Trindle, jadi sebagian mungkin terlewat.
 
 # Sentence about the wallpaper for one of Trindle's own pictures; { $name } is its name.
 settings-wallpaper-file-own-said = { $name }, salah satu gambar bawaan Trindle.
 
 # Sentence about the wallpaper for one chosen picture; { $name } is its name, written to read in the middle of a sentence.
-settings-wallpaper-file-one = Satu gambar, { $name }, setiap saat.
+settings-wallpaper-file-one = { $name } selalu ditampilkan.
 
 # Sentence about the wallpaper when the chosen picture cannot be used; { $why } is the reason.
-settings-wallpaper-file-refused = Gambar tidak dipakai. { $why } Gambar bawaan Trindle ditampilkan.
+settings-wallpaper-file-refused = Trindle tidak memakai gambar itu. { $why } Gambar bawaan Trindle ditampilkan sebagai gantinya.
 
 # Sentence about the wallpaper when the picture has gone.
 settings-wallpaper-file-gone = Gambar sudah tidak ada. Pilih gambar atau folder.
@@ -151,14 +151,8 @@ settings-wallpaper-card-title = Wallpaper
 # Heading of the wallpaper line, and name of its switch.
 settings-wallpaper-wallpaper = Wallpaper
 
-# Small words under the wallpaper line.
-settings-wallpaper-wallpaper-about = Mati, layar berwarna polos.
-
 # Heading of the line for choosing where the picture comes from.
 settings-wallpaper-picture = Gambar
-
-# Small words under that line.
-settings-wallpaper-picture-about = Satu gambar, folder, atau bawaan Trindle.
 
 # Name of the round button that chooses one picture.
 settings-wallpaper-choose-picture-button = Pilih gambar
@@ -172,26 +166,20 @@ settings-wallpaper-own-pictures = Gambar bawaan Trindle
 # Heading of the fit line.
 settings-wallpaper-fit = Penyesuaian
 
-# Small words under that line.
-settings-wallpaper-fit-about = Cara gambar menyesuaikan layar.
-
 # Name of the list of how the picture fits the screen.
 settings-wallpaper-fit-name = Cara gambar menyesuaikan layar
 
 # Heading of the colour line.
 settings-wallpaper-colour = Warna
 
-# Small words under the colour line when the colour can be seen.
-settings-wallpaper-colour-shown = Terlihat sendiri, atau di sekeliling gambar.
-
 # Small words under the colour line when a picture covers it.
-settings-wallpaper-colour-hidden = Tersembunyi: gambar menutupi layar.
+settings-wallpaper-colour-hidden = Tersembunyi oleh gambar.
 
 # Placeholder and name of the box for typing the colour as a hex code; the example is a code.
-settings-wallpaper-colour-hex = Warna sebagai kode hex, misalnya #09090b
+settings-wallpaper-colour-hex = Kode hex, misalnya #09090b
 
 # Words behind the i of the Wallpaper card.
-settings-wallpaper-card-about = Warna polos, atau satu gambar, atau folder agar gambar berganti sendiri pada waktu yang Anda atur. Warna terlihat sendiri jika tanpa gambar, dan di sekeliling gambar yang tidak menutupi layar; ketik sebagai kode hex, misalnya #09090b.
+settings-wallpaper-card-about = Pakai warna polos, satu gambar, atau folder berisi gambar yang berganti sesering yang Anda pilih. Warna terlihat sendiri jika tidak ada gambar, dan di sekeliling gambar yang tidak menutupi layar. Ketik sebagai kode hex, misalnya #09090b.
 
 # Small words on the cards that are greyed while the wallpaper is off.
 settings-wallpaper-waits = Nyalakan Wallpaper untuk memakai ini.
@@ -199,38 +187,26 @@ settings-wallpaper-waits = Nyalakan Wallpaper untuk memakai ini.
 # Heading of the line, and name of its switch, for changing the picture now and then.
 settings-wallpaper-rotate = Ganti gambar sesekali
 
-# Small words under that line.
-settings-wallpaper-rotate-about = Setiap gambar dalam folder, bergiliran.
-
 # Heading of the line, and name of its list, for how long each picture stays.
 settings-wallpaper-every = Ganti setiap
-
-# Small words under that line.
-settings-wallpaper-every-about = Berapa lama setiap gambar bertahan.
 
 # Heading of the line, and name of its list, for the order pictures change in.
 settings-wallpaper-order = Urutan
 
-# Small words under the order line.
-settings-wallpaper-order-about = Acak, atau menurut nama file.
-
 # Heading of the line, and name of its button, for moving to the next picture.
-settings-wallpaper-next = Gambar berikutnya sekarang
-
-# Small words under that line.
-settings-wallpaper-next-about = Langsung lompat ke gambar berikutnya.
+settings-wallpaper-next = Gambar berikutnya
 
 # Title of the Changing pictures card.
 settings-wallpaper-changing-title = Gambar berganti
 
 # Words behind the i of that card.
-settings-wallpaper-changing-about = Memakai setiap gambar dalam folder, satu demi satu, berganti pada waktu yang dipilih di sini, acak atau menurut nama file.
+settings-wallpaper-changing-about = Menampilkan setiap gambar dalam folder, satu demi satu, sesering yang Anda pilih di sini, acak atau menurut nama file.
 
 # Words behind the i of the Pictures card when pictures change by themselves.
-settings-wallpaper-pictures-rotating = Hanya gambar yang menyala yang dipakai. Tekan satu untuk meredupkannya dan gambar itu dilewati mulai sekarang; tekan lagi untuk mengembalikannya. Tidak ada yang pernah dihapus, jadi Anda dapat berubah pikiran. Gambar yang ada di layar sekarang adalah yang ada di gambar besar.
+settings-wallpaper-pictures-rotating = Trindle memakai setiap gambar yang tidak diredupkan. Tekan sebuah gambar untuk melewatinya, dan tekan lagi untuk mengembalikannya. Tidak ada yang dihapus. Gambar besar adalah gambar yang ada di layar sekarang.
 
 # Words behind the i of the Pictures card when one picture is on.
-settings-wallpaper-pictures-one = Tekan sebuah gambar untuk menampilkannya di layar. Tidak ada yang pernah dihapus.
+settings-wallpaper-pictures-one = Tekan sebuah gambar untuk memakainya.
 
 # Title of the Pictures card.
 settings-wallpaper-pictures-title = Gambar
@@ -240,6 +216,3 @@ settings-wallpaper-no-pictures-name = Belum ada gambar
 
 # Heading of the line shown when there are no pictures to choose from.
 settings-wallpaper-no-pictures = Tidak ada gambar untuk dipilih
-
-# Small words under that line.
-settings-wallpaper-no-pictures-about = Pilih folder gambar di atas.

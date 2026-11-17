@@ -1,6 +1,6 @@
 [package]
 name = "trindle"
-version = "0.9.0-beta.1"
+version = "0.9.1-beta.4"
 edition = "2021"
 rust-version = "1.85"
 # Resolve dependency versions compatible with rust-version.
@@ -61,7 +61,7 @@ name = "trindle-unlock"
 path = "src/unlock/main.rs"
 
 [dependencies]
-trindle-toolkit = { git = "https://github.com/trindle-os/trindle-toolkit", rev = "ee42b004259aea50e57280388d547fc0556b72be" }
+trindle-toolkit = { git = "https://github.com/trindle-os/trindle-toolkit", rev = "4f188cdef76a3c3072148d2e58d30c26de9dd7dd" }
 wayland-client.workspace = true
 wayland-protocols.workspace = true
 wayland-protocols-wlr.workspace = true
@@ -146,8 +146,8 @@ test-catalogue = ["publisher"]
 
 [dev-dependencies]
 # What the tests read of the toolkit: see its "testing" feature.
-trindle-toolkit = { git = "https://github.com/trindle-os/trindle-toolkit", rev = "ee42b004259aea50e57280388d547fc0556b72be", features = ["testing"] }
-trindle-help = { git = "https://github.com/trindle-os/trindle-help", rev = "c6a73764d1e85a3992e910fd869072b86d561f38" }
+trindle-toolkit = { git = "https://github.com/trindle-os/trindle-toolkit", rev = "4f188cdef76a3c3072148d2e58d30c26de9dd7dd", features = ["testing"] }
+trindle-help = { git = "https://github.com/trindle-os/trindle-help", rev = "634f633a39286c1af7ea89b8de4781cb3daccf02" }
 # The stand-in keyboard a test types with; already built for the compositor.
 wayland-protocols-misc.workspace = true
 # The tree of named parts a window tells a screen reader, as the tests read it.
@@ -183,7 +183,6 @@ codegen-units = 4
 strip = "debuginfo"
 panic = "abort"
 
-# Smithay 0.7.0 with one change, listed in vendor/smithay/TRINDLE.md: shared
-# memory pictures go back to their program as soon as they are on the GPU.
+# Smithay 0.7.0 with the changes listed in vendor/smithay/TRINDLE.md.
 [patch.crates-io]
 smithay = { path = "vendor/smithay" }

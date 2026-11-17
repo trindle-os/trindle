@@ -94,7 +94,7 @@ timed!(Key, Motion, Absolute, Button, Scroll);
 impl KeyboardKeyEvent<Virtual> for Key {
     fn key_code(&self) -> Keycode {
 
-        Keycode::new(self.code + 8)
+        Keycode::new(self.code.saturating_add(8))
     }
     fn state(&self) -> KeyState {
         if self.pressed { KeyState::Pressed } else { KeyState::Released }
@@ -212,9 +212,6 @@ impl Did {
             _ => false,
         }
     }
-}
-
-impl Did {
 
     pub fn taken(&self) -> crate::capture::Taken {
         use crate::capture::Taken;
@@ -288,6 +285,8 @@ mod tests {
     fn keys_and_scrolls_read_as_a_real_device_would() {
         let k = Key { time: 5, code: 30, pressed: true };
         assert_eq!(k.key_code(), Keycode::new(38));
+
+        assert_eq!(Key { time: 0, code: u32::MAX - 7, pressed: true }.key_code(), Keycode::new(u32::MAX));
         assert_eq!(Event::<Virtual>::time_msec(&k), 5);
         let s = Scroll { time: 1, source: AxisSource::Wheel, amount: [0.0, 15.0], v120: [None, Some(120.0)], stopped: [false; 2] };
         assert_eq!(s.amount(Axis::Horizontal), None);

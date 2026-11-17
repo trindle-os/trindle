@@ -30,15 +30,15 @@ keyring-checking = Comprobando…
 
 # SAFETY: needs a human review before it ships
 # Under the title when no keyring exists yet and a program wants to keep a password.
-keyring-why-none = Un programa quiere guardar una contraseña de forma segura. Escribe tu contraseña de inicio de sesión para iniciar el llavero; a partir de ahora se abrirá solo al iniciar sesión.
+keyring-why-none = Un programa quiere guardar una contraseña de forma segura. Escribe tu contraseña de inicio de sesión para iniciar el llavero. A partir de ahora, se abrirá solo cuando inicies sesión.
 
 # SAFETY: needs a human review before it ships
 # Under the title when the keyring was made with a different password from the login one.
-keyring-why-old = Tu contraseña de inicio de sesión no es la que se usó para crear este llavero. Escribe la antigua una vez; después se abrirá solo al iniciar sesión.
+keyring-why-old = Tu contraseña de inicio de sesión no es la que se usó para crear este llavero. Escribe la antigua una vez. Después, el llavero se abrirá solo cuando inicies sesión.
 
 # SAFETY: needs a human review before it ships
 # Under the title when no password was typed at log in, for example with a fingerprint or automatic log in.
-keyring-why-no-login = No se escribió ninguna contraseña al iniciar sesión (huella digital o inicio de sesión automático), así que el llavero no pudo abrirse solo. Escribe tu contraseña de inicio de sesión.
+keyring-why-no-login = No escribiste ninguna contraseña al iniciar sesión (usaste una huella digital o el inicio de sesión automático), así que el llavero no pudo abrirse solo. Escribe tu contraseña de inicio de sesión.
 
 # SAFETY: needs a human review before it ships
 # Under the title when a program asks for a saved password and the keyring is shut.
@@ -52,7 +52,7 @@ keyring-stopped = El llavero se ha detenido
 keyring-not-the-keyring-password = Esa no es la contraseña del llavero
 
 # Shown under the box when the keyring file is damaged and has been left as it is.
-keyring-damaged-left = El archivo del llavero está dañado, así que se ha dejado como está
+keyring-damaged-left = El archivo del llavero está dañado, así que Trindle no lo ha modificado
 
 # SAFETY: needs a human review before it ships
 # Shown under the box when the password is not the person's login password.
@@ -73,7 +73,7 @@ keyring-error-locked = El llavero está bloqueado
 keyring-error-wrong-password = Esa contraseña no abre el llavero
 
 # Said when the collection or item asked for is not there.
-keyring-error-no-such = No existe esa colección o elemento
+keyring-error-no-such = Ese elemento no existe
 
 # Said when the keyring file cannot be read as a keyring.
 keyring-error-damaged = El archivo del llavero está dañado
@@ -84,8 +84,10 @@ keyring-error-damaged = El archivo del llavero está dañado
 keyring-asked-by = Solicitado por { $program }
 
 # Told to a program that asked while the keyring was taking over from the one before and many calls already waited.
-keyring-starting = El llavero se está iniciando. Vuelve a pedirlo.
+keyring-starting = El llavero se está iniciando. Inténtalo de nuevo.
 
 # The program in "Asked for by", for a program on the bus: $name is the name it gives itself, which anything can claim.
 keyring-named-itself = un programa que se llama a sí mismo { $name }
 
+# Said to a program that gave a password with letters the keyring can't read, so no keyring is made with it.
+keyring-password-unreadable = Esa contraseña tiene letras que el llavero no puede leer

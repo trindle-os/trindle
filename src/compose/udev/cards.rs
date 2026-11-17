@@ -24,7 +24,7 @@ use smithay::{
 };
 use tracing::{debug, error, info, warn};
 
-use super::{AnvilState, BackendData, DeviceAddError, OutputManager, UdevData};
+use super::{Compose, BackendData, DeviceAddError, OutputManager, UdevData};
 use crate::{
     clean_start::CleanStart,
     drm_extras::{drm_scanner::{DrmScanEvent, DrmScanner}, leftovers},
@@ -40,10 +40,10 @@ const SUPPORTED_FORMATS_8BIT_ONLY: &[Fourcc] = &[Fourcc::Abgr8888, Fourcc::Argb8
 
 pub(super) fn choose_primary_gpu(session: &LibSeatSession) -> Option<DrmNode> {
 
-    let chosen = std::env::var("ANVIL_DRM_DEVICE").ok().and_then(|var| match DrmNode::from_path(&var) {
+    let chosen = std::env::var("TRINDLE_DRM_DEVICE").ok().and_then(|var| match DrmNode::from_path(&var) {
         Ok(node) => Some(node),
         Err(err) => {
-            warn!(?err, "ANVIL_DRM_DEVICE {} is not a graphics card, choosing one instead", var);
+            warn!(?err, "TRINDLE_DRM_DEVICE {} is not a graphics card, choosing one instead", var);
             None
         }
     });
@@ -83,7 +83,7 @@ fn panel_gpu(seat: &str) -> Option<DrmNode> {
     })
 }
 
-impl AnvilState<UdevData> {
+impl Compose<UdevData> {
     pub(super) fn device_added(&mut self, node: DrmNode, path: &Path) -> Result<(), DeviceAddError> {
 
         let fd = self
@@ -103,8 +103,6 @@ impl AnvilState<UdevData> {
         }
         let gbm = GbmDevice::new(fd).map_err(DeviceAddError::GbmDevice)?;
 
-        let registration_token = self.watch_vblanks(node, notifier);
-
         let (render_node, software) = match self.init_gpu(node, &gbm) {
             Ok((node, software)) => (Some(node), software),
             Err(err) => {
@@ -116,7 +114,9 @@ impl AnvilState<UdevData> {
         let allocator = self.card_allocator(render_node, &gbm)?;
         let framebuffer_exporter = GbmFramebufferExporter::new(gbm.clone(), render_node);
         let render_formats = self.card_render_formats(render_node)?;
-        let color_formats = if std::env::var("ANVIL_DISABLE_10BIT").is_ok() {
+
+        let registration_token = self.watch_vblanks(node, notifier)?;
+        let color_formats = if std::env::var("TRINDLE_DISABLE_10BIT").is_ok() {
             SUPPORTED_FORMATS_8BIT_ONLY
         } else {
             SUPPORTED_FORMATS
@@ -140,11 +140,11 @@ impl AnvilState<UdevData> {
         Ok(())
     }
 
-    fn watch_vblanks(&mut self, node: DrmNode, notifier: DrmDeviceNotifier) -> RegistrationToken {
+    fn watch_vblanks(&mut self, node: DrmNode, notifier: DrmDeviceNotifier) -> Result<RegistrationToken, DeviceAddError> {
         self.handle
             .insert_source(
                 notifier,
-                move |event, metadata, data: &mut AnvilState<_>| match event {
+                move |event, metadata, data: &mut Compose<_>| match event {
                     DrmEvent::VBlank(crtc) => {
                         data.frame_finish(node, crtc, metadata);
                     }
@@ -153,11 +153,11 @@ impl AnvilState<UdevData> {
                     }
                 },
             )
-            .unwrap()
+            .map_err(|err| DeviceAddError::Vblanks(err.to_string()))
     }
 
     fn init_gpu(&mut self, node: DrmNode, gbm: &GbmDevice<DrmDeviceFd>) -> Result<(DrmNode, bool), DeviceAddError> {
-        // SAFETY: the GBM device is kept alive by this backend for as
+        // SAFETY: nothing else in this program makes or ends an EGL display
 
         let display = unsafe { EGLDisplay::new(gbm.clone()).map_err(DeviceAddError::AddNode)? };
         let egl_device = EGLDevice::device_for_display(&display).map_err(DeviceAddError::AddNode)?;
@@ -166,9 +166,8 @@ impl AnvilState<UdevData> {
         if software {
             info!(?node, "no 3D on this card: the processor draws, and windows do not move");
             crate::animate::disable();
-            crate::rest::drawn_by_processor();
 
-            std::env::set_var("TRINDLE_DRAWN_BY_PROCESSOR", "1");
+            crate::session::set_env("TRINDLE_DRAWN_BY_PROCESSOR", "1");
         }
         let render_node = egl_device.try_get_render_node().ok().flatten().unwrap_or(node);
 
@@ -237,8 +236,6 @@ impl AnvilState<UdevData> {
         render_node: Option<DrmNode>,
         software: bool,
     ) {
-
-        self.backend_data.retired_leases.remove(&node);
         self.backend_data.backends.insert(
             node,
             BackendData {
@@ -251,7 +248,7 @@ impl AnvilState<UdevData> {
                 surfaces: HashMap::new(),
 
                 leasing_global: (!software)
-                    .then(|| DrmLeaseState::new::<AnvilState<UdevData>>(&self.display_handle, &node))
+                    .then(|| DrmLeaseState::new_with_filter::<Compose<UdevData>, _>(&self.display_handle, &node, crate::state::unsandboxed))
                     .and_then(|lease| {
                         lease.inspect_err(|err| {
                             warn!(?err, "Failed to initialize drm lease global for: {}", node);
@@ -261,6 +258,10 @@ impl AnvilState<UdevData> {
                 active_leases: Vec::new(),
             },
         );
+
+        if self.backend_data.backends.get(&node).is_some_and(|b| b.leasing_global.is_some()) {
+            self.backend_data.retired_leases.remove(&node);
+        }
     }
 
     pub(super) fn recheck_devices(&mut self, failed: &[DrmNode]) {
@@ -359,7 +360,7 @@ impl AnvilState<UdevData> {
 
         if let Some(mut backend_data) = self.backend_data.backends.remove(&node) {
             if let Some(mut leasing_global) = backend_data.leasing_global.take() {
-                leasing_global.disable_global::<AnvilState<UdevData>>();
+                leasing_global.disable_global::<Compose<UdevData>>();
                 self.backend_data.retired_leases.insert(node, leasing_global);
             }
 
@@ -384,6 +385,7 @@ impl AnvilState<UdevData> {
             self.handle.remove(backend_data.registration_token);
 
             debug!("Dropping device");
+            self.check_syncobj();
         }
         self.early_release_if_one_gpu();
         self.resend_default_dmabuf_feedback();

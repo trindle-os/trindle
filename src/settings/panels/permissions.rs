@@ -8,7 +8,7 @@ use crate::common::apps::{self, Entry};
 use crate::common::keyfile::KeyFile;
 use crate::common::{access, files, run, x11_rooms};
 use crate::plugins;
-use crate::settings::ui::{app_icon, confirm, dropdown, group, headline, in_use_key, line, logo, on, page, Cause, Kit, Msg, Page};
+use crate::settings::ui::{app_icon, confirm, group, headline, icon, in_use_key, in_words, line, on, page, Cause, Kit, Msg, Page};
 
 const PICTURE: f32 = 24.0;
 
@@ -112,11 +112,18 @@ fn apps_named() -> Vec<String> {
     access::flatpak_apps_named(&access::flatpak_places())
 }
 
-fn owners_of(found: Found) -> Vec<Owner> {
-    let all = apps::entries();
+fn plugin_picture(file: Option<&Path>) -> Picture {
+    match file {
+        Some(path) if path.is_file() => Picture::File(path.to_path_buf()),
+        Some(_) => Picture::App(Vec::new()),
+        None => Picture::Nothing,
+    }
+}
+
+fn owners_of(all: &[Entry], found: Found) -> Vec<Owner> {
     let known: Vec<(&'static str, &'static str)> = access::FLATPAK.iter().map(|p| (p.key, p.words)).collect();
     let mut out: Vec<Owner> = found.into_iter().map(|(id, on)| {
-        let (name, icons) = flathub_app(&all, &id);
+        let (name, icons) = flathub_app(all, &id);
         Owner { id, name, sub: String::new(), picture: Picture::App(icons), known: known.clone(),
                 on: on.iter().map(|s| s.to_string()).collect() }
     }).collect();
@@ -141,6 +148,8 @@ pub struct Permissions {
     asker: Option<fn() -> Found>,
     #[cfg(test)]
     namer: Option<fn() -> Vec<String>>,
+
+    entries: Vec<Entry>,
     debs: Vec<Owner>,
     plugins: Vec<Owner>,
     appimages: Vec<Owner>,
@@ -173,9 +182,8 @@ fn loose_programs() -> &'static str {
 fn loose_words(top: &str) -> String {
     let mut out = top.to_string();
     for key in boxed::ALLOWED {
-        let a = access::ask(key);
         out.push(' ');
-        out.push_str(&t!("settings-permissions-title-and-words", title = access::title(key), words = access::off_line(a.without)));
+        out.push_str(&t!("settings-permissions-title-and-words", title = access::title(key), words = access::off_line(key)));
     }
     out
 }
@@ -191,9 +199,6 @@ fn added_images(top: &Path) -> Vec<String> {
     }).collect()
 }
 
-pub fn older_why() -> &'static str {
-    t!("settings-permissions-older-why")
-}
 const OLDER_KEY: &str = "permissions:older-programs";
 
 fn lets_in(level: Level) -> &'static str {
@@ -231,14 +236,29 @@ fn launcher(path: &Path) -> Option<(String, Vec<String>)> {
     Some((name, file.string("Desktop Entry", "Icon").into_iter().collect()))
 }
 
+fn with_generic(mut icons: Vec<String>, id: &str, name: &str) -> Vec<String> {
+    icons.push(apps::generic_icon_for(id, name));
+    icons
+}
+
 fn flathub_app(all: &[Entry], id: &str) -> (String, Vec<String>) {
     let file = format!("{id}.desktop");
     if let Some(e) = all.iter().find(|e| e.id == file) {
         return (e.name.clone(), e.icons());
     }
-    apps::app_dirs().iter().map(|d| d.join(&file)).find(|p| p.is_file())
+    let (name, icons) = apps::app_dirs().iter().map(|d| d.join(&file)).find(|p| p.is_file())
         .and_then(|p| launcher(&p)).filter(|(name, _)| !name.is_empty())
-        .unwrap_or_else(|| (id.to_string(), Vec::new()))
+        .unwrap_or_else(|| (id.to_string(), Vec::new()));
+    let icons = with_generic(icons, id, &name);
+    (name, icons)
+}
+
+fn version_line(v: &str, asks_nothing: bool, notes: &[String]) -> String {
+    match (asks_nothing, notes) {
+        (true, _) => t!("settings-permissions-version-asks-nothing", v = v),
+        (false, []) => t!("settings-permissions-version", v = v),
+        (false, notes) => t!("settings-permissions-version-notes", v = v, notes = in_words(notes)),
+    }
 }
 
 impl Permissions {
@@ -279,6 +299,7 @@ impl Permissions {
         self.older = x11_rooms::allowed(&files::setting(x11_rooms::SETTING));
         self.outside.read();
         self.read_thunder(kit);
+        self.entries = apps::entries();
         if !self.fresh {
             self.ask(kit);
         }
@@ -294,7 +315,7 @@ impl Permissions {
         self.turn += 1;
         if self.flathub.is_none() {
             let named = self.apps_namer()();
-            self.flathub = Some(owners_of(named.into_iter().map(|id| (id, Vec::new())).collect()));
+            self.flathub = Some(owners_of(&self.entries, named.into_iter().map(|id| (id, Vec::new())).collect()));
         }
         let turn = self.turn;
         let back = kit.then::<Permissions, Found>(move |me, _, found| me.heard(turn, found));
@@ -306,14 +327,15 @@ impl Permissions {
             return;
         }
         (self.fresh, self.answered) = (true, true);
-        self.flathub = Some(owners_of(found));
+        self.flathub = Some(owners_of(&self.entries, found));
     }
 
     fn read_own(&mut self) {
-        let all = apps::entries();
+        let all = &self.entries;
         self.debs = boxed::installed().into_iter().map(|id| {
             let name = all.iter().find(|e| e.id.trim_end_matches(".desktop").eq_ignore_ascii_case(&id)).map_or_else(|| id.clone(), |e| e.name.clone());
             let icons = boxed::launchers::launchers_of(&id).first().and_then(|p| launcher(p)).map(|(_, i)| i).unwrap_or_default();
+            let icons = with_generic(icons, &id, &name);
             Owner { sub: boxed::version(&id).map(|v| t!("settings-permissions-version", v = v)).unwrap_or_default(),
                     picture: Picture::App(icons), known: boxed::ALLOWED.iter().map(|k| (*k, *k)).collect(), on: boxed::allowed(&id),
                     id, name }
@@ -341,25 +363,19 @@ impl Permissions {
 
             let known: Vec<(&'static str, &'static str)> = plugins::PERMISSIONS.iter().map(|k| (*k, *k))
                 .filter(|(k, _)| p.asks.iter().any(|a| a == k)).collect();
-            let mut sub = if known.is_empty() { t!("settings-permissions-version-asks-nothing", v = &p.version) } else { t!("settings-permissions-version", v = &p.version) };
 
-            let mut notes: Vec<&str> = Vec::new();
+            let mut notes: Vec<String> = Vec::new();
             for note in known.iter().filter_map(|(k, _)| access::row_note(k)) {
-                if !notes.contains(&note) {
-                    notes.push(note);
+                if !notes.iter().any(|n| n == note) {
+                    notes.push(note.to_string());
                 }
             }
-            if !notes.is_empty() {
-                sub = format!("{sub}; {}.", notes.join("; "));
-            }
+            let mut sub = version_line(&p.version, known.is_empty(), &notes);
 
             if !p.listen.is_empty() {
                 sub = t!("settings-permissions-sub-listen", sub = &sub, detail = access::listen_detail(&p.listen));
             }
-            let picture = match &p.ring {
-                Some((icon, _, _)) => Picture::File(icon.clone()),
-                None => Picture::Nothing,
-            };
+            let picture = plugin_picture(p.ring.as_ref().map(|(icon, _, _)| icon.as_path()));
             Owner { on: plugins::allowed(&p), id: p.id, name: p.name, sub, picture, known }
         }).collect();
     }
@@ -405,7 +421,6 @@ impl Permissions {
             t!("settings-permissions-no-iommu")
         };
         let mut rows = vec![line(t!("settings-permissions-asked-before"))
-            .sub(t!("settings-permissions-forget-one"))
             .key(THUNDER).node(kit)];
         if let Some(p) = problem {
             rows.push(note(t!("settings-permissions-devices-not-read", why = p)).tone(Tone::Problem));
@@ -415,7 +430,7 @@ impl Permissions {
         for (id, vendor, name) in &listing.devices {
             let key = format!("{THUNDER}:{id}");
             let who = id.clone();
-            let forget = confirm::<Permissions>(kit, &key, "user-trash-symbolic", t!("settings-permissions-forget-device"),
+            let forget = confirm::<Permissions>(&key, "user-trash-symbolic", t!("settings-permissions-forget-device"),
                                                 move |me, k| me.forget_thunder(k, who.clone()));
             let name = if name.is_empty() { t!("settings-permissions-a-device").to_string() } else { name.clone() };
             let sub = if vendor.is_empty() { t!("settings-permissions-may-always").to_string() } else { t!("settings-permissions-made-by", vendor = vendor) };
@@ -522,13 +537,16 @@ impl Permissions {
         let picture = match &o.picture {
             Picture::App(_) if waiting => spinner().size(PICTURE),
             Picture::App(icons) => app_icon(icons.clone(), PICTURE),
-            Picture::File(path) => logo(path.clone(), PICTURE),
+            Picture::File(path) => icon(path.to_string_lossy().into_owned(), PICTURE),
             Picture::Nothing => return text.key(name),
         };
         row(vec![picture, text]).gap(12.0).width(Length::Fill).key(name)
     }
 
     fn older(&mut self, kit: &mut Kit, allow: bool) {
+        if allow && !crate::toolkit::window::persons_own(crate::common::person_only::SETTINGS_PERMISSIONS) {
+            return;
+        }
         self.older = allow;
         let err = files::set_setting(x11_rooms::SETTING, if allow { "yes" } else { "no" }).err();
         if err.is_some() {
@@ -556,17 +574,18 @@ impl Permissions {
         if self.codes_unread {
             rows.push(line(t!("settings-permissions-codes-unread-line")).key(CODES_KEY).node(kit));
         } else if rows.is_empty() {
-            rows.push(line(t!("settings-permissions-codes-none")).sub(t!("settings-permissions-codes-none-sub")).node(kit));
+            rows.push(line(t!("settings-permissions-codes-none")).node(kit));
         }
         group(t!("settings-permissions-codes")).icon(access::icon("expand")).about(t!("settings-permissions-codes-about"))
-            .rows(rows).node(kit)
+            .rows(rows).grows().node(kit)
     }
 
     fn older_card(&self, kit: &Kit) -> Node<Msg> {
         let title = t!("settings-permissions-allow-older");
         let sw = switch(self.older, title, |b| on::<Permissions>(move |me, k| me.older(k, b)));
         group(t!("settings-permissions-older")).icon("preferences-desktop-display-symbolic")
-            .rows(vec![line(title).sub(older_why()).key(OLDER_KEY).control(sw).node(kit)])
+            .about(t!("settings-permissions-older-why"))
+            .rows(vec![line(title).key(OLDER_KEY).control(sw).node(kit)])
             .node(kit)
     }
 
@@ -574,7 +593,7 @@ impl Permissions {
         let rows = if owners.is_empty() {
             vec![line(empty).node(kit)]
         } else {
-            super::users::banded_rows(owners.iter().map(|o| self.row(kit, kind, o)).collect())
+            crate::toolkit::widget::banded_list(owners.iter().map(|o| self.row(kit, kind, o)).collect())
         };
         let mut about = about.to_string();
         for o in owners {
@@ -587,7 +606,6 @@ impl Permissions {
         let (least, most) = if owners.len() > 3 { (5, 8) } else { crate::toolkit::theme::bento().card };
         card.node(kit).span_grows(least, most, crate::toolkit::theme::bento().words)
     }
-
 }
 
 impl Page for Permissions {
@@ -626,7 +644,7 @@ impl Page for Permissions {
             (_, 1) => t!("settings-permissions-one-app").to_string(),
             (_, n) => t!("settings-permissions-many-apps", n = n),
         };
-        let mut items = vec![headline(kit, words)];
+        let mut items = vec![headline(words)];
 
         let flathub = self.flathub.as_deref().unwrap_or(&[]);
         let kinds: [(&str, &str, &str, Kind, &[Owner], &str); 5] = [
@@ -640,8 +658,9 @@ impl Page for Permissions {
 
         let at = self.tab.filter(|t| *t < kinds.len()).unwrap_or_else(|| kinds.iter().position(|k| !k.4.is_empty()).unwrap_or(0));
         let names = kinds.iter().map(|(heading, _, _, _, owners, _)| if owners.is_empty() { heading.to_string() } else { format!("{heading} ({})", owners.len()) }).collect();
-        items.push(dropdown(kit, "permissions-kind", names, Some(at), t!("settings-permissions-kind-tip"),
-                                              |i| on::<Permissions>(move |p, _| p.tab = Some(i))));
+
+        items.push(crate::toolkit::widget::choice(names, at, t!("settings-permissions-kind-tip"),
+                                                  |i| on::<Permissions>(move |p, _| p.tab = Some(i))).width(crate::toolkit::widget::Length::Shrink).key("permissions-kind"));
         let (heading, icon, words, kind, owners, none) = kinds[at];
         items.push(self.card(kit, heading, icon, words, kind, owners, none));
         items.push(self.codes_card(kit));
@@ -684,6 +703,41 @@ impl Permissions {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn a_plugins_notes_are_one_sentence_from_the_words_files() {
+        let notes = vec![t!("access-note-acts-as-you").to_string(), t!("access-note-expand").to_string()];
+        let line = super::version_line("1.2", false, &notes);
+        assert_eq!(line, t!("settings-permissions-version-notes", v = "1.2", notes = crate::settings::ui::in_words(&notes)));
+        assert!(!line.contains(';'), "{line}");
+        assert_eq!(super::version_line("1.2", false, &[]), t!("settings-permissions-version", v = "1.2"));
+    }
+
+    #[test]
+    fn an_app_with_no_launcher_falls_back_to_the_shared_generic_icon() {
+        let id = "org.example.NoLauncherAnywhere";
+        let (name, icons) = super::flathub_app(&[], id);
+        assert_eq!(name, id);
+        assert_eq!(icons.last(), Some(&crate::common::apps::generic_icon_for(id, id)));
+    }
+
+    #[test]
+    fn no_line_under_a_permissions_control_explains_it() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let kit = Kit::new(events, asks, None, None);
+        let said = Permissions::made_up().view(&kit).said().join("|");
+        for old in [
+            "Once for each program.",
+            "The program can only read that file, with no internet.",
+            "They open as normal, with the internet.",
+            "Forget one to be asked again.",
+            "Codes from your plugins appear here.",
+            "Each runs separately. If this is off, they won\'t open.",
+        ] {
+            assert!(!said.contains(old), "{old} is still on the page");
+        }
+    }
     use super::*;
     use crate::settings::ui::Do;
     use crate::thunder::sysfs::Domain;
@@ -794,6 +848,17 @@ mod tests {
     }
 
     #[test]
+    fn a_plugins_missing_icon_file_is_found_missing_once_as_the_list_is_read() {
+        let dir = code_dir("picture");
+        let there = dir.join("icon.svg");
+        std::fs::write(&there, "<svg/>").unwrap();
+        assert!(matches!(plugin_picture(Some(&there)), Picture::File(p) if p == there));
+        assert!(matches!(plugin_picture(Some(&dir.join("gone.svg"))), Picture::App(names) if names.is_empty()));
+        assert!(matches!(plugin_picture(None), Picture::Nothing));
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
     fn a_long_list_is_cut_and_the_rest_counted() {
         let dir = code_dir("long");
         let many: Vec<String> = (0..300).map(|i| format!(r#"{{"trigger":"c{i:04}","replace":"x"}}"#)).collect();
@@ -873,7 +938,7 @@ mod tests {
         assert_eq!(p.turn, 1, "opening the page asks Flatpak nothing");
         let said = p.view(&kit).said();
         assert!(said.iter().any(|w| w == "org.example.Browser") && said.iter().any(|w| w == "org.example.Notes"), "{said:?}");
-        assert!(!said.iter().any(|w| w.starts_with("Reading")), "{said:?}");
+        assert!(!said.iter().any(|w| w.starts_with("Checking")), "{said:?}");
         let all = icons(&p, &kit);
         assert_eq!(all.len(), 2 * access::FLATPAK.len());
         assert!(all.iter().all(|(_, can)| *can), "{all:?}");
@@ -927,7 +992,7 @@ mod tests {
         assert_eq!((p.turn, p.answered), (1, false));
         let said = p.view(&kit).said();
         assert!(said.iter().any(|w| w == "org.example.Browser") && said.iter().any(|w| w == "org.example.Notes"), "{said:?}");
-        assert!(said.iter().any(|w| w.starts_with("Reading what each of ") && w.ends_with(" may use…")), "{said:?}");
+        assert!(said.iter().any(|w| w.starts_with("Checking what ") && w.ends_with(" may use…")), "{said:?}");
         let waiting = icons(&p, &kit);
         assert_eq!(waiting.len(), 2 * access::FLATPAK.len());
         assert!(waiting.iter().all(|(_, can)| !*can), "what is not known yet cannot be pressed: {waiting:?}");
@@ -943,7 +1008,7 @@ mod tests {
         p.heard(1, two_found());
         assert_eq!(rows(&p, &kit), before, "the answer moved a row, or something in one");
         assert!(icons(&p, &kit).iter().all(|(_, can)| *can));
-        assert!(!p.view(&kit).said().iter().any(|w| w.starts_with("Reading")));
+        assert!(!p.view(&kit).said().iter().any(|w| w.starts_with("Checking")));
     }
 
     #[test]
@@ -1006,7 +1071,7 @@ mod tests {
         assert_eq!(p.programs[0].on, ["network", "sound"]);
         let all = loose_words(loose_images());
         for key in boxed::ALLOWED {
-            assert!(all.contains(&access::off_line(access::ask(key).without)), "{key} has no Off: line");
+            assert!(all.contains(access::off_line(key)), "{key} has no Off: line");
         }
         let _ = std::fs::remove_dir_all(&top);
     }

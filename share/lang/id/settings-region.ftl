@@ -10,7 +10,7 @@ settings-region-keywords = bahasa lokal negara format tanggal mata uang wilayah
 settings-region-help = Bahasa dan format berlaku saat Anda login berikutnya.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = Keluar dan masuk lagi untuk melihatnya.
+settings-region-later = Masuk lagi untuk melihatnya di mana-mana.
 
 # Shown while the page reads the computer.
 settings-region-looking = Memeriksa…
@@ -39,7 +39,7 @@ settings-region-installed-done = Terpasang
 settings-region-everything-in = Semuanya dalam { $lang }.
 
 # Headline when the formats differ from the language: the names are { $lang } and { $fmt }.
-settings-region-menus-in = Menu dalam { $lang }; tanggal dan angka ditulis seperti dalam { $fmt }.
+settings-region-menus-in = Menu memakai { $lang }. Tanggal dan angka mengikuti gaya { $fmt }.
 
 # Headline when a change is saved but waits for the next login: { $words } is the sentence so far.
 settings-region-with-wait = { $words } Keluar dan masuk lagi untuk melihat perubahannya.
@@ -54,13 +54,10 @@ settings-region-language = Bahasa
 settings-region-formats = Format
 
 # Help text of the Language card (the information button).
-settings-region-language-about = Bahasa adalah bahasa menu dan pesan. Format adalah cara tanggal, waktu, angka, mata uang, satuan ukuran, dan ukuran kertas ditulis, dan boleh mengikuti kebiasaan negara lain. Keduanya berlaku saat Anda login berikutnya.
+settings-region-language-about = Bahasa dipakai untuk menu dan pesan. Format menentukan cara penulisan tanggal, waktu, angka, mata uang, dan satuan ukuran, serta ukuran kertas. Format dapat mengikuti gaya negara lain. Keduanya berlaku saat Anda login berikutnya.
 
 # Under the Language heading.
-settings-region-language-sub = Menu dan pesan, mulai login berikutnya.
-
-# Under the Formats heading.
-settings-region-formats-sub = Tanggal, angka, mata uang, dan ukuran kertas.
+settings-region-language-sub = Menu dan pesan berubah saat login berikutnya.
 
 # Heading of the line that shows a date and a number in the chosen formats.
 settings-region-date-number = Tanggal dan angka
@@ -75,7 +72,7 @@ settings-region-in-use = Sedang dipakai
 settings-region-add = Tambah bahasa
 
 # Help text of the Add a language card (the information button).
-settings-region-add-about = Memasang bahasa lain, agar dapat dipilih untuk menu atau format. Pembuatannya butuh waktu sebentar dan memerlukan kata sandi administrator.
+settings-region-add-about = Memasang bahasa lain, agar Anda dapat memilihnya untuk menu atau format. Pemasangan butuh waktu sebentar dan memerlukan kata sandi administrator.
 
 # Heading of the line shown when every language is already installed.
 settings-region-all-installed = Semua bahasa sudah terpasang
@@ -94,11 +91,7 @@ settings-region-install-another = Pasang yang lain
 
 # Tip of the button that installs the chosen language.
 # SAFETY: needs a human review before it ships
-settings-region-install-this = Pasang bahasa ini (meminta kata sandi Anda)
-
-# Under the Install another heading.
-# SAFETY: needs a human review before it ships
-settings-region-needs-password = Memerlukan kata sandi administrator.
+settings-region-install-this = Pasang bahasa ini
 
 # Heading of the line saying how many more languages can be made.
 settings-region-ready = Siap ditambahkan
@@ -106,7 +99,7 @@ settings-region-ready = Siap ditambahkan
 # Under the Ready to add heading: how many more languages can be made.
 settings-region-more =
     { $n ->
-       *[other] { $n } bahasa lagi yang dapat dibuat komputer ini.
+       *[other] Anda dapat memasang { $n } bahasa lagi.
     }
 
 settings-region-removing = Menghapus
@@ -117,7 +110,6 @@ settings-region-remove-language = Hapus bahasa ini
 
 settings-region-kept = Bahasa di komputer ini
 
-settings-region-kept-about = Semua bahasa yang terpasang di sini. Hapus yang tidak Anda pakai; bahasa yang sedang Anda pakai tetap ada. Meminta kata sandi administrator.
+settings-region-kept-about = Semua bahasa yang terpasang di komputer ini. Hapus yang tidak Anda pakai, kecuali bahasa yang sedang Anda pakai. Menghapus bahasa memerlukan kata sandi administrator.
 
-settings-region-in-use-stays = Sedang dipakai, jadi tetap ada
-
+settings-region-in-use-stays = Sedang dipakai.

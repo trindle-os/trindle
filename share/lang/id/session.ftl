@@ -26,15 +26,15 @@ session-lock-use-pin = Gunakan PIN
 session-lock-use-phone = Gunakan ponsel
 
 # Shown while the typed password or PIN is being checked.
-session-lock-checking = Memeriksa...
+session-lock-checking = Memeriksa…
 
 # Shown when the PIN has run out of time and the password is asked for instead.
 # SAFETY: needs a human review before it ships
-session-lock-pin-timed-out = Waktu PIN habis; ketik kata sandi Anda.
+session-lock-pin-timed-out = Waktu PIN habis. Ketik kata sandi Anda.
 
 # Shown after too many wrong PINs, and the password is asked for instead.
 # SAFETY: needs a human review before it ships
-session-lock-too-many-pins = Terlalu banyak PIN salah; ketik kata sandi Anda.
+session-lock-too-many-pins = Terlalu banyak PIN salah. Gunakan kata sandi Anda.
 
 # Shown after a wrong PIN, with how many tries are left (1 is one try left).
 # SAFETY: needs a human review before it ships
@@ -44,15 +44,15 @@ session-lock-wrong-pin =
     }
 
 # Shown while the phone is asked to unlock the screen.
-session-lock-asking-phone = Menghubungi ponsel Anda...
+session-lock-asking-phone = Menghubungi ponsel Anda…
 
 # Shown when the phone did not unlock the screen and the PIN may be typed.
 # SAFETY: needs a human review before it ships
-session-lock-phone-no-pin = Ponsel Anda tidak membukanya. Gunakan PIN Anda.
+session-lock-phone-no-pin = Trindle tidak dapat membuka kunci dengan ponsel Anda. Gunakan PIN Anda.
 
 # Shown when the phone did not unlock the screen and the password must be typed.
 # SAFETY: needs a human review before it ships
-session-lock-phone-no-password = Ponsel Anda tidak membukanya. Ketik kata sandi Anda.
+session-lock-phone-no-password = Trindle tidak dapat membuka kunci dengan ponsel Anda. Ketik kata sandi Anda.
 
 # Shown when the password typed is not the person's password.
 # SAFETY: needs a human review before it ships
@@ -74,7 +74,7 @@ session-wallpaper-larger-4k = lebih besar dari 4K
 session-wallpaper-larger-screen = lebih besar dari layar Anda
 
 # A reason a wallpaper was left out: its file is over 20 MB, or over 200 MB if it moves.
-session-wallpaper-over-20-or-200 = lebih dari 20 MB (200 MB jika bergerak)
+session-wallpaper-over-20-or-200 = lebih dari 20 MB (200 MB animasi)
 
 # A reason a wallpaper was left out: its file is over 20 MB.
 session-wallpaper-over-20 = lebih dari 20 MB
@@ -86,7 +86,10 @@ session-wallpaper-over-200 = lebih dari 200 MB
 session-wallpaper-reasons-or = { $first } atau { $second }
 
 # The line that says how many wallpapers were left out and why; the count and the reasons come in.
-session-wallpaper-left-out = { $count } dilewati: { $why }.
+session-wallpaper-left-out =
+    { $count ->
+       *[other] Trindle melewati { $count } gambar karena { $why }.
+    }
 
 # Under the lock screen when a phone or password check was given up on.
 session-lock-check-abandoned = Itu memakan waktu terlalu lama. Coba lagi.
@@ -97,7 +100,7 @@ session-lock-check-abandoned = Itu memakan waktu terlalu lama. Coba lagi.
 session-restart-question = Mulai ulang seluruh desktop?
 
 # Under the heading: what restarting everything does to the open windows.
-session-restart-windows = Setiap jendela yang terbuka akan ditutup, dan apa pun di dalamnya yang belum disimpan akan hilang.
+session-restart-windows = Setiap jendela yang terbuka akan ditutup. Apa pun yang belum Anda simpan akan hilang.
 
 # Tip of the round button that leaves everything as it is.
 session-restart-cancel = Batal
@@ -105,3 +108,12 @@ session-restart-cancel = Batal
 # Main button that restarts the whole desktop.
 session-restart-go = Mulai ulang
 
+
+# Under the lock screen when Enter is pressed while the last try, given up on, is still being checked.
+session-lock-still-checking = Masih memeriksa percobaan terakhir Anda. Coba lagi sebentar lagi.
+
+# Under the lock screen after several wrong tries, with how many seconds to wait (1 is one second).
+session-lock-wait =
+    { $n ->
+       *[other] Terlalu banyak percobaan salah. Coba lagi dalam { $n } detik.
+    }

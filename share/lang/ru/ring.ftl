@@ -10,7 +10,7 @@ ring-open = Открыть
 ring-plugin-not-open = Нечего закрывать
 
 # Name of the line or button that opens Settings from the ring (plugin menus, the ring's own tools).
-ring-settings = Параметры
+ring-settings = Настройки
 
 # First line of the ring's --help, printed in a terminal.
 ring-cli-usage = Использование:
@@ -22,34 +22,34 @@ ring-cli-command = { $program } [ПАРАМЕТР…]
 ring-cli-options = Параметры:
 
 # Help for the ring's --say option, printed in a terminal.
-ring-cli-say = Выполнить то, о чём просят эти слова, как если бы их сказали кольцу (для проверки голосовых команд без микрофона)
+ring-cli-say = Выполнить голосовую команду из текста, без микрофона
 
 # Help for the ring's --background option, printed in a terminal.
-ring-cli-background = Запустить без показа, чтобы первое открытие было мгновенным
+ring-cli-background = Запустить незаметно, чтобы кольцо открылось мгновенно в первый раз
 
 # Help for the ring's --show-desktop option, printed in a terminal.
-ring-cli-show-desktop = Убрать все окна, чтобы показать рабочий стол, или вернуть их (так работает Super и D)
+ring-cli-show-desktop = Скрыть все окна, чтобы показать рабочий стол, или вернуть их (это делают клавиши Super и D)
 
 # Help for the ring's --listen option, printed in a terminal.
-ring-cli-listen = Открыть кольцо сразу в режиме прослушивания, как это делает сочетание клавиш
+ring-cli-listen = Открыть кольцо сразу в режиме ожидания голосовой команды, как это делает сочетание клавиш
 
 # Help for the ring's --all option, printed in a terminal.
 ring-cli-all = Открыть кольцо со всеми приложениями вокруг
 
 # Help for the ring's --power option, printed in a terminal.
-ring-cli-power = Открыть кольцо на странице выхода, перезагрузки и выключения
+ring-cli-power = Открыть питание кольца: выход из системы, перезагрузка и выключение
 
 # Help for the ring's --favourites option, printed in a terminal.
 ring-cli-favourites = Открыть страницу избранного в параметрах
 
 # Help for the ring's --restyle option, printed in a terminal.
-ring-cli-restyle = Сразу применить новый вид (светлый или тёмный, или новый акцент) из параметров
+ring-cli-restyle = Сразу применить новый вид из параметров (светлый или тёмный, или новый цвет акцента)
 
 # Help for the ring's --corners option, printed in a terminal.
-ring-cli-corners = Снова создать сенсорные точки в верхних углах
+ring-cli-corners = Снова настроить сенсорные точки в верхних углах
 
 # Help for the ring's --notes option, printed in a terminal.
-ring-cli-notes = Перевести клавиатуру на круги уведомлений на экране (так работает Super и N)
+ring-cli-notes = Перевести управление с клавиатуры на круги уведомлений на экране (это делают клавиши Super и N)
 
 # Error printed in a terminal when the ring is given an option it does not know.
 ring-cli-unknown = неизвестный параметр { $option }
@@ -112,13 +112,13 @@ ring-tool-report = Сообщить о проблеме
 ring-gone = Этого больше нет.
 
 # Line in the ring when nothing could open the item that was pressed.
-ring-could-not-open = Ничто не смогло это открыть.
+ring-could-not-open = Trindle не может это открыть.
 
 # Line in the ring while it listens to a spoken command.
-ring-listening = Слушаю... говорите, остановлюсь, когда вы закончите
+ring-listening = Слушаю… Говорите команду. Остановлюсь, когда вы замолчите
 
 # Line in the ring while it works out what was said.
-ring-working-out = Разбираю...
+ring-working-out = Разбираю…
 
 # Answer to the spoken command to close windows when none are open.
 ring-nothing-to-close = Нечего закрывать
@@ -188,7 +188,7 @@ ring-star-remove = Убрать из избранного
 ring-star-add = Добавить в избранное
 
 # Screen reader name of the red button that shows why an uninstall failed.
-ring-not-done = Не выполнено
+ring-not-done = Почему нет?
 
 # Note on an app's menu when the middle of the ring has no room for another favourite; the number is how many it holds.
 ring-middle-full =
@@ -224,7 +224,7 @@ ring-empty-hint = Нажмите «Все приложения», затем щ�
 
 # Line in the ring when a spoken or typed power choice needs a click to confirm.
 # SAFETY: needs a human review before it ships
-ring-power-only-click = Подтвердить это можно только щелчком.
+ring-power-only-click = Щёлкните, чтобы подтвердить.
 
 # Line in the ring when something other than the person tried to shut the computer down.
 # SAFETY: needs a human review before it ships
@@ -232,7 +232,7 @@ ring-power-only-own = Выключить этот компьютер может�
 
 # Line in the ring when the power page closed because a program pressed a key.
 # SAFETY: needs a human review before it ships
-ring-power-closed = Страница питания закрылась: клавишу нажала программа, а не вы.
+ring-power-closed = Страница питания закрылась, потому что программа отправила нажатие клавиши.
 
 ring-startup-add = Запускать при входе
 
@@ -241,11 +241,19 @@ ring-startup-remove = Не запускать при входе
 
 
 # Help for the option that opens the shortcut list, or closes it when it is showing.
-ring-cli-shortcuts = Показать список всех быстрых клавиш или убрать его (Super и K, если не изменено в «Настройках»)
+ring-cli-shortcuts = Показать список всех быстрых клавиш или скрыть его (Super и K, если вы не измените это в «Настройках»)
 
 # Notice from the new ring after the parts were restarted from the keyboard.
 ring-restarted = Перезапущено
 
 # Under the notice above.
-ring-restarted-why = Кольцо и вспомогательные части запущены снова.
+ring-restarted-why = Кольцо и его вспомогательные части перезапущены.
 
+# Tip on the app menu's red button when removing the app did not work.
+ring-uninstall-failed = Не удалось удалить приложение.
+
+# Shorter name of the Sound and video piece of All apps, for when the full name does not fit along it.
+ring-category-media-short = Звук
+
+# Line in the ring when a spoken command, such as turning the sound down, did not work.
+ring-voice-failed = Не получилось.

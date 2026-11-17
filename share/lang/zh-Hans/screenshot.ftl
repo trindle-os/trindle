@@ -4,7 +4,7 @@
 screenshot-name = 截图
 
 # Note on the overlay before any part is chosen.
-screenshot-drag = 拖动选出要保留的部分
+screenshot-drag = 拖动框选要保留的部分
 
 # Name of the round button that keeps the whole screen.
 screenshot-whole = 整个屏幕
@@ -107,16 +107,16 @@ screenshot-not-saved = 截图未保存
 screenshot-not-copied = 截图未复制
 
 # Words of that notice.
-screenshot-clipboard-refused = 剪贴板无法接收。
+screenshot-clipboard-refused = Trindle 无法复制。
 
 # Words of the notice that the screenshot could not be saved: the picture was not made.
-screenshot-no-picture = 无法生成图片
+screenshot-no-picture = 无法截图。
 
 # Words of the notice that the screenshot could not be saved: no bus to ask on.
-screenshot-no-bus = 没有可供询问的会话总线
+screenshot-no-bus = Trindle 无法询问保存位置。
 
 # Words of the notice that the screenshot could not be saved: the file chooser could not be asked.
-screenshot-no-chooser = 无法询问文件选择器
+screenshot-no-chooser = 无法打开文件选择器。
 
 # Words of the notice that the screenshot could not be saved: every file name was taken.
 screenshot-no-free-name = 没有可用的名称
@@ -128,7 +128,7 @@ screenshot-write-failed = { $path }：{ $why }
 screenshot-eye-title = 取色器
 
 # Words that float beside the i of the eye dropper's window.
-screenshot-eye-help = 按下取色器，然后点击屏幕上的任意位置，即可取得指针下的颜色。按 Escape 放弃。每种颜色会立即以十六进制代码复制，并保存在下面的列表中，最新的在前，以后可以再次复制。
+screenshot-eye-help = 按下取色器，然后点击屏幕上的任意位置，即可拾取指针下的颜色。按 Escape 取消。每种颜色会立即以十六进制代码复制，并添加到下面的列表中，最新的在前，以后可以再次复制。
 
 # Name of the i button beside the title.
 screenshot-eye-about = 关于取色器
@@ -137,16 +137,16 @@ screenshot-eye-about = 关于取色器
 screenshot-eye-take = 取色
 
 # Sentence under the title while no colour has been taken.
-screenshot-eye-none = 从屏幕上的任何位置取一种颜色。
+screenshot-eye-none = 从屏幕上取色。
 
 # Sentence under the title once colours have been taken.
 screenshot-eye-taken =
     { $n ->
-       *[other] 已取 { $n } 种颜色；最新的是 { $newest }。
+       *[other] 已选取 { $n } 种颜色。最新的是 { $newest }。
     }
 
 # Shown in the big card while no colour has been taken.
-screenshot-eye-latest-empty = 您取的颜色会大大地显示在这里，随时可以复制。
+screenshot-eye-latest-empty = 还没有选取颜色。
 
 # Name of the card that holds the latest colour.
 screenshot-eye-latest = 最新的颜色
@@ -156,10 +156,10 @@ screenshot-eye-latest = 最新的颜色
 screenshot-eye-clear = 清空列表
 
 # Head of the card with the list of colours taken.
-screenshot-eye-list = 已取的颜色
+screenshot-eye-list = 你的颜色
 
 # Shown in the list card while no colour has been taken.
-screenshot-eye-list-empty = 用取色器取的颜色保存在这里，最新的在前。
+screenshot-eye-list-empty = 还没有选取颜色。
 
 # SAFETY: needs a human review before it ships
 # Name of the round button that takes a colour out of the list.
@@ -170,15 +170,15 @@ screenshot-eye-damaged = 取色器颜色
 
 # SAFETY: needs a human review before it ships
 # Title of the window that asks what an app may share.
-screenshot-pick-title = 要与 { $app } 共享您的屏幕吗？
+screenshot-pick-title = 要与 { $app } 共享你的屏幕吗？
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title when several things can be picked.
-screenshot-pick-many = 请选择一项或多项。只有您选的内容会被共享，直到应用停止或关闭。
+screenshot-pick-many = 请选择一项或多项。只有你选的内容会被共享，直到应用停止共享或关闭。
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title when one thing can be picked.
-screenshot-pick-one = 请选择一项。只有您选的内容会被共享，直到应用停止或关闭。
+screenshot-pick-one = 请选择一项。只有你选的内容会被共享，直到应用停止共享或关闭。
 
 # Heading over the screens that can be shared.
 screenshot-pick-screens = 屏幕
@@ -194,7 +194,7 @@ screenshot-pick-nothing = 没有可共享的内容。
 screenshot-pick-desktop = 整个桌面
 
 # Words under that choice.
-screenshot-pick-desktop-detail = 所有屏幕，按实际摆放
+screenshot-pick-desktop-detail = 所有屏幕，按当前排列
 
 # Words under a screen's choice: its size in pixels.
 screenshot-pick-size = { $width } × { $height }
@@ -233,14 +233,14 @@ screenshot-portal-name = 名称
 
 # SAFETY: needs a human review before it ships
 # Heading when an unknown program asks who the person is.
-screenshot-account-asks-unknown = 有程序想知道您是谁
+screenshot-account-asks-unknown = 有程序想获取你的信息
 
 # SAFETY: needs a human review before it ships
 # Heading when a program asks who the person is.
-screenshot-account-asks = { $who } 想知道您是谁
+screenshot-account-asks = { $who } 想获取你的信息
 
 # Name the screen reader gives to the person's picture.
-screenshot-account-picture = 您的头像
+screenshot-account-picture = 你的头像
 
 # Words under the person's name.
 screenshot-account-signed-in = 已登录为 { $id }
@@ -249,7 +249,7 @@ screenshot-account-signed-in = 已登录为 { $id }
 screenshot-apps-search = 搜索应用
 
 # Shown when no app can open the file.
-screenshot-apps-none = 这里没有能打开它的应用
+screenshot-apps-none = 没有能打开它的应用
 
 # Name of the switch that remembers the choice.
 screenshot-apps-always = 以后这类文件总是用这个应用打开
@@ -284,11 +284,11 @@ screenshot-inhibit-who = 某个程序
 
 # SAFETY: needs a human review before it ships
 # Heading when a program wants to add an app to the person's apps and cannot be named.
-screenshot-launcher-ask = 要把它添加到您的应用中吗？
+screenshot-launcher-ask = 要把它添加到你的应用中吗？
 
 # SAFETY: needs a human review before it ships
 # Heading when a named program wants to add an app to the person's apps.
-screenshot-launcher-asks = { $who } 想把它添加到您的应用中
+screenshot-launcher-asks = { $who } 想把它添加到你的应用中
 
 # Name the screen reader gives to the app's icon.
 screenshot-launcher-icon = 它的图标
@@ -310,7 +310,7 @@ screenshot-wallpaper-ask = 要把这张图片设为壁纸吗？
 
 # SAFETY: needs a human review before it ships
 # Heading when a program offers a wallpaper.
-screenshot-wallpaper-asks = { $who } 提供了一张新壁纸
+screenshot-wallpaper-asks = { $who } 想设置壁纸
 
 # Name the screen reader gives to the picture offered.
 screenshot-wallpaper-picture = 新壁纸
@@ -374,7 +374,7 @@ screenshot-print-from = 打印来自 { $who } 的内容
 screenshot-print-failed = 无法打印
 
 # Words of that notice when the choices made were not kept.
-screenshot-print-lost = 您的选择没有保留。请重新打印。
+screenshot-print-lost = 无法保存设置。请重新打印。
 
 # Line in the menu on a file or folder: change its name.
 screenshot-chooser-rename = 重命名
@@ -418,7 +418,7 @@ screenshot-chooser-no-folder = 没有那个文件夹。
 
 # SAFETY: needs a human review before it ships
 # Words under the box when saving would replace a file.
-screenshot-chooser-replace-ask = { $name } 已经存在。按“替换”，或再按一次 Enter，即可用这个替换它。
+screenshot-chooser-replace-ask = { $name } 已经存在。要替换它，请按“替换”，或再按一次 Enter。
 
 # Words under the box when a key is pressed on Recent, which is not a folder.
 screenshot-chooser-recent-not-folder = “最近”不是文件夹。请先打开一个文件夹。
@@ -458,49 +458,49 @@ screenshot-chooser-replace = 替换
 
 # SAFETY: needs a human review before it ships
 # What the screen reader says for the button that replaces a folder.
-screenshot-chooser-replace-spoken = 替换：原来的文件夹会被移到回收站
+screenshot-chooser-replace-spoken = 替换。现有的文件夹会被移到回收站。
 
 # SAFETY: needs a human review before it ships
 # Name of the main button that merges two folders.
 screenshot-chooser-merge = 合并
 
 # Words in the question when folders are being pasted.
-screenshot-chooser-rest-folders = 对每个已存在的文件夹都采用同样的答案。
+screenshot-chooser-rest-folders = 对每个已存在的文件夹都这样做。
 
 # Words in the question when files are being pasted.
-screenshot-chooser-rest-files = 对每个已存在的文件都采用同样的答案。
+screenshot-chooser-rest-files = 对每个已存在的文件都这样做。
 
 # Name of the switch that gives the same answer to the rest.
 screenshot-chooser-same = 其余的都这样处理
 
 # Words under the box after Cut.
-screenshot-chooser-was-cut = 已剪切 { $what }。请把它粘贴到一个文件夹里。
+screenshot-chooser-was-cut = 准备移动：{ $what }
 
 # Words under the box after Copy.
-screenshot-chooser-was-copied = 已复制 { $what }。请把它粘贴到一个文件夹里。
+screenshot-chooser-was-copied = 准备复制：{ $what }
 
 # Words under the box when Paste is pressed and there is nothing to paste.
 screenshot-chooser-nothing-cut = 没有剪切或复制任何内容。
 
 # Words under the box when Paste is pressed while a paste is still going.
-screenshot-chooser-paste-busy = 仍在粘贴中。
+screenshot-chooser-paste-busy = Trindle 仍在粘贴。
 
 # Red line after some items could not be moved.
 screenshot-chooser-not-moved =
     { $n ->
-       *[other] 有 { $n } 项无法移动：{ $names }。
+       *[other] Trindle 无法移动 { $n } 项：{ $names }。
     }
 
 # Red line after some items could not be copied.
 screenshot-chooser-not-copied =
     { $n ->
-       *[other] 有 { $n } 项无法复制：{ $names }。
+       *[other] Trindle 无法复制 { $n } 项：{ $names }。
     }
 
 # Red line after some items could not be put in the Trash.
 screenshot-chooser-not-trashed =
     { $n ->
-       *[other] 有 { $n } 项无法放入回收站：{ $names }。
+       *[other] Trindle 无法把 { $n } 项移到回收站：{ $names }。
     }
 
 # Name of the box where a file or folder is renamed.
@@ -513,10 +513,10 @@ screenshot-chooser-items =
     }
 
 # Title of the notice when an email could not be started.
-screenshot-mail-failed = 无法启动电子邮件
+screenshot-mail-failed = 无法创建电子邮件
 
 # Why: no mail program is chosen or installed.
-screenshot-mail-no-app = 没有设置邮件程序。请在“设置”的“默认应用”中选择一个。
+screenshot-mail-no-app = 你还没有选择邮件程序。请在“设置”的“默认应用”中选择一个。
 
 # Why: a program asked to attach more files than allowed.
 screenshot-mail-too-many = 要附加的文件太多。
@@ -525,7 +525,7 @@ screenshot-mail-too-many = 要附加的文件太多。
 screenshot-mail-too-big = 文件太大，无法附加。
 
 # Why: a file could not be read as a plain file.
-screenshot-mail-bad-file = 有一个文件无法附加。
+screenshot-mail-bad-file = 无法附加文件。
 
 # Why: an address was not a plain address.
 screenshot-mail-bad-address = 有一个地址无效。
@@ -563,6 +563,11 @@ screenshot-chooser-pin-not-kept = 无法保存固定。
 # Red line after some items could not be deleted.
 screenshot-chooser-not-deleted =
     { $n ->
-       *[other] 有 { $n } 个项目无法删除：{ $names }。
+       *[other] Trindle 无法删除 { $n } 个项目：{ $names }。
     }
 
+# What the screen reader says for the list of places down the left of the file chooser.
+screenshot-chooser-places = 位置
+
+# What the screen reader says for the list of files and folders in the file chooser.
+screenshot-chooser-files = 文件

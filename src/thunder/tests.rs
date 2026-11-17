@@ -257,7 +257,8 @@ fn a_failed_connection_is_said_and_still_waits() {
     s.dock(false);
     g.rescan();
     fs::set_permissions(sysfs::bus(&s.places.sys).join("0-1/authorized"), fs::Permissions::from_mode(0o444)).unwrap();
-    assert!(matches!(g.answer(DOCK, Choice::Always, false), Outcome::Failed(_)));
+    assert!(matches!(g.answer(DOCK, Choice::Always, false), Outcome::Failed));
+    assert_eq!(Outcome::Failed.words(), "failed", "the service sends no words of its own language");
     assert!(g.allowed().is_empty());
     assert_eq!(g.waiting().len(), 1);
 }
@@ -346,4 +347,90 @@ fn the_socket_asks_the_person_at_the_screen_and_nobody_else() {
     assert_eq!(line(&mut r3), "denied");
     stop.store(true, Ordering::Relaxed);
     service.join().unwrap();
+}
+
+fn pair(guard_uid: Option<u32>) -> (Client, UnixStream) {
+    let (a, b) = UnixStream::pair().unwrap();
+    a.set_nonblocking(true).unwrap();
+    b.set_read_timeout(Some(Duration::from_millis(300))).unwrap();
+    (Client { stream: a, uid: guard_uid, got: Vec::new(), watching: false, last: std::time::Instant::now() }, b)
+}
+
+fn me() -> u32 {
+    // SAFETY: getuid cannot fail and touches no memory.
+    unsafe { libc::getuid() }
+}
+
+fn lines_of(b: &UnixStream) -> Vec<String> {
+    let mut out = Vec::new();
+    let mut r = BufReader::new(b);
+    loop {
+        let mut l = String::new();
+        match r.read_line(&mut l) {
+            Ok(n) if n > 0 => out.push(l.trim_end().to_string()),
+            _ => return out,
+        }
+    }
+}
+
+#[test]
+fn a_client_that_starts_watching_is_not_told_the_same_question_twice() {
+    let s = Scratch::new("user", true);
+    let mut guard = Guard::new(s.places.clone());
+    s.dock(false);
+    guard.rescan();
+    assert_eq!(guard.news.len(), 1, "the question is news");
+    let (client, mut peer) = pair(Some(me()));
+    peer.write_all(b"watch\n").unwrap();
+    let mut clients = vec![client];
+    let fds = [libc::pollfd { fd: clients[0].stream.as_raw_fd(), events: libc::POLLIN, revents: libc::POLLIN }];
+    news_then_talk(&mut guard, &mut clients, &fds, 0);
+    send_news(&mut guard, &mut clients);
+    let heard = lines_of(&peer);
+    assert_eq!(heard.len(), 1, "{heard:?}");
+    assert!(Question::parse(&heard[0]).is_some());
+}
+
+#[test]
+fn clients_that_may_not_ask_cannot_fill_every_place() {
+    if me() == 0 {
+        return;
+    }
+    let s = Scratch::new("user", true);
+    fs::write(&s.places.seat, "IS_SEAT0=1\nACTIVE_UID=4242\n").unwrap();
+    let guard = Guard::new(s.places.clone());
+    let listener = bind(&s.places).unwrap();
+    let _knocks: Vec<UnixStream> = (0..CLIENTS).map(|_| UnixStream::connect(&s.places.socket).unwrap()).collect();
+    let mut clients = Vec::new();
+    accept(&listener, &mut clients, &guard);
+    assert_eq!(clients.len(), OUTSIDERS);
+    fs::write(&s.places.seat, format!("IS_SEAT0=1\nACTIVE_UID={}\n", me())).unwrap();
+    let _again = UnixStream::connect(&s.places.socket).unwrap();
+    accept(&listener, &mut clients, &guard);
+    assert_eq!(clients.len(), OUTSIDERS + 1, "the person at the screen still gets in");
+}
+
+#[test]
+fn a_silent_client_is_dropped_and_a_watching_one_kept() {
+    let s = Scratch::new("user", true);
+    let mut guard = Guard::new(s.places.clone());
+    let (silent, _p1) = pair(Some(me()));
+    let (mut watcher, _p2) = pair(Some(me()));
+    watcher.watching = true;
+    let mut clients = vec![silent, watcher];
+    let fds: Vec<libc::pollfd> = clients.iter().map(|c| libc::pollfd { fd: c.stream.as_raw_fd(), events: libc::POLLIN, revents: 0 }).collect();
+    talk(&mut guard, &mut clients, &fds, 0, Duration::from_secs(3600));
+    assert_eq!(clients.len(), 2, "not yet idle for long enough");
+    talk(&mut guard, &mut clients, &fds, 0, Duration::ZERO);
+    assert_eq!(clients.len(), 1);
+    assert!(clients[0].watching);
+}
+
+#[test]
+fn news_lost_to_an_overflow_makes_the_service_look_again() {
+    use std::os::fd::AsRawFd;
+    let (a, _b) = std::os::unix::net::UnixDatagram::pair().unwrap();
+    a.set_nonblocking(true).unwrap();
+    assert!(!super::heard_thunderbolt(a.as_raw_fd()), "nothing waiting is nothing heard");
+    assert!(super::heard_thunderbolt(-1), "a read that failed is a reason to look again");
 }

@@ -36,12 +36,10 @@ settings-help-close = Close { $title }
 settings-help-read = Read { $title }
 # Bold line in the Reading card of Help when no topic is open.
 settings-help-nothing-open = Nothing open
-# Quiet line under "Nothing open" in Help.
-settings-help-nothing-open-sub = Press the arrow beside a topic to read it here.
 # Heading of the Help card that shows the open topics.
 settings-help-reading = Reading
 # Placeholder and spoken name of the typing box that searches Help.
-settings-help-search-placeholder = Search help, such as “wifi”, “printer” or “shut down”
+settings-help-search-placeholder = Search help
 # Heading of the Help card with the search box.
 settings-help-search = Search help
 # Line and tip of the button that goes back to the Settings page Help was opened from; title is that page's title.
@@ -52,4 +50,4 @@ settings-help-program = Help in its own window
 # The hint on that row's button.
 settings-help-program-open = Open Help
 # Red words under the line "Help in its own window" when the Help program could not be started.
-settings-help-program-not-opened = Help could not be opened.
+settings-help-program-not-opened = Couldn't open Help.

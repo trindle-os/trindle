@@ -3,7 +3,39 @@
 use super::{cast_capture, Kept};
 use super::super::cast_pick::Choice;
 
-pub(super) fn place(out: &mut [u8], stride: u32, dims: (u32, u32), src: &[u8], size: (u32, u32), at: (i32, i32, u32, u32)) {
+pub(super) struct Out {
+    ptr: *mut u8,
+    len: usize,
+}
+
+impl Out {
+
+    #[cfg(test)]
+    pub(super) fn of(slice: &mut [u8]) -> Out {
+        Out { ptr: slice.as_mut_ptr(), len: slice.len() }
+    }
+
+    /// # Safety
+    /// `ptr` must be valid for writes of `len` bytes for as long as this is used.
+    pub(super) unsafe fn raw(ptr: *mut u8, len: usize) -> Out {
+        Out { ptr, len }
+    }
+
+    pub(super) fn zero(&self) {
+        // SAFETY: `ptr` is valid for `len` bytes, as `raw` requires.
+        unsafe { std::ptr::write_bytes(self.ptr, 0, self.len) };
+    }
+
+    fn put(&self, at: usize, bytes: &[u8]) {
+        if at.checked_add(bytes.len()).is_some_and(|end| end <= self.len) {
+            // SAFETY: the range is inside the `len` bytes valid for writes, and `bytes` is
+
+            unsafe { std::ptr::copy_nonoverlapping(bytes.as_ptr(), self.ptr.add(at), bytes.len()) };
+        }
+    }
+}
+
+pub(super) fn place(out: &Out, stride: u32, dims: (u32, u32), src: &[u8], size: (u32, u32), at: (i32, i32, u32, u32)) {
     let (sw, sh) = size;
     let (x0, y0, aw, ah) = at;
     if sw == 0 || sh == 0 || aw == 0 || ah == 0 || src.len() < (sw * sh * 4) as usize {
@@ -19,7 +51,7 @@ pub(super) fn place(out: &mut [u8], stride: u32, dims: (u32, u32), src: &[u8], s
         if aw == sw && x0 >= 0 && x0 as u32 + aw <= dims.0 {
             let from = (sy * sw * 4) as usize;
             let to = row + (x0 as usize) * 4;
-            out[to..to + (aw * 4) as usize].copy_from_slice(&src[from..from + (sw * 4) as usize]);
+            out.put(to, &src[from..from + (sw * 4) as usize]);
             continue;
         }
         for tx in 0..aw {
@@ -30,7 +62,7 @@ pub(super) fn place(out: &mut [u8], stride: u32, dims: (u32, u32), src: &[u8], s
             let sx = (tx * sw / aw).min(sw - 1);
             let from = ((sy * sw + sx) * 4) as usize;
             let to = row + (x as usize) * 4;
-            out[to..to + 4].copy_from_slice(&src[from..from + 4]);
+            out.put(to, &src[from..from + 4]);
         }
     }
 }

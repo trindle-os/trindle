@@ -13,11 +13,16 @@ use super::native::{Data, PwBuffer};
 use super::pod::{buffers, buffers_card, metas, DATA_DMABUF, DATA_FLAG_MAPPABLE, DATA_FLAG_READWRITE, DATA_MEMFD, PARAM_FORMAT};
 use super::stream::{state_of, Event, Inner, Slot, Store};
 
+/// # Safety
+/// `data` must be the address of the `Inner` the listener was added with,
+/// which lives for as long as the stream.
 unsafe fn inner<'a>(data: Data) -> &'a Inner {
     // SAFETY: as the caller promises.
     unsafe { &*(data as *const Inner) }
 }
 
+/// # Safety
+/// Only PipeWire calls this, with the `data` given with the listener (an `Inner` alive for the stream) and an `error` that is null or a NUL-ended string.
 pub(super) unsafe extern "C" fn on_state(data: Data, _old: c_int, state: c_int, error: *const c_char) {
     // SAFETY: PipeWire passes back the data given with the listener, and an
 
@@ -29,6 +34,8 @@ pub(super) unsafe extern "C" fn on_state(data: Data, _old: c_int, state: c_int, 
     }
 }
 
+/// # Safety
+/// Only PipeWire calls this, with the `data` given with the listener and a `param` that is null or a whole spa_pod.
 pub(super) unsafe extern "C" fn on_param(data: Data, id: u32, param: *const u8) {
     // SAFETY: as in on_state.
     let inner = unsafe { inner(data) };
@@ -107,6 +114,8 @@ fn settle(inner: &Inner, parsed: &Option<(VideoFormat, Option<Vec<u64>>)>) -> (O
     (format, buffers_pod)
 }
 
+/// # Safety
+/// Only PipeWire calls this, with the `data` given with the listener and a `buffer` that is valid, with its data entries, until it is removed.
 pub(super) unsafe extern "C" fn on_add_buffer(data: Data, buffer: *mut PwBuffer) {
     // SAFETY: as in on_state.
     let inner = unsafe { inner(data) };
@@ -200,6 +209,8 @@ fn in_memory(buffer: *mut PwBuffer, format: VideoFormat) -> Option<Box<Slot>> {
     Some(Box::new(Slot { store: Store::Shared(memory), stride, format, attached: RefCell::new(None) }))
 }
 
+/// # Safety
+/// Only PipeWire calls this, with the `data` given with the listener and a `buffer` it earlier gave to `on_add_buffer`.
 pub(super) unsafe extern "C" fn on_remove_buffer(data: Data, buffer: *mut PwBuffer) {
     // SAFETY: as in on_state.
     let inner = unsafe { inner(data) };
@@ -224,12 +235,28 @@ pub(super) unsafe extern "C" fn on_remove_buffer(data: Data, buffer: *mut PwBuff
     }
 }
 
+/// # Safety
+/// Only PipeWire calls this, with the `data` given with the listener (an `Inner` alive for the stream).
 pub(super) unsafe extern "C" fn on_process(data: Data) {
     // SAFETY: as in on_state.
     let inner = unsafe { inner(data) };
     if let Ok(mut events) = inner.events.try_borrow_mut() {
         if !events.contains(&Event::Process) {
             events.push(Event::Process);
+        }
+    }
+}
+
+#[cfg(test)]
+mod safety_docs {
+
+    #[test]
+    fn every_unsafe_callback_has_a_safety_section() {
+        let source = include_str!("callbacks.rs");
+        let lines: Vec<&str> = source.lines().collect();
+        for (i, l) in lines.iter().enumerate().filter(|(_, l)| l.contains("unsafe extern \"C\" fn") || l.starts_with("unsafe fn ")) {
+            let docs: Vec<&&str> = lines[..i].iter().rev().take_while(|p| p.starts_with("///")).collect();
+            assert!(docs.iter().any(|d| d.trim() == "/// # Safety"), "{l}");
         }
     }
 }

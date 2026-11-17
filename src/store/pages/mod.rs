@@ -3,6 +3,7 @@
 pub(super) mod add_file;
 pub(super) mod appimage_warning;
 pub(super) mod backup_page;
+pub(super) mod flatpak_page;
 pub(super) mod github_key;
 pub(super) mod github_page;
 pub(super) mod github_search;
@@ -35,6 +36,10 @@ use std::{cell::RefCell, rc::Rc};
 #[derive(Default)]
 pub struct GitHubPage {
     text: String,
+
+    no_flathub: bool,
+    with_hub: bool,
+    with_github: bool,
 
     hub_found: Vec<github::Found>,
 
@@ -147,7 +152,7 @@ pub struct InstalledPage {
     pub(super) ask: Option<RemoveAsk>,
 
     #[cfg(test)]
-    pub(super) removals: Option<Rc<RefCell<Vec<(updates::Removal, String)>>>>,
+    pub(super) removals: Option<Rc<RefCell<Vec<(updates::Removal, String, bool)>>>>,
 }
 
 #[cfg(test)]
@@ -188,7 +193,7 @@ pub(super) mod made_up {
     }
 
     pub fn github(text: &str, hub_found: Vec<github::Found>, found: Vec<github::Found>, asked: bool) -> GitHubPage {
-        GitHubPage { text: text.into(), hub_found, checking: found.len(), found, asked, ..GitHubPage::default() }
+        GitHubPage { text: text.into(), hub_found, checking: found.len(), found, asked, with_hub: true, with_github: true, ..GitHubPage::default() }
     }
 
     pub fn github_key(mut g: GitHubPage, at: Option<crate::toolkit::widget::Rect>, stored: bool, problem: Option<&str>) -> GitHubPage {

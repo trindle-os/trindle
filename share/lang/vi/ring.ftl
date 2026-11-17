@@ -23,22 +23,22 @@ ring-cli-command = { $program } [TÙY CHỌN…]
 ring-cli-options = Tùy chọn:
 
 # Help for the ring's --say option, printed in a terminal.
-ring-cli-say = Làm theo những lời này, như thể nói với vòng tròn (để thử lệnh giọng nói mà không cần micrô)
+ring-cli-say = Chạy một lệnh giọng nói từ văn bản mà không cần micrô
 
 # Help for the ring's --background option, printed in a terminal.
-ring-cli-background = Khởi động mà không hiện ra, để lần mở đầu tiên tức thì
+ring-cli-background = Khởi động ở chế độ ẩn, để lần đầu vòng tròn mở ra ngay lập tức
 
 # Help for the ring's --show-desktop option, printed in a terminal.
-ring-cli-show-desktop = Cất mọi cửa sổ để hiện màn hình nền, hoặc đưa chúng trở lại (Super và D yêu cầu việc này)
+ring-cli-show-desktop = Ẩn mọi cửa sổ để hiện màn hình nền, hoặc đưa chúng trở lại (phím Super và D làm việc này)
 
 # Help for the ring's --listen option, printed in a terminal.
-ring-cli-listen = Mở vòng tròn khi đã sẵn sàng nghe, như phím tắt có thể làm
+ring-cli-listen = Mở vòng tròn khi đã sẵn sàng nghe lệnh giọng nói, như phím tắt vẫn làm
 
 # Help for the ring's --all option, printed in a terminal.
 ring-cli-all = Mở vòng tròn với mọi ứng dụng hiện quanh nó
 
 # Help for the ring's --power option, printed in a terminal.
-ring-cli-power = Mở vòng tròn ở mục đăng xuất, khởi động lại và tắt máy
+ring-cli-power = Mở phần nguồn của vòng tròn: đăng xuất, khởi động lại và tắt máy
 
 # Help for the ring's --favourites option, printed in a terminal.
 ring-cli-favourites = Mở trang mục yêu thích trong Cài đặt
@@ -47,10 +47,10 @@ ring-cli-favourites = Mở trang mục yêu thích trong Cài đặt
 ring-cli-restyle = Áp dụng ngay giao diện mới (sáng hoặc tối, hoặc màu nhấn mới) từ Cài đặt
 
 # Help for the ring's --corners option, printed in a terminal.
-ring-cli-corners = Tạo lại các điểm chạm ở các góc trên
+ring-cli-corners = Thiết lập lại các điểm chạm ở các góc trên
 
 # Help for the ring's --notes option, printed in a terminal.
-ring-cli-notes = Chuyển bàn phím vào các vòng thông báo trên màn hình (Super và N yêu cầu việc này)
+ring-cli-notes = Chuyển điều khiển bàn phím sang các vòng thông báo trên màn hình (phím Super và N làm việc này)
 
 # Error printed in a terminal when the ring is given an option it does not know.
 ring-cli-unknown = tùy chọn không rõ { $option }
@@ -74,13 +74,13 @@ ring-uninstalling = Đang gỡ cài đặt
 ring-uninstalled = Đã gỡ cài đặt
 
 # Tip of the round button on the menu of an app put there by hand: it only leaves the ring.
-ring-take-off = Bỏ khỏi vòng tròn
+ring-take-off = Gỡ khỏi vòng tròn
 
 # Line that replaces that button while the app is being taken off the ring.
-ring-taking-off = Đang bỏ
+ring-taking-off = Đang gỡ
 
 # Line that replaces that button once the app is off the ring.
-ring-taken-off = Đã bỏ
+ring-taken-off = Đã gỡ
 
 # Name of the ring's round button that opens Apps.
 ring-tool-apps = Ứng dụng
@@ -113,13 +113,13 @@ ring-tool-report = Báo cáo sự cố
 ring-gone = Mục đó không còn nữa.
 
 # Line in the ring when nothing could open the item that was pressed.
-ring-could-not-open = Không có gì mở được mục đó.
+ring-could-not-open = Trindle không mở được mục đó.
 
 # Line in the ring while it listens to a spoken command.
-ring-listening = Đang nghe... hãy nói, nó sẽ dừng khi bạn ngừng
+ring-listening = Đang nghe… Hãy nói lệnh của bạn. Sẽ ngừng nghe khi bạn ngừng nói
 
 # Line in the ring while it works out what was said.
-ring-working-out = Đang tìm hiểu...
+ring-working-out = Đang tìm hiểu…
 
 # Answer to the spoken command to close windows when none are open.
 ring-nothing-to-close = Không có gì để đóng
@@ -186,7 +186,7 @@ ring-star-remove = Bỏ khỏi mục yêu thích
 ring-star-add = Thêm vào mục yêu thích
 
 # Screen reader name of the red button that shows why an uninstall failed.
-ring-not-done = Chưa xong
+ring-not-done = Tại sao không?
 
 # Note on an app's menu when the middle of the ring has no room for another favourite; the number is how many it holds.
 ring-middle-full =
@@ -222,7 +222,7 @@ ring-empty-hint = Nhấp Tất cả ứng dụng, rồi nhấp chuột phải v�
 
 # Line in the ring when a spoken or typed power choice needs a click to confirm.
 # SAFETY: needs a human review before it ships
-ring-power-only-click = Chỉ một cú nhấp mới xác nhận được việc này.
+ring-power-only-click = Nhấp để xác nhận.
 
 # Line in the ring when something other than the person tried to shut the computer down.
 # SAFETY: needs a human review before it ships
@@ -230,7 +230,7 @@ ring-power-only-own = Chỉ bạn mới tắt được máy tính này.
 
 # Line in the ring when the power page closed because a program pressed a key.
 # SAFETY: needs a human review before it ships
-ring-power-closed = Trang nguồn đã đóng: một chương trình đã nhấn phím, không phải bạn.
+ring-power-closed = Trang nguồn đã đóng vì một chương trình đã gửi một lần nhấn phím.
 
 ring-startup-add = Chạy khi đăng nhập
 
@@ -239,11 +239,19 @@ ring-startup-remove = Thôi chạy khi đăng nhập
 
 
 # Help for the option that opens the shortcut list, or closes it when it is showing.
-ring-cli-shortcuts = Hiện mọi phím tắt trong một danh sách, hoặc cất danh sách đi (Super và K, trừ khi đã đổi trong Cài đặt)
+ring-cli-shortcuts = Hiện danh sách mọi phím tắt, hoặc ẩn danh sách (Super và K, trừ khi bạn đổi trong Cài đặt)
 
 # Notice from the new ring after the parts were restarted from the keyboard.
 ring-restarted = Đã khởi động lại
 
 # Under the notice above.
-ring-restarted-why = Vòng tròn và các phần phụ trợ đã khởi động lại.
+ring-restarted-why = Vòng tròn và các phần phụ trợ của nó đã khởi động lại.
 
+# Tip on the app menu's red button when removing the app did not work.
+ring-uninstall-failed = Không gỡ được.
+
+# Shorter name of the Sound and video piece of All apps, for when the full name does not fit along it.
+ring-category-media-short = Âm thanh
+
+# Line in the ring when a spoken command, such as turning the sound down, did not work.
+ring-voice-failed = Việc đó không thành công.

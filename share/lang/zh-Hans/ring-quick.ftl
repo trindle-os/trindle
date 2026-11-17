@@ -1,7 +1,7 @@
 # machine translated (Simplified Chinese), not yet reviewed by a person.
 
 # Tip of the pin button on a clipboard or notification item that is not pinned: keeps it for good.
-ring-quick-pin = 固定：永久保留
+ring-quick-pin = 固定以保留它
 
 # Tip of the pin button on a clipboard or notification item that is pinned.
 ring-quick-unpin = 取消固定
@@ -12,7 +12,7 @@ ring-quick-forget-one = 忘记这一条
 
 # SAFETY: needs a human review before it ships
 # Tip of the bin button that forgets everything on the page except what is pinned; it asks twice.
-ring-quick-forget-all = 忘记除已固定以外的全部内容
+ring-quick-forget-all = 清除除已固定项目以外的全部内容
 
 # Name of the volume slider for the speakers on the sound page.
 ring-quick-speakers = 扬声器
@@ -97,17 +97,17 @@ ring-quick-bt-disconnecting = 正在断开 { $name }……
 ring-quick-bt-failed = 没有成功。它是否已开机并且就在附近？
 
 # Line under the Bluetooth page when pairing failed because the codes were not accepted.
-ring-quick-bt-codes = 未配对：验证码未被接受。
+ring-quick-bt-codes = 配对失败。验证码无效。
 
 # Line under the Bluetooth page when pairing failed.
-ring-quick-bt-not-paired = 未配对。它是否处于配对模式并且就在附近？
+ring-quick-bt-not-paired = 没有配对成功。它是否处于配对模式并且就在附近？
 
 # Line under the Bluetooth page when pairing worked but connecting did not.
 ring-quick-bt-paired-not-connected = 已配对，但没有连上。请稍后再试。
 
 # SAFETY: needs a human review before it ships
 # Question in the ring when a Bluetooth device wants a PIN typed.
-ring-quick-bt-ask-pin = 请输入这台设备的 PIN 码。通常可在它的说明书里找到，或者是 0000。
+ring-quick-bt-ask-pin = 请输入这台设备的 PIN 码。通常可以在设备说明书里找到，也可以试试 0000。
 
 # Typing box for the PIN of a Bluetooth device, shown quietly while empty.
 ring-quick-bt-pin-box = PIN 码
@@ -178,7 +178,7 @@ ring-quick-battery-none = 这台电脑没有电池。
 ring-quick-brightness-fixed = 这块屏幕的亮度无法在此处调节
 
 # Line on the clipboard page when nothing has been copied yet.
-ring-quick-clip-empty = 还没有复制任何内容。您复制的内容会保存在这里。
+ring-quick-clip-empty = 还没有复制任何内容。
 
 # Line on the clipboard page for a copied picture.
 ring-quick-clip-picture = 一张图片
@@ -199,7 +199,7 @@ ring-quick-notes-back = 返回全部通知
 ring-quick-copied = 已复制
 
 # Tip of the button on a crash notification that copies its details for an assistant.
-ring-quick-copy-assistant = 为您的助手复制
+ring-quick-copy-assistant = 为你的助手复制
 
 # Line on the battery page while charging, with the time until full.
 ring-quick-charging-full = 正在充电：约 { $time }后充满
@@ -208,7 +208,7 @@ ring-quick-charging-full = 正在充电：约 { $time }后充满
 ring-quick-charging = 正在充电
 
 # Line on the battery page on battery, with the time left and the power in watts.
-ring-quick-on-battery-left = 使用电池：约剩 { $time }，功率 { $rate } W
+ring-quick-on-battery-left = 正在使用电池。约剩 { $time }，功率 { $rate } W。
 
 # Line on the battery page on battery, when the time is not known.
 ring-quick-on-battery = 使用电池
@@ -222,9 +222,9 @@ ring-quick-plugged = 已接通电源，未在充电
 # Line on the battery page about how much charge the battery still holds. The health is good, worn, or something else for worn out.
 ring-quick-health =
     { $how ->
-        [good] 健康状况：良好。电池容量是新电池时的 { $capacity }%。
-        [worn] 健康状况：已损耗。电池容量是新电池时的 { $capacity }%。
-       *[old] 健康状况：已严重损耗：该换新的了。电池容量是新电池时的 { $capacity }%。
+        [good] 电池状况良好。现在能存储的电量是新电池时的 { $capacity }%。
+        [worn] 电池已损耗。现在能存储的电量是新电池时的 { $capacity }%。
+       *[old] 电池已严重损耗，该换新的了。现在能存储的电量是新电池时的 { $capacity }%。
     }
 
 # Line on the battery page about how many times the battery has been charged.
@@ -234,10 +234,10 @@ ring-quick-cycles =
     }
 
 # Tip of the button that turns notification circles off.
-ring-quick-notes-on = 通知已开启：点按关闭
+ring-quick-notes-on = 通知已开启。点按关闭
 
 # Tip of the button that turns notification circles back on.
-ring-quick-notes-off = 通知已关闭：点按开启
+ring-quick-notes-off = 通知已关闭。点按开启
 
 # A time of under an hour on the battery page.
 ring-quick-minutes = { $m } 分钟
@@ -258,7 +258,8 @@ ring-quick-mic-level = 麦克风音量
 ring-quick-title-tray = 托盘图标
 
 
-
 # Heading of the shortcut list page, opened with Super and K.
 ring-quick-title-shortcuts = 快捷键
 
+# Line under the Wi-Fi page when leaving the network did not work.
+ring-quick-wifi-leave-failed = 无法断开连接。

@@ -133,6 +133,17 @@ pub(super) fn headline(s: &Store) -> (Dot, String) {
     }
 }
 
+pub(in crate::store) fn longest_headlines() -> Vec<String> {
+    use crate::common::updating::Who;
+    let (n, bytes, held) = (999, 999_000_000_000, 999);
+    let none = t!("store-upd-sentence", text = with_held(t!("store-upd-none-ready").to_string(), held));
+    let mut all = vec![then(found_sentence(n, bytes, false, held), no_more()), then(found_sentence(n, bytes, true, held), t!("store-upd-gone-in-restart")),
+                       then(none, no_more()), nothing_known().to_string()];
+    all.extend([Who::Ring, Who::Apps, Who::Boxes, Who::System, Who::Unknown]
+        .map(|w| t!("store-installed-other-busy", who = w.sentence(), back = plugin_page::come_back())));
+    all
+}
+
 pub(super) fn no_more() -> &'static str {
     t!("store-upd-no-more")
 }
@@ -155,6 +166,11 @@ pub(super) fn overall(s: &Store) -> f32 {
     let running: Vec<f32> = s.dials.iter().filter(|(k, d)| (k.starts_with("up:") || k.starts_with("fw:")) && d.running())
         .map(|(_, d)| d.share()).collect();
     if running.is_empty() { 0.0 } else { running.iter().sum::<f32>() / running.len() as f32 }
+}
+
+pub(in crate::store) fn overall_ring(s: &Store) -> &crate::toolkit::tiles::RingShare {
+    s.upd.overall.set(Some(overall(s)));
+    &s.upd.overall
 }
 
 pub(crate) fn stopped_row() -> &'static str {

@@ -101,13 +101,18 @@ impl Picker {
             }
         });
         let picked = self.picked.contains(&i);
-        let words = column(vec![label(choice.name()).cut(), note(choice.detail()).cut()]).gap(4.0);
+
+        let words = column(vec![label(choice.name()).cut(), note(choice.detail()).room_for(2).key(detail_key(i))]).gap(4.0);
         let mut c = card(column(vec![row(vec![space(), face, space()]), words]).gap(8.0))
             .on_press(Msg::Pick(i))
             .lit(if picked { 1.0 } else { 0.0 });
         c = c.spoken(if picked { t!("screenshot-pick-chosen", name = &tip) } else { tip });
         c
     }
+}
+
+fn detail_key(i: usize) -> String {
+    format!("pick-detail:{i}")
 }
 
 impl App for Picker {
@@ -192,6 +197,24 @@ mod tests {
             p.update(Msg::Pick(1));
             drawn::window("one chosen", p.view(), Theme::chosen(), (1280, 800), false);
         }));
+    }
+
+    #[test]
+    fn every_tiles_words_are_whole_in_every_language() {
+        use crate::common::shipped_languages::{in_language, tags};
+        use crate::toolkit::theme::Theme;
+        use crate::toolkit::ui::Ui;
+        for tag in tags() {
+            in_language(&tag, || {
+                let p = Picker::new("Brave".into(), vec![Choice::Desktop, screen("DP-1"), screen("HDMI-A-1")], true, |_| {});
+                let mut ui = Ui::new(p.view(), Theme::new(false, crate::common::style::DEFAULT_ACCENT));
+                let mut pix = tiny_skia::Pixmap::new(720, 520).unwrap();
+                ui.paint(&mut pix.as_mut(), 1.0);
+                for i in 0..3 {
+                    assert_eq!(ui.label_at(&detail_key(i)), None, "{tag}: {:?} is cut", p.choices[i].detail());
+                }
+            });
+        }
     }
 
     #[test]

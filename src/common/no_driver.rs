@@ -126,14 +126,15 @@ fn unbound(sys: &Path) -> Vec<Found> {
         }
     }
     let usb = sys.join("bus/usb/devices");
-    for n in names_in(&usb) {
-        let d = usb.join(&n);
+    let all_usb = names_in(&usb);
+    for n in &all_usb {
+        let d = usb.join(n);
 
         if n.contains(':') || n.starts_with("usb") {
             continue;
         }
         let Some(id) = id_pair(&d, "idVendor", "idProduct") else { continue };
-        let faces: Vec<std::path::PathBuf> = names_in(&usb).into_iter()
+        let faces: Vec<std::path::PathBuf> = all_usb.iter()
             .filter(|f| f.starts_with(&format!("{n}:"))).map(|f| usb.join(f)).collect();
         if let Some(k) = known_usb(id) {
             if !faces.iter().any(|f| bound(f)) {

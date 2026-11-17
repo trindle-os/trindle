@@ -30,7 +30,7 @@ ring-snooze-for-1-hour = Snooze for 1 hour
 # Tip and screen reader name of the snooze choice for six hours.
 ring-snooze-for-6-hours = Snooze for 6 hours
 # Tip and screen reader name of the snooze choice for the next morning.
-ring-snooze-for-next-morning = Snooze for next morning
+ring-snooze-for-next-morning = Snooze until morning
 # Tip of the button on the snooze page that goes back to the notification's message.
 ring-act-back = Back to the message
 # Tip of the pin button when the notification is already pinned.
@@ -70,9 +70,9 @@ ring-crash-stopped = { $name } stopped unexpectedly
 ## Drives (src/ring/drives.rs)
 
 # Notice when a drive's button was pressed and the drive has gone.
-ring-drive-gone = That drive is not there any more
+ring-drive-gone = That drive isn't there any more
 # Title of the notice when a drive could not be opened; the reason follows under it.
-ring-drive-not-opened = { $name } could not be opened
+ring-drive-not-opened = Couldn't open { $name }
 
 ## Closing the lid (src/ring/lid.rs)
 
@@ -87,7 +87,7 @@ ring-lid-nothing = Nothing
 # Choice for what closing the laptop lid does: shut down.
 ring-lid-shut-down = Shut down
 # Reason the system lists beside Trindle's hold on the lid switch (shown by tools that list what stops sleep).
-ring-lid-reason = Closing the lid does what Settings, Power says
+ring-lid-reason = You can choose what happens when you close the lid in Settings, under Power.
 
 ## Magnifier (src/ring/magnify.rs)
 
@@ -101,13 +101,13 @@ ring-magnify-stop = Stop magnifying
 ## Microphone switch (src/ring/mic.rs)
 
 # Tip of the switch in the ring that turns the microphone off for every program.
-ring-mic-off-tip = Turn the microphone off for every program
+ring-mic-off-tip = Switch off the microphone for all programs
 # Tip of the switch in the ring that turns the microphone back on.
-ring-mic-on-tip = Turn the microphone back on
+ring-mic-on-tip = Switch on the microphone
 # Line in the ring when something other than the person pressed the microphone switch on.
-ring-mic-own-press = Only your own press can turn the microphone back on.
+ring-mic-own-press = Only you can switch the microphone back on.
 # Line in the ring when the microphone switch could not be changed; the reason follows.
-ring-mic-not-changed = The microphone switch could not be changed: { $why }
+ring-mic-not-changed = Trindle couldn't change the microphone switch: { $why }
 
 ## Clicking a notification (src/ring/note_goes.rs)
 
@@ -116,7 +116,7 @@ ring-goes-no-program = No program found
 # Notice when a notification was clicked and it was sent by a program Trindle cannot open.
 ring-goes-other-program = Sent by another program
 # Notice when the program for a clicked notification could not be started.
-ring-goes-not-started = Could not start it
+ring-goes-not-started = Couldn't start it
 
 ## Notification stack (src/ring/notes/)
 
@@ -125,7 +125,7 @@ ring-notes-copied = Copied for your assistant
 # Screen reader name of a notification circle.
 ring-notes-name = Notification
 # Said when a pinned notification has been held long enough and now follows the pointer.
-ring-notes-moving = Moving. Let go to drop, Escape to put back.
+ring-notes-moving = Moving the notification. Let go to drop it, or press Escape to put it back.
 # Said when a pinned notification has been dropped or moved by keys.
 ring-notes-moved = Moved
 # Said when Escape put a held notification back.
@@ -159,7 +159,11 @@ ring-notify-top-right = Top right
 # Title of the notice when a plugin that asks for permissions has been given none.
 ring-plugin-needs = { $name } needs your permission
 # Line under the notice that a plugin needs permission: none of the permissions it asks for are given.
-ring-plugin-cannot-work = It cannot work yet: 0 of { $asks } allowed.
+ring-plugin-cannot-work =
+    { $asks ->
+        [one] It can't work yet. You haven't allowed the one permission it asks for.
+       *[other] It can't work yet. You've allowed none of the { $asks } permissions it asks for.
+    }
 
 # Said to a screen reader when a notification was copied; $said is what the circle said.
 ring-copied-said = Copied. { $said }
@@ -174,5 +178,9 @@ ring-outside-files = Has your files open
 ring-outside-body =
     { $more ->
         [0] { $names }
+        [one] { $names } and 1 more
        *[other] { $names } and { $more } more
     }
+
+# Said under the magnifier when the screen picture it took has the wrong size.
+ring-magnify-wrong-size = The picture was the wrong size.

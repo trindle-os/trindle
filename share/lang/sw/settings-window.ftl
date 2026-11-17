@@ -26,14 +26,14 @@ settings-window-group-about = Kuhusu
 settings-window-in-apps = Ndani ya Programu
 
 # Small grey heading over the row a search finds that opens the Folders program's settings.
-settings-window-in-folders = Ndani ya Folda
+settings-window-in-folders = Ndani ya Folders
 
 # The side bar row that opens the Folders program at its own settings.
-settings-window-in-folders-name = Mipangilio ya Folda yenyewe
+settings-window-in-folders-name = Mipangilio ya Folders yenyewe
 
 # Words the Settings search matches the Folders settings row by, in lower case, separated by spaces.
 settings-window-in-folders-keywords =
-    folda faili meneja wa faili kuanza kidirisha nyumbani karibuni diski usb kijiti kadi sd imechomekwa fungua toa orodha viendelezi majina visanduku vya kuweka alama kuchagua safu ndogo kawaida pana
+    folders folda faili meneja wa faili kuanza kidirisha nyumbani karibuni diski usb kijiti kadi sd imechomekwa fungua toa orodha viendelezi majina visanduku vya kuweka alama kuchagua safu ndogo kawaida pana
 
 # Quiet line in the side bar when a search finds no page.
 settings-window-no-page = Hakuna ukurasa unaolingana. Jaribu neno fupi zaidi, au angalia kwenye Msaada.
@@ -42,7 +42,7 @@ settings-window-no-page = Hakuna ukurasa unaolingana. Jaribu neno fupi zaidi, au
 settings-window-theme-refused = {"  "}{ $id }  { $name } (haiwezi kutumika: { $why })
 
 # Printed in a terminal when trindle-settings --theme is given no theme name.
-settings-window-theme-name = Taja jina la mandhari, kwa mfano: trindle-settings --theme default
+settings-window-theme-name = Andika jina la mandhari, kwa mfano: trindle-settings --theme default
 
 # Printed in a terminal after trindle-settings --theme worked; theme is the theme's name.
 settings-window-theme-now = Mandhari sasa ni { $theme }.
@@ -51,13 +51,13 @@ settings-window-theme-now = Mandhari sasa ni { $theme }.
 settings-window-theme-own = Ya Trindle yenyewe
 
 # Printed in a terminal when the theme could not be chosen; error says why and ends with a full stop.
-settings-window-themes-list = { $error } trindle-settings --themes inaziorodhesha.
+settings-window-themes-list = { $error } Endesha trindle-settings --themes ili kuona orodha.
 
 # Printed in a terminal when trindle-settings --keys is not given the word default.
-settings-window-keys-how = Ili kurudisha kila kitufe na ufunguo: trindle-settings --keys default
+settings-window-keys-how = Ili kurudisha kila kitufe na ufunguo kwenye hali ya kawaida, endesha: trindle-settings --keys default
 
 # Printed in a terminal after every key and button was put back.
-settings-window-keys-back = Kila kitufe na ufunguo kimerudi kama kilivyochapishwa.
+settings-window-keys-back = Kila kitufe na ufunguo kimerudi kwenye hali ya kawaida.
 
 # Printed in a terminal when the keys could not be put back; error says why.
-settings-window-keys-failed = Funguo hazikuweza kurudishwa: { $error }
+settings-window-keys-failed = Trindle haikuweza kurudisha funguo: { $error }

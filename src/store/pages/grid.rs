@@ -16,7 +16,7 @@ pub fn grid(s: &Store, head: &str) -> Node<Msg> {
     let title = title_row(if home { t!("store-grid-discover") } else { head }, vec![selector(s)]);
     let tiles = mixed::tiles(s);
 
-    let (why, only) = (mixed::why_none(s), s.show == Show::AppImages);
+    let (why, only) = (mixed::why_none(s), s.prefs.show == Show::AppImages);
     let foot = why.filter(|_| !only).map(note);
     if tiles.is_empty() {
         return none_page(s, title, foot);
@@ -69,10 +69,10 @@ fn none_page(s: &Store, title: Node<Msg>, foot: Option<Node<Msg>>) -> Node<Msg> 
         View::Search(text) => (t!("store-grid-none-found", text = text), t!("store-grid-try-shorter")),
         _ => (t!("store-grid-none-here").to_string(), t!("store-grid-search-or-look")),
     };
-    let only = s.show == Show::AppImages;
+    let only = s.prefs.show == Show::AppImages;
     let (words, advice) = match (only, mixed::why_none(s)) {
         (true, Some(why)) => (why.to_string(), false),
-        (true, None) if s.hub.is_none() => (t!("store-browse-fetching").to_string(), false),
+        (true, None) if s.appimagehub.list.is_none() => (t!("store-browse-fetching").to_string(), false),
         _ => (words, true),
     };
     let mut body: Vec<Node<Msg>> = advice.then(|| card(empty_state(next, None))).into_iter().collect();
@@ -83,7 +83,7 @@ fn none_page(s: &Store, title: Node<Msg>, foot: Option<Node<Msg>>) -> Node<Msg> 
 
 fn selector(s: &Store) -> Node<Msg> {
     let names = Show::ALL.iter().map(|x| x.name().to_string()).collect();
-    let at = Show::ALL.iter().position(|x| *x == s.show).unwrap_or(0);
+    let at = Show::ALL.iter().position(|x| *x == s.prefs.show).unwrap_or(0);
     choice(names, at, t!("store-tabs-show"), |i| go(move |s| mixed::set_show(s, Show::ALL[i]))).width(Length::Shrink).key(SELECTOR)
 }
 

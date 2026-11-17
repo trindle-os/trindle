@@ -1,9 +1,7 @@
 //! Thanks: upstream projects, with home and donation links.
 
-use std::sync::OnceLock;
-
 use crate::common::run::on_thread;
-use crate::settings::panels::network::banded;
+use crate::toolkit::widget::banded_list;
 use crate::settings::ui::{group, headline, line, link, on, page, Kit, Msg, Page};
 use crate::toolkit::t;
 use crate::toolkit::widget::{button, Node};
@@ -40,8 +38,9 @@ fn shorter() -> [(&'static str, &'static str); 6] {
 }
 
 pub fn projects() -> &'static [(&'static str, &'static str, &'static str, Option<&'static str>)] {
-    static ALL: OnceLock<Vec<(&'static str, &'static str, &'static str, Option<&'static str>)>> = OnceLock::new();
-    ALL.get_or_init(|| vec![
+    use crate::common::live_language::{per_language, Kept};
+    static ALL: Kept<Vec<(&'static str, &'static str, &'static str, Option<&'static str>)>> = std::sync::Mutex::new(Vec::new());
+    per_language(&ALL, || vec![
     ("Debian", t!("settings-thanks-project-debian"), "https://www.debian.org", Some("https://www.debian.org/donations")),
     ("Linux", t!("settings-thanks-project-linux"), "https://kernel.org", None),
     ("Rust", t!("settings-thanks-project-rust"), "https://www.rust-lang.org", None),
@@ -93,7 +92,7 @@ pub fn projects() -> &'static [(&'static str, &'static str, &'static str, Option
     ("whisper.cpp", t!("settings-thanks-project-whisper-cpp"), "https://github.com/ggml-org/whisper.cpp", None),
     ("ab_glyph", t!("settings-thanks-project-ab-glyph"), "https://github.com/alexheretic/ab-glyph", None),
     ("serde, quick-xml, flate2", t!("settings-thanks-project-serde-quick-xml-flate2"), "https://serde.rs", None),
-])
+]).as_slice()
 }
 
 fn notices_path() -> std::path::PathBuf {
@@ -172,7 +171,7 @@ fn licences_card(kit: &Kit, counts: Option<&[(String, usize)]>) -> Node<Msg> {
         }));
     }));
     rows.push(line(t!("settings-thanks-rust")).sub(rust_words(counts)).key("licences:rust").control(open).node(kit));
-    group(t!("settings-thanks-licences")).icon("text-x-generic-symbolic").about(read.join(" ")).span(6, 8).rows(banded(rows)).node(kit)
+    group(t!("settings-thanks-licences")).icon("text-x-generic-symbolic").about(read.join(" ")).span(6, 8).rows(banded_list(rows)).node(kit)
 }
 
 #[derive(Default)]
@@ -212,7 +211,7 @@ impl Page for Thanks {
     }
     fn view(&self, kit: &Kit) -> Node<Msg> {
         let mut items = vec![
-            headline(kit, t!("settings-thanks-headline", n = projects().len())),
+            headline(t!("settings-thanks-headline", n = projects().len())),
         ];
 
         for (kind, icon, names) in kinds() {
@@ -234,7 +233,7 @@ impl Page for Thanks {
                 };
                 line(name).sub(shown).key(key).controls(controls).node(kit)
             }).collect::<Vec<_>>();
-            let rows = banded(rows);
+            let rows = banded_list(rows);
             let mut card = group(kind).icon(icon);
             if !longer.is_empty() {
                 card = card.about(longer.join(" "));
@@ -303,12 +302,10 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "needs the website checkout at ../trindle-site; run it there with --ignored, and TRINDLE_WRITE_THANKS=1 rewrites that page"]
     fn the_website_thanks_the_same_projects_as_the_app() {
         let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../trindle-site/thanks.html");
-        let Ok(page) = std::fs::read_to_string(&path) else {
-            println!("skipped: ../trindle-site/thanks.html is not here");
-            return;
-        };
+        let page = std::fs::read_to_string(&path).expect("../trindle-site/thanks.html is not here");
         let (Some(a), Some(b)) = (page.find(WEB_START), page.find(WEB_END)) else {
             panic!("trindle-site/thanks.html has lost its thanks:start and thanks:end marks");
         };

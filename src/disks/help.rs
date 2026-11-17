@@ -106,7 +106,7 @@ pub const MESSAGES: &[crate::common::more::Entry] = &[
     ("disks-room-read-only-unknown", ROOM),
     ("disks-room-many-drives", ROOM),
     ("disks-room-drives-unknown", ROOM),
-    ("disks-room-swap-file", ROOM),
+    ("disks-swap-still-off", ROOM),
     ("disks-room-swap-unknown", ROOM),
     ("disks-room-used-unknown", ROOM),
     ("disks-room-area-unknown", ROOM),

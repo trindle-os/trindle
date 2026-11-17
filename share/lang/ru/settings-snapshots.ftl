@@ -8,10 +8,10 @@ settings-snap-keywords = снимки снимок восстановить от
 
 # SAFETY: needs a human review before it ships
 # Help line at the foot of the Snapshots page.
-settings-snap-help = Система в том виде, какой она была до и после каждого изменения программ и каждый раз, когда вы делаете снимок. Восстановление снимка возвращает всю систему к нему со следующего запуска; ваши собственные файлы остаются как есть, если у домашней папки есть отдельная часть диска, как её создаёт установщик Trindle. Если компьютер не запускается, выберите «Снимки Trindle» в меню загрузки. «Прежние версии» хранят ежедневную копию личных файлов каждого пользователя отдельно от снимков системы.
+settings-snap-help = Снимки сохраняют копию системы такой, какой она была до и после каждого изменения программ и каждый раз, когда вы делаете снимок. Восстановление снимка возвращает всю систему в прежнее состояние после следующего перезапуска. Ваши личные файлы остаются как есть, если у домашней папки есть отдельная часть диска, как её создаёт установщик Trindle. Если компьютер не запускается, выберите «Снимки Trindle» в меню загрузки. «Прежние версии» хранят ежедневную копию личных файлов каждого пользователя отдельно от снимков системы.
 
 # Red words under the Earlier versions switch when a daily copy was skipped because the disk is nearly full.
-settings-snap-nearly-full = Копия не сделана: диск почти заполнен.
+settings-snap-nearly-full = Копия не сделана, потому что диск почти заполнен.
 
 # Time of a snapshot taken today: { $time } is the hour and minute.
 settings-snap-today = сегодня в { $time }
@@ -29,7 +29,7 @@ settings-snap-not-restart = Компьютер не перезапустился
 settings-snap-taking = Создаётся снимок
 
 # Said beside the set aside line while the space is freed.
-settings-snap-freeing = Освобождается...
+settings-snap-freeing = Освобождается…
 
 # Said beside the set aside line once the space is freed.
 settings-snap-freed = Освобождено
@@ -51,13 +51,13 @@ settings-snap-deleted = Удалено
 
 # SAFETY: needs a human review before it ships
 # Said beside a setting while the administrator's password is awaited.
-settings-snap-waiting = Ожидается пароль...
+settings-snap-waiting = Ожидание вашего пароля…
 
 # Said beside the Earlier versions switch once it is turned on.
 settings-snap-copy-daily = Копия делается каждый день
 
 # Said beside the Earlier versions switch once it is turned off.
-settings-snap-no-more = Больше копии не делаются
+settings-snap-no-more = Больше копий не будет
 
 # Said beside the list of how long copies are kept once the choice is saved.
 settings-snap-kept = Сохранено
@@ -98,7 +98,7 @@ settings-snap-earlier = Прежние версии
 
 # SAFETY: needs a human review before it ships
 # Help text of the Earlier versions card (the information button).
-settings-snap-earlier-about = Trindle может хранить копию файлов всех пользователей в том виде, какой они были в каждый день, чтобы старую версию файла или случайно удалённый файл можно было открыть или вернуть из «Папок». Каждый человек видит в копии только то, что мог читать в тот день, поэтому закрытая домашняя папка остаётся закрытой; файл, который тогда был открыт для других, остаётся для них открытым в этой копии, пока она не исчезнет. Копии хранятся отдельно от снимков системы: восстановление системы никогда не меняет ваши файлы, а эти копии никогда не меняют систему. Цена этому место: удалённый или изменённый файл занимает его, пока не исчезнет последняя копия, где он есть, поэтому удаление не освобождает диск сразу. Очистка копий освобождает место сейчас для всех на этом компьютере и не может быть отменена. Пока диск почти заполнен, копии не делаются. Для любого изменения нужен пароль администратора.
+settings-snap-earlier-about = Trindle может хранить ежедневную копию файлов всех пользователей. Тогда старую версию файла или случайно удалённый файл можно открыть или вернуть из Folders. В копии каждый человек видит только то, что мог видеть в тот день, поэтому закрытые домашние папки остаются закрытыми. Файл, который тогда был открыт для других, остаётся для них открытым в этой копии, пока копию не удалят. Эти копии хранятся отдельно от снимков системы, и одно не влияет на другое. Они занимают место на диске. Удалённый или изменённый файл занимает место, пока не удалена последняя копия, где он есть. Очистка копий сразу освобождает место для всех, и это нельзя отменить. Пока диск почти заполнен, копии не делаются. Чтобы изменить что-либо из этого, нужен пароль администратора.
 
 # Label of the switch for keeping earlier versions, and heading of its line.
 settings-snap-keep-earlier = Хранить прежние версии ваших файлов
@@ -113,21 +113,21 @@ settings-snap-keep-each = Хранить копию каждого дня
 settings-snap-how-long = Как долго хранится копия каждого дня
 
 # Headline of the Snapshots page while the snapshots are read.
-settings-snap-looking = Просмотр снимков…
+settings-snap-looking = Проверка снимков…
 
 # Headline of the Snapshots page when the snapshots could not be read.
 settings-snap-not-read = Не удалось прочитать снимки.
 
 # Headline of the Snapshots page when the computer started from a snapshot: { $n } is its number.
-settings-snap-started-from = Запуск выполнен из снимка { $n }, поэтому ничего из сделанного сейчас не сохранится.
+settings-snap-started-from = Вы запустили систему из снимка { $n }, поэтому ничего из того, что вы сделаете сейчас, не сохранится.
 
 # Headline of the Snapshots page: how many snapshots there are and { $when } the time of the newest.
 settings-snap-go-back =
     { $n ->
-        [one] { $n } снимок для отката, самый новый от { $when }.
-        [few] { $n } снимка для отката, самый новый от { $when }.
-        [many] { $n } снимков для отката, самый новый от { $when }.
-       *[other] { $n } снимка для отката, самый новый от { $when }.
+        [one] Можно вернуться к { $n } снимку. Самый новый от { $when }.
+        [few] Можно вернуться к { $n } снимкам. Самый новый от { $when }.
+        [many] Можно вернуться к { $n } снимкам. Самый новый от { $when }.
+       *[other] Можно вернуться к { $n } снимкам. Самый новый от { $when }.
     }
 
 # Headline of the Snapshots page when there are none yet.
@@ -138,7 +138,7 @@ settings-snap-kept-until-deleted = { $what }, хранится до удален
 
 # SAFETY: needs a human review before it ships
 # Tip of the button that restores the system to a snapshot, and its label while working.
-settings-snap-restore-this = Восстановить систему до этого снимка
+settings-snap-restore-this = Восстановить этот снимок
 
 # SAFETY: needs a human review before it ships
 # Tip of the button that deletes a snapshot.
@@ -150,9 +150,6 @@ settings-snap-restart-now = Перезапустить сейчас
 # Under the heading when snapshots are not set up on a Btrfs computer.
 settings-snap-not-set-up-sub = Они пока не настроены.
 
-# Under the To have them heading when snapshots are not set up.
-settings-snap-reinstall = Переустановите пакет trindle.
-
 # Help text of the No snapshots card when snapshots are not set up on a Btrfs computer.
 settings-snap-not-set-up-about = Снимки не настроены. Переустановка пакета trindle настроит их: sudo apt install --reinstall trindle.
 
@@ -160,10 +157,7 @@ settings-snap-not-set-up-about = Снимки не настроены. Пере�
 settings-snap-another-kind = другой тип
 
 # Under the heading when the computer does not use Btrfs: { $fs } is the kind it uses.
-settings-snap-need-btrfs = Им нужна Btrfs; этот компьютер использует { $fs }.
-
-# Under the To have them heading when the computer does not use Btrfs.
-settings-snap-choose-btrfs = Выберите Btrfs при установке Debian.
+settings-snap-need-btrfs = Снимкам нужна Btrfs. Этот компьютер использует { $fs }.
 
 # Help text of the No snapshots card when the computer does not use Btrfs: { $fs } is the kind it uses.
 settings-snap-need-btrfs-about = Снимкам нужна система на Btrfs, а этот компьютер использует { $fs }. Чтобы они были, выберите Btrfs для системы при установке Debian.
@@ -177,11 +171,8 @@ settings-snap-no-snapshots-title = Нет снимков
 # Heading of the line shown when the computer has no snapshots.
 settings-snap-no-snapshots-line = На этом компьютере нет снимков
 
-# Heading of the line saying how to have snapshots.
-settings-snap-to-have = Чтобы они были
-
 # Shown in place of the list while the snapshots are read.
-settings-snap-looking-short = Просмотр…
+settings-snap-looking-short = Загрузка…
 
 # Heading of the line shown when the snapshots could not be read; the reason is under it.
 settings-snap-not-read-line = Не удалось прочитать снимки
@@ -189,33 +180,24 @@ settings-snap-not-read-line = Не удалось прочитать снимк�
 # Heading of the line shown when there are no snapshots yet.
 settings-snap-none-line = Пока нет
 
-# Under the None yet heading.
-settings-snap-none-line-sub = Один делается перед каждым изменением программ.
-
 # SAFETY: needs a human review before it ships
 # Help text of the Snapshots card (the information button).
-settings-snap-list-about = Каждый снимок может вернуть всю систему к тому состоянию, в каком она была, со следующего запуска, или быть удалён. И то и другое требует двойного нажатия и пароля администратора. После восстановления рядом появляется кнопка перезапуска.
+settings-snap-list-about = Каждый снимок может вернуть всю систему в прежнее состояние после следующего перезапуска. Чтобы восстановить или удалить снимок, нужен пароль администратора.
 
 # Tip of the button that takes a snapshot now, and heading of its line.
 settings-snap-take-now = Сделать снимок сейчас
 
 # Under the Take a snapshot now heading when the computer started from a snapshot.
-settings-snap-not-while = Недоступно при запуске из снимка.
-
-# Under the Take a snapshot now heading.
-settings-snap-kept-until-you = Хранится, пока вы его не удалите.
+settings-snap-not-while = Для этого перезапустите систему как обычно.
 
 # Heading of the line about systems set aside by restoring: how many there are.
 settings-snap-set-aside =
     { $n ->
-        [one] { $n } система отложена при восстановлении
-        [few] { $n } системы отложены при восстановлении
-        [many] { $n } систем отложено при восстановлении
-       *[other] { $n } системы отложены при восстановлении
+        [one] { $n } старая система отложена после восстановления
+        [few] { $n } старые системы отложены после восстановлений
+        [many] { $n } старых систем отложено после восстановлений
+       *[other] { $n } старой системы отложено после восстановлений
     }
-
-# Under the set aside heading.
-settings-snap-free-space = Освободите место, когда всё будет в порядке.
 
 # SAFETY: needs a human review before it ships
 # Tip of the button that frees the space the set aside systems use.
@@ -226,13 +208,13 @@ settings-snap-take-one = Сделать снимок
 
 # SAFETY: needs a human review before it ships
 # Help text of the Take one card (the information button).
-settings-snap-take-about = Сделайте снимок перед тем, как пробовать то, что, возможно, захочется отменить; сделанный вами снимок хранится, пока вы его не удалите. Пока компьютер запущен из снимка, ничего сделанного не сохранится, поэтому сначала перезапустите его как обычно. Каждое восстановление откладывает то, какой система была сразу перед ним, поэтому ничего не теряется; освободите занимаемое ими место, когда всё будет в порядке.
+settings-snap-take-about = Сделайте снимок, прежде чем пробовать то, что, возможно, захочется отменить. Сделанные вами снимки хранятся, пока вы их не удалите. Если вы запустили систему из снимка, сначала перезапустите её как обычно, иначе новый снимок не сохранится. Каждое восстановление откладывает систему такой, какой она была сразу перед ним, поэтому ничего не теряется. Если системные файлы заблокированы, их могут менять только установки и обновления, и для каждой из них делается снимок до и после. Чтобы изменить блокировку, нужен пароль администратора.
 
 # Heading of a line on the Before restoring card: { $n } is the number of the snapshot started from.
 settings-snap-started-line = Запуск из снимка { $n }
 
 # Under the Started from snapshot heading.
-settings-snap-nothing-kept = Ничего из сделанного сейчас не сохранится.
+settings-snap-nothing-kept = Изменения не сохранятся.
 
 # Heading of a line on the Before restoring card.
 settings-snap-files-too = Ваши файлы тоже входят в снимки
@@ -245,7 +227,7 @@ settings-snap-before = Перед восстановлением
 
 # SAFETY: needs a human review before it ships
 # Help text of the Before restoring card (the information button).
-settings-snap-before-about = Если запуск выполнен из снимка, ничего из сделанного сейчас не сохранится: если система должна быть такой, нажмите «Восстановить» у этого снимка в списке, затем перезапустите. На этом компьютере домашняя папка может быть частью системы, и тогда восстановление снимка возвращает и ваши файлы к тому, какими они были тогда, поэтому сначала скопируйте всё новое в надёжное место.
+settings-snap-before-about = Так как вы запустили систему из снимка, ничего из того, что вы делаете сейчас, не сохраняется. Чтобы оставить систему такой, нажмите «Восстановить этот снимок» рядом с ним в списке, затем перезапустите. На этом компьютере домашняя папка может быть частью системы. Тогда восстановление снимка вернёт и ваши личные файлы к тому, какими они были, поэтому сначала скопируйте всё новое в надёжное место.
 
 
 # Name of the switch that keeps the system's own files read-only.
@@ -259,4 +241,3 @@ settings-snap-locked-now = Заблокированы
 
 # Said beside the System files locked switch once it is turned off.
 settings-snap-unlocked-now = Разблокированы
-

@@ -1,6 +1,7 @@
 //! Installing updates: all at once, or one alone, and what is said as each goes in.
 
 use crate::toolkit::t;
+use crate::toolkit::tiles::RingShare;
 use std::rc::Rc;
 use std::cell::RefCell;
 use crate::store::pages::job_rows::{begin, settle};
@@ -17,10 +18,6 @@ use super::stopping::{start_stoppable, stopped};
 use super::{APPS_ROW, DEBIAN_ROW, Flat, NEEDS_RESTART, REBOOT_REQUIRED, SYSTEM_ROW, TRINDLE_ROW, app_key, busy, debian_name, flat_held};
 
 pub fn install_all(s: &mut Store) {
-    install_all_in(s);
-}
-
-pub(super) fn install_all_in(s: &mut Store) {
     if busy(s) {
         return;
     }
@@ -64,7 +61,7 @@ pub(super) fn flatpaks_for_all(s: &Store) -> Option<Vec<String>> {
         return (!s.upd.flats.is_empty() || !s.updatable.is_empty()).then(Vec::new);
     }
     let names: Vec<String> = s.upd.flats.iter().filter(|f| !flat_held(s, f)).map(Flat::named).collect();
-    (!names.is_empty()).then_some(names)
+    crate::common::held::held_back_names(names)
 }
 
 pub(super) fn alone(s: &mut Store, name: &str, take: impl FnOnce() -> Result<Hold, Who>) -> Option<Hold> {
@@ -122,7 +119,7 @@ pub(super) fn update_plugin(s: &mut Store, offer: &crate::plugins::catalogue::Of
 }
 
 pub(super) fn forget_failures(s: &mut Store) {
-    s.said.retain(|k, _| !(k.starts_with("up:") || k.starts_with("fw:")));
+    s.words.said.retain(|k, _| !(k.starts_with("up:") || k.starts_with("fw:")));
     s.upd.stopped.clear();
 }
 
@@ -139,32 +136,33 @@ pub(super) fn job_done(s: &mut Store) {
 
 fn update_flatpak(s: &mut Store, hold: Hold, key: String, kind: &'static str, named: String) {
     begin(s, &key, |_| {});
-    s.said.remove(&key);
+    s.words.said.remove(&key);
     s.working += 1;
     let said: Rc<RefCell<Vec<String>>> = Rc::default();
     let heard = said.clone();
     let job = RefCell::new(progress::Job::default());
     let dial = key.clone();
-    let on_line = s.heard(move |s, line| {
+    let on_line = s.heard_if(move |s, line| {
         if let Some(at) = job.borrow_mut().heard(line) {
             if let Some(d) = s.dials.get_mut(&dial) {
                 d.within(at.share);
             }
         }
         heard.borrow_mut().push(line.to_string());
+        false
     });
     let id = named.split('/').next().unwrap_or_default().to_string();
     let stop = Stop::default();
     s.upd.stops.insert(key.clone(), stop.clone());
     s.upd.stopped.remove(&key);
     let was = stop.clone();
-    start_stoppable(&stop, &run::line_by_line(&["flatpak", "update", "--user", "-y", kind, &named]), on_line, s.then(move |s: &mut Store, ok: bool| {
+    start_stoppable(&stop, &crate::store::progress::english(&run::line_by_line(&update_argv(&[kind, &named]))), on_line, s.then(move |s: &mut Store, ok: bool| {
         s.job_over();
 
         if !stopped(s, &key, &was, ok) {
             settle(s, &key, ok, "");
             if ok {
-                s.said.remove(&key);
+                s.words.said.remove(&key);
                 went_in(s, &key);
                 renew_steam(s, &[id]);
             } else {
@@ -176,6 +174,12 @@ fn update_flatpak(s: &mut Store, hold: Hold, key: String, kind: &'static str, na
             drop(hold);
         });
     }));
+}
+
+pub(super) fn update_argv<'a>(named: &[&'a str]) -> Vec<&'a str> {
+    let mut argv = vec!["flatpak", "update", "-y"];
+    argv.extend_from_slice(named);
+    argv
 }
 
 fn renew_steam(s: &mut Store, ids: &[String]) {
@@ -194,25 +198,26 @@ fn update_apps(s: &mut Store, hold: Hold, names: Vec<String>) {
     s.working += 1;
     s.upd.app_order.clear();
     s.upd.app_rows = s.updatable.iter().filter(|id| !s.held.app(id))
-        .chain(s.upd.flats.iter().filter(|f| !flat_held(s, f)).map(|f| &f.id)).map(|i| (i.clone(), 0.0)).collect();
+        .chain(s.upd.flats.iter().filter(|f| !flat_held(s, f)).map(|f| &f.id)).map(|i| (i.clone(), RingShare::new(Some(0.0)))).collect();
     let said: Rc<RefCell<Vec<String>>> = Rc::default();
     let heard = said.clone();
     let job = RefCell::new(progress::Job::default());
-    let on_line = s.heard(move |s, line| {
+    let on_line = s.heard_if(move |s, line| {
         apps_line(s, line, &job);
         heard.borrow_mut().push(line.to_string());
+        false
     });
     let going: Vec<String> = s.upd.app_rows.keys().cloned().collect();
-    let mut argv = vec!["flatpak", "update", "--user", "-y"];
-    argv.extend(names.iter().map(String::as_str));
+    let names: Vec<&str> = names.iter().map(String::as_str).collect();
+    let argv = update_argv(&names);
     let stop = Stop::default();
     s.upd.stops.insert(APPS_ROW.to_string(), stop.clone());
     s.upd.stopped.remove(APPS_ROW);
     let end = AppsEnd { stop: stop.clone(), going, said, hold };
-    start_stoppable(&stop, &run::line_by_line(&argv), on_line, s.then(move |s: &mut Store, ok: bool| apps_end(s, ok, end)));
+    start_stoppable(&stop, &crate::store::progress::english(&run::line_by_line(&argv)), on_line, s.then(move |s: &mut Store, ok: bool| apps_end(s, ok, end)));
 }
 
-fn apps_line(s: &mut Store, line: &str, job: &RefCell<progress::Job>) {
+pub(super) fn apps_line(s: &mut Store, line: &str, job: &RefCell<progress::Job>) {
     if let Some(id) = table_row(line) {
         s.upd.app_order.push(id);
     }
@@ -222,14 +227,15 @@ fn apps_line(s: &mut Store, line: &str, job: &RefCell<progress::Job>) {
         }
     }
     if let Some((step, within)) = fetching(line) {
+        s.turning.moved();
         for (i, id) in s.upd.app_order.iter().enumerate() {
-            if let Some(share) = s.upd.app_rows.get_mut(id) {
+            if let Some(share) = s.upd.app_rows.get(id) {
                 let now = match (i + 1).cmp(&step) {
                     std::cmp::Ordering::Less => 1.0,
                     std::cmp::Ordering::Equal => within,
                     std::cmp::Ordering::Greater => 0.0,
                 };
-                *share = share.max(now);
+                share.set(Some(share.get().unwrap_or(0.0).max(now)));
             }
         }
     }
@@ -253,7 +259,7 @@ fn apps_end(s: &mut Store, ok: bool, end: AppsEnd) {
         let still = s.updatable.iter().any(|id| !s.held.app(id)) || s.upd.flats.iter().any(|f| !flat_held(s, f));
         if !cut_short {
             settle(s, APPS_ROW, ok && !still, "");
-            s.said.remove(APPS_ROW);
+            s.words.said.remove(APPS_ROW);
             if !ok || still {
                 s.say(APPS_ROW, why_not_updated(&said.borrow()), Tone::Problem);
             }
@@ -289,22 +295,18 @@ pub(super) fn fetching(line: &str) -> Option<(usize, f32)> {
 
 fn upgrade_system(s: &mut Store, hold: Hold, key: &'static str, step: &'static str, firmware: Vec<firmware::Firmware>) {
     begin(s, key, |d| d.by_steps());
-    s.said.remove(key);
+    s.words.said.remove(key);
     s.working += 1;
     if key != TRINDLE_ROW && s.debian.iter().any(|p| NEEDS_RESTART.iter().any(|n| p.starts_with(n))) {
         s.upd.wants_restart = true;
     }
-    let on_line = s.heard(move |s, line| {
-        if let Some(d) = s.dials.get_mut(key) {
-            d.heard(line);
-        }
-    });
+    let on_line = s.heard_if(move |s, line| s.dials.get_mut(key).is_some_and(|d| d.hear(line)));
     updates::debian_watching(step, on_line, s.then(move |s: &mut Store, res: Result<(), String>| {
         s.job_over();
 
         let part = Part::of_admin(res);
         settle(s, key, part == Part::Done, "");
-        s.said.remove(key);
+        s.words.said.remove(key);
         if let Some(why) = part.why() {
             s.say(key, why, Tone::Problem);
         }
@@ -330,14 +332,14 @@ fn update_firmware(s: &mut Store, hold: Hold, mut left: Vec<firmware::Firmware>)
     let key = format!("fw:{}", dev.id);
 
     begin(s, &key, |d| d.expect(60.0));
-    s.said.remove(&key);
+    s.words.said.remove(&key);
     s.working += 1;
     let device = dev.id.clone();
     updates::admin_watching(&["firmware-update", &device], |_| {}, s.then(move |s: &mut Store, res: Result<(), String>| {
         s.job_over();
         let part = Part::of_admin(res);
         settle(s, &key, part == Part::Done, "");
-        s.said.remove(&key);
+        s.words.said.remove(&key);
         match part.why() {
             Some(why) => s.say(&key, why, Tone::Problem),
             None => {

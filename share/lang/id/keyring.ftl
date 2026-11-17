@@ -27,15 +27,15 @@ keyring-checking = Memeriksa…
 
 # Under the title when no keyring exists yet and a program wants to keep a password.
 # SAFETY: needs a human review before it ships
-keyring-why-none = Sebuah program ingin menyimpan kata sandi dengan aman. Ketik kata sandi login Anda untuk memulai keyring; mulai sekarang keyring terbuka sendiri saat Anda login.
+keyring-why-none = Sebuah program ingin menyimpan kata sandi dengan aman. Ketik kata sandi login Anda untuk memulai keyring. Mulai sekarang, keyring akan terbuka sendiri saat Anda login.
 
 # Under the title when the keyring was made with a different password from the login one.
 # SAFETY: needs a human review before it ships
-keyring-why-old = Kata sandi login Anda bukan yang dipakai untuk membuat keyring ini. Ketik yang lama satu kali; setelah itu keyring terbuka sendiri saat login.
+keyring-why-old = Kata sandi login Anda bukan yang dipakai untuk membuat keyring ini. Ketik yang lama satu kali. Setelah itu, keyring akan terbuka sendiri saat Anda login.
 
 # Under the title when no password was typed at log in, for example with a fingerprint or automatic log in.
 # SAFETY: needs a human review before it ships
-keyring-why-no-login = Tidak ada kata sandi yang diketik saat login (sidik jari atau login otomatis), jadi keyring tidak dapat terbuka sendiri. Ketik kata sandi login Anda.
+keyring-why-no-login = Anda tidak mengetik kata sandi saat login (Anda memakai sidik jari atau login otomatis), jadi keyring tidak dapat terbuka sendiri. Ketik kata sandi login Anda.
 
 # Under the title when a program asks for a saved password and the keyring is shut.
 # SAFETY: needs a human review before it ships
@@ -49,7 +49,7 @@ keyring-stopped = Keyring telah berhenti
 keyring-not-the-keyring-password = Itu bukan kata sandi keyring
 
 # Shown under the box when the keyring file is damaged and has been left as it is.
-keyring-damaged-left = File keyring rusak, jadi dibiarkan apa adanya
+keyring-damaged-left = File keyring rusak, jadi Trindle tidak mengubahnya
 
 # Shown under the box when the password is not the person's login password.
 # SAFETY: needs a human review before it ships
@@ -60,7 +60,7 @@ keyring-not-login-password = Itu bukan kata sandi login Anda
 keyring-not-your-password = Itu bukan kata sandi Anda.
 
 # Shown in Settings when the old keyring is still running after its time to stop has run out.
-keyring-would-not-stop = Keyring lama tidak mau berhenti.
+keyring-would-not-stop = Keyring lama tidak berhenti.
 
 # Said when the keyring is locked and cannot be used.
 keyring-error-locked = Keyring terkunci
@@ -70,7 +70,7 @@ keyring-error-locked = Keyring terkunci
 keyring-error-wrong-password = Kata sandi itu tidak membuka keyring
 
 # Said when the collection or item asked for is not there.
-keyring-error-no-such = Koleksi atau item itu tidak ada
+keyring-error-no-such = Item itu tidak ada
 
 # Said when the keyring file cannot be read as a keyring.
 keyring-error-damaged = File keyring rusak
@@ -81,8 +81,11 @@ keyring-error-damaged = File keyring rusak
 keyring-asked-by = Diminta oleh { $program }
 
 # Told to a program that asked while the keyring was taking over from the one before and many calls already waited.
-keyring-starting = Keyring sedang dimulai. Minta lagi.
+keyring-starting = Keyring sedang dimulai. Coba lagi.
 
 # The program in "Asked for by", for a program on the bus: $name is the name it gives itself, which anything can claim.
 keyring-named-itself = program yang menamakan dirinya { $name }
 
+
+# Said to a program that gave a password with letters the keyring can't read, so no keyring is made with it.
+keyring-password-unreadable = Kata sandi itu berisi huruf yang tidak dapat dibaca gantungan kunci

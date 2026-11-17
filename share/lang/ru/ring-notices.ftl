@@ -77,7 +77,7 @@ ring-crash-greeter = Экран входа Trindle
 ring-crash-lock = Экран блокировки Trindle
 
 # Name of Settings in the crash notice.
-ring-crash-settings = Параметры Trindle
+ring-crash-settings = Настройки Trindle
 
 # Name of Apps in the crash notice.
 ring-crash-apps = Приложения Trindle
@@ -110,7 +110,7 @@ ring-lid-nothing = Ничего
 ring-lid-shut-down = Выключить
 
 # Reason the system lists beside Trindle's hold on the lid switch (shown by tools that list what stops sleep).
-ring-lid-reason = Закрытие крышки делает то, что указано в «Параметры», «Питание»
+ring-lid-reason = Что происходит при закрытии крышки, можно выбрать в «Настройки», в разделе «Питание».
 
 # Notice at the foot of the screen for a few seconds when the magnifier starts.
 ring-magnify-hint = Удерживайте в любом месте, чтобы увеличить
@@ -125,7 +125,7 @@ ring-magnify-stop = Выключить лупу
 ring-mic-off-tip = Выключить микрофон для всех программ
 
 # Tip of the switch in the ring that turns the microphone back on.
-ring-mic-on-tip = Включить микрофон снова
+ring-mic-on-tip = Включить микрофон
 
 # Line in the ring when something other than the person pressed the microphone switch on.
 ring-mic-own-press = Включить микрофон снова можете только вы сами.
@@ -149,7 +149,7 @@ ring-notes-copied = Скопировано для вашего помощник�
 ring-notes-name = Уведомление
 
 # Said when a pinned notification has been held long enough and now follows the pointer.
-ring-notes-moving = Перемещение. Отпустите, чтобы оставить здесь, Escape, чтобы вернуть.
+ring-notes-moving = Перемещение уведомления. Отпустите, чтобы оставить здесь, или нажмите Escape, чтобы вернуть.
 
 # Said when a pinned notification has been dropped or moved by keys.
 ring-notes-moved = Перемещено
@@ -193,7 +193,14 @@ ring-plugin-needs = Для { $name } нужно ваше разрешение
 
 # Line under the notice that a plugin needs permission: none of the permissions it asks for are given.
 # SAFETY: needs a human review before it ships
-ring-plugin-cannot-work = Пока не может работать: разрешено 0 из { $asks }.
+ring-plugin-cannot-work =
+    { $asks ->
+        [1] Пока не может работать. Вы не разрешили единственное разрешение, которое он запрашивает.
+        [one] Пока не может работать. Вы ещё ничего не разрешили из того, что он запрашивает (всего разрешений: { $asks }).
+        [few] Пока не может работать. Вы ещё ничего не разрешили из того, что он запрашивает (всего разрешений: { $asks }).
+        [many] Пока не может работать. Вы ещё ничего не разрешили из того, что он запрашивает (всего разрешений: { $asks }).
+       *[other] Пока не может работать. Вы ещё ничего не разрешили из того, что он запрашивает (всего разрешений: { $asks }).
+    }
 
 # Said to a screen reader when a notification was copied; $said is what the circle said.
 ring-copied-said = Скопировано. { $said }
@@ -210,9 +217,11 @@ ring-outside-files = Открыты ваши файлы
 ring-outside-body =
     { $more ->
         [0] { $names }
-        [one] { $names } и ещё { $more }
+        [one] { $names } и ещё 1
         [few] { $names } и ещё { $more }
         [many] { $names } и ещё { $more }
        *[other] { $names } и ещё { $more }
     }
 
+# Said under the magnifier when the screen picture it took has the wrong size.
+ring-magnify-wrong-size = Снимок оказался не того размера.

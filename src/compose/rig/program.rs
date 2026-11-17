@@ -1,8 +1,16 @@
 // Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
 use wayland_client::protocol::{wl_buffer, wl_compositor, wl_keyboard, wl_output, wl_pointer, wl_region, wl_registry, wl_seat, wl_shm, wl_shm_pool, wl_surface};
-use wayland_client::{delegate_noop, Connection, Dispatch, QueueHandle, WEnum};
+use wayland_client::protocol::{wl_data_device, wl_data_device_manager, wl_data_offer, wl_data_source};
+use wayland_client::{delegate_noop, event_created_child, Connection, Dispatch, QueueHandle, WEnum};
 use wayland_protocols::xdg::shell::client::{xdg_popup, xdg_positioner, xdg_surface, xdg_toplevel, xdg_wm_base};
+use wayland_protocols::ext::image_capture_source::v1::client::{
+    ext_image_capture_source_v1::ExtImageCaptureSourceV1, ext_output_image_capture_source_manager_v1::ExtOutputImageCaptureSourceManagerV1,
+};
+use wayland_protocols::ext::image_copy_capture::v1::client::{
+    ext_image_copy_capture_frame_v1::ExtImageCopyCaptureFrameV1, ext_image_copy_capture_manager_v1::ExtImageCopyCaptureManagerV1,
+    ext_image_copy_capture_session_v1::ExtImageCopyCaptureSessionV1,
+};
 use wayland_protocols_wlr::layer_shell::v1::client::zwlr_layer_shell_v1::ZwlrLayerShellV1;
 use wayland_protocols_wlr::layer_shell::v1::client::zwlr_layer_surface_v1::{self, ZwlrLayerSurfaceV1};
 
@@ -52,6 +60,18 @@ pub struct Program {
     pub(super) texts: Option<ZwpTextInputManagerV3>,
 
     pub(super) outputs: Vec<wl_output::WlOutput>,
+
+    pub copier: Option<ExtImageCopyCaptureManagerV1>,
+    pub screen_sources: Option<ExtOutputImageCaptureSourceManagerV1>,
+
+    pub(super) data: Option<wl_data_device_manager::WlDataDeviceManager>,
+    pub(super) drag_words: Vec<u8>,
+
+    pub(super) dragged: Vec<&'static str>,
+
+    pub(super) takes: Option<String>,
+    pub(super) offer: Option<wl_data_offer::WlDataOffer>,
+    pub(super) dropped: Option<(wl_data_offer::WlDataOffer, std::fs::File)>,
 }
 
 #[allow(dead_code, non_camel_case_types, unused_unsafe, unused_variables, non_upper_case_globals, non_snake_case,
@@ -154,6 +174,9 @@ impl Dispatch<wl_registry::WlRegistry, ()> for Program {
                 "zwp_virtual_keyboard_manager_v1" => p.typer = Some(registry.bind(name, 1, qh, ())),
                 "zwp_text_input_manager_v3" => p.texts = Some(registry.bind(name, 1, qh, ())),
                 "wl_output" => p.outputs.push(registry.bind(name, version.min(4), qh, ())),
+                "ext_image_copy_capture_manager_v1" => p.copier = Some(registry.bind(name, 1, qh, ())),
+                "ext_output_image_capture_source_manager_v1" => p.screen_sources = Some(registry.bind(name, 1, qh, ())),
+                "wl_data_device_manager" => p.data = Some(registry.bind(name, version.min(3), qh, ())),
                 _ => {}
             }
         }
@@ -240,6 +263,55 @@ impl Dispatch<xdg_wm_base::XdgWmBase, ()> for Program {
 }
 
 delegate_noop!(Program: ignore wl_compositor::WlCompositor);
+delegate_noop!(Program: ignore wl_data_device_manager::WlDataDeviceManager);
+delegate_noop!(Program: ignore wl_data_offer::WlDataOffer);
+
+impl Dispatch<wl_data_device::WlDataDevice, ()> for Program {
+    fn event(p: &mut Self, _: &wl_data_device::WlDataDevice, event: wl_data_device::Event, _: &(), _: &Connection, _: &QueueHandle<Self>) {
+        let Some(kind) = p.takes.clone() else { return };
+        match event {
+            wl_data_device::Event::Enter { serial, id: Some(offer), .. } => {
+                offer.accept(serial, Some(kind));
+                let copy = wl_data_device_manager::DndAction::Copy;
+                offer.set_actions(copy, copy);
+                p.offer = Some(offer);
+            }
+            wl_data_device::Event::Drop => {
+                use std::os::fd::{AsFd, FromRawFd, OwnedFd};
+                let Some(offer) = p.offer.take() else { return };
+                let mut ends = [0; 2];
+                // SAFETY: ends is two ints pipe2 fills, checked before they are owned.
+                assert_eq!(unsafe { libc::pipe2(ends.as_mut_ptr(), libc::O_CLOEXEC | libc::O_NONBLOCK) }, 0);
+                // SAFETY: both ends are fresh and owned here alone.
+                let (read, write) = unsafe { (OwnedFd::from_raw_fd(ends[0]), OwnedFd::from_raw_fd(ends[1])) };
+                offer.receive(kind, write.as_fd());
+                p.dropped = Some((offer, std::fs::File::from(read)));
+            }
+            _ => {}
+        }
+    }
+
+    event_created_child!(Program, wl_data_device::WlDataDevice, [
+        wl_data_device::EVT_DATA_OFFER_OPCODE => (wl_data_offer::WlDataOffer, ()),
+    ]);
+}
+
+impl Dispatch<wl_data_source::WlDataSource, ()> for Program {
+    fn event(p: &mut Self, _: &wl_data_source::WlDataSource, event: wl_data_source::Event, _: &(), _: &Connection, _: &QueueHandle<Self>) {
+        match event {
+            wl_data_source::Event::Send { fd, .. } => {
+                use std::io::Write;
+                p.dragged.push("send");
+
+                let _ = std::fs::File::from(fd).write_all(&p.drag_words);
+            }
+            wl_data_source::Event::DndDropPerformed => p.dragged.push("dropped"),
+            wl_data_source::Event::DndFinished => p.dragged.push("finished"),
+            wl_data_source::Event::Cancelled => p.dragged.push("cancelled"),
+            _ => {}
+        }
+    }
+}
 delegate_noop!(Program: ignore wl_surface::WlSurface);
 delegate_noop!(Program: ignore wl_shm::WlShm);
 delegate_noop!(Program: ignore wl_shm_pool::WlShmPool);
@@ -249,3 +321,8 @@ delegate_noop!(Program: ignore ZwlrLayerShellV1);
 delegate_noop!(Program: ignore xdg_toplevel::XdgToplevel);
 delegate_noop!(Program: ignore xdg_popup::XdgPopup);
 delegate_noop!(Program: ignore xdg_positioner::XdgPositioner);
+delegate_noop!(Program: ignore ExtImageCopyCaptureManagerV1);
+delegate_noop!(Program: ignore ExtOutputImageCaptureSourceManagerV1);
+delegate_noop!(Program: ignore ExtImageCaptureSourceV1);
+delegate_noop!(Program: ignore ExtImageCopyCaptureSessionV1);
+delegate_noop!(Program: ignore ExtImageCopyCaptureFrameV1);

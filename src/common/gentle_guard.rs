@@ -12,8 +12,9 @@ const NOT_DISK: &[(&str, usize, &str)] = &[];
 const POURS: [&str; 4] = ["io::copy(", "fs::copy(", "copy_file_range(", "sendfile("];
 
 const SHORT: &[(&str, usize, &str)] = &[
+    ("store/parts.rs", 1, "a .deb the person gave is read once into its hash on the install's own thread; nothing is written"),
     ("installer/steps.rs", 1, "one small settings file"),
-    ("mcp/tools.rs", 2, "Trindle's own small settings files"),
+    ("mcp/tools.rs", 1, "Trindle's own small settings files"),
     ("screenshot/mod.rs", 1, "one picture of the screen"),
     ("store/backup.rs", 1, "the person's own small picture"),
     ("store/fence_net.rs", 4, "the bytes of a live connection passed on as they come, between an AI program and a site on the person's list; nothing is on a drive"),
@@ -22,7 +23,7 @@ const SHORT: &[(&str, usize, &str)] = &[
 const PROGRAMS: [&str; 7] = ["\"tar\"", "\"rsync\"", "\"cp\"", "\"dd\"", "\"sha256sum\"", "\"unzip\"", "\"dpkg-deb\""];
 
 const STARTED: &[(&str, usize, &str)] = &[
-    ("common/packs.rs", 2, "unzip and tar, both started through program by the one unpacking (gently)"),
+    ("common/packs.rs", 3, "unzip and tar, both started through program: by the one unpacking (gently) and by the listing made before it"),
     ("common/kinds.rs", 1, "a kind of file's name, and nothing started"),
     ("installer/steps.rs", 1, "the copy of the whole system, started through program"),
     ("plugins/catalogue.rs", 2, "unpacking an archive and listing it first, both started through program"),

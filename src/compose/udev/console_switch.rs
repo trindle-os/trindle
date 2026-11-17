@@ -1,20 +1,20 @@
 // Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
 use smithay::{
-    backend::drm::DrmNode,
+    backend::{drm::DrmNode, session::Session},
     reexports::input::Libinput,
 };
 use tracing::{error, info, warn};
 
 use super::{
     gamma::{apply_gamma, gamma_length, linear_ramp, read_gamma},
-    AnvilState, BackendData, UdevData,
+    Compose, BackendData, UdevData, SCREENS_BACK_LOG,
 };
 use crate::drm_extras::leftovers;
 
-pub(super) fn pause(data: &mut AnvilState<UdevData>, libinput_context: &Libinput) {
+pub(super) fn pause(data: &mut Compose<UdevData>, libinput_context: &Libinput) {
     libinput_context.suspend();
-    info!("pausing session");
+    info!(target: SCREENS_BACK_LOG, "pausing session");
 
     data.reader_keys.release();
     data.expander.clear();
@@ -28,8 +28,8 @@ pub(super) fn pause(data: &mut AnvilState<UdevData>, libinput_context: &Libinput
     }
 }
 
-pub(super) fn resume(data: &mut AnvilState<UdevData>, libinput_context: &mut Libinput) {
-    info!("resuming session");
+pub(super) fn resume(data: &mut Compose<UdevData>, libinput_context: &mut Libinput) {
+    info!(target: SCREENS_BACK_LOG, "resuming session");
     let mut failed = Vec::new();
 
     if let Err(err) = libinput_context.resume() {
@@ -51,7 +51,7 @@ pub(super) fn resume(data: &mut AnvilState<UdevData>, libinput_context: &mut Lib
         }
         restore_screens(backend);
         if let Some(lease_global) = backend.leasing_global.as_mut() {
-            lease_global.resume::<AnvilState<UdevData>>();
+            lease_global.resume::<Compose<UdevData>>();
         }
     }
 
@@ -76,6 +76,7 @@ fn retake_screens(node: DrmNode, backend: &mut BackendData) -> bool {
 fn restore_screens(backend: &mut BackendData) {
     let drm = backend.drm_output_manager.device();
     for (crtc, surface) in backend.surfaces.iter_mut() {
+        surface.drm_output.reset_buffers();
         if !(surface.enabled && surface.powered) {
             if let Err(err) = surface.drm_output.with_compositor(|c| c.clear()) {
                 warn!(?err, "could not keep a screen off");
@@ -92,4 +93,21 @@ fn restore_screens(backend: &mut BackendData) {
             }
         }
     }
+}
+
+pub(super) fn draw_afresh(data: &mut Compose<UdevData>) {
+    if !data.backend_data.session.is_active() {
+        return;
+    }
+    for backend in data.backend_data.backends.values_mut() {
+        for surface in backend.surfaces.values_mut() {
+            surface.drm_output.reset_buffers();
+        }
+    }
+    let nodes: Vec<DrmNode> = data.backend_data.backends.keys().copied().collect();
+    data.handle.insert_idle(move |data| {
+        for node in nodes {
+            data.render(node, None, data.clock.now());
+        }
+    });
 }

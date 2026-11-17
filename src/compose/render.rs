@@ -1,6 +1,4 @@
-//! Origin: began as a file of anvil, Smithay's example compositor (MIT, Victor Berger and
-//! Victoria Brekenfeld). About 24% of this file's lines still read as
-//! they did there; the rest is Trindle's own.
+// Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
 use std::{sync::Mutex, time::Duration};
 
@@ -29,15 +27,15 @@ pub const ASSUMED_REFRESH: i32 = 60_000;
 const FRAME_MILLIS_PER_MILLIHERTZ: u64 = 1_000_000;
 
 pub fn frame_duration(refresh: i32) -> Duration {
-    Duration::from_secs_f64(1_000f64 / refresh as f64)
+    Duration::from_secs_f64(1_000f64 / refresh.max(1) as f64)
 }
 
 pub fn frames_to_millis(frames: u64, refresh: u64) -> u64 {
-    frames * FRAME_MILLIS_PER_MILLIHERTZ / refresh
+    frames.saturating_mul(FRAME_MILLIS_PER_MILLIHERTZ) / refresh.max(1)
 }
 
 pub fn frames_in(wait: Duration, refresh: u64) -> u64 {
-    (wait.as_millis() as u64 * refresh).div_ceil(FRAME_MILLIS_PER_MILLIHERTZ)
+    (wait.as_millis() as u64).saturating_mul(refresh).div_ceil(FRAME_MILLIS_PER_MILLIHERTZ)
 }
 
 smithay::backend::renderer::element::render_elements! {
@@ -398,4 +396,18 @@ where
     let (elements, clear_color) =
         output_elements(output, space, custom_elements, renderer, session_lock);
     damage_tracker.render_output(renderer, framebuffer, age, &elements, clear_color)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_refresh_rate_of_zero_or_below_never_divides_by_zero() {
+        for refresh in [0, -1, i32::MIN] {
+            assert!(frame_duration(refresh) > Duration::ZERO);
+        }
+        assert_eq!(frames_to_millis(u64::MAX, 0), u64::MAX);
+        assert_eq!(frames_in(Duration::from_millis(u64::MAX), u64::MAX), u64::MAX.div_ceil(FRAME_MILLIS_PER_MILLIHERTZ));
+    }
 }

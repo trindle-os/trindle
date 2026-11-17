@@ -77,30 +77,33 @@ installer-missing-language = اختر لغة
 installer-missing-keyboard = اختر لوحة مفاتيح
 
 # Note beside Next on the first page while no time zone is chosen.
-installer-missing-time = اختر توقيتًا
+installer-missing-time = اختر منطقة زمنية
 
 # Note beside Next on the disk page while no disk is chosen.
-installer-missing-disk = اختر أين يوضع Trindle
+installer-missing-disk = اختر مكان Trindle
+
+# Note beside Next on the disk page while the disks are read again, after one turned out not to be the disk shown.
+installer-disks-rereading = جارٍ قراءة الأقراص مجددًا
 
 # SAFETY: needs a human review before it ships
 # Note beside Next on the disk password page while no password has been typed twice.
-installer-missing-disk-password = اكتب كلمة مرور القرص مرتين، بالشكل نفسه في المرتين
+installer-missing-disk-password = اكتب كلمة مرور القرص مرتين. يجب أن تكون نفسها في المرتين
 
 # Note beside Next on the account page while the sign-in name is not good.
-installer-missing-username = اسم تسجيل الدخول مطلوب
+installer-missing-username = أدخل اسم تسجيل الدخول
 
 # Note beside Next on the account page while the computer's name is not good.
 installer-missing-hostname = أعطِ هذا الحاسوب اسمًا
 
 # SAFETY: needs a human review before it ships
 # Note beside Next on the account page while no password has been typed twice.
-installer-missing-password = اكتب كلمة مرورك مرتين، بالشكل نفسه في المرتين
+installer-missing-password = اكتب كلمة مرورك مرتين. يجب أن تكون نفسها في المرتين
 
 # Title of the first page.
 installer-welcome-title = مرحبًا بك في { $name }
 
 # Sentence under the title of the first page.
-installer-welcome-help = اختر لغتك؛ تتبعها لوحة المفاتيح والوقت، ويمكنك تغيير أي منهما.
+installer-welcome-help = اختر لغتك، وسيطابق Trindle لوحة المفاتيح والمنطقة الزمنية معها، ويمكنك تغييرهما.
 
 # Head of the card for choosing the language, and the name of its search box.
 installer-language = اللغة
@@ -115,14 +118,14 @@ installer-time = الوقت
 installer-select = اختر
 
 # Title of the disk page.
-installer-disks-title = أين يوضع { $name }
+installer-disks-title = مكان { $name }
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title of the disk page.
-installer-disks-help = يُستبدل كل ما على القرص الذي تختاره، إلا إذا أفسحت مجالًا بجانب ما هو موجود.
+installer-disks-help = يُستبدل كل ما على القرص الذي تختاره، إلا إذا اخترت التثبيت بجانب ما هو موجود عليه.
 
 # Shown on the disk page when no disk is big enough.
-installer-disks-none = لم يُعثر على قرص كبير بما يكفي. يحتاج Trindle إلى 20 GB.
+installer-disks-none = لم يجد Trindle قرصًا كبيرًا بما يكفي. يحتاج إلى 20 GB.
 
 # SAFETY: needs a human review before it ships
 # Name and words of the choice to erase a whole disk.
@@ -166,10 +169,10 @@ installer-swap-title = ملف تبادل بحجم { $gb } GB
 installer-swap-switch = إنشاء ملف تبادل
 
 # Under the swap file's head when Secure Boot is on.
-installer-swap-secure-boot = الإقلاع الآمن (Secure Boot) مفعّل، لذلك لا يستطيع هذا الحاسوب الإسبات، لكن ملف التبادل ما زال مفيدًا حين تنفد الذاكرة. لا يُنشأ إلا إذا كان في القرص مساحة وفيرة فائضة.
+installer-swap-secure-boot = الإقلاع الآمن (Secure Boot) مفعّل، لذلك لا يستطيع هذا الحاسوب الإسبات، لكن ملف التبادل ما زال مفيدًا حين تنفد الذاكرة. لا ينشئه Trindle إلا إذا كان في القرص مساحة وفيرة فائضة.
 
 # Under the swap file's head when the computer can hibernate.
-installer-swap-note = مساحة للإسبات، أي إبقاء كل شيء مفتوحًا مع إطفاء الطاقة، ومكان يُلجأ إليه حين تنفد الذاكرة. بدونه لا يستطيع الحاسوب الإسبات. لا يُنشأ إلا إذا كان في القرص مساحة وفيرة فائضة.
+installer-swap-note = يتيح ملف التبادل للحاسوب الإسبات، أي إبقاء كل شيء مفتوحًا مع إطفاء الطاقة. ويمنح الحاسوب أيضًا مساحة إضافية حين تنفد الذاكرة. بدونه لا يستطيع الحاسوب الإسبات. لا ينشئ Trindle ملفًا منه إلا إذا كان في القرص مساحة وفيرة فائضة.
 
 # SAFETY: needs a human review before it ships
 # Title of the page about encrypting the disk.
@@ -200,7 +203,7 @@ installer-privacy-about = عن الشريحة
 
 # SAFETY: needs a human review before it ships
 # In the card about the chip, on a computer that has one.
-installer-privacy-chip = في هذا الحاسوب شريحة TPM. يطلب أول إقلاع بعد التثبيت كلمة المرور مرة واحدة، بينما تتعرّف الشريحة على هذا الحاسوب؛ وبعد ذلك تفتح القرص بنفسها ولا يُكتب شيء. احتفظ بكلمة المرور: فهي طريق الدخول إذا استُبدلت الشريحة أو نُقل القرص إلى حاسوب آخر.
+installer-privacy-chip = في هذا الحاسوب شريحة TPM. عند أول إقلاع بعد التثبيت، يطلب الحاسوب كلمة المرور مرة واحدة أثناء إعداد الشريحة. وبعد ذلك تفتح الشريحة القرص ولا تكتب شيئًا. احتفظ بكلمة المرور، لأنك ستحتاج إليها إذا استُبدلت الشريحة أو نُقل القرص إلى حاسوب آخر.
 
 # SAFETY: needs a human review before it ships
 # In the card about the chip, on a computer that has none Trindle can use.
@@ -212,7 +215,7 @@ installer-disk-title = كلمة مرور القرص
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title of the disk password page.
-installer-disk-help = تُكتب قبل أي شيء آخر عند بدء تشغيل الحاسوب.
+installer-disk-help = تكتبها قبل أي شيء آخر عند بدء تشغيل الحاسوب.
 
 # SAFETY: needs a human review before it ships
 # Head of the card with the disk password boxes, and the name of the first box.
@@ -224,7 +227,7 @@ installer-disk-suggest = اقتراح عبارة مرور
 
 # SAFETY: needs a human review before it ships
 # Label and name of the second box of a password, where it is typed again.
-installer-same-again = أعدها كما هي
+installer-same-again = اكتبها مرة أخرى
 
 # SAFETY: needs a human review before it ships
 # Red line under the password boxes when the two do not match.
@@ -236,7 +239,7 @@ installer-disk-write-down = دوّنها
 
 # SAFETY: needs a human review before it ships
 # Words in that card.
-installer-disk-write-down-text = دوّن كلمة المرور هذه على ورقة واحتفظ بها في مكان آمن بعيدًا عن الحاسوب. بدونها لا يمكن فتح القرص، لا من قبلك ولا من قبل أي شخص آخر، أبدًا. ولا طريق للعودة. أربع كلمات عادية تصنع عبارة مرور يسهل كتابتها ويصعب تخمينها.
+installer-disk-write-down-text = دوّن كلمة المرور هذه على ورقة واحتفظ بها في مكان آمن بعيدًا عن الحاسوب. بدونها لن يستطيع أحد فتح القرص، ولا حتى أنت. ولا طريق للعودة. عبارة مرور من أربع كلمات عادية يسهل كتابتها ويصعب تخمينها.
 
 # Title of the account page.
 installer-you-title = عنك
@@ -268,16 +271,16 @@ installer-password = كلمة المرور
 installer-strength = مدى صعوبة تخمينها
 
 # Red line under the account boxes: the sign-in name is empty.
-installer-user-needed = اسم تسجيل الدخول مطلوب.
+installer-user-needed = أدخل اسم تسجيل الدخول.
 
 # Red line under the account boxes: a name is too long.
 installer-name-too-long = هذا الاسم طويل جدًا.
 
 # Red line under the account boxes: the sign-in name does not start with a small letter.
-installer-user-start = ابدأ بحرف صغير.
+installer-user-start = ابدأ بحرف a-z.
 
 # Red line under the account boxes: the sign-in name uses letters it may not.
-installer-user-letters = حروف صغيرة وأرقام و- و_ فقط.
+installer-user-letters = استخدم a-z و0-9 و- و_ فقط.
 
 # Red line under the account boxes: the sign-in name belongs to the system.
 installer-user-taken = هذا الاسم يستخدمه النظام بالفعل.
@@ -336,7 +339,7 @@ installer-guess-years =
     }
 
 # Under the strength meter: the password is too strong to guess in any time worth saying.
-installer-guess-never = سيحتاج الحاسوب إلى وقت أطول من التاريخ المدوَّن لتخمين هذا.
+installer-guess-never = سيستغرق الحاسوب وقتًا أطول من كل التاريخ المدوَّن لتخمين هذا.
 
 # Title of the Ready page.
 installer-ready-title = جاهز للتثبيت
@@ -348,7 +351,7 @@ installer-ready-nothing-changed = لم يتغير شيء بعد
 installer-ready-security = تحديثات الأمان
 
 # In the card about security updates.
-installer-ready-security-text = يثبّت { $name } إصلاحات الأمان من Debian بنفسه كل يوم. لا يمكن إيقاف هذا.
+installer-ready-security-text = يثبّت { $name } إصلاحات الأمان من Debian بنفسه كل يوم. يمكنك إيقاف هذا من الإعدادات، ثم عن هذا الحاسوب.
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title when a whole disk will be replaced.
@@ -356,7 +359,7 @@ installer-ready-replaced = سيُستبدل كل ما على { $disk }.
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title when the install goes beside what is there.
-installer-ready-kept = يبقى كل ما على { $part }، لكن انسخه احتياطيًا أولًا: قد يؤدي تصغيره إلى فقدان الملفات إذا انقطعت الكهرباء.
+installer-ready-kept = يبقى كل ما على { $part }، لكن انسخه احتياطيًا أولًا. قد يؤدي انقطاع الكهرباء أثناء التصغير إلى فقدان الملفات.
 
 # Sentence under the title when no disk has been chosen.
 installer-ready-none = لم يُختر قرص بعد.
@@ -375,13 +378,13 @@ installer-ready-beside = بجانب { $part }
 
 # SAFETY: needs a human review before it ships
 # Words of that row.
-installer-ready-beside-text = يُصغَّر { $part } إلى { $size }، ويوضع { $name } في المساحة المحرَّرة.
+installer-ready-beside-text = يُصغَّر { $part } إلى { $size }، ويُثبَّت { $name } في المساحة التي تتحرر بذلك.
 
 # Name of a row in the list when no disk is chosen.
 installer-ready-no-disk = لا قرص
 
 # Words of that row.
-installer-ready-no-disk-text = لم يُختر قرص.
+installer-ready-no-disk-text = اختر قرصًا.
 
 # SAFETY: needs a human review before it ships
 # Name of a row in the list: the disk will not be encrypted.
@@ -401,10 +404,22 @@ installer-ready-locked-password = تكتب كلمة مروره في كل مرة 
 
 # SAFETY: needs a human review before it ships
 # Words of that row when the TPM chip unlocks the disk.
-installer-ready-locked-chip = كلمة المرور مرة واحدة، ثم تفتحه شريحة TPM في هذا الحاسوب.
+installer-ready-locked-chip = تكتب كلمة المرور مرة واحدة، ثم تفتح شريحة TPM في هذا الحاسوب القرص.
+
+# Added to the end of the disk's row on the last page when a swap file is to be made, with its size in GB.
+installer-ready-swap = مع ملف تبديل بحجم { $gb } غيغابايت.
+
+# Under the choice to let the TPM chip unlock the disk, on a computer with no usable chip.
+installer-privacy-chip-off = يحتاج إلى شريحة TPM يستطيع Trindle استخدامها.
+
+# In the card about the chip when the disk is not being encrypted, on a computer that has a chip.
+installer-privacy-chip-none = في هذا الحاسوب شريحة TPM، يمكنها فتح قرص مشفّر.
+
+# In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
+installer-privacy-no-chip-none = ليس في هذا الحاسوب شريحة TPM يستطيع Trindle استخدامها.
 
 # Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = لوحة المفاتيح { $keyboard }، التوقيت { $zone }.
+installer-ready-language = لوحة مفاتيح { $keyboard }، وتوقيت { $zone }.
 
 # Title of the page shown while the install runs.
 installer-installing-title = جارٍ تثبيت { $name }
@@ -424,23 +439,23 @@ installer-done-keep = احتفظ بكلمة مرور القرص بأمان
 
 # SAFETY: needs a human review before it ships
 # In that card when the TPM chip unlocks the disk.
-installer-keep-chip = القرص مشفّر. يطلب أول إقلاع كلمة مرور القرص مرة واحدة، بينما تتعرّف الشريحة على هذا الحاسوب؛ وبعد ذلك يُفتح من تلقاء نفسه. دوّن كلمة المرور هذه على ورقة واحتفظ بها في مكان آمن بعيدًا عن هذا الحاسوب. بدونها لا يمكن فتح القرص، لا من قبلك ولا من قبل أي شخص آخر، أبدًا.
+installer-keep-chip = القرص مشفّر. عند أول إقلاع للحاسوب، يطلب كلمة مرور القرص مرة واحدة أثناء إعداد الشريحة. وبعد ذلك يُفتح القرص من تلقاء نفسه. دوّن كلمة المرور هذه على ورقة واحتفظ بها في مكان آمن بعيدًا عن هذا الحاسوب. بدونها لن يستطيع أحد فتح القرص، ولا حتى أنت.
 
 # SAFETY: needs a human review before it ships
 # In that card when the password is typed at each start.
-installer-keep-password = القرص مشفّر. دوّن كلمة مرور القرص على ورقة الآن، إن لم تكن قد فعلت، واحتفظ بها في مكان آمن بعيدًا عن هذا الحاسوب. بدونها لا يمكن فتح القرص، لا من قبلك ولا من قبل أي شخص آخر، أبدًا.
+installer-keep-password = القرص مشفّر. إن لم تكن قد فعلت، دوّن كلمة مرور القرص على ورقة الآن واحتفظ بها في مكان آمن بعيدًا عن هذا الحاسوب. بدونها لن يستطيع أحد فتح القرص، ولا حتى أنت.
 
 # Title of the first slide.
 installer-slide-ring = كل شيء في دائرة واحدة
 
 # Words of the first slide.
-installer-slide-ring-text = حرّك المؤشر إلى حافة الشاشة وانقر نقرًا مزدوجًا، فتُفتح الحلقة: برامجك حول الخارج، والوقت والمفاتيح في الوسط.
+installer-slide-ring-text = حرّك المؤشر إلى حافة الشاشة وانقر نقرًا مزدوجًا لفتح الحلقة. برامجك على الحافة الخارجية، والوقت والمفاتيح في الوسط.
 
 # Title of the second slide.
-installer-slide-snapshots = أعد ما أفسده تحديث
+installer-slide-snapshots = تراجع عن تحديث سيئ
 
 # Words of the second slide.
-installer-slide-snapshots-text = تُؤخذ لقطة للنظام قبل كل تغيير في البرمجيات وبعده. تعيد الإعدادات النظام كله إلى أي منها، وتستطيع قائمة الإقلاع فعل ذلك حين لا يبدأ الحاسوب.
+installer-slide-snapshots-text = يأخذ Trindle لقطة للنظام قبل كل تغيير في البرمجيات وبعده. وفي الإعدادات يمكنك إعادة النظام كله إلى أي منها. وإذا لم يبدأ الحاسوب، يمكنك فعل ذلك من قائمة الإقلاع.
 
 # Title of the third slide.
 installer-slide-apps = تطبيقات لا تعيق طريقك
@@ -449,10 +464,10 @@ installer-slide-apps = تطبيقات لا تعيق طريقك
 installer-slide-apps-text = تطبيقات Flathub وتطبيقات Debian نفسها وAppImage ومصادر البرمجيات في مكان واحد، مع نسخ احتياطية يمكنك حملها إلى حاسوب آخر.
 
 # Title of the fourth slide.
-installer-slide-yours = لك، بسرعة
+installer-slide-yours = اجعله على ذوقك
 
 # Words of the fourth slide.
-installer-slide-yours-text = فاتح أو داكن، وأصواتك الخاصة، وحافظة تتذكر ما نسخته.
+installer-slide-yours-text = اختر الفاتح أو الداكن، واختر أصواتك الخاصة، واستخدم حافظة تتذكر ما نسخته.
 
 # Title of the fifth slide.
 installer-slide-small = صغير وهادئ
@@ -467,19 +482,19 @@ installer-tour-ring = الحلقة هي سطح المكتب كله
 installer-tour-ring-corner = ضع المؤشر في هذه الزاوية فتُفتح الحلقة
 
 # Note on the ring picture, at the time.
-installer-tour-ring-time = الوقت والتاريخ، في الوسط
+installer-tour-ring-time = الوقت والتاريخ في الوسط
 
 # Note on the ring picture, at the programs.
-installer-tour-ring-programs = برامجك حول الخارج
+installer-tour-ring-programs = برامجك على الحافة الخارجية
 
 # Note on the ring picture, at the switches.
-installer-tour-ring-switches = الصوت والشاشة وكل تطبيقاتك وإبقاء الجهاز مستيقظًا وإيقاف التشغيل
+installer-tour-ring-switches = مفاتيح للصوت والشاشة وكل تطبيقاتك وإبقاء الجهاز مستيقظًا وإيقاف التشغيل
 
 # Title of the tour slide about Settings.
 installer-tour-settings = الإعدادات، بكلمات بسيطة
 
 # Note on the Settings picture, at the search box.
-installer-tour-settings-search = اكتب هنا لتجد إعدادًا دون عناء البحث
+installer-tour-settings-search = اكتب هنا لتجد إعدادًا
 
 # Note on the Settings picture, at Network.
 installer-tour-settings-network = في الشبكة تنضم إلى شبكة Wi-Fi
@@ -497,37 +512,37 @@ installer-tour-apps = التطبيقات، لكل شيء آخر
 installer-tour-apps-search = ابحث عن برنامج باسمه أو بما يفعله
 
 # Note on the Apps picture, at the list.
-installer-tour-apps-many = آلاف البرامج، مجانية، من Flathub وDebian
+installer-tour-apps-many = آلاف البرامج المجانية، من Flathub وDebian
 
 # Note on the Apps picture, at updates.
 installer-tour-apps-updates = تحديثات لكل شيء، بما في ذلك Trindle نفسه
 
 # Title of the tour slide about voice control.
-installer-tour-voice = يمكنك التحدث إليه بدلًا من ذلك
+installer-tour-voice = تحدّث إلى حاسوبك
 
 # Note on the voice picture, at where voice control lives.
-installer-tour-voice-where = التحكم الصوتي هنا: الإعدادات، ثم الحلقة
+installer-tour-voice-where = التحكم الصوتي في الإعدادات، ثم الحلقة
 
 # Note on the voice picture, at the button that adds voice.
-installer-tour-voice-add = اضغط إضافة الصوت مرة واحدة. حجمه نحو 150 MB ويستغرق بضع دقائق
+installer-tour-voice-add = اضغط «أضف التحكم الصوتي» مرة واحدة. حجم التنزيل نحو 150 MB ويستغرق بضع دقائق
 
 # Note on the voice picture, about what to say.
 installer-tour-voice-say = ثم اضغط على وسط الحلقة وقل اسم تطبيق، أو «أعلى»، أو «إعدادات Wi-Fi»
 
 # Note on the voice picture, about where speech is understood.
-installer-tour-voice-private = ما تقوله يُفهم على هذا الحاسوب ولا يذهب إلى مكان آخر
+installer-tour-voice-private = يفهم Trindle كلامك على هذا الحاسوب، ولا يُرسَل إلى أي مكان آخر أبدًا
 
 # Title of the tour slide about snapshots.
-installer-tour-snapshots = طريق للعودة، قبل أن يتغير أي شيء
+installer-tour-snapshots = ارجع إلى ما قبل التغيير
 
 # Note on the snapshots picture, about when a snapshot is taken.
-installer-tour-snapshots-before = يأخذ الحاسوب لقطة قبل كل تحديث
+installer-tour-snapshots-before = يأخذ Trindle لقطة قبل كل تحديث
 
 # Note on the snapshots picture, about going back.
-installer-tour-snapshots-back = إذا تعطل شيء، ارجع إلى ما كان عليه من قائمة الإقلاع
+installer-tour-snapshots-back = إذا تعطل شيء، يمكنك العودة إلى ما كان عليه من قائمة الإقلاع
 
 # Name of the picture of the ring, and the head of its card.
-installer-live-caption = الحلقة، حيث يعيش كل شيء
+installer-live-caption = الحلقة، وفيها كل شيء
 
 # Sentence under the title of the welcome from a stick.
 installer-live-help = أنت تعمل من العصا، لذلك لم يتغير شيء على هذا الحاسوب.
@@ -542,19 +557,19 @@ installer-live-open = افتح الحلقة
 installer-live-open-line = انقر نقرًا مزدوجًا عند حافة الشاشة، أو اضغط Super.
 
 # Name of the second thing to do.
-installer-live-speak = تحدّث إليها
+installer-live-speak = استخدم صوتك
 
 # Line under it when voice control is there.
 installer-live-speak-line = اضغط على وسط الحلقة وقل ما تريد.
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = أضف الصوت من الإعدادات، الحلقة، ثم اضغط الوسط وتحدّث.
+installer-live-speak-add = اضغط «أضف التحكم الصوتي» في الإعدادات، تحت الحلقة. ثم اضغط الوسط وتحدّث.
 
 # Name of the third thing to do.
 installer-live-tab = كل شيء في الحلقة
 
 # Line under it.
-installer-live-tab-line = ما هو مفتوح وإشعاراتك والحافظة، كلها هناك.
+installer-live-tab-line = ستجد هناك ما هو مفتوح وإشعاراتك والحافظة.
 
 # The choice of the dark look.
 installer-live-dark = داكن
@@ -579,7 +594,7 @@ installer-step-room = جارٍ إفساح المجال
 installer-step-prepare = جارٍ تحضير القرص
 
 # Foot of the install page while a place is made beside another system.
-installer-step-place = جارٍ تهيئة مكان لـ Trindle
+installer-step-place = جارٍ تهيئة مساحة لـ Trindle
 
 # Foot of the install page while the disk is looked at.
 installer-step-check = جارٍ فحص ما هو موجود على القرص
@@ -588,10 +603,10 @@ installer-step-check = جارٍ فحص ما هو موجود على القرص
 installer-step-smaller = جارٍ تصغير النظام الآخر
 
 # Foot of the install page while the disk is encrypted.
-installer-step-lock = جارٍ قفل القرص
+installer-step-lock = جارٍ تشفير القرص
 
 # Foot of the install page while the TPM chip is set up.
-installer-step-chip = جارٍ إعداد شريحة الحاسوب
+installer-step-chip = جارٍ إعداد شريحة TPM
 
 # Foot of the install page while the system is copied.
 installer-step-copy = جارٍ نسخ Trindle إلى القرص
@@ -603,7 +618,7 @@ installer-step-settings = جارٍ كتابة الإعدادات
 installer-step-account = جارٍ إنشاء حسابك
 
 # Foot of the install page while the stick's own parts are taken out.
-installer-step-live-parts = جارٍ إزالة أجزاء العصا
+installer-step-live-parts = جارٍ إزالة إضافات العصا
 
 # Foot of the install page while the start-up files are made.
 installer-step-startup = جارٍ إنشاء ملفات بدء التشغيل
@@ -651,35 +666,35 @@ installer-bad-keyboard = لوحة المفاتيح هذه لا يستطيع Trin
 installer-bad-timezone = المنطقة الزمنية هذه لا يستطيع Trindle استخدامها.
 
 # Red line at the foot: the person's name has something that cannot be written.
-installer-bad-fullname = يحوي هذا الاسم شيئًا لا يستطيع Trindle كتابته.
+installer-bad-fullname = يحتوي هذا الاسم على حرف لا يستطيع Trindle استخدامه.
 
-# SAFETY: needs a human review before it ships
 # Red line at the foot: a password has a line break in it.
-installer-bad-password = لا يمكن أن تحوي كلمة المرور فاصل سطر.
+# SAFETY: needs a human review before it ships
+installer-bad-password = لا يمكن أن تحتوي كلمة المرور على فاصل أسطر.
 
 # Red line at the foot: the second half of the installer was not started as root.
-installer-needs-root = يجب أن يعمل النصف الثاني من المثبّت بصلاحيات root.
+installer-needs-root = يحتاج الجزء الثاني من المثبّت إلى العمل بصلاحيات root.
 
 # Red line at the foot: there is no boot partition to share.
-installer-no-boot-partition = ليس في هذا القرص قسم إقلاع للمشاركة، لذلك لا يستطيع Trindle أن يوضع بجانب ما هو موجود هنا.
+installer-no-boot-partition = ليس في هذا القرص قسم إقلاع للمشاركة، لذلك لا يمكن تثبيت Trindle بجانب ما هو موجود عليه.
 
 # Red line at the foot: the partition just made cannot be found.
-installer-new-part-missing = تعذّر العثور على الجزء الجديد من القرص.
+installer-new-part-missing = تعذّر على Trindle العثور على القسم الجديد.
 
 # Red line at the foot: the size of a partition cannot be read.
 installer-size-unreadable = تعذّرت قراءة حجم { $part }.
 
 # SAFETY: needs a human review before it ships
 # Red line at the foot: a partition of this kind cannot be made smaller.
-installer-cannot-shrink = لا يستطيع Trindle تصغير قسم من نوع { $fs }.
+installer-cannot-shrink = لا يستطيع Trindle تصغير أقسام { $fs }.
 
 # SAFETY: needs a human review before it ships
 # Red line at the foot: a partition of a kind that is not known cannot be made smaller.
-installer-cannot-shrink-unknown = لا يستطيع Trindle تصغير قسم غير معروف.
+installer-cannot-shrink-unknown = لا يستطيع Trindle تصغير قسم من نوع غير معروف.
 
 # SAFETY: needs a human review before it ships
 # Red line at the foot: encrypting needs a password and there is none.
-installer-disk-password-needed = كلمة المرور مطلوبة لتشفير القرص.
+installer-disk-password-needed = تحتاج إلى كلمة مرور لتشفير القرص.
 
 # Red line at the foot: the copy of the system could not start.
 installer-copy-no-start = تعذّر نسخ النظام: { $why }
@@ -688,19 +703,19 @@ installer-copy-no-start = تعذّر نسخ النظام: { $why }
 installer-copy-failed = تعذّر نسخ النظام. { $why }
 
 # Red line at the foot: there is not enough room for a swap file.
-installer-swap-no-room = لا مساحة لملف التبادل.
+installer-swap-no-room = لا توجد مساحة لملف التبديل.
 
 # Red line at the foot: the swap file's place on the disk cannot be read.
-installer-swap-unreadable = تعذّرت قراءة مكان ملف التبادل على القرص.
+installer-swap-unreadable = تعذّر على Trindle قراءة موضع ملف التبادل على القرص.
 
 # Red line at the foot: the new partitions could not be named in the table of disks.
-installer-fstab-unidentified = تعذّر التعرف على الأقسام الجديدة.
+installer-fstab-unidentified = تعذّر على Trindle التعرف على الأقسام الجديدة.
 
 # Red line at the foot: the time zone could not be set.
 installer-timezone-failed = تعذّر ضبط المنطقة الزمنية: { $why }
 
 # Red line at the foot: the boot menu could not be installed.
-installer-boot-failed = تعذّر تثبيت قائمة الإقلاع على هذا الحاسوب.
+installer-boot-failed = تعذّر على Trindle تثبيت قائمة الإقلاع على هذا الحاسوب.
 
 # Name of that button after one press, when a second press goes ahead.
 installer-sure = متأكد؟
@@ -708,7 +723,7 @@ installer-sure = متأكد؟
 
 
 # Note on the ring picture, at the tab at the edge.
-installer-tour-ring-foot = ما هو مفتوح، والحافظة، وزر يمسح الشاشة
+installer-tour-ring-foot = اعرض ما هو مفتوح، واستخدم الحافظة، وامسح الشاشة بزر واحد
 
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } هو الذاكرة المحمولة التي يعمل منها Trindle.
@@ -717,7 +732,7 @@ installer-disk-is-stick = { $dev } هو الذاكرة المحمولة التي
 installer-disk-in-use = { $dev } قيد الاستخدام. أغلق ما يستخدمه ثم حاول مرة أخرى.
 
 # Said beside how far the install has got, once it has started.
-installer-started = بدأ التثبيت
+installer-started = جارٍ التثبيت
 
 # The button that ends an install under way.
 installer-halt = إيقاف
@@ -729,7 +744,7 @@ installer-halt-sure = إيقاف التثبيت؟ لقد ذهب المحتوى �
 installer-halting = جارٍ الإيقاف
 
 # When Stop could not let go of the disk.
-installer-halt-stuck = تعذّر تحرير القرص. أعد تشغيل الحاسوب لتحاول مرة أخرى.
+installer-halt-stuck = تعذّر على Trindle تحرير القرص. أعد تشغيل الحاسوب لتحاول مرة أخرى.
 
 # The copy is done and the person is still answering.
 installer-step-waiting = تم النسخ. بانتظار إجاباتك.
@@ -746,14 +761,31 @@ installer-memory-short = يحتاج Trindle إلى 1 GB من الذاكرة عل
 installer-lock-needs-uefi = لا يمكن تشفير القرص إلا على حاسوب يبدأ عبر UEFI، وهذا الحاسوب لا يبدأ بهذه الطريقة.
 
 # Red words when the Windows partition chosen to share the disk was hibernated or left in Windows' fast start-up; { $part } is the partition.
-installer-windows-asleep = نظام Windows على { $part } كان في السبات أو تُرك في البدء السريع، لذلك قد يؤدي تصغيره إلى فقدان ملفاته. شغّل Windows، واختر إعادة التشغيل، ثم حاول مرة أخرى.
+installer-windows-asleep = كان نظام Windows على { $part } في السبات أو أُغلق مع البدء السريع. قد يؤدي تصغيره الآن إلى فقدان ملفاته. شغّل Windows، واختر إعادة التشغيل، ثم حاول مرة أخرى.
 
 # Red words on the last page when the snapshots could not be set up; { $why } is the reason.
-installer-snapshots-failed = تم تثبيت Trindle، لكن تعذّر إعداد اللقطات: { $why }
+installer-snapshots-failed = تم تثبيت Trindle، لكنه لم يستطع إعداد اللقطات: { $why }
 
 # Red words on the last page when the boot menu could not be made after setting up snapshots; { $why } is the reason.
-installer-snapshots-menu-failed = تم تثبيت Trindle، لكن تعذّر جعل قائمة الإقلاع تعرض اللقطات: { $why }
+installer-snapshots-menu-failed = تم تثبيت Trindle، لكنه لم يستطع إضافة اللقطات إلى قائمة الإقلاع: { $why }
 
 # Head of the card on the last page that lists what could not be done.
 installer-done-problems = لم يكتمل إعداد كل شيء
 
+installer-suggest-failed = تعذّر على Trindle إنشاء عبارة مرور. اكتب عبارتك الخاصة.
+
+installer-disk-changed = { $dev } ليس القرص الذي ظهر لك. ارجع واختر القرص مرة أخرى.
+
+installer-no-gpt = { $dev } لا يستخدم جدول أقسام GPT، لذلك لا يمكن تثبيت Trindle بجانب ما هو موجود عليه.
+
+installer-boot-partition-small = قسم الإقلاع في هذا القرص أصغر من أن يُشارَك، لذلك لا يمكن تثبيت Trindle بجانب ما هو موجود عليه.
+
+installer-swap-failed = ثُبّت Trindle، لكنه لم يتمكن من إنشاء ملف التبادل: { $why }
+
+installer-uuid-missing = تعذّر على Trindle التعرّف على { $dev } بعد إعداده.
+
+installer-ready-replaced-known = سيُستبدل كل ما على { $disk } ({ $holds }).
+
+installer-disk-named = { $what }، { $dev }
+
+installer-run-stopped = توقف { $program } قبل أن يحصل على كل ما يحتاجه: { $why }

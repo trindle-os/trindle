@@ -200,11 +200,24 @@ impl Drives {
         if self.open.as_deref().is_some_and(|k| !self.names(k)) {
             self.open = None;
         }
+        self.forget_gone();
         self.sum_up();
         let paths: Vec<String> = self.drives.iter().map(|d| d.path.clone()).collect();
         for p in paths {
             self.ask_health(&p);
         }
+    }
+
+    pub(super) fn forget_gone(&mut self) {
+        let known = |k: &str, d: &[Drive]| k.split(':').any(|word| d.iter().any(|x| x.path == word || x.vols.iter().any(|v| v.path == word)));
+        let drives = std::mem::take(&mut self.drives);
+        self.texts.retain(|k, _| known(k, &drives));
+        self.picks.retain(|k, _| known(k, &drives));
+        self.gbs.retain(|k, _| known(k, &drives));
+        if self.armed.as_deref().is_some_and(|k| !known(k, &drives)) {
+            self.armed = None;
+        }
+        self.drives = drives;
     }
 
     pub(super) fn weigh(&mut self) {

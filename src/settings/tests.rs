@@ -19,7 +19,6 @@ fn settings_with_every_page() -> Settings {
     let asks = events.post(|_: Do| {});
     let mut pages = panels::all();
     let plugins: Vec<Box<dyn Page>> = vec![
-        Box::new(panels::crash_reports::CrashReports::default()),
         Box::new(panels::plugins::Plugins::default()),
     ];
     for p in plugins {
@@ -105,14 +104,13 @@ fn made_up_pages() -> Vec<Box<dyn Page>> {
         Box::new(snapshots::Snapshots::made_up()), Box::new(permissions::Permissions::made_up()), Box::new(ai_programs::AiPrograms::made_up()),
         Box::new(startup::Startup::made_up()), Box::new(about::About::made_up()),
         Box::new(thanks::Thanks::default()), Box::new(help::Help::default()),
-        Box::new(crash_reports::CrashReports::made_up()), Box::new(plugins::Plugins::made_up()),
+        Box::new(plugins::Plugins::made_up()),
     ]
 }
 
 fn every_page() -> Vec<Box<dyn Page>> {
     let mut pages = panels::all();
     for p in [
-        Box::new(panels::crash_reports::CrashReports::default()) as Box<dyn Page>,
         Box::new(panels::plugins::Plugins::default()),
     ] {
         if !pages.iter().any(|q| q.id() == p.id()) {
@@ -122,7 +120,7 @@ fn every_page() -> Vec<Box<dyn Page>> {
     pages
 }
 
-const NARROWEST: u32 = 400;
+const NARROWEST: u32 = super::LEAST.0;
 
 fn showing(page: Box<dyn Page>, tall: f32) -> Settings {
     let events = Loop::new();
@@ -139,4 +137,34 @@ fn on_trial(id: &str) -> (Box<dyn Page>, Box<dyn Page>) {
         "appearance" => (Box::new(Appearance::made_up()), Box::new(Appearance::on_trial())),
         _ => (Box::new(Display::made_up()), Box::new(Display::on_trial())),
     }
+}
+
+#[test]
+fn a_new_language_leaves_a_page_with_a_job_under_way_as_it_is() {
+    use panels::snapshots::Snapshots;
+    let mut s = settings_with_every_page();
+    let at = |s: &Settings, id: &str| s.pages.iter().position(|p| p.id() == id).unwrap();
+    let page = |s: &Settings, id: &str| &*s.pages[at(s, id)] as *const dyn Page as *const () as usize;
+    let (snapshots, about) = (page(&s, "snapshots"), page(&s, "about"));
+    assert!(at(&s, "snapshots") != s.current && at(&s, "about") != s.current);
+    let answer = s.kit.then::<Snapshots, ()>(|_, _, ()| {});
+    s.relanguage();
+    assert_eq!(page(&s, "snapshots"), snapshots, "the page waiting for its job is kept");
+    assert_ne!(page(&s, "about"), about, "a page with nothing under way is made again");
+    drop(answer);
+    s.relanguage();
+    assert_ne!(page(&s, "snapshots"), snapshots, "once its answer is in, it is made again too");
+}
+
+#[test]
+fn a_closed_password_box_says_nothing() {
+    let events = Loop::new();
+    let asks = events.post(|_: Do| {});
+    let mut kit = Kit::new(events, asks, None, None);
+    kit.say("line", "Not done.", false, false);
+    let closed = crate::common::run::admin_error("Error executing command as another user: Request dismissed");
+    assert!(kit.settle::<(), String>("line", Err(closed), "Couldn't.").is_none());
+    assert!(kit.said("line").is_none());
+    kit.say("line", "Not done.", false, false);
+    assert_eq!(kit.said("line").map(|(_, red)| red), Some(true));
 }

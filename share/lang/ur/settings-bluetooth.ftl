@@ -16,13 +16,13 @@ settings-bluetooth-cause-auth-failed = { $could_not } PIN یا نمبر قبول
 
 # SAFETY: needs a human review before it ships
 # Said in red when the pairing was turned down; the first sentence says what could not be done.
-settings-bluetooth-cause-turned-down = { $could_not } اسے مسترد کر دیا گیا، یہاں یا دوسرے آلے پر۔
+settings-bluetooth-cause-turned-down = { $could_not } جوڑا بنانے کی درخواست مسترد کر دی گئی، یہاں یا دوسرے آلے پر۔
 
 # Said in red when the other device did not answer in time; the first sentence says what could not be done.
 settings-bluetooth-cause-timeout = { $could_not } دوسرے آلے نے وقت پر جواب نہیں دیا۔ اسے جوڑنے کے موڈ میں رکھیں، پھر دوبارہ کوشش کریں۔
 
 # Said in red when the same thing is already being done; the first sentence says what could not be done.
-settings-bluetooth-cause-in-progress = { $could_not } یہ پہلے ہی ہو رہا ہے۔ ذرا انتظار کریں۔
+settings-bluetooth-cause-in-progress = { $could_not } Trindle پہلے ہی یہ کر رہا ہے۔ ذرا انتظار کریں۔
 
 # Said in red when the device did not answer; the first sentence says what could not be done.
 settings-bluetooth-cause-no-answer = { $could_not } آلے نے جواب نہیں دیا۔ دیکھیں کہ وہ چالو اور قریب ہے، پھر دوبارہ کوشش کریں۔
@@ -34,7 +34,7 @@ settings-bluetooth-cause-not-available = { $could_not } آلہ استعمال ک
 settings-bluetooth-the-bus = سسٹم بس
 
 # Headline of the page while Bluetooth is looked for.
-settings-bluetooth-top-looking = Bluetooth تلاش کیا جا رہا ہے…
+settings-bluetooth-top-looking = Bluetooth کی جانچ ہو رہی ہے…
 
 # Headline of the page when the Bluetooth service is not running.
 settings-bluetooth-top-gone = اس کمپیوٹر پر Bluetooth نہیں چل رہا۔
@@ -43,16 +43,22 @@ settings-bluetooth-top-gone = اس کمپیوٹر پر Bluetooth نہیں چل �
 settings-bluetooth-top-off = Bluetooth بند ہے۔
 
 # Headline of the page when Bluetooth is off at a switch or key on the computer itself.
-settings-bluetooth-top-hard = Bluetooth کمپیوٹر ہی پر بند کیا گیا ہے۔
+settings-bluetooth-top-hard = Bluetooth کمپیوٹر کے سوئچ یا کلید سے بند کیا گیا ہے۔
 
 # Headline of the page when the computer has no Bluetooth.
 settings-bluetooth-top-none = اس کمپیوٹر میں Bluetooth نہیں ہے۔
 
+# Headline of the page when the computer has an adapter that Bluetooth has not finished setting up.
+settings-bluetooth-top-starting = Bluetooth شروع ہو رہا ہے…
+
+# Headline of the page when the adapter was there a moment ago and has gone.
+settings-bluetooth-top-lost = Bluetooth اڈاپٹر چلا گیا ہے۔
+
 # Headline of the page when Bluetooth is on and searching.
-settings-bluetooth-top-searching = چالو ہے، قریبی آلات تلاش ہو رہے ہیں…
+settings-bluetooth-top-searching = چالو ہے اور آلات تلاش کر رہا ہے…
 
 # Headline of the page when Bluetooth is on and nothing is connected.
-settings-bluetooth-top-idle = چالو ہے، ابھی کچھ جڑا نہیں۔
+settings-bluetooth-top-idle = چالو ہے، مگر کچھ جڑا نہیں۔
 
 # Headline of the page when Bluetooth is on and devices are connected; the names are already joined into a list.
 settings-bluetooth-top-connected =
@@ -62,47 +68,47 @@ settings-bluetooth-top-connected =
     }
 
 # Help text (i button) of the Bluetooth card.
-settings-bluetooth-card-about = یہ سوئچ اس کمپیوٹر کا Bluetooth چالو یا بند کرتا ہے؛ اس کے نیچے اڈاپٹر کا نام ہے۔ جب دوسرے آلات کو دکھائی دیں چالو ہو تو قریبی آلات اس کمپیوٹر کو ڈھونڈ سکتے ہیں۔
+settings-bluetooth-card-about = سوئچ کے نیچے لکھا نام آپ کے Bluetooth اڈاپٹر کا نام ہے۔ جب دوسرے آلات کو دکھائی دیں چالو ہو تو قریبی آلات اس کمپیوٹر کو ڈھونڈ سکتے ہیں۔
 
 # Heading of the Bluetooth card, of its switch's line, and the name of its switch.
 settings-bluetooth-title = Bluetooth
 
-# Small line under the Bluetooth switch when Bluetooth is blocked by the system.
-settings-bluetooth-switched-off = بند کیا ہوا ہے۔
-
 # Heading of the line with the switch that makes this computer visible, and the name of that switch.
 settings-bluetooth-visible = دوسرے آلات کو دکھائی دیں
-
-# Small line under the Visible to other devices switch.
-settings-bluetooth-visible-sub = قریبی آلات اس کمپیوٹر کو ڈھونڈ سکتے ہیں۔
 
 # Heading of the card when Bluetooth is off at a switch on the computer itself.
 settings-bluetooth-hard-line = کمپیوٹر ہی پر بند کیا گیا ہے
 
 # Small line under it.
-settings-bluetooth-hard-line-sub = سوئچ یا کلید سے۔ پہلے اسے چالو کریں۔
+settings-bluetooth-hard-line-sub = اسے چالو کرنے کے لیے کمپیوٹر کا اپنا سوئچ یا کلید استعمال کریں۔
 
 # Heading of the card when the computer has no Bluetooth adapter.
 settings-bluetooth-no-adapter = کوئی Bluetooth اڈاپٹر نہیں
 
 # Help text (i button) of that card.
-settings-bluetooth-no-adapter-about = اس کمپیوٹر میں کوئی Bluetooth اڈاپٹر نہیں ملا۔ USB ساکٹ میں لگنے والا اڈاپٹر لگاتے ہی یہاں نظر آ جاتا ہے۔
+settings-bluetooth-no-adapter-about = Trindle کو اس کمپیوٹر میں کوئی Bluetooth اڈاپٹر نہیں ملا۔ اگر آپ USB ساکٹ میں اڈاپٹر لگائیں تو وہ فوراً یہاں نظر آ جاتا ہے۔
 
 # Line in that card.
 settings-bluetooth-none-found = کوئی نہیں ملا
 
+# Line in the no-adapter card while Bluetooth finishes setting up the adapter.
+settings-bluetooth-starting = شروع ہو رہا ہے
+
+# Line in the no-adapter card when the adapter was there a moment ago.
+settings-bluetooth-lost = اڈاپٹر چلا گیا ہے
+
 # Small line under it.
-settings-bluetooth-none-found-sub = USB والا لگانے کے بعد یہاں نظر آئے گا۔
+settings-bluetooth-lost-sub = Trindle تلاش کرتا رہتا ہے اور واپس آنے پر اسے یہاں دکھائے گا۔ نہ آئے تو کمپیوٹر ری اسٹارٹ کریں۔
 
 # SAFETY: needs a human review before it ships
 # Shown beside the Bluetooth switch while the password is asked for.
-settings-bluetooth-waiting = پاس ورڈ کا انتظار ہے...
+settings-bluetooth-waiting = آپ کے پاس ورڈ کا انتظار ہے…
 
 # Said in red when this computer could not be made visible to other devices.
-settings-bluetooth-visible-failed = یہ کمپیوٹر دوسرے آلات کو دکھائی نہیں دے سکا۔
+settings-bluetooth-visible-failed = Trindle اس کمپیوٹر کو دوسرے آلات کے لیے ظاہر نہیں کر سکا۔
 
 # Said in red when this computer could not be hidden from other devices.
-settings-bluetooth-hidden-failed = یہ کمپیوٹر دوسرے آلات سے چھپایا نہیں جا سکا۔
+settings-bluetooth-hidden-failed = Trindle اس کمپیوٹر کو دوسرے آلات سے چھپا نہیں سکا۔
 
 # Shown on the two device lists while Bluetooth is off.
 settings-bluetooth-switch-on-first = انہیں استعمال کرنے کے لیے Bluetooth چالو کریں۔
@@ -110,18 +116,15 @@ settings-bluetooth-switch-on-first = انہیں استعمال کرنے کے ل�
 # Line in the My devices card when nothing is paired.
 settings-bluetooth-none-paired = ابھی کوئی جوڑا نہیں بنا
 
-# Small line under it.
-settings-bluetooth-none-paired-sub = جوڑا بنانے کے لیے آلات تلاش کریں۔
-
 # Heading of the card that lists paired devices.
 settings-bluetooth-mine = میرے آلات
 
 # SAFETY: needs a human review before it ships
 # Help text (i button) of the My devices card.
-settings-bluetooth-mine-about = وہ آلات جن کا اس کمپیوٹر سے جوڑا بنا ہے، جہاں بتایا جائے وہاں ان کی بیٹری کے ساتھ۔ صفحہ کھلتے وقت جڑے ہوئے آلات پہلے آتے ہیں، اور صفحہ کھلا رہنے تک کوئی سطر اپنی جگہ نہیں بدلتی۔ گول بٹن کسی آلے کو جوڑتے یا منقطع کرتے ہیں؛ ردی دان کا بٹن اسے بھلا دیتا ہے، اس لیے دوبارہ جوڑا بنانا پڑتا ہے۔
+settings-bluetooth-mine-about = وہ آلات جن کا اس کمپیوٹر سے جوڑا بنا ہے، جہاں پڑھی جا سکے وہاں بیٹری کی سطح کے ساتھ۔ صفحہ کھولتے وقت جو آلات جڑے ہوں وہ پہلے آتے ہیں، اور صفحہ کھلا رہنے تک ترتیب وہی رہتی ہے۔ اگر آپ کسی آلے کو بھلا دیں تو اسے دوبارہ جوڑنا پڑے گا۔
 
 # Line in the Nearby card while the search runs.
-settings-bluetooth-looking = آلات تلاش ہو رہے ہیں...
+settings-bluetooth-looking = آلات تلاش ہو رہے ہیں…
 
 # Tip of the button that stops the search.
 settings-bluetooth-stop-looking = تلاش بند کریں
@@ -129,17 +132,14 @@ settings-bluetooth-stop-looking = تلاش بند کریں
 # Heading of the line that starts the search, and tip of its button.
 settings-bluetooth-look = آلات تلاش کریں
 
-# Small line under it.
-settings-bluetooth-look-sub = پہلے دوسرے آلے کو جوڑنے کے موڈ میں رکھیں۔
-
 # Heading of the card that lists devices nearby.
 settings-bluetooth-nearby = قریب
 
 # Help text (i button) of the Nearby card.
-settings-bluetooth-nearby-about = آلات تلاش کریں دبائیں، دوسرے آلے کو جوڑنے کے موڈ میں رکھیں، پھر اس کے ساتھ جوڑا بنائیں دبائیں۔ صفحہ کھلتے وقت قریبی آلات سب سے مضبوط سگنل والے پہلے دکھائے جاتے ہیں، اور ہر نیا ملنے والا آخر میں شامل ہوتا ہے۔ کچھ آلات ایک نمبر دکھاتے ہیں جسے یہاں والے سے ملانا ہوتا ہے، اور کچھ PIN مانگتے ہیں جو اکثر ان کی ہدایات میں ہوتا ہے، یا 0000۔
+settings-bluetooth-nearby-about = آلات تلاش کریں دبائیں، دوسرے آلے کو جوڑنے کے موڈ میں رکھیں، پھر اس کے ساتھ جوڑا بنائیں دبائیں۔ صفحہ کھولنے پر سب سے مضبوط سگنل والا آلہ سب سے پہلے دکھایا جاتا ہے، اور ہر نیا ملنے والا آخر میں شامل ہوتا ہے۔ کچھ آلات ایک نمبر دکھاتے ہیں جسے یہاں والے سے ملانا ہوتا ہے۔ کچھ PIN مانگتے ہیں جو اکثر ان کی ہدایات میں ہوتا ہے، یا 0000۔
 
 # Said in red when the search could not be stopped.
-settings-bluetooth-stop-failed = آلات کی تلاش روکی نہیں جا سکی۔
+settings-bluetooth-stop-failed = Trindle آلات کی تلاش روک نہیں سکا۔
 
 # Said in red when the search could not be started.
 settings-bluetooth-start-failed = آلات تلاش نہیں ہو سکے۔
@@ -174,19 +174,19 @@ settings-bluetooth-disconnect-failed = اسے منقطع نہیں کیا جا س
 settings-bluetooth-forget-failed = اسے بھلایا نہیں جا سکا۔
 
 # Shown under a device while it is being paired.
-settings-bluetooth-pairing = جوڑا بن رہا ہے...
+settings-bluetooth-pairing = جوڑا بن رہا ہے…
 
 # Said in red when a device could not be paired.
 settings-bluetooth-pair-failed = اس کا جوڑا نہیں بن سکا۔
 
 # Shown under a device while it is being connected.
-settings-bluetooth-connecting = جڑ رہا ہے...
+settings-bluetooth-connecting = جڑ رہا ہے…
 
 # Said in red when a device could not be connected.
 settings-bluetooth-connect-failed = یہ جڑ نہیں سکا۔
 
 # Said under a device that paired but could not be set to connect by itself.
-settings-bluetooth-not-trusted = جڑ گیا، مگر اگلی بار خود بخود جڑنے کے لیے مقرر نہیں ہو سکا۔ جب چاہیں اسے یہاں سے جوڑیں۔
+settings-bluetooth-not-trusted = جڑ گیا، مگر Trindle اسے اگلی بار خود بخود جڑنے کے لیے مقرر نہیں کر سکا۔ جب آپ اسے استعمال کرنا چاہیں تو یہاں سے جوڑیں۔
 
 # Said under a device that shows a code to be typed on it; the code is already written.
 settings-bluetooth-type-code = آلے پر { $code } لکھیں، پھر اس پر Enter دبائیں۔
@@ -217,36 +217,35 @@ settings-bluetooth-cancel = منسوخ کریں
 
 # SAFETY: needs a human review before it ships
 # Help line above the box where a device's PIN is typed.
-settings-bluetooth-pin-help = اس آلے کا PIN لکھیں۔ یہ اکثر اس کی ہدایات میں ہوتا ہے، یا 0000۔
+settings-bluetooth-pin-help = اس آلے کا PIN لکھیں۔ یہ اکثر ہدایات میں ہوتا ہے۔ نہ ملے تو 0000 آزمائیں۔
 
 # Words the settings search looks for on this page (not shown).
 settings-bluetooth-keywords = ہیڈ فون ماؤس کی بورڈ جوڑا آلات وائرلیس headphones mouse keyboard pair devices wireless
 
 # Help text at the top of the page.
-settings-bluetooth-help = تلاش دبائیں، دوسرے آلے کو جوڑنے کے موڈ میں رکھیں، پھر اس کے ساتھ جوڑا بنائیں دبائیں۔
+settings-bluetooth-help = آلات تلاش کریں دبائیں، دوسرے آلے کو جوڑنے کے موڈ میں رکھیں، پھر اس کے ساتھ جوڑا بنائیں دبائیں۔
 
 # Said in red under the Bluetooth switch when restarting the sound service after Bluetooth came back on failed; $why is the system's own reason.
-settings-bluetooth-sound-failed = Bluetooth کی آواز دوبارہ شروع نہیں ہو سکی، اس لیے دوبارہ لاگ اِن ہونے تک ہیڈ فون سادہ معیار پر چل سکتے ہیں۔ { $why }
+settings-bluetooth-sound-failed = Trindle Bluetooth کی آواز دوبارہ شروع نہیں کر سکا، اس لیے دوبارہ لاگ اِن ہونے تک ہیڈ فون کی آواز معمول سے خراب ہو سکتی ہے۔ { $why }
 
 # Tooltip of the help button beside the Bluetooth switch.
-settings-bluetooth-sound-help = Bluetooth بند اور چالو کرنے کے بعد ہیڈ فون کی آواز سادہ کیوں ہو جاتی ہے
+settings-bluetooth-sound-help = Bluetooth بند اور چالو کرنے کے بعد ہیڈ فون کی آواز خراب کیوں ہو جاتی ہے
 
 
 # Said in red when a device is no longer in BlueZ's list; the first sentence says what could not be done.
-settings-bluetooth-cause-gone = { $could_not } یہ آلہ اب پہچانا نہیں جا رہا۔ اسے دوبارہ تلاش کریں۔
+settings-bluetooth-cause-gone = { $could_not } یہ آلہ اب اس کمپیوٹر پر محفوظ نہیں۔ اسے دوبارہ تلاش کریں۔
 
 # Said in red when a paired device's saved pairing is refused; the first sentence says what could not be done.
-settings-bluetooth-cause-old-pairing = { $could_not } محفوظ شدہ جوڑا اب قبول نہیں ہو رہا۔ آلے کو بھلا دیں اور دوبارہ جوڑا بنائیں۔
+settings-bluetooth-cause-old-pairing = { $could_not } آلہ اب محفوظ شدہ جوڑا قبول نہیں کرتا۔ آلے کو بھلا دیں اور دوبارہ جوڑا بنائیں۔
 
 # Said in red under a device that connected and then dropped at once.
-settings-bluetooth-dropped = یہ جڑا، پھر کٹ گیا۔ محفوظ شدہ جوڑا پرانا ہو سکتا ہے۔
+settings-bluetooth-dropped = یہ جڑا، پھر رابطہ ٹوٹ گیا۔ محفوظ شدہ جوڑا پرانا ہو سکتا ہے۔
 
 # Tooltip of the button that forgets a paired device and looks for it afresh.
 settings-bluetooth-pair-again = بھلا کر دوبارہ جوڑا بنائیں
 
 # Said under Look for devices after a device was forgotten to be paired afresh.
-settings-bluetooth-forgotten-pair = بھلا دیا گیا۔ اسے جوڑنے کے موڈ میں رکھیں، پھر نیچے نظر آنے پر جوڑا بنائیں دبائیں۔
+settings-bluetooth-forgotten-pair = آلہ بھلا دیا گیا۔ اسے جوڑنے کے موڈ میں رکھیں، پھر نیچے نظر آنے پر جوڑا بنائیں دبائیں۔
 
 # Tooltip of the button that opens Help from a failed connection.
 settings-bluetooth-more = اس کے بارے میں مزید
-

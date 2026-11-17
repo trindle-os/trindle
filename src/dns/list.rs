@@ -6,10 +6,16 @@
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 
-pub const SOURCES: [&str; 2] = [
-    "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/multi-onlydomains.txt",
-    "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/tif.medium-onlydomains.txt",
-];
+macro_rules! hagezi {
+    () => { "cdn.jsdelivr.net" };
+    ($list:literal) => { concat!("https://", hagezi!(), "/gh/hagezi/dns-blocklists@latest/wildcard/", $list, "-onlydomains.txt") };
+}
+
+pub const HOST: &str = hagezi!();
+
+pub const THREATS: &str = hagezi!("tif.medium");
+
+pub const SOURCES: [&str; 2] = [hagezi!("multi"), THREATS];
 const MAGIC: &[u8; 8] = b"TRDNSL1\0";
 const HEAD: usize = 24;
 pub const FILE: &str = "lists.bin";

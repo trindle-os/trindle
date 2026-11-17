@@ -3,6 +3,7 @@
 //! from the system's `root`: restoring the system never touches them, and
 //! they never hold any of the system.
 
+use crate::toolkit::t;
 use std::path::{Path, PathBuf};
 
 use crate::common::snapshots::xml_field;
@@ -26,10 +27,10 @@ pub const KEEP_DEFAULT: u32 = 7;
 
 pub fn keep_words(days: u32) -> String {
     match days {
-        7 => "a week".into(),
-        14 => "two weeks".into(),
-        30 => "a month".into(),
-        n => format!("{n} days"),
+        7 => t!("common-keep-week").to_string(),
+        14 => t!("common-keep-two-weeks").to_string(),
+        30 => t!("common-keep-month").to_string(),
+        n => t!("common-keep-days", n = n).to_string(),
     }
 }
 
@@ -136,25 +137,23 @@ impl NotHere {
 
     pub fn words(&self) -> String {
         match self {
-            NotHere::NoSnapper => "Earlier versions need snapper, which is not installed on this computer.".into(),
-            NotHere::FromSnapshot => "Not while the computer is started from a snapshot.".into(),
+            NotHere::NoSnapper => t!("common-snap-no-snapper").into(),
+            NotHere::FromSnapshot => t!("common-snap-from-snapshot").into(),
             NotHere::PartOfSystem =>
-                "The home folder is part of the system on this computer, not a part of the disk of its own, so \
-                 earlier versions cannot be kept apart from the system.".into(),
+                t!("common-snap-part-of-system").into(),
             NotHere::NotBtrfs(fs) if is_network(fs) =>
-                "The home folder is kept on another computer, so earlier versions cannot be kept here.".into(),
-            NotHere::NotBtrfs(fs) => format!("Earlier versions need the home folder on Btrfs, and here it is on {fs}."),
+                t!("common-snap-network").into(),
+            NotHere::NotBtrfs(fs) => t!("common-snap-not-btrfs", fs = fs.as_str()).to_string(),
             NotHere::NotWhole =>
-                "The home folder is a folder inside another part of the disk, not a part of its own, so earlier \
-                 versions cannot be kept for it.".into(),
-            NotHere::ReadOnly => "The home folder cannot be written to at the moment, so nothing can be kept.".into(),
+                t!("common-snap-not-whole").into(),
+            NotHere::ReadOnly => t!("common-snap-read-only").into(),
             NotHere::LockedFiles =>
-                "A home folder here is kept as one locked file, and a copy of it each day would fill the disk.".into(),
-            NotHere::Elsewhere => "Your home folder is not inside /home, where the copies are taken.".into(),
+                t!("common-snap-locked-files").into(),
+            NotHere::Elsewhere => t!("common-snap-elsewhere").into(),
             NotHere::Apart =>
-                "Your home folder is locked or kept apart from the others, so the copies cannot hold it.".into(),
+                t!("common-snap-apart").into(),
             NotHere::OwnPart =>
-                "Your home folder is a part of the disk of its own, which the copies of /home do not go into.".into(),
+                t!("common-snap-own-part").into(),
         }
     }
 }
@@ -509,10 +508,11 @@ impl Default for Standing {
 
 pub fn standing() -> Standing {
     let set_up = Path::new(SNAPPER_CONFIG).exists();
+    let setting = Setting::read();
     Standing {
         possible: possible_for_me(),
 
-        setting: Setting { on: set_up && Setting::read().on, ..Setting::read() },
+        setting: Setting { on: set_up && setting.on, ..setting },
         kept: kept_in(Path::new(SNAPSHOTS)),
         state: State::read(),
     }

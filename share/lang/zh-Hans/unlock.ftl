@@ -7,7 +7,7 @@ unlock-title-default = 磁盘密码
 
 # Heading of the box in place of cryptsetup's own wording ("Please unlock disk ...", "Enter passphrase").
 # SAFETY: needs a human review before it ships
-unlock-title-encryption = 输入加密密码
+unlock-title-encryption = 输入磁盘密码
 
 # Key hint under the box: Tab, or the eye, shows the typed password.
 unlock-show = 显示
@@ -24,4 +24,3 @@ unlock-turn-off = 关机
 # Red line inside the card when Enter is pressed with nothing typed.
 # SAFETY: needs a human review before it ships
 unlock-type-first = 请先输入密码，再按回车键
-

@@ -25,15 +25,15 @@ session-lock-use-pin = Dùng mã PIN
 session-lock-use-phone = Dùng điện thoại
 
 # Shown while the typed password or PIN is being checked.
-session-lock-checking = Đang kiểm tra...
+session-lock-checking = Đang kiểm tra…
 
 # Shown when the PIN has run out of time and the password is asked for instead.
 # SAFETY: needs a human review before it ships
-session-lock-pin-timed-out = Mã PIN đã hết hạn; hãy nhập mật khẩu.
+session-lock-pin-timed-out = Mã PIN đã hết hạn. Hãy nhập mật khẩu.
 
 # Shown after too many wrong PINs, and the password is asked for instead.
 # SAFETY: needs a human review before it ships
-session-lock-too-many-pins = Sai PIN quá nhiều lần; hãy nhập mật khẩu.
+session-lock-too-many-pins = Sai mã PIN quá nhiều lần. Hãy dùng mật khẩu.
 
 # Shown after a wrong PIN, with how many tries are left (1 is one try left).
 # SAFETY: needs a human review before it ships
@@ -43,15 +43,15 @@ session-lock-wrong-pin =
     }
 
 # Shown while the phone is asked to unlock the screen.
-session-lock-asking-phone = Đang hỏi điện thoại của bạn...
+session-lock-asking-phone = Đang hỏi điện thoại của bạn…
 
 # Shown when the phone did not unlock the screen and the PIN may be typed.
 # SAFETY: needs a human review before it ships
-session-lock-phone-no-pin = Điện thoại của bạn không mở khóa được. Hãy dùng mã PIN.
+session-lock-phone-no-pin = Trindle không mở khóa được bằng điện thoại của bạn. Hãy dùng mã PIN.
 
 # Shown when the phone did not unlock the screen and the password must be typed.
 # SAFETY: needs a human review before it ships
-session-lock-phone-no-password = Điện thoại của bạn không mở khóa được. Hãy nhập mật khẩu.
+session-lock-phone-no-password = Trindle không mở khóa được bằng điện thoại của bạn. Hãy nhập mật khẩu.
 
 # Shown when the password typed is not the person's password.
 # SAFETY: needs a human review before it ships
@@ -85,7 +85,10 @@ session-wallpaper-over-200 = trên 200 MB
 session-wallpaper-reasons-or = { $first } hoặc { $second }
 
 # The line that says how many wallpapers were left out and why; the count and the reasons come in.
-session-wallpaper-left-out = Đã bỏ qua { $count }: { $why }.
+session-wallpaper-left-out =
+    { $count ->
+       *[other] Trindle đã bỏ qua { $count } ảnh vì chúng { $why }.
+    }
 
 # Under the lock screen when a phone or password check was given up on.
 session-lock-check-abandoned = Việc này mất quá nhiều thời gian. Hãy thử lại.
@@ -96,7 +99,7 @@ session-lock-check-abandoned = Việc này mất quá nhiều thời gian. Hãy 
 session-restart-question = Khởi động lại toàn bộ màn hình nền?
 
 # Under the heading: what restarting everything does to the open windows.
-session-restart-windows = Mọi cửa sổ đang mở sẽ đóng, và những gì chưa lưu trong đó sẽ mất.
+session-restart-windows = Mọi cửa sổ đang mở sẽ đóng. Những gì bạn chưa lưu sẽ bị mất.
 
 # Tip of the round button that leaves everything as it is.
 session-restart-cancel = Huỷ
@@ -104,3 +107,11 @@ session-restart-cancel = Huỷ
 # Main button that restarts the whole desktop.
 session-restart-go = Khởi động lại
 
+# Under the lock screen when Enter is pressed while the last try, given up on, is still being checked.
+session-lock-still-checking = Vẫn đang kiểm tra lần thử trước của bạn. Hãy thử lại sau giây lát.
+
+# Under the lock screen after several wrong tries, with how many seconds to wait (1 is one second).
+session-lock-wait =
+    { $n ->
+       *[other] Sai quá nhiều lần. Hãy thử lại sau { $n } giây.
+    }

@@ -28,10 +28,10 @@ store-grid-none-found = Tidak ada aplikasi yang cocok dengan “{ $text }”.
 store-grid-none-here = Belum ada aplikasi di sini.
 
 # Advice in the empty page of a search.
-store-grid-try-shorter = Coba kata yang lebih pendek, atau telusuri satu jenis di sebelah kiri.
+store-grid-try-shorter = Coba kata yang lebih pendek, atau pilih kategori di sebelah kiri.
 
 # Advice in the empty page of a kind of apps.
-store-grid-search-or-look = Cari berdasarkan nama di atas, atau telusuri jenis lain di sebelah kiri.
+store-grid-search-or-look = Cari berdasarkan nama di atas, atau pilih kategori lain di sebelah kiri.
 
 # Under a page of apps: how many are shown of how many there are.
 store-grid-showing = Menampilkan { $shown } dari { $apps }.
@@ -46,7 +46,7 @@ store-wait-fetching = Mengambil daftar aplikasi dari Flathub. Pertama kali memak
 store-wait-no-reach = Apps tidak dapat menjangkau Flathub.
 
 # Under the title of the waiting page when the computer is not connected.
-store-wait-offline = Komputer ini tidak terhubung ke internet. Apps mencoba lagi sendiri begitu terhubung.
+store-wait-offline = Komputer ini tidak terhubung ke internet. Apps akan mencoba lagi saat sudah terhubung.
 
 # In the waiting page when the computer is not connected.
 store-wait-comes-from = Aplikasi yang dapat dipilih berasal dari Flathub, lewat internet.
@@ -67,13 +67,13 @@ store-wait-try-again = Coba lagi
 store-back-results = Hasil
 
 # Red words under the search box when no web browser opens a link.
-store-no-browser = Tidak ada peramban web untuk membuka { $url }. Pasang satu dahulu di Apps.
+store-no-browser = Tidak ada peramban web untuk membuka { $url }. Pasang satu dari Apps dahulu.
 
 # Said in the card or under the title while the lists are being read.
 store-looking = Mencari…
 
 # Said under an app's row on the Install page when the app was put in.
-store-done-installed-note = Sekarang ada di Terpasang, dan di cincin
+store-done-installed-note = Sekarang ada di Terpasang dan di ring
 
 # Said under an app's row when it was taken off, and the word on its dial.
 store-done-removed = Dihapus
@@ -85,7 +85,7 @@ store-done-not = Gagal
 store-done-installed = Terpasang
 
 # Red words under an app when Flatpak gave no reason it would not work.
-store-flatpak-refused = Flatpak menolak.
+store-flatpak-refused = Flatpak gagal.
 
 # Tab of the Installed page that shows everything.
 store-tab-all = Semua
@@ -103,7 +103,7 @@ store-tab-deb-files = Berkas deb
 store-tab-plugins = Plugin
 
 # Line under the title of the Installed page when nothing is installed.
-store-installed-nothing = Belum ada yang terpasang. Temukan penuh dengan hal untuk dicoba.
+store-installed-nothing = Belum ada yang terpasang. Anda akan menemukan aplikasi untuk dicoba di Temukan.
 
 # Line under the title of the Installed page when only plugins are installed.
 store-installed-only-plugins =
@@ -221,14 +221,10 @@ store-installed-search = Cari yang terpasang
 store-installed-appimage-failed = AppImage tidak dapat ditambahkan.
 
 # In the card of the Installed page when nothing is installed.
-store-installed-empty = Aplikasi yang Anda pasang dari Temukan, dari GitHub atau sebagai AppImage, program dari berkas .deb, dan plugin muncul di sini.
+store-installed-empty = Semua yang Anda pasang muncul di sini: aplikasi dari Temukan atau GitHub, AppImage, program dari berkas .deb, dan plugin.
 
 # In the card of the Installed page when the search matches nothing.
 store-installed-no-match = Tidak ada yang terpasang yang cocok dengan “{ $find }”.
-
-# Note at the foot of the Installed list.
-# SAFETY: needs a human review before it ships
-store-installed-remove-twice = Hapus meminta dua kali: tekan lagi dalam tiga detik.
 
 # On an installed thing's line: its version.
 store-installed-version = versi { $version }
@@ -250,10 +246,10 @@ store-installed-about = Tentang
 
 # Under an installed thing's row while it is being taken off.
 # SAFETY: needs a human review before it ships
-store-installed-removing = Menghapus...
+store-installed-removing = Menghapus…
 
 # Red words in the Installed card when the session bus cannot be asked for a file.
-store-add-no-bus = Tidak ada bus sesi untuk menanyakan berkas yang mana.
+store-add-no-bus = Trindle tidak dapat membuka pemilih berkas saat ini.
 
 # Title of the window that asks which AppImage to add.
 store-add-choose-title = Pilih AppImage
@@ -262,13 +258,13 @@ store-add-choose-title = Pilih AppImage
 store-add-filter = AppImage
 
 # Red words in the Installed card when the file chooser could not be asked.
-store-add-no-chooser = Pemilih berkas tidak dapat ditanyai.
+store-add-no-chooser = Trindle tidak dapat membuka pemilih berkas.
 
 # Words in the Installed card while an AppImage is being added.
-store-add-adding = Menambahkan...
+store-add-adding = Menambahkan…
 
 # Words under the search box when an AppImage let go on the window is already there.
-store-add-already = { $name } sudah ada: lihat Terpasang.
+store-add-already = { $name } sudah terpasang. Anda akan menemukannya di Terpasang.
 
 # Words once an AppImage is in the ring.
 store-add-in-ring = Sudah ditambahkan. Sekarang ada di daftar Anda.
@@ -276,34 +272,31 @@ store-add-in-ring = Sudah ditambahkan. Sekarang ada di daftar Anda.
 # Red words under the search box when a dropped file is not a Flatpak reference this computer can use.
 store-add-bad-ref = Itu bukan referensi Flatpak yang dapat dipakai komputer ini.
 
-# Words under the search box while a Flatpak reference is installed; the source is given.
-store-add-installing-ref = Memasang { $name } dari { $host }...
-
 # Words under the search box once a Flatpak reference is installed.
 store-add-installed-ref = { $name } terpasang.
 
 # Red words when Flatpak gave no reason it would not install a reference.
-store-add-ref-refused = Flatpak tidak mau memasangnya.
+store-add-ref-refused = Flatpak tidak dapat memasangnya.
 
 # Red words under the search box when a Flatpak reference could not be installed; the reason follows.
-store-add-ref-failed = { $name } tidak dapat dipasang. { $why }
+store-add-ref-failed = Trindle tidak dapat memasang { $name }. { $why }
 
 # Words in the Installed card while an AppImage replaces another.
-store-add-replacing = Mengganti...
+store-add-replacing = Mengganti…
 
 # Heading of the question when an AppImage has the name of one already there.
 # SAFETY: needs a human review before it ships
 store-replace-head = { $name } sudah ada
 
 # Small heading over the AppImage being brought.
-store-replace-new = Yang dibawa
+store-replace-new = Yang baru
 
 # Small heading over the AppImage already there.
 store-replace-old = Yang sudah ada
 
 # Tip of the round button that keeps the AppImage already there.
 # SAFETY: needs a human review before it ships
-store-replace-skip = Lewati: pertahankan yang sudah ada
+store-replace-skip = Lewati dan pertahankan yang lama
 
 # Button that replaces the AppImage already there with the new one.
 # SAFETY: needs a human review before it ships
@@ -320,7 +313,7 @@ store-flatpak-ask-size = Data tersimpannya memakai { $size }.
 store-flatpak-ask-none = Tidak ada data tersimpan.
 
 # Under that heading while the size of the saved data is being counted.
-store-flatpak-ask-measuring = Menghitung data tersimpannya...
+store-flatpak-ask-measuring = Mengukur data tersimpannya…
 
 # Under the choices: the two that delete data cannot be undone.
 # SAFETY: needs a human review before it ships
@@ -328,7 +321,7 @@ store-flatpak-ask-undone = Data yang dihapus tidak dapat dikembalikan.
 
 # Button: remove the app and leave the data it saved.
 # SAFETY: needs a human review before it ships
-store-flatpak-keep = Hapus, simpan datanya
+store-flatpak-keep = Hapus tetapi simpan data
 
 # Button (red): remove the app and delete its saved data.
 # SAFETY: needs a human review before it ships
@@ -343,34 +336,31 @@ store-flatpak-data-only-none = Tidak ada data tersimpan untuk dihapus.
 
 # Tip of the round button that shuts the card with nothing done.
 # SAFETY: needs a human review before it ships
-store-flatpak-cancel = Batal: pertahankan keduanya
+store-flatpak-cancel = Batal
 
 # Said under the card or the row once only the data has been deleted.
-store-flatpak-data-gone = Data tersimpannya sudah dihapus.
+store-flatpak-data-gone = Data tersimpannya sudah hilang.
 
 # Words while only the data is being deleted.
-store-flatpak-data-going = Menghapus data tersimpannya...
+store-flatpak-data-going = Menghapus data tersimpannya…
 
 # Red words under a button when a job ended and gave no reason.
-store-job-no-reason = Tidak selesai, dan tidak memberi alasan.
+store-job-no-reason = Tidak selesai. Tidak ada alasan yang diberikan.
 
 # Tip of the round i button beside a refusal that shows what is behind it.
 store-show-behind = Tampilkan letak masalahnya
 
 # Placeholder of the box on the GitHub page.
-store-gh-search-placeholder = Cari di GitHub: ketik, lalu tekan Enter
+store-gh-search-placeholder = Cari aplikasi (tekan Enter untuk mencari di GitHub juga)
 
 # Heading of the card of matches from AppImageHub.
 store-gh-hub = Di AppImageHub ({ $n })
 
-# Note on the GitHub page before GitHub has been asked.
-store-gh-press-enter = Tekan Enter untuk mencari juga di seluruh GitHub.
-
 # Note on the GitHub page when the computer has no internet.
-store-gh-offline-note = GitHub tidak ditanyai: tidak ada internet untuk menanyainya.
+store-gh-offline-note = Trindle tidak dapat mencari di GitHub karena komputer ini tidak terhubung ke internet.
 
 # Note on the GitHub page while GitHub is being asked.
-store-gh-asking = Menanyai GitHub...
+store-gh-asking = Memeriksa GitHub…
 
 # Note on the GitHub page when GitHub knows nothing more.
 store-gh-nothing-more = Tidak ada lagi di GitHub.
@@ -378,7 +368,7 @@ store-gh-nothing-more = Tidak ada lagi di GitHub.
 # Note on the GitHub page while the projects found are looked through.
 store-gh-looking =
     { $n ->
-       *[other] Mencari berkas AppImage dan Flatpak di { $n } proyek...
+       *[other] Mencari berkas AppImage dan Flatpak di { $n } proyek…
     }
 
 # Note on the GitHub page when no match has a file for this computer.
@@ -392,7 +382,7 @@ store-gh-search-card = Cari di GitHub
 
 # Line under the title of the GitHub page.
 # SAFETY: needs a human review before it ships
-store-gh-line = Aplikasi di GitHub sebagai berkas AppImage atau Flatpak. Tidak ada yang memeriksanya: pasang hanya dari orang yang Anda percaya.
+store-gh-line = Aplikasi di GitHub, sebagai berkas AppImage atau Flatpak. Tidak ada yang memeriksanya, jadi pasang hanya dari orang yang Anda percaya.
 
 # Line under the title of the GitHub page when the computer has no internet.
 store-gh-offline = GitHub tidak dapat dicari selama komputer ini tidak terhubung ke internet.
@@ -419,21 +409,21 @@ store-gh-key = Kunci GitHub
 
 # Name of the GitHub key's button when a key is stored.
 # SAFETY: needs a human review before it ships
-store-gh-key-stored = Kunci GitHub: satu tersimpan
+store-gh-key-stored = Kunci GitHub tersimpan
 
 # In the GitHub key's box: what the key is for.
 # SAFETY: needs a human review before it ships
-store-gh-key-words = Anda hampir pasti tidak memerlukannya. Tanpa kunci, GitHub menjawab 60 pertanyaan per jam dari komputer ini; dengan kunci, 5.000. Kunci hanya menaikkan batas itu. Kunci dipakai untuk melihat berkas publik dan tidak lebih: tidak memberi Trindle jalan masuk ke akun Anda, dan Anda tidak mencentang izin apa pun saat membuatnya. Kunci disimpan di komputer ini, di gantungan kunci Anda, dan hanya dikirim ke GitHub.
+store-gh-key-words = Anda hampir pasti tidak memerlukannya. Tanpa kunci, GitHub mengizinkan 60 permintaan per jam dari komputer ini. Dengan kunci, 5.000. Kunci hanya menaikkan batas itu. Kunci dipakai untuk melihat berkas publik dan tidak lebih. Kunci tidak memberi Trindle jalan masuk ke akun Anda, dan Anda tidak mencentang izin apa pun saat membuatnya. Kunci disimpan di komputer ini, di gantungan kunci Anda, dan hanya dikirim ke GitHub.
 
 # In the GitHub key's box: how to make a key.
 # SAFETY: needs a human review before it ships
-store-gh-key-how = Buat kunci di GitHub, beri nama apa saja, biarkan semua izin, tekan Generate token, lalu tempel yang ditampilkan di sini.
+store-gh-key-how = Buat kunci di GitHub, beri nama apa saja, dan biarkan semua izin apa adanya. Tekan Generate token, lalu tempel yang ditampilkan di sini.
 
 # Red words under the GitHub key's box when the key could not be removed.
-store-gh-key-not-removed = Tidak dapat menghapusnya: { $why }
+store-gh-key-not-removed = Tidak berhasil dihapus: { $why }
 
 # Red words under the GitHub key's box when the key could not be kept.
-store-gh-key-not-kept = Tidak dapat menyimpannya: { $why }
+store-gh-key-not-kept = Tidak berhasil disimpan: { $why }
 
 # Placeholder of the GitHub key's box when a key is stored already.
 store-gh-key-keep-empty = Kosongkan untuk mempertahankannya
@@ -454,7 +444,7 @@ store-gh-key-make = Buat kunci di GitHub
 store-gh-key-keep = Simpan kunci
 
 # Red words when a project's newest release has nothing for this computer.
-store-gh-nothing-installs = Tidak ada di rilis terbarunya yang dapat dipasang di sini.
+store-gh-nothing-installs = Tidak ada di rilis terbarunya yang dapat dipasang di komputer ini.
 
 # Word on the file's dial and under a GitHub file when it was added.
 store-added = Ditambahkan
@@ -484,25 +474,16 @@ store-bk-apps-list =
     }
 
 # Under the Apps switch: the list, then why the file stays small.
-store-bk-apps-sub = { $list } Komputer lain memasangnya baru dari Flathub, jadi berkasnya tetap kecil.
+store-bk-apps-sub = { $list }
 
 # Name of the switch for the apps' own data in a backup.
 store-bk-data = Data milik aplikasi
 
-# Under the Apps' own data switch.
-store-bk-data-sub = Pengaturan dan hasil kerja tersimpan setiap aplikasi, tanpa cache-nya.
-
 # Name of the switch for AppImages in a backup.
 store-bk-appimages = AppImage
 
-# Under the AppImages switch.
-store-bk-appimages-sub = Disimpan utuh, karena masing-masing satu berkas.
-
 # Name of the switch for Trindle's settings in a backup.
 store-bk-settings = Pengaturan Trindle
-
-# Under the Trindle settings switch.
-store-bk-settings-sub = Cincin, pilihan gambar latar, warna, papan ketik, daya, aplikasi bawaan, dan gambar Anda.
 
 # Under a switch: what it holds, then how big it is now.
 store-bk-now = { $sub } Sekarang { $size }.
@@ -520,21 +501,18 @@ store-bk-back-card = Pulihkan cadangan
 # SAFETY: needs a human review before it ships
 store-bk-choose = Pilih berkas cadangan
 
-# Under the choose row: which backups can be used; the name of Flat's backups is given.
-store-bk-choose-sub = Cadangan Trindle, atau yang dibuat oleh { $flat }.
-
 # Note in the card that puts a backup back.
 # SAFETY: needs a human review before it ships
-store-bk-back-note = Aplikasinya dipasang dan datanya serta pengaturannya dikembalikan. Dokumen dan gambar Anda tidak termasuk di dalamnya: salin sendiri.
+store-bk-back-note = Pemulihan memasang aplikasinya dan mengembalikan data serta pengaturannya. Dokumen dan gambar Anda tidak ada di cadangan, jadi salin sendiri.
 
 # Said while a backup is being made.
-store-bk-making = Mencadangkan... ini bisa memakan beberapa menit.
+store-bk-making = Mencadangkan. Ini bisa memakan beberapa menit.
 
 # Said when a backup is made: the file and its size.
-store-bk-made = Berkasnya { $path } ({ $size }). Salin ke flashdisk USB atau penyimpanan awan untuk dibawa.
+store-bk-made = Cadangannya adalah { $path } ({ $size }). Salin ke flashdisk USB atau penyimpanan awan untuk dibawa.
 
 # Red words when no connection to the file chooser exists.
-store-bk-no-bus = Tidak ada cadangan yang dipilih, karena Trindle tidak punya sambungan ke pemilih berkas.
+store-bk-no-bus = Tidak ada cadangan yang dipilih, karena Trindle tidak dapat tersambung ke pemilih berkas.
 
 # Title of the window that asks which backup to use.
 store-bk-choose-title = Pilih cadangan
@@ -546,10 +524,7 @@ store-bk-filter = Cadangan Trindle dan Flat
 store-bk-no-answer = Tidak ada cadangan yang dipilih, karena pemilih berkas tidak menjawab.
 
 # Said while a backup file is read.
-store-bk-reading = Membaca cadangan...
-
-# Said when a backup was put back.
-store-bk-logout = Keluar lalu masuk kembali untuk melihat semua pengaturan.
+store-bk-reading = Membaca cadangan…
 
 # Said when a backup was put back, after what was done; the first part is given.
 store-bk-logout-after = { $last } Keluar lalu masuk kembali untuk melihat semua pengaturan.
@@ -557,24 +532,24 @@ store-bk-logout-after = { $last } Keluar lalu masuk kembali untuk melihat semua 
 # Said once a Flat backup is read: how many apps and how many have settings.
 store-bk-found =
     { $apps ->
-       *[other] { $apps } aplikasi, { $with } dengan pengaturannya. Memulai...
+       *[other] Ditemukan { $apps } aplikasi, { $with } dengan pengaturan. Memulai…
     }
 
 # Line under the title of the Software sources page: how many makers' sources are added.
 store-src-line =
     { $n ->
-        [0] Belum ada sumber milik pembuat yang ditambahkan.
-       *[other] { $n } sumber milik pembuat ditambahkan, dijaga tetap terbaru bersama pembaruan Debian.
+        [0] Belum ada sumber perangkat lunak yang ditambahkan.
+       *[other] { $n } sumber perangkat lunak ditambahkan, dijaga tetap terbaru bersama pembaruan Debian.
     }
 
 # Under a maker's source that is added and installed.
-store-src-added = { $what }. Ditambahkan, dan dijaga tetap terbaru.
+store-src-added = { $what } ditambahkan dan dijaga tetap terbaru.
 
 # Under a maker's source that is added but whose program is not installed.
 store-src-no-program = { $what }. Sumber ditambahkan, tetapi programnya belum terpasang.
 
 # Under a maker's source whose program is installed another way.
-store-src-other-way = { $what }. Dipasang dengan cara lain.
+store-src-other-way = { $what } dipasang dengan cara lain.
 
 # Tip of the round button that removes a maker's source and its program.
 # SAFETY: needs a human review before it ships
@@ -596,33 +571,18 @@ store-src-ready = Siap ditambahkan
 # Name of the field for the address of a source.
 store-src-address = Alamat
 
-# Under the address field.
-store-src-address-sub = Alamat repositori, dari petunjuk pemasangan pembuatnya.
-
 # Name of the field for the suite of a source.
 store-src-suite = Suite
 
-# Under the suite field.
-store-src-suite-sub = Biasanya trixie atau stable.
-
 # Name of the field for the components of a source.
 store-src-components = Komponen
-
-# Under the components field.
-store-src-components-sub = Biasanya main.
 
 # Name of the field for a source's signing key.
 # SAFETY: needs a human review before it ships
 store-src-key = Kunci penandatangan
 
-# Under the signing key field.
-store-src-key-sub = Alamat kunci penandatangannya.
-
 # Name of the field for the program to install from a source.
 store-src-program = Program yang dipasang
-
-# Under the program field.
-store-src-program-sub = Nama paketnya, jika Anda ingin segera memasangnya.
 
 # Placeholder of the program field.
 store-src-program-hint = opsional
@@ -659,10 +619,10 @@ store-src-bad-package = Itu bukan nama paket.
 store-src-starting = Memulai
 
 # Said under Tailscale's row while its sign-in page is opened.
-store-src-opening = Membuka halaman masuk Tailscale...
+store-src-opening = Membuka halaman masuk Tailscale…
 
 # Said under Tailscale's row once its sign-in page has opened.
-store-src-opened = Masuk di halaman yang terbuka; ini selesai sendiri.
+store-src-opened = Masuk di halaman yang terbuka. Trindle akan melanjutkan sendiri setelah Anda masuk.
 
 # Said under Tailscale's row when it is connected.
 store-src-connected = Terhubung
@@ -677,7 +637,7 @@ store-bk-http-title = Tidak dienkripsi
 
 # Words of that card.
 # SAFETY: needs a human review before it ships
-store-bk-http-card = Alamat ini tidak dienkripsi. Seseorang di tengah jalan dapat melihat apa yang dikirim, dan dapat menukar cadangan dengan yang lain.
+store-bk-http-card = Koneksi ini tidak dienkripsi. Seseorang dapat melihat apa yang dikirim di tengah jalan, atau menukar cadangan dengan yang lain.
 
 # Label of the tick box on that card; the restore button works only once it is on.
 # SAFETY: needs a human review before it ships
@@ -693,12 +653,12 @@ store-bk-http-cancel = Batal
 
 # Under that heading when the folder of the saved data cannot be read, so its size is not known.
 # SAFETY: needs a human review before it ships
-store-flatpak-ask-uncounted = Data tersimpannya tidak dapat dihitung.
+store-flatpak-ask-uncounted = Data tersimpannya tidak dapat diukur.
 
-store-hub-warning = AppImageHub hanya mendaftar proyek: tidak ada yang meninjau atau memindainya, dan tidak harus ditandatangani. Trindle menjalankan tiap AppImage di dalam kotak dengan folder home pribadi: awalnya ia boleh memakai internet dan suara, dan tidak melihat satu pun berkas Anda.
+store-hub-warning = AppImageHub hanya mendaftar proyek. Tidak ada yang meninjau atau memindainya, dan tidak harus ditandatangani. Trindle menjalankan setiap AppImage di dalam kotak dengan folder home pribadinya sendiri. Awalnya ia dapat memakai internet dan suara, tetapi tidak dapat melihat satu pun berkas Anda.
 
 # Said once where AppImages are listed: the line saying where each comes from is not checked.
-store-from-hint = Asal sebuah AppImage hanyalah petunjuk, bukan pemeriksaan.
+store-from-hint = Asal yang dinyatakan sebuah AppImage hanyalah petunjuk. Trindle tidak memeriksanya.
 
 # Where an AppImage comes from: a project on GitHub, by its owner and name.
 store-from-github = Di GitHub: { $repo }
@@ -707,7 +667,7 @@ store-from-github = Di GitHub: { $repo }
 store-from-github-stars = Di GitHub: { $repo }, { $stars } bintang
 
 # Where an AppImage comes from: a website, by its name.
-store-from-site = Bukan di GitHub: dari situs web, { $site }
+store-from-site = Bukan di GitHub. Berasal dari { $site }
 
 # Where an AppImage comes from, for one added by hand.
 store-from-unknown = Asal tidak diketahui
@@ -719,7 +679,7 @@ store-from-site-open = Buka situsnya
 store-age-updated = Terakhir diperbarui: { $date }
 
 # The same, said in red, when that is more than six months ago.
-store-age-updated-old = Terakhir diperbarui: { $date }. Tidak diperbarui lebih dari enam bulan, jadi mungkin punya celah keamanan yang belum diperbaiki.
+store-age-updated-old = Terakhir diperbarui: { $date }. Belum diperbarui lebih dari enam bulan, jadi mungkin punya masalah keamanan yang belum diperbaiki.
 
 # When the source does not say when an app was last updated.
 store-age-updated-unknown = Terakhir diperbarui: tidak diketahui
@@ -748,13 +708,13 @@ store-browse-line = { $n ->
 store-browse-fetching = Mengambil daftar AppImageHub…
 
 # The same when the list could not be fetched.
-store-browse-failed = Daftar AppImageHub tidak dapat diambil.
+store-browse-failed = Trindle tidak dapat mengambil daftar AppImageHub.
 
 # The same with no internet and no copy kept.
 store-browse-offline = Daftar AppImageHub tidak dapat diambil selama komputer ini tidak terhubung ke internet.
 
 # In the list when the kind chosen has none.
-store-browse-none = AppImageHub tidak mendaftar satu pun dari jenis ini.
+store-browse-none = AppImageHub tidak punya satu pun dari ini.
 
 # Under the rows: how many are shown of how many.
 store-browse-showing = Menampilkan { $shown } dari { $n }.
@@ -771,7 +731,7 @@ store-browse-details = Lihat detail dan berkas
 store-grid-home-unchecked = pemeriksaan pembaruan mati
 
 # One line at the foot of Apps' results when the search asks for ChatGPT, OpenAI or Codex.
-store-chatgpt-returns = ChatGPT kembali setelah OpenAI menandatangani unduhannya.
+store-chatgpt-returns = ChatGPT akan kembali setelah OpenAI menandatangani unduhannya.
 
 
 
@@ -800,7 +760,7 @@ store-appimage-line-bare = AppImage
 store-appimage-warn-head = AppImage tidak diperiksa. Tidak ada yang meninjau atau memindainya.
 
 # Under it: how Trindle boxes an AppImage.
-store-appimage-warn-box = Trindle menjalankan setiap AppImage di dalam kotak dengan folder rumah pribadi: pada awalnya ia boleh memakai internet dan suara, dan tidak melihat satu pun file Anda.
+store-appimage-warn-box = Trindle menjalankan setiap AppImage di dalam kotak dengan folder home pribadinya sendiri. Pada awalnya ia dapat memakai internet dan suara, tetapi tidak dapat melihat satu pun berkas Anda.
 
 # Label of the small tick in that card's corner; once it is set the card never comes again.
 store-appimage-warn-hide = Jangan tampilkan lagi
@@ -811,3 +771,18 @@ store-appimage-warn-ok = OK
 # Button on that card that gives the install up.
 store-appimage-warn-cancel = Batal
 
+# Printed by the command line after a backup. { $size } is how big the file is.
+store-cli-backed-up = dicadangkan ({ $size })
+
+# Printed by the command line after Trindle's own settings were put back.
+store-cli-settings-back = Pengaturan Trindle dikembalikan
+
+
+# Tick box under the Search page's box: look on Flathub, for Flatpaks.
+store-gh-place-flathub = Flathub (Flatpak)
+
+# Tick box: look on AppImageHub, for AppImages.
+store-gh-place-hub = AppImageHub (AppImage)
+
+# Tick box: look on GitHub, which needs Enter.
+store-gh-place-github = GitHub

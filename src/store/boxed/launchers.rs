@@ -28,12 +28,40 @@ pub(super) fn put_launchers(name: &str, files: &Path) -> Result<(), String> {
         if path.extension().is_none_or(|x| x != "desktop") {
             continue;
         }
-        let Ok(text) = std::fs::read_to_string(&path) else { continue };
+        let Some(text) = own_file(files, &path).and_then(|p| read_at_most(&p, LAUNCHER_MOST)) else { continue };
         let terminal = our_terminal(name, &text);
-        let entry = launcher(name, &text, terminal, |icon| icon_in(files, icon));
-        std::fs::write(out.join(e.file_name()), entry).map_err(|e| e.to_string())?;
+
+        let Some(entry) = launcher(name, &text, terminal, |icon| icon_in(files, icon)) else {
+            eprintln!("trindle-boxed: {name}: {} has a command that could not be boxed, so it is left out", e.file_name().to_string_lossy());
+            continue;
+        };
+        let target = out.join(e.file_name());
+        if !may_write(&target, name) {
+            eprintln!("trindle-boxed: {name}: {} is somebody else's launcher, so it is left alone", e.file_name().to_string_lossy());
+            continue;
+        }
+        std::fs::write(&target, entry).map_err(|e| e.to_string())?;
     }
     Ok(())
+}
+
+const LAUNCHER_MOST: u64 = 64 * 1024;
+
+pub(super) fn own_file(files: &Path, path: &Path) -> Option<PathBuf> {
+    let (real, top) = (std::fs::canonicalize(path).ok()?, std::fs::canonicalize(files).ok()?);
+    (real.starts_with(&top) && std::fs::metadata(&real).is_ok_and(|m| m.is_file())).then_some(real)
+}
+
+pub(super) fn read_at_most(path: &Path, most: u64) -> Option<String> {
+    let mut text = String::new();
+    std::io::Read::read_to_string(&mut std::io::Read::take(std::fs::File::open(path).ok()?, most + 1), &mut text).ok()?;
+    (text.len() as u64 <= most).then_some(text)
+}
+
+pub(super) fn may_write(target: &Path, name: &str) -> bool {
+    let Ok(meta) = std::fs::symlink_metadata(target) else { return true };
+    let mark = format!("{MARK}{name}");
+    meta.is_file() && std::fs::read_to_string(target).is_ok_and(|t| t.lines().any(|l| l.trim() == mark))
 }
 
 fn our_terminal(name: &str, text: &str) -> bool {
@@ -45,24 +73,43 @@ pub(super) fn is_terminal(categories: &str) -> bool {
     categories.split(';').any(|c| c == "TerminalEmulator")
 }
 
-pub(super) fn launcher(name: &str, text: &str, terminal: bool, find_icon: impl Fn(&str) -> Option<PathBuf>) -> String {
+pub(super) fn key_value(line: &str) -> Option<(&str, &str)> {
+    let t = line.trim_start();
+    if t.starts_with('[') || t.starts_with('#') {
+        return None;
+    }
+    let (k, v) = t.split_once('=')?;
+    Some((k.trim(), v.trim_start()))
+}
+
+pub(super) fn bare(key: &str) -> &str {
+    key.split('[').next().unwrap_or(key).trim()
+}
+
+pub(super) fn launcher(name: &str, text: &str, terminal: bool, find_icon: impl Fn(&str) -> Option<PathBuf>) -> Option<String> {
     let mut out = String::new();
     let mut first = true;
     let mut main = false;
     for line in text.lines() {
-        let section = line.starts_with('[');
+        let section = line.trim_start().starts_with('[');
         if section {
             main = line.trim() == "[Desktop Entry]";
         }
-        if terminal && main && (line.starts_with("Name=") || line.starts_with("Icon=")) {
-            out.push_str(&if line.starts_with("Name=") { format!("Name={}\n", t!("store-boxed-terminal")) } else { "Icon=utilities-terminal\n".to_string() });
-        } else if terminal && main && line.starts_with("Name[") {
+        let kv = key_value(line);
+        let key = kv.map(|(k, _)| k);
+        let base = key.map(bare);
+        if terminal && main && matches!(key, Some("Name" | "Icon")) {
+            out.push_str(&if key == Some("Name") { format!("Name={}\n", t!("store-boxed-terminal")) } else { "Icon=utilities-terminal\n".to_string() });
+        } else if terminal && main && base == Some("Name") {
             continue;
-        } else if let Some(cmd) = line.strip_prefix("Exec=") {
+        } else if let (Some("Exec"), Some((_, cmd))) = (key, kv) {
+            if cmd.trim().is_empty() {
+                return None;
+            }
             out.push_str(&format!("Exec=trindle-boxed {name} {cmd}\n"));
-        } else if line.starts_with("TryExec=") || line.starts_with("DBusActivatable=") {
+        } else if matches!(base, Some("Exec" | "TryExec" | "DBusActivatable")) {
             continue;
-        } else if let Some(icon) = line.strip_prefix("Icon=").filter(|i| !i.starts_with('/')) {
+        } else if let Some(icon) = (key == Some("Icon")).then(|| kv.map(|(_, v)| v)).flatten().filter(|i| !i.starts_with('/')) {
             match find_icon(icon) {
                 Some(p) => out.push_str(&format!("Icon={}\n", p.display())),
                 None => out.push_str(&format!("Icon={icon}\n")),
@@ -76,22 +123,22 @@ pub(super) fn launcher(name: &str, text: &str, terminal: bool, find_icon: impl F
             first = false;
         }
     }
-    out
+    let unboxed = out.lines().any(|l| key_value(l).is_some_and(|(k, _)| matches!(bare(k), "Exec" | "TryExec" | "DBusActivatable"))
+        && !l.starts_with(&format!("Exec=trindle-boxed {name} ")));
+    (!unboxed).then_some(out)
 }
 
-fn icon_in(files: &Path, icon: &str) -> Option<PathBuf> {
+pub(super) fn icon_in(files: &Path, icon: &str) -> Option<PathBuf> {
     let theme = files.join("usr/share/icons/hicolor");
-    let scalable = theme.join(format!("scalable/apps/{icon}.svg"));
-    if scalable.is_file() {
+    if let Some(scalable) = own_file(files, &theme.join(format!("scalable/apps/{icon}.svg"))) {
         return Some(scalable);
     }
     let size = |d: &std::fs::DirEntry| d.file_name().to_string_lossy().split('x').next()?.parse::<u32>().ok();
     let biggest = std::fs::read_dir(&theme).into_iter().flatten().flatten()
-        .filter_map(|d| Some((size(&d)?, d.path().join(format!("apps/{icon}.png")))))
-        .filter(|(_, p)| p.is_file())
+        .filter_map(|d| Some((size(&d)?, own_file(files, &d.path().join(format!("apps/{icon}.png")))?)))
         .max_by_key(|(s, _)| *s)
         .map(|(_, p)| p);
     biggest.or_else(|| {
-        ["png", "svg", "xpm"].iter().map(|x| files.join(format!("usr/share/pixmaps/{icon}.{x}"))).find(|p| p.is_file())
+        ["png", "svg", "xpm"].iter().find_map(|x| own_file(files, &files.join(format!("usr/share/pixmaps/{icon}.{x}"))))
     })
 }

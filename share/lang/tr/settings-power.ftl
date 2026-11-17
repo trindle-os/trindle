@@ -8,7 +8,7 @@ settings-power-title = Güç
 settings-power-keywords = pil uyku askıya al kapat yeniden başlat oturumu kapat ekran kapalı boşta karart kilit parola pin tuş takımı kafein uyanık tut şarj şarj olma sınır 80 pil sağlığı
 
 # Introduction under the heading of the power page, and the words behind the page i.
-settings-power-help = Pil, güç kipi ve ekranın ne zaman kararacağı, kilitleneceği ve kapanacağı; dizüstü bilgisayarda pil ve şarj cihazı için ayrı ayrı. Sekmedeki fincan ekranı açık tutar. Kilitle, yeniden başlat ve kapat da burada.
+settings-power-help = Güç kipinizi ve ekranın ne zaman kararacağını, kilitleneceğini ve kapanacağını seçin. Dizüstü bilgisayarda bunları pil ve şarj cihazı için ayrı ayrı ayarlarsınız. Halkadaki fincan ekranı açık tutar. Kilitleme, yeniden başlatma ve kapatma da buradan yapılır.
 
 # Choice in a list of how long to wait.
 settings-power-time-never = Hiçbir zaman
@@ -48,7 +48,7 @@ settings-power-time-only-sleep = Yalnızca uykuya geçince
 
 # Heading of the line, and name of its round button, that suspends the computer.
 # SAFETY: needs a human review before it ships
-settings-power-suspend = Askıya al
+settings-power-suspend = Uyku
 
 # Heading of the line, and name of its round button, that restarts the computer.
 # SAFETY: needs a human review before it ships
@@ -78,32 +78,20 @@ settings-power-lid-shut-down = Kapat
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-dim = Ekranı şu süre sonra karart
 
-# Small words under an idle timer line.
-settings-power-timer-dim-about = Herhangi bir hareket parlaklığı geri getirir.
-
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-clock = Hareketli saati şu süre sonra göster
-
-# Small words under an idle timer line.
-settings-power-timer-clock-about = Yalnızca saat, ekranda yavaşça dolaşır.
 
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-off = Ekranı şu süre sonra kapat
 
-# Small words under an idle timer line.
-settings-power-timer-off-about = Herhangi bir tuş ya da hareket onu yeniden açar.
-
 # Heading of an idle timer line, and the name of its lists.
-settings-power-timer-suspend = Şu süre sonra askıya al
-
-# Small words under an idle timer line.
-settings-power-timer-suspend-about = Bu kadar süre dokunulmazsa uykuya geçer.
+settings-power-timer-suspend = Şu süre sonra uykuya geç
 
 # Red words under the keep the screen awake switch when turning it on could not be saved.
-settings-power-no-awake = Ekran açık tutulamadı: seçim kaydedilemedi.
+settings-power-no-awake = Trindle seçiminizi kaydedemediği için ekranı açık tutamadı.
 
 # Red words under the keep the screen awake switch when turning it off could not be saved.
-settings-power-no-sleep = Ekranı açık tutma kapatılamadı: seçim kaydedilemedi.
+settings-power-no-sleep = Trindle seçiminizi kaydedemedi, bu yüzden ekran açık kalacak.
 
 # Name of the power mode that saves the battery.
 settings-power-profile-saver = Pil tasarrufu
@@ -136,10 +124,10 @@ settings-power-hours-minutes = { $h } sa { $m } dk
 settings-power-minutes = { $m } dk
 
 # Sentence at the top of the page on a computer with no battery.
-settings-power-top-no-battery = Prize takılı: bu bilgisayarda bakılacak pil yok.
+settings-power-top-no-battery = Prize takılı. Bu bilgisayarda pil yok.
 
 # Sentence at the top of the page on a computer with no battery; { $mode } is the power mode.
-settings-power-top-no-battery-mode = Prize takılı, { $mode } kipinde: bakılacak pil yok.
+settings-power-top-no-battery-mode = Prize takılı, { $mode } kipinde. Bu bilgisayarda pil yok.
 
 # Sentence at the top of the page while charging; { $percent } is how full.
 settings-power-top-charging = Şarj oluyor, %{ $percent }.
@@ -160,16 +148,13 @@ settings-power-top-battery = Pil %{ $percent }.
 settings-power-top-battery-left = Pil %{ $percent }, yaklaşık { $left } kaldı.
 
 # Sentence at the top of the page while the battery is being read.
-settings-power-top-looking = Pile bakılıyor…
+settings-power-top-looking = Pil denetleniyor…
 
 # Red words under the power mode line when the mode could not be changed.
 settings-power-mode-failed = Güç kipi değiştirilemedi.
 
 # Heading of the power mode line, and the name of its list.
 settings-power-mode = Güç kipi
-
-# Small words under the power mode line.
-settings-power-mode-about = Tasarruf daha serin, performans daha hızlı çalışır.
 
 # Said in green under a line after its choice was kept.
 settings-power-saved = Kaydedildi
@@ -180,17 +165,11 @@ settings-power-warn-name = Pil şu düzeye inince uyar
 # Heading of the line for the battery warning.
 settings-power-warn = Şu düzeye inince uyar
 
-# Small words under the battery warning line.
-settings-power-warn-about = Bir kez, ekranın ortasında.
-
 # Choice in the list of battery levels: never warn.
 settings-power-never = Hiçbir zaman
 
 # Heading of the line, and name of its switch, for stopping charging at 80%.
 settings-power-limit = Şarjı %80'de durdur
-
-# Small words under the charge limit line.
-settings-power-limit-about = Çoğunlukla prize takılı kalan pile daha iyi davranır.
 
 # Title of the battery card on a laptop.
 settings-power-card-battery = Pil
@@ -199,11 +178,11 @@ settings-power-card-battery = Pil
 settings-power-card-looking-after = Pile bakım
 
 # Words behind the i of the battery card.
-settings-power-battery-about = Pil tasarrufu daha serin çalışır ve pilin daha uzun dayanmasını sağlar; performans daha hızlı çalışır; dengeli ikisinin arasındadır. Uyarı, pil azalırken bir kez ekranın ortasında görünür. %80'de durmak, çoğunlukla prize takılı kalan bir dizüstü bilgisayarın pili için daha iyidir: %80'e kadar şarj olur, daha fazla olmaz ve yıllarca daha uzun ömürlü olur. Gün boyu prizden uzak kalacaksanız kapatın.
+settings-power-battery-about = Pil tasarrufu daha serin çalışır ve pilin daha uzun dayanmasını sağlar. Performans daha hızlı çalışır. Dengeli ikisinin arasındadır. Uyarı, pil azalırken ekranın ortasında bir kez görünür. %80'de durmak, çoğu zaman prize takılı kalan bir dizüstü bilgisayar için daha iyidir ve pilin yıllarca daha uzun dayanmasına yardımcı olur. Gün boyu prizden uzak kalacaksanız kapatın.
 
 # Words under the charge limit line while the password window is open.
 # SAFETY: needs a human review before it ships
-settings-power-limit-waiting = Parola bekleniyor...
+settings-power-limit-waiting = Parolanız bekleniyor…
 
 # Green words under the charge limit line after charging was limited to 80%.
 settings-power-limit-on = %80'de durur
@@ -214,26 +193,20 @@ settings-power-limit-off = Tam dolana kadar şarj olur
 # Heading of the keep the screen awake line, and name of its switch.
 settings-power-awake = Ekranı açık tut
 
-# Small words under the keep the screen awake line.
-settings-power-awake-about = Sekmedeki fincan da aynısını yapar.
-
 # Title of the card about dimming and the moving clock.
 settings-power-screen-title = Ekran
 
 # Words behind the i of the Screen card.
-settings-power-screen-about = Ekranı açık tut açıkken bunların hiçbiri olmaz; sekmedeki fincan da onu açar ve kapatır. Karartma: herhangi bir hareket parlaklığı geri getirir; yalnızca dizüstü bilgisayarlarınki gibi kendi parlaklığı olan ekranlar kararır. Hareketli saat: ekran kararır ve üzerinde yalnızca yavaşça dolaşan saat kalır; herhangi bir tuş ya da hareket her şeyi geri getirir. Dizüstü bilgisayarda her süre iki kez ayarlanır: pil için ve şarj cihazı için.
+settings-power-screen-about = Ekranı açık tut açıkken bunların hiçbiri olmaz. Halkadaki fincan da onu açar ve kapatır. Yalnızca dizüstü bilgisayarlarınki gibi kendi parlaklık denetimi olan ekranlar kararabilir. Hareketli saat ekranı karartır ve yalnızca yavaşça dolaşan saati gösterir. Fareyi oynatmak ya da bir tuşa basmak her şeyi geri getirir. Dizüstü bilgisayarda her süreyi iki kez ayarlarsınız: bir kez pil için, bir kez şarj cihazı için.
 
 # Title of the card about turning the screen off and sleeping.
 settings-power-sleep-title = Ekran kapalı ve uyku
 
 # Words behind the i of the Screen off and sleep card.
-settings-power-sleep-about = Herhangi bir tuş ya da hareket ekranı yeniden açar. Askıya almak, siz uyandırana kadar bilgisayarı uykuya geçirir. Dizüstü bilgisayarda her süre iki kez ayarlanır: pil için ve şarj cihazı için. İkinci bir ekran takılıyken kapağı kapatmak hiçbir şey yapmaz, böylece daha büyük ekranla devam edebilirsiniz.
+settings-power-sleep-about = Bir tuşa basmak ya da fareyi oynatmak ekranı yeniden açar. Uyku, siz uyandırana kadar bilgisayarı duraklatır. Dizüstü bilgisayarda her süreyi iki kez ayarlarsınız: bir kez pil için, bir kez şarj cihazı için. İkinci bir ekran takılıysa kapağı kapatmak hiçbir şey yapmaz, böylece daha büyük ekranla devam edebilirsiniz.
 
 # Heading of the line for what closing the lid does.
 settings-power-lid = Kapak kapatıldığında
-
-# Small words under that line.
-settings-power-lid-about = İkinci bir ekran takılıyken hiçbir şey olmaz.
 
 # Caption above a list that applies while the laptop runs on its battery.
 settings-power-when-battery = Pille çalışırken
@@ -251,35 +224,24 @@ settings-power-named-charger = { $title }: prize takılıyken
 # SAFETY: needs a human review before it ships
 settings-power-lock = Ekranı kilitle
 
-# Small words under the lock the screen line.
-# SAFETY: needs a human review before it ships
-settings-power-lock-about = Parolanız ya da bir PIN sizi geri alır.
-
 # Heading of the lock after line, and the name of its list.
 # SAFETY: needs a human review before it ships
 settings-power-lock-after-name = Şu süre sonra kilitle
 
-# Small words under the lock after line.
-# SAFETY: needs a human review before it ships
-settings-power-lock-after-about = Bu kadar süre dokunulmazsa, başka ne ayarlanmış olursa olsun.
-
 # Heading of the line, and name of its switch, for locking when the computer sleeps.
 # SAFETY: needs a human review before it ships
 settings-power-lock-sleep = Bilgisayar uykuya geçince kilitle
-
-# Small words under that line.
-settings-power-lock-sleep-about = Böylece her zaman kilitli uyanır.
 
 # Heading of the line, and name of its button, that locks the screen now.
 # SAFETY: needs a human review before it ships
 settings-power-lock-now = Şimdi kilitle
 
 # Small words under the lock now line.
-settings-power-lock-now-about = Super ve L tuşlarına birlikte basmak da aynısını yapar.
+settings-power-lock-now-about = Ya da Super ve L tuşlarına basın.
 
 # Red words under the lock now line when the lock screen would not start.
 # SAFETY: needs a human review before it ships
-settings-power-lock-now-failed = Ekran kilitlenemedi: kilit ekranı başlamadı.
+settings-power-lock-now-failed = Kilit ekranı başlamadığı için Trindle ekranı kilitleyemedi.
 
 # Title of the locking card.
 # SAFETY: needs a human review before it ships
@@ -287,23 +249,15 @@ settings-power-lock-title = Kilitleme
 
 # Words behind the i of the locking card.
 # SAFETY: needs a human review before it ships
-settings-power-lock-card-about = Uzaktayken ekran kilitlenir; parolanız ya da seçerseniz dört haneli bir PIN sizi geri alır. O zamana dek ekranda hiçbir şey görünmez. Oturum açmak her zaman parolanızı gerektirir. Şu süre sonra kilitle, ekran ve uyku süreleri ne olursa olsun, bilgisayar kilitlenmeden önce ne kadar süre dokunulmadan kalacağını belirler; o zamana kadar geri dönmek için PIN gerekmez. Kilitlemeyi kapatmak PIN'i de unutturur. Dört hane yazmak parolanızdan daha hızlıdır: PIN için seçilen sürenin ardından ya da beş yanlış denemeden sonra bunun yerine parolanız gerekir. Çöp kutusu, PIN kullanmayı bırakır.
+settings-power-lock-card-about = Uzaktayken ekran kilitlenir. Parolanızla ya da ayarladıysanız dört haneli bir PIN ile kilidi açana kadar ekranda hiçbir şey görünmez. Oturum açmak her zaman parolanızı gerektirir. Şu süre sonra kilitle, ekran ve uyku süreleri ne olursa olsun bilgisayarın kilitlenmeden önce ne kadar süre kullanılmadan kalabileceğini belirler. O zamana kadar geri döndüğünüzde PIN gerekmez. Kilitlemeyi kapatmak PIN'i de kaldırır. PIN şu süre geçerli bölümünde ayarlanan sürenin ardından ya da beş yanlış denemeden sonra bunun yerine parolanız gerekir.
 
 # Heading of the line for adding a PIN.
 # SAFETY: needs a human review before it ships
 settings-power-pin-add = Ayrıca PIN ile kilidi aç
 
-# Small words under that line.
-# SAFETY: needs a human review before it ships
-settings-power-pin-add-about = Dört hane, parolanızdan daha hızlı.
-
 # Heading of the line, and name of its list, for how long a PIN works after the screen locks.
 # SAFETY: needs a human review before it ships
 settings-power-pin-works-name = PIN şu süre geçerli
-
-# Small words under that line.
-# SAFETY: needs a human review before it ships
-settings-power-pin-works-about = Sonra bunun yerine parolanız gerekir.
 
 # Name of the bin button that stops using a PIN.
 # SAFETY: needs a human review before it ships
@@ -311,11 +265,7 @@ settings-power-pin-stop = PIN kullanmayı bırak
 
 # Heading of the line shown when a PIN is kept.
 # SAFETY: needs a human review before it ships
-settings-power-pin-kept = Bir PIN kayıtlı
-
-# Small words under that line.
-# SAFETY: needs a human review before it ships
-settings-power-pin-kept-about = Değiştirmek için dört yeni hane yazın.
+settings-power-pin-kept = Bir PIN ayarlı
 
 # Placeholder of the box for typing a new PIN.
 # SAFETY: needs a human review before it ships
@@ -325,46 +275,52 @@ settings-power-pin-new = Yeni PIN
 # SAFETY: needs a human review before it ships
 settings-power-pin-keep = Bu PIN'i kaydet
 
+# Placeholder of the box for typing your account password before a PIN is saved.
+settings-power-pin-password = Parolanız
+
+# Red words under the PIN box when no password was typed.
+settings-power-pin-need-password = Önce parolanızı yazın, sonra PIN'i kaydedin.
+
+# Red words under the PIN box when the password typed was wrong.
+settings-power-pin-wrong-password = Bu parola doğru değil, bu yüzden Trindle PIN'i kaydetmedi.
+
 # Red words under the PIN line when the PIN could not be removed.
 # SAFETY: needs a human review before it ships
-settings-power-pin-not-removed = PIN kaldırılamadı, bu yüzden hâlâ ekranın kilidini açıyor.
+settings-power-pin-not-removed = Trindle PIN'i kaldıramadı, bu yüzden ekranın kilidini hâlâ o açıyor.
 
 # Red words under the PIN box when it is not the right length; { $n } is how many digits a PIN has.
 # SAFETY: needs a human review before it ships
 settings-power-pin-digits =
     { $n ->
-        [one] PIN { $n } haneli olmalıdır.
-       *[other] PIN { $n } haneli olmalıdır.
+        [one] { $n } hane kullanın.
+       *[other] { $n } hane kullanın.
     }
 
 # Heading of the log out line, and name of its round button.
 # SAFETY: needs a human review before it ships
 settings-power-log-out = Oturumu kapat
 
-# Small words under the log out line.
-settings-power-log-out-about = Oturum açma ekranına döner.
-
 # Title of the card with log out, suspend, restart and shut down.
 settings-power-session-title = Oturum
 
 # Words behind the i of the session card.
 # SAFETY: needs a human review before it ships
-settings-power-session-about = Oturumu kapatmak her pencereyi kapatır ve oturum açma ekranına döner. Askıya almak, siz uyandırana kadar bilgisayarı uykuya geçirir. Her düğme, halkadaki güç seçeneği gibi iki kez sorar, böylece yanlış basış hiçbir şey yapmaz.
+settings-power-session-about = Oturumu kapatmak her pencereyi kapatır ve sizi oturum açma ekranına götürür. Uyku, siz uyandırana kadar bilgisayarı duraklatır. Her düğme, halkadaki güç seçenekleri gibi onay için ikinci bir basış ister; böylece yanlışlıkla basmak hiçbir şey yapmaz.
 
 # Red words under a session button when the system bus is not there.
-settings-power-no-bus = Sistem veri yolu kullanılamıyor.
+settings-power-no-bus = Sistem hizmetine ulaşılamıyor.
 
 # Red words under a session button when the computer would not do it.
-settings-power-would-not = Bilgisayar bunu yapmadı.
+settings-power-would-not = Bilgisayar bunu yapamadı.
 
 # Spoken description of the battery picture while the battery is being read.
-settings-power-art-looking-tip = Pile bakılıyor.
+settings-power-art-looking-tip = Pil denetleniyor.
 
 # Spoken description of the battery picture; { $percent } is how full and { $state } what it is doing, such as Charging.
 settings-power-art-tip = Pil %{ $percent }. { $state }
 
 # Word drawn in the empty battery picture while the battery is being read.
-settings-power-art-looking = Bakılıyor
+settings-power-art-looking = Yükleniyor
 
 # Word drawn under the battery figure when its state is not known.
 settings-power-art-battery = Pil
@@ -398,4 +354,3 @@ settings-power-pin-hours =
 
 # A length of time in the list of how long a PIN works, in hours and minutes; { $hours } and { $minutes } are the two parts already written out, such as 1 hour and 15 minutes.
 settings-power-pin-hours-minutes = { $hours } { $minutes }
-

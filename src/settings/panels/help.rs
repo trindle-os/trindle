@@ -8,7 +8,7 @@ use std::rc::Rc;
 use image::{DynamicImage, GenericImageView};
 
 use crate::settings::help_topics::{topics, Block, Topic};
-use crate::settings::panels::network::banded;
+use crate::toolkit::widget::banded_list;
 use crate::settings::ui::{group, headline, icon, line, on, page, Kit, Msg, Page};
 use crate::toolkit::picture;
 use crate::toolkit::t;
@@ -34,16 +34,14 @@ fn area_icon(id: &str) -> &'static str {
 }
 
 fn pictures() -> PathBuf {
-    let mut places = vec![
-        PathBuf::from("/usr/share/trindle/help"),
-        PathBuf::from("/usr/lib/trindle/share/help"),
-    ];
+    let installed = PathBuf::from("/usr/share/trindle/help");
+    #[cfg(debug_assertions)]
     if let Ok(exe) = std::env::current_exe() {
-        for dir in exe.ancestors().skip(1).take(4) {
-            places.push(dir.join("share/help"));
+        if let Some(near) = exe.ancestors().skip(1).take(4).map(|d| d.join("share/help")).find(|p| p.is_dir()) {
+            return if installed.is_dir() { installed } else { near };
         }
     }
-    places.iter().find(|p| p.is_dir()).cloned().unwrap_or_else(|| places[0].clone())
+    installed
 }
 
 fn text_of(blocks: &[Block]) -> String {
@@ -58,9 +56,18 @@ fn text_of(blocks: &[Block]) -> String {
     parts.join(" ")
 }
 
+fn haystacks() -> &'static [String] {
+    use crate::common::live_language::{per_language, Kept};
+    static ALL: Kept<Vec<String>> = std::sync::Mutex::new(Vec::new());
+    per_language(&ALL, || topics().iter().map(|t| format!("{} {} {}", t.title, t.keywords, text_of(t.blocks)).to_lowercase()).collect()).as_slice()
+}
+
 fn matches(topic: &Topic, words: &[&str]) -> bool {
-    let hay = format!("{} {} {}", topic.title, topic.keywords, text_of(topic.blocks)).to_lowercase();
-    words.iter().all(|w| hay.contains(w))
+    if words.is_empty() {
+        return true;
+    }
+    let Some(at) = topics().iter().position(|t| t.id == topic.id) else { return false };
+    words.iter().all(|w| haystacks()[at].contains(w))
 }
 
 fn start() -> &'static str {
@@ -149,9 +156,9 @@ impl Help {
             rows.push(line(topic.title).icon(area_icon(id)).control(close).below(self.body(topic.blocks)).node(kit));
         }
         if rows.is_empty() {
-            rows.push(line(t!("settings-help-nothing-open")).sub(t!("settings-help-nothing-open-sub")).node(kit));
+            rows.push(line(t!("settings-help-nothing-open")).node(kit));
         }
-        group(t!("settings-help-reading")).icon("help-browser-symbolic").rows(rows).span(7, 8).node(kit)
+        group(t!("settings-help-reading")).icon("help-browser-symbolic").rows(rows).span(7, 8).grows().node(kit)
     }
 
     fn area(&self, kit: &Kit, name: &str, icon: &str, topics: &[&'static Topic]) -> Node<Msg> {
@@ -168,7 +175,7 @@ impl Help {
             line(t.title).control(read).node(kit)
         }).collect::<Vec<_>>();
 
-        group(name).icon(icon).rows(banded(rows)).span(4, 5).node(kit)
+        group(name).icon(icon).rows(banded_list(rows)).span(4, 5).node(kit)
     }
 
     fn search(&self, kit: &Kit) -> Node<Msg> {
@@ -240,8 +247,8 @@ impl Page for Help {
         let words: Vec<&str> = text.split_whitespace().collect();
         let found: Vec<&'static Topic> = topics().iter().filter(|t| matches(t, &words)).collect();
         let mut items = vec![match typed {
-            "" => headline(kit, start()),
-            _ => headline(kit, found_words(found.len(), typed).0),
+            "" => headline(start()),
+            _ => headline(found_words(found.len(), typed).0),
         }];
 
         items.push(self.search(kit));
@@ -269,7 +276,29 @@ impl Help {
 
 #[cfg(test)]
 mod tests {
-    use super::{areas, topics};
+    use crate::settings::ui::{Kit, Page};
+
+    #[test]
+    fn nothing_open_has_no_line_telling_how_to_open_a_topic() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let kit = Kit::new(events, asks, None, None);
+        let said = super::Help::default().view(&kit).said().join("|");
+        assert!(said.contains("Nothing open"), "{said}");
+        assert!(!said.contains("Press the arrow beside a topic to read it here."));
+    }
+    use super::{areas, haystacks, matches, topics};
+
+    #[test]
+    fn a_search_finds_what_the_words_hold_whatever_the_case_and_nothing_typed_finds_all() {
+        let all = topics();
+        assert!(all.iter().all(|t| matches(t, &[])));
+        assert_eq!(haystacks().len(), all.len());
+        let first = &all[0];
+        let word = first.title.to_lowercase();
+        assert!(matches(first, &[word.as_str()]));
+        assert!(!matches(first, &["zzzqqqnotaword"]));
+    }
 
     #[test]
     fn every_topic_has_one_card() {
@@ -279,5 +308,20 @@ mod tests {
         }
         let named: usize = areas().iter().map(|a| a.2.len()).sum();
         assert_eq!(named, topics().len(), "a card names a topic that is not there");
+    }
+
+    #[test]
+    fn a_word_sheet_for_the_language_in_use_changes_a_topic_at_once() {
+        use crate::toolkit::lang::{english, with_catalogue, Bundle, Catalogue};
+        let title = || topics().iter().find(|t| t.id == "welcome").map(|t| t.title).unwrap();
+        let was = title();
+        let sheet = Bundle::from_files("en", &[("own.ftl", "settings-help-topics-welcome-title = Hello from my own sheet\n")]);
+        with_catalogue(Catalogue::new(sheet, english()), || {
+            assert_eq!(title(), was, "nothing is made again before the switch");
+            crate::common::live_language::switch(vec!["en".to_string()]);
+            assert_eq!(title(), "Hello from my own sheet");
+            assert!(haystacks().iter().any(|h| h.contains("hello from my own sheet")), "the search finds the new words");
+        });
+        assert_eq!(std::thread::spawn(|| topics().iter().find(|t| t.id == "welcome").map(|t| t.title)).join().unwrap(), Some(was));
     }
 }

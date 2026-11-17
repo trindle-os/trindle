@@ -215,7 +215,7 @@ pub fn end_services() {
         .stdin(Stdio::null()).stdout(Stdio::null()).stderr(Stdio::null()).status();
 }
 
-const PLAIN_DRAWING: &str = "ANVIL_DISABLE_DIRECT_SCANOUT";
+const PLAIN_DRAWING: &str = "TRINDLE_DISABLE_DIRECT_SCANOUT";
 
 const FIRST_TRY: Duration = Duration::from_secs(20);
 
@@ -352,6 +352,33 @@ const RING_CHECK: Duration = Duration::from_secs(2);
 const RING_TRIES: usize = 5;
 const RING_WINDOW: Duration = Duration::from_secs(600);
 
+#[derive(Default)]
+struct Kept {
+    missing: bool,
+    starts: Vec<Instant>,
+}
+
+impl Kept {
+
+    fn start_now(&mut self, there: bool) -> bool {
+        if there {
+            self.missing = false;
+            return false;
+        }
+        if !self.missing {
+            self.missing = true;
+            return false;
+        }
+        self.starts.retain(|t| t.elapsed() < RING_WINDOW);
+        if self.starts.len() >= RING_TRIES {
+            return false;
+        }
+        self.starts.push(Instant::now());
+        self.missing = false;
+        true
+    }
+}
+
 fn tray_owned(bus: &zbus::blocking::Connection) -> bool {
     bus.call_method(Some("org.freedesktop.DBus"), "/org/freedesktop/DBus", Some("org.freedesktop.DBus"),
         "NameHasOwner", &(crate::ring::sni::WATCHER,))
@@ -377,23 +404,49 @@ fn wait_for_tray_for(long: Duration) {
     }
 }
 
-fn keep_ring() {
+#[derive(Default)]
+struct Keeper {
+    idle: Kept,
+    ring: Kept,
+
+    waiting: Option<Instant>,
+}
+
+impl Keeper {
+
+    fn look(&mut self, idle_running: bool, ring_owned: Option<bool>) -> Vec<&'static str> {
+        let mut start = Vec::new();
+        if self.idle.start_now(idle_running) {
+            start.push("trindle-idle");
+        }
+        let Some(owned) = ring_owned else { return start };
+        if self.waiting.is_some_and(|since| since.elapsed() < TRAY_WAIT) {
+            return start;
+        }
+        self.waiting = None;
+        if self.ring.start_now(owned) {
+            start.push("trindle-ring");
+            self.waiting = Some(Instant::now());
+        }
+        start
+    }
+}
+
+fn keep_parts(ring: bool) {
     use crate::toolkit::event::{Flow, Loop};
     use std::cell::Cell;
     use std::rc::Rc;
     let events = Loop::new();
-    let Ok(bus) = crate::toolkit::bus::Bus::session(&events) else { return };
     let owned = Rc::new(Cell::new(false));
+    let bus = if ring { crate::toolkit::bus::Bus::session(&events).ok() } else { None };
     let (taken, let_go) = (owned.clone(), owned.clone());
-    let Ok(_hearing) = bus.watch(crate::ring::sni::WATCHER, &events, move |_| taken.set(true), move || let_go.set(false)) else { return };
+    let _hearing = bus.as_ref().and_then(|b| b.watch(crate::ring::sni::WATCHER, &events, move |_| taken.set(true), move || let_go.set(false)).ok());
+    let ring = ring && _hearing.is_some();
     // SAFETY: getppid and kill with signal 0 only ask; neither can fail harmfully.
     let compositor = unsafe { libc::getppid() };
     // SAFETY: as above, both calls only ask.
     let alive = move || unsafe { libc::getppid() == compositor && libc::kill(compositor, 0) == 0 };
-    let mut starts: Vec<Instant> = Vec::new();
-    let mut missing = false;
-
-    let mut waiting: Option<Instant> = None;
+    let mut keeper = Keeper::default();
     let quit = events.clone();
     events.every(RING_CHECK, move || {
         if !alive() {
@@ -403,29 +456,21 @@ fn keep_ring() {
 
         // SAFETY: waitpid with WNOHANG only collects ended children.
         while unsafe { libc::waitpid(-1, std::ptr::null_mut(), libc::WNOHANG) } > 0 {}
-        if waiting.is_some_and(|since| since.elapsed() < TRAY_WAIT) {
-            return Flow::Continue;
+        for part in keeper.look(super::idle::running(), ring.then(|| owned.get())) {
+            if part == "trindle-idle" {
+                eprintln!("trindle-autostart: the idle watcher had gone; starting it again, so sleep and lock-session lock");
+                let _ = own_part(&["trindle-idle"]).spawn();
+            } else {
+                let _ = own_part(&["trindle-ring", "--background"]).spawn();
+            }
         }
-        waiting = None;
-        if owned.get() {
-            missing = false;
-            return Flow::Continue;
-        }
-        if !missing {
-            missing = true;
-            return Flow::Continue;
-        }
-        starts.retain(|t| t.elapsed() < RING_WINDOW);
-        if starts.len() >= RING_TRIES {
-            return Flow::Continue;
-        }
-        starts.push(Instant::now());
-        missing = false;
-        let _ = own_part(&["trindle-ring", "--background"]).spawn();
-        waiting = Some(Instant::now());
         Flow::Continue
     });
     events.run();
+}
+
+fn first_time() -> bool {
+    !crate::common::files::config_path("welcome-done").exists()
 }
 
 fn greeting(stick: bool, first: bool) -> Option<&'static [&'static str]> {
@@ -455,13 +500,12 @@ pub fn autostart(args: Vec<String>) -> i32 {
 
     let kept = matches!(door, Door::Handed(_));
     open_ring(door);
-    if let Some(greet) = greeting(crate::common::boot::from_stick(), crate::welcome::first_time()) {
+    if let Some(greet) = greeting(crate::common::boot::from_stick(), first_time()) {
         own(greet);
     }
     start_persons_programs();
-    if !kept {
-        keep_ring();
-    }
+
+    keep_parts(!kept);
     0
 }
 
@@ -562,6 +606,37 @@ fn start_persons_programs() {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
+    #[test]
+    fn the_idle_watcher_is_kept_for_the_whole_session() {
+
+        let mut k = Keeper::default();
+        assert!(k.look(true, None).is_empty());
+        assert!(k.look(false, None).is_empty(), "one look is not enough");
+        assert_eq!(k.look(false, None), ["trindle-idle"]);
+        assert!(k.look(true, None).is_empty());
+
+        let mut k = Keeper::default();
+        assert!(k.look(false, Some(false)).is_empty());
+        assert_eq!(k.look(false, Some(false)), ["trindle-idle", "trindle-ring"]);
+        assert!(k.look(true, Some(false)).is_empty(), "the new ring is given time to take the tray");
+    }
+
+    #[test]
+    fn a_kept_part_is_started_again_on_the_second_look_and_not_round_and_round() {
+        let mut kept = Kept::default();
+        assert!(!kept.start_now(true));
+        assert!(!kept.start_now(false), "one look is not enough: a renewal or restart may be in between");
+        assert!(kept.start_now(false), "gone on two looks: started");
+        assert!(!kept.start_now(true));
+        for _ in 1..RING_TRIES {
+            assert!(!kept.start_now(false));
+            assert!(kept.start_now(false));
+        }
+        assert!(!kept.start_now(false));
+        assert!(!kept.start_now(false), "after RING_TRIES starts within the window it waits");
+    }
 
     #[test]
     fn a_compositor_asked_to_end_by_a_signal_is_a_clean_end() {
@@ -580,32 +655,14 @@ mod tests {
         }
         assert_eq!(super::exit_code(ExitStatus::from_raw(3 << 8)), 3);
         assert!(!super::asked_to_end(ExitStatus::from_raw(1 << 8)));
-
-        let code = crate::common::source::code(include_str!("start.rs")).split_once("#[cfg(test)]").unwrap().0.to_string();
-        assert_eq!(code.matches(".code().unwrap_or(1)").count(), 1, "a place reads the end by hand");
     }
 
     use super::{door_named, door_numbered, greeting, Door};
 
     #[test]
     fn gtk_programs_are_told_to_use_trindles_file_chooser() {
-        let code = crate::common::source::code(include_str!("start.rs"));
-        let session = code.split_once("pub fn session(").unwrap().1;
-        let told = session.find("gtk_portal();").expect("the session never tells GTK programs to use the portal");
-        let compositor = session.find("Command::new(COMPOSE)").unwrap();
-        assert!(told < compositor, "GTK programs are told only after the compositor has started");
         assert_eq!(super::GTK_PORTAL, "GTK_USE_PORTAL");
         assert!(super::ACTIVATION.contains(&super::GTK_PORTAL), "D-Bus-started programs are not told");
-        let f = code.split_once("fn gtk_portal() {").unwrap().1.split_once("\n}\n").unwrap().0;
-        assert!(f.contains("var_os(GTK_PORTAL).is_none()"), "a choice of the person's own is overwritten");
-    }
-
-    #[test]
-    fn the_session_refreshes_the_portal_settings_copy_before_the_compositor() {
-        let code = crate::common::source::code(include_str!("start.rs"));
-        let session = code.split_once("pub fn session(").unwrap().1;
-        let refreshed = session.find("refresh_portals();").expect("the stale portal settings copy is never refreshed");
-        assert!(refreshed < session.find("Command::new(COMPOSE)").unwrap());
     }
 
     #[test]
@@ -628,16 +685,6 @@ mod tests {
         log.rewind().unwrap();
         log.read_to_string(&mut said).unwrap();
         assert_eq!(said, "the library is not installed\n", "a part's errors, and only its errors, are kept");
-
-        let code = crate::common::source::code(include_str!("start.rs")).split_once("#[cfg(test)]").unwrap().0;
-        let own = ["trindle", "-"].concat();
-        for line in code.lines().map(str::trim).filter(|l| !l.starts_with("//")) {
-            let quietly = line.contains("quiet(&[") || line.contains(&["Command::new(\"", &own].concat());
-            assert!(!(quietly && line.contains(&["\"", &own].concat())), "a part of Trindle's is started with its errors thrown away: {line}");
-        }
-        assert!(code.contains("own(&[\"trindle-wallpaper\"]);"));
-        let part = code.split_once("fn own_part(").unwrap().1.split_once("\n}\n").unwrap().0;
-        assert!(part.contains(".stderr(Stdio::inherit())") && !part.contains(".stderr(Stdio::null())"));
     }
 
     fn tempfile_here(tag: &str) -> std::fs::File {

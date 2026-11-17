@@ -7,7 +7,7 @@ unlock-title-default = Senha do disco
 
 # Heading of the box in place of cryptsetup's own wording ("Please unlock disk ...", "Enter passphrase").
 # SAFETY: needs a human review before it ships
-unlock-title-encryption = Digite a senha de criptografia
+unlock-title-encryption = Digite a senha do disco
 
 # Key hint under the box: Tab, or the eye, shows the typed password.
 unlock-show = Mostrar

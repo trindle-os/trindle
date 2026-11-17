@@ -8,7 +8,7 @@ settings-thanks-kind-underneath-it-all = Por baixo de tudo
 settings-thanks-kind-the-desktop = A área de trabalho
 
 # Heading of a card on the Thanks page that groups projects: "Drawing and letters".
-settings-thanks-kind-drawing-and-letters = Desenho e letras
+settings-thanks-kind-drawing-and-letters = Gráficos e fontes
 
 # Heading of a card on the Thanks page that groups projects: "Folders and drives".
 settings-thanks-kind-folders-and-drives = Pastas e unidades
@@ -20,40 +20,40 @@ settings-thanks-kind-sound-networks-and-devices = Som, redes e dispositivos
 settings-thanks-kind-apps = Aplicativos
 
 # Short line under "Skrifa (Fontations)" on the Thanks page, used where its own description is long.
-settings-thanks-short-skrifa-fontations = Ajusta as letras aos pixels da tela
+settings-thanks-short-skrifa-fontations = Deixa as letras nítidas na tela
 
 # Short line under "Smithay" on the Thanks page, used where its own description is long.
-settings-thanks-short-smithay = Do que o compositor próprio do Trindle é feito
+settings-thanks-short-smithay = Com o que o sistema de janelas do Trindle é construído
 
 # Short line under "Papirus" on the Thanks page, used where its own description is long.
 settings-thanks-short-papirus = A base dos Ícones do Trindle
 
 # Short line under "HaGeZi's DNS Blocklists" on the Thanks page, used where its own description is long.
-settings-thanks-short-hagezi-s-dns-blocklists = Verifica de onde veio um pacote baixado
+settings-thanks-short-hagezi-s-dns-blocklists = Bloqueia sites maliciosos e verifica de onde vieram os downloads
 
 # Short line under "ab_glyph" on the Thanks page, used where its own description is long.
-settings-thanks-short-ab-glyph = Letras nas barras de título e na tela de inicialização
+settings-thanks-short-ab-glyph = Desenha as letras nas barras de título e na tela de inicialização
 
 # Short line under "ntfs-3g, exfatprogs, dosfstools" on the Thanks page, used where its own description is long.
 settings-thanks-short-ntfs-3g-exfatprogs-dosfstools = Unidades que o Windows e as câmeras leem
 
 # What the project "Debian" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-debian = O sistema em que tudo roda
+settings-thanks-project-debian = O sistema em que o Trindle roda
 
 # What the project "Linux" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-linux = O kernel em que tudo roda
+settings-thanks-project-linux = O núcleo em que tudo roda
 
 # What the project "Rust" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-rust = A linguagem em que o Trindle é escrito
 
 # What the project "tiny-skia" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-tiny-skia = Pinta as janelas próprias do Trindle
+settings-thanks-project-tiny-skia = Desenha as janelas próprias do Trindle
 
 # What the project "rustybuzz" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-rustybuzz = Molda as letras nas janelas próprias do Trindle
+settings-thanks-project-rustybuzz = Organiza o texto nas janelas próprias do Trindle
 
 # What the project "Skrifa (Fontations)" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-skrifa-fontations = Ajusta as letras das janelas próprias do Trindle aos pixels da tela
+settings-thanks-project-skrifa-fontations = Deixa as letras das janelas próprias do Trindle nítidas na tela
 
 # What the project "resvg" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-resvg = Desenha os ícones
@@ -62,22 +62,22 @@ settings-thanks-project-resvg = Desenha os ícones
 settings-thanks-project-accesskit = Permite que leitores de tela leiam as janelas próprias do Trindle
 
 # What the project "zbus" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-zbus = A conversa do Trindle com o resto do sistema
+settings-thanks-project-zbus = Como o Trindle conversa com o resto do sistema
 
 # What the project "fontdb" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-fontdb = Encontra as fontes
 
 # What the project "Smithay" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-smithay = Os blocos de construção em Rust de que o compositor próprio do Trindle é feito, e o anvil, o exemplo de onde ele começou
+settings-thanks-project-smithay = Os blocos de construção em Rust do sistema de janelas do Trindle, e o anvil, o exemplo de onde ele partiu
 
 # What the project "Alacritty" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-alacritty = O Terminal, escrito em Rust
 
 # What the project "systemd" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-systemd = Inicia o computador, faz a entrada das pessoas e o coloca para dormir
+settings-thanks-project-systemd = Inicia o computador, faz o seu login e o coloca para dormir
 
 # What the project "Mesa" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-mesa = Controla o chip gráfico
+settings-thanks-project-mesa = Faz o chip gráfico funcionar
 
 # What the project "PipeWire" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-pipewire = Som
@@ -86,46 +86,46 @@ settings-thanks-project-pipewire = Som
 settings-thanks-project-networkmanager = Wi-Fi e redes
 
 # What the project "libinput" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-libinput = Lê o mouse, o touchpad e a tela sensível ao toque
+settings-thanks-project-libinput = Cuida do mouse, do touchpad e da tela sensível ao toque
 
 # What the project "wayland-rs" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-wayland-rs = A conversa própria do Trindle com o compositor
+settings-thanks-project-wayland-rs = Como o Trindle conversa com o seu sistema de janelas
 
 # What the project "Flatpak" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-flatpak = Executa os aplicativos em Aplicativos
 
 # What the project "Flathub" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-flathub = De onde vêm os aplicativos de Aplicativos
+settings-thanks-project-flathub = De onde Aplicativos obtém os seus aplicativos
 
 # What the project "Inter" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-inter = As letras de que a Trindle Sans é feita
+settings-thanks-project-inter = A fonte em que a Trindle Sans se baseia
 
 # What the project "Radio Canada" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-radio-canada = O sinal de libra na Trindle Sans
 
 # What the project "Papirus" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-papirus = A base dos Ícones do Trindle, e as imagens dentro dos que o Trindle cria
+settings-thanks-project-papirus = A base dos Ícones do Trindle, e as imagens dentro dos ícones próprios do Trindle
 
 # What the project "greetd" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-greetd = O gerenciador da tela de entrada
+settings-thanks-project-greetd = Executa a tela de entrada
 
 # What the project "Noto" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-noto = Letras para todos os idiomas
+settings-thanks-project-noto = Fontes para todos os idiomas
 
 # What the project "Samba" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-samba = Compartilha pastas na rede doméstica
+settings-thanks-project-samba = Compartilha pastas na rede
 
 # What the project "libarchive" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-libarchive = Lê RAR, imagens de disco e outros arquivos compactados para Pastas
+settings-thanks-project-libarchive = Permite que o Folders abra arquivos RAR, imagens de disco e outros arquivos compactados
 
 # What the project "AppImageHub" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-appimagehub = A lista de AppImages que Aplicativos pesquisa
+settings-thanks-project-appimagehub = Os AppImages que Aplicativos pesquisa
 
 # What the project "ODRS" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-odrs = As avaliações de aplicativos em Aplicativos
 
 # What the project "HaGeZi's DNS Blocklists" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-hagezi-s-dns-blocklists = Verifica de onde veio um pacote baixado na lista Threat Intelligence
+settings-thanks-project-hagezi-s-dns-blocklists = Bloqueia anúncios, rastreadores e sites maliciosos, e verifica de onde veio um pacote baixado usando a lista Threat Intelligence dele
 
 # What the project "xdg-desktop-portal" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-xdg-desktop-portal = Permite que aplicativos abram e salvem arquivos
@@ -146,28 +146,28 @@ settings-thanks-project-udisks = Unidades e pendrives
 settings-thanks-project-cups = Impressão
 
 # What the project "polkit" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-polkit = Pede a senha antes de mudanças no sistema
+settings-thanks-project-polkit = Pede a sua senha antes de mudanças no sistema
 
 # What the project "Xwayland" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-xwayland = Executa programas X11 mais antigos
 
 # What the project "wvkbd" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-wvkbd = O teclado na tela, para toque
+settings-thanks-project-wvkbd = O teclado na tela para toque
 
 # What the project "snapper" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-snapper = Os instantâneos
 
 # What the project "Btrfs" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-btrfs = A organização do disco que torna os instantâneos possíveis
+settings-thanks-project-btrfs = O formato de disco que torna os instantâneos possíveis
 
 # What the project "fwupd and the LVFS" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-fwupd-and-the-lvfs = Atualizações de firmware
 
 # What the project "GVfs" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-gvfs = Compartilhamentos de rede e celulares em outros programas
+settings-thanks-project-gvfs = Deixa outros programas usarem compartilhamentos de rede e celulares
 
 # What the project "ntfs-3g, exfatprogs, dosfstools" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-ntfs-3g-exfatprogs-dosfstools = Formatar e verificar unidades que o Windows e as câmeras leem
+settings-thanks-project-ntfs-3g-exfatprogs-dosfstools = Formata e verifica unidades que o Windows e as câmeras leem
 
 # What the project "ModemManager" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-modemmanager = Banda larga móvel
@@ -179,16 +179,16 @@ settings-thanks-project-avahi = Encontra impressoras na rede
 settings-thanks-project-hplip = Impressoras e scanners HP
 
 # What the project "whisper.cpp" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-whisper-cpp = Controle por voz, neste computador
+settings-thanks-project-whisper-cpp = Controle por voz neste computador
 
 # What the project "ab_glyph" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-ab-glyph = As letras nas barras de título e na tela de inicialização, e preenche cada letra que o Trindle desenha
+settings-thanks-project-ab-glyph = Desenha as letras nas barras de título e na tela de inicialização, e desenha o formato de cada letra que o Trindle mostra
 
 # What the project "serde, quick-xml, flate2" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-serde-quick-xml-flate2 = Leitura dos catálogos de aplicativos
 
 # Where to read the licence of an included work, behind the info button of the Licences card on the Thanks page (paths are file names).
-settings-thanks-where-copyright = Leia em /usr/share/doc/trindle/copyright e THIRD-PARTY.txt.
+settings-thanks-where-copyright = As licenças estão em /usr/share/doc/trindle/copyright e THIRD-PARTY.txt.
 
 # Name of an included work in the Licences card on the Thanks page: "The compositor".
 settings-thanks-included-the-compositor-name = O compositor
@@ -215,7 +215,7 @@ settings-thanks-included-screen-helpers = Começou como smithay-drm-extras, que 
 settings-thanks-included-spellbook-name = spellbook
 
 # What the included work "spellbook" is in Trindle and its licence, the line under its name in the Licences card.
-settings-thanks-included-spellbook = Verifica a ortografia em Texto, sem alterações. MPL-2.0.
+settings-thanks-included-spellbook = Verifica a ortografia em Texto. Usado sem alterações. MPL-2.0.
 
 # Where to read the licence of "spellbook", behind the info button of the Licences card.
 settings-thanks-included-spellbook-where = Usado como publicado e sem alterações. O código-fonte está em github.com/helix-editor/spellbook. Leia a licença em /usr/share/doc/trindle/copyright e THIRD-PARTY.txt.
@@ -227,7 +227,7 @@ settings-thanks-included-trindle-sans-name = Trindle Sans
 settings-thanks-included-trindle-sans = Inter 4.1 com um novo sinal de libra. SIL Open Font License 1.1.
 
 # Where to read the licence of "Trindle Sans", behind the info button of the Licences card.
-settings-thanks-included-trindle-sans-where = O sinal de libra é da Radio Canada. Leia em /usr/share/fonts/truetype/trindle-sans/.
+settings-thanks-included-trindle-sans-where = O sinal de libra vem da Radio Canada. A licença está em /usr/share/fonts/truetype/trindle-sans/.
 
 # Name of an included work in the Licences card on the Thanks page: "Emoji and spelling lists".
 settings-thanks-included-emoji-and-spelling-lists-name = Emojis e listas de ortografia
@@ -236,7 +236,7 @@ settings-thanks-included-emoji-and-spelling-lists-name = Emojis e listas de orto
 settings-thanks-included-emoji-and-spelling-lists = Noto Color Emoji e listas Hunspell, do Debian.
 
 # Where to read the licence of "Emoji and spelling lists", behind the info button of the Licences card.
-settings-thanks-included-emoji-and-spelling-lists-where = A fonte de emojis está sob a SIL Open Font License; ambas mantêm suas próprias licenças. Leia em /usr/share/doc/ sob o nome de cada pacote.
+settings-thanks-included-emoji-and-spelling-lists-where = A fonte de emojis usa a SIL Open Font License. As listas de ortografia têm as próprias licenças. Leia-as em /usr/share/doc/ sob o nome de cada pacote.
 
 # Name of an included work in the Licences card on the Thanks page: "Alacritty".
 settings-thanks-included-alacritty-name = Alacritty
@@ -254,7 +254,7 @@ settings-thanks-included-voice-control-name = Controle por voz
 settings-thanks-included-voice-control = whisper.cpp (MIT) e o modelo Whisper.
 
 # Where to read the licence of "Voice control", behind the info button of the Licences card.
-settings-thanks-included-voice-control-where = Ambos são baixados neste computador só quando o controle por voz é ligado. Leia na pasta para onde são baixados.
+settings-thanks-included-voice-control-where = Ambos são baixados neste computador só quando você liga o controle por voz. As licenças deles estão na pasta para onde são baixados.
 
 # Name of an included work in the Licences card on the Thanks page: "Papirus icons".
 settings-thanks-included-papirus-icons-name = Ícones Papirus
@@ -269,7 +269,7 @@ settings-thanks-included-papirus-icons-where = Leia em /usr/share/doc/papirus-ic
 settings-thanks-included-firmware-name = Firmware
 
 # What the included work "Firmware" is in Trindle and its licence, the line under its name in the Licences card.
-settings-thanks-included-firmware = O firmware do Debian. Não é software livre.
+settings-thanks-included-firmware = O firmware do Debian, que não é software livre.
 
 # Where to read the licence of "Firmware", behind the info button of the Licences card.
 settings-thanks-included-firmware-where = Cada fabricante tem sua própria licença. Leia em /usr/share/doc/ sob o nome de cada pacote de firmware, por exemplo firmware-mediatek.
@@ -282,7 +282,7 @@ settings-thanks-keywords = agradecimentos créditos projetos código aberto soft
 
 # Text behind the info button of the Thanks page.
 settings-thanks-help =
-    Obrigado a todos que os constroem. Se algum deles importa para você, o coração leva ao lugar onde aceitam doações.
+    Obrigado a todos que constroem esses projetos. Se algum deles importa para você, clique no coração para ver onde você pode doar.
 
 # The sentence at the top of the Thanks page; n is how many projects are thanked.
 settings-thanks-headline =
@@ -305,7 +305,7 @@ settings-thanks-licences = Licenças
 settings-thanks-trindle-licence = Software livre sob GPL-3.0-or-later.
 
 # First sentence behind the info button of the Licences card.
-settings-thanks-licences-about = O que o Trindle usou como ponto de partida ou inclui mantém a própria licença.
+settings-thanks-licences-about = O que o Trindle inclui ou usou como ponto de partida tem licença própria.
 
 # One line behind the info button of the Licences card: the work's name and where its licence is read.
 settings-thanks-where = { $name }: { $where_read }
@@ -325,11 +325,10 @@ settings-thanks-rust-counts =
     }
 
 # Quiet line under the Rust libraries when the list of licences is not on this computer.
-settings-thanks-rust-missing = Não foi possível encontrar a lista neste computador.
+settings-thanks-rust-missing = O Trindle não conseguiu encontrar a lista neste computador.
 
 # Tip of the button that opens the full list of licences as a text page.
-settings-thanks-open-list = Abrir a lista completa como uma página de texto
+settings-thanks-open-list = Abrir a lista completa como texto
 
 # Red words under the Rust libraries line when the list could not be opened.
 settings-thanks-open-failed = Não foi possível abrir a lista.
-

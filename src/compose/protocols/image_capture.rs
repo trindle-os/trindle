@@ -30,6 +30,7 @@ use smithay::reexports::wayland_protocols::ext::image_copy_capture::v1::server::
     ext_image_copy_capture_manager_v1::{self, ExtImageCopyCaptureManagerV1},
     ext_image_copy_capture_session_v1::{self, ExtImageCopyCaptureSessionV1},
 };
+use super::Filtered;
 use smithay::reexports::wayland_server::backend::ClientId;
 use smithay::reexports::wayland_server::protocol::{wl_buffer::WlBuffer, wl_output, wl_shm};
 use smithay::reexports::wayland_server::{
@@ -161,10 +162,6 @@ impl fmt::Debug for ImageCaptureState {
     }
 }
 
-pub struct ImageCaptureGlobalData {
-    filter: Box<dyn for<'c> Fn(&'c Client) -> bool + Send + Sync>,
-}
-
 pub trait ImageCaptureHandler {
     fn image_capture_state(&mut self) -> &mut ImageCaptureState;
 
@@ -179,13 +176,13 @@ impl ImageCaptureState {
 
     pub fn new<D, F>(display: &DisplayHandle, filter: F) -> Self
     where
-        D: GlobalDispatch<ExtImageCopyCaptureManagerV1, ImageCaptureGlobalData>
-            + GlobalDispatch<ExtOutputImageCaptureSourceManagerV1, ImageCaptureGlobalData>
-            + GlobalDispatch<ExtForeignToplevelImageCaptureSourceManagerV1, ImageCaptureGlobalData>
+        D: GlobalDispatch<ExtImageCopyCaptureManagerV1, Filtered>
+            + GlobalDispatch<ExtOutputImageCaptureSourceManagerV1, Filtered>
+            + GlobalDispatch<ExtForeignToplevelImageCaptureSourceManagerV1, Filtered>
             + 'static,
         F: for<'c> Fn(&'c Client) -> bool + Send + Sync + Clone + 'static,
     {
-        let data = |f: &F| ImageCaptureGlobalData { filter: Box::new(f.clone()) };
+        let data = |f: &F| Filtered::new(f.clone());
         display.create_global::<D, ExtImageCopyCaptureManagerV1, _>(VERSION, data(&filter));
         display.create_global::<D, ExtOutputImageCaptureSourceManagerV1, _>(VERSION, data(&filter));
         display.create_global::<D, ExtForeignToplevelImageCaptureSourceManagerV1, _>(VERSION, data(&filter));
@@ -249,7 +246,7 @@ impl ImageCaptureState {
             let Some(image) = &pointer.image else { continue };
             let Some(session) = self.sessions.get_mut(image) else { continue };
             if session.waiting.is_some() {
-                fill(renderer, session, &seen.elements, Color32F::TRANSPARENT, seen.scale, Transform::Normal, true, now, event_loop);
+                fill(renderer, session, &seen.elements, Color32F::TRANSPARENT, seen.scale, true, now, event_loop);
             }
         }
     }
@@ -319,8 +316,6 @@ impl ImageCaptureState {
         }
         let Some(size) = output_size(output) else { return };
         let scale = output.current_scale().fractional_scale();
-
-        let transform = Transform::Normal;
         let mut scenes: [Option<(Vec<E>, Color32F)>; 2] = [None, None];
         let dmabuf = self.dmabuf.clone();
         for (resource, session) in self.sessions.iter_mut() {
@@ -333,7 +328,7 @@ impl ImageCaptureState {
             let (scene, clear) = scenes[usize::from(session.paint_cursors)]
                 .get_or_insert_with(|| elements_for(renderer, session.paint_cursors));
             let clear = *clear;
-            fill(renderer, session, scene, clear, scale, transform, false, now, event_loop);
+            fill(renderer, session, scene, clear, scale, false, now, event_loop);
         }
     }
 
@@ -366,7 +361,7 @@ impl ImageCaptureState {
             if resized(resource, session, size, &dmabuf) {
                 continue;
             }
-            fill(renderer, session, &elements, Color32F::TRANSPARENT, scale, Transform::Normal, false, now, event_loop);
+            fill(renderer, session, &elements, Color32F::TRANSPARENT, scale, false, now, event_loop);
         }
     }
 }
@@ -392,7 +387,6 @@ fn fill<R, E, T>(
     elements: &[E],
     clear: Color32F,
     scale: f64,
-    transform: Transform,
     see_through: bool,
     now: Duration,
     event_loop: &LoopHandle<'static, T>,
@@ -406,22 +400,21 @@ fn fill<R, E, T>(
     let same_mode = matches!(
         session.tracker.mode(),
         OutputModeSource::Static { size: s, scale: sc, transform: t }
-            if *s == size && sc.x == scale && sc.y == scale && *t == transform
+            if *s == size && sc.x == scale && sc.y == scale && *t == Transform::Normal
     );
     if !same_mode {
-        session.tracker = OutputDamageTracker::new(size, scale, transform);
+        session.tracker = OutputDamageTracker::new(size, scale, Transform::Normal);
     }
     let damage = match session.tracker.damage_output(1, elements) {
-        Ok((Some(damage), _)) if !damage.is_empty() => damage_in_buffer(damage, size, transform),
+        Ok((Some(damage), _)) if !damage.is_empty() => damage_in_buffer(damage),
 
         _ => return,
     };
     let Some(mut capture) = session.waiting.take() else { return };
     let Some(buffer) = capture.buffer.take() else { return };
-    match buffer.paint(renderer, size, elements, clear, scale, transform, see_through) {
+    match buffer.paint(renderer, size, elements, clear, scale, see_through) {
         Ok(sync) => {
             capture.damage = damage;
-            capture.transform = transform;
             capture.submit_after_sync(sync, now, event_loop);
         }
         Err(err) => {
@@ -451,7 +444,6 @@ struct Capture {
     frame: ExtImageCopyCaptureFrameV1,
     buffer: Option<Canvas>,
     damage: Vec<smithay::utils::Rectangle<i32, smithay::utils::Buffer>>,
-    transform: Transform,
     done: bool,
 }
 
@@ -476,7 +468,7 @@ impl Capture {
         if !self.frame.is_alive() {
             return;
         }
-        self.frame.transform(wl_output::Transform::from(self.transform));
+        self.frame.transform(wl_output::Transform::Normal);
         for rect in &self.damage {
             self.frame.damage(rect.loc.x, rect.loc.y, rect.size.w, rect.size.h);
         }
@@ -513,45 +505,45 @@ pub struct FrameData {
 
 pub struct SessionData;
 
-impl<D> GlobalDispatch<ExtImageCopyCaptureManagerV1, ImageCaptureGlobalData, D> for ImageCaptureState
+impl<D> GlobalDispatch<ExtImageCopyCaptureManagerV1, Filtered, D> for ImageCaptureState
 where
     D: Dispatch<ExtImageCopyCaptureManagerV1, ()> + 'static,
 {
     fn bind(_: &mut D, _: &DisplayHandle, _: &Client, manager: New<ExtImageCopyCaptureManagerV1>,
-            _: &ImageCaptureGlobalData, data_init: &mut DataInit<'_, D>) {
+            _: &Filtered, data_init: &mut DataInit<'_, D>) {
         data_init.init(manager, ());
     }
 
-    fn can_view(client: Client, data: &ImageCaptureGlobalData) -> bool {
-        (data.filter)(&client)
+    fn can_view(client: Client, data: &Filtered) -> bool {
+        data.can_view(&client)
     }
 }
 
-impl<D> GlobalDispatch<ExtOutputImageCaptureSourceManagerV1, ImageCaptureGlobalData, D> for ImageCaptureState
+impl<D> GlobalDispatch<ExtOutputImageCaptureSourceManagerV1, Filtered, D> for ImageCaptureState
 where
     D: Dispatch<ExtOutputImageCaptureSourceManagerV1, ()> + 'static,
 {
     fn bind(_: &mut D, _: &DisplayHandle, _: &Client, manager: New<ExtOutputImageCaptureSourceManagerV1>,
-            _: &ImageCaptureGlobalData, data_init: &mut DataInit<'_, D>) {
+            _: &Filtered, data_init: &mut DataInit<'_, D>) {
         data_init.init(manager, ());
     }
 
-    fn can_view(client: Client, data: &ImageCaptureGlobalData) -> bool {
-        (data.filter)(&client)
+    fn can_view(client: Client, data: &Filtered) -> bool {
+        data.can_view(&client)
     }
 }
 
-impl<D> GlobalDispatch<ExtForeignToplevelImageCaptureSourceManagerV1, ImageCaptureGlobalData, D> for ImageCaptureState
+impl<D> GlobalDispatch<ExtForeignToplevelImageCaptureSourceManagerV1, Filtered, D> for ImageCaptureState
 where
     D: Dispatch<ExtForeignToplevelImageCaptureSourceManagerV1, ()> + 'static,
 {
     fn bind(_: &mut D, _: &DisplayHandle, _: &Client, manager: New<ExtForeignToplevelImageCaptureSourceManagerV1>,
-            _: &ImageCaptureGlobalData, data_init: &mut DataInit<'_, D>) {
+            _: &Filtered, data_init: &mut DataInit<'_, D>) {
         data_init.init(manager, ());
     }
 
-    fn can_view(client: Client, data: &ImageCaptureGlobalData) -> bool {
-        (data.filter)(&client)
+    fn can_view(client: Client, data: &Filtered) -> bool {
+        data.can_view(&client)
     }
 }
 
@@ -793,7 +785,6 @@ where
                     frame: frame.clone(),
                     buffer: Some(buffer),
                     damage: Vec::new(),
-                    transform: Transform::Normal,
                     done: false,
                 });
             }
@@ -819,15 +810,15 @@ macro_rules! delegate_image_capture {
     ($(@<$( $lt:tt $( : $clt:tt $(+ $dlt:tt )* )? ),+>)? $ty: ty) => {
         smithay::reexports::wayland_server::delegate_global_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
             smithay::reexports::wayland_protocols::ext::image_copy_capture::v1::server::ext_image_copy_capture_manager_v1::ExtImageCopyCaptureManagerV1:
-                $crate::protocols::image_capture::ImageCaptureGlobalData
+                $crate::protocols::Filtered
         ] => $crate::protocols::image_capture::ImageCaptureState);
         smithay::reexports::wayland_server::delegate_global_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
             smithay::reexports::wayland_protocols::ext::image_capture_source::v1::server::ext_output_image_capture_source_manager_v1::ExtOutputImageCaptureSourceManagerV1:
-                $crate::protocols::image_capture::ImageCaptureGlobalData
+                $crate::protocols::Filtered
         ] => $crate::protocols::image_capture::ImageCaptureState);
         smithay::reexports::wayland_server::delegate_global_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
             smithay::reexports::wayland_protocols::ext::image_capture_source::v1::server::ext_foreign_toplevel_image_capture_source_manager_v1::ExtForeignToplevelImageCaptureSourceManagerV1:
-                $crate::protocols::image_capture::ImageCaptureGlobalData
+                $crate::protocols::Filtered
         ] => $crate::protocols::image_capture::ImageCaptureState);
         smithay::reexports::wayland_server::delegate_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
             smithay::reexports::wayland_protocols::ext::image_copy_capture::v1::server::ext_image_copy_capture_manager_v1::ExtImageCopyCaptureManagerV1: ()

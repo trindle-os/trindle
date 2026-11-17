@@ -18,17 +18,26 @@ polkit-cancel = Отмена
 
 # Said when the password typed is not accepted, and the question is asked again.
 # SAFETY: needs a human review before it ships
-polkit-not-accepted = Пароль не принят. Попробуйте ещё раз.
+polkit-not-accepted = Пароль неверный. Попробуйте ещё раз.
 
 # Name a screen reader speaks for the password question window.
-polkit-spoken = Проверка подлинности
+polkit-spoken = Ваш пароль
 
 # Under the password box, when other requests for a password are waiting for
 # this one to end. { $n } is how many.
 polkit-waiting-behind =
     { $n ->
-        [one] { $n } запрос ждёт завершения этого.
-        [few] { $n } запроса ждут завершения этого.
-        [many] { $n } запросов ждут завершения этого.
-       *[other] { $n } запроса ждут завершения этого.
+        [one] Ещё { $n } запрос ждёт.
+        [few] Ещё { $n } запроса ждут.
+        [many] Ещё { $n } запросов ждут.
+       *[other] Ещё { $n } запроса ждут.
     }
+
+# Under the heading, when Drives asks for the password to take the snapshot before making room.
+polkit-reason-drives-snapshot = Диски нужен пароль администратора, чтобы сделать снимок перед освобождением места.
+
+# Under the heading, when Drives asks for the password to switch a swap file off before making room.
+polkit-reason-drives-swap-off = Диски нужен пароль администратора, чтобы выключить файл подкачки, пока освобождается место.
+
+# Under the heading, when Drives asks for the password to switch a swap file back on.
+polkit-reason-drives-swap-on = Диски нужен пароль администратора, чтобы снова включить файл подкачки.

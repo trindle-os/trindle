@@ -11,8 +11,6 @@ use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 use std::time::{Duration, SystemTime};
 
-pub const LIST: &str = "https://cdn.jsdelivr.net/gh/hagezi/dns-blocklists@latest/wildcard/tif.medium-onlydomains.txt";
-
 pub const HOME: &str = "https://github.com/hagezi/dns-blocklists";
 pub fn credit() -> &'static str {
     t!("store-origin-credit")
@@ -128,7 +126,7 @@ fn fetch(list: &Path) -> bool {
     let part = list.with_extension("part");
     let ok = std::process::Command::new("curl")
         .args(["-fsSL", "--proto", "=https", "--proto-redir", "=https", "--max-time", "120", "--max-filesize", crate::dns::list::LARGEST, "-o"])
-        .arg(&part).arg(LIST)
+        .arg(&part).arg(crate::dns::list::THREATS)
         .stdin(std::process::Stdio::null()).stdout(std::process::Stdio::null()).stderr(std::process::Stdio::null())
         .status().is_ok_and(|s| s.success());
     if ok && accept(&part, list) && std::fs::rename(&part, list).is_ok() {
@@ -225,7 +223,7 @@ mod tests {
         let (said, warn) = words(&o, &check_with(&o, &list, never));
         assert!(warn && said.contains("bad-downloads.example is on HaGeZi"));
         let (said, warn) = words(&origin("https://example.org/x"), &Verdict::Clear);
-        assert!(!warn && said.contains("not complete"));
+        assert!(!warn && said.contains("isn't complete"));
         let _ = std::fs::remove_dir_all(&d);
     }
 
@@ -239,7 +237,7 @@ mod tests {
         let v = check_with(&of(&deb), &d.join("list.txt"), |_| { fetched.set(true); true });
         assert_eq!(v, Verdict::Unknown);
         assert!(!fetched.get(), "nothing is fetched for a file that names no site");
-        assert_eq!(words(&Origin::default(), &v), ("Trindle cannot tell where this came from.".to_string(), false));
+        assert_eq!(words(&Origin::default(), &v), ("Trindle can't tell where this came from.".to_string(), false));
         let _ = std::fs::remove_dir_all(&d);
     }
 
@@ -249,7 +247,7 @@ mod tests {
         let list = d.join("list.txt");
         let o = origin("https://example.org/x.deb");
         assert_eq!(check_with(&o, &list, |_| false), Verdict::NotChecked);
-        assert!(words(&o, &Verdict::NotChecked).0.contains("could not be checked"));
+        assert!(words(&o, &Verdict::NotChecked).0.contains("couldn't check the site"));
 
         std::fs::write(&list, "example.org\n").unwrap();
         let old = SystemTime::now() - Duration::from_secs(3 * 24 * 60 * 60);

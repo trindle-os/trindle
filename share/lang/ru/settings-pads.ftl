@@ -12,20 +12,17 @@ settings-pads-top-picked = Теперь нажмите клавишу для «{
 # Heading of the line shown when no game controller is plugged in.
 settings-pads-none = Ничего не подключено
 
-# Small words under that line.
-settings-pads-none-about = Подключите контроллер, и его кнопки появятся здесь.
-
 # Name of the list that chooses which controller is shown; { $title } is the one shown now.
 settings-pads-which = Какой контроллер
 
 # What the picture is, for the screen reader.
-settings-pads-picture = Картинка: { $title }, каждая кнопка подсвечивается при нажатии
+settings-pads-picture = Изображение: { $title }. Каждая кнопка подсвечивается, когда вы её нажимаете.
 
 # Title of the card of the controller's buttons.
 settings-pads-buttons-title = Кнопки
 
 # Words behind the i of that card.
-settings-pads-buttons-about = Все кнопки, триггеры и направления стиков и крестовины. Последняя нажатая кнопка вверху. Кнопка, превращённая в клавишу, вводит эту клавишу в игре без поддержки контроллера.
+settings-pads-buttons-about = Все кнопки и триггеры, а также все направления стиков и крестовины. Последняя нажатая кнопка вверху. Если назначить кнопке клавишу, она будет вводить эту клавишу в играх без поддержки контроллера.
 
 # Name of the round button that starts changing a button; { $name } is the button.
 settings-pads-change = Превратить «{ $name }» в клавишу
@@ -34,7 +31,7 @@ settings-pads-change = Превратить «{ $name }» в клавишу
 settings-pads-stop = Не менять «{ $name }»
 
 # Name of the list of what a button becomes; { $name } is the button.
-settings-pads-choose = Во что превращается «{ $name }»
+settings-pads-choose = Что делает «{ $name }»
 
 # What the list says while a button waits for its key: the clue, and a choice that does nothing.
 settings-pads-waiting = Нажмите клавишу или выберите кнопку
@@ -65,13 +62,13 @@ settings-pads-stick-left = Левый
 settings-pads-stick-right = Правый
 
 # Title of the card of the ready-made changes.
-settings-pads-quick-title = Готовые изменения
+settings-pads-quick-title = Частые изменения
 
 # Title of the card of changes that are not one button into another.
 settings-pads-other-title = Другие изменения
 
 # Words behind the i of that card.
-settings-pads-other-about = Перевёрнутые стики, поменянные стики и мёртвые зоны. Вводите так: Left Stick dead zone = 10% или Right Stick Y = inverted.
+settings-pads-other-about = Переверните стики или поменяйте их местами, либо задайте мёртвую зону. Вводите изменение так: Left Stick dead zone = 10% или Right Stick Y = inverted.
 
 
 
@@ -95,12 +92,10 @@ settings-pads-middle-click = Средний щелчок
 settings-pads-profiles-title = Профили
 
 # Words behind the i of that card.
-settings-pads-profiles-about = Профиль: это набор изменений. «Стандартный» ничего не меняет, поэтому игра со своей поддержкой контроллеров видит контроллер как есть. Каждая игра Steam использует «Стандартный», пока вы не выберете для неё профиль здесь, и профиль сам меняется, когда эта игра запускается. «Любая другая игра» относится к играм, которые запустил не Steam.
+settings-pads-profiles-about = Профиль - это набор изменений. «Стандартный» ничего не меняет, поэтому игры со своей поддержкой контроллеров видят контроллер как есть. Каждая игра Steam использует «Стандартный», пока вы не выберете для неё профиль здесь. Trindle переключается на этот профиль, когда игра запускается. «Любая другая игра» - это любая игра, которую запустил не Steam.
 
 # The one switch that turns every controller change off at once.
 settings-pads-changes = Изменения контроллера
-
-settings-pads-changes-sub = Выключено: каждый контроллер остаётся как есть.
 
 # The game whose profile is shown.
 settings-pads-game = Игра
@@ -116,8 +111,6 @@ settings-pads-profile = Профиль
 
 settings-pads-standard = Стандартный
 
-settings-pads-standard-sub = Без изменений.
-
 settings-pads-profile-add = Добавить профиль
 
 settings-pads-profile-remove = Удалить «{ $name }»
@@ -127,7 +120,7 @@ settings-pads-profile-name = Название профиля
 # The name a new profile is given.
 settings-pads-profile-new = Профиль { $n }
 
-settings-pads-profile-empty = Профилю нужно название.
+settings-pads-profile-empty = Введите название профиля.
 
 settings-pads-profile-standard = Название «Стандартный» занято.
 
@@ -141,7 +134,15 @@ settings-pads-not-a-game = Это не номер приложения Steam.
 settings-pads-standard-why = «Стандартный» ничего не меняет. Сначала добавьте профиль.
 
 # The headline while the shown game uses Standard, and while all changes are off.
-settings-pads-top-standard = Стандартный: контроллер как есть.
+settings-pads-top-standard = Используется «Стандартный», без изменений.
 
 settings-pads-top-off = Изменения контроллера выключены.
 
+# Heading of the line shown when the file of changed controller buttons could not be read.
+settings-pads-unread = Trindle не смог прочитать ваши изменённые кнопки
+
+# Small words under that line; { $why } is the reason.
+settings-pads-unread-about = До тех пор все кнопки работают как обычно, и ничего не сохраняется. { $why }
+
+# Shown beside a change that was not saved because the file of changed buttons could not be read.
+settings-pads-not-saved-unread = Не сохранено. Файл с изменёнными кнопками не удалось прочитать, поэтому он остался как есть.

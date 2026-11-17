@@ -4,7 +4,6 @@ use std::cell::RefCell;
 use std::path::{Path, PathBuf};
 use std::rc::Rc;
 use super::enc::Form;
-use super::store::LARGEST;
 use crate::common::files;
 use crate::toolkit::chooser::Ask;
 use crate::toolkit::editing::doc::Doc;
@@ -29,7 +28,6 @@ impl Text {
         let shown = path.display().to_string();
         match std::fs::metadata(path) {
             Ok(m) if m.is_dir() => return self.fail(t!("text-is-folder", name = &shown)),
-            Ok(m) if m.len() > LARGEST => return self.fail(t!("text-too-big", name = &shown)),
             Err(e) if e.kind() != std::io::ErrorKind::NotFound => return self.fail(t!("text-cannot-open", name = &shown, reason = e.to_string())),
             _ => {}
         }
@@ -38,6 +36,7 @@ impl Text {
         let (text, form) = match store::read_document(path) {
             Ok(bytes) => enc::read(&bytes),
             Err(e) if e.kind() == std::io::ErrorKind::NotFound => (String::new(), Form::default()),
+            Err(e) if e.kind() == std::io::ErrorKind::FileTooLarge => return self.fail(t!("text-too-big", name = &shown)),
             Err(e) => return self.fail(t!("text-cannot-open", name = &shown, reason = e.to_string())),
         };
         let at = if self.tabs.get(self.active).is_some_and(Tab::blank) {

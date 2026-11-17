@@ -104,7 +104,8 @@ pub fn failed_port(record: &str) -> Option<String> {
     if !tail.trim().is_empty() {
         return None;
     }
-    let token = head.trim_end().trim_end_matches(':').rsplit(' ').next()?;
+
+    let token = head.trim_end().strip_prefix("usb ")?.strip_suffix(':')?;
     valid_port(token).then(|| token.to_string())
 }
 
@@ -327,7 +328,7 @@ fn watch(retrier: &mut Retrier, kmsg: &Path) -> io::Result<()> {
                 }
             }
 
-            Err(e) if e.raw_os_error() == Some(32) || e.kind() == io::ErrorKind::Interrupted => {}
+            Err(e) if e.raw_os_error() == Some(libc::EPIPE) || e.kind() == io::ErrorKind::Interrupted => {}
             Err(e) => return Err(e),
         }
     }
@@ -366,7 +367,7 @@ mod language_tests {
             let gone = Entry { port: "1-1".into(), worked: false, controller: false };
             assert_eq!(gone.words(), "Le port 1-1 ne revient pas.");
             let back = Entry { port: "1-1".into(), worked: true, controller: true };
-            assert!(back.words().starts_with("USB port 1-1 did not start"), "{}", back.words());
+            assert!(back.words().starts_with("USB port 1-1 didn't start"), "{}", back.words());
         });
     }
 }

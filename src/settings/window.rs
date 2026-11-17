@@ -5,7 +5,7 @@ use std::rc::{Rc, Weak};
 use std::time::Duration;
 
 use super::ui::{Do, Kit};
-use super::{own_pages, Settings, NAME, PATH, SIZE, XML};
+use super::{own_pages, Settings, LEAST, NAME, PATH, SIZE, XML};
 use crate::common::files;
 use crate::toolkit::bus::{Asked, Bus, Offer, Props, Served};
 use crate::toolkit::event::{Flow, Loop, Post};
@@ -84,6 +84,7 @@ fn window(events: &Loop, args: Vec<String>, bus: Option<Bus>) -> Option<(Rc<Show
     let app = Settings { kit, pages, current: 0, search: String::new(), tall: 0.0 };
     let kind = Kind::Window { title: t!("settings-window-title").into(), app_id: NAME.into() };
     let shown = Rc::new(Shown::open(events, &display, kind, SIZE, app)?);
+    shown.window.limit(Some(LEAST), None);
     *slot.borrow_mut() = Rc::downgrade(&shown);
     stop_pages_on_close(events, &shown);
     shown.change(|s| {
@@ -104,8 +105,20 @@ fn answering(events: &Loop, slot: &Slot) -> Post<Do> {
             Do::Show => {
                 shown.window.raise();
             }
-            Do::Tick if !shown.with(Settings::moving) => {}
+            Do::Tick => {
+                if shown.with(|s| s.moving() && s.turn()) {
+                    shown.change(|_| {});
+                }
+            }
             Do::Say(words) => shown.announce(&words),
+            Do::Look(f) => {
+                shown.change_if(move |s| {
+                    let news = f(s);
+                    let moves = s.kit.want.is_some() || s.kit.back;
+                    s.follow();
+                    news || moves
+                });
+            }
             Do::Conf => {
 
                 shown.restyle();
@@ -133,7 +146,7 @@ fn stop_pages_on_close(events: &Loop, shown: &Rc<Shown<Settings>>) {
 fn tick(events: &Loop, shown: &Rc<Shown<Settings>>, asks: &Post<Do>) {
     let (t, w) = (asks.clone(), Rc::downgrade(shown));
     let mut ticks = 0u32;
-    events.every(Duration::from_millis(250), move || {
+    events.every(crate::common::filling::TURN, move || {
         let Some(shown) = w.upgrade() else { return Flow::Stop };
         ticks = ticks.wrapping_add(1);
         if ticks % 4 == 0 {

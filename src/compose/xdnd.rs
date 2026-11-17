@@ -4,7 +4,6 @@ use std::os::fd::{AsFd, OwnedFd};
 use std::time::{Duration, Instant};
 
 use smithay::desktop::space::SpaceElement;
-use smithay::input::pointer::CursorImageStatus;
 use smithay::reexports::calloop::timer::{TimeoutAction, Timer};
 use smithay::reexports::wayland_server::protocol::wl_data_device_manager::DndAction;
 use smithay::reexports::wayland_server::protocol::wl_data_source::{self, WlDataSource};
@@ -18,7 +17,7 @@ use smithay::xwayland::X11Surface;
 use tracing::{debug, info, warn};
 
 use crate::focus::PointerFocusTarget;
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
 
 pub const XDND_FINISH_SECS: u64 = 30;
 
@@ -101,10 +100,6 @@ impl Xdnd {
     fn busy(&self) -> bool {
         self.armed.is_some() || self.from_x.is_some() || self.over_x.is_some()
     }
-
-    pub fn takes_over(&self) -> Option<DndAction> {
-        self.over_x.as_ref().filter(|o| o.accepted).map(|o| o.action)
-    }
 }
 
 fn only_copy(actions: DndAction) -> DndAction {
@@ -120,7 +115,7 @@ fn offerable(kinds: &[String]) -> Vec<String> {
         .collect()
 }
 
-impl<BackendData: Backend + 'static> AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> Compose<BackendData> {
 
     pub fn xdnd_element_under(&self, pos: Point<f64, Logical>) -> Option<(&crate::shell::WindowElement, Point<i32, Logical>)> {
         let Some(xwm) = self.xdnd.from_x.as_ref().map(|f| f.xwm) else { return self.space.element_under(pos) };
@@ -207,7 +202,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
         }
         self.xdnd.ticking = true;
         let timer = Timer::from_duration(TICK);
-        let _ = self.handle.insert_source(timer, |_, _, state| {
+        crate::session::watch(&self.handle, timer, |_, _, state| {
             if state.xdnd_tick() {
                 TimeoutAction::ToDuration(TICK)
             } else {
@@ -321,8 +316,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
                 }
             }
             XdndEvent::Enter { kinds, actions } => self.xdnd_entered(xwm, kinds, actions),
-            XdndEvent::Position { action } => {
-                let _ = action;
+            XdndEvent::Position { .. } => {
                 if let Some(f) = &mut self.xdnd.from_x {
                     if f.xwm == xwm {
 
@@ -771,13 +765,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
     pub fn xdnd_shape_over(&self, surface: &WlSurface) -> Option<DndAction> {
         let o = self.xdnd.over_x.as_ref()?;
         let window = self.old_window_of(surface)?;
-        (window.window_id() == o.window).then_some(o.action)
-    }
-
-    pub fn xdnd_cursor_reset(&mut self) {
-        if matches!(self.cursor_status, CursorImageStatus::Named(_)) {
-            self.cursor_status = CursorImageStatus::default_named();
-        }
+        crate::xrooms::x11_window([(window.xwm_id(), window.window_id(), o.action)], Some(o.xwm), o.window)
     }
 }
 

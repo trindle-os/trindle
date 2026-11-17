@@ -1,6 +1,8 @@
 //! What the compositor is told: shortcuts, key repeat, workspaces, gaps and title bar colours.
 
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
+use std::sync::atomic::{AtomicU64, Ordering};
+use std::sync::Mutex;
 
 use quick_xml::events::{BytesEnd, BytesStart, BytesText, Event};
 use quick_xml::Reader;
@@ -62,6 +64,8 @@ pub struct Keybind {
     pub action: Action,
 }
 
+pub const DEFAULT_EDGE_CLICKS: u8 = 1;
+
 #[derive(Clone, Debug)]
 pub struct Config {
     pub keybinds: Vec<Keybind>,
@@ -70,6 +74,8 @@ pub struct Config {
     pub workspaces: usize,
 
     pub gap: i32,
+
+    pub edge_clicks: u8,
     pub corner_radius: i32,
 
     pub desktop_double_click: Option<String>,
@@ -160,6 +166,7 @@ impl Default for Config {
             repeat_delay: 600,
             workspaces: 1,
             gap: 0,
+            edge_clicks: DEFAULT_EDGE_CLICKS,
             corner_radius: 8,
             desktop_double_click: None,
             pointer: Pointer::load(),
@@ -326,6 +333,9 @@ impl Config {
             [.., "keyboard", "repeatDelay"] => {
                 if let Ok(n) = text.parse() { self.repeat_delay = n; }
             }
+            [.., "core", "edgeClicks"] => {
+                if let Ok(n) = text.parse::<u8>() { self.edge_clicks = n.clamp(1, 2); }
+            }
             [.., "core", "gap"] => {
                 if let Ok(n) = text.parse() { self.gap = n; }
             }
@@ -428,15 +438,32 @@ fn parse_combo(text: &str) -> Option<(Mods, Keysym)> {
 }
 
 pub fn apply_environment() {
-    for path in [files::system_desktop("environment"), files::user_environment()] {
-        for (k, v) in files::read_env(Path::new(&path)) {
-            std::env::set_var(k, v);
-        }
+    for (k, v) in environment_from(&environment_files()) {
+
+        std::env::set_var(k, v);
     }
 }
 
+pub fn reapply_environment() {
+    reapply_from(&environment_files());
+}
+
+fn reapply_from(paths: &[PathBuf]) {
+    for (k, v) in environment_from(paths) {
+        crate::session::set_env(&k, v);
+    }
+}
+
+fn environment_files() -> [PathBuf; 2] {
+    [files::system_desktop("environment"), files::user_environment()]
+}
+
+fn environment_from(paths: &[PathBuf]) -> Vec<(String, String)> {
+    paths.iter().flat_map(|p| files::read_env(p)).collect()
+}
+
 pub fn xkb_names() -> (String, String, String, Option<String>) {
-    let get = |k: &str| std::env::var(k).unwrap_or_default();
+    let get = |k: &str| crate::session::env_var(k).unwrap_or_default();
     let options = get("XKB_DEFAULT_OPTIONS");
     (get("XKB_DEFAULT_LAYOUT"), get("XKB_DEFAULT_VARIANT"), get("XKB_DEFAULT_MODEL"),
      (!options.is_empty()).then_some(options))
@@ -446,8 +473,56 @@ fn mouse_at<'a>(context: &'a Option<String>, button: &'a Option<String>) -> Opti
     Some((context.as_deref()?, button.as_deref()?))
 }
 
+static REREAD: AtomicU64 = AtomicU64::new(1);
+
+pub fn note_reread() {
+    REREAD.fetch_add(1, Ordering::Relaxed);
+}
+
+pub fn kept_until_reread<T: Copy>(cache: &Mutex<Option<(u64, T)>>, make: impl FnOnce() -> T) -> T {
+    kept_at(REREAD.load(Ordering::Relaxed), cache, make)
+}
+
+fn kept_at<T: Copy>(now: u64, cache: &Mutex<Option<(u64, T)>>, make: impl FnOnce() -> T) -> T {
+    let Ok(mut kept) = cache.lock() else { return make() };
+    match *kept {
+        Some((at, value)) if at == now => value,
+        _ => {
+            let value = make();
+            *kept = Some((now, value));
+            value
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn the_environment_read_again_never_sets_the_compositors_own() {
+        let dir = std::env::temp_dir().join(format!("trindle-reapply-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let file = dir.join("environment");
+        std::fs::write(&file, "TRINDLE_REAPPLY_TEST=read again\n").unwrap();
+        super::reapply_from(&[file]);
+        let _ = std::fs::remove_dir_all(&dir);
+        assert!(std::env::var("TRINDLE_REAPPLY_TEST").is_err(), "set in the compositor's own environment");
+        assert_eq!(crate::session::env_var("TRINDLE_REAPPLY_TEST").as_deref(), Some("read again"));
+    }
+
+    #[test]
+    fn settings_are_read_once_until_read_again() {
+        let cache = std::sync::Mutex::new(None);
+        let mut reads = 0;
+        for now in [1, 1, 1, 2, 2] {
+            super::kept_at(now, &cache, || {
+                reads += 1;
+                reads
+            });
+        }
+        assert_eq!(reads, 2);
+    }
+
     use super::*;
     use crate::common::combos::{Combo, BUILT_IN};
 
@@ -544,6 +619,16 @@ mod tests {
     fn the_rest_of_trindles_settings_are_read() {
         let c = trindle();
         assert_eq!((c.repeat_rate, c.repeat_delay, c.gap, c.corner_radius), (30, 400, 6, 10));
+    }
+
+    #[test]
+    fn the_clicks_that_open_the_ring_at_the_edge_are_a_setting_held_to_one_or_two() {
+        let mut c = trindle();
+        assert_eq!(c.edge_clicks, DEFAULT_EDGE_CLICKS);
+        for (said, want) in [("2", 2), ("1", 1), ("9", 2), ("0", 1)] {
+            c.read_rc(&format!("<trindle_desktop><core><edgeClicks>{said}</edgeClicks></core></trindle_desktop>"));
+            assert_eq!(c.edge_clicks, want, "{said}");
+        }
     }
 
     #[test]

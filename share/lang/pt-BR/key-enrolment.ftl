@@ -13,10 +13,10 @@ key-enrol-why-nvidia = O driver próprio da NVIDIA é compilado neste computador
 key-enrol-why-addon = Um driver adicional é compilado neste computador, então o Secure Boot não o carrega até você aprovar a chave dele. Faça isso antes de reiniciar.
 
 # Step 1: the password, made before the restart.
-key-enrol-step1 = Crie uma senha só com letras e números. A tela azul usa um teclado americano, então os símbolos podem estar em outras teclas. Anote a senha; ela é usada uma única vez.
+key-enrol-step1 = Crie uma senha usando só letras e números. A tela azul usa um layout de teclado americano, então os símbolos podem estar em outras teclas. Anote a senha. Você só vai precisar dela uma vez.
 
 # Step 2: the restart and how long the blue screen waits.
-key-enrol-step2 = Reinicie. Uma tela azul com o título Enroll MOK aparece antes de o Trindle iniciar. Ela desiste após cerca de 10 segundos, então esteja pronto para apertar uma tecla.
+key-enrol-step2 = Reinicie. Uma tela azul chamada Enroll MOK aparece antes de o Trindle iniciar. Você tem cerca de 10 segundos para apertar uma tecla, então esteja pronto.
 
 # Step 3: the first two screens.
 key-enrol-step3 = Escolha Enroll MOK e depois Continue.
@@ -25,7 +25,7 @@ key-enrol-step3 = Escolha Enroll MOK e depois Continue.
 key-enrol-step4 = Escolha Yes e digite a senha que você criou.
 
 # Step 5: the last screen.
-key-enrol-step5 = Escolha Reboot. O driver é carregado quando o computador voltar.
+key-enrol-step5 = Escolha Reboot. O driver será carregado quando o computador reiniciar.
 
 # Tip after the steps: what happens when the blue screen is missed and how to be asked again.
-key-enrol-missed = Se você perder a tela azul, o computador inicia sem o driver, como antes. Nada está danificado; execute sudo mokutil --import /var/lib/dkms/mok.pub e reinicie para ser perguntado de novo.
+key-enrol-missed = Se você perder a tela azul, o computador inicia sem o driver, como antes. Nada está danificado. Para ser perguntado de novo, execute sudo mokutil --import /var/lib/dkms/mok.pub e reinicie.

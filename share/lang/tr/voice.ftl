@@ -13,7 +13,7 @@ voice-brighter = Daha parlak
 voice-dimmer = Daha loş
 
 # Said under the ring when the request is to let the screen rest again.
-voice-keep-awake-off = Ekran yine dinlenebilir
+voice-keep-awake-off = Ekran yeniden uykuya geçebilir
 
 # Said under the ring when the screen is kept awake.
 voice-keep-awake-on = Ekran açık tutuluyor
@@ -22,7 +22,7 @@ voice-keep-awake-on = Ekran açık tutuluyor
 voice-updates = Güncellemeler aranıyor
 
 # Said under the ring when nothing was heard at all.
-voice-nothing-heard = Hiçbir şey duyulmadı. Halkanın ortasına dokunun ve konuşun.
+voice-nothing-heard = Trindle sizi duyamadı. Halkanın ortasına dokunun ve konuşun.
 
 # Said under the ring when the volume goes up.
 voice-louder = Daha yüksek
@@ -85,7 +85,7 @@ voice-showing-app = { $name } gösteriliyor
 voice-opening-app = { $name } açılıyor
 
 # Said under the ring when the request was heard but not understood; what was heard comes in.
-voice-heard-unknown = “{ $heard }” duyuldu, ama ne yapılacağı anlaşılamadı
+voice-heard-unknown = Trindle “{ $heard }” komutunu tanıyamadı
 
 # Said in the ring when voice has not been added yet.
 voice-optional = Ses, isteğe bağlı bir eklentidir. Ayarlar'da, Halka sayfasından ekleyin.
@@ -94,31 +94,31 @@ voice-optional = Ses, isteğe bağlı bir eklentidir. Ayarlar'da, Halka sayfası
 voice-switched-off = Ses kapalı. Ayarlar'da, Halka sayfasından açın.
 
 # Said in the ring when the microphone cannot be opened; the reason comes after it.
-voice-mic-failed = Mikrofon açılamadı: { $why }
+voice-mic-failed = Trindle mikrofona erişemedi: { $why }
 
 # Said in the ring when the microphone's recorder would not start.
-voice-mic-not-started = Mikrofon açılamadı: pw-record başlamadı
+voice-mic-not-started = Kayıt programı başlamadığı için Trindle mikrofona erişemedi
 
 # Said in the ring when listening stopped and nothing was recorded.
 voice-nothing-recorded = Hiçbir şey kaydedilmedi.
 
 # Said in the ring when the recording had no speech in it.
-voice-nothing-heard-after = Hiçbir şey duyulmadı. Halkanın ortasına dokunun ve konuşun.
+voice-nothing-heard-after = Trindle sizi duyamadı. Halkanın ortasına dokunun ve konuşun.
 
 # Said in the ring when the speech engine failed and gave no reason.
 voice-whisper-failed = Whisper başarısız oldu
 
 # Progress line while the build tools are added for the build; the names of the packages come in.
-voice-installing-tools = Derleme araçları şimdilik kuruluyor: { $names }
+voice-installing-tools = Derleme araçları geçici olarak kuruluyor: { $names }
 
 # Progress line while whisper.cpp is built; its version comes in.
-voice-building = Ses için whisper.cpp { $version } derleniyor (bir iki dakika)
+voice-building = Ses denetimi için whisper.cpp { $version } derleniyor. Bu bir iki dakika sürer.
 
 # Progress line while the speech model is downloaded (148 MB).
 voice-fetching-model = Konuşma modeli indiriliyor (148 MB)
 
 # Progress line while the build tools are taken away again.
-voice-removing-tools = Derleme araçları yeniden kaldırılıyor
+voice-removing-tools = Derleme araçları şimdi kaldırılıyor
 
 # Said once voice is added and ready to use.
 voice-ready = Sesle denetim hazır. Halkayı açın, ortasına dokunun ve konuşun.
@@ -131,3 +131,13 @@ voice-press-enter = Kapatmak için Enter'a basın.
 
 # Shown when the command is run with neither install nor remove.
 voice-usage = kullanım: trindle-voice-setup install | remove
+
+# Said when a step of the voice set-up fails. { $program } is the program that was run, with its first word.
+voice-step-failed = { $program } çalışmadı.
+
+# Said when the whisper.cpp download isn't the one Trindle checks for, so nothing is built from it.
+voice-whisper-fingerprint = whisper.cpp indirmesi Trindle'ın beklediği değil, bu yüzden derlenmedi.
+
+# Said when the speech model download isn't the one Trindle checks for, so it isn't installed.
+voice-model-fingerprint = Konuşma modeli indirmesi Trindle'ın beklediği değil, bu yüzden kurulmadı.
+voice-no-private-folder = kullanılabilir özel klasör yok.

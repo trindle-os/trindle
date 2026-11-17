@@ -17,13 +17,13 @@ voice-brighter = Brighter
 # Said under the ring after "dimmer" turns the screen down.
 voice-dimmer = Dimmer
 # Said under the ring when the request is to let the screen rest again.
-voice-keep-awake-off = The screen can rest again
+voice-keep-awake-off = Screen can sleep again
 # Said under the ring when the screen is kept awake.
-voice-keep-awake-on = Keeping awake
+voice-keep-awake-on = Staying awake
 # Said under the ring when the request is to look for updates.
 voice-updates = Looking for updates
 # Said under the ring when nothing was heard at all.
-voice-nothing-heard = Nothing heard. Tap the middle of the ring and speak.
+voice-nothing-heard = Trindle couldn't hear you. Tap the middle of the ring and speak.
 # Said under the ring when the volume goes up.
 voice-louder = Louder
 # Said under the ring when the volume goes down.
@@ -63,7 +63,7 @@ voice-showing-app = Showing { $name }
 # Said under the ring when an app is opened; the app's name comes in.
 voice-opening-app = Opening { $name }
 # Said under the ring when the request was heard but not understood; what was heard comes in.
-voice-heard-unknown = Heard “{ $heard }”, but did not know what to do
+voice-heard-unknown = Trindle couldn't recognise the command “{ $heard }”
 
 ## Why voice did not start (src/voice/mod.rs)
 
@@ -72,26 +72,28 @@ voice-optional = Voice is an optional extra. Add it in Settings, on the Ring pag
 # Said in the ring when voice has been added but is switched off.
 voice-switched-off = Voice is switched off. Switch it on in Settings, on the Ring page.
 # Said in the ring when the microphone cannot be opened; the reason comes after it.
-voice-mic-failed = The microphone could not be opened: { $why }
+voice-mic-failed = Trindle couldn't access the microphone: { $why }
+# The reason after "Trindle couldn't access the microphone:" when the session has no private folder to keep a recording in.
+voice-no-private-folder = no private folder is available.
 # Said in the ring when the microphone's recorder would not start.
-voice-mic-not-started = The microphone could not be opened: pw-record did not start
+voice-mic-not-started = Trindle couldn't access the microphone because the recording program didn't start
 # Said in the ring when listening stopped and nothing was recorded.
 voice-nothing-recorded = Nothing was recorded.
 # Said in the ring when the recording had no speech in it.
-voice-nothing-heard-after = Nothing was heard. Tap the middle of the ring and speak.
+voice-nothing-heard-after = Trindle couldn't hear you. Tap the middle of the ring and speak.
 # Said in the ring when the speech engine failed and gave no reason.
 voice-whisper-failed = Whisper failed
 
 ## Adding and removing voice (src/voice/setup.rs)
 
 # Progress line while the build tools are added for the build; the names of the packages come in.
-voice-installing-tools = Installing build tools for now: { $names }
+voice-installing-tools = Installing build tools temporarily: { $names }
 # Progress line while whisper.cpp is built; its version comes in.
-voice-building = Building whisper.cpp { $version } for voice (a minute or two)
+voice-building = Building whisper.cpp { $version } for voice control. This takes a minute or two.
 # Progress line while the speech model is downloaded (148 MB).
-voice-fetching-model = Fetching the speech model (148 MB)
+voice-fetching-model = Downloading speech model (148 MB)
 # Progress line while the build tools are taken away again.
-voice-removing-tools = Removing the build tools again
+voice-removing-tools = Removing the build tools now
 # Said once voice is added and ready to use.
 voice-ready = Voice control is ready. Open the ring, tap the middle, and speak.
 # Said once voice is removed.
@@ -100,3 +102,10 @@ voice-removed = Voice control removed.
 voice-press-enter = Press Enter to close.
 # Shown when the command is run with neither install nor remove.
 voice-usage = usage: trindle-voice-setup install | remove
+
+# Said when a step of the voice set-up fails. { $program } is the program that was run, with its first word.
+voice-step-failed = { $program } didn't work.
+# Said when the whisper.cpp download isn't the one Trindle checks for, so nothing is built from it.
+voice-whisper-fingerprint = The whisper.cpp download isn't the one Trindle expected, so it wasn't built.
+# Said when the speech model download isn't the one Trindle checks for, so it isn't installed.
+voice-model-fingerprint = The speech model download isn't the one Trindle expected, so it wasn't installed.

@@ -168,6 +168,12 @@ pub(super) const STANDING_GAP: Duration = Duration::from_millis(if cfg!(test) { 
 pub(super) const STANDING_TRIES: u32 = 21;
 
 pub(super) fn take_back(bus: &Bus, lp: &Loop, session: Option<String>, done: impl FnOnce(Result<(), String>) + 'static) {
+    let done = move |sure: Result<(), String>| {
+        if let Err(why) = &sure {
+            eprintln!("trindle-disks: the password given could not be taken back: {why}");
+        }
+        done(sure)
+    };
     match session {
         Some(sid) => drive_leave::take_back_for(bus, lp, &sid, done),
         None => drive_leave::take_back(bus, lp, done),

@@ -63,23 +63,15 @@ pub struct Proc {
 impl Proc {
 
     pub fn force_exit(&self) {
-        if let Ok(gone) = self.gone.lock() {
-            if !*gone {
-                // SAFETY: the program is not yet collected, so this number
-
-                unsafe { libc::kill(self.pid, libc::SIGKILL) };
-            }
-        }
+        self.signal(libc::SIGKILL);
     }
-}
-
-impl Proc {
 
     pub fn signal(&self, signal: libc::c_int) {
         if let Ok(gone) = self.gone.lock() {
             if !*gone {
                 let target = if self.group { -self.pid } else { self.pid };
-                // SAFETY: as in force_exit; a group's number is its head's.
+                // SAFETY: the program is not yet collected, so this number
+
                 unsafe { libc::kill(target, signal) };
             }
         }
@@ -204,8 +196,13 @@ fn settled(child: &mut std::process::Child, gone: &Mutex<bool>) -> Option<std::p
     // SAFETY: an all-zero siginfo_t is a valid one for waitid to fill in.
     let mut info: libc::siginfo_t = unsafe { std::mem::zeroed() };
 
-    // SAFETY: waits on this child alone, writing only into `info`.
-    unsafe { libc::waitid(libc::P_PID, child.id(), &mut info, libc::WEXITED | libc::WNOWAIT) };
+    loop {
+        // SAFETY: waits on this child alone, writing only into `info`.
+        let got = unsafe { libc::waitid(libc::P_PID, child.id(), &mut info, libc::WEXITED | libc::WNOWAIT) };
+        if got == 0 || std::io::Error::last_os_error().raw_os_error() != Some(libc::EINTR) {
+            break;
+        }
+    }
     let mut gone = gone.lock().unwrap_or_else(|e| e.into_inner());
     *gone = true;
     child.wait().ok()
@@ -235,7 +232,7 @@ pub fn captured_secret(argv: &[&str], secret: Zeroizing<String>) -> (bool, Strin
 fn run_fed(argv: &[String], stdin: Option<Zeroizing<Vec<u8>>>) -> (bool, String, String) {
     let Some(program) = argv.first() else { return (false, String::new(), String::new()) };
     asks_polkit(program);
-    let child = Command::new(program).args(&argv[1..])
+    let child = parsed(Command::new(program).args(&argv[1..]))
         .stdin(if stdin.is_some() { Stdio::piped() } else { Stdio::null() })
         .stdout(Stdio::piped()).stderr(Stdio::piped()).spawn();
     let mut child = match child {
@@ -265,8 +262,12 @@ fn run_fed(argv: &[String], stdin: Option<Zeroizing<Vec<u8>>>) -> (bool, String,
     (ok, String::from_utf8_lossy(&got).to_string(), err)
 }
 
+pub fn parsed(command: &mut Command) -> &mut Command {
+    command.env("LC_ALL", "C")
+}
+
 pub fn text(argv: &[&str]) -> String {
-    std::process::Command::new(argv[0]).args(&argv[1..]).output().ok()
+    parsed(Command::new(argv[0]).args(&argv[1..])).output().ok()
         .filter(|o| o.status.success())
         .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string()).unwrap_or_default()
 }
@@ -293,7 +294,7 @@ pub fn admin_helper() -> String {
 }
 
 #[cfg(test)]
-pub const NO_PASSWORD: &str = "Not done: no administrator's password was given.";
+pub const NO_PASSWORD: &str = "That wasn't done, because no administrator's password was given.";
 
 fn asks_polkit(program: &str) {
     if program == "pkexec" || program.ends_with("/pkexec") {
@@ -345,7 +346,7 @@ mod tests {
             let said = admin_error(silent);
             assert_ne!(said, NO_PASSWORD, "{silent:?}");
             assert_eq!(crate::common::refused::of_words(&said), None, "no refusal is read into it");
-            assert!(said.starts_with("Not done") && said.ends_with('.'), "{said}");
+            assert!(said.starts_with("That wasn't done") && said.ends_with('.'), "{said}");
         }
         assert_eq!(admin_error("Error executing command as another user: Request dismissed"), NO_PASSWORD);
     }
@@ -370,5 +371,43 @@ mod tests {
             let status = settled(&mut child, &Mutex::new(false)).map(|s| s.into_raw()).unwrap_or(0);
             assert_eq!(crate::common::crash::is_fault(status), crashed, "{script}");
         }
+    }
+
+    #[test]
+    fn text_is_asked_for_in_the_c_locale() {
+
+        assert_eq!(text(&["sh", "-c", "echo $LC_ALL"]), "C");
+        let mut command = Command::new("sh");
+        let out = parsed(command.args(["-c", "echo $LC_ALL"]).env("LC_ALL", "de_DE.UTF-8")).output().unwrap();
+        assert_eq!(String::from_utf8_lossy(&out.stdout).trim(), "C", "a caller's own setting is not left in place");
+    }
+
+    #[test]
+    fn captured_output_is_in_the_c_locale() {
+        let argv: Vec<String> = ["sh", "-c", "echo $LC_ALL"].map(String::from).to_vec();
+        assert_eq!(captured(&argv, None).1.trim(), "C");
+    }
+
+    #[test]
+    fn force_exit_ends_the_whole_group() {
+        let mut command = Command::new("sh");
+        command.args(["-c", "sleep 30 & echo $!; wait"]).stdout(Stdio::piped());
+        let (mut child, proc) = start_group(&mut command).unwrap();
+        let mut line = String::new();
+        BufReader::new(child.stdout.take().unwrap()).read_line(&mut line).unwrap();
+        let grandchild: libc::pid_t = line.trim().parse().unwrap();
+        proc.force_exit();
+        collect(&mut child, &proc);
+        let mut alive = true;
+        for _ in 0..50 {
+            // SAFETY: signal 0 only asks whether the number is in use.
+            alive = unsafe { libc::kill(grandchild, 0) } == 0
+                && !std::fs::read_to_string(format!("/proc/{grandchild}/stat")).is_ok_and(|s| s.contains(") Z "));
+            if !alive {
+                break;
+            }
+            std::thread::sleep(Duration::from_millis(20));
+        }
+        assert!(!alive, "what the program started went with it");
     }
 }

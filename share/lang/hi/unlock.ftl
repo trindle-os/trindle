@@ -4,7 +4,7 @@
 unlock-title-default = डिस्क पासवर्ड
 
 # Heading of the box in place of cryptsetup's own wording ("Please unlock disk ...", "Enter passphrase").
-unlock-title-encryption = एन्क्रिप्शन पासवर्ड डालें
+unlock-title-encryption = डिस्क का पासवर्ड डालें
 
 # Key hint under the box: Tab, or the eye, shows the typed password.
 unlock-show = दिखाएँ

@@ -12,7 +12,15 @@ pub(crate) struct Warn {
 }
 
 pub(crate) fn before(s: &mut Store, install: impl FnOnce(&mut Store) + 'static) {
-    if s.warning_off {
+    ask(s, s.prefs.warning_off, install);
+}
+
+pub(crate) fn before_arriving(s: &mut Store, install: impl FnOnce(&mut Store) + 'static) {
+    ask(s, false, install);
+}
+
+fn ask(s: &mut Store, skip: bool, install: impl FnOnce(&mut Store) + 'static) {
+    if skip {
         return install(s);
     }
     match s.warn.as_mut() {
@@ -35,8 +43,8 @@ fn ok(s: &mut Store) {
     pressed_install(s, |s| {
         let Some(w) = s.warn.take() else { return };
         if w.ticked {
-            s.warning_off = true;
-            if let Err(e) = formats::set_warning_off_in(&s.conf) {
+            s.prefs.warning_off = true;
+            if let Err(e) = formats::set_warning_off_in(&s.prefs.conf) {
                 s.top = Some((e.to_string(), Tone::Problem));
             }
         }
@@ -57,7 +65,7 @@ pub(crate) fn ticked(s: &mut Store, on: bool) {
 pub(crate) fn over(s: &Store) -> Vec<Node<Msg>> {
     let Some(w) = &s.warn else { return Vec::new() };
     let hold = drawing((0.0, 0.0), "", |_, _| {}).width(Length::Fill).height(Length::Fill).on_pointer(|_| go(|_| {}));
-    let wide = (theme::apps_list().card_least * 1.5).min(s.across - 32.0).max(260.0);
+    let wide = (theme::apps_list().card_least * 1.5).min(s.size.across - 32.0).max(260.0);
     let panel = placed(warning_card(w).width(Length::Fixed(wide)), |(w, h), (aw, ah)| ((aw - w) / 2.0, ((ah - h) / 2.0).max(8.0)));
     vec![hold, panel]
 }

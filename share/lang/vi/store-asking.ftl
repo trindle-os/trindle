@@ -7,14 +7,14 @@ store-ask-title = Những gì { $app } được phép dùng
 
 # Under the list of switches in the permission window when one or more is on already.
 # SAFETY: needs a human review before it ships
-store-ask-above-on = Mỗi công tắc cho biết điều đang được cho phép. Bạn có thể đổi lại sau trong Ứng dụng, Quyền.
+store-ask-above-on = Bạn có thể đổi lại sau trong Cài đặt, Quyền.
 
 # Under the list of switches in the permission window when all start off.
 # SAFETY: needs a human review before it ships
-store-ask-above-off = Mỗi công tắc vẫn tắt cho đến khi bạn bấm vào. Bạn có thể đổi lại sau trong Ứng dụng, Quyền.
+store-ask-above-off = Chưa có gì được cho phép. Bạn có thể đổi lại sau trong Cài đặt, Quyền.
 
 # Note under the list of switches, since a .deb names nothing it wants.
-store-ask-worked-out = Được suy ra từ chính ứng dụng
+store-ask-worked-out = Dựa trên những gì ứng dụng yêu cầu
 
 # Tip of the button that turns every switch on.
 # SAFETY: needs a human review before it ships

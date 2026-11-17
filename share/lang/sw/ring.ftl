@@ -22,34 +22,34 @@ ring-cli-command = { $program } [CHAGUO…]
 ring-cli-options = Machaguo:
 
 # Help for the ring's --say option, printed in a terminal.
-ring-cli-say = Fanya maneno haya yanavyoomba, kana kwamba yamesemwa kwa pete (kujaribu amri za sauti bila maikrofoni)
+ring-cli-say = Endesha amri ya sauti kutoka kwa maandishi bila kutumia maikrofoni
 
 # Help for the ring's --background option, printed in a terminal.
-ring-cli-background = Anza bila kuonyesha, ili ufunguzi wa kwanza uwe wa papo hapo
+ring-cli-background = Anza bila kuonekana, ili pete ifunguke papo hapo mara ya kwanza
 
 # Help for the ring's --show-desktop option, printed in a terminal.
-ring-cli-show-desktop = Weka kila dirisha kando ili kuonyesha eneo-kazi, au vilete tena (Super na D huomba hili)
+ring-cli-show-desktop = Ficha kila dirisha ili kuonyesha eneo-kazi, au virudishe (funguo za Super na D hufanya hivi)
 
 # Help for the ring's --listen option, printed in a terminal.
-ring-cli-listen = Fungua pete ikiwa tayari inasikiliza, kama njia ya mkato ya kibodi inavyoweza
+ring-cli-listen = Fungua pete ikiwa tayari inasikiliza amri ya sauti, kama njia ya mkato ya kibodi inavyofanya
 
 # Help for the ring's --all option, printed in a terminal.
 ring-cli-all = Fungua pete huku kila programu ikionyeshwa kuizunguka
 
 # Help for the ring's --power option, printed in a terminal.
-ring-cli-power = Fungua pete kwenye kuondoka, kuanzisha upya na kuzima
+ring-cli-power = Fungua chaguo za nguvu za pete: kuondoka, kuanzisha upya na kuzima
 
 # Help for the ring's --favourites option, printed in a terminal.
 ring-cli-favourites = Fungua ukurasa wa vipendwa kwenye Mipangilio
 
 # Help for the ring's --restyle option, printed in a terminal.
-ring-cli-restyle = Pokea mwonekano mpya (mwanga au giza, au rangi mpya) kutoka Mipangilio mara moja
+ring-cli-restyle = Tumia mwonekano mpya kutoka Mipangilio mara moja (mwanga au giza, au rangi mpya ya kuangazia)
 
 # Help for the ring's --corners option, printed in a terminal.
-ring-cli-corners = Tengeneza tena sehemu za kugusa kwenye pembe za juu
+ring-cli-corners = Weka tena sehemu za kugusa kwenye pembe za juu
 
 # Help for the ring's --notes option, printed in a terminal.
-ring-cli-notes = Hamisha kibodi kwenye miduara ya arifa kwenye skrini (Super na N huomba hili)
+ring-cli-notes = Hamisha udhibiti wa kibodi kwenye miduara ya arifa kwenye skrini (funguo za Super na N hufanya hivi)
 
 # Error printed in a terminal when the ring is given an option it does not know.
 ring-cli-unknown = chaguo lisilojulikana { $option }
@@ -73,13 +73,13 @@ ring-uninstalling = Inaondoa
 ring-uninstalled = Imeondolewa
 
 # Tip of the round button on the menu of an app put there by hand: it only leaves the ring.
-ring-take-off = Toa kwenye pete
+ring-take-off = Ondoa kwenye pete
 
 # Line that replaces that button while the app is being taken off the ring.
-ring-taking-off = Inatolewa
+ring-taking-off = Inaondolewa
 
 # Line that replaces that button once the app is off the ring.
-ring-taken-off = Imetolewa
+ring-taken-off = Imeondolewa
 
 # Name of the ring's round button that opens Apps.
 ring-tool-apps = Programu
@@ -112,13 +112,13 @@ ring-tool-report = Ripoti tatizo
 ring-gone = Hicho hakipo tena.
 
 # Line in the ring when nothing could open the item that was pressed.
-ring-could-not-open = Hakuna kilichoweza kukifungua.
+ring-could-not-open = Trindle haiwezi kufungua hicho.
 
 # Line in the ring while it listens to a spoken command.
-ring-listening = Inasikiliza... sema, na itaacha ukiacha
+ring-listening = Inasikiliza… Sema amri yako. Kusikiliza kunaisha ukiacha kuzungumza
 
 # Line in the ring while it works out what was said.
-ring-working-out = Inafahamu ulichosema...
+ring-working-out = Inafahamu ulichosema…
 
 # Answer to the spoken command to close windows when none are open.
 ring-nothing-to-close = Hakuna cha kufunga
@@ -186,7 +186,7 @@ ring-star-remove = Ondoa kwenye vipendwa
 ring-star-add = Ongeza kwenye vipendwa
 
 # Screen reader name of the red button that shows why an uninstall failed.
-ring-not-done = Haikufanyika
+ring-not-done = Kwa nini?
 
 # Note on an app's menu when the middle of the ring has no room for another favourite; the number is how many it holds.
 ring-middle-full =
@@ -201,7 +201,7 @@ ring-power-screensaver = Kiokoa skrini
 
 # Choice on the ring's power page: put the computer to sleep.
 # SAFETY: needs a human review before it ships
-ring-power-suspend = Laza
+ring-power-suspend = Lala
 
 # Choice on the ring's power page: hibernate.
 # SAFETY: needs a human review before it ships
@@ -224,7 +224,7 @@ ring-empty-hint = Bofya Programu zote, kisha bofya kulia programu yoyote ili kui
 
 # Line in the ring when a spoken or typed power choice needs a click to confirm.
 # SAFETY: needs a human review before it ships
-ring-power-only-click = Ni kubofya tu kunakothibitisha hili.
+ring-power-only-click = Bofya ili kuthibitisha.
 
 # Line in the ring when something other than the person tried to shut the computer down.
 # SAFETY: needs a human review before it ships
@@ -232,7 +232,7 @@ ring-power-only-own = Ni wewe tu unayeweza kuzima kompyuta hii.
 
 # Line in the ring when the power page closed because a program pressed a key.
 # SAFETY: needs a human review before it ships
-ring-power-closed = Ukurasa wa nguvu ulifungwa: programu ilibonyeza kitufe, si wewe.
+ring-power-closed = Ukurasa wa nguvu ulifungwa kwa sababu programu ilituma mbonyezo wa kitufe.
 
 ring-startup-add = Anza ukiingia
 
@@ -241,7 +241,7 @@ ring-startup-remove = Acha kuanza ukiingia
 
 
 # Help for the option that opens the shortcut list, or closes it when it is showing.
-ring-cli-shortcuts = Onyesha kila njia ya mkato ya kibodi kwenye orodha, au iweke kando (Super na K, isipobadilishwa kwenye Mipangilio)
+ring-cli-shortcuts = Onyesha orodha ya kila njia ya mkato ya kibodi, au ifiche orodha hiyo (Super na K, usipoibadilisha kwenye Mipangilio)
 
 # Notice from the new ring after the parts were restarted from the keyboard.
 ring-restarted = Imeanzishwa upya
@@ -249,3 +249,11 @@ ring-restarted = Imeanzishwa upya
 # Under the notice above.
 ring-restarted-why = Pete na sehemu saidizi zimeanza tena.
 
+# Tip on the app menu's red button when removing the app did not work.
+ring-uninstall-failed = Haikuweza kuiondoa.
+
+# Shorter name of the Sound and video piece of All apps, for when the full name does not fit along it.
+ring-category-media-short = Sauti
+
+# Line in the ring when a spoken command, such as turning the sound down, did not work.
+ring-voice-failed = Hilo halikufanya kazi.

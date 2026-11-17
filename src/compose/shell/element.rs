@@ -43,7 +43,7 @@ use smithay::{
 
 use super::picture::{whole_scale, Picture};
 use super::ssd::{self, Action, Look, BORDER, HEADER_BAR_HEIGHT};
-use crate::{focus::PointerFocusTarget, state::Backend, AnvilState};
+use crate::{focus::PointerFocusTarget, state::Backend, Compose};
 
 const BTN_LEFT: u32 = 0x110;
 
@@ -54,6 +54,10 @@ impl WindowElement {
 
     pub fn has_ssd(&self) -> bool {
         self.decoration_state().is_ssd && !self.is_fullscreen()
+    }
+
+    pub fn bar_width(&self) -> i32 {
+        self.client_size().w + 2 * BORDER
     }
 
     pub fn is_fullscreen(&self) -> bool {
@@ -78,7 +82,7 @@ impl WindowElement {
     }
 
     pub fn title(&self) -> String {
-        match self.0.underlying_surface() {
+        ssd::capped_title(match self.0.underlying_surface() {
             WindowSurface::Wayland(t) => with_states(t.wl_surface(), |states| {
                 states
                     .data_map
@@ -87,7 +91,7 @@ impl WindowElement {
                     .unwrap_or_default()
             }),
             WindowSurface::X11(x) => x.title(),
-        }
+        })
     }
 
     pub fn deco_offset(&self) -> Point<i32, Logical> {
@@ -119,8 +123,7 @@ impl WindowElement {
                     return Some((PointerFocusTarget::WlSurface(surface), loc + offset));
                 }
             }
-            let width = self.client_size().w + 2 * BORDER;
-            if ssd::part_at(width, location).is_some() {
+            if ssd::part_at(self.bar_width(), location).is_some() {
                 return Some((PointerFocusTarget::Ssd(Ssd(self.clone())), Point::default()));
             }
         }
@@ -234,13 +237,13 @@ impl WaylandFocus for Ssd {
 impl Ssd {
 
     fn width(&self) -> i32 {
-        self.0.client_size().w + 2 * BORDER
+        self.0.bar_width()
     }
 
     fn act<BackendData: Backend>(
         &self,
-        seat: &Seat<AnvilState<BackendData>>,
-        data: &mut AnvilState<BackendData>,
+        seat: &Seat<Compose<BackendData>>,
+        data: &mut Compose<BackendData>,
         action: Action,
         serial: Serial,
     ) {
@@ -262,11 +265,11 @@ impl Ssd {
     }
 }
 
-impl<BackendData: Backend> PointerTarget<AnvilState<BackendData>> for Ssd {
+impl<BackendData: Backend> PointerTarget<Compose<BackendData>> for Ssd {
     fn enter(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        data: &mut Compose<BackendData>,
         event: &MotionEvent,
     ) {
 
@@ -278,8 +281,8 @@ impl<BackendData: Backend> PointerTarget<AnvilState<BackendData>> for Ssd {
     }
     fn motion(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         event: &MotionEvent,
     ) {
         let mut state = self.0.decoration_state();
@@ -289,15 +292,15 @@ impl<BackendData: Backend> PointerTarget<AnvilState<BackendData>> for Ssd {
     }
     fn relative_motion(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         _event: &RelativeMotionEvent,
     ) {
     }
     fn button(
         &self,
-        seat: &Seat<AnvilState<BackendData>>,
-        data: &mut AnvilState<BackendData>,
+        seat: &Seat<Compose<BackendData>>,
+        data: &mut Compose<BackendData>,
         event: &ButtonEvent,
     ) {
         if event.button != BTN_LEFT {
@@ -320,16 +323,16 @@ impl<BackendData: Backend> PointerTarget<AnvilState<BackendData>> for Ssd {
     }
     fn axis(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         _frame: AxisFrame,
     ) {
     }
-    fn frame(&self, _seat: &Seat<AnvilState<BackendData>>, _data: &mut AnvilState<BackendData>) {}
+    fn frame(&self, _seat: &Seat<Compose<BackendData>>, _data: &mut Compose<BackendData>) {}
     fn leave(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         _serial: Serial,
         _time: u32,
     ) {
@@ -340,67 +343,67 @@ impl<BackendData: Backend> PointerTarget<AnvilState<BackendData>> for Ssd {
     }
     fn gesture_swipe_begin(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         _event: &GestureSwipeBeginEvent,
     ) {
     }
     fn gesture_swipe_update(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         _event: &GestureSwipeUpdateEvent,
     ) {
     }
     fn gesture_swipe_end(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         _event: &GestureSwipeEndEvent,
     ) {
     }
     fn gesture_pinch_begin(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         _event: &GesturePinchBeginEvent,
     ) {
     }
     fn gesture_pinch_update(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         _event: &GesturePinchUpdateEvent,
     ) {
     }
     fn gesture_pinch_end(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         _event: &GesturePinchEndEvent,
     ) {
     }
     fn gesture_hold_begin(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         _event: &GestureHoldBeginEvent,
     ) {
     }
     fn gesture_hold_end(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         _event: &GestureHoldEndEvent,
     ) {
     }
 }
 
-impl<BackendData: Backend> TouchTarget<AnvilState<BackendData>> for Ssd {
+impl<BackendData: Backend> TouchTarget<Compose<BackendData>> for Ssd {
     fn down(
         &self,
-        seat: &Seat<AnvilState<BackendData>>,
-        data: &mut AnvilState<BackendData>,
+        seat: &Seat<Compose<BackendData>>,
+        data: &mut Compose<BackendData>,
         event: &smithay::input::touch::DownEvent,
         _seq: Serial,
     ) {
@@ -420,8 +423,8 @@ impl<BackendData: Backend> TouchTarget<AnvilState<BackendData>> for Ssd {
 
     fn up(
         &self,
-        seat: &Seat<AnvilState<BackendData>>,
-        data: &mut AnvilState<BackendData>,
+        seat: &Seat<Compose<BackendData>>,
+        data: &mut Compose<BackendData>,
         event: &smithay::input::touch::UpEvent,
         _seq: Serial,
     ) {
@@ -440,8 +443,8 @@ impl<BackendData: Backend> TouchTarget<AnvilState<BackendData>> for Ssd {
 
     fn motion(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         event: &smithay::input::touch::MotionEvent,
         _seq: Serial,
     ) {
@@ -453,24 +456,24 @@ impl<BackendData: Backend> TouchTarget<AnvilState<BackendData>> for Ssd {
 
     fn frame(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         _seq: Serial,
     ) {
     }
 
     fn cancel(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         _seq: Serial,
     ) {
     }
 
     fn shape(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         _event: &smithay::input::touch::ShapeEvent,
         _seq: Serial,
     ) {
@@ -478,8 +481,8 @@ impl<BackendData: Backend> TouchTarget<AnvilState<BackendData>> for Ssd {
 
     fn orientation(
         &self,
-        _seat: &Seat<AnvilState<BackendData>>,
-        _data: &mut AnvilState<BackendData>,
+        _seat: &Seat<Compose<BackendData>>,
+        _data: &mut Compose<BackendData>,
         _event: &smithay::input::touch::OrientationEvent,
         _seq: Serial,
     ) {
@@ -505,7 +508,7 @@ impl SpaceElement for WindowElement {
     fn is_in_input_region(&self, point: &Point<f64, Logical>) -> bool {
         if self.has_ssd() {
 
-            ssd::part_at(self.client_size().w + 2 * BORDER, *point).is_some()
+            ssd::part_at(self.bar_width(), *point).is_some()
                 || SpaceElement::is_in_input_region(&self.0, &(*point - self.deco_offset().to_f64()))
         } else {
             SpaceElement::is_in_input_region(&self.0, point)
@@ -555,7 +558,7 @@ impl WindowElement {
         R::TextureId: Clone + Texture + Send + 'static,
     {
         let client = self.client_size();
-        let width = client.w + 2 * BORDER;
+        let width = self.bar_width();
         let look = Look {
             width,
             scale: whole_scale(scale) as i32,

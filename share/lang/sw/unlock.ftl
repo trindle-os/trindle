@@ -6,7 +6,7 @@ unlock-title-default = Nenosiri la diski
 
 # Heading of the box in place of cryptsetup's own wording ("Please unlock disk ...", "Enter passphrase").
 # SAFETY: needs a human review before it ships
-unlock-title-encryption = Andika nenosiri la usimbaji fiche
+unlock-title-encryption = Andika nenosiri la diski
 
 # Key hint under the box: Tab, or the eye, shows the typed password.
 # SAFETY: needs a human review before it ships

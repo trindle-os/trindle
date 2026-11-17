@@ -389,7 +389,7 @@ pub mod tests {
         let ring = std::fs::read_to_string(src.join("ring/updates.rs")).unwrap();
         assert!(!ring.contains("pkexec") && !ring.contains("debian_watching(") && !ring.contains("admin_watching("), "the ring puts nothing in itself");
         let page = std::fs::read_to_string(src.join("store/update_page/install.rs")).unwrap();
-        let install = page.split_once("fn install_all_in(").unwrap().1.split_once("\n}\n").unwrap().0;
+        let install = page.split_once("fn install_all(").unwrap().1.split_once("\n}\n").unwrap().0;
         let asks = install.find("updating::needs_password(").expect("Apps asks whether a password is needed");
         assert!(install.find("upgrade_system(").is_some_and(|at| at > asks));
     }
@@ -665,7 +665,7 @@ pub mod tests {
         let lines = functions(&page);
         let mut takers: Vec<&str> = lines.iter().filter(|(_, l)| l.contains("updating::begin(")).map(|(f, _)| f.as_str()).collect();
         takers.dedup();
-        assert_eq!(takers, ["install_all_in", "update_app", "update_part", "update_trindle", "update_debian", "update_device"]);
+        assert_eq!(takers, ["install_all", "update_app", "update_part", "update_trindle", "update_debian", "update_device"]);
         for taker in takers {
             let body: String = lines.iter().filter(|(f, _)| f == taker).fold(String::new(), |mut s, (_, l)| { let _ = writeln!(s, "{l}"); s });
             assert!(body.contains("updating::begin(Who::Apps)"), "{taker} takes Apps' turn");
@@ -685,7 +685,8 @@ pub mod tests {
 
             ["\"apt-", "upgrade"].concat(),
             quoted("firmware-update"),
-            ["\"flatpak\"", " \"update\"", " \"--user\"", " \"-y\""].join(","),
+
+            ["update_", "argv(&"].concat(),
             ["fetch_", "install("].concat(),
             ["fetch_update_", "unseen("].concat(),
         ];
@@ -694,7 +695,7 @@ pub mod tests {
         assert!(loose.is_empty(), "an update is started without the lock: {loose:?}");
         assert_eq!(found, [
             "store/plugin_page.rs install_as",
-            "store/update_page/install.rs install_all_in",
+            "store/update_page/install.rs install_all",
             "store/update_page/install.rs update_apps",
             "store/update_page/install.rs update_debian",
             "store/update_page/install.rs update_firmware",

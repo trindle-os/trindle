@@ -38,30 +38,17 @@ store-tab-count = { $name } { $n }
 # Spoken name of a strip of tabs on the Installed page.
 store-tabs-show = دکھائیں
 
-# How long is left when it is a minute or less.
-store-left-minute = تقریباً ایک منٹ باقی ہے
-
-# How long is left, in minutes.
-store-left-minutes = تقریباً { $n } منٹ باقی ہیں
-
-# How long is left, in hours.
-store-left-hours =
-    { $n ->
-        [one] تقریباً 1 گھنٹہ باقی ہے
-       *[other] تقریباً { $n } گھنٹے باقی ہیں
-    }
-
 # Credit under a package's page for the list its site was checked against.
 store-origin-credit = HaGeZi کی Threat Intelligence فہرست سے جانچا گیا
 
 # Where a download came from: the site and the page that led to it.
-store-origin-both = { $site } سے ڈاؤن لوڈ کیا گیا، { $referrer } کے ذریعے پہنچے۔
+store-origin-both = آپ نے اسے { $site } سے ڈاؤن لوڈ کیا، { $referrer } سے آنے کے بعد۔
 
 # Where a download came from: the site.
 store-origin-site = { $site } سے ڈاؤن لوڈ کیا گیا۔
 
 # Where a download came from: the page that led to it.
-store-origin-referrer = { $referrer } کے ذریعے پہنچے۔
+store-origin-referrer = { $referrer } سے لنک کیا گیا۔
 
 # Said when nothing tells where a download came from.
 store-origin-unknown = Trindle نہیں بتا سکتا کہ یہ کہاں سے آیا۔
@@ -72,17 +59,17 @@ store-origin-listed = { $from } { $name } نقصان دہ ڈاؤن لوڈز او
 
 # Said when the site is not on the list; the first part says where the download came from.
 # SAFETY: needs a human review before it ships
-store-origin-clear = { $from } یہ سائٹ HaGeZi کی Threat Intelligence فہرست میں نہیں ہے، لیکن فہرست مکمل نہیں ہے، اس لیے اس سے یہ ثابت نہیں ہوتا کہ یہ محفوظ ہے۔
+store-origin-clear = { $from } یہ سائٹ HaGeZi کی Threat Intelligence فہرست میں نہیں ہے۔ وہ فہرست مکمل نہیں ہے، اس لیے اس سے یہ ثابت نہیں ہوتا کہ یہ محفوظ ہے۔
 
 # Said when the list could not be fetched; the first part says where the download came from.
 # SAFETY: needs a human review before it ships
-store-origin-not-checked = { $from } سائٹ کی جانچ نہیں ہو سکی، کیونکہ HaGeZi کی Threat Intelligence فہرست حاصل نہیں ہو سکی۔
+store-origin-not-checked = { $from } Trindle سائٹ کی جانچ نہیں کر سکا، کیونکہ اسے HaGeZi کی Threat Intelligence فہرست نہیں ملی۔
 
 # Name shown for a review whose writer gave none.
 store-review-someone = کوئی صاحب
 
 # Red words when the keyring could not be reached.
-store-key-unreached = Keyring تک رسائی نہیں ہو سکی: { $why }۔
+store-key-unreached = Trindle Keyring تک نہیں پہنچ سکا: { $why }۔
 
 # Red words when the key kept in the keyring is not text.
 store-key-not-text = محفوظ کی گئی کلید متن نہیں ہے۔

@@ -131,13 +131,16 @@ impl Back {
     }
 
     fn then(&self, f: impl FnOnce(&mut Quick) + 'static) {
+        self.then_if(move |q| {
+            f(q);
+            true
+        });
+    }
+
+    fn then_if(&self, f: impl FnOnce(&mut Quick) -> bool + 'static) {
         let Some(ctx) = self.ctx.upgrade() else { return };
         let at = self.at;
-        ctx.face(move |face| {
-            if face.quick.gen.get() == at {
-                f(&mut face.quick);
-            }
-        });
+        ctx.face_if(move |face| face.quick.gen.get() == at && f(&mut face.quick));
     }
 }
 
@@ -398,13 +401,20 @@ impl Quick {
     }
 
     fn repeat(&self, every: Duration, f: impl Fn(&mut Quick) + 'static) {
+        self.repeat_if(every, move |q| {
+            f(q);
+            true
+        });
+    }
+
+    fn repeat_if(&self, every: Duration, f: impl Fn(&mut Quick) -> bool + 'static) {
         let (b, f) = (self.back(), Rc::new(f));
         self.ctx().lp.every(every, move || {
             if !b.live() {
                 return Flow::Stop;
             }
             let f = f.clone();
-            b.then(move |q| f(q));
+            b.then_if(move |q| f(q));
             Flow::Continue
         });
     }

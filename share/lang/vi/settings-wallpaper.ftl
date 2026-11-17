@@ -8,7 +8,7 @@ settings-wallpaper-title = Hình nền
 settings-wallpaper-keywords = nền ảnh trình chiếu hình ảnh wallpaper background slideshow photo
 
 # Introduction under the heading of the wallpaper page, and the words behind the page i.
-settings-wallpaper-help = Một màu trơn, hoặc một bức ảnh, hoặc một thư mục để ảnh tự đổi theo thời gian bạn đặt.
+settings-wallpaper-help = Dùng một màu trơn, một bức ảnh, hoặc một thư mục ảnh tự đổi theo tần suất bạn chọn.
 
 # Choice in the list of how long each picture stays.
 settings-wallpaper-every-10s = 10 giây
@@ -56,7 +56,7 @@ settings-wallpaper-order-shuffle = Ngẫu nhiên
 settings-wallpaper-order-name = Theo tên tệp
 
 # Red words when the program that draws the wallpaper would not start.
-settings-wallpaper-no-changer = Không thể đổi hình nền: chương trình của nó không khởi động.
+settings-wallpaper-no-changer = Trindle không thể khởi động chương trình đổi hình nền.
 
 # Under the large picture, when counting; { $used } of { $all } pictures are used.
 settings-wallpaper-count =
@@ -86,10 +86,10 @@ settings-wallpaper-file-own = { $name }, một trong các ảnh đi kèm Trindle
 settings-wallpaper-plain-below = Một màu trơn, đặt bên dưới.
 
 # Under the large picture when the picture or folder has gone.
-settings-wallpaper-gone-below = Không còn gì ở đó nữa. Hãy chọn một ảnh hoặc một thư mục.
+settings-wallpaper-gone-below = Ảnh hoặc thư mục không còn ở đó nữa. Hãy chọn cái khác.
 
 # Sentence about the wallpaper when it is a plain colour.
-settings-wallpaper-plain = Một màu trơn, không có ảnh.
+settings-wallpaper-plain = Chỉ một màu trơn.
 
 # Sentence about the wallpaper when Trindle's own pictures change; { $every } is how often, { $used } of { $all } pictures are used and { $extra } is any added sentences, each after a space.
 settings-wallpaper-changing-own =
@@ -107,16 +107,16 @@ settings-wallpaper-changing-folder =
 settings-wallpaper-empty-folder-choose = Thư mục { $folder } không có ảnh nào. Hãy chọn thư mục khác.
 
 # Added to the sentence about the wallpaper when a folder holds more than Trindle looks through.
-settings-wallpaper-more-than-looked-at = Thư mục chứa nhiều hơn số Trindle xem qua, nên một số ảnh có thể bị bỏ sót.
+settings-wallpaper-more-than-looked-at = Thư mục có nhiều ảnh hơn số Trindle kiểm tra được, nên một số có thể bị bỏ sót.
 
 # Sentence about the wallpaper for one of Trindle's own pictures; { $name } is its name.
 settings-wallpaper-file-own-said = { $name }, một trong các ảnh đi kèm Trindle.
 
 # Sentence about the wallpaper for one chosen picture; { $name } is its name, written to read in the middle of a sentence.
-settings-wallpaper-file-one = Một ảnh, { $name }, suốt thời gian.
+settings-wallpaper-file-one = { $name } luôn được hiển thị.
 
 # Sentence about the wallpaper when the chosen picture cannot be used; { $why } is the reason.
-settings-wallpaper-file-refused = Ảnh này không được dùng. { $why } Ảnh của Trindle được hiện thay thế.
+settings-wallpaper-file-refused = Trindle không dùng ảnh đó. { $why } Thay vào đó, ảnh của Trindle được hiện.
 
 # Sentence about the wallpaper when the picture has gone.
 settings-wallpaper-file-gone = Ảnh không còn ở đó nữa. Hãy chọn một ảnh hoặc một thư mục.
@@ -151,14 +151,8 @@ settings-wallpaper-card-title = Hình nền
 # Heading of the wallpaper line, and name of its switch.
 settings-wallpaper-wallpaper = Hình nền
 
-# Small words under the wallpaper line.
-settings-wallpaper-wallpaper-about = Khi tắt, màn hình là một màu trơn.
-
 # Heading of the line for choosing where the picture comes from.
 settings-wallpaper-picture = Ảnh
-
-# Small words under that line.
-settings-wallpaper-picture-about = Một ảnh, một thư mục, hoặc ảnh của Trindle.
 
 # Name of the round button that chooses one picture.
 settings-wallpaper-choose-picture-button = Chọn một ảnh
@@ -172,26 +166,20 @@ settings-wallpaper-own-pictures = Ảnh của Trindle
 # Heading of the fit line.
 settings-wallpaper-fit = Vừa khung
 
-# Small words under that line.
-settings-wallpaper-fit-about = Cách ảnh vừa với màn hình.
-
 # Name of the list of how the picture fits the screen.
 settings-wallpaper-fit-name = Cách ảnh vừa với màn hình
 
 # Heading of the colour line.
 settings-wallpaper-colour = Màu
 
-# Small words under the colour line when the colour can be seen.
-settings-wallpaper-colour-shown = Hiện riêng, hoặc quanh một bức ảnh.
-
 # Small words under the colour line when a picture covers it.
-settings-wallpaper-colour-hidden = Bị ẩn: ảnh phủ kín màn hình.
+settings-wallpaper-colour-hidden = Bị ảnh che.
 
 # Placeholder and name of the box for typing the colour as a hex code; the example is a code.
-settings-wallpaper-colour-hex = Màu dưới dạng mã hex, ví dụ #09090b
+settings-wallpaper-colour-hex = Một mã hex, ví dụ #09090b
 
 # Words behind the i of the Wallpaper card.
-settings-wallpaper-card-about = Một màu trơn, hoặc một bức ảnh, hoặc một thư mục để ảnh tự đổi theo thời gian bạn đặt. Màu hiện riêng khi không có ảnh, và quanh một bức ảnh không phủ kín màn hình; hãy nhập nó dưới dạng mã hex, ví dụ #09090b.
+settings-wallpaper-card-about = Dùng một màu trơn, một bức ảnh, hoặc một thư mục ảnh tự đổi theo tần suất bạn chọn. Màu hiện riêng khi không có ảnh, và quanh một bức ảnh không phủ kín màn hình. Hãy nhập nó dưới dạng mã hex, ví dụ #09090b.
 
 # Small words on the cards that are greyed while the wallpaper is off.
 settings-wallpaper-waits = Hãy bật Hình nền để dùng các mục này.
@@ -199,38 +187,26 @@ settings-wallpaper-waits = Hãy bật Hình nền để dùng các mục này.
 # Heading of the line, and name of its switch, for changing the picture now and then.
 settings-wallpaper-rotate = Thỉnh thoảng đổi ảnh
 
-# Small words under that line.
-settings-wallpaper-rotate-about = Lần lượt từng ảnh trong một thư mục.
-
 # Heading of the line, and name of its list, for how long each picture stays.
 settings-wallpaper-every = Đổi sau mỗi
-
-# Small words under that line.
-settings-wallpaper-every-about = Mỗi ảnh được giữ bao lâu.
 
 # Heading of the line, and name of its list, for the order pictures change in.
 settings-wallpaper-order = Thứ tự
 
-# Small words under the order line.
-settings-wallpaper-order-about = Ngẫu nhiên, hoặc theo tên tệp.
-
 # Heading of the line, and name of its button, for moving to the next picture.
-settings-wallpaper-next = Đổi sang ảnh kế tiếp ngay
-
-# Small words under that line.
-settings-wallpaper-next-about = Chuyển sang ảnh tiếp theo ngay lập tức.
+settings-wallpaper-next = Ảnh kế tiếp
 
 # Title of the Changing pictures card.
 settings-wallpaper-changing-title = Ảnh thay đổi
 
 # Words behind the i of that card.
-settings-wallpaper-changing-about = Dùng mọi ảnh trong một thư mục, lần lượt từng ảnh, đổi theo thời gian chọn ở đây, ngẫu nhiên hoặc theo tên tệp.
+settings-wallpaper-changing-about = Hiện mọi ảnh trong một thư mục, lần lượt từng ảnh, theo tần suất bạn chọn ở đây, ngẫu nhiên hoặc theo tên tệp.
 
 # Words behind the i of the Pictures card when pictures change by themselves.
-settings-wallpaper-pictures-rotating = Chỉ những ảnh sáng mới được dùng. Bấm vào một ảnh để làm mờ nó và từ đó nó sẽ bị bỏ qua; bấm lần nữa để đưa nó trở lại. Không có gì bị xóa, nên bạn có thể đổi ý. Ảnh đang hiện trên màn hình là ảnh trong khung lớn.
+settings-wallpaper-pictures-rotating = Trindle dùng mọi ảnh không bị làm mờ. Bấm vào một ảnh để bỏ qua nó, và bấm lần nữa để đưa nó trở lại. Không có gì bị xóa. Ảnh trong khung lớn là ảnh đang hiện trên màn hình.
 
 # Words behind the i of the Pictures card when one picture is on.
-settings-wallpaper-pictures-one = Bấm vào một ảnh để đặt nó lên màn hình. Không có gì bị xóa.
+settings-wallpaper-pictures-one = Bấm vào một ảnh để dùng nó.
 
 # Title of the Pictures card.
 settings-wallpaper-pictures-title = Ảnh
@@ -240,7 +216,3 @@ settings-wallpaper-no-pictures-name = Chưa có ảnh nào
 
 # Heading of the line shown when there are no pictures to choose from.
 settings-wallpaper-no-pictures = Không có ảnh để chọn
-
-# Small words under that line.
-settings-wallpaper-no-pictures-about = Hãy chọn một thư mục ảnh ở trên.
-

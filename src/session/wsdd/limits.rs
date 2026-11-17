@@ -35,3 +35,11 @@ pub(super) fn spawn_within(count: &'static AtomicUsize, most: usize, job: impl F
         job();
     })
 }
+
+pub(super) const MOST_DEVICES: usize = 300;
+pub(super) const MOST_TEXT: usize = 256;
+pub(super) const MOST_TYPES: usize = 16;
+
+pub(super) fn cut(s: &str, most: usize) -> String {
+    s.chars().take(most).collect()
+}

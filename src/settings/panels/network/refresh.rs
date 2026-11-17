@@ -76,7 +76,7 @@ impl Network {
         }
     }
 
-    fn got_device(&mut self, kit: &mut Kit, path: &str, dev: Props) {
+    pub(super) fn got_device(&mut self, kit: &mut Kit, path: &str, dev: Props) {
         let kind = get_u32(&dev, "DeviceType");
         if kind == DEVICE_WIFI {
             self.next.wifi = true;
@@ -84,7 +84,8 @@ impl Network {
         if kind == DEVICE_ETHERNET {
             self.next.wired.push(Wired { path: path.to_string(), name: get_str(&dev, "Interface"), state: get_u32(&dev, "State") });
             self.one_done();
-        } else if kind == DEVICE_WIFI && self.enabled {
+        } else if kind == DEVICE_WIFI && self.enabled && !std::mem::replace(&mut self.next.wifi_read, true) {
+
             let first = self.wifi_device.replace(path.to_string()).is_none();
             if first {
                 self.scan(kit);
@@ -206,6 +207,7 @@ impl Network {
             path: path.clone(),
             strength,
             secure: get_u32(&props, "Flags") & 1 != 0 || get_u32(&props, "WpaFlags") != 0 || get_u32(&props, "RsnFlags") != 0,
+            enterprise: (get_u32(&props, "WpaFlags") | get_u32(&props, "RsnFlags")) & KEY_MGMT_802_1X != 0,
         };
 
         let f = &mut self.next;
@@ -228,7 +230,6 @@ impl Network {
         self.order.keep(&mut names, String::clone);
         self.ap_names = names;
     }
-
 }
 
 const SETTINGS_PATH: &str = "/org/freedesktop/NetworkManager/Settings";
@@ -237,6 +238,7 @@ const WIRELESS: &str = "org.freedesktop.NetworkManager.Device.Wireless";
 const ACCESS_POINT: &str = "org.freedesktop.NetworkManager.AccessPoint";
 const SETTINGS: &str = "org.freedesktop.NetworkManager.Settings";
 
+const KEY_MGMT_802_1X: u32 = 0x200;
 const DEVICE_WIFI: u32 = 2;
 const DEVICE_ETHERNET: u32 = 1;
 

@@ -7,28 +7,28 @@ settings-audio-title = Áudio
 settings-audio-keywords = som volume alto-falantes caixas de som fones de ouvido microfone mic mudo silenciar teste
 
 # Introduction under the heading of the audio page, and the words behind the page i.
-settings-audio-help = Escolha quais alto-falantes ou fones tocam o som e qual microfone escuta.
+settings-audio-help = Escolha quais alto-falantes ou fones tocam o som e qual microfone usar.
 
 # Red sentence at the top of the page when PipeWire, the sound system, is not installed.
-settings-audio-top-missing = Não há som: o PipeWire não está instalado.
+settings-audio-top-missing = Não há som porque o PipeWire não está instalado.
 
 # Red sentence at the top of the page when PipeWire is installed but not answering.
-settings-audio-top-failed = Não há som: o PipeWire não está respondendo.
+settings-audio-top-failed = Não há som porque o PipeWire, o serviço de som, não está respondendo.
 
 # Red sentence at the top of the page when there are no speakers or headphones.
-settings-audio-top-no-output = Nenhum alto-falante ou fone foi encontrado.
+settings-audio-top-no-output = Não há alto-falantes nem fones.
 
 # Plain sentence at the top of the page while the page is still finding out about sound.
 settings-audio-top-listening = Verificando o som…
 
 # Warning at the top of the page when sound is muted; { $device } is the speakers or headphones.
-settings-audio-top-muted = O som está silenciado, então { $device } está mudo.
+settings-audio-top-muted = { $device }: silenciado.
 
 # Warning at the top of the page when the volume is at nothing; { $device } is the speakers or headphones.
-settings-audio-top-down = O volume está no mínimo, então { $device } está mudo.
+settings-audio-top-down = O volume de { $device } está no mínimo.
 
 # Sentence at the top of the page when all is well; { $device } is the speakers or headphones and { $percent } the volume.
-settings-audio-top-playing = O som toca em { $device } a { $percent }%.
+settings-audio-top-playing = O som está tocando em { $device } a { $percent }%.
 
 # Title of the card for speakers and headphones.
 settings-audio-out-title = Alto-falantes e fones
@@ -37,10 +37,10 @@ settings-audio-out-title = Alto-falantes e fones
 settings-audio-in-title = Microfone
 
 # Heading of the line shown when no speakers or headphones are found.
-settings-audio-out-none = Nenhum dispositivo de saída
+settings-audio-out-none = Nenhum alto-falante encontrado
 
 # Heading of the line shown when no microphone is found.
-settings-audio-in-none = Nenhum dispositivo de entrada
+settings-audio-in-none = Nenhum microfone
 
 # Small words under that line for speakers.
 settings-audio-out-plug = Conecte alto-falantes ou fones.
@@ -51,17 +51,11 @@ settings-audio-in-plug = Conecte um microfone ou headset.
 # Heading of the line with the list of devices.
 settings-audio-device = Dispositivo
 
-# Small words under the device line for speakers.
-settings-audio-out-device-about = Onde o som toca.
-
-# Small words under the device line for microphones.
-settings-audio-in-device-about = O que escuta.
-
 # Name of the list of speakers and headphones.
 settings-audio-out-device-name = Onde o som toca
 
 # Name of the list of microphones.
-settings-audio-in-device-name = O que escuta
+settings-audio-in-device-name = Microfone
 
 # Heading of the volume line.
 settings-audio-volume = Volume
@@ -81,32 +75,20 @@ settings-audio-out-mute-name = Silenciar o som
 # Name of the switch that mutes the microphone.
 settings-audio-in-mute-name = Silenciar o microfone
 
-# Small words under the mute line for the speakers.
-settings-audio-mute-out-about = Mudo, mantendo o volume.
-
-# Small words under the mute line for the microphone.
-settings-audio-mute-in-about = Nada é ouvido enquanto estiver ligado.
-
 # Heading of the line that plays a test sound.
 settings-audio-test = Teste
-
-# Small words under the test line.
-settings-audio-test-about = Toca um som curto neste dispositivo.
 
 # Name of the button that plays a test sound.
 settings-audio-test-button = Tocar um som de teste
 
 # Words behind the i of the speakers card.
-settings-audio-out-about = Escolha quais alto-falantes ou fones tocam o som. O volume e o mudo aqui são os mesmos das teclas do teclado e do círculo de som no anel.
+settings-audio-out-about = Escolha quais alto-falantes ou fones tocam o som. O volume e o mudo aqui funcionam do mesmo jeito que as teclas do teclado e o círculo de som no anel.
 
 # Heading of the line with the microphone level bar.
 settings-audio-level = Nível
 
-# Small words under the level line.
-settings-audio-level-about = Fale e a barra se move quando ele ouvir você.
-
 # Words behind the i of the microphone card.
-settings-audio-in-about = Escolha qual microfone escuta. A barra de nível acompanha o que ele ouve enquanto esta página estiver aberta; nada é gravado nem guardado.
+settings-audio-in-about = Escolha qual microfone usar. Enquanto esta página estiver aberta, a barra mostra o som que ele capta. O Trindle não grava nem guarda nada.
 
 # Title of the card shown when PipeWire is not answering.
 settings-audio-failed-title = Som
@@ -115,19 +97,19 @@ settings-audio-failed-title = Som
 settings-audio-failed-heading = O PipeWire não está respondendo
 
 # Small words under that line.
-settings-audio-failed-about = O som pode não ter iniciado nesta sessão.
+settings-audio-failed-about = O som pode não ter iniciado quando você entrou.
 
 # Red words under the volume line when the volume could not be changed.
-settings-audio-no-volume = Não foi possível alterar o volume. O som pode não ter iniciado; saia e entre de novo, e tente outra vez.
+settings-audio-no-volume = O Trindle não conseguiu alterar o volume. O som pode não ter iniciado. Saia da sessão, entre de novo e tente outra vez.
 
 # Red words under the mute line when the sound could not be muted.
-settings-audio-no-mute = Não foi possível silenciar o som. O som pode não ter iniciado; saia e entre de novo, e tente outra vez.
+settings-audio-no-mute = O Trindle não conseguiu silenciar o som. O som pode não ter iniciado. Saia da sessão, entre de novo e tente outra vez.
 
 # Red words under the mute line when the sound could not be turned back on.
-settings-audio-no-unmute = Não foi possível reativar o som. O som pode não ter iniciado; saia e entre de novo, e tente outra vez.
+settings-audio-no-unmute = O Trindle não conseguiu reativar o som. O som pode não ter iniciado. Saia da sessão, entre de novo e tente outra vez.
 
 # Red words under the device line when the device could not be chosen.
-settings-audio-not-chosen = Não foi possível escolher esse dispositivo.
+settings-audio-not-chosen = Não foi possível mudar para esse dispositivo.
 
 # Red words under the test line when the test sound would not play.
 settings-audio-test-failed = O som de teste não tocou neste dispositivo.
@@ -154,15 +136,14 @@ settings-audio-kind-speakers = alto-falantes
 # Heading of the line shown while Bluetooth plays the sound.
 settings-audio-bt-now = O som está indo para o Bluetooth
 
-# Words under that heading.
-settings-audio-bt-now-about = Mude para os alto-falantes; o Bluetooth continua conectado.
-
 # Tooltip of the button that moves the sound to the speakers; { $device } is the speakers, kind included.
 settings-audio-use-speakers = Tocar em { $device }
 
 # Heading of the line when Bluetooth devices are connected but have no sound output; { $names } lists them.
-settings-audio-bt-silent = { $names }: conectado, mas sem saída de som.
+settings-audio-bt-silent = { $names }: conectado, mas o som não toca nele.
 
 # Words under that heading.
-settings-audio-bt-silent-about = O perfil de som pode estar desligado. Desconecte e conecte de novo.
+settings-audio-bt-silent-about = O som dele pode não estar configurado. Desconecte e conecte de novo.
 
+# Red words when the sound devices could not be read.
+settings-audio-not-read = O Trindle não achou os dispositivos de som.

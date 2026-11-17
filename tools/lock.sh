@@ -22,5 +22,5 @@ awk -v tk="git+https://github.com/trindle-os/trindle-toolkit?rev=$toolkit#$toolk
             }
         }
     }' "$here/Cargo.lock" > "$here/Cargo.lock.new"
-awk -v RS= -v ORS='\n\n' '!seen[$0]++ { gsub(/trindle-common 0\.9\.0-beta\.1( \(git[^)]*\))?"/, "trindle-common\""); print }' "$here/Cargo.lock.new" | sed '$d' > "$here/Cargo.lock"
+awk -v RS= -v ORS='\n\n' '!seen[$0]++ { gsub(/trindle-common [0-9][^ "]*( \(git[^)]*\))?"/, "trindle-common\""); print }' "$here/Cargo.lock.new" | sed '$d' > "$here/Cargo.lock"
 rm "$here/Cargo.lock.new"

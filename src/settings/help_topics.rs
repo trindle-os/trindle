@@ -1,7 +1,5 @@
 //! The Help page's content: plain words for someone who has never used Trindle.
 
-use std::sync::OnceLock;
-
 use crate::common::key_enrolment::{self, Lead};
 use crate::toolkit::t;
 
@@ -366,10 +364,10 @@ fn about_and_trouble() -> Vec<Topic> {
 }
 
 pub fn topics() -> &'static [Topic] {
-    static ALL: OnceLock<Vec<Topic>> = OnceLock::new();
-    ALL.get_or_init(|| {
+    use crate::common::live_language::{per_language, Kept};
+    static ALL: Kept<Vec<Topic>> = std::sync::Mutex::new(Vec::new());
+    per_language(&ALL, || {
         let groups = [getting_started, programs, devices, seeing, looks, hardware_and_files, system, about_and_trouble];
         groups.iter().flat_map(|group| group()).collect()
-    })
+    }).as_slice()
 }
-

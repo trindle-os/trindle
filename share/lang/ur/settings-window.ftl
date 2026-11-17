@@ -26,14 +26,14 @@ settings-window-group-about = تعارف
 settings-window-in-apps = ایپس میں
 
 # Small grey heading over the row a search finds that opens the Folders program's settings.
-settings-window-in-folders = فولڈرز میں
+settings-window-in-folders = Folders میں
 
 # The side bar row that opens the Folders program at its own settings.
-settings-window-in-folders-name = فولڈرز کی اپنی سیٹنگز
+settings-window-in-folders-name = Folders کی اپنی سیٹنگز
 
 # Words the Settings search matches the Folders settings row by, in lower case, separated by spaces.
 settings-window-in-folders-keywords =
-    فولڈرز فائلیں فائل منیجر آغاز پین ہوم حالیہ ڈرائیوز یو ایس بی اسٹک ایس ڈی کارڈ پلگ ان کھولیں نکالیں فہرست توسیع ناموں ٹک خانے چیک باکس چننا انتخاب قطاریں کومپیکٹ عام کشادہ
+    Folders فولڈرز فائلیں فائل منیجر آغاز پین ہوم حالیہ ڈرائیوز یو ایس بی اسٹک ایس ڈی کارڈ پلگ ان کھولیں نکالیں فہرست توسیع ناموں ٹک خانے چیک باکس چننا انتخاب قطاریں کومپیکٹ عام کشادہ
 
 # Quiet line in the side bar when a search finds no page.
 settings-window-no-page = کوئی صفحہ نہیں ملا۔ چھوٹا لفظ آزمائیں، یا مدد میں دیکھیں۔
@@ -51,13 +51,13 @@ settings-window-theme-now = تھیم اب { $theme } ہے۔
 settings-window-theme-own = Trindle کی اپنی
 
 # Printed in a terminal when the theme could not be chosen; error says why and ends with a full stop.
-settings-window-themes-list = { $error } trindle-settings --themes انہیں فہرست کرتا ہے۔
+settings-window-themes-list = { $error } فہرست دیکھنے کے لیے trindle-settings --themes چلائیں۔
 
 # Printed in a terminal when trindle-settings --keys is not given the word default.
-settings-window-keys-how = ہر کلید اور بٹن واپس کرنے کے لیے: trindle-settings --keys default
+settings-window-keys-how = ہر کلید اور بٹن کو عام حالت پر واپس لانے کے لیے یہ چلائیں: trindle-settings --keys default
 
 # Printed in a terminal after every key and button was put back.
-settings-window-keys-back = ہر کلید اور بٹن اب ویسا ہی ہے جیسا چھاپا گیا ہے۔
+settings-window-keys-back = ہر کلید اور بٹن عام حالت پر واپس آ گیا ہے۔
 
 # Printed in a terminal when the keys could not be put back; error says why.
-settings-window-keys-failed = کلیدیں واپس نہیں کی جا سکیں: { $error }
+settings-window-keys-failed = Trindle کلیدیں واپس نہیں کر سکا: { $error }

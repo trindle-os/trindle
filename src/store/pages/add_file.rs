@@ -1,4 +1,4 @@
-//! Adding what the person brings: AppImages, Flatpak references and .deb files.
+//! Adding what the person brings: AppImages and .deb files.
 
 use crate::store::came_from::{self, CameFrom};
 use crate::store::{github, go, Msg, Store, View};
@@ -79,28 +79,6 @@ fn settled(source: &std::path::Path, at: &std::path::Path, from: &CameFrom) {
     if source.parent() == Some(github::downloads().as_path()) && source != at {
         let _ = std::fs::remove_file(source);
     }
-}
-
-pub(crate) fn install_flatpakref(s: &mut Store, file: std::path::PathBuf) {
-    let Some(about) = crate::store::dropped::reference(&file) else {
-        s.top = Some((t!("store-add-bad-ref").into(), Tone::Problem));
-        return;
-    };
-    s.top = Some((t!("store-add-installing-ref", name = &about.name, host = &about.host), Tone::Plain));
-    let done = s.then(move |s: &mut Store, (ok, err): (bool, String)| {
-        if ok {
-            s.top = Some((t!("store-add-installed-ref", name = &about.name), Tone::Plain));
-            installed_opened(s);
-        } else {
-            let why = err.trim().lines().last().unwrap_or(t!("store-add-ref-refused")).to_string();
-            s.top = Some((t!("store-add-ref-failed", name = &about.name, why = why), Tone::Problem));
-        }
-    });
-    let argv = crate::store::dropped::install_argv(&file);
-    run::on_thread(move || {
-        let (ok, _, err) = run::captured(&argv, None);
-        (ok, err)
-    }, done);
 }
 
 fn plain_error(e: std::io::Error) -> String {

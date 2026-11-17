@@ -43,6 +43,8 @@ const SERVER_PATH: &str = "/org/freedesktop/Notifications";
 
 const ICON_MOST: u64 = 4 << 20;
 
+const NOTES_KEEP: Duration = Duration::from_secs(24 * 3600);
+
 type Key = (String, String);
 
 type Action = (String, Option<OwnedValue>);
@@ -130,11 +132,14 @@ fn icon_of(v: &Value) -> Option<Icon> {
             _ => None,
         }),
         ("bytes", Value::Array(bytes)) => {
-            let all: Vec<u8> = bytes.iter().filter_map(|b| if let Value::U8(b) = b { Some(*b) } else { None }).collect();
-            (!all.is_empty()).then_some(Icon::Bytes(all))
+            let all: Vec<u8> = bytes.iter().filter_map(|b| if let Value::U8(b) = b { Some(*b) } else { None }).take(ICON_MOST as usize + 1).collect();
+            (!all.is_empty() && all.len() as u64 <= ICON_MOST).then_some(Icon::Bytes(all))
         }
-        ("file", Value::Fd(fd)) => {
+        ("file-descriptor" | "file", Value::Fd(fd)) => {
             let file = std::fs::File::from(fd.as_fd().try_clone_to_owned().ok()?);
+            if !file.metadata().ok()?.is_file() {
+                return None;
+            }
             let mut all = Vec::new();
             file.take(ICON_MOST).read_to_end(&mut all).ok()?;
             (!all.is_empty()).then_some(Icon::Bytes(all))
@@ -214,11 +219,26 @@ fn add(state: &Rc<State>, asked: Asked) {
         });
 }
 
+fn notes_dir() -> PathBuf {
+    crate::common::files::scratch().join("trindle-portal-notes")
+}
+
+fn sweep_notes(dir: &std::path::Path, now: std::time::SystemTime) {
+    let Ok(all) = std::fs::read_dir(dir) else { return };
+    for e in all.flatten() {
+        let old = e.metadata().and_then(|m| m.modified()).ok()
+            .is_some_and(|t| now.duration_since(t).unwrap_or_default() > NOTES_KEEP);
+        if old {
+            let _ = std::fs::remove_file(e.path());
+        }
+    }
+}
+
 fn shown_icon(options: &Options, turn: u64) -> (String, Option<PathBuf>) {
     match options.get("icon").and_then(|v| icon_of(v)) {
         Some(Icon::Named(name)) => (name, None),
         Some(Icon::Bytes(bytes)) => {
-            let dir = crate::common::files::scratch().join("trindle-portal-notes");
+            let dir = notes_dir();
             let path = dir.join(format!("{}-{}", std::process::id(), turn));
             if std::fs::create_dir_all(&dir).is_ok() && std::fs::write(&path, bytes).is_ok() {
                 (path.to_string_lossy().into_owned(), Some(path))
@@ -318,6 +338,7 @@ fn pressed(state: &State, number: u32, key: &str) {
 }
 
 pub fn offer(bus: &Bus, events: &Loop, stay: &Rc<Stay>) -> Offer {
+    sweep_notes(&notes_dir(), std::time::SystemTime::now());
     let state = Rc::new(State {
         bus: bus.clone(),
         events: events.clone(),
@@ -480,6 +501,41 @@ mod tests {
         let v = Value::from(("bytes", Value::new(vec![1u8, 2, 3])));
         assert!(matches!(icon_of(&v), Some(Icon::Bytes(b)) if b == vec![1, 2, 3]));
         assert!(icon_of(&Value::from("mail")).is_none());
+        let big = Value::from(("bytes", Value::new(vec![7u8; ICON_MOST as usize + 1])));
+        assert!(icon_of(&big).is_none());
+    }
+
+    #[test]
+    fn an_icon_by_descriptor_is_read_only_from_an_ordinary_file() {
+        let dir = std::env::temp_dir().join(format!("trindle-icon-fd-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(dir.join("i.png"), [1u8, 2, 3]).unwrap();
+        let file = std::fs::File::open(dir.join("i.png")).unwrap();
+        let v = Value::from(("file-descriptor", Value::Fd(zbus::zvariant::Fd::from(&file))));
+        assert!(matches!(icon_of(&v), Some(Icon::Bytes(b)) if b == vec![1, 2, 3]));
+        let fifo = dir.join("pipe");
+        let name = std::ffi::CString::new(fifo.to_str().unwrap()).unwrap();
+        // SAFETY: name is a NUL-terminated path that outlives the call.
+        assert_eq!(unsafe { libc::mkfifo(name.as_ptr(), 0o600) }, 0);
+
+        let read = std::fs::OpenOptions::new().read(true).write(true).open(&fifo).unwrap();
+        let v = Value::from(("file-descriptor", Value::Fd(zbus::zvariant::Fd::from(&read))));
+        assert!(icon_of(&v).is_none(), "a pipe is not waited on");
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn old_icon_copies_are_swept_and_new_ones_stay() {
+        let dir = std::env::temp_dir().join(format!("trindle-notes-sweep-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(dir.join("1-1"), b"x").unwrap();
+        sweep_notes(&dir, std::time::SystemTime::now());
+        assert!(dir.join("1-1").exists());
+        sweep_notes(&dir, std::time::SystemTime::now() + NOTES_KEEP * 2);
+        assert!(!dir.join("1-1").exists());
+        let _ = std::fs::remove_dir_all(&dir);
         assert_eq!((urgency("low"), urgency("high"), urgency("urgent")), (0, 1, 2));
     }
 }

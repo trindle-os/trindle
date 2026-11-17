@@ -36,30 +36,17 @@ store-tab-count = { $name } { $n }
 # Spoken name of a strip of tabs on the Installed page.
 store-tabs-show = Onyesha
 
-# How long is left when it is a minute or less.
-store-left-minute = imebaki takriban dakika moja
-
-# How long is left, in minutes.
-store-left-minutes = imebaki takriban dakika { $n }
-
-# How long is left, in hours.
-store-left-hours =
-    { $n ->
-        [one] imebaki takriban saa 1
-       *[other] imebaki takriban saa { $n }
-    }
-
 # Credit under a package's page for the list its site was checked against.
 store-origin-credit = Imekaguliwa dhidi ya orodha ya Threat Intelligence ya HaGeZi
 
 # Where a download came from: the site and the page that led to it.
-store-origin-both = Imepakuliwa kutoka { $site }, kwa kupitia { $referrer }.
+store-origin-both = Ulipakua hii kutoka { $site }, baada ya kufika kutoka { $referrer }.
 
 # Where a download came from: the site.
 store-origin-site = Imepakuliwa kutoka { $site }.
 
 # Where a download came from: the page that led to it.
-store-origin-referrer = Imefikiwa kupitia { $referrer }.
+store-origin-referrer = Kiungo kilitoka { $referrer }.
 
 # Said when nothing tells where a download came from.
 store-origin-unknown = Trindle haiwezi kujua hii ilitoka wapi.
@@ -70,16 +57,16 @@ store-origin-listed = { $from } { $name } iko kwenye orodha ya Threat Intelligen
 
 # Said when the site is not on the list; the first part says where the download came from.
 # SAFETY: needs a human review before it ships
-store-origin-clear = { $from } Tovuti hii haiko kwenye orodha ya Threat Intelligence ya HaGeZi, lakini orodha hiyo haijakamilika, kwa hiyo hili halithibitishi kuwa ni salama.
+store-origin-clear = { $from } Tovuti hii haiko kwenye orodha ya Threat Intelligence ya HaGeZi. Orodha hiyo haijakamilika, kwa hiyo hili halithibitishi kuwa ni salama.
 
 # Said when the list could not be fetched; the first part says where the download came from.
-store-origin-not-checked = { $from } Tovuti haikuweza kukaguliwa, kwa sababu orodha ya Threat Intelligence ya HaGeZi haikuweza kupatikana.
+store-origin-not-checked = { $from } Trindle haikuweza kukagua tovuti, kwa sababu haikuweza kupata orodha ya Threat Intelligence ya HaGeZi.
 
 # Name shown for a review whose writer gave none.
 store-review-someone = Mtu fulani
 
 # Red words when the keyring could not be reached.
-store-key-unreached = Hifadhi ya funguo haikuweza kufikiwa: { $why }.
+store-key-unreached = Trindle haikuweza kufikia hifadhi ya funguo: { $why }.
 
 # Red words when the key kept in the keyring is not text.
 store-key-not-text = Ufunguo uliohifadhiwa si maandishi.

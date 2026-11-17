@@ -50,14 +50,11 @@ settings-help-read = Oku: { $title }
 # Bold line in the Reading card of Help when no topic is open.
 settings-help-nothing-open = Açık konu yok
 
-# Quiet line under "Nothing open" in Help.
-settings-help-nothing-open-sub = Bir konuyu burada okumak için yanındaki oka basın.
-
 # Heading of the Help card that shows the open topics.
 settings-help-reading = Okunan
 
 # Placeholder and spoken name of the typing box that searches Help.
-settings-help-search-placeholder = Yardımda ara, örneğin “wifi”, “yazıcı” ya da “kapat”
+settings-help-search-placeholder = Yardımda ara
 
 # Heading of the Help card with the search box.
 settings-help-search = Yardımda ara

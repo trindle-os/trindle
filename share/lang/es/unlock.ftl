@@ -5,7 +5,7 @@
 unlock-title-default = Contraseña del disco
 
 # Heading of the box in place of cryptsetup's own wording ("Please unlock disk ...", "Enter passphrase").
-unlock-title-encryption = Escribe la contraseña de cifrado
+unlock-title-encryption = Escribe la contraseña del disco
 
 # Key hint under the box: Tab, or the eye, shows the typed password.
 unlock-show = Mostrar
@@ -21,4 +21,3 @@ unlock-turn-off = Apagar
 
 # Red line inside the card when Enter is pressed with nothing typed.
 unlock-type-first = Escribe la contraseña y pulsa Intro
-

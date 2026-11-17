@@ -18,14 +18,23 @@ polkit-cancel = 取消
 
 # SAFETY: needs a human review before it ships
 # Said when the password typed is not accepted, and the question is asked again.
-polkit-not-accepted = 密码未被接受。请重试。
+polkit-not-accepted = 密码不对。请重试。
 
 # Name a screen reader speaks for the password question window.
-polkit-spoken = 身份验证
+polkit-spoken = 你的密码
 
 # Under the password box, when other requests for a password are waiting for
 # this one to end. { $n } is how many.
 polkit-waiting-behind =
     { $n ->
-       *[other] 还有 { $n } 个请求在等待这个请求结束。
+       *[other] 还有 { $n } 个请求在等待。
     }
+
+# Under the heading, when Drives asks for the password to take the snapshot before making room.
+polkit-reason-drives-snapshot = 驱动器需要管理员的密码，才能在腾出空间前创建快照。
+
+# Under the heading, when Drives asks for the password to switch a swap file off before making room.
+polkit-reason-drives-swap-off = 驱动器需要管理员的密码，才能在腾出空间时关闭交换文件。
+
+# Under the heading, when Drives asks for the password to switch a swap file back on.
+polkit-reason-drives-swap-on = 驱动器需要管理员的密码，才能重新开启交换文件。

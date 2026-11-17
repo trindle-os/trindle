@@ -23,7 +23,7 @@ voice-keep-awake-on = Inabaki macho
 voice-updates = Inatafuta masasisho
 
 # Said under the ring when nothing was heard at all.
-voice-nothing-heard = Hakuna kilichosikika. Gusa katikati ya pete kisha uongee.
+voice-nothing-heard = Trindle haikukusikia. Gusa katikati ya pete kisha uongee.
 
 # Said under the ring when the volume goes up.
 voice-louder = Sauti juu zaidi
@@ -86,7 +86,7 @@ voice-showing-app = Inaonyesha { $name }
 voice-opening-app = Inafungua { $name }
 
 # Said under the ring when the request was heard but not understood; what was heard comes in.
-voice-heard-unknown = Imesikia “{ $heard }”, lakini haikujua la kufanya
+voice-heard-unknown = Trindle haikutambua amri “{ $heard }”
 
 # Said in the ring when voice has not been added yet.
 voice-optional = Sauti ni nyongeza ya hiari. Iongeze kwenye Mipangilio, ukurasa wa Pete.
@@ -95,31 +95,31 @@ voice-optional = Sauti ni nyongeza ya hiari. Iongeze kwenye Mipangilio, ukurasa 
 voice-switched-off = Sauti imezimwa. Iwashe kwenye Mipangilio, ukurasa wa Pete.
 
 # Said in the ring when the microphone cannot be opened; the reason comes after it.
-voice-mic-failed = Kipaza sauti hakikuweza kufunguliwa: { $why }
+voice-mic-failed = Trindle haikuweza kutumia kipaza sauti: { $why }
 
 # Said in the ring when the microphone's recorder would not start.
-voice-mic-not-started = Kipaza sauti hakikuweza kufunguliwa: pw-record haikuanza
+voice-mic-not-started = Trindle haikuweza kutumia kipaza sauti kwa sababu programu ya kurekodi haikuanza
 
 # Said in the ring when listening stopped and nothing was recorded.
 voice-nothing-recorded = Hakuna kilichorekodiwa.
 
 # Said in the ring when the recording had no speech in it.
-voice-nothing-heard-after = Hakuna kilichosikika. Gusa katikati ya pete kisha uongee.
+voice-nothing-heard-after = Trindle haikukusikia. Gusa katikati ya pete kisha uongee.
 
 # Said in the ring when the speech engine failed and gave no reason.
 voice-whisper-failed = Whisper imeshindwa
 
 # Progress line while the build tools are added for the build; the names of the packages come in.
-voice-installing-tools = Inaweka zana za kujenga kwa muda: { $names }
+voice-installing-tools = Inasakinisha zana za kujenga kwa muda: { $names }
 
 # Progress line while whisper.cpp is built; its version comes in.
-voice-building = Inajenga whisper.cpp { $version } kwa ajili ya sauti (dakika moja au mbili)
+voice-building = Inajenga whisper.cpp { $version } kwa ajili ya udhibiti wa sauti. Hii huchukua dakika moja au mbili.
 
 # Progress line while the speech model is downloaded (148 MB).
 voice-fetching-model = Inapakua modeli ya usemi (148 MB)
 
 # Progress line while the build tools are taken away again.
-voice-removing-tools = Inaondoa zana za kujenga tena
+voice-removing-tools = Inaondoa zana za kujenga sasa
 
 # Said once voice is added and ready to use.
 voice-ready = Udhibiti wa sauti uko tayari. Fungua pete, gusa katikati, kisha uongee.
@@ -132,3 +132,15 @@ voice-press-enter = Bonyeza Enter ili kufunga.
 
 # Shown when the command is run with neither install nor remove.
 voice-usage = matumizi: trindle-voice-setup install | remove
+
+# Said when a step of the voice set-up fails. { $program } is the program that was run, with its first word.
+voice-step-failed = { $program } haikufanya kazi.
+
+# Said when the whisper.cpp download isn't the one Trindle checks for, so nothing is built from it.
+voice-whisper-fingerprint = Upakuaji wa whisper.cpp si ule ambao Trindle ilitarajia, kwa hiyo haukujengwa.
+
+# Said when the speech model download isn't the one Trindle checks for, so it isn't installed.
+voice-model-fingerprint = Upakuaji wa modeli ya usemi si ule ambao Trindle ilitarajia, kwa hiyo haukusakinishwa.
+
+# The reason after "Trindle couldn't access the microphone:" when the session has no private folder to keep a recording in.
+voice-no-private-folder = hakuna folda ya faragha inayopatikana.

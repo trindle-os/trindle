@@ -13,13 +13,13 @@ chosen-act-name-empty = Nama tidak boleh kosong.
 chosen-act-name-slash = Nama tidak boleh berisi garis miring.
 
 # Red words under a name being typed when it is . or ..
-chosen-act-name-kept = Nama itu disediakan untuk sistem.
+chosen-act-name-kept = Nama itu dipakai oleh sistem.
 
 # Red words under a name being typed when it is too long.
 chosen-act-name-long = Nama itu terlalu panjang.
 
 # Red words under the name box, and at the foot of Folders, when a rename fails: the item's name, then the reason.
-chosen-inplace-not-renamed = Nama { $name } tidak dapat diganti: { $why }.
+chosen-inplace-not-renamed = Trindle tidak dapat mengganti nama { $name }: { $why }.
 
 # Red words under the name box, and at the foot of Folders, when a name is already used in that place; the kind is the word folder or file.
 chosen-inplace-taken =

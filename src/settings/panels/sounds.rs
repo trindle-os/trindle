@@ -29,6 +29,8 @@ pub struct Sounds {
 
     own: Vec<(String, String)>,
 
+    picked: Vec<(&'static str, Option<String>)>,
+
     asking: Option<Listen>,
 
     taken: Clashes,
@@ -84,21 +86,35 @@ fn play(kit: &mut Kit, key: &str, path: &std::path::Path, percent: u32) {
 
 impl Sounds {
 
-    fn top(&self, kit: &Kit) -> Node<Msg> {
+    fn read_picked(&mut self) {
+        self.picked = MOMENTS.iter().map(|&(m, _)| (m, sounds::chosen(m))).collect();
+    }
+
+    fn chosen(&self, moment: &str) -> Option<String> {
+        match self.picked.iter().find(|p| p.0 == moment) {
+            Some(p) => p.1.clone(),
+            None => sounds::chosen(moment),
+        }
+    }
+
+    fn top(&self) -> Node<Msg> {
         let total = MOMENTS.len();
-        let on = MOMENTS.iter().filter(|(m, _)| sounds::chosen(m).is_some()).count();
+        let on = MOMENTS.iter().filter(|(m, _)| self.chosen(m).is_some()).count();
         let said = match on {
             0 => t!("settings-sounds-top-none").to_string(),
             n if n == total => t!("settings-sounds-top-all").to_string(),
             n => t!("settings-sounds-top-some", n = n, total = total),
         };
-        headline(kit, said)
+        headline(said)
     }
 
     fn choose(&mut self, kit: &mut Kit, moment: &str, id: &str) {
         let key = moment_key(moment);
-        if kit.settle(&key, set_setting(&format!("sound_{moment}"), id), not_saved()).is_some() && id != OFF {
-            hear(kit, &key, id, sounds::volume_of(moment));
+        if kit.settle(&key, set_setting(&format!("sound_{moment}"), id), not_saved()).is_some() {
+            self.read_picked();
+            if id != OFF {
+                hear(kit, &key, id, sounds::volume_of(moment));
+            }
         }
     }
 
@@ -216,6 +232,7 @@ impl Sounds {
             }
         }
         self.own = sounds::own();
+        self.read_picked();
     }
 
     fn moment_rows(&self, kit: &Kit) -> (Vec<Node<Msg>>, Vec<Node<Msg>>) {
@@ -223,10 +240,10 @@ impl Sounds {
         let names: Vec<String> = choices.iter().map(|(_, name)| name.clone()).collect();
         let moment_line = |moment: &'static str, title: &'static str| {
             let key = moment_key(moment);
-            let current = sounds::chosen(moment).unwrap_or_else(|| OFF.to_string());
+            let current = self.chosen(moment).unwrap_or_else(|| OFF.to_string());
             let at = choices.iter().position(|(id, _)| *id == current);
             let ids: Vec<String> = choices.iter().map(|(id, _)| id.clone()).collect();
-            let pick = dropdown(kit, &key, names.clone(), at, title, move |i| {
+            let pick = dropdown(&key, names.clone(), at, title, move |i| {
                 let id = ids[i].clone();
                 on::<Sounds>(move |me, k| me.choose(k, moment, &id))
             });
@@ -236,8 +253,7 @@ impl Sounds {
                     hear(k, &heard_under, &id, sounds::volume_of(moment));
                 }
             }));
-            let (name, sub) = moment_words(moment, title);
-            line(name).sub(sub).key(key).control(pick).control(hear).node(kit)
+            line(moment_name(moment, title)).key(key).control(pick).control(hear).node(kit)
         };
         let (power, rest): (Vec<_>, Vec<_>) = MOMENTS.iter().partition(|(m, _)| POWER.contains(m));
         let shown = |at: usize| self.volumes.get(at).copied().unwrap_or_else(|| sounds::volume(sounds::VOLUMES[at].0));
@@ -276,7 +292,6 @@ impl Sounds {
                                      |all| on::<Sounds>(move |me, _| me.taken.set_same(all))));
         }
         mine.push(line(t!("settings-sounds-add-heading"))
-            .sub(t!("settings-sounds-add-formats"))
             .key(ADD_KEY).control(add).control(folder).node(kit));
         for (id, name) in &self.own {
             let key = format!("sounds:{id}");
@@ -285,12 +300,12 @@ impl Sounds {
             let hear = button("audio-volume-high-symbolic", t!("settings-sounds-hear"))
                 .on_press(on::<Sounds>(move |_, k| hear(k, &heard_under, &playing, sounds::VOLUME_FULL)));
             let gone = id.clone();
-            let remove = confirm::<Sounds>(kit, &key, "user-trash-symbolic", t!("settings-sounds-remove"), move |me, k| me.remove(k, &gone));
+            let remove = confirm::<Sounds>(&key, "user-trash-symbolic", t!("settings-sounds-remove"), move |me, k| me.remove(k, &gone));
             mine.push(line(name.clone()).key(key).control(hear).control(remove).node(kit));
         }
 
         if self.own.is_empty() {
-            mine.push(line(t!("settings-sounds-none-yet")).sub(t!("settings-sounds-none-yet-about")).node(kit));
+            mine.push(line(t!("settings-sounds-none-yet")).node(kit));
         }
         mine
     }
@@ -314,15 +329,19 @@ impl Page for Sounds {
     }
     fn shown(&mut self, _kit: &mut Kit) {
         self.own = sounds::own();
+        self.read_picked();
         self.volumes = sounds::VOLUMES.iter().map(|(g, _)| sounds::volume(g)).collect();
+    }
+    fn conf_changed(&mut self, _kit: &mut Kit) {
+        self.read_picked();
     }
     fn view(&self, kit: &Kit) -> Node<Msg> {
         let (coming, power) = self.moment_rows(kit);
         let mine = self.own_rows(kit);
         page(kit, self.title(), self.help(), vec![
-            self.top(kit),
+            self.top(),
             group(t!("settings-sounds-coming-title")).icon("system-log-out-symbolic")
-                .about(t!("settings-sounds-coming-about"))
+                .about([t!("settings-sounds-coming-about"), t!("settings-sounds-moment-logout-about")].join(" "))
                 .rows(coming)
                 .span(3, 4)
                 .node(kit),
@@ -344,14 +363,11 @@ fn newly(copied: &[Copied]) -> usize {
     copied.iter().filter(|(_, got)| matches!(got, Ok(Put::Made(_)))).count()
 }
 
-fn moment_words(moment: &str, title: &'static str) -> (&'static str, &'static str) {
+fn moment_name(moment: &str, title: &'static str) -> &'static str {
     match moment {
-        "login" => (title, t!("settings-sounds-moment-login-about")),
-        "logout" => (t!("settings-sounds-moment-logout-short"), t!("settings-sounds-moment-logout-about")),
-        "plug" => (title, t!("settings-sounds-moment-plug-about")),
-        "unplug" => (title, t!("settings-sounds-moment-unplug-about")),
-        "battery" => (title, t!("settings-sounds-moment-battery-about")),
-        _ => (t!("settings-sounds-moment-notification-short"), t!("settings-sounds-moment-notification-about")),
+        "logout" => t!("settings-sounds-moment-logout-short"),
+        "notification" => t!("settings-sounds-moment-notification-short"),
+        _ => title,
     }
 }
 
@@ -396,12 +412,34 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
+    #[ignore = "writes pictures to TRINDLE_SHOTS and asserts nothing; run it by hand with --ignored"]
     fn shoot_the_question_with_the_switch() {
         use crate::settings::ui::stand::{made_up_taken, shoot_both};
         let mut page = Sounds::default();
         page.taken.add_batch(["bell.wav", "chime.ogg", "ping.flac", "drum.mp3"].map(made_up_taken));
         shoot_both(Box::new(page), "376-sounds", (1280.0, 900.0));
+    }
+
+    #[test]
+    fn the_question_says_how_many_more_wait_whole_in_every_language() {
+        use crate::common::shipped_languages::{in_language, tags};
+        use crate::settings::ui::stand::made_up_taken;
+        use crate::toolkit::ui::{App as _, Ui};
+        for tag in tags() {
+            in_language(&tag, || {
+                let mut page = Sounds::default();
+                page.taken.add_batch(["bell.wav", "chime.ogg", "ping.flac", "drum.mp3"].map(made_up_taken));
+                let events = crate::toolkit::event::Loop::new();
+                let asks = events.post(|_: crate::settings::ui::Do| {});
+                let mut kit = Kit::new(events, asks, None, None);
+                kit.current = page.id().to_string();
+                let s = crate::settings::Settings { kit, pages: vec![Box::new(page)], current: 0, search: String::new(), tall: 900.0 };
+                let mut ui = Ui::new(s.view(), crate::toolkit::theme::Theme::new(false, "#fbc711"));
+                let mut pix = tiny_skia::Pixmap::new(1280, 900).unwrap();
+                ui.paint(&mut pix.as_mut(), 1.0);
+                assert_eq!(ui.label_at(&crate::settings::ui::sub_key(ASK_KEY)), None, "{tag}: the count under the question is cut");
+            });
+        }
     }
 
     #[test]

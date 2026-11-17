@@ -4,7 +4,7 @@
 //! tells, and stops nothing.
 
 use std::fmt::Write as _;
-use std::collections::{BTreeMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 use std::path::{Path, PathBuf};
 
@@ -166,47 +166,157 @@ pub fn personal_folders(home: &Path) -> Vec<PathBuf> {
     crate::store::boxed::walls::OWN_FOLDERS.iter().map(|f| home.join(f)).collect()
 }
 
-pub fn scan(proc_root: &Path, sockets: &HashSet<u64>, folders: &[PathBuf], mine: &str, want_net: bool, want_files: bool) -> Vec<Seen> {
-    let mut found: BTreeMap<String, Seen> = BTreeMap::new();
-    let Ok(dir) = std::fs::read_dir(proc_root) else { return Vec::new() };
-    for e in dir.flatten() {
-        let at = e.path();
-        if !e.file_name().to_str().is_some_and(|n| n.bytes().all(|b| b.is_ascii_digit())) {
-            continue;
-        }
-        if std::fs::read_link(at.join("ns/mnt")).ok().as_deref().and_then(Path::to_str) != Some(mine) {
-            continue;
-        }
-        let Ok(exe) = std::fs::read_link(at.join("exe")) else { continue };
-        if trindle_own(&exe) {
-            continue;
-        }
-        let Ok(fds) = std::fs::read_dir(at.join("fd")) else { continue };
-        let (mut network, mut files) = (false, false);
-        for fd in fds.flatten() {
-            let Ok(to) = std::fs::read_link(fd.path()) else { continue };
-            if want_net && !network {
-                network = to.to_str().and_then(|t| t.strip_prefix("socket:[")?.strip_suffix(']')?.parse::<u64>().ok()).is_some_and(|i| sockets.contains(&i));
-            }
-            if want_files && !files {
-                files = folders.iter().any(|f| to.starts_with(f));
-            }
-            if network == want_net && files == want_files {
-                break;
-            }
-        }
-        if !network && !files {
-            continue;
-        }
-        let cmdline = std::fs::read(at.join("cmdline")).unwrap_or_default();
-        let (key, name, exe) = identity(&exe, &cmdline);
-        let seen = found.entry(key.clone()).or_insert(Seen { key, name, exe, network: false, files: false });
-        seen.network |= network;
-        seen.files |= files;
+const MOST_PROCESSES: usize = 8192;
+const MOST_OPEN: usize = 4096;
+const LONGEST_CMDLINE: u64 = 4096;
+
+const MOST_SKIPPED: u32 = 11;
+
+type Stamp = (std::time::SystemTime, u64, u64);
+
+fn stamp(path: &Path) -> Option<Stamp> {
+    use std::os::unix::fs::MetadataExt;
+    let m = std::fs::metadata(path).ok()?;
+    Some((m.modified().ok()?, m.len(), m.ino()))
+}
+
+struct Known {
+    start: u64,
+    exe: PathBuf,
+
+    who: Option<(String, String, String)>,
+    told_net: bool,
+    told_files: bool,
+}
+
+pub struct Watch {
+    proc_root: PathBuf,
+    folders: Vec<PathBuf>,
+    conf: PathBuf,
+    fine: PathBuf,
+    switches: Option<(Option<Stamp>, (bool, bool))>,
+    fine_stamp: Option<Stamp>,
+    known: HashMap<u32, Known>,
+    sockets: HashSet<u64>,
+    files_gap: u32,
+    files_in: u32,
+}
+
+impl Watch {
+    pub fn new(proc_root: &Path) -> Watch {
+        Watch::at(proc_root, personal_folders(&files::home()), files::trindle_conf(), fine_path())
     }
-    let mut out: Vec<Seen> = found.into_values().collect();
-    out.sort_by(|a, b| (a.name.to_lowercase(), &a.key).cmp(&(b.name.to_lowercase(), &b.key)));
+
+    fn at(proc_root: &Path, folders: Vec<PathBuf>, conf: PathBuf, fine: PathBuf) -> Watch {
+        Watch { proc_root: proc_root.into(), folders, conf, fine, switches: None, fine_stamp: None, known: HashMap::new(), sockets: HashSet::new(), files_gap: 0, files_in: 0 }
+    }
+
+    fn switches(&mut self) -> (bool, bool) {
+        let now = stamp(&self.conf);
+        if let Some((_, on)) = self.switches.filter(|s| s.0 == now) {
+            return on;
+        }
+        let env = files::read_env(&self.conf);
+        let yes = |k: &str| env.get(k).map_or(files::default_setting(k), String::as_str) != "no";
+        let on = (yes(NETWORK), yes(FILES));
+        self.switches = Some((now, on));
+        on
+    }
+
+    pub fn look(&mut self) -> Vec<Seen> {
+        let (net, files) = self.switches();
+        let fine = stamp(&self.fine);
+        if fine != self.fine_stamp {
+
+            self.fine_stamp = fine;
+            self.known.values_mut().for_each(|k| (k.told_net, k.told_files) = (false, false));
+            (self.sockets, self.files_in) = (HashSet::new(), 0);
+        }
+        let sockets = if net { reaching(&Tables::read(&self.proc_root.join("net"))) } else { HashSet::new() };
+        let new: HashSet<u64> = sockets.difference(&self.sockets).copied().collect();
+        self.sockets = sockets;
+        let files_due = files && self.files_in == 0;
+        self.files_in = self.files_in.saturating_sub(1);
+        if new.is_empty() && !files_due {
+            return Vec::new();
+        }
+        let Some(mine) = my_room(&self.proc_root) else { return Vec::new() };
+        let seen = self.walk(&new, files, &mine);
+        if seen.iter().any(|s| s.files) {
+            (self.files_gap, self.files_in) = (0, 0);
+        } else if files_due {
+            self.files_gap = (self.files_gap * 2).clamp(1, MOST_SKIPPED);
+            self.files_in = self.files_gap;
+        }
+        seen
+    }
+
+    fn walk(&mut self, new: &HashSet<u64>, want_files: bool, mine: &str) -> Vec<Seen> {
+        let mut found: BTreeMap<String, Seen> = BTreeMap::new();
+        let Ok(dir) = std::fs::read_dir(&self.proc_root) else { return Vec::new() };
+        let mut known = HashMap::new();
+        for e in dir.flatten().take(MOST_PROCESSES) {
+            let Some(pid) = e.file_name().to_str().filter(|n| n.bytes().all(|b| b.is_ascii_digit())).and_then(|n| n.parse::<u32>().ok()) else { continue };
+            let at = e.path();
+            let Some(mut p) = self.process(pid, &at, mine) else { continue };
+            let net = !new.is_empty() && !p.told_net;
+            let files = want_files && !p.told_files;
+            if let Some((key, name, exe)) = p.who.as_ref().filter(|_| net || files) {
+                let (n, f) = holds(&at, net.then_some(new), files.then_some(self.folders.as_slice()));
+                if n || f {
+                    let seen = found.entry(key.clone()).or_insert(Seen { key: key.clone(), name: name.clone(), exe: exe.clone(), network: false, files: false });
+                    seen.network |= n;
+                    seen.files |= f;
+                    p.told_net |= n;
+                    p.told_files |= f;
+                }
+            }
+            known.insert(pid, p);
+        }
+        self.known = known;
+        let mut out: Vec<Seen> = found.into_values().collect();
+        out.sort_by(|a, b| (a.name.to_lowercase(), &a.key).cmp(&(b.name.to_lowercase(), &b.key)));
+        out
+    }
+
+    fn process(&mut self, pid: u32, at: &Path, mine: &str) -> Option<Known> {
+        let exe = std::fs::read_link(at.join("exe")).ok()?;
+        let start = started(at)?;
+        if let Some(k) = self.known.remove(&pid).filter(|k| k.start == start && k.exe == exe) {
+            return Some(k);
+        }
+        let in_room = std::fs::read_link(at.join("ns/mnt")).ok().as_deref().and_then(Path::to_str) == Some(mine);
+        let who = (in_room && !trindle_own(&exe)).then(|| identity(&exe, &cmdline(at)));
+        Some(Known { start, exe, who, told_net: false, told_files: false })
+    }
+}
+
+fn started(at: &Path) -> Option<u64> {
+    let stat = std::fs::read_to_string(at.join("stat")).ok()?;
+    stat.get(stat.rfind(')')? + 1..)?.split_whitespace().nth(19)?.parse().ok()
+}
+
+fn cmdline(at: &Path) -> Vec<u8> {
+    use std::io::Read;
+    let mut out = Vec::new();
+    if let Ok(f) = std::fs::File::open(at.join("cmdline")) {
+        let _ = f.take(LONGEST_CMDLINE).read_to_end(&mut out);
+    }
     out
+}
+
+fn holds(at: &Path, sockets: Option<&HashSet<u64>>, folders: Option<&[PathBuf]>) -> (bool, bool) {
+    let Ok(fds) = std::fs::read_dir(at.join("fd")) else { return (false, false) };
+    let (mut network, mut files) = (false, false);
+    for fd in fds.flatten().take(MOST_OPEN) {
+        let Ok(to) = std::fs::read_link(fd.path()) else { continue };
+        network |= sockets.is_some_and(|s| to.to_str().and_then(|t| t.strip_prefix("socket:[")?.strip_suffix(']')?.parse::<u64>().ok()).is_some_and(|i| s.contains(&i)));
+        files |= folders.is_some_and(|f| f.iter().any(|f| to.starts_with(f)));
+        if network == sockets.is_some() && files == folders.is_some() {
+            break;
+        }
+    }
+    (network, files)
 }
 
 pub fn my_room(proc_root: &Path) -> Option<String> {
@@ -344,38 +454,127 @@ mod tests {
         assert!(identity(Path::new("/usr/bin/node"), format!("node\0{}\0", "a".repeat(900)).as_bytes()).0.len() <= LONGEST_KEY);
     }
 
-    #[test]
-    fn only_ordinary_programs_outside_a_box_are_found() {
-        let top = std::env::temp_dir().join(format!("trindle-outside-scan-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&top);
-        let proc = |pid: &str, room: &str, exe: &str, cmd: &[u8], fds: &[&str]| {
-            let d = top.join(pid);
+    struct FakeProc(PathBuf);
+
+    impl FakeProc {
+        fn new(name: &str) -> FakeProc {
+            let top = std::env::temp_dir().join(format!("trindle-outside-{name}-{}", std::process::id()));
+            let _ = std::fs::remove_dir_all(&top);
+            std::fs::create_dir_all(top.join("proc/self/ns")).unwrap();
+            std::fs::create_dir_all(top.join("proc/net")).unwrap();
+            std::os::unix::fs::symlink("mnt:[1]", top.join("proc/self/ns/mnt")).unwrap();
+            FakeProc(top)
+        }
+
+        fn proc(&self, pid: &str, start: u64, room: &str, exe: &str, cmd: &[u8], fds: &[&str]) {
+            let d = self.0.join("proc").join(pid);
+            let _ = std::fs::remove_dir_all(&d);
             std::fs::create_dir_all(d.join("ns")).unwrap();
             std::fs::create_dir_all(d.join("fd")).unwrap();
             std::os::unix::fs::symlink(room, d.join("ns/mnt")).unwrap();
             std::os::unix::fs::symlink(exe, d.join("exe")).unwrap();
             std::fs::write(d.join("cmdline"), cmd).unwrap();
+            std::fs::write(d.join("stat"), format!("{pid} (a b) c) S {} {start} 0 0\n", ["0"; 18].join(" "))).unwrap();
             for (i, to) in fds.iter().enumerate() {
                 std::os::unix::fs::symlink(to, d.join("fd").join(i.to_string())).unwrap();
             }
-        };
-        proc("10", "mnt:[1]", "/usr/bin/firefox-esr", b"firefox-esr\0", &["socket:[2002]", "/home/john/Documents/a.odt", "pipe:[5]"]);
-        proc("11", "mnt:[9]", "/usr/bin/gimp", b"gimp\0", &["socket:[2002]", "/home/john/Pictures/a.png"]);
-        proc("12", "mnt:[1]", "/usr/bin/trindle-ring", b"trindle-ring\0", &["socket:[2002]"]);
-        proc("13", "mnt:[1]", "/usr/bin/vlc", b"vlc\0", &["/home/john/.config/vlc/x", "socket:[3003]"]);
-        proc("14", "mnt:[1]", "/usr/bin/mousepad", b"mousepad\0", &["/home/john/Documents/b.txt"]);
-        proc("15", "mnt:[1]", "/home/john/Downloads/trindle-helper", b"trindle-helper\0", &["/home/john/Documents/c.txt"]);
-        proc("16", "mnt:[1]", "/usr/lib/trindle/trindle-plugin", b"trindle-plugin\0", &["/home/john/Documents/d.txt"]);
-        std::fs::create_dir_all(top.join("net")).unwrap();
-        let sockets = HashSet::from([2002]);
-        let folders = personal_folders(Path::new("/home/john"));
-        let both = scan(&top, &sockets, &folders, "mnt:[1]", true, true);
-        let names: Vec<(&str, bool, bool)> = both.iter().map(|s| (s.name.as_str(), s.network, s.files)).collect();
-        assert_eq!(names, [("firefox-esr", true, true), ("mousepad", false, true), ("trindle-helper", false, true)]);
-        let net = scan(&top, &sockets, &folders, "mnt:[1]", true, false);
-        assert_eq!(net.iter().map(|s| (s.name.as_str(), s.files)).collect::<Vec<_>>(), [("firefox-esr", false)]);
-        assert!(scan(&top, &sockets, &folders, "mnt:[1]", false, false).is_empty(), "a look that is off is not made");
-        let _ = std::fs::remove_dir_all(&top);
+        }
+
+        fn tcp(&self, text: &str) {
+            std::fs::write(self.0.join("proc/net/tcp"), text).unwrap();
+        }
+
+        fn watch(&self) -> Watch {
+            Watch::at(&self.0.join("proc"), personal_folders(Path::new("/home/john")), self.0.join("trindle.conf"), self.0.join("outside-fine"))
+        }
+
+        fn names(seen: &[Seen]) -> Vec<(&str, bool, bool)> {
+            seen.iter().map(|s| (s.name.as_str(), s.network, s.files)).collect()
+        }
+    }
+
+    impl Drop for FakeProc {
+        fn drop(&mut self) {
+            let _ = std::fs::remove_dir_all(&self.0);
+        }
+    }
+
+    #[test]
+    fn only_ordinary_programs_outside_a_box_are_found() {
+        let fake = FakeProc::new("scan");
+        fake.proc("10", 1, "mnt:[1]", "/usr/bin/firefox-esr", b"firefox-esr\0", &["socket:[2002]", "/home/john/Documents/a.odt", "pipe:[5]"]);
+        fake.proc("11", 1, "mnt:[9]", "/usr/bin/gimp", b"gimp\0", &["socket:[2002]", "/home/john/Pictures/a.png"]);
+        fake.proc("12", 1, "mnt:[1]", "/usr/bin/trindle-ring", b"trindle-ring\0", &["socket:[2002]"]);
+        fake.proc("13", 1, "mnt:[1]", "/usr/bin/vlc", b"vlc\0", &["/home/john/.config/vlc/x", "socket:[3003]"]);
+        fake.proc("14", 1, "mnt:[1]", "/usr/bin/mousepad", b"mousepad\0", &["/home/john/Documents/b.txt"]);
+        fake.proc("15", 1, "mnt:[1]", "/home/john/Downloads/trindle-helper", b"trindle-helper\0", &["/home/john/Documents/c.txt"]);
+        fake.proc("16", 1, "mnt:[1]", "/usr/lib/trindle/trindle-plugin", b"trindle-plugin\0", &["/home/john/Documents/d.txt"]);
+        fake.tcp(TCP);
+        let both = fake.watch().look();
+        assert_eq!(FakeProc::names(&both), [("firefox-esr", true, true), ("mousepad", false, true), ("trindle-helper", false, true)]);
+        std::fs::write(fake.0.join("trindle.conf"), "outside_files=no\n").unwrap();
+        assert_eq!(FakeProc::names(&fake.watch().look()), [("firefox-esr", true, false)]);
+        std::fs::write(fake.0.join("trindle.conf"), "outside_files=no\noutside_network=no\n").unwrap();
+        assert!(fake.watch().look().is_empty(), "a look that is off is not made");
+    }
+
+    #[test]
+    fn a_process_is_told_once_and_not_looked_into_again() {
+        let fake = FakeProc::new("once");
+        fake.proc("10", 1, "mnt:[1]", "/usr/bin/firefox-esr", b"firefox-esr\0", &["socket:[2002]", "/home/john/Documents/a.odt"]);
+        fake.tcp(TCP);
+        let mut watch = fake.watch();
+        assert_eq!(FakeProc::names(&watch.look()), [("firefox-esr", true, true)]);
+        assert!(watch.look().is_empty(), "told already, and nothing new since");
+        fake.proc("10", 2, "mnt:[1]", "/usr/bin/firefox-esr", b"firefox-esr\0", &["/home/john/Documents/a.odt"]);
+        let again = (0..3).map(|_| watch.look()).find(|s| !s.is_empty()).unwrap_or_default();
+        assert_eq!(FakeProc::names(&again), [("firefox-esr", false, true)], "a later process given the same number is new");
+    }
+
+    #[test]
+    fn the_network_is_looked_at_only_when_a_new_connection_is_made() {
+        let fake = FakeProc::new("net");
+        std::fs::write(fake.0.join("trindle.conf"), "outside_files=no\n").unwrap();
+        fake.tcp(TCP);
+        let mut watch = fake.watch();
+        assert!(watch.look().is_empty());
+        fake.proc("20", 1, "mnt:[1]", "/usr/bin/curl", b"curl\0", &["socket:[2002]"]);
+        assert!(watch.look().is_empty(), "a connection seen before is not news");
+        fake.tcp(&format!("{TCP}   6: 0F02A8C0:C354 22D8B85D:01BB 01 00000000:00000000 00:00000000 00000000  1000        0 6006 1 0 100 0 0 10 0\n"));
+        fake.proc("20", 1, "mnt:[1]", "/usr/bin/curl", b"curl\0", &["socket:[6006]"]);
+        assert_eq!(FakeProc::names(&watch.look()), [("curl", true, false)]);
+    }
+
+    #[test]
+    fn a_quiet_look_for_open_files_waits_longer_each_time_up_to_a_minute() {
+        let fake = FakeProc::new("quiet");
+        let mut watch = fake.watch();
+        let mut made = Vec::new();
+        for _ in 0..80 {
+            let before = watch.files_in;
+            watch.look();
+            made.push(before == 0);
+        }
+        let gaps: Vec<usize> = made.iter().enumerate().filter(|m| *m.1).map(|m| m.0).collect::<Vec<_>>().windows(2).map(|w| w[1] - w[0]).collect();
+        assert_eq!(gaps[..6], [2, 3, 5, 9, 12, 12]);
+        fake.proc("30", 1, "mnt:[1]", "/usr/bin/mousepad", b"mousepad\0", &["/home/john/Documents/b.txt"]);
+        while watch.files_in > 0 {
+            assert!(watch.look().is_empty());
+        }
+        assert_eq!(watch.look().len(), 1);
+        assert_eq!(watch.files_in, 0, "news brings the looks back to every few seconds");
+    }
+
+    #[test]
+    fn a_program_taken_off_the_fine_list_is_told_again() {
+        let fake = FakeProc::new("retell");
+        fake.proc("10", 1, "mnt:[1]", "/usr/bin/firefox-esr", b"firefox-esr\0", &["socket:[2002]"]);
+        fake.tcp(TCP);
+        let mut watch = fake.watch();
+        assert_eq!(watch.look().len(), 1);
+        assert!(watch.look().is_empty());
+        make_fine_in(&fake.0.join("outside-fine"), Kind::Network, &[("/usr/bin/x".into(), "x".into())]).unwrap();
+        assert_eq!(FakeProc::names(&watch.look()), [("firefox-esr", true, false)]);
     }
 
     #[test]

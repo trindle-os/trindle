@@ -4,5 +4,5 @@
 terms-accept = Nakubali [EULA](eula)
 
 # In the foot, while the box is not ticked, saying why the button beside it is off.
-terms-needed = Weka alama kwenye kisanduku ili kuendelea
+terms-needed = Makubaliano yanahitajika
 

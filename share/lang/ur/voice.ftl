@@ -14,7 +14,7 @@ voice-brighter = زیادہ روشن
 voice-dimmer = کم روشن
 
 # Said under the ring when the request is to let the screen rest again.
-voice-keep-awake-off = اسکرین اب آرام کر سکتی ہے
+voice-keep-awake-off = اسکرین دوبارہ سو سکتی ہے
 
 # Said under the ring when the screen is kept awake.
 voice-keep-awake-on = جگائے رکھا جا رہا ہے
@@ -23,7 +23,7 @@ voice-keep-awake-on = جگائے رکھا جا رہا ہے
 voice-updates = اپ ڈیٹس تلاش کی جا رہی ہیں
 
 # Said under the ring when nothing was heard at all.
-voice-nothing-heard = کچھ سنائی نہیں دیا۔ رنگ کے بیچ میں ٹیپ کریں اور بولیں۔
+voice-nothing-heard = Trindle آپ کو سن نہیں سکا۔ حلقے کے بیچ میں ٹیپ کریں اور بولیں۔
 
 # Said under the ring when the volume goes up.
 voice-louder = زیادہ آواز
@@ -86,7 +86,7 @@ voice-showing-app = { $name } دکھائی جا رہی ہے
 voice-opening-app = { $name } کھولی جا رہی ہے
 
 # Said under the ring when the request was heard but not understood; what was heard comes in.
-voice-heard-unknown = “{ $heard }” سنا، لیکن سمجھ نہیں آیا کہ کیا کرنا ہے
+voice-heard-unknown = Trindle “{ $heard }” کمانڈ کو پہچان نہیں سکا
 
 # Said in the ring when voice has not been added yet.
 voice-optional = آواز ایک اختیاری اضافہ ہے۔ اسے سیٹنگز میں، رنگ کے صفحے پر شامل کریں۔
@@ -95,31 +95,31 @@ voice-optional = آواز ایک اختیاری اضافہ ہے۔ اسے سیٹ�
 voice-switched-off = آواز بند ہے۔ اسے سیٹنگز میں، رنگ کے صفحے پر چالو کریں۔
 
 # Said in the ring when the microphone cannot be opened; the reason comes after it.
-voice-mic-failed = مائیکروفون کھولا نہیں جا سکا: { $why }
+voice-mic-failed = Trindle کو مائیکروفون تک رسائی نہیں ملی: { $why }
 
 # Said in the ring when the microphone's recorder would not start.
-voice-mic-not-started = مائیکروفون کھولا نہیں جا سکا: pw-record شروع نہیں ہوا
+voice-mic-not-started = Trindle کو مائیکروفون تک رسائی نہیں ملی کیونکہ ریکارڈنگ پروگرام شروع نہیں ہوا
 
 # Said in the ring when listening stopped and nothing was recorded.
 voice-nothing-recorded = کچھ ریکارڈ نہیں ہوا۔
 
 # Said in the ring when the recording had no speech in it.
-voice-nothing-heard-after = کچھ سنائی نہیں دیا۔ رنگ کے بیچ میں ٹیپ کریں اور بولیں۔
+voice-nothing-heard-after = Trindle آپ کو سن نہیں سکا۔ حلقے کے بیچ میں ٹیپ کریں اور بولیں۔
 
 # Said in the ring when the speech engine failed and gave no reason.
 voice-whisper-failed = Whisper ناکام ہو گیا
 
 # Progress line while the build tools are added for the build; the names of the packages come in.
-voice-installing-tools = فی الحال بلڈ ٹولز انسٹال کیے جا رہے ہیں: { $names }
+voice-installing-tools = بلڈ ٹولز عارضی طور پر انسٹال کیے جا رہے ہیں: { $names }
 
 # Progress line while whisper.cpp is built; its version comes in.
-voice-building = آواز کے لیے whisper.cpp { $version } بنایا جا رہا ہے (ایک دو منٹ)
+voice-building = آواز سے قابو کے لیے whisper.cpp { $version } بنایا جا رہا ہے۔ اس میں ایک دو منٹ لگتے ہیں۔
 
 # Progress line while the speech model is downloaded (148 MB).
-voice-fetching-model = تقریر کا ماڈل حاصل کیا جا رہا ہے (148 MB)
+voice-fetching-model = آواز پہچاننے کا ماڈل ڈاؤن لوڈ ہو رہا ہے (148 MB)
 
 # Progress line while the build tools are taken away again.
-voice-removing-tools = بلڈ ٹولز دوبارہ ہٹائے جا رہے ہیں
+voice-removing-tools = اب بلڈ ٹولز ہٹائے جا رہے ہیں
 
 # Said once voice is added and ready to use.
 voice-ready = آواز سے کنٹرول تیار ہے۔ رنگ کھولیں، بیچ میں ٹیپ کریں، اور بولیں۔
@@ -132,3 +132,15 @@ voice-press-enter = بند کرنے کے لیے Enter دبائیں۔
 
 # Shown when the command is run with neither install nor remove.
 voice-usage = استعمال: trindle-voice-setup install | remove
+
+# Said when a step of the voice set-up fails. { $program } is the program that was run, with its first word.
+voice-step-failed = { $program } نے کام نہیں کیا۔
+
+# Said when the whisper.cpp download isn't the one Trindle checks for, so nothing is built from it.
+voice-whisper-fingerprint = whisper.cpp کا ڈاؤن لوڈ وہ نہیں ہے جس کی Trindle کو توقع تھی، اس لیے اسے بنایا نہیں گیا۔
+
+# Said when the speech model download isn't the one Trindle checks for, so it isn't installed.
+voice-model-fingerprint = تقریر کے ماڈل کا ڈاؤن لوڈ وہ نہیں ہے جس کی Trindle کو توقع تھی، اس لیے اسے انسٹال نہیں کیا گیا۔
+
+# The reason after "Trindle couldn't access the microphone:" when the session has no private folder to keep a recording in.
+voice-no-private-folder = کوئی نجی فولڈر دستیاب نہیں ہے۔

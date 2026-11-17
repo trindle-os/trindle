@@ -11,19 +11,13 @@ activity-about-page = عن هذه الصفحة
 activity-try-again = حاول مرة أخرى
 
 # Red words in place of the room when the computer could not be read at the first look.
-activity-cannot-read = تعذّرت قراءة ما يفعله الحاسوب.
+activity-cannot-read = لم يتمكن Trindle من فحص نشاط الحاسوب.
 
 # In place of the room when no program is running.
 activity-no-programs = لا توجد برامج قيد التشغيل بعد.
 
 # In place of the list when the room could not be read, so there is nothing to list.
-activity-nothing-to-list = لا شيء لعرضه حتى يمكن قراءة الحاسوب.
-
-# The one sentence above the room, saying what it shows.
-activity-caption = كل فقاعة برنامج، وحجمها بحجم الذاكرة التي يشغلها.
-
-# The one sentence above the list of programs.
-activity-list-caption = اضغط على برنامج لتراه في الغرفة.
+activity-nothing-to-list = لا يستطيع Trindle عرض أي برنامج حتى يتمكن من فحص نشاط الحاسوب.
 
 # Heading of the card that lists the programs.
 activity-programs = البرامج
@@ -38,19 +32,19 @@ activity-memory = الذاكرة
 activity-processor = المعالج
 
 # Words the screen reader gives the room when no bubble is picked.
-activity-room-spoken = البرامج، كل منها بحجم الذاكرة التي يشغلها
+activity-room-spoken = فقاعات البرامج بحجم استهلاكها للذاكرة
 
 # First paragraph of the words behind the i: what the computer is doing.
-activity-help-1 = ما يفعله هذا الحاسوب الآن. كل برنامج فقاعة داخل الدائرة الكبيرة، وحجمها بحجم الذاكرة التي يشغلها، فكلما امتلأت الدائرة امتلأت الذاكرة.
+activity-help-1 = هذا ما يفعله حاسوبك الآن. يظهر كل برنامج على شكل فقاعة داخل الدائرة. كلما كبرت الفقاعة زاد استهلاكها للذاكرة. وكلما امتلأت الدائرة زادت الذاكرة المستخدمة.
 
 # Second paragraph of the words behind the i: how the colours and bars show the work.
-activity-help-2 = البرنامج الذي يعمل يتوهج وينبض، أسرع وأشد سطوعاً كلما زاد جهده: اللون البارد يعني عملاً قليلاً، والبرتقالي عملاً شاقاً، والأحمر أقصى جهد. حول الحافة شريط لكل خيط من خيوط المعالج، يطول ويسخن كلما زاد انشغاله، فإذا كانت كلها طويلة وحمراء فالحاسوب يعمل بأقصى طاقته وأكثر الفقاعات سطوعاً هي السبب.
+activity-help-2 = تتوهج فقاعة البرنامج وتنبض أثناء عمله. كلما كانت النبضات أسرع وأسطع زاد العمل. الألوان الباردة تعني عملاً قليلاً، والبرتقالي يعني استخداماً كبيراً، والأحمر يعني استخداماً كاملاً. كل شريط حول الحافة يمثل خيطاً واحداً، وهو جزء من المعالج يتولى العمل. كلما طالت الأشرطة وصارت ألوانها أدفأ زاد العمل. وحين تكون كل الأشرطة طويلة وحمراء يعمل الحاسوب بأقصى ما يستطيع. وأسطع فقاعة تدل على البرنامج الذي يبذل أكبر جهد.
 
 # Third paragraph of the words behind the i: how to look at a program and stop it, and what the two grey bubbles are.
-activity-help-3 = اضغط على فقاعة، أو على برنامج في القائمة، لترى ما يفعله بأرقام بسيطة، ولإيقافه إذا توقف عن الاستجابة: زر الإيقاف، إذا ضغطت عليه مرتين، يطلب من البرنامج أن يُغلق، وقد يضيع كل ما لم يُحفظ فيه. فقاعتان رماديتان هادئتان تضمّان الباقي: سطح مكتب Trindle، وهو المسؤول عن رسم الشاشة والحلقة والتبويب وخلفية الشاشة، وLinux والبرامج الأخرى، وهي Linux نفسه والبرامج التي تعتني بالحاسوب.
+activity-help-3 = اضغط على فقاعة، أو على برنامج في القائمة، لترى ما يفعله بأرقام بسيطة. ويمكنك أيضاً إيقاف برنامج توقف عن الاستجابة. اضغط زر الإيقاف مرتين فيطلب Trindle من البرنامج أن يُغلق. وقد يضيع كل ما لم تحفظه فيه. تعرض الفقاعتان الرماديتان كل ما عدا ذلك. سطح مكتب Trindle هو الجزء الذي يرسم الشاشة والحلقة والتبويب وخلفية الشاشة. وLinux والبرامج الأخرى هو Linux نفسه والبرامج التي تعتني بالحاسوب.
 
 # Fourth paragraph of the words behind the i: how memory, the processor, the disk and the swap file are counted.
-activity-help-4 = تُحسب الذاكرة بالطريقة العادلة التي تحسبها بها أدوات مثل smem: الذاكرة التي يتشاركها برنامجان تُقسَّم بينهما، وتُحتسب الذاكرة المنقولة إلى ملف التبديل، فلا شيء يُحسب مرتين ولا شيء يُترك. تُظهر البطاقات بجانب الصورة مدى امتلاء الذاكرة والمعالج والقرص وملف التبديل، ولا تتحول الحلقة إلى البرتقالي ثم الأحمر إلا عندما يقارب أحدها الامتلاء.
+activity-help-4 = يحسب Trindle الذاكرة بعناية، بالطريقة نفسها التي تحسبها بها أدوات مثل smem. الذاكرة التي يتشاركها برنامجان تُقسَّم بينهما، وتُحتسب الذاكرة المنقولة إلى ملف التبديل، فلا شيء يُحسب مرتين ولا شيء يُترك. تُظهر البطاقات بجانب الصورة مدى امتلاء الذاكرة والمعالج والقرص وملف التبديل. ولا تتحول الحلقة إلى البرتقالي ثم الأحمر إلا عندما تقارب الامتلاء.
 
 # Heading of the card that shows the room and its sentence, at the top of the room.
 activity-right-now = الآن
@@ -59,34 +53,34 @@ activity-right-now = الآن
 activity-looking = جارٍ النظر…
 
 # The sentence at the top when the computer could not be read at all.
-activity-unread = تعذّرت قراءة الحاسوب الآن.
+activity-unread = لم يتمكن Trindle من فحص الحاسوب.
 
 # The sentence at the top when the whole processor is flat out, and one program is using most of it. $a is its name.
-activity-flat-out-one = حاسوبك يعمل بأقصى طاقته: { $a } يستخدم { $threads }.
+activity-flat-out-one = حاسوبك يعمل بأقصى ما يستطيع: { $a } يستخدم { $threads }.
 
 # The sentence at the top when the whole processor is flat out, and two programs are using most of it. $a and $b are their names.
-activity-flat-out-two = حاسوبك يعمل بأقصى طاقته: { $a } و{ $b } يستخدمان { $threads }.
+activity-flat-out-two = حاسوبك يعمل بأقصى ما يستطيع: { $a } و{ $b } يستخدمان { $threads }.
 
 # The sentence at the top when the whole processor is flat out, and one program is the busiest. $a is its name.
-activity-flat-out-busiest = حاسوبك يعمل بأقصى طاقته على { $threads }؛ و{ $a } الأكثر انشغالاً.
+activity-flat-out-busiest = حاسوبك يعمل بأقصى ما يستطيع على { $threads }. و{ $a } هو الأكثر انشغالاً.
 
 # The sentence at the top when the whole processor is flat out and no one program stands out.
-activity-flat-out = حاسوبك يعمل بأقصى طاقته على { $threads }.
+activity-flat-out = حاسوبك يعمل بأقصى ما يستطيع على { $threads }.
 
 # The sentence at the top when memory is nearly full, and one program holds the most. $b is its name.
-activity-memory-full-named = الذاكرة شبه ممتلئة؛ و{ $b } يشغل أكبر قدر منها.
+activity-memory-full-named = الذاكرة شبه ممتلئة. و{ $b } يستخدم أكبر قدر منها.
 
 # The sentence at the top when memory is nearly full, and no program is named.
 activity-memory-full = الذاكرة شبه ممتلئة.
 
 # The sentence at the top when the computer is busy and one program is the busiest. $a is its name.
-activity-ticking-busiest = الحاسوب يعمل بهدوء؛ و{ $a } الأكثر انشغالاً.
+activity-ticking-busiest = الحاسوب غير مشغول. { $a } هو الذي يعمل أكثر من غيره.
 
 # The sentence at the top when the computer is busy and nothing is named.
 activity-busy = الحاسوب مشغول.
 
 # The sentence at the top when the computer is only lightly busy and nothing is named.
-activity-ticking-over = الحاسوب يعمل بهدوء.
+activity-ticking-over = الحاسوب غير مشغول.
 
 # The sentence at the top when one program is doing most of the work. $a is its name.
 activity-doing-most = { $a } يقوم بمعظم العمل الآن.
@@ -98,10 +92,10 @@ activity-two-keeping-busy = { $a } و{ $b } يبقيان الحاسوب مشغو
 activity-plenty-to-spare = { $a } يعمل بجهد، لكن الحاسوب لديه الكثير من الطاقة الفائضة.
 
 # The sentence at the top when all is calm but memory is filling up. $b is the program holding the most.
-activity-calm-memory-filling = كل شيء هادئ، لكن الذاكرة تمتلئ؛ و{ $b } يشغل أكبر قدر منها.
+activity-calm-memory-filling = الحاسوب لا يبذل جهداً كبيراً، لكن استهلاك الذاكرة في ازدياد. و{ $b } يستخدم أكبر قدر منها.
 
 # The sentence at the top when all is calm and nothing is working hard.
-activity-all-calm = كل شيء هادئ: لا شيء يعمل بجهد.
+activity-all-calm = لا يوجد برنامج يعمل بجهد.
 
 # How many threads, as a phrase inside a sentence: all of them. $n is the number of threads.
 activity-all-threads = كل { $n ->
@@ -153,19 +147,19 @@ activity-under-one-percent = أقل من 1%
 activity-size-under-mb = أقل من 1 ميغابايت
 
 # How a thread is described in its tip when it is resting.
-activity-resting = في راحة
+activity-resting = خامل
 
 # How a thread is described in its tip when it is busy. $percent is the share, such as 80%.
 activity-busy-percent = مشغول بنسبة { $percent }
 
 # How hard a program is working, when it is resting.
-activity-effort-resting = في راحة
+activity-effort-resting = خامل
 
 # How hard a program is working, when it is working a little.
 activity-effort-little = يعمل قليلاً
 
 # How hard a program is working, when it is working flat out.
-activity-effort-flat-out = يعمل بأقصى طاقته
+activity-effort-flat-out = أقصى جهد
 
 # How hard a program is working, when it is working hard.
 activity-effort-hard = يعمل بجهد
@@ -213,16 +207,16 @@ activity-note-working-hardest = الأكثر جهداً
 activity-working-hardest = { $effort }: { $work }
 
 # The words under that heading when it also holds the most memory. $effort is how hard, $work is its share.
-activity-working-hardest-most = { $effort }: { $work }، ويشغل أكبر قدر من الذاكرة
+activity-working-hardest-most = { $effort }: { $work }، ويستخدم أكبر قدر من الذاكرة
 
 # Heading of the card beside the room for the program holding the most memory.
-activity-note-most-memory = يشغل أكبر قدر من الذاكرة
+activity-note-most-memory = يستخدم أكبر قدر من الذاكرة
 
 # Heading of the card beside the room for the program holding the next most memory.
 activity-note-next-memory = التالي في استخدام الذاكرة
 
 # The words under a heading for memory. $amount is the memory, $how is its share of the whole.
-activity-holding = يشغل { $amount }، { $how }
+activity-holding = يستخدم { $amount }، { $how }
 
 # The words under the memory figure of a card: how much a program holds, as a share of the whole.
 activity-share-of-memory = { $share } من الذاكرة
@@ -278,19 +272,19 @@ activity-separate-parts = { $n } أجزاء منفصلة
 activity-running-for = يعمل منذ
 
 # A card's fact: the name of the facts' heading for what a program is made of.
-activity-made-of = يتكوّن من
+activity-made-of = الأجزاء
 
 # Words under a memory card when it could not be read at the first look.
-activity-ring-not-read = تعذّرت قراءته بعد.
+activity-ring-not-read = لا يمكن قراءة هذا بعد.
 
 # Sentence under the memory figure: how much memory is in use, and how much of it Trindle itself holds. $used and $ours are sizes.
-activity-memory-sentence = { $used } قيد الاستخدام؛ وTrindle نفسه يشغل { $ours }.
+activity-memory-sentence = { $used } قيد الاستخدام. وTrindle نفسه يستخدم { $ours }.
 
 # Sentence under the processor figure: how busy all the threads have been. $threads is "all 16 threads" or similar.
 activity-processor-sentence = مدى انشغال { $threads } خلال الدقيقتين الماضيتين.
 
 # Sentence under the disk figure: how much is used and how much is still free. $used and $free are sizes.
-activity-disk-sentence = { $used } مستخدمة؛ و{ $free } لا تزال فارغة.
+activity-disk-sentence = { $used } مستخدمة و{ $free } فارغة.
 
 # Limit under a memory, disk or swap figure. $amount is the whole.
 activity-of-size = من { $amount }
@@ -302,13 +296,13 @@ activity-disk = القرص
 activity-swap-file = ملف التبديل
 
 # Sentence under the swap file figure: how much is in use, and the rest is room to hibernate. $used is a size.
-activity-swap-sentence = { $used } قيد الاستخدام؛ والباقي مساحة للإسبات.
+activity-swap-sentence = { $used } قيد الاستخدام.
 
 # Name of the temperature card, shown when the computer has a temperature to read.
 activity-temperature = الحرارة
 
 # Sentence under the temperature figure.
-activity-temperature-sentence = مدى سخونة المعالج الآن.
+activity-temperature-sentence = درجة حرارة المعالج
 
 # Limit under the temperature figure. The degree sign is written as it is.
 activity-of-hundred-degrees = من 100°م
@@ -319,5 +313,4 @@ activity-no-swap = ليس لدى هذا الحاسوب ملف تبديل، فل�
 
 
 # Short line in the Activity window after a program that did not answer Stop within five seconds was ended by force. $title is the program.
-activity-forced = أُغلق قسرًا: لم يستجب { $title }
-
+activity-forced = { $title } لم يستجب، لذلك أغلقه Trindle قسراً

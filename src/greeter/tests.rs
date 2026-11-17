@@ -48,8 +48,8 @@ fn the_login_screen_draws_only_pairs_the_table_holds() {
             g.phone = i % 2 == 0;
             g.light = Some(crate::common::style::light());
             if i % 3 == 0 {
-                g.password = "wrong".into();
-                g.problem = Some((no_match().into(), Under::Password));
+                g.password = zeroize::Zeroizing::new("wrong".into());
+                g.problem = Some((t!("greeter-no-match").into(), Under::Password));
             }
             drawn::page(&user.to_string());
             let mut ui = Ui::new(g.view(), Theme::chosen());
@@ -70,8 +70,8 @@ fn shoot_the_login_screen() {
         g.phone = phone;
         g.light = Some(false);
         if wrong {
-            g.password = "wrong".into();
-            g.problem = Some((no_match().into(), Under::Password));
+            g.password = zeroize::Zeroizing::new("wrong".into());
+            g.problem = Some((t!("greeter-no-match").into(), Under::Password));
         }
         for (w, h) in [(1280u32, 800u32), (1920, 1080)] {
             let mut ui = Ui::new(g.view(), Theme::new(false, crate::common::style::DEFAULT_ACCENT));
@@ -182,16 +182,16 @@ fn everything_fits_a_small_screen() {
 #[test]
 fn a_failure_is_said_in_red_under_its_box_and_the_welcome_stays() {
     let (mut g, _) = greeter("john");
-    assert_eq!(g.headline, welcome_back());
+    assert_eq!(g.headline, t!("greeter-welcome-back"));
     g.update(Msg::Pass("wrong".into()));
     g.update(Msg::Submit);
     assert_eq!(g.headline, "Logging in\u{2026}");
     g.update(Msg::Back(Step::Reply, Some(json!({"type": "error", "error_type": "auth_error", "description": "pam_authenticate: AUTH_ERR"})), None));
-    assert_eq!(g.headline, welcome_back());
-    assert_eq!(g.problem, Some((no_match().into(), Under::Password)));
+    assert_eq!(g.headline, t!("greeter-welcome-back"));
+    assert_eq!(g.problem, Some((t!("greeter-no-match").into(), Under::Password)));
 
     let words = format!("{:?}", g.view().said());
-    assert!(words.contains(no_match()), "{words}");
+    assert!(words.contains(t!("greeter-no-match")), "{words}");
 }
 
 #[test]
@@ -232,13 +232,13 @@ fn logging_in_asks_greetd_for_the_name_then_sends_the_password() {
     assert_eq!(sent.borrow()[0], json!({"type": "create_session", "username": "john"}));
 
     g.update(Msg::Pass("other".into()));
-    assert_eq!(g.password, "hunter2");
+    assert_eq!(g.password.as_str(), "hunter2");
 
     g.update(Msg::Back(Step::Reply, Some(json!({"type": "auth_message", "auth_message_type": "secret", "auth_message": "Password:"})), None));
     assert_eq!(sent.borrow()[1], json!({"type": "post_auth_message_response", "response": "hunter2"}));
     g.update(Msg::Back(Step::Reply, Some(json!({"type": "error", "error_type": "auth_error", "description": "pam_authenticate: AUTH_ERR"})), None));
-    assert_eq!(g.problem, Some((no_match().into(), Under::Password)));
-    assert_eq!(g.headline, welcome_new());
+    assert_eq!(g.problem, Some((t!("greeter-no-match").into(), Under::Password)));
+    assert_eq!(g.headline, t!("greeter-welcome"));
     assert!(!g.busy);
     assert!(g.password.is_empty());
     assert_eq!(sent.borrow()[2], json!({"type": "cancel_session"}));
@@ -260,31 +260,41 @@ fn the_phone_question_is_the_pocketkey_one() {
 
 #[test]
 fn only_the_chosen_phone_says_yes() {
-    let mut secret = Some("hunter2".to_string());
-    assert_eq!(answer("visible", Q, true, &mut secret), Answer::Send(Some("yes".into())));
-    assert_eq!(answer("visible", Q, false, &mut secret), Answer::Send(Some("no".into())));
+    assert_eq!(answer("visible", Q, true, true), Answer::Send(Some("yes".into())));
+    assert_eq!(answer("visible", Q, false, true), Answer::Send(Some("no".into())));
 
-    assert_eq!(answer("secret", "Password:", false, &mut secret), Answer::Send(Some("hunter2".into())));
-    assert_eq!(secret, None);
+    assert_eq!(answer("secret", "Password:", false, true), Answer::Password);
+    assert_eq!(answer("secret", "Password:", false, false), Answer::Ask);
 
     for near in ["Trindle Pocketkey: use your phone? (yes/no) ", "trindle pocketkey: use your phone? (yes/no)", "Use your phone?", ""] {
-        assert_eq!(answer("visible", near, true, &mut None), Answer::Ask, "{near:?}");
+        assert_eq!(answer("visible", near, true, false), Answer::Ask, "{near:?}");
     }
 
-    assert_eq!(answer("secret", Q, false, &mut Some("hunter2".into())), Answer::Send(Some("no".into())), "the question is not a password prompt");
-    assert_eq!(answer("secret", Q, true, &mut None), Answer::Send(Some("yes".into())));
+    assert_eq!(answer("secret", Q, false, true), Answer::Send(Some("no".into())), "the question is not a password prompt");
+    assert_eq!(answer("secret", Q, true, false), Answer::Send(Some("yes".into())));
 }
 
 #[test]
 fn the_password_never_answers_the_phone_question() {
-    let mut secret = Some("hunter2".to_string());
-    assert_eq!(answer("visible", Q, false, &mut secret), Answer::Send(Some("no".into())));
-    assert_eq!(answer("info", "Hello", false, &mut secret), Answer::Send(None));
-    assert_eq!(secret.as_deref(), Some("hunter2"));
+    assert_eq!(answer("visible", Q, false, true), Answer::Send(Some("no".into())));
+    assert_eq!(answer("info", "Hello", false, true), Answer::Send(None));
+}
+
+#[test]
+fn an_unknown_reply_from_greetd_gives_the_screen_back() {
+    let (mut g, sent) = greeter("john");
+    g.phone = false;
+    g.update(Msg::Pass("hunter2".into()));
+    g.update(Msg::Submit);
+    assert!(g.busy);
+    g.update(Msg::Back(Step::Reply, Some(json!({"type": "something_new"})), None));
+    assert!(!g.busy, "still busy after a reply it did not know");
+    assert!(g.password.is_empty());
+    assert_eq!(sent.borrow().last(), Some(&json!({"type": "cancel_session"})));
 }
 
 #[test]
 fn a_password_prompt_after_the_phone_means_it_did_not_work() {
-    assert_eq!(answer("secret", "Password:", true, &mut None), Answer::PhoneFailed);
-    assert_eq!(answer("info", "Touch your phone", true, &mut None), Answer::Send(None));
+    assert_eq!(answer("secret", "Password:", true, false), Answer::PhoneFailed);
+    assert_eq!(answer("info", "Touch your phone", true, false), Answer::Send(None));
 }

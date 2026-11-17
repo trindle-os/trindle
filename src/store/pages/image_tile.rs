@@ -18,7 +18,7 @@ use super::links::link_button;
 #[derive(Clone, Debug, PartialEq)]
 pub(crate) enum Standing {
     Absent,
-    Going(f32, bool),
+    Going(crate::toolkit::tiles::RingShare, bool),
     Here(PathBuf),
 }
 
@@ -50,25 +50,25 @@ pub(crate) fn standing(s: &Store, f: &Found) -> Standing {
         return Standing::Here(path);
     }
     match s.dials.get(&key_of(f)) {
-        Some(d) if d.tone() != crate::toolkit::widget::Tone::Problem => Standing::Going(d.share(), d.running()),
+        Some(d) if d.tone() != crate::toolkit::widget::Tone::Problem => Standing::Going(d.ring(), d.running()),
         _ => Standing::Absent,
     }
 }
 
 pub(crate) fn open_file(path: &Path) {
     #[cfg(test)]
-    STARTED.with(|a| a.borrow_mut().push(path.to_path_buf()));
+    STARTED.with(|a| a.borrow_mut().push(crate::icons::appimages::start_words(path).to_vec()));
     #[cfg(not(test))]
-    crate::common::run::spawn(&[&path.display().to_string()]);
+    crate::common::run::spawn(&crate::icons::appimages::start_words(path).each_ref().map(String::as_str));
 }
 
 #[cfg(test)]
 thread_local! {
-    static STARTED: std::cell::RefCell<Vec<PathBuf>> = const { std::cell::RefCell::new(Vec::new()) };
+    static STARTED: std::cell::RefCell<Vec<Vec<String>>> = const { std::cell::RefCell::new(Vec::new()) };
 }
 
 #[cfg(test)]
-pub(crate) fn started_so_far() -> Vec<PathBuf> {
+pub(crate) fn started_so_far() -> Vec<Vec<String>> {
     STARTED.with(|a| std::mem::take(&mut *a.borrow_mut()))
 }
 

@@ -25,14 +25,14 @@ settings-window-group-about = Hakkında
 settings-window-in-apps = Uygulamalar'da
 
 # Small grey heading over the row a search finds that opens the Folders program's settings.
-settings-window-in-folders = Klasörler'de
+settings-window-in-folders = Folders'ta
 
 # The side bar row that opens the Folders program at its own settings.
-settings-window-in-folders-name = Klasörler'in kendi ayarları
+settings-window-in-folders-name = Folders'ın kendi ayarları
 
 # Words the Settings search matches the Folders settings row by, in lower case, separated by spaces.
 settings-window-in-folders-keywords =
-    klasörler dosyalar dosya yöneticisi başlangıç bölme ana klasör son kullanılan sürücüler usb bellek sd kart takılı aç çıkar liste uzantılar adlar onay kutuları seçme satırlar sıkışık normal geniş
+    folders klasörler dosyalar dosya yöneticisi başlangıç bölme ana klasör son kullanılan sürücüler usb bellek sd kart takılı aç çıkar liste uzantılar adlar onay kutuları seçme satırlar sıkışık normal geniş
 
 # Quiet line in the side bar when a search finds no page.
 settings-window-no-page = Eşleşen sayfa yok. Daha kısa bir sözcük deneyin ya da Yardım'a bakın.
@@ -41,7 +41,7 @@ settings-window-no-page = Eşleşen sayfa yok. Daha kısa bir sözcük deneyin y
 settings-window-theme-refused = {"  "}{ $id }  { $name } (kullanılamaz: { $why })
 
 # Printed in a terminal when trindle-settings --theme is given no theme name.
-settings-window-theme-name = Bir tema adı verin, örneğin: trindle-settings --theme default
+settings-window-theme-name = Bir tema adı yazın, örneğin: trindle-settings --theme default
 
 # Printed in a terminal after trindle-settings --theme worked; theme is the theme's name.
 settings-window-theme-now = Tema artık { $theme }.
@@ -50,13 +50,13 @@ settings-window-theme-now = Tema artık { $theme }.
 settings-window-theme-own = Trindle'ın kendi teması
 
 # Printed in a terminal when the theme could not be chosen; error says why and ends with a full stop.
-settings-window-themes-list = { $error } trindle-settings --themes bunları listeler.
+settings-window-themes-list = { $error } Listeyi görmek için trindle-settings --themes çalıştırın.
 
 # Printed in a terminal when trindle-settings --keys is not given the word default.
-settings-window-keys-how = Tüm tuşları ve düğmeleri geri koymak için: trindle-settings --keys default
+settings-window-keys-how = Tüm tuşları ve düğmeleri normale döndürmek için şunu çalıştırın: trindle-settings --keys default
 
 # Printed in a terminal after every key and button was put back.
-settings-window-keys-back = Tüm tuşlar ve düğmeler yazdırıldığı gibi geri döndü.
+settings-window-keys-back = Tüm tuşlar ve düğmeler normale döndü.
 
 # Printed in a terminal when the keys could not be put back; error says why.
-settings-window-keys-failed = Tuşlar geri konamadı: { $error }
+settings-window-keys-failed = Trindle tuşları geri koyamadı: { $error }

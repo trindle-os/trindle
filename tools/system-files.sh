@@ -19,8 +19,12 @@ if [ -x "$compose" ]; then
     install -d "$dest$prefix/xwayland-later"
     ln -sfn ../bin/trindle-compose "$dest$prefix/xwayland-later/Xwayland"
 fi
-(cd "$here/share" && tar chf - --exclude=./grub --exclude=./iso --exclude=./fonts --exclude=./licences .) \
+(cd "$here/share" && tar chf - --exclude=./grub --exclude=./iso --exclude=./fonts --exclude=./licences --exclude=./lang .) \
     | (cd "$dest$prefix/share" && tar xf -)
+install -d "$dest/usr/share/trindle/lang"
+(cd "$here/share/lang" && tar chf - .) | (cd "$dest/usr/share/trindle/lang" && tar xf -)
+[ -s "$dest/usr/share/trindle/lang/fr/settings-about.ftl" ] \
+    || { echo "share/lang did not reach /usr/share/trindle/lang" >&2; exit 1; }
 [ -s "$dest$prefix/share/style.css" ] && [ -d "$dest$prefix/share/themes" ] \
     || { echo "share/style.css or share/themes did not reach the package" >&2; exit 1; }
 ln -sfn ../bin/trindle "$dest$prefix/libexec/trindle-admin"
@@ -29,11 +33,6 @@ ln -sfn ../bin/trindle "$dest$prefix/libexec/trindle-thunder"
 ln -sfn ../bin/trindle "$dest$prefix/libexec/trindle-controller"
 ln -sfn ../bin/trindle "$dest$prefix/libexec/trindle-usb-retry"
 chmod -R go-w "$dest$prefix"
-
-install -d "$dest/usr/bin"
-for name in $("$dest$prefix/bin/trindle" --names); do
-    ln -sfn "$prefix/bin/trindle" "$dest/usr/bin/$name"
-done
 
 for f in "$here"/share/applications/*.desktop; do
     case $(basename "$f") in
@@ -192,6 +191,8 @@ install -Dm644 "$here/system/sysctl/90-trindle-games.conf" \
     "$dest/usr/lib/sysctl.d/90-trindle-games.conf"
 install -Dm644 "$here/system/sysctl/90-trindle-hardening.conf" \
     "$dest/usr/lib/sysctl.d/90-trindle-hardening.conf"
+install -Dm644 "$here/system/sysctl/90-trindle-watches.conf" \
+    "$dest/usr/lib/sysctl.d/90-trindle-watches.conf"
 install -Dm644 "$here/system/systemd/limits/90-trindle-games.conf" \
     "$dest/usr/lib/systemd/system.conf.d/90-trindle-games.conf"
 install -Dm644 "$here/system/systemd/limits/90-trindle-games.conf" \
@@ -268,6 +269,7 @@ install -Dm644 "$here/system/apt/trindle-archive-keyring.gpg" \
 
 install -Dm644 "$here/system/apt/trindle-backports.sources" "$dest/etc/apt/sources.list.d/trindle-backports.sources"
 install -Dm644 "$here/system/apt/trindle-backports.pref" "$dest/etc/apt/preferences.d/trindle-backports.pref"
+install -Dm644 "$here/system/apt/trindle-contrib.sources" "$dest/etc/apt/sources.list.d/trindle-contrib.sources"
 install -Dm755 "$here/system/kernel/dkms-hook" "$dest/usr/lib/trindle/dkms-hook"
 
 version=$(sed -n 's/^version = "\(.*\)"/\1/p' "$here/Cargo.toml" | head -n 1)

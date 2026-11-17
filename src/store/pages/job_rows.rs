@@ -54,10 +54,10 @@ pub(super) fn pictured_row(s: &Store, picture: Option<Node<Msg>>, key: &str, hea
 pub(super) fn pictured_row_with(s: &Store, picture: Option<Node<Msg>>, key: &str, head: String, sub: String, lines: Vec<Node<Msg>>,
                      buttons: Vec<Node<Msg>>) -> Node<Msg> {
     let mut under = lines;
-    if let Some((w, t)) = s.said.get(key).filter(|(w, _)| !w.is_empty()) {
+    if let Some((w, t)) = s.words.said.get(key).filter(|(w, _)| !w.is_empty()) {
 
         let more = (*t == Tone::Problem).then(|| crate::common::more::button(s.more(key)));
-        match s.behind.get(key).filter(|b| !b.is_empty()) {
+        match s.words.behind.get(key).filter(|b| !b.is_empty()) {
 
             Some(behind) => {
                 let own = key.to_string();
@@ -66,7 +66,7 @@ pub(super) fn pictured_row_with(s: &Store, picture: Option<Node<Msg>>, key: &str
                 beside.push(button("dialog-information-symbolic", t!("store-show-behind")).size(theme::sheet().info)
                     .on_press(go(move |s| s.toggle_behind(&own))));
                 under.push(row(beside).gap(8.0).centred());
-                if s.behind_open.contains(key) {
+                if s.words.open.contains(key) {
                     under.extend(behind.iter().map(|b| note(b.clone())));
                 }
             }

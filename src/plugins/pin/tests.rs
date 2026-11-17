@@ -368,3 +368,10 @@ fn ring_json_may_ask_for_the_card_by_a_computer_id_alone() {
     let items: Vec<(&str, Option<&str>, usize)> = note.items.iter().map(|i| (i.label.as_str(), i.unlock.as_deref(), i.args.len())).collect();
     assert_eq!(items, [("Unlock Office", Some("office-1"), 0), ("Go", None, 2)]);
 }
+
+#[test]
+fn the_unlock_program_is_this_one_whatever_the_path_holds() {
+    let command = unlock_command("org.example.Flow", "desk");
+    assert_eq!(command.get_program(), "/proc/self/exe");
+    assert!(command.get_args().any(|a| a == "unlock"));
+}

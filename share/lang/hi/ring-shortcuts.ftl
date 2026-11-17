@@ -89,7 +89,7 @@ ring-shortcuts-console = टेक्स्ट कंसोल पर जाए�
 ring-shortcuts-console-keys = Ctrl+Alt+F1 से F12
 
 # Words for the keys the screen reader takes while it is on.
-ring-shortcuts-reader-keys = स्क्रीन रीडर की अपनी कुंजियाँ, जब वह चालू हो
+ring-shortcuts-reader-keys = स्क्रीन रीडर के लिए कुंजियाँ, जब वह चालू हो
 
 # The keys the screen reader takes while it is on.
 ring-shortcuts-reader-keys-keys = Caps Lock, Insert

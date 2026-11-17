@@ -73,6 +73,8 @@ fn run_plan() -> i32 {
             return 1;
         }
     };
+
+    crate::common::live_language::switch(crate::common::live_language::for_locale(&plan.locale));
     let (answers, wait) = std::sync::mpsc::channel();
     std::thread::spawn(move || loop {
         let mut line = String::new();
@@ -96,7 +98,7 @@ fn run_plan() -> i32 {
         Err(e) => {
             steps::let_go();
             eprintln!("{e}");
-            1
+            if steps::disk_changed() { steps::CHANGED } else { 1 }
         }
     }
 }
@@ -195,14 +197,14 @@ enum Msg {
     Leave(String, f32),
     Swap(bool),
     Lock(Lock),
-    DiskOne(String),
-    DiskTwo(String),
+    DiskOne(Zeroizing<String>),
+    DiskTwo(Zeroizing<String>),
     Suggest,
     Full(String),
     User(String),
     Host(String),
-    One(String),
-    Two(String),
+    One(Zeroizing<String>),
+    Two(Zeroizing<String>),
 
     Line(String),
     Finished(Result<(), String>),
@@ -210,6 +212,10 @@ enum Msg {
     Stop,
 
     Stopped(bool),
+
+    DiskChanged(String),
+
+    Disks(Vec<Disk>),
     NextSlide,
 }
 
@@ -225,6 +231,8 @@ struct Installer {
     disk_two: Zeroizing<String>,
 
     suggested: u32,
+
+    suggest_failed: bool,
     full: String,
     user: String,
     host: String,
@@ -251,6 +259,9 @@ struct Installer {
 
     terms: bool,
 
+    rereading: bool,
+    read_disks: fn() -> Vec<Disk>,
+
     reading_terms: bool,
     roll_at: Rc<Cell<f32>>,
     roll_to: Rc<Cell<f32>>,
@@ -261,6 +272,8 @@ struct Installer {
     events: Loop,
     asks: Post<Msg>,
     wake: Post<()>,
+
+    retitle: Cell<bool>,
 }
 
 impl Installer {
@@ -300,7 +313,7 @@ impl App for Installer {
             Msg::Find(at, t) => self.set_find(at, t),
             Msg::Pick(at, i) => self.pick(at, i),
             Msg::Try(t) => self.tried = t,
-            Msg::Erase(disk) => self.plan.target = Some(Where::Erase { disk }),
+            Msg::Erase(disk) => self.choose(Where::Erase { disk }),
             Msg::Beside(part) => self.beside(part),
             Msg::Leave(part, v) => {
                 self.leave.insert(part.clone(), v.max(0.0) as u64);
@@ -309,11 +322,11 @@ impl App for Installer {
             Msg::Swap(on) => self.plan.swap = on,
             Msg::Lock(lock) => self.plan.lock = lock,
             Msg::DiskOne(t) => {
-                self.disk_one = Zeroizing::new(t);
+                self.disk_one = t;
                 self.disk_typed();
             }
             Msg::DiskTwo(t) => {
-                self.disk_two = Zeroizing::new(t);
+                self.disk_two = t;
                 self.disk_typed();
             }
             Msg::Suggest => self.suggest(),
@@ -324,11 +337,11 @@ impl App for Installer {
                 self.you_typed();
             }
             Msg::One(t) => {
-                self.one = Zeroizing::new(t);
+                self.one = t;
                 self.you_typed();
             }
             Msg::Two(t) => {
-                self.two = Zeroizing::new(t);
+                self.two = t;
                 self.you_typed();
             }
             Msg::Line(line) => self.progress(&line),
@@ -339,8 +352,14 @@ impl App for Installer {
             Msg::Finished(Err(e)) => self.fail(&plain(&e)),
             Msg::Stop => self.stop(),
             Msg::Stopped(free) => self.stopped(free),
+            Msg::DiskChanged(e) => self.disk_changed(&e),
+            Msg::Disks(disks) => self.got_disks(disks),
             Msg::NextSlide => self.slide = (self.slide + 1) % tour::COUNT,
         }
+    }
+
+    fn window_title(&self) -> Option<String> {
+        self.retitle.take().then(|| t!("installer-window-title", name = &self.name))
     }
 
     fn view(&self) -> Node<Msg> {

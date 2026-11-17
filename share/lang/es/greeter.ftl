@@ -27,13 +27,13 @@ greeter-ready-name = Escribe tu nombre y tu contraseña, y pulsa Intro.
 greeter-phone-failed = Tu teléfono no te ha iniciado sesión. Escribe tu contraseña.
 
 # Under the password box for a few seconds, where a phone is paired.
-greeter-phone-hint = El botón del teléfono inicia sesión con tu teléfono.
+greeter-phone-hint = Inicia sesión con tu teléfono
 
 # At the foot of the screen, for when nothing else works.
 greeter-trouble = ¿Problemas para iniciar sesión? Pulsa Ctrl+Alt+F2 para un inicio de sesión en texto.
 
 # Beside the light drawing switch, on a computer with no graphics chip.
-greeter-no-chip = No se encontró ningún chip gráfico, así que el dibujo ligero mantiene todo rápido.
+greeter-no-chip = Trindle no encontró ningún chip gráfico, así que usa gráficos más simples para que el escritorio responda con rapidez.
 
 # The main button's name (a round button with an arrow) that logs in.
 greeter-sign-in = Iniciar sesión
@@ -55,7 +55,7 @@ greeter-pam-account-expired = Esta cuenta ha caducado.
 greeter-pam-password-expired = Esta contraseña ha caducado. Inicia sesión en una consola de texto (Ctrl+Alt+F2) para cambiarla.
 
 # Red line under the boxes, or the sentence at the top, when the login failed and the system gave no reason.
-greeter-login-failed = No funcionó el inicio de sesión.
+greeter-login-failed = No se pudo iniciar sesión.
 
 # Red line under the name box when Enter is pressed with no name.
 greeter-name-first = Escribe primero tu nombre.
@@ -80,7 +80,7 @@ greeter-answer-box = Respuesta
 greeter-use-phone = Usar teléfono
 
 # Name of the switch for light drawing on a computer with no graphics chip, and the word under it.
-greeter-light-drawing = Dibujo ligero
+greeter-light-drawing = Gráficos reducidos
 
 # Tip of the round button that shows or hides the on-screen keyboard.
 greeter-keyboard-tip = Teclado en pantalla
@@ -111,7 +111,7 @@ greeter-shut-down = Apagar
 greeter-shut-down-sure = Pulsa de nuevo para apagar
 
 # Red line under the boxes when a power button is pressed and the system has no bus to ask.
-greeter-no-bus = El bus del sistema no está disponible.
+greeter-no-bus = Trindle no puede acceder al sistema.
 
 # Red line under the boxes when the system refused to restart; the reason follows, as the system worded it.
 greeter-restart-failed = No se pudo reiniciar: { $why }
@@ -120,20 +120,19 @@ greeter-restart-failed = No se pudo reiniciar: { $why }
 greeter-shut-down-failed = No se pudo apagar: { $why }
 
 # Red line under the boxes when the login service could not be spoken to.
-greeter-service-no-talk = No se pudo hablar con el servicio de inicio de sesión.
+greeter-service-no-talk = No se pudo conectar con el servicio de inicio de sesión.
 
 # Red line under the boxes when the login service was too slow.
-greeter-service-timeout = El servicio de inicio de sesión no respondió a tiempo.
+greeter-service-timeout = El servicio de inicio de sesión tardó demasiado.
 
 # Red line under the boxes when the login service hung up.
 greeter-service-closed = greetd cerró la conexión.
 
 # Red line under the boxes when the login service's answer was far too large.
-greeter-service-too-big = El servicio de inicio de sesión respondió con algo demasiado grande para leerlo.
+greeter-service-too-big = El servicio de inicio de sesión envió una respuesta demasiado grande para leerla.
 
 # Red line under the boxes when the login screen was started by hand and not by the login service.
-greeter-service-not-started = GREETD_SOCK no está definido: la pantalla de inicio de sesión no la inició greetd.
+greeter-service-not-started = GREETD_SOCK no está definido, así que greetd no inició esta pantalla de inicio de sesión.
 
 # Red line under the boxes when there is no connection to the login service.
 greeter-service-no-connection = sin conexión
-

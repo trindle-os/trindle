@@ -1,6 +1,6 @@
-//! Origin: began as a file of anvil, Smithay's example compositor (MIT, Victor Berger and
-//! Victoria Brekenfeld). About 74% of this file's lines still read as
-//! they did there; the rest is Trindle's own.
+// Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
+
+use std::sync::atomic::{AtomicBool, Ordering};
 
 use smithay::{
     backend::renderer::{
@@ -67,6 +67,13 @@ impl<R: Renderer> std::fmt::Debug for PointerRenderElement<R> {
     }
 }
 
+fn picture_lost(err: &dyn std::fmt::Debug) {
+    static SAID: AtomicBool = AtomicBool::new(false);
+    if !SAID.swap(true, Ordering::Relaxed) {
+        tracing::warn!(?err, "the pointer's picture cannot be drawn");
+    }
+}
+
 impl<T: Texture + Clone + Send + 'static, R> AsRenderElements<R> for PointerElement
 where
     R: Renderer<TextureId = T> + ImportAll + ImportMem,
@@ -86,22 +93,14 @@ where
             CursorImageStatus::Hidden => vec![],
 
             CursorImageStatus::Named(_) => {
-                if let Some(buffer) = self.buffer.as_ref() {
-                    vec![PointerRenderElement::<R>::from(
-                        MemoryRenderBufferRenderElement::from_buffer(
-                            renderer,
-                            (location - self.hotspot.to_physical_precise_round(scale)).to_f64(),
-                            buffer,
-                            None,
-                            None,
-                            None,
-                            Kind::Cursor,
-                        )
-                        .expect("Lost system pointer buffer"),
-                    )
-                    .into()]
-                } else {
-                    vec![]
+                let Some(buffer) = self.buffer.as_ref() else { return vec![] };
+                let at = (location - self.hotspot.to_physical_precise_round(scale)).to_f64();
+                match MemoryRenderBufferRenderElement::from_buffer(renderer, at, buffer, None, None, None, Kind::Cursor) {
+                    Ok(element) => vec![PointerRenderElement::<R>::from(element).into()],
+                    Err(err) => {
+                        picture_lost(&err);
+                        vec![]
+                    }
                 }
             }
             CursorImageStatus::Surface(surface) => {

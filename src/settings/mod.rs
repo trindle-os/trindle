@@ -14,6 +14,8 @@ pub mod ui;
 mod window;
 pub mod wordsheet;
 
+use std::cell::RefCell;
+use std::collections::HashMap;
 use std::rc::Rc;
 
 use crate::toolkit::bus::Bus;
@@ -28,6 +30,8 @@ const NAME: &str = "org.trindle.Settings";
 const PATH: &str = "/org/trindle/Settings";
 const XML: &str = r#"<interface name="org.trindle.Settings"><method name="Show"/><method name="Open"><arg type="as" direction="in"/></method></interface>"#;
 const SIZE: (u32, u32) = (1180, 800);
+
+const LEAST: (u32, u32) = (560, 480);
 
 const SIDE_ROW: f32 = 18.0;
 
@@ -60,18 +64,29 @@ fn page_groups() -> [(&'static str, &'static [&'static str]); 5] {
     [
         (t!("settings-window-group-personal"), &["ring", "wallpaper", "appearance", "sounds"]),
         (t!("settings-window-group-devices"), &["display", "audio", "bluetooth", "keyboard", "printers", "power", "games"]),
-        (t!("settings-window-group-network"), &["network", "tailscale", "blocking"]),
+        (t!("settings-window-group-network"), &["blocking", "network", "tailscale"]),
         (t!("settings-window-group-system"), &["users", "snapshots", "ai-programs", "region", "datetime"]),
         (t!("settings-window-group-about"), &["about", "thanks", "help"]),
     ]
 }
 
-pub const IN_APPS: &[&str] = &["default-apps", "startup", "permissions", "plugins", "crash-reports"];
+pub const IN_APPS: &[&str] = &["default-apps", "startup", "permissions", "plugins"];
 
 fn own_pages() -> Vec<Box<dyn Page>> {
     let mut pages = panels::all();
     pages.retain(|p| !IN_APPS.contains(&p.id()));
     pages
+}
+
+fn apps_pages() -> &'static [(&'static str, &'static str, &'static str, String)] {
+    use crate::common::live_language::{per_language, Kept};
+    static ALL: Kept<Vec<(&'static str, &'static str, &'static str, String)>> = std::sync::Mutex::new(Vec::new());
+    per_language(&ALL, || panels::all().into_iter().filter(|p| IN_APPS.contains(&p.id()))
+        .map(|p| (p.id(), p.title(), p.icon(), format!("{} {} {}", p.title(), p.keywords(), p.help()).to_lowercase())).collect()).as_slice()
+}
+
+pub(crate) fn apps_titles() -> Vec<&'static str> {
+    panels::all().into_iter().filter(|p| IN_APPS.contains(&p.id())).map(|p| p.title()).collect()
 }
 
 fn in_folders() -> (&'static str, &'static str, &'static str) {
@@ -166,6 +181,9 @@ impl Settings {
     fn handle(&mut self, ask: Do) {
         match ask {
             Do::Then(f) => f(self),
+            Do::Look(f) => {
+                f(self);
+            }
             Do::Open(args) => {
                 self.relist();
                 if let Some(p) = panel_of(&args) {
@@ -180,6 +198,20 @@ impl Settings {
             Do::Tick | Do::Show | Do::Say(_) => {}
         }
         self.follow();
+    }
+
+    pub(crate) fn relanguage(&mut self) {
+        let mut fresh = panels::all();
+        for (at, page) in self.pages.iter_mut().enumerate() {
+            if at == self.current || self.kit.awaited((*page.as_any_mut()).type_id()) {
+                continue;
+            }
+            if let Some(i) = fresh.iter().position(|p| p.id() == page.id()) {
+                *page = fresh.swap_remove(i);
+            }
+        }
+        self.relist();
+        self.kit.retitle.set(true);
     }
 
     fn relist(&mut self) {
@@ -199,9 +231,17 @@ impl Settings {
         self.kit.moving() || self.pages[self.current].moving()
     }
 
+    fn turn(&self) -> bool {
+        self.kit.turn() | self.pages[self.current].moving()
+    }
+
     fn matches(&self, page: &dyn Page) -> bool {
-        let text = format!("{} {} {}", page.title(), page.keywords(), page.help()).to_lowercase();
-        self.search.to_lowercase().split_whitespace().all(|w| text.contains(w))
+        let search = self.search.to_lowercase();
+        let mut words = search.split_whitespace().peekable();
+        if words.peek().is_none() {
+            return true;
+        }
+        haystack(page, |text| words.all(|w| text.contains(w)))
     }
 
     fn first_found(&self) -> Option<&'static str> {
@@ -214,8 +254,8 @@ impl Settings {
         if self.search.trim().is_empty() {
             return Vec::new();
         }
-        panels::all().into_iter().filter(|p| IN_APPS.contains(&p.id()) && self.matches(&**p))
-            .map(|p| (p.id(), p.title(), p.icon())).collect()
+        apps_pages().iter().filter(|(_, _, _, text)| self.search.to_lowercase().split_whitespace().all(|w| text.contains(w)))
+            .map(|&(id, title, icon, _)| (id, title, icon)).collect()
     }
 
     fn found_in_folders(&self) -> bool {
@@ -263,7 +303,7 @@ impl Settings {
             let pick = list(rows, chosen, move |n| {
                 let id = ids[n];
                 go(move |s| s.show(id))
-            }).here().row_height(row);
+            }).called(name).here().row_height(row);
             groups.push(column(vec![crate::toolkit::widget::row(vec![space().width(Length::Fixed(SIDE_HEAD_INDENT)), side_heading(name)]), pick]).gap(SIDE_HEAD_GAP));
         }
 
@@ -274,12 +314,12 @@ impl Settings {
             let pick = list(rows, None, move |n| {
                 let id = ids[n];
                 go(move |_| open_in_apps(id))
-            }).here().row_height(row);
+            }).called(t!("settings-window-in-apps")).here().row_height(row);
             groups.push(column(vec![crate::toolkit::widget::row(vec![space().width(Length::Fixed(SIDE_HEAD_INDENT)), side_heading(t!("settings-window-in-apps"))]), pick]).gap(SIDE_HEAD_GAP));
         }
 
         if self.found_in_folders() {
-            let pick = list(vec![item(in_folders().0).icon(in_folders().1)], None, |_| go(|_| open_in_folders())).here().row_height(row);
+            let pick = list(vec![item(in_folders().0).icon(in_folders().1)], None, |_| go(|_| open_in_folders())).called(t!("settings-window-in-folders")).here().row_height(row);
             groups.push(column(vec![crate::toolkit::widget::row(vec![space().width(Length::Fixed(SIDE_HEAD_INDENT)), side_heading(t!("settings-window-in-folders"))]), pick]).gap(SIDE_HEAD_GAP));
         }
         let pages = if groups.is_empty() {
@@ -289,9 +329,6 @@ impl Settings {
         };
         column(vec![search, pages]).gap(SIDE_GAP).padding(theme::sheet().sidebar_room)
     }
-}
-
-impl Settings {
 
     fn side_row(&self) -> f32 {
         let groups: Vec<usize> = page_groups().iter()
@@ -383,6 +420,10 @@ impl Hosted {
         self.s.moving()
     }
 
+    pub fn turn(&self) -> bool {
+        self.s.turn()
+    }
+
     pub fn pressed(&mut self, place: crate::toolkit::widget::Rect) {
         self.s.kit.pressed_at = Some(place);
     }
@@ -390,7 +431,6 @@ impl Hosted {
     pub fn escape(&mut self) -> bool {
         self.s.kit.info.take().is_some()
     }
-
 }
 
 fn go(f: impl Fn(&mut Settings) + 'static) -> Msg {
@@ -429,6 +469,10 @@ impl Shows for Settings {
         self.kit.pressed_at = Some(place);
     }
 
+    fn window_title(&self) -> Option<String> {
+        self.kit.retitle.take().then(|| t!("settings-window-title").to_string())
+    }
+
     fn intercept(&self, input: &crate::toolkit::input::Input, _keys: bool) -> Option<Msg> {
         if let Some(taken) = self.pages[self.current].intercept(input) {
             return Some(taken);
@@ -439,6 +483,28 @@ impl Shows for Settings {
             _ => None,
         }
     }
+}
+
+#[cfg(test)]
+thread_local! {
+
+    static LOWERED: std::cell::Cell<u32> = const { std::cell::Cell::new(0) };
+}
+
+fn haystack<T>(page: &dyn Page, f: impl FnOnce(&str) -> T) -> T {
+    thread_local! {
+        static KEPT: RefCell<HashMap<(&'static str, usize), String>> = RefCell::new(HashMap::new());
+    }
+    let key = (page.id(), page.help().as_ptr() as usize);
+    KEPT.with(|kept| {
+        let mut kept = kept.borrow_mut();
+        let text = kept.entry(key).or_insert_with(|| {
+            #[cfg(test)]
+            LOWERED.with(|n| n.set(n.get() + 1));
+            format!("{} {} {}", page.title(), page.keywords(), page.help()).to_lowercase()
+        });
+        f(text)
+    })
 }
 
 fn panel_of(args: &[String]) -> Option<String> {
@@ -454,8 +520,8 @@ fn own_key_taken() -> bool {
 }
 
 pub fn main(mut args: Vec<String>) -> i32 {
-    crate::common::no_driver::start();
     let own_key = own_key_taken();
+    crate::common::no_driver::start();
     if args.get(1).map(String::as_str) == Some("--screen-reader") {
         if let Some(code) = command_line::screen_reader(&mut args, own_key) {
             return code;

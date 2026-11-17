@@ -7,23 +7,23 @@ settings-sounds-title = Sons
 settings-sounds-keywords = som sons toque início iniciar login entrar sair logout desligar carregador conectado desconectado bateria alerta bipe desligado silêncio próprio personalizado adicionar arquivo wav ogg mp3
 
 # Introduction under the heading of the sounds page, and the words behind the page i.
-settings-sounds-help = O som de cada momento. Escolher um o toca, e Desligado mantém aquele momento em silêncio. Sons seus podem ser adicionados e escolhidos como qualquer outro.
+settings-sounds-help = Escolha um som para cada momento, como entrar na sessão. Você também pode adicionar seus próprios sons.
 
 # First choice in each moment's list of sounds: that moment makes no sound.
 settings-sounds-off = Desligado
 
 # Sentence at the top of the page when no moment makes a sound.
-settings-sounds-top-none = Tudo em silêncio: nenhum momento faz som.
+settings-sounds-top-none = Tudo em silêncio.
 
 # Sentence at the top of the page when every moment makes a sound.
-settings-sounds-top-all = Todo momento tem seu som.
+settings-sounds-top-all = Todos os sons estão ligados.
 
 # Sentence at the top of the page when some moments make a sound; { $n } is how many of the { $total } do.
 settings-sounds-top-some =
     { $n ->
-        [one] { $n } dos { $total } momentos faz um som; os outros ficam em silêncio.
-        [many] { $n } de { $total } momentos fazem som; os outros ficam em silêncio.
-       *[other] { $n } dos { $total } momentos fazem som; os outros ficam em silêncio.
+        [one] { $n } de { $total } sons está ligado. Os demais estão desligados.
+        [many] { $n } de { $total } sons estão ligados. Os demais estão desligados.
+       *[other] { $n } de { $total } sons estão ligados. Os demais estão desligados.
     }
 
 # Name of a sound that comes with Trindle, in the lists of sounds.
@@ -72,7 +72,7 @@ settings-sounds-moment-unplug = Carregador desconectado
 settings-sounds-moment-battery = Bateria fraca
 
 # Name of a moment that can make a sound, as the heading of its line and the name of its list.
-settings-sounds-moment-notification = Uma notificação surge
+settings-sounds-moment-notification = Uma notificação aparece
 
 # Heading of the logging out line.
 settings-sounds-moment-logout-short = Sair da sessão
@@ -80,26 +80,11 @@ settings-sounds-moment-logout-short = Sair da sessão
 # Heading of the notifications line.
 settings-sounds-moment-notification-short = Notificações
 
-# Small words under the logging in line.
-settings-sounds-moment-login-about = Quando a área de trabalho aparece.
-
 # Small words under the logging out line.
-settings-sounds-moment-logout-about = Ao reiniciar e desligar também.
-
-# Small words under the charger plugged in line.
-settings-sounds-moment-plug-about = Quando o carregador é ligado.
-
-# Small words under the charger unplugged line.
-settings-sounds-moment-unplug-about = Quando o carregador é tirado.
-
-# Small words under the battery low line.
-settings-sounds-moment-battery-about = Quando é hora de carregar.
-
-# Small words under the notifications line.
-settings-sounds-moment-notification-about = Quando uma notificação surge.
+settings-sounds-moment-logout-about = Também ao reiniciar e desligar.
 
 # Heading and slider name for the volume of the logging in and out sounds.
-settings-sounds-volume-coming = Volume de entrada e saída
+settings-sounds-volume-coming = Volume de entrar e sair da sessão
 
 # Heading and slider name for the volume of notification sounds.
 settings-sounds-volume-notifications = Volume das notificações
@@ -108,31 +93,28 @@ settings-sounds-volume-notifications = Volume das notificações
 settings-sounds-volume-power = Volume dos sons de energia
 
 # Name of the round button that plays the sound chosen for a moment, or an added sound.
-settings-sounds-hear = Ouvir
+settings-sounds-hear = Tocar
 
 # Name of the button that opens a window to add sound files.
 settings-sounds-add = Adicionar arquivos de som
 
 # Name of the button that opens the folder where added sounds are kept.
-settings-sounds-open-folder = Abrir a pasta onde ficam guardados
+settings-sounds-open-folder = Abrir a pasta dos sons adicionados
 
 # Red words under the add sounds line when the folder could not be opened.
 settings-sounds-folder-not-opened = Não foi possível abrir a pasta.
 
 # Red words under the add sounds line when the folder for added sounds could not be made.
-settings-sounds-folder-not-made = Não foi possível criar a pasta dos seus sons.
+settings-sounds-folder-not-made = O Trindle não conseguiu criar a pasta dos seus sons.
 
 # Name of the button that plays the sound being added, when one of the same name is already there.
-settings-sounds-hear-new = Ouvir o que está sendo trazido
+settings-sounds-hear-new = Tocar o som novo
 
 # Name of the button that plays the sound already there, when one of the same name is being added.
-settings-sounds-hear-old = Ouvir o que já está lá
+settings-sounds-hear-old = Tocar o som existente
 
 # Heading of the line for adding sounds.
 settings-sounds-add-heading = Adicionar sons
-
-# Small words under the add sounds line, listing the kinds of file that can be added.
-settings-sounds-add-formats = WAV, OGG, Opus, FLAC ou MP3.
 
 # Name of the bin button that removes a sound added by the person.
 # SAFETY: needs a human review before it ships
@@ -141,14 +123,11 @@ settings-sounds-remove = Remover este som
 # Heading of the line shown when no sounds have been added.
 settings-sounds-none-yet = Nenhum adicionado ainda
 
-# Small words under that line.
-settings-sounds-none-yet-about = Adicione um para escolhê-lo em qualquer momento.
-
 # Red words under a moment's line when its chosen sound file is gone.
-settings-sounds-gone = Esse som não está mais neste computador. Escolha outro.
+settings-sounds-gone = Esse som não está mais neste computador. Escolha um diferente.
 
 # Red words under a line when a sound would not play.
-settings-sounds-would-not-play = O som não tocou. Verifique os alto-falantes em Áudio.
+settings-sounds-would-not-play = O som não tocou. Verifique seus alto-falantes em Áudio.
 
 # Title of the window for choosing sound files.
 settings-sounds-chooser-title = Escolher arquivos de som
@@ -157,13 +136,17 @@ settings-sounds-chooser-title = Escolher arquivos de som
 settings-sounds-chooser-filter = Sons
 
 # Red words under the add sounds line when a chosen file is not a sound; { $name } is the file name.
-settings-sounds-not-playable = { $name } não é um tipo de som que o Trindle consegue tocar.
+settings-sounds-not-playable = O Trindle não pode tocar { $name } porque não reconhece o tipo de arquivo.
 
 # Red words under the add sounds line when a file could not be copied in; { $name } is the file name.
 settings-sounds-not-copied = Não foi possível copiar { $name }.
 
 # Green words under the add sounds line after sounds were added; { $n } is how many.
-settings-sounds-added = { $n } adicionado(s). Escolha ao lado de um momento acima.
+settings-sounds-added =
+    { $n ->
+        [one] { $n } som adicionado. Agora você pode escolhê-lo para qualquer momento acima.
+       *[other] { $n } sons adicionados. Agora você pode escolhê-los para qualquer momento acima.
+    }
 
 # Red words under the question about a sound of the same name when it could not be replaced; { $name } is the file name.
 settings-sounds-not-replaced = Não foi possível substituir { $name }.
@@ -179,23 +162,23 @@ settings-sounds-replaced-some = { $n } de { $total } substituídos.
 settings-sounds-not-removed = Não foi possível removê-lo.
 
 # Red words under a moment's line when its sound was removed and the moment could not be set back to its own sound.
-settings-sounds-not-set-back = O som dele foi removido, e não foi possível voltar ao som original.
+settings-sounds-not-set-back = O Trindle removeu o som, mas não conseguiu restaurar o som original daquele momento.
 
 # Title of the card with the sounds for logging in and out and notifications.
-settings-sounds-coming-title = Entrada e saída
+settings-sounds-coming-title = Entrar e sair da sessão
 
 # Words behind the i of that card.
-settings-sounds-coming-about = Escolher um som o toca, e Desligado mantém aquele momento em silêncio. O botão redondo ao lado de cada um toca o som escolhido agora. Cada volume vai de 0 a 100 de dez em dez e toca uma vez quando você solta.
+settings-sounds-coming-about = Cada volume vai de 0 a 100, de dez em dez. Você ouve o som uma vez quando solta.
 
 # Title of the card with the charger and battery sounds.
 settings-sounds-power-title = Energia
 
 # Words behind the i of that card.
-settings-sounds-power-about = Os sons de o carregador ser ligado e tirado, e de a bateria ficar fraca. O volume vai de 0 a 100 de dez em dez e toca uma vez quando você solta.
+settings-sounds-power-about = Sons de ligar e desligar o carregador e de bateria fraca. O volume vai de 0 a 100, de dez em dez. Você ouve o som uma vez quando solta.
 
 # Title of the card with the sounds the person added.
 settings-sounds-own-title = Seus próprios sons
 
 # Words behind the i of that card.
 # SAFETY: needs a human review before it ships
-settings-sounds-own-about = WAV, OGG, Opus, FLAC ou MP3. Eles são copiados para a sua própria pasta, então os originais podem ser movidos ou apagados, e depois escolhidos ao lado de qualquer momento como os outros. Remover um faz todo momento que o usava voltar ao seu som original.
+settings-sounds-own-about = WAV, OGG, Opus, FLAC ou MP3. O Trindle os copia para a sua própria pasta, então você pode mover ou apagar os originais. Depois, você pode escolhê-los para qualquer momento, como os outros. Se você remover um, todo momento que o usava volta ao som original.

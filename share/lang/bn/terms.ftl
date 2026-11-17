@@ -5,5 +5,5 @@
 terms-accept = আমি [EULA](eula)-তে সম্মত
 
 # In the foot, while the box is not ticked, saying why the button beside it is off.
-terms-needed = এগিয়ে যেতে বাক্সে টিক দিন
+terms-needed = সম্মতি আবশ্যক
 

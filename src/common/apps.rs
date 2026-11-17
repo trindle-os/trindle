@@ -1,6 +1,7 @@
 //! Installed applications from .desktop files, searched in XDG order so user
 //! entries (including Hidden=true) override system ones.
 
+use crate::toolkit::t;
 use std::collections::{HashMap, HashSet};
 use std::path::{Path, PathBuf};
 
@@ -11,15 +12,15 @@ pub const CATEGORIES: [&str; 9] =
 
 pub fn category_title(c: &str) -> &'static str {
     match c {
-        "internet" => "Internet",
-        "office" => "Office",
-        "graphics" => "Graphics",
-        "media" => "Sound and video",
-        "games" => "Games",
-        "development" => "Development",
-        "learning" => "Learning",
-        "utilities" => "Utilities",
-        _ => "System",
+        "internet" => t!("common-category-internet"),
+        "office" => t!("common-category-office"),
+        "graphics" => t!("common-category-graphics"),
+        "media" => t!("common-category-media"),
+        "games" => t!("common-category-games"),
+        "development" => t!("common-category-development"),
+        "learning" => t!("common-category-learning"),
+        "utilities" => t!("common-category-utilities"),
+        _ => t!("common-category-system"),
     }
 }
 
@@ -109,6 +110,12 @@ impl Entry {
         all.push(generic_icon_for(self.key(), &self.name));
         all
     }
+
+    pub fn icon_that_exists(&self, has: impl Fn(&str) -> bool) -> String {
+        let mut all = self.icons();
+        let generic = all.pop().unwrap_or_default();
+        all.into_iter().find(|n| has(n)).unwrap_or(generic)
+    }
 }
 
 pub const GENERIC_ICONS: [&str; 20] = crate::toolkit::generic::NAMES;
@@ -160,7 +167,7 @@ fn locale_names(lang: &str) -> Vec<String> {
     names
 }
 
-fn on_path(program: &str) -> bool {
+pub(super) fn on_path(program: &str) -> bool {
     let p = Path::new(program);
     if p.is_absolute() {
         return if super::files::own_place(p) { p.is_file() } else { far_there(p, FAR_GRACE, |p| p.is_file()) };
@@ -268,7 +275,7 @@ fn entry_from(id: &str, file_path: &Path, file: &super::keyfile::KeyFile, langs:
     Some(Entry {
         id: id.to_string(),
         name,
-        icon: get("Icon").filter(|i| !i.is_empty() && !is_old_stand_in(i)),
+        icon: get("Icon").filter(|i| !i.is_empty() && !is_old_stand_in(i) && (!i.starts_with('/') || found(i))),
         program: program_from(get("X-Flatpak").as_deref(), &exec),
         exec,
         try_exec,
@@ -285,8 +292,7 @@ fn entry_from(id: &str, file_path: &Path, file: &super::keyfile::KeyFile, langs:
 
 pub fn entries() -> Vec<Entry> {
     let langs = languages();
-    let desktops: Vec<String> = std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default()
-        .split(':').filter(|d| !d.is_empty()).map(str::to_string).collect();
+    let desktops = current_desktops();
     let mut seen = HashSet::new();
     let mut all = Vec::new();
     for base in app_dirs() {
@@ -405,11 +411,20 @@ fn any_downloaded(files: &[String]) -> bool {
     files.iter().filter(|f| !is_link(f)).any(|f| downloaded::arrived(Path::new(f), &from))
 }
 
+fn dbus_path(name: &str) -> String {
+    let path: String = name.chars().map(|c| match c {
+        '.' => '/',
+        '-' => '_',
+        c => c,
+    }).collect();
+    format!("/{path}")
+}
+
 fn launch_inner(app: &Entry, files: &[String], token: Option<String>, boxed: bool) -> bool {
     let Ok(file) = super::keyfile::KeyFile::load(&app.path) else { return false };
     if app.exec.is_empty() {
 
-        let path = format!("/{}", app.key().replace(['.', '-'], "/"));
+        let path = dbus_path(app.key());
         return super::run::spawn(&["busctl", "--user", "call", app.key(), &path, "org.freedesktop.Application", "Activate", "a{sv}", "0"]);
     }
 
@@ -530,7 +545,7 @@ pub const OWN: &[Own] = &[
     Own { key: "settings", desktop: &["trindle-settings"], window: &["org.trindle.settings", "trindle-settings"], command: &["trindle-settings"] },
     Own {
         key: "store",
-        desktop: &["trindle-apps", "trindle-store", "trindle-deb", "trindle-appimage"],
+        desktop: &["trindle-apps", "trindle-store", "trindle-deb", "trindle-appimage", "trindle-flatpak"],
         window: &["org.trindle.apps", "org.trindle.store", "trindle-apps", "trindle-store"],
         command: &["trindle-apps", "trindle-store"],
     },
@@ -628,10 +643,45 @@ fn best_tier(apps: &[Entry], wanted: &str) -> Option<usize> {
     apps.iter().filter_map(|a| tier(a, wanted)).min()
 }
 
+pub fn with_existing_icons(mut list: Vec<Entry>) -> Vec<Entry> {
+    let icons = shared_icons();
+    for a in &mut list {
+        a.icon = Some(a.icon_that_exists(|n| icons.find(n, 32, 1).is_some()));
+    }
+    list
+}
+
+thread_local! {
+    static SHARED_ICONS: std::cell::RefCell<Option<(String, std::rc::Rc<crate::toolkit::icon::Icons>)>> = const { std::cell::RefCell::new(None) };
+}
+
+pub fn shared_icons() -> std::rc::Rc<crate::toolkit::icon::Icons> {
+    let theme = crate::toolkit::icon::chosen();
+    SHARED_ICONS.with_borrow_mut(|slot| match slot {
+        Some((made_for, icons)) if *made_for == theme => icons.clone(),
+        _ => {
+            let icons = std::rc::Rc::new(crate::toolkit::icon::Icons::new());
+            *slot = Some((theme, icons.clone()));
+            icons
+        }
+    })
+}
+
 pub fn find_for_window<'a>(apps: &'a [Entry], app_id: &str) -> Option<&'a Entry> {
     let wanted = window_name(app_id);
     let best = best_tier(apps, &wanted)?;
     apps.iter().find(|a| tier(a, &wanted) == Some(best))
+}
+
+pub fn window_icons(app: Option<&Entry>, app_id: &str) -> Vec<String> {
+    app.map(Entry::icons).unwrap_or_else(|| vec![generic_icon_for(app_id, app_id)])
+}
+
+pub fn window_icon(app: Option<&Entry>, app_id: &str) -> String {
+    match app {
+        Some(a) => { let icons = shared_icons(); a.icon_that_exists(|n| icons.find(n, 32, 1).is_some()) }
+        None => generic_icon_for(app_id, app_id),
+    }
 }
 
 pub fn owns(apps: &[Entry], app: &Entry, app_id: &str) -> bool {
@@ -640,8 +690,7 @@ pub fn owns(apps: &[Entry], app: &Entry, app_id: &str) -> bool {
 }
 
 pub fn opener_for(kind: &str) -> Option<Entry> {
-    let all = entries();
-    chosen_of(&all, kind).or_else(|| openers_of(&all, kind).into_iter().next())
+    chosen_of(&entries(), kind)
 }
 
 pub fn start_file(path: &Path) -> Result<(), String> {
@@ -650,7 +699,7 @@ pub fn start_file(path: &Path) -> Result<(), String> {
 
 pub fn start_file_saying(path: &Path, stderr: std::process::Stdio) -> Result<(), String> {
     let file = super::keyfile::KeyFile::load(path).map_err(|e| e.to_string())?;
-    let (argv, folder) = command_of(&file, path).ok_or("It has no command to run.")?;
+    let (argv, folder) = command_of(&file, path).ok_or(t!("common-app-no-command"))?;
     let argv = with_own_x11(argv);
     let mut command = std::process::Command::new(&argv[0]);
     command.args(&argv[1..]).stdin(std::process::Stdio::null())
@@ -658,7 +707,7 @@ pub fn start_file_saying(path: &Path, stderr: std::process::Stdio) -> Result<(),
     if let Some(folder) = folder {
         command.current_dir(folder);
     }
-    let mut child = command.spawn().map_err(|e| format!("could not start {}: {e}", argv[0]))?;
+    let mut child = command.spawn().map_err(|e| t!("common-app-not-started", program = &argv[0], error = e.to_string()).to_string())?;
     std::thread::spawn(move || child.wait());
     Ok(())
 }
@@ -672,14 +721,20 @@ pub fn openers_of(all: &[Entry], kind: &str) -> Vec<Entry> {
     all.iter().filter(|a| opens(a, kind)).cloned().collect()
 }
 
+pub(super) fn current_desktops() -> Vec<String> {
+    std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default().split(':').filter(|d| !d.is_empty()).map(str::to_string).collect()
+}
+
+fn config_home() -> PathBuf {
+    std::env::var_os("XDG_CONFIG_HOME").filter(|v| !v.is_empty()).map(PathBuf::from).unwrap_or_else(|| home().join(".config"))
+}
+
 fn mimeapps() -> PathBuf {
-    std::env::var_os("XDG_CONFIG_HOME").filter(|v| !v.is_empty()).map(PathBuf::from)
-        .unwrap_or_else(|| home().join(".config")).join("mimeapps.list")
+    config_home().join("mimeapps.list")
 }
 
 fn mimeapps_lists() -> Vec<PathBuf> {
-    let desktops: Vec<String> = std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default()
-        .split(':').filter(|d| !d.is_empty()).map(str::to_lowercase).collect();
+    let desktops: Vec<String> = current_desktops().iter().map(|d| d.to_lowercase()).collect();
     let config = mimeapps();
     let mut dirs = vec![config.parent().map(Path::to_path_buf).unwrap_or_default()];
     let system = std::env::var("XDG_CONFIG_DIRS").ok().filter(|v| !v.is_empty()).unwrap_or_else(|| "/etc/xdg".into());
@@ -712,7 +767,7 @@ pub fn choose_opener(id: &str, kinds: &[&str]) -> Result<(), String> {
 }
 
 pub(crate) fn choose_opener_in(path: &std::path::Path, id: &str, kinds: &[&str]) -> Result<(), String> {
-    let mut file = super::keyfile::KeyFile::load_kept(path).map_err(|e| format!("Nothing was changed, because {e}."))?;
+    let mut file = super::keyfile::KeyFile::load_kept(path).map_err(|e| t!("common-launcher-unchanged", why = e.to_string()).to_string())?;
     for kind in kinds {
         file.set("Default Applications", kind, id);
         let mut added = vec![id.to_string()];
@@ -741,9 +796,8 @@ pub fn default_terminal(all: &[Entry]) -> Option<Entry> {
 }
 
 fn terminal_lists() -> Vec<PathBuf> {
-    let desktops: Vec<String> = std::env::var("XDG_CURRENT_DESKTOP").unwrap_or_default()
-        .split(':').filter(|d| !d.is_empty()).map(str::to_lowercase).collect();
-    let config = std::env::var_os("XDG_CONFIG_HOME").map(PathBuf::from).unwrap_or_else(|| home().join(".config"));
+    let desktops: Vec<String> = current_desktops().iter().map(|d| d.to_lowercase()).collect();
+    let config = config_home();
     let dirs = std::env::var("XDG_CONFIG_DIRS").ok().filter(|d| !d.is_empty()).unwrap_or_else(|| "/etc/xdg".into());
     let mut all = vec![config];
     all.extend(dirs.split(':').filter(|d| !d.is_empty()).map(PathBuf::from));

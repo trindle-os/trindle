@@ -100,14 +100,12 @@ pub fn why(raw: &str, could_not: &str) -> String {
     t!("settings-common-why-then", could_not = could_not, cause = cause)
 }
 
+pub fn own_or_why(said: &str, own: &[&str], could_not: &str) -> String {
+    let said = said.trim();
+    if own.contains(&said) { said.to_string() } else { why(said, could_not) }
+}
+
 pub(super) fn is_just_saved(text: &str) -> bool {
     let low = text.trim().trim_end_matches('.').to_lowercase();
-    if [t!("settings-common-saved"), t!("settings-common-done")].iter().any(|w| w.to_lowercase() == low) {
-        return true;
-    }
-    matches!(low.as_str(),
-             "saved" | "done" | "in use now" | "changed" | "set" | "taken" | "added" | "freed" | "removed"
-             | "stored" | "installed" | "updated" | "joined" | "copied" | "default now" | "played" | "sent"
-             | "connected" | "connecting" | "on" | "off" | "forgotten" | "stops at 80%" | "charges to full"
-             | "starts at login" | "kept, but does not start" | "up to date")
+    t!("settings-common-quiet-words").split('|').any(|w| w.trim().to_lowercase() == low)
 }

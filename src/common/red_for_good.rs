@@ -1,7 +1,7 @@
 //! Red is for an act that cannot be undone, and for a failure, and for
-//! nothing else (the rule for every design). "Wipe securely" was once drawn in the highlight,
-//! as "Delete permanently" and "Empty the Trash" were too: each a
-//! screen's main action, and each said under it "This cannot be undone".
+//! nothing else (the rule for every design). "Wipe securely", "Delete
+//! permanently" and "Empty the Trash" are each a screen's main action, and
+//! each says under it "This cannot be undone".
 
 use super::save_is_a_word::all_lines;
 

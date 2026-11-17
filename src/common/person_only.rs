@@ -56,6 +56,8 @@ pub const APPS_INSTALL: &str = "apps-install";
 
 pub const APPS_BACKUP_BACK: &str = "apps-backup-back";
 
+pub const APPS_REMOVE: &str = "apps-remove";
+
 pub const APPS_DATA_DELETE: &str = "apps-data-delete";
 
 pub const PLUGIN_OFF: &str = "apps-plugin-off";
@@ -74,7 +76,7 @@ pub const RESTART_PARTS: &str = "settings-restart-parts";
 
 pub const PIN_CARD: &str = "pin-card";
 
-pub const ACTS: [(&str, &str, &str); 19] = [
+pub const ACTS: [(&str, &str, &str); 20] = [
     (STOP, "activity/stop.rs", "stop_step(self.armed, crate::toolkit::window::persons_own(crate::common::person_only::STOP))"),
     (FORCE_CLOSE, "ring/view/window_ring.rs", "let own = kept::own_press();"),
     (RING_POWER, "ring/view/power.rs", "power_step(what, self.armed.as_deref(), kept::own_press())"),
@@ -86,6 +88,7 @@ pub const ACTS: [(&str, &str, &str); 19] = [
     (APPS_INSTALL, "store/pages/install.rs", "if !crate::toolkit::window::persons_own(crate::common::person_only::APPS_INSTALL) {"),
     (APPS_BACKUP_BACK, "store/pages/backup_page.rs", "if !crate::toolkit::window::persons_own(crate::common::person_only::APPS_BACKUP_BACK) {"),
     (APPS_DATA_DELETE, "store/pages/remove_ask.rs", "if wipe && !crate::toolkit::window::persons_own(crate::common::person_only::APPS_DATA_DELETE) {"),
+    (APPS_REMOVE, "store/pages/installed.rs", "crate::toolkit::window::persons_own(crate::common::person_only::APPS_REMOVE)"),
     (PLUGIN_OFF, "settings/panels/plugin_rows.rs", "if matches!(what, Act::Switch(false)) && !crate::toolkit::window::persons_own(crate::common::person_only::PLUGIN_OFF) {"),
     (PLUGIN_REMOVE, "store/plugin_page.rs", "crate::toolkit::window::persons_own(crate::common::person_only::PLUGIN_REMOVE)"),
     (SCREEN_READER, "settings/panels/appearance/reading.rs", "if !crate::toolkit::window::persons_own(crate::common::person_only::SCREEN_READER) {"),
@@ -106,12 +109,11 @@ pub const INSTALL_PRESSED: [(&str, &str); 7] = [
     ("store/deb.rs", "on_press(go(pressed_install_boxed))"),
 ];
 
-pub const WAITING: [(&str, &str, &str); 0] = [];
-
-pub const GIVEN_IN: [(&str, &str, &str); 9] = [
+pub const GIVEN_IN: [(&str, &str, &str); 10] = [
     (PASSWORD, "polkit/mod.rs", "name: \"trindle-polkit\".into()"),
     (DEVICE, "thunder/ask.rs", "name: \"trindle-thunder\".into()"),
     (PERMISSIONS, "store/asking.rs", "name: \"trindle-permissions\".into()"),
+    (PERMISSIONS, "store/fence_window.rs", "name: \"trindle-permissions\".into()"),
     (RING, "ring/view/panel.rs", "name: \"trindle-ring\".into()"),
     (PORTAL, "screenshot/portal_ask.rs", "const APP_ID: &str = \"org.trindle.Portal\";"),
     (CHOOSER, "screenshot/portal_files.rs", "app_id: \"org.trindle.FileChooser\".into()"),

@@ -1,0 +1,129 @@
+## What an app can be allowed to do, and what goes wrong without it. Each
+## permission has a name (said after "asks for", as in "Weather asks for
+## the internet and sound"), the line under its switch, and for some a warning.
+
+access-network-name = internet
+access-network-without = Program ini tidak akan dapat menjangkau internet atau komputer lain di dekatnya.
+access-sound-name = suara
+access-sound-without = Program ini tidak akan mengeluarkan suara.
+access-microphone-name = mikrofon Anda
+access-microphone-without = Program ini tidak akan dapat mendengar Anda.
+access-sound-and-microphone-name = suara dan mikrofon Anda
+access-sound-and-microphone-without = Program ini tidak akan mengeluarkan suara dan tidak akan dapat mendengar Anda.
+access-files-name = folder Dokumen, Unduhan, Gambar, Musik, Video, dan Desktop Anda
+access-files-without = Program ini tidak akan dapat membuka file Anda atau menyimpan ke folder Anda.
+access-home-name = semua isi folder beranda Anda, termasuk file pengaturan tersembunyi
+access-home-without = Program ini tidak akan dapat membuka file Anda atau menyimpan ke folder Anda.
+access-devices-name = kamera Anda dan perangkat lain yang tercolok
+access-devices-without = Program ini tidak akan dapat melihat Anda atau memakai apa pun yang Anda colokkan.
+access-bluetooth-name = perangkat Bluetooth seperti headphone
+access-bluetooth-without = Program ini tidak akan dapat terhubung ke apa pun lewat Bluetooth.
+access-notifications-name = notifikasi
+access-notifications-without = Program ini tidak akan dapat memberi tahu Anda saat sesuatu terjadi.
+access-background-name = mulai otomatis saat Anda masuk
+access-background-without = Program ini hanya akan berjalan saat Anda membukanya.
+access-screen-name = gambar layar Anda, apa yang Anda salin, dan pengetikan seolah-olah dari papan ketik Anda
+access-screen-without = Program ini tidak akan dapat melihat jendela lain atau membaca apa yang Anda salin kapan pun ia mau.
+access-x11-name = menggambar jendelanya dengan cara lama, yang memungkinkannya mengawasi program lama lain dan apa yang diketik di dalamnya
+access-x11-without = Jendelanya tidak akan terbuka.
+access-computer-name = bekerja di luar kotaknya, dengan semua yang dapat Anda jangkau sendiri
+access-computer-without = Apa yang Anda ketik di dalamnya tetap terkurung di kotaknya, jadi sudo dan file Anda sendiri tidak akan berfungsi di sana.
+access-control-name = kendali atas papan ketik, mouse, dan papan klip Anda
+access-control-without = Program ini tidak akan dapat menggerakkan penunjuk, mengetik, atau membagikan apa yang Anda salin.
+access-capture-name = berbagi mouse dan papan ketik Anda dengan komputer lain
+access-capture-without = Penunjuk tidak akan dapat berpindah ke komputer lain.
+access-copied-name = file yang Anda salin
+access-copied-without = Program ini tidak akan dapat membaca file yang Anda salin, jadi tidak bisa membawanya ke komputer lain.
+access-summon-name = membuka cincin di atas jendela layar penuh, seolah-olah Anda menekan tombolnya
+access-summon-without = Tombol dan kliknya hanya akan membuka cincin di desktop, tidak pernah di atas jendela layar penuh.
+access-listen-name = dijangkau oleh komputer lain di jaringan lokal Anda
+access-listen-without = Komputer lain di jaringan lokal Anda tidak akan dapat menemukan atau terhubung ke program ini.
+access-home-network-name = perangkat di jaringan lokal Anda saja
+access-home-network-without = Program ini tidak akan dapat menemukan atau berbicara dengan printer, pemindai, atau perangkat lain di jaringan lokal.
+access-usb-devices-name = pemindai dan perangkat USB
+access-usb-devices-without = Program ini tidak akan dapat memakai pemindai yang tercolok ke komputer ini.
+access-expand-name = memperluas kode singkat saat Anda mengetik
+access-expand-without = Kode singkatnya tidak akan diperluas saat Anda mengetik.
+access-accessibility-name = membacakan setiap jendela dengan suara
+access-accessibility-without = Program ini tidak akan dapat membacakan jendela Anda dengan suara.
+access-unnamed-name = sesuatu yang tidak disebutkannya
+
+access-control-warning = Plugin ini dapat mengetik, mengklik, dan membaca apa yang Anda salin seolah-olah itu Anda. Izinkan hanya untuk plugin yang Anda percaya.
+access-capture-warning = Selama penunjuk berada di komputer lain, semua yang Anda ketik dan klik dikirim ke plugin ini. Izinkan hanya untuk plugin yang Anda percaya.
+access-copied-warning = Plugin ini hanya dapat membaca file yang Anda salin selama diizinkan, dan tidak ada yang lain. Izinkan hanya untuk plugin yang Anda percaya.
+access-summon-warning = Plugin ini dapat menaruh cincin, yang menerima semua yang Anda ketik, di atas game atau film tanpa Anda menyentuh tombol apa pun. Izinkan hanya untuk plugin yang Anda percaya.
+access-home-network-warning = Plugin ini dapat berbicara dengan setiap perangkat di jaringan lokal Anda, termasuk router, tetapi tidak ke internet. Izinkan hanya untuk plugin yang Anda percaya.
+access-usb-devices-warning = Plugin ini dapat memakai pemindai dan perangkat gambar yang tercolok saat ia mulai, dan tidak ada perangkat USB lain. Izinkan hanya untuk plugin yang Anda percaya.
+access-expand-warning = Trindle memantau apa yang Anda ketik untuk mencari kodenya, lalu mengetikkan kata-katanya untuk Anda. Plugin tidak pernah melihat apa yang Anda ketik. Izinkan hanya untuk plugin yang Anda percaya.
+access-accessibility-warning = Plugin ini dapat membaca semua yang ada di layar Anda. Seperti pembaca layar lainnya, ia juga dapat menekan tombol dan mengetik teks di jendela lain, meski tidak punya papan ketik atau mouse sendiri. Izinkan hanya untuk plugin yang Anda percaya.
+
+## Titles (for a tooltip) and the line under a switch, which says what switching it off means.
+access-network-title = Internet
+access-network-off = Jika mati, program ini tidak dapat menjangkau internet atau komputer lain di dekatnya.
+access-sound-title = Memutar suara
+access-sound-off = Jika mati, tidak ada suara.
+access-microphone-title = Mikrofon Anda
+access-microphone-off = Jika mati, program ini tidak dapat mendengar Anda.
+access-sound-and-microphone-title = Memutar suara dan memakai mikrofon Anda
+access-sound-and-microphone-off = Jika mati, program ini tidak mengeluarkan suara dan tidak dapat mendengar Anda.
+access-files-title = Folder Dokumen, Unduhan, Gambar, Musik, Video, dan Desktop Anda
+access-files-off = Jika mati, program ini tidak dapat membuka file Anda atau menyimpan ke folder Anda.
+access-home-title = Semua isi folder beranda Anda, termasuk file pengaturan tersembunyi
+access-home-off = Jika mati, program ini tidak dapat membuka file Anda atau menyimpan ke folder Anda.
+access-devices-title = Kamera Anda dan perangkat lain yang tercolok
+access-devices-off = Jika mati, program ini tidak dapat memakai kamera Anda atau apa pun yang Anda colokkan.
+access-bluetooth-title = Bluetooth, untuk headphone dan perangkat lain di dekat Anda
+access-bluetooth-off = Jika mati, program ini tidak dapat terhubung ke apa pun lewat Bluetooth.
+access-notifications-title = Menampilkan notifikasi
+access-notifications-off = Jika mati, program ini tidak dapat memberi tahu Anda saat sesuatu terjadi.
+access-background-title = Mulai sendiri saat Anda masuk
+access-background-off = Jika mati, program ini hanya berjalan saat Anda membukanya.
+access-screen-title = Mengambil gambar layar Anda, membaca apa yang Anda salin, dan mengetik seolah-olah papan ketik Anda
+access-screen-off = Jika mati, program ini tidak dapat melihat jendela lain atau membaca apa yang Anda salin kapan pun ia mau.
+access-x11-title = Menggambar jendelanya dengan cara lama, yang memungkinkannya mengawasi program lama lain dan apa yang diketik di dalamnya
+access-x11-off = Jika mati, jendelanya tidak akan terbuka.
+access-computer-title = Bekerja di luar kotaknya, dengan semua yang dapat Anda jangkau sendiri
+access-computer-off = Jika mati, apa yang Anda ketik di dalamnya tetap terkurung di kotaknya, jadi sudo dan file Anda sendiri tidak akan berfungsi di sana.
+access-control-title = Mengendalikan papan ketik, mouse, dan papan klip Anda
+access-control-off = Jika mati, program ini tidak dapat menggerakkan penunjuk, mengetik, atau membagikan apa yang Anda salin.
+access-capture-title = Berbagi mouse dan papan ketik Anda dengan komputer lain
+access-capture-off = Jika mati, penunjuk tidak dapat berpindah ke komputer lain.
+access-copied-title = Membaca file yang Anda salin
+access-copied-off = Jika mati, program ini tidak dapat membaca file yang Anda salin atau mengirimkannya ke komputer lain.
+access-summon-title = Membuka cincin di atas jendela layar penuh, seolah-olah Anda menekan tombolnya
+access-summon-off = Jika mati, tombol dan kliknya hanya membuka cincin di desktop, tidak pernah di atas jendela layar penuh.
+access-listen-title = Biarkan komputer lain di jaringan lokal Anda menjangkaunya
+access-listen-off = Jika mati, komputer lain di jaringan lokal Anda tidak dapat menemukan atau terhubung ke program ini.
+access-home-network-title = Menjangkau perangkat di jaringan lokal Anda saja
+access-home-network-off = Jika mati, program ini tidak dapat menemukan atau terhubung ke printer, pemindai, atau perangkat lain di jaringan lokal.
+access-usb-devices-title = Memakai pemindai dan perangkat USB
+access-usb-devices-off = Jika mati, program ini tidak dapat memakai pemindai yang tercolok ke komputer ini.
+access-expand-title = Memperluas kode singkat Anda saat Anda mengetik
+access-expand-off = Jika mati, Trindle tidak akan memperluas kode singkatnya saat Anda mengetik.
+access-accessibility-title = Membaca apa yang ditampilkan setiap jendela dan mengucapkannya dengan suara
+access-accessibility-off = Jika mati, program ini tidak dapat membacakan jendela Anda dengan suara.
+access-unnamed-title = Sesuatu yang tidak disebutkannya
+
+## The few words on a plugin's row of the Permissions page.
+access-note-acts-as-you = dapat bertindak sebagai Anda
+access-note-home-network = dapat menjangkau setiap perangkat di jaringan lokal Anda
+access-note-usb-devices = dapat memakai pemindai dan perangkat gambar
+access-note-expand = dapat mengetik di jendela Anda
+access-note-accessibility = dapat membaca semua yang ada di layar Anda
+
+access-listen-detail = { $ports }, hanya dari komputer di jaringan lokal Anda. Internet juga harus diizinkan.
+
+## A request that is unusual for the kind of app that makes it.
+access-unusual = Ini tidak lazim untuk { $kind }. Izinkan hanya jika Anda percaya dari mana aplikasi ini berasal.
+access-kind-terminal = terminal
+access-kind-calculator = kalkulator
+access-kind-photo = aplikasi foto
+access-kind-text-editor = editor teks
+access-kind-browser = peramban web
+access-kind-office = aplikasi perkantoran
+access-kind-graphics = aplikasi grafis
+access-kind-game = game
+access-kind-sound-video = aplikasi suara dan video
+access-kind-programming = alat pemrograman
+access-kind-utility = utilitas
+access-kind-other = aplikasi seperti ini

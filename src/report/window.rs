@@ -4,17 +4,20 @@ use std::cell::{Cell, RefCell};
 use std::rc::{Rc, Weak};
 use std::time::Duration;
 
+use super::picture;
 use super::probe::{self, Crash};
 use super::scrub::Who;
 use super::send::{self, Answer};
 use super::{
-    github, home, live_for, log_lines, model, offered, pending_dir, read_log, same_window, server, title_crash, title_note, username, Do,
+    github, home, log_lines, model, offered, pending_dir, read_log, same_window, server, title_crash, title_note, username, Do,
     Mode, Reporter, NAME, PATH, SIZE, XML,
 };
 use crate::toolkit::bus::{Asked, Bus, Offer, Props, Served};
 use crate::toolkit::event::{Loop, Post};
 use crate::toolkit::ui::Shown;
 use crate::toolkit::window::{Display, Kind};
+
+const SHOT_WAIT: Duration = Duration::from_millis(800);
 
 type Slot = Rc<RefCell<Weak<Shown<Reporter>>>>;
 
@@ -94,6 +97,7 @@ pub(super) fn open(events: &Loop, mode: Mode, program: String) -> Option<Rc<Show
     app.mode = mode;
     app.program = program.clone();
     app.username = username();
+    app.plugins = crate::plugins::installed().into_iter().map(|p| (p.id, p.name)).collect();
     app.github = github();
     app.switch = offered();
     app.keeps_username = true;
@@ -109,8 +113,22 @@ pub(super) fn open(events: &Loop, mode: Mode, program: String) -> Option<Rc<Show
     *slot.borrow_mut() = Rc::downgrade(&shown);
     let ev = events.clone();
     shown.window.on_close(move || ev.quit());
+
+    let fitted = Rc::downgrade(&shown);
+    display.on_screens(move || {
+        if let Some(shown) = fitted.upgrade() {
+            refit(&shown);
+        }
+    });
+    refit(&shown);
     read_in_background(&asks, mode, program);
     Some(shown)
+}
+
+fn refit(shown: &Shown<Reporter>) {
+    let room = shown.window.room_tall().map(|r| r as f32);
+    shown.change(|r| r.fit_to(room));
+    shown.fit();
 }
 
 fn answering(events: &Loop, slot: &Slot, who: &Who) -> Post<Do> {
@@ -119,6 +137,7 @@ fn answering(events: &Loop, slot: &Slot, who: &Who) -> Post<Do> {
     let answer = events.post(move |result: Answer| {
         let Some(shown) = t.borrow().upgrade() else { return };
         shown.change(|r| r.answered(result));
+        refit(&shown);
     });
     events.post(move |ask: Do| {
         let Some(shown) = s.borrow().upgrade() else { return };
@@ -139,18 +158,46 @@ fn answering(events: &Loop, slot: &Slot, who: &Who) -> Post<Do> {
             Do::Post(body) => {
                 let back = answer.clone();
                 std::thread::spawn(move || {
-                    back.send(send::post(&live_for(&server(), &send::slug_of(&body)), &body));
+                    back.send(send::post(&server(), &body));
                 });
             }
+            Do::Chosen(path) => {
+                let mut asks = None;
+                shown.change(|r| {
+                    r.chooser = None;
+                    asks = r.asks.clone();
+                    r.picture_busy = path.is_some();
+                    r.picture_fault = None;
+                });
+                if let (Some(path), Some(asks)) = (path, asks) {
+                    std::thread::spawn(move || asks.send(Do::Picture(picture::read(&path))));
+                }
+            }
+            Do::Shoot => {
+                let mut asks = None;
+                shown.change(|r| asks = r.asks.clone());
+                if let Some(asks) = asks {
+
+                    shown.window.minimise();
+                    std::thread::spawn(move || {
+                        std::thread::sleep(SHOT_WAIT);
+                        let photo = picture::screen();
+                        asks.send(Do::Picture(photo));
+                        crate::ring::windows::Windows::raise_key("report");
+                    });
+                }
+            }
+            Do::Picture(result) => shown.change(|r| r.picture_is(result)),
             Do::Status(open) => shown.change(|r| r.gate_is(open)),
+            Do::Fit => {}
         }
+        refit(&shown);
     })
 }
 
 fn read_in_background(asks: &Post<Do>, mode: Mode, program: String) {
 
-    let asked = true;
-    if asked && mode == Mode::Note {
+    if mode == Mode::Note {
         let ask = asks.clone();
         std::thread::spawn(move || {
             ask.send(Do::Status(send::accepting(&server())));
@@ -161,13 +208,11 @@ fn read_in_background(asks: &Post<Do>, mode: Mode, program: String) {
         match mode {
             Mode::Crash => {
                 let found = probe::coredump();
-                let raw = probe::log_before(found.as_ref().map(|f| f.1));
+                let raw = probe::log_before(found.as_ref().map(|f| (f.0.program.as_str(), f.1)));
                 let crash = found.map(|f| f.0).unwrap_or(Crash { program, signal: String::new(), trace: String::new() });
-                let to = live_for(&server(), &send::slug_for(&crash.program));
+                let to = server();
                 reads.send(Do::Crash(crash, raw));
-                if asked {
-                    reads.send(Do::Status(send::accepting(&to)));
-                }
+                reads.send(Do::Status(send::accepting(&to)));
             }
             Mode::Note => {
                 reads.send(Do::Log(read_log()));

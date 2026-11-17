@@ -20,10 +20,10 @@ store-nav-updates = Mises à jour
 store-nav-updates-waiting = Mises à jour ({ $n })
 
 # Side bar place: plugins.
-store-nav-plugins = Extensions
+store-nav-plugins = Modules
 
 # Side bar place: apps from GitHub.
-store-nav-github = Depuis GitHub
+store-nav-github = Rechercher
 
 # Side bar place: where software comes from.
 store-nav-sources = Sources de logiciels
@@ -39,9 +39,6 @@ store-group-settings = Réglages des applications
 
 # Small heading over the categories of apps.
 store-group-categories = Catégories
-
-# Small heading over the other ways to get an app.
-store-group-more = Autres façons d'obtenir des applications
 
 # Title of a page of search results; the words searched for are in the quotes.
 store-grid-results = Résultats pour « { $text } »
@@ -89,20 +86,24 @@ store-cat-utility = Utilitaires
 store-cat-system = Système
 
 # Red words when the list of apps could not be read.
-store-catalogue-unreadable = Le catalogue n'a pas pu être lu : { $why }
+store-catalogue-unreadable = Trindle n'a pas pu lire le catalogue : { $why }
 
 # Red words when Flathub's list of apps could not be fetched. { $why } is what Flatpak said.
-store-catalogue-not-fetched = La liste des applications n'a pas pu être récupérée sur Flathub. Vérifiez la connexion à Internet. { $why }
+store-catalogue-not-fetched = Trindle n'a pas pu récupérer la liste des applications sur Flathub. Vérifiez votre connexion à Internet. { $why }
 
 # Red words under the search box when nothing that was dropped on the window is a kind Apps takes.
-store-dropped-only = Seuls les fichiers .deb, .AppImage et .flatpakref peuvent être déposés ici.
+store-dropped-only = Vous pouvez seulement déposer ici des fichiers .deb, .AppImage et .flatpakref.
 
 # Red words under an app that Flatpak did not update; what Flatpak said follows.
-store-not-updated-said = Non mise à jour. Flatpak a dit : { $why }
+store-not-updated-said = Flatpak ne l'a pas mise à jour : { $why }
 
 # Red words under an app that Flatpak did not update and gave no reason for.
-store-not-updated-none = Non mise à jour, et Flatpak n'a donné aucune raison.
+store-not-updated-none = Elle n'a pas été mise à jour. Aucune raison n'a été donnée.
 
 # Side bar place and title: the AppImages AppImageHub lists.
 store-nav-browse = Parcourir les AppImages
+
+
+# Heading of the Flatpaks a detailed search found on Flathub.
+store-gh-flathub = Flatpaks sur Flathub ({ $n })
 

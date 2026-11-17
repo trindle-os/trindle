@@ -8,7 +8,7 @@ settings-about-title = Acerca de este equipo
 settings-about-keywords = hostname computer name network name about system version debian trindle memory ram processor cpu disk graphics screen model kernel rolling release activity running programs busy task manager system monitor disks drives usb space nombre del equipo red acerca sistema versión memoria procesador disco gráficos pantalla modelo núcleo actividad programas en ejecución monitor unidades espacio
 
 # Text behind the info button of the About page.
-settings-about-help = El nombre de este equipo tal como lo ven otros equipos de la red, de qué está hecho y cuánto tarda en arrancar. Lo que está haciendo ahora, y qué programas usan la memoria y el procesador, está en Actividad, y las unidades y su espacio en Unidades, cada una en su propia ventana: las flechas de Más detalle las abren.
+settings-about-help = Esta página muestra el nombre de este equipo tal como lo ven otros equipos de la red, de qué está hecho y cuánto tarda en arrancar. Actividad muestra lo que hace el equipo ahora y qué programas usan la memoria y el procesador. Unidades muestra tus unidades y su espacio. Cada una se abre en su propia ventana. Usa las flechas de Más detalle para abrirlas.
 
 # What is shown when a fact about the computer cannot be found.
 settings-about-unknown = Desconocido
@@ -85,17 +85,17 @@ settings-about-up-days =
     }
 
 # Red words under the computer name box when the name is not allowed.
-settings-about-name-bad = Solo letras, números y guiones, sin empezar ni terminar con un guion.
+settings-about-name-bad = Usa solo letras, números y guiones. No empieces ni termines con un guion.
 
 # SAFETY: needs a human review before it ships
 # Words under the computer name box while the password window is open.
-settings-about-name-waiting = Esperando la contraseña...
+settings-about-name-waiting = Esperando tu contraseña…
 
 # Red words under the computer name box when renaming failed.
 settings-about-name-failed = No se pudo cambiar el nombre del equipo.
 
 # Words under the computer name box after renaming worked.
-settings-about-name-done = Los programas que ya están abiertos verán el nombre nuevo tras el próximo inicio de sesión.
+settings-about-name-done = Los programas que ya están abiertos usarán el nombre nuevo después de que vuelvas a iniciar sesión.
 
 # Placeholder and spoken name of the typing box for the computer's name.
 settings-about-name-entry = Nombre del equipo
@@ -106,51 +106,27 @@ settings-about-rename = Cambiar el nombre de este equipo
 # Bold line of the computer name setting.
 settings-about-name = Nombre del equipo
 
-# Quiet line under the computer name setting.
-settings-about-name-sub = Letras, números y guiones.
-
 # Heading of the card with the computer's name.
 settings-about-name-group = Nombre
 
 # SAFETY: needs a human review before it ships
 # Text behind the info button of the Name card.
-settings-about-name-about = Cómo aparece este equipo en la red y en el indicador de una terminal. Letras, números y guiones, sin empezar ni terminar con un guion. Cambiarlo pide tu contraseña.
+settings-about-name-about = Este es el nombre del equipo en la red y en el indicador de una terminal. Usa letras, números y guiones, pero no empieces ni termines con un guion. Para cambiarlo tienes que escribir tu contraseña.
 
 # Heading of the card about the computer's hardware.
 settings-about-hardware = El equipo
 
 # Text behind the info button of the hardware card.
-settings-about-hardware-about = El fabricante y el modelo, el procesador y cuántos hilos ejecuta a la vez, los gráficos y cada pantalla en uso con su tamaño y su frecuencia de actualización.
-
-# Quiet line under the maker and model.
-settings-about-hw-computer = El equipo
-
-# Quiet line under the processor.
-settings-about-hw-processor = El procesador
-
-# Quiet line under the graphics.
-settings-about-hw-graphics = Dibuja las imágenes
-
-# Quiet line under the screens.
-settings-about-hw-screen = La pantalla
+settings-about-hardware-about = Aquí se ven el fabricante y el modelo del equipo, su procesador y sus gráficos. También se ve cuántos hilos puede ejecutar a la vez el procesador, y cada pantalla en uso con su tamaño y su frecuencia de actualización.
 
 # Heading of the card about the software.
 settings-about-software = El software
 
 # Text behind the info button of the software card.
-settings-about-software-about = Trindle es un escritorio sobre Debian, que se ocupa de los programas de debajo. El núcleo es la parte que habla con el hardware, y el compositor propio de Trindle dibuja el escritorio, sobre Wayland.
-
-# Quiet line under the Debian version.
-settings-about-sw-debian = Funciona por debajo
-
-# Quiet line under the kernel version.
-settings-about-sw-kernel = El núcleo
+settings-about-software-about = Trindle es un escritorio que funciona sobre Debian, que se ocupa de los programas de debajo. El núcleo es la parte que trabaja con el hardware. El compositor propio de Trindle dibuja el escritorio con Wayland.
 
 # Bold line naming Trindle's compositor.
 settings-about-sw-compositor = El compositor propio de Trindle
-
-# Quiet line under the compositor line.
-settings-about-sw-compositor-sub = Dibuja el escritorio, sobre Wayland
 
 # Bold line saying how many apps are installed; n is the count.
 settings-about-sw-apps =
@@ -160,20 +136,14 @@ settings-about-sw-apps =
        *[other] { $n } aplicaciones
     }
 
-# Quiet line under the number of apps.
-settings-about-sw-apps-sub = Instaladas, listas en el anillo
-
 # Heading of the card with the ways to Activity and Drives.
 settings-about-more = Más detalle
 
 # Text behind the info button of the More detail card.
-settings-about-more-about = Lo que está haciendo ahora, y qué programas usan la memoria y el procesador, está en Actividad. Cada unidad, cuánto se ha llenado y en qué estado está, y las memorias USB, están en Unidades.
+settings-about-more-about = Actividad muestra lo que hace el equipo ahora y qué programas usan la memoria y el procesador. Unidades muestra todas las unidades, cuánto se han llenado y en qué estado están, y las memorias USB.
 
 # Bold line of the setting that opens Activity.
 settings-about-activity = Ver qué se está ejecutando
-
-# Quiet line under the setting that opens Activity.
-settings-about-activity-sub = Programas que usan memoria y procesador.
 
 # Tip of the arrow that opens the Activity program.
 settings-about-activity-name = Actividad
@@ -181,14 +151,17 @@ settings-about-activity-name = Actividad
 # Bold line of the setting that opens Drives.
 settings-about-drives = Unidades y espacio
 
-# Quiet line under the setting that opens Drives.
-settings-about-drives-sub = Cada unidad, cuánto se ha llenado y su estado.
-
 # Tip of the arrow that opens the Drives program.
 settings-about-drives-name = Unidades
 
 # Red words under the start-up times line when the file could not be saved.
-settings-about-times-failed = No se pudieron guardar los tiempos de arranque en Descargas.
+settings-about-times-failed = Trindle no pudo guardar los tiempos de arranque en Descargas.
+
+# First line of the saved start-up times file: the two columns, separated by a comma.
+settings-about-times-heading = Fecha y hora,Segundos
+
+# File name of the saved start-up times, in Downloads.
+settings-about-times-file = Tiempos de inicio de Trindle.csv
 
 # Words under the start-up times line after the file was saved; file is the file's name.
 settings-about-times-saved = En Descargas, como { $file }
@@ -200,19 +173,19 @@ settings-about-times-save = Guardar
 settings-about-times-save-spoken = Guardar todos los tiempos de arranque en Descargas
 
 # Bold line of the setting that saves the start-up times.
-settings-about-times-keep = Todos los arranques, para conservar
+settings-about-times-keep = Guardar cada tiempo de arranque
 
 # Quiet line under that setting.
 settings-about-times-keep-sub = Se guardan en Descargas como una hoja de cálculo.
 
 # The sentence over the chart of the last ten start-up times.
-settings-about-times-chart = Cada columna es un arranque, el más reciente a la derecha.
+settings-about-times-chart = Cada columna es un arranque. El más reciente está a la derecha.
 
 # Heading of the card with the last ten start-up times.
-settings-about-times = Los últimos diez arranques
+settings-about-times = Últimos diez arranques
 
 # Text behind the info button of the start-up times card.
-settings-about-times-about = Cada arranque se mide desde el botón de encendido hasta la pantalla de inicio de sesión, sin contar el tiempo de escribir la contraseña del disco. El más reciente está arriba.
+settings-about-times-about = Trindle mide cada arranque desde el botón de encendido hasta la pantalla de inicio de sesión. No cuenta el tiempo que tardas en escribir la contraseña del disco. El más reciente está arriba.
 
 # Heading of the memory tile.
 settings-about-memory = Memoria
@@ -220,31 +193,59 @@ settings-about-memory = Memoria
 # Heading of the disk tile.
 settings-about-disk = Disco
 
+# Heading of the card on About that holds the switch and the optional names for problem reports.
+settings-about-reports = Informes de problemas
+
+# Text behind the round i of that card. Buildmorphic is the community that helps build Trindle; keep its name.
+settings-about-reports-about = Los informes van a Buildmorphic, la comunidad que ayuda a crear Trindle. Puedes unirte solo con una dirección de correo. Ganas crédito y niveles por los problemas que informas primero, aunque no sepas arreglarlos. Un informe contiene solo una lista fija de datos, y no se envía nada hasta que pulsas Enviar. Un nombre de usuario o de GitHub es opcional, y tu nombre de usuario nunca es tu dirección de correo.
+
+# Switch: whether Trindle asks about problems and about sharing reports. Name of the switch for the screen reader too.
+settings-about-reports-offer = Ofrecer enviar un informe cuando algo sale mal
+
+# Box for the optional Buildmorphic username, also its name for the screen reader. Buildmorphic is a name.
+settings-about-reports-name = Nombre de usuario de Buildmorphic
+
+# Box for the optional GitHub name, also its name for the screen reader. GitHub is a name.
+settings-about-reports-github = Nombre de GitHub
+
+# Name of the round button that opens the Buildmorphic community website, and of its line.
+settings-about-reports-community = Sobre la comunidad
+
+# Said under the switch when it is turned off and reports that were waiting to be sent were deleted; n is how many.
+settings-about-reports-deleted =
+    { $n ->
+        [one] Desactivado. { $n } informe en espera borrado.
+       *[other] Desactivado. { $n } informes en espera borrados.
+    }
+
+# Said in red under the switch when it is turned off but some waiting reports could not be deleted; n is how many.
+settings-about-reports-kept =
+    { $n ->
+        [one] Desactivado. No se pudo borrar { $n } informe en espera.
+       *[other] Desactivado. No se pudieron borrar { $n } informes en espera.
+    }
+
 
 
 # Heading of the card with the switch for looking for updates.
 settings-about-updates = Actualizaciones
 
 # Text behind the info button of the updates card.
-settings-about-updates-about = Trindle busca versiones nuevas de las aplicaciones, los complementos, el firmware y de sí mismo poco después de que inicies sesión y cada pocas horas, y las correcciones de seguridad de Debian entran todos los días. Si se desactiva, solo busca cuando pulsas Buscar actualizaciones en Aplicaciones, o el botón de actualizaciones del anillo. Las correcciones de seguridad de Debian tienen su propio interruptor; si se desactiva, ya no se instalan por sí solas y los fallos conocidos siguen abiertos hasta que actualices. Cambiar cualquiera de los dos interruptores pide la contraseña de administrador, para que los servicios propios del equipo también vean la decisión.
+settings-about-updates-about = Trindle busca versiones nuevas de las aplicaciones, los complementos, el firmware y de sí mismo poco después de que inicies sesión y luego cada pocas horas. Si lo desactivas, Trindle solo busca cuando pulsas Buscar actualizaciones en Aplicaciones, o el botón de actualizaciones del anillo. Las correcciones de seguridad de Debian se instalan todos los días y tienen su propio interruptor. Si lo desactivas, ya no se instalan por sí solas y los fallos de seguridad conocidos siguen sin corregir hasta que actualices. Cambiar cualquiera de los dos interruptores pide la contraseña de administrador, para que todo el equipo use tu decisión.
 
 # Bold line of the switch for looking for updates by itself; also the switch's name for a screen reader.
 settings-about-updates-by-itself = Buscar actualizaciones
 
 # Words under the Check for updates switch while the password window is open.
-settings-about-updates-waiting = Esperando la contraseña...
-
-# Quiet line under that switch.
-settings-about-updates-by-itself-sub = Desactivado, nada busca si no lo pides.
+settings-about-updates-waiting = Esperando tu contraseña…
 
 
 
 # Bold line of the switch for Debian's security fixes; also the switch's name for a screen reader.
 settings-about-security = Actualizaciones de seguridad
 
-# Quiet line under the Security updates switch when it is on.
-settings-about-security-sub = Las correcciones de seguridad se instalan solas todos los días.
-
 # Warning line under the Security updates switch when it is off.
 settings-about-security-off = Las correcciones de seguridad ya no se instalan solas.
 
+# Said in red under the switch when it is turned off but the Reporting add-on could not delete the reports it keeps; the reason follows.
+settings-about-reports-addon-kept = Desactivado, pero no se borraron los informes en espera del complemento Reporting.

@@ -19,6 +19,7 @@ pub(super) struct Opts {
     pub(super) renew_steam: bool,
     pub(super) deb: Option<PathBuf>,
     pub(super) appimage: Option<PathBuf>,
+    pub(super) flatpakref: Option<PathBuf>,
 }
 
 impl Opts {
@@ -55,6 +56,7 @@ impl Opts {
                 "updates" => o.updates = Some(v),
                 "deb" => o.deb = Some(PathBuf::from(v)),
                 "appimage" => o.appimage = Some(PathBuf::from(v)),
+                "flatpakref" => o.flatpakref = Some(PathBuf::from(v)),
                 _ => {}
             }
         }
@@ -70,11 +72,19 @@ impl Store {
         }
         if let Some(file) = o.appimage {
             if dropped::kind_of(&file) == Some(dropped::Kind::AppImage) {
-                pages::appimage_warning::before(self, move |s| pages::add_file::add_appimage_file(s, file, true, came_from::CameFrom::NotKnown));
+                pages::appimage_warning::before_arriving(self, move |s| pages::add_file::add_appimage_file(s, file, true, came_from::CameFrom::NotKnown));
+            }
+        }
+
+        if let Some(file) = o.flatpakref {
+            if dropped::kind_of(&file) == Some(dropped::Kind::FlatpakRef) {
+                pages::flatpak_page::offer_ref(self, file);
+            } else if dropped::is_bundle(&file) {
+                pages::flatpak_page::offer_opened_bundle(self, file);
             }
         }
         if let Some(id) = o.app {
-            self.pending_app = Some(id);
+            self.opening.app = Some(id);
             self.show_pending_app();
         }
 
@@ -86,10 +96,10 @@ impl Store {
                 update_page::check::ask_start(self);
             }
             self.select_nav("updates");
-            self.pending_spot = Some(part).filter(|p| !p.is_empty());
+            self.spot.asked = Some(part).filter(|p| !p.is_empty());
         }
         if let Some(words) = o.github {
-            self.pending_github = Some(words);
+            self.opening.github = Some(words);
             self.select_nav("github");
         }
         if let Some(words) = o.search.filter(|w| !w.is_empty()) {

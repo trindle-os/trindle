@@ -75,7 +75,6 @@ const PAINTED: &[(&str, &str, &[&str])] = &[
     ("store/draw.rs", "store/shots_test_pages.rs", &["apps_in_the_dark_look_draws_only_pairs_the_table_holds", "apps_in_the_light_look_draws_only_pairs_the_table_holds"]),
     ("text/app.rs", "text/tests.rs", &["text_draws_only_pairs_the_table_holds"]),
     ("thunder/ask.rs", "thunder/ask.rs", &["the_thunderbolt_question_draws_only_pairs_the_table_holds"]),
-    ("welcome/mod.rs", "welcome/tests.rs", &["welcome_draws_only_pairs_the_table_holds"]),
 ];
 
 const ALSO: &[(&str, &str)] = &[

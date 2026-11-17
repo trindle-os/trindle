@@ -57,7 +57,7 @@ screenshot-tool-circle = دائرہ
 screenshot-tool-highlighter = ہائی لائٹر
 
 # Name of the drawing tool that writes words.
-screenshot-tool-words = الفاظ
+screenshot-tool-words = متن
 
 # Name of the drawing tool that puts numbered spots.
 screenshot-tool-numbers = نمبر
@@ -108,16 +108,16 @@ screenshot-not-saved = اسکرین شاٹ محفوظ نہیں ہوا
 screenshot-not-copied = اسکرین شاٹ کاپی نہیں ہوا
 
 # Words of that notice.
-screenshot-clipboard-refused = کلپ بورڈ نے اسے قبول نہیں کیا۔
+screenshot-clipboard-refused = Trindle اسے کاپی نہیں کر سکا۔
 
 # Words of the notice that the screenshot could not be saved: the picture was not made.
-screenshot-no-picture = تصویر بن نہیں سکی
+screenshot-no-picture = اسکرین شاٹ نہیں لیا جا سکا۔
 
 # Words of the notice that the screenshot could not be saved: no bus to ask on.
-screenshot-no-bus = پوچھنے کے لیے کوئی سیشن بس نہیں ہے
+screenshot-no-bus = Trindle یہ نہیں پوچھ سکتا کہ کہاں محفوظ کرنا ہے۔
 
 # Words of the notice that the screenshot could not be saved: the file chooser could not be asked.
-screenshot-no-chooser = فائل منتخب کرنے والے سے پوچھا نہیں جا سکا
+screenshot-no-chooser = فائل منتخب کرنے والا نہیں کھل سکا۔
 
 # Words of the notice that the screenshot could not be saved: every file name was taken.
 screenshot-no-free-name = کوئی خالی نام نہیں ملا
@@ -129,26 +129,26 @@ screenshot-write-failed = { $path }: { $why }
 screenshot-eye-title = رنگ چننے والا
 
 # Words that float beside the i of the eye dropper's window.
-screenshot-eye-help = رنگ چننے والے کو دبائیں، پھر اسکرین پر کہیں بھی کلک کریں تاکہ پوائنٹر کے نیچے کا رنگ لیا جائے۔ Escape سے رک جاتا ہے۔ ہر رنگ فوراً ہیکس کوڈ کے طور پر کاپی ہو جاتا ہے اور نیچے فہرست میں، نیا سب سے اوپر، رکھا جاتا ہے تاکہ بعد میں دوبارہ کاپی ہو سکے۔
+screenshot-eye-help = رنگ چننے والے کو دبائیں، پھر اسکرین پر کہیں بھی کلک کریں تاکہ پوائنٹر کے نیچے کا رنگ اٹھا لیا جائے۔ منسوخ کرنے کے لیے Escape دبائیں۔ ہر رنگ فوراً ہیکس کوڈ کے طور پر کاپی ہو جاتا ہے اور نیچے فہرست میں، نیا سب سے اوپر، شامل ہو جاتا ہے تاکہ آپ اسے بعد میں دوبارہ کاپی کر سکیں۔
 
 # Name of the i button beside the title.
 screenshot-eye-about = رنگ چننے والے کے بارے میں
 
 # Name of the main button that takes a colour.
-screenshot-eye-take = رنگ لیں
+screenshot-eye-take = رنگ چنیں
 
 # Sentence under the title while no colour has been taken.
-screenshot-eye-none = اسکرین پر کہیں سے بھی رنگ لیں۔
+screenshot-eye-none = اسکرین سے رنگ چنیں۔
 
 # Sentence under the title once colours have been taken.
 screenshot-eye-taken =
     { $n ->
-        [one] ایک رنگ لیا گیا: { $newest }۔
-       *[other] { $n } رنگ لیے گئے؛ سب سے نیا { $newest } ہے۔
+        [one] ایک رنگ چنا گیا: { $newest }۔
+       *[other] { $n } رنگ چنے گئے۔ سب سے نیا { $newest } ہے۔
     }
 
 # Shown in the big card while no colour has been taken.
-screenshot-eye-latest-empty = جو رنگ آپ لیں گے وہ یہاں بڑا دکھائی دے گا، کاپی کے لیے تیار۔
+screenshot-eye-latest-empty = ابھی کوئی رنگ نہیں چنا گیا۔
 
 # Name of the card that holds the latest colour.
 screenshot-eye-latest = تازہ ترین رنگ
@@ -157,10 +157,10 @@ screenshot-eye-latest = تازہ ترین رنگ
 screenshot-eye-clear = فہرست صاف کریں
 
 # Head of the card with the list of colours taken.
-screenshot-eye-list = لیے گئے رنگ
+screenshot-eye-list = آپ کے رنگ
 
 # Shown in the list card while no colour has been taken.
-screenshot-eye-list-empty = رنگ چننے والے سے لیے گئے رنگ یہاں رکھے جاتے ہیں، نیا سب سے اوپر۔
+screenshot-eye-list-empty = ابھی کوئی رنگ نہیں چنا گیا۔
 
 # SAFETY: needs a human review before it ships
 # Name of the round button that takes a colour out of the list.
@@ -175,11 +175,11 @@ screenshot-pick-title = کیا { $app } کے ساتھ اپنی اسکرین شی
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title when several things can be picked.
-screenshot-pick-many = ایک یا زیادہ چنیں۔ جب تک ایپ رک نہ جائے یا بند نہ ہو، صرف وہی شیئر ہوتا ہے جو آپ چنیں۔
+screenshot-pick-many = ایک یا زیادہ چنیں۔ جب تک ایپ شیئر کرنا بند نہ کر دے یا بند نہ ہو جائے، صرف وہی شیئر ہوتا ہے جو آپ چنیں۔
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title when one thing can be picked.
-screenshot-pick-one = ایک چنیں۔ جب تک ایپ رک نہ جائے یا بند نہ ہو، صرف وہی شیئر ہوتا ہے جو آپ چنیں۔
+screenshot-pick-one = ایک چنیں۔ جب تک ایپ شیئر کرنا بند نہ کر دے یا بند نہ ہو جائے، صرف وہی شیئر ہوتا ہے جو آپ چنیں۔
 
 # Heading over the screens that can be shared.
 screenshot-pick-screens = اسکرینیں
@@ -194,7 +194,7 @@ screenshot-pick-nothing = شیئر کرنے کے لیے کچھ نہیں ہے۔
 screenshot-pick-desktop = پورا ڈیسک ٹاپ
 
 # Words under that choice.
-screenshot-pick-desktop-detail = ہر اسکرین، جیسی رکھی ہے
+screenshot-pick-desktop-detail = تمام اسکرینیں، اپنی ترتیب کے مطابق
 
 # Words under a screen's choice: its size in pixels.
 screenshot-pick-size = { $width } ضرب { $height }
@@ -233,11 +233,11 @@ screenshot-portal-name = نام
 
 # SAFETY: needs a human review before it ships
 # Heading when an unknown program asks who the person is.
-screenshot-account-asks-unknown = ایک پروگرام پوچھ رہا ہے کہ آپ کون ہیں
+screenshot-account-asks-unknown = ایک پروگرام آپ کی معلومات مانگ رہا ہے
 
 # SAFETY: needs a human review before it ships
 # Heading when a program asks who the person is.
-screenshot-account-asks = { $who } پوچھ رہا ہے کہ آپ کون ہیں
+screenshot-account-asks = { $who } آپ کی معلومات مانگ رہا ہے
 
 # Name the screen reader gives to the person's picture.
 screenshot-account-picture = آپ کی تصویر
@@ -249,7 +249,7 @@ screenshot-account-signed-in = بطور { $id } لاگ اِن
 screenshot-apps-search = ایپس تلاش کریں
 
 # Shown when no app can open the file.
-screenshot-apps-none = یہاں کوئی ایپ اسے نہیں کھول سکتی
+screenshot-apps-none = کوئی ایپ اسے نہیں کھول سکتی
 
 # Name of the switch that remembers the choice.
 screenshot-apps-always = اس قسم کی فائل کے لیے ہمیشہ یہی ایپ استعمال کریں
@@ -308,7 +308,7 @@ screenshot-wallpaper-ask = کیا اس تصویر کو اپنا والپیپر �
 
 # SAFETY: needs a human review before it ships
 # Heading when a program offers a wallpaper.
-screenshot-wallpaper-asks = { $who } نیا والپیپر پیش کر رہا ہے
+screenshot-wallpaper-asks = { $who } والپیپر لگانا چاہتا ہے
 
 # Name the screen reader gives to the picture offered.
 screenshot-wallpaper-picture = نیا والپیپر
@@ -317,7 +317,7 @@ screenshot-wallpaper-picture = نیا والپیپر
 screenshot-wallpaper-set = والپیپر بنائیں
 
 # Red line under the printer box when no printer is set up.
-screenshot-print-no-printer = کوئی پرنٹر سیٹ نہیں۔ ترتیبات، پرنٹرز میں ایک شامل کریں۔
+screenshot-print-no-printer = کوئی پرنٹر سیٹ اپ نہیں ہے۔ ترتیبات میں پرنٹرز کے تحت ایک شامل کریں۔
 
 # Red line under the printer box when the printing system does not answer.
 screenshot-print-not-answering = پرنٹنگ جواب نہیں دے رہی۔
@@ -371,7 +371,7 @@ screenshot-print-from = { $who } سے پرنٹ کریں
 screenshot-print-failed = پرنٹ نہیں ہو سکا
 
 # Words of that notice when the choices made were not kept.
-screenshot-print-lost = اس کی انتخابات محفوظ نہیں رہے۔ دوبارہ پرنٹ کریں۔
+screenshot-print-lost = ترتیبات محفوظ نہیں ہو سکیں۔ دوبارہ پرنٹ کریں۔
 
 # Line in the menu on a file or folder: change its name.
 screenshot-chooser-rename = نام بدلیں
@@ -415,7 +415,7 @@ screenshot-chooser-no-folder = وہ فولڈر موجود نہیں۔
 
 # SAFETY: needs a human review before it ships
 # Words under the box when saving would replace a file.
-screenshot-chooser-replace-ask = { $name } پہلے سے موجود ہے۔ اس کی جگہ یہ رکھنے کے لیے بدلیں دبائیں، یا دوبارہ Enter دبائیں۔
+screenshot-chooser-replace-ask = { $name } پہلے سے موجود ہے۔ اسے بدلنے کے لیے بدلیں دبائیں یا دوبارہ Enter دبائیں۔
 
 # Words under the box when a key is pressed on Recent, which is not a folder.
 screenshot-chooser-recent-not-folder = حالیہ فولڈر نہیں ہے۔ پہلے کوئی فولڈر کھولیں۔
@@ -453,52 +453,52 @@ screenshot-chooser-replace = بدلیں
 
 # SAFETY: needs a human review before it ships
 # What the screen reader says for the button that replaces a folder.
-screenshot-chooser-replace-spoken = بدلیں: جو فولڈر پہلے سے موجود ہے وہ ردی دان میں چلا جائے گا
+screenshot-chooser-replace-spoken = بدلیں۔ موجودہ فولڈر ردی دان میں منتقل ہو جائے گا۔
 
 # SAFETY: needs a human review before it ships
 # Name of the main button that merges two folders.
 screenshot-chooser-merge = ضم کریں
 
 # Words in the question when folders are being pasted.
-screenshot-chooser-rest-folders = پہلے سے موجود ہر فولڈر کے لیے یہی جواب۔
+screenshot-chooser-rest-folders = پہلے سے موجود ہر فولڈر کے لیے یہی کریں۔
 
 # Words in the question when files are being pasted.
-screenshot-chooser-rest-files = پہلے سے موجود ہر فائل کے لیے یہی جواب۔
+screenshot-chooser-rest-files = پہلے سے موجود ہر فائل کے لیے یہی کریں۔
 
 # Name of the switch that gives the same answer to the rest.
 screenshot-chooser-same = باقی کے لیے بھی یہی کریں
 
 # Words under the box after Cut.
-screenshot-chooser-was-cut = { $what } کاٹا گیا۔ اسے کسی فولڈر میں چسپاں کریں۔
+screenshot-chooser-was-cut = منتقل کرنے کے لیے تیار: { $what }
 
 # Words under the box after Copy.
-screenshot-chooser-was-copied = { $what } کاپی ہوا۔ اسے کسی فولڈر میں چسپاں کریں۔
+screenshot-chooser-was-copied = کاپی کرنے کے لیے تیار: { $what }
 
 # Words under the box when Paste is pressed and there is nothing to paste.
 screenshot-chooser-nothing-cut = کچھ کاٹا یا کاپی نہیں کیا گیا۔
 
 # Words under the box when Paste is pressed while a paste is still going.
-screenshot-chooser-paste-busy = چسپاں کرنے کا عمل ابھی جاری ہے۔
+screenshot-chooser-paste-busy = Trindle ابھی چسپاں کر رہا ہے۔
 
 # Red line after some items could not be moved.
 screenshot-chooser-not-moved =
     { $n ->
-        [one] ایک چیز منتقل نہیں ہو سکی: { $names }۔
-       *[other] { $n } چیزیں منتقل نہیں ہو سکیں: { $names }۔
+        [one] Trindle ایک آئٹم منتقل نہیں کر سکا: { $names }۔
+       *[other] Trindle { $n } آئٹم منتقل نہیں کر سکا: { $names }۔
     }
 
 # Red line after some items could not be copied.
 screenshot-chooser-not-copied =
     { $n ->
-        [one] ایک چیز کاپی نہیں ہو سکی: { $names }۔
-       *[other] { $n } چیزیں کاپی نہیں ہو سکیں: { $names }۔
+        [one] Trindle ایک آئٹم کاپی نہیں کر سکا: { $names }۔
+       *[other] Trindle { $n } آئٹم کاپی نہیں کر سکا: { $names }۔
     }
 
 # Red line after some items could not be put in the Trash.
 screenshot-chooser-not-trashed =
     { $n ->
-        [one] ایک چیز ردی دان میں نہیں ڈالی جا سکی: { $names }۔
-       *[other] { $n } چیزیں ردی دان میں نہیں ڈالی جا سکیں: { $names }۔
+        [one] Trindle ایک آئٹم ردی دان میں منتقل نہیں کر سکا: { $names }۔
+       *[other] Trindle { $n } آئٹم ردی دان میں منتقل نہیں کر سکا: { $names }۔
     }
 
 # Name of the box where a file or folder is renamed.
@@ -512,10 +512,10 @@ screenshot-chooser-items =
     }
 
 # Title of the notice when an email could not be started.
-screenshot-mail-failed = ای میل شروع نہیں ہو سکی
+screenshot-mail-failed = ای میل نہیں بن سکی
 
 # Why: no mail program is chosen or installed.
-screenshot-mail-no-app = کوئی میل پروگرام مقرر نہیں۔ ترتیبات، پہلے سے طے ایپس میں ایک چنیں۔
+screenshot-mail-no-app = آپ نے کوئی میل پروگرام نہیں چنا۔ ترتیبات، پہلے سے طے ایپس میں ایک چنیں۔
 
 # Why: a program asked to attach more files than allowed.
 screenshot-mail-too-many = منسلک کرنے کے لیے بہت زیادہ فائلیں ہیں۔
@@ -527,13 +527,13 @@ screenshot-mail-too-big = فائلیں منسلک کرنے کے لیے بہت ب
 screenshot-mail-bad-file = ایک فائل منسلک نہیں ہو سکی۔
 
 # Why: an address was not a plain address.
-screenshot-mail-bad-address = ایک پتہ درست نہیں تھا۔
+screenshot-mail-bad-address = ایک پتہ درست نہیں ہے۔
 
 # Why: the subject was too long or had odd characters.
-screenshot-mail-bad-subject = موضوع درست نہیں تھا۔
+screenshot-mail-bad-subject = موضوع درست نہیں ہے۔
 
 # Why: the words were too long or had odd characters.
-screenshot-mail-bad-words = الفاظ درست نہیں تھے۔
+screenshot-mail-bad-words = متن درست نہیں ہے۔
 
 # Why: no private place to keep the files.
 screenshot-mail-no-place = فائلیں محفوظ طریقے سے رکھی نہیں جا سکیں۔
@@ -562,7 +562,12 @@ screenshot-chooser-pin-not-kept = پن محفوظ نہیں ہو سکا۔
 # Red line after some items could not be deleted.
 screenshot-chooser-not-deleted =
     { $n ->
-        [one] ایک آئٹم حذف نہیں ہو سکا: { $names }۔
-       *[other] { $n } آئٹم حذف نہیں ہو سکے: { $names }۔
+        [one] Trindle ایک آئٹم حذف نہیں کر سکا: { $names }۔
+       *[other] Trindle { $n } آئٹم حذف نہیں کر سکا: { $names }۔
     }
 
+# What the screen reader says for the list of places down the left of the file chooser.
+screenshot-chooser-places = مقامات
+
+# What the screen reader says for the list of files and folders in the file chooser.
+screenshot-chooser-files = فائلیں

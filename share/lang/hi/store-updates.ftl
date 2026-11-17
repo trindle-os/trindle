@@ -2,7 +2,7 @@
 # machine translated (Hindi), not yet reviewed by a person.
 
 # Name of Debian's group of updates, on its row and in the headline.
-store-upd-debian-name = Debian के पैकेज
+store-upd-debian-name = Debian पैकेज
 
 # On a row held back: the version it is held at, and the one that waits.
 store-upd-held-version-waits = संस्करण { $have } पर रोका हुआ; { $waits }
@@ -17,7 +17,7 @@ store-upd-held-version = संस्करण { $have } पर रोका ह
 store-upd-held = रोका हुआ
 
 # On the Held back card: the version a thing is held at, and nothing newer waits.
-store-upd-held-version-nothing = संस्करण { $have } पर रोका हुआ; अभी कुछ नया नहीं
+store-upd-held-version-nothing = संस्करण { $have } पर रोका गया है। अभी कुछ नया नहीं है।
 
 # On the Held back card: nothing newer waits.
 store-upd-held-nothing = रोका हुआ; अभी कुछ नया नहीं
@@ -56,31 +56,31 @@ store-upd-sentence = { $text }।
 store-upd-and-then = { $first } { $second }
 
 # Added to the headline when firmware is among the updates.
-store-upd-firmware-restart = फ़र्मवेयर को पूरा करने के लिए रीस्टार्ट चाहिए।
+store-upd-firmware-restart = फ़र्मवेयर अपडेट पूरा करने के लिए रीस्टार्ट करें।
 
 # Headline while the check runs.
 store-upd-checking = अपडेट खोजे जा रहे हैं।
 
 # Headline while one update goes in on its own; its name is given.
-store-upd-updating-one = { $name } अपडेट हो रहा है। इसके लगते समय आप काम करते रह सकते हैं।
+store-upd-updating-one = { $name } अपडेट हो रहा है। इंस्टॉल होते समय आप काम करते रह सकते हैं।
 
 # Headline while all the updates go in.
-store-upd-installing-all = अपडेट इंस्टॉल हो रहे हैं। इनके लगते समय आप काम करते रह सकते हैं।
+store-upd-installing-all = अपडेट इंस्टॉल हो रहे हैं। इंस्टॉल होते समय आप काम करते रह सकते हैं।
 
 # Headline when the updates are in and the computer must start again.
-store-upd-restart = पूरा करने के लिए रीस्टार्ट करें: अपडेट लग गए हैं, और कंप्यूटर के फिर शुरू होने पर उपयोग में आएँगे।
+store-upd-restart = अपडेट का इंस्टॉल पूरा करने के लिए कंप्यूटर को रीस्टार्ट करें।
 
 # Added to the headline when what went in needs a restart.
-store-upd-gone-in-restart = जो लग चुका है उसे पूरा करने के लिए रीस्टार्ट चाहिए।
+store-upd-gone-in-restart = इंस्टॉल पूरा करने के लिए रीस्टार्ट करें।
 
 # Added to the headline with no internet.
-store-upd-no-more = यह कंप्यूटर इंटरनेट से जुड़ा नहीं है, इसलिए और नहीं खोजा जा सकता।
+store-upd-no-more = यह कंप्यूटर इंटरनेट से जुड़ा नहीं है, इसलिए Trindle और अपडेट नहीं खोज सकता।
 
 # Headline when nothing is ready (updates held back are added after it).
 store-upd-none-ready = कोई अपडेट तैयार नहीं है
 
 # Headline with nothing waiting and no internet to look with.
-store-upd-nothing-known = इस कंप्यूटर की जानकारी में कोई अपडेट प्रतीक्षा में नहीं है। इंटरनेट से जुड़े न होने पर यह और नहीं खोज सकता।
+store-upd-nothing-known = Trindle को प्रतीक्षा में कोई अपडेट नहीं पता। जब तक यह कंप्यूटर इंटरनेट से जुड़ा नहीं है, वह और नहीं खोज सकता।
 
 # Name of the apps in the headline's list of what could not be checked.
 store-upd-name-apps = ऐप्स
@@ -92,7 +92,7 @@ store-upd-name-system = Trindle और Debian
 store-upd-name-firmware = फ़र्मवेयर
 
 # Headline when some checks failed; the list of what was not checked is given.
-store-upd-check-failed = { $names } के अपडेट खोजे नहीं जा सके।
+store-upd-check-failed = Trindle { $names } के अपडेट नहीं जाँच सका।
 
 # Headline when everything is up to date.
 store-upd-current = सब कुछ अद्यतन है।
@@ -104,7 +104,7 @@ store-upd-last-checked = आखिरी बार { $time } पर जाँच
 store-upd-not-checked = इंटरनेट के बिना जाँचा नहीं जा सकता
 
 # Red words under a card when a check took too long.
-store-upd-too-long = जवाब देने में बहुत समय लगा।
+store-upd-too-long = जाँच में बहुत समय लगा।
 
 # Tip of the round button that checks again.
 store-upd-check-again = फिर जाँचें
@@ -130,7 +130,7 @@ store-upd-restart-now = अभी रीस्टार्ट करें
 store-upd-check-for = अपडेट खोजें
 
 # Tip of the round button that releases a thing held back.
-store-upd-release = { $name } को छोड़ें
+store-upd-release = { $name } के अपडेट की अनुमति दें
 
 # Tip of the round button that holds a thing's updates back.
 store-upd-hold = { $name } को रोककर रखें
@@ -166,10 +166,10 @@ store-upd-from = { $from } से
 store-upd-shared-part = एक साझा हिस्सा, { $from } से
 
 # Note under the Apps card.
-store-upd-yours-alone = सिर्फ़ आपके, इसलिए ये बिना पासवर्ड के अपडेट होते हैं। कोई ऐप अपने नए संस्करण के लिए ज़रूरी साझा हिस्से साथ लाता है।
+store-upd-yours-alone = ये ऐप सिर्फ़ आपके हैं, इसलिए बिना पासवर्ड के अपडेट होते हैं। किसी ऐप का अपडेट उसके लिए ज़रूरी साझा हिस्से भी इंस्टॉल करता है।
 
 # Note under the Apps card: what holding back does.
-store-upd-hold-why = रोका हुआ अपडेट उसी संस्करण पर रहता है जो उसके पास है, और यहाँ तथा रिंग में "सब इंस्टॉल करें" से बाहर रहता है, जब तक आप उसे छोड़ न दें।
+store-upd-hold-why = रोका हुआ अपडेट अपने मौजूदा संस्करण पर रहता है। जब तक आप अपडेट की फिर से अनुमति नहीं देते, यहाँ और रिंग में सारे अपडेट इंस्टॉल करते समय उसे छोड़ दिया जाता है।
 
 # Heading of the Apps card.
 store-upd-card-apps = ऐप्स
@@ -198,10 +198,10 @@ store-upd-card-plugins = प्लगइन
 store-upd-nothing-held = कुछ भी रोका हुआ नहीं है।
 
 # On a row of the Held back card for a thing released while the page is open.
-store-upd-released = छोड़ा गया
+store-upd-released = रोका नहीं गया
 
 # Note under the Held back card: what releasing does.
-store-upd-release-why = छोड़ी गई चीज़ फिर बाकी के साथ लगती है, यहाँ और रिंग में "सब इंस्टॉल करें" से।
+store-upd-release-why = जब आप अपडेट की फिर से अनुमति दे देते हैं, तो यहाँ और रिंग में वह बाकी के साथ इंस्टॉल हो जाता है।
 
 # Name on the Held back card of a device whose firmware is not named now.
 store-upd-device-firmware = किसी उपकरण का फ़र्मवेयर
@@ -218,8 +218,8 @@ store-upd-version-to = { $from } से { $to }
 # On a row: Debian's updates, how many, which go in by themselves or together.
 store-upd-debian-count =
     { $n ->
-        [one] 1 अपडेट, जो अपने आप लगता है
-       *[other] { $n } अपडेट, जो साथ में लगते हैं
+        [one] 1 अपडेट, अकेले इंस्टॉल होता है
+       *[other] { $n } अपडेट, साथ में इंस्टॉल होते हैं
     }
 
 # On a row of Debian's updates: where it comes from.
@@ -235,7 +235,7 @@ store-upd-has-trindle = इस कंप्यूटर पर Trindle { $versio
 store-upd-card-system = Trindle और Debian
 
 # Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Debian के पैकेज एक-दूसरे के साथ बैठने के लिए बनाए गए हैं, और अकेला लगाया गया एक पैकेज दूसरों को साथ ला सकता है या उन्हें अलग छोड़ सकता है। इसलिए वे एक बटन से साथ में लगते हैं।
+store-upd-debian-why = Debian पैकेज एक-दूसरे के साथ मिलकर काम करने के लिए बने हैं। सिर्फ़ एक को इंस्टॉल करने से दूसरे भी आ सकते हैं या वे बेमेल रह सकते हैं, इसलिए सब साथ में इंस्टॉल होते हैं।
 
 # Note on the Trindle and Debian card: why no row has a Hold back button.
 store-upd-not-held = Trindle और Debian के अपडेट पूरे कंप्यूटर के लिए सुरक्षा सुधार लाते हैं, इसलिए उन्हें रोका नहीं जा सकता।
@@ -246,14 +246,8 @@ store-upd-card-security = सुरक्षा अपडेट
 # On the security card: its state.
 store-upd-security-on = चालू, हर दिन
 
-# On the security card.
-store-upd-security-note = Debian के सुधार बिना पूछे हर दिन लग जाते हैं।
-
-# On the security card.
-store-upd-security-part = Trindle का हिस्सा; इसे बंद नहीं किया जा सकता।
-
 # On the security card: that holding back never stops these.
-store-upd-never-held = किसी अपडेट को रोकने से ये कभी नहीं रुकते।
+store-upd-never-held = किसी अपडेट को रोकने से सुरक्षा अपडेट कभी नहीं रुकते।
 
 # Firmware card: the computer has no updater.
 store-upd-fw-none = इस कंप्यूटर में फ़र्मवेयर अपडेटर नहीं है।
@@ -266,7 +260,7 @@ store-upd-fw-restart = पूरा करने के लिए रीस्�
 store-upd-fw-version = संस्करण { $version }
 
 # Note on the firmware card when the updater is there.
-store-upd-fw-note = नया फ़र्मवेयर कंप्यूटर के रीस्टार्ट होने पर लगता है।
+store-upd-fw-note = नया फ़र्मवेयर कंप्यूटर के रीस्टार्ट होने पर इंस्टॉल होता है।
 
 # Note on the firmware card when the updater is missing.
 store-upd-fw-install = फ़र्मवेयर को अद्यतन रखने के लिए fwupd इंस्टॉल करें।
@@ -281,22 +275,22 @@ store-upd-fw-no-list = fwupd नई सूची ला नहीं सका�
 store-upd-no-flathub = Flathub तक पहुँचा नहीं जा सका।
 
 # Red words when Debian's lists could not be fetched.
-store-upd-no-lists = Debian की सूचियाँ लाई नहीं जा सकीं।
+store-upd-no-lists = Trindle को Debian की सूचियाँ नहीं मिल सकीं।
 
 # Red words when Debian's lists could not be fetched; the reason follows.
-store-upd-no-lists-why = Debian की सूचियाँ लाई नहीं जा सकीं। { $why }
+store-upd-no-lists-why = Trindle को Debian की सूचियाँ नहीं मिल सकीं। { $why }
 
 # Red words under a row when its updates could not be held back or released: the list of what is held could not be kept.
-store-upd-not-held-list = रोका नहीं गया। रोकी गई चीज़ों की सूची सहेजी नहीं जा सकी: { $why }।
+store-upd-not-held-list = Trindle उसे रोक नहीं सका, क्योंकि वह रोके गए अपडेट की सूची सहेज नहीं सका: { $why }।
 
 # The same, for a release.
-store-upd-not-released-list = छोड़ा नहीं गया। रोकी गई चीज़ों की सूची सहेजी नहीं जा सकी: { $why }।
+store-upd-not-released-list = Trindle अपडेट फिर से चालू नहीं कर सका, क्योंकि वह रोके गए अपडेट की सूची सहेज नहीं सका: { $why }।
 
 # Red words when Flatpak could not be told a thing is held back.
-store-upd-held-not-told = Apps में रोका गया, पर Flatpak को खुद नहीं बताया जा सका, इसलिए ऐप अपडेट करने वाली कोई और चीज़ इसे फिर भी लगा सकती है।
+store-upd-held-not-told = इसे Apps में रोका गया है, लेकिन Trindle Flatpak में यह बदल नहीं सका। ऐप अपडेट करने वाला कोई और प्रोग्राम इसे फिर भी इंस्टॉल कर सकता है।
 
 # Red words when Flatpak could not be told a thing is released.
-store-upd-released-not-told = Apps में छोड़ा गया, पर Flatpak को खुद नहीं बताया जा सका और वह इसे अब भी छोड़ सकता है। इसे रोकें और फिर छोड़ें।
+store-upd-released-not-told = Apps में अपडेट फिर से अनुमत हैं, लेकिन Trindle Flatpak में यह बदल नहीं सका, इसलिए Flatpak इसे अब भी छोड़ सकता है। इसे रोकें, फिर अपडेट की फिर से अनुमति दें।
 
 # Red words: the above, then what Flatpak itself said.
 store-upd-flatpak-said = { $words } Flatpak ने कहा: { $why }
@@ -304,10 +298,15 @@ store-upd-flatpak-said = { $words } Flatpak ने कहा: { $why }
 # Name of Trindle itself on its row of updates.
 store-upd-trindle = Trindle
 
+# Said when a security fix for a boxed app can't be downloaded. { $package } is the package, { $version } the fixed version.
+store-patch-not-fetched = Trindle { $package } { $version } डाउनलोड नहीं कर सका।
+
+# Said when a security fix for a boxed app was downloaded but isn't there to use.
+store-patch-not-found = Trindle को डाउनलोड किया हुआ पैकेज नहीं मिला।
 
 
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
-store-upd-off = अपने आप अपडेट जाँचना बंद है। देखने के लिए अपडेट जाँचें दबाएँ।
+store-upd-off = अपने आप अपडेट जाँचना बंद है।
 
 # How a card stands with nothing known to wait, looking by itself switched off and no check pressed yet.
 store-upd-not-looked = जाँचा नहीं गया
@@ -322,8 +321,7 @@ store-upd-stopping = रोका जा रहा है
 store-upd-stopped = रोका गया। जारी रखने के लिए अपडेट दबाएँ।
 
 # Under the Apps card when Install all was stopped.
-store-upd-stopped-all = रोका गया। जारी रखने के लिए इंस्टॉल दबाएँ।
+store-upd-stopped-all = रोका गया। जारी रखने के लिए फिर से इंस्टॉल करें।
 
 # Note under the Apps card.
 store-upd-steam-restarts = कोई गेम न चल रहा हो, तब Steam रीस्टार्ट होता है।
-

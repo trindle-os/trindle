@@ -15,8 +15,18 @@ use super::{app_page, browse, go, help, look, pages, plugin_page, screen, update
 impl Store {
 
     pub(super) fn moving(&self) -> bool {
-        self.loading || self.dials.values().any(Dial::running)
-            || (matches!(self.view, View::Hosted(_)) && self.hosted.as_ref().is_some_and(|h| h.moving()))
+        self.dials.values().any(Dial::running) || self.hosted_moving()
+    }
+
+    fn hosted_moving(&self) -> bool {
+        matches!(self.view, View::Hosted(_)) && self.hosted.as_ref().is_some_and(|h| h.moving())
+    }
+
+    pub(super) fn turn(&self) -> bool {
+        let moved = self.dials.values().fold(false, |m, d| d.turn() | m);
+        update_page::words::overall_ring(self);
+        let hosted = self.hosted_moving() && self.hosted.as_ref().is_some_and(|h| h.turn());
+        self.turning.turned(moved) | hosted
     }
 
     fn page_name(&self) -> String {
@@ -35,7 +45,7 @@ impl Store {
     }
 
     fn page(&self) -> Node<Msg> {
-        screen::new_page(self.page_name());
+        screen::new_page(self.page_name(), self.size.across);
         if self.view == View::Plugins && self.detail.is_none() {
             return plugin_page::view(self);
         }
@@ -46,6 +56,9 @@ impl Store {
                 }
             }));
             return h.view().map(lift);
+        }
+        if let Some(page) = pages::flatpak_page::view(self) {
+            return page;
         }
         if self.awaiting() {
             return pages::grid::waiting_for_flathub(&self.grid_title(), self.failed.as_deref(), self.online);
@@ -71,17 +84,17 @@ impl Store {
     }
 
     pub(super) fn whole(&self, settings: Vec<Place>) -> Node<Msg> {
-        self.pulsing.set(false);
+        self.pulse.on.set(false);
         let mut top = vec![entry(self.search.clone(), t!("store-search-placeholder"), |t| go(move |s| s.typed(t.clone())))
                            .width(Length::Fill)];
-        if let Some((words, tone)) = &self.top {
+        if let Some((words, tone)) = self.top.as_ref().filter(|(w, _)| !crate::common::refused::closed_box(w)) {
             top.push(if *tone == Tone::Problem {
                 pages::links::red_about(words.clone(), help::INSTALL)
             } else {
                 note(words.clone()).tone(*tone)
             });
         }
-        let main = column(vec![row(top).gap(12.0).padding(12.0), self.page().height(Length::Fill).opacity(self.fade)])
+        let main = column(vec![row(top).gap(12.0).padding(12.0), self.page().height(Length::Fill).opacity(self.fade_in.shown)])
             .width(Length::Fill).height(Length::Fill);
         self.keep_pulsing();
 
@@ -109,11 +122,11 @@ impl Store {
     }
 
     fn keep_pulsing(&self) {
-        if !self.pulsing.get() || self.pulse_timer.get() {
+        if !self.pulse.on.get() || self.pulse.timer.get() {
             return;
         }
-        self.pulse_timer.set(true);
-        let (pulsing, running, asks) = (self.pulsing.clone(), self.pulse_timer.clone(), self.asks.clone());
+        self.pulse.timer.set(true);
+        let (pulsing, running, asks) = (self.pulse.on.clone(), self.pulse.timer.clone(), self.asks.clone());
         self.events.every(look::PULSE_FRAME, move || {
             if pulsing.get() && asks.send(Do::Pulse) {
                 return Flow::Continue;
@@ -145,6 +158,8 @@ impl Shows for Store {
             crate::toolkit::input::Input::Key { sym: crate::toolkit::input::Keysym::Escape, .. }
                 if pages::appimage_warning::showing(self) => Some(go(pages::appimage_warning::cancel)),
             crate::toolkit::input::Input::Key { sym: crate::toolkit::input::Keysym::Escape, .. }
+                if pages::flatpak_page::showing(self) => Some(go(pages::flatpak_page::cancel_first)),
+            crate::toolkit::input::Input::Key { sym: crate::toolkit::input::Keysym::Escape, .. }
                 if pages::github_key::key_box_open(self) => Some(go(pages::github_key::close_key_box)),
             crate::toolkit::input::Input::Key { sym: crate::toolkit::input::Keysym::Escape, .. }
                 if matches!(self.view, View::Hosted(_)) => Some(go(|s| {
@@ -157,16 +172,57 @@ impl Shows for Store {
     }
 
     fn resized(&mut self, w: f32, h: f32) -> bool {
-        let changed = self.across != w;
-        self.across = w;
+        let changed = self.size.across != w;
+        self.size.across = w;
 
-        let taller = (self.tall - h).abs() >= 1.0;
-        self.tall = h;
+        let taller = (self.size.tall - h).abs() >= 1.0;
+        self.size.tall = h;
 
         (changed && (self.detail.is_some() || self.image.is_some() || self.view == View::Installed)) || taller
     }
 
     fn view(&self) -> Node<Msg> {
         self.whole(self.settings_places())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::time::Duration;
+
+    use super::*;
+    use crate::store::catalogue::App;
+
+    fn store() -> Store {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: Do| {});
+        Store::new(&events, asks, None)
+    }
+
+    #[test]
+    fn a_turning_dial_asks_for_the_page_at_most_once_a_second() {
+        let mut s = store();
+        let app = App { id: "org.example.Paint".into(), ..Default::default() };
+        let mut d = Dial::default();
+        d.expect(1.0);
+        s.dials.insert(app.id.clone(), d);
+        let app_page::State::Fetching(ring) = app_page::gather(&s, &app).state else { panic!("the app is being fetched") };
+        let was = ring.get();
+        let mut built = 0;
+        for _ in 0..12 {
+            std::thread::sleep(Duration::from_millis(40));
+            built += usize::from(s.moving() && s.turn());
+        }
+        assert!(ring.get() > was, "the page's ring followed the dial");
+        assert!((1..=3).contains(&built), "the view was asked for {built} times in 12 turns");
+        s.dials.get_mut(&app.id).unwrap().finish(true, "");
+        assert!(!s.moving(), "a finished job turns nothing");
+    }
+
+    #[test]
+    fn loading_alone_keeps_no_clock() {
+        let mut s = store();
+        s.loading = true;
+        assert!(!s.moving());
     }
 }

@@ -1,7 +1,7 @@
 # machine translated (Turkish), not yet reviewed by a person.
 
 # Title of the Help topic about approving a driver's key.
-key-enrol-title = Yeniden başlatırken bir sürücünün anahtarını onaylama
+key-enrol-title = Yeniden başlatırken bir sürücünün anahtarını onaylayın
 
 # Words people might search for that topic by, in lower case, separated by spaces.
 key-enrol-keywords = secure boot key mok enroll enrol blue screen password driver nvidia virtualbox camera dkms mokutil black screen güvenli önyükleme anahtar mavi ekran parola şifre sürücü kamera siyah ekran
@@ -14,10 +14,10 @@ key-enrol-why-addon = Eklenti sürücüsü bu bilgisayarda derlenir, bu yüzden 
 
 # Step 1: the password, made before the restart.
 # SAFETY: needs a human review before it ships
-key-enrol-step1 = Yalnızca harf ve rakamlardan oluşan bir parola belirleyin. Mavi ekranda Amerikan klavyesi vardır, bu yüzden simgeler başka tuşlarda olabilir. Parolayı yazın; yalnızca bir kez kullanılır.
+key-enrol-step1 = Yalnızca harf ve rakam kullanarak bir parola belirleyin. Mavi ekran Amerikan klavye düzeni kullanır, bu yüzden simgeler başka tuşlarda olabilir. Parolayı bir yere yazın. Yalnızca bir kez gerekecek.
 
 # Step 2: the restart and how long the blue screen waits.
-key-enrol-step2 = Yeniden başlatın. Trindle başlamadan önce Enroll MOK başlıklı mavi bir ekran görünür. Yaklaşık 10 saniye sonra vazgeçer, bu yüzden bir tuşa basmaya hazır olun.
+key-enrol-step2 = Yeniden başlatın. Trindle başlamadan önce Enroll MOK adlı mavi bir ekran görünür. Bir tuşa basmak için yaklaşık 10 saniyeniz var, bu yüzden hazır olun.
 
 # Step 3: the first two screens.
 key-enrol-step3 = Enroll MOK'u, ardından Continue'yu seçin.
@@ -27,7 +27,7 @@ key-enrol-step3 = Enroll MOK'u, ardından Continue'yu seçin.
 key-enrol-step4 = Yes'i seçin, sonra belirlediğiniz parolayı yazın.
 
 # Step 5: the last screen.
-key-enrol-step5 = Reboot'u seçin. Bilgisayar açılınca sürücü yüklenir.
+key-enrol-step5 = Reboot'u seçin. Sürücü, bilgisayar yeniden başladığında yüklenir.
 
 # Tip after the steps: what happens when the blue screen is missed and how to be asked again.
-key-enrol-missed = Mavi ekranı kaçırırsanız bilgisayar eskisi gibi sürücü olmadan başlar. Hiçbir şey bozulmaz; yeniden sorulması için sudo mokutil --import /var/lib/dkms/mok.pub komutunu çalıştırın ve yeniden başlatın.
+key-enrol-missed = Mavi ekranı kaçırırsanız bilgisayar eskisi gibi sürücü olmadan başlar. Hiçbir şey bozulmaz. Yeniden sorulmasını istiyorsanız sudo mokutil --import /var/lib/dkms/mok.pub komutunu çalıştırıp yeniden başlatın.

@@ -17,6 +17,23 @@ pub struct Installed {
     pub ask: bool,
 }
 
+fn swap_in(at: &Path, fresh: &Path) -> Result<(), String> {
+    let (files, old) = (at.join("files"), at.join("files.old"));
+    let _ = std::fs::remove_dir_all(&old);
+    let had = std::fs::symlink_metadata(&files).is_ok();
+    if had {
+        std::fs::rename(&files, &old).map_err(|e| e.to_string())?;
+    }
+    if let Err(e) = std::fs::rename(fresh, &files) {
+        if had {
+            let _ = std::fs::rename(&old, &files);
+        }
+        return Err(e.to_string());
+    }
+    let _ = std::fs::remove_dir_all(&old);
+    Ok(())
+}
+
 pub fn relink(at: &Path, keys: &[String]) -> Result<(), String> {
     let fresh = at.join("files.new");
     let _ = std::fs::remove_dir_all(&fresh);
@@ -24,9 +41,7 @@ pub fn relink(at: &Path, keys: &[String]) -> Result<(), String> {
     for key in keys {
         parts::link_tree(&parts::tree(key), &fresh).map_err(|e| format!("{key}: {e}"))?;
     }
-    let files = at.join("files");
-    let _ = std::fs::remove_dir_all(&files);
-    std::fs::rename(&fresh, &files).map_err(|e| e.to_string())?;
+    swap_in(at, &fresh)?;
     write_lines(&at.join("parts"), keys).map_err(|e| e.to_string())?;
     let carried: Vec<String> = keys.iter().map(|k| {
         let c = parts::control(k);
@@ -45,7 +60,7 @@ pub fn install(deb: &Path, heard: impl Fn(&str)) -> Result<Installed, String> {
 pub fn install_with(deb: &Path, local: Option<&Path>, heard: impl Fn(&str)) -> Result<Installed, String> {
     let control = parts::control_of(deb);
     let name = parts::field_of(&control, "Package");
-    if name.is_empty() || name.contains('/') || name.starts_with('.') {
+    if !crate::store::deb::valid_name(&name) {
         return Err(t!("store-boxed-not-deb").into());
     }
     let at = folder(&name);
@@ -57,8 +72,7 @@ pub fn install_with(deb: &Path, local: Option<&Path>, heard: impl Fn(&str)) -> R
     let mut found = vec![main.clone()];
     let _ = write_lines(&attempt.pending, &found);
     if parts::cannot_box(&parts::walk(&parts::tree(&main))) {
-        return attempt.give_up(format!("{name} is a driver or a background service. Those cannot work from their own \
-                                folder, so it was not installed."));
+        return attempt.give_up(t!("store-boxed-driver", name = &name).to_string());
     }
     let missing = attempt.gather_needs(local, &mut found, &heard);
     attempt.finish(&main, &found, missing)
@@ -166,11 +180,17 @@ impl Attempt<'_> {
         }
         let files = self.at.join("files");
         take_launchers(self.name);
-        put_launchers(self.name, &files)?;
-        crate::common::files::write_whole(&self.at.join("version"), parts::field_of(self.control, "Version").as_bytes()).map_err(|e| e.to_string())?;
+        if let Err(e) = put_launchers(self.name, &files) {
+            return self.give_up(e);
+        }
+        if let Err(e) = crate::common::files::write_whole(&self.at.join("version"), parts::field_of(self.control, "Version").as_bytes()) {
+            return self.give_up(e.to_string());
+        }
         let _ = std::fs::remove_file(&self.pending);
         let wants = work_out_wants(&parts::tree(main), &files, self.control);
-        write_lines(&self.at.join("wants"), &wants).map_err(|e| e.to_string())?;
+        if let Err(e) = write_lines(&self.at.join("wants"), &wants) {
+            return self.give_up(e.to_string());
+        }
         parts::sweep();
         let asked = asked(self.name);
         let ask = !wants.iter().all(|w| asked.contains(w));
@@ -179,7 +199,7 @@ impl Attempt<'_> {
 }
 
 pub fn remove(name: &str) -> std::io::Result<()> {
-    if name.is_empty() || name.contains('/') || name.starts_with('.') {
+    if !crate::store::deb::valid_name(name) {
         return Err(std::io::Error::other("not a package's name"));
     }
     crate::common::removal::stop_boxed(name, None);

@@ -21,15 +21,15 @@ use smithay::{
 use smithay::{utils::Rectangle, xwayland::xwm::ResizeEdge as X11ResizeEdge};
 
 use crate::shell::{SurfaceData, WindowElement};
-use crate::{focus::PointerFocusTarget, state::{AnvilState, Backend}};
+use crate::{focus::PointerFocusTarget, state::{Compose, Backend}};
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     pub fn start_pointer_resize(
         &mut self,
         window: WindowElement,
         edges: ResizeEdge,
-        start_data: PointerGrabStartData<AnvilState<BackendData>>,
+        start_data: PointerGrabStartData<Compose<BackendData>>,
         serial: Serial,
     ) {
         let Some(initial_window_location) = self.space.element_location(&window) else { return };
@@ -97,13 +97,6 @@ impl From<xdg_toplevel::ResizeEdge> for ResizeEdge {
     }
 }
 
-impl From<ResizeEdge> for xdg_toplevel::ResizeEdge {
-    #[inline]
-    fn from(x: ResizeEdge) -> Self {
-        Self::try_from(x.bits()).unwrap()
-    }
-}
-
 impl From<X11ResizeEdge> for ResizeEdge {
     #[inline]
     fn from(edge: X11ResizeEdge) -> Self {
@@ -144,7 +137,7 @@ pub enum ResizeState {
 }
 
 pub struct PointerResizeSurfaceGrab<BackendData: Backend + 'static> {
-    pub start_data: PointerGrabStartData<AnvilState<BackendData>>,
+    pub start_data: PointerGrabStartData<Compose<BackendData>>,
     pub window: WindowElement,
     pub edges: ResizeEdge,
     pub initial_window_location: Point<i32, Logical>,
@@ -220,7 +213,7 @@ impl Resizing<'_> {
         (new_window_width, new_window_height).into()
     }
 
-    pub(super) fn ask<BackendData: Backend>(&self, data: &mut AnvilState<BackendData>, size: Size<i32, Logical>) {
+    pub(super) fn ask<BackendData: Backend>(&self, data: &mut Compose<BackendData>, size: Size<i32, Logical>) {
         match &self.window.0.underlying_surface() {
             WindowSurface::Wayland(xdg) => {
                 xdg.with_pending_state(|state| {
@@ -236,7 +229,7 @@ impl Resizing<'_> {
         }
     }
 
-    pub(super) fn finish<BackendData: Backend>(&self, data: &mut AnvilState<BackendData>, serial: Serial) {
+    pub(super) fn finish<BackendData: Backend>(&self, data: &mut Compose<BackendData>, serial: Serial) {
         match &self.window.0.underlying_surface() {
             WindowSurface::Wayland(xdg) => {
                 xdg.with_pending_state(|state| {
@@ -264,7 +257,7 @@ impl Resizing<'_> {
         }
     }
 
-    fn anchor_far_edges<BackendData: Backend>(&self, data: &mut AnvilState<BackendData>) -> Point<i32, Logical> {
+    fn anchor_far_edges<BackendData: Backend>(&self, data: &mut Compose<BackendData>) -> Point<i32, Logical> {
         let mut location = data.space.element_location(self.window).unwrap_or_default();
         if self.edges.intersects(ResizeEdge::TOP_LEFT) {
             let geometry = smithay::utils::Rectangle::<i32, Logical>::from_size(self.window.client_size());
@@ -297,11 +290,11 @@ impl Resizing<'_> {
     }
 }
 
-impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for PointerResizeSurfaceGrab<BackendData> {
+impl<BackendData: Backend> PointerGrab<Compose<BackendData>> for PointerResizeSurfaceGrab<BackendData> {
     fn motion(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         _focus: Option<(PointerFocusTarget, Point<f64, Logical>)>,
         event: &MotionEvent,
     ) {
@@ -320,8 +313,8 @@ impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for PointerResiz
 
     fn relative_motion(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         focus: Option<(PointerFocusTarget, Point<f64, Logical>)>,
         event: &RelativeMotionEvent,
     ) {
@@ -330,8 +323,8 @@ impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for PointerResiz
 
     fn button(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         event: &ButtonEvent,
     ) {
         handle.button(data, event);
@@ -349,8 +342,8 @@ impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for PointerResiz
 
     fn axis(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         details: AxisFrame,
     ) {
         handle.axis(data, details)
@@ -358,16 +351,16 @@ impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for PointerResiz
 
     fn frame(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
     ) {
         handle.frame(data);
     }
 
     fn gesture_swipe_begin(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         event: &GestureSwipeBeginEvent,
     ) {
         handle.gesture_swipe_begin(data, event);
@@ -375,8 +368,8 @@ impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for PointerResiz
 
     fn gesture_swipe_update(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         event: &GestureSwipeUpdateEvent,
     ) {
         handle.gesture_swipe_update(data, event);
@@ -384,8 +377,8 @@ impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for PointerResiz
 
     fn gesture_swipe_end(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         event: &GestureSwipeEndEvent,
     ) {
         handle.gesture_swipe_end(data, event);
@@ -393,8 +386,8 @@ impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for PointerResiz
 
     fn gesture_pinch_begin(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         event: &GesturePinchBeginEvent,
     ) {
         handle.gesture_pinch_begin(data, event);
@@ -402,8 +395,8 @@ impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for PointerResiz
 
     fn gesture_pinch_update(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         event: &GesturePinchUpdateEvent,
     ) {
         handle.gesture_pinch_update(data, event);
@@ -411,8 +404,8 @@ impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for PointerResiz
 
     fn gesture_pinch_end(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         event: &GesturePinchEndEvent,
     ) {
         handle.gesture_pinch_end(data, event);
@@ -420,8 +413,8 @@ impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for PointerResiz
 
     fn gesture_hold_begin(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         event: &GestureHoldBeginEvent,
     ) {
         handle.gesture_hold_begin(data, event);
@@ -429,16 +422,16 @@ impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for PointerResiz
 
     fn gesture_hold_end(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         event: &GestureHoldEndEvent,
     ) {
         handle.gesture_hold_end(data, event);
     }
 
-    fn start_data(&self) -> &PointerGrabStartData<AnvilState<BackendData>> {
+    fn start_data(&self) -> &PointerGrabStartData<Compose<BackendData>> {
         &self.start_data
     }
 
-    fn unset(&mut self, _data: &mut AnvilState<BackendData>) {}
+    fn unset(&mut self, _data: &mut Compose<BackendData>) {}
 }

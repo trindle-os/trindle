@@ -32,6 +32,9 @@ fn known_file() -> PathBuf {
 }
 
 pub fn key_of(usb: Option<(u32, u32)>, name: &str) -> String {
+
+    let name = name.replace(char::is_control, " ");
+    let name = name.as_str();
     match usb {
         Some((maker, model)) => format!("{maker:04x}:{model:04x} {name}"),
         None => name.to_string(),
@@ -103,6 +106,12 @@ mod tests {
 
     fn dev(id: &str, key: &str, types: bool) -> Arrival {
         Arrival { id: id.into(), key: key.into(), types }
+    }
+
+    #[test]
+    fn a_device_name_with_a_line_break_cannot_make_a_second_known_device() {
+        let key = super::key_of(None, "Real keys\n046d:c52b Made up\r");
+        assert!(!key.contains(['\n', '\r']), "{key:?}");
     }
 
     #[test]

@@ -55,7 +55,7 @@ pub fn data_size(dir: &Path) -> std::io::Result<u64> {
 }
 
 pub fn flatpak_running(id: &str) -> bool {
-    Command::new("flatpak").args(["ps", "--columns=application"]).output().ok().filter(|o| o.status.success())
+    super::run::parsed(Command::new("flatpak").args(["ps", "--columns=application"])).output().ok().filter(|o| o.status.success())
         .is_some_and(|o| String::from_utf8_lossy(&o.stdout).lines().any(|l| l.trim() == id))
 }
 
@@ -129,7 +129,7 @@ impl Look for Real {
         p.is_dir()
     }
     fn owner(&self, p: &Path) -> Option<String> {
-        let out = Command::new("dpkg-query").arg("-S").arg(p).output().ok().filter(|o| o.status.success())?;
+        let out = super::run::parsed(Command::new("dpkg-query").arg("-S").arg(p)).output().ok().filter(|o| o.status.success())?;
         owner_from(&String::from_utf8_lossy(&out.stdout))
     }
     fn facts(&self, package: &str) -> Facts {
@@ -141,7 +141,7 @@ impl Look for Real {
 }
 
 pub fn facts(package: &str) -> Facts {
-    let out = Command::new("dpkg-query").args(["-W", "-f=${Essential}\\n${Protected}\\n${Priority}\\n", "--", package]).output();
+    let out = super::run::parsed(Command::new("dpkg-query").args(["-W", "-f=${Essential}\\n${Protected}\\n${Priority}\\n", "--", package])).output();
     let text = out.ok().filter(|o| o.status.success()).map(|o| String::from_utf8_lossy(&o.stdout).into_owned()).unwrap_or_default();
     let mut lines = text.lines().map(str::trim);
     Facts {
@@ -323,41 +323,297 @@ pub fn hide(launcher: &Path, id: &str, home: &Path) -> std::io::Result<()> {
     super::files::write_text(&to, &hidden(&text))
 }
 
-pub fn stop_boxed(first: &str, path: Option<&Path>) {
-    for pid in boxed_copies(first, path, std::fs::read_dir("/proc").into_iter().flatten().flatten().filter_map(|e| {
+pub(crate) struct Proc {
+    pub pid: i32,
+    pub ppid: i32,
+    pub cmdline: Vec<u8>,
+
+    pub appimage: Option<Vec<u8>>,
+
+    pub appdir: Option<PathBuf>,
+
+    pub exe: Option<PathBuf>,
+    pub cwd: Option<PathBuf>,
+}
+
+fn running() -> Vec<Proc> {
+    use std::os::unix::ffi::OsStringExt;
+    std::fs::read_dir("/proc").into_iter().flatten().flatten().filter_map(|e| {
         let pid: i32 = e.file_name().to_str()?.parse().ok()?;
-        Some((pid, std::fs::read(e.path().join("cmdline")).ok()?))
-    })) {
+        let cmdline = std::fs::read(e.path().join("cmdline")).ok()?;
+        let stat = std::fs::read_to_string(e.path().join("stat")).ok()?;
+
+        let ppid = stat.rsplit_once(')')?.1.split_whitespace().nth(1)?.parse().ok()?;
+        let env = std::fs::read(e.path().join("environ")).unwrap_or_default();
+        let var = |name: &[u8]| env.split(|b| *b == 0).find_map(|v| v.strip_prefix(name).map(<[u8]>::to_vec));
+        let appimage = var(b"APPIMAGE=");
+        let appdir = var(b"APPDIR=").map(|d| PathBuf::from(std::ffi::OsString::from_vec(d)));
+        let exe = std::fs::read_link(e.path().join("exe")).ok();
+        let cwd = std::fs::read_link(e.path().join("cwd")).ok();
+        Some(Proc { pid, ppid, cmdline, appimage, appdir, exe, cwd })
+    }).collect()
+}
+
+pub fn stop_boxed(first: &str, path: Option<&Path>) {
+    let me = std::process::id() as i32;
+    let wants = wanted(path);
+    let found = || {
+        let all = running();
+        let up = ancestors(me, &all);
+        let mut pids = copies(first, wants.as_deref(), &all);
+        pids.retain(|p| !up.contains(p));
+        pids
+    };
+    let ask = |pids: &[i32], signal| -> Vec<i32> {
         // SAFETY: kill with a process number and a signal; it touches no memory.
-        unsafe { libc::kill(pid, libc::SIGTERM) };
+        pids.iter().copied().filter(|pid| unsafe { libc::kill(*pid, signal) } == 0).collect()
+    };
+    let asked = ask(&found(), libc::SIGTERM);
+    if asked.is_empty() {
+        return;
+    }
+    for _ in 0..30 {
+        std::thread::sleep(std::time::Duration::from_millis(100));
+        if !found().iter().any(|p| asked.contains(p)) {
+            return;
+        }
+    }
+    let killed = ask(&found(), libc::SIGKILL);
+    if !killed.is_empty() {
+        eprintln!("trindle: {} process(es) did not quit when asked, so were stopped", killed.len());
     }
 }
 
-fn boxed_copies(first: &str, path: Option<&Path>, all: impl Iterator<Item = (i32, Vec<u8>)>) -> Vec<i32> {
-    all.filter(|(_, raw)| {
-        let words: Vec<&[u8]> = raw.split(|b| *b == 0).collect();
-        let boxed = words.first().is_some_and(|w| w.ends_with(b"trindle-boxed"));
-        let same = words.get(1).is_some_and(|w| *w == first.as_bytes());
-        boxed && same && path.is_none_or(|p| words.get(2).is_some_and(|w| *w == p.as_os_str().as_encoded_bytes()))
-    })
-    .map(|(pid, _)| pid)
-    .collect()
+fn ancestors(me: i32, all: &[Proc]) -> Vec<i32> {
+    let mut out = vec![me];
+    while let Some(up) = all.iter().find(|p| Some(&p.pid) == out.last()).map(|p| p.ppid).filter(|p| *p > 1 && !out.contains(p)) {
+        out.push(up);
+    }
+    out
+}
+
+fn wanted(path: Option<&Path>) -> Option<Vec<Vec<u8>>> {
+    let p = path?;
+    let mut out = vec![p.as_os_str().as_encoded_bytes().to_vec()];
+    if let Ok(real) = std::fs::canonicalize(p) {
+        out.push(real.as_os_str().as_encoded_bytes().to_vec());
+    }
+    Some(out)
+}
+
+#[cfg(test)]
+pub(crate) fn boxed_copies(first: &str, path: Option<&Path>, all: &[Proc]) -> Vec<i32> {
+    copies(first, wanted(path).as_deref(), all)
+}
+
+fn copies(first: &str, want: Option<&[Vec<u8>]>, all: &[Proc]) -> Vec<i32> {
+    let is = |x: &[u8]| want.is_some_and(|w| w.iter().any(|w| w == x));
+    let bare = first == "--appimage";
+    let mut mounts: Vec<&Path> = Vec::new();
+
+    let mut out: Vec<(i32, bool)> = Vec::new();
+    for p in all {
+        let words: Vec<&[u8]> = p.cmdline.split(|b| *b == 0).collect();
+        let boxed = words.first().is_some_and(|w| w.ends_with(b"trindle-boxed"))
+            && words.get(1).is_some_and(|w| *w == first.as_bytes())
+            && (want.is_none() || words.get(2).is_some_and(|x| is(x)));
+        let named = bare && (words.first().is_some_and(|x| is(x) || relative_is(x, p.cwd.as_deref(), want))
+            || p.exe.as_ref().is_some_and(|e| is(e.as_os_str().as_encoded_bytes())));
+        let mount = p.appdir.as_deref().filter(|d| bare && p.appimage.as_deref().is_some_and(is) && inside(p, d));
+        mounts.extend(mount);
+        if boxed || named || mount.is_some() {
+            out.push((p.pid, boxed));
+        }
+    }
+    let mut i = 0;
+    while i < out.len() {
+        let (parent, every) = out[i];
+        let below: Vec<(i32, bool)> = all.iter()
+            .filter(|p| p.ppid == parent && !out.iter().any(|o| o.0 == p.pid) && (every || mounts.iter().any(|m| inside(p, m))))
+            .map(|p| (p.pid, every)).collect();
+        out.extend(below);
+        i += 1;
+    }
+    out.into_iter().map(|o| o.0).collect()
+}
+
+fn inside(p: &Proc, mount: &Path) -> bool {
+    let made = mount.is_absolute() && mount.file_name().and_then(|n| n.to_str())
+        .is_some_and(|n| n.starts_with(".mount_") || n.starts_with("appimage_extracted_"));
+    made && p.exe.as_deref().is_some_and(|e| e != mount && e.starts_with(mount))
+}
+
+fn relative_is(argv0: &[u8], cwd: Option<&Path>, want: Option<&[Vec<u8>]>) -> bool {
+    use std::os::unix::ffi::OsStrExt;
+    let p = Path::new(std::ffi::OsStr::from_bytes(argv0));
+    let (Some(cwd), Some(want)) = (cwd, want) else { return false };
+    if p.is_absolute() || !argv0.contains(&b'/') {
+        return false;
+    }
+    let at = cwd.join(p);
+    let real = std::fs::canonicalize(&at).unwrap_or(at);
+    want.iter().any(|w| w == real.as_os_str().as_bytes())
 }
 
 #[cfg(test)]
 mod tests {
     #[test]
     fn running_copies_of_a_boxed_program_and_an_appimage_are_found() {
-        let cmd = |w: &[&str]| w.join("\0").into_bytes();
+
+        let p = |pid, ppid, w: &[&str], env: Option<&str>| {
+            let mount = w[0].strip_prefix("/tmp/").and_then(|r| r.split_once('/')).map(|(m, _)| PathBuf::from(format!("/tmp/{m}")));
+            super::Proc { pid, ppid, cmdline: w.join("\0").into_bytes(), appimage: env.map(|e| e.as_bytes().to_vec()),
+                          appdir: env.and(mount.clone()), exe: mount.map(|_| PathBuf::from(w[0])), cwd: None }
+        };
         let all = vec![
-            (1, cmd(&["/usr/bin/trindle-boxed", "--appimage", "/h/.appimage/A.AppImage", "x"])),
-            (2, cmd(&["/usr/bin/trindle-boxed", "--appimage", "/h/.appimage/B.AppImage"])),
-            (3, cmd(&["trindle-boxed", "gimp", "gimp"])),
-            (4, cmd(&["vim", "gimp"])),
+            p(1, 0, &["/usr/bin/trindle-boxed", "--appimage", "/h/.appimage/A.AppImage", "x"], None),
+            p(2, 0, &["/usr/bin/trindle-boxed", "--appimage", "/h/.appimage/B.AppImage"], None),
+            p(3, 0, &["trindle-boxed", "gimp", "gimp"], None),
+            p(4, 0, &["vim", "gimp"], None),
+
+            p(5, 1, &["bwrap", "--args"], None),
+            p(6, 5, &["a-helper"], None),
+
+            p(7, 0, &["/h/.appimage/A.AppImage"], Some("/h/.appimage/A.AppImage")),
+            p(8, 0, &["/tmp/.mount_A/a", "--type=zygote"], Some("/h/.appimage/A.AppImage")),
+            p(9, 8, &["/tmp/.mount_A/a", "--type=renderer"], None),
+            p(10, 0, &["/tmp/.mount_B/b"], Some("/h/.appimage/B.AppImage")),
+
+            p(11, 1, &["xdg-dbus-proxy", "--fd=7", "unix:path=/run/user/1000/bus"], None),
         ];
+
+        let browser = |pid, ppid| super::Proc { pid, ppid, cmdline: b"/usr/lib/firefox/firefox".to_vec(), appimage: Some(b"/h/.appimage/A.AppImage".to_vec()),
+                                               appdir: Some("/tmp/.mount_A".into()), exe: Some("/usr/lib/firefox/firefox".into()), cwd: None };
+
+        let usr = super::Proc { pid: 14, ppid: 0, cmdline: b"/usr/bin/vim".to_vec(), appimage: Some(b"/h/.appimage/A.AppImage".to_vec()),
+                                appdir: Some("/usr".into()), exe: Some("/usr/bin/vim".into()), cwd: None };
+        let all: Vec<_> = all.into_iter().chain([browser(12, 8), browser(13, 0), usr]).collect();
         let a = Path::new("/h/.appimage/A.AppImage");
-        assert_eq!(super::boxed_copies("--appimage", Some(a), all.clone().into_iter()), vec![1]);
-        assert_eq!(super::boxed_copies("gimp", None, all.into_iter()), vec![3]);
+        let mut found = super::boxed_copies("--appimage", Some(a), &all);
+        found.sort();
+        assert_eq!(found, vec![1, 5, 6, 7, 8, 9, 11]);
+        assert_eq!(super::boxed_copies("gimp", None, &all), vec![3]);
+    }
+
+    #[test]
+    fn the_stopper_never_stops_itself_or_what_started_it() {
+        let p = |pid, ppid| super::Proc { pid, ppid, cmdline: Vec::new(), appimage: None, appdir: None, exe: None, cwd: None };
+        let all = vec![p(10, 1), p(20, 10), p(30, 20), p(40, 20)];
+        assert_eq!(super::ancestors(30, &all), vec![30, 20, 10]);
+    }
+
+    #[test]
+    fn a_bare_copy_is_found_by_its_real_file_not_only_its_exact_spelling() {
+        let dir = fresh_dir("trindle-bare-names");
+        let image = dir.join("Real-1.AppImage");
+        std::fs::write(&image, "x").unwrap();
+        std::os::unix::fs::symlink(&image, dir.join("link.AppImage")).unwrap();
+        let real = std::fs::canonicalize(&image).unwrap();
+        let p = |pid, argv0: &str, exe: Option<&Path>, cwd: Option<&Path>| Proc {
+            pid, ppid: 0, cmdline: argv0.as_bytes().to_vec(), appimage: None, appdir: None, exe: exe.map(Path::to_path_buf), cwd: cwd.map(Path::to_path_buf),
+        };
+        let link = dir.join("link.AppImage");
+        let all = vec![
+            p(1, link.to_str().unwrap(), None, None),
+            p(2, "./Real-1.AppImage", None, Some(&dir)),
+            p(3, "other", Some(&real), None),
+            p(4, "./Other.AppImage", None, Some(&dir)),
+        ];
+        let mut found = boxed_copies("--appimage", Some(&link), &all);
+        found.sort();
+        assert_eq!(found, vec![1, 2, 3]);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    fn fresh_dir(name: &str) -> PathBuf {
+        use std::os::unix::fs::DirBuilderExt;
+        let mut bytes = [0u8; 8];
+        std::io::Read::read_exact(&mut std::fs::File::open("/dev/urandom").unwrap(), &mut bytes).unwrap();
+        let dir = std::env::temp_dir().join(format!("{name}-{:x}", u64::from_le_bytes(bytes)));
+        std::fs::DirBuilder::new().mode(0o700).create(&dir).unwrap();
+        dir
+    }
+
+    struct Leftovers { image: PathBuf, child: std::process::Child, dir: PathBuf }
+
+    impl Drop for Leftovers {
+        fn drop(&mut self) {
+            stop_boxed("--appimage", Some(&self.image));
+            let _ = self.child.kill();
+            let _ = self.child.wait();
+            let _ = std::fs::remove_dir_all(&self.dir);
+        }
+    }
+
+    fn start(script: &str) -> Leftovers {
+        let dir = fresh_dir(".mount_trindle-stop-test");
+        for tool in ["sh", "sleep"] {
+            std::fs::copy(Path::new("/bin").join(tool), dir.join(tool)).unwrap();
+        }
+        let image = dir.join("Stop-1.0.AppImage");
+        std::fs::write(&image, format!("#!{}/sh\n{script}", dir.display())).unwrap();
+        std::fs::set_permissions(&image, std::os::unix::fs::PermissionsExt::from_mode(0o755)).unwrap();
+
+        let mut tries = 0;
+        let child = loop {
+            match std::process::Command::new(&image).env("APPIMAGE", &image).env("APPDIR", &dir).spawn() {
+                Err(e) if e.raw_os_error() == Some(libc::ETXTBSY) && tries < 20 => {
+                    tries += 1;
+                    std::thread::sleep(std::time::Duration::from_millis(50));
+                }
+                other => break other.unwrap(),
+            }
+        };
+        Leftovers { image, child, dir }
+    }
+
+    fn seen(image: &Path, n: usize) -> bool {
+        (0..250).any(|_| { std::thread::sleep(std::time::Duration::from_millis(20)); boxed_copies("--appimage", Some(image), &running()).len() == n })
+    }
+
+    #[test]
+    fn an_appimage_started_bare_is_stopped_with_everything_it_started() {
+        let mut run = start("\"$APPDIR/sleep\" 300 &\nexec \"$APPDIR/sleep\" 300\n");
+        assert!(seen(&run.image, 2), "the copy and its helper are found");
+        stop_boxed("--appimage", Some(&run.image));
+        let _ = run.child.wait();
+        assert!(boxed_copies("--appimage", Some(&run.image), &running()).is_empty());
+    }
+
+    #[test]
+    fn a_copy_that_ignores_the_request_to_quit_is_still_gone() {
+        let mut run = start("trap '' TERM\n\"$APPDIR/sleep\" 300 &\nwait\n");
+        assert!(seen(&run.image, 2), "the copy and its helper are found");
+        let began = std::time::Instant::now();
+        stop_boxed("--appimage", Some(&run.image));
+        assert!(began.elapsed() < std::time::Duration::from_secs(5));
+        let _ = run.child.wait();
+        assert!(boxed_copies("--appimage", Some(&run.image), &running()).is_empty());
+    }
+
+    #[test]
+    fn a_program_it_started_from_outside_its_mount_is_left_alone() {
+        let mut run = start("sleep 300 &\n\"$APPDIR/sleep\" 300 &\nexec \"$APPDIR/sleep\" 300\n");
+        let main = run.child.id() as i32;
+        let system = std::fs::canonicalize("/bin/sleep").unwrap();
+        let stray = (0..250).find_map(|_| {
+            std::thread::sleep(std::time::Duration::from_millis(20));
+            let all = running();
+            let mounted = all.iter().filter(|p| p.exe.as_deref().is_some_and(|e| e.starts_with(&run.dir))).count();
+            let stray = all.iter().find(|p| p.ppid == main && p.exe.as_deref() == Some(system.as_path())).map(|p| p.pid);
+            stray.filter(|_| mounted == 2)
+        }).expect("the copy, its helper and the stray all start");
+        let found = boxed_copies("--appimage", Some(&run.image), &running());
+        stop_boxed("--appimage", Some(&run.image));
+        let _ = run.child.wait();
+        let left = std::fs::read_to_string(format!("/proc/{stray}/stat"))
+            .is_ok_and(|s| s.rsplit_once(')').is_some_and(|(_, r)| !r.trim_start().starts_with('Z')));
+        // SAFETY: kill with a process number and a signal; it touches no memory.
+        unsafe { libc::kill(stray, libc::SIGKILL) };
+        assert_eq!(found.len(), 2, "{found:?}");
+        assert!(!found.contains(&stray));
+        assert!(left, "the stray was stopped");
+        assert!(boxed_copies("--appimage", Some(&run.image), &running()).is_empty());
     }
 
     use super::*;

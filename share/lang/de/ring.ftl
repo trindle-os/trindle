@@ -22,34 +22,34 @@ ring-cli-command = { $program } [OPTION…]
 ring-cli-options = Optionen:
 
 # Help for the ring's --say option, printed in a terminal.
-ring-cli-say = Tue, was diese Worte verlangen, als wären sie dem Ring gesprochen worden (um Sprachbefehle ohne Mikrofon auszuprobieren)
+ring-cli-say = Einen Sprachbefehl als Text ausführen, ohne Mikrofon
 
 # Help for the ring's --background option, printed in a terminal.
-ring-cli-background = Ohne Anzeige starten, damit das erste Öffnen sofort geht
+ring-cli-background = Unsichtbar starten, damit sich der Ring beim ersten Mal sofort öffnet
 
 # Help for the ring's --show-desktop option, printed in a terminal.
-ring-cli-show-desktop = Alle Fenster wegräumen, um den Desktop zu zeigen, oder sie zurückholen (Super und D verlangt dies)
+ring-cli-show-desktop = Alle Fenster ausblenden, um den Desktop zu zeigen, oder sie zurückholen (das machen die Tasten Super und D)
 
 # Help for the ring's --listen option, printed in a terminal.
-ring-cli-listen = Den Ring schon zuhörend öffnen, wie es ein Tastenkürzel kann
+ring-cli-listen = Den Ring öffnen und schon auf einen Sprachbefehl warten, wie es ein Tastenkürzel tut
 
 # Help for the ring's --all option, printed in a terminal.
 ring-cli-all = Den Ring mit allen Apps rundherum öffnen
 
 # Help for the ring's --power option, printed in a terminal.
-ring-cli-power = Den Ring bei Abmelden, Neustart und Herunterfahren öffnen
+ring-cli-power = Die Energieoptionen des Rings öffnen: Abmelden, Neustart und Herunterfahren
 
 # Help for the ring's --favourites option, printed in a terminal.
 ring-cli-favourites = Die Favoritenseite in den Einstellungen öffnen
 
 # Help for the ring's --restyle option, printed in a terminal.
-ring-cli-restyle = Ein neues Aussehen (hell oder dunkel, oder eine neue Akzentfarbe) aus den Einstellungen sofort übernehmen
+ring-cli-restyle = Ein neues Aussehen aus den Einstellungen sofort anwenden (hell oder dunkel, oder eine neue Akzentfarbe)
 
 # Help for the ring's --corners option, printed in a terminal.
-ring-cli-corners = Die Berührungspunkte in den oberen Ecken neu erstellen
+ring-cli-corners = Die Berührungspunkte in den oberen Ecken neu einrichten
 
 # Help for the ring's --notes option, printed in a terminal.
-ring-cli-notes = Die Tastatur in die Benachrichtigungskreise auf dem Bildschirm verlegen (Super und N verlangt dies)
+ring-cli-notes = Die Tastatursteuerung zu den Benachrichtigungskreisen auf dem Bildschirm verlegen (das machen die Tasten Super und N)
 
 # Error printed in a terminal when the ring is given an option it does not know.
 ring-cli-unknown = unbekannte Option { $option }
@@ -73,7 +73,7 @@ ring-uninstalling = Wird deinstalliert
 ring-uninstalled = Deinstalliert
 
 # Tip of the round button on the menu of an app put there by hand: it only leaves the ring.
-ring-take-off = Vom Ring nehmen
+ring-take-off = Vom Ring entfernen
 
 # Line that replaces that button while the app is being taken off the ring.
 ring-taking-off = Wird entfernt
@@ -112,13 +112,13 @@ ring-tool-report = Problem melden
 ring-gone = Das ist nicht mehr da.
 
 # Line in the ring when nothing could open the item that was pressed.
-ring-could-not-open = Nichts konnte das öffnen.
+ring-could-not-open = Trindle kann das nicht öffnen.
 
 # Line in the ring while it listens to a spoken command.
-ring-listening = Hört zu... sprich, es hört auf, wenn du aufhörst
+ring-listening = Hört zu… Sprich deinen Befehl. Es hört auf, wenn du nicht mehr sprichst
 
 # Line in the ring while it works out what was said.
-ring-working-out = Wird herausgefunden...
+ring-working-out = Wird ausgewertet…
 
 # Answer to the spoken command to close windows when none are open.
 ring-nothing-to-close = Nichts zum Schließen
@@ -186,7 +186,7 @@ ring-star-remove = Aus den Favoriten entfernen
 ring-star-add = Zu den Favoriten hinzufügen
 
 # Screen reader name of the red button that shows why an uninstall failed.
-ring-not-done = Nicht erledigt
+ring-not-done = Warum nicht?
 
 # Note on an app's menu when the middle of the ring has no room for another favourite; the number is how many it holds.
 ring-middle-full =
@@ -200,7 +200,7 @@ ring-power-lock = Sperren
 ring-power-screensaver = Bildschirmschoner
 
 # Choice on the ring's power page: put the computer to sleep.
-ring-power-suspend = Ruhezustand
+ring-power-suspend = Bereitschaft
 
 # Choice on the ring's power page: hibernate.
 ring-power-hibernate = Tiefschlaf
@@ -218,7 +218,7 @@ ring-power-shut-down = Herunterfahren
 ring-empty-hint = Klicke auf „Alle Apps“, dann mit der rechten Maustaste auf eine App, um sie hier zu behalten
 
 # Line in the ring when a spoken or typed power choice needs a click to confirm.
-ring-power-only-click = Nur ein Klick bestätigt dies.
+ring-power-only-click = Klicke zum Bestätigen.
 
 # Line in the ring when something other than the person tried to shut the computer down.
 # SAFETY: needs a human review before it ships
@@ -226,7 +226,7 @@ ring-power-only-own = Nur du kannst diesen Computer herunterfahren.
 
 # Line in the ring when the power page closed because a program pressed a key.
 # SAFETY: needs a human review before it ships
-ring-power-closed = Die Energieseite wurde geschlossen: Ein Programm hat eine Taste gedrückt, nicht du.
+ring-power-closed = Die Energieseite wurde geschlossen, weil ein Programm einen Tastendruck gesendet hat.
 
 ring-startup-add = Bei der Anmeldung starten
 
@@ -235,7 +235,7 @@ ring-startup-remove = Nicht mehr bei der Anmeldung starten
 
 
 # Help for the option that opens the shortcut list, or closes it when it is showing.
-ring-cli-shortcuts = Alle Tastenkürzel in einer Liste zeigen oder die Liste wegräumen (Super und K, sofern in den Einstellungen nicht geändert)
+ring-cli-shortcuts = Eine Liste aller Tastenkürzel zeigen oder die Liste ausblenden (Super und K, sofern du es nicht in den Einstellungen änderst)
 
 # Notice from the new ring after the parts were restarted from the keyboard.
 ring-restarted = Neu gestartet
@@ -243,3 +243,11 @@ ring-restarted = Neu gestartet
 # Under the notice above.
 ring-restarted-why = Der Ring und die Hilfsteile sind neu gestartet.
 
+# Tip on the app menu's red button when removing the app did not work.
+ring-uninstall-failed = Es konnte nicht entfernt werden.
+
+# Shorter name of the Sound and video piece of All apps, for when the full name does not fit along it.
+ring-category-media-short = Ton
+
+# Line in the ring when a spoken command, such as turning the sound down, did not work.
+ring-voice-failed = Das hat nicht geklappt.

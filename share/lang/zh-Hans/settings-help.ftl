@@ -29,7 +29,7 @@ settings-help-area-safe = 保障安全
 settings-help-area-computer = 这台电脑
 
 # The sentence at the top of Help before anything is typed.
-settings-help-start = 初次使用 Trindle？请先看“欢迎”，或输入您要找的内容。
+settings-help-start = 初次使用 Trindle？请先看“欢迎”，或输入你要找的内容。
 
 # The sentence at the top of Help when a search finds nothing; typed is what was typed.
 settings-help-found-none = 没有与“{ $typed }”相符的内容。请换一个更短的词。
@@ -49,14 +49,11 @@ settings-help-read = 阅读“{ $title }”
 # Bold line in the Reading card of Help when no topic is open.
 settings-help-nothing-open = 没有打开的主题
 
-# Quiet line under "Nothing open" in Help.
-settings-help-nothing-open-sub = 按主题旁边的箭头，即可在这里阅读。
-
 # Heading of the Help card that shows the open topics.
 settings-help-reading = 阅读
 
 # Placeholder and spoken name of the typing box that searches Help.
-settings-help-search-placeholder = 搜索帮助，例如“无线网络”、“打印机”或“关机”
+settings-help-search-placeholder = 搜索帮助
 
 # Heading of the Help card with the search box.
 settings-help-search = 搜索帮助
@@ -72,4 +69,3 @@ settings-help-program-open = 打开帮助
 
 # Red words under the line "Help in its own window" when the Help program could not be started.
 settings-help-program-not-opened = 无法打开帮助。
-

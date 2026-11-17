@@ -13,7 +13,7 @@ settings-plugins-help = 插件为 Trindle 增加功能：圆环中的图标、�
 
 # Red words when the window that asks what a plugin may use could not be opened.
 # SAFETY: needs a human review before it ships
-settings-plugins-window-failed = 无法打开询问插件可使用哪些内容的窗口。
+settings-plugins-window-failed = Trindle 无法打开询问插件可使用哪些内容的窗口。
 
 # Under About it: the plugin's version number is { $v }.
 settings-plugins-version = 版本 { $v }。
@@ -22,7 +22,7 @@ settings-plugins-version = 版本 { $v }。
 settings-plugins-version-settled = 版本 { $v }。{ $settled }
 
 # Help text of a plugin's card when it asks for nothing: the plugin's name is { $name }.
-settings-plugins-asks-nothing = { $name } 没有提出任何请求，所以它在隔离环境中运行，不被允许任何内容。
+settings-plugins-asks-nothing = { $name } 没有请求任何权限，所以它在隔离环境中运行，什么都不被允许。
 
 # Help text of a plugin's card: its name is { $name }, { $list } is what it asks for, { $allowed } of { $asks } are allowed.
 # SAFETY: needs a human review before it ships
@@ -31,12 +31,8 @@ settings-plugins-asks-for =
        *[other] { $name } 请求：{ $list }；已允许 { $allowed } 项，共 { $asks } 项。它在隔离环境中运行，只能使用你允许的内容。
     }
 
-# Under the line that tells a plugin needs more allowed, beside its Allow button.
-# SAFETY: needs a human review before it ships
-settings-plugins-needs-more = “允许”会列出它请求的每一项，每项都有开关。
-
 # Heading of the line about a plugin on its card.
-settings-plugins-about-it = 关于它
+settings-plugins-about-it = 关于
 
 # Tip of the button that changes what a plugin may use.
 # SAFETY: needs a human review before it ships
@@ -57,7 +53,7 @@ settings-plugins-type-here = 在此输入
 settings-plugins-no-settings = { $name } 没有自己的设置。
 
 # Note on a plugin's card when none of its settings show now: its name is { $name }.
-settings-plugins-no-settings-now = 按目前情况，{ $name } 没有可显示的设置。
+settings-plugins-no-settings-now = { $name } 目前没有可显示的设置。
 
 # Headline of the Your plugins page: how many plugins are installed and { $list } their names.
 settings-plugins-installed =
@@ -72,14 +68,11 @@ settings-plugins-group = 插件
 # Heading of the line shown when no plugin is installed.
 settings-plugins-none = 没有已安装的插件
 
-# Under the None installed heading.
-settings-plugins-none-sub = “应用”里有可添加的插件。
-
 # Tip of the button at the end of the page's title that opens the Permissions page.
 settings-plugins-open-permissions = 打开权限
 
 # Said at the top of a plugin's card while its service has not yet answered; the plugin's name is {$name}.
-settings-plugins-rows-asking = 正在询问 { $name }。
+settings-plugins-rows-asking = 正在询问 { $name }…
 
 # Said at the top of a plugin's card, and in red under a row, when its service does not answer; the plugin's name is {$name}.
 settings-plugins-rows-silent = { $name } 没有回应。它的服务可能已停止。
@@ -95,4 +88,3 @@ settings-plugins-rows-failed = { $name } 无法完成。
 
 # Red words under a row when the change failed; the plugin's name is {$name} and the reason it gave is {$why}.
 settings-plugins-rows-failed-why = { $name } 无法完成：{ $why }。
-

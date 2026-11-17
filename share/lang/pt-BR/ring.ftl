@@ -19,34 +19,34 @@ ring-cli-command = { $program } [OPÇÃO…]
 ring-cli-options = Opções:
 
 # Help for the ring's --say option, printed in a terminal.
-ring-cli-say = Faz o que estas palavras pedem, como se fossem ditas ao anel (para testar comandos de voz sem microfone)
+ring-cli-say = Executa um comando de voz a partir de texto, sem usar microfone
 
 # Help for the ring's --background option, printed in a terminal.
-ring-cli-background = Inicia sem mostrar, para que a primeira abertura seja instantânea
+ring-cli-background = Inicia fora de vista, para que o anel abra na hora na primeira vez
 
 # Help for the ring's --show-desktop option, printed in a terminal.
-ring-cli-show-desktop = Guarda todas as janelas para mostrar a área de trabalho, ou as traz de volta (Super e D pedem isto)
+ring-cli-show-desktop = Esconde todas as janelas para mostrar a área de trabalho, ou as traz de volta (as teclas Super e D fazem isto)
 
 # Help for the ring's --listen option, printed in a terminal.
-ring-cli-listen = Abre o anel já ouvindo, como um atalho de teclado pode fazer
+ring-cli-listen = Abre o anel já ouvindo um comando de voz, como faz um atalho de teclado
 
 # Help for the ring's --all option, printed in a terminal.
 ring-cli-all = Abre o anel com todos os aplicativos mostrados ao redor
 
 # Help for the ring's --power option, printed in a terminal.
-ring-cli-power = Abre o anel em sair, reiniciar e desligar
+ring-cli-power = Abre as opções de energia do anel: sair, reiniciar e desligar
 
 # Help for the ring's --favourites option, printed in a terminal.
 ring-cli-favourites = Abre a página de favoritos nas Configurações
 
 # Help for the ring's --restyle option, printed in a terminal.
-ring-cli-restyle = Adota de imediato um novo visual (claro ou escuro, ou um novo destaque) das Configurações
+ring-cli-restyle = Aplica na hora um novo visual das Configurações (claro ou escuro, ou uma nova cor de destaque)
 
 # Help for the ring's --corners option, printed in a terminal.
-ring-cli-corners = Cria de novo as áreas de toque nos cantos superiores
+ring-cli-corners = Configura de novo as áreas de toque nos cantos superiores
 
 # Help for the ring's --notes option, printed in a terminal.
-ring-cli-notes = Move o teclado para os círculos de notificação na tela (Super e N pedem isto)
+ring-cli-notes = Move o controle do teclado para os círculos de notificação na tela (as teclas Super e N fazem isto)
 
 # Error printed in a terminal when the ring is given an option it does not know.
 ring-cli-unknown = opção desconhecida { $option }
@@ -70,13 +70,13 @@ ring-uninstalling = Desinstalando
 ring-uninstalled = Desinstalado
 
 # Tip of the round button on the menu of an app put there by hand: it only leaves the ring.
-ring-take-off = Tirar do anel
+ring-take-off = Remover do anel
 
 # Line that replaces that button while the app is being taken off the ring.
-ring-taking-off = Tirando
+ring-taking-off = Removendo
 
 # Line that replaces that button once the app is off the ring.
-ring-taken-off = Tirado
+ring-taken-off = Removido
 
 # Name of the ring's round button that opens Apps.
 ring-tool-apps = Aplicativos
@@ -109,13 +109,13 @@ ring-tool-report = Relatar um problema
 ring-gone = Isso não está mais lá.
 
 # Line in the ring when nothing could open the item that was pressed.
-ring-could-not-open = Nada conseguiu abrir isso.
+ring-could-not-open = O Trindle não consegue abrir isso.
 
 # Line in the ring while it listens to a spoken command.
-ring-listening = Ouvindo... fale, e ele para quando você parar
+ring-listening = Ouvindo… Diga o seu comando. A escuta para quando você parar de falar
 
 # Line in the ring while it works out what was said.
-ring-working-out = Entendendo...
+ring-working-out = Entendendo…
 
 # Answer to the spoken command to close windows when none are open.
 ring-nothing-to-close = Nada para fechar
@@ -184,7 +184,7 @@ ring-star-remove = Remover dos favoritos
 ring-star-add = Adicionar aos favoritos
 
 # Screen reader name of the red button that shows why an uninstall failed.
-ring-not-done = Não concluído
+ring-not-done = Por que não?
 
 # Note on an app's menu when the middle of the ring has no room for another favourite; the number is how many it holds.
 ring-middle-full =
@@ -219,13 +219,13 @@ ring-power-shut-down = Desligar
 ring-empty-hint = Clique em Todos os aplicativos e depois clique com o botão direito em um aplicativo para mantê-lo aqui
 
 # Line in the ring when a spoken or typed power choice needs a click to confirm.
-ring-power-only-click = Só um clique confirma isto.
+ring-power-only-click = Clique para confirmar.
 
 # Line in the ring when something other than the person tried to shut the computer down.
 ring-power-only-own = Só você pode desligar este computador.
 
 # Line in the ring when the power page closed because a program pressed a key.
-ring-power-closed = A página de energia foi fechada: um programa apertou uma tecla, não você.
+ring-power-closed = A página de energia foi fechada porque um programa enviou o toque de uma tecla.
 
 # Said in the middle of the ring when Close is chosen on a plugin's icon and none of its windows are open.
 ring-plugin-not-open = Nada aberto para fechar
@@ -237,11 +237,16 @@ ring-startup-remove = Parar de iniciar ao entrar
 
 
 # Help for the option that opens the shortcut list, or closes it when it is showing.
-ring-cli-shortcuts = Mostrar todos os atalhos de teclado em uma lista, ou guardar a lista (Super e K, a menos que mudado nas Configurações)
+ring-cli-shortcuts = Mostrar uma lista de todos os atalhos de teclado, ou esconder a lista (Super e K, a menos que você mude nas Configurações)
 
 # Notice from the new ring after the parts were restarted from the keyboard.
 ring-restarted = Reiniciado
 
 # Under the notice above.
-ring-restarted-why = O anel e as partes auxiliares iniciaram de novo.
-
+ring-restarted-why = O anel e as partes auxiliares foram reiniciados.
+# Tip on the app menu's red button when removing the app did not work.
+ring-uninstall-failed = Não foi possível remover.
+# Shorter name of the Sound and video piece of All apps, for when the full name does not fit along it.
+ring-category-media-short = Som
+# Line in the ring when a spoken command, such as turning the sound down, did not work.
+ring-voice-failed = Isso não funcionou.

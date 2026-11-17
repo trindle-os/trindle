@@ -116,6 +116,11 @@ impl Default for Metrics {
 
 impl Metrics {
     pub fn now() -> Metrics {
+        static KEPT: Mutex<Option<(u64, Metrics)>> = Mutex::new(None);
+        crate::config::kept_until_reread(&KEPT, Self::read)
+    }
+
+    fn read() -> Metrics {
         let layers = crate::common::sheet::layers();
         let light = crate::common::sheet::asked_light();
         let d = Metrics::default();
@@ -151,7 +156,7 @@ pub fn filled(m: &Metrics, share: f32) -> i32 {
     (levels::bar_share(share) * m.bar_w as f32).round() as i32
 }
 
-type Key = (Shown, u64, [[f32; 4]; 3], i32, Metrics, i32);
+type Key = (Shown, u64, [[f32; 4]; 3], Metrics, i32);
 
 thread_local! {
     static PAINTED: RefCell<Option<(Key, Overlay)>> = const { RefCell::new(None) };
@@ -173,7 +178,7 @@ fn lay_sun(px: &mut [Paint], pw: usize, at: (i32, i32), side: f32, ink: [f32; 4]
                 cover = cover.max((0.5 - gap).clamp(0.0, 1.0));
             }
             let i = y as usize * pw + x as usize;
-            if cover > 0.0 && x >= 0 && i < px.len() {
+            if cover > 0.0 && i < px.len() {
                 px[i] = Paint::of(ink, cover).over(px[i]);
             }
         }
@@ -183,13 +188,12 @@ fn lay_sun(px: &mut [Paint], pw: usize, at: (i32, i32), side: f32, ink: [f32; 4]
 const BRIGHTNESS: &str = "display-brightness-symbolic";
 
 fn paint(what: &Shown, m: &Metrics, w_logical: i32, scale: f64) -> (Vec<u8>, i32, i32) {
-    let (theme, radius) = ssd::theme();
-    let c = theme.active;
+    let c = ssd::theme().0.active;
     let (w, h) = pixel_size((w_logical, m.height).into(), scale);
     let s = scale as f32;
     let (pw, ph) = (w as usize, h as usize);
     let mut px = vec![Paint::CLEAR; pw * ph];
-    let r = (radius as f32 * s).max(h as f32 / 2.0).min(h as f32 / 2.0);
+    let r = h as f32 / 2.0;
     let edge = s.max(1.0);
     for y in 0..ph {
         for x in 0..pw {
@@ -262,9 +266,8 @@ where
     let screen = output.current_transform().transform_size(mode.size);
     let scale = output.current_scale().fractional_scale();
     let w_logical = width(&m, what.words.map_or(0.0, width_of));
-    let (theme, radius) = ssd::theme();
-    let c = theme.active;
-    let key: Key = (what, scale.to_bits(), [c.background, c.border, c.text], radius, m, w_logical);
+    let c = ssd::theme().0.active;
+    let key: Key = (what, scale.to_bits(), [c.background, c.border, c.text], m, w_logical);
     let pill = PAINTED.with(|p| kept(p, key, |k| Overlay::new(&paint(&k.0, &m, w_logical, scale).0, (w_logical, m.height).into(), scale)));
     let (w, h) = (pixels(w_logical, scale) as f64, pixels(m.height, scale) as f64);
     let at = (((screen.w as f64 - w) / 2.0).round().max(0.0), (screen.h as f64 - h - m.bottom as f64 * scale).round().max(0.0));
@@ -388,41 +391,6 @@ mod tests {
 
     fn out_of_pill(x: usize, y: usize, w: usize, h: usize) -> bool {
         crate::indicators::outside_round_box(x as f32 + 0.5, y as f32 + 0.5, w as f32, h as f32, h as f32 / 2.0) > 0.0
-    }
-
-    #[test]
-    #[ignore]
-    fn shoot_the_level() {
-        let out = std::path::PathBuf::from(std::env::var("TRINDLE_SHOTS").unwrap_or_else(|_| "target/shots-level".into()));
-        std::fs::create_dir_all(&out).unwrap();
-        let m = Metrics::default();
-        let s = |share, muted| Sound { share, muted };
-        let cases = [
-            ("volume-20", Kind::Speakers, s(0.2, false)),
-            ("volume-80", Kind::Speakers, s(0.8, false)),
-            ("volume-muted", Kind::Speakers, s(0.8, true)),
-            ("microphone-off", Kind::Microphone, s(0.8, true)),
-            ("brightness-30", Kind::Brightness, s(0.3, false)),
-        ];
-        for (light, look, desk) in [(false, "dark", (0x2a, 0x2d, 0x33)), (true, "light", (0xd8, 0xda, 0xdf))] {
-            ssd::set_theme(crate::config::Theme::of(light), 10);
-            for (name, kind, sound) in cases {
-                let what = shown(kind, sound);
-                for scale in [1.0f64, 1.5, 2.0] {
-                let wl = width(&m, what.words.map_or(0.0, width_of));
-                let (bytes, w, h) = paint(&what, &m, wl, scale);
-                let (sw, sh) = (w + 240, h + 240);
-                let mut screen = tiny_skia::Pixmap::new(sw as u32, sh as u32).unwrap();
-                screen.fill(tiny_skia::Color::from_rgba8(desk.0, desk.1, desk.2, 0xff));
-                let mut pill = tiny_skia::Pixmap::new(w as u32, h as u32).unwrap();
-                for (d, b) in pill.data_mut().chunks_mut(4).zip(bytes.chunks(4)) {
-                    d.copy_from_slice(&[b[2], b[1], b[0], b[3]]);
-                }
-                screen.draw_pixmap(120, 120, pill.as_ref(), &tiny_skia::PixmapPaint::default(), tiny_skia::Transform::identity(), None);
-                screen.save_png(out.join(format!("level-{name}-{look}-x{scale}.png"))).unwrap();
-                }
-            }
-        }
     }
 
     #[test]

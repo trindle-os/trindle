@@ -38,6 +38,7 @@ fn keep(from: &Path, dir: &Path) -> Option<PathBuf> {
         _ => (name.clone(), String::new()),
     };
     let size = std::fs::metadata(from).ok()?.len();
+    let mine = std::cell::OnceCell::new();
     for n in 1..1000 {
         let to = match n {
             1 => dir.join(&name),
@@ -47,7 +48,7 @@ fn keep(from: &Path, dir: &Path) -> Option<PathBuf> {
             return Some(to);
         }
         match std::fs::metadata(&to) {
-            Ok(m) if m.len() == size && std::fs::read(&to).ok() == std::fs::read(from).ok() => return Some(to),
+            Ok(m) if m.len() == size && std::fs::read(&to).ok() == *mine.get_or_init(|| std::fs::read(from).ok()) => return Some(to),
             Ok(_) => continue,
 
             Err(_) => match crate::common::copies::copy_new(from, &to) {
@@ -149,6 +150,24 @@ mod tests {
         assert_eq!(keep(&a, &kept), Some(kept.join("sea.png")), "the same picture is not copied twice");
         assert_eq!(keep(&b, &kept), Some(kept.join("sea-2.png")));
         assert_eq!(std::fs::read(kept.join("sea-2.png")).expect("read"), b"two");
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn many_same_sized_pictures_each_get_their_own_name_and_the_same_one_is_found() {
+        let dir = std::env::temp_dir().join(format!("trindle-wallpaper-same-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).expect("dir");
+        let kept = dir.join("kept");
+        let all: Vec<PathBuf> = (0..30).map(|i| {
+            let p = dir.join(format!("d{i}")).join("sea.png");
+            std::fs::create_dir_all(p.parent().unwrap()).unwrap();
+            std::fs::write(&p, format!("{i:04}")).unwrap();
+            p
+        }).collect();
+        let first: Vec<_> = all.iter().map(|p| keep(p, &kept)).collect();
+        assert_eq!(first.iter().flatten().collect::<std::collections::HashSet<_>>().len(), 30);
+        assert_eq!(all.iter().map(|p| keep(p, &kept)).collect::<Vec<_>>(), first, "each is found again, none copied twice");
         let _ = std::fs::remove_dir_all(&dir);
     }
 

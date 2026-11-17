@@ -90,7 +90,7 @@ ring-shortcuts-console = التبديل إلى طرفية نصية
 ring-shortcuts-console-keys = Ctrl+Alt+F1 إلى F12
 
 # Words for the keys the screen reader takes while it is on.
-ring-shortcuts-reader-keys = مفاتيح قارئ الشاشة نفسه، ما دام يعمل
+ring-shortcuts-reader-keys = مفاتيح قارئ الشاشة ما دام يعمل
 
 # The keys the screen reader takes while it is on.
 ring-shortcuts-reader-keys-keys = Caps Lock، Insert

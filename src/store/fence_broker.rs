@@ -1,6 +1,7 @@
 //! What the fence lets an AI program ask Trindle to do outside it.
 
 use std::io::Write;
+use crate::toolkit::t;
 use std::os::fd::{AsRawFd, OwnedFd};
 use std::os::unix::net::{UnixListener, UnixStream};
 use std::path::{Path, PathBuf};
@@ -19,7 +20,7 @@ pub enum Answer {
 
 pub type Approver = Arc<dyn Fn(&str, &str) -> Answer + Send + Sync>;
 
-const BODY_MAX: usize = 60_000;
+const BODY_MAX: usize = 16_000;
 
 static ASKING: Mutex<()> = Mutex::new(());
 
@@ -103,12 +104,16 @@ fn handle(kind: &str, args: &[String], root: &Path, home: &Path, approver: &Appr
         "sudo" | "pkexec" => match parse_sudo(kind, args) {
             Ok(argv) => {
                 let text = approval_text(&argv);
+                if text.chars().count() > TEXT_MOST {
+                    tell(&err, t!("store-fence-ask-too-long"));
+                    return 1;
+                }
                 let Ok(_one) = ASKING.try_lock() else {
-                    tell(&err, "Another request is waiting for you to answer it.");
+                    tell(&err, t!("store-fence-ask-busy"));
                     return 1;
                 };
                 if approver("sudo", &text) == Answer::No {
-                    tell(&err, "You did not allow this.");
+                    tell(&err, t!("store-fence-ask-refused"));
                     return 1;
                 }
                 admin_command(argv)
@@ -120,7 +125,7 @@ fn handle(kind: &str, args: &[String], root: &Path, home: &Path, approver: &Appr
         },
         "share" => return share_request(args, root, home, approver, &err),
         other => {
-            tell(&err, &format!("{other} is not available inside the fence."));
+            tell(&err, &t!("store-fence-not-here", name = other));
             return 1;
         }
     };
@@ -132,7 +137,7 @@ fn handle(kind: &str, args: &[String], root: &Path, home: &Path, approver: &Appr
             s.code().unwrap_or_else(|| 128 + s.signal().unwrap_or(0))
         }
         Err(_) => {
-            tell(&err, "It could not be started outside the fence.");
+            tell(&err, t!("store-fence-not-started"));
             127
         }
     }
@@ -140,7 +145,7 @@ fn handle(kind: &str, args: &[String], root: &Path, home: &Path, approver: &Appr
 
 fn share_request(args: &[String], root: &Path, home: &Path, approver: &Approver, err: &Option<OwnedFd>) -> i32 {
     let Some(asked) = args.first().filter(|a| a.starts_with('/') && !a.contains('\0')) else {
-        tell(err, "Give the full path of the folder.");
+        tell(err, t!("store-fence-share-path"));
         return 1;
     };
     let real = match super::fence::shareable(Path::new(asked), home) {
@@ -151,12 +156,12 @@ fn share_request(args: &[String], root: &Path, home: &Path, approver: &Approver,
         }
     };
     let Ok(_one) = ASKING.try_lock() else {
-        tell(err, "Another request is waiting for you to answer it.");
+        tell(err, t!("store-fence-ask-busy"));
         return 1;
     };
     let (read_only, always) = match approver("share", &real.to_string_lossy()) {
         Answer::No => {
-            tell(err, "You did not share it.");
+            tell(err, t!("store-fence-share-refused"));
             return 1;
         }
         Answer::Once(r) => (r, false),
@@ -164,7 +169,7 @@ fn share_request(args: &[String], root: &Path, home: &Path, approver: &Approver,
     };
     match super::fence::share(root, home, &real, read_only, always) {
         Ok(_) => {
-            tell(err, "Shared. It is there the next time this program starts.");
+            tell(err, t!("store-fence-shared"));
             0
         }
         Err(why) => {
@@ -242,13 +247,13 @@ pub fn parse_ssh(args: &[String], hosts: &[String]) -> Result<Vec<String>, Strin
             }
         }
     }
-    let target = target.ok_or_else(|| "Name the computer to reach.".to_string())?;
+    let target = target.ok_or_else(|| t!("store-fence-ssh-name").to_string())?;
     let (user, host) = match target.rsplit_once('@') {
         Some((u, h)) => (Some(u), h),
         None => (None, target.as_str()),
     };
     if user.is_some_and(|u| !plain_user(u)) || !host_ok(host) {
-        return Err("That is not a computer name ssh may reach from the fence.".into());
+        return Err(t!("store-fence-ssh-bad").into());
     }
     if !hosts.iter().any(|h| h.eq_ignore_ascii_case(host)) {
         return Err(format!("{host} is not on the list of computers AI programs may reach. Add it in Settings, AI programs."));
@@ -263,7 +268,7 @@ fn ssh_command(root: &Path, argv: &[String]) -> Result<std::process::Command, St
     let dir = root.join("ssh");
     let key = dir.join("id_ed25519");
     if !key.exists() {
-        make_key(&dir).map_err(|e| format!("The key for AI programs could not be made: {e}"))?;
+        make_key(&dir).map_err(|e| t!("store-fence-key-failed", why = e.to_string()))?;
     }
     let mut c = std::process::Command::new("ssh");
     c.args(["-F", "/dev/null", "-i"]).arg(&key)
@@ -303,19 +308,26 @@ pub fn parse_sudo(kind: &str, args: &[String]) -> Result<Vec<String>, String> {
     }
     let cmd = &args[i.min(args.len())..];
     if cmd.is_empty() || cmd[0].is_empty() || cmd.iter().any(|w| w.contains('\0')) {
-        return Err("Name a command to run.".into());
+        return Err(t!("store-fence-sudo-name").into());
     }
     Ok(cmd.to_vec())
 }
 
+const TEXT_MOST: usize = 2000;
+
+fn hidden(c: char) -> bool {
+    c.is_control() || matches!(c, '\u{200b}'..='\u{200f}' | '\u{2028}'..='\u{202e}' | '\u{2060}'..='\u{2064}' | '\u{2066}'..='\u{2069}' | '\u{feff}' | '\u{061c}')
+}
+
 pub fn approval_text(argv: &[String]) -> String {
     let quote = |w: &String| if w.chars().all(|c| c.is_ascii_alphanumeric() || "-_./=:,+@%".contains(c)) { w.clone() } else { format!("'{}'", w.replace('\'', "'\\''")) };
-    argv.iter().map(quote).collect::<Vec<_>>().join(" ")
+    argv.iter().map(quote).collect::<Vec<_>>().join(" ").chars()
+        .flat_map(|c| if hidden(c) { format!("\\u{{{:x}}}", c as u32).chars().collect() } else { vec![c] }).collect()
 }
 
 pub fn stand_in(called: &str, args: &[String]) -> i32 {
     let Some(path) = std::env::var_os(super::fence::BROKER_ENV) else {
-        eprintln!("{called} is not available here.");
+        eprintln!("{}", t!("store-fence-stand-in-gone", name = called));
         return 1;
     };
     ask(Path::new(&path), called, args)
@@ -327,12 +339,12 @@ pub fn ask(path: &Path, called: &str, args: &[String]) -> i32 {
         "sudo" | "pkexec" => called,
         super::fence::SHARE_ASK => "share",
         other => {
-            eprintln!("{other} is not available inside the fence. Ask for it to be run outside.");
+            eprintln!("{}", t!("store-fence-stand-in-outside", name = other));
             return 1;
         }
     };
     let Ok(conn) = UnixStream::connect(path) else {
-        eprintln!("{called}: the fence's request line is not there.");
+        eprintln!("{}", t!("store-fence-stand-in-line", name = called));
         return 1;
     };
     let mut body: Vec<u8> = kind.as_bytes().to_vec();
@@ -341,7 +353,7 @@ pub fn ask(path: &Path, called: &str, args: &[String]) -> i32 {
         body.extend_from_slice(a.as_bytes());
     }
     if body.len() > BODY_MAX || send_message(conn.as_raw_fd(), &body, &[0, 1, 2]).is_err() {
-        eprintln!("{called}: the request was not sent.");
+        eprintln!("{}", t!("store-fence-stand-in-unsent", name = called));
         return 1;
     }
     match recv_message(conn.as_raw_fd(), 32) {

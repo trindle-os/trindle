@@ -14,27 +14,27 @@ fn the_i_shuts_on_a_press_anywhere_outside_its_words() {
 #[test]
 fn room_is_judged_by_what_is_left_as_well() {
     let g = GB as u64;
-    assert!(headline(&[], Some((g, g * 4 / 10))).0.starts_with("Nearly full"));
-    assert!(headline(&[], Some((3 * g, 2 * g))).0.starts_with("Getting full"));
-    assert!(headline(&[], Some((100 * g, 400 * g))).0.starts_with("Plenty of room"));
-    assert!(headline(&[], Some((960 * g, 40 * g))).0.starts_with("Nearly full"));
+    assert!(headline(&[], Some((g, g * 4 / 10))).0.starts_with("This computer is nearly full"));
+    assert!(headline(&[], Some((3 * g, 2 * g))).0.starts_with("This computer is getting full"));
+    assert!(headline(&[], Some((100 * g, 400 * g))).0.starts_with("There's plenty of room"));
+    assert!(headline(&[], Some((960 * g, 40 * g))).0.starts_with("This computer is nearly full"));
 }
 
 #[test]
 fn drives_follows_the_language_and_falls_back_word_by_word() {
     use crate::toolkit::lang::{english, with_catalogue, Bundle, Catalogue};
-    let french = "disks-map-caption = Chaque partie de chaque disque, remplie selon son usage.\n\
+    let french = "disks-your-drives = Vos disques\n\
                   disks-formatted = Format\u{e9}\n\
                   disks-health-hours =\n    { $n ->\n        [one] utilis\u{e9} pendant { $hours } heure\n       *[other] utilis\u{e9} pendant { $hours } heures\n    }\n";
     with_catalogue(Catalogue::new(Bundle::from_text("fr", french), english()), || {
-        assert_eq!(map_caption(), "Chaque partie de chaque disque, remplie selon son usage.");
+        assert_eq!(t!("disks-your-drives"), "Vos disques");
         assert_eq!(t!("disks-formatted"), "Format\u{e9}");
 
         let h = Health { kelvin: 311.15, hours: 2140, ..Default::default() };
         assert_eq!(plan::health_line(&h), ("Healthy, 38 \u{b0}C, utilis\u{e9} pendant 2,140 heures".to_string(), true));
         assert_eq!(plan::kinds()[1].for_what, "Linux only");
     });
-    assert_eq!(map_caption(), "Each part of each drive, filled as far as it is used.");
+    assert_eq!(t!("disks-your-drives"), "Your drives");
 }
 
 #[test]
@@ -233,7 +233,7 @@ fn the_map_draws_every_part_as_wide_as_it_is_big() {
 
     assert!(first[2].1 > 4.0 * first[0].1);
     assert!(rows[0].spoken().contains("Data, 40% full, 180.0 GB free"), "{}", rows[0].spoken());
-    assert_eq!(d.together(), "3 drives, 2.5 TB in all. 1 needs a look, see its card.");
+    assert_eq!(d.together(), "3 drives, 2.5 TB in all. 1 needs a look: see its card.");
 }
 
 #[test]
@@ -310,4 +310,12 @@ fn nothing_that_erases_is_offered_for_the_system_drive() {
     assert!(system.is_empty(), "the system part has {} changes", system.len());
     let usb = &d.drives[1];
     assert!(d.part_extras(usb, &usb.vols[0], &kinds).len() >= 4);
+}
+
+#[test]
+fn no_row_of_drives_explains_its_own_name() {
+    let words = include_str!("../../../share/lang/en/disks.ftl");
+    for key in ["disks-map-caption", "disks-faults-note", "disks-format-whole", "disks-format-part", "disks-delete-note", "disks-new-part-note"] {
+        assert!(!words.lines().any(|l| l.starts_with(&format!("{key} ="))), "{key} is back");
+    }
 }

@@ -1,7 +1,7 @@
 # machine translated (Bengali), not yet reviewed by a person.
 
 # Name of Debian's group of updates, on its row and in the headline.
-store-upd-debian-name = Debian-এর প্যাকেজ
+store-upd-debian-name = Debian প্যাকেজ
 
 # On a row held back: the version it is held at, and the one that waits.
 store-upd-held-version-waits = সংস্করণ { $have }-এ আটকে রাখা; { $waits }
@@ -16,7 +16,7 @@ store-upd-held-version = সংস্করণ { $have }-এ আটকে রা
 store-upd-held = আটকে রাখা
 
 # On the Held back card: the version a thing is held at, and nothing newer waits.
-store-upd-held-version-nothing = সংস্করণ { $have }-এ আটকে রাখা; আরও নতুন কিছু এখনও নেই
+store-upd-held-version-nothing = সংস্করণ { $have }-এ আটকে রাখা হয়েছে। আরও নতুন কিছু এখনও নেই।
 
 # On the Held back card: nothing newer waits.
 store-upd-held-nothing = আটকে রাখা; আরও নতুন কিছু এখনও নেই
@@ -56,33 +56,33 @@ store-upd-and-then = { $first } { $second }
 
 # Added to the headline when firmware is among the updates.
 # SAFETY: needs a human review before it ships
-store-upd-firmware-restart = ফার্মওয়্যার শেষ করতে রিস্টার্ট লাগবে।
+store-upd-firmware-restart = ফার্মওয়্যার আপডেট শেষ করতে রিস্টার্ট করুন।
 
 # Headline while the check runs.
 store-upd-checking = আপডেট খোঁজা হচ্ছে।
 
 # Headline while one update goes in on its own; its name is given.
-store-upd-updating-one = { $name } আপডেট হচ্ছে। এটি ঢোকার সময় আপনি কাজ চালিয়ে যেতে পারেন।
+store-upd-updating-one = { $name } আপডেট হচ্ছে। এটি ইনস্টল হওয়ার সময় আপনি কাজ চালিয়ে যেতে পারেন।
 
 # Headline while all the updates go in.
-store-upd-installing-all = আপডেট ইনস্টল হচ্ছে। এগুলো ঢোকার সময় আপনি কাজ চালিয়ে যেতে পারেন।
+store-upd-installing-all = আপডেট ইনস্টল হচ্ছে। এগুলো ইনস্টল হওয়ার সময় আপনি কাজ চালিয়ে যেতে পারেন।
 
 # Headline when the updates are in and the computer must start again.
 # SAFETY: needs a human review before it ships
-store-upd-restart = শেষ করতে রিস্টার্ট করুন: আপডেট ঢুকে গেছে, কম্পিউটার আবার চালু হলে কাজে লাগবে।
+store-upd-restart = আপডেট ইনস্টল শেষ করতে কম্পিউটার রিস্টার্ট করুন।
 
 # Added to the headline when what went in needs a restart.
 # SAFETY: needs a human review before it ships
-store-upd-gone-in-restart = যা ঢুকেছে তা শেষ করতে রিস্টার্ট লাগবে।
+store-upd-gone-in-restart = ইনস্টল শেষ করতে রিস্টার্ট করুন।
 
 # Added to the headline with no internet.
-store-upd-no-more = এই কম্পিউটার ইন্টারনেটে যুক্ত নেই, তাই আর খোঁজা যাচ্ছে না।
+store-upd-no-more = এই কম্পিউটার ইন্টারনেটে যুক্ত নেই, তাই Trindle আর আপডেট খুঁজতে পারছে না।
 
 # Headline when nothing is ready (updates held back are added after it).
 store-upd-none-ready = কোনো আপডেট তৈরি নেই
 
 # Headline with nothing waiting and no internet to look with.
-store-upd-nothing-known = এই কম্পিউটারের জানা কোনো আপডেট অপেক্ষায় নেই। ইন্টারনেটে যুক্ত না থাকলে আরও খোঁজা যায় না।
+store-upd-nothing-known = Trindle অপেক্ষায় থাকা কোনো আপডেটের কথা জানে না। এই কম্পিউটার ইন্টারনেটে যুক্ত না থাকলে এটি আরও খুঁজতে পারে না।
 
 # Name of the apps in the headline's list of what could not be checked.
 store-upd-name-apps = অ্যাপ
@@ -94,7 +94,7 @@ store-upd-name-system = Trindle ও Debian
 store-upd-name-firmware = ফার্মওয়্যার
 
 # Headline when some checks failed; the list of what was not checked is given.
-store-upd-check-failed = { $names }-এর আপডেট খোঁজা যায়নি।
+store-upd-check-failed = Trindle { $names }-এর আপডেট খুঁজে দেখতে পারেনি।
 
 # Headline when everything is up to date.
 store-upd-current = সবকিছু হালনাগাদ আছে।
@@ -106,7 +106,7 @@ store-upd-last-checked = শেষবার দেখা হয়েছে { $t
 store-upd-not-checked = ইন্টারনেট ছাড়া খোঁজা যায় না
 
 # Red words under a card when a check took too long.
-store-upd-too-long = সাড়া দিতে অনেক বেশি সময় লেগেছে।
+store-upd-too-long = খুঁজতে অনেক বেশি সময় লেগেছে।
 
 # Tip of the round button that checks again.
 store-upd-check-again = আবার খুঁজুন
@@ -133,7 +133,7 @@ store-upd-check-for = আপডেট খুঁজুন
 
 # Tip of the round button that releases a thing held back.
 # SAFETY: needs a human review before it ships
-store-upd-release = { $name } ছাড়ুন
+store-upd-release = { $name }-এর আপডেটের অনুমতি দিন
 
 # Tip of the round button that holds a thing's updates back.
 # SAFETY: needs a human review before it ships
@@ -170,11 +170,11 @@ store-upd-from = { $from } থেকে
 store-upd-shared-part = ভাগ করা অংশ, { $from } থেকে
 
 # Note under the Apps card.
-store-upd-yours-alone = শুধু আপনার, তাই পাসওয়ার্ড ছাড়াই আপডেট হয়। অ্যাপ তার নতুন সংস্করণের দরকারি ভাগ করা অংশগুলো সাথে আনে।
+store-upd-yours-alone = এই অ্যাপগুলো শুধু আপনার, তাই পাসওয়ার্ড ছাড়াই আপডেট হয়। অ্যাপের আপডেট তার দরকারি ভাগ করা অংশগুলোও ইনস্টল করে।
 
 # Note under the Apps card: what holding back does.
 # SAFETY: needs a human review before it ships
-store-upd-hold-why = আটকে রাখা আপডেট আপনি না ছাড়া পর্যন্ত যে সংস্করণে আছে সেখানেই থাকে, এবং এখানে ও রিংয়ের "সব ইনস্টল"-এর বাইরে থাকে।
+store-upd-hold-why = আটকে রাখা আপডেট বর্তমান সংস্করণেই থাকে। আপনি আবার আপডেটের অনুমতি না দেওয়া পর্যন্ত, এখানে ও রিংয়ে সব আপডেট ইনস্টল করার সময় এটি বাদ থাকে।
 
 # Heading of the Apps card.
 store-upd-card-apps = অ্যাপ
@@ -203,11 +203,11 @@ store-upd-card-plugins = প্লাগইন
 store-upd-nothing-held = কিছুই আটকে রাখা নেই।
 
 # On a row of the Held back card for a thing released while the page is open.
-store-upd-released = ছাড়া হয়েছে
+store-upd-released = আটকে রাখা নেই
 
 # Note under the Held back card: what releasing does.
 # SAFETY: needs a human review before it ships
-store-upd-release-why = ছাড়া জিনিস আবার বাকিদের সাথে, এখানের ও রিংয়ের "সব ইনস্টল" থেকে ঢোকে।
+store-upd-release-why = আপনি আবার আপডেটের অনুমতি দিলে এটি বাকিদের সাথে ইনস্টল হবে, এখানে ও রিংয়ে।
 
 # Name on the Held back card of a device whose firmware is not named now.
 store-upd-device-firmware = একটি ডিভাইসের ফার্মওয়্যার
@@ -224,8 +224,8 @@ store-upd-version-to = { $from } থেকে { $to }
 # On a row: Debian's updates, how many, which go in by themselves or together.
 store-upd-debian-count =
     { $n ->
-        [one] ১টি আপডেট, যা একাই ঢোকে
-       *[other] { $n }টি আপডেট, যা একসাথে ঢোকে
+        [one] ১টি আপডেট, একা ইনস্টল হয়
+       *[other] { $n }টি আপডেট, একসাথে ইনস্টল হয়
     }
 
 # On a row of Debian's updates: where it comes from.
@@ -241,7 +241,7 @@ store-upd-has-trindle = এই কম্পিউটারে Trindle { $version
 store-upd-card-system = Trindle ও Debian
 
 # Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Debian-এর প্যাকেজগুলো একটি আরেকটির সাথে মানানসই করে তৈরি, তাই একটি একা ঢোকালে অন্যগুলো সাথে আসতে পারে বা তালগোল পাকিয়ে যেতে পারে। তাই সেগুলো একটি বোতাম থেকে একসাথে ঢোকে।
+store-upd-debian-why = Debian প্যাকেজগুলো একসাথে কাজ করার জন্য তৈরি। শুধু একটি ইনস্টল করলে অন্যগুলোও আসতে পারে, বা সেগুলো তালগোল পাকাতে পারে, তাই সবগুলো একসাথে ইনস্টল হয়।
 
 # Note on the Trindle and Debian card: why no row has a Hold back button.
 # SAFETY: needs a human review before it ships
@@ -255,17 +255,9 @@ store-upd-card-security = নিরাপত্তা আপডেট
 # SAFETY: needs a human review before it ships
 store-upd-security-on = চালু, প্রতিদিন
 
-# On the security card.
-# SAFETY: needs a human review before it ships
-store-upd-security-note = Debian-এর সংশোধন প্রতিদিন না জিজ্ঞেস করেই ঢোকে।
-
-# On the security card.
-# SAFETY: needs a human review before it ships
-store-upd-security-part = Trindle-এর অংশ; বন্ধ করা যায় না।
-
 # On the security card: that holding back never stops these.
 # SAFETY: needs a human review before it ships
-store-upd-never-held = কোনো আপডেট আটকে রাখলেও এগুলো থামে না।
+store-upd-never-held = কোনো আপডেট আটকে রাখলেও নিরাপত্তা আপডেট থামে না।
 
 # Firmware card: the computer has no updater.
 store-upd-fw-none = এই কম্পিউটারে ফার্মওয়্যার আপডেটার নেই।
@@ -279,7 +271,7 @@ store-upd-fw-version = সংস্করণ { $version }
 
 # Note on the firmware card when the updater is there.
 # SAFETY: needs a human review before it ships
-store-upd-fw-note = কম্পিউটার রিস্টার্ট হলে নতুন ফার্মওয়্যার ঢোকে।
+store-upd-fw-note = কম্পিউটার রিস্টার্ট হলে নতুন ফার্মওয়্যার ইনস্টল হয়।
 
 # Note on the firmware card when the updater is missing.
 store-upd-fw-install = ফার্মওয়্যার হালনাগাদ রাখতে fwupd ইনস্টল করুন।
@@ -294,22 +286,22 @@ store-upd-fw-no-list = fwupd সবচেয়ে নতুন তালিক�
 store-upd-no-flathub = Flathub-এ পৌঁছানো যায়নি।
 
 # Red words when Debian's lists could not be fetched.
-store-upd-no-lists = Debian-এর তালিকা আনা যায়নি।
+store-upd-no-lists = Trindle Debian-এর তালিকা আনতে পারেনি।
 
 # Red words when Debian's lists could not be fetched; the reason follows.
-store-upd-no-lists-why = Debian-এর তালিকা আনা যায়নি। { $why }
+store-upd-no-lists-why = Trindle Debian-এর তালিকা আনতে পারেনি। { $why }
 
 # Red words under a row when its updates could not be held back or released: the list of what is held could not be kept.
-store-upd-not-held-list = আটকে রাখা হয়নি। আটকে রাখা জিনিসের তালিকা রাখা যায়নি: { $why }।
+store-upd-not-held-list = Trindle এটি আটকে রাখতে পারেনি, কারণ আটকে রাখা আপডেটের তালিকা সংরক্ষণ করতে পারেনি: { $why }।
 
 # The same, for a release.
-store-upd-not-released-list = ছাড়া হয়নি। আটকে রাখা জিনিসের তালিকা রাখা যায়নি: { $why }।
+store-upd-not-released-list = Trindle আবার আপডেটের অনুমতি দিতে পারেনি, কারণ আটকে রাখা আপডেটের তালিকা সংরক্ষণ করতে পারেনি: { $why }।
 
 # Red words when Flatpak could not be told a thing is held back.
-store-upd-held-not-told = অ্যাপে আটকে রাখা হয়েছে, কিন্তু Flatpak নিজেকে জানানো যায়নি, তাই অ্যাপ আপডেট করে এমন অন্য কিছু এটি ঢুকিয়ে দিতে পারে।
+store-upd-held-not-told = এটি অ্যাপে আটকে রাখা হয়েছে, কিন্তু Trindle Flatpak-এ এটি বদলাতে পারেনি। অ্যাপ আপডেট করে এমন অন্য প্রোগ্রাম এখনও এটি ইনস্টল করে দিতে পারে।
 
 # Red words when Flatpak could not be told a thing is released.
-store-upd-released-not-told = অ্যাপে ছাড়া হয়েছে, কিন্তু Flatpak নিজেকে জানানো যায়নি এবং এটি এখনও বাদ রাখতে পারে। আবার আটকে রেখে ছেড়ে দিন।
+store-upd-released-not-told = অ্যাপে আবার আপডেটের অনুমতি দেওয়া হয়েছে, কিন্তু Trindle Flatpak-এ এটি বদলাতে পারেনি, তাই Flatpak এখনও এটি বাদ রাখতে পারে। আগে আটকে রাখুন, তারপর আবার আপডেটের অনুমতি দিন।
 
 # Red words: the above, then what Flatpak itself said.
 store-upd-flatpak-said = { $words } Flatpak বলেছে: { $why }
@@ -317,9 +309,15 @@ store-upd-flatpak-said = { $words } Flatpak বলেছে: { $why }
 # Name of Trindle itself on its row of updates.
 store-upd-trindle = Trindle
 
+# Said when a security fix for a boxed app can't be downloaded. { $package } is the package, { $version } the fixed version.
+store-patch-not-fetched = Trindle { $package } { $version } ডাউনলোড করতে পারেনি।
+
+# Said when a security fix for a boxed app was downloaded but isn't there to use.
+store-patch-not-found = Trindle যে প্যাকেজ ডাউনলোড করেছিল তা খুঁজে পায়নি।
+
 
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
-store-upd-off = নিজে থেকে হালনাগাদ খোঁজা বন্ধ আছে। দেখতে "হালনাগাদ খুঁজুন" চাপুন।
+store-upd-off = নিজে থেকে আপডেট খোঁজা বন্ধ আছে।
 
 # How a card stands with nothing known to wait, looking by itself switched off and no check pressed yet.
 store-upd-not-looked = খোঁজা হয়নি
@@ -334,8 +332,7 @@ store-upd-stopping = থামানো হচ্ছে
 store-upd-stopped = থামানো হয়েছে। চালিয়ে যেতে "হালনাগাদ করুন" চাপুন।
 
 # Under the Apps card when Install all was stopped.
-store-upd-stopped-all = থামানো হয়েছে। চালিয়ে যেতে "ইনস্টল করুন" চাপুন।
+store-upd-stopped-all = থামানো হয়েছে। চালিয়ে যেতে আবার ইনস্টল করুন।
 
 # Note under the Apps card.
 store-upd-steam-restarts = কোনো গেম না চললে Steam আবার চালু হবে।
-

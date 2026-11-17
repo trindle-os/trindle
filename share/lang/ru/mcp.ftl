@@ -49,3 +49,35 @@ mcp-ask-pair = выполнить сопряжение с устройством
 # SAFETY: needs a human review before it ships
 mcp-ask-undo = вернуть настройки и разрешения приложений в состояние до: { $note }
 
+# The question for putting back a snapshot that also holds an app's own settings file or cache; the app's id and the earlier question, in quotes, come in.
+mcp-ask-undo-app = вернуть настройки, разрешения и файлы { $id } как было до: { $note }. Если { $id } открыто, оно сначала закроется
+
+# The question for closing an app and starting it again; the app's id comes in.
+mcp-ask-restart = закрыть { $id } и запустить снова. Несохранённое в нём пропадёт
+
+# The question for changing a setting in an app's own settings file; the app's id, and the setting, the file and both values in quotes, come in.
+mcp-ask-app-setting = изменить { $key } в { $file } у { $id } с { $from } на { $to }. Если { $id } открыто, оно сначала закроется
+
+# The same question when the setting is not in the file yet and is added.
+mcp-ask-app-setting-new = добавить { $key } со значением { $to } в { $file } у { $id }. Если { $id } открыто, оно сначала закроется
+
+# The question for clearing an app's cache; the app's id comes in.
+mcp-ask-cache = очистить кэш { $id }. Если { $id } открыто, оно сначала закроется, а копия кэша сохранится, чтобы его можно было вернуть
+
+# The question for pairing a Bluetooth device; its name, in quotes, and its address come in.
+# SAFETY: needs a human review before it ships
+mcp-ask-pair-named = выполнить сопряжение с устройством Bluetooth { $name } ({ $address })
+
+# The question for closing a window; the window's title or app name, in quotes, comes in.
+mcp-ask-close = закрыть { $name }
+
+# The question for opening an app; the app's name, in quotes, comes in.
+mcp-ask-open = открыть { $name }
+
+# The question for letting an app use something; the app's Flathub id and the permission (network, home, devices, sound or bluetooth) come in.
+# SAFETY: needs a human review before it ships
+mcp-ask-allow = разрешить { $id } использовать: { $what }
+
+# The question for taking a permission away from an app; the app's Flathub id and the permission come in.
+# SAFETY: needs a human review before it ships
+mcp-ask-deny = запретить { $id } использовать: { $what }

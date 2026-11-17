@@ -18,8 +18,10 @@ store-nav-updates-waiting = Updates ({ $n })
 store-nav-plugins = Plugins
 # Side bar place and title: the AppImages AppImageHub lists.
 store-nav-browse = Browse AppImages
-# Side bar place: apps from GitHub.
-store-nav-github = From GitHub
+# Side bar place and title: the one detailed search over Flathub, AppImages and GitHub.
+store-nav-github = Search
+# Heading of the Flatpaks a detailed search found on Flathub.
+store-gh-flathub = Flatpaks on Flathub ({ $n })
 # Side bar place: where software comes from.
 store-nav-sources = Software sources
 # Side bar place, title of the page and its way back: moving apps and settings to another computer.
@@ -30,8 +32,6 @@ store-group-apps = Apps
 store-group-settings = Settings for apps
 # Small heading over the categories of apps.
 store-group-categories = Categories
-# Small heading over the other ways to get an app.
-store-group-more = More ways to get apps
 # Title of a page of search results; the words searched for are in the quotes.
 store-grid-results = Results for “{ $text }”
 # Title of the front page of apps, and of a page before the catalogue has come.
@@ -41,7 +41,7 @@ store-grid-popular = Popular
 # Title of the page of apps from a source, before the catalogue has come.
 store-grid-apps = Apps
 # Red words under the search box when an app asked for is not in the catalogue.
-store-not-in-catalogue = { $id } is not in the Flathub catalogue.
+store-not-in-catalogue = { $id } isn't in the Flathub catalogue.
 
 ## Categories of apps (src/store/catalogue.rs)
 
@@ -66,18 +66,18 @@ store-cat-utility = Utilities
 # Side bar category: tools for the computer itself.
 store-cat-system = System
 # Red words when the list of apps could not be read.
-store-catalogue-unreadable = The catalogue could not be read: { $why }
+store-catalogue-unreadable = Trindle couldn't read the catalogue: { $why }
 # Red words when Flathub's list of apps could not be fetched. { $why } is what Flatpak said.
-store-catalogue-not-fetched = The list of apps could not be fetched from Flathub. Check the internet connection. { $why }
+store-catalogue-not-fetched = Trindle couldn't get the list of apps from Flathub. Check your internet connection. { $why }
 
 ## Dropping a file on the window (src/store/dropped.rs)
 
 # Red words under the search box when nothing that was dropped on the window is a kind Apps takes.
-store-dropped-only = Only .deb, .AppImage and .flatpakref files can be dropped here.
+store-dropped-only = You can only drop .deb, .AppImage and .flatpakref files here.
 
 ## Why an app was not updated (src/store/mod.rs)
 
 # Red words under an app that Flatpak did not update; what Flatpak said follows.
-store-not-updated-said = Not updated. Flatpak said: { $why }
+store-not-updated-said = Flatpak didn't update it: { $why }
 # Red words under an app that Flatpak did not update and gave no reason for.
-store-not-updated-none = Not updated, and Flatpak gave no reason.
+store-not-updated-none = It wasn't updated. No reason was given.

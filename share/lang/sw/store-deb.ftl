@@ -13,17 +13,17 @@ store-deb-not-finished = Faili hii si kifurushi cha Debian kinachoweza kusakinis
 store-deb-ready = { $name } iko tayari kusakinishwa kwenye folda yake yenyewe.
 
 # Red words at the top of the window for a package made for another kind of computer.
-store-deb-elsewhere = Kifurushi hiki ni cha kompyuta za { $arch }, kwa hiyo hakiwezi kuwekwa kwenye hii.
+store-deb-elsewhere = Kifurushi hiki ni cha kompyuta za { $arch }, kwa hiyo hakiwezi kusakinishwa kwenye hii.
 
 # Red words at the top of the window when the package is Trindle itself.
-store-deb-trindle = Hii ni Trindle yenyewe. Inasasishwa kutoka ukurasa wa Masasisho wa Programu, si kutoka kwenye faili.
+store-deb-trindle = Hii ni Trindle yenyewe. Isasishe kutoka ukurasa wa Masasisho katika Programu, si kutoka kwenye faili.
 
 # Red words at the top of the window for a driver or a background service.
-store-deb-service = { $name } ni kiendeshi au huduma ya usuli, ambayo haiwezi kufanya kazi kutoka folda yake yenyewe, kwa hiyo haiwezi kusakinishwa hapa.
+store-deb-service = { $name } ni kiendeshi au huduma ya usuli. Haiwezi kufanya kazi kutoka folda yake yenyewe, kwa hiyo haiwezi kusakinishwa hapa.
 
 # Words on the caution card above every package.
 # SAFETY: needs a human review before it ships
-store-deb-caution = Kifurushi kutoka nje ya Debian na Trindle huwekwa kwenye folda yake yenyewe, ambako kinadhibitiwa lakini hakifungwi kabisa. Tafadhali sakinisha tu vile vya watengenezaji unaowaamini.
+store-deb-caution = Kifurushi kutoka nje ya Debian na Trindle husakinishwa kwenye folda yake yenyewe. Kinadhibitiwa huko, lakini hakifungwi kabisa. Sakinisha tu vifurushi vya watengenezaji unaowaamini.
 
 # Words at the top of the window once the package is installed.
 store-deb-installed = { $name } imesakinishwa kwenye folda yake yenyewe.
@@ -36,7 +36,7 @@ store-deb-where = Ilikotoka
 
 # Tip and spoken name of the round button that removes the package and what it saved.
 # SAFETY: needs a human review before it ships
-store-deb-remove = Kiondoe pamoja na kilichohifadhi
+store-deb-remove = Kiondoe pamoja na data yake
 
 # Word beside the ring while the package goes in.
 store-deb-installing = Inasakinisha
@@ -52,23 +52,20 @@ store-deb-reinstall = Sakinisha upya
 store-deb-update = Sasisha
 
 # Heading of the card for a package not installed yet.
-store-deb-goes-in = Kinawekwa kwenye folda yake yenyewe, kikidhibitiwa kwa kawaida
+store-deb-goes-in = Kinasakinishwa kwenye folda yake yenyewe iliyodhibitiwa
 
 # Under that heading.
 # SAFETY: needs a human review before it ships
-store-deb-goes-in-note = Hakuna nenosiri linalohitajika. Hakiwezi kufikia intaneti, sauti wala faili zako hadi uruhusu.
+store-deb-goes-in-note = Hakuna nenosiri linalohitajika. Hakiwezi kutumia intaneti wala sauti, au kuona faili zako, hadi uruhusu.
 
 # Heading of the card for a package installed at this version.
 store-deb-same-version = Toleo la { $version } limesakinishwa kwenye folda yake yenyewe
-
-# Under that heading.
-store-deb-same-version-note = Kisakinishe upya hapo ikiwa kimeacha kufanya kazi vizuri.
 
 # Heading of the card for a package installed at another version.
 store-deb-other-version = Toleo la { $version } limesakinishwa kwenye folda yake yenyewe
 
 # Under that heading: the version this brings.
-store-deb-other-version-note = Kukisakinisha hapo kunakipeleka hadi toleo la { $version }, huku kilichohifadhi kikibaki.
+store-deb-other-version-note = Hii hukisasisha hadi toleo la { $version } na kuweka kilichohifadhi.
 
 # Facts line: how big the package is once installed.
 store-deb-fact-size = Ukubwa kikishasakinishwa
@@ -80,13 +77,13 @@ store-deb-fact-arch = Kimetengenezwa kwa ajili ya
 store-deb-no-description = Kifurushi hiki hakina maelezo.
 
 # Words at the top of the window while the package goes in.
-store-deb-installing-note = Inasakinisha kwenye folda yake yenyewe. Kuleta kinachohitaji kunaweza kuchukua dakika chache.
+store-deb-installing-note = Inasakinisha kwenye folda yake yenyewe. Kupakua sehemu inazohitaji kunaweza kuchukua dakika chache.
 
 # Words at the top of the window once the package is installed.
 store-deb-done = Imesakinishwa kwenye folda yake yenyewe. Utaipata kwenye pete.
 
 # Red words at the top of the window when parts the package needs could not be found; the parts follow.
-store-deb-missing = Imesakinishwa kwenye folda yake yenyewe, lakini sehemu hizi hazikupatikana, kwa hiyo huenda isianze: { $parts }.
+store-deb-missing = Imesakinishwa kwenye folda yake yenyewe, lakini sehemu hizi hazipo, kwa hiyo huenda isianze: { $parts }.
 
 # Words at the top of the window once the package is removed.
 # SAFETY: needs a human review before it ships
@@ -108,7 +105,7 @@ store-parts-not-deb = { $path } si kifurushi cha Debian kinachoweza kusakinishwa
 store-parts-not-unpacked = { $path } haikuweza kufunguliwa.
 
 # Red words when the program is not one kept in a box.
-store-loose-not-boxed = Programu hiyo haihifadhiwi kwenye boksi.
+store-loose-not-boxed = Programu hiyo haiendeshwi kwenye boksi.
 
 # Name of Trindle's own terminal in the ring.
 store-boxed-terminal = Terminal
@@ -130,16 +127,16 @@ store-boxed-x-could-not-open = { $app } haikuweza kufunguka
 
 # Body of the notice the first time a terminal opens outside its box.
 # SAFETY: needs a human review before it ships
-store-boxed-terminal-told = Terminal inaweza kufikia sehemu kubwa zaidi ya kompyuta yako kuliko programu nyingine, kwa sababu inahitaji hivyo kwa kazi yake. Andika amri unazozielewa tu, kutoka kwa watu unaowaamini.
+store-boxed-terminal-told = Terminal inaweza kufikia sehemu kubwa zaidi ya kompyuta yako kuliko programu nyingine. Andika tu amri unazozielewa, kutoka kwa watu unaowaamini.
 
-# Title of the notice when a plugin allowed the home network has none.
-store-boxed-home-off = Mtandao wa nyumbani umezimwa
+# Title of the notice when a plugin allowed the local network has none.
+store-boxed-home-off = Hakuna mtandao wa ndani
 
 # Body of that notice: the plugin's name and why.
 store-boxed-home-off-why = { $app } haina mtandao: { $why }
 
 # Why a plugin allowed the home network has none: Trindle could not find its own program.
-store-boxed-home-why-self = haikuweza kupata programu yake yenyewe
+store-boxed-home-why-self = programu ya Trindle haipo
 
 # The same: the unshare program is missing.
 store-boxed-home-why-unshare = unshare haijasakinishwa
@@ -148,25 +145,31 @@ store-boxed-home-why-unshare = unshare haijasakinishwa
 store-boxed-home-why-pasta = pasta haijasakinishwa
 
 # The same: the network room was not made.
-store-boxed-home-why-not-made = chumba chake cha mtandao hakikutengenezwa
+store-boxed-home-why-not-made = mtandao wake haukuwekwa
 
 # The same: the room was not a new one, so it was left alone.
-store-boxed-home-why-not-new = chumba chake cha mtandao hakikuwa kipya
+store-boxed-home-why-not-new = mtandao wake tayari ulikuwepo
 
 # The same: the filter that keeps a box from making a room of its own could not be made.
-store-boxed-home-why-filter = kichujio cha miito ya mfumo hakikuweza kutengenezwa
+store-boxed-home-why-filter = Trindle haikuweza kuweka kichujio cha usalama
 
 # The same: the room's rules would not load.
-store-boxed-home-why-rules = sheria za chumba hazikupakia
+store-boxed-home-why-rules = sheria zake za mtandao hazikuweza kupakia
 
 # The same: a program would not start, with its name and the reason.
-store-boxed-home-why-would-not-start = { $program } haikuanza: { $why }
+store-boxed-home-why-would-not-start = { $program } haikuweza kuanza: { $why }
 
 # The same: pasta refused, with what it said.
 store-boxed-home-why-pasta-said = pasta ilisema: { $why }
 
 # The same: pasta could not join the room and said nothing.
-store-boxed-home-why-pasta-no-join = pasta haikuweza kujiunga na chumba
+store-boxed-home-why-pasta-no-join = pasta haikuweza kuunganisha mtandao wake
+
+# Said when an app can't be installed because its package has a link as a top folder. { $name } is the folder.
+store-parts-link = Folda ya juu { $name } ni kiungo, kwa hiyo kifurushi hakiwezi kutumika.
+
+# Said when an app can't be installed in a box because it is a driver or a background service. { $name } is the app.
+store-boxed-driver = { $name } ni dereva au huduma ya nyuma. Hizo haziwezi kufanya kazi kutoka kwenye folda yake yenyewe, kwa hiyo haikusakinishwa.
 
 
 
@@ -174,5 +177,10 @@ store-boxed-home-why-pasta-no-join = pasta haikuweza kujiunga na chumba
 store-downloaded-opened = Imefunguliwa bila intaneti
 
 # Body of that notice: why, and what the program was given.
-store-downloaded-why = Ilipakuliwa, kwa hiyo programu ina faili hiyo tu, ya kusomwa tu.
+store-downloaded-why = Kwa kuwa ilipakuliwa, programu inaweza kusoma faili hiyo moja tu.
 
+# Title of the notice when the desktop could not be asked for a display for an older program.
+store-boxed-x-unasked = Programu za zamani haziwezi kufunguka
+
+# Body of that notice: what to do.
+store-boxed-x-unasked-why = Ondoka kisha ingia tena, halafu jaribu tena

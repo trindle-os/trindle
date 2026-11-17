@@ -1,0 +1,129 @@
+## What an app can be allowed to do, and what goes wrong without it. Each
+## permission has a name (said after "asks for", as in "Weather asks for
+## the internet and sound"), the line under its switch, and for some a warning.
+
+access-network-name = das Internet
+access-network-without = Es kann sich nicht mit dem Internet oder anderen Computern in der Nähe verbinden.
+access-sound-name = Ton
+access-sound-without = Es gibt keinen Ton von sich.
+access-microphone-name = dein Mikrofon
+access-microphone-without = Es kann dich nicht hören.
+access-sound-and-microphone-name = Ton und dein Mikrofon
+access-sound-and-microphone-without = Es gibt keinen Ton von sich und kann dich nicht hören.
+access-files-name = deine Ordner Dokumente, Downloads, Bilder, Musik, Videos und Schreibtisch
+access-files-without = Es kann deine Dateien nicht öffnen und nichts in deinen Ordnern speichern.
+access-home-name = alles in deinem Home-Ordner, auch versteckte Einstellungsdateien
+access-home-without = Es kann deine Dateien nicht öffnen und nichts in deinen Ordnern speichern.
+access-devices-name = deine Kamera und andere angeschlossene Geräte
+access-devices-without = Es kann dich nicht sehen und nichts verwenden, was du anschließt.
+access-bluetooth-name = Bluetooth-Geräte wie Kopfhörer
+access-bluetooth-without = Es kann sich über Bluetooth mit nichts verbinden.
+access-notifications-name = Benachrichtigungen
+access-notifications-without = Es kann dir nicht Bescheid geben, wenn etwas passiert.
+access-background-name = Start beim Anmelden
+access-background-without = Es läuft nur, solange du es geöffnet hast.
+access-screen-name = Bilder deines Bildschirms, das Kopierte und Tippen für dich, als wäre es deine Tastatur
+access-screen-without = Es kann keine anderen Fenster sehen und nicht jederzeit lesen, was du kopierst.
+access-x11-name = Zeichnen seiner Fenster auf die ältere Art, womit es andere ältere Programme und ihre Eingaben beobachten kann
+access-x11-without = Seine Fenster öffnen sich nicht.
+access-computer-name = Arbeiten außerhalb seiner Box, mit allem, was du selbst erreichen kannst
+access-computer-without = Was du darin eintippst, bleibt in seiner Box, also funktionieren sudo und deine eigenen Dateien dort nicht.
+access-control-name = Steuerung von Tastatur, Maus und Zwischenablage
+access-control-without = Es kann den Zeiger nicht bewegen, nichts tippen und nicht teilen, was du kopierst.
+access-capture-name = Teilen von Maus und Tastatur mit einem anderen Computer
+access-capture-without = Der Zeiger kann nicht zu einem anderen Computer wechseln.
+access-copied-name = die Dateien, die du kopierst
+access-copied-without = Es kann die Dateien, die du kopierst, nicht lesen und nicht an einen anderen Computer senden.
+access-summon-name = Öffnen des Rings über einem Vollbildfenster, als hättest du die Taste gedrückt
+access-summon-without = Seine Tasten und Klicks öffnen den Ring nur auf dem Desktop, nie über einem Vollbildfenster.
+access-listen-name = Erreichbarkeit für andere Computer in deinem lokalen Netzwerk
+access-listen-without = Andere Computer in deinem lokalen Netzwerk können es nicht finden und sich nicht damit verbinden.
+access-home-network-name = nur Geräte in deinem lokalen Netzwerk
+access-home-network-without = Es kann Drucker, Scanner und andere Geräte im lokalen Netzwerk nicht finden und sich nicht mit ihnen verbinden.
+access-usb-devices-name = Scanner und USB-Geräte
+access-usb-devices-without = Es kann keinen Scanner verwenden, der an diesen Computer angeschlossen ist.
+access-expand-name = Ausschreiben von Kürzeln beim Tippen
+access-expand-without = Seine Kürzel werden beim Tippen nicht ausgeschrieben.
+access-accessibility-name = Vorlesen aller Fenster
+access-accessibility-without = Es kann deine Fenster nicht vorlesen.
+access-unnamed-name = etwas, das es nicht genannt hat
+
+access-control-warning = Es kann tippen, klicken und lesen, was du kopierst, als wärst du es selbst. Erlaube das nur einem Plugin, dem du vertraust.
+access-capture-warning = Solange der Zeiger auf dem anderen Computer ist, geht alles, was du tippst und klickst, an dieses Plugin. Erlaube das nur einem Plugin, dem du vertraust.
+access-copied-warning = Es kann genau die Dateien lesen, die du kopierst, solange es erlaubt ist, und sonst nichts. Erlaube das nur einem Plugin, dem du vertraust.
+access-summon-warning = Es kann den Ring, der alles annimmt, was du tippst, über ein Spiel oder einen Film legen, ohne dass du eine Taste drückst. Erlaube das nur einem Plugin, dem du vertraust.
+access-home-network-warning = Es kann mit jedem Gerät in deinem lokalen Netzwerk sprechen, auch mit deinem Router, aber nicht mit dem Internet. Erlaube das nur einem Plugin, dem du vertraust.
+access-usb-devices-warning = Es kann die Scanner und Bildgeräte verwenden, die beim Start angeschlossen sind, aber kein anderes USB-Gerät. Erlaube das nur einem Plugin, dem du vertraust.
+access-expand-warning = Trindle achtet beim Tippen auf deine Kürzel und tippt dann die Wörter für dich. Das Plugin sieht nie, was du tippst. Erlaube das nur einem Plugin, dem du vertraust.
+access-accessibility-warning = Es kann alles lesen, was auf deinem Bildschirm steht. Wie jedes Vorleseprogramm kann es auch Schaltflächen drücken und in anderen Fenstern Text tippen, obwohl es keine eigene Tastatur und keine eigene Maus hat. Erlaube das nur einem Plugin, dem du vertraust.
+
+## Titles (for a tooltip) and the line under a switch, which says what switching it off means.
+access-network-title = Das Internet
+access-network-off = Aus heißt: Es kann sich nicht mit dem Internet oder anderen Computern in der Nähe verbinden.
+access-sound-title = Ton wiedergeben
+access-sound-off = Aus heißt: kein Ton.
+access-microphone-title = Dein Mikrofon
+access-microphone-off = Aus heißt: Es kann dich nicht hören.
+access-sound-and-microphone-title = Ton wiedergeben und dein Mikrofon verwenden
+access-sound-and-microphone-off = Aus heißt: Es gibt keinen Ton von sich und kann dich nicht hören.
+access-files-title = Deine Ordner Dokumente, Downloads, Bilder, Musik, Videos und Schreibtisch
+access-files-off = Aus heißt: Es kann deine Dateien nicht öffnen und nichts in deinen Ordnern speichern.
+access-home-title = Alles in deinem Home-Ordner, auch versteckte Einstellungsdateien
+access-home-off = Aus heißt: Es kann deine Dateien nicht öffnen und nichts in deinen Ordnern speichern.
+access-devices-title = Deine Kamera und andere angeschlossene Geräte
+access-devices-off = Aus heißt: Es kann deine Kamera und angeschlossene Geräte nicht verwenden.
+access-bluetooth-title = Bluetooth, für Kopfhörer und andere Geräte in der Nähe
+access-bluetooth-off = Aus heißt: Es kann sich über Bluetooth mit nichts verbinden.
+access-notifications-title = Benachrichtigungen anzeigen
+access-notifications-off = Aus heißt: Es kann dir nicht Bescheid geben, wenn etwas passiert.
+access-background-title = Von selbst starten, wenn du dich anmeldest
+access-background-off = Aus heißt: Es läuft nur, solange du es geöffnet hast.
+access-screen-title = Bilder deines Bildschirms aufnehmen, lesen, was du kopierst, und tippen wie auf deiner Tastatur
+access-screen-off = Aus heißt: Es kann keine anderen Fenster sehen und nicht jederzeit lesen, was du kopierst.
+access-x11-title = Seine Fenster auf die ältere Art zeichnen, womit es andere ältere Programme und ihre Eingaben beobachten kann
+access-x11-off = Aus heißt: Seine Fenster öffnen sich nicht.
+access-computer-title = Außerhalb seiner Box arbeiten, mit allem, was du selbst erreichen kannst
+access-computer-off = Aus heißt: Was du darin eintippst, bleibt in seiner Box, also funktionieren sudo und deine eigenen Dateien dort nicht.
+access-control-title = Tastatur, Maus und Zwischenablage steuern
+access-control-off = Aus heißt: Es kann den Zeiger nicht bewegen, nichts tippen und nicht teilen, was du kopierst.
+access-capture-title = Maus und Tastatur mit einem anderen Computer teilen
+access-capture-off = Aus heißt: Der Zeiger kann nicht zu einem anderen Computer wechseln.
+access-copied-title = Die Dateien lesen, die du kopierst
+access-copied-off = Aus heißt: Es kann die Dateien, die du kopierst, nicht lesen und nicht an einen anderen Computer senden.
+access-summon-title = Den Ring über einem Vollbildfenster öffnen, als hättest du die Taste gedrückt
+access-summon-off = Aus heißt: Seine Tasten und Klicks öffnen den Ring nur auf dem Desktop, nie über einem Vollbildfenster.
+access-listen-title = Anderen Computern in deinem lokalen Netzwerk erlauben, es zu erreichen
+access-listen-off = Aus heißt: Andere Computer in deinem lokalen Netzwerk können es nicht finden und sich nicht damit verbinden.
+access-home-network-title = Nur Geräte in deinem lokalen Netzwerk erreichen
+access-home-network-off = Aus heißt: Es kann Drucker, Scanner und andere Geräte im lokalen Netzwerk nicht finden und sich nicht mit ihnen verbinden.
+access-usb-devices-title = Scanner und USB-Geräte verwenden
+access-usb-devices-off = Aus heißt: Es kann keinen Scanner verwenden, der an diesen Computer angeschlossen ist.
+access-expand-title = Deine Kürzel beim Tippen ausschreiben
+access-expand-off = Aus heißt: Trindle schreibt seine Kürzel beim Tippen nicht aus.
+access-accessibility-title = Lesen, was jedes Fenster zeigt, und es vorlesen
+access-accessibility-off = Aus heißt: Es kann deine Fenster nicht vorlesen.
+access-unnamed-title = Etwas, das es nicht genannt hat
+
+## The few words on a plugin's row of the Permissions page.
+access-note-acts-as-you = es kann wie du handeln
+access-note-home-network = es kann jedes Gerät in deinem lokalen Netzwerk erreichen
+access-note-usb-devices = es kann Scanner und Bildgeräte verwenden
+access-note-expand = es kann in deine Fenster tippen
+access-note-accessibility = es kann alles auf deinem Bildschirm lesen
+
+access-listen-detail = { $ports }, nur von Computern in deinem lokalen Netzwerk. Dafür muss auch das Internet erlaubt sein.
+
+## A request that is unusual for the kind of app that makes it.
+access-unusual = Das ist ungewöhnlich für { $kind }. Erlaube es nur, wenn du der Herkunft dieser App vertraust.
+access-kind-terminal = ein Terminal
+access-kind-calculator = einen Taschenrechner
+access-kind-photo = eine Foto-App
+access-kind-text-editor = einen Texteditor
+access-kind-browser = einen Webbrowser
+access-kind-office = eine Office-App
+access-kind-graphics = eine Grafik-App
+access-kind-game = ein Spiel
+access-kind-sound-video = eine Ton- und Video-App
+access-kind-programming = ein Programmierwerkzeug
+access-kind-utility = ein Hilfsprogramm
+access-kind-other = eine App wie diese

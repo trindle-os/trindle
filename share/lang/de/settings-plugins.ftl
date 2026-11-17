@@ -8,10 +8,10 @@ settings-plugins-title = Deine Plugins
 settings-plugins-keywords = plugins erweiterungen add-ons installiert entfernen einstellungen
 
 # Help line at the foot of the Your plugins page.
-settings-plugins-help = Plugins erweitern Trindle: ein Symbol im Ring, Einstellungen hier, Benachrichtigungen oder etwas, das ab der Anmeldung läuft. Jedes läuft abgeschottet und darf nichts, bis du es unter Berechtigungen erlaubst; diese Seite öffnest du mit der Schaltfläche am Ende des Seitentitels. Die Karte jedes Plugins enthält seine eigenen Einstellungen; der Papierkorb auf einer Karte entfernt das Plugin, wenn du ihn zweimal drückst.
+settings-plugins-help = Plugins erweitern Trindle. Ein Plugin kann ein Symbol im Ring hinzufügen, Einstellungen hier, Benachrichtigungen oder etwas, das beim Anmelden startet. Jedes Plugin läuft in einer eigenen Box und darf nichts verwenden, bis du es unter Berechtigungen erlaubst. Die Schaltfläche neben dem Seitentitel öffnet die Berechtigungen. Um ein Plugin zu entfernen, drücke zweimal auf den Papierkorb auf seiner Karte.
 
 # Red words when the window that asks what a plugin may use could not be opened.
-settings-plugins-window-failed = Das Fenster, das fragt, was es verwenden darf, konnte nicht geöffnet werden.
+settings-plugins-window-failed = Trindle konnte das Fenster nicht öffnen, in dem gefragt wird, was das Plugin verwenden darf.
 
 # Under About it: the plugin's version number is { $v }.
 settings-plugins-version = Version { $v }.
@@ -20,19 +20,15 @@ settings-plugins-version = Version { $v }.
 settings-plugins-version-settled = Version { $v }. { $settled }
 
 # Help text of a plugin's card when it asks for nothing: the plugin's name is { $name }.
-settings-plugins-asks-nothing = { $name } fordert nichts an und läuft daher abgeschottet, ohne dass etwas erlaubt ist.
+settings-plugins-asks-nothing = { $name } fordert nichts an und läuft daher in einer eigenen Box, ohne dass etwas erlaubt ist.
 
 # Help text of a plugin's card: its name is { $name }, { $list } is what it asks for, { $allowed } of { $asks } are allowed.
 # SAFETY: needs a human review before it ships
 settings-plugins-asks-for =
     { $asks ->
-        [one] { $name } fordert { $list } an; { $allowed } von { $asks } erlaubt. Es läuft abgeschottet und nur mit dem, was du erlaubst.
-       *[other] { $name } fordert { $list } an; { $allowed } von { $asks } erlaubt. Es läuft abgeschottet und nur mit dem, was du erlaubst.
+        [one] { $name } fordert { $list } an. Du hast { $allowed } von { $asks } erlaubt. Es läuft in einer eigenen Box und nur mit dem, was du erlaubst.
+       *[other] { $name } fordert { $list } an. Du hast { $allowed } von { $asks } erlaubt. Es läuft in einer eigenen Box und nur mit dem, was du erlaubst.
     }
-
-# Under the line that tells a plugin needs more allowed, beside its Allow button.
-# SAFETY: needs a human review before it ships
-settings-plugins-needs-more = Erlauben zeigt jedes angeforderte Ding mit einem Schalter.
 
 # Heading of the line about a plugin on its card.
 settings-plugins-about-it = Über das Plugin
@@ -71,15 +67,12 @@ settings-plugins-group = Plugins
 # Heading of the line shown when no plugin is installed.
 settings-plugins-none = Keine installiert
 
-# Under the None installed heading.
-settings-plugins-none-sub = In Apps gibt es Plugins zum Hinzufügen.
-
 # Tip of the button at the end of the page's title that opens the Permissions page.
 # SAFETY: needs a human review before it ships
 settings-plugins-open-permissions = Berechtigungen öffnen
 
 # Said at the top of a plugin's card while its service has not yet answered; the plugin's name is {$name}.
-settings-plugins-rows-asking = { $name } wird gefragt.
+settings-plugins-rows-asking = { $name } wird gefragt …
 
 # Said at the top of a plugin's card, and in red under a row, when its service does not answer; the plugin's name is {$name}.
 settings-plugins-rows-silent = { $name } antwortet nicht. Der Dienst ist vielleicht angehalten.
@@ -95,4 +88,3 @@ settings-plugins-rows-failed = { $name } konnte das nicht tun.
 
 # Red words under a row when the change failed; the plugin's name is {$name} and the reason it gave is {$why}.
 settings-plugins-rows-failed-why = { $name } konnte das nicht tun: { $why }.
-

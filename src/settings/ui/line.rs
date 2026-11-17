@@ -4,7 +4,7 @@ use super::{Kit, Msg, icon};
 use crate::toolkit::widget::{column, form_label, note,
                              row, Length, Node, Tone};
 
-const CONTROL_GAP: f32 = 12.0;
+pub const CONTROL_GAP: f32 = 12.0;
 
 pub struct Line {
     title: String,
@@ -14,19 +14,23 @@ pub struct Line {
     below: Vec<Node<Msg>>,
     key: Option<String>,
 
-    room: bool,
+    room: u8,
+}
+
+pub fn sub_key(line: &str) -> String {
+    format!("{line}:sub")
 }
 
 pub fn line(heading: impl Into<String>) -> Line {
-    Line { title: heading.into(), sub: None, icon: None, controls: Vec::new(), below: Vec::new(), key: None, room: false }
+    Line { title: heading.into(), sub: None, icon: None, controls: Vec::new(), below: Vec::new(), key: None, room: 0 }
 }
 
 impl Line {
 
-    pub fn keep_sub(mut self, words: impl Into<String>) -> Self {
+    pub fn keep_sub(mut self, words: impl Into<String>, lines: u8) -> Self {
         let words = words.into();
         self.sub = (!words.is_empty()).then_some(words);
-        self.room = true;
+        self.room = lines.max(1);
         self
     }
 
@@ -63,8 +67,12 @@ impl Line {
 
     pub fn node(mut self, kit: &Kit) -> Node<Msg> {
         let mut words = vec![form_label(self.title)];
-        if self.room {
-            words.push(note(self.sub.unwrap_or_default()).room_for(1));
+        if self.room > 0 {
+            let sub = note(self.sub.unwrap_or_default()).room_for(self.room);
+            words.push(match &self.key {
+                Some(k) => sub.key(sub_key(k)),
+                None => sub,
+            });
         } else if let Some(s) = self.sub {
             words.push(note(s));
         }

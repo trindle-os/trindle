@@ -53,20 +53,20 @@ pub fn drawn_by_processor() -> bool {
 }
 
 pub fn virtual_machine() -> Option<String> {
-    let out = std::process::Command::new("systemd-detect-virt").arg("--vm").output().ok()?;
+    let out = super::run::parsed(std::process::Command::new("systemd-detect-virt").arg("--vm")).output().ok()?;
     let id = String::from_utf8_lossy(&out.stdout).trim().to_string();
     if !out.status.success() || id.is_empty() || id == "none" {
         return None;
     }
     Some(match id.as_str() {
-        "qemu" | "kvm" => "a QEMU virtual machine (GNOME Boxes, virt-manager and the like)".to_string(),
+        "qemu" | "kvm" => t!("common-vm-qemu").to_string(),
         "oracle" => "VirtualBox".to_string(),
         "vmware" => "VMware".to_string(),
         "microsoft" => "Hyper-V".to_string(),
         "parallels" => "Parallels".to_string(),
-        "apple" => "a Mac's virtual machine".to_string(),
+        "apple" => t!("common-vm-apple").to_string(),
         "xen" => "Xen".to_string(),
-        other => format!("a virtual machine ({other})"),
+        other => t!("common-vm-other", name = other).to_string(),
     })
 }
 

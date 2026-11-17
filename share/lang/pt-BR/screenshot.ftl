@@ -108,19 +108,19 @@ screenshot-not-saved = Captura de tela não salva
 screenshot-not-copied = Captura de tela não copiada
 
 # Words of that notice.
-screenshot-clipboard-refused = A área de transferência não aceitou.
+screenshot-clipboard-refused = O Trindle não conseguiu copiar.
 
 # Words of the notice that the screenshot could not be saved: the picture was not made.
-screenshot-no-picture = não foi possível criar a imagem
+screenshot-no-picture = Não foi possível tirar a captura de tela.
 
 # Words of the notice that the screenshot could not be saved: no bus to ask on.
-screenshot-no-bus = não há barramento de sessão para perguntar onde
+screenshot-no-bus = O Trindle não consegue perguntar onde salvar.
 
 # Words of the notice that the screenshot could not be saved: the file chooser could not be asked.
-screenshot-no-chooser = não foi possível consultar o seletor de arquivos
+screenshot-no-chooser = Não foi possível abrir o seletor de arquivos.
 
 # Words of the notice that the screenshot could not be saved: every file name was taken.
-screenshot-no-free-name = nenhum nome livre
+screenshot-no-free-name = Nenhum nome livre
 
 # Words of the notice that the screenshot could not be saved: the path and why it failed.
 screenshot-write-failed = { $path }: { $why }
@@ -129,7 +129,7 @@ screenshot-write-failed = { $path }: { $why }
 screenshot-eye-title = Conta-gotas
 
 # Words that float beside the i of the eye dropper's window.
-screenshot-eye-help = Toque no conta-gotas e clique em qualquer lugar da tela para pegar a cor sob o ponteiro. Escape desiste. Cada cor é copiada na hora como código hexadecimal e guardada na lista abaixo, da mais nova para a mais antiga, para poder ser copiada de novo depois.
+screenshot-eye-help = Clique no conta-gotas e depois em qualquer lugar da tela para pegar a cor sob o ponteiro. Pressione Escape para cancelar. Cada cor é copiada na hora como código hexadecimal e adicionada à lista abaixo, da mais nova para a mais antiga, para você poder copiá-la de novo depois.
 
 # Name of the i button beside the title.
 screenshot-eye-about = Sobre o conta-gotas
@@ -138,18 +138,18 @@ screenshot-eye-about = Sobre o conta-gotas
 screenshot-eye-take = Pegar uma cor
 
 # Sentence under the title while no colour has been taken.
-screenshot-eye-none = Pegue uma cor de qualquer lugar da tela.
+screenshot-eye-none = Pegue uma cor da tela.
 
 # Sentence under the title once colours have been taken.
 screenshot-eye-taken =
     { $n ->
         [one] Uma cor pega: { $newest }.
-        [many] { $n } cores pegas; a mais nova é { $newest }.
-       *[other] { $n } cores pegas; a mais nova é { $newest }.
+        [many] { $n } de cores pegas. A mais nova é { $newest }.
+       *[other] { $n } cores pegas. A mais nova é { $newest }.
     }
 
 # Shown in the big card while no colour has been taken.
-screenshot-eye-latest-empty = A cor que você pegar aparece aqui, grande, pronta para copiar.
+screenshot-eye-latest-empty = Nenhuma cor pega ainda.
 
 # Name of the card that holds the latest colour.
 screenshot-eye-latest = Última cor
@@ -159,10 +159,10 @@ screenshot-eye-latest = Última cor
 screenshot-eye-clear = Limpar a lista
 
 # Head of the card with the list of colours taken.
-screenshot-eye-list = Cores pegas
+screenshot-eye-list = Suas cores
 
 # Shown in the list card while no colour has been taken.
-screenshot-eye-list-empty = As cores pegas com o conta-gotas ficam guardadas aqui, da mais nova para a mais antiga.
+screenshot-eye-list-empty = Nenhuma cor pega ainda.
 
 # SAFETY: needs a human review before it ships
 # Name of the round button that takes a colour out of the list.
@@ -177,11 +177,11 @@ screenshot-pick-title = Compartilhar sua tela com { $app }?
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title when several things can be picked.
-screenshot-pick-many = Escolha um ou mais. Só o que você escolher é compartilhado, até o aplicativo parar ou fechar.
+screenshot-pick-many = Escolha um ou mais. Só o que você escolher é compartilhado, até o aplicativo parar de compartilhar ou ser fechado.
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title when one thing can be picked.
-screenshot-pick-one = Escolha um. Só o que você escolher é compartilhado, até o aplicativo parar ou fechar.
+screenshot-pick-one = Escolha um. Só o que você escolher é compartilhado, até o aplicativo parar de compartilhar ou ser fechado.
 
 # Heading over the screens that can be shared.
 screenshot-pick-screens = Telas
@@ -235,11 +235,11 @@ screenshot-portal-name = Nome
 
 # SAFETY: needs a human review before it ships
 # Heading when an unknown program asks who the person is.
-screenshot-account-asks-unknown = Um programa pergunta quem você é
+screenshot-account-asks-unknown = Um programa quer seus dados
 
 # SAFETY: needs a human review before it ships
 # Heading when a program asks who the person is.
-screenshot-account-asks = { $who } pergunta quem você é
+screenshot-account-asks = { $who } quer seus dados
 
 # Name the screen reader gives to the person's picture.
 screenshot-account-picture = Sua foto
@@ -251,7 +251,7 @@ screenshot-account-signed-in = Conectado como { $id }
 screenshot-apps-search = Buscar aplicativos
 
 # Shown when no app can open the file.
-screenshot-apps-none = Nenhum aplicativo aqui consegue abri-lo
+screenshot-apps-none = Nenhum aplicativo consegue abri-lo
 
 # SAFETY: needs a human review before it ships
 # Name of the switch that remembers the choice.
@@ -313,7 +313,7 @@ screenshot-wallpaper-ask = Definir esta imagem como papel de parede?
 
 # SAFETY: needs a human review before it ships
 # Heading when a program offers a wallpaper.
-screenshot-wallpaper-asks = { $who } oferece um novo papel de parede
+screenshot-wallpaper-asks = { $who } quer definir o papel de parede
 
 # Name the screen reader gives to the picture offered.
 screenshot-wallpaper-picture = O novo papel de parede
@@ -377,7 +377,7 @@ screenshot-print-from = Imprimir de { $who }
 screenshot-print-failed = Não foi possível imprimir
 
 # Words of that notice when the choices made were not kept.
-screenshot-print-lost = As escolhas não foram guardadas. Imprima de novo.
+screenshot-print-lost = Não foi possível salvar as configurações. Imprima de novo.
 
 # Line in the menu on a file or folder: change its name.
 screenshot-chooser-rename = Renomear
@@ -421,7 +421,7 @@ screenshot-chooser-no-folder = Essa pasta não existe.
 
 # SAFETY: needs a human review before it ships
 # Words under the box when saving would replace a file.
-screenshot-chooser-replace-ask = { $name } já existe. Pressione Substituir, ou Enter de novo, para colocar este no lugar.
+screenshot-chooser-replace-ask = { $name } já existe. Para substituí-lo, pressione Substituir ou pressione Enter de novo.
 
 # Words under the box when a key is pressed on Recent, which is not a folder.
 screenshot-chooser-recent-not-folder = Recentes não é uma pasta. Abra uma primeiro.
@@ -461,56 +461,56 @@ screenshot-chooser-replace = Substituir
 
 # SAFETY: needs a human review before it ships
 # What the screen reader says for the button that replaces a folder.
-screenshot-chooser-replace-spoken = Substituir: a pasta que já existe vai para a Lixeira
+screenshot-chooser-replace-spoken = Substituir. A pasta existente é movida para a Lixeira.
 
 # SAFETY: needs a human review before it ships
 # Name of the main button that merges two folders.
 screenshot-chooser-merge = Mesclar
 
 # Words in the question when folders are being pasted.
-screenshot-chooser-rest-folders = A mesma resposta para toda pasta que já existe.
+screenshot-chooser-rest-folders = Fazer isso com todas as pastas que já existem.
 
 # Words in the question when files are being pasted.
-screenshot-chooser-rest-files = A mesma resposta para todo arquivo que já existe.
+screenshot-chooser-rest-files = Fazer isso com todos os arquivos que já existem.
 
 # Name of the switch that gives the same answer to the rest.
 screenshot-chooser-same = Fazer o mesmo com os demais
 
 # Words under the box after Cut.
-screenshot-chooser-was-cut = { $what } recortado. Cole em uma pasta.
+screenshot-chooser-was-cut = Pronto para mover: { $what }
 
 # Words under the box after Copy.
-screenshot-chooser-was-copied = { $what } copiado. Cole em uma pasta.
+screenshot-chooser-was-copied = Pronto para copiar: { $what }
 
 # Words under the box when Paste is pressed and there is nothing to paste.
 screenshot-chooser-nothing-cut = Nada foi recortado nem copiado.
 
 # Words under the box when Paste is pressed while a paste is still going.
-screenshot-chooser-paste-busy = Uma colagem ainda está em andamento.
+screenshot-chooser-paste-busy = O Trindle ainda está colando.
 
 # Red line after some items could not be moved.
 screenshot-chooser-not-moved =
     { $n ->
-        [one] Um item não pôde ser movido: { $names }.
-        [many] { $n } itens não puderam ser movidos: { $names }.
-       *[other] { $n } itens não puderam ser movidos: { $names }.
+        [one] O Trindle não conseguiu mover um item: { $names }.
+        [many] O Trindle não conseguiu mover { $n } de itens: { $names }.
+       *[other] O Trindle não conseguiu mover { $n } itens: { $names }.
     }
 
 # Red line after some items could not be copied.
 screenshot-chooser-not-copied =
     { $n ->
-        [one] Um item não pôde ser copiado: { $names }.
-        [many] { $n } itens não puderam ser copiados: { $names }.
-       *[other] { $n } itens não puderam ser copiados: { $names }.
+        [one] O Trindle não conseguiu copiar um item: { $names }.
+        [many] O Trindle não conseguiu copiar { $n } de itens: { $names }.
+       *[other] O Trindle não conseguiu copiar { $n } itens: { $names }.
     }
 
 # SAFETY: needs a human review before it ships
 # Red line after some items could not be put in the Trash.
 screenshot-chooser-not-trashed =
     { $n ->
-        [one] Um item não pôde ser colocado na Lixeira: { $names }.
-        [many] { $n } itens não puderam ser colocados na Lixeira: { $names }.
-       *[other] { $n } itens não puderam ser colocados na Lixeira: { $names }.
+        [one] O Trindle não conseguiu mover um item para a Lixeira: { $names }.
+        [many] O Trindle não conseguiu mover { $n } de itens para a Lixeira: { $names }.
+       *[other] O Trindle não conseguiu mover { $n } itens para a Lixeira: { $names }.
     }
 
 # Name of the box where a file or folder is renamed.
@@ -525,10 +525,10 @@ screenshot-chooser-items =
     }
 
 # Title of the notice when an email could not be started.
-screenshot-mail-failed = Não foi possível iniciar o e-mail
+screenshot-mail-failed = Não foi possível criar o e-mail
 
 # Why: no mail program is chosen or installed.
-screenshot-mail-no-app = Nenhum programa de e-mail definido. Escolha um em Configurações, Aplicativos padrão.
+screenshot-mail-no-app = Você não escolheu um programa de e-mail. Escolha um em Configurações, Aplicativos padrão.
 
 # Why: a program asked to attach more files than allowed.
 screenshot-mail-too-many = Arquivos demais para anexar.
@@ -540,13 +540,13 @@ screenshot-mail-too-big = Os arquivos são grandes demais para anexar.
 screenshot-mail-bad-file = Não foi possível anexar um arquivo.
 
 # Why: an address was not a plain address.
-screenshot-mail-bad-address = Um endereço não era válido.
+screenshot-mail-bad-address = Um endereço não é válido.
 
 # Why: the subject was too long or had odd characters.
-screenshot-mail-bad-subject = O assunto não era válido.
+screenshot-mail-bad-subject = O assunto não é válido.
 
 # Why: the words were too long or had odd characters.
-screenshot-mail-bad-words = O texto não era válido.
+screenshot-mail-bad-words = O texto não é válido.
 
 # Why: no private place to keep the files.
 screenshot-mail-no-place = Não foi possível guardar os arquivos com segurança.
@@ -575,8 +575,13 @@ screenshot-chooser-pin-not-kept = Não foi possível salvar o item fixado.
 # Red line after some items could not be deleted.
 screenshot-chooser-not-deleted =
     { $n ->
-        [one] Não foi possível excluir { $n } item: { $names }.
-        [many] Não foi possível excluir { $n } itens: { $names }.
-       *[other] Não foi possível excluir { $n } itens: { $names }.
+        [one] O Trindle não conseguiu excluir um item: { $names }.
+        [many] O Trindle não conseguiu excluir { $n } de itens: { $names }.
+       *[other] O Trindle não conseguiu excluir { $n } itens: { $names }.
     }
 
+# What the screen reader says for the list of places down the left of the file chooser.
+screenshot-chooser-places = Locais
+
+# What the screen reader says for the list of files and folders in the file chooser.
+screenshot-chooser-files = Arquivos

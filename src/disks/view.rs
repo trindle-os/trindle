@@ -6,15 +6,18 @@ use crate::toolkit::widget::{Length, Node, Tone, bento, button, card, column, he
 use crate::toolkit::{popup, t, theme};
 use super::{Drives, Msg, help, plan, red};
 use super::model::percent;
-use super::map::map_caption;
 use super::map::MAP_LEAST;
 use super::map::amount_ring;
 use super::map::MapPart;
 use super::map::MapRow;
 use super::map::map_picture;
 
-fn help() -> [&'static str; 3] {
-    [t!("disks-help-1"), t!("disks-help-2"), t!("disks-help-3")]
+fn help() -> Vec<String> {
+    let plain = [t!("disks-help-1"), t!("disks-help-2"), t!("disks-help-3"), t!("disks-name-note"), t!("disks-folder-note"),
+                 t!("disks-startup-note"), t!("disks-room-note")];
+    let mut all: Vec<String> = plain.iter().map(|p| p.to_string()).collect();
+    all.push(t!("disks-hidden-note", lock = crate::common::hidden_drives::not_a_lock()).to_string());
+    all
 }
 
 pub(super) const SHORT_LINE: usize = 56;
@@ -129,7 +132,7 @@ impl Drives {
 
     fn overview(&self) -> Node<Msg> {
         let b = theme::bento();
-        let mut all = vec![tile_head("drive-harddisk-symbolic", t!("disks-your-drives"), Vec::new()), note(map_caption())];
+        let mut all = vec![tile_head("drive-harddisk-symbolic", t!("disks-your-drives"), Vec::new())];
         if !self.loaded {
             all.push(loading_state(MAP_LEAST));
         } else if self.drives.is_empty() {
@@ -235,7 +238,7 @@ impl Drives {
 
     pub(super) fn help_panel(&self) -> Node<Msg> {
         let at = self.help_at;
-        let words = column(help().iter().map(|p| note(*p).width(Length::Fill)).collect()).gap(12.0);
+        let words = column(help().into_iter().map(|p| note(p).width(Length::Fill)).collect()).gap(12.0);
         let panel = card(scroll("help words", words.width(Length::Fill))).floats().width(Length::Fixed(HELP_WIDE));
         popup::under_the_i(panel, at).within()
     }

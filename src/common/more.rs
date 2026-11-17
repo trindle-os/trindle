@@ -48,10 +48,12 @@ fn help_argv(address: &str, error: &str) -> Option<Vec<String>> {
     if !valid(address) {
         return None;
     }
+
     let error = clean_error(error);
+    let error = error.trim_start_matches(|c: char| c == '-' || c.is_whitespace());
     let mut argv = vec![PROGRAM.to_string(), address.to_string()];
     if !error.is_empty() {
-        argv.push(error);
+        argv.push(error.to_string());
     }
     Some(argv)
 }
@@ -147,6 +149,8 @@ mod tests {
         assert_eq!(help_argv("folders", "bad\u{202e}\u{7}words").unwrap(), [PROGRAM, "folders", "bad  words"]);
         assert_eq!(help_argv("folders", " \u{200b} ").unwrap(), [PROGRAM, "folders"]);
         assert_eq!(help_argv("--version", "words"), None);
+        assert_eq!(help_argv("folders", "--version").unwrap(), [PROGRAM, "folders", "version"], "an error is never an option");
+        assert_eq!(help_argv("folders", "- -- ").unwrap(), [PROGRAM, "folders"]);
         let cut = clean_error(&"\u{e9}".repeat(ERROR_LIMIT));
         assert!(cut.len() <= ERROR_LIMIT && cut.chars().all(|c| c == '\u{e9}'));
         assert!(!open_with("--version", "words"));

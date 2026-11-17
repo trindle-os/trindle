@@ -17,7 +17,7 @@ key-enrol-why-addon = Un pilote complémentaire est compilé sur cet ordinateur 
 key-enrol-step1 = Inventez un mot de passe composé uniquement de lettres et de chiffres. L'écran bleu utilise un clavier américain, donc les symboles peuvent se trouver sur d'autres touches. Notez-le : il ne sert qu'une fois.
 
 # Step 2: the restart and how long the blue screen waits.
-key-enrol-step2 = Redémarrez. Un écran bleu intitulé Enroll MOK apparaît avant le démarrage de Trindle. Il abandonne au bout d'environ 10 secondes, soyez donc prêt à appuyer sur une touche.
+key-enrol-step2 = Redémarrez. Un écran bleu intitulé Enroll MOK apparaît avant le démarrage de Trindle. Vous avez environ 10 secondes pour appuyer sur une touche, soyez donc prêt.
 
 # SAFETY: needs a human review before it ships
 # Step 3: the first two screens.
@@ -28,7 +28,7 @@ key-enrol-step3 = Choisissez Enroll MOK, puis Continue.
 key-enrol-step4 = Choisissez Yes, puis saisissez le mot de passe que vous avez inventé.
 
 # Step 5: the last screen.
-key-enrol-step5 = Choisissez Reboot. Le pilote se charge une fois l'ordinateur redémarré.
+key-enrol-step5 = Choisissez Reboot. Le pilote se chargera au redémarrage de l'ordinateur.
 
 # Tip after the steps: what happens when the blue screen is missed and how to be asked again.
-key-enrol-missed = Si vous manquez l'écran bleu, l'ordinateur démarre sans le pilote, comme avant. Rien n'est cassé : exécutez sudo mokutil --import /var/lib/dkms/mok.pub puis redémarrez pour qu'on vous le redemande.
+key-enrol-missed = Si vous manquez l'écran bleu, l'ordinateur démarre sans le pilote, comme avant. Rien n'est cassé. Pour qu'on vous le redemande, exécutez sudo mokutil --import /var/lib/dkms/mok.pub puis redémarrez.

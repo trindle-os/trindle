@@ -2,7 +2,7 @@
 
 use super::KeyAction;
 
-use crate::{focus::KeyboardFocusTarget, shell::FullscreenSurface, state::Backend, AnvilState};
+use crate::{focus::KeyboardFocusTarget, shell::FullscreenSurface, state::Backend, Compose};
 
 use smithay::{
     backend::input::{Event, InputBackend, KeyState, KeyboardKeyEvent},
@@ -13,13 +13,12 @@ use smithay::{
     utils::{Serial, SERIAL_COUNTER as SCOUNTER},
     wayland::{keyboard_shortcuts_inhibit::KeyboardShortcutsInhibitorSeat, seat::WaylandFocus},
 };
-use tracing::{debug, info};
+use tracing::info;
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
     pub(super) fn keyboard_key_to_action<B: InputBackend>(&mut self, evt: B::KeyboardKeyEvent) -> KeyAction {
         let keycode = evt.key_code();
         let state = evt.state();
-        debug!(?keycode, ?state, "key");
         let serial = SCOUNTER.next_serial();
         let time = Event::time_msec(&evt);
         let press = Press { keycode, state, serial, time };
@@ -126,6 +125,11 @@ impl<BackendData: Backend> AnvilState<BackendData> {
             .input(self, keycode, state, serial, time, |st, modifiers, handle| {
                 let keysym = handle.modified_sym();
                 if state == KeyState::Pressed {
+
+                    if crate::lock::works_while_locked(keysym) {
+                        suppressed_keys.push(keysym);
+                        return FilterResult::Intercept(vt_switch(keysym));
+                    }
                     if keysym.raw() == xkb::KEY_Escape && st.is_modal_panel(&modal_surface) {
                         suppressed_keys.push(keysym);
                         escaped = true;
@@ -306,6 +310,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
             down: state == KeyState::Pressed,
             mods: keyboard.modifier_state(),
             real: self.ring.by_hand,
+            private: self.only_the_person_answers(),
         };
         let taken = self.reader_keys.take(&press);
         self.watch_reader();
@@ -349,17 +354,11 @@ impl WindowKeys {
 
     fn filter<BackendData: Backend>(
         &self,
-        st: &mut AnvilState<BackendData>,
+        st: &mut Compose<BackendData>,
         modifiers: &ModifiersState,
         keysym: Keysym,
         suppressed_keys: &mut Vec<Keysym>,
     ) -> FilterResult<KeyAction> {
-        debug!(
-            state = ?self.state,
-            mods = ?modifiers,
-            keysym = ::xkbcommon::xkb::keysym_get_name(keysym),
-            "keysym"
-        );
 
         let mods = own_modifier_released(crate::config::Mods::held(modifiers), keysym);
         if let KeyState::Pressed = self.state {
@@ -371,14 +370,14 @@ impl WindowKeys {
 
     fn pressed<BackendData: Backend>(
         &self,
-        st: &mut AnvilState<BackendData>,
+        st: &mut Compose<BackendData>,
         modifiers: &ModifiersState,
         mods: crate::config::Mods,
         keysym: Keysym,
         suppressed_keys: &mut Vec<Keysym>,
     ) -> FilterResult<KeyAction> {
 
-        if (xkb::KEY_XF86Switch_VT_1..=xkb::KEY_XF86Switch_VT_12).contains(&keysym.raw()) {
+        if crate::lock::works_while_locked(keysym) {
             suppressed_keys.push(keysym);
             return FilterResult::Intercept(vt_switch(keysym));
         }
@@ -411,7 +410,7 @@ impl WindowKeys {
 
     fn typed<BackendData: Backend>(
         &self,
-        st: &mut AnvilState<BackendData>,
+        st: &mut Compose<BackendData>,
         modifiers: &ModifiersState,
         keysym: Keysym,
         suppressed_keys: &mut Vec<Keysym>,
@@ -432,7 +431,7 @@ impl WindowKeys {
     }
 
     fn released<BackendData: Backend>(
-        st: &mut AnvilState<BackendData>,
+        st: &mut Compose<BackendData>,
         mods: crate::config::Mods,
         keysym: Keysym,
         suppressed_keys: &mut Vec<Keysym>,

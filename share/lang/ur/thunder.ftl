@@ -13,14 +13,14 @@ thunder-let-connect = کیا { $name } کو جڑنے دیں؟
 thunder-no-name = ایک تھنڈربولٹ آلہ
 
 # Under the device's name when its maker did not say who it is.
-thunder-no-maker = اس کے بنانے والے نے نہیں بتایا کہ یہ کون ہے۔
+thunder-no-maker = بنانے والا نامعلوم ہے۔
 
 # Under the device's name: who made it. $maker is the maker's name.
 thunder-made-by = بنانے والا: { $maker }۔
 
 # Warning under the question when the device gives the name of one allowed before, but cannot be proved to be it.
 # SAFETY: needs a human review before it ships
-thunder-doubt = یہ اس آلے کا نام بتا رہا ہے جسے آپ پہلے اجازت دے چکے ہیں، مگر یہ ثابت نہیں کر سکا کہ یہ وہی ہے۔
+thunder-doubt = اس کا نام اس آلے جیسا ہی ہے جسے آپ پہلے اجازت دے چکے ہیں، مگر Trindle تصدیق نہیں کر سکا کہ یہ وہی آلہ ہے۔
 
 # Button that refuses the device.
 # SAFETY: needs a human review before it ships
@@ -38,7 +38,7 @@ thunder-always = ہمیشہ اجازت دیں
 thunder-not-connected = اسے جوڑا نہیں جا سکا۔
 
 # Red words under the question when it could not be connected after it was unplugged and plugged in again.
-thunder-unplug = اسے جوڑا نہیں جا سکا۔ اسے نکال کر دوبارہ لگائیں اور ایک بار پھر کوشش کریں۔
+thunder-unplug = Trindle اسے جوڑ نہیں سکا۔ اسے نکال کر دوبارہ لگائیں اور ایک بار پھر کوشش کریں۔
 
 # Red words under the question when the part of Trindle that answers for the guard is not running.
-thunder-guard-silent = Trindle کا تھنڈربولٹ نگران ابھی جواب نہیں دے رہا۔
+thunder-guard-silent = Trindle کا تھنڈربولٹ تحفظ جواب نہیں دے رہا۔

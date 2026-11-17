@@ -29,7 +29,7 @@ pub(super) fn opens_menu(sym: Keysym, shift: bool) -> bool {
 #[allow(clippy::too_many_arguments)]
 pub(super) fn app_button(app: &Program, i: usize, icon: i32, names: bool, best: bool, lit: bool, at: [f32; 4], ink: Ink) -> Node<Msg> {
 
-    let icons = if favourites::is_path(&app.id) { app.icon.clone().into_iter().collect() } else { app.icons() };
+    let icons = if favourites::is_path(&app.id) { app.icon.clone().into_iter().chain([crate::common::apps::generic_icon_for(&app.id, &app.name)]).collect() } else { app.icons() };
     let name = app.name.clone();
     let under = name.clone();
     let cut = Rc::new(Cell::new(false));
@@ -51,7 +51,7 @@ pub(super) fn app_button(app: &Program, i: usize, icon: i32, names: bool, best: 
             f.pressed_at = at;
             f.activate(i)
         })),
-        Input::Key { sym, mods, .. } if opens_menu(*sym, mods.shift) => Some(msg(move |f| f.menu = Some((i, at)))),
+        Input::Key { sym, mods, .. } if opens_menu(*sym, mods.shift) => Some(msg(move |f| f.open_menu(i, at))),
         _ => None,
     })
     .on_pointer(move |p| match p {
@@ -156,7 +156,6 @@ impl Face {
             },
             Pointer::Menu(_, _) => {
                 self.press = None;
-                self.gone = None;
                 self.open_menu(i, at);
             }
             Pointer::Hover(_, _) => self.hover_app = Some(i),

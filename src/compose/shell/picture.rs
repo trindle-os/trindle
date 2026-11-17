@@ -1,8 +1,4 @@
-//! A piece of a window drawn from a picture the compositor made itself:
-//! the title bar it draws for a program, and the corners of the line round
-//! a window that draws its own. Each keeps the texture it is drawn from in
-//! plain sight, so a window can be faded as it opens and still be drawn
-//! from what it last showed after it has closed.
+// Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
 use smithay::backend::renderer::element::{Element, Id, RenderElement};
 use smithay::backend::renderer::utils::CommitCounter;

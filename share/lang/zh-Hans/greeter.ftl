@@ -27,13 +27,13 @@ greeter-ready-name = 输入你的名字和密码，然后按 Enter。
 greeter-phone-failed = 你的手机没有让你登录。请输入你的密码。
 
 # Under the password box for a few seconds, where a phone is paired.
-greeter-phone-hint = 手机按钮可让你用手机登录。
+greeter-phone-hint = 用手机登录
 
 # At the foot of the screen, for when nothing else works.
 greeter-trouble = 登录有困难？按 Ctrl+Alt+F2 进入文字登录。
 
 # Beside the light drawing switch, on a computer with no graphics chip.
-greeter-no-chip = 没有找到图形芯片，所以使用轻量绘制以保持流畅。
+greeter-no-chip = Trindle 找不到图形芯片，所以使用更简单的图形，让桌面保持流畅。
 
 # SAFETY: needs a human review before it ships
 # The main button's name (a round button with an arrow) that logs in.
@@ -81,7 +81,7 @@ greeter-answer-box = 回答
 greeter-use-phone = 使用手机
 
 # Name of the switch for light drawing on a computer with no graphics chip, and the word under it.
-greeter-light-drawing = 轻量绘制
+greeter-light-drawing = 低图形模式
 
 # Tip of the round button that shows or hides the on-screen keyboard.
 greeter-keyboard-tip = 屏幕键盘
@@ -113,7 +113,7 @@ greeter-shut-down = 关机
 greeter-shut-down-sure = 再按一次以关机
 
 # Red line under the boxes when a power button is pressed and the system has no bus to ask.
-greeter-no-bus = 系统总线不可用。
+greeter-no-bus = Trindle 无法连接系统。
 
 # Red line under the boxes when the system refused to restart; the reason follows, as the system worded it.
 greeter-restart-failed = 无法重启：{ $why }
@@ -122,20 +122,19 @@ greeter-restart-failed = 无法重启：{ $why }
 greeter-shut-down-failed = 无法关机：{ $why }
 
 # Red line under the boxes when the login service could not be spoken to.
-greeter-service-no-talk = 无法与登录服务通信。
+greeter-service-no-talk = 无法连接登录服务。
 
 # Red line under the boxes when the login service was too slow.
-greeter-service-timeout = 登录服务没有及时回应。
+greeter-service-timeout = 登录服务响应时间太长。
 
 # Red line under the boxes when the login service hung up.
 greeter-service-closed = greetd 关闭了连接。
 
 # Red line under the boxes when the login service's answer was far too large.
-greeter-service-too-big = 登录服务返回的内容太大，无法读取。
+greeter-service-too-big = 登录服务发来的回复太大，无法读取。
 
 # Red line under the boxes when the login screen was started by hand and not by the login service.
 greeter-service-not-started = 未设置 GREETD_SOCK：登录界面不是由 greetd 启动的。
 
 # Red line under the boxes when there is no connection to the login service.
 greeter-service-no-connection = 没有连接
-

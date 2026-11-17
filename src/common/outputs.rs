@@ -2,6 +2,8 @@
 //! of Trindle's compositor directly over trindle_screens_v1. Display settings, the start-up scale
 //! and About this computer all come here, so no outside program is needed.
 
+use std::time::{Duration, Instant};
+
 use serde::{Deserialize, Serialize};
 use wayland_client::globals::{registry_queue_init, GlobalListContents};
 use wayland_client::protocol::wl_registry;
@@ -198,22 +200,36 @@ pub fn heads() -> Result<Vec<Head>, String> {
     Ok(Link::open()?.state.heads())
 }
 
+const ANSWER_WAIT: Duration = Duration::from_secs(5);
+
+fn readable_within(fd: std::os::fd::RawFd, limit: Duration) -> bool {
+    let mut poll = libc::pollfd { fd, events: libc::POLLIN | libc::POLLERR, revents: 0 };
+    let ms = limit.as_millis().min(i32::MAX as u128) as libc::c_int;
+    loop {
+        // SAFETY: one valid pollfd, and a count of one to match.
+        let got = unsafe { libc::poll(&mut poll, 1, ms) };
+        if got >= 0 || std::io::Error::last_os_error().kind() != std::io::ErrorKind::Interrupted {
+            return got > 0;
+        }
+    }
+}
+
 pub fn apply(settings: &[Setting]) -> Result<(), String> {
     let mut link = Link::open()?;
     for _ in 0..TRIES {
         match link.apply(settings)? {
             (Outcome::Applied, _) => return Ok(()),
             (Outcome::Refused, why) if why.is_empty() => {
-                return Err("The desktop could not set the displays that way.".into())
+                return Err(t!("common-displays-refused").to_string())
             }
             (Outcome::Refused, why) => {
-                return Err(format!("The desktop could not set the displays that way: {why}."))
+                return Err(t!("common-displays-refused-why", why = why))
             }
 
             (Outcome::Stale, _) => link.settle()?,
         }
     }
-    Err("The displays kept changing, so nothing was changed.".into())
+    Err(t!("common-displays-kept-changing").to_string())
 }
 
 pub fn saved() -> Option<Vec<Setting>> {
@@ -437,12 +453,12 @@ struct Link {
 
 impl Link {
     fn open() -> Result<Link, String> {
-        let conn = Connection::connect_to_env().map_err(|_| "There is no desktop to ask.".to_string())?;
+        let conn = Connection::connect_to_env().map_err(|_| t!("common-displays-no-desktop").to_string())?;
         let (globals, queue) = registry_queue_init::<State>(&conn).map_err(|e| e.to_string())?;
         let qh = queue.handle();
         let manager: TrindleScreensManagerV1 = globals
             .bind(&qh, 1..=1, ())
-            .map_err(|_| "This desktop cannot say what displays there are.".to_string())?;
+            .map_err(|_| t!("common-displays-cannot-say").to_string())?;
         let mut link = Link { conn, queue, state: State { manager: Some(manager), ..State::default() } };
         link.settle()?;
         Ok(link)
@@ -462,12 +478,33 @@ impl Link {
         if before.is_some() {
             return Ok(());
         }
-        Err("The desktop did not say what displays there are.".into())
+        Err(t!("common-displays-did-not-say").to_string())
+    }
+
+    fn dispatch_until(&mut self, end: Instant) -> Result<(), String> {
+        use std::os::fd::AsRawFd;
+        let stopped = || t!("common-displays-stopped-answering").to_string();
+        self.queue.dispatch_pending(&mut self.state).map_err(|_| stopped())?;
+        if self.state.outcome.is_some() {
+            return Ok(());
+        }
+        self.conn.flush().map_err(|_| stopped())?;
+
+        let Some(guard) = self.conn.prepare_read() else { return Ok(()) };
+        if !readable_within(guard.connection_fd().as_raw_fd(), end.saturating_duration_since(Instant::now())) {
+            return Err(stopped());
+        }
+        match guard.read() {
+            Ok(_) => {}
+            Err(wayland_client::backend::WaylandError::Io(e)) if e.kind() == std::io::ErrorKind::WouldBlock => {}
+            Err(_) => return Err(stopped()),
+        }
+        self.queue.dispatch_pending(&mut self.state).map(drop).map_err(|_| stopped())
     }
 
     fn apply(&mut self, settings: &[Setting]) -> Result<(Outcome, String), String> {
         let (Some(manager), Some(serial)) = (self.state.manager.clone(), self.state.serial) else {
-            return Err("The desktop did not say what displays there are.".into());
+            return Err(t!("common-displays-did-not-say").to_string());
         };
         let heads = self.state.heads();
 
@@ -476,7 +513,7 @@ impl Link {
             .map(|h| settings.iter().find(|s| s.name == h.name).cloned().unwrap_or_else(|| h.setting()))
             .collect();
         if !heads.is_empty() && !wanted.iter().any(|s| s.enabled) {
-            return Err("That would leave no display on.".into());
+            return Err(t!("common-displays-none-on").to_string());
         }
         let wanted = clear_unnamed(&heads, settings, wanted);
         let qh = self.queue.handle();
@@ -492,10 +529,11 @@ impl Link {
         }
         self.state.outcome = None;
         plan.apply();
+        let end = Instant::now() + ANSWER_WAIT;
         while self.state.outcome.is_none() {
-            if self.queue.blocking_dispatch(&mut self.state).is_err() {
+            if let Err(e) = self.dispatch_until(end) {
                 plan.destroy();
-                return Err("The desktop stopped answering.".into());
+                return Err(e);
             }
         }
         plan.destroy();
@@ -614,6 +652,21 @@ mod harness {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn a_desktop_that_says_nothing_is_given_up_on_at_the_limit() {
+        let mut ends = [0; 2];
+        // SAFETY: pipe fills the two numbers of the array it is given.
+        assert_eq!(unsafe { libc::pipe(ends.as_mut_ptr()) }, 0);
+        let started = std::time::Instant::now();
+        assert!(!super::readable_within(ends[0], std::time::Duration::from_millis(200)));
+        assert!(started.elapsed() < std::time::Duration::from_secs(5));
+        // SAFETY: writes one byte from a live buffer to the pipe's own end.
+        unsafe { libc::write(ends[1], b"x".as_ptr().cast(), 1) };
+        assert!(super::readable_within(ends[0], std::time::Duration::ZERO));
+        // SAFETY: closes the two ends made above, once each.
+        unsafe { libc::close(ends[0]); libc::close(ends[1]) };
+    }
+
     use super::*;
 
     fn mode(width: i32, height: i32, refresh: i32, preferred: bool) -> Mode {

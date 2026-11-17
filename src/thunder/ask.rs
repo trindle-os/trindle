@@ -225,8 +225,8 @@ impl Asker {
     }
 
     fn answered(self: &Rc<Self>, rest: &str) {
-        let mut f = rest.splitn(3, '\t');
-        let (id, how, words) = (f.next().unwrap_or(""), f.next().unwrap_or(""), f.next().unwrap_or(""));
+        let mut f = rest.splitn(2, '\t');
+        let (id, how) = (f.next().unwrap_or(""), f.next().unwrap_or(""));
         let Some(shown) = self.shown.borrow().clone() else { return };
         if shown.with(|w| w.q.id != id) {
             return;
@@ -239,7 +239,7 @@ impl Asker {
 
             "locked" => shown.change(|w| w.busy = false),
             _ => {
-                let words = if words.is_empty() { t!("thunder-not-connected") } else { words };
+                let words = if how == "failed" { t!("thunder-unplug") } else { t!("thunder-not-connected") };
                 shown.change(|w| {
                     w.busy = false;
                     w.problem = Some(words.to_string());
@@ -273,7 +273,7 @@ impl Asker {
                     return;
                 };
                 shown.fit();
-                shown.spoken(&format!("Let {name} connect?"));
+                shown.spoken(&t!("thunder-let-connect", name = &name));
 
                 let (out, id) = (self.out.clone(), q.id.clone());
                 shown.window.on_close(move || {
@@ -324,7 +324,7 @@ impl Asker {
 }
 
 pub fn start(lp: &Loop, display: &Rc<Display>) {
-    if !Path::new("/sys/bus/thunderbolt").exists() && std::env::var_os("TRINDLE_THUNDER_SOCKET").is_none() {
+    if !Path::new("/sys/bus/thunderbolt").exists() {
         return;
     }
     let me: Rc<RefCell<Weak<Asker>>> = Rc::new(RefCell::new(Weak::new()));

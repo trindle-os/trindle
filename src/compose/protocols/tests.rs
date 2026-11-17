@@ -19,6 +19,7 @@ use wayland_client::protocol::{wl_compositor, wl_output::WlOutput, wl_registry, 
 use wayland_client::{event_created_child, Connection, Dispatch, EventQueue, Proxy, QueueHandle, WEnum};
 
 use super::night::{self, NightHandler, NightState};
+use super::output_power::{OutputPowerHandler, OutputPowerState};
 use super::screens::{ScreenFacts, ScreenMode, ScreenPlan, ScreensHandler, ScreensState};
 use super::windows::{Change, WindowInfo, WindowsHandler, WindowsState};
 use super::workspaces::{WorkspacesHandler, WorkspacesState};
@@ -36,6 +37,10 @@ use crate::wire::windows::{
     trindle_windows_manager_v1::{self, TrindleWindowsManagerV1},
 };
 use crate::wire::workspaces::trindle_workspaces_manager_v1::{self, TrindleWorkspacesManagerV1};
+use wayland_protocols_wlr::output_power_management::v1::client::{
+    zwlr_output_power_manager_v1::ZwlrOutputPowerManagerV1,
+    zwlr_output_power_v1::{self, ZwlrOutputPowerV1},
+};
 
 struct Server {
     compositor: CompositorState,
@@ -43,6 +48,10 @@ struct Server {
     workspaces: WorkspacesState,
     night: NightState,
     screens: ScreensState,
+    power: OutputPowerState,
+
+    lit: Option<bool>,
+    power_refused: bool,
 
     surfaces: Vec<WlSurface>,
 
@@ -99,7 +108,7 @@ impl WindowsHandler for Server {
         let n = self.number(&s);
         self.asked.push(format!("raise {n}"));
     }
-    fn close_window(&mut self, s: WlSurface) {
+    fn close_or_force(&mut self, s: WlSurface) {
         let n = self.number(&s);
         self.asked.push(format!("close {n}"));
     }
@@ -153,6 +162,24 @@ impl ScreensHandler for Server {
 }
 crate::delegate_screens!(Server);
 
+impl OutputPowerHandler for Server {
+    fn output_power_state(&mut self) -> &mut OutputPowerState {
+        &mut self.power
+    }
+    fn output_power(&mut self, _: &Output) -> Option<bool> {
+        self.lit
+    }
+    fn set_output_power(&mut self, _: &Output, on: bool) -> bool {
+        if self.power_refused {
+            return false;
+        }
+        self.asked.push(format!("power {on}"));
+        self.lit = Some(on);
+        true
+    }
+}
+crate::delegate_output_power!(Server);
+
 #[derive(Debug)]
 struct Win {
     handle: TrindleWindowV1,
@@ -195,6 +222,9 @@ struct Panel {
     tints: Vec<Tint>,
     screens_manager: Option<TrindleScreensManagerV1>,
     screens: Vec<Scr>,
+    power_manager: Option<ZwlrOutputPowerManagerV1>,
+
+    power: Vec<Vec<&'static str>>,
     settled: Vec<u32>,
     results: Vec<(u32, String)>,
 }
@@ -220,6 +250,7 @@ impl Dispatch<wl_registry::WlRegistry, ()> for Panel {
             "trindle_workspaces_manager_v1" => panel.workspace_manager = Some(registry.bind(name, 1, qh, ())),
             "trindle_night_manager_v1" => panel.night_manager = Some(registry.bind(name, 1, qh, ())),
             "trindle_screens_manager_v1" => panel.screens_manager = Some(registry.bind(name, 1, qh, ())),
+            "zwlr_output_power_manager_v1" => panel.power_manager = Some(registry.bind(name, 1, qh, ())),
             _ => {}
         }
     }
@@ -233,6 +264,22 @@ impl Dispatch<wl_surface::WlSurface, ()> for Panel {
 }
 impl Dispatch<WlOutput, ()> for Panel {
     fn event(_: &mut Self, _: &WlOutput, _: wayland_client::protocol::wl_output::Event, _: &(), _: &Connection, _: &QueueHandle<Self>) {}
+}
+impl Dispatch<ZwlrOutputPowerManagerV1, ()> for Panel {
+    fn event(_: &mut Self, _: &ZwlrOutputPowerManagerV1, _: <ZwlrOutputPowerManagerV1 as Proxy>::Event, _: &(), _: &Connection,
+             _: &QueueHandle<Self>) {}
+}
+impl Dispatch<ZwlrOutputPowerV1, usize> for Panel {
+    fn event(panel: &mut Self, _: &ZwlrOutputPowerV1, event: zwlr_output_power_v1::Event, n: &usize, _: &Connection,
+             _: &QueueHandle<Self>) {
+        let said = match event {
+            zwlr_output_power_v1::Event::Mode { mode: WEnum::Value(zwlr_output_power_v1::Mode::On) } => "on",
+            zwlr_output_power_v1::Event::Mode { .. } => "off",
+            zwlr_output_power_v1::Event::Failed => "failed",
+            _ => return,
+        };
+        panel.power[*n].push(said);
+    }
 }
 impl Dispatch<TrindleNightManagerV1, ()> for Panel {
     fn event(_: &mut Self, _: &TrindleNightManagerV1, _: <TrindleNightManagerV1 as Proxy>::Event, _: &(), _: &Connection,
@@ -412,6 +459,9 @@ impl Harness {
             workspaces: WorkspacesState::new::<Server, _>(&dh, |_| true),
             night: NightState::new::<Server, _>(&dh, |_| true),
             screens: ScreensState::new::<Server, _>(&dh, |_| true),
+            power: OutputPowerState::new::<Server, _>(&dh, |_| true),
+            lit: Some(true),
+            power_refused: false,
             surfaces: Vec::new(),
             asked: Vec::new(),
             table_sizes: HashMap::from([("test-1".to_string(), 256)]),
@@ -438,17 +488,18 @@ impl Harness {
 
     fn pump(&mut self) {
         for _ in 0..4 {
-            for c in &mut self.clients {
+
+            for c in self.clients.iter_mut().filter(|c| c.conn.protocol_error().is_none()) {
                 c.conn.flush().unwrap();
             }
             self.display.dispatch_clients(&mut self.server).unwrap();
             self.display.flush_clients().unwrap();
-            for c in &mut self.clients {
+            for c in self.clients.iter_mut().filter(|c| c.conn.protocol_error().is_none()) {
                 if let Some(guard) = c.conn.prepare_read() {
 
                     let _ = guard.read();
                 }
-                c.queue.dispatch_pending(&mut c.panel).unwrap();
+                let _ = c.queue.dispatch_pending(&mut c.panel);
             }
         }
     }
@@ -462,6 +513,16 @@ impl Harness {
 
     fn panel(&self, c: usize) -> &Panel {
         &self.clients[c].panel
+    }
+
+    fn power_control(&mut self, c: usize) -> (usize, ZwlrOutputPowerV1) {
+        let qh = self.qh(c);
+        let panel = &mut self.clients[c].panel;
+        let n = panel.power.len();
+        panel.power.push(Vec::new());
+        let control = panel.power_manager.as_ref().unwrap().get_output_power(panel.output.as_ref().unwrap(), &qh, n);
+        self.pump();
+        (n, control)
     }
 
     fn qh(&self, c: usize) -> QueueHandle<Panel> {
@@ -902,4 +963,66 @@ fn a_refusal_from_the_screens_themselves_is_passed_on_in_its_words() {
     plan.apply();
     h.pump();
     assert_eq!(h.panel(p).results, vec![(1, "A refused 1280x720".to_string())]);
+}
+
+#[test]
+fn screens_go_off_and_on_and_every_control_of_the_screen_hears() {
+    let mut h = Harness::new();
+    let (idle, other) = (h.connect(), h.connect());
+    let (a, control) = h.power_control(idle);
+    let (b, _) = h.power_control(other);
+    assert_eq!(h.panel(idle).power[a], ["on"]);
+    control.set_mode(zwlr_output_power_v1::Mode::Off);
+    h.pump();
+    assert_eq!(h.server.asked, ["power false"]);
+    assert_eq!(h.panel(idle).power[a], ["on", "off"]);
+    assert_eq!(h.panel(other).power[b], ["on", "off"], "another control of the screen was not told");
+
+    control.set_mode(zwlr_output_power_v1::Mode::Off);
+    h.pump();
+    assert_eq!(h.panel(idle).power[a], ["on", "off"]);
+    control.set_mode(zwlr_output_power_v1::Mode::On);
+    h.pump();
+    assert_eq!(h.panel(other).power[b], ["on", "off", "on"]);
+}
+
+#[test]
+fn a_screen_that_cannot_be_switched_or_has_gone_fails_its_controls() {
+    let mut h = Harness::new();
+    let c = h.connect();
+    h.server.lit = None;
+    let (none, _) = h.power_control(c);
+    assert_eq!(h.panel(c).power[none], ["failed"], "a screen that cannot be switched off was offered");
+    h.server.lit = Some(true);
+    h.server.power_refused = true;
+    let (refused, control) = h.power_control(c);
+    control.set_mode(zwlr_output_power_v1::Mode::Off);
+    h.pump();
+    assert_eq!(h.panel(c).power[refused], ["on", "failed"], "a refused switch was not said");
+
+    h.server.power_refused = false;
+    control.set_mode(zwlr_output_power_v1::Mode::Off);
+    h.pump();
+    assert!(h.server.asked.is_empty(), "a failed control still switched the screen");
+    let (gone, _) = h.power_control(c);
+    let output = h.output.clone();
+    h.server.power.output_removed(&output);
+    h.pump();
+    assert_eq!(h.panel(c).power[gone], ["on", "failed"], "the control of an unplugged screen was not told");
+}
+
+#[test]
+fn a_power_mode_that_does_not_exist_is_a_protocol_error_and_nothing_else() {
+    let mut h = Harness::new();
+    let (bad, good) = (h.connect(), h.connect());
+    let (_, control) = h.power_control(bad);
+    let (g, _) = h.power_control(good);
+    use wayland_client::backend::protocol::{Argument, Message};
+
+    let message = Message { sender_id: control.id(), opcode: 0, args: wayland_client::backend::smallvec::smallvec![Argument::Uint(7)] };
+    h.clients[bad].conn.backend().send_request(message, None, None).unwrap();
+    h.pump();
+    assert!(h.clients[bad].conn.protocol_error().is_some(), "a mode that does not exist was taken");
+    assert!(h.server.asked.is_empty(), "the screen was switched for a mode that does not exist");
+    assert_eq!(h.panel(good).power[g], ["on"]);
 }

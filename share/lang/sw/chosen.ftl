@@ -13,13 +13,13 @@ chosen-act-name-empty = Jina haliwezi kuwa tupu.
 chosen-act-name-slash = Jina haliwezi kuwa na mkwaju.
 
 # Red words under a name being typed when it is . or ..
-chosen-act-name-kept = Jina hilo limehifadhiwa kwa ajili ya mfumo.
+chosen-act-name-kept = Mfumo unatumia jina hilo.
 
 # Red words under a name being typed when it is too long.
 chosen-act-name-long = Jina hilo ni refu mno.
 
 # Red words under the name box, and at the foot of Folders, when a rename fails: the item's name, then the reason.
-chosen-inplace-not-renamed = { $name } haikubadilishwa jina: { $why }.
+chosen-inplace-not-renamed = Trindle haikuweza kubadilisha jina la { $name }: { $why }.
 
 # Red words under the name box, and at the foot of Folders, when a name is already used in that place; the kind is the word folder or file.
 chosen-inplace-taken =

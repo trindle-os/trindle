@@ -17,7 +17,7 @@ store-app-state-removing = Suppression
 store-app-state-downloading = Téléchargement
 
 # The state beside the dot while Flatpak is putting the fetched app in.
-store-app-state-putting-in = Mise en place
+store-app-state-putting-in = Installation
 
 # The state beside the dot while the app's own update goes in.
 store-app-state-updating = Mise à jour
@@ -63,7 +63,7 @@ store-app-remove = Supprimer
 store-app-open-round = Ouvrir
 
 # Main button that releases an app whose updates are held back.
-store-app-release = Libérer
+store-app-release = Autoriser les mises à jour
 
 # Main button that updates the app.
 store-app-update = Mettre à jour
@@ -81,13 +81,13 @@ store-app-website = Site web
 store-app-no-pictures = Cette application n'a pas d'images.
 
 # In the picture frame when the picture could not be fetched.
-store-app-picture-missed = Cette image n'a pas pu être récupérée.
+store-app-picture-missed = Trindle n'a pas pu récupérer cette image.
 
 # In the picture frame while the picture is being fetched.
 store-app-picture-fetching = Récupération de l'image…
 
 # In the picture frame when the computer has no internet.
-store-app-picture-offline = Les images ne peuvent pas être récupérées tant que cet ordinateur n'est pas connecté à Internet.
+store-app-picture-offline = Connectez l'ordinateur à Internet pour voir les images.
 
 # Between the picture buttons: which picture, when it has no caption.
 store-app-picture-of = Image { $at } sur { $n }
@@ -162,13 +162,13 @@ store-app-review-no-title = Sans titre
 store-app-people-none = Personne n'a encore écrit sur cette application.
 
 # Under What people say when there is no internet.
-store-app-people-offline = Ce que disent les gens ne peut pas être récupéré tant que cet ordinateur n'est pas connecté à Internet.
+store-app-people-offline = Connectez l'ordinateur à Internet pour lire les avis.
 
 # Under What people say while reviews are being fetched.
-store-app-people-looking = Recherche de ce que disent les gens…
+store-app-people-looking = Chargement des avis…
 
 # Name of the card of reviews.
-store-app-people = Ce que disent les gens
+store-app-people = Avis
 
 # Facts line: when the app's project was made.
 store-app-fact-created = Créé

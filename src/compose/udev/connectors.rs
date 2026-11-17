@@ -23,7 +23,7 @@ use smithay::{
 use tracing::{debug, info, warn};
 
 use super::{
-    dmabuf::get_surface_dmabuf_feedback, AnvilState, BackendData, CardOutput, OutputManager, SurfaceData, UdevData,
+    dmabuf::get_surface_dmabuf_feedback, Compose, BackendData, CardOutput, OutputManager, SurfaceData, UdevData,
     UdevOutputId, UdevRenderer,
 };
 use crate::{
@@ -143,7 +143,7 @@ struct Started {
     dmabuf_feedback: Option<SurfaceDmabufFeedback>,
 }
 
-impl AnvilState<UdevData> {
+impl Compose<UdevData> {
     pub(super) fn connector_connected(&mut self, node: DrmNode, connector: connector::Info, crtc: crtc::Handle) {
         let device = if let Some(device) = self.backend_data.backends.get_mut(&node) {
             device
@@ -152,7 +152,10 @@ impl AnvilState<UdevData> {
         };
 
         let render_node = device.render_node.unwrap_or(self.backend_data.primary_gpu);
-        let mut renderer = self.backend_data.gpus.single_renderer(&render_node).unwrap();
+        let Ok(mut renderer) = self.backend_data.gpus.single_renderer(&render_node) else {
+            warn!(?render_node, "a screen was plugged in but its card cannot draw; left dark");
+            return;
+        };
 
         let output_name = format!("{}-{}", connector.interface().as_str(), connector.interface_id());
         info!(?crtc, "Trying to setup connector {}", output_name,);
@@ -215,6 +218,9 @@ impl AnvilState<UdevData> {
                 leasing_state.withdraw_connector(connector.handle());
             }
         } else if let Some(surface) = device.surfaces.remove(&crtc) {
+            if let Some(timer) = surface.vblank_throttle_timer {
+                self.handle.remove(timer);
+            }
 
             self.output_power_state.output_removed(&surface.output);
             self.night_state.output_removed(&surface.output);
@@ -223,15 +229,19 @@ impl AnvilState<UdevData> {
         }
 
         let render_node = device.render_node.unwrap_or(self.backend_data.primary_gpu);
-        let mut renderer = self.backend_data.gpus.single_renderer(&render_node).unwrap();
-        let _ = device.drm_output_manager.try_to_restore_modifiers::<_, OutputRenderElements<
+        let Ok(mut renderer) = self.backend_data.gpus.single_renderer(&render_node) else {
+            return;
+        };
+        if let Err(err) = device.drm_output_manager.try_to_restore_modifiers::<_, OutputRenderElements<
             UdevRenderer<'_>,
             WindowRenderElement<UdevRenderer<'_>>,
         >>(
             &mut renderer,
 
             &DrmOutputRenderElements::default(),
-        );
+        ) {
+            debug!(?err, "the faster buffer layouts were not restored");
+        }
     }
 }
 
@@ -245,7 +255,7 @@ fn lend_connector(
     info!("Connector {} is non-desktop, setting up for leasing", output_name);
     device.non_desktop_connectors.push((connector, crtc));
     if let Some(lease_state) = device.leasing_global.as_mut() {
-        lease_state.add_connector::<AnvilState<UdevData>>(
+        lease_state.add_connector::<Compose<UdevData>>(
             connector,
             output_name,
             format!("{} {}", names.make, names.model),
@@ -289,11 +299,12 @@ fn add_output(
             model: spec.names.model.clone(),
         },
     );
-    let global = output.create_global::<AnvilState<UdevData>>(display_handle);
+    let global = output.create_global::<Compose<UdevData>>(display_handle);
 
     let x = space
         .outputs()
-        .fold(0, |acc, o| acc + space.output_geometry(o).unwrap().size.w);
+        .filter_map(|o| space.output_geometry(o))
+        .fold(0, |acc, geo| acc + geo.size.w);
     let position = (x, 0).into();
 
     let turn = panel_turn(drm_device, connector.handle());
@@ -311,7 +322,7 @@ fn add_output(
 
 fn abandon(space: &mut Space<WindowElement>, display_handle: &DisplayHandle, output: &Output, global: GlobalId) {
     space.unmap_output(output);
-    display_handle.remove_global::<AnvilState<UdevData>>(global);
+    display_handle.remove_global::<Compose<UdevData>>(global);
 }
 
 fn query_planes(
@@ -385,7 +396,7 @@ fn start_output(
 }
 
 fn scanout_flags(driver: &Driver) -> FrameFlags {
-    if std::env::var("ANVIL_DISABLE_DIRECT_SCANOUT").is_ok() {
+    if std::env::var("TRINDLE_DISABLE_DIRECT_SCANOUT").is_ok() {
         FrameFlags::empty()
     } else if driver.name().to_string_lossy().contains("evdi") {
 

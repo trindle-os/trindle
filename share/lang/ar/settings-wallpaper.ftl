@@ -8,7 +8,7 @@ settings-wallpaper-title = الخلفية
 settings-wallpaper-keywords = خلفية صورة عرض شرائح صور شاشة سطح المكتب
 
 # Introduction under the heading of the wallpaper page, and the words behind the page i.
-settings-wallpaper-help = لون ساده، أو صورة واحدة، أو مجلد تتغير صوره من تلقاء نفسها في الوقت الذي تحدده.
+settings-wallpaper-help = استخدم لونًا واحدًا، أو صورة واحدة، أو مجلد صور تتغير بالمعدل الذي تختاره.
 
 # Choice in the list of how long each picture stays.
 settings-wallpaper-every-10s = 10 ثوانٍ
@@ -38,7 +38,7 @@ settings-wallpaper-every-1d = يوم واحد
 settings-wallpaper-fit-fill = ملء الشاشة
 
 # Choice in the list of how the picture fits the screen.
-settings-wallpaper-fit-fit = ملاءمة، تُعرض الصورة كاملة
+settings-wallpaper-fit-fit = ملاءمة الصورة كاملة
 
 # Choice in the list of how the picture fits the screen.
 settings-wallpaper-fit-center = في الوسط، بالحجم الفعلي
@@ -56,7 +56,7 @@ settings-wallpaper-order-shuffle = عشوائي
 settings-wallpaper-order-name = حسب اسم الملف
 
 # Red words when the program that draws the wallpaper would not start.
-settings-wallpaper-no-changer = تعذّر تغيير الخلفية: لم يبدأ البرنامج الخاص بها.
+settings-wallpaper-no-changer = لم يستطع Trindle تشغيل البرنامج الذي يغيّر الخلفية.
 
 # Under the large picture, when counting; { $used } of { $all } pictures are used.
 settings-wallpaper-count =
@@ -101,10 +101,10 @@ settings-wallpaper-file-own = { $name }، إحدى الصور التي تأتي 
 settings-wallpaper-plain-below = لون ساده، يُضبط أدناه.
 
 # Under the large picture when the picture or folder has gone.
-settings-wallpaper-gone-below = لا شيء هناك بعد الآن. اختر صورة أو مجلدًا.
+settings-wallpaper-gone-below = الصورة أو المجلد لم يعد موجودًا. اختر غيره.
 
 # Sentence about the wallpaper when it is a plain colour.
-settings-wallpaper-plain = لون ساده، بلا صورة.
+settings-wallpaper-plain = لون واحد فقط.
 
 # Sentence about the wallpaper when Trindle's own pictures change; { $every } is how often, { $used } of { $all } pictures are used and { $extra } is any added sentences, each after a space.
 settings-wallpaper-changing-own =
@@ -132,16 +132,16 @@ settings-wallpaper-changing-folder =
 settings-wallpaper-empty-folder-choose = لا توجد صور في المجلد { $folder }. اختر مجلدًا آخر.
 
 # Added to the sentence about the wallpaper when a folder holds more than Trindle looks through.
-settings-wallpaper-more-than-looked-at = يحتوي المجلد على أكثر مما يفحصه Trindle، لذلك قد تُترك بعض صوره.
+settings-wallpaper-more-than-looked-at = يحتوي المجلد على صور أكثر مما يستطيع Trindle فحصه، لذلك قد يُترك بعضها.
 
 # Sentence about the wallpaper for one of Trindle's own pictures; { $name } is its name.
 settings-wallpaper-file-own-said = { $name }، إحدى الصور التي تأتي مع Trindle.
 
 # Sentence about the wallpaper for one chosen picture; { $name } is its name, written to read in the middle of a sentence.
-settings-wallpaper-file-one = صورة واحدة، { $name }، طوال الوقت.
+settings-wallpaper-file-one = { $name } تُعرض دائمًا.
 
 # Sentence about the wallpaper when the chosen picture cannot be used; { $why } is the reason.
-settings-wallpaper-file-refused = لا تُستخدم الصورة. { $why } وتُعرض صورة Trindle الخاصة.
+settings-wallpaper-file-refused = لا يستخدم Trindle تلك الصورة. { $why } وتُعرض صورة Trindle الخاصة بدلًا منها.
 
 # Sentence about the wallpaper when the picture has gone.
 settings-wallpaper-file-gone = الصورة لم تعد موجودة. اختر صورة أو مجلدًا.
@@ -176,14 +176,8 @@ settings-wallpaper-card-title = الخلفية
 # Heading of the wallpaper line, and name of its switch.
 settings-wallpaper-wallpaper = الخلفية
 
-# Small words under the wallpaper line.
-settings-wallpaper-wallpaper-about = عند الإيقاف تكون الشاشة بلون ساده.
-
 # Heading of the line for choosing where the picture comes from.
 settings-wallpaper-picture = الصورة
-
-# Small words under that line.
-settings-wallpaper-picture-about = صورة واحدة، أو مجلد، أو صور Trindle الخاصة.
 
 # Name of the round button that chooses one picture.
 settings-wallpaper-choose-picture-button = اختر صورة
@@ -197,26 +191,20 @@ settings-wallpaper-own-pictures = صور Trindle الخاصة
 # Heading of the fit line.
 settings-wallpaper-fit = الملاءمة
 
-# Small words under that line.
-settings-wallpaper-fit-about = كيف تلائم الصورة الشاشة.
-
 # Name of the list of how the picture fits the screen.
 settings-wallpaper-fit-name = كيف تلائم الصورة الشاشة
 
 # Heading of the colour line.
 settings-wallpaper-colour = اللون
 
-# Small words under the colour line when the colour can be seen.
-settings-wallpaper-colour-shown = يُرى وحده، أو حول صورة.
-
 # Small words under the colour line when a picture covers it.
-settings-wallpaper-colour-hidden = مخفي: تغطي الصورة الشاشة.
+settings-wallpaper-colour-hidden = تخفيه الصورة.
 
 # Placeholder and name of the box for typing the colour as a hex code; the example is a code.
-settings-wallpaper-colour-hex = اللون برمز سداسي عشري، مثل #09090b
+settings-wallpaper-colour-hex = رمز سداسي عشري، مثل #09090b
 
 # Words behind the i of the Wallpaper card.
-settings-wallpaper-card-about = لون ساده، أو صورة واحدة، أو مجلد تتغير صوره من تلقاء نفسها في الوقت الذي تحدده. يُرى اللون وحده إذا لم تكن هناك صورة، وحول صورة لا تغطي الشاشة؛ اكتبه برمز سداسي عشري، مثل #09090b.
+settings-wallpaper-card-about = استخدم لونًا واحدًا، أو صورة واحدة، أو مجلد صور تتغير بالمعدل الذي تختاره. يظهر اللون وحده إذا لم تكن هناك صورة، وحول صورة لا تغطي الشاشة. اكتبه برمز سداسي عشري، مثل #09090b.
 
 # Small words on the cards that are greyed while the wallpaper is off.
 settings-wallpaper-waits = شغّل الخلفية لاستخدام هذه الخيارات.
@@ -224,38 +212,26 @@ settings-wallpaper-waits = شغّل الخلفية لاستخدام هذه ال�
 # Heading of the line, and name of its switch, for changing the picture now and then.
 settings-wallpaper-rotate = غيّر الصورة من حين إلى آخر
 
-# Small words under that line.
-settings-wallpaper-rotate-about = كل صورة في مجلد، بالتناوب.
-
 # Heading of the line, and name of its list, for how long each picture stays.
 settings-wallpaper-every = التغيير كل
-
-# Small words under that line.
-settings-wallpaper-every-about = مدة بقاء كل صورة.
 
 # Heading of the line, and name of its list, for the order pictures change in.
 settings-wallpaper-order = الترتيب
 
-# Small words under the order line.
-settings-wallpaper-order-about = عشوائي، أو حسب اسم الملف.
-
 # Heading of the line, and name of its button, for moving to the next picture.
-settings-wallpaper-next = الصورة التالية الآن
-
-# Small words under that line.
-settings-wallpaper-next-about = ينتقل إلى التالية فورًا.
+settings-wallpaper-next = الصورة التالية
 
 # Title of the Changing pictures card.
 settings-wallpaper-changing-title = تغيير الصور
 
 # Words behind the i of that card.
-settings-wallpaper-changing-about = يستخدم كل صورة في المجلد، واحدة بعد الأخرى، ويغيّرها في الوقت المختار هنا، عشوائيًا أو حسب اسم الملف.
+settings-wallpaper-changing-about = يعرض كل صورة في المجلد، واحدة بعد الأخرى، بالمعدل الذي تختاره هنا، عشوائيًا أو حسب اسم الملف.
 
 # Words behind the i of the Pictures card when pictures change by themselves.
-settings-wallpaper-pictures-rotating = تُستخدم الصور المضاءة فقط. اضغط على صورة لتعتيمها فتُتجاوز من الآن فصاعدًا؛ واضغط عليها مرة أخرى لإعادتها. لا يُحذف شيء أبدًا، فيمكنك تغيير رأيك. الصورة الظاهرة على الشاشة الآن هي التي في الصورة الكبيرة.
+settings-wallpaper-pictures-rotating = يستخدم Trindle كل صورة غير معتّمة. اضغط على صورة لتجاوزها، واضغط عليها مرة أخرى لإعادتها. لا يُحذف شيء. الصورة الكبيرة هي الظاهرة على الشاشة الآن.
 
 # Words behind the i of the Pictures card when one picture is on.
-settings-wallpaper-pictures-one = اضغط على صورة لوضعها على الشاشة. لا يُحذف شيء أبدًا.
+settings-wallpaper-pictures-one = اضغط على صورة لاستخدامها.
 
 # Title of the Pictures card.
 settings-wallpaper-pictures-title = الصور
@@ -265,7 +241,3 @@ settings-wallpaper-no-pictures-name = لا صور بعد
 
 # Heading of the line shown when there are no pictures to choose from.
 settings-wallpaper-no-pictures = لا توجد صور للاختيار منها
-
-# Small words under that line.
-settings-wallpaper-no-pictures-about = اختر مجلد صور من الأعلى.
-

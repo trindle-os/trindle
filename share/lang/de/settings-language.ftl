@@ -5,7 +5,7 @@
 settings-language-heading = Sprache von Trindle
 
 # Words under the heading of that card.
-settings-language-about = Wähle die Sprache, in der Trindles eigene Programme geschrieben sind. Was noch nicht übersetzt ist, erscheint auf Englisch.
+settings-language-about = Wähle die Sprache für die eigenen Programme von Trindle. Was noch nicht übersetzt ist, erscheint auf Englisch.
 
 # Title of the line with the list of languages.
 settings-language-pick = Sprache von Trindle
@@ -13,17 +13,14 @@ settings-language-pick = Sprache von Trindle
 # Tip of the list of languages, and its screen reader name.
 settings-language-pick-tip = Sprache für Trindles Programme wählen
 
-# Words under the list of languages: when a new choice is taken up.
-settings-language-next-start = Wird von jedem Programm beim nächsten Start verwendet.
+# Added to the language card's i: when a new choice is taken up.
+settings-language-next-start = Die Einstellungen nutzen es jetzt, andere Programme beim nächsten Start.
 
 # Entry in the list of languages: use the language the computer is set to.
-settings-language-auto = Dem System folgen
+settings-language-auto = Systemsprache
 
 # Title of the group of bars showing how much of each language is translated.
 settings-language-how-complete = Wie viel übersetzt ist
-
-# Words under that title.
-settings-language-how-complete-sub = Ein voller Balken bedeutet, dass jedes Wort übersetzt ist.
 
 # Tip and screen reader name of a bar under a language: how many of the English words it has (done and all are counts).
 settings-language-share =
@@ -37,4 +34,3 @@ settings-language-variant = Nur die Wörter, die vom Englischen abweichen
 
 # Under a language whose words were made by machine and not yet checked by a person.
 settings-language-machine = Maschinell übersetzt
-

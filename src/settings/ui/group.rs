@@ -13,11 +13,12 @@ pub struct Group {
     span: Option<(u8, u8)>,
     waits: Option<String>,
     wide: bool,
+    grows: bool,
     known_as: Option<String>,
 }
 
 pub fn group(name: impl Into<String>) -> Group {
-    Group { name: name.into(), icon: None, about: None, vis: None, rows: Vec::new(), span: None, waits: None, wide: false, known_as: None }
+    Group { name: name.into(), icon: None, about: None, vis: None, rows: Vec::new(), span: None, waits: None, wide: false, grows: false, known_as: None }
 }
 
 impl Group {
@@ -51,6 +52,11 @@ impl Group {
         self
     }
 
+    pub fn grows(mut self) -> Self {
+        self.grows = true;
+        self
+    }
+
     pub fn waits_for(mut self, why: Option<&str>) -> Self {
         self.waits = why.map(str::to_string);
         self
@@ -69,7 +75,7 @@ impl Group {
         let icon = self.icon.unwrap_or_else(|| PAGE_ICON.with(|i| i.get()).to_string());
         let mut end = Vec::new();
         if let (Some(k), Some(about)) = (kit, &self.about) {
-            end.push(info(k, &format!("card:{}", self.name), &t!("settings-common-about-card", name = self.name.to_lowercase()), about));
+            end.push(info(k, &format!("card:{}", self.name), &t!("settings-common-about-card", name = self.name.as_str()), about));
         }
 
         let key = self.known_as.map(|id| card_key(&id)).or_else(|| (!self.name.is_empty()).then(|| card_key(&self.name)));
@@ -82,7 +88,8 @@ impl Group {
         all.extend(self.rows.into_iter().map(|r| grey(r, waits)));
         let b = crate::toolkit::theme::bento();
         let (least, most) = self.span.unwrap_or(b.card);
-        let card = boxed(column(all).gap(ROW_GAP)).height(Length::Fill).beside().span(least, most, b.words);
+        let card = boxed(column(all).gap(ROW_GAP)).height(Length::Fill).beside();
+        let card = if self.grows { card.span_grows(least, most, b.words) } else { card.span(least, most, b.words) };
         let card = if self.wide { card.wide_by_choice() } else { card };
         match key {
             Some(k) => card.key(k),

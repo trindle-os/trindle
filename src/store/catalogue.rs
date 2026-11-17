@@ -443,7 +443,7 @@ pub fn load(done: impl FnOnce(Option<Catalogue>, String) + 'static) {
 }
 
 pub fn installed(done: impl FnOnce(HashMap<String, (String, String)>) + 'static) {
-    capture(&["flatpak", "list", "--app", "--columns=application,installation,version"], None, move |_ok, out, _err| {
+    capture(&crate::store::progress::english(&["flatpak", "list", "--app", "--columns=application,installation,version"]), None, move |_ok, out, _err| {
         let mut result = HashMap::new();
         for line in out.lines() {
             let parts: Vec<&str> = line.split('\t').collect();

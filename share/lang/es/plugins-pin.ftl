@@ -11,7 +11,7 @@ plugins-pin-not-saved = El PIN no se guarda
 plugins-pin-no-answer = El otro equipo no ha respondido.
 
 # Red words on the PIN card when the unlocking command refused without saying why.
-plugins-pin-not-unlocked = No se desbloqueó.
+plugins-pin-not-unlocked = Sigue bloqueado.
 
 # Name the screen reader gives to the four dots on the PIN card.
 plugins-pin-dots = PIN
@@ -29,4 +29,3 @@ plugins-pin-send = Enviar
 
 # Heading of the PIN card, and the title of its window.
 plugins-pin-title = Desbloquear con PIN
-

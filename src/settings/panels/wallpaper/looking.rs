@@ -5,9 +5,10 @@ use std::path::{Path, PathBuf};
 use std::rc::Rc;
 use std::time::Duration;
 
+use super::cards::Cover;
 use super::{NO_PICTURE, PREVIEW_LOOPS, PREVIEW_STEP, Play, STILL_WIDTH, Slot, TILE_STEP, Thumb, Wallpaper, every_choices, expand_user, or_default, screen_size, shown_name, typed_colour};
 use crate::common::files::setting;
-use crate::common::run::on_thread;
+use crate::common::run::{answer, on_thread, wait_for};
 use crate::session::moving;
 use crate::session::wallpaper::{default_picture, looked_in, Found, own_pictures, showing, skipped};
 use crate::session::wallpaper_limits::{self as limits, Over};
@@ -43,7 +44,6 @@ impl Wallpaper {
         }
         let old_showing = std::mem::replace(&mut self.now.showing, seen.showing);
         self.now.src = seen.src;
-        self.now.is_dir = seen.is_dir;
         self.now.rotating = seen.rotating;
         self.now.showing_there = seen.showing_there;
         self.now.showing_words = seen.showing_words;
@@ -85,13 +85,13 @@ impl Wallpaper {
             if me.away {
                 return;
             }
-            me.thumbs.insert(key, px.map_or(Thumb::Failed, |p| Thumb::Ready(Rc::new(p))));
+            me.thumbs.insert(key, px.map_or(Thumb::Failed, |p| Thumb::Ready(Rc::new(Cover::new(p)))));
             me.next_thumb(k);
         });
         on_thread(move || decode(&path, step), back);
     }
 
-    pub(super) fn thumb(&self, path: &Path, step: usize) -> Option<Rc<Pixmap>> {
+    pub(super) fn thumb(&self, path: &Path, step: usize) -> Option<Rc<Cover>> {
         match self.thumbs.get(&(path.to_path_buf(), step)) {
             Some(Thumb::Ready(p)) => Some(p.clone()),
             Some(Thumb::Waiting | Thumb::Failed) | None => None,
@@ -111,50 +111,59 @@ impl Wallpaper {
         }
         self.gen += 1;
         let gen = self.gen;
-        *self.slot(which) = Some(Play { gen, path: path.to_path_buf(), step, film: None, left: 0, gap: Duration::ZERO, frame: None });
-        let back = kit.then::<Wallpaper, Option<(Film, usize, Duration)>>(move |me, k, opened| me.opened(k, which, gen, opened));
-        let path = path.to_path_buf();
-        on_thread(move || open_film(&path, step), back);
+        let (ask, asked) = std::sync::mpsc::channel();
+        let each = kit.each::<Wallpaper, Reel>(move |me, k, reel| me.reel(k, which, gen, reel));
+        let id = wait_for(Box::new(move |v| match v.downcast::<Reel>() {
+            Ok(reel) => {
+                let more = !matches!(*reel, Reel::Over);
+                each(*reel);
+                more
+            }
+            Err(_) => false,
+        }));
+        let film = path.to_path_buf();
+
+        let say = move |r| answer(id, Box::new(r));
+        std::thread::spawn(move || { let _ = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| run_film(&film, step, &asked, say))); say(Reel::Over) });
+        *self.slot(which) = Some(Play { gen, path: path.to_path_buf(), ask, asked: std::time::Instant::now(), left: 0,
+                                        gap: Duration::ZERO, frame: None });
     }
 
-    pub(super) fn opened(&mut self, kit: &mut Kit, which: Slot, gen: u64, opened: Option<(Film, usize, Duration)>) {
+    fn reel(&mut self, kit: &mut Kit, which: Slot, gen: u64, reel: Reel) {
         let slot = self.slot(which);
         let Some(p) = slot.as_mut().filter(|p| p.gen == gen) else { return };
-        let Some((film, left, gap)) = opened else {
-            *slot = None;
-            return;
+        let wait = match reel {
+            Reel::Opened(Some((left, gap))) => {
+                (p.left, p.gap) = (left, gap);
+                gap
+            }
+            Reel::Opened(None) | Reel::Over => {
+                *slot = None;
+                return;
+            }
+            Reel::Frame(px) => {
+                if let Some(px) = px {
+                    p.frame = Some(Rc::new(Cover::new(px)));
+                }
+
+                p.gap.saturating_sub(p.asked.elapsed())
+            }
         };
-        (p.film, p.left, p.gap) = (Some(film), left, gap);
-        kit.after::<Wallpaper>(gap, move |me, k| me.advance(k, which, gen));
+        kit.after::<Wallpaper>(wait, move |me, _| me.advance(which, gen));
     }
 
-    fn advance(&mut self, kit: &mut Kit, which: Slot, gen: u64) {
+    fn advance(&mut self, which: Slot, gen: u64) {
         let slot = self.slot(which);
         let Some(p) = slot.as_mut().filter(|p| p.gen == gen) else { return };
-        if p.left == 0 {
+        if p.left == 0 || p.ask.send(()).is_err() {
             *slot = None;
             return;
         }
-
-        let Some(film) = p.film.take() else { return };
         p.left -= 1;
-        let (step, since) = (p.step, std::time::Instant::now());
-        let back = kit.then::<Wallpaper, (Film, Option<Pixmap>)>(move |me, k, (film, px)| me.stepped(k, which, gen, film, px, since));
-        on_thread(move || step_film(film, step), back);
+        p.asked = std::time::Instant::now();
     }
 
-    fn stepped(&mut self, kit: &mut Kit, which: Slot, gen: u64, film: Film, px: Option<Pixmap>, since: std::time::Instant) {
-        let Some(p) = self.slot(which).as_mut().filter(|p| p.gen == gen) else { return };
-        p.film = Some(film);
-        if let Some(px) = px {
-            p.frame = Some(Rc::new(px));
-        }
-
-        let wait = p.gap.saturating_sub(since.elapsed());
-        kit.after::<Wallpaper>(wait, move |me, k| me.advance(k, which, gen));
-    }
-
-    pub(super) fn frame(&self, which: Slot, path: &Path) -> Option<Rc<Pixmap>> {
+    pub(super) fn frame(&self, which: Slot, path: &Path) -> Option<Rc<Cover>> {
         let p = match which {
             Slot::Preview => self.preview.as_ref(),
             Slot::Tile => self.tile.as_ref(),
@@ -181,7 +190,6 @@ impl Wallpaper {
             None => self.set(kit, "wallpaper", &path.to_string_lossy(), None),
         }
     }
-
 }
 
 fn decode(path: &Path, step: usize) -> Option<Pixmap> {
@@ -197,10 +205,24 @@ fn decode(path: &Path, step: usize) -> Option<Pixmap> {
     picture::to_pixmap(&img)
 }
 
-pub(super) struct Film {
+struct Film {
     player: moving::Player,
     buf: Vec<u8>,
     stride: usize,
+}
+
+pub(super) enum Reel {
+    Opened(Option<(usize, Duration)>),
+    Frame(Option<Pixmap>),
+    Over,
+}
+
+fn run_film(path: &Path, step: usize, asked: &std::sync::mpsc::Receiver<()>, say: impl Fn(Reel)) {
+    let Some((mut film, left, gap)) = open_film(path, step) else { return say(Reel::Opened(None)) };
+    say(Reel::Opened(Some((left, gap))));
+    while asked.recv().is_ok() {
+        say(Reel::Frame(next_frame(&mut film, step)));
+    }
 }
 
 fn open_film(path: &Path, step: usize) -> Option<(Film, usize, Duration)> {
@@ -210,11 +232,6 @@ fn open_film(path: &Path, step: usize) -> Option<(Film, usize, Duration)> {
     let gap = Duration::from_secs_f64(1.0 / info.fps.max(1.0));
     let left = player.frames() * PREVIEW_LOOPS;
     Some((Film { player, buf: vec![0u8; w * h * 4], stride: w * 4 }, left, gap))
-}
-
-fn step_film(mut film: Film, step: usize) -> (Film, Option<Pixmap>) {
-    let px = next_frame(&mut film, step);
-    (film, px)
 }
 
 fn next_frame(film: &mut Film, step: usize) -> Option<Pixmap> {
@@ -233,7 +250,6 @@ fn next_frame(film: &mut Film, step: usize) -> Option<Pixmap> {
 
 pub(super) struct Seen {
     pub(super) src: PathBuf,
-    pub(super) is_dir: bool,
     pub(super) rotating: bool,
     pub(super) showing: PathBuf,
     pub(super) showing_there: bool,
@@ -269,7 +285,7 @@ fn look(raw: &str, every: u64, skip: &HashSet<String>, counted: bool) -> Seen {
             if folder.is_dir() { looked_in(&folder).pictures } else { Vec::new() }
         }
     };
-    Seen { src, is_dir, rotating, showing, showing_there, showing_words, choices, said, memory }
+    Seen { src, rotating, showing, showing_there, showing_words, choices, said, memory }
 }
 
 #[derive(Clone, Copy)]
@@ -387,7 +403,6 @@ fn rotating_source(raw: &str, on: bool) -> PathBuf {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::session::wallpaper_limits as limits;
     use crate::toolkit::event::Loop;
 
     #[test]
@@ -402,7 +417,7 @@ mod tests {
         let skip: HashSet<String> = ["b.jpg".to_string()].into();
         let raw = folder.to_string_lossy().to_string();
         let seen = look(&raw, 60, &skip, false);
-        assert!(seen.is_dir && seen.rotating && seen.src == folder);
+        assert!(seen.rotating && seen.src == folder);
         assert_eq!(seen.choices, [folder.join("a.png"), folder.join("b.jpg"), folder.join("c.png")]);
         assert_eq!((seen.showing.clone(), seen.showing_there), (folder.join("a.png"), true));
         assert_eq!(seen.said, "A new picture every 1 minute, from 2 of the 3 pictures in Holiday.");
@@ -411,16 +426,16 @@ mod tests {
 
         let one = folder.join("c.png");
         let seen = look(&one.to_string_lossy(), 300, &skip, false);
-        assert!(!seen.is_dir && !seen.rotating && seen.showing == one && seen.showing_there);
+        assert!(!seen.rotating && seen.showing == one && seen.showing_there);
         assert_eq!(seen.choices.len(), 3);
-        assert_eq!(seen.said, "One picture, C, all the time.");
+        assert_eq!(seen.said, "C is always shown.");
 
         let plain = look(NO_PICTURE, 300, &skip, false);
-        assert!(plain.choices.is_empty() && !plain.showing_there && plain.said == "A plain colour, with no picture.");
+        assert!(plain.choices.is_empty() && !plain.showing_there && plain.said == "Just a plain colour.");
         assert_eq!(plain.showing_words, "A plain colour, set below.");
         let gone = look(&dir.join("gone.png").to_string_lossy(), 300, &skip, false);
-        assert_eq!(gone.said, "The picture is not there any more. Choose a picture or a folder.");
-        assert_eq!(gone.showing_words, "Nothing there any more. Choose a picture or a folder.");
+        assert_eq!(gone.said, "The picture isn't there any more. Choose a picture or a folder.");
+        assert_eq!(gone.showing_words, "The picture or folder is no longer there. Choose another.");
 
         let empty = dir.join("Empty");
         std::fs::create_dir_all(&empty).unwrap();
@@ -443,13 +458,14 @@ mod tests {
         image::RgbImage::new(3841, 16).save(&big).unwrap();
         let skip = HashSet::new();
 
+        let over_note = "Trindle left out 1 picture because it's larger than 4K.";
         let seen = look(&dir.to_string_lossy(), 300, &skip, false);
         assert_eq!(seen.choices, [dir.join("a.png")]);
-        assert_eq!(seen.said, format!("A new picture every 5 minutes, from 1 of the 1 picture in {}. 1 left out: larger than 4K.",
+        assert_eq!(seen.said, format!("A new picture every 5 minutes, from 1 of the 1 picture in {}. {over_note}",
                                       dir.file_name().unwrap().to_string_lossy()));
 
         let seen = look(&big.to_string_lossy(), 300, &skip, false);
-        assert_eq!(seen.said, "The picture is not used. 1 left out: larger than 4K. Trindle's own is shown.");
+        assert_eq!(seen.said, format!("Trindle isn't using that picture. {over_note} Trindle's own picture is shown instead."));
         assert_eq!(seen.showing, default_picture());
         assert_eq!(seen.choices, [dir.join("a.png")], "the others beside it are only those that fit");
 
@@ -462,7 +478,7 @@ mod tests {
         let mut kit = Kit::new(events.clone(), asks, None, None);
         let mut page = Wallpaper::made_up();
         page.chosen(&mut kit, big, over);
-        assert_eq!(kit.said("source"), Some(("1 left out: larger than 4K.", true)));
+        assert_eq!(kit.said("source"), Some((over_note, true)));
         std::fs::remove_dir_all(&dir).unwrap();
     }
 
@@ -470,7 +486,7 @@ mod tests {
     fn a_moving_wallpaper_is_given_its_note_about_memory() {
         let seen = look(&default_picture().to_string_lossy(), 300, &HashSet::new(), false);
         if seen.showing_there {
-            assert!(seen.memory.contains(&limits::moving_costs()), "the moving mosaic carries no note about memory");
+            assert!(seen.memory.contains(&t!("session-wallpaper-moving-costs")), "the moving mosaic carries no note about memory");
         }
     }
 }

@@ -1,16 +1,16 @@
 # Archive key rotation
 
-Trindle's update archive (apt.trindle.org) is signed with one ed25519 key, fingerprint `DC23 9DC3 4F02 A6A6 D569 E83B 6D17 DFB7 011D D6AA` (`sh tools/apt/key.sh fingerprint`). It now expires two years after it was last renewed (`sh tools/apt/key.sh expires`; today 6 November 2028).
+Trindle's update archive (apt.trindle.org) is signed with one ed25519 key, fingerprint `DC23 9DC3 4F02 A6A6 D569 E83B 6D17 DFB7 011D D6AA` (`sh tools/apt/key.sh fingerprint`). It expires two years after it was last renewed (`sh tools/apt/key.sh expires`).
 
 ## Where it lives
 
 - Public half: `system/apt/trindle-archive-keyring.gpg` in this repository. `tools/system-files.sh` installs it on every computer as `/usr/share/keyrings/trindle-archive-keyring.gpg`, and `system/apt/trindle.sources` names it in `Signed-By`.
-- Private half: `"$TRINDLE_KEY_HOME"` in the project's private key folder (backed up with the other secrets). It is never in the repository.
+- Private half: kept by the maintainers in `"$TRINDLE_KEY_HOME"`, never in the repository.
 - `tools/apt/build.sh` signs with it and `tools/apt/verify.sh` checks against the public half. `verify.sh` refuses to pass, and so `publish.sh` puts nothing up, once the key is within 60 days of expiry.
 
 ## Who and how often
 
-The Trindle project session renews it, on the project owner's word, at least six months before the expiry date, and always in the release that comes nearest to that. Extending an expiry keeps the fingerprint, so nothing in `Signed-By` or in `key.sh` changes.
+The maintainers renew it at least six months before the expiry date, and always in the release that comes nearest to that. Extending an expiry keeps the fingerprint, so nothing in `Signed-By` or in `key.sh` changes.
 
 ## Renewing (same key, new date)
 

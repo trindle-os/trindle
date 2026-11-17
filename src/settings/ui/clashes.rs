@@ -62,7 +62,7 @@ pub fn replace_rows(kit: &Kit, key: &str, clashes: &Clashes, bring: Vec<Node<Msg
     let Some(taken) = clashes.first() else { return Vec::new() };
     let more = clashes.more();
     let mut head = line(t!("settings-common-already-there", name = &taken.name))
-        .keep_sub(if more == 0 { String::new() } else { t!("settings-common-same-for-rest-more", n = more) })
+        .keep_sub(if more == 0 { String::new() } else { t!("settings-common-same-for-rest-more", n = more) }, 2)
         .key(key);
     if more > 0 {
         head = head.control(crate::toolkit::widget::switch(clashes.same(), t!("settings-common-same-for-rest"), same));

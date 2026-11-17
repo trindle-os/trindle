@@ -10,19 +10,13 @@ activity-about-page = Об этой странице
 activity-try-again = Повторить
 
 # Red words in place of the room when the computer could not be read at the first look.
-activity-cannot-read = Не удалось узнать, чем занят компьютер.
+activity-cannot-read = Trindle не удалось проверить, чем занят компьютер.
 
 # In place of the room when no program is running.
 activity-no-programs = Пока не запущено ни одной программы.
 
 # In place of the list when the room could not be read, so there is nothing to list.
-activity-nothing-to-list = Показывать нечего, пока не удастся прочитать данные компьютера.
-
-# The one sentence above the room, saying what it shows.
-activity-caption = Каждый пузырь это программа, размером с занимаемую ею память.
-
-# The one sentence above the list of programs.
-activity-list-caption = Нажмите на программу, чтобы увидеть её в круге.
+activity-nothing-to-list = Показать программы не получится, пока Trindle не сможет проверить, чем занят компьютер.
 
 # Heading of the card that lists the programs.
 activity-programs = Программы
@@ -37,20 +31,20 @@ activity-memory = Память
 activity-processor = Процессор
 
 # Words the screen reader gives the room when no bubble is picked.
-activity-room-spoken = Программы, каждая размером с занимаемую ею память
+activity-room-spoken = Пузыри программ, размер зависит от занятой памяти
 
 # First paragraph of the words behind the i: what the computer is doing.
-activity-help-1 = Чем сейчас занят этот компьютер. Каждая программа это пузырь в большом круге, размером с занимаемую ею память, поэтому чем полнее круг, тем полнее память.
+activity-help-1 = Здесь видно, чем сейчас занят ваш компьютер. Каждая программа показана пузырём внутри круга. Чем больше пузырь, тем больше памяти занимает программа. Чем полнее круг, тем больше памяти занято.
 
 # Second paragraph of the words behind the i: how the colours and bars show the work.
-activity-help-2 = Работающая программа светится и пульсирует, тем быстрее и ярче, чем больше она работает: холодный цвет означает мало работы, оранжевый много, а красный предел. По краю идёт по одной полосе на каждый поток процессора; чем он занятее, тем полоса длиннее и теплее, поэтому когда все полосы длинные и красные, компьютер работает на пределе, а виноват самый яркий пузырь.
+activity-help-2 = Пузырь работающей программы светится и пульсирует. Чем чаще и ярче пульсация, тем больше работы. Холодные цвета означают мало работы, оранжевый означает большую нагрузку, а красный означает полную нагрузку. Каждая полоса по краю показывает один поток, то есть часть процессора, которая выполняет работу. Чем длиннее полосы и теплее цвет, тем больше работы. Когда все полосы длинные и красные, компьютер работает на пределе возможностей. Самый яркий пузырь показывает, какая программа нагружает компьютер сильнее всего.
 
 # Third paragraph of the words behind the i: how to look at a program and stop it, and what the two grey bubbles are.
 # SAFETY: needs a human review before it ships
-activity-help-3 = Нажмите на пузырь или на программу в списке, чтобы увидеть простыми цифрами, чем она занята, и остановить её, если она перестала отвечать: кнопка остановки, нажатая дважды, просит программу закрыться, и всё несохранённое в ней может быть потеряно. Два тихих серых пузыря содержат остальное: рабочий стол Trindle, то есть композитор, который рисует экран, кольцо, вкладку и обои, и Linux и другие программы, то есть сам Linux и программы, которые присматривают за компьютером.
+activity-help-3 = Нажмите на пузырь или на программу в списке, чтобы увидеть простыми цифрами, чем она занята. Если программа перестала отвечать, её можно остановить: дважды нажмите кнопку остановки, и Trindle попросит программу закрыться. Всё, что вы в ней не сохранили, может пропасть. Два серых пузыря показывают всё остальное. «Рабочий стол Trindle» - это часть, которая рисует экран, кольцо, вкладку и обои. «Linux и другие программы» - это сам Linux и программы, которые присматривают за компьютером.
 
 # Fourth paragraph of the words behind the i: how memory, the processor, the disk and the swap file are counted.
-activity-help-4 = Память считается честным способом, как в таких средствах, как smem: память, общая для двух программ, делится между ними, а память, вытесненная в файл подкачки, включается в подсчёт, поэтому ничто не считается дважды и не теряется. Карточки рядом с картинкой показывают, насколько заполнены память, процессор, диск и файл подкачки; кольцо становится оранжевым, а затем красным, только когда что-то почти заполнено.
+activity-help-4 = Trindle считает память аккуратно, так же, как это делают такие программы, как smem. Память, общая для двух программ, делится между ними, а память, вытесненная в файл подкачки, тоже учитывается, поэтому ничего не считается дважды и не теряется. Карточки рядом с картинкой показывают, насколько заполнены память, процессор, диск и файл подкачки. Кольцо становится оранжевым, а затем красным, только когда почти заполнено.
 
 # Heading of the card that shows the room and its sentence, at the top of the room.
 activity-right-now = Прямо сейчас
@@ -59,7 +53,7 @@ activity-right-now = Прямо сейчас
 activity-looking = Смотрим…
 
 # The sentence at the top when the computer could not be read at all.
-activity-unread = Сейчас не удалось прочитать данные компьютера.
+activity-unread = Trindle не удалось проверить компьютер.
 
 # The sentence at the top when the whole processor is flat out, and one program is using most of it. $a is its name.
 activity-flat-out-one = Компьютер работает на пределе: { $a } использует { $threads }.
@@ -80,13 +74,13 @@ activity-memory-full-named = Память почти заполнена; бол�
 activity-memory-full = Память почти заполнена.
 
 # The sentence at the top when the computer is busy and one program is the busiest. $a is its name.
-activity-ticking-busiest = Компьютер работает в обычном режиме; самая загруженная программа: { $a }.
+activity-ticking-busiest = Компьютер не загружен. Больше всего работает { $a }.
 
 # The sentence at the top when the computer is busy and nothing is named.
 activity-busy = Компьютер занят.
 
 # The sentence at the top when the computer is only lightly busy and nothing is named.
-activity-ticking-over = Компьютер работает в обычном режиме.
+activity-ticking-over = Компьютер не загружен.
 
 # The sentence at the top when one program is doing most of the work. $a is its name.
 activity-doing-most = Большую часть работы сейчас делает { $a }.
@@ -98,10 +92,10 @@ activity-two-keeping-busy = Компьютер занимают { $a } и { $b }
 activity-plenty-to-spare = { $a } усиленно работает, но у компьютера большой запас.
 
 # The sentence at the top when all is calm but memory is filling up. $b is the program holding the most.
-activity-calm-memory-filling = Всё спокойно, но память заполняется; больше всех занимает { $b }.
+activity-calm-memory-filling = Компьютер почти не нагружен, но памяти занято всё больше. Больше всех использует { $b }.
 
 # The sentence at the top when all is calm and nothing is working hard.
-activity-all-calm = Всё спокойно: ничто не нагружает компьютер.
+activity-all-calm = Ни одна программа не нагружает компьютер.
 
 # How many threads, as a phrase inside a sentence: all of them. $n is the number of threads.
 activity-all-threads = { $n ->
@@ -145,13 +139,13 @@ activity-under-one-percent = меньше 1%
 activity-size-under-mb = меньше 1 МБ
 
 # How a thread is described in its tip when it is resting.
-activity-resting = отдыхает
+activity-resting = простаивает
 
 # How a thread is described in its tip when it is busy. $percent is the share, such as 80%.
 activity-busy-percent = занято на { $percent }
 
 # How hard a program is working, when it is resting.
-activity-effort-resting = Отдыхает
+activity-effort-resting = Простаивает
 
 # How hard a program is working, when it is working a little.
 activity-effort-little = Немного работает
@@ -269,19 +263,19 @@ activity-separate-parts = { $n ->
 activity-running-for = Работает уже
 
 # A card's fact: the name of the facts' heading for what a program is made of.
-activity-made-of = Состоит из
+activity-made-of = Части
 
 # Words under a memory card when it could not be read at the first look.
 activity-ring-not-read = Пока не удалось прочитать.
 
 # Sentence under the memory figure: how much memory is in use, and how much of it Trindle itself holds. $used and $ours are sizes.
-activity-memory-sentence = Используется { $used }; из них самому Trindle принадлежит { $ours }.
+activity-memory-sentence = Используется { $used }. Из них { $ours } занимает сама Trindle.
 
 # Sentence under the processor figure: how busy all the threads have been. $threads is "all 16 threads" or similar.
 activity-processor-sentence = Насколько были заняты { $threads } за последние две минуты.
 
 # Sentence under the disk figure: how much is used and how much is still free. $used and $free are sizes.
-activity-disk-sentence = Занято { $used }; ещё свободно { $free }.
+activity-disk-sentence = Занято { $used }, свободно { $free }.
 
 # Limit under a memory, disk or swap figure. $amount is the whole.
 activity-of-size = из { $amount }
@@ -293,13 +287,13 @@ activity-disk = Диск
 activity-swap-file = Файл подкачки
 
 # Sentence under the swap file figure: how much is in use, and the rest is room to hibernate. $used is a size.
-activity-swap-sentence = Используется { $used }; остальное место для гибернации.
+activity-swap-sentence = Используется { $used }.
 
 # Name of the temperature card, shown when the computer has a temperature to read.
 activity-temperature = Температура
 
 # Sentence under the temperature figure.
-activity-temperature-sentence = Насколько сейчас нагрет процессор.
+activity-temperature-sentence = Температура процессора
 
 # Limit under the temperature figure. The degree sign is written as it is.
 activity-of-hundred-degrees = из 100°C
@@ -309,5 +303,4 @@ activity-no-swap = У этого компьютера нет файла подк
 
 
 # Short line in the Activity window after a program that did not answer Stop within five seconds was ended by force. $title is the program.
-activity-forced = Принудительно закрыто: { $title } не отвечает
-
+activity-forced = { $title } не отвечает, поэтому программа закрыта принудительно

@@ -13,7 +13,7 @@ plugins-pin-no-answer = Diğer bilgisayardan yanıt gelmedi.
 
 # Red words on the PIN card when the unlocking command refused without saying why.
 # SAFETY: needs a human review before it ships
-plugins-pin-not-unlocked = Kilit açılmadı.
+plugins-pin-not-unlocked = Hâlâ kilitli.
 
 # Name the screen reader gives to the four dots on the PIN card.
 plugins-pin-dots = PIN
@@ -32,4 +32,3 @@ plugins-pin-send = Gönder
 # Heading of the PIN card, and the title of its window.
 # SAFETY: needs a human review before it ships
 plugins-pin-title = PIN ile kilidi aç
-

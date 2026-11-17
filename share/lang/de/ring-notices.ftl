@@ -37,7 +37,7 @@ ring-snooze-for-1-hour = 1 Stunde schlummern
 ring-snooze-for-6-hours = 6 Stunden schlummern
 
 # Tip and screen reader name of the snooze choice for the next morning.
-ring-snooze-for-next-morning = Bis zum nächsten Morgen schlummern
+ring-snooze-for-next-morning = Bis zum Morgen schlummern
 
 # Tip of the button on the snooze page that goes back to the notification's message.
 ring-act-back = Zurück zur Nachricht
@@ -109,7 +109,7 @@ ring-lid-nothing = Nichts
 ring-lid-shut-down = Herunterfahren
 
 # Reason the system lists beside Trindle's hold on the lid switch (shown by tools that list what stops sleep).
-ring-lid-reason = Beim Schließen des Deckels geschieht, was unter Einstellungen, Energie steht
+ring-lid-reason = Was beim Schließen des Deckels passiert, stellst du unter Einstellungen, Energie ein.
 
 # Notice at the foot of the screen for a few seconds when the magnifier starts.
 ring-magnify-hint = Halte irgendwo gedrückt, um zu vergrößern
@@ -126,14 +126,14 @@ ring-mic-off-tip = Mikrofon für alle Programme ausschalten
 
 # Tip of the switch in the ring that turns the microphone back on.
 # SAFETY: needs a human review before it ships
-ring-mic-on-tip = Mikrofon wieder einschalten
+ring-mic-on-tip = Mikrofon einschalten
 
 # Line in the ring when something other than the person pressed the microphone switch on.
 # SAFETY: needs a human review before it ships
-ring-mic-own-press = Nur dein eigener Tastendruck kann das Mikrofon wieder einschalten.
+ring-mic-own-press = Nur du kannst das Mikrofon wieder einschalten.
 
 # Line in the ring when the microphone switch could not be changed; the reason follows.
-ring-mic-not-changed = Der Mikrofonschalter konnte nicht geändert werden: { $why }
+ring-mic-not-changed = Trindle konnte den Mikrofonschalter nicht ändern: { $why }
 
 # Notice when a notification was clicked and no program could be found for it.
 ring-goes-no-program = Kein Programm gefunden
@@ -151,7 +151,7 @@ ring-notes-copied = Für deinen Assistenten kopiert
 ring-notes-name = Benachrichtigung
 
 # Said when a pinned notification has been held long enough and now follows the pointer.
-ring-notes-moving = Wird bewegt. Loslassen zum Ablegen, Escape zum Zurücklegen.
+ring-notes-moving = Du bewegst die Benachrichtigung. Lass los, um sie abzulegen, oder drücke Esc, um sie zurückzulegen.
 
 # Said when a pinned notification has been dropped or moved by keys.
 ring-notes-moved = Verschoben
@@ -189,11 +189,15 @@ ring-notify-top-right = Oben rechts
 
 # Title of the notice when a plugin that asks for permissions has been given none.
 # SAFETY: needs a human review before it ships
-ring-plugin-needs = { $name } braucht deine Erlaubnis
+ring-plugin-needs = { $name } braucht Berechtigungen
 
 # Line under the notice that a plugin needs permission: none of the permissions it asks for are given.
 # SAFETY: needs a human review before it ships
-ring-plugin-cannot-work = Es kann noch nicht arbeiten: 0 von { $asks } erlaubt.
+ring-plugin-cannot-work =
+    { $asks ->
+        [one] Es kann noch nicht arbeiten. Du hast die eine Berechtigung, die es anfordert, nicht erlaubt.
+       *[other] Es kann noch nicht arbeiten. Du hast keine der { $asks } Berechtigungen erlaubt, die es anfordert.
+    }
 
 # Said to a screen reader when a notification was copied; $said is what the circle said.
 ring-copied-said = Kopiert. { $said }
@@ -210,7 +214,9 @@ ring-outside-files = Hat deine Dateien geöffnet
 ring-outside-body =
     { $more ->
         [0] { $names }
-        [one] { $names } und { $more } weitere
+        [one] { $names } und 1 weiteres
        *[other] { $names } und { $more } weitere
     }
 
+# Said under the magnifier when the screen picture it took has the wrong size.
+ring-magnify-wrong-size = Das Bild hatte die falsche Größe.

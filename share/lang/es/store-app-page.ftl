@@ -18,7 +18,7 @@ store-app-state-removing = Eliminando
 store-app-state-downloading = Descargando
 
 # The state beside the dot while Flatpak is putting the fetched app in.
-store-app-state-putting-in = Instalándola
+store-app-state-putting-in = Instalando
 
 # The state beside the dot while the app's own update goes in.
 store-app-state-updating = Actualizando
@@ -27,7 +27,7 @@ store-app-state-updating = Actualizando
 store-app-state-held = Instalada, retenida
 
 # The state beside the dot for an installed app whose updates are held back.
-store-app-state-held-version = Instalada, retenida en la versión { $version }
+store-app-state-held-version = Instalada, actualizaciones retenidas en la versión { $version }
 
 # The state beside the dot for an installed app with an update waiting; the end says what waits.
 store-app-state-waiting = Instalada, { $waits }
@@ -65,7 +65,7 @@ store-app-remove = Eliminar
 store-app-open-round = Abrir
 
 # Main button that releases an app whose updates are held back.
-store-app-release = Versión
+store-app-release = Permitir actualizaciones
 
 # Main button that updates the app.
 store-app-update = Actualizar
@@ -83,13 +83,13 @@ store-app-website = Sitio web
 store-app-no-pictures = Esta aplicación no tiene imágenes.
 
 # In the picture frame when the picture could not be fetched.
-store-app-picture-missed = No se pudo obtener esta imagen.
+store-app-picture-missed = Trindle no pudo obtener esta imagen.
 
 # In the picture frame while the picture is being fetched.
 store-app-picture-fetching = Obteniendo la imagen…
 
 # In the picture frame when the computer has no internet.
-store-app-picture-offline = No se pueden obtener imágenes mientras este equipo no esté conectado a internet.
+store-app-picture-offline = Conéctate a internet para ver las imágenes.
 
 # Between the picture buttons: which picture, when it has no caption.
 store-app-picture-of = Imagen { $at } de { $n }
@@ -165,13 +165,13 @@ store-app-review-no-title = Sin título
 store-app-people-none = Nadie ha escrito aún sobre esta aplicación.
 
 # Under What people say when there is no internet.
-store-app-people-offline = No se puede obtener lo que dice la gente mientras este equipo no esté conectado a internet.
+store-app-people-offline = Conéctate a internet para leer las opiniones.
 
 # Under What people say while reviews are being fetched.
-store-app-people-looking = Buscando lo que dice la gente…
+store-app-people-looking = Cargando opiniones…
 
 # Name of the card of reviews.
-store-app-people = Lo que dice la gente
+store-app-people = Opiniones
 
 # Facts line: when the app's project was made.
 store-app-fact-created = Creado

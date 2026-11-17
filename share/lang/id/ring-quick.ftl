@@ -2,7 +2,7 @@
 # machine translated (Indonesian), not yet reviewed by a person.
 
 # Tip of the pin button on a clipboard or notification item that is not pinned: keeps it for good.
-ring-quick-pin = Sematkan: simpan selamanya
+ring-quick-pin = Sematkan agar tetap tersimpan
 
 # Tip of the pin button on a clipboard or notification item that is pinned.
 ring-quick-unpin = Lepas sematan
@@ -13,7 +13,7 @@ ring-quick-forget-one = Lupakan yang ini
 
 # Tip of the bin button that forgets everything on the page except what is pinned; it asks twice.
 # SAFETY: needs a human review before it ships
-ring-quick-forget-all = Lupakan semuanya kecuali yang disematkan
+ring-quick-forget-all = Hapus semuanya kecuali yang disematkan
 
 # Name of the volume slider for the speakers on the sound page.
 ring-quick-speakers = Pengeras suara
@@ -70,7 +70,7 @@ ring-quick-bt-switch = Bluetooth
 ring-quick-bt-off = Bluetooth mati.
 
 # Line on the Bluetooth page while it looks for devices and none is found yet.
-ring-quick-bt-searching = Mencari... aktifkan mode pemasangan pada perangkat.
+ring-quick-bt-searching = Mencari… Aktifkan mode pemasangan pada perangkat.
 
 # Tip of the button beside a connected Bluetooth device that disconnects it.
 ring-quick-bt-disconnect = Putuskan
@@ -86,20 +86,20 @@ ring-quick-bt-pair = Pasangkan dan hubungkan
 ring-quick-bt-device = Perangkat Bluetooth
 
 # Line under the Bluetooth page while pairing with a device.
-ring-quick-bt-pairing = Memasangkan dengan { $name }...
+ring-quick-bt-pairing = Memasangkan dengan { $name }…
 
 # Line under the Bluetooth page while connecting a device.
-ring-quick-bt-connecting = Menghubungkan { $name }...
+ring-quick-bt-connecting = Menghubungkan { $name }…
 
 # Line under the Bluetooth page while disconnecting a device.
-ring-quick-bt-disconnecting = Memutuskan { $name }...
+ring-quick-bt-disconnecting = Memutuskan { $name }…
 
 # Line under the Bluetooth page when connecting or disconnecting did not work.
 ring-quick-bt-failed = Tidak berhasil. Apakah perangkat menyala dan berada di dekat?
 
 # Line under the Bluetooth page when pairing failed because the codes were not accepted.
 # SAFETY: needs a human review before it ships
-ring-quick-bt-codes = Tidak dipasangkan: kode tidak diterima.
+ring-quick-bt-codes = Gagal memasangkan. Kode tidak diterima.
 
 # Line under the Bluetooth page when pairing failed.
 ring-quick-bt-not-paired = Tidak dipasangkan. Apakah perangkat dalam mode pemasangan dan berada di dekat?
@@ -109,7 +109,7 @@ ring-quick-bt-paired-not-connected = Sudah dipasangkan, tetapi tidak terhubung. 
 
 # Question in the ring when a Bluetooth device wants a PIN typed.
 # SAFETY: needs a human review before it ships
-ring-quick-bt-ask-pin = Ketik PIN untuk perangkat ini. Biasanya ada di petunjuknya, atau 0000.
+ring-quick-bt-ask-pin = Ketik PIN untuk perangkat ini. Biasanya ada di petunjuk perangkat, atau coba 0000.
 
 # Typing box for the PIN of a Bluetooth device, shown quietly while empty.
 ring-quick-bt-pin-box = PIN
@@ -147,7 +147,7 @@ ring-quick-wifi-switch = Wi-Fi
 ring-quick-wifi-off = Wi-Fi mati.
 
 # Line on the Wi-Fi page while it looks for networks.
-ring-quick-wifi-looking = Mencari jaringan...
+ring-quick-wifi-looking = Mencari jaringan…
 
 # Tip of the button beside the Wi-Fi network in use that leaves it.
 ring-quick-wifi-disconnect = Putuskan
@@ -164,7 +164,7 @@ ring-quick-wifi-password-box = Kata sandi
 ring-quick-wifi-join = Gabung
 
 # Line under the Wi-Fi page while joining a network.
-ring-quick-wifi-joining = Bergabung ke { $ssid }...
+ring-quick-wifi-joining = Bergabung ke { $ssid }…
 
 # Question text in the ring when the Wi-Fi password was not accepted.
 # SAFETY: needs a human review before it ships
@@ -180,7 +180,7 @@ ring-quick-battery-none = Komputer ini tidak punya baterai.
 ring-quick-brightness-fixed = Kecerahan layar ini tidak bisa diubah dari sini
 
 # Line on the clipboard page when nothing has been copied yet.
-ring-quick-clip-empty = Belum ada yang disalin. Apa yang Anda salin disimpan di sini.
+ring-quick-clip-empty = Belum ada yang disalin.
 
 # Line on the clipboard page for a copied picture.
 ring-quick-clip-picture = Sebuah gambar
@@ -192,7 +192,7 @@ ring-quick-clip-again = Salin ini lagi
 ring-quick-clip-filter = Saring
 
 # Line on the notifications page when nothing has been said yet.
-ring-quick-notes-empty = Belum ada yang disampaikan.
+ring-quick-notes-empty = Belum ada notifikasi.
 
 # Tip of the button on one notification's page that goes back to the list.
 ring-quick-notes-back = Kembali ke semua notifikasi
@@ -210,7 +210,7 @@ ring-quick-charging-full = Mengisi daya: penuh dalam sekitar { $time }
 ring-quick-charging = Mengisi daya
 
 # Line on the battery page on battery, with the time left and the power in watts.
-ring-quick-on-battery-left = Memakai baterai: sisa sekitar { $time }, memakai { $rate } W
+ring-quick-on-battery-left = Memakai baterai. Sisa sekitar { $time }, memakai { $rate } W.
 
 # Line on the battery page on battery, when the time is not known.
 ring-quick-on-battery = Memakai baterai
@@ -224,9 +224,9 @@ ring-quick-plugged = Tercolok, tidak mengisi daya
 # Line on the battery page about how much charge the battery still holds. The health is good, worn, or something else for worn out.
 ring-quick-health =
     { $how ->
-        [good] Kesehatan: baik. Kapasitasnya { $capacity }% dari saat baru.
-        [worn] Kesehatan: aus. Kapasitasnya { $capacity }% dari saat baru.
-       *[old] Kesehatan: sudah habis masa pakainya: saatnya ganti yang baru. Kapasitasnya { $capacity }% dari saat baru.
+        [good] Baterai dalam kondisi baik. Kini baterai dapat menyimpan { $capacity }% dari muatan saat baru.
+        [worn] Baterai sudah aus. Kini baterai dapat menyimpan { $capacity }% dari muatan saat baru.
+       *[old] Baterai sudah habis masa pakainya, jadi saatnya ganti yang baru. Kini baterai dapat menyimpan { $capacity }% dari muatan saat baru.
     }
 
 # Line on the battery page about how many times the battery has been charged.
@@ -236,10 +236,10 @@ ring-quick-cycles =
     }
 
 # Tip of the button that turns notification circles off.
-ring-quick-notes-on = Notifikasi menyala: matikan
+ring-quick-notes-on = Notifikasi menyala. Matikan
 
 # Tip of the button that turns notification circles back on.
-ring-quick-notes-off = Notifikasi mati: nyalakan
+ring-quick-notes-off = Notifikasi mati. Nyalakan
 
 # A time of under an hour on the battery page.
 ring-quick-minutes = { $m } mnt
@@ -264,3 +264,5 @@ ring-quick-title-tray = Ikon baki
 # Heading of the shortcut list page, opened with Super and K.
 ring-quick-title-shortcuts = Pintasan
 
+# Line under the Wi-Fi page when leaving the network did not work.
+ring-quick-wifi-leave-failed = Tidak dapat memutuskan sambungan.

@@ -12,10 +12,10 @@ settings-users-help = إضافة أشخاص وتغيير كلمات المرور
 
 # Beside a change that is waiting for the administrator's password to be typed.
 # SAFETY: needs a human review before it ships
-settings-users-waiting = بانتظار كلمة المرور...
+settings-users-waiting = بانتظار كلمة مرورك…
 
 # Headline of the Users page when nobody on the computer is an administrator.
-settings-users-sum-nobody-admin = لا أحد هنا مسؤول، لذا لا يمكن تثبيت شيء أو تغييره للجميع.
+settings-users-sum-nobody-admin = لا أحد هنا مسؤول، لذا لا يستطيع أحد تثبيت شيء أو تغييره للجميع.
 
 # Headline of the Users page when you are the only person and an administrator.
 settings-users-sum-only-you = أنت وحدك تستخدم هذا الحاسوب، وأنت مسؤوله.
@@ -60,7 +60,7 @@ settings-users-sum-admins =
 settings-users-this-is-you = هذا أنت.
 
 # Under a person's name on their card when the card is someone else's: the name shown is their login name.
-settings-users-login-name = اسم الدخول الخاص بهم.
+settings-users-login-name = اسم الدخول
 
 # Tip of the round button on a person's card that picks their picture, and title of the window that opens.
 settings-users-choose-picture = اختر صورة
@@ -74,7 +74,7 @@ settings-users-change-password = غيّر كلمة المرور
 
 # Tip of the round button on a person's card that deletes them and their files.
 # SAFETY: needs a human review before it ships
-settings-users-delete = احذف، مع ملفاتهم
+settings-users-delete = احذف الحساب والملفات
 
 # Said beside a person once they are deleted.
 # SAFETY: needs a human review before it ships
@@ -84,13 +84,9 @@ settings-users-deleted = تم الحذف
 # SAFETY: needs a human review before it ships
 settings-users-administrator = مسؤول
 
-# Under the Administrator line: what an administrator can do.
-# SAFETY: needs a human review before it ships
-settings-users-admin-can = يستطيع تثبيت الأشياء وتغييرها للجميع.
-
 # Tip of the administrator switch on your own card, and said when you press it: you cannot remove your own administrator rights.
 # SAFETY: needs a human review before it ships
-settings-users-cannot-take-away = لا يمكنك سحب هذا من نفسك.
+settings-users-cannot-take-away = لا يمكنك إزالة صلاحيات المسؤول عن نفسك.
 
 # Said beside a person after they are made an administrator.
 # SAFETY: needs a human review before it ships
@@ -102,7 +98,7 @@ settings-users-admin-no-longer = لم يعد مسؤولًا
 
 # Help text for a person's card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-person-about = صورتهم وكلمة مرورهم، وحذفهم مع ملفاتهم لأي شخص غيرك، هي الأزرار المستديرة بجانب اسمهم. يستطيع المسؤول تثبيت البرامج وتغيير الأشياء للجميع؛ ولا يمكنك سحب هذا من نفسك. كل تغيير يطلب كلمة مرور المسؤول.
+settings-users-person-about = يستطيع المسؤول تثبيت البرامج وتغيير الأشياء للجميع. لا يمكنك إزالة صلاحيات المسؤول عن نفسك. كل تغيير يحتاج إلى كلمة مرور المسؤول.
 
 # Typing box in the change password form, for your own current password.
 # SAFETY: needs a human review before it ships
@@ -113,7 +109,7 @@ settings-users-current-password = كلمة المرور الحالية
 settings-users-new-password = كلمة المرور الجديدة
 
 # Typing box in the change password form where the new password is typed again.
-settings-users-again = مرة أخرى
+settings-users-again = اكتبها مرة أخرى
 
 # Button in the change password form that saves the new password.
 settings-users-save = حفظ
@@ -128,11 +124,11 @@ settings-users-cancel = إلغاء
 
 # Red words in the change password form when your current password was left empty.
 # SAFETY: needs a human review before it ships
-settings-users-need-current = كلمة مرورك الحالية أيضًا، حتى تبقى تسجيلات دخولك المحفوظة تعمل.
+settings-users-need-current = أدخل كلمة مرورك الحالية أيضًا، حتى تبقى تسجيلات دخولك المحفوظة تعمل.
 
 # Red words in the change password form when the new password is too short.
 # SAFETY: needs a human review before it ships
-settings-users-at-least-8 = 8 أحرف على الأقل، من فضلك.
+settings-users-at-least-8 = استخدم 8 أحرف على الأقل.
 
 # Red words in the change password form when the two new passwords differ.
 # SAFETY: needs a human review before it ships
@@ -144,7 +140,7 @@ settings-users-password-changed = تم تغيير كلمة المرور
 
 # Red words after a password change when the saved logins could not take the new password.
 # SAFETY: needs a human review before it ships
-settings-users-not-rekeyed = تم تغيير كلمة المرور، لكن تسجيلات الدخول المحفوظة ما زالت تُفتح بالقديمة.
+settings-users-not-rekeyed = تم تغيير كلمة المرور، لكن تسجيلات الدخول المحفوظة ما زالت تستخدم كلمة المرور القديمة.
 
 # Red words when the chosen file is not a picture the page can use.
 settings-users-png-please = PNG أو JPG أو WebP، من فضلك.
@@ -156,21 +152,17 @@ settings-users-picture-not-changed = تعذّر تغيير الصورة.
 settings-users-saved = تم الحفظ
 
 # Red words when your new picture works at login but could not be copied to your home folder.
-settings-users-picture-not-shared = تظهر الصورة عند تسجيل الدخول، لكن تعذّر إعطاؤها لبرامجك الأخرى.
+settings-users-picture-not-shared = تظهر صورتك في شاشة تسجيل الدخول، لكن تعذّر على Trindle مشاركتها مع برامجك الأخرى.
 
 # Heading of the form for adding a person.
 settings-users-add-someone = أضف شخصًا
 
 # Help text for the Add someone form (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-add-about = حساب جديد لشخص آخر: اسمه الكامل، واسم دخول بأحرف إنجليزية صغيرة وأرقام يبدأ بحرف، وكلمة مرور من 8 أحرف على الأقل. يستطيع تسجيل الدخول فورًا. يستطيع المسؤول تثبيت البرامج وتغيير الأشياء للجميع.
+settings-users-add-about = أدخل اسمه الكامل واسم دخول وكلمة مرور من 8 أحرف على الأقل. يجب أن يحتوي اسم الدخول على أحرف إنجليزية صغيرة وأرقام فقط، وأن يبدأ بحرف. يستطيع تسجيل الدخول فورًا. يستطيع المسؤول تثبيت البرامج وتغيير الأشياء للجميع.
 
 # Heading of the line in the Add someone form that holds the button.
 settings-users-new-account = حساب جديد
-
-# Under the New account heading.
-# SAFETY: needs a human review before it ships
-settings-users-new-account-sub = يستطيع تسجيل الدخول فورًا بكلمة المرور هذه.
 
 # Typing box in the Add someone form for the person's full name.
 settings-users-full-name = الاسم الكامل
@@ -204,19 +196,16 @@ settings-users-saved-logins = تسجيلات الدخول المحفوظة
 
 # Help text for the Saved logins card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-keyring-about = كلمات المرور التي تحفظها البرامج لك، مثل البريد أو Wi-Fi، تُحفظ في حلقة مفاتيح تُفتح بتسجيل دخولك. ينتقل الجميع إلى حلقة مفاتيح Trindle من تلقاء أنفسهم عند تسجيل الدخول. وإن تعذّر نقل حلقتك، فإن النقل ينسخ كل تسجيل دخول محفوظ، ويطلب كلمة مرور أي حلقة مفاتيح لا تفتحها حلقتك، وتُترك ملفات GNOME كما هي.
+settings-users-keyring-about = تحفظ البرامج كلمات المرور لك، مثل البريد أو Wi-Fi، في حلقة مفاتيح تُفتح عند تسجيل دخولك. وعند تسجيل الدخول، ينقل Trindle حلقة مفاتيحك إلى حلقته الخاصة. وإن لم ينجح ذلك، يمكنك نقلها من هنا. يُنسخ كل تسجيل دخول محفوظ. وقد يُطلب منك كلمة مرور حلقة مفاتيح لا يفتحها تسجيل دخولك. وتُترك ملفات GNOME كما هي.
 
 # Heading of the line on the Saved logins card when the logins are kept by Trindle's keyring.
-settings-users-kept-trindle = محفوظة في حلقة مفاتيح Trindle
+settings-users-kept-trindle = في حلقة مفاتيح Trindle
 
 # Heading of the line on the Saved logins card when the logins are kept by GNOME's keyring.
-settings-users-kept-gnome = محفوظة في حلقة مفاتيح GNOME
-
-# Under the heading when the logins are kept by Trindle's keyring.
-settings-users-opens-login = تُفتح بتسجيل دخولك.
+settings-users-kept-gnome = في حلقة مفاتيح GNOME
 
 # Under the heading when the logins are still kept by GNOME's keyring.
-settings-users-could-not-move = تعذّر على تسجيل دخولك نقلها.
+settings-users-could-not-move = تعذّر على Trindle نقلها عند تسجيل الدخول.
 
 # Tip of the button that moves saved logins to Trindle's keyring.
 # SAFETY: needs a human review before it ships
@@ -227,7 +216,7 @@ settings-users-move-keyring = انقل إلى حلقة مفاتيح Trindle
 settings-users-your-password = كلمة مرورك
 
 # Tip of the button that starts moving the saved logins.
-settings-users-go-ahead = تابع
+settings-users-go-ahead = انقل الآن
 
 # Typing box for the password of one GNOME keyring that stayed shut: the keyring's name is { $name }.
 # SAFETY: needs a human review before it ships
@@ -235,10 +224,10 @@ settings-users-password-for = كلمة مرور { $name }
 
 # Red words when the move of saved logins was started without a password.
 # SAFETY: needs a human review before it ships
-settings-users-your-password-please = كلمة مرورك، من فضلك.
+settings-users-your-password-please = اكتب كلمة مرورك.
 
 # Said beside the Saved logins line while they are copied.
-settings-users-copying = جارٍ نسخ تسجيلات دخولك المحفوظة...
+settings-users-copying = جارٍ نسخ تسجيلات دخولك المحفوظة…
 
 # Said beside the Saved logins line when the copy is done: how many logins were copied.
 settings-users-copied = تم نسخ { $n }
@@ -248,23 +237,22 @@ settings-users-copied = تم نسخ { $n }
 settings-users-nothing-moved =
     { $n ->
         [zero] لم يُنقل شيء بعد.
-        [one] لم يُنقل شيء بعد: { $names } يحتاج إلى كلمة مروره الخاصة.
-        [two] لم يُنقل شيء بعد: { $names } يحتاجان إلى كلمتي مرورهما الخاصتين.
-        [few] لم يُنقل شيء بعد: { $names } تحتاج إلى كلمات مرورها الخاصة.
-        [many] لم يُنقل شيء بعد: { $names } تحتاج إلى كلمات مرورها الخاصة.
-       *[other] لم يُنقل شيء بعد: { $names } تحتاج إلى كلمات مرورها الخاصة.
+        [one] لم يُنقل شيء بعد. اكتب كلمة المرور لـ { $names }.
+        [two] لم يُنقل شيء بعد. اكتب كلمتي المرور لـ { $names }.
+        [few] لم يُنقل شيء بعد. اكتب كلمات المرور لـ { $names }.
+        [many] لم يُنقل شيء بعد. اكتب كلمات المرور لـ { $names }.
+       *[other] لم يُنقل شيء بعد. اكتب كلمات المرور لـ { $names }.
     }
 
 # Red words when the move of saved logins stopped unexpectedly.
-settings-users-stopped = توقف في منتصف الطريق.
+settings-users-stopped = لم ينتهِ.
 
 # Words in place of the people while the accounts are still being read.
-settings-users-looking-accounts = جارٍ النظر في الحسابات…
+settings-users-looking-accounts = جارٍ فحص الحسابات…
 
 # Heading of the placeholder card shown while the accounts are being read.
 settings-users-people = الأشخاص
 
 # Under the Administrator line of the placeholder card.
 # SAFETY: needs a human review before it ships
-settings-users-looking = جارٍ النظر…
-
+settings-users-looking = جارٍ التحميل…

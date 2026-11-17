@@ -5,14 +5,14 @@ use std::time::Duration;
 use super::{CLICKER, Keyboard, said};
 use crate::common::files::{trindle_conf, update_env};
 use crate::common::pointer::{self, Pointer, Range};
-use crate::settings::ui::{group, line, on, Kit, Msg};
+use crate::settings::ui::{group, line, on, strip_width, Kit, Msg, LINE_MOST};
 use crate::toolkit::colour::Colour;
 use crate::toolkit::colour::paint as brush;
 use crate::toolkit::t;
 use crate::toolkit::text::{Align, Style};
 use crate::toolkit::theme;
 use crate::toolkit::ui::arc_to;
-use crate::toolkit::widget::{choice, column, drawing, slider, switch, Length, Node};
+use crate::toolkit::widget::{choice, column, drawing, dropdown, slider, switch, Length, Node};
 use tiny_skia::{LineCap, PathBuilder, PixmapMut, Stroke, Transform};
 
 impl Keyboard {
@@ -82,14 +82,16 @@ impl Keyboard {
                     words.push(figure.clone());
                     pace_words().len()
                 });
-                let pick = choice(words, chosen, title, move |i| {
+                let pick = move |i: usize| {
                     let to = paces.get(i).copied();
                     on::<Keyboard>(move |me, k| {
                         if let Some(to) = to {
                             me.pick_pace(k, which, to);
                         }
                     })
-                }).width(Length::Shrink);
+                };
+                let pick = if pace_strip() <= LINE_MOST { choice(words, chosen, title, pick) } else { dropdown(words, Some(chosen), title, pick) };
+                let pick = pick.width(Length::Shrink).key(format!("pace:{key}"));
                 column(vec![pick, bar]).gap(12.0)
             }
         };
@@ -103,15 +105,13 @@ impl Keyboard {
         let p = &self.pointer;
         let both = self.touchpad.then_some(t!("settings-keyboard-both"));
         let mouse = group(t!("settings-keyboard-mouse-title")).icon("input-mouse-symbolic")
-            .about(t!("settings-keyboard-mouse-about"))
+            .about(format!("{} {}", t!("settings-keyboard-mouse-about"), t!("settings-keyboard-clicker-about")))
             .rows(vec![
                 self.slider_line(kit, Slide::Speed, t!("settings-keyboard-pointer-speed"), both),
-                self.slider_line(kit, Slide::Scroll, t!("settings-keyboard-scroll-speed"), Some(t!("settings-keyboard-scroll-wheel-about"))),
-                Self::switch_line(kit, pointer::MOUSE_NATURAL, p.mouse_natural, t!("settings-keyboard-natural"),
-                                  t!("settings-keyboard-natural-wheel-about")),
-                Self::switch_line(kit, pointer::LEFT_HANDED, p.left_handed, t!("settings-keyboard-left-handed"),
-                                  t!("settings-keyboard-left-handed-about")),
-                line(t!("settings-keyboard-clicker")).sub(t!("settings-keyboard-clicker-about")).key(CLICKER)
+                self.slider_line(kit, Slide::Scroll, t!("settings-keyboard-scroll-speed"), None),
+                Self::switch_line(kit, pointer::MOUSE_NATURAL, p.mouse_natural, t!("settings-keyboard-natural")),
+                Self::switch_line(kit, pointer::LEFT_HANDED, p.left_handed, t!("settings-keyboard-left-handed")),
+                line(t!("settings-keyboard-clicker")).key(CLICKER)
                     .control(switch(self.clicker, t!("settings-keyboard-clicker"), |b| on::<Keyboard>(move |me, k| me.clicking_helper(k, b))))
                     .node(kit),
             ])
@@ -121,18 +121,15 @@ impl Keyboard {
             cards.push(group(t!("settings-keyboard-touchpad-title")).icon("input-touchpad-symbolic")
                 .about(t!("settings-keyboard-touchpad-about"))
                 .rows(vec![
-                    self.slider_line(kit, Slide::TouchpadScroll, t!("settings-keyboard-scroll-speed"), Some(t!("settings-keyboard-scroll-touchpad-about"))),
-                    Self::switch_line(kit, pointer::TAP, p.tap, t!("settings-keyboard-tap"), t!("settings-keyboard-tap-about")),
-                    Self::switch_line(kit, pointer::TOUCHPAD_NATURAL, p.touchpad_natural, t!("settings-keyboard-natural"),
-                                      t!("settings-keyboard-natural-touchpad-about")),
-                    Self::switch_line(kit, pointer::QUIET_TYPING, p.quiet_typing, t!("settings-keyboard-quiet"),
-                                      t!("settings-keyboard-quiet-about")),
+                    self.slider_line(kit, Slide::TouchpadScroll, t!("settings-keyboard-scroll-speed"), None),
+                    Self::switch_line(kit, pointer::TAP, p.tap, t!("settings-keyboard-tap")),
+                    Self::switch_line(kit, pointer::TOUCHPAD_NATURAL, p.touchpad_natural, t!("settings-keyboard-natural")),
+                    Self::switch_line(kit, pointer::QUIET_TYPING, p.quiet_typing, t!("settings-keyboard-quiet")),
                 ])
                 .node(kit));
         }
         cards
     }
-
 }
 
 #[derive(Clone, Copy, PartialEq)]
@@ -150,6 +147,19 @@ impl Slide {
 
 fn pace_words() -> [&'static str; 3] {
     [t!("settings-keyboard-pace-slower"), t!("settings-keyboard-pace-normal"), t!("settings-keyboard-pace-faster")]
+}
+
+fn pace_strip() -> f32 {
+    thread_local! {
+        static MEASURED: crate::common::widest::Measured = const { std::cell::RefCell::new(None) };
+    }
+    crate::common::widest::per_language(&MEASURED, || {
+        let words: Vec<String> = pace_words().iter().map(|w| w.to_string()).collect();
+        [(&pointer::SCROLLS, &pointer::WHEEL_PACES), (&pointer::TOUCHPAD_SCROLLS, &pointer::TOUCHPAD_PACES)].iter().flat_map(|(range, paces)| {
+            let steps = ((range.most - range.least) / range.step).round() as usize;
+            (0..=steps).map(move |i| times(range.least + i as f64 * range.step, paces))
+        }).map(|figure| strip_width(&[words.clone(), vec![figure]].concat())).fold(0.0, f32::max)
+    })
 }
 
 fn along(value: f64, range: &Range) -> String {

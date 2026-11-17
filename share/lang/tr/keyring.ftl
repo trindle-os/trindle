@@ -53,7 +53,7 @@ keyring-not-the-keyring-password = Bu, anahtarlığın parolası değil
 
 # Shown under the box when the keyring file is damaged and has been left as it is.
 # SAFETY: needs a human review before it ships
-keyring-damaged-left = Anahtarlık dosyası bozuk, bu yüzden dokunulmadı
+keyring-damaged-left = Anahtarlık dosyası bozuk, bu yüzden Trindle onu değiştirmedi
 
 # Shown under the box when the password is not the person's login password.
 # SAFETY: needs a human review before it ships
@@ -75,7 +75,7 @@ keyring-error-locked = Anahtarlık kilitli
 keyring-error-wrong-password = Bu parola anahtarlığı açmıyor
 
 # Said when the collection or item asked for is not there.
-keyring-error-no-such = Böyle bir koleksiyon ya da öğe yok
+keyring-error-no-such = Bu öğe yok
 
 # Said when the keyring file cannot be read as a keyring.
 # SAFETY: needs a human review before it ships
@@ -87,8 +87,8 @@ keyring-error-damaged = Anahtarlık dosyası bozuk
 keyring-asked-by = İsteyen: { $program }
 
 # Told to a program that asked while the keyring was taking over from the one before and many calls already waited.
-keyring-starting = Anahtar halkası başlıyor. Yeniden isteyin.
+keyring-starting = Anahtarlık başlıyor. Yeniden deneyin.
 
 # The program in "Asked for by", for a program on the bus: $name is the name it gives itself, which anything can claim.
 keyring-named-itself = kendine { $name } diyen bir program
-
+keyring-password-unreadable = Bu parolada anahtarlığın okuyamadığı harfler var

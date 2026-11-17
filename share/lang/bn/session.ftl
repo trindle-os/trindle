@@ -23,15 +23,15 @@ session-lock-use-pin = পিন ব্যবহার করুন
 session-lock-use-phone = ফোন ব্যবহার করুন
 
 # Shown while the typed password or PIN is being checked.
-session-lock-checking = যাচাই হচ্ছে...
+session-lock-checking = যাচাই হচ্ছে…
 
 # Shown when the PIN has run out of time and the password is asked for instead.
 # SAFETY: needs a human review before it ships
-session-lock-pin-timed-out = পিনের সময় শেষ; আপনার পাসওয়ার্ড লিখুন।
+session-lock-pin-timed-out = পিনের সময় শেষ। আপনার পাসওয়ার্ড লিখুন।
 
 # Shown after too many wrong PINs, and the password is asked for instead.
 # SAFETY: needs a human review before it ships
-session-lock-too-many-pins = ভুল পিন অনেকবার দেওয়া হয়েছে; আপনার পাসওয়ার্ড লিখুন।
+session-lock-too-many-pins = ভুল পিন অনেকবার দেওয়া হয়েছে। আপনার পাসওয়ার্ড ব্যবহার করুন।
 
 # Shown after a wrong PIN, with how many tries are left (1 is one try left).
 # SAFETY: needs a human review before it ships
@@ -42,15 +42,15 @@ session-lock-wrong-pin =
     }
 
 # Shown while the phone is asked to unlock the screen.
-session-lock-asking-phone = আপনার ফোনকে জিজ্ঞাসা করা হচ্ছে...
+session-lock-asking-phone = আপনার ফোনকে জিজ্ঞাসা করা হচ্ছে…
 
 # Shown when the phone did not unlock the screen and the PIN may be typed.
 # SAFETY: needs a human review before it ships
-session-lock-phone-no-pin = আপনার ফোন এটি খুলতে পারেনি। আপনার পিন ব্যবহার করুন।
+session-lock-phone-no-pin = Trindle আপনার ফোন দিয়ে খুলতে পারেনি। আপনার পিন ব্যবহার করুন।
 
 # Shown when the phone did not unlock the screen and the password must be typed.
 # SAFETY: needs a human review before it ships
-session-lock-phone-no-password = আপনার ফোন এটি খুলতে পারেনি। আপনার পাসওয়ার্ড লিখুন।
+session-lock-phone-no-password = Trindle আপনার ফোন দিয়ে খুলতে পারেনি। আপনার পাসওয়ার্ড লিখুন।
 
 # Shown when the password typed is not the person's password.
 # SAFETY: needs a human review before it ships
@@ -72,7 +72,7 @@ session-wallpaper-larger-4k = 4K-এর চেয়ে বড়
 session-wallpaper-larger-screen = আপনার পর্দার চেয়ে বড়
 
 # A reason a wallpaper was left out: its file is over 20 MB, or over 200 MB if it moves.
-session-wallpaper-over-20-or-200 = ২০ MB-এর বেশি (চলমান হলে ২০০ MB)
+session-wallpaper-over-20-or-200 = ২০ MB-এর বেশি (অ্যানিমেটেড হলে ২০০ MB)
 
 # A reason a wallpaper was left out: its file is over 20 MB.
 session-wallpaper-over-20 = ২০ MB-এর বেশি
@@ -84,7 +84,11 @@ session-wallpaper-over-200 = ২০০ MB-এর বেশি
 session-wallpaper-reasons-or = { $first } বা { $second }
 
 # The line that says how many wallpapers were left out and why; the count and the reasons come in.
-session-wallpaper-left-out = { $count }টি বাদ গেছে: { $why }।
+session-wallpaper-left-out =
+    { $count ->
+        [one] Trindle { $count }টি ছবি বাদ দিয়েছে, কারণ সেটি { $why }।
+       *[other] Trindle { $count }টি ছবি বাদ দিয়েছে, কারণ সেগুলো { $why }।
+    }
 
 # Under the lock screen when a phone or password check was given up on.
 session-lock-check-abandoned = এতে অনেক সময় লেগেছে। আবার চেষ্টা করুন।
@@ -95,7 +99,7 @@ session-lock-check-abandoned = এতে অনেক সময় লেগে�
 session-restart-question = পুরো ডেস্কটপ আবার চালু করবেন?
 
 # Under the heading: what restarting everything does to the open windows.
-session-restart-windows = খোলা সব উইন্ডো বন্ধ হবে, আর তাতে যা সংরক্ষণ করা হয়নি তা হারিয়ে যাবে।
+session-restart-windows = খোলা সব উইন্ডো বন্ধ হবে। যা সংরক্ষণ করেননি তা হারিয়ে যাবে।
 
 # Tip of the round button that leaves everything as it is.
 session-restart-cancel = বাতিল করুন
@@ -103,3 +107,13 @@ session-restart-cancel = বাতিল করুন
 # Main button that restarts the whole desktop.
 session-restart-go = আবার চালু করুন
 
+
+# Under the lock screen when Enter is pressed while the last try, given up on, is still being checked.
+session-lock-still-checking = আপনার আগের চেষ্টাটি এখনও যাচাই হচ্ছে। একটু পরে আবার চেষ্টা করুন।
+
+# Under the lock screen after several wrong tries, with how many seconds to wait (1 is one second).
+session-lock-wait =
+    { $n ->
+        [one] অনেকবার ভুল হয়েছে। { $n } সেকেন্ড পরে আবার চেষ্টা করুন।
+       *[other] অনেকবার ভুল হয়েছে। { $n } সেকেন্ড পরে আবার চেষ্টা করুন।
+    }

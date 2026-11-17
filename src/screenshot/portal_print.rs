@@ -288,12 +288,11 @@ impl App for PrintWindow {
     }
 }
 
-pub(super) fn listing(ok: bool, out: &str, err: &str) -> Result<(Vec<Printer>, Option<String>), &'static str> {
-    let quiet = err.contains("No destinations") || err.to_lowercase().contains("no system default");
-    if !ok && !quiet {
-        return Err(not_answering());
+pub(super) fn read_listing(run: impl FnMut(&[&str]) -> cups::Ran, pause: impl FnOnce()) -> Result<(Vec<Printer>, Option<String>), &'static str> {
+    match cups::read_printers(run, pause) {
+        cups::Listing::Ready { printers, default } => Ok((printers, default)),
+        cups::Listing::Unreachable(_) => Err(not_answering()),
     }
-    Ok((cups::parse_printers(out), cups::parse_default(out)))
 }
 
 fn before(settings: &Options, setup: &Options) -> Choices {
@@ -312,45 +311,59 @@ fn before(settings: &Options, setup: &Options) -> Choices {
     c
 }
 
+fn heading_of(doc: &str, app_id: &str) -> String {
+    let who = app_name(app_id);
+    match (who.is_empty(), doc.trim().is_empty()) {
+        (_, false) => t!("screenshot-print-doc", doc = doc.chars().filter(|c| !c.is_control()).take(60).collect::<String>()),
+        (false, true) => t!("screenshot-print-from", who = &who),
+        (true, true) => t!("screenshot-print-go").to_string(),
+    }
+}
+
+fn show_print(kit: &Kit, asked: Asked, who: (OwnedObjectPath, String, String), heading: String, start: Choices,
+              give: impl Fn(Choices) -> Answer + 'static) {
+    if kit.screen().is_none() {
+        return asked.reply(&failed());
+    }
+    let kit = kit.clone();
+    let go = {
+        let kit = kit.clone();
+        move |got: Listing| open(&kit, asked, who, heading, got, start, give)
+    };
+    if !crate::common::run::have("lpstat") {
+        return go(Err(not_installed()));
+    }
+    kit.hold();
+    crate::common::run::on_thread(
+        || read_listing(cups::run_blocking, || std::thread::sleep(cups::WAKE)),
+        move |got| {
+            kit.release();
+            go(got);
+        },
+    );
+}
+
 fn prepare(kit: &Kit, tokens: &Rc<RefCell<Tokens>>, asked: Asked) {
     let Ok((handle, app_id, parent, doc, settings, setup, _options)) = asked.message().body()
         .deserialize::<(OwnedObjectPath, String, String, String, Options, Options, Options)>() else {
         return asked.fail("org.freedesktop.DBus.Error.InvalidArgs", "PreparePrint takes a handle, an app, a window, a title and three sets of options");
     };
-    if kit.screen().is_none() {
-        return asked.reply(&failed());
-    }
     let start = before(&settings, &setup);
-    let who = app_name(&app_id);
-    let heading = match (who.is_empty(), doc.trim().is_empty()) {
-        (_, false) => t!("screenshot-print-doc", doc = doc.chars().filter(|c| !c.is_control()).take(60).collect::<String>()),
-        (false, true) => t!("screenshot-print-from", who = &who),
-        (true, true) => t!("screenshot-print-go").to_string(),
-    };
-    let (kit, tokens) = (kit.clone(), tokens.clone());
-    if !crate::common::run::have("lpstat") {
-        return open(&kit, &tokens, asked, (handle, app_id, parent), heading, Err(not_installed()), start);
-    }
-    kit.hold();
-    let held = kit.clone();
-    crate::common::run::capture(&["lpstat", "-p", "-d"], None, move |ok, out, err| {
-        held.release();
-        open(&held, &tokens, asked, (handle, app_id, parent), heading, listing(ok, &out, &err), start);
+    let heading = heading_of(&doc, &app_id);
+    let (tokens, app) = (tokens.clone(), app_id.clone());
+    show_print(kit, asked, (handle, app_id, parent), heading, start, move |c| {
+        let token = tokens.borrow_mut().give(&app, c.clone(), Instant::now());
+        prepared(token, &c)
     });
 }
 
 type Listing = Result<(Vec<Printer>, Option<String>), &'static str>;
 
-fn open(kit: &Kit, tokens: &Rc<RefCell<Tokens>>, asked: Asked, who: (OwnedObjectPath, String, String), heading: String, got: Listing, start: Choices) {
-    let (handle, app_id, parent) = who;
-    let tokens = tokens.clone();
+fn open(kit: &Kit, asked: Asked, who: (OwnedObjectPath, String, String), heading: String, got: Listing, start: Choices,
+        give: impl Fn(Choices) -> Answer + 'static) {
+    let (handle, _app_id, parent) = who;
     let words = heading.clone();
-    ask(kit, asked, handle.as_str(), &parent, &words, SIZE, move |done| {
-        PrintWindow::new(heading, got, &start, done, move |c| {
-            let token = tokens.borrow_mut().give(&app_id, c.clone(), Instant::now());
-            prepared(token, &c)
-        })
-    });
+    ask(kit, asked, handle.as_str(), &parent, &words, SIZE, move |done| PrintWindow::new(heading, got, &start, done, give));
 }
 
 fn tell(kit: &Kit, why: &str) {
@@ -362,25 +375,40 @@ fn tell(kit: &Kit, why: &str) {
 }
 
 fn print(kit: &Kit, tokens: &Rc<RefCell<Tokens>>, asked: Asked) {
-    let Ok((_handle, app_id, _parent, doc, fd, options)) = asked.message().body()
+    let Ok((handle, app_id, parent, doc, fd, options)) = asked.message().body()
         .deserialize::<(OwnedObjectPath, String, String, String, zbus::zvariant::OwnedFd, Options)>() else {
         return asked.fail("org.freedesktop.DBus.Error.InvalidArgs", "Print takes a handle, an app, a window, a title, a file and options");
     };
-    let chosen = get::<u32>(&options, "token").and_then(|t| tokens.borrow_mut().take(t, &app_id, Instant::now()));
-    let Some(chosen) = chosen else {
+    let document: OwnedFd = fd.into();
+    let Some(token) = get::<u32>(&options, "token") else {
+
+        let kit2 = kit.clone();
+        let held = RefCell::new(Some((doc.clone(), document)));
+        let heading = heading_of(&doc, &app_id);
+        return show_print(kit, asked, (handle, app_id, parent), heading, before(&Options::new(), &Options::new()), move |c| {
+            if let Some((doc, document)) = held.borrow_mut().take() {
+                send(&kit2, c, doc, document, |_| {});
+            }
+            answer(DONE, HashMap::new())
+        });
+    };
+    let Some(chosen) = tokens.borrow_mut().take(token, &app_id, Instant::now()) else {
         tell(kit, t!("screenshot-print-lost"));
         return asked.reply(&failed());
     };
-    let document: OwnedFd = fd.into();
+    send(kit, chosen, doc, document, move |r| asked.reply(&answer(if r { DONE } else { FAILED }, HashMap::new())));
+}
+
+fn send(kit: &Kit, chosen: Choices, doc: String, document: OwnedFd, then: impl FnOnce(bool) + 'static) {
     kit.hold();
     let kit = kit.clone();
     crate::common::run::on_thread(move || cups::send(&chosen, &doc, document), move |sent| {
         kit.release();
         match sent {
-            Ok(_) => asked.reply(&answer(DONE, HashMap::new())),
+            Ok(_) => then(true),
             Err(why) => {
                 tell(&kit, &why);
-                asked.reply(&answer(FAILED, HashMap::new()))
+                then(false)
             }
         }
     });
@@ -529,15 +557,28 @@ mod tests {
     }
 
     #[test]
-    fn cups_words_are_read_into_a_listing() {
-        let out = "printer Office is idle.  enabled since x\nsystem default destination: Office\n";
-        assert_eq!(listing(true, out, "").map(|(p, d)| (p.len(), d)), Ok((1, Some("Office".into()))));
-        assert_eq!(listing(false, "", "lpstat: No destinations added.").map(|(p, _)| p.len()), Ok(0));
-        assert_eq!(listing(false, "", "lpstat: Connection refused").map(|(p, _)| p.len()), Err(not_answering()));
+    fn the_window_is_headed_by_the_title_or_the_program() {
+        assert!(heading_of("Report\u{7}.pdf", "").contains("Report.pdf"));
+        assert_eq!(heading_of("  ", ""), t!("screenshot-print-go"));
     }
 
     #[test]
-    fn with_no_screen_a_print_window_fails_and_a_print_without_a_token_fails() {
+    fn cups_words_are_read_into_a_listing() {
+        let ran = |ok: bool, out: &str, err: &str| (ok, out.to_string(), err.to_string());
+        let run = |answers: Vec<cups::Ran>| { let mut a = answers.into_iter(); move |_: &[&str]| a.next().expect("asked more than expected") };
+        let out = "printer Office is idle.  enabled since x\n";
+        let good = read_listing(run(vec![ran(true, out, ""), ran(true, "system default destination: Office\n", "")]), || {});
+        assert_eq!(good.map(|(p, d)| (p.len(), d)), Ok((1, Some("Office".into()))));
+        let no_default = read_listing(run(vec![ran(true, out, ""), ran(false, "", "lpstat: Invalid destination name")]), || {});
+        assert_eq!(no_default.map(|(p, d)| (p.len(), d)), Ok((1, None)), "a default that fails alone must not hide the printers");
+        assert_eq!(read_listing(run(vec![ran(false, "", "lpstat: No destinations added.")]), || {}).map(|(p, _)| p.len()), Ok(0));
+        let down = || [ran(false, "", "lpstat: Connection refused"), ran(false, "scheduler is not running\n", "")];
+        let both: Vec<_> = down().into_iter().chain(down()).collect();
+        assert_eq!(read_listing(run(both), || {}).map(|(p, _)| p.len()), Err(not_answering()));
+    }
+
+    #[test]
+    fn with_no_screen_a_print_window_fails_and_a_print_without_a_token_asks_for_one_and_fails_too() {
         let rig = Rig::new();
         let _p = rig.a.serve(super::super::portal::PATH, offer(&rig.kit())).expect("serve");
         let handle = ObjectPath::try_from("/org/freedesktop/portal/desktop/request/1_1/p1").expect("path");
@@ -548,7 +589,8 @@ mod tests {
         let null = std::fs::File::open("/dev/null").expect("a file");
         let fd = zbus::zvariant::Fd::from(&null);
         let r: Reply = call(&rig, INTERFACE, "Print", &(&handle, "org.example.App", "", "Report", fd, &none)).expect("reply");
-        assert_eq!(r.0, FAILED, "a print with no token goes nowhere");
+        assert_eq!(r.0, FAILED, "a print with no token needs the window, and there is no screen");
+        assert_eq!(Rig::new().stay.busy.get(), 0, "and it was not refused as a lost token");
         assert_eq!(rig.stay.busy.get(), 0);
         let p = props(&rig, INTERFACE).expect("properties");
         assert!(p.contains_key("version"));

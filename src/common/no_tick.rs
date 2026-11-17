@@ -10,7 +10,6 @@ pub const SHOWN_SECONDS: u32 = 2;
 
 #[cfg(test)]
 mod tests {
-    use super::*;
 
     fn banned() -> Vec<String> {
         vec![
@@ -35,12 +34,5 @@ mod tests {
                 && !ALLOWED.iter().any(|(f, w)| file.ends_with(f) && line.contains(w)))
             .collect();
         assert!(found.is_empty(), "a tick or a green state dot is drawn: {found:#?}");
-    }
-
-    #[test]
-    fn the_marks_are_icons_the_sets_have() {
-        for icon in [GO_ICON, MARK_ICON] {
-            assert!(icon.ends_with("-symbolic"));
-        }
     }
 }

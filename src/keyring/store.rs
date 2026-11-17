@@ -251,7 +251,13 @@ impl Store {
             self.reindex();
             return Err(e);
         }
-        Ok(())
+
+        match fs::remove_file(backup(&self.path)) {
+            Ok(()) => {}
+            Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
+            Err(e) => return Err(e.into()),
+        }
+        self.save()
     }
 
     fn body(&self) -> Result<&Body, Error> {
@@ -489,8 +495,15 @@ mod tests {
         assert_eq!(again.search(None, &attrs(&[("k", "v")])).len(), 1);
 
         assert!(backup(&path).exists());
+        let copy = place("rekey-copy");
+        fs::create_dir_all(copy.parent().unwrap()).unwrap();
+        fs::copy(backup(&path), &copy).unwrap();
+        let mut old_copy = Store::load(&copy).unwrap();
+        assert_eq!(old_copy.unlock(b"old"), Err(Error::WrongPassword));
+        assert!(old_copy.unlock(b"new").is_ok());
         fs::write(&path, b"nonsense").unwrap();
         assert!(Store::load(&path).is_ok());
+        fs::remove_dir_all(copy.parent().unwrap()).unwrap();
         fs::remove_dir_all(path.parent().unwrap()).unwrap();
     }
 

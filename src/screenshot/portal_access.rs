@@ -112,16 +112,27 @@ fn picture_bytes(path: &Path) -> Option<Vec<u8>> {
 }
 
 fn full_name() -> Option<String> {
-    // SAFETY: getpwuid returns null or an entry that is read at once, before
 
-    unsafe {
-        let p = libc::getpwuid(libc::getuid());
-        if p.is_null() || (*p).pw_gecos.is_null() {
+    // SAFETY: passwd is plain C data for which all zero bytes (null pointers, nought numbers) is valid.
+    let mut entry: libc::passwd = unsafe { std::mem::zeroed() };
+    let mut buf = vec![0u8; 4096];
+    let mut found: *mut libc::passwd = std::ptr::null_mut();
+    loop {
+        // SAFETY: entry and buf outlive the call, buf's length is passed, and
+
+        let rc = unsafe { libc::getpwuid_r(libc::getuid(), &mut entry, buf.as_mut_ptr().cast(), buf.len(), &mut found) };
+        if rc == libc::ERANGE && buf.len() < (1 << 20) {
+            buf.resize(buf.len() * 2, 0);
+            continue;
+        }
+        if rc != 0 || found.is_null() || entry.pw_gecos.is_null() {
             return None;
         }
-        let all = std::ffi::CStr::from_ptr((*p).pw_gecos).to_string_lossy().to_string();
-        all.split(',').next().map(str::to_string)
+        break;
     }
+    // SAFETY: pw_gecos is NUL-terminated inside buf, which is still alive.
+    let all = unsafe { std::ffi::CStr::from_ptr(entry.pw_gecos) }.to_string_lossy().to_string();
+    all.split(',').next().map(str::to_string)
 }
 
 fn account(kit: &Kit, asked: Asked) {
@@ -185,6 +196,13 @@ mod tests {
     use super::super::portal::FAILED;
     use super::super::portal_ask::testkit::{call, Reply, Rig};
     use zbus::zvariant::ObjectPath;
+
+    #[test]
+    fn the_full_name_is_read_the_same_from_many_threads_at_once() {
+        let once = full_name();
+        let all: Vec<_> = (0..8).map(|_| std::thread::spawn(|| (0..200).map(|_| full_name()).collect::<Vec<_>>())).collect();
+        assert!(all.into_iter().flat_map(|t| t.join().unwrap()).all(|n| n == once));
+    }
 
     #[test]
     fn a_face_picture_is_read_only_if_it_is_a_plain_file_of_a_fair_size() {

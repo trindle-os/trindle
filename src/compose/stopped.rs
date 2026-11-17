@@ -99,6 +99,11 @@ impl Default for Metrics {
 impl Metrics {
 
     pub fn now() -> Metrics {
+        static KEPT: Mutex<Option<(u64, Metrics)>> = Mutex::new(None);
+        crate::config::kept_until_reread(&KEPT, Self::read)
+    }
+
+    fn read() -> Metrics {
         let layers = crate::common::sheet::layers();
         let light = crate::common::sheet::asked_light();
         let d = Metrics::default();
@@ -150,11 +155,19 @@ fn shape_with(text: f32, m: Metrics) -> Shape {
     }
 }
 
-fn width_of(words: &str) -> f32 {
-    ssd::face(400.0).map_or(words.chars().count() as f32 * 7.0, |font| {
+fn width_of(words: &'static str) -> f32 {
+    thread_local! {
+        static MEASURED: RefCell<Vec<(&'static str, f32)>> = const { RefCell::new(Vec::new()) };
+    }
+    if let Some(width) = MEASURED.with(|m| m.borrow().iter().find(|(w, _)| *w == words).map(|(_, width)| *width)) {
+        return width;
+    }
+    let width = ssd::face(400.0).map_or(words.chars().count() as f32 * 7.0, |font| {
         let size = ab_glyph::PxScale::from(ssd::FONT_PX);
         ssd::chars_width(&font, size, &words.chars().collect::<Vec<_>>())
-    })
+    });
+    MEASURED.with(|m| m.borrow_mut().push((words, width)));
+    width
 }
 
 pub fn pill_on(screen: Size<i32, Logical>, shape: Shape) -> Rectangle<i32, Logical> {
@@ -219,7 +232,7 @@ pub(crate) fn icon_in(bases: &[PathBuf], sets: &[String], name: &str, px: u32) -
 }
 
 pub(crate) fn sets() -> Vec<String> {
-    chosen().into_iter().chain(["Trindle-Circle".to_string()]).collect()
+    chosen().into_iter().chain(["Trindle-Circle".to_string(), "Trindle-Square".to_string()]).collect()
 }
 
 pub(crate) fn lay_icon(px: &mut [Paint], w: usize, icon: &tiny_skia::Pixmap, (x, y): (i32, i32), ink: [f32; 4]) {
@@ -243,13 +256,12 @@ fn paint(stopped: Stopped, shape: Shape, scale: f64, on: bool) -> (Vec<u8>, i32,
 }
 
 fn paint_with(stopped: Stopped, shape: Shape, scale: f64, on: bool, bases: &[PathBuf], sets: &[String]) -> (Vec<u8>, i32, i32) {
-    let (theme, radius) = ssd::theme();
-    let c = theme.active;
+    let c = ssd::theme().0.active;
     let (w, h) = pixel_size((shape.w, shape.h).into(), scale);
     let s = scale as f32;
     let (pw, ph) = (w as usize, h as usize);
     let mut px = vec![Paint::CLEAR; pw * ph];
-    let r = (radius as f32 * s).max(h as f32 / 2.0).min(h as f32 / 2.0);
+    let r = h as f32 / 2.0;
     let edge = s.max(1.0);
     for y in 0..ph {
         for x in 0..pw {
@@ -288,7 +300,7 @@ fn paint_with(stopped: Stopped, shape: Shape, scale: f64, on: bool, bases: &[Pat
     (ssd::to_bytes(&px), w, h)
 }
 
-type Key = (Stopped, u64, bool, [[f32; 4]; 3], i32, Metrics);
+type Key = (Stopped, u64, bool, [[f32; 4]; 3], Metrics);
 
 thread_local! {
     static PAINTED: RefCell<Option<(Key, Overlay)>> = const { RefCell::new(None) };
@@ -305,9 +317,8 @@ where
     let scale = output.current_scale().fractional_scale();
     let shape = shape(width_of(stopped.words()));
     let on = place.zip(crate::indicators::pointer()).is_some_and(|(p, at)| on_button(p, at));
-    let (theme, radius) = ssd::theme();
-    let c = theme.active;
-    let key: Key = (stopped, scale.to_bits(), on, [c.background, c.border, c.text], radius, shape.look);
+    let c = ssd::theme().0.active;
+    let key: Key = (stopped, scale.to_bits(), on, [c.background, c.border, c.text], shape.look);
     let pill = PAINTED.with(|p| kept(p, key, |_| Overlay::new(&paint(stopped, shape, scale, on).0, (shape.w, shape.h).into(), scale)));
     let (w, h) = (pixels(shape.w, scale) as f64, pixels(shape.h, scale) as f64);
     let at = (((screen.w as f64 - w) / 2.0).round().max(0.0), ((screen.h as f64 - h) / 2.0).round().max(0.0));
@@ -353,7 +364,7 @@ mod tests {
 
     #[test]
     fn the_words_are_as_given() {
-        assert_eq!(Stopped::Ring.words(), "The ring stopped. Press Super to restart it.");
+        assert_eq!(Stopped::Ring.words(), "The ring stopped. Press Super to start it again.");
         assert_eq!(Stopped::Shot.words(), "Screenshot stopped and was closed.");
         assert_eq!(Stopped::try_again(), "Try again");
         for s in [Stopped::Ring, Stopped::Shot] {
@@ -423,33 +434,6 @@ mod tests {
         assert!(!on(ring, mx, my + 60.0));
 
         assert!(!on(ring, pill.loc.x as f64 + cx as f64, pill.loc.y as f64 + cy as f64));
-    }
-
-    #[test]
-    #[ignore]
-    fn shoot_the_pill() {
-        let out = std::path::PathBuf::from(std::env::var("TRINDLE_SHOTS").unwrap_or_else(|_| "target/shots-stopped".into()));
-        std::fs::create_dir_all(&out).unwrap();
-        let icons = PathBuf::from(std::env::var("TRINDLE_ICONS").unwrap_or_else(|_| "../trindle-icons".into()));
-        let sets = ["Trindle-Circle".to_string()];
-        for (stopped, name) in [(Stopped::Ring, "ring"), (Stopped::Shot, "screenshot")] {
-            let shape = shape(width_of(stopped.words()));
-            for (on, when) in [(false, "rest"), (true, "pointer-on-button")] {
-                for (scale, size) in [(1.0f64, "1x"), (2.0, "2x")] {
-                    let (bytes, w, h) = paint_with(stopped, shape, scale, on, std::slice::from_ref(&icons), &sets);
-
-                    let (sw, sh) = (w + 160, h + 120);
-                    let mut screen = tiny_skia::Pixmap::new(sw as u32, sh as u32).unwrap();
-                    screen.fill(tiny_skia::Color::from_rgba8(0x3a, 0x3d, 0x44, 0xff));
-                    let mut pill = tiny_skia::Pixmap::new(w as u32, h as u32).unwrap();
-                    for (d, b) in pill.data_mut().chunks_mut(4).zip(bytes.chunks(4)) {
-                        d.copy_from_slice(&[b[2], b[1], b[0], b[3]]);
-                    }
-                    screen.draw_pixmap(80, 60, pill.as_ref(), &tiny_skia::PixmapPaint::default(), tiny_skia::Transform::identity(), None);
-                    screen.save_png(out.join(format!("pill-{name}-{when}-{size}.png"))).unwrap();
-                }
-            }
-        }
     }
 
     #[test]

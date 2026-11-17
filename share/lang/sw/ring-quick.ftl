@@ -1,7 +1,7 @@
 # machine translated (Swahili), not yet reviewed by a person.
 
 # Tip of the pin button on a clipboard or notification item that is not pinned: keeps it for good.
-ring-quick-pin = Bandika: ihifadhi daima
+ring-quick-pin = Ibandike ili kuihifadhi
 
 # Tip of the pin button on a clipboard or notification item that is pinned.
 ring-quick-unpin = Ondoa kubandika
@@ -12,7 +12,7 @@ ring-quick-forget-one = Sahau hiki
 
 # Tip of the bin button that forgets everything on the page except what is pinned; it asks twice.
 # SAFETY: needs a human review before it ships
-ring-quick-forget-all = Sahau vyote isipokuwa vilivyobandikwa
+ring-quick-forget-all = Futa vyote isipokuwa vilivyobandikwa
 
 # Name of the volume slider for the speakers on the sound page.
 ring-quick-speakers = Spika
@@ -69,7 +69,7 @@ ring-quick-bt-switch = Bluetooth
 ring-quick-bt-off = Bluetooth imezimwa.
 
 # Line on the Bluetooth page while it looks for devices and none is found yet.
-ring-quick-bt-searching = Inatafuta... weka kifaa katika hali ya kuoanisha.
+ring-quick-bt-searching = Inatafuta… Weka kifaa katika hali ya kuoanisha.
 
 # Tip of the button beside a connected Bluetooth device that disconnects it.
 ring-quick-bt-disconnect = Tenganisha
@@ -84,19 +84,19 @@ ring-quick-bt-pair = Oanisha na uunganishe
 ring-quick-bt-device = Kifaa cha Bluetooth
 
 # Line under the Bluetooth page while pairing with a device.
-ring-quick-bt-pairing = Inaoanisha na { $name }...
+ring-quick-bt-pairing = Inaoanisha na { $name }…
 
 # Line under the Bluetooth page while connecting a device.
-ring-quick-bt-connecting = Inaunganisha { $name }...
+ring-quick-bt-connecting = Inaunganisha { $name }…
 
 # Line under the Bluetooth page while disconnecting a device.
-ring-quick-bt-disconnecting = Inatenganisha { $name }...
+ring-quick-bt-disconnecting = Inatenganisha { $name }…
 
 # Line under the Bluetooth page when connecting or disconnecting did not work.
 ring-quick-bt-failed = Haikufanikiwa. Je, kimewashwa na kiko karibu?
 
 # Line under the Bluetooth page when pairing failed because the codes were not accepted.
-ring-quick-bt-codes = Haikuoanishwa: misimbo haikukubaliwa.
+ring-quick-bt-codes = Imeshindwa kuoanisha. Misimbo haikufanya kazi.
 
 # Line under the Bluetooth page when pairing failed.
 ring-quick-bt-not-paired = Haikuoanishwa. Je, kiko katika hali ya kuoanisha na karibu?
@@ -106,7 +106,7 @@ ring-quick-bt-paired-not-connected = Kimeoanishwa, lakini hakikuunganishwa. Jari
 
 # Question in the ring when a Bluetooth device wants a PIN typed.
 # SAFETY: needs a human review before it ships
-ring-quick-bt-ask-pin = Andika PIN ya kifaa hiki. Mara nyingi iko kwenye maelekezo yake, au ni 0000.
+ring-quick-bt-ask-pin = Andika PIN ya kifaa hiki. Mara nyingi unaweza kuipata kwenye maelekezo ya kifaa, au jaribu 0000.
 
 # Typing box for the PIN of a Bluetooth device, shown quietly while empty.
 # SAFETY: needs a human review before it ships
@@ -146,7 +146,7 @@ ring-quick-wifi-switch = Wi-Fi
 ring-quick-wifi-off = Wi-Fi imezimwa.
 
 # Line on the Wi-Fi page while it looks for networks.
-ring-quick-wifi-looking = Inatafuta mitandao...
+ring-quick-wifi-looking = Inatafuta mitandao…
 
 # Tip of the button beside the Wi-Fi network in use that leaves it.
 ring-quick-wifi-disconnect = Tenganisha
@@ -163,7 +163,7 @@ ring-quick-wifi-password-box = Nenosiri
 ring-quick-wifi-join = Jiunge
 
 # Line under the Wi-Fi page while joining a network.
-ring-quick-wifi-joining = Inajiunga na { $ssid }...
+ring-quick-wifi-joining = Inajiunga na { $ssid }…
 
 # Question text in the ring when the Wi-Fi password was not accepted.
 # SAFETY: needs a human review before it ships
@@ -179,7 +179,7 @@ ring-quick-battery-none = Kompyuta hii haina betri.
 ring-quick-brightness-fixed = Mwangaza wa skrini hii hauwezi kubadilishwa kutoka hapa
 
 # Line on the clipboard page when nothing has been copied yet.
-ring-quick-clip-empty = Hakuna kilichonakiliwa bado. Unachonakili huhifadhiwa hapa.
+ring-quick-clip-empty = Hakuna kilichonakiliwa bado.
 
 # Line on the clipboard page for a copied picture.
 ring-quick-clip-picture = Picha
@@ -209,7 +209,7 @@ ring-quick-charging-full = Inachaji: itajaa baada ya takriban { $time }
 ring-quick-charging = Inachaji
 
 # Line on the battery page on battery, with the time left and the power in watts.
-ring-quick-on-battery-left = Inatumia betri: imebaki takriban { $time }, ikitumia W { $rate }
+ring-quick-on-battery-left = Inatumia nguvu ya betri. Imebaki takriban { $time }, ikitumia W { $rate }.
 
 # Line on the battery page on battery, when the time is not known.
 ring-quick-on-battery = Inatumia betri
@@ -223,9 +223,9 @@ ring-quick-plugged = Imechomekwa, haichaji
 # Line on the battery page about how much charge the battery still holds. The health is good, worn, or something else for worn out.
 ring-quick-health =
     { $how ->
-        [good] Hali: nzuri. Inabeba { $capacity }% ya ilivyokuwa mpya.
-        [worn] Hali: imechakaa. Inabeba { $capacity }% ya ilivyokuwa mpya.
-       *[old] Hali: imeisha nguvu: ni wakati wa kupata mpya. Inabeba { $capacity }% ya ilivyokuwa mpya.
+        [good] Betri ina afya nzuri. Sasa inahifadhi { $capacity }% ya chaji ambayo ilihifadhi ilipokuwa mpya.
+        [worn] Betri imechakaa. Sasa inahifadhi { $capacity }% ya chaji ambayo ilihifadhi ilipokuwa mpya.
+       *[old] Betri imechakaa kabisa, kwa hiyo ni wakati wa kupata mpya. Sasa inahifadhi { $capacity }% ya chaji ambayo ilihifadhi ilipokuwa mpya.
     }
 
 # Line on the battery page about how many times the battery has been charged.
@@ -236,10 +236,10 @@ ring-quick-cycles =
     }
 
 # Tip of the button that turns notification circles off.
-ring-quick-notes-on = Arifa zimewashwa: zizime
+ring-quick-notes-on = Arifa zimewashwa. Zizime
 
 # Tip of the button that turns notification circles back on.
-ring-quick-notes-off = Arifa zimezimwa: ziwashe
+ring-quick-notes-off = Arifa zimezimwa. Ziwashe
 
 # A time of under an hour on the battery page.
 ring-quick-minutes = dak { $m }
@@ -264,3 +264,4 @@ ring-quick-title-tray = Aikoni za treya
 # Heading of the shortcut list page, opened with Super and K.
 ring-quick-title-shortcuts = Njia za mkato
 
+ring-quick-wifi-leave-failed = Haikuweza kukata muunganisho.

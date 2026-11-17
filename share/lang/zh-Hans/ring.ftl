@@ -19,22 +19,22 @@ ring-cli-command = { $program } [选项…]
 ring-cli-options = 选项：
 
 # Help for the ring's --say option, printed in a terminal.
-ring-cli-say = 按这些话的要求去做，就像对圆环说出来一样（无需麦克风即可试用语音命令）
+ring-cli-say = 无需麦克风，用文字运行语音命令
 
 # Help for the ring's --background option, printed in a terminal.
-ring-cli-background = 启动但不显示，这样第一次打开是瞬间完成的
+ring-cli-background = 不显示窗口直接启动，这样圆环第一次打开时是瞬间完成的
 
 # Help for the ring's --show-desktop option, printed in a terminal.
-ring-cli-show-desktop = 收起所有窗口以显示桌面，或把它们恢复（Super 加 D 会发出此请求）
+ring-cli-show-desktop = 隐藏所有窗口以显示桌面，或把它们恢复（Super 加 D 键可以做到）
 
 # Help for the ring's --listen option, printed in a terminal.
-ring-cli-listen = 打开圆环并立即开始聆听，就像键盘快捷键那样
+ring-cli-listen = 打开圆环并立即开始聆听语音命令，就像键盘快捷键那样
 
 # Help for the ring's --all option, printed in a terminal.
 ring-cli-all = 打开圆环，并在四周显示所有应用
 
 # Help for the ring's --power option, printed in a terminal.
-ring-cli-power = 在注销、重启和关机时打开圆环
+ring-cli-power = 打开圆环的电源选项：注销、重启和关机
 
 # Help for the ring's --favourites option, printed in a terminal.
 ring-cli-favourites = 打开“设置”中的收藏页面
@@ -43,10 +43,10 @@ ring-cli-favourites = 打开“设置”中的收藏页面
 ring-cli-restyle = 立即采用“设置”中的新外观（浅色或深色，或新的强调色）
 
 # Help for the ring's --corners option, printed in a terminal.
-ring-cli-corners = 重新创建顶部角落的触控点
+ring-cli-corners = 重新设置顶部角落的触控点
 
 # Help for the ring's --notes option, printed in a terminal.
-ring-cli-notes = 把键盘移到屏幕上的通知圆圈中（Super 加 N 会发出此请求）
+ring-cli-notes = 把键盘控制移到屏幕上的通知圆圈（Super 加 N 键可以做到）
 
 # Error printed in a terminal when the ring is given an option it does not know.
 ring-cli-unknown = 未知选项 { $option }
@@ -70,13 +70,13 @@ ring-uninstalling = 正在卸载
 ring-uninstalled = 已卸载
 
 # Tip of the round button on the menu of an app put there by hand: it only leaves the ring.
-ring-take-off = 从圆环中取下
+ring-take-off = 从圆环中移除
 
 # Line that replaces that button while the app is being taken off the ring.
-ring-taking-off = 正在取下
+ring-taking-off = 正在移除
 
 # Line that replaces that button once the app is off the ring.
-ring-taken-off = 已取下
+ring-taken-off = 已移除
 
 # Name of the ring's round button that opens Apps.
 ring-tool-apps = 应用
@@ -109,10 +109,10 @@ ring-tool-report = 报告问题
 ring-gone = 它已经不在了。
 
 # Line in the ring when nothing could open the item that was pressed.
-ring-could-not-open = 没有程序能打开它。
+ring-could-not-open = Trindle 无法打开它。
 
 # Line in the ring while it listens to a spoken command.
-ring-listening = 正在聆听……请说话，您停下它也会停
+ring-listening = 正在聆听……请说出你的命令。你停止说话后，聆听也会停止
 
 # Line in the ring while it works out what was said.
 ring-working-out = 正在理解……
@@ -183,7 +183,7 @@ ring-star-remove = 从收藏中移除
 ring-star-add = 添加到收藏
 
 # Screen reader name of the red button that shows why an uninstall failed.
-ring-not-done = 未完成
+ring-not-done = 为什么没完成？
 
 # Note on an app's menu when the middle of the ring has no room for another favourite; the number is how many it holds.
 ring-middle-full =
@@ -222,15 +222,15 @@ ring-empty-hint = 点击“所有应用”，再右键点击任一应用，即�
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when a spoken or typed power choice needs a click to confirm.
-ring-power-only-click = 只有点击才能确认此操作。
+ring-power-only-click = 点击确认。
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when something other than the person tried to shut the computer down.
-ring-power-only-own = 只有您本人才能关闭这台电脑。
+ring-power-only-own = 只有你本人才能关闭这台电脑。
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when the power page closed because a program pressed a key.
-ring-power-closed = 电源页面已关闭：是某个程序按了键，不是您。
+ring-power-closed = 电源页面已关闭，因为某个程序发送了按键。
 
 # Said in the middle of the ring when Close is chosen on a plugin's icon and none of its windows are open.
 ring-plugin-not-open = 没有可关闭的内容
@@ -240,13 +240,18 @@ ring-startup-add = 登录时启动
 ring-startup-remove = 不再在登录时启动
 
 
-
 # Help for the option that opens the shortcut list, or closes it when it is showing.
-ring-cli-shortcuts = 以列表显示所有键盘快捷键，或收起列表（Super 和 K，除非在“设置”中更改）
+ring-cli-shortcuts = 显示所有键盘快捷键的列表，或隐藏列表（Super 和 K，除非你在“设置”中更改）
 
 # Notice from the new ring after the parts were restarted from the keyboard.
 ring-restarted = 已重启
 
 # Under the notice above.
-ring-restarted-why = 圆环和辅助部分已重新启动。
+ring-restarted-why = 圆环及其辅助部分已重新启动。
 
+
+ring-uninstall-failed = 无法卸载。
+
+ring-category-media-short = 声音
+
+ring-voice-failed = 这次没有成功。

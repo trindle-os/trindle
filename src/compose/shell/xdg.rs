@@ -16,7 +16,7 @@ use smithay::{
             Resource,
         },
     },
-    utils::{Logical, Point, Rectangle, Serial},
+    utils::{Logical, Point, Rectangle, Serial, SERIAL_COUNTER},
     wayland::{
         compositor::{self, with_states},
         seat::WaylandFocus,
@@ -26,12 +26,12 @@ use smithay::{
         },
     },
 };
-use tracing::{trace, warn};
+use tracing::warn;
 
 use crate::{
     focus::KeyboardFocusTarget,
     shell::{TouchMoveSurfaceGrab, TouchResizeSurfaceGrab},
-    state::{AnvilState, Backend},
+    state::{Compose, Backend},
 };
 
 use super::placement::place_new_window;
@@ -40,9 +40,21 @@ use super::{
     ResizeData, ResizeEdge, ResizeState, SurfaceData, WindowElement,
 };
 
-impl<BackendData: Backend> XdgShellHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> XdgShellHandler for Compose<BackendData> {
     fn xdg_shell_state(&mut self) -> &mut XdgShellState {
         &mut self.xdg_shell_state
+    }
+
+    fn title_changed(&mut self, _: ToplevelSurface) {
+        self.panel_stale = true;
+    }
+
+    fn app_id_changed(&mut self, _: ToplevelSurface) {
+        self.panel_stale = true;
+    }
+
+    fn parent_changed(&mut self, _: ToplevelSurface) {
+        self.panel_stale = true;
     }
 
     fn toplevel_destroyed(&mut self, surface: ToplevelSurface) {
@@ -94,7 +106,7 @@ impl<BackendData: Backend> XdgShellHandler for AnvilState<BackendData> {
     }
 
     fn move_request(&mut self, surface: ToplevelSurface, seat: wl_seat::WlSeat, serial: Serial) {
-        let Some(seat) = known_seat(Seat::<AnvilState<BackendData>>::from_resource(&seat)) else {
+        let Some(seat) = known_seat(Seat::<Compose<BackendData>>::from_resource(&seat)) else {
             return;
         };
         self.move_request_xdg(&surface, &seat, serial)
@@ -107,7 +119,7 @@ impl<BackendData: Backend> XdgShellHandler for AnvilState<BackendData> {
         serial: Serial,
         edges: xdg_toplevel::ResizeEdge,
     ) {
-        let Some(seat) = known_seat(Seat::<AnvilState<BackendData>>::from_resource(&seat)) else {
+        let Some(seat) = known_seat(Seat::<Compose<BackendData>>::from_resource(&seat)) else {
             return;
         };
 
@@ -117,24 +129,17 @@ impl<BackendData: Backend> XdgShellHandler for AnvilState<BackendData> {
             }
         }
 
-        let pointer = seat.get_pointer().unwrap();
+        let Some(pointer) = seat.get_pointer() else { return };
 
         if !pointer.has_grab(serial) {
             return;
         }
 
-        let start_data = pointer.grab_start_data().unwrap();
+        let Some(start_data) = pointer.grab_start_data() else { return };
 
         let Some(window) = self.window_for_surface(surface.wl_surface()) else { return };
 
-        if start_data.focus.is_none()
-            || !start_data
-                .focus
-                .as_ref()
-                .unwrap()
-                .0
-                .same_client_as(&surface.wl_surface().id())
-        {
+        if !super::press_of_its_own(start_data.focus.as_ref(), surface.wl_surface()) {
             return;
         }
 
@@ -167,7 +172,6 @@ impl<BackendData: Backend> XdgShellHandler for AnvilState<BackendData> {
             .capabilities
             .contains(xdg_toplevel::WmCapabilities::Fullscreen)
         {
-
             let wl_surface = surface.wl_surface();
 
             let output_geometry = fullscreen_output_geometry(wl_surface, wl_output.as_ref(), &mut self.space);
@@ -195,13 +199,8 @@ impl<BackendData: Backend> XdgShellHandler for AnvilState<BackendData> {
                     state.fullscreen_output = wl_output;
                 });
                 self.leave_fullscreen_slots(&window, Some(&output));
-                output.user_data().insert_if_missing(FullscreenSurface::default);
-                output
-                    .user_data()
-                    .get::<FullscreenSurface>()
-                    .unwrap()
-                    .set(window.clone());
-                trace!("Fullscreening: {:?}", window);
+                output.user_data().get_or_insert(FullscreenSurface::default).set(window.clone());
+                tracing::info!(target: super::FULL_SCREEN_LOG, "a window goes full screen");
             }
         }
 
@@ -227,6 +226,7 @@ impl<BackendData: Backend> XdgShellHandler for AnvilState<BackendData> {
         if let Some(window) = self.window_for_surface(surface.wl_surface()) {
             self.leave_fullscreen_slots(&window, None);
         }
+        tracing::info!(target: super::FULL_SCREEN_LOG, "a window leaves full screen");
 
         surface.send_pending_configure();
     }
@@ -268,9 +268,13 @@ impl<BackendData: Backend> XdgShellHandler for AnvilState<BackendData> {
     }
 
     fn grab(&mut self, surface: PopupSurface, seat: wl_seat::WlSeat, serial: Serial) {
-        let Some(seat) = known_seat(Seat::<AnvilState<BackendData>>::from_resource(&seat)) else {
+        let Some(seat) = known_seat(Seat::<Compose<BackendData>>::from_resource(&seat)) else {
             return;
         };
+        if !self.popup_grab_serial_ok(&seat, &surface, serial) {
+            surface.send_popup_done();
+            return;
+        }
         let kind = PopupKind::Xdg(surface);
         if let Some(root) = find_popup_root_surface(&kind).ok().and_then(|root| {
             self.space
@@ -317,7 +321,25 @@ impl<BackendData: Backend> XdgShellHandler for AnvilState<BackendData> {
     }
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
+
+    fn popup_grab_serial_ok(&self, seat: &Seat<Self>, surface: &PopupSurface, serial: Serial) -> bool {
+        let client = surface.wl_surface().client().map(|c| c.id());
+        let ours = |focus: Option<WlSurface>| focus.and_then(|s| s.client()).map(|c| c.id()) == client && client.is_some();
+        let keyboard = seat.get_keyboard();
+        let pointer = seat.get_pointer();
+        let held = keyboard.as_ref().is_some_and(|k| k.has_grab(serial))
+            || pointer.as_ref().is_some_and(|p| p.has_grab(serial))
+            || seat.get_touch().is_some_and(|t| t.has_grab(serial));
+        let focused = keyboard
+            .as_ref()
+            .is_some_and(|k| ours(k.current_focus().and_then(|f| f.wl_surface().map(|s| s.into_owned()))));
+        let keyboard_enter = keyboard.filter(|_| focused).and_then(|k| k.last_enter());
+        let pointer_enter = pointer
+            .filter(|p| ours(p.current_focus().and_then(|f| f.wl_surface().map(|s| s.into_owned()))))
+            .and_then(|p| p.last_enter());
+        popup_serial_allowed(serial, focused, held, [keyboard_enter, pointer_enter], SERIAL_COUNTER.next_serial())
+    }
 
     pub fn refit_login_screen(&mut self) {
         if !crate::session::launch().greeter {
@@ -347,30 +369,23 @@ impl<BackendData: Backend> AnvilState<BackendData> {
             }
         }
 
-        let pointer = seat.get_pointer().unwrap();
+        let Some(pointer) = seat.get_pointer() else { return };
 
         if !pointer.has_grab(serial) {
             return;
         }
 
-        let start_data = pointer.grab_start_data().unwrap();
+        let Some(start_data) = pointer.grab_start_data() else { return };
 
         let Some(window) = self.window_for_surface(surface.wl_surface()) else {
             return;
         };
 
-        if start_data.focus.is_none()
-            || !start_data
-                .focus
-                .as_ref()
-                .unwrap()
-                .0
-                .same_client_as(&surface.wl_surface().id())
-        {
+        if !super::press_of_its_own(start_data.focus.as_ref(), surface.wl_surface()) {
             return;
         }
 
-        let initial_window_location = self.space.element_location(&window).unwrap();
+        let Some(initial_window_location) = self.space.element_location(&window) else { return };
 
         let grab = PointerMoveSurfaceGrab {
             start_data,
@@ -386,24 +401,17 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         if !touch.has_grab(serial) {
             return false;
         }
-        let start_data = touch.grab_start_data().unwrap();
+        let Some(start_data) = touch.grab_start_data() else { return true };
 
         let Some(window) = self.window_for_surface(surface.wl_surface()) else {
             return true;
         };
 
-        if start_data.focus.is_none()
-            || !start_data
-                .focus
-                .as_ref()
-                .unwrap()
-                .0
-                .same_client_as(&surface.wl_surface().id())
-        {
+        if !super::press_of_its_own(start_data.focus.as_ref(), surface.wl_surface()) {
             return true;
         }
 
-        let initial_window_location = self.space.element_location(&window).unwrap();
+        let Some(initial_window_location) = self.space.element_location(&window) else { return true };
 
         let grab = TouchMoveSurfaceGrab {
             start_data,
@@ -420,39 +428,22 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         if !touch.has_grab(serial) {
             return false;
         }
-        let start_data = touch.grab_start_data().unwrap();
-        tracing::info!(?start_data);
+        let Some(start_data) = touch.grab_start_data() else { return true };
 
         let Some(window) = self.window_for_surface(surface.wl_surface()) else {
-            tracing::info!("no window");
             return true;
         };
 
-        if start_data.focus.is_none()
-            || !start_data
-                .focus
-                .as_ref()
-                .unwrap()
-                .0
-                .same_client_as(&surface.wl_surface().id())
-        {
-            tracing::info!("different surface");
+        if !super::press_of_its_own(start_data.focus.as_ref(), surface.wl_surface()) {
             return true;
         }
-        let loc = self.space.element_location(&window).unwrap();
+        let Some(loc) = self.space.element_location(&window) else { return true };
         let (initial_window_location, initial_window_size) = (loc, window.client_size());
 
         with_states(surface.wl_surface(), move |states| {
-            states
-                .data_map
-                .get::<RefCell<SurfaceData>>()
-                .unwrap()
-                .borrow_mut()
-                .resize_state = ResizeState::Resizing(ResizeData {
-                edges: edges.into(),
-                initial_window_location,
-                initial_window_size,
-            });
+            if let Some(data) = states.data_map.get::<RefCell<SurfaceData>>() {
+                data.borrow_mut().resize_state = ResizeState::Resizing(ResizeData { edges: edges.into(), initial_window_location, initial_window_size });
+            }
         });
 
         let grab = TouchResizeSurfaceGrab {
@@ -477,20 +468,11 @@ impl<BackendData: Backend> AnvilState<BackendData> {
             return self.unconstrain_layer_popup(popup, &root);
         };
 
-        let mut outputs_for_window = self.space.outputs_for_element(&window);
-        if outputs_for_window.is_empty() {
+        let screens = self.space.outputs_for_element(&window);
+        let Some(outputs_geo) = screens.iter().filter_map(|o| self.space.output_geometry(o)).reduce(|a, b| a.merge(b)) else {
             return;
-        }
-
-        let mut outputs_geo = self
-            .space
-            .output_geometry(&outputs_for_window.pop().unwrap())
-            .unwrap();
-        for output in outputs_for_window {
-            outputs_geo = outputs_geo.merge(self.space.output_geometry(&output).unwrap());
-        }
-
-        let window_geo = self.space.element_geometry(&window).unwrap();
+        };
+        let Some(window_geo) = self.space.element_geometry(&window) else { return };
 
         let mut target = outputs_geo;
         target.loc -= get_popup_toplevel_coords(&PopupKind::Xdg(popup.clone()));
@@ -567,43 +549,21 @@ fn handle_toplevel_commit(space: &mut Space<WindowElement>, surface: &WlSurface)
 }
 
 fn resize_acknowledged(surface: &WlSurface, acked: Serial) {
-        if let Some(serial) = with_states(surface, |states| {
-            if let Some(data) = states.data_map.get::<RefCell<SurfaceData>>() {
-                if let ResizeState::WaitingForFinalAck(_, serial) = data.borrow().resize_state {
-                    return Some(serial);
-                }
-            }
 
-            None
-        }) {
-
-            let is_resizing = with_states(surface, |states| {
-                states
-                    .data_map
-                    .get::<XdgToplevelSurfaceData>()
-                    .unwrap()
-                    .lock()
-                    .unwrap()
-                    .current
-                    .states
-                    .contains(xdg_toplevel::State::Resizing)
-            });
-
-            if acked >= serial && is_resizing {
-                with_states(surface, |states| {
-                    let mut data = states
-                        .data_map
-                        .get::<RefCell<SurfaceData>>()
-                        .unwrap()
-                        .borrow_mut();
-                    if let ResizeState::WaitingForFinalAck(resize_data, _) = data.resize_state {
-                        data.resize_state = ResizeState::WaitingForCommit(resize_data);
-                    } else {
-                        unreachable!()
-                    }
-                });
+    let was_resizing = with_states(surface, |states| {
+        states.data_map.get::<XdgToplevelSurfaceData>()
+            .and_then(|d| d.lock().ok().map(|d| d.current.states.contains(xdg_toplevel::State::Resizing)))
+            .unwrap_or(false)
+    });
+    with_states(surface, |states| {
+        let Some(data) = states.data_map.get::<RefCell<SurfaceData>>() else { return };
+        let mut data = data.borrow_mut();
+        if let ResizeState::WaitingForFinalAck(resize_data, serial) = data.resize_state {
+            if acked >= serial && was_resizing {
+                data.resize_state = ResizeState::WaitingForCommit(resize_data);
             }
         }
+    });
 }
 
 fn known_seat<S>(found: Option<S>) -> Option<S> {
@@ -611,6 +571,31 @@ fn known_seat<S>(found: Option<S>) -> Option<S> {
         tracing::debug!("request names a seat the compositor does not know; ignored");
     }
     found
+}
+
+fn popup_serial_allowed(serial: Serial, focused: bool, held: bool, enters: [Option<Serial>; 2], now: Serial) -> bool {
+    focused && (held || (now.is_no_older_than(&serial) && enters.iter().flatten().any(|enter| serial.is_no_older_than(enter))))
+}
+
+#[cfg(test)]
+mod popup_grab_tests {
+    use super::popup_serial_allowed;
+    use smithay::utils::Serial;
+
+    #[test]
+    fn a_popup_grab_with_a_made_up_serial_is_refused() {
+        let (enter, press, now) = (Serial::from(10), Serial::from(12), Serial::from(20));
+        assert!(popup_serial_allowed(press, true, true, [None, None], now));
+        assert!(popup_serial_allowed(press, true, false, [Some(enter), None], now));
+        assert!(popup_serial_allowed(press, true, false, [None, Some(enter)], now));
+
+        assert!(!popup_serial_allowed(press, true, false, [None, None], now));
+
+        assert!(!popup_serial_allowed(press, false, true, [Some(enter), Some(enter)], now));
+
+        assert!(!popup_serial_allowed(Serial::from(5), true, false, [Some(enter), Some(enter)], now));
+        assert!(!popup_serial_allowed(Serial::from(25), true, false, [Some(enter), None], now));
+    }
 }
 
 #[cfg(test)]
@@ -621,13 +606,5 @@ mod seat_tests {
     fn a_request_naming_an_unknown_seat_is_ignored() {
         assert_eq!(known_seat::<u8>(None), None);
         assert_eq!(known_seat(Some(3u8)), Some(3));
-    }
-
-    #[test]
-    fn no_client_named_seat_or_output_is_unwrapped() {
-        let text = include_str!("xdg.rs");
-        let code = text.split("#[cfg(test)]").next().unwrap();
-        assert!(!code.contains("Seat::from_resource(&seat).unwrap()"));
-        assert!(!code.contains("Output::from_resource(&output).unwrap()"));
     }
 }

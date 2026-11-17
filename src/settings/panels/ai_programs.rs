@@ -8,7 +8,7 @@
 use std::path::{Path, PathBuf};
 
 use crate::common::files::home;
-use crate::settings::ui::{no_chooser, group, headline, line, on, page, Kit, Msg, Page};
+use crate::settings::ui::{no_chooser, group, headline, line, on, page, Cause, Kit, Msg, Page};
 use crate::store::{fence, fence_broker};
 use crate::toolkit::bus::Listen;
 use crate::toolkit::t;
@@ -67,16 +67,17 @@ impl AiPrograms {
         crate::toolkit::window::persons_own(crate::common::person_only::AI_PROGRAMS)
     }
 
-    fn finish(&mut self, kit: &mut Kit, key: &str, result: Result<(), &str>) {
+    fn finish<E: Cause>(&mut self, kit: &mut Kit, key: &str, result: Result<(), E>) {
         self.look();
-        kit.done(key, result.err(), t!("settings-ai-saved"));
+        let why = result.err().map(|e| e.words(t!("settings-ai-not-changed")));
+        kit.done(key, why.as_deref(), t!("settings-ai-saved"));
     }
 
     fn fence(&mut self, kit: &mut Kit, on: bool) {
         if !Self::own_press() {
             return;
         }
-        let r = fence::set_enabled(&self.root, on).map_err(|_| t!("settings-ai-not-changed"));
+        let r = fence::set_enabled(&self.root, on);
         self.finish(kit, FENCE, r);
     }
 
@@ -154,7 +155,7 @@ impl AiPrograms {
         if !Self::own_press() {
             return;
         }
-        let r = fence::unshare(&self.root, path).map_err(|_| t!("settings-ai-not-changed"));
+        let r = fence::unshare(&self.root, path);
         self.finish(kit, SHARE, r);
     }
 
@@ -179,7 +180,7 @@ impl AiPrograms {
         if !Self::own_press() {
             return;
         }
-        let r = fence_broker::make_key(&self.root.join("ssh")).map_err(|_| t!("settings-ai-key-not-made"));
+        let r = fence_broker::make_key(&self.root.join("ssh")).map_err(|e| e.words(t!("settings-ai-key-not-made")));
         self.finish(kit, HOST, r);
     }
 
@@ -209,7 +210,7 @@ impl AiPrograms {
         if !Self::own_press() {
             return;
         }
-        let r = fence::set_net_limit(&self.root, on).map_err(|_| t!("settings-ai-not-changed"));
+        let r = fence::set_net_limit(&self.root, on);
         self.finish(kit, NET, r);
     }
 
@@ -233,7 +234,6 @@ impl AiPrograms {
     fn net_card(&self, kit: &Kit) -> Node<Msg> {
         let toggle = switch(self.net_on, t!("settings-ai-limit-net"), |v| on::<AiPrograms>(move |me, k| me.net_limit(k, v)));
         let mut rows = vec![line(t!("settings-ai-limit-net"))
-            .sub(t!("settings-ai-limit-net-sub"))
             .key(NET).control(toggle).node(kit)];
         for h in &self.net_hosts {
             let name = h.clone();
@@ -246,20 +246,17 @@ impl AiPrograms {
         let typed = entry(self.typed_net.clone(), t!("settings-ai-eg-site"), |t| on::<AiPrograms>(move |me, _| me.typed_net = t.clone()))
             .on_submit(on::<AiPrograms>(|me, k| me.add_net(k)));
         let add = button("list-add-symbolic", t!("settings-ai-let-site")).on_press(on::<AiPrograms>(|me, k| me.add_net(k)));
-        rows.push(line(t!("settings-ai-add-site")).sub(t!("settings-ai-add-site-sub")).key(NET_ADD).control(add).below(typed).node(kit));
+        rows.push(line(t!("settings-ai-add-site")).key(NET_ADD).control(add).below(typed).node(kit));
         group(t!("settings-ai-network")).icon("network-wired-symbolic")
-            .about(t!("settings-ai-network-about"))
+            .about(format!("{} {}", t!("settings-ai-network-about"), t!("settings-ai-add-site-sub")))
             .span(5, 7).rows(rows).node(kit)
     }
 
     fn fence_card(&self, kit: &Kit) -> Node<Msg> {
         let toggle = switch(self.enabled, t!("settings-ai-keep-inside"), |v| on::<AiPrograms>(move |me, k| me.fence(k, v)));
-        let mut sub = t!("settings-ai-hides-home").to_string();
-        if !self.enabled {
-            sub = t!("settings-ai-fence-off").to_string();
-        }
+        let sub = if self.enabled { "" } else { t!("settings-ai-fence-off") };
         group(t!("settings-ai-the-fence")).icon("security-high-symbolic")
-            .about(t!("settings-ai-fence-about"))
+            .about(format!("{} {}", t!("settings-ai-fence-about"), t!("settings-ai-inside")))
             .span(5, 7)
             .rows(vec![line(t!("settings-ai-keep-inside")).sub(sub).key(FENCE).control(toggle).node(kit)])
             .node(kit)
@@ -284,23 +281,22 @@ impl AiPrograms {
                     on::<AiPrograms>(move |me, k| me.own_settings(k, &n, v))
                 });
                 rows.push(line(t!("settings-ai-own"))
-                    .sub(t!("settings-ai-own-sub"))
                     .key(format!("ai:own:{name}")).control(mine).node(kit));
             }
         }
         let typed = entry(self.typed_program.clone(), t!("settings-ai-eg-program"), |t| on::<AiPrograms>(move |me, _| me.typed_program = t.clone()))
             .on_submit(on::<AiPrograms>(|me, k| me.add_program(k)));
         let add = button("list-add-symbolic", t!("settings-ai-add-program")).on_press(on::<AiPrograms>(|me, k| me.add_program(k)));
-        rows.push(line(t!("settings-ai-add-program")).sub(t!("settings-ai-add-program-sub")).key(PROGRAM).control(add).below(typed).node(kit));
+        rows.push(line(t!("settings-ai-add-program")).key(PROGRAM).control(add).below(typed).node(kit));
         group(t!("settings-ai-title")).icon("application-x-executable-symbolic")
-            .about(t!("settings-ai-programs-about"))
+            .about(format!("{} {}", t!("settings-ai-programs-about"), t!("settings-ai-own-sub")))
             .span(5, 7).rows(rows).node(kit)
     }
 
     fn shared_card(&self, kit: &Kit) -> Node<Msg> {
         let mut rows: Vec<Node<Msg>> = Vec::new();
         if self.shared.is_empty() {
-            rows.push(line(t!("settings-ai-nothing-shared")).sub(t!("settings-ai-none-seen")).node(kit));
+            rows.push(line(t!("settings-ai-nothing-shared")).node(kit));
         }
         for s in &self.shared {
             let (p, q) = (s.path.clone(), s.path.clone());
@@ -314,9 +310,9 @@ impl AiPrograms {
                 .controls(vec![ro, take]).node(kit));
         }
         let add = button("folder-new-symbolic", t!("settings-ai-share-folder")).on_press(on::<AiPrograms>(|me, k| me.choose_folder(k)));
-        rows.push(line(t!("settings-ai-share-folder")).sub(t!("settings-ai-share-folder-sub")).key(SHARE).control(add).node(kit));
+        rows.push(line(t!("settings-ai-share-folder")).key(SHARE).control(add).node(kit));
         group(t!("settings-ai-shared")).icon("folder-symbolic")
-            .about(t!("settings-ai-shared-about"))
+            .about(format!("{} {}", t!("settings-ai-shared-about"), t!("settings-ai-share-folder-sub")))
             .span(5, 7).rows(rows).node(kit)
     }
 
@@ -333,16 +329,16 @@ impl AiPrograms {
         let typed = entry(self.typed_host.clone(), t!("settings-ai-eg-computer"), |t| on::<AiPrograms>(move |me, _| me.typed_host = t.clone()))
             .on_submit(on::<AiPrograms>(|me, k| me.add_host(k)));
         let add = button("list-add-symbolic", t!("settings-ai-let-computer")).on_press(on::<AiPrograms>(|me, k| me.add_host(k)));
-        rows.push(line(t!("settings-ai-add-computer")).sub(t!("settings-ai-add-computer-sub")).key(HOST).control(add).below(typed).node(kit));
+        rows.push(line(t!("settings-ai-add-computer")).key(HOST).control(add).below(typed).node(kit));
         match &self.public {
             Some(key) => rows.push(note(t!("settings-ai-put-key", key = key))),
             None => {
                 let make = button("dialog-password-symbolic", t!("settings-ai-make-key")).on_press(on::<AiPrograms>(|me, k| me.make_key(k)));
-                rows.push(line(t!("settings-ai-make-key-for")).sub(t!("settings-ai-make-key-sub")).control(make).node(kit));
+                rows.push(line(t!("settings-ai-make-key-for")).control(make).node(kit));
             }
         }
         group(t!("settings-ai-ssh")).icon("network-server-symbolic")
-            .about(t!("settings-ai-ssh-about"))
+            .about(format!("{} {}", t!("settings-ai-ssh-about"), t!("settings-ai-make-key-sub")))
             .span(5, 7).rows(rows).node(kit)
     }
 
@@ -351,12 +347,12 @@ impl AiPrograms {
         for n in &self.names {
             let name = n.clone();
             let take = remove("list-remove-symbolic", t!("settings-ai-stop-key")).on_press(on::<AiPrograms>(move |me, k| me.drop_key(k, &name)));
-            rows.push(line(n.clone()).sub(t!("settings-ai-given")).key(format!("ai:key:{n}")).control(take).node(kit));
+            rows.push(line(n.clone()).key(format!("ai:key:{n}")).control(take).node(kit));
         }
         let typed = entry(self.typed_key.clone(), t!("settings-ai-eg-key"), |t| on::<AiPrograms>(move |me, _| me.typed_key = t.clone()))
             .on_submit(on::<AiPrograms>(|me, k| me.add_key(k))).secret_of(Secret::Key).key("ai:key-entry");
         let add = button("list-add-symbolic", t!("settings-ai-give-key")).on_press(on::<AiPrograms>(|me, k| me.add_key(k)));
-        rows.push(line(t!("settings-ai-add-key")).sub(t!("settings-ai-add-key-sub")).key(KEYS).control(add).below(typed).node(kit));
+        rows.push(line(t!("settings-ai-add-key")).key(KEYS).control(add).below(typed).node(kit));
         group(t!("settings-ai-keys")).icon("dialog-password-symbolic")
             .about(t!("settings-ai-keys-about"))
             .span(5, 7).rows(rows).node(kit)
@@ -382,10 +378,13 @@ impl Page for AiPrograms {
     fn shown(&mut self, _kit: &mut Kit) {
         self.look();
     }
+
+    fn hidden(&mut self, _kit: &mut Kit) {
+        self.typed_key.clear();
+    }
     fn view(&self, kit: &Kit) -> Node<Msg> {
         let items = vec![
-            headline(kit, t!("settings-ai-note")),
-            note(t!("settings-ai-inside")),
+            headline(t!("settings-ai-note")),
             self.fence_card(kit),
             self.programs_card(kit),
             self.shared_card(kit),
@@ -409,5 +408,32 @@ impl AiPrograms {
             hosts: vec!["nas.example.com".into()], names: vec!["ANTHROPIC_API_KEY".into()], public: Some("ssh-ed25519 AAAA example".into()),
             typed_program: String::new(), typed_host: String::new(), typed_key: String::new(), typed_net: String::new(), net_on: false, net_hosts: vec!["api.anthropic.com".into()], asking: None,
         }
+    }
+}
+
+#[cfg(test)]
+mod secret_tests {
+    use super::*;
+
+    #[test]
+    fn a_key_typed_and_not_sent_is_cleared_when_the_page_is_left() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let mut kit = Kit::new(events, asks, None, None);
+        let mut page = AiPrograms::made_up();
+        page.typed_key = "sk-example-not-real".into();
+        page.hidden(&mut kit);
+        assert!(page.typed_key.is_empty());
+    }
+
+    #[test]
+    fn a_failed_change_names_a_full_disk() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let mut kit = Kit::new(events, asks, None, None);
+        let mut page = AiPrograms::made_up();
+        page.finish(&mut kit, NET, Err(std::io::Error::from_raw_os_error(28)));
+        let (words, red) = kit.said(NET).map(|(w, red)| (w.to_string(), red)).unwrap();
+        assert!(red && words.contains(t!("settings-common-why-full")), "the cause was dropped: {words}");
     }
 }

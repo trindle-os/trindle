@@ -9,25 +9,9 @@ use crate::toolkit::bus as dbus;
 use crate::toolkit::t;
 use crate::toolkit::widget::{Node, button};
 use super::{Act, Do, Drives, GB, Msg, help, plan, room, spot};
-use super::udisks::UD;
-use super::udisks::DRIVE;
-use super::udisks::BLOCK;
-use super::udisks::FILESYSTEM;
-use super::udisks::PARTITION;
-use super::udisks::PARTITION_TABLE;
-use super::udisks::Opts;
-use super::udisks::opts;
-use super::udisks::fstab_item;
-use super::udisks::used_space;
-use super::udisks::taken_dirs;
-use super::udisks::me_ids;
-use super::model::Vol;
-use super::model::Drive;
-use super::steps::Carried;
-use super::steps::Step;
-use super::steps::step;
-use super::steps::unmount;
-use super::steps::mount;
+use super::udisks::{BLOCK, DRIVE, FILESYSTEM, Opts, PARTITION, PARTITION_TABLE, UD, fstab_item, me_ids, opts, taken_dirs, used_space};
+use super::model::{Drive, Vol};
+use super::steps::{Carried, Step, mount, step, unmount};
 
 pub(super) fn fs_opts(fs: &str, name: &str, tear_down: bool) -> Opts {
     let mut o = opts(vec![("update-partition-type", Value::from(true))]);
@@ -52,6 +36,16 @@ pub(super) fn format_key(drive: &str, target: &str, whole: bool) -> String {
     if whole { format!("{drive}:wipe") } else { format!("{target}:format") }
 }
 
+const EJECT_AT: [&str; 4] = ["/usr/bin/eject", "/bin/eject", "/usr/sbin/eject", "/sbin/eject"];
+
+pub(in crate::disks) fn closing_steps(drive: &str, mounted: &[String], method: &'static str, can_eject: bool) -> Vec<Step> {
+    let mut steps: Vec<Step> = mounted.iter().map(|p| unmount(p)).collect();
+    if method != "Eject" || can_eject {
+        steps.push(step(drive, DRIVE, method, (Opts::new(),)));
+    }
+    steps
+}
+
 impl Drives {
 
     pub(super) fn hide(&mut self, drive: &str, row: &str, key: &str, hide: bool) {
@@ -73,7 +67,7 @@ impl Drives {
         let (icon, tip) = if hidden {
             (HIDE_ICON, t!("disks-eye-show", what = what))
         } else {
-            (SHOW_ICON, t!("disks-eye-hide", what = what, lock = hidden_drives::NOT_A_LOCK))
+            (SHOW_ICON, t!("disks-eye-hide", what = what, lock = hidden_drives::not_a_lock()))
         };
         button(icon, tip).on_press(Msg::Hide { drive: drive.into(), row: row.into(), key: key.into(), hide: !hidden })
     }
@@ -82,7 +76,24 @@ impl Drives {
         self.texts.get(key).map(|t| t.trim().to_string()).unwrap_or_else(|| or.to_string())
     }
 
+    pub(super) fn may_change(&self, a: &Act) -> bool {
+        let whole_of = |drive: &str| self.drive(drive).filter(|d| !d.system);
+        match a {
+            Act::Format { drive, target, whole: true } => whole_of(drive).is_some_and(|d| d.whole.as_deref() == Some(target.as_str())),
+            Act::Format { drive, target, whole: false } => whole_of(drive).is_some_and(|d| d.vols.iter().any(|v| v.path == *target)),
+            Act::Delete { drive, .. } | Act::Resize { drive, .. } | Act::Make { drive, .. } => whole_of(drive).is_some(),
+
+            Act::Room { drive, .. } => self.drive(drive).is_some(),
+            Act::Rename { drive, vol } | Act::Folder { drive, vol } | Act::Check { drive, vol } | Act::Repair { drive, vol } =>
+                self.vol(drive, vol).is_some_and(|(_, v)| !v.system),
+            Act::Off { .. } | Act::Mount { .. } | Act::Open(_) => true,
+        }
+    }
+
     pub(super) fn act(&mut self, a: Act) {
+        if !self.may_change(&a) {
+            return;
+        }
         match a {
             Act::Off { drive, method } => self.drive_off(&drive, method),
             Act::Mount { drive, vol, on } => {
@@ -106,15 +117,10 @@ impl Drives {
 
     fn drive_off(&mut self, drive: &str, method: &'static str) {
         let Some(d) = self.drive(drive) else { return };
-        let mut steps: Vec<Step> = d.mounted(&self.objects).iter().map(|p| unmount(p)).collect();
-        steps.push(step(drive, DRIVE, method, (Opts::new(),)));
+        let can_eject = EJECT_AT.iter().any(|p| std::path::Path::new(p).exists());
+        let steps = closing_steps(drive, &d.mounted(&self.objects), method, can_eject);
         let (doing, done) = if method == "Eject" { (t!("disks-closing-it"), t!("disks-safe-remove")) } else { (t!("disks-powering-off"), t!("disks-off-safe")) };
-        self.job(drive, "", doing, steps, move |r| match r {
-            Ok(_) => Ok(done.into()),
-
-            Err(e) if method == "Eject" && e.contains("\u{201c}eject\u{201d}") && e.contains("No such file") => Ok(done.into()),
-            Err(e) => Err(e),
-        });
+        self.job(drive, "", doing, steps, move |r| r.map(|_| done.into()));
     }
 
     fn rename(&mut self, drive: &str, vol: &str) {
@@ -307,16 +313,65 @@ impl Drives {
             return self.finish();
         }
         let Some((_, v)) = self.vol(drive, vol) else { return self.finish() };
-        let v = v.clone();
-        let (facts, ids) = self.room_facts(&v, self.changing.get());
-        let (Some(ids), Ok(plan)) = (ids, room::plan(&facts, want)) else {
-            self.say(drive, row, t!("disks-snapshot-changed").into(), false);
+        let (facts, _) = self.room_facts(&v.clone(), self.changing.get());
+
+        let files = facts.swap_files.unwrap_or_default();
+        if files.is_empty() {
+            return self.shrink(drive, vol, row, want, Vec::new());
+        }
+        #[cfg(test)]
+        self.swaps.push((false, files.clone()));
+        self.snapping = true;
+        self.working.insert(spot(drive, row), t!("disks-swap-off-doing").into());
+        let (asks, drive, vol, row, told) = (self.asks.clone(), drive.to_string(), vol.to_string(), row.to_string(), files.clone());
+        (self.swap)(false, files, Box::new(move |res| { asks.send(Do::SwappedOff { drive, vol, row, want, files: told, res }); }));
+    }
+
+    pub(super) fn swapped_off(&mut self, drive: &str, vol: &str, row: &str, want: u64, files: Vec<String>, res: Result<String, String>) {
+        self.snapping = false;
+        self.working.remove(&spot(drive, row));
+        if let Err(why) = res {
+            self.say(drive, row, t!("disks-snapshot-failed", why = plan::sentence(&why)), false);
             return self.finish();
+        }
+        self.shrink(drive, vol, row, want, files);
+    }
+
+    fn shrink(&mut self, drive: &str, vol: &str, row: &str, want: u64, files: Vec<String>) {
+        let found = self.vol(drive, vol).map(|(_, v)| v.clone());
+        let ready = found.map(|v| self.room_facts(&v, self.changing.get())).and_then(|(facts, ids)| Some((ids?, room::plan(&facts, want).ok()?)));
+        let Some((ids, plan)) = ready else {
+            return self.swap_back(drive.to_string(), row.to_string(), files, Err(t!("disks-snapshot-changed").into()), false);
         };
         let made = plan.room;
         let steps = room::steps(&plan, &ids);
         self.busy = self.busy.saturating_sub(1);
         self.job(drive, row, t!("disks-making-room"), steps, move |r| r.map(|_| t!("disks-room-made", size = size_text(made as f64))));
+        if files.is_empty() {
+            return;
+        }
+        if self.working.contains_key(&spot(drive, row)) {
+            self.swapped.insert(spot(drive, row), files);
+        } else {
+
+            let said = self.told(drive, row).map_or_else(|| plan::no_service().to_string(), |(w, _)| w);
+            self.busy += 1;
+            self.swap_back(drive.to_string(), row.to_string(), files, Err(said), false);
+        }
+    }
+
+    pub(super) fn swap_back(&mut self, drive: String, row: String, files: Vec<String>, res: Result<String, String>, standing: bool) {
+        if files.is_empty() {
+            return self.handle(Do::Done { drive, row, res, standing });
+        }
+        #[cfg(test)]
+        self.swaps.push((true, files.clone()));
+        self.snapping = true;
+        self.working.insert(spot(&drive, &row), t!("disks-swap-on-doing").into());
+        let asks = self.asks.clone();
+        (self.swap)(true, files, Box::new(move |back| {
+            asks.send(Do::SwappedOn { drive, row, res: swap_news(res, back), standing });
+        }));
     }
 
     fn check(&mut self, drive: &str, vol: &str, repair: bool) {
@@ -473,5 +528,14 @@ impl Drives {
         let s = step(&whole, PARTITION_TABLE, "CreatePartitionAndFormat",
             (offset, want, "", "", Opts::new(), fs.clone(), fs_opts(&fs, &name, false)));
         self.job(drive, "", t!("disks-making-it"), vec![s], |r| r.map(|_| t!("disks-made").into()));
+    }
+}
+
+pub(super) fn swap_news(res: Result<String, String>, back: Result<String, String>) -> Result<String, String> {
+    let done = || plan::sentence(res.as_ref().unwrap_or_else(|e| e));
+    match back {
+        Ok(note) if note.is_empty() => res,
+        Ok(note) => Err(t!("disks-swap-on-but", done = done(), why = plan::sentence(&note))),
+        Err(why) => Err(t!("disks-swap-still-off", done = done(), why = plan::sentence(&why))),
     }
 }

@@ -17,7 +17,7 @@ store-upd-held-version = 已暂缓更新，停留在版本 { $have }
 store-upd-held = 已暂缓更新
 
 # On the Held back card: the version a thing is held at, and nothing newer waits.
-store-upd-held-version-nothing = 已暂缓更新，停留在版本 { $have }；暂无更新版本
+store-upd-held-version-nothing = 已暂缓更新，停留在版本 { $have }。暂无更新的版本。
 
 # On the Held back card: nothing newer waits.
 store-upd-held-nothing = 已暂缓更新；暂无更新版本
@@ -53,7 +53,7 @@ store-upd-sentence = { $text }。
 store-upd-and-then = { $first }{ $second }
 
 # Added to the headline when firmware is among the updates.
-store-upd-firmware-restart = 固件需要重启才能完成更新。
+store-upd-firmware-restart = 重启以完成固件更新。
 
 # Headline while the check runs.
 store-upd-checking = 正在检查更新。
@@ -65,19 +65,19 @@ store-upd-updating-one = 正在更新 { $name }。安装期间你可以继续工
 store-upd-installing-all = 正在安装更新。安装期间你可以继续工作。
 
 # Headline when the updates are in and the computer must start again.
-store-upd-restart = 重启以完成更新：更新已安装，电脑重新启动后才会生效。
+store-upd-restart = 请重启电脑，完成更新的安装。
 
 # Added to the headline when what went in needs a restart.
-store-upd-gone-in-restart = 已安装的内容需要重启才能完成。
+store-upd-gone-in-restart = 重启以完成安装。
 
 # Added to the headline with no internet.
-store-upd-no-more = 这台电脑没有连接互联网，无法再查找更多更新。
+store-upd-no-more = 这台电脑没有连接互联网，Trindle 无法查找更多更新。
 
 # Headline when nothing is ready (updates held back are added after it).
 store-upd-none-ready = 没有可用的更新
 
 # Headline with nothing waiting and no internet to look with.
-store-upd-nothing-known = 这台电脑已知的更新都已处理。没有连接互联网时，无法查找更多更新。
+store-upd-nothing-known = Trindle 不知道有任何待安装的更新。这台电脑没有连接互联网时，无法查找更多更新。
 
 # Name of the apps in the headline's list of what could not be checked.
 store-upd-name-apps = 应用
@@ -89,7 +89,7 @@ store-upd-name-system = Trindle 和 Debian
 store-upd-name-firmware = 固件
 
 # Headline when some checks failed; the list of what was not checked is given.
-store-upd-check-failed = 无法检查{ $names }的更新。
+store-upd-check-failed = Trindle 无法检查{ $names }的更新。
 
 # Headline when everything is up to date.
 store-upd-current = 一切都是最新的。
@@ -101,7 +101,7 @@ store-upd-last-checked = 上次检查时间：{ $time }。
 store-upd-not-checked = 没有互联网无法检查
 
 # Red words under a card when a check took too long.
-store-upd-too-long = 等待回应的时间太长。
+store-upd-too-long = 检查花的时间太长。
 
 # Tip of the round button that checks again.
 store-upd-check-again = 再次检查
@@ -126,7 +126,7 @@ store-upd-restart-now = 立即重启
 store-upd-check-for = 检查更新
 
 # Tip of the round button that releases a thing held back.
-store-upd-release = 解除暂缓 { $name }
+store-upd-release = 允许更新 { $name }
 
 # Tip of the round button that holds a thing's updates back.
 store-upd-hold = 暂缓更新 { $name }
@@ -163,10 +163,10 @@ store-upd-shared-part = 共享组件，来自 { $from }
 
 # Note under the Apps card.
 # SAFETY: needs a human review before it ships
-store-upd-yours-alone = 仅属于你自己，所以更新时不需要密码。应用会带上其新版本所需的共享组件。
+store-upd-yours-alone = 这些应用只属于你自己，所以更新时不需要密码。应用更新时，也会安装它所需的共享组件。
 
 # Note under the Apps card: what holding back does.
-store-upd-hold-why = 已暂缓的更新会停留在当前版本，在这里和圆环中的“全部安装”时也不会安装，直到你解除暂缓。
+store-upd-hold-why = 已暂缓的更新会停留在当前版本。在这里和圆环中点击“全部安装”时，它不会被安装，直到你重新允许更新。
 
 # Heading of the Apps card.
 store-upd-card-apps = 应用
@@ -193,10 +193,10 @@ store-upd-card-plugins = 插件
 store-upd-nothing-held = 没有暂缓的更新。
 
 # On a row of the Held back card for a thing released while the page is open.
-store-upd-released = 已解除暂缓
+store-upd-released = 未暂缓
 
 # Note under the Held back card: what releasing does.
-store-upd-release-why = 解除暂缓的项目会重新和其他更新一起安装，包括这里和圆环中的“全部安装”。
+store-upd-release-why = 重新允许更新后，在这里和圆环中点击“全部安装”时，它会和其他更新一起安装。
 
 # Name on the Held back card of a device whose firmware is not named now.
 store-upd-device-firmware = 某设备的固件
@@ -220,7 +220,7 @@ store-upd-debian-count =
 store-upd-from-debian = 来自 Debian
 
 # Under Debian's rows: how many of them show.
-store-upd-debian-showing = 显示 Debian 更新的 { $shown } 项，共 { $total } 项。
+store-upd-debian-showing = 显示 { $shown } 个 Debian 更新，共 { $total } 个。
 
 # Note on the Trindle and Debian card: which version of Trindle the computer has.
 store-upd-has-trindle = 这台电脑使用的是 Trindle { $version }。
@@ -229,7 +229,7 @@ store-upd-has-trindle = 这台电脑使用的是 Trindle { $version }。
 store-upd-card-system = Trindle 和 Debian
 
 # Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Debian 的软件包彼此配合，单独安装一个可能带入其他软件包，或使它们不同步。所以它们从一个按钮一起安装。
+store-upd-debian-why = Debian 软件包彼此配合。单独安装一个，可能带入其他包，或让它们不同步，所以会一起安装。
 
 # Note on the Trindle and Debian card: why no row has a Hold back button.
 store-upd-not-held = Trindle 和 Debian 的更新包含整台电脑的安全修复，因此不能暂缓。
@@ -240,14 +240,8 @@ store-upd-card-security = 安全更新
 # On the security card: its state.
 store-upd-security-on = 已开启，每天一次
 
-# On the security card.
-store-upd-security-note = Debian 的修复每天自动安装，无需询问。
-
-# On the security card.
-store-upd-security-part = 属于 Trindle 的一部分，无法关闭。
-
 # On the security card: that holding back never stops these.
-store-upd-never-held = 暂缓更新不会影响这些安全更新。
+store-upd-never-held = 暂缓更新不会影响安全更新。
 
 # Firmware card: the computer has no updater.
 store-upd-fw-none = 这台电脑没有固件更新工具。
@@ -274,22 +268,22 @@ store-upd-fw-no-list = fwupd 无法获取最新列表。
 store-upd-no-flathub = 无法连接 Flathub。
 
 # Red words when Debian's lists could not be fetched.
-store-upd-no-lists = 无法获取 Debian 的列表。
+store-upd-no-lists = Trindle 无法获取 Debian 的列表。
 
 # Red words when Debian's lists could not be fetched; the reason follows.
-store-upd-no-lists-why = 无法获取 Debian 的列表。{ $why }
+store-upd-no-lists-why = Trindle 无法获取 Debian 的列表。{ $why }
 
 # Red words under a row when its updates could not be held back or released: the list of what is held could not be kept.
-store-upd-not-held-list = 未能暂缓。无法保存已暂缓项目的列表：{ $why }。
+store-upd-not-held-list = Trindle 未能暂缓它，因为无法保存已暂缓更新的列表：{ $why }。
 
 # The same, for a release.
-store-upd-not-released-list = 未能解除暂缓。无法保存已暂缓项目的列表：{ $why }。
+store-upd-not-released-list = Trindle 未能重新允许更新，因为无法保存已暂缓更新的列表：{ $why }。
 
 # Red words when Flatpak could not be told a thing is held back.
-store-upd-held-not-told = 已在“应用”中暂缓，但无法通知 Flatpak 本身，所以其他更新应用的工具仍可能安装它。
+store-upd-held-not-told = 它已在“应用”中暂缓，但 Trindle 无法在 Flatpak 中更改这一点。其他更新应用的程序仍可能安装它。
 
 # Red words when Flatpak could not be told a thing is released.
-store-upd-released-not-told = 已在“应用”中解除暂缓，但无法通知 Flatpak 本身，它可能仍会被跳过。请再次暂缓并解除暂缓。
+store-upd-released-not-told = 已在“应用”中重新允许更新，但 Trindle 无法在 Flatpak 中更改这一点，所以 Flatpak 可能仍会跳过它。请先暂缓，再重新允许更新。
 
 # Red words: the above, then what Flatpak itself said.
 store-upd-flatpak-said = { $words } Flatpak 提示：{ $why }
@@ -297,10 +291,15 @@ store-upd-flatpak-said = { $words } Flatpak 提示：{ $why }
 # Name of Trindle itself on its row of updates.
 store-upd-trindle = Trindle
 
+# Said when a security fix for a boxed app can't be downloaded. { $package } is the package, { $version } the fixed version.
+store-patch-not-fetched = Trindle 无法下载 { $package } { $version }。
+
+# Said when a security fix for a boxed app was downloaded but isn't there to use.
+store-patch-not-found = Trindle 找不到它下载的软件包。
 
 
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
-store-upd-off = 自动检查更新已关闭。点击“检查更新”即可查找。
+store-upd-off = 自动检查更新已关闭。
 
 # How a card stands with nothing known to wait, looking by itself switched off and no check pressed yet.
 store-upd-not-looked = 未检查
@@ -319,4 +318,3 @@ store-upd-stopped-all = 已停止。点击“安装”继续。
 
 # Note under the Apps card.
 store-upd-steam-restarts = 没有游戏在运行后，Steam 会重启。
-

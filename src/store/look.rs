@@ -9,7 +9,8 @@ use tiny_skia::{FillRule, Paint, PathBuilder, Stroke, Transform};
 use super::{go, Msg, Store};
 use crate::toolkit::colour::Colour;
 use crate::toolkit::theme;
-use crate::toolkit::widget::{button, card, drawing, entry, label, note, ring, row, Length, Node, Pen, Tone};
+use crate::toolkit::tiles::RingShare;
+use crate::toolkit::widget::{button, card, drawing, entry, label, note, row, Length, Node, Pen, Tone};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Dot {
@@ -77,11 +78,11 @@ fn solid(c: Colour, alpha: f32) -> Paint<'static> {
 }
 
 pub fn dot(s: &Store, d: Dot) -> Node<Msg> {
-    dot_marking(&s.pulsing, d)
+    dot_marking(&s.pulse.on, d)
 }
 
 pub fn dot_named(s: &Store, d: Dot, says: &str) -> Node<Msg> {
-    made(&s.pulsing, d, says)
+    made(&s.pulse.on, d, says)
 }
 
 pub fn dot_marking(pulsing: &std::cell::Cell<bool>, d: Dot) -> Node<Msg> {
@@ -171,9 +172,9 @@ pub fn back(to: &str, press: Msg) -> Node<Msg> {
         .flat().width(Length::Shrink).on_press(press)
 }
 
-pub fn ring_with_figure(share: f32, size: f32) -> Node<Msg> {
-    let percent = (share.clamp(0.0, 1.0) * 100.0).floor();
-    row(vec![ring(percent / 100.0, size).tone(Tone::Accent), note(format!("{percent:.0}%")).width(Length::Fixed(FIGURE_ROOM))])
+pub fn ring_with_figure(share: &RingShare, size: f32) -> Node<Msg> {
+    let percent = crate::common::filling::percent(share.get().unwrap_or(0.0));
+    row(vec![crate::common::filling::following_ring(share, size, Tone::Accent), note(format!("{percent}%")).width(Length::Fixed(FIGURE_ROOM))])
         .gap(8.0).centred().width(Length::Shrink)
 }
 
@@ -220,6 +221,26 @@ pub fn open_button(tip: &str) -> Node<Msg> {
     })
 }
 
+pub fn action_room() -> f32 {
+    thread_local! {
+        static MEASURED: crate::common::widest::Measured = const { std::cell::RefCell::new(None) };
+    }
+    crate::common::widest::per_language(&MEASURED, || {
+        use crate::common::widest::{action, words};
+        use crate::toolkit::lang::t as word;
+        let least = theme::app_page().action;
+        let pills = ["store-app-install", "store-app-open", "store-app-update", "store-app-release", "store-fp-install", "store-deb-install",
+                     "store-deb-reinstall", "store-deb-update"].map(|k| action(word(k)));
+        let busy = ["store-app-busy-installing", "store-app-busy-removing", "store-deb-installing"]
+            .map(|k| theme::sheet().spinner + busy_gap() + words(word(k)));
+        pills.into_iter().chain(busy).fold(least, f32::max).min(2.0 * least).ceil()
+    })
+}
+
+pub fn busy_gap() -> f32 {
+    theme::sheet().action_gap
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -240,4 +261,21 @@ mod tests {
             assert!(!d.pulses(), "{d:?}");
         }
     }
+
+    #[test]
+    fn the_action_room_holds_every_word_whole_in_every_language() {
+        use crate::common::shipped_languages::{in_language, tags};
+        use crate::toolkit::widget::main_action;
+        for tag in tags() {
+            in_language(&tag, || {
+                let room = action_room();
+                for key in ["store-app-release", "store-deb-reinstall", "store-app-install", "store-app-update"] {
+                    let words = crate::toolkit::lang::t(key);
+                    let wide = crate::common::widest::laid::<Msg>(vec![main_action("view-pin-symbolic", words)]);
+                    assert!(wide <= room + 0.5, "{tag}: {words:?} needs {wide} of {room}");
+                }
+            });
+        }
+    }
 }
+

@@ -9,8 +9,28 @@ use super::{go, Msg, Store};
 
 pub(super) const SIDE: f32 = 230.0;
 
+pub(super) fn side_room() -> f32 {
+    let s = crate::toolkit::theme::sheet();
+    2.0 * s.entry_padding + s.icon + s.gap
+}
+
+pub(super) fn side_list() -> f32 {
+    thread_local! {
+        static MEASURED: crate::common::widest::Measured = const { std::cell::RefCell::new(None) };
+    }
+    crate::common::widest::per_language(&MEASURED, || {
+        let mut names: Vec<String> = ["store-nav-discover", "store-nav-github", "store-nav-installed", "store-nav-sources", "store-nav-plugins"]
+            .map(|k| crate::toolkit::lang::t(k).to_string()).to_vec();
+        names.extend([move_apps().to_string(), t!("store-nav-updates-waiting", n = 999)]);
+        names.extend(categories().iter().map(|c| c.1.to_string()));
+        names.extend(crate::settings::apps_titles().into_iter().map(str::to_string));
+        let widest = names.iter().map(|n| crate::common::widest::words(n)).fold(0.0, f32::max);
+        (widest + side_room()).clamp(SIDE, 1.5 * SIDE).ceil()
+    })
+}
+
 pub(super) fn side_width() -> f32 {
-    SIDE + 2.0 * crate::toolkit::theme::sheet().snug_padding
+    side_list() + 2.0 * crate::toolkit::theme::sheet().snug_padding
 }
 
 pub(super) fn page_room(across: f32) -> f32 {
@@ -82,21 +102,18 @@ impl Store {
         let updates = if n == 0 { t!("store-nav-updates").to_string() } else { t!("store-nav-updates-waiting", n = n) };
         let mine: Vec<(String, String, &str)> = vec![
             ("home".into(), t!("store-nav-discover").into(), "starred-symbolic"),
+            ("github".into(), t!("store-nav-github").into(), "system-search-symbolic"),
             ("installed".into(), t!("store-nav-installed").into(), crate::settings::ui::INSTALL_ICON),
             ("updates".into(), updates, crate::settings::ui::UPDATE_ICON),
-            ("plugins".into(), t!("store-nav-plugins").into(), "application-x-addon-symbolic"),
-        ];
-        let more: Vec<(String, String, &str)> = vec![
-            ("browse".into(), t!("store-nav-browse").into(), "system-software-install-symbolic"),
-            ("github".into(), t!("store-nav-github").into(), "github-symbolic"),
             ("sources".into(), t!("store-nav-sources").into(), "network-server-symbolic"),
+            ("plugins".into(), t!("store-nav-plugins").into(), "application-x-addon-symbolic"),
             ("backup".into(), move_apps().into(), crate::settings::ui::SAVE_ICON),
         ];
         let kinds: Vec<(String, String, &str)> = categories().iter().map(|(code, name, icon)| (format!("cat:{code}"), name.to_string(), *icon)).collect();
-        let rows = mine.len() + kinds.len() + more.len() + settings.len();
+        let rows = mine.len() + kinds.len() + settings.len();
 
         let sheet = crate::toolkit::theme::sheet();
-        let (line, between, under) = side_fit(self.tall, rows, if settings.is_empty() { 3 } else { 4 }, sheet.sidebar_room + sheet.snug_padding);
+        let (line, between, under) = side_fit(self.size.tall, rows, if settings.is_empty() { 2 } else { 3 }, sheet.sidebar_room + sheet.snug_padding);
         let group = |name: &str, places: Vec<(String, String, &str)>| {
 
             let chosen = places.iter().position(|(k, _, _)| *k == here);
@@ -105,7 +122,7 @@ impl Store {
             let pick = list(rows, chosen, move |i| {
                 let keys = keys.clone();
                 go(move |s| s.select_nav(&keys[i]))
-            }).row_height(line).here().width(Length::Fixed(SIDE));
+            }).called(name).row_height(line).here().width(Length::Fixed(side_list()));
             let head = row(vec![space().width(Length::Fixed(SIDE_HEAD_INDENT)), side_heading(name)]).height(Length::Fixed(SIDE_HEAD));
             column(vec![head, pick]).gap(under)
         };
@@ -115,7 +132,6 @@ impl Store {
             groups.push(group(t!("store-group-settings"), settings));
         }
         groups.push(group(t!("store-group-categories"), kinds));
-        groups.push(group(t!("store-group-more"), more));
         column(with_rules(groups)).gap(between)
     }
 }

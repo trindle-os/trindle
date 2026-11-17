@@ -8,7 +8,7 @@ use smithay::reexports::wayland_server::Resource;
 use smithay::utils::{IsAlive, SERIAL_COUNTER};
 use smithay::wayland::seat::WaylandFocus;
 
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
 
 #[derive(Debug)]
 pub struct Dragging {
@@ -39,7 +39,7 @@ fn shape(over: Over) -> CursorIcon {
     }
 }
 
-impl<BackendData: Backend + 'static> AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> Compose<BackendData> {
 
     pub fn drag_started(&mut self, source: Option<WlDataSource>) {
         self.dragging = Some(Dragging { source, action: DndAction::empty(), over: None });
@@ -86,20 +86,20 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
             return;
         }
 
-        if self.capture.away() {
+        if self.capture.is_active() {
             return;
         }
         let under = self.surface_under_pointer();
 
         let older = under.as_ref().and_then(|s| self.xdnd_shape_over(s));
         let Some(d) = &mut self.dragging else { return };
-        let over = match &under {
-            None => Over::Nothing,
-            Some(_) if older.is_some() => Over::Other(older.unwrap_or(DndAction::empty())),
-            Some(s) if s.id().same_client_as(&source.id()) => Over::Own,
-            Some(s) if d.over.as_ref() == Some(&s.id()) => Over::Other(d.action),
+        let over = match (&under, older) {
+            (None, _) => Over::Nothing,
+            (Some(_), Some(action)) => Over::Other(action),
+            (Some(s), None) if s.id().same_client_as(&source.id()) => Over::Own,
+            (Some(s), None) if d.over.as_ref() == Some(&s.id()) => Over::Other(d.action),
 
-            Some(_) => {
+            (Some(_), None) => {
                 d.action = DndAction::empty();
                 Over::Other(DndAction::empty())
             }

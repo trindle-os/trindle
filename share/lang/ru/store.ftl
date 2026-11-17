@@ -22,7 +22,7 @@ store-nav-updates-waiting = Обновления ({ $n })
 store-nav-plugins = Плагины
 
 # Side bar place: apps from GitHub.
-store-nav-github = С GitHub
+store-nav-github = Поиск
 
 # Side bar place: where software comes from.
 store-nav-sources = Источники программ
@@ -38,9 +38,6 @@ store-group-settings = Настройки приложений
 
 # Small heading over the categories of apps.
 store-group-categories = Категории
-
-# Small heading over the other ways to get an app.
-store-group-more = Другие способы получить приложения
 
 # Title of a page of search results; the words searched for are in the quotes.
 store-grid-results = Результаты по запросу «{ $text }»
@@ -88,20 +85,24 @@ store-cat-utility = Утилиты
 store-cat-system = Система
 
 # Red words when the list of apps could not be read.
-store-catalogue-unreadable = Не удалось прочитать каталог: { $why }
+store-catalogue-unreadable = Trindle не смог прочитать каталог: { $why }
 
 # Red words when Flathub's list of apps could not be fetched. { $why } is what Flatpak said.
-store-catalogue-not-fetched = Не удалось получить список приложений с Flathub. Проверьте подключение к интернету. { $why }
+store-catalogue-not-fetched = Trindle не смог получить список приложений с Flathub. Проверьте подключение к интернету. { $why }
 
 # Red words under the search box when nothing that was dropped on the window is a kind Apps takes.
 store-dropped-only = Сюда можно перетащить только файлы .deb, .AppImage и .flatpakref.
 
 # Red words under an app that Flatpak did not update; what Flatpak said follows.
-store-not-updated-said = Не обновлено. Flatpak сообщил: { $why }
+store-not-updated-said = Flatpak не обновил его: { $why }
 
 # Red words under an app that Flatpak did not update and gave no reason for.
-store-not-updated-none = Не обновлено, причину Flatpak не назвал.
+store-not-updated-none = Не обновлено. Причина не указана.
 
 # Side bar place and title: the AppImages AppImageHub lists.
 store-nav-browse = Обзор AppImage
+
+
+# Heading of the Flatpaks a detailed search found on Flathub.
+store-gh-flathub = Flatpak-приложения на Flathub ({ $n })
 

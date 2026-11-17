@@ -27,16 +27,16 @@ greeter-ready-name = अपना नाम और पासवर्ड लि�
 greeter-phone-failed = आपके फ़ोन ने आपको लॉग इन नहीं किया। अपना पासवर्ड लिखें।
 
 # Under the password box for a few seconds, where a phone is paired.
-greeter-phone-hint = फ़ोन वाला बटन आपको आपके फ़ोन से लॉग इन करता है।
+greeter-phone-hint = अपने फ़ोन से लॉग इन करें
 
 # At the foot of the screen, for when nothing else works.
 greeter-trouble = लॉग इन में परेशानी? टेक्स्ट लॉगिन के लिए Ctrl+Alt+F2 दबाएँ।
 
 # Beside the light drawing switch, on a computer with no graphics chip.
-greeter-no-chip = कोई ग्राफ़िक्स चिप नहीं मिली, इसलिए हल्की ड्राइंग चीज़ों को तेज़ रखती है।
+greeter-no-chip = Trindle को ग्राफ़िक्स चिप नहीं मिली, इसलिए डेस्कटॉप को तेज़ रखने के लिए वह सरल ग्राफ़िक्स इस्तेमाल कर रहा है।
 
 # The main button's name (a round button with an arrow) that logs in.
-greeter-sign-in = साइन इन करें
+greeter-sign-in = लॉग इन करें
 
 # Red line under the boxes when the name and password are wrong, or the account is unknown.
 # SAFETY: needs a human review before it ships
@@ -78,7 +78,7 @@ greeter-answer-box = उत्तर
 greeter-use-phone = फ़ोन इस्तेमाल करें
 
 # Name of the switch for light drawing on a computer with no graphics chip, and the word under it.
-greeter-light-drawing = हल्की ड्राइंग
+greeter-light-drawing = कम ग्राफ़िक्स
 
 # Tip of the round button that shows or hides the on-screen keyboard.
 greeter-keyboard-tip = स्क्रीन पर कीबोर्ड
@@ -109,7 +109,7 @@ greeter-shut-down = शट डाउन
 greeter-shut-down-sure = शट डाउन करने के लिए फिर दबाएँ
 
 # Red line under the boxes when a power button is pressed and the system has no bus to ask.
-greeter-no-bus = सिस्टम बस उपलब्ध नहीं है।
+greeter-no-bus = Trindle सिस्टम तक नहीं पहुँच सकता।
 
 # Red line under the boxes when the system refused to restart; the reason follows, as the system worded it.
 greeter-restart-failed = रीस्टार्ट नहीं हो सका: { $why }
@@ -118,20 +118,19 @@ greeter-restart-failed = रीस्टार्ट नहीं हो सक�
 greeter-shut-down-failed = शट डाउन नहीं हो सका: { $why }
 
 # Red line under the boxes when the login service could not be spoken to.
-greeter-service-no-talk = लॉगिन सेवा से बात नहीं हो सकी।
+greeter-service-no-talk = लॉगिन सेवा तक नहीं पहुँचा जा सका।
 
 # Red line under the boxes when the login service was too slow.
-greeter-service-timeout = लॉगिन सेवा ने समय पर जवाब नहीं दिया।
+greeter-service-timeout = लॉगिन सेवा को बहुत समय लगा।
 
 # Red line under the boxes when the login service hung up.
 greeter-service-closed = greetd ने कनेक्शन बंद कर दिया।
 
 # Red line under the boxes when the login service's answer was far too large.
-greeter-service-too-big = लॉगिन सेवा ने पढ़ने के लिए बहुत बड़ा जवाब दिया।
+greeter-service-too-big = लॉगिन सेवा ने इतना बड़ा जवाब भेजा कि वह पढ़ा नहीं जा सकता।
 
 # Red line under the boxes when the login screen was started by hand and not by the login service.
 greeter-service-not-started = GREETD_SOCK सेट नहीं है: लॉगिन स्क्रीन greetd ने शुरू नहीं की।
 
 # Red line under the boxes when there is no connection to the login service.
 greeter-service-no-connection = कोई कनेक्शन नहीं
-

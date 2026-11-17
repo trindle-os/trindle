@@ -1,0 +1,129 @@
+## What an app can be allowed to do, and what goes wrong without it. Each
+## permission has a name (said after "asks for", as in "Weather asks for
+## the internet and sound"), the line under its switch, and for some a warning.
+
+access-network-name = انٹرنیٹ
+access-network-without = یہ انٹرنیٹ یا قریبی دوسرے کمپیوٹروں تک نہیں پہنچ سکے گا۔
+access-sound-name = آواز
+access-sound-without = اس سے کوئی آواز نہیں آئے گی۔
+access-microphone-name = آپ کا مائیکروفون
+access-microphone-without = یہ آپ کو سن نہیں سکے گا۔
+access-sound-and-microphone-name = آواز اور آپ کا مائیکروفون
+access-sound-and-microphone-without = اس سے کوئی آواز نہیں آئے گی اور یہ آپ کو سن نہیں سکے گا۔
+access-files-name = آپ کے Documents، Downloads، Pictures، Music، Videos اور Desktop فولڈرز
+access-files-without = یہ آپ کی فائلیں کھول نہیں سکے گا اور آپ کے فولڈرز میں محفوظ نہیں کر سکے گا۔
+access-home-name = آپ کے ہوم فولڈر کی ہر چیز، چھپی ہوئی ترتیبات کی فائلوں سمیت
+access-home-without = یہ آپ کی فائلیں کھول نہیں سکے گا اور آپ کے فولڈرز میں محفوظ نہیں کر سکے گا۔
+access-devices-name = آپ کا کیمرا اور لگائے ہوئے دوسرے آلات
+access-devices-without = یہ آپ کو دیکھ نہیں سکے گا اور آپ کی لگائی ہوئی کوئی چیز استعمال نہیں کر سکے گا۔
+access-bluetooth-name = Bluetooth آلات، جیسے ہیڈ فون
+access-bluetooth-without = یہ Bluetooth کے ذریعے کسی چیز سے بات نہیں کر سکے گا۔
+access-notifications-name = اطلاعات
+access-notifications-without = یہ آپ کو کچھ ہونے کی خبر نہیں دے سکے گا۔
+access-background-name = لاگ اِن کرنے پر شروع ہونا
+access-background-without = یہ صرف اسی وقت چلے گا جب آپ نے اسے کھولا ہو۔
+access-screen-name = آپ کی اسکرین کی تصویریں، جو کچھ آپ کاپی کرتے ہیں وہ، اور آپ کے کی بورڈ کی طرح ٹائپ کرنا
+access-screen-without = یہ دوسری ونڈوز دیکھ نہیں سکے گا اور جب جی چاہے آپ کی نقل کی ہوئی چیز پڑھ نہیں سکے گا۔
+access-x11-name = اپنی ونڈوز کو پرانے طریقے سے بنانا، جس سے یہ دوسری پرانی ایپس اور ان میں ٹائپ کی گئی چیزیں دیکھ سکتا ہے
+access-x11-without = اس کی ونڈوز نہیں کھلیں گی۔
+access-computer-name = اپنے ڈبے سے باہر کام کرنا، ہر اس چیز کے ساتھ جس تک آپ خود پہنچ سکتے ہیں
+access-computer-without = آپ جو کچھ اس میں لکھتے ہیں وہ اس کے ڈبے کے اندر ہی رہے گا، اس لیے sudo اور آپ کی اپنی فائلیں وہاں کام نہیں کریں گی۔
+access-control-name = آپ کے کی بورڈ، ماؤس اور کلپ بورڈ پر قابو
+access-control-without = یہ پوائنٹر ہلا نہیں سکے گا، ٹائپ نہیں کر سکے گا اور آپ کی نقل کی ہوئی چیز شیئر نہیں کر سکے گا۔
+access-capture-name = آپ کا ماؤس اور کی بورڈ دوسرے کمپیوٹر کے ساتھ شیئر کرنا
+access-capture-without = پوائنٹر دوسرے کمپیوٹر پر نہیں جا سکے گا۔
+access-copied-name = آپ کی نقل کی ہوئی فائلیں
+access-copied-without = یہ آپ کی نقل کی ہوئی فائلیں پڑھ نہیں سکے گا، اس لیے انہیں دوسرے کمپیوٹر پر نہیں لے جا سکے گا۔
+access-summon-name = پوری اسکرین والی ونڈو کے اوپر حلقہ کھولنا، جیسے آپ نے کلید دبائی ہو
+access-summon-without = اس کی کلیدیں اور کلکس حلقہ صرف ڈیسک ٹاپ پر کھولیں گے، پوری اسکرین والی ونڈو کے اوپر کبھی نہیں۔
+access-listen-name = آپ کے مقامی نیٹ ورک کے دوسرے کمپیوٹروں کا اس تک پہنچنا
+access-listen-without = آپ کے مقامی نیٹ ورک کے دوسرے کمپیوٹر اسے ڈھونڈ نہیں سکیں گے اور اس سے جڑ نہیں سکیں گے۔
+access-home-network-name = صرف آپ کے مقامی نیٹ ورک کے آلات
+access-home-network-without = یہ مقامی نیٹ ورک پر پرنٹرز، اسکینرز یا دوسرے آلات کو ڈھونڈ نہیں سکے گا اور ان سے بات نہیں کر سکے گا۔
+access-usb-devices-name = اسکینرز اور USB آلات
+access-usb-devices-without = یہ اس کمپیوٹر میں لگا ہوا اسکینر استعمال نہیں کر سکے گا۔
+access-expand-name = ٹائپ کرتے وقت مختصر کوڈز کو پھیلانا
+access-expand-without = ٹائپ کرتے وقت اس کے مختصر کوڈز نہیں پھیلیں گے۔
+access-accessibility-name = ہر ونڈو کو بلند آواز سے پڑھنا
+access-accessibility-without = یہ آپ کی ونڈوز بلند آواز سے پڑھ نہیں سکے گا۔
+access-unnamed-name = کوئی ایسی چیز جس کا اس نے نام نہیں بتایا
+
+access-control-warning = یہ آپ کی طرح ٹائپ کر سکتا ہے، کلک کر سکتا ہے اور آپ کی نقل کی ہوئی چیز پڑھ سکتا ہے۔ یہ اجازت صرف ایسے پلگ ان کو دیں جس پر آپ بھروسا کرتے ہیں۔
+access-capture-warning = جب تک پوائنٹر دوسرے کمپیوٹر پر ہے، آپ جو کچھ ٹائپ اور کلک کرتے ہیں وہ سب اس پلگ ان کو جاتا ہے۔ یہ اجازت صرف ایسے پلگ ان کو دیں جس پر آپ بھروسا کرتے ہیں۔
+access-copied-warning = جب تک اجازت ہے، یہ بالکل وہی فائلیں پڑھ سکتا ہے جو آپ نقل کرتے ہیں، اور کچھ نہیں۔ یہ اجازت صرف ایسے پلگ ان کو دیں جس پر آپ بھروسا کرتے ہیں۔
+access-summon-warning = یہ حلقہ، جو آپ کی ٹائپ کی ہوئی ہر چیز لے لیتا ہے، آپ کے کوئی کلید دبائے بغیر کسی گیم یا فلم کے اوپر لا سکتا ہے۔ یہ اجازت صرف ایسے پلگ ان کو دیں جس پر آپ بھروسا کرتے ہیں۔
+access-home-network-warning = یہ آپ کے مقامی نیٹ ورک کے ہر آلے سے بات کر سکتا ہے، آپ کے راؤٹر سمیت، لیکن انٹرنیٹ سے نہیں۔ یہ اجازت صرف ایسے پلگ ان کو دیں جس پر آپ بھروسا کرتے ہیں۔
+access-usb-devices-warning = شروع ہوتے وقت جو اسکینرز اور تصویری آلات لگے ہوں انہیں یہ استعمال کر سکتا ہے، کوئی اور USB آلہ نہیں۔ یہ اجازت صرف ایسے پلگ ان کو دیں جس پر آپ بھروسا کرتے ہیں۔
+access-expand-warning = Trindle آپ کی ٹائپ کی ہوئی چیز میں ان کوڈز کو دیکھتا ہے اور آپ کے لیے ان کے الفاظ ٹائپ کرتا ہے۔ پلگ ان آپ کی ٹائپ کی ہوئی چیز کبھی نہیں دیکھتا۔ یہ اجازت صرف ایسے پلگ ان کو دیں جس پر آپ بھروسا کرتے ہیں۔
+access-accessibility-warning = یہ آپ کی اسکرین پر موجود ہر چیز پڑھ سکتا ہے۔ ہر اسکرین ریڈر کی طرح یہ دوسری ونڈوز میں بٹن بھی دبا سکتا ہے اور متن بھی ٹائپ کر سکتا ہے، حالانکہ اس کا اپنا کی بورڈ یا ماؤس نہیں ہوتا۔ یہ اجازت صرف ایسے پلگ ان کو دیں جس پر آپ بھروسا کرتے ہیں۔
+
+## Titles (for a tooltip) and the line under a switch, which says what switching it off means.
+access-network-title = انٹرنیٹ
+access-network-off = بند ہو تو یہ انٹرنیٹ یا قریبی دوسرے کمپیوٹروں تک نہیں پہنچ سکتا۔
+access-sound-title = آواز چلانا
+access-sound-off = بند ہو تو کوئی آواز نہیں آئے گی۔
+access-microphone-title = آپ کا مائیکروفون
+access-microphone-off = بند ہو تو یہ آپ کو سن نہیں سکتا۔
+access-sound-and-microphone-title = آواز چلانا اور آپ کا مائیکروفون استعمال کرنا
+access-sound-and-microphone-off = بند ہو تو یہ کوئی آواز نہیں نکالتا اور آپ کو سن نہیں سکتا۔
+access-files-title = آپ کے Documents، Downloads، Pictures، Music، Videos اور Desktop فولڈرز
+access-files-off = بند ہو تو یہ آپ کی فائلیں کھول نہیں سکتا اور آپ کے فولڈرز میں محفوظ نہیں کر سکتا۔
+access-home-title = آپ کے ہوم فولڈر کی ہر چیز، چھپی ہوئی ترتیبات کی فائلوں سمیت
+access-home-off = بند ہو تو یہ آپ کی فائلیں کھول نہیں سکتا اور آپ کے فولڈرز میں محفوظ نہیں کر سکتا۔
+access-devices-title = آپ کا کیمرا اور لگائے ہوئے دوسرے آلات
+access-devices-off = بند ہو تو یہ آپ کا کیمرا یا آپ کی لگائی ہوئی کوئی چیز استعمال نہیں کر سکتا۔
+access-bluetooth-title = Bluetooth، ہیڈ فون اور قریب کی دوسری چیزوں کے لیے
+access-bluetooth-off = بند ہو تو یہ Bluetooth کے ذریعے کسی چیز سے جڑ نہیں سکتا۔
+access-notifications-title = اطلاعات دکھانا
+access-notifications-off = بند ہو تو یہ آپ کو کچھ ہونے کی خبر نہیں دے سکتا۔
+access-background-title = لاگ اِن کرنے پر خود شروع ہونا
+access-background-off = بند ہو تو یہ صرف اسی وقت چلتا ہے جب آپ نے اسے کھولا ہو۔
+access-screen-title = آپ کی اسکرین کی تصویریں لینا، جو کچھ آپ نقل کرتے ہیں وہ پڑھنا، اور آپ کے کی بورڈ کی طرح ٹائپ کرنا
+access-screen-off = بند ہو تو یہ دوسری ونڈوز دیکھ نہیں سکتا اور جب جی چاہے آپ کی نقل کی ہوئی چیز پڑھ نہیں سکتا۔
+access-x11-title = اپنی ونڈوز کو پرانے طریقے سے بنانا، جس سے یہ دوسری پرانی ایپس اور ان میں ٹائپ کی گئی چیزیں دیکھ سکتا ہے
+access-x11-off = بند ہو تو اس کی ونڈوز نہیں کھلتیں۔
+access-computer-title = اپنے ڈبے سے باہر کام کرنا، ہر اس چیز کے ساتھ جس تک آپ خود پہنچ سکتے ہیں
+access-computer-off = بند ہو تو آپ جو کچھ اس میں لکھتے ہیں وہ اس کے ڈبے کے اندر ہی رہتا ہے، اس لیے sudo اور آپ کی اپنی فائلیں وہاں کام نہیں کریں گی۔
+access-control-title = آپ کے کی بورڈ، ماؤس اور کلپ بورڈ پر قابو
+access-control-off = بند ہو تو یہ پوائنٹر ہلا نہیں سکتا، ٹائپ نہیں کر سکتا اور آپ کی نقل کی ہوئی چیز شیئر نہیں کر سکتا۔
+access-capture-title = اپنا ماؤس اور کی بورڈ دوسرے کمپیوٹر کے ساتھ شیئر کرنا
+access-capture-off = بند ہو تو پوائنٹر دوسرے کمپیوٹر پر نہیں جا سکتا۔
+access-copied-title = آپ کی نقل کی ہوئی فائلیں پڑھنا
+access-copied-off = بند ہو تو یہ آپ کی نقل کی ہوئی فائلیں پڑھ نہیں سکتا اور انہیں دوسرے کمپیوٹر پر بھیج نہیں سکتا۔
+access-summon-title = پوری اسکرین والی ونڈو کے اوپر حلقہ کھولنا، جیسے آپ نے کلید دبائی ہو
+access-summon-off = بند ہو تو اس کی کلیدیں اور کلکس حلقہ صرف ڈیسک ٹاپ پر کھولتے ہیں، پوری اسکرین والی ونڈو کے اوپر کبھی نہیں۔
+access-listen-title = آپ کے مقامی نیٹ ورک کے دوسرے کمپیوٹروں کو اس تک پہنچنے دینا
+access-listen-off = بند ہو تو آپ کے مقامی نیٹ ورک کے دوسرے کمپیوٹر اسے ڈھونڈ نہیں سکتے اور اس سے جڑ نہیں سکتے۔
+access-home-network-title = صرف آپ کے مقامی نیٹ ورک کے آلات تک پہنچنا
+access-home-network-off = بند ہو تو یہ مقامی نیٹ ورک پر پرنٹرز، اسکینرز یا دوسرے آلات کو ڈھونڈ نہیں سکتا اور ان سے جڑ نہیں سکتا۔
+access-usb-devices-title = اسکینرز اور USB آلات استعمال کرنا
+access-usb-devices-off = بند ہو تو یہ اس کمپیوٹر میں لگا ہوا اسکینر استعمال نہیں کر سکتا۔
+access-expand-title = ٹائپ کرتے وقت آپ کے مختصر کوڈز کو پھیلانا
+access-expand-off = بند ہو تو Trindle ٹائپ کرتے وقت اس کے مختصر کوڈز نہیں پھیلائے گا۔
+access-accessibility-title = ہر ونڈو جو دکھاتی ہے اسے پڑھنا اور بلند آواز سے بتانا
+access-accessibility-off = بند ہو تو یہ آپ کی ونڈوز بلند آواز سے پڑھ نہیں سکتا۔
+access-unnamed-title = کوئی ایسی چیز جس کا اس نے نام نہیں بتایا
+
+## The few words on a plugin's row of the Permissions page.
+access-note-acts-as-you = یہ آپ کی طرح کام کر سکتا ہے
+access-note-home-network = یہ آپ کے مقامی نیٹ ورک کے ہر آلے تک پہنچ سکتا ہے
+access-note-usb-devices = یہ اسکینرز اور تصویری آلات استعمال کر سکتا ہے
+access-note-expand = یہ آپ کی ونڈوز میں ٹائپ کر سکتا ہے
+access-note-accessibility = یہ آپ کی اسکرین کی ہر چیز پڑھ سکتا ہے
+
+access-listen-detail = { $ports }، صرف آپ کے مقامی نیٹ ورک کے کمپیوٹروں سے۔ اس کے لیے انٹرنیٹ کی اجازت بھی ضروری ہے۔
+
+## A request that is unusual for the kind of app that makes it.
+access-unusual = { $kind } کے لیے یہ غیر معمولی ہے۔ صرف اسی صورت میں اجازت دیں جب آپ کو اس ایپ کے ماخذ پر بھروسا ہو۔
+access-kind-terminal = ٹرمینل
+access-kind-calculator = کیلکولیٹر
+access-kind-photo = فوٹو ایپ
+access-kind-text-editor = ٹیکسٹ ایڈیٹر
+access-kind-browser = ویب براؤزر
+access-kind-office = آفس ایپ
+access-kind-graphics = گرافکس ایپ
+access-kind-game = گیم
+access-kind-sound-video = آواز اور ویڈیو کی ایپ
+access-kind-programming = پروگرامنگ کا آلہ
+access-kind-utility = یوٹیلیٹی
+access-kind-other = اس طرح کی ایپ

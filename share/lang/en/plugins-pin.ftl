@@ -5,11 +5,11 @@
 # Red words on the PIN card when what was typed or sent is not four digits.
 plugins-pin-four = A PIN is 4 digits.
 # Note on the PIN card, always shown.
-plugins-pin-not-saved = The PIN is not saved
+plugins-pin-not-saved = The PIN isn't saved
 # Red words on the PIN card when the unlocking command gave no answer of its own.
-plugins-pin-no-answer = No answer from the other computer.
+plugins-pin-no-answer = The other computer didn't answer.
 # Red words on the PIN card when the unlocking command refused without saying why.
-plugins-pin-not-unlocked = Not unlocked.
+plugins-pin-not-unlocked = Still locked.
 # Name the screen reader gives to the four dots on the PIN card.
 plugins-pin-dots = PIN
 # Name and tip of the round button on the PIN card that takes the last digit away.

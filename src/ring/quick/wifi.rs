@@ -6,7 +6,7 @@ use std::time::Duration;
 use zeroize::Zeroizing;
 
 use crate::common::run::{capture, captured, captured_secret, on_thread};
-use crate::ring::ctx::Msg;
+use crate::ring::{ctx::Msg, plain};
 use crate::settings::ui::{icon, icon_in};
 use crate::toolkit::t;
 use crate::toolkit::widget::{button, card, label, Node, row, space, switch};
@@ -14,6 +14,13 @@ use crate::toolkit::widget::{button, card, label, Node, row, space, switch};
 use super::{banded, Body, line_of, m, Net, Quick, ROW_GAP, ROW_ICON, Well};
 
 const WIFI_EVERY: Duration = Duration::from_secs(4);
+
+pub(super) const WIFI_LOOK: &str = "nmcli radio wifi; echo '#saved'; \
+    nmcli -t -f UUID,TYPE con show | sed -n 's/:802-11-wireless$//p' | while IFS= read -r u; do \
+    nmcli -g 802-11-wireless.ssid con show uuid \"$u\"; done; echo '#near'; \
+    nmcli -t -f IN-USE,SIGNAL,SECURITY,SSID dev wifi list --rescan no";
+
+pub(super) const WIFI_LEAVE: &str = "for d in $(nmcli -t -f DEVICE,TYPE dev | sed -n 's/:wifi$//p'); do nmcli dev disconnect \"$d\" || exit 1; done";
 
 pub(super) fn signal_level(signal: u32) -> &'static str {
     match signal {
@@ -63,7 +70,7 @@ impl Quick {
     pub(super) fn wifi(&mut self) {
         self.body = Body::Wifi(None, vec![], HashSet::new());
         let b = self.back();
-        capture(&["nmcli", "dev", "wifi", "rescan"], None, move |_, _, _| b.then(|q| q.wifi_draw()));
+        capture(&plain(&["nmcli", "dev", "wifi", "rescan"]), None, move |_, _, _| b.then(|q| q.wifi_draw()));
         self.repeat(WIFI_EVERY, |q| q.wifi_draw());
     }
 
@@ -85,7 +92,7 @@ impl Quick {
                 let ssid = n.ssid.clone();
                 if n.inuse {
 
-                    line.push(button("network-offline-symbolic", t!("ring-quick-wifi-disconnect")).on(true).on_press(m(move |q| q.wifi_down(&ssid))).well());
+                    line.push(button("network-offline-symbolic", t!("ring-quick-wifi-disconnect")).on(true).on_press(m(move |q| q.wifi_down())).well());
                 } else {
                     let ask = n.secured && !saved.contains(&n.ssid);
                     line.push(button("network-transmit-receive-symbolic", t!("ring-quick-wifi-connect"))
@@ -102,8 +109,7 @@ impl Quick {
             return;
         }
         let b = self.back();
-        capture(&["sh", "-c", "nmcli radio wifi; echo '#saved'; nmcli -t -f NAME con show; echo '#near'; \
-                               nmcli -t -f IN-USE,SIGNAL,SECURITY,SSID dev wifi list --rescan no"],
+        capture(&plain(&["sh", "-c", WIFI_LOOK]),
                 None, move |_, out, _| b.then(move |q| {
             if !q.wifi_asking {
                 let (on, saved, mut nets) = parse_wifi(&out);
@@ -119,12 +125,18 @@ impl Quick {
             *state = Some(on);
         }
         let b = self.back();
-        capture(&["nmcli", "radio", "wifi", if on { "on" } else { "off" }], None, move |_, _, _| b.then(|q| q.wifi_draw()));
+        capture(&plain(&["nmcli", "radio", "wifi", if on { "on" } else { "off" }]), None, move |_, _, _| b.then(|q| q.wifi_draw()));
     }
 
-    fn wifi_down(&mut self, ssid: &str) {
+    fn wifi_down(&mut self) {
         let b = self.back();
-        capture(&["nmcli", "con", "down", "id", ssid], None, move |_, _, _| b.then(|q| q.refresh_now()));
+        capture(&plain(&["sh", "-c", WIFI_LEAVE]), None, move |ok, _, err| b.then(move |q| {
+            if !ok {
+                eprintln!("trindle-ring: could not leave the network: {}", err.trim());
+                q.say(t!("ring-quick-wifi-leave-failed"));
+            }
+            q.refresh_now();
+        }));
     }
 
     fn wifi_connect(&mut self, ssid: &str, ask: bool) {
@@ -150,8 +162,8 @@ impl Quick {
         let b = self.back();
         let name = ssid.clone();
         on_thread(move || match password {
-            Some(pw) => captured_secret(&["nmcli", "--ask", "dev", "wifi", "connect", &ssid], pw),
-            None => captured(&["nmcli".into(), "dev".into(), "wifi".into(), "connect".into(), ssid], None),
+            Some(pw) => captured_secret(&plain(&["nmcli", "--ask", "dev", "wifi", "connect", &ssid]), pw),
+            None => captured(&plain(&["nmcli", "dev", "wifi", "connect", &ssid]).into_iter().map(String::from).collect::<Vec<_>>(), None),
         }, move |(ok, _out, err): (bool, String, String)| b.then(move |q| {
             if ok {
                 q.wifi_asking = false;
@@ -161,8 +173,9 @@ impl Quick {
                 q.say("");
                 q.ask_password(&name, t!("ring-quick-wifi-wrong-password"));
             } else {
+                eprintln!("trindle-ring: could not join a network: {}", err.trim());
                 q.wifi_asking = false;
-                q.say(err.trim().lines().last().unwrap_or(t!("ring-quick-wifi-failed")));
+                q.say(t!("ring-quick-wifi-failed"));
             }
         }));
     }

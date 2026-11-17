@@ -18,7 +18,7 @@ store-app-state-removing = Wird entfernt
 store-app-state-downloading = Wird heruntergeladen
 
 # The state beside the dot while Flatpak is putting the fetched app in.
-store-app-state-putting-in = Wird eingespielt
+store-app-state-putting-in = Wird installiert
 
 # The state beside the dot while the app's own update goes in.
 store-app-state-updating = Wird aktualisiert
@@ -27,7 +27,7 @@ store-app-state-updating = Wird aktualisiert
 store-app-state-held = Installiert, zurückgehalten
 
 # The state beside the dot for an installed app whose updates are held back.
-store-app-state-held-version = Installiert, zurückgehalten bei Version { $version }
+store-app-state-held-version = Installiert, Updates zurückgehalten bei Version { $version }
 
 # The state beside the dot for an installed app with an update waiting; the end says what waits.
 store-app-state-waiting = Installiert, { $waits }
@@ -65,7 +65,7 @@ store-app-remove = Entfernen
 store-app-open-round = Öffnen
 
 # Main button that releases an app whose updates are held back.
-store-app-release = Freigeben
+store-app-release = Updates erlauben
 
 # Main button that updates the app.
 store-app-update = Aktualisieren
@@ -83,13 +83,13 @@ store-app-website = Website
 store-app-no-pictures = Diese App hat keine Bilder.
 
 # In the picture frame when the picture could not be fetched.
-store-app-picture-missed = Dieses Bild konnte nicht geladen werden.
+store-app-picture-missed = Trindle konnte dieses Bild nicht laden.
 
 # In the picture frame while the picture is being fetched.
 store-app-picture-fetching = Das Bild wird geladen …
 
 # In the picture frame when the computer has no internet.
-store-app-picture-offline = Bilder können nicht geladen werden, solange dieser Computer nicht mit dem Internet verbunden ist.
+store-app-picture-offline = Verbinde dich mit dem Internet, um Bilder zu sehen.
 
 # Between the picture buttons: which picture, when it has no caption.
 store-app-picture-of = Bild { $at } von { $n }
@@ -101,7 +101,7 @@ store-app-picture-of-caption = Bild { $at } von { $n }: { $caption }
 store-app-picture-earlier = Früheres Bild
 
 # Tip of the round button that shows the picture after.
-store-app-picture-later = Späteres Bild
+store-app-picture-later = Nächstes Bild
 
 # Licence shown in Facts for an app that is not open source.
 store-app-proprietary = Proprietär
@@ -164,13 +164,13 @@ store-app-review-no-title = Ohne Titel
 store-app-people-none = Noch niemand hat über diese App geschrieben.
 
 # Under What people say when there is no internet.
-store-app-people-offline = Was andere sagen, kann nicht geladen werden, solange dieser Computer nicht mit dem Internet verbunden ist.
+store-app-people-offline = Verbinde dich mit dem Internet, um Bewertungen zu lesen.
 
 # Under What people say while reviews are being fetched.
-store-app-people-looking = Es wird gesucht, was andere sagen …
+store-app-people-looking = Bewertungen werden geladen …
 
 # Name of the card of reviews.
-store-app-people = Was andere sagen
+store-app-people = Bewertungen
 
 # Facts line: when the app's project was made.
 store-app-fact-created = Erstellt

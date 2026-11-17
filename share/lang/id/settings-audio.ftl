@@ -8,25 +8,25 @@ settings-audio-title = Audio
 settings-audio-keywords = suara volume speaker pengeras headphone mikrofon mic bisu tes sound audio
 
 # Introduction under the heading of the audio page, and the words behind the page i.
-settings-audio-help = Pilih speaker atau headphone yang memutar suara, dan mikrofon yang mendengarkan.
+settings-audio-help = Pilih speaker atau headphone yang memutar suara, dan mikrofon yang dipakai.
 
 # Red sentence at the top of the page when PipeWire, the sound system, is not installed.
-settings-audio-top-missing = Tidak ada suara: PipeWire belum terpasang.
+settings-audio-top-missing = Tidak ada suara karena PipeWire belum terpasang.
 
 # Red sentence at the top of the page when PipeWire is installed but not answering.
-settings-audio-top-failed = Tidak ada suara: PipeWire tidak menjawab.
+settings-audio-top-failed = Tidak ada suara karena PipeWire, layanan suara, tidak menjawab.
 
 # Red sentence at the top of the page when there are no speakers or headphones.
-settings-audio-top-no-output = Speaker atau headphone tidak ditemukan.
+settings-audio-top-no-output = Tidak ada speaker atau headphone.
 
 # Plain sentence at the top of the page while the page is still finding out about sound.
-settings-audio-top-listening = Mencari suara…
+settings-audio-top-listening = Memeriksa suara…
 
 # Warning at the top of the page when sound is muted; { $device } is the speakers or headphones.
-settings-audio-top-muted = Suara dibisukan, jadi { $device } senyap.
+settings-audio-top-muted = { $device } dibisukan.
 
 # Warning at the top of the page when the volume is at nothing; { $device } is the speakers or headphones.
-settings-audio-top-down = Volume diturunkan sampai habis, jadi { $device } senyap.
+settings-audio-top-down = Volume { $device } diturunkan sampai habis.
 
 # Sentence at the top of the page when all is well; { $device } is the speakers or headphones and { $percent } the volume.
 settings-audio-top-playing = Suara diputar melalui { $device } pada { $percent }%.
@@ -38,10 +38,10 @@ settings-audio-out-title = Speaker dan headphone
 settings-audio-in-title = Mikrofon
 
 # Heading of the line shown when no speakers or headphones are found.
-settings-audio-out-none = Tidak ada perangkat keluaran
+settings-audio-out-none = Tidak ada speaker ditemukan
 
 # Heading of the line shown when no microphone is found.
-settings-audio-in-none = Tidak ada perangkat masukan
+settings-audio-in-none = Tidak ada mikrofon
 
 # Small words under that line for speakers.
 settings-audio-out-plug = Colokkan speaker atau headphone.
@@ -52,17 +52,11 @@ settings-audio-in-plug = Colokkan mikrofon atau headset.
 # Heading of the line with the list of devices.
 settings-audio-device = Perangkat
 
-# Small words under the device line for speakers.
-settings-audio-out-device-about = Tempat suara diputar.
-
-# Small words under the device line for microphones.
-settings-audio-in-device-about = Yang mendengarkan.
-
 # Name of the list of speakers and headphones.
 settings-audio-out-device-name = Tempat suara diputar
 
 # Name of the list of microphones.
-settings-audio-in-device-name = Yang mendengarkan
+settings-audio-in-device-name = Mikrofon
 
 # Heading of the volume line.
 settings-audio-volume = Volume
@@ -82,17 +76,8 @@ settings-audio-out-mute-name = Bisukan suara
 # Name of the switch that mutes the microphone.
 settings-audio-in-mute-name = Bisukan mikrofon
 
-# Small words under the mute line for the speakers.
-settings-audio-mute-out-about = Senyap, volume tetap tersimpan.
-
-# Small words under the mute line for the microphone.
-settings-audio-mute-in-about = Tidak ada yang terdengar saat menyala.
-
 # Heading of the line that plays a test sound.
 settings-audio-test = Tes
-
-# Small words under the test line.
-settings-audio-test-about = Memutar bunyi lonceng singkat melalui perangkat ini.
 
 # Name of the button that plays a test sound.
 settings-audio-test-button = Putar suara tes
@@ -103,11 +88,8 @@ settings-audio-out-about = Pilih speaker atau headphone yang memutar suara. Volu
 # Heading of the line with the microphone level bar.
 settings-audio-level = Level
 
-# Small words under the level line.
-settings-audio-level-about = Bicaralah dan bilah akan bergerak saat mikrofon mendengar Anda.
-
 # Words behind the i of the microphone card.
-settings-audio-in-about = Pilih mikrofon yang mendengarkan. Bilah level mengikuti apa yang didengarnya selama halaman ini terbuka; tidak ada yang direkam atau disimpan.
+settings-audio-in-about = Pilih mikrofon yang dipakai. Selama halaman ini terbuka, bilah menunjukkan suara yang ditangkapnya. Trindle tidak merekam atau menyimpan apa pun.
 
 # Title of the card shown when PipeWire is not answering.
 settings-audio-failed-title = Suara
@@ -116,22 +98,22 @@ settings-audio-failed-title = Suara
 settings-audio-failed-heading = PipeWire tidak menjawab
 
 # Small words under that line.
-settings-audio-failed-about = Suara mungkin belum dimulai untuk sesi ini.
+settings-audio-failed-about = Suara mungkin belum dimulai saat Anda masuk.
 
 # Red words under the volume line when the volume could not be changed.
-settings-audio-no-volume = Volume tidak dapat diubah. Suara mungkin belum dimulai; keluar lalu masuk lagi, kemudian coba lagi.
+settings-audio-no-volume = Trindle tidak dapat mengubah volume. Suara mungkin belum dimulai. Keluar lalu masuk lagi, kemudian coba lagi.
 
 # Red words under the mute line when the sound could not be muted.
-settings-audio-no-mute = Suara tidak dapat dibisukan. Suara mungkin belum dimulai; keluar lalu masuk lagi, kemudian coba lagi.
+settings-audio-no-mute = Trindle tidak dapat membisukan suara. Suara mungkin belum dimulai. Keluar lalu masuk lagi, kemudian coba lagi.
 
 # Red words under the mute line when the sound could not be turned back on.
-settings-audio-no-unmute = Suara tidak dapat dinyalakan kembali. Suara mungkin belum dimulai; keluar lalu masuk lagi, kemudian coba lagi.
+settings-audio-no-unmute = Trindle tidak dapat menyalakan suara kembali. Suara mungkin belum dimulai. Keluar lalu masuk lagi, kemudian coba lagi.
 
 # Red words under the device line when the device could not be chosen.
-settings-audio-not-chosen = Perangkat itu tidak dapat dipilih.
+settings-audio-not-chosen = Tidak dapat beralih ke perangkat itu.
 
 # Red words under the test line when the test sound would not play.
-settings-audio-test-failed = Suara tes tidak dapat diputar melalui perangkat ini.
+settings-audio-test-failed = Suara tes tidak diputar melalui perangkat ini.
 
 
 # A device's name with what kind it is; { $name } is the device and { $kind } one of the kind words below.
@@ -155,15 +137,14 @@ settings-audio-kind-speakers = speaker
 # Heading of the line shown while Bluetooth plays the sound.
 settings-audio-bt-now = Suara menuju Bluetooth
 
-# Words under that heading.
-settings-audio-bt-now-about = Beralih ke speaker; Bluetooth tetap terhubung.
-
 # Tooltip of the button that moves the sound to the speakers; { $device } is the speakers, kind included.
 settings-audio-use-speakers = Putar lewat { $device }
 
 # Heading of the line when Bluetooth devices are connected but have no sound output; { $names } lists them.
-settings-audio-bt-silent = { $names }: terhubung, tetapi tidak ada keluaran suara.
+settings-audio-bt-silent = { $names } terhubung, tetapi suara tidak dapat diputar melaluinya.
 
 # Words under that heading.
-settings-audio-bt-silent-about = Profil suaranya mungkin mati. Putuskan lalu sambungkan lagi.
+settings-audio-bt-silent-about = Suaranya mungkin belum disiapkan. Putuskan, lalu sambungkan lagi.
 
+# Red words when the sound devices could not be read.
+settings-audio-not-read = Trindle tidak menemukan perangkat suara.

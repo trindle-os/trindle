@@ -2,137 +2,120 @@
 //! the Permissions page both use, and what a Flathub app has, read from
 //! flatpak and changed with the person's own overrides. The permissions
 //! page and the assistants' set_app_permission both use the one list.
+//! Every word is in share/lang/en/access.ftl.
 
 use std::collections::BTreeSet;
 
 use super::run;
+use crate::toolkit::t;
 
 pub struct Ask {
-    pub key: &'static str,
     pub name: &'static str,
     pub without: &'static str,
+
+    pub title: &'static str,
+
+    pub off: &'static str,
 }
 
-pub const ASKS: &[Ask] = &[
-    Ask { key: "network", name: "the internet", without: "It will not be able to reach the internet or other computers nearby." },
-    Ask { key: "sound", name: "play sound", without: "It will make no sound." },
-    Ask { key: "microphone", name: "your microphone", without: "It will not be able to hear you." },
-
-    Ask { key: "sound-and-microphone", name: "play sound and use your microphone", without: "It will make no sound and will not be able to hear you." },
-    Ask { key: "files", name: "your Documents, Downloads, Pictures, Music, Videos and Desktop folders",
-          without: "It will not be able to open your files or save into your folders." },
-    Ask { key: "home", name: "everything in your home folder, hidden settings files included",
-          without: "It will not be able to open your files or save into your folders." },
-    Ask { key: "devices", name: "your camera and other plugged-in devices", without: "It will not be able to see you or use what you plug in." },
-    Ask { key: "bluetooth", name: "Bluetooth, for headphones and other things nearby", without: "It will not be able to talk to anything over Bluetooth." },
-    Ask { key: "notifications", name: "show notifications", without: "It will not be able to tell you when something happens." },
-    Ask { key: "background", name: "start by itself when you log in", without: "It will only run while you have it open." },
-    Ask { key: "screen", name: "take pictures of your screen, read what you copy and type as if it were your keyboard",
-          without: "It will not be able to see other windows or read what you copy at any time." },
-    Ask { key: "x11", name: "draw its windows the older way, which lets it watch other older apps and what is typed in them",
-          without: "Its windows will not open." },
-    Ask { key: "computer", name: "work outside its box, with everything you can reach yourself",
-          without: "What you type into it stays shut in its box, so sudo and your own files will not work there." },
-
-    Ask { key: "control", name: "control your keyboard, mouse and clipboard",
-          without: "It will not be able to move the pointer, type or share what you copy." },
-
-    Ask { key: "capture", name: "share your mouse and keyboard with another computer",
-          without: "The pointer will not be able to cross to another computer." },
-
-    Ask { key: "copied", name: "read the files you copy",
-          without: "It will not be able to read the files you copy, so it cannot carry them to another computer." },
-
-    Ask { key: "summon", name: "open the ring over a full-screen window, as if you pressed the key",
-          without: "Its keys and clicks will open the ring on the desktop only, never over a full-screen window." },
-
-    Ask { key: "listen", name: "let other computers on your home network reach it",
-          without: "Other computers on your home network will not be able to find it or connect to it." },
-
-    Ask { key: "home-network", name: "reach devices on your home network only",
-          without: "It will not be able to find or talk to printers, scanners or other devices at home." },
-
-    Ask { key: "usb-devices", name: "use scanners and USB devices",
-          without: "It will not be able to use a scanner that is plugged into this computer." },
-
-    Ask { key: "expand", name: "expand your short codes as you type",
-          without: "Its short codes will not be expanded as you type." },
-
-    Ask { key: "accessibility", name: "read what every window shows and say it aloud",
-          without: "It will not be able to read your windows aloud." },
+#[cfg(test)]
+pub const ASKS: &[&str] = &[
+    "network", "sound", "microphone", "sound-and-microphone", "files", "home", "devices", "bluetooth", "notifications",
+    "background", "screen", "x11", "computer", "control", "capture", "copied", "summon", "listen", "home-network",
+    "usb-devices", "expand", "accessibility",
 ];
 
 pub fn warning(key: &str) -> Option<&'static str> {
     match key {
-        "control" => Some("It can type, click and read what you copy as if it were you. Only allow this for a plugin you trust."),
-        "capture" => Some("While the pointer is on the other computer, everything you type and click goes to this plugin. Only allow this for a plugin you trust."),
-        "copied" => Some("It can read exactly the files you copy while it is allowed, and nothing else. Only allow this for a plugin you trust."),
-        "summon" => Some("It can put the ring, which takes everything you type, over a game or a film without you touching a key. Only allow this for a plugin you trust."),
-        "home-network" => Some("It can talk to every device on your home network, your router included, but not to the internet. Only allow this for a plugin you trust."),
-        "usb-devices" => Some("It can use the scanners and image devices that are plugged in when it starts, and no other USB device. Only allow this for a plugin you trust."),
-        "expand" => Some("Trindle watches what you type for its codes and types its words for you. The plugin never sees what you type. Only allow this for a plugin you trust."),
-        "accessibility" => Some("It can read everything on your screen. Like any screen reader, it can also press buttons and type text in other windows, though it has no keyboard or mouse of its own. Only allow this for a plugin you trust."),
+        "control" => Some(t!("access-control-warning")),
+        "capture" => Some(t!("access-capture-warning")),
+        "copied" => Some(t!("access-copied-warning")),
+        "summon" => Some(t!("access-summon-warning")),
+        "home-network" => Some(t!("access-home-network-warning")),
+        "usb-devices" => Some(t!("access-usb-devices-warning")),
+        "expand" => Some(t!("access-expand-warning")),
+        "accessibility" => Some(t!("access-accessibility-warning")),
         _ => None,
     }
 }
 
 pub fn row_note(key: &str) -> Option<&'static str> {
     match key {
-        "control" | "capture" | "copied" | "summon" => Some("it can act as you"),
-        "home-network" => Some("it can reach every device on your home network"),
-        "usb-devices" => Some("it can use scanners and image devices"),
-        "expand" => Some("it can type into your windows"),
-        "accessibility" => Some("it can read everything on your screen"),
+        "control" | "capture" | "copied" | "summon" => Some(t!("access-note-acts-as-you")),
+        "home-network" => Some(t!("access-note-home-network")),
+        "usb-devices" => Some(t!("access-note-usb-devices")),
+        "expand" => Some(t!("access-note-expand")),
+        "accessibility" => Some(t!("access-note-accessibility")),
         _ => None,
     }
 }
 
 pub fn listen_detail(doors: &[super::firewall::Door]) -> String {
-    format!("{}, from computers on your home network only. It needs the internet allowed too.", super::firewall::ports_words(doors))
+    t!("access-listen-detail", ports = super::firewall::ports_words(doors))
 }
 
-pub fn off_line(without: &str) -> String {
-    let mut c = without.chars();
-    match c.next() {
-        None => String::new(),
-        Some(f) => format!("Off: {}{}", f.to_lowercase(), c.as_str()),
-    }
+pub fn off_line(key: &str) -> &'static str {
+    ask(key).off
 }
 
 pub fn ask(key: &str) -> Ask {
-    ASKS.iter().find(|a| a.key == key).map(|a| Ask { key: a.key, name: a.name, without: a.without })
-        .unwrap_or(Ask { key: "", name: "something it did not name", without: "" })
+    match key {
+        "network" => Ask { name: t!("access-network-name"), without: t!("access-network-without"), title: t!("access-network-title"), off: t!("access-network-off") },
+        "sound" => Ask { name: t!("access-sound-name"), without: t!("access-sound-without"), title: t!("access-sound-title"), off: t!("access-sound-off") },
+        "microphone" => Ask { name: t!("access-microphone-name"), without: t!("access-microphone-without"), title: t!("access-microphone-title"), off: t!("access-microphone-off") },
+        "sound-and-microphone" => Ask { name: t!("access-sound-and-microphone-name"), without: t!("access-sound-and-microphone-without"), title: t!("access-sound-and-microphone-title"), off: t!("access-sound-and-microphone-off") },
+        "files" => Ask { name: t!("access-files-name"), without: t!("access-files-without"), title: t!("access-files-title"), off: t!("access-files-off") },
+        "home" => Ask { name: t!("access-home-name"), without: t!("access-home-without"), title: t!("access-home-title"), off: t!("access-home-off") },
+        "devices" => Ask { name: t!("access-devices-name"), without: t!("access-devices-without"), title: t!("access-devices-title"), off: t!("access-devices-off") },
+        "bluetooth" => Ask { name: t!("access-bluetooth-name"), without: t!("access-bluetooth-without"), title: t!("access-bluetooth-title"), off: t!("access-bluetooth-off") },
+        "notifications" => Ask { name: t!("access-notifications-name"), without: t!("access-notifications-without"), title: t!("access-notifications-title"), off: t!("access-notifications-off") },
+        "background" => Ask { name: t!("access-background-name"), without: t!("access-background-without"), title: t!("access-background-title"), off: t!("access-background-off") },
+        "screen" => Ask { name: t!("access-screen-name"), without: t!("access-screen-without"), title: t!("access-screen-title"), off: t!("access-screen-off") },
+        "x11" => Ask { name: t!("access-x11-name"), without: t!("access-x11-without"), title: t!("access-x11-title"), off: t!("access-x11-off") },
+        "computer" => Ask { name: t!("access-computer-name"), without: t!("access-computer-without"), title: t!("access-computer-title"), off: t!("access-computer-off") },
+        "control" => Ask { name: t!("access-control-name"), without: t!("access-control-without"), title: t!("access-control-title"), off: t!("access-control-off") },
+        "capture" => Ask { name: t!("access-capture-name"), without: t!("access-capture-without"), title: t!("access-capture-title"), off: t!("access-capture-off") },
+        "copied" => Ask { name: t!("access-copied-name"), without: t!("access-copied-without"), title: t!("access-copied-title"), off: t!("access-copied-off") },
+        "summon" => Ask { name: t!("access-summon-name"), without: t!("access-summon-without"), title: t!("access-summon-title"), off: t!("access-summon-off") },
+        "listen" => Ask { name: t!("access-listen-name"), without: t!("access-listen-without"), title: t!("access-listen-title"), off: t!("access-listen-off") },
+        "home-network" => Ask { name: t!("access-home-network-name"), without: t!("access-home-network-without"), title: t!("access-home-network-title"), off: t!("access-home-network-off") },
+        "usb-devices" => Ask { name: t!("access-usb-devices-name"), without: t!("access-usb-devices-without"), title: t!("access-usb-devices-title"), off: t!("access-usb-devices-off") },
+        "expand" => Ask { name: t!("access-expand-name"), without: t!("access-expand-without"), title: t!("access-expand-title"), off: t!("access-expand-off") },
+        "accessibility" => Ask { name: t!("access-accessibility-name"), without: t!("access-accessibility-without"), title: t!("access-accessibility-title"), off: t!("access-accessibility-off") },
+        _ => Ask { name: t!("access-unnamed-name"), without: "", title: t!("access-unnamed-title"), off: "" },
+    }
 }
 
-pub fn title(key: &str) -> String {
-    let name = ask(key).name;
-    let mut c = name.chars();
-    c.next().map(|f| f.to_uppercase().chain(c).collect()).unwrap_or_default()
+pub fn title(key: &str) -> &'static str {
+    ask(key).title
 }
 
-const KINDS: &[(&str, &str, &[&str])] = &[
-    ("TerminalEmulator", "a terminal", &["microphone", "devices", "screen"]),
-    ("Calculator", "a calculator", &["network", "microphone", "files", "devices", "screen", "background"]),
-    ("Photography", "a photo app", &["microphone", "screen", "background"]),
-    ("TextEditor", "a text editor", &["microphone", "devices", "screen"]),
-    ("WebBrowser", "a web browser", &["screen"]),
-    ("Office", "an office app", &["microphone", "devices", "screen"]),
-    ("Graphics", "a graphics app", &["microphone", "background"]),
-    ("Game", "a game", &["screen", "files", "background"]),
-    ("AudioVideo", "a sound and video app", &["screen"]),
-    ("Development", "a programming tool", &["microphone", "devices"]),
-    ("Utility", "a utility", &["microphone", "devices", "screen"]),
-];
+fn kinds() -> [(&'static str, &'static str, &'static [&'static str]); 11] {
+    [
+        ("TerminalEmulator", t!("access-kind-terminal"), &["microphone", "devices", "screen"]),
+        ("Calculator", t!("access-kind-calculator"), &["network", "microphone", "files", "devices", "screen", "background"]),
+        ("Photography", t!("access-kind-photo"), &["microphone", "screen", "background"]),
+        ("TextEditor", t!("access-kind-text-editor"), &["microphone", "devices", "screen"]),
+        ("WebBrowser", t!("access-kind-browser"), &["screen"]),
+        ("Office", t!("access-kind-office"), &["microphone", "devices", "screen"]),
+        ("Graphics", t!("access-kind-graphics"), &["microphone", "background"]),
+        ("Game", t!("access-kind-game"), &["screen", "files", "background"]),
+        ("AudioVideo", t!("access-kind-sound-video"), &["screen"]),
+        ("Development", t!("access-kind-programming"), &["microphone", "devices"]),
+        ("Utility", t!("access-kind-utility"), &["microphone", "devices", "screen"]),
+    ]
+}
 
 pub fn unusual(categories: &str, key: &str) -> Option<String> {
     let has: Vec<&str> = categories.split(';').map(str::trim).filter(|c| !c.is_empty()).collect();
-    let kind = KINDS.iter().find(|(c, _, _)| has.contains(c));
+    let kinds = kinds();
+    let kind = kinds.iter().find(|(c, _, _)| has.contains(c));
     let odd = match kind {
         Some((c, _, keys)) => keys.contains(&key) || (key == "computer" && *c != "TerminalEmulator"),
         None => key == "computer",
     };
-    let name = kind.map_or("an app like this", |(_, n, _)| *n);
-    odd.then(|| format!("This is unusual for {name}. Only allow it if you trust where this app came from."))
+    let name = kind.map_or_else(|| t!("access-kind-other"), |(_, n, _)| *n);
+    odd.then(|| t!("access-unusual", kind = name))
 }
 
 pub struct Permission {
@@ -228,11 +211,19 @@ pub fn flatpak_uses_x11(text: &str) -> bool {
         .any(|v| v.split(';').any(|s| s.trim() == "x11"))
 }
 
+fn plain_app_id(id: &str) -> bool {
+    id.len() <= 255 && id.contains('.') && !id.starts_with(['-', '.']) && !id.ends_with('.') && !id.contains("..")
+        && id.chars().all(|c| c.is_ascii_alphanumeric() || matches!(c, '.' | '-' | '_'))
+}
+
 pub fn flatpak_set(id: &str, key: &str, on: bool) -> Result<(), String> {
-    let p = FLATPAK.iter().find(|p| p.key == key).ok_or_else(|| format!("{key} is not a permission"))?;
+    if !plain_app_id(id) {
+        return Err(t!("common-flatpak-not-an-app").to_string());
+    }
+    let p = FLATPAK.iter().find(|p| p.key == key).ok_or_else(|| t!("common-flatpak-not-a-permission").to_string())?;
     for flag in if on { p.yes } else { p.no } {
         let out = std::process::Command::new("flatpak").args(["override", "--user", flag, id]).output()
-            .map_err(|e| format!("flatpak: {e}"))?;
+            .map_err(|e| e.to_string())?;
         if !out.status.success() {
             return Err(String::from_utf8_lossy(&out.stderr).trim().to_string());
         }
@@ -249,7 +240,6 @@ mod tests {
         for key in ["network", "sound", "microphone", "files", "devices", "bluetooth", "notifications", "background",
                     "screen", "x11", "computer", "control", "capture", "copied", "listen", "summon", "home-network", "usb-devices", "expand", "accessibility"] {
             let a = ask(key);
-            assert_eq!(a.key, key);
             assert!(!a.name.is_empty() && a.without.ends_with('.'), "{key}");
 
             for word in ["/", "Wayland", "X11", "pipewire", "pulse", ".so", "--"] {
@@ -260,7 +250,7 @@ mod tests {
         assert_eq!(ask("microphone").without, "It will not be able to hear you.");
         assert_eq!(title("network"), "The internet");
         for p in FLATPAK {
-            assert_ne!(ask(p.words).key, "", "{} has words", p.key);
+            assert_ne!(ask(p.words).title, ask("nothing").title, "{} has words", p.key);
         }
     }
 
@@ -272,7 +262,7 @@ mod tests {
         assert!(warning("capture").is_some_and(|w| w.contains("trust") && w.ends_with('.')));
         let w = warning("copied").unwrap();
         assert_eq!(w, "It can read exactly the files you copy while it is allowed, and nothing else. Only allow this for a plugin you trust.");
-        assert_eq!(ask("copied").name, "read the files you copy");
+        assert_eq!(ask("copied").name, "the files you copy");
         assert_eq!(title("copied"), "Read the files you copy");
         assert_eq!(icon("copied"), "edit-copy-symbolic");
         assert!(warning("network").is_none());
@@ -280,11 +270,11 @@ mod tests {
 
     #[test]
     fn the_home_network_and_usb_devices_say_their_risk_calmly_and_exactly() {
-        assert_eq!(ask("home-network").name, "reach devices on your home network only");
-        assert_eq!(title("home-network"), "Reach devices on your home network only");
-        assert_eq!(ask("usb-devices").name, "use scanners and USB devices");
+        assert_eq!(ask("home-network").name, "devices on your local network only");
+        assert_eq!(title("home-network"), "Reach devices on your local network only");
+        assert_eq!(ask("usb-devices").name, "scanners and USB devices");
         assert_eq!(title("usb-devices"), "Use scanners and USB devices");
-        assert_eq!(warning("home-network"), Some("It can talk to every device on your home network, your router included, but not to the internet. Only allow this for a plugin you trust."));
+        assert_eq!(warning("home-network"), Some("It can talk to every device on your local network, your router included, but not to the internet. Only allow this for a plugin you trust."));
         assert_eq!(warning("usb-devices"), Some("It can use the scanners and image devices that are plugged in when it starts, and no other USB device. Only allow this for a plugin you trust."));
         assert_eq!(icon("home-network"), "network-workgroup-symbolic");
         assert_eq!(icon("usb-devices"), "scanner-symbolic");
@@ -297,7 +287,7 @@ mod tests {
 
     #[test]
     fn accessibility_says_it_reads_and_can_press_and_type_through_the_bus() {
-        assert_eq!(ask("accessibility").name, "read what every window shows and say it aloud");
+        assert_eq!(ask("accessibility").name, "reading every window aloud");
         assert_eq!(title("accessibility"), "Read what every window shows and say it aloud");
         assert_eq!(ask("accessibility").without, "It will not be able to read your windows aloud.");
         let w = warning("accessibility").unwrap();
@@ -308,8 +298,8 @@ mod tests {
 
     #[test]
     fn every_warning_has_a_note_for_the_permissions_row_and_the_rest_have_none() {
-        for a in ASKS {
-            assert_eq!(warning(a.key).is_some(), row_note(a.key).is_some(), "{}", a.key);
+        for key in ASKS {
+            assert_eq!(warning(key).is_some(), row_note(key).is_some(), "{key}");
         }
         assert_eq!(row_note("control"), row_note("copied"));
         assert_ne!(row_note("home-network"), row_note("control"), "the home network is not acting as the person");
@@ -347,5 +337,44 @@ mod tests {
         assert!(!flatpak_uses_x11("[Context]\nsockets=!x11;wayland;\n"));
         assert!(!flatpak_uses_x11("[Context]\nshared=x11;\n"));
         assert!(!flatpak_uses_x11(""));
+    }
+
+    #[test]
+    fn no_permission_word_is_a_literal_english_string_in_the_code() {
+        let text = include_str!("access.rs");
+        let live = text.split("#[cfg(test)]").next().unwrap();
+        let code: String = live.lines().filter(|l| !l.trim_start().starts_with("//")).collect::<Vec<_>>().join("\n");
+        let mut rest = code.as_str();
+        while let Some(a) = rest.find('"') {
+            let Some(len) = rest[a + 1..].find('"') else { break };
+            let lit = &rest[a + 1..a + 1 + len];
+            rest = &rest[a + len + 2..];
+            let english = lit.contains(' ') && lit.chars().any(|c| c.is_ascii_lowercase());
+            assert!(!english, "access.rs has English written in the code: {lit}");
+        }
+        let ftl = include_str!("../../share/lang/en/access.ftl");
+        for key in ASKS {
+            for part in ["name", "without", "title", "off"] {
+                assert!(ftl.contains(&format!("\naccess-{key}-{part} = ")), "access.ftl lacks access-{key}-{part}");
+            }
+        }
+        assert_eq!(title("usb-devices"), "Use scanners and USB devices");
+    }
+
+    #[test]
+    fn no_code_in_access_rs_changes_the_case_of_a_translated_string() {
+        let live = include_str!("access.rs").split("#[cfg(test)]").next().unwrap();
+        for call in ["to_lowercase", "to_uppercase", "to_ascii_lowercase", "to_ascii_uppercase", "make_ascii"] {
+            assert!(!live.contains(call), "access.rs changes case with {call}; each language writes its own");
+        }
+    }
+
+    #[test]
+    fn an_id_that_flatpak_would_read_as_an_option_or_as_every_app_is_refused() {
+        for bad in ["", "--reset", "-x.y", "org..x", ".org.x", "org.x;rm", "org.x y", "noname"] {
+            assert!(!plain_app_id(bad), "{bad:?}");
+            assert!(flatpak_set(bad, "network", true).is_err(), "{bad:?}");
+        }
+        assert!(plain_app_id("org.mozilla.firefox") && plain_app_id("com.valvesoftware.Steam") && plain_app_id("io.github.some-app_2.X"));
     }
 }

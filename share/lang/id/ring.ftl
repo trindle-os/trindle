@@ -23,34 +23,34 @@ ring-cli-command = { $program } [OPSI…]
 ring-cli-options = Opsi:
 
 # Help for the ring's --say option, printed in a terminal.
-ring-cli-say = Lakukan apa yang diminta kata-kata ini, seolah diucapkan kepada ring (untuk mencoba perintah suara tanpa mikrofon)
+ring-cli-say = Jalankan perintah suara dari teks tanpa mikrofon
 
 # Help for the ring's --background option, printed in a terminal.
-ring-cli-background = Mulai tanpa ditampilkan, agar pembukaan pertama instan
+ring-cli-background = Mulai tanpa tampil, agar ring langsung terbuka saat pertama kali
 
 # Help for the ring's --show-desktop option, printed in a terminal.
-ring-cli-show-desktop = Sembunyikan semua jendela untuk menampilkan desktop, atau tampilkan kembali (Super dan D meminta ini)
+ring-cli-show-desktop = Sembunyikan semua jendela untuk menampilkan desktop, atau tampilkan kembali (tombol Super dan D melakukan ini)
 
 # Help for the ring's --listen option, printed in a terminal.
-ring-cli-listen = Buka ring yang sudah mendengarkan, seperti yang bisa dilakukan pintasan keyboard
+ring-cli-listen = Buka ring yang sudah mendengarkan perintah suara, seperti yang dilakukan pintasan keyboard
 
 # Help for the ring's --all option, printed in a terminal.
 ring-cli-all = Buka ring dengan semua aplikasi ditampilkan di sekelilingnya
 
 # Help for the ring's --power option, printed in a terminal.
-ring-cli-power = Buka ring pada keluar, mulai ulang, dan matikan
+ring-cli-power = Buka pilihan daya ring: keluar, mulai ulang, dan matikan
 
 # Help for the ring's --favourites option, printed in a terminal.
 ring-cli-favourites = Buka halaman favorit di Pengaturan
 
 # Help for the ring's --restyle option, printed in a terminal.
-ring-cli-restyle = Langsung terapkan tampilan baru (terang atau gelap, atau aksen baru) dari Pengaturan
+ring-cli-restyle = Terapkan tampilan baru dari Pengaturan sekarang juga (terang atau gelap, atau warna aksen baru)
 
 # Help for the ring's --corners option, printed in a terminal.
-ring-cli-corners = Buat lagi titik sentuh di sudut atas
+ring-cli-corners = Siapkan lagi titik sentuh di sudut atas
 
 # Help for the ring's --notes option, printed in a terminal.
-ring-cli-notes = Pindahkan keyboard ke lingkaran notifikasi di layar (Super dan N meminta ini)
+ring-cli-notes = Pindahkan kendali keyboard ke lingkaran notifikasi di layar (tombol Super dan N melakukan ini)
 
 # Error printed in a terminal when the ring is given an option it does not know.
 ring-cli-unknown = opsi tidak dikenal { $option }
@@ -113,13 +113,13 @@ ring-tool-report = Laporkan masalah
 ring-gone = Itu sudah tidak ada lagi.
 
 # Line in the ring when nothing could open the item that was pressed.
-ring-could-not-open = Tidak ada yang dapat membukanya.
+ring-could-not-open = Trindle tidak dapat membukanya.
 
 # Line in the ring while it listens to a spoken command.
-ring-listening = Mendengarkan... bicaralah, berhenti saat Anda berhenti
+ring-listening = Mendengarkan… Ucapkan perintah Anda. Mendengarkan berhenti saat Anda berhenti bicara
 
 # Line in the ring while it works out what was said.
-ring-working-out = Sedang memahami...
+ring-working-out = Sedang memahami…
 
 # Answer to the spoken command to close windows when none are open.
 ring-nothing-to-close = Tidak ada yang ditutup
@@ -187,7 +187,7 @@ ring-star-remove = Hapus dari favorit
 ring-star-add = Tambahkan ke favorit
 
 # Screen reader name of the red button that shows why an uninstall failed.
-ring-not-done = Belum selesai
+ring-not-done = Mengapa tidak?
 
 # Note on an app's menu when the middle of the ring has no room for another favourite; the number is how many it holds.
 ring-middle-full =
@@ -201,7 +201,7 @@ ring-power-lock = Kunci
 ring-power-screensaver = Screensaver
 
 # Choice on the ring's power page: put the computer to sleep.
-ring-power-suspend = Tangguhkan
+ring-power-suspend = Tidur
 
 # Choice on the ring's power page: hibernate.
 ring-power-hibernate = Hibernasi
@@ -223,7 +223,7 @@ ring-empty-hint = Klik Semua aplikasi, lalu klik kanan aplikasi mana pun untuk m
 
 # Line in the ring when a spoken or typed power choice needs a click to confirm.
 # SAFETY: needs a human review before it ships
-ring-power-only-click = Hanya klik yang dapat mengonfirmasi ini.
+ring-power-only-click = Klik untuk mengonfirmasi.
 
 # Line in the ring when something other than the person tried to shut the computer down.
 # SAFETY: needs a human review before it ships
@@ -231,7 +231,7 @@ ring-power-only-own = Hanya Anda yang dapat mematikan komputer ini.
 
 # Line in the ring when the power page closed because a program pressed a key.
 # SAFETY: needs a human review before it ships
-ring-power-closed = Halaman daya tertutup: sebuah program menekan tombol, bukan Anda.
+ring-power-closed = Halaman daya tertutup karena sebuah program mengirim penekanan tombol.
 
 ring-startup-add = Mulai saat masuk
 
@@ -240,11 +240,20 @@ ring-startup-remove = Berhenti mulai saat masuk
 
 
 # Help for the option that opens the shortcut list, or closes it when it is showing.
-ring-cli-shortcuts = Tampilkan semua pintasan papan ketik dalam daftar, atau simpan daftarnya (Super dan K, kecuali diubah di Pengaturan)
+ring-cli-shortcuts = Tampilkan daftar semua pintasan keyboard, atau sembunyikan daftarnya (Super dan K, kecuali Anda mengubahnya di Pengaturan)
 
 # Notice from the new ring after the parts were restarted from the keyboard.
 ring-restarted = Dimulai ulang
 
 # Under the notice above.
-ring-restarted-why = Ring dan bagian pembantu telah dimulai lagi.
+ring-restarted-why = Ring dan bagian pembantunya telah dimulai ulang.
 
+
+# Tip on the app menu's red button when removing the app did not work.
+ring-uninstall-failed = Tidak dapat mencopotnya.
+
+# Shorter name of the Sound and video piece of All apps, for when the full name does not fit along it.
+ring-category-media-short = Suara
+
+# Line in the ring when a spoken command, such as turning the sound down, did not work.
+ring-voice-failed = Itu tidak berhasil.

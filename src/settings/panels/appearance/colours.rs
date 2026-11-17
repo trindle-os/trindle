@@ -66,12 +66,12 @@ impl Appearance {
         }
     }
 
-    pub(super) fn top(&self, kit: &Kit) -> Node<Msg> {
-        headline(kit, self.top_words())
+    pub(super) fn top(&self) -> Node<Msg> {
+        headline(self.top_words())
     }
 
     pub(super) fn top_words(&self) -> String {
-        let shape = t!("settings-appearance-shape-round");
+        let shape = if self.set == crate::icons::SQUARES { t!("settings-appearance-shape-square") } else { t!("settings-appearance-shape-round") };
         let theme = self.themes.iter().find(|t| t.id == self.theme && !t.id.is_empty());
 
         if let Some((name, why)) = &self.unusable {
@@ -107,18 +107,16 @@ impl Appearance {
             .on_submit(on::<Appearance>(move |me, k| me.check_hex(k, &typed)))
             .width(Length::Fixed(120.0));
         let own = line(t!("settings-appearance-any-colour"))
-            .sub(t!("settings-appearance-any-colour-about"))
             .key(ACCENT)
             .controls(vec![code, dot])
             .node(kit);
 
         group(t!("settings-appearance-colour-title")).icon("color-select-symbolic")
-            .about(t!("settings-appearance-colour-about"))
-            .rows(vec![line(t!("settings-appearance-highlight")).sub(t!("settings-appearance-highlight-about")).below(picker).node(kit), own])
+            .about(format!("{} {}", t!("settings-appearance-colour-about"), t!("settings-appearance-any-colour-about")))
+            .rows(vec![line(t!("settings-appearance-highlight")).below(picker).node(kit), own])
             .span(6, 6)
             .node(kit)
     }
-
 }
 
 const ACCENT: &str = "appearance:accent";

@@ -13,13 +13,17 @@ ring-updates-none = Everything is up to date
 # Answer to a spoken question about updates when the updates button installs them all; "it" for one, "them" for more.
 ring-updates-spoken-all =
     { $n ->
-        [one] { $n } waiting: the updates button beside Apps puts it in
-       *[other] { $n } waiting: the updates button beside Apps puts them in
+        [one] { $n } update is waiting. Use the updates button beside Apps to install it.
+       *[other] { $n } updates are waiting. Use the updates button beside Apps to install them.
     }
 # Answer to a spoken question about updates when only plugin updates that need a look wait; the clause that follows says so.
-ring-updates-spoken-look = { $n } waiting: { $look }
+ring-updates-spoken-look =
+    { $n ->
+        [one] { $n } update is waiting. { $look }.
+       *[other] { $n } updates are waiting. { $look }.
+    }
 # Answer to a spoken question about updates when some install and some need a look; the last clause says which need a look.
-ring-updates-spoken-mixed = { $n } waiting: the updates button beside Apps puts { $put } in, and { $look }
+ring-updates-spoken-mixed = { $n } updates are waiting. Use the updates button beside Apps to install { $put } of them. { $look }.
 # Name and tip of the updates button when only firmware updates wait: the button takes the person to them.
 ring-updates-see-firmware =
     { $n ->
@@ -29,8 +33,8 @@ ring-updates-see-firmware =
 # Name and tip of the updates button when firmware updates wait among others: the button takes the person to them.
 ring-updates-see-among =
     { $n ->
-        [one] See { $n } update, firmware among them
-       *[other] See { $n } updates, firmware among them
+        [one] See { $n } update, including firmware
+       *[other] See { $n } updates, including firmware
     }
 # Name and tip of the updates button when updates wait that it will install.
 ring-updates-install =
@@ -41,8 +45,8 @@ ring-updates-install =
 # Name and tip of the updates button when only plugin updates that ask for more than before wait.
 ring-updates-see-plugin =
     { $n ->
-        [one] See the plugin update, which asks for more than before
-       *[other] See { $n } plugin updates, which ask for more than before
+        [one] See the plugin update, which asks for more permissions than before
+       *[other] See { $n } plugin updates, which ask for more permissions than before
     }
 # Name and tip of the updates button when some updates install and some plugin updates need a look; the clause after the semicolon says which.
 ring-updates-install-and-look =
@@ -85,11 +89,11 @@ ring-tray-vpn = Connected through a VPN
 # Name of the network button when connected by cable.
 ring-tray-wired = Wired
 # Name of the network button when connected by cable but the internet is not reachable.
-ring-tray-wired-limited = Wired, limited connectivity
+ring-tray-wired-limited = Wired, but no internet
 # Name of the network button on Wi-Fi: the network's name and its signal strength.
 ring-tray-wifi = { $name }, signal { $strength }%
 # Name of the network button on Wi-Fi when the internet is not reachable.
-ring-tray-wifi-limited = { $name }, signal { $strength }%, limited connectivity
+ring-tray-wifi-limited = { $name }, signal { $strength }%, limited access
 # Name of the Bluetooth button when Bluetooth is off.
 ring-tray-bt-off = Bluetooth is off
 # Name of the Bluetooth button when devices are connected; their names follow, separated by commas.
@@ -108,6 +112,6 @@ ring-tray-none = No tray icons
 # Line of a tray icon's menu: put the icon in the ring's row.
 ring-tray-show = Show in the ring
 # Line of a tray icon's menu: take the icon out of the ring's row.
-ring-tray-take-out = Take out of the ring
+ring-tray-take-out = Remove from the ring
 # Quiet words in a tray icon's menu in place of Show in the ring, when the row is full.
-ring-tray-full = Four are already in the ring. Take one out first.
+ring-tray-full = Four icons are already in the ring. Take one out first.

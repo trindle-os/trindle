@@ -7,10 +7,10 @@ settings-startup-title = البدء عند تسجيل الدخول
 settings-startup-keywords = autostart startup start login boot automatically launch delay بدء تلقائي تسجيل الدخول إقلاع تشغيل تأخير
 
 # Introduction under the heading of the start at login page, and the words behind the page i.
-settings-startup-help = تطبيقات تفتح من تلقاء نفسها عند تسجيل الدخول. يتيح التأخير للتطبيق أن ينتظر الشبكة أو تطبيقًا آخر أولًا.
+settings-startup-help = تطبيقات تفتح من تلقاء نفسها عند تسجيل الدخول. يمكنك إضافة تأخير لينتظر التطبيق الشبكة أو تطبيقًا آخر أولًا.
 
 # Sentence at the top of the page when no app starts at login.
-settings-startup-top-none = لا يبدأ شيء من تلقاء نفسه عند تسجيل الدخول.
+settings-startup-top-none = لا يبدأ أي تطبيق من تلقاء نفسه عند تسجيل الدخول.
 
 # Sentence at the top of the page when one app starts at login; { $name } is the app.
 settings-startup-top-one = يبدأ { $name } من تلقاء نفسه عند تسجيل الدخول.
@@ -29,12 +29,12 @@ settings-startup-top-many =
 # Second sentence at the top of the page, after a space, when apps are kept in the list but switched off; { $n } is how many.
 settings-startup-top-off =
     { $n ->
-        [zero] لا يوجد غيرها محفوظًا ومعطلًا.
-        [one] وهناك تطبيق آخر محفوظ ومعطَّل.
-        [two] وهناك تطبيقان آخران محفوظان ومعطَّلان.
-        [few] وهناك { $n } تطبيقات أخرى محفوظة ومعطَّلة.
-        [many] وهناك { $n } تطبيقًا آخر محفوظة ومعطَّلة.
-       *[other] وهناك { $n } تطبيق آخر محفوظة ومعطَّلة.
+        [zero] لا يوجد غيرها معطَّل.
+        [one] وتطبيق آخر معطَّل.
+        [two] وتطبيقان آخران معطَّلان.
+        [few] و{ $n } تطبيقات أخرى معطَّلة.
+        [many] و{ $n } تطبيقًا آخر معطَّل.
+       *[other] و{ $n } تطبيق آخر معطَّل.
     }
 
 # Choice in the delay list: the app starts as soon as someone logs in.
@@ -65,10 +65,13 @@ settings-startup-switch = ابدأه عند تسجيل الدخول
 
 # Name of the bin button on an app's line that stops it starting at login.
 # SAFETY: needs a human review before it ships
-settings-startup-stop = أوقف بدءه عند تسجيل الدخول
+settings-startup-stop = لا تبدأه عند تسجيل الدخول
 
 # Red words under an app's line when it could not be taken off the list.
-settings-startup-not-removed = تعذّرت إزالته، لذا لا يزال يبدأ عند تسجيل الدخول.
+settings-startup-not-removed = تعذّر على Trindle إزالته، لذا لا يزال يبدأ عند تسجيل الدخول.
+
+# Under the name of a launcher that comes with the system, which can only be switched on or off; { $command } is what it runs, cut short.
+settings-startup-system = يأتي مع النظام: { $command }
 
 # Red words under the add card when something could not be added.
 settings-startup-not-added = تعذّرت إضافته.
@@ -80,19 +83,16 @@ settings-startup-find = ابحث عن تطبيق
 settings-startup-add-this = ابدأ هذا عند تسجيل الدخول
 
 # Red words under an app in the add list when it was removed from the computer meanwhile.
-settings-startup-gone = تعذّرت إضافته: لم يعد التطبيق مثبتًا.
+settings-startup-gone = تعذّر على Trindle إضافته لأن التطبيق لم يعد مثبتًا.
 
 # Placeholder of the box for typing a command; the example is a command, not translated words.
-settings-startup-command-example = مثال: syncthing --no-browser
+settings-startup-command-example = syncthing --no-browser
 
 # Name of the button that opens a window to choose a program on the disk.
-settings-startup-browse = اختر برنامجًا من القرص
+settings-startup-browse = اختر برنامجًا
 
 # Heading of the line for adding a command.
 settings-startup-command = أمر
-
-# Small words under the command line.
-settings-startup-command-about = كما يُكتب في الطرفية، أو برنامج على القرص.
 
 # Red words under the command line when nothing was typed.
 settings-startup-command-empty = اكتب أمرًا، أو اختر برنامجًا.
@@ -103,14 +103,11 @@ settings-startup-chooser-title = اختر برنامجًا يبدأ عند تس�
 # Heading of the line shown in the list when nothing starts at login.
 settings-startup-none-title = لا شيء يبدأ من تلقاء نفسه
 
-# Small words under that line.
-settings-startup-none-about = أضف تطبيقًا بجانب هذا.
-
 # Title of the card listing what starts at login.
 settings-startup-list-title = يبدأ عند تسجيل الدخول
 
 # Words behind the i of the card listing what starts at login.
-settings-startup-about = يمكن لكل تطبيق أن ينتظر قليلًا بعد تسجيل دخولك، حتى تصبح الشبكة أو تطبيق آخر جاهزًا أولًا. يبقيه مفتاحه هنا دون أن يبدأه؛ وسلة المهملات توقف بدءه عند تسجيل الدخول نهائيًا.
+settings-startup-about = يمكن لكل تطبيق أن ينتظر قليلًا بعد تسجيل دخولك، لتكون الشبكة أو تطبيق آخر جاهزًا أولًا.
 
 # Added to the words behind the i, after a space, for an app whose command is too long for its line; { $name } is the app and { $command } its command.
 settings-startup-runs = يشغّل { $name }: { $command }
@@ -124,18 +121,11 @@ settings-startup-open-command = اكتب أمرًا، أو اختر برنامج
 # Heading of the line for adding an installed app.
 settings-startup-app-heading = تطبيق مثبت
 
-# Small words under that line.
-settings-startup-app-about = اختر واحدًا من قائمة التطبيقات.
-
 # Heading of the line for adding a command or a program.
 settings-startup-cmd-heading = أمر أو برنامج
 
-# Small words under that line.
-settings-startup-cmd-about = يُكتب، أو يُختار من القرص.
-
 # Words behind the i of the Add an app card.
-settings-startup-add-about = اختر من التطبيقات المثبتة، أو أعطِ أمرًا للتشغيل كما تكتبه في الطرفية، أو برنامجًا تختاره من القرص. يبدأ عند تسجيل الدخول التالي، فورًا؛ ويمكن اختيار مدة انتظار له بعد دخوله إلى القائمة.
+settings-startup-add-about = اختر أحد تطبيقاتك المثبتة، أو اكتب أمرًا للتشغيل كما تفعل في الطرفية. ويمكنك أيضًا اختيار برنامج من القرص. يبدأ عند تسجيل دخولك التالي. وبعد أن يصبح في القائمة، يمكنك اختيار تأخير له.
 
 # Title of the card for adding an app.
 settings-startup-add-title = أضف تطبيقًا
-

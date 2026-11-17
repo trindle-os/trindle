@@ -10,7 +10,7 @@ plugins-pin-not-saved = PIN 码不会被保存
 plugins-pin-no-answer = 另一台电脑没有回应。
 
 # Red words on the PIN card when the unlocking command refused without saying why.
-plugins-pin-not-unlocked = 未解锁。
+plugins-pin-not-unlocked = 仍是锁定的。
 
 # Name the screen reader gives to the four dots on the PIN card.
 plugins-pin-dots = PIN 码

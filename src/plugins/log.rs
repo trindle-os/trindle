@@ -13,7 +13,7 @@ use std::path::{Path, PathBuf};
 pub const MOST: u64 = 256 * 1024;
 
 pub fn path(id: &str) -> PathBuf {
-    crate::common::files::home().join(".local/state/trindle/plugins").join(format!("{id}.log"))
+    crate::common::files::state_home().join("trindle/plugins").join(format!("{id}.log"))
 }
 
 pub fn forget(id: &str) {

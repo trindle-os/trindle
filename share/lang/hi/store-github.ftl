@@ -2,7 +2,7 @@
 # machine translated (Hindi), not yet reviewed by a person.
 
 # Said wherever the page offers a file from GitHub to install.
-store-gh-unchecked = सुरक्षित रूप से डाउनलोड हुई, पर इस फ़ाइल को किसी ने जाँचा नहीं है: इसके निर्माता कोई हस्ताक्षर प्रकाशित नहीं करते।
+store-gh-unchecked = यह फ़ाइल सुरक्षित रूप से डाउनलोड हुई, पर इसे किसी ने जाँचा नहीं है, क्योंकि इसके निर्माता कोई हस्ताक्षर प्रकाशित नहीं करते।
 
 # What a project with nothing to install here is told as.
 store-gh-no-files = इस प्रोजेक्ट की रिलीज़ में इस कंप्यूटर के लिए कोई AppImage या Flatpak फ़ाइल नहीं है।
@@ -23,28 +23,28 @@ store-gh-keyis-none = कोई की रखी नहीं है
 store-gh-keyis-nokeyring = इस कंप्यूटर पर कीरिंग नहीं है, इसलिए कोई की रखी नहीं जा सकती
 
 # Red words: the key is still in a plain file; why it was not moved follows.
-store-gh-keyis-plain = आपकी GitHub की अब भी इस कंप्यूटर की एक सादी फ़ाइल में है और वहीं से इस्तेमाल हो रही है: उसे कीरिंग में नहीं ले जाया जा सका। { $why }
+store-gh-keyis-plain = आपकी GitHub कुंजी अब भी इस कंप्यूटर की एक पुरानी सादी फ़ाइल में है, जिसे Trindle अब नहीं पढ़ता। { $why }
 
 # Red words: the keyring could not say; why is given first.
-store-gh-keyis-hidden = { $why } इसलिए GitHub से बिना की के पूछा जाता है, चाहे कोई रखी हो या नहीं।
+store-gh-keyis-hidden = { $why } इसलिए Trindle GitHub को बिना की के इस्तेमाल करता है, चाहे कोई सहेजी हो या नहीं।
 
 # Red words: a stored key has a space or line break in it.
-store-gh-keyis-unsendable = एक GitHub की रखी है, पर उसे भेजा नहीं जा सकता: उसके अंदर स्पेस या नई पंक्ति है, जैसा दो टुकड़ों में चिपकाई गई की में होता है। इसलिए GitHub से बिना की के पूछा जाता है। उसे हटाएँ और की फिर से चिपकाएँ।
+store-gh-keyis-unsendable = Trindle आपकी सहेजी हुई GitHub की भेज नहीं सकता, क्योंकि उसमें स्पेस या नई पंक्ति है। इसलिए Trindle GitHub को बिना की के इस्तेमाल करता है। की हटाएँ और उसे फिर से चिपकाएँ।
 
 # Reason the plain file holding the key could not be removed.
 store-gh-keyis-file-stays = फ़ाइल हटाई नहीं जा सकी।
 
 # Reason the keyring did not take the key.
-store-gh-keyis-not-taken = कीरिंग ने इसे नहीं लिया।
+store-gh-keyis-not-taken = कीरिंग ने इसे सहेजा नहीं, इसलिए Trindle GitHub को बिना कुंजी के इस्तेमाल करता है।
 
 # Red words when a pasted key has a space or line break in it.
-store-gh-key-spaces = की एक पंक्ति की होती है जिसमें स्पेस नहीं होता, और इसके अंदर नई पंक्ति या स्पेस है। केवल की चिपकाएँ।
+store-gh-key-spaces = की एक पंक्ति की होती है जिसमें स्पेस नहीं होता। इसके अंदर नई पंक्ति या स्पेस है। केवल की ही चिपकाएँ।
 
 # GitHub's limit was reached: which limit, when it answers again.
-store-gh-limit = GitHub ने अभी के लिए जवाब देना बंद कर दिया है: { $which }। { $when }
+store-gh-limit = GitHub ने अभी के लिए जवाब देना बंद कर दिया है, क्योंकि { $which }। { $when }
 
 # The same, with where the key goes that raises the limit.
-store-gh-limit-hint = GitHub ने अभी के लिए जवाब देना बंद कर दिया है: { $which }। { $when } { $hint }
+store-gh-limit-hint = GitHub ने अभी के लिए जवाब देना बंद कर दिया है, क्योंकि { $which }। { $when } { $hint }
 
 # Part of the limit words: how long to wait is not known.
 store-gh-wait-later = बाद में फिर कोशिश करें।
@@ -57,37 +57,37 @@ store-gh-wait-minutes =
     }
 
 # Part of the limit words: the limit of searches with a key.
-store-gh-limit-search-key = यह एक मिनट में 30 खोजों का जवाब देता है
+store-gh-limit-search-key = यह एक मिनट में 30 खोजों की अनुमति देता है
 
 # Part of the limit words: the limit of searches without a key.
-store-gh-limit-search = यह एक मिनट में 10 खोजों का जवाब देता है
+store-gh-limit-search = यह एक मिनट में 10 खोजों की अनुमति देता है
 
 # Part of the limit words: the limit of questions with a key.
-store-gh-limit-key = यह आपकी की के साथ एक घंटे में 5,000 सवालों का जवाब देता है, और वे खत्म हो चुके हैं
+store-gh-limit-key = आपकी की जितने अनुरोधों की अनुमति देती है, यानी एक घंटे में 5,000, आप वे सब इस्तेमाल कर चुके हैं
 
 # Part of the limit words: the limit of questions without a key.
-store-gh-limit-plain = यह बिना की के एक पते से एक घंटे में 60 सवालों का जवाब देता है
+store-gh-limit-plain = यह बिना की के एक पते से एक घंटे में 60 अनुरोधों की अनुमति देता है
 
 # Part of the limit words: how the key raises the limit.
-store-gh-limit-key-hint = GitHub की इसे 5,000 तक बढ़ा देती है: GitHub खोजें के ऊपर दाईं ओर की चाबी वाला बटन दबाएँ।
+store-gh-limit-key-hint = GitHub की इसे 5,000 तक बढ़ा देती है। खोजें के ऊपर दाईं ओर का चाबी वाला बटन दबाएँ।
 
 # Red words when GitHub does not accept the key.
-store-gh-key-refused = GitHub ने की स्वीकार नहीं की। नई बनाएँ, या इसे हटा दें: GitHub खोजें के ऊपर दाईं ओर की चाबी वाला बटन दबाएँ।
+store-gh-key-refused = GitHub ने की स्वीकार नहीं की। खोजें के ऊपर दाईं ओर के चाबी वाले बटन से नई बनाएँ, या इसे हटा दें।
 
 # Red words when GitHub answered with a code and no words.
-store-gh-answered = GitHub ने { $code } कहा।
+store-gh-answered = GitHub ने { $code } लौटाया।
 
 # Red words when GitHub refused a question without saying why.
-store-gh-refused-plain = GitHub ने इसे मना कर दिया, जबकि उसके जवाब खत्म नहीं हुए हैं।
+store-gh-refused-plain = GitHub ने इसे रोक दिया, जबकि आप उसकी सीमा तक नहीं पहुँचे हैं।
 
 # Red words when GitHub refused a question; its reason is given.
-store-gh-refused = GitHub ने इसे मना कर दिया: { $why }।
+store-gh-refused = GitHub ने इसे रोक दिया: { $why }।
 
 # Red words: projects found could not be looked at.
 store-gh-unread =
     { $n ->
-        [one] मिला 1 प्रोजेक्ट देखा नहीं जा सका, इसलिए वह सूची में नहीं है
-       *[other] मिले { $n } प्रोजेक्ट देखे नहीं जा सके, इसलिए वे सूची में नहीं हैं
+        [one] Trindle मिले 1 प्रोजेक्ट को देख नहीं सका, इसलिए वह सूची में नहीं है
+       *[other] Trindle मिले { $n } प्रोजेक्ट को देख नहीं सका, इसलिए वे सूची में नहीं हैं
     }
 
 # Red words: the above made a sentence.
@@ -100,7 +100,7 @@ store-gh-unread-why = { $which }: { $why }।
 store-gh-unreached = GitHub तक पहुँचा नहीं जा सका।
 
 # Red words over what a search found when only half of it was answered; why GitHub did not answer follows.
-store-gh-half = केवल AppImage वाले प्रोजेक्ट खोजे गए: GitHub ने Flatpak की खोज का जवाब नहीं दिया। { $why }
+store-gh-half = Trindle ने केवल AppImage वाले प्रोजेक्ट खोजे, क्योंकि GitHub ने Flatpak की खोज का जवाब नहीं दिया। { $why }
 
 # Word on a GitHub file's dial while it downloads.
 store-gh-step-downloading = डाउनलोड हो रहा है

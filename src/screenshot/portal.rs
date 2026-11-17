@@ -47,7 +47,7 @@ pub(super) const FAILED: u32 = 2;
 
 const IDLE: Duration = Duration::from_secs(60);
 
-const KEEP: usize = 1;
+const KEEP: usize = 5;
 
 fn folder() -> PathBuf {
     home().join(".cache/trindle/portal-screenshots")
@@ -275,7 +275,9 @@ mod tests {
         let mut left: Vec<String> = std::fs::read_dir(&dir).unwrap().flatten()
             .map(|e| e.file_name().to_string_lossy().into_owned()).collect();
         left.sort();
-        assert_eq!(left, vec!["screenshot-7.png".to_string()]);
+        assert!(left.len() > 1 && left.len() == super::KEEP, "the last few stay, not only the newest");
+        assert_eq!(left.last().map(String::as_str), Some("screenshot-7.png"));
+        assert!(!left.contains(&"screenshot-0.png".to_string()));
         std::fs::remove_dir_all(&dir).unwrap();
     }
 
@@ -289,6 +291,15 @@ mod tests {
     fn work_on_a_thread_answers_with_no_window_shown() {
         use std::cell::Cell;
         use std::rc::Rc;
+        const INNER: &str = "TRINDLE_PORTAL_THREAD_TEST_ALONE";
+        if std::env::var_os(INNER).is_none() {
+            let name = concat!(module_path!(), "::work_on_a_thread_answers_with_no_window_shown");
+            let out = std::process::Command::new(std::env::current_exe().unwrap())
+                .args(["--exact", name.split_once("::").unwrap().1, "--test-threads=1"]).env(INNER, "1").output().unwrap();
+            assert!(out.status.success() && String::from_utf8_lossy(&out.stdout).contains("1 passed"),
+                    "{}\n{}", String::from_utf8_lossy(&out.stdout), String::from_utf8_lossy(&out.stderr));
+            return;
+        }
         let lp = super::events();
         let got = Rc::new(Cell::new(0));
         let g = got.clone();

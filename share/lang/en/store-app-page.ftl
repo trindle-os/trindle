@@ -13,13 +13,13 @@ store-app-state-removing = Removing
 # The state beside the dot while the app is being fetched.
 store-app-state-downloading = Downloading
 # The state beside the dot while Flatpak is putting the fetched app in.
-store-app-state-putting-in = Putting it in
+store-app-state-putting-in = Installing
 # The state beside the dot while the app's own update goes in.
 store-app-state-updating = Updating
 # The state beside the dot for an installed app whose updates are held back and whose version is not known.
 store-app-state-held = Installed, held back
 # The state beside the dot for an installed app whose updates are held back.
-store-app-state-held-version = Installed, held back at version { $version }
+store-app-state-held-version = Installed, updates held back at version { $version }
 # The state beside the dot for an installed app with an update waiting; the end says what waits.
 store-app-state-waiting = Installed, { $waits }
 # The same, with the installed version.
@@ -43,7 +43,7 @@ store-app-remove = Remove
 # Round button beside Update or Release that opens the app.
 store-app-open-round = Open
 # Main button that releases an app whose updates are held back.
-store-app-release = Release
+store-app-release = Allow updates
 # Main button that updates the app.
 store-app-update = Update
 # Main button that opens the app.
@@ -55,11 +55,11 @@ store-app-website = Website
 # In the picture frame when the app has no pictures.
 store-app-no-pictures = This app has no pictures.
 # In the picture frame when the picture could not be fetched.
-store-app-picture-missed = This picture could not be fetched.
+store-app-picture-missed = Trindle couldn't get this picture.
 # In the picture frame while the picture is being fetched.
-store-app-picture-fetching = Fetching the picture…
+store-app-picture-fetching = Getting the picture…
 # In the picture frame when the computer has no internet.
-store-app-picture-offline = Pictures cannot be fetched while this computer is not connected to the internet.
+store-app-picture-offline = Connect to the internet to see pictures.
 # Between the picture buttons: which picture, when it has no caption.
 store-app-picture-of = Picture { $at } of { $n }
 # Between the picture buttons: which picture, then its caption.
@@ -67,7 +67,7 @@ store-app-picture-of-caption = Picture { $at } of { $n }: { $caption }
 # Tip of the round button that shows the picture before.
 store-app-picture-earlier = Earlier picture
 # Tip of the round button that shows the picture after.
-store-app-picture-later = Later picture
+store-app-picture-later = Next picture
 # Licence shown in Facts for an app that is not open source.
 store-app-proprietary = Proprietary
 # Name of the Facts card.
@@ -112,8 +112,8 @@ store-app-review-no-title = No title
 # Under What people say when nobody has written.
 store-app-people-none = Nobody has written about this app yet.
 # Under What people say when there is no internet.
-store-app-people-offline = What people say cannot be fetched while this computer is not connected to the internet.
+store-app-people-offline = Connect to the internet to read reviews.
 # Under What people say while reviews are being fetched.
-store-app-people-looking = Looking for what people say…
+store-app-people-looking = Loading reviews…
 # Name of the card of reviews.
-store-app-people = What people say
+store-app-people = Reviews

@@ -25,19 +25,19 @@ fn files(dir: &Path) -> usize {
 }
 
 #[derive(Clone, Debug)]
-struct Seen {
-    line: String,
-    headers: Vec<(String, String)>,
-    body: String,
+pub(super) struct Seen {
+    pub(super) line: String,
+    pub(super) headers: Vec<(String, String)>,
+    pub(super) body: String,
 }
 
-struct Fake {
-    server: Server,
-    seen: Arc<Mutex<Vec<Seen>>>,
+pub(super) struct Fake {
+    pub(super) server: Server,
+    pub(super) seen: Arc<Mutex<Vec<Seen>>>,
 }
 
 impl Fake {
-    fn start(post_code: u16, post_body: &str, status_code: u16, status_body: &str) -> Fake {
+    pub(super) fn start(post_code: u16, post_body: &str, status_code: u16, status_body: &str) -> Fake {
         let listener = TcpListener::bind("127.0.0.1:0").unwrap();
         let port = listener.local_addr().unwrap().port();
         let seen: Arc<Mutex<Vec<Seen>>> = Arc::default();
@@ -100,7 +100,6 @@ fn nobody() -> Server {
 #[test]
 fn the_address_is_one_constant_and_the_live_server_is_built_from_it() {
     assert_eq!(send::REPORTS_URL, "https://buildmorphic.com/api/reports/trindle");
-    assert_eq!(send::COMMUNITY_URL, "https://trindle-community.buildmorphic.com");
     let live = Server::live();
     assert_eq!((live.post.as_str(), live.status.as_str()), ("https://buildmorphic.com/api/reports/trindle", "https://buildmorphic.com/api/reports/trindle/status"));
     assert!(!crate::common::source::code(include_str!("mod.rs")).contains("https://buildmorphic"), "the address is written once, in send.rs");
@@ -154,7 +153,10 @@ fn each_answer_means_what_the_api_says() {
         (403, r#"{"ok":false,"error":"Not taking reports."}"#, Answer::Refused("Not taking reports.".into())),
         (413, r#"{"ok":false,"error":"Too big."}"#, Answer::Refused("Too big.".into())),
         (429, r#"{"ok":false,"error":"Slow down."}"#, Answer::Later("Slow down.".into())),
-        (503, "", Answer::Later("The address answered 503.".into())),
+        (503, "", Answer::Later("The server sent 503.".into())),
+        (404, "", Answer::Later("The server sent 404.".into())),
+        (408, "", Answer::Later("The server sent 408.".into())),
+        (302, "", Answer::Later("The server sent 302.".into())),
     ] {
         let fake = Fake::start(code, body, 200, "{}");
         assert_eq!(post(&fake.server, "{}"), want, "{code}");
@@ -251,9 +253,6 @@ fn with_the_switch_off_nothing_is_asked_sent_or_kept() {
     assert_eq!(go(&dir, false, &mut b, 0, &fake.server), 0);
     assert_eq!(fake.asked(), 0, "no status check and no post");
     assert_eq!(files(&dir), 2);
-
-    assert_eq!(forget_pending(&dir), 2);
-    assert_eq!(files(&dir), 0);
 }
 
 #[test]
@@ -322,7 +321,7 @@ fn send_is_only_offered_once_buildmorphic_says_it_is_taking_reports() {
     assert!(r.outbox.is_empty());
     r.gate_is(false);
     assert!(!has_send(&r), "no Send button");
-    assert!(says(&r, "Reports are not being taken yet."), "and the reason is written where it would be");
+    assert!(says(&r, "Reports can't be sent yet."), "and the reason is written where it would be");
     r.update(Msg::Send);
     assert!(r.outbox.is_empty());
     r.gate_is(true);
@@ -387,15 +386,12 @@ fn in_tests_the_live_address_is_never_asked_or_posted_to() {
     let live = Server::live();
     assert!(!send::accepting(&live));
     assert!(matches!(send::post(&live, "{}"), Answer::Later(_)));
-    let pocketkey = Server::of_slug("trindle-pocketkey");
-    assert!(!send::accepting(&pocketkey));
-    assert!(matches!(send::post(&pocketkey, "{}"), Answer::Later(_)));
     assert_eq!(asked(), before, "a request was made to a live address");
 
     let elsewhere = Server::at("http://127.0.0.1:9");
     let _ = send::accepting(&elsewhere);
     assert_eq!(asked(), before + 1);
-    assert_eq!(crate::report::not_taken(), "Reports are not being taken yet.");
+    assert_eq!(crate::report::not_taken(), "Reports can't be sent yet.");
 }
 
 #[test]
@@ -425,27 +421,78 @@ fn a_note_is_not_sent_without_words_and_a_log() {
     assert!(r.outbox.is_empty());
 }
 
-#[test]
-fn a_report_goes_to_the_repository_that_owns_the_program() {
-    assert_eq!(send::slug_for("trindle-pocketkeyd"), "trindle-pocketkey");
-    assert_eq!(send::slug_for("trindle-pocketkey-radio"), "trindle-pocketkey");
-    for own in ["trindle", "trindle-compose", "trindle-folders", "trindle-unlock", "something-else"] {
-        assert_eq!(send::slug_for(own), "trindle", "{own}");
-    }
-    let crash = Crash { program: "trindle-pocketkeyd".into(), signal: "11".into(), trace: String::new() };
-    let body = document(&Parts { mode: Mode::Crash, version: "1", words: "", hardware: "", crash: Some(&crash), log: &[], username: "", github: "" }, &who());
-    let v: serde_json::Value = serde_json::from_str(&body).unwrap();
-    assert_eq!(v["project"], "trindle-pocketkey", "the project matches the slug it is posted to");
-    assert_eq!(Server::of_slug(&send::slug_of(&body)).post, "https://buildmorphic.com/api/reports/trindle-pocketkey");
-    let note = document(&Parts { mode: Mode::Note, version: "1", words: "The ring froze twice.", hardware: "", crash: None, log: &[], username: "", github: "" }, &who());
-    assert_eq!(Server::of_slug(&send::slug_of(&note)), Server::live(), "a note is Trindle's own");
+const VALID_PROJECTS: [&str; 18] = [
+    "trindle", "trindle-crash-reports", "trindle-flow", "trindle-folders", "trindle-help", "trindle-icons", "trindle-releases", "trindle-scan",
+    "trindle-screen-reader", "trindle-site", "trindle-snippets", "trindle-talk", "trindle-toolkit", "trindle-translations", "trindle-voice",
+    "trindle-keyboard", "trindle-benchmarks", "trindle-videos",
+];
 
-    assert_eq!(Server::of_slug(&send::slug_of(r#"{"project":"elsewhere"}"#)), Server::live());
-    assert_eq!(Server::of_slug(&send::slug_of("not json")), Server::live());
+fn crash_body(program: &str) -> serde_json::Value {
+    let crash = Crash { program: program.into(), signal: "11".into(), trace: String::new() };
+    let body = document(&Parts { mode: Mode::Crash, version: "1", words: "", hardware: "", crash: Some(&crash), log: &[], username: "", github: "" }, &who());
+    serde_json::from_str(&body).unwrap()
 }
 
 #[test]
-fn a_plugin_crash_names_the_plugin_and_goes_to_its_repository() {
+fn a_folders_report_is_filed_under_the_folders_project() {
+    let v = crash_body("trindle-folders");
+    assert_eq!(v["project"], "trindle-folders");
+    assert_eq!(v["crash"]["program"], "trindle-folders");
+    assert_eq!(super::mode_of(&["--crash".into(), "trindle-folders".into()]), (Mode::Crash, "trindle-folders".to_string()));
+    assert_eq!(send::slug_of(&v.to_string()), "trindle-folders");
+}
+
+#[test]
+fn a_known_plugin_crash_names_its_project_and_everything_else_is_trindles_own() {
+    let id = |name: &str| format!("trindle-plugin {}{name}", ["org.", "trindle", "."].concat());
+    assert_eq!(crash_body(&id("Flow"))["project"], "trindle-flow");
+    assert_eq!(crash_body(&id("ScreenReader"))["project"], "trindle-screen-reader");
+    assert_eq!(crash_body(&id("Keyboard"))["project"], "trindle-keyboard");
+    for own in [id("OneWord"), id("PocketKey"), id("Downloader"), "trindle-plugin org.example.One".to_string(), "trindle-ring".to_string(), "trindle".to_string()] {
+        assert_eq!(crash_body(&own)["project"], "trindle", "{own}");
+    }
+    let note = document(&Parts { mode: Mode::Note, version: "1", words: "The ring froze twice.", hardware: "", crash: None, log: &[], username: "", github: "" }, &who());
+    assert_eq!(serde_json::from_str::<serde_json::Value>(&note).unwrap()["project"], "trindle", "a note is Trindle's own");
+}
+
+#[test]
+fn every_project_the_code_can_name_is_one_the_server_knows() {
+    let own = ["org.", "trindle", "."].concat();
+    let names = ["Flow", "Scan", "Talk", "Voice", "Snippets", "CrashReports", "ScreenReader", "Keyboard"];
+    let mut named: Vec<&str> = names.iter().filter_map(|n| send::project_of(&format!("trindle-plugin {own}{n}"))).collect();
+    named.push(send::project_of(send::FOLDERS_PROGRAM).unwrap());
+    assert_eq!(named.len(), 9, "each plugin in the list has a project");
+    for p in &named {
+        assert!(VALID_PROJECTS.contains(p), "{p} is not a project the server knows");
+    }
+    for p in VALID_PROJECTS {
+        let wanted = named.contains(&p);
+        assert_eq!(send::slug_of(&format!(r#"{{"project":"{p}"}}"#)) == p, wanted || p == "trindle", "{p}");
+    }
+    assert_eq!(send::slug_of(r#"{"project":"trindle-pocketkey"}"#), "trindle");
+    assert_eq!(send::slug_of(r#"{"project":"../x"}"#), "trindle");
+    assert_eq!(send::slug_of("not json"), "trindle");
+}
+
+#[test]
+fn a_crash_of_the_one_file_names_its_part_and_build() {
+    use super::probe::{build_id, part_of, with_build};
+    let info = "  Command Line: /usr/bin/trindle-ring --open\n       Message: Process 5 (trindle) dumped core.\n\n                Module libwayland-client.so.0 with build-id aaaa\n                Module /usr/lib/trindle/bin/trindle (deleted) with build-id 0123abcdef\n";
+    assert_eq!(part_of(info), Some("trindle-ring"));
+    assert_eq!(part_of("  Command Line: /usr/bin/other x"), None);
+    assert_eq!(part_of("  Command Line: ../x/trindle-ring"), Some("trindle-ring"));
+    assert_eq!(build_id(info, "trindle").as_deref(), Some("0123abcdef"));
+    assert_eq!(build_id(info, "libwayland-client.so.0").as_deref(), Some("aaaa"));
+    assert_eq!(build_id("Module trindle with build-id zz\n", "trindle"), None, "not hex");
+    assert_eq!(build_id("", "trindle"), None);
+    let long = "x".repeat(super::TRACE_MOST + 50);
+    let cut = with_build(long, Some("0123abcdef".into()));
+    assert!(cut.chars().count() <= super::TRACE_MOST && cut.ends_with("Build id: 0123abcdef"));
+    assert_eq!(with_build("t".into(), None), "t");
+}
+
+#[test]
+fn a_plugin_crash_names_the_plugin_and_its_project() {
     use super::probe::plugin_program;
     let own = ["org.", "trindle", "."].concat();
     let info = |c: &str| format!("           PID: 5\n  Command Line: {c}\n    Executable: /usr/lib/trindle/bin/trindle\n");
@@ -453,7 +500,6 @@ fn a_plugin_crash_names_the_plugin_and_goes_to_its_repository() {
     assert_eq!(program, format!("trindle-plugin {own}ScreenReader"));
     assert_eq!(send::slug_for(&program), "trindle-screen-reader");
     assert_eq!(send::slug_for(&format!("trindle-plugin {own}Flow")), "trindle-flow");
-    assert_eq!(send::slug_for(&format!("trindle-plugin {own}PocketKey")), "trindle-pocketkey", "the repository's own spelling, not cut at capitals");
     assert_eq!(send::slug_for(&format!("trindle-plugin {own}CrashReports")), "trindle-crash-reports");
     assert_eq!(send::slug_for(&format!("trindle-plugin {own}OneWord")), "trindle", "a plugin with no repository is Trindle's own");
     assert_eq!(plugin_program(&info("/usr/bin/trindle-plugin run org.example.One x")).as_deref(), Some("trindle-plugin org.example.One"));
@@ -465,10 +511,6 @@ fn a_plugin_crash_names_the_plugin_and_goes_to_its_repository() {
         assert_eq!(plugin_program(&info(no)), None, "{no}");
     }
     assert_eq!(plugin_program("no command line"), None);
-    let body = serde_json::json!({"kind": "crash", "project": send::slug_for(&program)}).to_string();
-    assert_eq!(Server::of_slug(&send::slug_of(&body)).post, "https://buildmorphic.com/api/reports/trindle-screen-reader");
-    assert_eq!(Server::of_slug(&send::slug_of(r#"{"project":"trindle-one-word"}"#)), Server::live(), "a slug not in the contract goes to Trindle's own");
-    assert_eq!(Server::of_slug(&send::slug_of(r#"{"project":"../x"}"#)), Server::live(), "a project that is not a slug goes nowhere new");
 }
 
 #[test]
@@ -553,4 +595,18 @@ fn nothing_personal_goes_in_a_report_the_scrubbing_stays() {
     r.update(Msg::Send);
     let sent = &r.outbox[0];
     assert!(!sent.contains("jo.smith@example.com") && !sent.contains("192.168.1.20") && !sent.contains("/home/jo/"), "{sent}");
+}
+
+#[test]
+fn a_waiting_report_a_month_old_is_removed_and_a_new_one_stays() {
+    let dir = temp("stale");
+    waiting(&dir, &["{\"old\":1}", "{\"new\":2}"]);
+    let old = std::fs::File::options().write(true).open(dir.join("2026-0.json")).unwrap();
+    old.set_modified(std::time::SystemTime::now() - std::time::Duration::from_secs(31 * 24 * 3600)).unwrap();
+    let fake = Fake::start(201, "{}", 200, r#"{"accepting":false}"#);
+    let mut b = Backoff::new();
+    assert_eq!(go(&dir, false, &mut b, 0, &fake.server), 0);
+    assert_eq!(files(&dir), 1);
+    assert!(dir.join("2026-1.json").exists());
+    let _ = std::fs::remove_dir_all(&dir);
 }

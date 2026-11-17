@@ -13,14 +13,11 @@ settings-pads-top-picked = اب { $name } کے لیے کلید دبائیں۔
 # Heading of the line shown when no game controller is plugged in.
 settings-pads-none = کوئی جڑا ہوا نہیں
 
-# Small words under that line.
-settings-pads-none-about = ایک جوڑیں تو اس کے بٹن یہاں نظر آئیں گے۔
-
 # Name of the list that chooses which controller is shown; { $title } is the one shown now.
 settings-pads-which = کون سا کنٹرولر
 
 # What the picture is, for the screen reader.
-settings-pads-picture = { $title } کی تصویر، جس میں ہر بٹن دبانے پر روشن ہوتا ہے
+settings-pads-picture = { $title } کی تصویر۔ ہر بٹن دبانے پر روشن ہوتا ہے۔
 
 # Title of the card of the controller's buttons.
 settings-pads-buttons-title = بٹن
@@ -35,7 +32,7 @@ settings-pads-change = { $name } کو کلید میں بدلیں
 settings-pads-stop = { $name } کو بدلنا روکیں
 
 # Name of the list of what a button becomes; { $name } is the button.
-settings-pads-choose = { $name } کیا بنتا ہے
+settings-pads-choose = { $name } کیا کرتا ہے
 
 # What the list says while a button waits for its key: the clue, and a choice that does nothing.
 settings-pads-waiting = کوئی کلید دبائیں یا بٹن چنیں
@@ -66,13 +63,13 @@ settings-pads-stick-left = بائیں
 settings-pads-stick-right = دائیں
 
 # Title of the card of the ready-made changes.
-settings-pads-quick-title = تیار شدہ تبدیلیاں
+settings-pads-quick-title = عام تبدیلیاں
 
 # Title of the card of changes that are not one button into another.
 settings-pads-other-title = دوسری تبدیلیاں
 
 # Words behind the i of that card.
-settings-pads-other-about = الٹی کی ہوئی اسٹکس، آپس میں بدلی اسٹکس اور ڈیڈ زون۔ اسے یوں لکھیں: Left Stick dead zone = 10%، یا Right Stick Y = inverted۔
+settings-pads-other-about = اسٹکس کو الٹیں یا آپس میں بدلیں، یا ڈیڈ زون مقرر کریں۔ تبدیلی اس طرح لکھیں: Left Stick dead zone = 10%، یا Right Stick Y = inverted۔
 
 
 
@@ -96,12 +93,10 @@ settings-pads-middle-click = درمیانی کلک
 settings-pads-profiles-title = پروفائلز
 
 # Words behind the i of that card.
-settings-pads-profiles-about = پروفائل تبدیلیوں کا ایک مجموعہ ہے۔ معیاری کچھ نہیں بدلتا، اس لیے جس گیم میں اپنی کنٹرولر سپورٹ ہو وہ کنٹرولر کو جیسا ہے ویسا دیکھتا ہے۔ ہر Steam گیم معیاری استعمال کرتا ہے جب تک آپ یہاں اس کے لیے کوئی پروفائل نہ چنیں، اور گیم شروع ہوتے ہی پروفائل خود بدل جاتا ہے۔ کوئی اور گیم ان گیمز کے لیے ہے جنہیں Steam نے شروع نہیں کیا۔
+settings-pads-profiles-about = پروفائل تبدیلیوں کا ایک مجموعہ ہے۔ معیاری کچھ نہیں بدلتا، اس لیے جن گیمز میں اپنی کنٹرولر سپورٹ ہو وہ کنٹرولر کو جیسا ہے ویسا دیکھتے ہیں۔ ہر Steam گیم معیاری استعمال کرتا ہے جب تک آپ یہاں اس کے لیے کوئی پروفائل نہ چنیں۔ گیم شروع ہونے پر Trindle اس پروفائل پر چلا جاتا ہے۔ کوئی اور گیم کا مطلب ہر وہ گیم ہے جسے Steam نے شروع نہیں کیا۔
 
 # The one switch that turns every controller change off at once.
 settings-pads-changes = کنٹرولر کی تبدیلیاں
-
-settings-pads-changes-sub = بند ہونے پر ہر کنٹرولر جیسا ہے ویسا رہتا ہے۔
 
 # The game whose profile is shown.
 settings-pads-game = گیم
@@ -117,8 +112,6 @@ settings-pads-profile = پروفائل
 
 settings-pads-standard = معیاری
 
-settings-pads-standard-sub = کوئی تبدیلی نہیں۔
-
 settings-pads-profile-add = پروفائل شامل کریں
 
 settings-pads-profile-remove = { $name } ہٹائیں
@@ -128,7 +121,7 @@ settings-pads-profile-name = پروفائل کا نام
 # The name a new profile is given.
 settings-pads-profile-new = پروفائل { $n }
 
-settings-pads-profile-empty = پروفائل کو ایک نام چاہیے۔
+settings-pads-profile-empty = پروفائل کا نام لکھیں۔
 
 settings-pads-profile-standard = "معیاری" کا نام پہلے سے لیا جا چکا ہے۔
 
@@ -142,7 +135,15 @@ settings-pads-not-a-game = یہ Steam ایپ نمبر نہیں ہے۔
 settings-pads-standard-why = معیاری کچھ نہیں بدلتا۔ پہلے ایک پروفائل شامل کریں۔
 
 # The headline while the shown game uses Standard, and while all changes are off.
-settings-pads-top-standard = معیاری: کنٹرولر جیسا ہے ویسا۔
+settings-pads-top-standard = معیاری استعمال ہو رہا ہے، کوئی تبدیلی نہیں۔
 
 settings-pads-top-off = کنٹرولر کی تبدیلیاں بند ہیں۔
 
+# Heading of the line shown when the file of changed controller buttons could not be read.
+settings-pads-unread = Trindle آپ کے بدلے ہوئے بٹن نہیں پڑھ سکا
+
+# Small words under that line; { $why } is the reason.
+settings-pads-unread-about = جب تک ایسا نہیں ہوتا، ہر بٹن معمول کے مطابق کام کرتا ہے اور کچھ محفوظ نہیں ہوتا۔ { $why }
+
+# Shown beside a change that was not saved because the file of changed buttons could not be read.
+settings-pads-not-saved-unread = محفوظ نہیں ہوا۔ بدلے ہوئے بٹنوں کی فائل پڑھی نہیں جا سکی، اس لیے اسے جوں کا توں چھوڑ دیا گیا۔

@@ -9,13 +9,13 @@ settings-games-title = Oyunlar
 settings-games-keywords = oyunlar steam proton cızırtı takılma ses arabellek sürücü kitaplık bölünmüş kilit oyun kumandası gamepad joystick pad düğmeler tuşlar değiştir yeniden ata değiştokuş çubuk tetik d-pad xbox playstation nintendo
 
 # What the page is for, in the help.
-settings-games-help = Oyunların iyi çalışmasına yardım eden ayarlar. Steam kendi ayarlarını Steam içinde tutar. Kumandada bir düğmeye basın, listenin en üstüne gelir ve resimde yanar. Sonra klavyede o düğmenin olmasını istediğiniz tuşa basın. Bir düğme, listesinden başka bir düğme ya da hiçbir şey de olabilir. Her kumanda değişikliklerini markasına ve modeline göre kendisi tutar, oyunlar değiştirilmiş kumandayı okur. Başlattığınız bir değişikliği Escape durdurur.
+settings-games-help = Oyunların iyi çalışmasına yardım eden ayarlar. Steam'in kendi ayarlarını Steam içinde değiştirin. Bir kumanda düğmesini değiştirmek için ona basın. Düğme listenin en üstüne çıkar ve resimde yanar. Sonra onun yerine geçmesini istediğiniz klavye tuşuna basın. Bir düğme, kendi listesinden başka bir düğme ya da hiçbir şey de olabilir. Trindle değişiklikleri kumandanın her marka ve modeli için ayrı tutar, oyunlar da değiştirilmiş kumandayı kullanır. Başladığınız bir değişikliği iptal etmek için Esc'ye basın.
 
 # The sentence at the top of the page.
 settings-games-top = Cızırtı yapan, takılan ya da daha fazla yer isteyen oyunlar için yardım.
 
 # Shown beside a switch while the person is asked for the password.
-settings-games-waiting = Parola bekleniyor...
+settings-games-waiting = Parolanız bekleniyor…
 
 # The card holding the sound and split-lock switches.
 settings-games-smooth = Daha akıcı oyunlar
@@ -42,7 +42,7 @@ settings-games-sound-done-off = Daha büyük arabellek kapalı
 settings-games-split = Eski oyun takılma düzeltmesi
 
 # Under the split-lock switch.
-settings-games-split-sub = Eski oyunlar daha az takılır; bir program ötekileri yavaşlatabilir.
+settings-games-split-sub = Eski oyunlar daha az takılır ama bir program ötekileri yavaşlatabilir.
 
 # After the split-lock switch is turned on.
 settings-games-split-done-on = Takılma düzeltmesi açık
@@ -62,9 +62,6 @@ settings-games-drive-unnamed = Sürücü
 # One drive in the list: its name, size and kind of filesystem.
 settings-games-drive-name = { $name }, { $size }, { $fs }
 
-# Under a drive that can be used for games.
-settings-games-drive-ready = Oyunlar için hazır
-
 # The button that makes a drive the games drive.
 settings-games-drive-use = Oyunlar için kullan
 
@@ -83,9 +80,6 @@ settings-games-drive-forgotten = Artık oyunlar için kullanılmıyor
 # When there is no second drive.
 settings-games-drive-none = İkinci sürücü yok
 
-# Under that.
-settings-games-drive-none-sub = Oyunları üzerinde tutmak için ikinci bir sürücü takın.
-
 # When the drives could not be listed.
 settings-games-drive-unread = Sürücüler listelenemedi
 
@@ -99,16 +93,16 @@ settings-games-drive-steam = Steam'de ekleyin
 settings-games-drive-steam-sub = Steam'de: Ayarlar, Depolama, Sürücü ekle.
 
 # Why a Windows-formatted drive cannot be used.
-settings-games-drive-windows = Windows biçimi: oyunlar bunda bozulur. Linux için biçimlendirin.
+settings-games-drive-windows = Bu sürücü Windows için biçimlendirilmiş, oyunlar üzerinde düzgün çalışmaz. Linux için biçimlendirin.
 
 # Why a locked drive cannot be used.
-settings-games-drive-locked = Kilitli: önce Sürücüler'de kilidini açın.
+settings-games-drive-locked = Önce Sürücüler'de kilidini açın.
 
 # Why a part that holds no files cannot be used.
-settings-games-drive-not-files = Dosya içermiyor
+settings-games-drive-not-files = Dosyalar için değil
 
 # Why an unknown kind of drive cannot be used.
-settings-games-drive-unknown = Oyunların çalışabileceği bir biçim değil
+settings-games-drive-unknown = Oyunlar buradan çalışamaz
 
 
 
@@ -116,7 +110,7 @@ settings-games-drive-unknown = Oyunların çalışabileceği bir biçim değil
 settings-games-steam-title = Steam oyunları
 
 # What that card is for.
-settings-games-steam-about = Tek tek oyunlar için düzeltmeler. Bunları değiştirmek için Steam kapalı olmalı.
+settings-games-steam-about = Tek tek oyunlar için düzeltmeler. Bunları değiştirmeden önce Steam'i kapatın.
 
 # Shown, and beside every control, while Steam is open.
 settings-games-steam-open = Steam açık
@@ -128,16 +122,16 @@ settings-games-steam-open-sub = Bunları değiştirmek için Steam'i kapatın.
 settings-games-game-running = Oyun çalışıyor
 
 # Under a game's name.
-settings-games-game-sub = Daha güçlü grafikler, topluluk Proton'u, temiz başlangıç. Temiz başlangıç, oyunun Windows kurulumunu Çöp kutusu'na taşır; içinde tutulan kayıtlar da Steam Cloud'da yoksa onunla gider.
+settings-games-game-sub = Temiz başlangıç, oyunun kurulumunu ve yerel kayıtlarını Çöp kutusu'na taşır.
 
 # The switch for a game: use the stronger graphics chip.
-settings-games-stronger = Daha güçlü grafikleri kullan
+settings-games-stronger = Daha hızlı grafikleri kullan
 
 # After that switch is turned on.
-settings-games-stronger-on = Daha güçlü grafikler açık
+settings-games-stronger-on = Daha hızlı grafikler açık
 
 # After that switch is turned off.
-settings-games-stronger-off = Daha güçlü grafikler kapalı
+settings-games-stronger-off = Daha hızlı grafikler kapalı
 
 # The switch for a game: use the community Proton build.
 settings-games-proton-one = Topluluk Proton'unu kullan
@@ -146,16 +140,16 @@ settings-games-proton-one = Topluluk Proton'unu kullan
 settings-games-proton-all = Tüm oyunlar için topluluk Proton'u
 
 # Under that.
-settings-games-proton-all-sub = İlk seferde kurulur. Her oyun kendi seçebilir.
+settings-games-proton-all-sub = Bir oyun ilk kez gerek duyduğunda kurulur.
 
 # While the community Proton build is being installed.
-settings-games-proton-installing = Topluluk Proton'u kuruluyor...
+settings-games-proton-installing = Topluluk Proton'u kuruluyor…
 
 # After a game or all games are given community Proton.
 settings-games-proton-on = Topluluk Proton'u seçildi
 
 # After the choice is given back to Steam.
-settings-games-proton-off = Steam yeniden seçiyor
+settings-games-proton-off = Steam'in seçimini kullan
 
 # When community Proton was not found after installing.
 settings-games-proton-missing = Topluluk Proton'u bulunamadı.
@@ -164,7 +158,7 @@ settings-games-proton-missing = Topluluk Proton'u bulunamadı.
 settings-games-fresh = Temiz başlangıç
 
 # After a fresh start.
-settings-games-fresh-done = Çöp kutusu'na taşındı. Steam bir sonraki başlatmada yenisini oluşturur.
+settings-games-fresh-done = Kurulum Çöp kutusu'na taşındı. Oyun bir sonraki başlayışında Steam yenisini oluşturur.
 
 # When the game had no Windows setup to move.
 settings-games-fresh-none = Taşınacak bir şey yok
@@ -172,6 +166,8 @@ settings-games-fresh-none = Taşınacak bir şey yok
 # When no Steam games are installed.
 settings-games-none = Steam oyunu bulunamadı
 
-# Under that.
-settings-games-none-sub = Steam'de kurduğunuz oyunlar burada listelenir.
+# Red words when community Proton could not be installed.
+settings-games-proton-not-installed = Trindle topluluk Proton'unu kuramadı.
 
+# Red words when Steam's settings could not be changed for a game.
+settings-games-proton-not-changed = Trindle Steam'in ayarlarını değiştiremedi.

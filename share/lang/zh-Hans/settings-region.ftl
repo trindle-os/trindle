@@ -11,7 +11,7 @@ settings-region-keywords = 语言 区域 国家 格式 日期 货币
 settings-region-help = 语言和格式在你下次登录时生效。
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = 注销后重新登录即可看到。
+settings-region-later = 重新登录后可在所有地方看到。
 
 # Shown while the page reads the computer.
 settings-region-looking = 查看中…
@@ -40,7 +40,7 @@ settings-region-installed-done = 已安装
 settings-region-everything-in = 一切都使用{ $lang }。
 
 # Headline when the formats differ from the language: the names are { $lang } and { $fmt }.
-settings-region-menus-in = 菜单使用{ $lang }；日期和数字按{ $fmt }的习惯书写。
+settings-region-menus-in = 菜单使用{ $lang }。日期和数字按{ $fmt }的习惯书写。
 
 # Headline when a change is saved but waits for the next login: { $words } is the sentence so far.
 settings-region-with-wait = { $words } 注销后重新登录即可看到更改。
@@ -55,13 +55,10 @@ settings-region-language = 语言
 settings-region-formats = 格式
 
 # Help text of the Language card (the information button).
-settings-region-language-about = 语言决定菜单和消息使用的文字。格式决定日期、时间、数字、货币、度量单位和纸张尺寸的写法，可以采用另一个国家的习惯。两者都在你下次登录时生效。
+settings-region-language-about = 语言决定菜单和消息使用的文字。格式决定日期、时间、数字、货币和度量单位的写法，以及纸张尺寸，可以采用另一个国家的习惯。两者都在你下次登录时生效。
 
 # Under the Language heading.
-settings-region-language-sub = 菜单和消息，下次登录后生效。
-
-# Under the Formats heading.
-settings-region-formats-sub = 日期、数字、货币和纸张尺寸。
+settings-region-language-sub = 菜单和消息在下次登录时更改。
 
 # Heading of the line that shows a date and a number in the chosen formats.
 settings-region-date-number = 日期和数字
@@ -77,7 +74,7 @@ settings-region-add = 添加语言
 
 # Help text of the Add a language card (the information button).
 # SAFETY: needs a human review before it ships
-settings-region-add-about = 安装另一种语言，这样就可以将它用于菜单或格式。生成语言需要一点时间，并需要管理员密码。
+settings-region-add-about = 安装另一种语言，这样你就可以将它用于菜单或格式。安装一种语言需要一点时间，并需要管理员密码。
 
 # Heading of the line shown when every language is already installed.
 settings-region-all-installed = 所有语言都已安装
@@ -96,11 +93,7 @@ settings-region-install-another = 安装其他语言
 
 # Tip of the button that installs the chosen language.
 # SAFETY: needs a human review before it ships
-settings-region-install-this = 安装此语言（需要输入你的密码）
-
-# Under the Install another heading.
-# SAFETY: needs a human review before it ships
-settings-region-needs-password = 需要管理员密码。
+settings-region-install-this = 安装此语言
 
 # Heading of the line saying how many more languages can be made.
 settings-region-ready = 可添加
@@ -108,7 +101,7 @@ settings-region-ready = 可添加
 # Under the Ready to add heading: how many more languages can be made.
 settings-region-more =
     { $n ->
-       *[other] 这台电脑还可以生成 { $n } 种语言。
+       *[other] 你还可以安装 { $n } 种语言。
     }
 
 settings-region-removing = 正在移除
@@ -119,7 +112,6 @@ settings-region-remove-language = 移除此语言
 
 settings-region-kept = 这台电脑上的语言
 
-settings-region-kept-about = 这里安装的所有语言。可移除你不用的语言；你正在使用的语言会保留。需要管理员密码。
+settings-region-kept-about = 这台电脑上安装的所有语言。你可以移除不用的语言，但正在使用的那一种除外。移除语言需要管理员密码。
 
-settings-region-in-use-stays = 正在使用，所以会保留
-
+settings-region-in-use-stays = 正在使用。

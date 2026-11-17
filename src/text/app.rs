@@ -8,7 +8,7 @@ use crate::toolkit::input::{Input, Typing};
 use crate::toolkit::t;
 use crate::toolkit::ui::App;
 use crate::toolkit::widget::{Length, Node, Pointer, column};
-use super::{Answer, Bar, Msg, Text, View, dictionaries, markdown, store};
+use super::{Answer, Bar, Msg, Text, View, dictionaries, store};
 
 impl App for Text {
     type Msg = Msg;
@@ -94,8 +94,8 @@ impl Text {
             }
             Msg::Pointer(p) => {
                 let link = self.tabs[self.active].finished.borrow_mut().pointer(p);
-                if let Some(url) = link.filter(|u| markdown::html::safe_url(u)) {
-                    crate::settings::ui::open_link(&url);
+                if link.is_some_and(|u| !crate::settings::ui::open_link(&u)) {
+                    self.fail(t!("text-link-not-opened").to_string());
                 }
             }
             Msg::Scroll(_, y, steps) => self.tabs[self.active].finished.borrow_mut().scroll(y, steps),

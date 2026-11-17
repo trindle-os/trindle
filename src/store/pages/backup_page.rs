@@ -21,7 +21,7 @@ pub fn backup(s: &Store) -> Node<Msg> {
 
     let part = |head: &str, sub: &str, size: Option<&Option<String>>, on: bool, set: fn(&mut BackupPage, bool)| {
         let sub = match size {
-            Some(Some(now)) => t!("store-bk-now", sub = sub, size = now),
+            Some(Some(now)) => t!("store-bk-now", sub = sub, size = now).trim().to_string(),
             _ => sub.to_string(),
         };
         let switch = crate::toolkit::widget::switch(on, head.to_string(), move |on| go(move |s| set(&mut s.backup, !on)));
@@ -41,11 +41,11 @@ pub fn backup(s: &Store) -> Node<Msg> {
     tiles.push(list_card("document-save-symbolic", t!("store-bk-card"), vec![
         part(t!("store-bk-apps"), &t!("store-bk-apps-sub", list = apps),
              None, !b.no_apps, |p, off| p.no_apps = off),
-        part(t!("store-bk-data"), t!("store-bk-data-sub"), Some(&b.data_size),
+        part(t!("store-bk-data"), "", Some(&b.data_size),
              !b.no_data, |p, off| p.no_data = off),
-        part(t!("store-bk-appimages"), t!("store-bk-appimages-sub"), Some(&b.appimages_size), !b.no_appimages,
+        part(t!("store-bk-appimages"), "", Some(&b.appimages_size), !b.no_appimages,
              |p, off| p.no_appimages = off),
-        part(t!("store-bk-settings"), t!("store-bk-settings-sub"), None, !b.no_settings, |p, off| p.no_settings = off),
+        part(t!("store-bk-settings"), "", None, !b.no_settings, |p, off| p.no_settings = off),
         update_row(s, "bk:make", t!("store-bk-where").into(),
                    t!("store-bk-where-sub", name = file.file_name().unwrap_or_default().to_string_lossy().to_string()),
                    vec![shown]),
@@ -54,10 +54,10 @@ pub fn backup(s: &Store) -> Node<Msg> {
     let choose = job_button(s, "bk:back", "document-open-symbolic", t!("store-bk-choose"), choose_backup);
     tiles.push(list_card("document-open-symbolic", t!("store-bk-back-card"), vec![
         update_row(s, "bk:back", t!("store-bk-choose").into(),
-                   t!("store-bk-choose-sub", flat = flat::name()), vec![choose]),
+                   String::new(), vec![choose]),
         note(t!("store-bk-back-note")),
     ]));
-    if let Some((words, tone)) = s.said.get(HTTP_LINE).filter(|(w, _)| !w.is_empty()) {
+    if let Some((words, tone)) = s.words.said.get(HTTP_LINE).filter(|(w, _)| !w.is_empty()) {
         tiles.push(crate::store::help::beside(note(words.clone()).tone(*tone).key(HTTP_LINE), more_about(crate::store::help::BACKUP_HTTP)));
     }
     if let Some(w) = &b.waiting {
@@ -136,10 +136,10 @@ fn ask_backup(s: &mut Store, path: std::path::PathBuf) {
     s.say(HTTP_LINE, "", Tone::Plain);
     let looked = path.clone();
     run::on_thread(move || crate::store::backup::rule_of(&looked), s.then(move |s: &mut Store, rule: Rule| match rule {
-        Rule::Nothing => restore_backup(s, path, false),
+        Rule::Nothing => restore_flat(s, path, false),
         Rule::Line => {
             s.say(HTTP_LINE, t!("store-bk-http-line"), Tone::Warn);
-            restore_backup(s, path, false);
+            restore_flat(s, path, false);
         }
         Rule::Card => s.backup.waiting = Some(Waiting { path, ticked: false }),
     }));
@@ -148,7 +148,7 @@ fn ask_backup(s: &mut Store, path: std::path::PathBuf) {
 fn http_card(w: &Waiting) -> Node<Msg> {
     let go_on = crate::toolkit::widget::main_word(t!("store-bk-http-go")).off(!w.ticked).on_press(go(|s| {
         if let Some(w) = s.backup.waiting.take().filter(|w| w.ticked) {
-            restore_backup(s, w.path, true);
+            restore_flat(s, w.path, true);
         }
     }));
     let cancel = crate::toolkit::widget::word_button(t!("store-bk-http-cancel")).on_press(go(|s| s.backup.waiting = None));
@@ -166,36 +166,10 @@ fn http_card(w: &Waiting) -> Node<Msg> {
     ])
 }
 
-fn restore_backup(s: &mut Store, path: std::path::PathBuf, ticked: bool) {
+fn restore_flat(s: &mut Store, path: std::path::PathBuf, ticked: bool) {
 
     begin(s, "bk:back", |d| d.expect(60.0));
     s.working += 1;
-    if crate::store::flat::is_flat(&path) {
-        return restore_flat(s, path, ticked);
-    }
-    s.say("bk:back", t!("store-bk-reading"), Tone::Plain);
-    let reading = path.clone();
-    crate::store::backup::read_manifest(&reading, s.then(move |s: &mut Store, m: Result<serde_json::Value, String>| match m {
-        Err(e) => {
-            s.job_over();
-            settle(s, "bk:back", false, "");
-            s.say("bk:back", e, Tone::Problem);
-        }
-        Ok(manifest) => {
-            let say = s.heard(|s, line| restoring(s, line, None));
-            crate::store::backup::restore(path, manifest, ticked, say, s.then(|s: &mut Store, res: Result<(), String>| {
-                s.job_over();
-                settle(s, "bk:back", res.is_ok(), "");
-                match res {
-                    Ok(()) => s.say("bk:back", t!("store-bk-logout"), Tone::Plain),
-                    Err(e) => s.say("bk:back", e, Tone::Problem),
-                }
-            }));
-        }
-    }));
-}
-
-fn restore_flat(s: &mut Store, path: std::path::PathBuf, ticked: bool) {
     s.say("bk:back", t!("store-bk-reading"), Tone::Plain);
 
     let p = path.clone();

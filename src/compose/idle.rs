@@ -15,12 +15,22 @@ use smithay::{
     },
 };
 
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     pub fn notify_activity(&mut self) {
         self.idle_notifier_state.notify_activity(&self.seat);
+        self.wake_screens();
+    }
+
+    fn wake_screens(&mut self) {
+        let off: Vec<_> = self.space.outputs().filter(|o| self.backend_data.output_power(o) == Some(false)).cloned().collect();
+        for output in off {
+            if BackendData::set_output_power(self, &output, true) {
+                self.output_power_state.mode_changed(&output, true);
+            }
+        }
     }
 
     pub fn refresh_idle_inhibit(&mut self) {
@@ -44,6 +54,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
 
     pub fn refresh_suspended(&mut self) {
         let toplevels = self.xdg_shell_state.toplevel_surfaces().to_vec();
+        let showing = self.windows_showing();
         for toplevel in toplevels {
             let surface = toplevel.wl_surface();
             let drawn = smithay::backend::renderer::utils::with_renderer_surface_state(surface, |s| {
@@ -54,7 +65,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
             let change = suspend_change(
                 toplevel.is_initial_configure_sent(),
                 drawn,
-                self.is_showing(surface),
+                showing.contains(surface),
                 suspended,
             );
             if let Some(now) = change {
@@ -68,6 +79,16 @@ impl<BackendData: Backend> AnvilState<BackendData> {
                 toplevel.send_pending_configure();
             }
         }
+    }
+
+    fn windows_showing(&self) -> Vec<WlSurface> {
+        if self.is_locked() {
+            return Vec::new();
+        }
+        self.space.elements()
+            .filter(|w| !self.space.outputs_for_element(w).is_empty())
+            .filter_map(|w| w.wl_surface().map(|s| s.into_owned()))
+            .collect()
     }
 
     fn is_showing(&self, surface: &WlSurface) -> bool {
@@ -112,14 +133,14 @@ fn suspend_change(configured: bool, drawn: bool, showing: bool, suspended: bool)
     }
 }
 
-impl<BackendData: Backend + 'static> IdleNotifierHandler for AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> IdleNotifierHandler for Compose<BackendData> {
     fn idle_notifier_state(&mut self) -> &mut IdleNotifierState<Self> {
         &mut self.idle_notifier_state
     }
 }
-delegate_idle_notify!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_idle_notify!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend + 'static> IdleInhibitHandler for AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> IdleInhibitHandler for Compose<BackendData> {
     fn inhibit(&mut self, surface: WlSurface) {
         self.idle_inhibitors.push(surface);
         self.refresh_idle_inhibit();
@@ -133,7 +154,7 @@ impl<BackendData: Backend + 'static> IdleInhibitHandler for AnvilState<BackendDa
         self.refresh_idle_inhibit();
     }
 }
-delegate_idle_inhibit!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_idle_inhibit!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
 #[cfg(test)]
 mod tests {

@@ -8,17 +8,17 @@ settings-display-keywords = экран монитор разрешение ра�
 
 # Introduction under the heading of the display page, and the words behind the page i.
 # SAFETY: needs a human review before it ships
-settings-display-help = Изменения применяются сразу. Если с экраном что-то пошло не так, ничего не делайте: через 15 секунд всё вернётся само, если не нажать «Оставить». Ночной свет делает экран теплее вечером.
+settings-display-help = Изменения применяются сразу. Если с экраном что-то пошло не так, ничего не делайте. Через 15 секунд всё вернётся само, если не нажать «Оставить». Ночной свет делает экран теплее вечером.
 
 # Question along the bottom of the page while a change of displays waits to be kept.
 # SAFETY: needs a human review before it ships
 settings-display-foot-keep = Оставить такое расположение?
 
 # Sentence at the top of the page while the displays are being found.
-settings-display-looking = Осмотр экранов…
+settings-display-looking = Проверка экранов…
 
 # Sentence at the top of the page when no display was found.
-settings-display-none-found = Экраны не найдены.
+settings-display-none-found = Экран не найден.
 
 # First half of the sentence at the top of the page: no display is in use.
 settings-display-used-none = Ни один экран не используется
@@ -98,20 +98,11 @@ settings-display-rotation-of = Поворот экрана { $display }
 # Heading of the resolution line.
 settings-display-resolution = Разрешение
 
-# Small words under that line.
-settings-display-resolution-about = Сколько точек он показывает и как часто.
-
 # Heading of the size line.
 settings-display-size = Размер
 
-# Small words under that line.
-settings-display-size-about = Насколько крупно всё выглядит на этом экране.
-
 # Heading of the rotation line.
 settings-display-rotation = Поворот
-
-# Small words under that line.
-settings-display-rotation-about = Для экрана, поставленного на бок.
 
 # Heading of the line, and name of its switch, that turns a display on or off.
 settings-display-use = Использовать этот экран
@@ -119,12 +110,9 @@ settings-display-use = Использовать этот экран
 # Small words under that line for the only display in use.
 settings-display-use-only = Единственный используемый экран нельзя выключить.
 
-# Small words under that line otherwise.
-settings-display-use-off = Выключен, на нём ничего не показывается.
-
 # Words behind the i of a display's card.
 # SAFETY: needs a human review before it ships
-settings-display-card-about = Изменения применяются сразу. Если с экраном что-то пошло не так, ничего не делайте: через 15 секунд всё вернётся само, если не нажать «Оставить». Рекомендуемое разрешение родное для экрана; стандартный размер выбран Trindle для этого экрана.
+settings-display-card-about = Изменения применяются сразу. Если с экраном что-то пошло не так, ничего не делайте. Через 15 секунд всё вернётся само, если не нажать «Оставить». Рекомендуемое разрешение: то, для которого сделан экран. Стандартный размер: тот, который Trindle выбрал для этого экрана.
 
 # Name of the list of where a display sits, and heading of its line when there are more than two displays; { $display } is the display.
 settings-display-place-name = Расположение экрана { $display }
@@ -139,13 +127,13 @@ settings-display-relative = { $display } относительно { $other }
 settings-display-arrangement-title = Расположение
 
 # Words behind the i of that card.
-settings-display-arrangement-about = Как экраны стоят рядом, чтобы указатель переходил с одного на другой через общий край.
+settings-display-arrangement-about = Задайте, как экраны стоят рядом, чтобы указатель мог переходить с одного на другой через общий край.
 
 # Small words on that card while fewer than two displays are in use.
-settings-display-arrangement-waits = Включите два экрана, чтобы расположить один рядом с другим.
+settings-display-arrangement-waits = Чтобы поставить один экран рядом с другим, нужно два экрана.
 
 # Red words when the desktop refused a change of displays and gave no reason.
-settings-display-refused = Рабочий стол отказал.
+settings-display-refused = Не удалось это изменить.
 
 # Said aloud after the displays changed; { $seconds } is how long until they go back.
 settings-display-aloud-changed =
@@ -160,43 +148,31 @@ settings-display-aloud-changed =
 settings-display-not-undone = Не удалось отменить изменение. { $why }
 
 # Red words when the arrangement could not be kept for the next login.
-settings-display-not-kept = Расположение сейчас действует, но его не удалось сохранить до следующего входа.
+settings-display-not-kept = Расположение сейчас действует, но Trindle не смог сохранить его до следующего входа.
 
 # Heading of the line under the picture of the displays when the desktop refused a change.
 settings-display-nothing-changed = Ничего не изменено
 
 # Small words under that line.
-settings-display-refused-change = Рабочий стол отказал в изменении.
+settings-display-refused-change = Не удалось внести это изменение.
 
 # Heading of the line under the picture of the displays.
 settings-display-apply-at-once = Изменения применяются сразу
-
-# Small words under that line; { $seconds } is how long Keep is asked for.
-settings-display-keep-asked =
-    { $seconds ->
-        [one] Вопрос «Оставить?» внизу окна задаётся { $seconds } секунду.
-        [few] Вопрос «Оставить?» внизу окна задаётся { $seconds } секунды.
-        [many] Вопрос «Оставить?» внизу окна задаётся { $seconds } секунд.
-       *[other] Вопрос «Оставить?» внизу окна задаётся { $seconds } секунды.
-    }
 
 # Title of the night light card.
 settings-display-night-title = Ночной свет
 
 # Words behind the i of that card.
-settings-display-night-about = Вечером экран становится теплее, что легче для глаз. Он следует за закатом и рассветом, вычисленными по часовому поясу, или за вашим временем; если часовой пояс не показывает, где находится компьютер, используется заданное время.
+settings-display-night-about = Вечером экран становится теплее, что легче для глаз. Он следует за закатом и рассветом, вычисленными по вашему часовому поясу, или за временем, которое вы задали сами. Если Trindle не может определить по часовому поясу, где вы находитесь, используется заданное вами время.
 
 # Heading of the night light line, and name of its switch.
 settings-display-night = Ночной свет
-
-# Small words under that line.
-settings-display-night-about-line = Более тёплые цвета вечером.
 
 # Small words under the When line; { $zone } is the time zone.
 settings-display-when-zone = Закат и рассвет в поясе { $zone }.
 
 # Small words under the When line when the time zone gives no place.
-settings-display-when-no-place = Часовой пояс не указывает места: заданное время.
+settings-display-when-no-place = Trindle использует заданное время, потому что не знает, когда закат.
 
 # Choice in the When list: from sunset to sunrise.
 settings-display-when-sun = От заката до рассвета
@@ -216,9 +192,6 @@ settings-display-to = До
 # Heading of the warmth line, and name of its slider.
 settings-display-warmth = Теплота
 
-# Small words under the warmth line.
-settings-display-warmth-about = Насколько тёплым экран становится ночью.
-
 # Small word under the left end of the warmth slider.
 settings-display-little = Слегка
 
@@ -237,10 +210,10 @@ settings-display-one-display-tip = { $name }, { $res }
 # Spoken description of the picture of the displays when several are in use; { $n } is how many.
 settings-display-many-displays-tip =
     { $n ->
-        [one] { $n } экран, рядом, как они расположены
-        [few] { $n } экрана, рядом, как они расположены
-        [many] { $n } экранов, рядом, как они расположены
-       *[other] { $n } экрана, рядом, как они расположены
+        [one] { $n } экран
+        [few] { $n } экрана, как они расположены
+        [many] { $n } экранов, как они расположены
+       *[other] { $n } экрана, как они расположены
     }
 
 # Word drawn in the picture of the displays when none is in use.
@@ -250,26 +223,25 @@ settings-display-no-display = Нет экрана
 settings-display-your-displays = Ваши экраны
 
 # Small words under Nothing to show on when the desktop listed no displays.
-settings-display-listed-none = Рабочий стол не перечислил ни одного экрана.
+settings-display-listed-none = Trindle не нашёл ни одного экрана.
 
 # Title of the card shown when no display was found.
 settings-display-none-title = Экраны не найдены
 
 # Heading of the line in that card.
-settings-display-none-heading = Нечего показывать
+settings-display-none-heading = Экраны не найдены
 
 # Title of the card about the graphics card.
 settings-display-graphics-title = Графика
 
 # Words behind the i of that card.
-settings-display-graphics-about = В этом компьютере карта NVIDIA с открытым драйвером. Всё работает. На карте примерно с 2022 года он будет работать медленно, потому что открытый драйвер не может поднять скорость карты. Можно установить собственный драйвер NVIDIA.
+settings-display-graphics-about = В этом компьютере установлена видеокарта NVIDIA с открытым драйвером. Она работает, но карта примерно с 2022 года будет работать медленно, потому что открытый драйвер не может повысить её скорость. Вместо него можно установить собственный драйвер NVIDIA.
 
 # Heading of the line about an NVIDIA card on the open driver.
 settings-display-nvidia = Карта NVIDIA с открытым драйвером
 
 # Small words under that line.
-settings-display-nvidia-about = Работает; карта с 2022 года работает медленно.
+settings-display-nvidia-about = Карты с 2022 года и новее могут работать медленно.
 
 # Words of the link that opens help about the NVIDIA driver.
 settings-display-nvidia-help = Что с этим делать
-

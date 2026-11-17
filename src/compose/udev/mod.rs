@@ -14,6 +14,7 @@ mod paint;
 mod recovery;
 mod resting;
 pub mod run;
+mod woken;
 
 use std::{collections::hash_map::HashMap, time::Instant};
 
@@ -53,7 +54,7 @@ use crate::{
     drawing::PointerElement,
     drm_extras::drm_scanner::DrmScanner,
     protocols::screens::ScreenMode,
-    state::{AnvilState, Backend, SurfaceDmabufFeedback},
+    state::{Compose, Backend, SurfaceDmabufFeedback},
 };
 
 type UdevRenderer<'a> = MultiRenderer<
@@ -62,6 +63,8 @@ type UdevRenderer<'a> = MultiRenderer<
     GbmGlesBackend<GlesRenderer, DrmDeviceFd>,
     GbmGlesBackend<GlesRenderer, DrmDeviceFd>,
 >;
+
+pub const SCREENS_BACK_LOG: &str = "trindle_compose::screens_back";
 
 #[derive(Debug, PartialEq)]
 struct UdevOutputId {
@@ -79,7 +82,7 @@ pub struct UdevData {
     backends: HashMap<DrmNode, BackendData>,
 
     retired_leases: HashMap<DrmNode, DrmLeaseState>,
-    pointer_images: Vec<(xcursor::parser::Image, u32, MemoryRenderBuffer)>,
+    pointer_images: Vec<(paint::PointerKey, MemoryRenderBuffer)>,
     pointer_element: PointerElement,
     pointer_image: crate::cursor::Cursor,
     keyboards: Vec<smithay::reexports::input::Device>,
@@ -122,7 +125,7 @@ fn configure_pointer(device: &mut smithay::reexports::input::Device, pointer: &c
     }
 }
 
-impl AnvilState<UdevData> {
+impl Compose<UdevData> {
 
     pub fn apply_input_settings(&mut self) {
         let pointer = self.config.pointer.clone();
@@ -180,7 +183,7 @@ struct SurfaceData {
 impl Drop for SurfaceData {
     fn drop(&mut self) {
         if let Some(global) = self.global.take() {
-            self.dh.remove_global::<AnvilState<UdevData>>(global);
+            self.dh.remove_global::<Compose<UdevData>>(global);
         }
     }
 }
@@ -212,4 +215,6 @@ enum DeviceAddError {
     AddNode(egl::Error),
     #[error("Primary GPU is missing")]
     PrimaryGpuMissing,
+    #[error("Failed to watch the card for vblanks: {0}")]
+    Vblanks(String),
 }

@@ -13,20 +13,20 @@ settings-network-join-password-typed = یہ پاس ورڈ قبول نہیں ہو
 
 # Said in red under a Wi-Fi network when the password kept for it was not accepted.
 # SAFETY: needs a human review before it ships
-settings-network-join-password-kept = اس نیٹ ورک کے لیے محفوظ پاس ورڈ قبول نہیں ہوا۔ ردی کے ڈبے سے نیٹ ورک کو بھلا دیں، پھر دوبارہ شامل ہوں۔
+settings-network-join-password-kept = اس نیٹ ورک کے لیے محفوظ پاس ورڈ قبول نہیں ہوا۔ ردی کے ڈبے والے بٹن سے نیٹ ورک کو بھلا دیں، پھر دوبارہ شامل ہوں۔
 
 # Said in red under a Wi-Fi network that could not be found.
-settings-network-join-not-found = یہ نیٹ ورک نہیں ملا۔ اس کا نام اور یہ کہ یہ حد میں ہے، چیک کریں۔
+settings-network-join-not-found = Trindle کو یہ نیٹ ورک نہیں ملا۔ اس کا نام دیکھیں، اور یہ بھی دیکھیں کہ یہ حد میں ہے۔
 
 # Said in red under a Wi-Fi network that let the computer in but gave it no address.
-settings-network-join-no-address = نیٹ ورک نے اس کمپیوٹر کو آنے دیا مگر کوئی پتہ نہیں دیا۔ دوبارہ کوشش کریں، یا راؤٹر دوبارہ چالو کریں۔
+settings-network-join-no-address = یہ کمپیوٹر نیٹ ورک میں شامل ہو گیا مگر اسے کوئی پتہ نہیں ملا۔ دوبارہ کوشش کریں، یا راؤٹر دوبارہ شروع کریں۔
 
 # Said in red under a Wi-Fi network that did not let the computer join, for any other reason.
-settings-network-join-failed = نیٹ ورک نے اس کمپیوٹر کو شامل نہیں ہونے دیا۔ اس کے قریب جائیں، پھر دوبارہ کوشش کریں۔
+settings-network-join-failed = یہ کمپیوٹر نیٹ ورک میں شامل نہیں ہو سکا۔ راؤٹر کے قریب جائیں، پھر دوبارہ کوشش کریں۔
 
 # Said in red when the password typed is one a Wi-Fi network cannot have.
 # SAFETY: needs a human review before it ships
-settings-network-bad-password = Wi-Fi نیٹ ورک کا ایسا پاس ورڈ نہیں ہو سکتا۔ اسے چیک کریں، پھر دوبارہ کوشش کریں۔
+settings-network-bad-password = یہ Wi-Fi کا پاس ورڈ نہیں ہو سکتا۔ اسے چیک کریں، پھر دوبارہ کوشش کریں۔
 
 # Said in red when joining a network failed for no known reason.
 settings-network-join-refused = نیٹ ورک میں شامل نہیں ہو سکا۔
@@ -39,13 +39,13 @@ settings-network-access-open = آپ کے پاس ورڈ سے کھلتا ہے
 # SAFETY: needs a human review before it ships
 settings-network-access-change = آپ کے پاس ورڈ سے کھلتا اور بدلا جا سکتا ہے
 
-# Small line of a shared folder: anyone at home may open it.
+# Small line of a shared folder: anyone on the local network may open it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-open = گھر میں کوئی بھی کھول سکتا ہے
+settings-network-access-guests-open = مقامی نیٹ ورک پر کوئی بھی کھول سکتا ہے
 
-# Small line of a shared folder: anyone at home may change it.
+# Small line of a shared folder: anyone on the local network may change it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-change = گھر میں کوئی بھی بدل سکتا ہے
+settings-network-access-guests-change = مقامی نیٹ ورک پر کوئی بھی بدل سکتا ہے
 
 # Small line of a shared folder: where it is, then who may do what with it; both are already written.
 settings-network-shared-sub = { $place }: { $access }
@@ -67,7 +67,7 @@ settings-network-state-disconnected = منقطع
 settings-network-state-preparing = تیار ہو رہا ہے
 
 # State of a network device that is being set up.
-settings-network-state-configuring = ترتیب دیا جا رہا ہے
+settings-network-state-configuring = سیٹ اپ ہو رہا ہے
 
 # State of a network device that needs a password.
 # SAFETY: needs a human review before it ships
@@ -97,10 +97,10 @@ settings-network-top-both = تار سے منسلک ہے، اور Wi-Fi پر { $n
 # Headline of the page when connected to a Wi-Fi network; the level is strong, good, fair or weak.
 settings-network-top-wifi =
     { $level ->
-        [strong] { $name } سے منسلک، مضبوط سگنل۔
-        [good] { $name } سے منسلک، اچھا سگنل۔
-        [fair] { $name } سے منسلک، درمیانہ سگنل۔
-       *[other] { $name } سے منسلک، کمزور سگنل۔
+        [strong] { $name } سے منسلک ہے۔ سگنل مضبوط ہے۔
+        [good] { $name } سے منسلک ہے۔ سگنل اچھا ہے۔
+        [fair] { $name } سے منسلک ہے۔ سگنل درمیانہ ہے۔
+       *[other] { $name } سے منسلک ہے۔ سگنل کمزور ہے۔
     }
 
 # Headline of the page when connected by cable only.
@@ -116,7 +116,7 @@ settings-network-top-none = منسلک نہیں۔ نیچے سے کوئی نیٹ 
 settings-network-top-looking = نیٹ ورک تلاش کیے جا رہے ہیں…
 
 # Headline of the page when NetworkManager is not running.
-settings-network-top-gone = نیٹ ورک دیکھے نہیں جا سکتے: NetworkManager نہیں چل رہا۔
+settings-network-top-gone = Trindle نیٹ ورک نہیں دکھا سکتا کیونکہ NetworkManager نہیں چل رہا۔
 
 # The word for the system bus in "The system bus is not available".
 settings-network-the-bus = سسٹم بس
@@ -140,7 +140,7 @@ settings-network-signal-from =
     }
 
 # Small line under the Use Wi-Fi switch when the Wi-Fi chip needs a newer Linux.
-settings-network-chip = اس کی چپ کو نئے Linux کی ضرورت ہے۔
+settings-network-chip = Wi-Fi کو نئے Linux کی ضرورت ہے۔
 
 # Small line under the Use Wi-Fi line when the computer has no working Wi-Fi.
 settings-network-no-wifi = اس کمپیوٹر میں کام کرنے والا Wi-Fi نہیں ہے۔
@@ -161,14 +161,11 @@ settings-network-wifi-card = Wi-Fi
 settings-network-wifi-cable-card = Wi-Fi اور تار
 
 # Help text (i button) of the Wi-Fi card.
-settings-network-wifi-about = Wi-Fi اس کمپیوٹر کو تار کے بغیر نیٹ ورک سے جوڑتا ہے۔ بند ہو تو یہ نیٹ ورک تلاش کرنا چھوڑ دیتا ہے اور تھوڑی بیٹری بچاتا ہے۔ جو نیٹ ورک اپنا نام نشر نہیں کرتا وہ حد میں موجود نیٹ ورکس کی فہرست میں کبھی نظر نہیں آتا: اس سے یہاں جڑنے کے لیے اس کا نام بڑے چھوٹے حروف سمیت بالکل ٹھیک لکھیں۔ جب اس کمپیوٹر کی Wi-Fi چپ ایسی ہو جسے اس کے Linux کے کسی ڈرائیور نے ابھی تک نہیں سنبھالا، تو اسے اس سے نئے Linux کی ضرورت ہے جس پر Trindle چل رہا ہے۔ نیٹ ورک تار کی اپنی الگ لائن ہے، جس میں جوڑنے یا منقطع کرنے کا بٹن ہے۔
+settings-network-wifi-about = Wi-Fi اس کمپیوٹر کو تار کے بغیر نیٹ ورک سے جوڑتا ہے۔ اسے بند کر دیں تو یہ نیٹ ورک تلاش کرنا چھوڑ دیتا ہے اور تھوڑی بیٹری بچاتا ہے۔ جو نیٹ ورک اپنا نام چھپاتا ہے وہ حد میں موجود نیٹ ورکس کی فہرست میں کبھی نظر نہیں آتا۔ اس سے جڑنے کے لیے اس کا نام بڑے چھوٹے حروف سمیت بالکل ٹھیک لکھیں۔ کچھ Wi-Fi چپس کو ایسے ڈرائیور کی ضرورت ہوتی ہے جو Trindle کے Linux ورژن میں ابھی نہیں ہے۔ ان کے لیے Linux کا نیا ورژن چاہیے۔ نیٹ ورک تار کی اپنی الگ لائن ہے، جس میں جوڑنے یا منقطع کرنے کا بٹن ہے۔
 
 # Heading of the line with the switch that lets other computers connect, and the name of the switch.
 # SAFETY: needs a human review before it ships
 settings-network-share-switch = دوسرے کمپیوٹرز کو جڑنے دیں
-
-# Small line under that switch.
-settings-network-share-switch-sub = گھر میں فولڈرز اور پرنٹرز شیئر کرنے کے لیے۔
 
 # Line in the Sharing card while the shared folders are read.
 settings-network-share-looking = شیئر کیے گئے فولڈرز تلاش کیے جا رہے ہیں…
@@ -180,20 +177,17 @@ settings-network-share-unreadable = شیئر کیے گئے فولڈرز پڑھے
 settings-network-not-reachable = ابھی رسائی نہیں
 
 # Small line under it.
-settings-network-not-reachable-sub = جب تک یہ بند ہے دوسرے انہیں نہیں کھول سکتے۔
+settings-network-not-reachable-sub = شیئرنگ بند ہو تو دوسرے کمپیوٹر انہیں نہیں کھول سکتے۔
 
 # Line in the Sharing card when no folder is shared.
 settings-network-no-shared = کوئی فولڈر شیئر نہیں کیا گیا
-
-# Small line under it.
-settings-network-no-shared-sub = شیئر کرنے کے لیے فولڈرز میں اس پر دایاں کلک کریں۔
 
 # Heading of the Sharing card.
 settings-network-sharing = شیئرنگ
 
 # Help text (i button) of the Sharing card.
 # SAFETY: needs a human review before it ships
-settings-network-sharing-about = جب تک دوسرے کمپیوٹرز کو جڑنے دیں بند ہے، نیٹ ورک پر کوئی چیز اس کمپیوٹر تک نہیں پہنچ سکتی جب تک اس نے خود پہلے رابطہ نہ کیا ہو، اس لیے ایک ہی Wi-Fi پر کوئی قسمت آزمائی نہیں کر سکتا۔ گھر کے دوسرے کمپیوٹرز کے ساتھ فولڈر یا پرنٹر شیئر کرنے کے لیے اسے چالو کریں۔ فولڈر شیئر کرنے کے لیے اسے فولڈرز میں دایاں کلک کر کے "نیٹ ورک پر شیئر کریں" چنیں۔ ہر ایک بتاتا ہے کہ کون کیا کر سکتا ہے۔ آپ کے پاس ورڈ کے ساتھ: دوسرے آپ کے شیئرنگ پاس ورڈ سے فائلیں کھول سکتے ہیں، یا کھول اور بدل سکتے ہیں۔ گھر میں کوئی بھی: نیٹ ورک پر کوئی بھی پاس ورڈ کے بغیر فائلیں کھول سکتا ہے، یا کھول اور بدل سکتا ہے۔ سوئچ بند ہونے پر گھر کے دوسرے کمپیوٹرز ان میں سے کچھ بھی نہیں کھول سکتے۔
+settings-network-sharing-about = جب تک دوسرے کمپیوٹرز کو جڑنے دیں بند ہے، نیٹ ورک کے دوسرے کمپیوٹر اس کمپیوٹر تک صرف تب پہنچ سکتے ہیں جب اس کمپیوٹر نے پہلے ان سے رابطہ کیا ہو۔ اس سے ایک ہی Wi-Fi پر موجود کوئی بھی اندر آنے کی کوشش نہیں کر سکتا۔ گھر کے دوسرے کمپیوٹرز کے ساتھ فولڈر یا پرنٹر شیئر کرنے کے لیے اسے چالو کریں۔ فولڈر شیئر کرنے کے لیے اسے Folders میں دایاں کلک کر کے "نیٹ ورک پر شیئر کریں" چنیں۔ ہر شیئر کیا گیا فولڈر بتاتا ہے کہ کون کیا کر سکتا ہے۔ آپ کے پاس ورڈ کے ساتھ: جن کے پاس آپ کا شیئرنگ پاس ورڈ ہو وہ فائلیں کھول سکتے ہیں، یا کھول اور بدل سکتے ہیں۔ گھر میں کوئی بھی: نیٹ ورک پر موجود کوئی بھی پاس ورڈ کے بغیر فائلیں کھول سکتا ہے، یا کھول اور بدل سکتا ہے۔ سوئچ بند ہو تو گھر کے دوسرے کمپیوٹر ان میں سے کچھ بھی نہیں کھول سکتے۔
 
 # Shown under a shared folder while sharing it is stopped.
 settings-network-stopping = بند کیا جا رہا ہے…
@@ -204,7 +198,7 @@ settings-network-waiting = پاس ورڈ کا انتظار ہے...
 
 # Shown beside the sharing switch after other computers were allowed in.
 # SAFETY: needs a human review before it ships
-settings-network-sharing-allowed = شیئرنگ کی اجازت ہے
+settings-network-sharing-allowed = شیئرنگ چالو ہے
 
 # Shown beside the sharing switch after other computers were kept out.
 # SAFETY: needs a human review before it ships
@@ -232,15 +226,12 @@ settings-network-connecting = جڑ رہا ہے...
 # Line in the Networks in range card when there are none.
 settings-network-none-in-range = حد میں کوئی نیٹ ورک نہیں
 
-# Small line under it.
-settings-network-none-in-range-sub = ہر بار یہ صفحہ کھلنے پر دوبارہ تلاش کیا جاتا ہے۔
-
 # Heading of the card that lists Wi-Fi networks in range.
 settings-network-in-range = حد میں موجود نیٹ ورکس
 
 # Help text (i button) of the Networks in range card.
 # SAFETY: needs a human review before it ships
-settings-network-in-range-about = ہر وہ Wi-Fi نیٹ ورک جو یہ کمپیوٹر سن سکتا ہے۔ صفحہ کھلتے وقت، استعمال میں نیٹ ورک سب سے پہلے ہے، پھر یہاں محفوظ شدہ، پھر باقی سگنل کی مضبوطی کے لحاظ سے؛ صفحہ کھلا ہونے تک ہر لائن اپنی جگہ رہتی ہے۔ کسی سے جڑنے کے لیے تیر دبائیں؛ محفوظ نیٹ ورک پہلی بار اپنا پاس ورڈ مانگتا ہے۔ ردی کا ڈبہ محفوظ شدہ نیٹ ورک اور اس کا پاس ورڈ بھلا دیتا ہے۔ کھلا نیٹ ورک مخفی (انکرپٹڈ) نہیں ہوتا، اس لیے قریب کے لوگ اس پر بھیجی گئی چیزیں دیکھ سکتے ہیں۔
+settings-network-in-range-about = ہر وہ Wi-Fi نیٹ ورک جو یہ کمپیوٹر پکڑ سکتا ہے۔ صفحہ کھولنے پر پہلے وہ نیٹ ورک آتا ہے جو آپ استعمال کر رہے ہیں، پھر محفوظ شدہ نیٹ ورک، پھر باقی سگنل کی مضبوطی کے مطابق۔ صفحہ کھلا ہو تو یہ ترتیب نہیں بدلتی۔ نیٹ ورک سے جڑنے کے لیے تیر دبائیں۔ محفوظ نیٹ ورک پہلی بار اپنا پاس ورڈ مانگتا ہے۔ ردی کے ڈبے والا بٹن محفوظ شدہ نیٹ ورک اور اس کا پاس ورڈ بھلا دیتا ہے۔ کھلا نیٹ ورک خفیہ (انکرپٹڈ) نہیں ہوتا، اس لیے قریب کے لوگ دیکھ سکتے ہیں کہ آپ اس پر کیا بھیج رہے ہیں۔
 
 # Shown on the Networks in range card while Wi-Fi is off.
 settings-network-switch-on = حد میں موجود نیٹ ورکس دیکھنے کے لیے Wi-Fi چالو کریں۔
@@ -285,9 +276,6 @@ settings-network-password-short = Wi-Fi پاس ورڈ کم از کم 8 حروف 
 # Heading of the line for joining a hidden network, and tip of its button.
 settings-network-hidden = پوشیدہ نیٹ ورک میں شامل ہوں
 
-# Small line under it.
-settings-network-hidden-sub = اس کا نام بالکل ٹھیک لکھیں، بڑے حروف سمیت۔
-
 # Placeholder of the box where a hidden network's name is typed.
 settings-network-hidden-name = نیٹ ورک کا نام
 
@@ -296,13 +284,61 @@ settings-network-hidden-name = نیٹ ورک کا نام
 settings-network-hidden-password = پاس ورڈ، اگر ہو
 
 # Said in red when no name was typed for a hidden network.
-settings-network-name-needed = نیٹ ورک کا نام ضروری ہے۔
+settings-network-name-needed = نیٹ ورک کا نام لکھیں۔
 
 # Shown under a network after it was joined.
 settings-network-joined = شامل ہو گیا
 
 # Said in red when a join failed and the settings made for it could not be forgotten; the first sentence says why it failed.
-settings-network-kept-anyway = { $words } پھر بھی یہ محفوظ ہو گیا: دوبارہ شامل ہونے سے پہلے ردی کے ڈبے سے اسے بھلا دیں۔
+settings-network-kept-anyway = { $words } نیٹ ورک پھر بھی محفوظ ہو گیا۔ دوبارہ شامل ہونے سے پہلے ردی کے ڈبے والے بٹن سے اسے بھلا دیں۔
 
 # Said in red when a network would not disconnect.
-settings-network-disconnect-failed = یہ منقطع نہیں ہوا۔
+settings-network-disconnect-failed = منقطع نہیں کیا جا سکا۔
+
+# Heading of the card that lists the ports opened by hand.
+settings-network-ports = کھلے پورٹ
+
+# Help text (i button) of the Open ports card.
+settings-network-ports-about = ہر پورٹ بند رہتا ہے، سوائے اس کے کہ اس کمپیوٹر نے دوسرے کمپیوٹر سے پہلے رابطہ کیا ہو۔ جو پروگرام دوسروں کے جڑنے کا انتظار کرتا ہے، جیسے گیم سرور یا سنک کا ٹول، اس تک اس وقت تک نہیں پہنچا جا سکتا جب تک آپ یہاں اس کا پورٹ نہ کھولیں۔ کھلا پورٹ اس کمپیوٹر کے مقامی نیٹ ورک کے کسی بھی کمپیوٹر کو اندر آنے دیتا ہے، لیکن وسیع انٹرنیٹ کو کبھی نہیں۔ کیفے، ہوٹل یا دفتر کے نیٹ ورک پر اس میں وہاں کے باقی سب لوگ بھی آ جاتے ہیں۔ پورٹ کھولنے یا بند کرنے کے لیے ایڈمنسٹریٹر کا پاس ورڈ چاہیے۔
+
+# Line in the Open ports card when no port is open.
+settings-network-ports-none = کوئی پورٹ نہیں کھلا
+
+# Tooltip of the button that closes an open port. { $port } is like TCP 37666.
+settings-network-port-close = { $port } بند کریں
+
+# Heading of the line that opens a port.
+settings-network-port-add = پورٹ کھولیں
+
+# Placeholder in the box where the port number is typed.
+settings-network-port-number = پورٹ نمبر
+
+# Tooltip of the choice of TCP, UDP or both.
+settings-network-port-protocol = پروٹوکول
+
+# Choice: the TCP protocol only. Usually left as TCP.
+settings-network-port-tcp = TCP
+
+# Choice: the UDP protocol only. Usually left as UDP.
+settings-network-port-udp = UDP
+
+# Choice: both TCP and UDP.
+settings-network-port-both = دونوں
+
+# Button that opens the typed port.
+settings-network-port-open = کھولیں
+
+# Red words when what was typed is not a port number.
+settings-network-port-not-a-port = 1 سے 65535 تک کا نمبر لکھیں۔
+
+# Red words when the port is already open.
+settings-network-port-already = پہلے سے کھلا ہے۔
+
+# Said under the line once the port is open.
+settings-network-port-opened = کھل گیا
+
+# Part of a network's small line: it signs in with a username as well as a password, as work and university networks do.
+settings-network-username = صارف نام چاہیے
+
+# Red words when someone tries to join a network that signs in with a username.
+settings-network-username-unsupported = اس نیٹ ورک کو پاس ورڈ کے ساتھ صارف نام بھی چاہیے۔ Trindle ابھی ایسے نیٹ ورکس میں شامل نہیں ہو سکتا۔

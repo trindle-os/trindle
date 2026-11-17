@@ -24,15 +24,15 @@ session-lock-use-pin = PIN استعمال کریں
 session-lock-use-phone = فون استعمال کریں
 
 # Shown while the typed password or PIN is being checked.
-session-lock-checking = جانچ ہو رہی ہے...
+session-lock-checking = جانچ ہو رہی ہے…
 
 # Shown when the PIN has run out of time and the password is asked for instead.
 # SAFETY: needs a human review before it ships
-session-lock-pin-timed-out = PIN کا وقت ختم ہو گیا؛ اپنا پاس ورڈ لکھیں۔
+session-lock-pin-timed-out = PIN کا وقت ختم ہو گیا۔ اپنا پاس ورڈ لکھیں۔
 
 # Shown after too many wrong PINs, and the password is asked for instead.
 # SAFETY: needs a human review before it ships
-session-lock-too-many-pins = بہت زیادہ غلط PIN؛ اپنا پاس ورڈ لکھیں۔
+session-lock-too-many-pins = بہت زیادہ غلط PIN۔ اپنا پاس ورڈ استعمال کریں۔
 
 # Shown after a wrong PIN, with how many tries are left (1 is one try left).
 # SAFETY: needs a human review before it ships
@@ -43,15 +43,15 @@ session-lock-wrong-pin =
     }
 
 # Shown while the phone is asked to unlock the screen.
-session-lock-asking-phone = آپ کے فون سے پوچھا جا رہا ہے...
+session-lock-asking-phone = آپ کے فون سے پوچھا جا رہا ہے…
 
 # Shown when the phone did not unlock the screen and the PIN may be typed.
 # SAFETY: needs a human review before it ships
-session-lock-phone-no-pin = آپ کے فون نے اسے نہیں کھولا۔ اپنا PIN استعمال کریں۔
+session-lock-phone-no-pin = Trindle آپ کے فون سے نہیں کھل سکا۔ اپنا PIN استعمال کریں۔
 
 # Shown when the phone did not unlock the screen and the password must be typed.
 # SAFETY: needs a human review before it ships
-session-lock-phone-no-password = آپ کے فون نے اسے نہیں کھولا۔ اپنا پاس ورڈ لکھیں۔
+session-lock-phone-no-password = Trindle آپ کے فون سے نہیں کھل سکا۔ اپنا پاس ورڈ لکھیں۔
 
 # Shown when the password typed is not the person's password.
 # SAFETY: needs a human review before it ships
@@ -73,7 +73,7 @@ session-wallpaper-larger-4k = 4K سے بڑی
 session-wallpaper-larger-screen = آپ کی اسکرین سے بڑی
 
 # A reason a wallpaper was left out: its file is over 20 MB, or over 200 MB if it moves.
-session-wallpaper-over-20-or-200 = 20 MB سے زیادہ (چلنے والی ہو تو 200 MB سے زیادہ)
+session-wallpaper-over-20-or-200 = 20 MB سے زیادہ (متحرک ہو تو 200 MB سے زیادہ)
 
 # A reason a wallpaper was left out: its file is over 20 MB.
 session-wallpaper-over-20 = 20 MB سے زیادہ
@@ -85,7 +85,11 @@ session-wallpaper-over-200 = 200 MB سے زیادہ
 session-wallpaper-reasons-or = { $first } یا { $second }
 
 # The line that says how many wallpapers were left out and why; the count and the reasons come in.
-session-wallpaper-left-out = { $count } چھوڑ دیے گئے: { $why }۔
+session-wallpaper-left-out =
+    { $count ->
+        [one] Trindle نے { $count } تصویر چھوڑ دی کیونکہ وہ { $why } ہے۔
+       *[other] Trindle نے { $count } تصویریں چھوڑ دیں کیونکہ وہ { $why } ہیں۔
+    }
 
 # Under the lock screen when a phone or password check was given up on.
 session-lock-check-abandoned = اس میں بہت وقت لگ گیا۔ دوبارہ کوشش کریں۔
@@ -96,7 +100,7 @@ session-lock-check-abandoned = اس میں بہت وقت لگ گیا۔ دوبا�
 session-restart-question = پورا ڈیسک ٹاپ دوبارہ شروع کریں؟
 
 # Under the heading: what restarting everything does to the open windows.
-session-restart-windows = ہر کھلی ونڈو بند ہو جائے گی، اور ان میں جو کچھ محفوظ نہیں ہوا وہ ضائع ہو جائے گا۔
+session-restart-windows = ہر کھلی ونڈو بند ہو جائے گی۔ جو کچھ آپ نے محفوظ نہیں کیا وہ ضائع ہو جائے گا۔
 
 # Tip of the round button that leaves everything as it is.
 session-restart-cancel = منسوخ کریں
@@ -104,3 +108,12 @@ session-restart-cancel = منسوخ کریں
 # Main button that restarts the whole desktop.
 session-restart-go = دوبارہ شروع کریں
 
+# Under the lock screen when Enter is pressed while the last try, given up on, is still being checked.
+session-lock-still-checking = آپ کی پچھلی کوشش کی جانچ اب بھی ہو رہی ہے۔ ذرا دیر میں دوبارہ کوشش کریں۔
+
+# Under the lock screen after several wrong tries, with how many seconds to wait (1 is one second).
+session-lock-wait = 
+    { $n ->
+        [one] بہت زیادہ غلط کوششیں۔ { $n } سیکنڈ بعد دوبارہ کوشش کریں۔
+       *[other] بہت زیادہ غلط کوششیں۔ { $n } سیکنڈ بعد دوبارہ کوشش کریں۔
+    }

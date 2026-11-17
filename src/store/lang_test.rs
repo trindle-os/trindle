@@ -38,3 +38,15 @@ fn apps_follows_the_language_and_falls_back_word_by_word() {
     });
     assert_eq!(pages::links::back_name(&super::View::Home), "Discover", "and English again outside");
 }
+
+#[test]
+fn no_page_of_apps_explains_an_ordinary_control() {
+    let dir = format!("{}/share/lang/en", env!("CARGO_MANIFEST_DIR"));
+    let words: String = std::fs::read_dir(dir).unwrap().flatten().filter(|f| f.file_name().to_string_lossy().starts_with("store"))
+        .map(|f| std::fs::read_to_string(f.path()).unwrap()).collect();
+    for key in ["store-gh-press-enter", "store-installed-remove-twice", "store-upd-security-note", "store-src-address-sub", "store-src-suite-sub",
+                "store-src-components-sub", "store-src-key-sub", "store-src-program-sub", "store-bk-data-sub", "store-bk-appimages-sub",
+                "store-bk-settings-sub", "store-bk-choose-sub", "store-deb-same-version-note"] {
+        assert!(!words.lines().any(|l| l.starts_with(&format!("{key} ="))), "{key} is back");
+    }
+}

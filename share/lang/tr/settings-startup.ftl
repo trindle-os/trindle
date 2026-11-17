@@ -7,10 +7,10 @@ settings-startup-title = Oturum açılırken başlat
 settings-startup-keywords = autostart startup start login boot automatically launch delay otomatik başlat açılış başlangıç oturum gecikme
 
 # Introduction under the heading of the start at login page, and the words behind the page i.
-settings-startup-help = Oturum açtığınızda kendiliğinden açılan uygulamalar. Gecikme, bir uygulamanın önce ağı ya da başka bir uygulamayı beklemesini sağlar.
+settings-startup-help = Oturum açtığınızda kendiliğinden açılan uygulamalar. Bir uygulamanın önce ağı ya da başka bir uygulamayı beklemesi için gecikme ekleyebilirsiniz.
 
 # Sentence at the top of the page when no app starts at login.
-settings-startup-top-none = Oturum açtığınızda kendiliğinden başlayan bir şey yok.
+settings-startup-top-none = Oturum açtığınızda kendiliğinden başlayan uygulama yok.
 
 # Sentence at the top of the page when one app starts at login; { $name } is the app.
 settings-startup-top-one = Oturum açtığınızda { $name } kendiliğinden başlar.
@@ -25,8 +25,8 @@ settings-startup-top-many =
 # Second sentence at the top of the page, after a space, when apps are kept in the list but switched off; { $n } is how many.
 settings-startup-top-off =
     { $n ->
-        [one] Kapalı olarak saklanan bir tane daha var.
-       *[other] Kapalı olarak saklanan { $n } tane daha var.
+        [one] Bir tane daha kapalı.
+       *[other] { $n } tane daha kapalı.
     }
 
 # Choice in the delay list: the app starts as soon as someone logs in.
@@ -52,10 +52,13 @@ settings-startup-delay-for = { $name } için gecikme
 settings-startup-switch = Oturum açılırken başlat
 
 # Name of the bin button on an app's line that stops it starting at login.
-settings-startup-stop = Oturum açılırken başlamasını durdur
+settings-startup-stop = Oturum açılırken başlatma
 
 # Red words under an app's line when it could not be taken off the list.
-settings-startup-not-removed = Kaldırılamadı, bu yüzden oturum açılırken hâlâ başlıyor.
+settings-startup-not-removed = Trindle bunu kaldıramadı, bu yüzden oturum açılırken hâlâ başlıyor.
+
+# Under the name of a launcher that comes with the system, which can only be switched on or off; { $command } is what it runs, cut short.
+settings-startup-system = Sistemle birlikte gelir: { $command }
 
 # Red words under the add card when something could not be added.
 settings-startup-not-added = Eklenemedi.
@@ -67,19 +70,16 @@ settings-startup-find = Uygulama bul
 settings-startup-add-this = Bunu oturum açılırken başlat
 
 # Red words under an app in the add list when it was removed from the computer meanwhile.
-settings-startup-gone = Eklenemedi: uygulama artık kurulu değil.
+settings-startup-gone = Uygulama artık kurulu olmadığı için Trindle bunu ekleyemedi.
 
 # Placeholder of the box for typing a command; the example is a command, not translated words.
-settings-startup-command-example = örn. syncthing --no-browser
+settings-startup-command-example = syncthing --no-browser
 
 # Name of the button that opens a window to choose a program on the disk.
-settings-startup-browse = Diskten bir program seç
+settings-startup-browse = Bir program seç
 
 # Heading of the line for adding a command.
 settings-startup-command = Komut
-
-# Small words under the command line.
-settings-startup-command-about = Terminal'de yazıldığı gibi ya da diskteki bir program.
 
 # Red words under the command line when nothing was typed.
 settings-startup-command-empty = Bir komut yazın ya da bir program seçin.
@@ -90,14 +90,11 @@ settings-startup-chooser-title = Oturum açılırken başlayacak programı seçi
 # Heading of the line shown in the list when nothing starts at login.
 settings-startup-none-title = Kendiliğinden başlayan bir şey yok
 
-# Small words under that line.
-settings-startup-none-about = Yanındaki düğmeyle bir uygulama ekleyin.
-
 # Title of the card listing what starts at login.
 settings-startup-list-title = Oturum açılırken başlayanlar
 
 # Words behind the i of the card listing what starts at login.
-settings-startup-about = Her uygulama, ağın ya da başka bir uygulamanın hazır olması için oturum açtıktan sonra bir süre bekleyebilir. Anahtarı onu başlatmadan burada tutar; çöp kutusu ise oturum açılırken başlamasını tamamen durdurur.
+settings-startup-about = Her uygulama oturum açtıktan sonra bir süre bekleyebilir; böylece ağ ya da başka bir uygulama önce hazır olur.
 
 # Added to the words behind the i, after a space, for an app whose command is too long for its line; { $name } is the app and { $command } its command.
 settings-startup-runs = { $name } şunu çalıştırır: { $command }
@@ -111,17 +108,11 @@ settings-startup-open-command = Bir komut yazın ya da bir program seçin
 # Heading of the line for adding an installed app.
 settings-startup-app-heading = Kurulu bir uygulama
 
-# Small words under that line.
-settings-startup-app-about = Uygulama listesinden birini seçin.
-
 # Heading of the line for adding a command or a program.
 settings-startup-cmd-heading = Bir komut ya da program
 
-# Small words under that line.
-settings-startup-cmd-about = Yazılır ya da diskten seçilir.
-
 # Words behind the i of the Add an app card.
-settings-startup-add-about = Kurulu uygulamalardan seçin ya da çalıştırılacak bir komut verin; komutu Terminal'de yazacağınız gibi yazın ya da diskten bir program seçin. Bir sonraki oturum açılışında hemen başlar; listeye girdikten sonra bunun için bekleme süresi seçilebilir.
+settings-startup-add-about = Kurulu uygulamalarınızdan birini seçin ya da Terminal'de yazar gibi çalıştırılacak bir komut yazın. Diskten bir program da seçebilirsiniz. Bir sonraki oturum açışınızda başlar. Listeye girdikten sonra ona bir gecikme seçebilirsiniz.
 
 # Title of the card for adding an app.
 settings-startup-add-title = Uygulama ekle

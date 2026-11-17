@@ -10,7 +10,7 @@ settings-region-keywords = lugha eneo nchi miundo tarehe sarafu
 settings-region-help = Lugha na miundo huanza kutumika utakapoingia tena.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = Toka kisha ingia tena ili kuona.
+settings-region-later = Ingia tena ili kuona kila mahali.
 
 # Shown while the page reads the computer.
 settings-region-looking = Inatafuta…
@@ -39,7 +39,7 @@ settings-region-installed-done = Imewekwa
 settings-region-everything-in = Kila kitu kiko katika { $lang }.
 
 # Headline when the formats differ from the language: the names are { $lang } and { $fmt }.
-settings-region-menus-in = Menyu ziko katika { $lang }; tarehe na namba huandikwa kama katika { $fmt }.
+settings-region-menus-in = Menyu ziko katika { $lang }. Tarehe na namba huandikwa kwa mtindo wa { $fmt }.
 
 # Headline when a change is saved but waits for the next login: { $words } is the sentence so far.
 settings-region-with-wait = { $words } Toka kisha ingia tena ili kuona mabadiliko.
@@ -54,13 +54,10 @@ settings-region-language = Lugha
 settings-region-formats = Miundo
 
 # Help text of the Language card (the information button).
-settings-region-language-about = Lugha ni ile ya menyu na ujumbe. Miundo ni jinsi tarehe, saa, namba, pesa, vipimo na ukubwa wa karatasi vinavyoandikwa, na inaweza kufuata desturi za nchi nyingine. Vyote huanza kutumika utakapoingia tena.
+settings-region-language-about = Lugha hutumika kwa menyu na ujumbe. Miundo huamua jinsi tarehe, saa, namba, pesa na vipimo huandikwa, pamoja na ukubwa wa karatasi. Inaweza kufuata mtindo wa nchi nyingine. Vyote huanza kutumika utakapoingia tena.
 
 # Under the Language heading.
-settings-region-language-sub = Menyu na ujumbe, kuanzia utakapoingia tena.
-
-# Under the Formats heading.
-settings-region-formats-sub = Tarehe, namba, pesa na ukubwa wa karatasi.
+settings-region-language-sub = Menyu na ujumbe hubadilika utakapoingia tena.
 
 # Heading of the line that shows a date and a number in the chosen formats.
 settings-region-date-number = Tarehe na namba
@@ -75,7 +72,7 @@ settings-region-in-use = Inatumika sasa
 settings-region-add = Ongeza lugha
 
 # Help text of the Add a language card (the information button).
-settings-region-add-about = Huweka lugha nyingine, ili iweze kuchaguliwa kwa menyu au miundo. Kuitengeneza huchukua muda kidogo na kunahitaji nenosiri la msimamizi.
+settings-region-add-about = Huweka lugha nyingine, ili uweze kuichagua kwa menyu au miundo. Kuiweka huchukua muda kidogo na kunahitaji nenosiri la msimamizi.
 
 # Heading of the line shown when every language is already installed.
 settings-region-all-installed = Kila lugha tayari imewekwa
@@ -94,10 +91,7 @@ settings-region-count =
 settings-region-install-another = Weka nyingine
 
 # Tip of the button that installs the chosen language.
-settings-region-install-this = Weka lugha hii (inauliza nenosiri lako)
-
-# Under the Install another heading.
-settings-region-needs-password = Inahitaji nenosiri la msimamizi.
+settings-region-install-this = Weka lugha hii
 
 # Heading of the line saying how many more languages can be made.
 settings-region-ready = Tayari kuongezwa
@@ -105,8 +99,8 @@ settings-region-ready = Tayari kuongezwa
 # Under the Ready to add heading: how many more languages can be made.
 settings-region-more =
     { $n ->
-        [one] Lugha { $n } zaidi ambayo kompyuta hii inaweza kutengeneza.
-       *[other] Lugha { $n } zaidi ambazo kompyuta hii inaweza kutengeneza.
+        [one] Unaweza kuweka lugha { $n } zaidi.
+       *[other] Unaweza kuweka lugha { $n } zaidi.
     }
 
 settings-region-removing = Inaondolewa
@@ -117,7 +111,6 @@ settings-region-remove-language = Ondoa lugha hii
 
 settings-region-kept = Lugha kwenye kompyuta hii
 
-settings-region-kept-about = Lugha zote zilizosakinishwa hapa. Ondoa usizotumia; unayoitumia inabaki. Huomba nenosiri la msimamizi.
+settings-region-kept-about = Lugha zote zilizosakinishwa kwenye kompyuta hii. Ondoa usizotumia, isipokuwa unayoitumia. Kuondoa moja kunahitaji nenosiri la msimamizi.
 
-settings-region-in-use-stays = Inatumika, kwa hiyo inabaki
-
+settings-region-in-use-stays = Inatumika.

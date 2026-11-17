@@ -17,14 +17,14 @@ store-deb-ready = { $name } sẵn sàng để cài trong thư mục riêng của
 store-deb-elsewhere = Gói này dành cho máy tính { $arch }, nên không cài được lên máy này.
 
 # Red words at the top of the window when the package is Trindle itself.
-store-deb-trindle = Đây chính là Trindle. Nó được cập nhật từ trang Cập nhật của Ứng dụng, không phải từ một tệp.
+store-deb-trindle = Đây chính là Trindle. Hãy cập nhật từ trang Cập nhật trong Ứng dụng, không phải từ một tệp.
 
 # Red words at the top of the window for a driver or a background service.
-store-deb-service = { $name } là trình điều khiển hoặc dịch vụ chạy nền, không hoạt động được từ thư mục riêng của nó, nên không thể cài ở đây.
+store-deb-service = { $name } là trình điều khiển hoặc dịch vụ chạy nền. Nó không chạy được từ thư mục riêng của nó, nên không thể cài ở đây.
 
 # Words on the caution card above every package.
 # SAFETY: needs a human review before it ships
-store-deb-caution = Gói từ bên ngoài Debian và Trindle được cài trong thư mục riêng của nó, nơi nó bị hạn chế nhưng chưa bị cách ly hoàn toàn. Chỉ nên cài gói của những nhà phát hành bạn tin tưởng.
+store-deb-caution = Gói từ bên ngoài Debian và Trindle được cài trong thư mục riêng của nó. Nó bị hạn chế ở đó, nhưng chưa bị cách ly hoàn toàn. Chỉ cài gói của những nhà phát hành bạn tin tưởng.
 
 # Words at the top of the window once the package is installed.
 store-deb-installed = { $name } đã được cài trong thư mục riêng của nó.
@@ -37,7 +37,7 @@ store-deb-where = Nguồn gốc
 
 # Tip and spoken name of the round button that removes the package and what it saved.
 # SAFETY: needs a human review before it ships
-store-deb-remove = Gỡ nó và những gì nó đã lưu
+store-deb-remove = Gỡ nó và dữ liệu của nó
 
 # Word beside the ring while the package goes in.
 store-deb-installing = Đang cài
@@ -53,23 +53,20 @@ store-deb-update = Cập nhật
 
 # Heading of the card for a package not installed yet.
 # SAFETY: needs a human review before it ships
-store-deb-goes-in = Nó được cài trong thư mục riêng, mặc định bị hạn chế
+store-deb-goes-in = Nó được cài trong một thư mục riêng, bị hạn chế
 
 # Under that heading.
 # SAFETY: needs a human review before it ships
-store-deb-goes-in-note = Không cần mật khẩu. Nó không thể dùng internet, âm thanh hay tệp của bạn cho đến khi bạn cho phép.
+store-deb-goes-in-note = Không cần mật khẩu. Nó không thể dùng internet hay âm thanh, hoặc xem tệp của bạn, cho đến khi bạn cho phép.
 
 # Heading of the card for a package installed at this version.
 store-deb-same-version = Phiên bản { $version } đã được cài trong thư mục riêng của nó
-
-# Under that heading.
-store-deb-same-version-note = Hãy cài lại ở đó nếu nó không còn hoạt động đúng.
 
 # Heading of the card for a package installed at another version.
 store-deb-other-version = Phiên bản { $version } đã được cài trong thư mục riêng của nó
 
 # Under that heading: the version this brings.
-store-deb-other-version-note = Cài gói này ở đó sẽ nâng nó lên phiên bản { $version }, giữ nguyên những gì nó đã lưu.
+store-deb-other-version-note = Việc này cập nhật nó lên phiên bản { $version } và giữ nguyên những gì nó đã lưu.
 
 # Facts line: how big the package is once installed.
 store-deb-fact-size = Cỡ sau khi cài
@@ -81,13 +78,13 @@ store-deb-fact-arch = Dành cho
 store-deb-no-description = Gói này không có mô tả.
 
 # Words at the top of the window while the package goes in.
-store-deb-installing-note = Đang cài trong thư mục riêng của nó. Lấy những thứ nó cần có thể mất vài phút.
+store-deb-installing-note = Đang cài trong thư mục riêng của nó. Tải các phần nó cần có thể mất vài phút.
 
 # Words at the top of the window once the package is installed.
 store-deb-done = Đã cài trong thư mục riêng của nó. Bạn sẽ thấy nó trong vòng tròn Trindle.
 
 # Red words at the top of the window when parts the package needs could not be found; the parts follow.
-store-deb-missing = Đã cài trong thư mục riêng của nó, nhưng không tìm thấy các phần sau, nên nó có thể không khởi động: { $parts }.
+store-deb-missing = Đã cài trong thư mục riêng của nó, nhưng thiếu các phần sau, nên nó có thể không khởi động: { $parts }.
 
 # Words at the top of the window once the package is removed.
 # SAFETY: needs a human review before it ships
@@ -109,7 +106,7 @@ store-parts-not-deb = { $path } không phải là gói Debian có thể cài.
 store-parts-not-unpacked = Không thể giải nén { $path }.
 
 # Red words when the program is not one kept in a box.
-store-loose-not-boxed = Chương trình đó không được giữ trong hộp.
+store-loose-not-boxed = Chương trình đó không chạy trong hộp.
 
 # Name of Trindle's own terminal in the ring.
 store-boxed-terminal = Terminal
@@ -131,16 +128,16 @@ store-boxed-x-could-not-open = { $app } không mở được
 
 # Body of the notice the first time a terminal opens outside its box.
 # SAFETY: needs a human review before it ships
-store-boxed-terminal-told = Terminal có thể truy cập nhiều phần của máy tính hơn các ứng dụng khác, vì công việc của nó cần như vậy. Chỉ gõ những lệnh bạn hiểu, từ những người bạn tin tưởng.
+store-boxed-terminal-told = Terminal có thể truy cập nhiều phần của máy tính hơn các ứng dụng khác. Chỉ gõ những lệnh bạn hiểu, từ những người bạn tin tưởng.
 
-# Title of the notice when a plugin allowed the home network has none.
-store-boxed-home-off = Mạng gia đình đang tắt
+# Title of the notice when a plugin allowed the local network has none.
+store-boxed-home-off = Không có mạng cục bộ
 
 # Body of that notice: the plugin's name and why.
 store-boxed-home-off-why = { $app } không có mạng: { $why }
 
 # Why a plugin allowed the home network has none: Trindle could not find its own program.
-store-boxed-home-why-self = không tìm thấy chương trình của chính nó
+store-boxed-home-why-self = thiếu chương trình của Trindle
 
 # The same: the unshare program is missing.
 store-boxed-home-why-unshare = unshare chưa được cài
@@ -149,16 +146,16 @@ store-boxed-home-why-unshare = unshare chưa được cài
 store-boxed-home-why-pasta = pasta chưa được cài
 
 # The same: the network room was not made.
-store-boxed-home-why-not-made = không tạo được phòng mạng của nó
+store-boxed-home-why-not-made = mạng của nó chưa được thiết lập
 
 # The same: the room was not a new one, so it was left alone.
-store-boxed-home-why-not-new = phòng mạng của nó không phải phòng mới
+store-boxed-home-why-not-new = mạng của nó đã tồn tại từ trước
 
 # The same: the filter that keeps a box from making a room of its own could not be made.
-store-boxed-home-why-filter = không tạo được bộ lọc lệnh gọi hệ thống
+store-boxed-home-why-filter = Trindle không thể thiết lập bộ lọc an toàn
 
 # The same: the room's rules would not load.
-store-boxed-home-why-rules = các quy tắc của phòng mạng không nạp được
+store-boxed-home-why-rules = các quy tắc mạng của nó không nạp được
 
 # The same: a program would not start, with its name and the reason.
 store-boxed-home-why-would-not-start = { $program } không khởi động được: { $why }
@@ -167,12 +164,23 @@ store-boxed-home-why-would-not-start = { $program } không khởi động đư�
 store-boxed-home-why-pasta-said = pasta báo: { $why }
 
 # The same: pasta could not join the room and said nothing.
-store-boxed-home-why-pasta-no-join = pasta không vào được phòng mạng
+store-boxed-home-why-pasta-no-join = pasta không kết nối nó được
+
+# Said when an app can't be installed because its package has a link as a top folder. { $name } is the folder.
+store-parts-link = Thư mục trên cùng { $name } là một liên kết, nên không dùng được gói này.
+
+# Said when an app can't be installed in a box because it is a driver or a background service. { $name } is the app.
+store-boxed-driver = { $name } là trình điều khiển hoặc dịch vụ chạy nền. Loại này không chạy được từ thư mục riêng của nó, nên chưa được cài.
 
 
 # Title of the notice when a program was given a downloaded file and run in a box with no internet.
 store-downloaded-opened = Đã mở mà không có internet
 
 # Body of that notice: why, and what the program was given.
-store-downloaded-why = Nó được tải về, nên chương trình chỉ có tệp đó, chỉ để đọc.
+store-downloaded-why = Vì nó được tải về, chương trình chỉ đọc được đúng tệp đó.
 
+# Title of the notice when the desktop could not be asked for a display for an older program.
+store-boxed-x-unasked = Chương trình cũ không mở được
+
+# Body of that notice: what to do.
+store-boxed-x-unasked-why = Hãy đăng xuất rồi đăng nhập lại, sau đó thử lại

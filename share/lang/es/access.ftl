@@ -1,0 +1,129 @@
+## What an app can be allowed to do, and what goes wrong without it. Each
+## permission has a name (said after "asks for", as in "Weather asks for
+## the internet and sound"), the line under its switch, and for some a warning.
+
+access-network-name = internet
+access-network-without = No podrá conectarse a internet ni a otros equipos cercanos.
+access-sound-name = sonido
+access-sound-without = No emitirá sonido.
+access-microphone-name = tu micrófono
+access-microphone-without = No podrá oírte.
+access-sound-and-microphone-name = sonido y tu micrófono
+access-sound-and-microphone-without = No emitirá sonido y no podrá oírte.
+access-files-name = tus carpetas Documentos, Descargas, Imágenes, Música, Vídeos y Escritorio
+access-files-without = No podrá abrir tus archivos ni guardar en tus carpetas.
+access-home-name = todo lo de tu carpeta personal, incluidos los archivos de ajustes ocultos
+access-home-without = No podrá abrir tus archivos ni guardar en tus carpetas.
+access-devices-name = tu cámara y otros dispositivos conectados
+access-devices-without = No podrá verte ni usar lo que conectes.
+access-bluetooth-name = dispositivos Bluetooth, como auriculares
+access-bluetooth-without = No podrá conectarse a nada por Bluetooth.
+access-notifications-name = notificaciones
+access-notifications-without = No podrá avisarte cuando pase algo.
+access-background-name = iniciarse cuando inicias sesión
+access-background-without = Solo se ejecutará mientras lo tengas abierto.
+access-screen-name = imágenes de tu pantalla, lo que copias y escribir por ti como si fuera tu teclado
+access-screen-without = No podrá ver otras ventanas ni leer lo que copias cuando quiera.
+access-x11-name = dibujar sus ventanas a la antigua, lo que le permite vigilar otras aplicaciones antiguas y lo que se escribe en ellas
+access-x11-without = Sus ventanas no se abrirán.
+access-computer-name = trabajar fuera de su caja, con todo lo que tú mismo puedes alcanzar
+access-computer-without = Lo que escribas en él se queda dentro de su caja, así que sudo y tus propios archivos no funcionarán allí.
+access-control-name = control de tu teclado, ratón y portapapeles
+access-control-without = No podrá mover el puntero, escribir ni compartir lo que copias.
+access-capture-name = compartir tu ratón y teclado con otro equipo
+access-capture-without = El puntero no podrá pasar a otro equipo.
+access-copied-name = los archivos que copias
+access-copied-without = No podrá leer los archivos que copias, así que no puede llevarlos a otro equipo.
+access-summon-name = abrir el anillo sobre una ventana a pantalla completa, como si pulsaras la tecla
+access-summon-without = Sus teclas y clics abrirán el anillo solo en el escritorio, nunca sobre una ventana a pantalla completa.
+access-listen-name = que otros equipos de tu red local puedan acceder a ello
+access-listen-without = Otros equipos de tu red local no podrán encontrarlo ni conectarse a él.
+access-home-network-name = solo dispositivos de tu red local
+access-home-network-without = No podrá encontrar impresoras, escáneres ni otros dispositivos de la red local, ni conectarse a ellos.
+access-usb-devices-name = escáneres y dispositivos USB
+access-usb-devices-without = No podrá usar un escáner conectado a este equipo.
+access-expand-name = expandir códigos cortos mientras escribes
+access-expand-without = Sus códigos cortos no se expandirán mientras escribes.
+access-accessibility-name = leer todas las ventanas en voz alta
+access-accessibility-without = No podrá leer tus ventanas en voz alta.
+access-unnamed-name = algo que no indicó
+
+access-control-warning = Puede escribir, hacer clic y leer lo que copias como si fueras tú. Solo permítelo para un complemento de confianza.
+access-capture-warning = Mientras el puntero esté en el otro equipo, todo lo que escribas y pulses va a este complemento. Solo permítelo para un complemento de confianza.
+access-copied-warning = Puede leer justo los archivos que copias mientras esté permitido, y nada más. Solo permítelo para un complemento de confianza.
+access-summon-warning = Puede poner el anillo, que recibe todo lo que escribes, sobre un juego o una película sin que toques ninguna tecla. Solo permítelo para un complemento de confianza.
+access-home-network-warning = Puede comunicarse con todos los dispositivos de tu red local, incluido tu router, pero no con internet. Solo permítelo para un complemento de confianza.
+access-usb-devices-warning = Puede usar los escáneres y dispositivos de imagen conectados cuando se inicia, y ningún otro dispositivo USB. Solo permítelo para un complemento de confianza.
+access-expand-warning = Trindle vigila lo que escribes para detectar sus códigos y escribe sus palabras por ti. El complemento nunca ve lo que escribes. Solo permítelo para un complemento de confianza.
+access-accessibility-warning = Puede leer todo lo que hay en tu pantalla. Como cualquier lector de pantalla, también puede pulsar botones y escribir texto en otras ventanas, aunque no tiene teclado ni ratón propios. Solo permítelo para un complemento de confianza.
+
+## Titles (for a tooltip) and the line under a switch, which says what switching it off means.
+access-network-title = Internet
+access-network-off = Si está desactivado, no puede llegar a internet ni a otros equipos cercanos.
+access-sound-title = Reproducir sonido
+access-sound-off = Si está desactivado, no hay sonido.
+access-microphone-title = Tu micrófono
+access-microphone-off = Si está desactivado, no puede oírte.
+access-sound-and-microphone-title = Reproducir sonido y usar tu micrófono
+access-sound-and-microphone-off = Si está desactivado, no emite sonido y no puede oírte.
+access-files-title = Tus carpetas Documentos, Descargas, Imágenes, Música, Vídeos y Escritorio
+access-files-off = Si está desactivado, no puede abrir tus archivos ni guardar en tus carpetas.
+access-home-title = Todo lo de tu carpeta personal, incluidos los archivos de ajustes ocultos
+access-home-off = Si está desactivado, no puede abrir tus archivos ni guardar en tus carpetas.
+access-devices-title = Tu cámara y otros dispositivos conectados
+access-devices-off = Si está desactivado, no puede usar tu cámara ni nada de lo que conectes.
+access-bluetooth-title = Bluetooth, para auriculares y otras cosas cercanas
+access-bluetooth-off = Si está desactivado, no puede conectarse a nada por Bluetooth.
+access-notifications-title = Mostrar notificaciones
+access-notifications-off = Si está desactivado, no puede avisarte cuando pasa algo.
+access-background-title = Iniciarse solo cuando inicias sesión
+access-background-off = Si está desactivado, solo se ejecuta mientras lo tienes abierto.
+access-screen-title = Hacer capturas de tu pantalla, leer lo que copias y escribir como si fuera tu teclado
+access-screen-off = Si está desactivado, no puede ver otras ventanas ni leer lo que copias cuando quiera.
+access-x11-title = Dibujar sus ventanas a la antigua, lo que le permite vigilar otras aplicaciones antiguas y lo que se escribe en ellas
+access-x11-off = Si está desactivado, sus ventanas no se abren.
+access-computer-title = Trabajar fuera de su caja, con todo lo que tú mismo puedes alcanzar
+access-computer-off = Si está desactivado, lo que escribes se queda dentro de su caja, así que sudo y tus propios archivos no funcionan allí.
+access-control-title = Controlar tu teclado, ratón y portapapeles
+access-control-off = Si está desactivado, no puede mover el puntero, escribir ni compartir lo que copias.
+access-capture-title = Compartir tu ratón y teclado con otro equipo
+access-capture-off = Si está desactivado, el puntero no puede pasar a otro equipo.
+access-copied-title = Leer los archivos que copias
+access-copied-off = Si está desactivado, no puede leer los archivos que copias ni enviarlos a otro equipo.
+access-summon-title = Abrir el anillo sobre una ventana a pantalla completa, como si pulsaras la tecla
+access-summon-off = Si está desactivado, sus teclas y clics abren el anillo solo en el escritorio, nunca sobre una ventana a pantalla completa.
+access-listen-title = Dejar que otros equipos de tu red local accedan a ello
+access-listen-off = Si está desactivado, otros equipos de tu red local no pueden encontrarlo ni conectarse a él.
+access-home-network-title = Llegar solo a dispositivos de tu red local
+access-home-network-off = Si está desactivado, no puede encontrar impresoras, escáneres ni otros dispositivos de la red local, ni conectarse a ellos.
+access-usb-devices-title = Usar escáneres y dispositivos USB
+access-usb-devices-off = Si está desactivado, no puede usar un escáner conectado a este equipo.
+access-expand-title = Expandir tus códigos cortos mientras escribes
+access-expand-off = Si está desactivado, Trindle no expande sus códigos cortos mientras escribes.
+access-accessibility-title = Leer lo que muestra cada ventana y decirlo en voz alta
+access-accessibility-off = Si está desactivado, no puede leer tus ventanas en voz alta.
+access-unnamed-title = Algo que no indicó
+
+## The few words on a plugin's row of the Permissions page.
+access-note-acts-as-you = puede actuar como tú
+access-note-home-network = puede llegar a todos los dispositivos de tu red local
+access-note-usb-devices = puede usar escáneres y dispositivos de imagen
+access-note-expand = puede escribir en tus ventanas
+access-note-accessibility = puede leer todo lo que hay en tu pantalla
+
+access-listen-detail = { $ports }, solo desde equipos de tu red local. También necesita que se permita internet.
+
+## A request that is unusual for the kind of app that makes it.
+access-unusual = Esto es inusual en { $kind }. Permítelo solo si confías en el origen de esta aplicación.
+access-kind-terminal = una terminal
+access-kind-calculator = una calculadora
+access-kind-photo = una aplicación de fotos
+access-kind-text-editor = un editor de texto
+access-kind-browser = un navegador web
+access-kind-office = una aplicación de ofimática
+access-kind-graphics = una aplicación de gráficos
+access-kind-game = un juego
+access-kind-sound-video = una aplicación de sonido y vídeo
+access-kind-programming = una herramienta de programación
+access-kind-utility = una utilidad
+access-kind-other = una aplicación como esta

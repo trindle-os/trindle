@@ -46,7 +46,7 @@ text-find-replace-key = Cari dan ganti (Ctrl+H)
 text-go-to-line-key = Ke baris (Ctrl+G)
 
 # Button in the menu for a Markdown file that shows it as it will look finished, with its shortcut.
-text-finished-key = Tampilan jadi (Ctrl+E)
+text-finished-key = Pratinjau (Ctrl+E)
 
 # Button in the menu for a Markdown file that exports it as a web page. Also the title of the chooser for that.
 text-export-html = Ekspor sebagai halaman web
@@ -70,7 +70,7 @@ text-close-tab = Tutup { $name }
 text-close-bar = Tutup bilah
 
 # Words the screen reader gives the button that shows the finished look of the text, with its shortcut.
-text-finished-look = Tampilan jadi
+text-finished-look = Pratinjau
 
 # Menu item that copies everything in the text.
 text-copy-all = Salin semua teks
@@ -149,7 +149,7 @@ text-replace-all = Ganti semua
 text-replace-all-spoken = Ganti setiap kata yang ditemukan
 
 # Words on the find bar when a find has been asked for and has no match.
-text-none-found = Tidak ditemukan
+text-none-found = Tidak ada yang cocok
 
 # Words on the find bar when a find has matches. $at is which one is shown, $n how many there are.
 text-of-found = { $at } dari { $n }
@@ -181,10 +181,10 @@ text-go-to-line = Ke baris
 text-back = Kembali ke teks
 
 # Words on the spelling bar, after the word: the word was added to the person's own words.
-text-spell-added = kini menjadi salah satu kata Anda
+text-spell-added = ditambahkan ke kata Anda
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are no suggestions.
-text-spell-none = tidak ada di kamus, dan kamus tidak punya yang mirip
+text-spell-none = tidak ada di kamus, dan tidak ada saran
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are suggestions.
 text-spell-offers = tidak ada di kamus. Maksud Anda salah satu dari ini?
@@ -215,13 +215,13 @@ text-starting = Memulai
 text-when-opens = Saat Teks dibuka
 
 # First choice: Text opens the files it had open last time.
-text-reopen = Buka kembali file terakhir kali
+text-reopen = Buka kembali file sebelumnya
 
 # Second choice: Text opens with an empty page.
-text-start-blank = Mulai kosong
+text-start-blank = Mulai baru
 
 # Note under the start choice: work not saved to a file is kept whichever choice is made.
-text-keep-note = Pekerjaan yang belum disimpan ke file selalu disimpan dan kembali, apa pun pilihannya.
+text-keep-note = Pekerjaan Anda yang belum disimpan tetap disimpan dan dikembalikan, apa pun pilihan Anda.
 
 # Heading of the group on the settings page for how the text looks.
 text-showing = Tampilan teks
@@ -260,10 +260,10 @@ text-read-as = Baca file sebagai
 text-save-in = Simpan dalam
 
 # Note under the save encoding: the next save writes the file in this encoding.
-text-next-save = Penyimpanan berikutnya menulis file dalam pengodean ini.
+text-next-save = File akan memakai pengodean ini saat Anda menyimpannya lagi.
 
 # Words saying the text has changes that are not saved to its file. $path is the file.
-text-changes-not-saved = { $name } memiliki perubahan yang belum disimpan ke filenya.
+text-changes-not-saved = { $name } memiliki perubahan yang belum disimpan.
 
 # Words saying the text has changes and no file yet.
 text-not-saved = Teks ini belum disimpan ke file.
@@ -273,7 +273,10 @@ text-not-saved = Teks ini belum disimpan ke file.
 text-save-named = Simpan { $name }?
 
 # Words in the question before closing: how many other tabs with changes are left after this one. $left is the number.
-text-more-after = { $left } lagi setelah ini.
+text-more-after =
+    { $left ->
+       *[other] { $left } tab lagi untuk disimpan.
+    }
 
 # SAFETY: needs a human review before it ships
 # Button in the question before closing that closes the tab without saving it.
@@ -293,55 +296,55 @@ text-is-folder = { $name } adalah folder.
 text-too-big = { $name } terlalu besar untuk dibuka di sini.
 
 # Shown when a file could not be opened. $name is the file's path and $reason why.
-text-cannot-open = { $name } tidak dapat dibuka: { $reason }
+text-cannot-open = Trindle tidak dapat membuka { $name }: { $reason }
 
 # Shown when a file could not be written. $name is the file's path and $reason why.
-text-cannot-write = { $name } tidak dapat ditulis: { $reason }
+text-cannot-write = Trindle tidak dapat menulis { $name }: { $reason }
 
 # Shown when a file could not be saved. $name is the file's path and $reason why.
-text-cannot-save = { $name } tidak dapat disimpan: { $reason }
+text-cannot-save = Trindle tidak dapat menyimpan { $name }: { $reason }
 
 # Shown when a file could not be read again. $name is the file's path and $reason why.
-text-cannot-read = { $name } tidak dapat dibaca: { $reason }
+text-cannot-read = Tidak dapat membaca { $name }: { $reason }
 
 # Shown when the list of open work could not be written. $folder is the folder and $reason why.
-text-work-not-kept = Pekerjaan tidak dapat disimpan di { $folder }: { $reason }
+text-work-not-kept = Trindle tidak dapat menyimpan pekerjaan Anda di { $folder }: { $reason }
 
 # Shown when the settings could not be saved. $reason says why.
-text-settings-not-saved = Pengaturan tidak dapat disimpan: { $reason }
+text-settings-not-saved = Tidak dapat menyimpan pengaturan: { $reason }
 
 # Shown when a word could not be added to the person's own words. $word is the word and $reason why.
-text-word-not-added = { $word } tidak dapat ditambahkan ke kata Anda: { $reason }
+text-word-not-added = Trindle tidak dapat menambahkan { $word } ke kamus Anda: { $reason }
 
 # Shown when the list of recent files could not be cleared. $reason says why.
-text-list-not-cleared = Daftar tidak dapat dikosongkan: { $reason }
+text-list-not-cleared = Trindle tidak dapat mengosongkan daftar: { $reason }
 
 # Shown when the file chooser could not be opened.
-text-chooser-failed = Pemilih file tidak dapat dibuka.
+text-chooser-failed = Tidak dapat membuka pemilih file.
 
 # Shown when the file chooser cannot be used because there is no session bus.
-text-no-bus = File tidak dapat dipilih tanpa session bus.
+text-no-bus = Trindle tidak dapat membuka pemilih file saat ini.
 
 # Shown when the spelling language asked for is not on the computer. $lang is its name.
 text-no-dictionary = Tidak ada kamus bernama { $lang }.
 
 # Shown when a spelling dictionary could not be read. $lang is its name and $reason why.
-text-dictionary-unreadable = Kamus { $lang } tidak dapat dibaca: { $reason }
+text-dictionary-unreadable = Trindle tidak dapat membaca kamus { $lang }: { $reason }
 
 # Shown when a save was stopped and the text it held before was kept in a folder. $reason says what went wrong and $path is where the old text is kept.
-text-kept-before = { $reason }. Isinya sebelumnya disimpan di { $path }.
+text-kept-before = { $reason }. Teks yang lama disimpan di { $path }.
 
 # Shown when a save was stopped part way and the old text is kept. $why says why, and $path is where the old text is kept.
-text-kept-before-that = { $why } Isinya sebelum penyimpanan itu disimpan di { $path }.
+text-kept-before-that = { $why } Teks sebelum penyimpanan itu ada di { $path }.
 
 # Shown when a save was stopped and what was kept of it cannot be read. $name is the file's path.
-text-saved-unreadable = { $name } sedang disimpan saat Teks dihentikan, dan hasil penyimpanan yang tersisa tidak dapat dibaca.
+text-saved-unreadable = Teks ditutup saat menyimpan { $name }, dan Trindle tidak dapat membaca bagian yang sempat tersimpan.
 
 # Shown when a save was stopped and the file has changed since. $name is the file's path.
-text-saved-changed = { $name } sedang disimpan saat Teks dihentikan, dan sejak itu telah berubah, jadi dibiarkan apa adanya.
+text-saved-changed = Teks ditutup saat menyimpan { $name }. File itu telah berubah sejak itu, jadi Trindle membiarkannya apa adanya.
 
 # Shown when a save was stopped and the old text could not be put back. $name is the file's path, $reason why, and $path where the old text is kept.
-text-saved-not-put-back = { $name } sedang disimpan saat Teks dihentikan, dan tidak dapat dikembalikan seperti semula: { $reason }. Isinya sebelum penyimpanan itu disimpan di { $path }.
+text-saved-not-put-back = Teks ditutup saat menyimpan { $name }, dan Trindle tidak dapat mengembalikan file itu seperti semula: { $reason }. Teks sebelum penyimpanan itu ada di { $path }.
 
 # Quiet word beside what was just saved, exported or changed.
 text-done = Selesai
@@ -349,10 +352,13 @@ text-done = Selesai
 # Suggested file name in the Save as chooser for text never saved before.
 text-untitled-file = Tanpa judul.txt
 
+# The misspelt word, shown in quotation marks on the spelling bar. { $word } is the word.
+text-spell-word = ‘{ $word }’
+
 
 
 # Line under the Save button when the file was changed by something else after Text opened, saved or reloaded it. Nothing has been saved.
-text-changed-elsewhere = Berubah di tempat lain sejak Anda membukanya.
+text-changed-elsewhere = File ini berubah sejak Anda membukanya.
 
 # Button beside that line: save the words here over the changed file.
 text-save-anyway = Tetap simpan
@@ -360,3 +366,5 @@ text-save-anyway = Tetap simpan
 # Button beside that line: read the file again from disk and drop the unsaved changes here.
 text-reload = Muat ulang
 
+# Shown when a link in the finished look is pressed and is not a web address, or no browser started.
+text-link-not-opened = Hanya alamat web yang dapat dibuka dari sini.

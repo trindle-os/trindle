@@ -1,11 +1,11 @@
 // Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
 use super::KeyAction;
-use crate::{state::Backend, AnvilState};
+use crate::{state::Backend, Compose};
 
 const HANDS_LOOKED_UP: std::time::Duration = std::time::Duration::from_millis(500);
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     pub fn virtual_input(&mut self, from: crate::virtual_input::Maker, did: crate::virtual_input::Did) {
         if from.from_box && self.is_locked() {
@@ -59,7 +59,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
 
         if self.capture.is_active() || !did.is_press() {
             if from_box {
-                if self.capture.is_active() && did.is_press() {
+                if kept_back_while_lent(self.capture.is_active(), &did) {
                     return;
                 }
             } else if self.captured(did.taken()) {
@@ -115,4 +115,31 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         self.on_pointer_button::<crate::virtual_input::Virtual>(button);
     }
 
+}
+
+fn kept_back_while_lent(lent: bool, did: &crate::virtual_input::Did) -> bool {
+    use crate::virtual_input::Did;
+    lent && match did {
+        Did::Key(k) => k.pressed,
+        Did::Button(b) => b.pressed,
+        _ => true,
+    }
+}
+
+#[cfg(test)]
+mod lent_tests {
+    use super::kept_back_while_lent;
+    use crate::virtual_input::{Absolute, Button, Did, Key, Motion};
+
+    #[test]
+    fn a_box_moves_and_scrolls_nothing_while_the_mouse_is_lent() {
+        let moves = [Did::Motion(Motion { time: 0, dx: 1.0, dy: 0.0 }), Did::Absolute(Absolute { time: 0, x: 0.5, y: 0.5 })];
+        for did in &moves {
+            assert!(kept_back_while_lent(true, did));
+            assert!(!kept_back_while_lent(false, did));
+        }
+        assert!(kept_back_while_lent(true, &Did::Key(Key { time: 0, code: 30, pressed: true })));
+        assert!(!kept_back_while_lent(true, &Did::Key(Key { time: 0, code: 30, pressed: false })));
+        assert!(!kept_back_while_lent(true, &Did::Button(Button { time: 0, button: 272, pressed: false })));
+    }
 }

@@ -374,8 +374,8 @@ pub fn main_for(id: &str, computer: &str) -> i32 {
 
 fn unlock_command(id: &str, computer: &str) -> Command {
     use std::os::unix::process::CommandExt;
-    let program = crate::common::run::find("trindle-plugin").or_else(|| std::env::current_exe().ok()).unwrap_or_else(|| "trindle-plugin".into());
-    let mut command = Command::new(program);
+
+    let mut command = Command::new("/proc/self/exe");
     command.arg0("trindle-plugin").args(["run", id, "unlock", computer]);
     command
 }

@@ -51,3 +51,33 @@ mcp-ask-pair = 与蓝牙设备 { $address } 配对
 # SAFETY: needs a human review before it ships
 # The question for putting settings back; the name of the saved point comes in.
 mcp-ask-undo = 把设置和应用权限恢复到之前的样子：{ $note }
+
+# The question for putting back a snapshot that also holds an app's own settings file or cache; the app's id and the earlier question, in quotes, come in.
+mcp-ask-undo-app = 把 { $id } 的设置、应用权限和文件还原到之前的状态：{ $note }。如果 { $id } 已打开，会先关闭
+
+# The question for closing an app and starting it again; the app's id comes in.
+mcp-ask-restart = 关闭 { $id } 并重新启动。其中未保存的内容会丢失
+
+# The question for changing a setting in an app's own settings file; the app's id, and the setting, the file and both values in quotes, come in.
+mcp-ask-app-setting = 把 { $id } 的 { $file } 中的 { $key } 从 { $from } 改为 { $to }。如果 { $id } 已打开，会先关闭
+
+# The same question when the setting is not in the file yet and is added.
+mcp-ask-app-setting-new = 在 { $id } 的 { $file } 中添加 { $key }，值为 { $to }。如果 { $id } 已打开，会先关闭
+
+# The question for clearing an app's cache; the app's id comes in.
+mcp-ask-cache = 清除 { $id } 的缓存。如果 { $id } 已打开，会先关闭它，并保留一份缓存副本，以便恢复
+
+# The question for pairing a Bluetooth device; its name, in quotes, and its address come in.
+mcp-ask-pair-named = 与蓝牙设备 { $name }（{ $address }）配对
+
+# The question for closing a window; the window's title or app name, in quotes, comes in.
+mcp-ask-close = 关闭 { $name }
+
+# The question for opening an app; the app's name, in quotes, comes in.
+mcp-ask-open = 打开 { $name }
+
+# The question for letting an app use something; the app's Flathub id and the permission (network, home, devices, sound or bluetooth) come in.
+mcp-ask-allow = 允许 { $id } 使用 { $what }
+
+# The question for taking a permission away from an app; the app's Flathub id and the permission come in.
+mcp-ask-deny = 不再允许 { $id } 使用 { $what }

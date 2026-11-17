@@ -85,9 +85,12 @@ fn into_a_folder(c: &mut Chooser, dir: &std::path::Path, turn: Turn) {
 
 fn a_folder_made_and_a_save_held_back_and_made(c: &mut Chooser, dir: &std::path::Path, chosen: &std::rc::Rc<std::cell::RefCell<Option<Outcome>>>, turn: Turn) {
 
+    let before = super::looks::ran_on::count();
     c.update(Msg::NewFolder);
-    assert!(c.renaming.is_none() && !dir.join("Albums/New folder").exists(), "the folder was made on the window's own loop");
+    assert!(c.renaming.is_none() && !c.entries.iter().any(|e| e.name == "New folder"), "the folder was shown before a thread answered");
     assert!(turn(c, &|c| c.renaming.is_some() && c.listed && c.entries.iter().any(|e| e.name == "New folder")));
+    let ran = super::looks::ran_on::since(before);
+    assert!(!ran.is_empty() && !ran.contains(&std::thread::current().id()), "the folder was made on the window's own loop");
     c.update(Msg::RenameText("Summer".into()));
     c.update(Msg::RenameDone);
     assert_eq!(c.at, Where::Folder(dir.join("Albums")), "the folder was renamed on the window's own loop");
@@ -97,7 +100,7 @@ fn a_folder_made_and_a_save_held_back_and_made(c: &mut Chooser, dir: &std::path:
     c.update(Msg::Submit);
     assert!(c.said.is_empty() && chosen.borrow().is_none());
     assert!(turn(c, &|c| !c.said.is_empty()), "a save over a file was not held back");
-    assert!(c.said.contains("already there") && chosen.borrow().is_none());
+    assert!(c.said.contains("already exists") && chosen.borrow().is_none());
     c.update(Msg::Submit);
     assert!(turn(c, &|_| chosen.borrow().is_some()), "the second Enter did not save");
     assert_eq!(*chosen.borrow(), Some(Outcome::Chosen { uris: vec![file_uri(&dir.join("notes.txt"))], choices: Vec::new(), filter: None }));
@@ -160,14 +163,14 @@ fn the_main_button_says_replace_while_the_name_typed_is_taken() {
         let ask = Ask { title: "Made up".into(), accept: accept.clone(), mode: Mode::Save, filters: Vec::new(), filter: None, choices: Vec::new(),
                         folder: Some(dir.clone()), name: String::new(), app_id: "org.example.Paint".into() };
         let mut c = Chooser::looked(ask, |_| {});
-        let already = |c: &Chooser| c.view().said().into_iter().filter(|w| w.contains("already there")).collect::<Vec<_>>();
+        let already = |c: &Chooser| c.view().said().into_iter().filter(|w| w.contains("already exists")).collect::<Vec<_>>();
         assert_eq!(main_button(&c), (save.clone(), false), "no name yet");
         for (typed, words) in [("n", &save), ("notes.tx", &save), ("notes.txt", &"Replace".to_string()), ("notes.txt2", &save), ("Albums", &save),
                                ("list.txt", &"Replace".to_string()), (" list.txt ", &"Replace".to_string())] {
             c.update(Msg::Name(typed.into()));
             assert_eq!(main_button(&c), (words.clone(), true), "{accept:?}: {typed:?} typed");
             let taken = *words == "Replace";
-            assert_eq!(already(&c), if taken { vec![format!("{} is already there.", typed.trim())] } else { Vec::new() }, "{accept:?}: {typed:?} typed");
+            assert_eq!(already(&c), if taken { vec![format!("{} already exists.", typed.trim())] } else { Vec::new() }, "{accept:?}: {typed:?} typed");
         }
 
         c.update(Msg::Name("new.txt".into()));
@@ -217,7 +220,7 @@ fn replace_is_one_press_on_its_button_and_two_by_enter_or_a_double_click() {
     let (mut c, chosen) = start("notes.txt");
     let _ = c.view();
     c.update(Msg::Submit);
-    assert!(chosen.borrow().is_none() && c.view().said().iter().any(|w| w.starts_with("notes.txt is already there. Press Replace")), "{:?}", c.view().said());
+    assert!(chosen.borrow().is_none() && c.view().said().iter().any(|w| w.starts_with("notes.txt already exists. To replace it, press Replace")), "{:?}", c.view().said());
     assert_eq!(main_button(&c).0, "Replace");
     c.update(Msg::Submit);
     assert_eq!(saved(&chosen), there);
@@ -263,5 +266,18 @@ fn the_folders_last_chosen_in_are_whole_as_they_were_when_they_cannot_be_written
     assert_eq!(std::fs::read_dir(&dir).unwrap().count(), 1, "nothing is left beside it");
     keep_folder(&file, "org.example.Write", Path::new("/made/up/too"));
     assert_eq!(std::fs::read_to_string(&file).unwrap(), "org.example.Write\t/made/up/too\norg.example.Paint\t/made/up\n");
+    std::fs::remove_dir_all(&dir).unwrap();
+}
+
+#[test]
+fn a_folder_with_a_line_break_in_its_name_does_not_damage_the_list() {
+    let dir = std::env::temp_dir().join(format!("trindle-chooser-kept-nl-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&dir);
+    std::fs::create_dir_all(&dir).unwrap();
+    let file = dir.join("folders");
+    keep_folder(&file, "org.example.Paint", Path::new("/made/up"));
+    keep_folder(&file, "org.example.Paint", Path::new("/made\nup"));
+    keep_folder(&file, "org.example\tPaint", Path::new("/made/up"));
+    assert_eq!(folders_read(&file), "org.example.Paint\t/made/up\n");
     std::fs::remove_dir_all(&dir).unwrap();
 }

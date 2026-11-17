@@ -22,7 +22,7 @@ store-nav-updates-waiting = Atualizações ({ $n })
 store-nav-plugins = Plugins
 
 # Side bar place: apps from GitHub.
-store-nav-github = Do GitHub
+store-nav-github = Pesquisar
 
 # Side bar place: where software comes from.
 store-nav-sources = Fontes de software
@@ -38,9 +38,6 @@ store-group-settings = Configurações de aplicativos
 
 # Small heading over the categories of apps.
 store-group-categories = Categorias
-
-# Small heading over the other ways to get an app.
-store-group-more = Mais formas de obter aplicativos
 
 # Title of a page of search results; the words searched for are in the quotes.
 store-grid-results = Resultados para “{ $text }”
@@ -88,20 +85,24 @@ store-cat-utility = Utilitários
 store-cat-system = Sistema
 
 # Red words when the list of apps could not be read.
-store-catalogue-unreadable = Não foi possível ler o catálogo: { $why }
+store-catalogue-unreadable = O Trindle não conseguiu ler o catálogo: { $why }
 
 # Red words when Flathub's list of apps could not be fetched. { $why } is what Flatpak said.
-store-catalogue-not-fetched = Não foi possível baixar a lista de aplicativos do Flathub. Verifique a conexão com a internet. { $why }
+store-catalogue-not-fetched = O Trindle não conseguiu baixar a lista de aplicativos do Flathub. Verifique a sua conexão com a internet. { $why }
 
 # Red words under the search box when nothing that was dropped on the window is a kind Apps takes.
-store-dropped-only = Só arquivos .deb, .AppImage e .flatpakref podem ser soltos aqui.
+store-dropped-only = Você só pode soltar aqui arquivos .deb, .AppImage e .flatpakref.
 
 # Red words under an app that Flatpak did not update; what Flatpak said follows.
-store-not-updated-said = Não atualizado. O Flatpak disse: { $why }
+store-not-updated-said = O Flatpak não o atualizou: { $why }
 
 # Red words under an app that Flatpak did not update and gave no reason for.
-store-not-updated-none = Não atualizado, e o Flatpak não deu motivo.
+store-not-updated-none = Não foi atualizado. Nenhum motivo foi informado.
 
 # Side bar place and title: the AppImages AppImageHub lists.
 store-nav-browse = Explorar AppImages
+
+
+# Heading of the Flatpaks a detailed search found on Flathub.
+store-gh-flathub = Flatpaks no Flathub ({ $n })
 

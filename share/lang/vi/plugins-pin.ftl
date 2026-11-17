@@ -5,13 +5,13 @@
 plugins-pin-four = Mã PIN gồm 4 chữ số.
 
 # Note on the PIN card, always shown.
-plugins-pin-not-saved = Mã PIN không được lưu lại
+plugins-pin-not-saved = Mã PIN chưa được lưu
 
 # Red words on the PIN card when the unlocking command gave no answer of its own.
 plugins-pin-no-answer = Máy tính kia không trả lời.
 
 # Red words on the PIN card when the unlocking command refused without saying why.
-plugins-pin-not-unlocked = Chưa mở khóa.
+plugins-pin-not-unlocked = Vẫn đang khóa.
 
 # Name the screen reader gives to the four dots on the PIN card.
 plugins-pin-dots = PIN
@@ -30,4 +30,3 @@ plugins-pin-send = Gửi
 # Heading of the PIN card, and the title of its window.
 # SAFETY: needs a human review before it ships
 plugins-pin-title = Mở khóa bằng PIN
-

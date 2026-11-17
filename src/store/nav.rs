@@ -10,6 +10,7 @@ impl Store {
 
     pub(super) fn page_key(&self) -> String {
         match (&self.detail, &self.image, &self.view) {
+            _ if pages::flatpak_page::showing(self) => "flatpak".into(),
             _ if self.awaiting() => "loading".into(),
             (Some(a), _, _) => format!("app:{}", a.id),
             (None, Some(f), _) => format!("image:{}", pages::image_tile::key_of(f)),
@@ -30,23 +31,23 @@ impl Store {
         if self.page_key() == was {
             return;
         }
-        if let Some(t) = self.fading.take() {
+        if let Some(t) = self.fade_in.tween.take() {
             t.stop();
         }
         if !crate::common::graphics::moving() {
-            self.fade = 1.0;
+            self.fade_in.shown = 1.0;
             return;
         }
-        self.fade = 0.0;
+        self.fade_in.shown = 0.0;
         let asks = self.asks.clone();
-        self.fading = Some(tween(&self.events, FADE_MS, Ease::Out, move |t| { asks.send(Do::Fade(t)); }, || {}));
+        self.fade_in.tween = Some(tween(&self.events, FADE_MS, Ease::Out, move |t| { asks.send(Do::Fade(t)); }, || {}));
     }
 
     pub(super) fn show_pending_app(&mut self) {
         if self.apps.is_empty() {
             return;
         }
-        let Some(id) = self.pending_app.take() else { return };
+        let Some(id) = self.opening.app.take() else { return };
         match self.apps.get(&id).cloned() {
             Some(a) => self.open_detail(a),
             None => self.top = Some((t!("store-not-in-catalogue", id = id), Tone::Problem)),
@@ -74,6 +75,7 @@ impl Store {
         self.detail = None;
         self.image = None;
         self.headline = None;
+        pages::flatpak_page::forget(self);
         if let Some(id) = hosted {
             self.show_hosted(id);
             return;
@@ -81,13 +83,13 @@ impl Store {
         self.shown = PAGE;
 
         if key != "updates" {
-            self.pending_spot = None;
+            self.spot.asked = None;
         }
         self.view = self.opened_view(key);
     }
 
     fn show_hosted(&mut self, id: String) {
-        self.pending_spot = None;
+        self.spot.asked = None;
         if let Some(h) = self.hosted.as_mut() {
             h.show(&id);
         }
@@ -138,7 +140,7 @@ impl Store {
     }
 
     pub(super) fn want_listed(&mut self) {
-        if self.show.appimages() {
+        if self.prefs.show.appimages() {
             browse::want_hub(self);
         }
     }
@@ -151,6 +153,7 @@ impl Store {
         self.search = text;
         self.detail = None;
         self.image = None;
+        pages::flatpak_page::forget(self);
         self.shown = PAGE;
         let words = self.search.trim().to_string();
         if !words.is_empty() {
@@ -165,16 +168,12 @@ impl Store {
     pub(super) fn open_detail(&mut self, a: App) {
         self.headline = None;
         self.image = None;
-        if !self.reviews.contains_key(&a.id) {
-            self.reviews.insert(a.id.clone(), None);
+        if self.heard.ratings.ask(&a.id) {
             let id = a.id.clone();
-            reviews::ratings(&a.id, self.then(move |s: &mut Store, r| {
-                s.reviews_heard.insert(id.clone());
-                s.reviews.insert(id, r);
-            }));
+            reviews::ratings(&a.id, self.then(move |s: &mut Store, r| s.heard.ratings.answer(id, r)));
             let id = a.id.clone();
             reviews::reviews(&a.id, self.then(move |s: &mut Store, list| {
-                s.said_about.insert(id, list);
+                s.heard.reviews.insert(id, list);
             }));
         }
         pages::pictures::fetch_pictures(self, &a);

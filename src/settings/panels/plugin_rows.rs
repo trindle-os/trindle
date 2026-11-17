@@ -147,7 +147,7 @@ impl Card {
                 let shown: Vec<(usize, String)> = options.iter().enumerate().filter_map(|(i, o)| Some((i, self.words.say(&o.text, None)?))).collect();
                 let chosen = row.kind.chosen(status).and_then(|c| shown.iter().position(|(i, _)| *i == c));
                 let picks: Vec<usize> = shown.iter().map(|(i, _)| *i).collect();
-                dropdown(kit, &key, shown.into_iter().map(|(_, w)| w).collect(), chosen, &label, move |n| {
+                dropdown(&key, shown.into_iter().map(|(_, w)| w).collect(), chosen, &label, move |n| {
                     let (id, i) = (id.clone(), picks[n]);
                     on::<Plugins>(move |me, k| me.rows.act(k, &id, ri, Act::Pick(i)))
                 })
@@ -234,7 +234,7 @@ send = "unpair"
     #[test]
     fn a_daemon_that_does_not_answer_is_said_with_no_rows() {
         let none = said(card("null"));
-        assert!(none.iter().any(|w| w == "Thing is not answering. Its service may be stopped."), "{none:?}");
+        assert!(none.iter().any(|w| w == "Thing isn't responding. Its service may have stopped."), "{none:?}");
         assert!(!none.iter().any(|w| w == "Use it"), "{none:?}");
     }
 }

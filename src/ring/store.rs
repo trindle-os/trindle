@@ -1,10 +1,9 @@
-//! Persisted favorites order and per-app launch counts.
+//! The favourites, kept in order.
 
-use std::collections::HashMap;
 use std::time::SystemTime;
 
 use crate::common::favourites::{from_text, renamed, HEADER};
-use crate::common::files::{config_path, read_text, write_text};
+use crate::common::files::{config_path, read_text};
 
 pub use crate::common::favourites::MAX as MAX_FAVOURITES;
 #[cfg(test)]
@@ -23,7 +22,7 @@ pub fn favourites() -> Vec<String> {
 
 pub fn save_favourites(ids: &[String]) {
     if let Err(e) = crate::common::favourites::save(&config_path("favourites"), ids) {
-        eprintln!("trindle-ring: could not save favorites: {e}");
+        eprintln!("trindle-ring: could not save favourites: {e}");
         crate::common::crash::error("E_SAVE_FAILED");
     }
 }
@@ -40,43 +39,6 @@ pub fn move_favourite(ids: &mut Vec<String>, from: &str, to: &str) -> bool {
 
 pub fn favourites_changed_at() -> Option<SystemTime> {
     std::fs::metadata(config_path("favourites")).and_then(|m| m.modified()).ok()
-}
-
-pub const USAGE_DAMAGED: &str = "Launch counts";
-
-pub fn usage_in(file: &std::path::Path) -> HashMap<String, u32> {
-    crate::common::damaged::read(file, USAGE_DAMAGED, |l| l.split_once(' ').is_some_and(|(n, _)| n.parse::<u32>().is_ok()))
-        .lines()
-        .filter_map(|l| {
-            let (n, id) = l.split_once(' ')?;
-            Some((renamed(id.trim()).to_string(), n.parse::<u32>().ok()?))
-        })
-        .fold(HashMap::new(), |mut counts, (id, n)| {
-            *counts.entry(id).or_insert(0) += n;
-            counts
-        })
-}
-
-pub fn record_use(app_id: &str) {
-    record_use_in(&config_path("usage"), app_id);
-}
-
-pub(crate) fn record_use_in(file: &std::path::Path, app_id: &str) {
-    let mut counts = usage_in(file);
-
-    if crate::common::damaged::may_write(file, USAGE_DAMAGED).is_err() {
-        return;
-    }
-    *counts.entry(app_id.to_string()).or_insert(0) += 1;
-    let mut lines: Vec<_> = counts.into_iter().collect();
-    lines.sort_by_key(|k| std::cmp::Reverse(k.1));
-    lines.truncate(500);
-    let text = lines.iter().fold(String::new(), |mut s, (id, n)| {
-        let _ = std::fmt::Write::write_fmt(&mut s, format_args!("{n} {id}\n"));
-        s
-    });
-
-    let _ = write_text(file, &text);
 }
 
 #[cfg(test)]

@@ -4,11 +4,7 @@ use std::path::{Path, PathBuf};
 
 pub use crate::toolkit::common::needs::{file, file_with, program, programs};
 
-const LEFT: &[(&str, &str, &str)] = &[(
-    "settings/panels/thanks.rs",
-    "the_website_thanks_the_same_projects_as_the_app",
-    "the website is a repository of its own, trindle-site, beside this one; a clone of Trindle alone has no page to compare, and says so",
-)];
+const LEFT: &[(&str, &str, &str)] = &[];
 
 fn ways() -> Vec<String> {
     let asks = ["can_pdf", "can_video", "can_play", "bwrap", "ffmpeg", "ffprobe", "pdftoppm"];

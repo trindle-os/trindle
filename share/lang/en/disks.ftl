@@ -9,22 +9,19 @@ disks-title = Drives
 disks-about-tip = About this page
 
 # First paragraph of the longer words that open from the i beside the title.
-disks-help-1 = Every drive in or plugged into this computer, drawn as a bar of its parts. Each part is as wide as it is big and filled as far as it is used, so a full part is easy to spot.
+disks-help-1 = This shows every drive in or plugged into this computer, as a bar split into its partitions. Each partition's width shows its size, and its shading shows how full it is, so a full one is easy to spot.
 
 # Second paragraph of the longer words that open from the i beside the title.
-disks-help-2 = Under the picture, each drive has a card. Open a part, mount or unmount it, or take a drive out safely or power it off. The pencil on a part floats its changes: its name, a folder of its own and whether it is ready at start-up, its size, checking and repairing it, formatting it or deleting it. The plus in free space makes a new part.
+disks-help-2 = Under the picture, each drive has a card. You can open a partition, mount or unmount it, remove a drive safely, or switch it off. The pencil on a partition lets you rename it, choose its folder, mount it at start-up, resize, check, repair, format or delete it. The plus in free space makes a new partition.
 
 # Third paragraph of the longer words that open from the i beside the title.
-disks-help-3 = The drive the system runs from is shown but never offered for any change that erases or moves things. Every change to any drive asks for an administrator's password, each time. The eye hides a drive or a part from Folders and the ring: it stays here, greyed, and is not locked.
-
-# Sentence under the title of the main card, saying what the picture of the drives shows.
-disks-map-caption = Each part of each drive, filled as far as it is used.
+disks-help-3 = You can see the drive the system runs from, but you can't make any change to it that erases or moves things. Every change to any drive asks for an administrator's password, each time. The eye hides a drive or partition from Folders and the ring. It stays here, greyed out, and it isn't locked.
 
 # Title of the main card, which draws every drive as a bar of its parts.
 disks-your-drives = Your drives
 
 # Red sentence at the top of the page when the list of drives could not be read at all.
-disks-cannot-read = The drives cannot be read right now.
+disks-cannot-read = Can't read the drives right now.
 
 # Tip of the round button that asks for the list of drives again, on the card shown when the drive service is missing.
 disks-try-again = Try again
@@ -33,7 +30,7 @@ disks-try-again = Try again
 disks-look-again = Look again
 
 # Line shown on the main card when the computer lists no drive at all.
-disks-no-drives = No drives were found. Plug one in and it appears here.
+disks-no-drives = No drives were found. Plug one in and it will appear here.
 
 # Name of the program that is missing, in the red words when the drive service cannot be reached.
 disks-missing-service = The drive service
@@ -42,7 +39,7 @@ disks-missing-service = The drive service
 disks-missing-bus = The system bus
 
 # Red words on the card shown when what Drives needs is not there. { $what } is the name of the missing program; { $package } is the package to install.
-disks-missing = { $what } is not available. Install it with: sudo apt install { $package }
+disks-missing = { $what } isn't available. To install it, run: sudo apt install { $package }
 
 ## The sentence at the top (src/disks/mod.rs)
 
@@ -50,7 +47,7 @@ disks-missing = { $what } is not available. Install it with: sudo apt install { 
 disks-headline-loading = Looking at the drives…
 
 # Red sentence at the top of the page when a drive says it is failing. { $name } is the drive's name.
-disks-headline-failing = { $name } is failing. Copy anything you want to keep off it now.
+disks-headline-failing = { $name } is failing. Copy any files you want to keep to another drive now.
 
 # Sentence at the top of the page when a drive has worn-out or damaged spots. { $name } is the drive's name; { $troubles } lists what is wrong.
 disks-headline-look = { $name } needs a look: { $troubles }.
@@ -58,33 +55,33 @@ disks-headline-look = { $name } needs a look: { $troubles }.
 # Sentence at the top of the page when nothing is wrong. { $plugged } is how many drives are plugged in from outside.
 disks-headline-calm =
     { $plugged ->
-        [0] Drives and the space on them.
-        [one] Drives and the space on them, and a drive plugged in.
-       *[other] Drives and the space on them, and { $plugged } drives plugged in.
+        [0] Your drives and the space on them.
+        [one] Your drives and the space on them, with a drive plugged in.
+       *[other] Your drives and the space on them, with { $plugged } drives plugged in.
     }
 
 # Red sentence at the top of the page when the computer's own disk is almost full. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-full =
     { $plugged ->
-        [0] Nearly full: only { $free } free on this computer. Delete or move some files soon.
-        [one] Nearly full: only { $free } free on this computer, and a drive plugged in. Delete or move some files soon.
-       *[other] Nearly full: only { $free } free on this computer, and { $plugged } drives plugged in. Delete or move some files soon.
+        [0] This computer is nearly full, with only { $free } free. Delete or move some files soon.
+        [one] This computer is nearly full, with only { $free } free. A drive is plugged in. Delete or move some files soon.
+       *[other] This computer is nearly full, with only { $free } free. { $plugged } drives are plugged in. Delete or move some files soon.
     }
 
 # Sentence at the top of the page when the computer's own disk is filling up. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-getting-full =
     { $plugged ->
-        [0] Getting full: { $free } free on this computer.
-        [one] Getting full: { $free } free on this computer, and a drive plugged in.
-       *[other] Getting full: { $free } free on this computer, and { $plugged } drives plugged in.
+        [0] This computer is getting full, with { $free } free.
+        [one] This computer is getting full, with { $free } free. A drive is plugged in.
+       *[other] This computer is getting full, with { $free } free. { $plugged } drives are plugged in.
     }
 
 # Sentence at the top of the page when the computer's own disk has plenty of room. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-plenty =
     { $plugged ->
-        [0] Plenty of room: { $free } free on this computer.
-        [one] Plenty of room: { $free } free on this computer, and a drive plugged in.
-       *[other] Plenty of room: { $free } free on this computer, and { $plugged } drives plugged in.
+        [0] There's plenty of room on this computer, with { $free } free.
+        [one] There's plenty of room on this computer, with { $free } free. A drive is plugged in.
+       *[other] There's plenty of room on this computer, with { $free } free. { $plugged } drives are plugged in.
     }
 
 ## How full the places are (src/disks/mod.rs)
@@ -98,7 +95,7 @@ disks-ring-files = Your files
 # Sentence on a ring's card. { $free } is the free space; { $place } is system for the disk the system is on, or files for the place that holds your own files.
 disks-ring-still-free =
     { $place ->
-        [system] { $free } still free, where the system is.
+        [system] { $free } still free on the disk the system is on.
        *[files] { $free } still free, for your own files.
     }
 
@@ -111,22 +108,23 @@ disks-ring-of = of { $whole }
 ## The drives together (src/disks/mod.rs)
 
 # Health reading in the line under the picture when no drive has taken a reading yet.
-disks-health-none = No readings, the drives do not say how they are
+disks-health-none = The drives haven't sent any health readings yet
 
 # Health reading in the line under the picture when the one drive that has taken a reading is fine.
-disks-health-one = Healthy, as the drive itself says
+disks-health-one = Healthy, by the drive's own check
 
 # Health reading in the line under the picture when every drive is fine. { $n } is how many drives say so.
 disks-health-all =
     { $n ->
-       *[other] Healthy, as all { $n } drives say
+        [one] Healthy, according to the drive's own check
+       *[other] All { $n } drives passed their own checks
     }
 
 # Health reading in the line under the picture when some drives need a look. { $n } is how many.
 disks-health-look =
     { $n ->
-        [one] { $n } needs a look, see its card
-       *[other] { $n } need a look, see their cards
+        [one] { $n } needs a look: see its card
+       *[other] { $n } need a look: see their cards
     }
 
 # Line under the picture of the drives. { $n } is how many drives there are; { $total } is their size together; { $health } says how healthy they are.
@@ -177,7 +175,7 @@ disks-spoken-drive = { $name }, { $words }: { $parts }.
 ## Parts and drives (src/disks/mod.rs)
 
 # Name given to a part that has no label and no device name.
-disks-part-name = Part
+disks-part-name = Partition
 
 # Name given to a drive that gives no maker or model.
 disks-drive-name = Drive
@@ -195,7 +193,7 @@ disks-kind-crypto-open = Encrypted, unlocked
 disks-kind-crypto-locked = Encrypted, locked
 
 # Kind of a part that holds other parts.
-disks-kind-container = Holds other parts
+disks-kind-container = Holds partitions
 
 # Kind of a part that has no filesystem on it.
 disks-kind-none = No filesystem
@@ -203,9 +201,9 @@ disks-kind-none = No filesystem
 # A part's kind with what the computer uses it for. { $kind } is the kind; { $role } is efi, legacy or loader.
 disks-kind-role =
     { $role ->
-        [efi] { $kind }, EFI, the part a computer starts from
-        [legacy] { $kind }, the part an older computer starts from
-       *[loader] { $kind }, a boot loader's own part
+        [efi] { $kind }, EFI, the partition a computer starts from
+        [legacy] { $kind }, the partition an older computer starts from
+       *[loader] { $kind }, a boot loader's own partition
     }
 
 # One line in the list of kinds a part can be formatted as. { $name } is the name of the kind of file system; { $what } says what it is for.
@@ -235,16 +233,16 @@ disks-trouble-temperature = too hot
 disks-trouble-wearing-out = wearing out
 
 # Trouble a drive reports when it has made itself read-only.
-disks-trouble-readonly = has made itself read-only
+disks-trouble-readonly = has gone read-only
 
 # Trouble a drive reports about the memory it uses to back up its work.
 disks-trouble-volatile = its memory backup has failed
 
 # Trouble a drive reports when part of it has made itself read-only.
-disks-trouble-pmr = part of it has made itself read-only
+disks-trouble-pmr = part of it has gone read-only
 
 # Trouble a drive reports when it has been used past what its maker expects.
-disks-trouble-worn = worn past what its maker expects
+disks-trouble-worn = worn past its expected life
 
 # Trouble a drive reports about damaged spots. { $n } is how many.
 disks-health-damaged =
@@ -264,7 +262,7 @@ disks-health-hours =
     }
 
 # How a drive says it is when it is failing, on its card.
-disks-health-failing = Failing: copy anything you want to keep off it now
+disks-health-failing = Failing. Copy anything you want to keep off it now
 
 # How a drive says it is when something is wrong, on its card. { $troubles } lists what is wrong.
 disks-health-attention = Needs attention: { $troubles }
@@ -278,16 +276,16 @@ disks-health-line = { $state }, { $readings }
 ## The card of a drive (src/disks/mod.rs)
 
 # Line under a drive's name when its case answers but the drive inside it does not.
-disks-no-answer = No drive answering
+disks-no-answer = Not answering
 
 # Red words on a drive's card when its case answers but the drive inside it does not.
-disks-no-answer-help = The case answers, but not the drive inside it. Unplug it, wait ten seconds and plug it into a blue or USB-C port with its own cable; if it stays like this, the drive inside may have come loose or failed.
+disks-no-answer-help = The drive's case is connected, but the drive inside isn't responding. Unplug it, wait ten seconds, then plug it into a blue or USB-C port using its own cable. If it stays like this, the drive inside may have come loose or failed.
 
 # Tip of the round button on a drive's card that takes the drive out safely.
 disks-remove-safely = Remove safely
 
 # Tip of the round button on a drive's card that powers the drive off.
-disks-power-off-tip = Power it off
+disks-power-off-tip = Switch off
 
 # Tip of the round button on a drive's card that opens the box for erasing the whole drive, and the name of that box's row and its button.
 disks-erase-whole = Erase the whole drive
@@ -296,24 +294,24 @@ disks-erase-whole = Erase the whole drive
 disks-eye-show =
     { $what ->
         [drive] Show this drive
-       *[part] Show this part
+       *[partition] Show this partition
     }
 
 # Tip of the eye that hides a drive or part. { $what } is drive or part; { $lock } is the note that hiding does not protect it.
 disks-eye-hide =
     { $what ->
         [drive] Hide this drive. { $lock }
-       *[part] Hide this part. { $lock }
+       *[partition] Hide this partition. { $lock }
     }
 
 # Note on the card of a hidden drive. { $lock } is the note that hiding does not protect it.
 disks-hidden-note = Hidden from Folders and the ring. { $lock }
 
 # Note on the card of the drive the system runs from.
-disks-system-note = The system runs from it: nothing here can be erased.
+disks-system-note = The system runs from it, so nothing here can be erased.
 
 # Note on the card of a drive that has no partition table.
-disks-no-table = No partition table: the whole drive is free.
+disks-no-table = This drive has no partition table, so all of it is free.
 
 ## The rows of parts (src/disks/mod.rs)
 
@@ -339,7 +337,7 @@ disks-mount = Mount
 disks-unmount = Unmount
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = Change it
+disks-change-it = Make changes
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = Name
@@ -369,7 +367,7 @@ disks-folder-note = Where its files appear. Leave it empty to let the computer c
 disks-mount-startup = Mount at start-up
 
 # Note under the row with the switch for mounting a part at start-up.
-disks-startup-note = Ready whenever the computer starts. If it is not there, the computer starts anyway.
+disks-startup-note = Mounts it whenever the computer starts. If it's missing, the computer still starts.
 
 # Spoken name of the sliders that choose a size in gigabytes, for resizing a part and for making a new one.
 disks-size-gb = Size in GB
@@ -387,19 +385,19 @@ disks-resize-tip = Resize it
 disks-size = Size
 
 # Said above the Format and Erase buttons at all times. { $words } names what is erased.
-disks-format-erases = This will erase everything on { $words }. It cannot be undone.
+disks-format-erases = This will erase everything on { $words }. You can't undo this.
 
 # Warning shown after the first press of the resize button. { $name } is the part; { $drive } is the drive; { $from } is its size now; { $to } is the size asked for.
-disks-resize-warning = Click again: { $name } on { $drive } goes from { $from } to { $to }
+disks-resize-warning = Click again to change { $name } on { $drive } from { $from } to { $to }
 
 # Warning shown after the first press of the resize button when the part gets smaller. { $name } is the part; { $drive } is the drive; { $from } is its size now; { $to } is the size asked for.
-disks-resize-warning-shrink = Click again: { $name } on { $drive } goes from { $from } to { $to }. Back up its files first, as a power cut while it shrinks can lose them.
+disks-resize-warning-shrink = Click again to change { $name } on { $drive } from { $from } to { $to }. Back up its files first, because a power cut while it shrinks can lose them.
 
 # Red words under the size when a Windows part was hibernated or left in fast start-up and so is not made smaller. { $name } is the part.
 disks-windows-asleep = Windows on { $name } was hibernated or left in fast start-up, so making it smaller could lose its files. Start Windows, choose Restart, then try again.
 
 # Label of the row where room is made for a new part under a part that is in use.
-disks-room-label = Make room for a new part
+disks-room-label = Room for a new partition
 
 # Spoken name of the slider that chooses how much room to make.
 disks-room-gb = Room in GB
@@ -408,10 +406,10 @@ disks-room-gb = Room in GB
 disks-room-tip = Make room
 
 # Warning shown after the first press of the make room button. { $name } is the part; { $drive } is the drive; { $size } is the room asked for.
-disks-room-warning = Click again: { $name } on { $drive } loses { $size }, after a snapshot
+disks-room-warning = Click again to take { $size } from { $name } on { $drive }. Trindle takes a snapshot first.
 
 # Note under the row that makes room.
-disks-room-note = Made smaller while in use, after a snapshot, leaving free space.
+disks-room-note = Trindle takes a snapshot, then makes the partition smaller while it's in use. The space it frees is left empty.
 
 # Tip of the button that checks a part for faults.
 disks-check-tip = Check it for faults
@@ -421,9 +419,6 @@ disks-repair-tip = Repair it
 
 # Label of the row where a part is checked and repaired.
 disks-faults = Faults
-
-# Note under the Faults row.
-disks-faults-note = Looks for faults in how its files are kept, and puts them right. It is unmounted while this runs.
 
 # Warning shown after the first press of the repair button. { $name } is the part; { $drive } is the drive.
 disks-repair-warning = Click again to repair { $name }, on { $drive }
@@ -437,14 +432,8 @@ disks-format = Format
 # Tip of the button that formats a part.
 disks-format-tip = Format it
 
-# Note under the row that erases the whole drive.
-disks-format-whole = Starts it afresh as one part, filling the drive.
-
-# Note under the row that formats one part.
-disks-format-part = Erases everything on this part only.
-
 # Warning shown after the first press of the format or erase button. { $words } names what is erased.
-disks-format-warning = Click again: everything on { $words } is erased
+disks-format-warning = Click again to erase everything on { $words }
 
 # Names a part in the warning before it is formatted. { $name } is the part; { $size } is its size; { $drive } is the drive.
 disks-part-where = { $name }, { $size }, on { $drive }
@@ -453,25 +442,19 @@ disks-part-where = { $name }, { $size }, on { $drive }
 disks-delete-name = Delete { $name }, { $size }, on { $drive }
 
 # Label of the row where a part is deleted.
-disks-delete-label = Delete this part
-
-# Note under the row that deletes a part.
-disks-delete-note = Its space becomes free, ready for a new part or for the one before it to grow into.
+disks-delete-label = Delete partition
 
 # Tip of the round button on free space that opens the box for making a new part.
-disks-new-part-tip = Make a new part here
+disks-new-part-tip = Make a new partition here
 
 # Label of the row where a new part is made.
-disks-new-part = New part
-
-# Note under the row where a new part is made.
-disks-new-part-note = Made in this free space, and formatted ready to use.
+disks-new-part = New partition
 
 # Tip of the button that makes a new part.
 disks-make-tip = Make it
 
 # Warning shown after the first press of the button that makes a new part. { $size } is the size asked for; { $drive } is the drive.
-disks-make-warning = Click again to make a { $size } part on { $drive }
+disks-make-warning = Click again to make a new partition of { $size } on { $drive }
 
 ## The floating box of changes (src/disks/mod.rs)
 
@@ -482,7 +465,7 @@ disks-sheet-erase = Erase { $name }
 disks-sheet-part = { $size }, on { $drive }
 
 # Title of the box for making a new part in free space.
-disks-sheet-new = A new part
+disks-sheet-new = New partition
 
 # Line under the title of the box for making a new part. { $size } is the free space; { $drive } is the drive.
 disks-sheet-gap = { $size } free, on { $drive }
@@ -514,7 +497,7 @@ disks-safe-remove = Safe to remove
 disks-powering-off = Powering off
 
 # Words on a drive's row when it has been powered off.
-disks-off-safe = Off: safe to unplug
+disks-off-safe = Safe to unplug
 
 # Words on a row while a part is being renamed.
 disks-renaming = Renaming
@@ -523,7 +506,7 @@ disks-renaming = Renaming
 disks-renamed = Renamed
 
 # Words on a row when the person emptied the folder box, so the computer chooses the folder.
-disks-folder-auto = The computer chooses its folder again
+disks-folder-auto = The folder is now chosen for you
 
 # Words on a row when a part has been given a folder. { $dir } is the folder.
 disks-folder-appears = It appears in { $dir }
@@ -532,7 +515,7 @@ disks-folder-appears = It appears in { $dir }
 disks-startup-on = Mounts at start-up in { $dir }
 
 # Words on a row when a part is set not to mount at start-up.
-disks-startup-off = Left alone at start-up
+disks-startup-off = Not mounted at start-up
 
 # Words on a row while a folder or start-up choice is being saved.
 disks-saving = Saving
@@ -544,25 +527,34 @@ disks-resizing = Resizing
 disks-resized = Resized to { $size }
 
 # Red words on the row that makes room, when the files to make smaller cannot be found.
-disks-room-files-missing = The files could not be found, so room cannot be made.
+disks-room-files-missing = Trindle couldn't find the files, so it can't make room.
 
 # Words on a row while the snapshot is taken before room is made.
 disks-snapshot-taking = Taking a snapshot
 
 # Red words when the snapshot taken before making room could not be found afterwards.
-disks-snapshot-missing = The snapshot could not be found afterwards.
+disks-snapshot-missing = Trindle couldn't find the snapshot afterwards.
 
-# Red words when the snapshot before making room failed. { $why } is why, as a sentence.
+# Red words when the snapshot, or switching off the swap file, before making room failed. { $why } is why, as a sentence.
 disks-snapshot-failed = { $why } Nothing was resized.
 
 # Red words when things changed while the snapshot was being taken.
-disks-snapshot-changed = Things changed while the snapshot was taken, so nothing was resized.
+disks-snapshot-changed = Something changed while Trindle was taking the snapshot, so nothing was resized.
 
 # Words on a row while room is being made.
 disks-making-room = Making room
 
+# Words on a row while the swap file is switched off before room is made.
+disks-swap-off-doing = Switching off the swap file
+
+# Words on a row while the swap file is switched back on after room is made.
+disks-swap-on-doing = Switching the swap file back on
+
+# Red words when the swap file couldn't be switched back on after making room. { $done } is how making room went, { $why } why the swap file is still off, both as sentences.
+disks-swap-still-off = { $done } The swap file stays off until you restart. { $why }
+
 # Words on a row when room has been made. { $size } is how much.
-disks-room-made = { $size } of room made
+disks-room-made = Made { $size } of room
 
 # Words on a row while a part is being repaired.
 disks-repairing = Repairing
@@ -571,7 +563,7 @@ disks-repairing = Repairing
 disks-repaired = Repaired
 
 # Red words when some faults could not be put right.
-disks-repair-failed = Some faults could not be put right. Copy off anything you want to keep.
+disks-repair-failed = Trindle couldn't repair some faults. Copy any files you want to keep to another drive.
 
 # Words on a row while a part is being checked.
 disks-checking = Checking
@@ -580,7 +572,7 @@ disks-checking = Checking
 disks-no-faults = No faults found
 
 # Red words when the check found faults.
-disks-faults-found = Faults found: press the spanner to repair them.
+disks-faults-found = Faults found. Press the spanner to repair them.
 
 # Words on a row while a part or drive is being formatted.
 disks-formatting = Formatting
@@ -592,13 +584,13 @@ disks-formatted = Formatted
 disks-erasing-whole = erasing the whole drive
 
 # Red words when a freshly formatted part could not be found to give it its folder again.
-disks-new-part-missing = The new part could not be found.
+disks-new-part-missing = Can't find the new partition.
 
 # Red words when the drive service could not be reached to give a formatted part its folder again.
-disks-service-unreachable = The drive service could not be reached.
+disks-service-unreachable = Couldn't reach the drive service.
 
 # Red words when the identifier of a freshly formatted part could not be read.
-disks-uuid-unread = The new part's identifier could not be read.
+disks-uuid-unread = Trindle couldn't read the new partition's identifier.
 
 # Words on a row while a part is being deleted.
 disks-deleting = Deleting
@@ -613,7 +605,7 @@ disks-making-it = Making it
 disks-made = Made
 
 # Red words under an eye when hiding or showing could not be kept. { $why } is the system's reason.
-disks-hide-failed = That could not be kept: { $why }
+disks-hide-failed = Couldn't save that: { $why }
 
 # Words on a row while a change is being made. { $doing } says what is being done.
 disks-working = { $doing }…
@@ -632,8 +624,8 @@ disks-name-empty = Give it a name first.
 # Red words under the folder name box when it is too long. { $max } is the most letters allowed.
 disks-name-too-long =
     { $max ->
-        [one] That name is too long: { $max } letter at most.
-       *[other] That name is too long: { $max } letters at most.
+        [one] That name is too long. Keep it to { $max } letter.
+       *[other] That name is too long. Keep it to { $max } letters.
     }
 
 # Red words under the folder name box when it has letters that are not allowed.
@@ -648,56 +640,56 @@ disks-name-taken = { $dir } is already in use.
 # Red words under a part's name box when the name is too long for its kind of file system. { $max } is the most letters allowed.
 disks-label-too-long =
     { $max ->
-        [one] That name is too long for this kind: { $max } letter at most.
-       *[other] That name is too long for this kind: { $max } letters at most.
+        [one] That name is too long for this partition. Keep it to { $max } letter.
+       *[other] That name is too long for this partition. Keep it to { $max } letters.
     }
 
 # Red words under a part's name box when a FAT name has marks that are not allowed.
-disks-label-fat-marks = FAT names cannot hold * ? . , ; : / \ | + = < > [ ] or ".
+disks-label-fat-marks = FAT names can't contain * ? . , ; : / \ | + = < > [ ] or ".
 
 # Red words under the Size row when the kind of part must be mounted before it can be resized. { $way } is larger or smaller.
 disks-resize-mount-first =
     { $way ->
-        [larger] Mount it first: this kind can only be made larger while mounted.
-       *[smaller] Mount it first: this kind can only be made smaller while mounted.
+        [larger] Mount it first. This kind of partition can only be made larger while it's mounted.
+       *[smaller] Mount it first. This kind of partition can only be made smaller while it's mounted.
     }
 
 # Red words under the Size row when the kind of part cannot be resized. { $way } is larger or smaller.
 disks-resize-cannot =
     { $way ->
-        [larger] This kind cannot be made larger.
-       *[smaller] This kind cannot be made smaller.
+        [larger] This kind can't be made larger.
+       *[smaller] This kind can't be made smaller.
     }
 
 ## What a change says and what became of it (src/disks/plan.rs)
 
 # Red words when the password box was closed with no password. Said whole, as a sentence.
-disks-no-password = No password was given, so nothing changed.
+disks-no-password = You didn't enter a password, so nothing changed.
 
 # Red words when the password box was closed with no password, after some steps of a change were already done.
-disks-no-password-part-way = No password was given, so the work stopped part-way.
+disks-no-password-part-way = You didn't enter a password, so the work stopped part-way.
 
 # Red words when another change is pressed while one is still being made.
 disks-change-going = A change is being made.
 disks-one-at-a-time = Another change is still being made. Try again when it has finished.
 
 # Red words when it could not be made sure that the password would be asked for.
-disks-not-sure = It could not be made sure that the password would be asked for, so nothing changed.
+disks-not-sure = Trindle couldn't make sure it would ask for your password, so nothing changed.
 
 # Red words after how a change ended, when the password just given could not be taken back.
-disks-standing = The password just given could not be taken back, so for a few minutes another change to a drive may not ask for one. It is being tried again.
+disks-standing = Trindle couldn't cancel the password you just gave. For a few minutes, another change to a drive may not ask for a password. Trindle is trying again.
 
 # Words after how a change ended, when the password just given has been taken back after all.
-disks-taken-back = The password given has now been taken back: the next change will ask for one.
+disks-taken-back = The password you gave has now been cancelled, so the next change will ask for one.
 
 # Red words when a change could not be started because there is no drive service to ask.
-disks-no-service = The drive service could not be reached, so nothing changed.
+disks-no-service = Trindle couldn't reach the drive service, so nothing changed.
 
 # Red words said the next time Drives opens, about a change it was closed or ended in the middle of.
 disks-closed = Drives was closed while this change was being made.
 
 # Words on the row of a change still being made when the window is asked to close.
-disks-stays-open = Drives stays open until this has finished, so that it can say how it ended.
+disks-stays-open = Drives will stay open until this finishes, so you can see how it went.
 
 # Red words for a refusal. { $reason } says why, without a full stop.
 disks-nothing-changed = { $reason }, so nothing changed.
@@ -706,7 +698,7 @@ disks-nothing-changed = { $reason }, so nothing changed.
 disks-part-way = { $reason }, so the work stopped part-way.
 
 # Reason given when the drive service could not be asked, without a full stop.
-disks-service-not-asked = The drive service could not be asked
+disks-service-not-asked = Couldn't ask the drive service
 
 # Red words when a change stopped part-way for a reason that was not a refusal. { $why } is the reason, as a sentence.
 disks-failed-part-way = { $why } The work stopped part-way.
@@ -730,25 +722,25 @@ disks-list-not-known = Not known: { $steps }.
 disks-left-unmounted = { $dev } was unmounted for this and is not mounted now.
 
 # Red words about a part that was unmounted for a change that did nothing to the drive. { $dev } is the part.
-disks-still-unmounted = { $dev } was unmounted for this and is still unmounted: mount it from its row.
+disks-still-unmounted = { $dev } was unmounted for this and is still unmounted. Mount it from its row.
 
 # Red words about a part that the step that stopped may have unmounted. { $dev } is the part.
-disks-may-be-unmounted = { $dev } may have been unmounted: look at its row.
+disks-may-be-unmounted = { $dev } may have been unmounted. Look at its row.
 
 # Red words about a part that could not be mounted again because that needs a password. { $dev } is the part.
-disks-put-back-password = { $dev } was unmounted for this, and mounting it again needs a password of its own: mount it from its row.
+disks-put-back-password = { $dev } was unmounted for this. Mount it again from its row and enter its password when asked.
 
 # Red words about a part that could not be mounted again. { $dev } is the part; { $why } is why.
-disks-put-back-failed = { $dev } was unmounted for this and could not be mounted again ({ $why }): mount it from its row.
+disks-put-back-failed = { $dev } was unmounted for this and could not be mounted again ({ $why }). Mount it from its row.
 
 # Red words under a freshly formatted part whose folder could not be kept. { $dir } is the folder; { $why } is why, as a sentence.
-disks-folder-not-kept = Formatted, but it was not given its folder { $dir } again. { $why } Choose the folder again from its row.
+disks-folder-not-kept = Formatting is done, but Trindle couldn't give it the folder { $dir } again. { $why } Choose the folder again from its row.
 
 # Red words when a drive is in use and cannot be unmounted.
 disks-busy = Something is still using it. Close any windows or programs showing its files, then try again.
 
 # Red words when there is not enough room for what is on a part at the size asked for.
-disks-no-room = There is not enough room for what is on it at that size.
+disks-no-room = That size is too small for the files already on it.
 
 ## Steps of a change, in the account of one that stopped part-way (src/disks/plan.rs)
 
@@ -759,7 +751,7 @@ disks-step-unmount = unmounting { $dev }
 disks-step-mount = mounting { $dev } again
 
 # Step of a change.
-disks-step-eject = closing the drive to be removed
+disks-step-eject = preparing the drive for removal
 
 # Step of a change.
 disks-step-power-off = powering the drive off
@@ -768,13 +760,13 @@ disks-step-power-off = powering the drive off
 disks-step-format = formatting { $dev }
 
 # Step of a change.
-disks-step-create = making the new part
+disks-step-create = making a partition
 
 # Step of a change. { $dev } is the part.
 disks-step-delete = deleting { $dev }
 
 # Step of a change. { $dev } is the part.
-disks-step-resize-part = resizing the part { $dev }
+disks-step-resize-part = resizing { $dev }
 
 # Step of a change. { $dev } is the part.
 disks-step-resize = resizing what is on { $dev }
@@ -789,7 +781,7 @@ disks-step-check = checking { $dev }
 disks-step-rename = renaming { $dev }
 
 # Step of a change. { $dev } is the part.
-disks-step-fstab = saving the folder and start-up choice of { $dev }
+disks-step-fstab = saving the folder and start-up settings for { $dev }
 
 # Step of a change that has no words of its own. { $method } is what the drive service was asked; { $dev } is the part.
 disks-step-other = the step { $method } on { $dev }
@@ -797,117 +789,117 @@ disks-step-other = the step { $method } on { $dev }
 ## Making room under a part that is in use (src/disks/room.rs)
 
 # Red words under the Make room row for a part of a kind that cannot be made smaller in use, and that can when it is not in use. { $kind } is the kind of file system.
-disks-room-ext-offline = This { $kind } part can only be made smaller when it is not in use, so room cannot be made from it here.
+disks-room-ext-offline = This { $kind } partition can only be made smaller when it isn't in use, so Trindle can't make room from it here.
 
 # Red words under the Make room row for an xfs part.
-disks-room-xfs-fixed = This xfs part cannot be made smaller.
+disks-room-xfs-fixed = xfs partitions can't be made smaller.
 
 # Red words under the Make room row for any other kind of part in use. { $kind } is the kind of file system.
-disks-room-other-kind = This { $kind } part cannot be made smaller while it is in use.
+disks-room-other-kind = This { $kind } partition can't be made smaller while it's in use.
 
 # Red words under the Make room row when a snapshot cannot be taken of the part.
-disks-room-no-snapshot = A snapshot can only be taken of the system's own disk, so room cannot be made here.
+disks-room-no-snapshot = Trindle can only take a snapshot of the system's own disk, so it can't make room here.
 
 # Red words under the Make room row.
-disks-room-not-in-table = It is not a part of a drive's table, so room cannot be made from it.
+disks-room-not-in-table = It isn't a partition in a drive's partition table, so Trindle can't make room from it.
 
 # Red words under the Make room row.
-disks-room-no-online-shrink = The drive service cannot make Btrfs smaller while it is in use here, so room cannot be made.
+disks-room-no-online-shrink = The drive service can't make Btrfs smaller while it's in use here, so Trindle can't make room.
 
 # Red words under the Make room row.
-disks-room-holds-parts = It holds other parts, so room cannot be made from it.
+disks-room-holds-parts = It has other partitions inside it, so Trindle can't make room from it.
 
 # Red words under the Make room row.
-disks-room-not-gpt = Its drive does not have a GPT table, so room cannot be made from it.
+disks-room-not-gpt = Its drive doesn't have a GPT partition table, so Trindle can't make room from it.
 
 # Red words under the Make room row.
 disks-room-mount-first = Mount it first: Btrfs is made smaller while it is mounted.
 
 # Red words under the Make room row.
-disks-room-mounts-not-one = It is not mounted in exactly one place, so room cannot be made.
+disks-room-mounts-not-one = It isn't mounted, so Trindle can't make room.
 
 # Red words under the Make room row.
-disks-room-read-only = It is mounted read-only, so room cannot be made.
+disks-room-read-only = It's mounted read-only, so Trindle can't make room.
 
 # Red words under the Make room row.
-disks-room-read-only-unknown = It could not be told whether it is read-only, so room cannot be made.
+disks-room-read-only-unknown = Trindle couldn't tell whether it's read-only, so it can't make room.
 
 # Red words under the Make room row.
-disks-room-many-drives = The files spread over more than one drive, so room cannot be made.
+disks-room-many-drives = The files are spread over more than one drive, so Trindle can't make room.
 
 # Red words under the Make room row.
-disks-room-drives-unknown = It could not be told how many drives the files spread over, so room cannot be made.
+disks-room-drives-unknown = Trindle couldn't tell how many drives the files are spread over, so it can't make room.
 
 # Red words under the Make room row.
-disks-room-swap-file = A swap file lies on it, so room cannot be made.
+disks-room-swap-unknown = Trindle couldn't tell whether there's a swap file on it, so it can't make room.
 
 # Red words under the Make room row.
-disks-room-swap-unknown = It could not be told whether a swap file lies on it, so room cannot be made.
+disks-room-used-unknown = Trindle couldn't read how much of it is in use, so it can't make room.
 
 # Red words under the Make room row.
-disks-room-used-unknown = How much of it is in use could not be read, so room cannot be made.
+disks-room-area-unknown = The drive service doesn't say how big the filesystem is, so Trindle can't check it or make room.
 
 # Red words under the Make room row.
-disks-room-area-unknown = The drive service does not say how big the files' area is, so it could not be checked and room cannot be made.
+disks-room-open-missing = Trindle couldn't find the unlocked copy of it, so it can't make room.
 
 # Red words under the Make room row.
-disks-room-open-missing = The open copy of it could not be found, so room cannot be made.
+disks-room-encryption-sizes = The sizes given for the encryption don't match, so Trindle can't make room.
 
 # Red words under the Make room row.
-disks-room-encryption-sizes = The sizes given for the encryption do not agree, so room cannot be made.
-
-# Red words under the Make room row.
-disks-room-sizes = The sizes given for it do not agree, so room cannot be made.
+disks-room-sizes = The sizes given for it don't match, so Trindle can't make room.
 
 # Red words under the Make room row. { $used } is how much the files use.
-disks-room-too-little = It holds { $used } and needs more than that kept, so too little can be freed.
+disks-room-too-little = It has { $used } on it and needs to keep more than that, so there's too little room to free up.
 
 # Red words under the Make room row.
-disks-room-sizes-unread = Its sizes could not be read.
+disks-room-sizes-unread = Couldn't read its sizes.
 
 # Red words under the Make room row when the room asked for is out of range. { $least } and { $most } are the smallest and largest room.
-disks-room-range = Room from { $least } to { $most } can be made.
+disks-room-range = You can make between { $least } and { $most } of room.
 
 # Red words when making room was stopped. { $what } says what was found wrong, without a full stop.
-disks-room-stopped = { $what }, so the work was stopped.
+disks-room-stopped = { $what }, so Trindle stopped.
 
 # What was found wrong while making room.
 disks-room-check-unmounted = The files are no longer mounted
 
 # What was found wrong while making room. { $is } is the size the part has; { $should } is the size it should have.
-disks-room-check-part = The part is { $is } and should be { $should }
+disks-room-check-part = The partition is { $is } and should be { $should }
 
 # What was found wrong while making room.
-disks-room-check-open = The open copy of the encryption is not the size it should be
+disks-room-check-open = The unlocked copy of the encryption isn't the size it should be
 
 # What was found wrong while making room. { $is } is the size the files' area has; { $should } is the size it should have.
-disks-room-check-area = The files' area is { $is } and should be { $should }
+disks-room-check-area = The filesystem is { $is } and should be { $should }
 
 # What was found wrong while making room.
-disks-room-check-area-small = The files' area is smaller than what is in use
+disks-room-check-area-small = The filesystem is smaller than what is in use
 
 # What was found wrong while making room.
-disks-room-check-fit = What holds what no longer fits
+disks-room-check-fit = The filesystem no longer fits
 
 # Red words when making room was stopped because the drive service no longer lists something. { $what } is part, copy or files.
 disks-room-gone =
     { $what ->
-        [part] The part is no longer listed by the drive service, so the work was stopped.
-        [copy] The open copy is no longer listed by the drive service, so the work was stopped.
+        [partition] The partition is no longer listed by the drive service, so the work was stopped.
+        [copy] The unlocked copy is no longer listed by the drive service, so the work was stopped.
        *[files] The filesystem is no longer listed by the drive service, so the work was stopped.
     }
 
 # Step of making room, in the account of one that stopped part-way.
-disks-room-step-files = making the files' area smaller
+disks-room-step-files = making the filesystem smaller
 
 # Step of making room, in the account of one that stopped part-way.
-disks-room-step-open = making the open copy of the encryption smaller
+disks-room-step-open = making the unlocked copy of the encryption smaller
 
 # Step of making room, in the account of one that stopped part-way.
-disks-room-step-part = making the part smaller
+disks-room-step-part = shrinking the partition
 
 # Step of making room, in the account of one that stopped part-way.
 disks-room-step-check = checking the sizes
 
 # Description the snapshot taken before making room is saved under, which Settings lists. { $dev } is the part; { $at } is a number that tells it from another.
-disks-room-snapshot-note = Before making room under { $dev } ({ $at })
+disks-room-snapshot-note = Before making room on { $dev } ({ $at })
+
+# Red words when the swap file is back on after making room, but Trindle met a problem doing it. { $done } is how making room went, { $why } the problem, both as sentences.
+disks-swap-on-but = { $done } { $why }

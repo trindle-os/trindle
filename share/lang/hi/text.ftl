@@ -47,7 +47,7 @@ text-find-replace-key = खोजें और बदलें (Ctrl+H)
 text-go-to-line-key = पंक्ति पर जाएँ (Ctrl+G)
 
 # Button in the menu for a Markdown file that shows it as it will look finished, with its shortcut.
-text-finished-key = तैयार रूप (Ctrl+E)
+text-finished-key = पूर्वावलोकन (Ctrl+E)
 
 # Button in the menu for a Markdown file that exports it as a web page. Also the title of the chooser for that.
 text-export-html = वेब पेज के रूप में निर्यात करें
@@ -71,7 +71,7 @@ text-close-tab = { $name } बंद करें
 text-close-bar = पट्टी बंद करें
 
 # Words the screen reader gives the button that shows the finished look of the text, with its shortcut.
-text-finished-look = तैयार रूप
+text-finished-look = पूर्वावलोकन
 
 # Menu item that copies everything in the text.
 text-copy-all = पूरा टेक्स्ट कॉपी करें
@@ -185,10 +185,10 @@ text-go-to-line = पंक्ति पर जाएँ
 text-back = टेक्स्ट पर वापस
 
 # Words on the spelling bar, after the word: the word was added to the person's own words.
-text-spell-added = अब आपके शब्दों में है
+text-spell-added = आपके शब्दों में जोड़ा गया
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are no suggestions.
-text-spell-none = शब्दकोश में नहीं है, और उससे मिलता-जुलता कुछ भी नहीं है
+text-spell-none = शब्दकोश में नहीं है, और कोई सुझाव नहीं है
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are suggestions.
 text-spell-offers = शब्दकोश में नहीं है। क्या आपका मतलब इनमें से कोई था?
@@ -218,16 +218,16 @@ text-starting = शुरुआत
 text-when-opens = जब टेक्स्ट खुले
 
 # First choice: Text opens the files it had open last time.
-text-reopen = पिछली बार की फ़ाइलें फिर खोलें
+text-reopen = पहले की फ़ाइलें फिर खोलें
 
 # Second choice: Text opens with an empty page.
-text-start-blank = खाली शुरू करें
+text-start-blank = नए सिरे से शुरू करें
 
 # Note under the start choice: work not saved to a file is kept whichever choice is made.
-text-keep-note = जो काम किसी फ़ाइल में सहेजा नहीं गया वह हमेशा रखा जाता है और दोनों तरह से वापस आता है।
+text-keep-note = आपका सहेजा न गया काम रखा जाता है और आप जो भी विकल्प चुनें, वापस आ जाता है।
 
 # Heading of the group on the settings page for how the text looks.
-text-showing = टेक्स्ट दिखाना
+text-showing = टेक्स्ट का रूप
 
 # Label of the size slider: how big the text is.
 text-size = आकार
@@ -263,11 +263,11 @@ text-read-as = फ़ाइल को इस रूप में पढ़ें
 text-save-in = इसमें सहेजें
 
 # Note under the save encoding: the next save writes the file in this encoding.
-text-next-save = अगली बार सहेजने पर फ़ाइल इसी एन्कोडिंग में लिखी जाएगी।
+text-next-save = अगली बार सहेजने पर फ़ाइल इसी एन्कोडिंग में होगी।
 
 # Words saying the text has changes that are not saved to its file. $path is the file.
 # SAFETY: needs a human review before it ships
-text-changes-not-saved = { $name } में ऐसे बदलाव हैं जो उसकी फ़ाइल में सहेजे नहीं गए।
+text-changes-not-saved = { $name } में सहेजे न गए बदलाव हैं।
 
 # Words saying the text has changes and no file yet.
 text-not-saved = यह टेक्स्ट किसी फ़ाइल में सहेजा नहीं गया है।
@@ -277,7 +277,11 @@ text-not-saved = यह टेक्स्ट किसी फ़ाइल म�
 text-save-named = { $name } सहेजें?
 
 # Words in the question before closing: how many other tabs with changes are left after this one. $left is the number.
-text-more-after = इसके बाद { $left } और।
+text-more-after =
+    { $left ->
+        [one] सहेजने के लिए { $left } टैब और है।
+       *[other] सहेजने के लिए { $left } टैब और हैं।
+    }
 
 # Button in the question before closing that closes the tab without saving it.
 # SAFETY: needs a human review before it ships
@@ -296,55 +300,55 @@ text-is-folder = { $name } एक फ़ोल्डर है।
 text-too-big = { $name } यहाँ खोलने के लिए बहुत बड़ा है।
 
 # Shown when a file could not be opened. $name is the file's path and $reason why.
-text-cannot-open = { $name } खोला नहीं जा सका: { $reason }
+text-cannot-open = Trindle { $name } खोल नहीं सका: { $reason }
 
 # Shown when a file could not be written. $name is the file's path and $reason why.
-text-cannot-write = { $name } लिखा नहीं जा सका: { $reason }
+text-cannot-write = Trindle { $name } लिख नहीं सका: { $reason }
 
 # Shown when a file could not be saved. $name is the file's path and $reason why.
-text-cannot-save = { $name } सहेजा नहीं जा सका: { $reason }
+text-cannot-save = Trindle { $name } सहेज नहीं सका: { $reason }
 
 # Shown when a file could not be read again. $name is the file's path and $reason why.
 text-cannot-read = { $name } पढ़ा नहीं जा सका: { $reason }
 
 # Shown when the list of open work could not be written. $folder is the folder and $reason why.
-text-work-not-kept = { $folder } में काम रखा नहीं जा सका: { $reason }
+text-work-not-kept = Trindle { $folder } में आपका काम सहेज नहीं सका: { $reason }
 
 # Shown when the settings could not be saved. $reason says why.
 text-settings-not-saved = सेटिंग्स सहेजी नहीं जा सकीं: { $reason }
 
 # Shown when a word could not be added to the person's own words. $word is the word and $reason why.
-text-word-not-added = { $word } आपके शब्दों में जोड़ा नहीं जा सका: { $reason }
+text-word-not-added = Trindle { $word } को आपके शब्दकोश में जोड़ नहीं सका: { $reason }
 
 # Shown when the list of recent files could not be cleared. $reason says why.
-text-list-not-cleared = सूची साफ़ नहीं की जा सकी: { $reason }
+text-list-not-cleared = Trindle सूची साफ़ नहीं कर सका: { $reason }
 
 # Shown when the file chooser could not be opened.
 text-chooser-failed = फ़ाइल चयनकर्ता खोला नहीं जा सका।
 
 # Shown when the file chooser cannot be used because there is no session bus.
-text-no-bus = सेशन बस के बिना फ़ाइलें चुनी नहीं जा सकतीं।
+text-no-bus = Trindle अभी फ़ाइल चयनकर्ता नहीं खोल सकता।
 
 # Shown when the spelling language asked for is not on the computer. $lang is its name.
 text-no-dictionary = { $lang } नाम का कोई शब्दकोश नहीं है।
 
 # Shown when a spelling dictionary could not be read. $lang is its name and $reason why.
-text-dictionary-unreadable = { $lang } शब्दकोश पढ़ा नहीं जा सका: { $reason }
+text-dictionary-unreadable = Trindle { $lang } शब्दकोश पढ़ नहीं सका: { $reason }
 
 # Shown when a save was stopped and the text it held before was kept in a folder. $reason says what went wrong and $path is where the old text is kept.
-text-kept-before = { $reason }। जो इसमें पहले था वह { $path } में रखा है।
+text-kept-before = { $reason }। पुराना टेक्स्ट { $path } में सहेजा गया है।
 
 # Shown when a save was stopped part way and the old text is kept. $why says why, and $path is where the old text is kept.
-text-kept-before-that = { $why } उस बार सहेजने से पहले जो इसमें था वह { $path } में रखा है।
+text-kept-before-that = { $why } उस बार सहेजने से पहले का टेक्स्ट { $path } में है।
 
 # Shown when a save was stopped and what was kept of it cannot be read. $name is the file's path.
-text-saved-unreadable = टेक्स्ट के रुकते समय { $name } सहेजा जा रहा था, और सहेजे हुए का जो हिस्सा रखा गया उसे पढ़ा नहीं जा सकता।
+text-saved-unreadable = { $name } सहेजते समय टेक्स्ट बंद हो गया, और जितना हिस्सा सहेजा गया था उसे Trindle पढ़ नहीं सकता।
 
 # Shown when a save was stopped and the file has changed since. $name is the file's path.
-text-saved-changed = टेक्स्ट के रुकते समय { $name } सहेजा जा रहा था, और तब से वह बदल चुका है, इसलिए उसे जैसा है वैसा छोड़ दिया गया।
+text-saved-changed = { $name } सहेजते समय टेक्स्ट बंद हो गया। फ़ाइल तब से बदल चुकी है, इसलिए Trindle ने उसे जैसा है वैसा छोड़ दिया है।
 
 # Shown when a save was stopped and the old text could not be put back. $name is the file's path, $reason why, and $path where the old text is kept.
-text-saved-not-put-back = टेक्स्ट के रुकते समय { $name } सहेजा जा रहा था, और उसे पहले जैसा वापस नहीं रखा जा सका: { $reason }। उस बार सहेजने से पहले जो इसमें था वह { $path } में रखा है।
+text-saved-not-put-back = { $name } सहेजते समय टेक्स्ट बंद हो गया, और Trindle फ़ाइल को पहले जैसा वापस नहीं रख सका: { $reason }। उस बार सहेजने से पहले का टेक्स्ट { $path } में है।
 
 # Quiet word beside what was just saved, exported or changed.
 text-done = हो गया
@@ -352,10 +356,12 @@ text-done = हो गया
 # Suggested file name in the Save as chooser for text never saved before.
 text-untitled-file = बिना नाम.txt
 
+# The misspelt word, shown in quotation marks on the spelling bar. { $word } is the word.
+text-spell-word = ‘{ $word }’
 
 
 # Line under the Save button when the file was changed by something else after Text opened, saved or reloaded it. Nothing has been saved.
-text-changed-elsewhere = आपके खोलने के बाद कहीं और बदली गई है।
+text-changed-elsewhere = आपके खोलने के बाद यह फ़ाइल बदल गई है।
 
 # Button beside that line: save the words here over the changed file.
 text-save-anyway = फिर भी सहेजें
@@ -363,3 +369,4 @@ text-save-anyway = फिर भी सहेजें
 # Button beside that line: read the file again from disk and drop the unsaved changes here.
 text-reload = फिर से लोड करें
 
+text-link-not-opened = यहाँ से केवल वेब पते खुलते हैं।

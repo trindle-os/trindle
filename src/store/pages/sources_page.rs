@@ -33,10 +33,10 @@ pub fn sources(s: &Store) -> Node<Msg> {
 
 fn known_row(s: &Store, k: &'static sources::Known, ours: bool, here: bool) -> Node<Msg> {
     let sub = match (ours, here) {
-        (true, true) => t!("store-src-added", what = k.what),
-        (true, false) => t!("store-src-no-program", what = k.what),
-        (false, true) => t!("store-src-other-way", what = k.what),
-        (false, false) => k.what.to_string(),
+        (true, true) => t!("store-src-added", what = k.what()),
+        (true, false) => t!("store-src-no-program", what = k.what()),
+        (false, true) => t!("store-src-other-way", what = k.what()),
+        (false, false) => k.what().to_string(),
     };
     let key = format!("src:{}", k.id);
     let mut buttons = Vec::new();
@@ -63,22 +63,21 @@ fn known_row(s: &Store, k: &'static sources::Known, ours: bool, here: bool) -> N
 
 fn custom_card(s: &Store) -> Node<Msg> {
     let f = &s.sources.form;
-    let field = |head: &str, sub: &str, hint: &str, text: &str, set: fn(&mut SourceForm, String)| {
-        column(vec![label(head.to_string()), note(sub.to_string()),
+    let field = |head: &str, hint: &str, text: &str, set: fn(&mut SourceForm, String)| {
+        column(vec![label(head.to_string()),
                     entry(text.to_string(), hint, move |t| go(move |s| set(&mut s.sources.form, t.clone())))
                         .width(Length::Fill)]).gap(4.0)
     };
     let add = source_button(s, "src:custom", crate::settings::ui::INSTALL_ICON, t!("store-src-add-this"), add_custom);
     list_card("list-add-symbolic", t!("store-src-another"), vec![
         note(t!("store-src-another-note")),
-        field(t!("store-src-address"), t!("store-src-address-sub"),
-              "https://apt.example.org/debian", &f.uri, |f, t| f.uri = t),
-        field(t!("store-src-suite"), t!("store-src-suite-sub"), "trixie", &f.suite, |f, t| f.suite = t),
-        field(t!("store-src-components"), t!("store-src-components-sub"), "main", &f.comps, |f, t| f.comps = t),
-        field(t!("store-src-key"), t!("store-src-key-sub"), "https://apt.example.org/key.gpg", &f.key, |f, t| f.key = t),
-        field(t!("store-src-program"), t!("store-src-program-sub"), t!("store-src-program-hint"), &f.package,
+        field(t!("store-src-address"), "https://apt.example.org/debian", &f.uri, |f, t| f.uri = t),
+        field(t!("store-src-suite"), "trixie", &f.suite, |f, t| f.suite = t),
+        field(t!("store-src-components"), "main", &f.comps, |f, t| f.comps = t),
+        field(t!("store-src-key"), "https://apt.example.org/key.gpg", &f.key, |f, t| f.key = t),
+        field(t!("store-src-program"), t!("store-src-program-hint"), &f.package,
               |f, t| f.package = t),
-        row(vec![s.said.get("src:custom").map_or_else(|| note("").width(Length::Fill), |(w, t)| if *t == Tone::Problem { crate::store::help::red(w.clone(), s.more("src:custom")) } else { note(w.clone()).tone(*t).width(Length::Fill) }), add])
+        row(vec![s.words.said.get("src:custom").map_or_else(|| note("").width(Length::Fill), |(w, t)| if *t == Tone::Problem { crate::store::help::red(w.clone(), s.more("src:custom")) } else { note(w.clone()).tone(*t).width(Length::Fill) }), add])
             .gap(12.0).centred(),
     ])
 }
@@ -139,18 +138,14 @@ fn add_custom(s: &mut Store) {
 }
 
 fn source_job(s: &mut Store, key: &str, args: Vec<String>, done: &'static str) {
-    s.said.remove(key);
+    s.words.said.remove(key);
     begin(s, key, |d| {
         d.by_steps();
         d.say(t!("store-src-starting"));
     });
     s.working += 1;
     let k = key.to_string();
-    let on_line = s.heard(move |s, line| {
-        if let Some(d) = s.dials.get_mut(&k) {
-            d.heard(line);
-        }
-    });
+    let on_line = s.heard_if(move |s, line| s.dials.get_mut(&k).is_some_and(|d| d.hear(line)));
     let k = key.to_string();
     let argv: Vec<&str> = args.iter().map(String::as_str).collect();
     updates::admin_watching(&argv, on_line, s.then(move |s: &mut Store, res: Result<(), String>| {

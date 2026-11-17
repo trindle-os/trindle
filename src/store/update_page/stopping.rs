@@ -33,7 +33,7 @@ pub(crate) fn stopped(s: &mut Store, key: &str, stop: &Stop, ok: bool) -> bool {
     let was = stop.pressed() && !ok;
     if was {
         s.dials.remove(key);
-        s.said.remove(key);
+        s.words.said.remove(key);
         s.upd.stopped.insert(key.to_string());
     }
     was

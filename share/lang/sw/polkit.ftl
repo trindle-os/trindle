@@ -18,15 +18,24 @@ polkit-cancel = Ghairi
 
 # Said when the password typed is not accepted, and the question is asked again.
 # SAFETY: needs a human review before it ships
-polkit-not-accepted = Nenosiri hilo halikukubaliwa. Jaribu tena.
+polkit-not-accepted = Nenosiri hilo si sahihi. Jaribu tena.
 
 # Name a screen reader speaks for the password question window.
-polkit-spoken = Uthibitishaji
+polkit-spoken = Nenosiri lako
 
 # Under the password box, when other requests for a password are waiting for
 # this one to end. { $n } is how many.
 polkit-waiting-behind =
     { $n ->
-        [one] Ombi lingine linasubiri hili liishe.
-       *[other] Maombi mengine { $n } yanasubiri hili liishe.
+        [one] Ombi lingine linasubiri.
+       *[other] Maombi mengine { $n } yanasubiri.
     }
+
+# Under the heading, when Drives asks for the password to take the snapshot before making room.
+polkit-reason-drives-snapshot = Diski inahitaji nenosiri la msimamizi ili kuchukua picha ya hali kabla ya kutengeneza nafasi.
+
+# Under the heading, when Drives asks for the password to switch a swap file off before making room.
+polkit-reason-drives-swap-off = Diski inahitaji nenosiri la msimamizi ili kuzima faili ya swap wakati inatengeneza nafasi.
+
+# Under the heading, when Drives asks for the password to switch a swap file back on.
+polkit-reason-drives-swap-on = Diski inahitaji nenosiri la msimamizi ili kuwasha tena faili ya swap.

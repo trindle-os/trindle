@@ -16,7 +16,7 @@ use crate::common::updating::{self, Part, Who};
 use crate::toolkit::widget::{Node, Tone};
 use super::check::{answered, ask_start, check_all, gave_up, lists_fetched, looked_again, start_asked, start_is_waiting};
 use super::hold::{keep_held, set_held};
-use super::install::{alone, fetching, flatpaks_for_all, forget_failures, install_all, job_done, table_row, update_app, update_debian, update_device, update_part, update_plugin, update_trindle, went_in};
+use super::install::{alone, apps_line, fetching, flatpaks_for_all, forget_failures, install_all, job_done, table_row, update_app, update_debian, update_device, update_part, update_plugin, update_trindle, went_in};
 use super::read::{bytes_from, flatpaks_heard, parse_flat_updates, parse_package_sizes};
 use super::rows::{app_name, held_row_key};
 use super::stopping::{stop_update, stopped};
@@ -99,7 +99,7 @@ fn every_install_button_is_off_while_the_ring_installs_and_back_after() {
     s.notice_updating();
     let free = view(&s);
     let names: Vec<String> = update_buttons(&free).into_iter().map(|(tip, _)| tip).collect();
-    assert_eq!(names, ["Check again", "Install 6 updates", "Update org.example.Calculator", "Update Trindle", "Update Debian's packages",
+    assert_eq!(names, ["Check again", "Install 6 updates", "Update org.example.Calculator", "Update Trindle", "Update Debian packages",
                        "Update Example keyboard", "Update org.example.One"],
                "the page's one main action, then each thing's own button; Debian's packages have one between them");
     assert!(update_buttons(&free).iter().all(|(_, can)| *can), "all can be pressed while nothing else updates");
@@ -109,7 +109,7 @@ fn every_install_button_is_off_while_the_ring_installs_and_back_after() {
     s.notice_updating();
     assert_eq!(s.other, Some(Who::Ring), "noticed on the next tick");
     let held = view(&s);
-    assert_eq!(headline_of(&held), "Updates are being installed from the ring. The buttons here come back when it has finished.");
+    assert_eq!(headline_of(&held), "Updates are being installed from the ring. The buttons will come back when it has finished.");
     let buttons = update_buttons(&held);
     assert_eq!(buttons.iter().map(|(tip, _)| tip.clone()).collect::<Vec<_>>(), names, "each stays in its place with its words");
     assert!(buttons.iter().all(|(_, can)| !*can), "every one is off: {buttons:?}");
@@ -137,7 +137,7 @@ fn every_install_button_is_off_while_the_ring_installs_and_back_after() {
 
     updating::pretend(Some(path), true);
     s.notice_updating();
-    assert!(headline_of(&view(&s)).starts_with("Debian's installer is at work"));
+    assert!(headline_of(&view(&s)).starts_with("Debian's installer is running"));
     assert!(update_buttons(&view(&s)).iter().all(|(_, can)| !*can));
     updating::pretend(None, false);
 }
@@ -168,7 +168,7 @@ fn nothing_starts_from_any_entry_while_another_updates() {
         ("an app", Box::new(|s| update_app(s, "org.example.Calculator"))),
         ("a shared part", Box::new(move |s| update_part(s, &part))),
         ("Trindle", Box::new(update_trindle)),
-        ("Debian's packages", Box::new(update_debian)),
+        ("Debian packages", Box::new(update_debian)),
         ("a device's firmware", Box::new(|s| update_device(s, "abc"))),
         ("a plugin", Box::new(move |s| update_plugin(s, &offer))),
     ];
@@ -201,7 +201,7 @@ fn one_update_alone_holds_the_turn_and_the_counts_drop_by_one() {
     let hold = alone(&mut s, "Calculator", || updating::begin(Who::Apps)).expect("free, so it starts");
     begin(&mut s, &app_key("org.example.Calculator"), |_| {});
     assert_eq!(updating::holder_at(&path), Some(Who::Apps), "the same lock Install all takes");
-    assert_eq!(headline_of(&view(&s)), "Updating Calculator. You can keep working while it goes in.");
+    assert_eq!(headline_of(&view(&s)), "Updating Calculator. You can keep working while it installs.");
 
     let during = update_buttons(&view(&s));
     assert_eq!(during.len(), 8, "the greyed pill and the seven rows: {during:?}");
@@ -232,15 +232,17 @@ fn one_update_alone_holds_the_turn_and_the_counts_drop_by_one() {
     went_in(&mut s, &part);
     assert_eq!((s.waiting_updates(), s.upd.parts()), (6, 0));
 
-    s.say(&app_key("org.example.Paint"), "Not updated. Flatpak said: error: the remote could not be reached", Tone::Problem);
+    s.say(&app_key("org.example.Paint"), "Flatpak didn't update it: error: the remote could not be reached", Tone::Problem);
     s.say("fw:abc", "The device was unplugged.", Tone::Problem);
+    s.say(&app_key("org.example.Notes"), crate::common::refused::not_done(crate::common::refused::Refused::Cancelled), Tone::Problem);
+    assert!(!s.words.said.contains_key(&app_key("org.example.Notes")), "a closed password box says nothing");
     let failed = view(&s);
-    assert!(failed.said().iter().any(|w| w.starts_with("Not updated. Flatpak said:")) && failed.said().iter().any(|w| w == "The device was unplugged."));
+    assert!(failed.said().iter().any(|w| w.starts_with("Flatpak didn't update it:")) && failed.said().iter().any(|w| w == "The device was unplugged."));
     assert!(update_buttons(&failed).iter().all(|(_, can)| *can));
 
     s.upd.restart = true;
     let wants = view(&s);
-    assert!(headline_of(&wants).ends_with("What has gone in needs a restart to finish."), "{}", headline_of(&wants));
+    assert!(headline_of(&wants).ends_with("Restart to finish installing."), "{}", headline_of(&wants));
     assert!(update_buttons(&wants).iter().any(|(tip, _)| tip == "Install 6 updates"), "Install all is still the main action");
 
     forget_failures(&mut s);
@@ -254,9 +256,9 @@ fn debian_s_packages_have_one_button_and_the_card_says_why() {
     let page = view(&s);
     let said = page.said();
     assert!(said.iter().any(|w| w == debian_why()), "{said:?}");
-    assert!(said.iter().any(|w| w == "2 updates, which go in together"));
+    assert!(said.iter().any(|w| w == "2 updates, installed together"));
     let tips: Vec<String> = page.buttons().into_iter().map(|(tip, _)| tip).collect();
-    assert!(tips.contains(&"Update Debian's packages".to_string()));
+    assert!(tips.contains(&"Update Debian packages".to_string()));
     assert!(!tips.iter().any(|t| t == "Update bash" || t == "Update curl"), "no package of Debian's has a button of its own: {tips:?}");
     for words in [debian_why(), "An app brings the shared parts its new version needs."] {
         assert!(!words.contains('\u{2014}') && words.ends_with('.'));
@@ -320,7 +322,7 @@ fn no_card_repeats_what_the_commands_say_and_each_failure_says_why_where_it_is()
         assert!(!said.iter().any(|w| w.starts_with("Updating 1/1")), "state {state}: a command's own line is on the page");
     }
 
-    s.said.clear();
+    s.words.said.clear();
     s.dials.insert(key.clone(), going());
     assert!(view(&s).said().iter().any(|w| w == "42%"), "{:?}", view(&s).said());
 
@@ -328,15 +330,15 @@ fn no_card_repeats_what_the_commands_say_and_each_failure_says_why_where_it_is()
     s.say(&key, why_not_updated(&["error: The disk is full".to_string()]), Tone::Problem);
     s.say(SYSTEM_ROW, Part::NoPassword.why().unwrap(), Tone::Problem);
     let said = view(&s).said();
-    assert!(said.iter().any(|w| w == "Not updated. Flatpak said: error: The disk is full"), "{said:?}");
-    assert!(said.iter().any(|w| w == "Not installed, because no administrator's password was given."), "{said:?}");
+    assert!(said.iter().any(|w| w == "Flatpak didn't update it: error: The disk is full"), "{said:?}");
+    assert!(!said.iter().any(|w| w.contains("no administrator's password was given")), "a closed password box says nothing: {said:?}");
 
     assert_eq!(not_fetched(""), no_lists());
-    assert_eq!(not_fetched("Not done: no administrator's password was given."), "Debian's lists could not be fetched. No administrator's password was given.");
-    assert_eq!(not_fetched("Temporary failure resolving 'deb.example.org'"), "Debian's lists could not be fetched. Temporary failure resolving 'deb.example.org'.");
+    assert_eq!(not_fetched("Not done: no administrator's password was given."), "Trindle couldn't get Debian's lists. Not done: no administrator's password was given.");
+    assert_eq!(not_fetched("Temporary failure resolving 'deb.example.org'"), "Trindle couldn't get Debian's lists. Temporary failure resolving 'deb.example.org'.");
 
-    assert_eq!(crate::store::pages::job_rows::no_reason(), "It did not finish, and gave no reason.");
-    assert_eq!(why_not_updated(&[]), "Not updated, and Flatpak gave no reason.");
+    assert_eq!(crate::store::pages::job_rows::no_reason(), "It didn't finish. No reason was given.");
+    assert_eq!(why_not_updated(&[]), "It wasn't updated. No reason was given.");
     no_words_point_elsewhere_for_the_reason();
 }
 
@@ -378,7 +380,7 @@ fn without_the_internet_what_is_known_is_shown_and_the_rest_said_plainly() {
     assert_eq!(update_buttons(&page), with, "every button is where it was and can be pressed");
     assert_eq!(headline_of(&page), format!("6 updates are ready. {}", no_more()));
     assert!(page.said().iter().any(|w| w == "button: Update org.example.Calculator"));
-    assert!(!page.said().iter().any(|w| w.starts_with("Could not check")), "not being connected is no failure");
+    assert!(!page.said().iter().any(|w| w.starts_with("Couldn't check")), "not being connected is no failure");
     assert_eq!(status(&s, APPS, None, 1, 0, 0).0, Dot::Waiting);
 
     updating::pretend(Some(path.clone()), true);
@@ -413,7 +415,7 @@ fn with_looking_by_itself_off_nothing_claims_a_look_that_was_not_made() {
     s.upd.off = true;
     s.upd.checked_at = None;
     let page = view(&s);
-    assert_eq!(headline_of(&page), "Checking for updates by itself is off. Press Check for updates to look.");
+    assert_eq!(headline_of(&page), "Automatic update checks are switched off.");
     assert_eq!((headline(&s).0, status(&s, APPS, None, 0, 0, 0)), (Dot::Quiet, (Dot::Quiet, "Not checked".to_string())));
     assert!(!page.said().iter().any(|w| w == "Up to date" || w.starts_with("Everything is up to date")));
     assert_eq!(update_buttons(&page), [("Check for updates".to_string(), true)], "the press still works");
@@ -462,7 +464,7 @@ fn a_check_that_never_answers_is_given_up_on() {
     gave_up(&mut s, 2);
     assert!(s.upd.checking.is_empty());
     assert_eq!(phase(&s), Phase::Found);
-    assert_eq!(status(&s, APPS, None, 0, 0, 0), (Dot::Failed, format!("Could not check. {}", too_long())));
+    assert_eq!(status(&s, APPS, None, 0, 0, 0), (Dot::Failed, format!("Couldn't check. {}", too_long())));
     assert!(s.upd.checked_at.is_some());
 
     s.upd.checked_at = None;
@@ -491,7 +493,7 @@ fn an_app_is_named_from_this_computer_without_the_catalogue() {
 }
 
 fn hold_buttons(s: &Store) -> Vec<(String, bool)> {
-    view(s).buttons().into_iter().filter(|(tip, _)| tip.starts_with("Hold back") || tip.starts_with("Release")).collect()
+    view(s).buttons().into_iter().filter(|(tip, _)| tip.starts_with("Hold back") || tip.starts_with("Allow updates")).collect()
 }
 
 fn row_order(s: &Store) -> Vec<String> {
@@ -531,7 +533,7 @@ fn the_holding_buttons_are_there_and_nothing_is_held(s: &Store) {
     assert!(before.iter().all(|(_, can)| *can));
     assert!(view(s).said().iter().any(|w| w == not_held()) && view(s).said().iter().any(|w| w == never_held()), "why Trindle's and Debian's have none");
     assert_eq!(counts(s), (8, 0));
-    assert_eq!(headline_of(&view(s)), "8 updates are ready, 350 MB in all. The firmware needs a restart to finish.");
+    assert_eq!(headline_of(&view(s)), "8 updates are ready, 350 MB in all. Restart to finish the firmware update.");
     assert_eq!(flatpaks_for_all(s), Some(Vec::new()), "nothing held: Flatpak updates everything, as ever");
 }
 
@@ -552,12 +554,12 @@ fn one_of_each_kind_is_held_back(s: &mut Store, rows: &[String], path: &std::pat
     for held in ["Update org.example.Calculator", "Update Example Platform 25.08 (org.example.Platform)", "Update Example keyboard", "Update org.example.One"] {
         assert!(buttons.contains(&(held.to_string(), false)), "{held} is off: {buttons:?}");
     }
-    for free in ["Update org.example.Paint", "Update Trindle", "Update Debian's packages"] {
+    for free in ["Update org.example.Paint", "Update Trindle", "Update Debian packages"] {
         assert!(buttons.contains(&(free.to_string(), true)), "{free} can be pressed: {buttons:?}");
     }
     assert_eq!(hold_buttons(s).iter().map(|(tip, can)| (tip.as_str(), *can)).collect::<Vec<_>>(),
-               [("Release org.example.Calculator", true), ("Hold back org.example.Paint", true), ("Release Example Platform 25.08 (org.example.Platform)", true),
-                ("Release Example keyboard", true), ("Release org.example.One", true)], "each hold button is where it was, now Release");
+               [("Allow updates for org.example.Calculator", true), ("Hold back org.example.Paint", true), ("Allow updates for Example Platform 25.08 (org.example.Platform)", true),
+                ("Allow updates for Example keyboard", true), ("Allow updates for org.example.One", true)], "each hold button is where it was, now Allow updates");
     let said = page.said();
     for words in ["Held back at version 1.0; version 2.0 is waiting", "Held back; version 25.08.3 is waiting", "Held back at version 1; version 2 is waiting",
                   "1 update, 10 MB; 2 held back", "1 held back", "1 plugin's update is held back.", hold_why()] {
@@ -641,17 +643,17 @@ fn the_card_lists_what_is_held(s: &mut Store, calculator: &Thing, old: &Thing, p
     s.upd = std::mem::take(&mut s.upd).opened_with(&s.held);
     assert!(held_card_shown(s));
     let said = view(s).said();
-    for words in ["4 held back", "Held back at version 1.0; version 2.0 is waiting", "Held back at version 7.1; nothing newer yet", "Held back; nothing newer yet",
+    for words in ["4 held back", "Held back at version 1.0; version 2.0 is waiting", "Held back at version 7.1. There's nothing newer yet.", "Held back; nothing newer yet",
                   "Example Platform 25.08", "A device's firmware", release_why()] {
         assert!(said.iter().any(|w| w == words), "{words}: {said:?}");
     }
-    let in_card = ["Release org.example.Calculator", "Release org.example.Old", "Release Example Platform 25.08 (org.example.Platform)",
-                   "Release the firmware of device zzz"];
+    let in_card = ["Allow updates for org.example.Calculator", "Allow updates for org.example.Old", "Allow updates for Example Platform 25.08 (org.example.Platform)",
+                   "Allow updates for the firmware of device zzz"];
     let all = hold_buttons(s);
     for tip in in_card {
         assert!(all.contains(&(tip.to_string(), true)), "{tip}: {all:?}");
     }
-    assert_eq!(all.iter().filter(|(tip, _)| tip == "Release org.example.Calculator").count(), 2, "on its own row and in the card");
+    assert_eq!(all.iter().filter(|(tip, _)| tip == "Allow updates for org.example.Calculator").count(), 2, "on its own row and in the card");
     let keys: Vec<String> = s.upd.held_rows.iter().map(held_row_key).collect();
     assert_eq!(keys, ["held:up:app:org.example.Calculator", "held:up:app:org.example.Old", "held:up:part:org.example.Platform:25.08", "held:fw:zzz"]);
     keys
@@ -707,9 +709,9 @@ fn a_hold_that_cannot_be_kept_is_said_in_red_and_changes_nothing() {
     assert!(!keep_held(&mut s, &Thing::app("org.example.Calculator").unwrap(), true, &app_key("org.example.Calculator")));
     assert!(!s.held.app("org.example.Calculator"));
     assert_eq!(counts(&s), (6, 0));
-    assert!(view(&s).said().iter().any(|w| w.starts_with("Not held back. The list of what is held back could not be kept")));
+    assert!(view(&s).said().iter().any(|w| w.starts_with("Trindle couldn't hold it back, because it couldn't save the list of held back updates")));
     assert!(!keep_held(&mut s, &Thing::plugin("org.example.One").unwrap(), true, "pl:org.example.One"));
-    assert!(plugin_page::problem(&s, "org.example.One").is_some_and(|w| w.starts_with("Not held back.")));
+    assert!(plugin_page::problem(&s, "org.example.One").is_some_and(|w| w.starts_with("Trindle couldn't hold it back")));
     held::pretend(None);
 }
 
@@ -748,7 +750,7 @@ fn the_headline_counts_and_sizes_what_is_ready() {
     assert_eq!(held_words(Some("1.0"), None), "Held back at version 1.0; an update is waiting");
     assert_eq!(held_words(Some(" "), Some("")), "Held back; an update is waiting");
     assert_eq!(found_sentence(4, 210_000_000, false, 0), "4 updates are ready, 210 MB in all.");
-    assert_eq!(found_sentence(1, 0, true, 0), "1 update is ready. The firmware needs a restart to finish.");
+    assert_eq!(found_sentence(1, 0, true, 0), "1 update is ready. Restart to finish the firmware update.");
 }
 
 #[test]
@@ -838,12 +840,10 @@ fn a_start_asked_for_is_dropped_when_it_may_not_go_ahead() {
 #[test]
 fn the_rings_start_is_the_pages_install_all() {
     let source = crate::common::source::code(include_str!("install.rs"));
-    let all = source.split_once("pub fn install_all(").unwrap().1.split_once("\n}\n").unwrap().0;
-    assert!(all.trim().ends_with("install_all_in(s);") && all.matches(";").count() == 1);
     let start = crate::common::source::code(include_str!("check.rs")).split_once("fn start_asked(").unwrap().1.split_once("\n}\n").unwrap().0;
-    assert!(start.contains("install_all_in(s)"));
-    assert!(start.find("take(&mut s.upd.start_asked)").unwrap() < start.find("install_all_in").unwrap());
-    let inner = source.split_once("fn install_all_in(").unwrap().1.split_once("\n}\n").unwrap().0;
+    assert!(start.contains("install_all(s)"));
+    assert!(start.find("take(&mut s.upd.start_asked)").unwrap() < start.find("install_all").unwrap());
+    let inner = source.split_once("pub fn install_all(").unwrap().1.split_once("\n}\n").unwrap().0;
     assert!(inner.contains("updating::begin(Who::Apps)") && inner.contains("!asks_more") && !inner.contains("left_to_look"));
 
     assert!(crate::common::source::code(include_str!("view.rs")).contains(".on_press(go(install_all))"));
@@ -932,7 +932,7 @@ fn a_running_update_shows_stop_and_a_stopped_one_says_what_to_press() {
     let after = view(&s);
     assert!(texts(&after).iter().any(|w| w == "Stopped. Press Update to carry on."), "{:?}", texts(&after));
     assert!(!after.buttons().iter().any(|(tip, _)| tip == "Stop"));
-    assert!(!s.said.contains_key(&key) && !s.dials.contains_key(&key), "no red words and no ring");
+    assert!(!s.words.said.contains_key(&key) && !s.dials.contains_key(&key), "no red words and no ring");
     assert!(update_buttons(&after).iter().any(|(tip, can)| tip == "Update org.example.Calculator" && *can), "Update is back");
     assert_eq!(s.waiting_updates(), 6, "and it still waits, counted");
 
@@ -963,8 +963,8 @@ fn install_all_has_its_own_stop(s: &mut Store) {
     s.upd.jobs = 0;
     assert!(stopped(s, APPS_ROW, &all, false));
     let page = view(s);
-    assert!(texts(&page).iter().any(|w| w == "Stopped. Press Install to carry on."), "{:?}", texts(&page));
-    assert!(!s.said.contains_key(APPS_ROW));
+    assert!(texts(&page).iter().any(|w| w == "Stopped. Install again to carry on."), "{:?}", texts(&page));
+    assert!(!s.words.said.contains_key(APPS_ROW));
 }
 
 #[test]
@@ -1048,7 +1048,7 @@ fn the_stopped_update_has_ended_for_good(store: &Rc<RefCell<Store>>, key: String
     assert_eq!(s.upd.jobs, 0);
     assert_eq!(updating::holder_at(path), None, "the turn is given back");
     assert!(s.upd.stopped.contains(&key) && s.upd.stops.is_empty());
-    assert!(!s.said.contains_key(&key) && !s.dials.contains_key(&key), "no red words and no ring");
+    assert!(!s.words.said.contains_key(&key) && !s.dials.contains_key(&key), "no red words and no ring");
     drop(s);
 
     store.borrow_mut().updatable = vec!["org.example.Calculator".into()];
@@ -1056,4 +1056,49 @@ fn the_stopped_update_has_ended_for_good(store: &Rc<RefCell<Store>>, key: String
     let pid = helper_pid(helper).expect("the helper ran");
     assert!((0..100).any(|_| { std::thread::sleep(Duration::from_millis(50)); !alive(pid) }), "what the update started has ended too");
     let _ = std::fs::remove_file(helper);
+}
+
+#[test]
+fn flatpak_updates_are_read_and_put_in_for_both_installations() {
+    for cached in [false, true] {
+        let user = read::remote_ls_argv("--user", cached);
+        let system = read::remote_ls_argv("--system", cached);
+        assert!(user.contains(&"--user") && !user.contains(&"--system"));
+        assert!(system.contains(&"--system") && !system.contains(&"--user"));
+        assert_eq!(user.contains(&"--cached"), cached);
+    }
+    let named: &[&str] = &["--app", "org.example.App/x86_64/stable"];
+    let argv = install::update_argv(named);
+    assert!(!argv.contains(&"--user") && !argv.contains(&"--system"), "left to Flatpak, which updates wherever it is kept: {argv:?}");
+}
+
+#[test]
+fn apps_updating_together_move_their_buttons_with_no_new_view() {
+    use crate::toolkit::tiles::RingShare;
+    let mut s = store_with_updates();
+    let id = "org.example.Calculator";
+    begin(&mut s, APPS_ROW, |_| {});
+    s.upd.app_rows = HashMap::from([(id.to_string(), RingShare::new(Some(0.0)))]);
+    s.upd.app_order = vec![id.to_string()];
+    let shown = crate::common::filling::following_buttons(&view(&s));
+    let ring = shown.into_iter().find(|(tip, _)| tip.ends_with(id)).expect("its button follows its row's figure").1;
+    let job = RefCell::new(crate::store::progress::Job::default());
+    let mut built = 0;
+    for n in 1..=12 {
+        std::thread::sleep(std::time::Duration::from_millis(40));
+        apps_line(&mut s, &format!("Updating 1/1\u{2026} \u{2588}  {}%  9.8 MB/s", n * 8), &job);
+        built += usize::from(s.moving() && s.turn());
+    }
+    assert_eq!(ring.get(), Some(0.96), "the button's edge followed every line");
+    assert!(built <= 3, "the view was asked for {built} times in 12 lines");
+}
+
+#[test]
+fn the_security_switch_says_a_failure_under_its_card() {
+    let mut s = store_with_updates();
+    s.say(super::SECURITY_ROW, "Example reason.", Tone::Problem);
+    assert!(s.top.is_none());
+    assert!(view(&s).said().iter().any(|w| w == "Example reason."));
+    s.say(super::SECURITY_ROW, crate::common::refused::not_done(crate::common::refused::Refused::Cancelled), Tone::Problem);
+    assert!(!view(&s).said().iter().any(|w| w == "Example reason." || w.contains("no administrator's password")));
 }

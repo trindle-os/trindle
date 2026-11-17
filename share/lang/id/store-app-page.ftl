@@ -27,7 +27,7 @@ store-app-state-updating = Memperbarui
 store-app-state-held = Terpasang, pembaruan ditahan
 
 # The state beside the dot for an installed app whose updates are held back.
-store-app-state-held-version = Terpasang, ditahan pada versi { $version }
+store-app-state-held-version = Terpasang, pembaruan ditahan pada versi { $version }
 
 # The state beside the dot for an installed app with an update waiting; the end says what waits.
 store-app-state-waiting = Terpasang, { $waits }
@@ -66,7 +66,7 @@ store-app-remove = Hapus
 store-app-open-round = Buka
 
 # Main button that releases an app whose updates are held back.
-store-app-release = Lepaskan
+store-app-release = Izinkan pembaruan
 
 # Main button that updates the app.
 store-app-update = Perbarui
@@ -84,13 +84,13 @@ store-app-website = Situs web
 store-app-no-pictures = Aplikasi ini tidak punya gambar.
 
 # In the picture frame when the picture could not be fetched.
-store-app-picture-missed = Gambar ini tidak dapat diambil.
+store-app-picture-missed = Trindle tidak dapat mengambil gambar ini.
 
 # In the picture frame while the picture is being fetched.
 store-app-picture-fetching = Mengambil gambar…
 
 # In the picture frame when the computer has no internet.
-store-app-picture-offline = Gambar tidak dapat diambil selama komputer ini tidak tersambung ke internet.
+store-app-picture-offline = Sambungkan ke internet untuk melihat gambar.
 
 # Between the picture buttons: which picture, when it has no caption.
 store-app-picture-of = Gambar { $at } dari { $n }
@@ -164,13 +164,13 @@ store-app-review-no-title = Tanpa judul
 store-app-people-none = Belum ada yang menulis tentang aplikasi ini.
 
 # Under What people say when there is no internet.
-store-app-people-offline = Apa kata orang tidak dapat diambil selama komputer ini tidak tersambung ke internet.
+store-app-people-offline = Sambungkan ke internet untuk membaca ulasan.
 
 # Under What people say while reviews are being fetched.
-store-app-people-looking = Mencari apa kata orang…
+store-app-people-looking = Memuat ulasan…
 
 # Name of the card of reviews.
-store-app-people = Apa kata orang
+store-app-people = Ulasan
 
 # Facts line: when the app's project was made.
 store-app-fact-created = Dibuat

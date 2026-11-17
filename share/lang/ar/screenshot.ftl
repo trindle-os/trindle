@@ -56,7 +56,7 @@ screenshot-tool-circle = دائرة
 screenshot-tool-highlighter = قلم تمييز
 
 # Name of the drawing tool that writes words.
-screenshot-tool-words = كلمات
+screenshot-tool-words = نص
 
 # Name of the drawing tool that puts numbered spots.
 screenshot-tool-numbers = أرقام
@@ -107,16 +107,16 @@ screenshot-not-saved = لم تُحفظ لقطة الشاشة
 screenshot-not-copied = لم تُنسخ لقطة الشاشة
 
 # Words of that notice.
-screenshot-clipboard-refused = تعذّر على الحافظة قبولها.
+screenshot-clipboard-refused = تعذّر على Trindle نسخها.
 
 # Words of the notice that the screenshot could not be saved: the picture was not made.
-screenshot-no-picture = تعذّر إنشاء الصورة
+screenshot-no-picture = تعذّر التقاط لقطة الشاشة.
 
 # Words of the notice that the screenshot could not be saved: no bus to ask on.
-screenshot-no-bus = لا يوجد ناقل جلسة للسؤال عن المكان
+screenshot-no-bus = لا يستطيع Trindle السؤال عن مكان الحفظ.
 
 # Words of the notice that the screenshot could not be saved: the file chooser could not be asked.
-screenshot-no-chooser = تعذّر سؤال أداة اختيار الملفات
+screenshot-no-chooser = تعذّر فتح أداة اختيار الملفات.
 
 # Words of the notice that the screenshot could not be saved: every file name was taken.
 screenshot-no-free-name = لا يوجد اسم متاح
@@ -128,30 +128,30 @@ screenshot-write-failed = { $path }: { $why }
 screenshot-eye-title = أداة انتقاء اللون
 
 # Words that float beside the i of the eye dropper's window.
-screenshot-eye-help = اضغط على أداة انتقاء اللون، ثم انقر في أي مكان على الشاشة لأخذ اللون تحت المؤشر. زر Escape يتراجع. يُنسخ كل لون فورًا برمز سداسي عشري ويُحفظ في القائمة أدناه، الأحدث أولًا، لتنسخه مرة أخرى لاحقًا.
+screenshot-eye-help = اضغط على أداة انتقاء اللون، ثم انقر في أي مكان على الشاشة لالتقاط اللون تحت المؤشر. اضغط Escape للإلغاء. يُنسخ كل لون فورًا برمز سداسي عشري ويُضاف إلى القائمة أدناه، الأحدث أولًا، لتتمكن من نسخه مرة أخرى لاحقًا.
 
 # Name of the i button beside the title.
 screenshot-eye-about = عن أداة انتقاء اللون
 
 # Name of the main button that takes a colour.
-screenshot-eye-take = خذ لونًا
+screenshot-eye-take = التقط لونًا
 
 # Sentence under the title while no colour has been taken.
-screenshot-eye-none = خذ لونًا من أي مكان على الشاشة.
+screenshot-eye-none = التقط لونًا من الشاشة.
 
 # Sentence under the title once colours have been taken.
 screenshot-eye-taken =
     { $n ->
-        [zero] لم يُؤخذ أي لون.
-        [one] أُخذ لون واحد: { $newest }.
-        [two] أُخذ لونان؛ الأحدث { $newest }.
-        [few] أُخذت { $n } ألوان؛ الأحدث { $newest }.
-        [many] أُخذ { $n } لونًا؛ الأحدث { $newest }.
-       *[other] أُخذ { $n } لون؛ الأحدث { $newest }.
+        [zero] لم يُلتقط أي لون.
+        [one] التُقط لون واحد: { $newest }.
+        [two] التُقط لونان. الأحدث { $newest }.
+        [few] التُقطت { $n } ألوان. الأحدث { $newest }.
+        [many] التُقط { $n } لونًا. الأحدث { $newest }.
+       *[other] التُقط { $n } لون. الأحدث { $newest }.
     }
 
 # Shown in the big card while no colour has been taken.
-screenshot-eye-latest-empty = اللون الذي تأخذه يظهر هنا كبيرًا، جاهزًا للنسخ.
+screenshot-eye-latest-empty = لم يُلتقط أي لون بعد.
 
 # Name of the card that holds the latest colour.
 screenshot-eye-latest = آخر لون
@@ -161,10 +161,10 @@ screenshot-eye-latest = آخر لون
 screenshot-eye-clear = امسح القائمة
 
 # Head of the card with the list of colours taken.
-screenshot-eye-list = الألوان المأخوذة
+screenshot-eye-list = ألوانك
 
 # Shown in the list card while no colour has been taken.
-screenshot-eye-list-empty = الألوان المأخوذة بأداة الانتقاء تُحفظ هنا، الأحدث أولًا.
+screenshot-eye-list-empty = لم تُلتقط أي ألوان بعد.
 
 # Name of the round button that takes a colour out of the list.
 # SAFETY: needs a human review before it ships
@@ -179,11 +179,11 @@ screenshot-pick-title = مشاركة شاشتك مع { $app }؟
 
 # Sentence under the title when several things can be picked.
 # SAFETY: needs a human review before it ships
-screenshot-pick-many = اختر واحدًا أو أكثر. لا يُشارَك إلا ما تختاره، حتى يتوقف التطبيق أو يُغلق.
+screenshot-pick-many = اختر واحدًا أو أكثر. لا يُشارَك إلا ما تختاره، حتى يتوقف التطبيق عن المشاركة أو يُغلق.
 
 # Sentence under the title when one thing can be picked.
 # SAFETY: needs a human review before it ships
-screenshot-pick-one = اختر واحدًا. لا يُشارَك إلا ما تختاره، حتى يتوقف التطبيق أو يُغلق.
+screenshot-pick-one = اختر واحدًا. لا يُشارَك إلا ما تختاره، حتى يتوقف التطبيق عن المشاركة أو يُغلق.
 
 # Heading over the screens that can be shared.
 screenshot-pick-screens = الشاشات
@@ -198,7 +198,7 @@ screenshot-pick-nothing = لا يوجد ما يمكن مشاركته.
 screenshot-pick-desktop = سطح المكتب كله
 
 # Words under that choice.
-screenshot-pick-desktop-detail = كل الشاشات كما هي
+screenshot-pick-desktop-detail = كل الشاشات كما هي مرتبة
 
 # Words under a screen's choice: its size in pixels.
 screenshot-pick-size = { $width } في { $height }
@@ -237,11 +237,11 @@ screenshot-portal-name = الاسم
 
 # Heading when an unknown program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks-unknown = برنامج يسأل من أنت
+screenshot-account-asks-unknown = برنامج يطلب معلوماتك
 
 # Heading when a program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks = { $who } يسأل من أنت
+screenshot-account-asks = { $who } يطلب معلوماتك
 
 # Name the screen reader gives to the person's picture.
 screenshot-account-picture = صورتك
@@ -253,7 +253,7 @@ screenshot-account-signed-in = مسجّل الدخول باسم { $id }
 screenshot-apps-search = ابحث عن تطبيقات
 
 # Shown when no app can open the file.
-screenshot-apps-none = لا يوجد تطبيق هنا يستطيع فتحه
+screenshot-apps-none = لا يوجد تطبيق يستطيع فتحه
 
 # Name of the switch that remembers the choice.
 screenshot-apps-always = استخدم هذا التطبيق دائمًا لهذا النوع من الملفات
@@ -313,7 +313,7 @@ screenshot-wallpaper-ask = تعيين هذه الصورة خلفية لشاشت�
 
 # Heading when a program offers a wallpaper.
 # SAFETY: needs a human review before it ships
-screenshot-wallpaper-asks = يقترح { $who } خلفية جديدة
+screenshot-wallpaper-asks = { $who } يريد تعيين خلفية
 
 # Name the screen reader gives to the picture offered.
 screenshot-wallpaper-picture = الخلفية الجديدة
@@ -323,10 +323,10 @@ screenshot-wallpaper-picture = الخلفية الجديدة
 screenshot-wallpaper-set = عيّنها خلفية
 
 # Red line under the printer box when no printer is set up.
-screenshot-print-no-printer = لا توجد طابعة مُعدّة. أضف واحدة في الإعدادات، الطابعات.
+screenshot-print-no-printer = لم تُعدّ أي طابعة. أضف واحدة في الإعدادات، تحت الطابعات.
 
 # Red line under the printer box when the printing system does not answer.
-screenshot-print-not-answering = الطباعة لا تردّ.
+screenshot-print-not-answering = الطباعة لا تستجيب.
 
 # Red line under the printer box when printing is not installed.
 screenshot-print-not-installed = الطباعة غير مثبتة على هذا الحاسوب.
@@ -377,7 +377,7 @@ screenshot-print-from = اطبع من { $who }
 screenshot-print-failed = تعذّرت الطباعة
 
 # Words of that notice when the choices made were not kept.
-screenshot-print-lost = لم تُحفظ اختياراتها. اطبع مرة أخرى.
+screenshot-print-lost = تعذّر حفظ الإعدادات. اطبع مرة أخرى.
 
 # Line in the menu on a file or folder: change its name.
 screenshot-chooser-rename = إعادة تسمية
@@ -411,7 +411,7 @@ screenshot-chooser-empty = لا شيء هنا
 screenshot-chooser-kind = نوع الملف
 
 # Said where a place on another computer is not answering.
-screenshot-chooser-not-answering = الحاسوب الآخر لا يردّ.
+screenshot-chooser-not-answering = الحاسوب الآخر لا يستجيب.
 
 # What the saved list of last folders is called when it is found damaged and set aside.
 screenshot-chooser-damaged = مجلدات أداة الاختيار
@@ -421,7 +421,7 @@ screenshot-chooser-no-folder = ذلك المجلد غير موجود.
 
 # Words under the box when saving would replace a file.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-ask = { $name } موجود بالفعل. اضغط استبدال، أو Enter مرة أخرى، لوضع هذا مكانه.
+screenshot-chooser-replace-ask = { $name } موجود بالفعل. لاستبداله، اضغط استبدال أو اضغط Enter مرة أخرى.
 
 # Words under the box when a key is pressed on Recent, which is not a folder.
 screenshot-chooser-recent-not-folder = الأخيرة ليست مجلدًا. افتح مجلدًا أولًا.
@@ -461,64 +461,64 @@ screenshot-chooser-replace = استبدال
 
 # What the screen reader says for the button that replaces a folder.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-spoken = استبدال: المجلد الموجود بالفعل يذهب إلى سلة المهملات
+screenshot-chooser-replace-spoken = استبدال. يُنقل المجلد الموجود إلى سلة المهملات.
 
 # Name of the main button that merges two folders.
 # SAFETY: needs a human review before it ships
 screenshot-chooser-merge = دمج
 
 # Words in the question when folders are being pasted.
-screenshot-chooser-rest-folders = الجواب نفسه لكل مجلد موجود بالفعل.
+screenshot-chooser-rest-folders = افعل هذا لكل مجلد موجود.
 
 # Words in the question when files are being pasted.
-screenshot-chooser-rest-files = الجواب نفسه لكل ملف موجود بالفعل.
+screenshot-chooser-rest-files = افعل هذا لكل ملف موجود.
 
 # Name of the switch that gives the same answer to the rest.
 screenshot-chooser-same = افعل الشيء نفسه مع الباقي
 
 # Words under the box after Cut.
-screenshot-chooser-was-cut = تم قص { $what }. الصقه في مجلد.
+screenshot-chooser-was-cut = جاهز للنقل: { $what }
 
 # Words under the box after Copy.
-screenshot-chooser-was-copied = تم نسخ { $what }. الصقه في مجلد.
+screenshot-chooser-was-copied = جاهز للنسخ: { $what }
 
 # Words under the box when Paste is pressed and there is nothing to paste.
-screenshot-chooser-nothing-cut = لم يُقص أو يُنسخ شيء.
+screenshot-chooser-nothing-cut = لا شيء مقصوص أو منسوخ.
 
 # Words under the box when Paste is pressed while a paste is still going.
-screenshot-chooser-paste-busy = لا يزال لصق قيد التنفيذ.
+screenshot-chooser-paste-busy = ما زال Trindle يلصق.
 
 # Red line after some items could not be moved.
 screenshot-chooser-not-moved =
     { $n ->
-        [zero] لم يتعذّر نقل أي عنصر: { $names }.
-        [one] تعذّر نقل عنصر واحد: { $names }.
-        [two] تعذّر نقل عنصرين: { $names }.
-        [few] تعذّر نقل { $n } عناصر: { $names }.
-        [many] تعذّر نقل { $n } عنصرًا: { $names }.
-       *[other] تعذّر نقل { $n } عنصر: { $names }.
+        [zero] لم يتعذّر على Trindle نقل أي عنصر: { $names }.
+        [one] تعذّر على Trindle نقل عنصر واحد: { $names }.
+        [two] تعذّر على Trindle نقل عنصرين: { $names }.
+        [few] تعذّر على Trindle نقل { $n } عناصر: { $names }.
+        [many] تعذّر على Trindle نقل { $n } عنصرًا: { $names }.
+       *[other] تعذّر على Trindle نقل { $n } عنصر: { $names }.
     }
 
 # Red line after some items could not be copied.
 screenshot-chooser-not-copied =
     { $n ->
-        [zero] لم يتعذّر نسخ أي عنصر: { $names }.
-        [one] تعذّر نسخ عنصر واحد: { $names }.
-        [two] تعذّر نسخ عنصرين: { $names }.
-        [few] تعذّر نسخ { $n } عناصر: { $names }.
-        [many] تعذّر نسخ { $n } عنصرًا: { $names }.
-       *[other] تعذّر نسخ { $n } عنصر: { $names }.
+        [zero] لم يتعذّر على Trindle نسخ أي عنصر: { $names }.
+        [one] تعذّر على Trindle نسخ عنصر واحد: { $names }.
+        [two] تعذّر على Trindle نسخ عنصرين: { $names }.
+        [few] تعذّر على Trindle نسخ { $n } عناصر: { $names }.
+        [many] تعذّر على Trindle نسخ { $n } عنصرًا: { $names }.
+       *[other] تعذّر على Trindle نسخ { $n } عنصر: { $names }.
     }
 
 # Red line after some items could not be put in the Trash.
 screenshot-chooser-not-trashed =
     { $n ->
-        [zero] لم يتعذّر نقل أي عنصر إلى سلة المهملات: { $names }.
-        [one] تعذّر نقل عنصر واحد إلى سلة المهملات: { $names }.
-        [two] تعذّر نقل عنصرين إلى سلة المهملات: { $names }.
-        [few] تعذّر نقل { $n } عناصر إلى سلة المهملات: { $names }.
-        [many] تعذّر نقل { $n } عنصرًا إلى سلة المهملات: { $names }.
-       *[other] تعذّر نقل { $n } عنصر إلى سلة المهملات: { $names }.
+        [zero] لم يتعذّر على Trindle نقل أي عنصر إلى سلة المهملات: { $names }.
+        [one] تعذّر على Trindle نقل عنصر واحد إلى سلة المهملات: { $names }.
+        [two] تعذّر على Trindle نقل عنصرين إلى سلة المهملات: { $names }.
+        [few] تعذّر على Trindle نقل { $n } عناصر إلى سلة المهملات: { $names }.
+        [many] تعذّر على Trindle نقل { $n } عنصرًا إلى سلة المهملات: { $names }.
+       *[other] تعذّر على Trindle نقل { $n } عنصر إلى سلة المهملات: { $names }.
     }
 
 # Name of the box where a file or folder is renamed.
@@ -536,10 +536,10 @@ screenshot-chooser-items =
     }
 
 # Title of the notice when an email could not be started.
-screenshot-mail-failed = تعذّر بدء البريد
+screenshot-mail-failed = تعذّر إنشاء البريد
 
 # Why: no mail program is chosen or installed.
-screenshot-mail-no-app = لم يُحدَّد برنامج بريد. اختر واحدًا في الإعدادات، التطبيقات الافتراضية.
+screenshot-mail-no-app = لم تختر برنامج بريد. اختر واحدًا في الإعدادات، التطبيقات الافتراضية.
 
 # Why: a program asked to attach more files than allowed.
 screenshot-mail-too-many = ملفات كثيرة جدًا للإرفاق.
@@ -586,11 +586,16 @@ screenshot-chooser-pin-not-kept = تعذّر حفظ التثبيت.
 # Red line after some items could not be deleted.
 screenshot-chooser-not-deleted =
     { $n ->
-        [zero] لم يُحذف أي عنصر: { $names }.
-        [one] تعذّر حذف عنصر واحد: { $names }.
-        [two] تعذّر حذف عنصرين: { $names }.
-        [few] تعذّر حذف { $n } عناصر: { $names }.
-        [many] تعذّر حذف { $n } عنصراً: { $names }.
-       *[other] تعذّر حذف { $n } عنصر: { $names }.
+        [zero] لم يتعذّر على Trindle حذف أي عنصر: { $names }.
+        [one] تعذّر على Trindle حذف عنصر واحد: { $names }.
+        [two] تعذّر على Trindle حذف عنصرين: { $names }.
+        [few] تعذّر على Trindle حذف { $n } عناصر: { $names }.
+        [many] تعذّر على Trindle حذف { $n } عنصرًا: { $names }.
+       *[other] تعذّر على Trindle حذف { $n } عنصر: { $names }.
     }
 
+# What the screen reader says for the list of places down the left of the file chooser.
+screenshot-chooser-places = الأماكن
+
+# What the screen reader says for the list of files and folders in the file chooser.
+screenshot-chooser-files = الملفات

@@ -7,7 +7,7 @@ unlock-title-default = Mot de passe du disque
 
 # SAFETY: needs a human review before it ships
 # Heading of the box in place of cryptsetup's own wording ("Please unlock disk ...", "Enter passphrase").
-unlock-title-encryption = Saisissez le mot de passe de chiffrement
+unlock-title-encryption = Saisissez le mot de passe du disque
 
 # SAFETY: needs a human review before it ships
 # Key hint under the box: Tab, or the eye, shows the typed password.
@@ -26,4 +26,3 @@ unlock-turn-off = Éteindre
 # SAFETY: needs a human review before it ships
 # Red line inside the card when Enter is pressed with nothing typed.
 unlock-type-first = Tapez le mot de passe, puis appuyez sur Entrée
-

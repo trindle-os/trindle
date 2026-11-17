@@ -20,34 +20,34 @@ ring-cli-command = { $program } [OPTION…]
 ring-cli-options = الخيارات:
 
 # Help for the ring's --say option, printed in a terminal.
-ring-cli-say = نفّذ ما تطلبه هذه الكلمات، كأنها قيلت للحلقة (لتجربة الأوامر الصوتية دون ميكروفون)
+ring-cli-say = شغّل أمرًا صوتيًا من نص دون استخدام ميكروفون
 
 # Help for the ring's --background option, printed in a terminal.
-ring-cli-background = ابدأ دون إظهار، ليكون الفتح الأول فوريًا
+ring-cli-background = ابدأ بعيدًا عن الأنظار، لتُفتح الحلقة فورًا في المرة الأولى
 
 # Help for the ring's --show-desktop option, printed in a terminal.
-ring-cli-show-desktop = أخفِ كل النوافذ لإظهار سطح المكتب، أو أعدها (يطلب ذلك Super وD)
+ring-cli-show-desktop = أخفِ كل النوافذ لإظهار سطح المكتب، أو أعدها (مفتاحا Super وD يفعلان ذلك)
 
 # Help for the ring's --listen option, printed in a terminal.
-ring-cli-listen = افتح الحلقة وهي تستمع مسبقًا، كما يفعل اختصار لوحة المفاتيح
+ring-cli-listen = افتح الحلقة وهي تستمع مسبقًا إلى أمر صوتي، كما يفعل اختصار لوحة المفاتيح
 
 # Help for the ring's --all option, printed in a terminal.
 ring-cli-all = افتح الحلقة مع عرض كل التطبيقات حولها
 
 # Help for the ring's --power option, printed in a terminal.
-ring-cli-power = افتح الحلقة على تسجيل الخروج وإعادة التشغيل وإيقاف التشغيل
+ring-cli-power = افتح خيارات الطاقة في الحلقة: تسجيل الخروج وإعادة التشغيل وإيقاف التشغيل
 
 # Help for the ring's --favourites option, printed in a terminal.
 ring-cli-favourites = افتح صفحة المفضلة في الإعدادات
 
 # Help for the ring's --restyle option, printed in a terminal.
-ring-cli-restyle = اعتمد مظهرًا جديدًا (فاتح أو داكن، أو لون تمييز جديد) من الإعدادات فورًا
+ring-cli-restyle = طبّق مظهرًا جديدًا من الإعدادات فورًا (فاتح أو داكن، أو لون تمييز جديد)
 
 # Help for the ring's --corners option, printed in a terminal.
-ring-cli-corners = أعد إنشاء نقاط اللمس في الزوايا العلوية
+ring-cli-corners = أعد إعداد نقاط اللمس في الزوايا العلوية
 
 # Help for the ring's --notes option, printed in a terminal.
-ring-cli-notes = انقل لوحة المفاتيح إلى دوائر الإشعارات على الشاشة (يطلب ذلك Super وN)
+ring-cli-notes = انقل التحكم بلوحة المفاتيح إلى دوائر الإشعارات على الشاشة (مفتاحا Super وN يفعلان ذلك)
 
 # Error printed in a terminal when the ring is given an option it does not know.
 ring-cli-unknown = خيار غير معروف { $option }
@@ -110,13 +110,13 @@ ring-tool-report = الإبلاغ عن مشكلة
 ring-gone = لم يعد موجودًا.
 
 # Line in the ring when nothing could open the item that was pressed.
-ring-could-not-open = لم يستطع شيء فتحه.
+ring-could-not-open = لا يستطيع Trindle فتح ذلك.
 
 # Line in the ring while it listens to a spoken command.
-ring-listening = أستمع... تحدّث، وسأتوقف حين تتوقف
+ring-listening = أستمع… قل أمرك. يتوقف الاستماع حين تتوقف عن الكلام
 
 # Line in the ring while it works out what was said.
-ring-working-out = جارٍ فهم ما قيل...
+ring-working-out = جارٍ فهم ما قيل…
 
 # Answer to the spoken command to close windows when none are open.
 ring-nothing-to-close = لا شيء لإغلاقه
@@ -189,7 +189,7 @@ ring-star-remove = إزالة من المفضلة
 ring-star-add = إضافة إلى المفضلة
 
 # Screen reader name of the red button that shows why an uninstall failed.
-ring-not-done = لم يتم
+ring-not-done = لماذا لم يتم؟
 
 # Note on an app's menu when the middle of the ring has no room for another favourite; the number is how many it holds.
 ring-middle-full =
@@ -228,7 +228,7 @@ ring-empty-hint = اضغط كل التطبيقات، ثم انقر بزر الف
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when a spoken or typed power choice needs a click to confirm.
-ring-power-only-click = النقر وحده يؤكد هذا.
+ring-power-only-click = انقر للتأكيد.
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when something other than the person tried to shut the computer down.
@@ -236,7 +236,7 @@ ring-power-only-own = أنت وحدك تستطيع إيقاف تشغيل هذا 
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when the power page closed because a program pressed a key.
-ring-power-closed = أُغلقت صفحة الطاقة: ضغط برنامج مفتاحًا، لا أنت.
+ring-power-closed = أُغلقت صفحة الطاقة لأن برنامجًا أرسل ضغطة مفتاح.
 
 # Said in the middle of the ring when Close is chosen on a plugin's icon and none of its windows are open.
 ring-plugin-not-open = لا شيء مفتوح لإغلاقه
@@ -248,11 +248,19 @@ ring-startup-remove = أوقف البدء عند تسجيل الدخول
 
 
 # Help for the option that opens the shortcut list, or closes it when it is showing.
-ring-cli-shortcuts = إظهار كل اختصارات لوحة المفاتيح في قائمة، أو إخفاء القائمة (Super وK، ما لم يتغير في الإعدادات)
+ring-cli-shortcuts = اعرض قائمة بكل اختصارات لوحة المفاتيح، أو أخفِ القائمة (Super وK، ما لم تغيّرهما في الإعدادات)
 
 # Notice from the new ring after the parts were restarted from the keyboard.
 ring-restarted = أُعيد التشغيل
 
 # Under the notice above.
-ring-restarted-why = بدأت الحلقة والأجزاء المساعدة من جديد.
+ring-restarted-why = أُعيد تشغيل الحلقة والأجزاء المساعدة.
 
+# Tip on the app menu's red button when removing the app did not work.
+ring-uninstall-failed = تعذّر إلغاء تثبيته.
+
+# Shorter name of the Sound and video piece of All apps, for when the full name does not fit along it.
+ring-category-media-short = الصوت
+
+# Line in the ring when a spoken command, such as turning the sound down, did not work.
+ring-voice-failed = لم ينجح ذلك.

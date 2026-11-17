@@ -32,45 +32,35 @@ store-list-installed = Installed
 store-tab-count = { $name } { $n }
 # Spoken name of a strip of tabs on the Installed page.
 store-tabs-show = Show
-# How long is left when it is a minute or less.
-store-left-minute = about a minute left
-# How long is left, in minutes.
-store-left-minutes = about { $n } minutes left
-# How long is left, in hours.
-store-left-hours =
-    { $n ->
-        [one] about 1 hour left
-       *[other] about { $n } hours left
-    }
 
 ## Where a download came from (src/store/origin.rs)
 
 # Credit under a package's page for the list its site was checked against.
 store-origin-credit = Checked against HaGeZi's Threat Intelligence list
 # Where a download came from: the site and the page that led to it.
-store-origin-both = Downloaded from { $site }, reached from { $referrer }.
+store-origin-both = You downloaded this from { $site }, after coming from { $referrer }.
 # Where a download came from: the site.
 store-origin-site = Downloaded from { $site }.
 # Where a download came from: the page that led to it.
-store-origin-referrer = Reached from { $referrer }.
+store-origin-referrer = Linked from { $referrer }.
 # Said when nothing tells where a download came from.
-store-origin-unknown = Trindle cannot tell where this came from.
+store-origin-unknown = Trindle can't tell where this came from.
 # Warning when the site is on the list; the first part says where the download came from.
-store-origin-listed = { $from } { $name } is on HaGeZi's Threat Intelligence list of sites known for harmful downloads and scams. Only install this if you are sure of where it came from.
+store-origin-listed = { $from } { $name } is on HaGeZi's Threat Intelligence list of sites known for harmful downloads and scams. Only install this if you are sure where it came from.
 # Said when the site is not on the list; the first part says where the download came from.
-store-origin-clear = { $from } The site is not on HaGeZi's Threat Intelligence list, but the list is not complete, so this does not prove it is safe.
+store-origin-clear = { $from } The site isn't on HaGeZi's Threat Intelligence list. That list isn't complete, so this doesn't prove it is safe.
 # Said when the list could not be fetched; the first part says where the download came from.
-store-origin-not-checked = { $from } The site could not be checked, as HaGeZi's Threat Intelligence list could not be fetched.
+store-origin-not-checked = { $from } Trindle couldn't check the site, because it couldn't get HaGeZi's Threat Intelligence list.
 
 ## Reviews and the GitHub key's keyring (src/store/reviews.rs, key.rs)
 
 # Name shown for a review whose writer gave none.
 store-review-someone = Someone
 # Red words when the keyring could not be reached.
-store-key-unreached = The keyring could not be reached: { $why }.
+store-key-unreached = Trindle couldn't reach the keyring: { $why }.
 # Red words when the key kept in the keyring is not text.
-store-key-not-text = The key kept is not text.
+store-key-not-text = The saved key isn't text.
 # Red words when a file that held the key could not be removed.
-store-key-not-removed = { $path } could not be removed: { $why }
+store-key-not-removed = { $path } couldn't be removed: { $why }
 # Red words when a file that held the key could not be read.
-store-key-not-read = { $path } could not be read: { $why }
+store-key-not-read = { $path } couldn't be read: { $why }

@@ -16,7 +16,7 @@ store-upd-held-version = { $have } sürümünde bekletiliyor
 store-upd-held = Bekletiliyor
 
 # On the Held back card: the version a thing is held at, and nothing newer waits.
-store-upd-held-version-nothing = { $have } sürümünde bekletiliyor; daha yenisi yok
+store-upd-held-version-nothing = { $have } sürümünde bekletiliyor. Daha yenisi yok.
 
 # On the Held back card: nothing newer waits.
 store-upd-held-nothing = Bekletiliyor; daha yenisi yok
@@ -55,7 +55,7 @@ store-upd-sentence = { $text }.
 store-upd-and-then = { $first } { $second }
 
 # Added to the headline when firmware is among the updates.
-store-upd-firmware-restart = Aygıt yazılımının tamamlanması için yeniden başlatma gerekir.
+store-upd-firmware-restart = Aygıt yazılımı güncellemesini bitirmek için yeniden başlatın.
 
 # Headline while the check runs.
 store-upd-checking = Güncellemeler denetleniyor.
@@ -67,19 +67,19 @@ store-upd-updating-one = { $name } güncelleniyor. Kurulurken çalışmaya devam
 store-upd-installing-all = Güncellemeler kuruluyor. Kurulurken çalışmaya devam edebilirsiniz.
 
 # Headline when the updates are in and the computer must start again.
-store-upd-restart = Bitirmek için yeniden başlatın: güncellemeler kuruldu ve bilgisayar yeniden başladığında kullanıma girer.
+store-upd-restart = Güncellemelerin kurulumunu tamamlamak için bilgisayarı yeniden başlatın.
 
 # Added to the headline when what went in needs a restart.
-store-upd-gone-in-restart = Kurulanların tamamlanması için yeniden başlatma gerekir.
+store-upd-gone-in-restart = Kurulumu bitirmek için yeniden başlatın.
 
 # Added to the headline with no internet.
-store-upd-no-more = Bu bilgisayar internete bağlı değil, bu yüzden daha fazlası aranamıyor.
+store-upd-no-more = Bu bilgisayar internete bağlı değil, bu yüzden Trindle daha fazla güncelleme arayamıyor.
 
 # Headline when nothing is ready (updates held back are added after it).
 store-upd-none-ready = Hazır güncelleme yok
 
 # Headline with nothing waiting and no internet to look with.
-store-upd-nothing-known = Bu bilgisayarın bildiği bekleyen güncelleme yok. İnternete bağlı değilken daha fazlasını arayamaz.
+store-upd-nothing-known = Trindle'ın bildiği bekleyen güncelleme yok. Bu bilgisayar internete bağlı değilken daha fazlasını arayamaz.
 
 # Name of the apps in the headline's list of what could not be checked.
 store-upd-name-apps = uygulamalar
@@ -103,7 +103,7 @@ store-upd-last-checked = Son denetim: { $time }.
 store-upd-not-checked = İnternet olmadan denetlenemez
 
 # Red words under a card when a check took too long.
-store-upd-too-long = Yanıt vermesi çok uzun sürdü.
+store-upd-too-long = Denetim çok uzun sürdü.
 
 # Tip of the round button that checks again.
 store-upd-check-again = Yeniden denetle
@@ -131,7 +131,7 @@ store-upd-check-for = Güncellemeleri denetle
 
 # SAFETY: needs a human review before it ships
 # Tip of the round button that releases a thing held back.
-store-upd-release = { $name } için bekletmeyi kaldır
+store-upd-release = { $name } için güncellemelere izin ver
 
 # SAFETY: needs a human review before it ships
 # Tip of the round button that holds a thing's updates back.
@@ -168,10 +168,10 @@ store-upd-from = Kaynak: { $from }
 store-upd-shared-part = Ortak bir parça, kaynak: { $from }
 
 # Note under the Apps card.
-store-upd-yours-alone = Yalnızca size ait olduklarından parolasız güncellenir. Bir uygulama, yeni sürümünün gerek duyduğu ortak parçaları da getirir.
+store-upd-yours-alone = Bu uygulamalar yalnızca size ait olduğundan parolasız güncellenir. Bir uygulamanın güncellemesi, gerek duyduğu ortak parçaları da kurar.
 
 # Note under the Apps card: what holding back does.
-store-upd-hold-why = Bekletilen bir güncelleme, siz bekletmeyi kaldırana kadar sahip olduğu sürümde kalır ve buradaki ile halkadaki Tümünü kur işleminin dışında tutulur.
+store-upd-hold-why = Bekletilen bir güncelleme mevcut sürümünde kalır. Güncellemelere yeniden izin verene kadar, tüm güncellemeleri kurduğunuzda burada ve halkada dışarıda bırakılır.
 
 # Heading of the Apps card.
 store-upd-card-apps = Uygulamalar
@@ -200,10 +200,10 @@ store-upd-card-plugins = Eklentiler
 store-upd-nothing-held = Bekletilen bir şey yok.
 
 # On a row of the Held back card for a thing released while the page is open.
-store-upd-released = Bekletme kaldırıldı
+store-upd-released = Bekletilmiyor
 
 # Note under the Held back card: what releasing does.
-store-upd-release-why = Bekletmesi kaldırılan şey, buradaki ve halkadaki Tümünü kur işlemiyle yeniden diğerleriyle birlikte kurulur.
+store-upd-release-why = Güncellemelere yeniden izin verdiğinizde bu, burada ve halkada diğerleriyle birlikte kurulur.
 
 # Name on the Held back card of a device whose firmware is not named now.
 store-upd-device-firmware = Bir aygıtın yazılımı
@@ -228,7 +228,7 @@ store-upd-debian-count =
 store-upd-from-debian = Kaynak: Debian
 
 # Under Debian's rows: how many of them show.
-store-upd-debian-showing = Debian güncellemelerinin { $total } tanesinden { $shown } tanesi gösteriliyor.
+store-upd-debian-showing = { $total } Debian güncellemesinden { $shown } tanesi gösteriliyor.
 
 # Note on the Trindle and Debian card: which version of Trindle the computer has.
 store-upd-has-trindle = Bu bilgisayarda Trindle { $version } var.
@@ -237,7 +237,7 @@ store-upd-has-trindle = Bu bilgisayarda Trindle { $version } var.
 store-upd-card-system = Trindle ve Debian
 
 # Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Debian paketleri birbirine uyacak biçimde yapılır; tek başına kurulan bir paket başkalarını da getirebilir ya da onları uyumsuz bırakabilir. Bu yüzden tek bir düğmeyle birlikte kurulurlar.
+store-upd-debian-why = Debian paketleri birlikte çalışacak şekilde hazırlanır. Yalnızca birini kurmak başkalarını da kurabilir ya da onları uyumsuz bırakabilir, bu yüzden hepsi birlikte kurulur.
 
 # Note on the Trindle and Debian card: why no row has a Hold back button.
 store-upd-not-held = Trindle'ın ve Debian'ın güncellemeleri tüm bilgisayar için güvenlik düzeltmeleri getirir, bu yüzden bekletilemez.
@@ -248,14 +248,8 @@ store-upd-card-security = Güvenlik güncellemeleri
 # On the security card: its state.
 store-upd-security-on = Açık, her gün
 
-# On the security card.
-store-upd-security-note = Debian düzeltmeleri her gün sormadan kurulur.
-
-# On the security card.
-store-upd-security-part = Trindle'ın parçasıdır; kapatılamaz.
-
 # On the security card: that holding back never stops these.
-store-upd-never-held = Bir güncellemeyi bekletmek bunları asla durdurmaz.
+store-upd-never-held = Bir güncellemeyi bekletmek güvenlik güncellemelerini asla durdurmaz.
 
 # Firmware card: the computer has no updater.
 store-upd-fw-none = Bu bilgisayarda aygıt yazılımı güncelleyicisi yok.
@@ -282,22 +276,22 @@ store-upd-fw-no-list = fwupd en yeni listeyi getiremedi.
 store-upd-no-flathub = Flathub'a ulaşılamadı.
 
 # Red words when Debian's lists could not be fetched.
-store-upd-no-lists = Debian listeleri getirilemedi.
+store-upd-no-lists = Trindle Debian listelerini alamadı.
 
 # Red words when Debian's lists could not be fetched; the reason follows.
-store-upd-no-lists-why = Debian listeleri getirilemedi. { $why }
+store-upd-no-lists-why = Trindle Debian listelerini alamadı. { $why }
 
 # Red words under a row when its updates could not be held back or released: the list of what is held could not be kept.
-store-upd-not-held-list = Bekletilmedi. Bekletilenlerin listesi saklanamadı: { $why }.
+store-upd-not-held-list = Trindle güncellemeyi bekletemedi, çünkü bekletilen güncellemelerin listesini kaydedemedi: { $why }.
 
 # The same, for a release.
-store-upd-not-released-list = Bekletme kaldırılmadı. Bekletilenlerin listesi saklanamadı: { $why }.
+store-upd-not-released-list = Trindle güncellemelere yeniden izin veremedi, çünkü bekletilen güncellemelerin listesini kaydedemedi: { $why }.
 
 # Red words when Flatpak could not be told a thing is held back.
-store-upd-held-not-told = Uygulamalar'da bekletildi, ancak Flatpak'in kendisine bildirilemedi; bu yüzden uygulamaları güncelleyen başka bir şey onu yine de kurabilir.
+store-upd-held-not-told = Uygulamalar'da bekletildi, ancak Trindle bunu Flatpak'te değiştiremedi. Uygulamaları güncelleyen başka bir program onu yine de kurabilir.
 
 # Red words when Flatpak could not be told a thing is released.
-store-upd-released-not-told = Uygulamalar'da bekletme kaldırıldı, ancak Flatpak'in kendisine bildirilemedi ve onu yine de dışarıda bırakabilir. Yeniden bekletip tekrar kaldırın.
+store-upd-released-not-told = Uygulamalar'da güncellemelere yeniden izin verildi, ancak Trindle bunu Flatpak'te değiştiremedi, bu yüzden Flatpak onu yine de dışarıda bırakabilir. Önce bekletin, sonra güncellemelere yeniden izin verin.
 
 # Red words: the above, then what Flatpak itself said.
 store-upd-flatpak-said = { $words } Flatpak şunu söyledi: { $why }
@@ -305,9 +299,15 @@ store-upd-flatpak-said = { $words } Flatpak şunu söyledi: { $why }
 # Name of Trindle itself on its row of updates.
 store-upd-trindle = Trindle
 
+# Said when a security fix for a boxed app can't be downloaded. { $package } is the package, { $version } the fixed version.
+store-patch-not-fetched = Trindle { $package } { $version } paketini indiremedi.
+
+# Said when a security fix for a boxed app was downloaded but isn't there to use.
+store-patch-not-found = Trindle indirdiği paketi bulamadı.
+
 
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
-store-upd-off = Kendiliğinden güncelleme denetimi kapalı. Bakmak için Güncellemeleri denetle düğmesine basın.
+store-upd-off = Otomatik güncelleme denetimi kapalı.
 
 # How a card stands with nothing known to wait, looking by itself switched off and no check pressed yet.
 store-upd-not-looked = Denetlenmedi
@@ -322,8 +322,7 @@ store-upd-stopping = Durduruluyor
 store-upd-stopped = Durduruldu. Devam etmek için Güncelle düğmesine basın.
 
 # Under the Apps card when Install all was stopped.
-store-upd-stopped-all = Durduruldu. Devam etmek için Kur düğmesine basın.
+store-upd-stopped-all = Durduruldu. Devam etmek için yeniden Kur'a basın.
 
 # Note under the Apps card.
 store-upd-steam-restarts = Steam, çalışan oyun kalmayınca yeniden başlar.
-

@@ -8,10 +8,10 @@ settings-plugins-keywords = plugin pengaya ekstensi terpasang hapus pengaturan
 
 # Help line at the foot of the Your plugins page.
 # SAFETY: needs a human review before it ships
-settings-plugins-help = Plugin menambah Trindle: ikon di cincin, pengaturan di sini, notifikasi, atau sesuatu yang berjalan sejak login. Masing-masing berjalan terisolasi, tidak diizinkan apa pun sampai Anda mengizinkannya di Izin, yang dibuka tombol di ujung judul halaman ini. Kartu setiap plugin di sini berisi pengaturannya sendiri; tong sampah di kartu, ditekan dua kali, menghapus plugin itu.
+settings-plugins-help = Plugin menambah fitur Trindle. Sebuah plugin dapat menambahkan ikon di cincin, pengaturan di sini, notifikasi, atau sesuatu yang mulai berjalan saat Anda login. Setiap plugin berjalan di kotaknya sendiri dan tidak dapat memakai apa pun sampai Anda mengizinkannya di Izin. Tombol di samping judul halaman membuka Izin. Untuk menghapus plugin, tekan tong sampah di kartunya dua kali.
 
 # Red words when the window that asks what a plugin may use could not be opened.
-settings-plugins-window-failed = Jendela yang menanyakan apa yang boleh dipakainya tidak dapat dibuka.
+settings-plugins-window-failed = Trindle tidak dapat membuka jendela yang menanyakan apa yang boleh dipakai plugin.
 
 # Under About it: the plugin's version number is { $v }.
 settings-plugins-version = Versi { $v }.
@@ -20,21 +20,17 @@ settings-plugins-version = Versi { $v }.
 settings-plugins-version-settled = Versi { $v }. { $settled }
 
 # Help text of a plugin's card when it asks for nothing: the plugin's name is { $name }.
-settings-plugins-asks-nothing = { $name } tidak meminta apa pun, jadi berjalan terisolasi tanpa izin apa pun.
+settings-plugins-asks-nothing = { $name } tidak meminta apa pun, jadi berjalan di kotaknya sendiri tanpa izin apa pun.
 
 # Help text of a plugin's card: its name is { $name }, { $list } is what it asks for, { $allowed } of { $asks } are allowed.
 # SAFETY: needs a human review before it ships
 settings-plugins-asks-for =
     { $asks ->
-       *[other] { $name } meminta { $list }; { $allowed } dari { $asks } diizinkan. Berjalan terisolasi, hanya dengan yang Anda izinkan.
+       *[other] { $name } meminta { $list }. Anda telah mengizinkan { $allowed } dari { $asks }. Plugin berjalan di kotaknya sendiri, hanya dengan yang Anda izinkan.
     }
 
-# Under the line that tells a plugin needs more allowed, beside its Allow button.
-# SAFETY: needs a human review before it ships
-settings-plugins-needs-more = Izinkan menampilkan setiap hal yang diminta, dengan sakelar.
-
 # Heading of the line about a plugin on its card.
-settings-plugins-about-it = Tentangnya
+settings-plugins-about-it = Tentang
 
 # Tip of the button that changes what a plugin may use.
 # SAFETY: needs a human review before it ships
@@ -70,18 +66,15 @@ settings-plugins-group = Plugin
 # Heading of the line shown when no plugin is installed.
 settings-plugins-none = Belum ada yang terpasang
 
-# Under the None installed heading.
-settings-plugins-none-sub = Aplikasi memiliki plugin untuk ditambahkan.
-
 # Tip of the button at the end of the page's title that opens the Permissions page.
 # SAFETY: needs a human review before it ships
 settings-plugins-open-permissions = Buka Izin
 
 # Said at the top of a plugin's card while its service has not yet answered; the plugin's name is {$name}.
-settings-plugins-rows-asking = Menanyakan ke { $name }.
+settings-plugins-rows-asking = Menanyakan ke { $name }…
 
 # Said at the top of a plugin's card, and in red under a row, when its service does not answer; the plugin's name is {$name}.
-settings-plugins-rows-silent = { $name } tidak menjawab. Layanannya mungkin berhenti.
+settings-plugins-rows-silent = { $name } tidak merespons. Layanannya mungkin sudah berhenti.
 
 # Said beside a row after the plugin kept the change.
 settings-plugins-rows-saved = Tersimpan.
@@ -94,4 +87,3 @@ settings-plugins-rows-failed = { $name } tidak dapat melakukannya.
 
 # Red words under a row when the change failed; the plugin's name is {$name} and the reason it gave is {$why}.
 settings-plugins-rows-failed-why = { $name } tidak dapat melakukannya: { $why }.
-

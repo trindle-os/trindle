@@ -25,8 +25,10 @@ const CHANGES: &[Change] = &[
      |f| crate::plugins::shortcuts::keep_choice(f, "org.example.One", "open", "Super+O").is_err()),
     ("what a plugin has already asked the person", "asked",
      |f| crate::plugins::mark_asked_in(f, &["network".to_string()]).is_err()),
-    ("the crash-report switches", "crash-reports.json",
-     |f| crate::settings::panels::crash_reports::save_in(f, "send", true).is_err()),
+    ("the keys and buttons the person changed", "remap.conf",
+     |f| super::remap::save_in(f, &super::remap::Table::default()).is_err()),
+    ("the changes made to game controllers", "controllers.conf",
+     |f| super::pads::save_in(f, &super::pads::Profiles::default()).is_err()),
 ];
 
 fn scratch(n: usize) -> PathBuf {

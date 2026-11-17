@@ -1,7 +1,7 @@
 # machine translated (Vietnamese), not yet reviewed by a person.
 
 # Tip of the pin button on a clipboard or notification item that is not pinned: keeps it for good.
-ring-quick-pin = Ghim: giữ lại mãi
+ring-quick-pin = Ghim để giữ lại
 
 # Tip of the pin button on a clipboard or notification item that is pinned.
 ring-quick-unpin = Bỏ ghim
@@ -12,7 +12,7 @@ ring-quick-forget-one = Quên mục này
 
 # Tip of the bin button that forgets everything on the page except what is pinned; it asks twice.
 # SAFETY: needs a human review before it ships
-ring-quick-forget-all = Quên tất cả trừ các mục đã ghim
+ring-quick-forget-all = Xoá tất cả trừ các mục đã ghim
 
 # Name of the volume slider for the speakers on the sound page.
 ring-quick-speakers = Loa
@@ -69,7 +69,7 @@ ring-quick-bt-switch = Bluetooth
 ring-quick-bt-off = Bluetooth đang tắt.
 
 # Line on the Bluetooth page while it looks for devices and none is found yet.
-ring-quick-bt-searching = Đang tìm... hãy đưa thiết bị vào chế độ ghép nối.
+ring-quick-bt-searching = Đang tìm… Hãy đưa thiết bị vào chế độ ghép nối.
 
 # Tip of the button beside a connected Bluetooth device that disconnects it.
 ring-quick-bt-disconnect = Ngắt kết nối
@@ -84,29 +84,29 @@ ring-quick-bt-pair = Ghép nối và kết nối
 ring-quick-bt-device = Thiết bị Bluetooth
 
 # Line under the Bluetooth page while pairing with a device.
-ring-quick-bt-pairing = Đang ghép nối với { $name }...
+ring-quick-bt-pairing = Đang ghép nối với { $name }…
 
 # Line under the Bluetooth page while connecting a device.
-ring-quick-bt-connecting = Đang kết nối { $name }...
+ring-quick-bt-connecting = Đang kết nối { $name }…
 
 # Line under the Bluetooth page while disconnecting a device.
-ring-quick-bt-disconnecting = Đang ngắt kết nối { $name }...
+ring-quick-bt-disconnecting = Đang ngắt kết nối { $name }…
 
 # Line under the Bluetooth page when connecting or disconnecting did not work.
 ring-quick-bt-failed = Không được. Thiết bị đã bật và ở gần chưa?
 
 # Line under the Bluetooth page when pairing failed because the codes were not accepted.
-ring-quick-bt-codes = Chưa ghép nối: mã không được chấp nhận.
+ring-quick-bt-codes = Không ghép đôi được. Mã không đúng.
 
 # Line under the Bluetooth page when pairing failed.
-ring-quick-bt-not-paired = Chưa ghép nối. Thiết bị đã ở chế độ ghép nối và ở gần chưa?
+ring-quick-bt-not-paired = Không ghép nối được. Thiết bị đã ở chế độ ghép nối và ở gần chưa?
 
 # Line under the Bluetooth page when pairing worked but connecting did not.
 ring-quick-bt-paired-not-connected = Đã ghép nối nhưng chưa kết nối được. Hãy thử lại sau giây lát.
 
 # Question in the ring when a Bluetooth device wants a PIN typed.
 # SAFETY: needs a human review before it ships
-ring-quick-bt-ask-pin = Nhập mã PIN của thiết bị này. Mã thường có trong hướng dẫn của nó, hoặc là 0000.
+ring-quick-bt-ask-pin = Nhập mã PIN của thiết bị này. Bạn thường tìm thấy mã trong hướng dẫn của thiết bị, hoặc thử 0000.
 
 # Typing box for the PIN of a Bluetooth device, shown quietly while empty.
 ring-quick-bt-pin-box = PIN
@@ -145,7 +145,7 @@ ring-quick-wifi-switch = Wi-Fi
 ring-quick-wifi-off = Wi-Fi đang tắt.
 
 # Line on the Wi-Fi page while it looks for networks.
-ring-quick-wifi-looking = Đang tìm mạng...
+ring-quick-wifi-looking = Đang tìm mạng…
 
 # Tip of the button beside the Wi-Fi network in use that leaves it.
 ring-quick-wifi-disconnect = Ngắt kết nối
@@ -161,7 +161,7 @@ ring-quick-wifi-password-box = Mật khẩu
 ring-quick-wifi-join = Tham gia
 
 # Line under the Wi-Fi page while joining a network.
-ring-quick-wifi-joining = Đang tham gia { $ssid }...
+ring-quick-wifi-joining = Đang tham gia { $ssid }…
 
 # Question text in the ring when the Wi-Fi password was not accepted.
 # SAFETY: needs a human review before it ships
@@ -177,7 +177,7 @@ ring-quick-battery-none = Máy này không có pin.
 ring-quick-brightness-fixed = Không thể đổi độ sáng của màn hình này từ đây
 
 # Line on the clipboard page when nothing has been copied yet.
-ring-quick-clip-empty = Chưa sao chép gì. Những gì bạn sao chép sẽ được giữ ở đây.
+ring-quick-clip-empty = Chưa sao chép gì.
 
 # Line on the clipboard page for a copied picture.
 ring-quick-clip-picture = Một bức ảnh
@@ -207,7 +207,7 @@ ring-quick-charging-full = Đang sạc: đầy sau khoảng { $time }
 ring-quick-charging = Đang sạc
 
 # Line on the battery page on battery, with the time left and the power in watts.
-ring-quick-on-battery-left = Đang dùng pin: còn khoảng { $time }, đang dùng { $rate } W
+ring-quick-on-battery-left = Đang dùng pin. Còn khoảng { $time }, đang dùng { $rate } W.
 
 # Line on the battery page on battery, when the time is not known.
 ring-quick-on-battery = Đang dùng pin
@@ -221,9 +221,9 @@ ring-quick-plugged = Đã cắm điện, không sạc
 # Line on the battery page about how much charge the battery still holds. The health is good, worn, or something else for worn out.
 ring-quick-health =
     { $how ->
-        [good] Tình trạng: tốt. Pin giữ được { $capacity }% so với lúc còn mới.
-        [worn] Tình trạng: đã mòn. Pin giữ được { $capacity }% so với lúc còn mới.
-       *[old] Tình trạng: đã chai: nên thay pin mới. Pin giữ được { $capacity }% so với lúc còn mới.
+        [good] Pin đang ở tình trạng tốt. Hiện pin chứa được { $capacity }% điện so với lúc còn mới.
+        [worn] Pin đã mòn. Hiện pin chứa được { $capacity }% điện so với lúc còn mới.
+       *[old] Pin đã chai, đã đến lúc thay pin mới. Hiện pin chứa được { $capacity }% điện so với lúc còn mới.
     }
 
 # Line on the battery page about how many times the battery has been charged.
@@ -233,10 +233,10 @@ ring-quick-cycles =
     }
 
 # Tip of the button that turns notification circles off.
-ring-quick-notes-on = Thông báo đang bật: nhấn để tắt
+ring-quick-notes-on = Thông báo đang bật. Nhấn để tắt
 
 # Tip of the button that turns notification circles back on.
-ring-quick-notes-off = Thông báo đang tắt: nhấn để bật
+ring-quick-notes-off = Thông báo đang tắt. Nhấn để bật
 
 # A time of under an hour on the battery page.
 ring-quick-minutes = { $m } phút
@@ -261,3 +261,5 @@ ring-quick-title-tray = Biểu tượng khay
 # Heading of the shortcut list page, opened with Super and K.
 ring-quick-title-shortcuts = Phím tắt
 
+# Line under the Wi-Fi page when leaving the network did not work.
+ring-quick-wifi-leave-failed = Không ngắt kết nối được.

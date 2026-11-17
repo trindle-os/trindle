@@ -32,13 +32,13 @@ installer-stop-done = Terminé
 installer-getting-ready = Préparation
 
 # Red line at the foot when the installer's helper could not be started.
-installer-no-start = L'installateur n'a pas pu démarrer : { $why }
+installer-no-start = Impossible de démarrer l'installateur : { $why }
 
 # Written to the error output when the plan sent to the helper could not be read.
-installer-plan-unreadable = Le plan n'a pas pu être lu.
+installer-plan-unreadable = Impossible de lire le plan.
 
 # Written to the error output when the plan sent to the helper could not be read, with the reason.
-installer-plan-unreadable-why = Le plan n'a pas pu être lu : { $why }
+installer-plan-unreadable-why = Impossible de lire le plan : { $why }
 
 # Red line at the foot when the helper stopped without saying why.
 installer-stopped = L'installation s'est arrêtée. Rien de plus n'a été écrit.
@@ -82,23 +82,26 @@ installer-missing-time = Choisissez un fuseau horaire
 # Note beside Next on the disk page while no disk is chosen.
 installer-missing-disk = Choisissez où installer Trindle
 
+# Note beside Next on the disk page while the disks are read again, after one turned out not to be the disk shown.
+installer-disks-rereading = Nouvelle lecture des disques
+
 # Note beside Next on the disk password page while no password has been typed twice.
-installer-missing-disk-password = Saisissez deux fois le mot de passe du disque, identique les deux fois
+installer-missing-disk-password = Saisissez deux fois le mot de passe du disque. Il doit être identique les deux fois
 
 # Note beside Next on the account page while the sign-in name is not good.
-installer-missing-username = Un identifiant de connexion est nécessaire
+installer-missing-username = Saisissez un identifiant de connexion
 
 # Note beside Next on the account page while the computer's name is not good.
 installer-missing-hostname = Donnez un nom à cet ordinateur
 
 # Note beside Next on the account page while no password has been typed twice.
-installer-missing-password = Saisissez deux fois votre mot de passe, identique les deux fois
+installer-missing-password = Saisissez deux fois votre mot de passe. Il doit être identique les deux fois
 
 # Title of the first page.
 installer-welcome-title = Bienvenue dans { $name }
 
 # Sentence under the title of the first page.
-installer-welcome-help = Choisissez votre langue ; le clavier et le fuseau horaire la suivent, et vous pouvez changer l'un comme l'autre.
+installer-welcome-help = Choisissez votre langue : Trindle y adaptera le clavier et le fuseau horaire, que vous pouvez modifier.
 
 # Head of the card for choosing the language, and the name of its search box.
 installer-language = Langue
@@ -117,10 +120,10 @@ installer-disks-title = Où installer { $name }
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title of the disk page.
-installer-disks-help = Tout ce qui se trouve sur le disque que vous choisissez est remplacé, sauf si vous faites de la place à côté de l'existant.
+installer-disks-help = Tout ce qui se trouve sur le disque que vous choisissez est remplacé, sauf si vous choisissez d'installer à côté de l'existant.
 
 # Shown on the disk page when no disk is big enough.
-installer-disks-none = Aucun disque assez grand n'a été trouvé. Trindle a besoin de 20 Go.
+installer-disks-none = Trindle n'a pas trouvé de disque assez grand. Il lui faut 20 Go.
 
 # SAFETY: needs a human review before it ships
 # Name and words of the choice to erase a whole disk.
@@ -164,16 +167,16 @@ installer-swap-title = Un fichier d'échange de { $gb } Go
 installer-swap-switch = Créer un fichier d'échange
 
 # Under the swap file's head when Secure Boot is on.
-installer-swap-secure-boot = Le démarrage sécurisé (Secure Boot) est activé : cet ordinateur ne peut donc pas se mettre en veille prolongée, mais le fichier d'échange aide quand la mémoire manque. Il n'est créé que si le disque a largement de la place en réserve.
+installer-swap-secure-boot = Le démarrage sécurisé (Secure Boot) est activé : cet ordinateur ne peut donc pas se mettre en veille prolongée, mais le fichier d'échange aide quand la mémoire manque. Trindle ne le crée que si le disque a largement de la place en réserve.
 
 # Under the swap file's head when the computer can hibernate.
-installer-swap-note = De la place pour la veille prolongée, qui garde tout ouvert avec l'alimentation coupée, et un recours quand la mémoire manque. Sans lui, l'ordinateur ne peut pas se mettre en veille prolongée. Il n'est créé que si le disque a largement de la place en réserve.
+installer-swap-note = Un fichier d'échange permet à l'ordinateur de se mettre en veille prolongée, ce qui garde tout ouvert quand il est éteint. Il offre aussi de la place en plus quand la mémoire manque. Sans lui, l'ordinateur ne peut pas se mettre en veille prolongée. Trindle n'en crée un que si le disque a largement de la place en réserve.
 
 # Title of the page about encrypting the disk.
 installer-privacy-title = Chiffrement du disque
 
 # Sentence under the title of that page.
-installer-privacy-help = Un disque chiffré ne peut pas être lu par quiconque le retire de cet ordinateur.
+installer-privacy-help = Personne ne peut lire un disque chiffré s'il le retire de cet ordinateur.
 
 # Head of the card with the three choices.
 installer-privacy-locked = Comment le disque est verrouillé
@@ -193,7 +196,7 @@ installer-privacy-about = À propos de la puce
 
 # SAFETY: needs a human review before it ships
 # In the card about the chip, on a computer that has one.
-installer-privacy-chip = Cet ordinateur a une puce TPM. Le premier démarrage après l'installation demande une fois le mot de passe, le temps que la puce apprenne cet ordinateur ; ensuite elle déverrouille le disque d'elle-même et rien n'est saisi. Gardez le mot de passe : c'est le seul moyen d'entrer si la puce est remplacée ou si le disque est déplacé vers un autre ordinateur.
+installer-privacy-chip = Cet ordinateur a une puce TPM. Au premier démarrage après l'installation, il demande une fois le mot de passe, le temps de configurer la puce. Ensuite, la puce déverrouille le disque et vous ne saisissez rien. Gardez le mot de passe, car il vous servira si la puce est remplacée ou si le disque est déplacé vers un autre ordinateur.
 
 # In the card about the chip, on a computer that has none Trindle can use.
 installer-privacy-no-chip = Cet ordinateur n'a aucune puce TPM que Trindle puisse utiliser : le mot de passe sera donc demandé à chaque démarrage. Sur un ordinateur qui en a une, la puce peut déverrouiller le disque toute seule.
@@ -202,7 +205,7 @@ installer-privacy-no-chip = Cet ordinateur n'a aucune puce TPM que Trindle puiss
 installer-disk-title = Le mot de passe du disque
 
 # Sentence under the title of the disk password page.
-installer-disk-help = Il est saisi avant toute autre chose au démarrage de l'ordinateur.
+installer-disk-help = Vous le saisissez avant toute autre chose au démarrage de l'ordinateur.
 
 # Head of the card with the disk password boxes, and the name of the first box.
 installer-disk-password = Mot de passe du disque
@@ -211,7 +214,7 @@ installer-disk-password = Mot de passe du disque
 installer-disk-suggest = Suggérer une phrase secrète
 
 # Label and name of the second box of a password, where it is typed again.
-installer-same-again = Encore une fois, à l'identique
+installer-same-again = Saisissez-le à nouveau
 
 # Red line under the password boxes when the two do not match.
 installer-mismatch = Les deux mots de passe ne correspondent pas.
@@ -222,7 +225,7 @@ installer-disk-write-down = Notez-le
 
 # SAFETY: needs a human review before it ships
 # Words in that card.
-installer-disk-write-down-text = Notez ce mot de passe sur papier et gardez-le en lieu sûr, loin de l'ordinateur. Sans lui, le disque ne peut jamais être ouvert, ni par vous ni par personne d'autre. Il n'y a aucun moyen de revenir en arrière. Quatre mots ordinaires forment une phrase secrète facile à saisir et difficile à deviner.
+installer-disk-write-down-text = Notez ce mot de passe sur papier et gardez-le en lieu sûr, loin de l'ordinateur. Sans lui, personne ne pourra jamais ouvrir le disque, pas même vous. Il n'y a aucun moyen de revenir en arrière. Une phrase secrète de quatre mots ordinaires est facile à saisir et difficile à deviner.
 
 # Title of the account page.
 installer-you-title = À propos de vous
@@ -252,25 +255,25 @@ installer-password = Mot de passe
 installer-strength = Difficulté à deviner
 
 # Red line under the account boxes: the sign-in name is empty.
-installer-user-needed = Un identifiant de connexion est nécessaire.
+installer-user-needed = Saisissez un identifiant de connexion.
 
 # Red line under the account boxes: a name is too long.
 installer-name-too-long = Ce nom est trop long.
 
 # Red line under the account boxes: the sign-in name does not start with a small letter.
-installer-user-start = Commencez par une lettre minuscule.
+installer-user-start = Commencez par une lettre a-z.
 
 # Red line under the account boxes: the sign-in name uses letters it may not.
-installer-user-letters = Lettres minuscules, chiffres, - et _ uniquement.
+installer-user-letters = Utilisez seulement a-z, 0-9, - et _.
 
 # Red line under the account boxes: the sign-in name belongs to the system.
-installer-user-taken = Ce nom est déjà utilisé par le système.
+installer-user-taken = Le système utilise déjà ce nom.
 
 # Red line under the account boxes: the computer's name is empty.
 installer-host-needed = Donnez un nom à cet ordinateur.
 
 # Red line under the account boxes: the computer's name uses letters it may not.
-installer-host-letters = Lettres, chiffres et - uniquement.
+installer-host-letters = Seulement lettres, chiffres et -.
 
 # Under the strength meter: how long a computer would take to guess the password, when it is at once.
 installer-guess-now = Un ordinateur devinerait ceci immédiatement.
@@ -308,19 +311,19 @@ installer-guess-years =
     }
 
 # Under the strength meter: the password is too strong to guess in any time worth saying.
-installer-guess-never = Un ordinateur mettrait plus longtemps que toute l'histoire connue à deviner ceci.
+installer-guess-never = Un ordinateur mettrait plus de temps que toute l'histoire connue à deviner ceci.
 
 # Title of the Ready page.
 installer-ready-title = Prêt à installer
 
 # Head of the card that lists what will happen.
-installer-ready-nothing-changed = Rien n'a encore été modifié
+installer-ready-nothing-changed = Rien n'a encore changé
 
 # Head of the card about security updates.
 installer-ready-security = Mises à jour de sécurité
 
 # In the card about security updates.
-installer-ready-security-text = { $name } installe tout seul chaque jour les correctifs de sécurité de Debian. Cela ne peut pas être désactivé.
+installer-ready-security-text = { $name } installe tout seul chaque jour les correctifs de sécurité de Debian. Vous pouvez désactiver cela dans Paramètres, À propos de cet ordinateur.
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title when a whole disk will be replaced.
@@ -328,7 +331,7 @@ installer-ready-replaced = Tout ce qui se trouve sur { $disk } sera remplacé.
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title when the install goes beside what is there.
-installer-ready-kept = Tout ce qui se trouve sur { $part } est conservé, mais faites d'abord une sauvegarde : la réduire peut faire perdre des fichiers en cas de coupure de courant.
+installer-ready-kept = Tout ce qui se trouve sur { $part } est conservé, mais faites d'abord une sauvegarde. Une coupure de courant pendant la réduction peut faire perdre des fichiers.
 
 # Sentence under the title when no disk has been chosen.
 installer-ready-none = Aucun disque n'a encore été choisi.
@@ -347,13 +350,13 @@ installer-ready-beside = À côté de { $part }
 
 # SAFETY: needs a human review before it ships
 # Words of that row.
-installer-ready-beside-text = { $part } est réduite, jusqu'à { $size }, et { $name } s'installe dans l'espace libéré.
+installer-ready-beside-text = { $part } est réduite à { $size }, et { $name } s'installe dans l'espace ainsi libéré.
 
 # Name of a row in the list when no disk is chosen.
 installer-ready-no-disk = Aucun disque
 
 # Words of that row.
-installer-ready-no-disk-text = Aucun disque choisi.
+installer-ready-no-disk-text = Choisissez un disque.
 
 # Name of a row in the list: the disk will not be encrypted.
 installer-ready-plain = Non chiffré
@@ -368,10 +371,22 @@ installer-ready-locked = Chiffré
 installer-ready-locked-password = Vous saisissez son mot de passe à chaque démarrage de l'ordinateur.
 
 # Words of that row when the TPM chip unlocks the disk.
-installer-ready-locked-chip = Le mot de passe une fois, puis la puce TPM de cet ordinateur le déverrouille.
+installer-ready-locked-chip = Vous saisissez le mot de passe une fois, puis la puce TPM de cet ordinateur déverrouille le disque.
+
+# Added to the end of the disk's row on the last page when a swap file is to be made, with its size in GB.
+installer-ready-swap = Plus un fichier d'échange de { $gb } Go.
+
+# Under the choice to let the TPM chip unlock the disk, on a computer with no usable chip.
+installer-privacy-chip-off = Nécessite une puce TPM que Trindle peut utiliser.
+
+# In the card about the chip when the disk is not being encrypted, on a computer that has a chip.
+installer-privacy-chip-none = Cet ordinateur a une puce TPM, qui peut déverrouiller un disque chiffré.
+
+# In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
+installer-privacy-no-chip-none = Cet ordinateur n'a aucune puce TPM que Trindle puisse utiliser.
 
 # Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = Clavier { $keyboard }, fuseau horaire { $zone }.
+installer-ready-language = Clavier { $keyboard }, heure { $zone }.
 
 # Title of the page shown while the install runs.
 installer-installing-title = Installation de { $name }
@@ -391,11 +406,11 @@ installer-done-keep = Gardez le mot de passe du disque en lieu sûr
 
 # SAFETY: needs a human review before it ships
 # In that card when the TPM chip unlocks the disk.
-installer-keep-chip = Le disque est chiffré. Le premier démarrage demande une fois le mot de passe du disque, le temps que la puce apprenne cet ordinateur ; ensuite il s'ouvre tout seul. Notez ce mot de passe sur papier et gardez-le en lieu sûr, loin de cet ordinateur. Sans lui, le disque ne peut jamais être ouvert, ni par vous ni par personne d'autre.
+installer-keep-chip = Le disque est chiffré. Au premier démarrage de l'ordinateur, il demande une fois le mot de passe du disque, le temps de configurer la puce. Ensuite, le disque s'ouvre tout seul. Notez ce mot de passe sur papier et gardez-le en lieu sûr, loin de cet ordinateur. Sans lui, personne ne pourra jamais ouvrir le disque, pas même vous.
 
 # SAFETY: needs a human review before it ships
 # In that card when the password is typed at each start.
-installer-keep-password = Le disque est chiffré. Notez dès maintenant le mot de passe du disque sur papier, si ce n'est pas déjà fait, et gardez-le en lieu sûr, loin de cet ordinateur. Sans lui, le disque ne peut jamais être ouvert, ni par vous ni par personne d'autre.
+installer-keep-password = Le disque est chiffré. Si ce n'est pas déjà fait, notez dès maintenant le mot de passe du disque sur papier et gardez-le en lieu sûr, loin de cet ordinateur. Sans lui, personne ne pourra jamais ouvrir le disque, pas même vous.
 
 # Title of the first slide.
 installer-slide-ring = Tout dans un seul cercle
@@ -404,10 +419,10 @@ installer-slide-ring = Tout dans un seul cercle
 installer-slide-ring-text = Déplacez le pointeur au bord de l'écran et double-cliquez : l'anneau s'ouvre, avec vos programmes tout autour, l'heure et les interrupteurs au milieu.
 
 # Title of the second slide.
-installer-slide-snapshots = Rétablir ce qu'une mise à jour a cassé
+installer-slide-snapshots = Annuler une mauvaise mise à jour
 
 # Words of the second slide.
-installer-slide-snapshots-text = Un instantané du système est pris avant et après chaque changement de logiciel. Les paramètres remettent tout le système dans n'importe lequel d'entre eux, et le menu de démarrage peut le faire quand l'ordinateur ne démarre plus.
+installer-slide-snapshots-text = Trindle prend un instantané du système avant et après chaque changement de logiciel. Dans Paramètres, vous pouvez remettre tout le système dans n'importe lequel d'entre eux. Si l'ordinateur ne démarre plus, vous pouvez le faire depuis le menu de démarrage.
 
 # Title of the third slide.
 installer-slide-apps = Des applications qui ne gênent pas
@@ -416,16 +431,16 @@ installer-slide-apps = Des applications qui ne gênent pas
 installer-slide-apps-text = Applications Flathub, celles de Debian, AppImages et sources de logiciels au même endroit, avec des sauvegardes que vous pouvez emporter sur un autre ordinateur.
 
 # Title of the fourth slide.
-installer-slide-yours = À vous, rapidement
+installer-slide-yours = Personnalisez-le
 
 # Words of the fourth slide.
-installer-slide-yours-text = Clair ou sombre, vos propres sons, et un presse-papiers qui se souvient de ce que vous avez copié.
+installer-slide-yours-text = Choisissez le thème clair ou sombre, vos propres sons, et profitez d'un presse-papiers qui se souvient de ce que vous avez copié.
 
 # Title of the fifth slide.
 installer-slide-small = Petit et silencieux
 
 # Words of the fifth slide.
-installer-slide-small-text = Le bureau est léger en mémoire et démarre en quelques secondes : un ordinateur portable ancien paraît neuf.
+installer-slide-small-text = Le bureau consomme peu de mémoire et démarre en quelques secondes : un vieil ordinateur portable paraît neuf.
 
 # Title of the tour slide about the ring.
 installer-tour-ring = L'anneau, c'est tout le bureau
@@ -434,19 +449,19 @@ installer-tour-ring = L'anneau, c'est tout le bureau
 installer-tour-ring-corner = Placez le pointeur dans ce coin et l'anneau s'ouvre
 
 # Note on the ring picture, at the time.
-installer-tour-ring-time = L'heure et la date, au milieu
+installer-tour-ring-time = L'heure et la date sont au milieu
 
 # Note on the ring picture, at the programs.
-installer-tour-ring-programs = Vos programmes sont placés tout autour
+installer-tour-ring-programs = Vos programmes sont tout autour
 
 # Note on the ring picture, at the switches.
-installer-tour-ring-switches = Son, écran, toutes vos applications, maintien éveillé et extinction
+installer-tour-ring-switches = Des interrupteurs pour le son, l'écran, toutes vos applications, le maintien éveillé et l'extinction
 
 # Title of the tour slide about Settings.
 installer-tour-settings = Les paramètres, en mots simples
 
 # Note on the Settings picture, at the search box.
-installer-tour-settings-search = Saisissez ici pour trouver un réglage sans le chercher
+installer-tour-settings-search = Saisissez ici pour trouver un réglage
 
 # Note on the Settings picture, at Network.
 installer-tour-settings-network = Réseau, c'est là que vous rejoignez un réseau Wi-Fi
@@ -464,37 +479,37 @@ installer-tour-apps = Les applications, pour tout le reste
 installer-tour-apps-search = Recherchez un programme par son nom ou par ce qu'il fait
 
 # Note on the Apps picture, at the list.
-installer-tour-apps-many = Des milliers de programmes, gratuits, de Flathub et de Debian
+installer-tour-apps-many = Des milliers de programmes gratuits, de Flathub et de Debian
 
 # Note on the Apps picture, at updates.
 installer-tour-apps-updates = Des mises à jour pour tout, y compris Trindle lui-même
 
 # Title of the tour slide about voice control.
-installer-tour-voice = Vous pouvez lui parler à la place
+installer-tour-voice = Parlez à votre ordinateur
 
 # Note on the voice picture, at where voice control lives.
-installer-tour-voice-where = La commande vocale se trouve ici : Paramètres, puis Anneau
+installer-tour-voice-where = La commande vocale est dans Paramètres, puis Anneau
 
 # Note on the voice picture, at the button that adds voice.
-installer-tour-voice-add = Appuyez une fois sur Ajouter la voix. Cela représente environ 150 Mo et prend quelques minutes
+installer-tour-voice-add = Appuyez une fois sur Ajouter la commande vocale. Le téléchargement fait environ 150 Mo et prend quelques minutes
 
 # Note on the voice picture, about what to say.
 installer-tour-voice-say = Touchez ensuite le milieu de l'anneau et dites le nom d'une application, « plus fort » ou « paramètres Wi-Fi »
 
 # Note on the voice picture, about where speech is understood.
-installer-tour-voice-private = Ce que vous dites est compris sur cet ordinateur et ne va nulle part ailleurs
+installer-tour-voice-private = Trindle comprend ce que vous dites sur cet ordinateur, et cela n'est jamais envoyé ailleurs
 
 # Title of the tour slide about snapshots.
-installer-tour-snapshots = Un retour en arrière, avant que rien ne change
+installer-tour-snapshots = Revenez à l'état d'avant un changement
 
 # Note on the snapshots picture, about when a snapshot is taken.
-installer-tour-snapshots-before = L'ordinateur prend un instantané avant chaque mise à jour
+installer-tour-snapshots-before = Trindle prend un instantané avant chaque mise à jour
 
 # Note on the snapshots picture, about going back.
-installer-tour-snapshots-back = Si quelque chose casse, revenez à l'état précédent depuis le menu de démarrage
+installer-tour-snapshots-back = Si quelque chose casse, vous pouvez revenir à l'état précédent depuis le menu de démarrage
 
 # Name of the picture of the ring, and the head of its card.
-installer-live-caption = L'anneau, où tout se trouve
+installer-live-caption = L'anneau, avec tout à l'intérieur
 
 # Sentence under the title of the welcome from a stick.
 installer-live-help = Vous utilisez la clé USB : rien n'a donc été modifié sur cet ordinateur.
@@ -509,19 +524,19 @@ installer-live-open = Ouvrir l'anneau
 installer-live-open-line = Double-cliquez au bord de l'écran, ou appuyez sur Super.
 
 # Name of the second thing to do.
-installer-live-speak = Lui parler
+installer-live-speak = Utilisez votre voix
 
 # Line under it when voice control is there.
 installer-live-speak-line = Touchez le milieu de l'anneau et dites ce que vous voulez.
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = Ajoutez la voix dans Paramètres, Anneau, puis touchez le milieu et parlez.
+installer-live-speak-add = Appuyez sur Ajouter la commande vocale dans Paramètres, sous Anneau. Puis touchez le milieu et parlez.
 
 # Name of the third thing to do.
 installer-live-tab = Tout dans l'anneau
 
 # Line under it.
-installer-live-tab-line = Ce qui est ouvert, vos notifications et le presse-papiers sont tous là.
+installer-live-tab-line = Vous y trouverez ce qui est ouvert, vos notifications et le presse-papiers.
 
 # The choice of the dark look.
 installer-live-dark = Sombre
@@ -545,7 +560,7 @@ installer-step-room = Création d'espace
 installer-step-prepare = Préparation du disque
 
 # Foot of the install page while a place is made beside another system.
-installer-step-place = Création d'une place pour Trindle
+installer-step-place = Préparation de la place pour Trindle
 
 # Foot of the install page while the disk is looked at.
 installer-step-check = Vérification de ce qui se trouve déjà sur le disque
@@ -554,10 +569,10 @@ installer-step-check = Vérification de ce qui se trouve déjà sur le disque
 installer-step-smaller = Réduction de l'autre système
 
 # Foot of the install page while the disk is encrypted.
-installer-step-lock = Verrouillage du disque
+installer-step-lock = Chiffrement du disque
 
 # Foot of the install page while the TPM chip is set up.
-installer-step-chip = Configuration de la puce de l'ordinateur
+installer-step-chip = Configuration de la puce TPM
 
 # Foot of the install page while the system is copied.
 installer-step-copy = Copie de Trindle sur le disque
@@ -569,7 +584,7 @@ installer-step-settings = Écriture des réglages
 installer-step-account = Création de votre compte
 
 # Foot of the install page while the stick's own parts are taken out.
-installer-step-live-parts = Retrait des éléments du système autonome
+installer-step-live-parts = Retrait des extras de la clé
 
 # Foot of the install page while the start-up files are made.
 installer-step-startup = Création des fichiers de démarrage
@@ -590,7 +605,7 @@ installer-run-no-start = { $program } n'a pas pu démarrer : { $why }
 installer-run-failed = { $program } ne s'est pas terminé. { $why }
 
 # Red line at the foot: a file could not be written.
-installer-write-failed = { $path } n'a pas pu être écrit : { $why }
+installer-write-failed = Impossible d'écrire { $path } : { $why }
 
 # Red line at the foot: something given as a disk is not one.
 installer-not-a-disk = { $dev } n'est pas un disque.
@@ -602,69 +617,69 @@ installer-not-a-disk-here = { $dev } n'est pas un disque de cet ordinateur.
 installer-no-disk-chosen = Aucun disque n'a été choisi.
 
 # Red line at the foot: the sign-in name cannot be used.
-installer-bad-username = Cet identifiant de connexion n'est pas utilisable par Trindle.
+installer-bad-username = Trindle ne peut pas utiliser cet identifiant de connexion.
 
 # Red line at the foot: the computer's name cannot be used.
-installer-bad-hostname = Ce nom d'ordinateur n'est pas utilisable par Trindle.
+installer-bad-hostname = Trindle ne peut pas utiliser ce nom d'ordinateur.
 
 # Red line at the foot: the language cannot be used.
-installer-bad-language = Cette langue n'est pas utilisable par Trindle.
+installer-bad-language = Trindle ne peut pas utiliser cette langue.
 
 # Red line at the foot: the keyboard cannot be used.
-installer-bad-keyboard = Ce clavier n'est pas utilisable par Trindle.
+installer-bad-keyboard = Trindle ne peut pas utiliser ce clavier.
 
 # Red line at the foot: the time zone cannot be used.
-installer-bad-timezone = Ce fuseau horaire n'est pas utilisable par Trindle.
+installer-bad-timezone = Trindle ne peut pas utiliser ce fuseau horaire.
 
 # Red line at the foot: the person's name has something that cannot be written.
-installer-bad-fullname = Ce nom contient quelque chose que Trindle ne peut pas écrire.
+installer-bad-fullname = Ce nom contient un caractère que Trindle ne peut pas utiliser.
 
 # Red line at the foot: a password has a line break in it.
 installer-bad-password = Un mot de passe ne peut pas contenir de saut de ligne.
 
 # Red line at the foot: the second half of the installer was not started as root.
-installer-needs-root = La seconde moitié de l'installateur doit s'exécuter en tant que root.
+installer-needs-root = La seconde partie de l'installateur doit s'exécuter en tant que root.
 
 # Red line at the foot: there is no boot partition to share.
-installer-no-boot-partition = Ce disque n'a pas de partition de démarrage à partager : Trindle ne peut donc pas s'installer à côté de l'existant.
+installer-no-boot-partition = Ce disque n'a pas de partition de démarrage à partager : Trindle ne peut donc pas s'installer à côté de ce qui s'y trouve déjà.
 
 # Red line at the foot: the partition just made cannot be found.
-installer-new-part-missing = La nouvelle partie du disque est introuvable.
+installer-new-part-missing = Trindle n'a pas trouvé la nouvelle partition.
 
 # Red line at the foot: the size of a partition cannot be read.
-installer-size-unreadable = La taille de { $part } n'a pas pu être lue.
+installer-size-unreadable = Impossible de lire la taille de { $part }.
 
 # SAFETY: needs a human review before it ships
 # Red line at the foot: a partition of this kind cannot be made smaller.
-installer-cannot-shrink = Trindle ne peut pas réduire une partition { $fs }.
+installer-cannot-shrink = Trindle ne peut pas réduire les partitions { $fs }.
 
 # SAFETY: needs a human review before it ships
 # Red line at the foot: a partition of a kind that is not known cannot be made smaller.
-installer-cannot-shrink-unknown = Trindle ne peut pas réduire une partition inconnue.
+installer-cannot-shrink-unknown = Trindle ne peut pas réduire une partition de type inconnu.
 
 # Red line at the foot: encrypting needs a password and there is none.
-installer-disk-password-needed = Un mot de passe est nécessaire pour chiffrer le disque.
+installer-disk-password-needed = Il faut un mot de passe pour chiffrer le disque.
 
 # Red line at the foot: the copy of the system could not start.
-installer-copy-no-start = Le système n'a pas pu être copié : { $why }
+installer-copy-no-start = Impossible de copier le système : { $why }
 
 # Red line at the foot: the copy of the system failed.
-installer-copy-failed = Le système n'a pas pu être copié. { $why }
+installer-copy-failed = Impossible de copier le système. { $why }
 
 # Red line at the foot: there is not enough room for a swap file.
-installer-swap-no-room = Pas assez de place pour un fichier d'échange.
+installer-swap-no-room = Pas de place pour un fichier d'échange.
 
 # Red line at the foot: the swap file's place on the disk cannot be read.
-installer-swap-unreadable = L'emplacement du fichier d'échange sur le disque n'a pas pu être lu.
+installer-swap-unreadable = Trindle n'a pas pu lire où se trouve le fichier d'échange sur le disque.
 
 # Red line at the foot: the new partitions could not be named in the table of disks.
-installer-fstab-unidentified = Les nouvelles partitions n'ont pas pu être identifiées.
+installer-fstab-unidentified = Trindle n'a pas pu identifier les nouvelles partitions.
 
 # Red line at the foot: the time zone could not be set.
-installer-timezone-failed = Le fuseau horaire n'a pas pu être défini : { $why }
+installer-timezone-failed = Impossible de définir le fuseau horaire : { $why }
 
 # Red line at the foot: the boot menu could not be installed.
-installer-boot-failed = Le menu de démarrage n'a pas pu être installé sur cet ordinateur.
+installer-boot-failed = Trindle n'a pas pu installer le menu de démarrage sur cet ordinateur.
 
 # Name of that button after one press, when a second press goes ahead.
 installer-sure = Sûr ?
@@ -672,7 +687,7 @@ installer-sure = Sûr ?
 
 
 # Note on the ring picture, at the tab at the edge.
-installer-tour-ring-foot = Ce qui est ouvert, le presse-papiers, et un bouton qui vide l'écran
+installer-tour-ring-foot = Voyez ce qui est ouvert, utilisez le presse-papiers et videz l'écran d'un seul bouton
 
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } est la clé depuis laquelle Trindle fonctionne.
@@ -681,7 +696,7 @@ installer-disk-is-stick = { $dev } est la clé depuis laquelle Trindle fonctionn
 installer-disk-in-use = { $dev } est utilisé. Fermez ce qui l'utilise, puis réessayez.
 
 # Said beside how far the install has got, once it has started.
-installer-started = Installation lancée
+installer-started = Installation en cours
 
 # The button that ends an install under way.
 installer-halt = Arrêter
@@ -693,7 +708,7 @@ installer-halt-sure = Arrêter l'installation ? L'ancien contenu du disque a dé
 installer-halting = Arrêt en cours
 
 # When Stop could not let go of the disk.
-installer-halt-stuck = Le disque n'a pas pu être libéré. Redémarrez l'ordinateur pour réessayer.
+installer-halt-stuck = Trindle n'a pas pu libérer le disque. Redémarrez l'ordinateur pour réessayer.
 
 # The copy is done and the person is still answering.
 installer-step-waiting = Copie terminée. En attente de vos réponses.
@@ -710,14 +725,40 @@ installer-memory-short = Trindle a besoin d'au moins 1 Go de mémoire, et cet or
 installer-lock-needs-uefi = Un disque ne peut être chiffré que sur un ordinateur qui démarre en UEFI, et celui-ci ne le fait pas.
 
 # Red words when the Windows partition chosen to share the disk was hibernated or left in Windows' fast start-up; { $part } is the partition.
-installer-windows-asleep = Windows sur { $part } a été mis en veille prolongée ou laissé en démarrage rapide, donc la réduire pourrait lui faire perdre ses fichiers. Démarrez Windows, choisissez Redémarrer, puis réessayez.
+installer-windows-asleep = Windows sur { $part } a été mis en veille prolongée ou éteint avec le démarrage rapide. La réduire maintenant pourrait lui faire perdre ses fichiers. Démarrez Windows, choisissez Redémarrer, puis réessayez.
 
 # Red words on the last page when the snapshots could not be set up; { $why } is the reason.
-installer-snapshots-failed = Trindle est installé, mais les instantanés n'ont pas pu être configurés : { $why }
+installer-snapshots-failed = Trindle est installé, mais il n'a pas pu configurer les instantanés : { $why }
 
 # Red words on the last page when the boot menu could not be made after setting up snapshots; { $why } is the reason.
-installer-snapshots-menu-failed = Trindle est installé, mais le menu de démarrage n'a pas pu être réglé pour lister les instantanés : { $why }
+installer-snapshots-menu-failed = Trindle est installé, mais il n'a pas pu ajouter les instantanés au menu de démarrage : { $why }
 
 # Head of the card on the last page that lists what could not be done.
 installer-done-problems = Tout n'a pas été configuré
 
+# Red line under the disk password boxes: the computer gave no random numbers, so no passphrase could be made.
+installer-suggest-failed = Trindle n'a pas pu créer de phrase secrète. Saisissez la vôtre.
+
+# Red line at the foot: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev } n'est pas le disque qui était affiché. Revenez en arrière et choisissez de nouveau le disque.
+
+# Red line at the foot: a disk with an old-style partition table cannot be shared with.
+installer-no-gpt = { $dev } n'utilise pas de table de partitions GPT : Trindle ne peut donc pas s'installer à côté de ce qui s'y trouve déjà.
+
+# Red line at the foot: the boot partition on the disk is too small to share.
+installer-boot-partition-small = La partition de démarrage de ce disque est trop petite pour être partagée : Trindle ne peut donc pas s'installer à côté de ce qui s'y trouve déjà.
+
+# Note on the last page: the swap file was not made, with why.
+installer-swap-failed = Trindle est installé, mais il n'a pas pu créer le fichier d'échange : { $why }
+
+# Red line at the foot: a partition's identity could not be read after it was made.
+installer-uuid-missing = Trindle n'a pas pu identifier { $dev } après l'avoir préparé.
+
+# Words on the last page: the disk that will be replaced, with what it holds.
+installer-ready-replaced-known = Tout ce qui se trouve sur { $disk } sera remplacé ({ $holds }).
+
+# A disk named with its model and size, then its place such as /dev/sda.
+installer-disk-named = { $what }, { $dev }
+
+# Red line at the foot: a program the installer runs stopped before it had all it was given.
+installer-run-stopped = { $program } s'est arrêté avant d'avoir tout ce dont il avait besoin : { $why }

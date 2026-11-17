@@ -61,8 +61,8 @@ def handle(r):
             return {"ok": True, "data": base64.b64encode(f.read()).decode()}
     pre = person() if op in ("user", "spawn") else []
     if op == "spawn":
-        log = open("/tmp/testbox-spawn.log", "ab")
-        subprocess.Popen(pre + ["sh", "-c", r["cmd"]], stdin=subprocess.DEVNULL, stdout=log, stderr=log, start_new_session=True)
+        with open("/tmp/testbox-spawn.log", "ab") as log:
+            subprocess.Popen(pre + ["sh", "-c", r["cmd"]], stdin=subprocess.DEVNULL, stdout=log, stderr=log, start_new_session=True)
         return {"ok": True, "rc": 0, "out": ""}
     try:
         p = subprocess.run(pre + ["sh", "-c", r["cmd"]], stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
@@ -125,7 +125,8 @@ def running():
 
 def who():
     try:
-        return open(WHO).read().strip()
+        with open(WHO) as f:
+            return f.read().strip()
     except OSError:
         return "another test (not the test computer)"
 
@@ -235,8 +236,8 @@ def start(args):
            "-device", "virtio-serial",
            "-chardev", "socket,id=tb,path=%s,server=on,wait=off" % AGENT,
            "-device", "virtserialport,chardev=tb,name=testbox"]
-    log = open(RUN + "/qemu.log", "w")
-    subprocess.Popen(cmd, stdin=subprocess.DEVNULL, stdout=log, stderr=log, pass_fds=(fd,), start_new_session=True)
+    with open(RUN + "/qemu.log", "w") as log:
+        subprocess.Popen(cmd, stdin=subprocess.DEVNULL, stdout=log, stderr=log, pass_fds=(fd,), start_new_session=True)
     os.close(fd)
     end = time.time() + BOOT_SECONDS
     while time.time() < end:
@@ -305,12 +306,18 @@ def button(down, which="left"):
         {"type": "btn", "data": {"down": down, "button": which}}]}}
 
 
-# Characters that are not their own key name.
+# Characters that are not their own key name, on the British layout the image uses.
 KEYS = {" ": "spc", "-": "minus", ".": "dot", "/": "slash", ",": "comma", "=": "equal", ";": "semicolon",
-        "'": "apostrophe", "\n": "ret", "\t": "tab", "\\": "backslash", "[": "bracket_left", "]": "bracket_right"}
-SHIFTED = {"!": "1", "@": "apostrophe", "#": "3", "$": "4", "%": "5", "^": "6", "&": "7", "*": "8", "(": "9",
+        "'": "apostrophe", "\n": "ret", "\t": "tab", "#": "backslash", "\\": "less", "[": "bracket_left",
+        "]": "bracket_right", "`": "grave_accent"}
+SHIFTED = {"!": "1", "@": "apostrophe", "$": "4", "%": "5", "^": "6", "&": "7", "*": "8", "(": "9",
            ")": "0", "_": "minus", "+": "equal", ":": "semicolon", "?": "slash", "<": "comma", ">": "dot",
-           "\"": "2", "{": "bracket_left", "}": "bracket_right", "|": "backslash"}
+           "\"": "2", "{": "bracket_left", "}": "bracket_right", "|": "less", "~": "backslash"}
+
+def read_bytes(path):
+    with open(path, "rb") as f:
+        return f.read()
+
 
 
 def keys(names):
@@ -344,16 +351,18 @@ def main():
     elif op == "spawn":
         agent({"op": "spawn", "cmd": a[0]})
     elif op == "put":
-        agent({"op": "put", "path": a[1], "data": base64.b64encode(open(a[0], "rb").read()).decode()})
+        agent({"op": "put", "path": a[1], "data": base64.b64encode(read_bytes(a[0])).decode()})
     elif op == "get":
-        open(a[1], "wb").write(base64.b64decode(agent({"op": "get", "path": a[0]})["data"]))
+        data = base64.b64decode(agent({"op": "get", "path": a[0]})["data"])
+        with open(a[1], "wb") as f:
+            f.write(data)
     elif op == "install":
         names = []
         for deb in a:
             if not os.path.isfile(deb):
                 die("no such file: " + deb)
             names.append("/tmp/testbox-debs/" + os.path.basename(deb))
-            agent({"op": "put", "path": names[-1], "data": base64.b64encode(open(deb, "rb").read()).decode()})
+            agent({"op": "put", "path": names[-1], "data": base64.b64encode(read_bytes(deb)).decode()})
         r = agent({"op": "run", "cmd": "DEBIAN_FRONTEND=noninteractive apt-get install -y %s 2>&1 | tr '\\r' '\\n' | grep -v '^(Reading' | tail -5" % " ".join(names)})
         sys.stdout.write(r["out"])
     elif op == "shot":

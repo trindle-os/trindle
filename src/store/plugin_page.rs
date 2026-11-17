@@ -231,7 +231,7 @@ fn cards(p: &PluginPage, dials: &HashMap<String, Dial>, held: bool, kept: &Held,
 }
 
 pub(super) fn problem(s: &Store, id: &str) -> Option<String> {
-    s.plugins.said.get(id).cloned()
+    s.plugins.said.get(id).filter(|w| !crate::common::refused::closed_box(w)).cloned()
 }
 
 pub(super) fn page_of(words: &str) -> &'static str {
@@ -524,9 +524,15 @@ pub(super) mod tests {
         s.plugins.own_said = Some(catalogue::paused().into());
         assert_eq!(pressable(&s), [t!("common-more"), catalogue::start_again()]);
 
-        let source = crate::common::source::code(include_str!("plugin_page.rs"));
-        let page = source.split("#[cfg(test)]").next().unwrap_or_default();
-        assert!(!page.contains(&["folder", "-symbolic"].concat()) && !page.contains("list_card(\"") , "the card has an icon or a row");
+        fn parts(n: &Node<Msg>) -> usize {
+            1 + n.items().iter().map(parts).sum::<usize>()
+        }
+        let only_words = |lines| parts(&words_card(t!("store-plugins-where"), lines));
+        s.plugins.own_said = None;
+        assert_eq!(parts(&places(&s)), only_words(vec![note(come_from())]), "the card has an icon or a row");
+        s.plugins.own_said = Some("Refused.".into());
+        let red = crate::store::pages::links::red_about("Refused.".into(), crate::plugins::help::LIST);
+        assert_eq!(parts(&places(&s)), only_words(vec![note(come_from()), red]), "the refused card has an icon or a row");
     }
 
     #[test]
@@ -545,18 +551,18 @@ pub(super) mod tests {
         have.asks = vec!["network".into()];
         let mut same = offer("a.b", "1.1");
         same.entry.permissions = vec!["network".into()];
-        assert_eq!(waiting_detail(&have, &same), "Version 1.0 now, 1.1 is ready");
+        assert_eq!(waiting_detail(&have, &same), "1.1 is ready. You have 1.0.");
         let mut more = offer("a.b", "1.1");
         more.entry.permissions = vec!["network".into(), "microphone".into(), "files".into()];
-        assert_eq!(waiting_detail(&have, &more), "Version 1.0 now, 1.1 is ready. It asks for more than before: your microphone and \
-                                                 your Documents, Downloads, Pictures, Music, Videos and Desktop folders. This update needs a new permission. It is waiting for you.");
+        assert_eq!(waiting_detail(&have, &more), "You have version 1.0. Version 1.1 needs more permissions: your microphone and \
+                                                 your Documents, Downloads, Pictures, Music, Videos and Desktop folders. This update needs a new permission, so it's waiting for you to allow it.");
 
         let mut p = PluginPage::default();
         (p.installed, p.offers) = (vec![have.clone()], vec![same.clone()]);
         let card = card_of(&p, &HashMap::new(), false, &Held::default(), &update_page::UpdatesPage::default(), "a.b").said();
-        assert!(card.contains(&"Version 1.0 installed; 1.1 is ready.".to_string()), "{card:?}");
+        assert!(card.contains(&"Version 1.0 is installed. Version 1.1 is ready.".to_string()), "{card:?}");
         assert_eq!(not_running("it did not start within 15 seconds."),
-                   "It is installed, but its background part is not running: it did not start within 15 seconds.");
+                   "It is installed, but the part of it that runs in the background isn't running: it did not start within 15 seconds.");
     }
 
     #[test]
@@ -591,9 +597,9 @@ pub(super) mod tests {
         let mut p = PluginPage::default();
         assert!(headline(&p, None, &Held::default()).starts_with("Looking"));
         p.loaded = true;
-        assert_eq!(headline(&p, None, &Held::default()), "No plugins are installed, and none are on offer yet.");
+        assert_eq!(headline(&p, None, &Held::default()), "No plugins are installed, and none are available yet.");
         p.offers = vec![offer("a.b", "1.0"), offer("c.d", "2.0")];
-        assert_eq!(headline(&p, None, &Held::default()), "No plugins are installed yet; 2 are ready to install.");
+        assert_eq!(headline(&p, None, &Held::default()), "No plugins are installed yet. 2 are ready to install.");
         p.installed = vec![mine("a.b", "1.0")];
         assert_eq!(headline(&p, None, &Held::default()), "1 plugin is installed, all up to date.");
         p.installed.push(mine("c.d", "1.5"));
@@ -671,6 +677,6 @@ pub(super) mod tests {
     #[test]
     fn what_it_asks_for_is_in_plain_words() {
         assert_eq!(asks_line(&[]), "It asks for nothing.");
-        assert_eq!(asks_line(&["network".into(), "notifications".into()]), "What it asks for: the internet and show notifications.");
+        assert_eq!(asks_line(&["network".into(), "notifications".into()]), "What it asks for: the internet and notifications.");
     }
 }

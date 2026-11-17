@@ -11,7 +11,7 @@ settings-region-keywords = ngôn ngữ vùng quốc gia định dạng ngày ti�
 settings-region-help = Ngôn ngữ và định dạng có hiệu lực ở lần đăng nhập tiếp theo.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = Hãy đăng xuất rồi đăng nhập lại để thấy thay đổi.
+settings-region-later = Hãy đăng nhập lại để thấy ở mọi nơi.
 
 # Shown while the page reads the computer.
 settings-region-looking = Đang xem…
@@ -40,7 +40,7 @@ settings-region-installed-done = Đã cài
 settings-region-everything-in = Mọi thứ đều bằng { $lang }.
 
 # Headline when the formats differ from the language: the names are { $lang } and { $fmt }.
-settings-region-menus-in = Menu bằng { $lang }; ngày và số được viết theo { $fmt }.
+settings-region-menus-in = Menu bằng { $lang }. Ngày và số theo kiểu { $fmt }.
 
 # Headline when a change is saved but waits for the next login: { $words } is the sentence so far.
 settings-region-with-wait = { $words } Hãy đăng xuất rồi đăng nhập lại để thấy thay đổi.
@@ -55,13 +55,10 @@ settings-region-language = Ngôn ngữ
 settings-region-formats = Định dạng
 
 # Help text of the Language card (the information button).
-settings-region-language-about = Ngôn ngữ là thứ tiếng dùng cho menu và thông báo. Định dạng là cách viết ngày, giờ, số, tiền, đơn vị đo và khổ giấy, và có thể theo cách của một nước khác. Cả hai có hiệu lực ở lần đăng nhập tiếp theo.
+settings-region-language-about = Ngôn ngữ dùng cho menu và thông báo. Định dạng quy định cách viết ngày, giờ, số, tiền và đơn vị đo, cùng khổ giấy. Chúng có thể theo kiểu của một nước khác. Cả hai có hiệu lực ở lần đăng nhập tiếp theo.
 
 # Under the Language heading.
-settings-region-language-sub = Menu và thông báo, từ lần đăng nhập sau.
-
-# Under the Formats heading.
-settings-region-formats-sub = Ngày, số, tiền và khổ giấy.
+settings-region-language-sub = Menu và thông báo đổi ở lần đăng nhập sau.
 
 # Heading of the line that shows a date and a number in the chosen formats.
 settings-region-date-number = Một ngày và một số
@@ -76,7 +73,7 @@ settings-region-in-use = Đang dùng
 settings-region-add = Thêm ngôn ngữ
 
 # Help text of the Add a language card (the information button).
-settings-region-add-about = Cài thêm một ngôn ngữ để có thể chọn cho menu hoặc định dạng. Việc tạo mất một lúc và cần mật khẩu quản trị viên.
+settings-region-add-about = Cài thêm một ngôn ngữ để bạn có thể chọn cho menu hoặc định dạng. Việc cài mất một lúc và cần mật khẩu quản trị viên.
 
 # Heading of the line shown when every language is already installed.
 settings-region-all-installed = Mọi ngôn ngữ đều đã được cài
@@ -95,11 +92,7 @@ settings-region-install-another = Cài thêm
 
 # Tip of the button that installs the chosen language.
 # SAFETY: needs a human review before it ships
-settings-region-install-this = Cài ngôn ngữ này (sẽ hỏi mật khẩu của bạn)
-
-# Under the Install another heading.
-# SAFETY: needs a human review before it ships
-settings-region-needs-password = Cần mật khẩu quản trị viên.
+settings-region-install-this = Cài ngôn ngữ này
 
 # Heading of the line saying how many more languages can be made.
 settings-region-ready = Sẵn sàng để thêm
@@ -107,7 +100,7 @@ settings-region-ready = Sẵn sàng để thêm
 # Under the Ready to add heading: how many more languages can be made.
 settings-region-more =
     { $n ->
-       *[other] Máy này có thể tạo thêm { $n } ngôn ngữ nữa.
+       *[other] Bạn có thể cài thêm { $n } ngôn ngữ nữa.
     }
 
 settings-region-removing = Đang gỡ
@@ -118,7 +111,6 @@ settings-region-remove-language = Gỡ ngôn ngữ này
 
 settings-region-kept = Ngôn ngữ trên máy tính này
 
-settings-region-kept-about = Mọi ngôn ngữ đã cài ở đây. Hãy gỡ những ngôn ngữ bạn không dùng; ngôn ngữ đang dùng sẽ được giữ lại. Yêu cầu mật khẩu quản trị viên.
+settings-region-kept-about = Mọi ngôn ngữ đã cài trên máy tính này. Hãy gỡ những ngôn ngữ bạn không dùng, trừ ngôn ngữ bạn đang dùng. Việc gỡ cần mật khẩu quản trị viên.
 
-settings-region-in-use-stays = Đang dùng, nên được giữ lại
-
+settings-region-in-use-stays = Đang được dùng.

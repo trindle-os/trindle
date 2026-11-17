@@ -4,5 +4,5 @@
 terms-accept = 我同意[最终用户许可协议](eula)
 
 # In the foot, while the box is not ticked, saying why the button beside it is off.
-terms-needed = 勾选此框才能继续
+terms-needed = 需要先同意
 

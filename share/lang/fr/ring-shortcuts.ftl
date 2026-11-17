@@ -89,7 +89,7 @@ ring-shortcuts-console = Passer à une console texte
 ring-shortcuts-console-keys = Ctrl+Alt+F1 à F12
 
 # Words for the keys the screen reader takes while it is on.
-ring-shortcuts-reader-keys = Les touches propres au lecteur d'écran, quand il est activé
+ring-shortcuts-reader-keys = Touches du lecteur d'écran quand il est activé
 
 # The keys the screen reader takes while it is on.
 ring-shortcuts-reader-keys-keys = Verr. Maj, Inser

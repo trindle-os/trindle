@@ -13,13 +13,13 @@ chosen-act-name-empty = নাম ফাঁকা রাখা যাবে ন�
 chosen-act-name-slash = নামে স্ল্যাশ থাকতে পারবে না।
 
 # Red words under a name being typed when it is . or ..
-chosen-act-name-kept = এই নামটি সিস্টেমের জন্য রাখা আছে।
+chosen-act-name-kept = এই নামটি সিস্টেম ব্যবহার করে।
 
 # Red words under a name being typed when it is too long.
 chosen-act-name-long = নামটি খুব লম্বা।
 
 # Red words under the name box, and at the foot of Folders, when a rename fails: the item's name, then the reason.
-chosen-inplace-not-renamed = { $name } এর নাম বদলানো যায়নি: { $why }।
+chosen-inplace-not-renamed = Trindle { $name }-এর নাম বদলাতে পারেনি: { $why }।
 
 # Red words under the name box, and at the foot of Folders, when a name is already used in that place; the kind is the word folder or file.
 chosen-inplace-taken =

@@ -37,23 +37,11 @@ store-tab-count = { $name } { $n }
 # Spoken name of a strip of tabs on the Installed page.
 store-tabs-show = 显示
 
-# How long is left when it is a minute or less.
-store-left-minute = 还剩约一分钟
-
-# How long is left, in minutes.
-store-left-minutes = 还剩约 { $n } 分钟
-
-# How long is left, in hours.
-store-left-hours =
-    { $n ->
-       *[other] 还剩约 { $n } 小时
-    }
-
 # Credit under a package's page for the list its site was checked against.
 store-origin-credit = 已对照 HaGeZi 的威胁情报列表检查
 
 # Where a download came from: the site and the page that led to it.
-store-origin-both = 下载自 { $site }，经由 { $referrer } 到达。
+store-origin-both = 你是从 { $site } 下载的，之前是从 { $referrer } 跳转过来的。
 
 # Where a download came from: the site.
 store-origin-site = 下载自 { $site }。
@@ -80,7 +68,7 @@ store-origin-not-checked = { $from } 无法检查该网站，因为无法获取 
 store-review-someone = 某人
 
 # Red words when the keyring could not be reached.
-store-key-unreached = 无法访问密钥环：{ $why }。
+store-key-unreached = Trindle 无法访问密钥环：{ $why }。
 
 # Red words when the key kept in the keyring is not text.
 store-key-not-text = 保存的密钥不是文本。

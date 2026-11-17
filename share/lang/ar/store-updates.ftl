@@ -17,7 +17,7 @@ store-upd-held-version = محجوز عند الإصدار { $have }
 store-upd-held = محجوز
 
 # On the Held back card: the version a thing is held at, and nothing newer waits.
-store-upd-held-version-nothing = محجوز عند الإصدار { $have }؛ لا شيء أحدث بعد
+store-upd-held-version-nothing = محجوز عند الإصدار { $have }. لا يوجد أحدث منه بعد.
 
 # On the Held back card: nothing newer waits.
 store-upd-held-nothing = محجوز؛ لا شيء أحدث بعد
@@ -68,7 +68,7 @@ store-upd-sentence = { $text }.
 store-upd-and-then = { $first } { $second }
 
 # Added to the headline when firmware is among the updates.
-store-upd-firmware-restart = يحتاج البرنامج الثابت إلى إعادة تشغيل ليكتمل.
+store-upd-firmware-restart = أعد التشغيل لإكمال تحديث البرنامج الثابت.
 
 # Headline while the check runs.
 store-upd-checking = جارٍ البحث عن تحديثات.
@@ -80,19 +80,19 @@ store-upd-updating-one = جارٍ تحديث { $name }. يمكنك متابعة 
 store-upd-installing-all = جارٍ تثبيت التحديثات. يمكنك متابعة العمل أثناء ذلك.
 
 # Headline when the updates are in and the computer must start again.
-store-upd-restart = أعد التشغيل ليكتمل الأمر: التحديثات مثبّتة، وتدخل حيز الاستخدام عندما يبدأ الحاسوب من جديد.
+store-upd-restart = أعد تشغيل الحاسوب لإكمال تثبيت التحديثات.
 
 # Added to the headline when what went in needs a restart.
-store-upd-gone-in-restart = ما ثُبّت يحتاج إلى إعادة تشغيل ليكتمل.
+store-upd-gone-in-restart = أعد التشغيل لإكمال التثبيت.
 
 # Added to the headline with no internet.
-store-upd-no-more = هذا الحاسوب غير متصل بالإنترنت، فلا يمكن البحث عن المزيد.
+store-upd-no-more = هذا الحاسوب غير متصل بالإنترنت، لذلك لا يستطيع Trindle البحث عن تحديثات.
 
 # Headline when nothing is ready (updates held back are added after it).
 store-upd-none-ready = لا توجد تحديثات جاهزة
 
 # Headline with nothing waiting and no internet to look with.
-store-upd-nothing-known = لا توجد تحديثات منتظرة يعرفها هذا الحاسوب. ولا يستطيع البحث عن المزيد ما دام غير متصل بالإنترنت.
+store-upd-nothing-known = لا يعرف Trindle أي تحديثات منتظرة. ولا يستطيع البحث عن المزيد ما دام هذا الحاسوب غير متصل بالإنترنت.
 
 # Name of the apps in the headline's list of what could not be checked.
 store-upd-name-apps = التطبيقات
@@ -104,7 +104,7 @@ store-upd-name-system = Trindle وDebian
 store-upd-name-firmware = البرنامج الثابت
 
 # Headline when some checks failed; the list of what was not checked is given.
-store-upd-check-failed = تعذّر البحث عن تحديثات لـ { $names }.
+store-upd-check-failed = تعذّر على Trindle البحث عن تحديثات لـ { $names }.
 
 # Headline when everything is up to date.
 store-upd-current = كل شيء محدَّث.
@@ -116,7 +116,7 @@ store-upd-last-checked = آخر فحص عند { $time }.
 store-upd-not-checked = لا يمكن الفحص دون إنترنت
 
 # Red words under a card when a check took too long.
-store-upd-too-long = استغرق الرد وقتًا طويلًا.
+store-upd-too-long = استغرق الفحص وقتًا طويلًا.
 
 # Tip of the round button that checks again.
 store-upd-check-again = افحص من جديد
@@ -145,7 +145,7 @@ store-upd-restart-now = أعد التشغيل الآن
 store-upd-check-for = ابحث عن تحديثات
 
 # Tip of the round button that releases a thing held back.
-store-upd-release = أطلق { $name }
+store-upd-release = اسمح بتحديثات { $name }
 
 # Tip of the round button that holds a thing's updates back.
 store-upd-hold = احجز { $name }
@@ -181,10 +181,10 @@ store-upd-from = من { $from }
 store-upd-shared-part = جزء مشترك، من { $from }
 
 # Note under the Apps card.
-store-upd-yours-alone = لك وحدك، لذلك تتحدّث دون كلمة مرور. ويجلب التطبيق الأجزاء المشتركة التي يحتاجها إصداره الجديد.
+store-upd-yours-alone = هذه التطبيقات لك وحدك، لذلك تتحدّث دون كلمة مرور. وتحديث التطبيق يثبّت أيضًا أي أجزاء مشتركة يحتاجها.
 
 # Note under the Apps card: what holding back does.
-store-upd-hold-why = التحديث المحجوز يبقى عند الإصدار الذي هو عليه، وخارج تثبيت الكل هنا وفي الحلقة، إلى أن تطلقه.
+store-upd-hold-why = التحديث المحجوز يبقى عند إصداره الحالي. يُستثنى عند تثبيت كل التحديثات، هنا وفي الحلقة، إلى أن تسمح بالتحديثات من جديد.
 
 # Heading of the Apps card.
 store-upd-card-apps = التطبيقات
@@ -221,10 +221,10 @@ store-upd-card-plugins = الإضافات
 store-upd-nothing-held = لا شيء محجوز.
 
 # On a row of the Held back card for a thing released while the page is open.
-store-upd-released = أُطلق
+store-upd-released = غير محجوز
 
 # Note under the Held back card: what releasing does.
-store-upd-release-why = ما يُطلق يدخل مع البقية من جديد، من تثبيت الكل هنا وفي الحلقة.
+store-upd-release-why = بعد أن تسمح بالتحديثات من جديد، سيُثبَّت مع البقية، هنا وفي الحلقة.
 
 # Name on the Held back card of a device whose firmware is not named now.
 store-upd-device-firmware = البرنامج الثابت لجهاز
@@ -262,7 +262,7 @@ store-upd-has-trindle = على هذا الحاسوب Trindle { $version }.
 store-upd-card-system = Trindle وDebian
 
 # Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = حزم Debian مصنوعة لتنسجم معًا، وتثبيت واحدة منفردة قد يجلب معها حزمًا أخرى أو يتركها غير متوافقة. لذلك تُثبَّت معًا، بزر واحد.
+store-upd-debian-why = حزم Debian مصنوعة لتعمل معًا. وتثبيت واحدة فقط قد يثبّت غيرها أو يتركها غير متوافقة، لذلك تُثبَّت كلها معًا.
 
 # Note on the Trindle and Debian card: why no row has a Hold back button.
 store-upd-not-held = تحديثات Trindle وDebian تحمل إصلاحات أمنية للحاسوب كله، لذلك لا يمكن حجزها.
@@ -273,14 +273,8 @@ store-upd-card-security = التحديثات الأمنية
 # On the security card: its state.
 store-upd-security-on = تعمل، كل يوم
 
-# On the security card.
-store-upd-security-note = تُثبَّت إصلاحات Debian كل يوم دون سؤال.
-
-# On the security card.
-store-upd-security-part = جزء من Trindle؛ ولا يمكن إيقافه.
-
 # On the security card: that holding back never stops these.
-store-upd-never-held = حجز تحديث لا يوقف هذه التحديثات أبدًا.
+store-upd-never-held = حجز تحديث لا يوقف التحديثات الأمنية أبدًا.
 
 # Firmware card: the computer has no updater.
 store-upd-fw-none = ليس في هذا الحاسوب أداة لتحديث البرنامج الثابت.
@@ -307,22 +301,22 @@ store-upd-fw-no-list = تعذّر على fwupd جلب أحدث قائمة.
 store-upd-no-flathub = تعذّر الوصول إلى Flathub.
 
 # Red words when Debian's lists could not be fetched.
-store-upd-no-lists = تعذّر جلب قوائم Debian.
+store-upd-no-lists = تعذّر على Trindle جلب قوائم Debian.
 
 # Red words when Debian's lists could not be fetched; the reason follows.
-store-upd-no-lists-why = تعذّر جلب قوائم Debian. { $why }
+store-upd-no-lists-why = تعذّر على Trindle جلب قوائم Debian. { $why }
 
 # Red words under a row when its updates could not be held back or released: the list of what is held could not be kept.
-store-upd-not-held-list = لم يُحجز. تعذّر حفظ قائمة المحجوزات: { $why }.
+store-upd-not-held-list = تعذّر على Trindle حجزه لأنه لم يستطع حفظ قائمة التحديثات المحجوزة: { $why }.
 
 # The same, for a release.
-store-upd-not-released-list = لم يُطلق. تعذّر حفظ قائمة المحجوزات: { $why }.
+store-upd-not-released-list = تعذّر على Trindle السماح بالتحديثات من جديد لأنه لم يستطع حفظ قائمة التحديثات المحجوزة: { $why }.
 
 # Red words when Flatpak could not be told a thing is held back.
-store-upd-held-not-told = حُجز في التطبيقات، لكن تعذّر إخبار Flatpak نفسه، فقد يثبّته شيء آخر يحدّث التطبيقات.
+store-upd-held-not-told = حُجز في التطبيقات، لكن تعذّر على Trindle تغيير ذلك في Flatpak. وقد يثبّته برنامج آخر يحدّث التطبيقات.
 
 # Red words when Flatpak could not be told a thing is released.
-store-upd-released-not-told = أُطلق في التطبيقات، لكن تعذّر إخبار Flatpak نفسه وقد يتركه خارجًا. احجزه ثم أطلقه من جديد.
+store-upd-released-not-told = سُمح بالتحديثات من جديد في التطبيقات، لكن تعذّر على Trindle تغيير ذلك في Flatpak، لذلك قد يتركه Flatpak خارجًا. احجزه ثم اسمح بالتحديثات من جديد.
 
 # Red words: the above, then what Flatpak itself said.
 store-upd-flatpak-said = { $words } قال Flatpak: { $why }
@@ -330,10 +324,16 @@ store-upd-flatpak-said = { $words } قال Flatpak: { $why }
 # Name of Trindle itself on its row of updates.
 store-upd-trindle = Trindle
 
+# Said when a security fix for a boxed app can't be downloaded. { $package } is the package, { $version } the fixed version.
+store-patch-not-fetched = تعذّر على Trindle تنزيل { $package } { $version }.
+
+# Said when a security fix for a boxed app was downloaded but isn't there to use.
+store-patch-not-found = تعذّر على Trindle العثور على الحزمة التي نزّلها.
+
 
 
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
-store-upd-off = البحث التلقائي عن التحديثات متوقف. اضغط «البحث عن تحديثات» لتبحث.
+store-upd-off = البحث التلقائي عن التحديثات متوقف.
 
 # How a card stands with nothing known to wait, looking by itself switched off and no check pressed yet.
 store-upd-not-looked = لم يُفحص
@@ -348,8 +348,7 @@ store-upd-stopping = جارٍ الإيقاف
 store-upd-stopped = أُوقف. اضغط «تحديث» للمتابعة.
 
 # Under the Apps card when Install all was stopped.
-store-upd-stopped-all = أُوقف. اضغط «تثبيت» للمتابعة.
+store-upd-stopped-all = أُوقف. ثبّت مرة أخرى للمتابعة.
 
 # Note under the Apps card.
 store-upd-steam-restarts = يُعاد تشغيل Steam عندما لا تكون أي لعبة قيد التشغيل.
-

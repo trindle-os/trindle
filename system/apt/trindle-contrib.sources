@@ -1,0 +1,14 @@
+# Debian's contrib section for the current release. NVIDIA's driver is in
+# non-free but needs helper packages that are only in contrib, so without
+# this apt cannot install it. Turning it on installs nothing by itself.
+Types: deb
+URIs: http://deb.debian.org/debian
+Suites: trixie trixie-updates
+Components: contrib
+Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp
+
+Types: deb
+URIs: http://deb.debian.org/debian-security
+Suites: trixie-security
+Components: contrib
+Signed-By: /usr/share/keyrings/debian-archive-keyring.pgp

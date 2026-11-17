@@ -26,14 +26,14 @@ settings-window-group-about = حول
 settings-window-in-apps = في التطبيقات
 
 # Small grey heading over the row a search finds that opens the Folders program's settings.
-settings-window-in-folders = في المجلدات
+settings-window-in-folders = في Folders
 
 # The side bar row that opens the Folders program at its own settings.
-settings-window-in-folders-name = إعدادات المجلدات نفسها
+settings-window-in-folders-name = إعدادات Folders الخاصة به
 
 # Words the Settings search matches the Folders settings row by, in lower case, separated by spaces.
 settings-window-in-folders-keywords =
-    مجلدات ملفات ملف مدير الملفات لوحة البداية المنزل الأخيرة محركات أقراص usb فلاشة بطاقة sd موصول فتح إخراج قائمة امتدادات أسماء مربعات تحديد اختيار صفوف مدمج عادي واسع
+    folders مجلدات ملفات ملف مدير الملفات لوحة البداية المنزل الأخيرة محركات أقراص usb فلاشة بطاقة sd موصول فتح إخراج قائمة امتدادات أسماء مربعات تحديد اختيار صفوف مدمج عادي واسع
 
 # Quiet line in the side bar when a search finds no page.
 settings-window-no-page = لا توجد صفحة مطابقة. جرّب كلمة أقصر أو ابحث في المساعدة.
@@ -42,7 +42,7 @@ settings-window-no-page = لا توجد صفحة مطابقة. جرّب كلمة
 settings-window-theme-refused = {"  "}{ $id }  { $name } (لا يمكن استخدامه: { $why })
 
 # Printed in a terminal when trindle-settings --theme is given no theme name.
-settings-window-theme-name = سمِّ سمة، مثل: trindle-settings --theme default
+settings-window-theme-name = اكتب اسم سمة، مثل: trindle-settings --theme default
 
 # Printed in a terminal after trindle-settings --theme worked; theme is the theme's name.
 settings-window-theme-now = السمة الآن هي { $theme }.
@@ -51,14 +51,14 @@ settings-window-theme-now = السمة الآن هي { $theme }.
 settings-window-theme-own = سمة Trindle الخاصة
 
 # Printed in a terminal when the theme could not be chosen; error says why and ends with a full stop.
-settings-window-themes-list = { $error } يعرض trindle-settings --themes قائمة السمات.
+settings-window-themes-list = { $error } شغّل trindle-settings --themes لعرض القائمة.
 
 # Printed in a terminal when trindle-settings --keys is not given the word default.
-settings-window-keys-how = لإعادة كل مفتاح وزر إلى حاله: trindle-settings --keys default
+settings-window-keys-how = لإعادة كل مفتاح وزر إلى وضعه المعتاد، شغّل: trindle-settings --keys default
 
 # Printed in a terminal after every key and button was put back.
-settings-window-keys-back = عاد كل مفتاح وزر إلى ما هو مطبوع.
+settings-window-keys-back = عاد كل مفتاح وزر إلى وضعه المعتاد.
 
 # Printed in a terminal when the keys could not be put back; error says why.
-settings-window-keys-failed = تعذّرت إعادة المفاتيح: { $error }
+settings-window-keys-failed = تعذّر على Trindle إعادة المفاتيح: { $error }
 

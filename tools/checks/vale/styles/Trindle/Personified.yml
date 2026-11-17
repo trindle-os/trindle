@@ -1,0 +1,8 @@
+extends: existence
+message: "'%s': things don't speak or decide; say what happens."
+level: warning
+ignorecase: true
+tokens:
+  # After "at", "under" and the like the noun is a place, and the sentence before it is what says.
+  - \b(?<!\b(?:at|on|under|in|beside|below|above|of) )(?:it|the \w+|Trindle's \w+) (?:says|said|refuses|refused|holds|keeps to|gives way|is told|was told)\b
+  - \bno moment\b

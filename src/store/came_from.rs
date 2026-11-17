@@ -100,7 +100,7 @@ mod tests {
         }
         let _ = std::fs::remove_dir_all(&top);
         let f = Found { site: "https://example.org/get".into(), ..Default::default() };
-        assert_eq!(CameFrom::of(&f).words(None), "Not on GitHub: from a website, example.org");
+        assert_eq!(CameFrom::of(&f).words(None), "Not on GitHub. It comes from example.org");
         assert_eq!(CameFrom::GitHub("a/b".into()).words(Some(1200)), "On GitHub: a/b, 1,200 stars");
         assert_eq!(CameFrom::NotKnown.link(), None);
     }

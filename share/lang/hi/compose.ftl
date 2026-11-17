@@ -17,3 +17,25 @@ compose-stopped-shot = स्क्रीनशॉट रुक गया और
 
 # Tip of the round button on that notice, which starts the stopped part again.
 compose-stopped-try-again = फिर कोशिश करें
+
+# Sent to Flow when you try its PIN and the screen isn't locked.
+compose-flow-not-locked = स्क्रीन लॉक नहीं है।
+
+# Sent to Flow when you try its PIN and no PIN is set.
+compose-flow-no-pin = कोई PIN सेट नहीं है।
+
+# Sent to Flow when you try its PIN after the time allowed for it has run out.
+compose-flow-late = PIN का समय खत्म हो गया।
+
+# Sent to Flow when the wrong PIN has been tried too many times.
+compose-flow-too-many = बहुत ज़्यादा कोशिशें हो गईं।
+
+# Sent to Flow when what was typed isn't a PIN of 4 digits.
+compose-flow-not-a-pin = PIN 4 अंकों का होता है।
+
+# Sent to Flow when the PIN is wrong. { $left } is the tries left.
+compose-flow-wrong-pin =
+    { $left ->
+        [one] PIN गलत है। 1 कोशिश बाकी है।
+       *[other] PIN गलत है। { $left } कोशिशें बाकी हैं।
+    }

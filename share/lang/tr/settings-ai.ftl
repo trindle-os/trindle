@@ -11,13 +11,13 @@ settings-ai-help = Yapay zekâ kodlama programları, kişisel dosyalarınızı g
 
 # SAFETY: needs a human review before it ships
 # Headline of the AI programs page.
-settings-ai-note = Bu, günlük kullanımda yapay zekâ programlarını kişisel dosyalarınızdan uzak tutar; örneğin biri kandırılıp banka dökümlerinizi toplayıp dışarı göndermeye çalışırsa. Sınırlı bir korumadır, garanti değildir: kararlı bir program, bilgisayarın yazılımındaki bir açık ya da sizin bir isteği onaylamanız veya bir klasörü paylaşmanız yine de bir şeyin sızmasına yol açabilir.
+settings-ai-note = Günlük kullanımda bu, yapay zekâ programlarını kişisel dosyalarınızdan uzak tutar. Örneğin kandırılmış bir programın banka dökümlerinizi toplayıp dışarı göndermesini engeller. Koruma sınırlıdır ve garanti değildir. Kararlı bir program, bilgisayarın yazılımındaki bir açık ya da sizin bir isteği onaylamanız veya bir klasörü paylaşmanız yine de bir şeyin sızmasına yol açabilir.
 
 # Note under the headline of the AI programs page.
-settings-ai-inside = Bir yapay zekâ programının başlattığı her şey, örneğin kurulan programlar, betikler ve diğer programlar, onunla birlikte koruma alanının içinde kalır.
+settings-ai-inside = Bir yapay zekâ programının başlattığı her şey, örneğin kurulan programlar ve betikler, onunla birlikte koruma alanının içinde kalır.
 
 # Red words when a change to the fence could not be made.
-settings-ai-not-changed = Değiştirilemedi.
+settings-ai-not-changed = Bu değiştirilemedi.
 
 # Said beside a setting on the AI programs page once it is saved.
 settings-ai-saved = Kaydedildi
@@ -30,18 +30,14 @@ settings-ai-key-not-made = Anahtar oluşturulamadı.
 
 # SAFETY: needs a human review before it ships
 # Label of the switch that limits the network of AI programs, and heading of its line.
-settings-ai-limit-net = Ağı burada listelenen sitelerle sınırla
-
-# SAFETY: needs a human review before it ships
-# Under the Limit the network heading.
-settings-ai-limit-net-sub = Kapalı: ağ açık. Açık: yalnızca aşağıdaki siteler.
+settings-ai-limit-net = Yalnızca aşağıdaki sitelere izin ver
 
 # SAFETY: needs a human review before it ships
 # Tip of the button that removes a site from the list AI programs may reach.
 settings-ai-stop-site = Yapay zekâ programlarının bu siteye ulaşmasını durdur
 
 # Example in the box for typing a site AI programs may reach.
-settings-ai-eg-site = örn. api.anthropic.com
+settings-ai-eg-site = api.anthropic.com
 
 # SAFETY: needs a human review before it ships
 # Tip of the button that adds a site AI programs may reach.
@@ -51,20 +47,17 @@ settings-ai-let-site = Yapay zekâ programlarının bu siteye ulaşmasına izin 
 settings-ai-add-site = Site ekle
 
 # Under the Add a site heading.
-settings-ai-add-site-sub = Adı ya da altındaki her ad için *.example.com.
+settings-ai-add-site-sub = Adını yazın veya altındaki tüm siteler için *.example.com yazın.
 
 # Heading of the card that limits the network of AI programs.
 settings-ai-network = Ağ
 
 # Help text of the Network card (the information button).
-settings-ai-network-about = Gelişmiş. Kapalıyken yapay zekâ programları ağı sizin gibi kullanır. Açıkken yalnızca aşağıdaki sitelere, güvenli (https) bağlantılarla ulaşabilir ve koruma alanının kendi ağı olmaz. Bir programın araçları kendilerine verilen vekil sunucu ayarlarını kullanmalıdır. Yapay zekâ hizmetinin sitesini ve kurulumun gerek duyduğu paket kaynaklarını ekleyin.
+settings-ai-network-about = Bu kapalıyken yapay zekâ programları ağı sizinle aynı şekilde kullanır. Açıkken yalnızca aşağıdaki sitelere, güvenli (https) bağlantılarla ulaşabilir ve koruma alanının kendi ağı olmaz. Bir programın araçları kendilerine verilen vekil sunucu ayarlarını kullanmalıdır. Yapay zekâ hizmetinin sitesini ve kurulumun gerek duyduğu paket kaynaklarını ekleyin.
 
 # SAFETY: needs a human review before it ships
 # Label of the switch that keeps AI programs inside the fence, and heading of its line.
 settings-ai-keep-inside = Yapay zekâ programlarını koruma alanında tut
-
-# Under the fence switch when it is on.
-settings-ai-hides-home = Aşağıda paylaşılan klasörler dışında ana klasörünüzü gizler.
 
 # SAFETY: needs a human review before it ships
 # Under the fence switch when it is off.
@@ -74,7 +67,7 @@ settings-ai-fence-off = Koruma alanı kapalı. Yapay zekâ programları artık s
 settings-ai-the-fence = Koruma alanı
 
 # Help text of The fence card (the information button).
-settings-ai-fence-about = Sistem, yapay zekâ programlarına görünür ve kullanılabilir kalır. Ana klasörünüzün yerine, çalıştırmalar arasında korudukları boş bir özel ana klasör gelir; içinde yalnızca sizin paylaştığınız klasörler bulunur. Diğer programlarınızı, oturumunuzu, anahtarlarınızı ya da parolalarınızı göremezler. Bu listedeki adıyla başlatılmayıp başka bir yolla başlatılan program koruma alanına alınmaz. Asistan bağlantısını (trindle-mcp) kurduysanız, bağlı bir asistan size sormadan şunları okuyabilir: açık pencerelerinizin başlıkları ve arkalarındaki uygulamalar, kurulu uygulamalarınız, çalışan programlar ve bellek kullanımları, bellek, disk, pil, açık kalma süresi ve ağ durumu, Trindle ayarlarınız, herhangi bir hizmet için sistem günlüğünün en çok 500 satırı, en son çökme notlarınız ile ses aygıtlarınızın, eşleştirilmiş Bluetooth aygıtlarının, yakındaki Wi-Fi ağlarının ve sürücülerin adları. Bir şeyi değiştirmeden önce size her zaman sorar.
+settings-ai-fence-about = Yapay zekâ programları sistemi yine görebilir ve kullanabilir. Ana klasörünüzün yerine, çalıştırmalar arasında korunan, boş başlayan özel bir klasör alırlar. İçinde yalnızca paylaştığınız klasörler görünür. Diğer programlarınızı, oturumunuzu, anahtarlarınızı ya da parolalarınızı göremezler. Bu listedeki bir adla değil de başka bir yolla başlattığınız program çitle çevrilmez.
 
 # SAFETY: needs a human review before it ships
 # Label of the switch that fences one AI program: its name is { $name }.
@@ -92,25 +85,19 @@ settings-ai-own-for = { $name } için mevcut ayar klasörümü kullan
 settings-ai-own = Mevcut ayar klasörümü kullan
 
 # Under the existing settings folder heading.
-settings-ai-own-sub = Bu programın geçmiş konuşmalarını tutar.
+settings-ai-own-sub = Bu klasörde programın geçmiş konuşmaları var.
 
 # Example in the box for typing the name of an AI program.
-settings-ai-eg-program = örn. claude
+settings-ai-eg-program = claude
 
 # Tip of the button that adds an AI program, and heading of its line.
 settings-ai-add-program = Program ekle
 
-# Under the Add a program heading.
-settings-ai-add-program-sub = Başlattığınız adı yazın.
-
 # Help text of the AI programs card (the information button).
-settings-ai-programs-about = Bu adlar koruma alanının içinde başlar. Mevcut ayar klasörümü kullan: kapalıyken program yepyeni bir özel klasörle başlar. Programlar içeride kendi oturumlarını açar: sizin oturumunuz paylaşılmaz.
+settings-ai-programs-about = Bu programlar koruma alanının içinde başlar. Mevcut ayar klasörümü kullan kapalıysa program yepyeni bir özel klasörle başlar. Her program koruma alanının içinde kendi oturumunu açar. Sizin oturumunuz paylaşılmaz.
 
 # Heading of the line shown when no folder is shared with AI programs.
 settings-ai-nothing-shared = Hiçbir şey paylaşılmıyor
-
-# Under the Nothing is shared heading.
-settings-ai-none-seen = Yapay zekâ programları klasörlerinizin hiçbirini görmez.
 
 # SAFETY: needs a human review before it ships
 # Label of the switch that lets AI programs only read a shared folder.
@@ -129,20 +116,20 @@ settings-ai-share-folder = Klasör paylaş
 
 # SAFETY: needs a human review before it ships
 # Under the Share a folder heading.
-settings-ai-share-folder-sub = Aynı yerde görünür, okunur ve yazılır.
+settings-ai-share-folder-sub = Aynı yerde gösterilir. Yapay zekâ programları okuyup yazabilir.
 
 # Heading of the card listing folders shared with AI programs.
 settings-ai-shared = Yapay zekâ programlarıyla paylaşılanlar
 
 # Help text of the shared folders card (the information button).
-settings-ai-shared-about = Ana klasörünüzdeki diğer her şey için kural, yapay zekâ programlarından gizli olmasıdır. Gizli klasörler ile anahtar, parola ya da posta tutan klasörler hiçbir zaman paylaşılamaz. Burada paylaşılan klasör, program bir sonraki başlayışında orada olur.
+settings-ai-shared-about = Ana klasörünüzdeki diğer her klasör yapay zekâ programlarından gizli kalır. Gizli klasörleri ve anahtar, parola ya da posta tutan klasörleri hiçbir zaman paylaşamazsınız. Burada paylaştığınız bir klasör, program bir sonraki başlayışında kullanılabilir olur.
 
 # SAFETY: needs a human review before it ships
 # Tip of the button that removes a computer from the list AI programs may reach by ssh.
 settings-ai-stop-computer = Yapay zekâ programlarının bu bilgisayara ulaşmasını durdur
 
 # Example in the box for typing a computer AI programs may reach by ssh.
-settings-ai-eg-computer = örn. nas.local
+settings-ai-eg-computer = nas.local
 
 # SAFETY: needs a human review before it ships
 # Tip of the button that adds a computer AI programs may reach by ssh.
@@ -150,9 +137,6 @@ settings-ai-let-computer = Yapay zekâ programlarının bu bilgisayara ulaşmas�
 
 # Heading of the line for adding a computer.
 settings-ai-add-computer = Bilgisayar ekle
-
-# Under the Add a computer heading.
-settings-ai-add-computer-sub = Adını yazın.
 
 # Note showing the public key to put on each computer: the key is { $key }.
 settings-ai-put-key = Bu anahtarı her bilgisayara koyun: { $key }
@@ -166,20 +150,17 @@ settings-ai-make-key = Anahtarı oluştur
 settings-ai-make-key-for = Yapay zekâ programları için anahtar oluştur
 
 # Under the Make a key heading.
-settings-ai-make-key-sub = Görebildikleri klasörlerin dışında tutulan ayrı bir anahtar.
+settings-ai-make-key-sub = Yapay zekâ programlarının göremediği klasörlerin dışında tutulan ayrı bir anahtar.
 
 # Heading of the card listing computers AI programs may reach by ssh.
 settings-ai-ssh = ssh ile ulaşabilecekleri bilgisayarlar
 
 # Help text of the ssh card (the information button).
-settings-ai-ssh-about = Koruma alanının içinde ssh, Trindle'a sorar; Trindle kendi anahtarını yalnızca burada listelenen bilgisayarlar için kullanır. Kendi anahtarlarınız yapay zekâ programlarına asla gösterilmez.
+settings-ai-ssh-about = Koruma alanının içinde ssh, Trindle üzerinden bağlanır. Trindle kendi anahtarını kullanır ve yalnızca burada listelenen bilgisayarlar için kullanır. Yapay zekâ programları sizin anahtarlarınızı asla görmez.
 
 # SAFETY: needs a human review before it ships
 # Tip of the button that stops giving AI programs a key.
 settings-ai-stop-key = Yapay zekâ programlarına bu anahtarı vermeyi durdur
-
-# Under the name of a key that AI programs are given.
-settings-ai-given = Yapay zekâ programlarına verildi
 
 # Example in the box for typing a key to give AI programs: a name, an equals sign and the value.
 settings-ai-eg-key = AD=değer
@@ -192,12 +173,9 @@ settings-ai-give-key = Yapay zekâ programlarına bu anahtarı ver
 # Heading of the line for adding a key.
 settings-ai-add-key = Anahtar ekle
 
-# Under the Add a key heading.
-settings-ai-add-key-sub = AD=değer biçiminde yazılır.
-
 # Heading of the card listing keys given to AI programs.
 settings-ai-keys = Yapay zekâ programlarına verilen anahtarlar
 
 # SAFETY: needs a human review before it ships
 # Help text of the keys card (the information button).
-settings-ai-keys-about = Oturumunuzdaki anahtarlar ve belirteçler yapay zekâ programlarına asla ulaşmaz. Buraya yazılan anahtar onlara verilir ve yalnızca buradan verilir.
+settings-ai-keys-about = Yapay zekâ programları oturumunuzdaki anahtarları ve belirteçleri asla almaz. Yalnızca buraya yazdığınız bir anahtarı alırlar.

@@ -72,7 +72,9 @@ pub fn unread_notes(path: &Path, seen: &Path, trim_at: u64, drop_at: u64, keep: 
             kept = last.len();
         }
     }
-    let _ = write_in_home(seen, &kept.to_string());
+    if was != Some(kept) {
+        let _ = write_in_home(seen, &kept.to_string());
+    }
     new
 }
 
@@ -165,8 +167,7 @@ pub fn parse_ring_note(bytes: &[u8]) -> RingNote {
 }
 
 pub fn plain_words(text: &str, max: usize) -> String {
-    let hidden = |c: char| c.is_control() || matches!(c, '\u{200B}'..='\u{200F}' | '\u{202A}'..='\u{202E}' | '\u{2060}'..='\u{2069}' | '\u{FEFF}');
-    let spaced: String = text.chars().map(|c| if c.is_whitespace() { ' ' } else { c }).filter(|c| !hidden(*c)).collect();
+    let spaced: String = text.chars().map(|c| if c.is_whitespace() { ' ' } else { c }).filter(|c| !crate::common::unseen::unseen(*c)).collect();
     let one = spaced.split(' ').filter(|w| !w.is_empty()).collect::<Vec<_>>().join(" ");
     if one.chars().count() <= max {
         one

@@ -28,10 +28,17 @@ chmod 644 "$doc/THIRD-PARTY.txt"
 first_apps="alacritty"
 "$here/target/release/trindle" boxed --gather "$stage/usr/share/trindle/first-apps" $first_apps
 
-rm -rf "$stage/usr/bin"
-
 size=$(du -sk "$stage" | cut -f1)
 depends=$(sed -e 's/#.*//' "$here/packages.txt" | tr -s ' \n' ' ' | sed 's/^ //; s/ $//; s/ /, /g')
+toolkit=$(sed -n '/^name = "trindle-toolkit"$/{n;s/^version = "\(.*\)"$/\1/p;q}' "$here/Cargo.lock" | sed 's/-/~/')
+[ -n "$toolkit" ] || { echo "no trindle-toolkit version in Cargo.lock" >&2; exit 1; }
+depends=$(echo "$depends" | sed "s/\(^\|, \)trindle-toolkit-lang\(,\|$\)/\1trindle-toolkit-lang (>= $toolkit)\2/")
+case "$depends" in *"trindle-toolkit-lang (>= $toolkit)"*) ;; *) echo "packages.txt must name trindle-toolkit-lang" >&2; exit 1 ;; esac
+icons=1.4.8
+for set in circle square; do
+    depends=$(echo "$depends" | sed "s/\(^\|, \)trindle-$set-icon-theme\(,\|$\)/\1trindle-$set-icon-theme (>= $icons)\2/")
+done
+case "$depends" in *"trindle-circle-icon-theme (>= $icons)"*"trindle-square-icon-theme (>= $icons)"*) ;; *) echo "packages.txt must name both Trindle icon sets" >&2; exit 1 ;; esac
 recommends=$(sed -e 's/#.*//' "$here/system/apt/hardware-packages.txt" | tr -s ' \n' ' ' | sed 's/^ //; s/ $//; s/ /, /g')
 mkdir -p "$stage/DEBIAN"
 sed -e "s/@VERSION@/$epoch:$version/" -e "s/@ARCH@/$arch/" -e "s/@SIZE@/$size/" -e "s/@DEPENDS@/$depends/" \

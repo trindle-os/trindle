@@ -4,7 +4,7 @@ use super::BTN_LEFT;
 use crate::{
     screen_edge,
     shell::{ssd::BORDER, FullscreenSurface, ResizeEdge, WindowElement},
-    state::Backend, AnvilState,
+    state::Backend, Compose,
 };
 
 use smithay::{
@@ -43,7 +43,7 @@ fn resizable(window: &WindowElement) -> bool {
     min.w == 0 || min != max
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     fn nothing_under(&self, location: Point<f64, Logical>, windows_ok: bool) -> bool {
 
@@ -117,7 +117,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         self.space.outputs().filter_map(|o| self.space.output_geometry(o)).collect()
     }
 
-    pub(super) fn desktop_double(&mut self, pos: Point<f64, Logical>, time: u32, slop: f64, grabbed: bool) -> bool {
+    pub(super) fn desktop_double(&mut self, pos: Point<f64, Logical>, time: u32, slop: f64, grabbed: bool, one_click_at_edge: bool) -> bool {
         let first = self.desktop_tap.take();
         if self.is_locked() || grabbed {
             return false;
@@ -131,6 +131,10 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         if !self.nothing_under(pos, at_edge) {
             return false;
         }
+
+        if at_edge && one_click_at_edge && self.config.edge_clicks <= 1 {
+            return true;
+        }
         let double = first.is_some_and(|(then, at)| {
             time.wrapping_sub(then) <= crate::pointer::DOUBLE_CLICK_MS && (pos - at).to_f64().x.hypot((pos - at).to_f64().y) <= slop
         });
@@ -141,18 +145,18 @@ impl<BackendData: Backend> AnvilState<BackendData> {
     }
 
     pub(crate) fn tap_desktop(&mut self, pos: Point<f64, Logical>, time: u32, grabbed: bool) {
-        if self.desktop_double(pos, time, crate::pointer::DOUBLE_TAP_SLOP, grabbed) {
+        if self.desktop_double(pos, time, crate::pointer::DOUBLE_TAP_SLOP, grabbed, false) {
             if let Some(cmd) = self.config.desktop_double_click.clone() {
                 self.spawn(&cmd);
             }
         }
     }
 
-    pub(super) fn update_edge_cursor(&mut self, pos: Point<f64, Logical>) {
+    pub(super) fn update_edge_cursor(&mut self, pos: Point<f64, Logical>, over_surface: bool) {
         if self.pointer.is_grabbed() {
             return;
         }
-        let edge = if self.surface_under(pos).is_none() { self.edge_under(pos) } else { None };
+        let edge = if over_surface { None } else { self.edge_under(pos) };
         match edge {
             Some((_, edges)) => {
                 self.cursor_status = CursorImageStatus::Named(edges.cursor());

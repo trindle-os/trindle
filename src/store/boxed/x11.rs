@@ -1,7 +1,6 @@
 //! A box's own Xwayland, held for as long as the box runs.
 
 use crate::toolkit::t;
-use std::path::Path;
 use std::process::{Command, Stdio};
 use crate::common::x11_rooms::{self, Answer};
 
@@ -90,12 +89,14 @@ pub(super) fn own_x11(name: &str) -> (Option<u32>, Option<XHold>) {
             tell(t!("store-boxed-x-many"), t!("store-boxed-x-many-close"));
             (None, None)
         }
-        Err(e) => {
-            let desktop = std::env::var("DISPLAY").ok().and_then(|d| d.strip_prefix(':')?.split('.').next()?.parse().ok());
-            eprintln!("trindle-boxed: {name}: {e}; the desktop's own display is used until the next login");
-            (desktop.filter(|n| Path::new(&x11_socket(*n)).exists()), None)
-        }
+        Err(e) => unasked(name, &e.to_string()),
     }
+}
+
+pub(super) fn unasked(name: &str, why: &str) -> (Option<u32>, Option<XHold>) {
+    eprintln!("trindle-boxed: {name}: {why}; it is started with no display of its own");
+    tell(t!("store-boxed-x-unasked"), t!("store-boxed-x-unasked-why"));
+    (None, None)
 }
 
 pub(crate) fn tell(summary: &str, body: &str) {

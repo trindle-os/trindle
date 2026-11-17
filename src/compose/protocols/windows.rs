@@ -2,6 +2,7 @@
 //! ring and the panel, and the few things they may do to a window.
 
 use smithay::output::Output;
+use super::Filtered;
 use smithay::reexports::wayland_server::backend::ClientId;
 use smithay::reexports::wayland_server::protocol::wl_surface::WlSurface;
 use smithay::reexports::wayland_server::{
@@ -68,7 +69,7 @@ pub trait WindowsHandler {
 
     fn raise_window(&mut self, surface: WlSurface);
 
-    fn close_window(&mut self, surface: WlSurface);
+    fn close_or_force(&mut self, surface: WlSurface);
 
     fn change_window(&mut self, surface: WlSurface, change: Change, on: bool);
 }
@@ -98,10 +99,6 @@ struct Known {
 
 pub struct WindowKey(u64);
 
-pub struct WindowsGlobalData {
-    filter: Box<dyn for<'c> Fn(&'c Client) -> bool + Send + Sync>,
-}
-
 #[derive(Debug)]
 pub struct WindowsState {
     display: DisplayHandle,
@@ -114,14 +111,14 @@ impl WindowsState {
 
     pub fn new<D, F>(display: &DisplayHandle, filter: F) -> WindowsState
     where
-        D: GlobalDispatch<TrindleWindowsManagerV1, WindowsGlobalData>
+        D: GlobalDispatch<TrindleWindowsManagerV1, Filtered>
             + Dispatch<TrindleWindowsManagerV1, ()>
             + Dispatch<TrindleWindowV1, WindowKey>
             + WindowsHandler
             + 'static,
         F: for<'c> Fn(&'c Client) -> bool + Send + Sync + 'static,
     {
-        display.create_global::<D, TrindleWindowsManagerV1, _>(VERSION, WindowsGlobalData { filter: Box::new(filter) });
+        display.create_global::<D, TrindleWindowsManagerV1, _>(VERSION, Filtered::new(filter));
         WindowsState { display: display.clone(), next_id: 1, managers: Vec::new(), known: Vec::new() }
     }
 
@@ -258,9 +255,9 @@ where
     }
 }
 
-impl<D> GlobalDispatch<TrindleWindowsManagerV1, WindowsGlobalData, D> for WindowsState
+impl<D> GlobalDispatch<TrindleWindowsManagerV1, Filtered, D> for WindowsState
 where
-    D: GlobalDispatch<TrindleWindowsManagerV1, WindowsGlobalData>
+    D: GlobalDispatch<TrindleWindowsManagerV1, Filtered>
         + Dispatch<TrindleWindowsManagerV1, ()>
         + Dispatch<TrindleWindowV1, WindowKey>
         + WindowsHandler
@@ -271,7 +268,7 @@ where
         _: &DisplayHandle,
         _: &Client,
         resource: New<TrindleWindowsManagerV1>,
-        _: &WindowsGlobalData,
+        _: &Filtered,
         data_init: &mut DataInit<'_, D>,
     ) {
         let manager = data_init.init(resource, ());
@@ -280,8 +277,8 @@ where
         st.tell::<D>(&manager);
     }
 
-    fn can_view(client: Client, data: &WindowsGlobalData) -> bool {
-        (data.filter)(&client)
+    fn can_view(client: Client, data: &Filtered) -> bool {
+        data.can_view(&client)
     }
 }
 
@@ -330,7 +327,7 @@ where
         match request {
             window::Request::Destroy => {}
             window::Request::Raise => state.raise_window(surface),
-            window::Request::Close => state.close_window(surface),
+            window::Request::Close => state.close_or_force(surface),
             window::Request::Change { turn_on, turn_off } => {
                 for (bit, change) in [(MINIMIZED, Change::Minimized), (MAXIMIZED, Change::Maximized), (FULLSCREEN, Change::Fullscreen)] {
                     let (on, off) = (turn_on & bit != 0, turn_off & bit != 0);
@@ -342,17 +339,14 @@ where
         }
     }
 
-    fn destroyed(state: &mut D, _: ClientId, window: &TrindleWindowV1, _: &WindowKey) {
-
-        let _ = (state, window);
-    }
+    fn destroyed(_: &mut D, _: ClientId, _: &TrindleWindowV1, _: &WindowKey) {}
 }
 
 #[macro_export]
 macro_rules! delegate_windows {
     ($(@<$( $lt:tt $( : $clt:tt $(+ $dlt:tt )* )? ),+>)? $ty: ty) => {
         smithay::reexports::wayland_server::delegate_global_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
-            $crate::protocols::windows::TrindleWindowsManagerV1: $crate::protocols::windows::WindowsGlobalData
+            $crate::protocols::windows::TrindleWindowsManagerV1: $crate::protocols::Filtered
         ] => $crate::protocols::windows::WindowsState);
         smithay::reexports::wayland_server::delegate_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
             $crate::protocols::windows::TrindleWindowsManagerV1: ()

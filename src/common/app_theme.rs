@@ -8,6 +8,7 @@
 
 use super::files::{config_home, read_text, write_text};
 use super::style::{accent, light};
+use crate::toolkit::colour::Colour;
 use crate::toolkit::theme;
 
 const FILE: &str = "trindle.css";
@@ -50,15 +51,16 @@ fn look() -> Look {
     let t = theme::Theme::new(light, &accent());
     let light = t.light;
     let c = |name: &str| theme::named(name, light).css();
-    let solid = |c: crate::toolkit::colour::Colour| crate::toolkit::colour::Colour { a: 1.0, ..c };
+    let solid = |c: Colour| Colour { a: 1.0, ..c };
 
-    let written = |c: crate::toolkit::colour::Colour| crate::toolkit::colour::Colour::parse(&solid(c).css()).unwrap_or(c);
-    let read_on = |c: crate::toolkit::colour::Colour, under: &[crate::toolkit::colour::Colour]| theme::clear(solid(c), under, theme::AIM_WORDS).css();
+    let written = |c: Colour| Colour::parse(&solid(c).css()).unwrap_or(c);
+    let read_on = |c: Colour, under: &[Colour]| theme::clear(solid(c), under, theme::AIM_WORDS).css();
+
     let select = written(theme::over(theme::alpha(t.accent, if light { 0.30 } else { 0.42 }), t.panel));
-    let (success, warning) = (solid(theme::good()), solid(crate::toolkit::colour::Colour::parse(if light { "#8f6c03" } else { "#ffc006" }).unwrap_or(t.accent)));
+    let (success, warning) = (solid(theme::good()), solid(Colour::parse(if light { "#8f6c03" } else { "#ffc006" }).unwrap_or(t.accent)));
 
     let grounds: Vec<_> = ["trindle-page", "trindle-card", "trindle-well", "trindle-box"].iter().map(|name| written(theme::named(name, light))).collect();
-    let words = |c: crate::toolkit::colour::Colour| read_on(c, &grounds);
+    let words = |c: Colour| read_on(c, &grounds);
 
     Look {
         danger_text: words(t.danger_text),
@@ -116,11 +118,13 @@ fn gtk4(l: &Look) -> String {
         vars.push_str(&format!("  --{}: {value};\n", name.replace('_', "-")));
     }
     vars.push_str("}\n");
-    format!("{}\n{named}\n{vars}\n{}", header(), tips(l))
+    format!("{}\n{named}\n{vars}\n{}", header(), tips())
 }
 
 fn gtk3(l: &Look) -> String {
     let Look { window, view, bar, side, card, pop, fg, line, accent, on_accent, accent_text, danger, on_danger, select, on_select, select_side, .. } = l;
+    let (dim_card, dim_view, dim_pop, dim_window) = (dim(fg, &[card]), dim(fg, &[view]), dim(fg, &[pop]), dim(fg, &[window]));
+    let dim_text = dim(fg, &[view, window, bar, side, card, pop]);
     format!(r#"{header}
 @define-color theme_bg_color {window};
 @define-color theme_fg_color {fg};
@@ -135,32 +139,42 @@ window.background, .background, dialog .dialog-vbox {{ background-color: {window
 headerbar, headerbar:backdrop, .titlebar:not(headerbar) {{
   background: {bar}; border-color: {line}; box-shadow: none; color: {fg}; }}
 .sidebar, placessidebar list, stacksidebar list,
-.sidebar .view, .sidebar treeview.view {{ background-color: {side}; }}
+.sidebar .view, .sidebar treeview.view {{ background-color: {side}; color: {fg}; }}
 .sidebar, placessidebar {{ border-color: {line}; }}
 popover, popover.background, menu, .menu, .context-menu {{ background-color: {pop}; color: {fg}; }}
 {tips}
-notebook > header {{ background-color: {bar}; border-color: {line}; }}
+notebook > header {{ background-color: {bar}; border-color: {line}; color: {fg}; }}
 notebook > header > tabs > tab, notebook > header > tabs > tab:hover, notebook > header > tabs > tab:checked {{ box-shadow: none; }}
-notebook > header > tabs > tab:checked {{ background-color: {card}; border-radius: 8px; }}
+notebook > header > tabs > tab:checked {{ background-color: {card}; color: {fg}; border-radius: 8px; }}
 stackswitcher > button:checked, .stack-switcher > button:checked {{ box-shadow: none; }}
-notebook > stack:not(:only-child) {{ background-color: {view}; }}
+notebook > stack:not(:only-child) {{ background-color: {view}; color: {fg}; }}
 link, *:link {{ color: {accent_text}; }}
 
 button:not(.flat):not(.titlebutton):not(.suggested-action):not(.destructive-action) {{
-  background-image: none; background-color: {card}; border-color: {line}; box-shadow: none; text-shadow: none; }}
-button:not(.flat):not(.titlebutton):hover {{ background-image: none; background-color: mix({card}, {fg}, 0.06); }}
-button:not(.flat):not(.titlebutton):active, button:not(.flat):not(.titlebutton):checked {{
-  background-image: none; background-color: mix({card}, {fg}, 0.12); }}
+  background-image: none; background-color: {card}; color: {fg}; border-color: {line}; box-shadow: none; text-shadow: none; }}
+button:not(.flat):not(.titlebutton):not(.suggested-action):not(.destructive-action):hover {{ background-image: none; background-color: mix({card}, {fg}, 0.06); color: {fg}; }}
+button:not(.flat):not(.titlebutton):not(.suggested-action):not(.destructive-action):active,
+button:not(.flat):not(.titlebutton):not(.suggested-action):not(.destructive-action):checked {{
+  background-image: none; background-color: mix({card}, {fg}, 0.12); color: {fg}; }}
+/* Words only where the ground is Trindle's own: a flat button elsewhere may sit on a ground the program paints itself. */
+headerbar button.flat, .titlebar button.flat, popover button.flat, .sidebar button.flat, menuitem, notebook > header > tabs > tab {{ color: {fg}; }}
+button:not(.suggested-action):not(.destructive-action) label {{ color: inherit; }}
+button:disabled, button:disabled *, combobox:disabled button, combobox:disabled button * {{ background-color: {card}; color: {dim_card}; }}
+entry:disabled, spinbutton:disabled, spinbutton:disabled entry {{ background-color: {view}; color: {dim_view}; }}
+menuitem:disabled, menuitem:disabled label {{ background-color: {pop}; color: {dim_pop}; }}
+window.background label:disabled, .background label:disabled {{ background-color: {window}; color: {dim_window}; }}
 button.suggested-action {{ background-image: none; background-color: {accent}; border-color: {accent}; color: {on_accent}; }}
 button.destructive-action {{ background-image: none; background-color: {danger}; border-color: {danger}; color: {on_danger}; }}
 
 headerbar button.titlebutton, .titlebar button.titlebutton {{
-  background-image: none; background-color: mix({card}, {fg}, 0.10); border: none; box-shadow: none;
+  background-image: none; background-color: mix({card}, {fg}, 0.10); color: {fg}; border: none; box-shadow: none;
   border-radius: 9999px; min-width: 24px; min-height: 24px; padding: 3px; margin: 0 2px; }}
-headerbar button.titlebutton:hover, .titlebar button.titlebutton:hover {{ background-color: mix({card}, {fg}, 0.18); }}
-headerbar button.titlebutton:active, .titlebar button.titlebutton:active {{ background-color: mix({card}, {fg}, 0.26); }}
+headerbar button.titlebutton:hover, .titlebar button.titlebutton:hover {{ background-color: mix({card}, {fg}, 0.18); color: {fg}; }}
+headerbar button.titlebutton:active, .titlebar button.titlebutton:active {{ background-color: mix({card}, {fg}, 0.26); color: {fg}; }}
 
 entry, spinbutton:not(.vertical) {{ background-image: none; background-color: {view}; border-color: {line}; color: {fg}; box-shadow: none; }}
+entry text, spinbutton text, combobox button label, combobox button cellview, combobox button box {{ color: {fg}; }}
+entry:disabled text, spinbutton:disabled text, combobox:disabled button label, combobox:disabled button cellview {{ color: {dim_text}; }}
 entry:focus, spinbutton:focus {{ border-color: {accent}; box-shadow: inset 0 0 0 1px {accent}; }}
 
 *:selected, *:selected:focus, .view:selected, treeview.view:selected, row:selected, flowbox flowboxchild:selected,
@@ -168,13 +182,26 @@ selection {{ background-color: {select}; color: {on_select}; }}
 .sidebar .view:selected, .sidebar treeview.view:selected, .sidebar row:selected,
 placessidebar row:selected {{ background-color: {select_side}; color: {fg}; }}
 switch:checked, progressbar progress, scale highlight {{
-  background-image: none; background-color: {accent}; border-color: {accent}; }}
-levelbar block.filled {{ background-image: none; background-color: mix({fg}, {view}, 0.45); border-color: transparent; }}
+  background-image: none; background-color: {accent}; color: {on_accent}; border-color: {accent}; }}
+levelbar block.filled {{ background-image: none; background-color: mix({fg}, {view}, 0.35); color: {view}; border-color: transparent; }}
 check:checked, radio:checked {{ background-image: none; background-color: {accent}; border-color: {accent}; color: {on_accent}; }}
-"#, header = header(), tips = tips(l))
+"#, header = header(), tips = tips())
 }
 
-fn tips(_l: &Look) -> String {
+fn dim(ink: &str, grounds: &[&str]) -> String {
+    use crate::toolkit::theme::{contrast, WORDS};
+    let (Some(i), Some(under)) = (Colour::parse(ink), grounds.iter().map(|g| Colour::parse(g)).collect::<Option<Vec<_>>>()) else { return ink.to_string() };
+    let g = under[0];
+    let at = |f: f32| Colour { r: i.r + (g.r - i.r) * f, g: i.g + (g.g - i.g) * f, b: i.b + (g.b - i.b) * f, a: 1.0 };
+    let shown = |f: f32| Colour::parse(&at(f).css()).unwrap_or(i);
+    let mut f = 0.0;
+    while f < 0.6 && under.iter().all(|u| contrast(shown(f + 0.05), *u) >= WORDS + 0.05) {
+        f += 0.05;
+    }
+    at(f).css()
+}
+
+fn tips() -> String {
     let k = theme::sheet();
     format!("tooltip, tooltip.background {{ background-color: {}; color: {}; border: 1px solid {}; border-radius: 9999px; \
              padding: {}px {}px; font-size: {}px; font-weight: {}; box-shadow: 0 0 0 1px {}, 0 {}px {}px rgba(0, 0, 0, {}); }}\n",
@@ -330,6 +357,71 @@ mod tests {
                 pix.save_png(dir.join(format!("other-programs-words-{}-{when}.png", if light { "light" } else { "dark" }))).unwrap();
             }
         }
+    }
+
+    #[test]
+    fn every_colour_pair_written_for_other_programs_stands_4_5_to_one_in_both_looks() {
+        let c = |s: &str| Colour::parse(s).unwrap_or_else(|| panic!("{s}"));
+        let value = |v: &str| -> Option<Colour> {
+            let v = v.trim();
+            let Some(args) = v.strip_prefix("mix(").and_then(|m| m.strip_suffix(')')) else { return Colour::parse(v) };
+            let p: Vec<&str> = args.split(',').map(str::trim).collect();
+            let (a, b, f) = (c(p[0]), c(p[1]), p[2].parse::<f32>().unwrap());
+            Colour::parse(&Colour { r: a.r + (b.r - a.r) * f, g: a.g + (b.g - a.g) * f, b: a.b + (b.b - a.b) * f, a: 1.0 }.css())
+        };
+        let mut short = Vec::new();
+        for light in [false, true] {
+            for accent in crate::toolkit::theme::drawn::highlights() {
+                let what = format!("{} with {accent}", if light { "light" } else { "dark" });
+                crate::common::style::ASKED_FOR_TEST.with(|a| *a.borrow_mut() = Some((light, accent.clone())));
+                let l = super::look();
+                crate::common::style::ASKED_FOR_TEST.with(|a| *a.borrow_mut() = None);
+                let grounds = [&l.window, &l.view, &l.bar, &l.side, &l.card, &l.pop];
+                let css = super::gtk3(&l);
+                let body = css.split_once("*/").map_or(css.as_str(), |h| h.1);
+                let mut with_words = 0;
+                for (sel, decls) in body.split('}').filter_map(|b| b.split_once('{')) {
+                    let sel = sel.trim().lines().last().unwrap_or("").trim();
+                    let get = |names: &[&str]| decls.split(';').find_map(|d| {
+                        let (n, v) = d.split_once(':')?;
+                        names.contains(&n.trim()).then(|| v.trim().to_string())
+                    });
+                    let (ground, ink) = (get(&["background-color", "background"]), get(&["color"]));
+                    let ground = ground.filter(|g| g != "none" && g != "transparent");
+                    match (ground, ink.filter(|i| i != "inherit")) {
+                        (Some(g), None) => short.push(format!("{what}: {sel} writes a ground {g} and no words")),
+                        (Some(g), Some(i)) => match (value(&g), value(&i)) {
+                            (Some(g), Some(i)) if contrast(i, Colour { a: 1.0, ..g }) < WORDS => short.push(format!("{what}: {sel}: {} on {}: {:.2}", i.css(), g.css(), contrast(i, g))),
+                            (Some(_), Some(_)) => with_words += 1,
+                            _ => short.push(format!("{what}: {sel}: {g} or {i} cannot be read")),
+                        },
+                        (None, Some(i)) if !sel.starts_with("link") && !sel.contains(":link") => {
+                            let i = value(&i).unwrap_or_else(|| panic!("{sel}: {i}"));
+                            for ground in grounds {
+                                if contrast(i, c(ground)) < WORDS {
+                                    short.push(format!("{what}: {sel} words {} on {ground}: {:.2}", i.css(), contrast(i, c(ground))));
+                                }
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+                assert!(with_words >= 20, "{what}: only {with_words} pairs found");
+                let four = super::gtk4(&l);
+                let names: Vec<(&str, &str)> = four.lines().filter_map(|l| l.strip_prefix("@define-color ")?.strip_suffix(';')?.split_once(' ')).collect();
+                for (name, ground) in names.iter().filter(|(n, _)| n.ends_with("_bg_color")) {
+                    let ink = name.replace("_bg_", "_fg_");
+                    if let Some((_, ink_v)) = names.iter().find(|(n, _)| *n == ink) {
+                        if contrast(c(ink_v), c(ground)) < WORDS {
+                            short.push(format!("{what}: @{ink} {ink_v} on @{name} {ground}"));
+                        }
+                    }
+                }
+            }
+        }
+        short.sort();
+        short.dedup();
+        assert!(short.is_empty(), "{} pairs written for other programs fall short:\n{}", short.len(), short.join("\n"));
     }
 
     #[test]

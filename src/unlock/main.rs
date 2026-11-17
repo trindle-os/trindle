@@ -288,8 +288,8 @@ mod tests {
 
     #[test]
     fn the_prompt_is_kept_short_and_plain() {
-        assert_eq!(tidy("Please unlock disk sda3_crypt:"), "Enter encryption password");
-        assert_eq!(tidy("  Enter passphrase: "), "Enter encryption password");
+        assert_eq!(tidy("Please unlock disk sda3_crypt:"), "Enter disk password");
+        assert_eq!(tidy("  Enter passphrase: "), "Enter disk password");
         assert_eq!(tidy("Disk password"), "Disk password");
     }
 

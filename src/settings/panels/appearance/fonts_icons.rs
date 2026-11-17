@@ -27,7 +27,7 @@ impl Appearance {
         run::on_thread(move || write_ini(name, &value), back);
     }
 
-    fn icon_set(&mut self, kit: &mut Kit, set: &'static str) {
+    pub(super) fn icon_set(&mut self, kit: &mut Kit, set: &'static str) {
         if self.set == set || kit.working(ICONS) {
             return;
         }
@@ -128,7 +128,6 @@ impl Appearance {
             controls.push(row(vec![d.node(), note(d.words()).tone(d.tone())]).gap(8.0).width(Length::Shrink));
         }
         let shape = line(t!("settings-appearance-shape"))
-            .sub(t!("settings-appearance-shape-about"))
             .key(ICONS)
             .controls(controls)
             .below(column(cards).gap(8.0))
@@ -156,16 +155,16 @@ impl Appearance {
         let names = fams.clone();
 
         let shown: Vec<String> = fams.iter().map(|f| if f.is_empty() { t!("settings-appearance-font-default").to_string() } else { f.clone() }).collect();
-        let pick_family = dropdown(kit, FONT, shown, at, t!("settings-appearance-font"), move |i| {
+        let pick_family = dropdown(FONT, shown, at, t!("settings-appearance-font"), move |i| {
             let f = names[i].clone();
             on::<Appearance>(move |me, k| me.set_font(k, Some(f.clone()), None))
         });
         let all = sizes.clone();
-        let pick_size = dropdown(kit, FONT_SIZE, sizes, size_at, t!("settings-appearance-font-size"), move |i| {
+        let pick_size = dropdown(FONT_SIZE, sizes, size_at, t!("settings-appearance-font-size"), move |i| {
             let s = all[i].clone();
             on::<Appearance>(move |me, k| me.set_font(k, None, Some(s.clone())))
         });
-        line(t!("settings-appearance-font")).sub(t!("settings-appearance-font-about")).key(FONT).controls(vec![pick_family, pick_size]).node(kit)
+        line(t!("settings-appearance-font")).key(FONT).controls(vec![pick_family, pick_size]).node(kit)
     }
 
     pub(super) fn text_card(&self, kit: &Kit) -> Node<Msg> {
@@ -175,7 +174,6 @@ impl Appearance {
                                  on::<Appearance>(|me, _| me.skip_font()), on::<Appearance>(|me, k| me.replace_font(k)),
                                  |all| on::<Appearance>(move |me, _| me.taken_fonts.set_same(all))));
         rows.push(line(t!("settings-appearance-add-fonts"))
-            .sub(t!("settings-appearance-add-fonts-about"))
             .key(ADD_FONTS)
             .controls(vec![add, help_link(t!("settings-appearance-fonts-help"), "themes")])
             .node(kit));
@@ -184,7 +182,6 @@ impl Appearance {
             .rows(rows)
             .node(kit)
     }
-
 }
 
 pub(super) const SAMPLES: &[&str] = &["firefox", "thunderbird", "org.gnome.Calculator", "vlc", "gimp"];

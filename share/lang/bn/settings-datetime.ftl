@@ -8,7 +8,7 @@ settings-datetime-keywords = সময় সময়অঞ্চল ঘড়�
 
 # Help line at the foot of the Date and time page.
 # SAFETY: needs a human review before it ships
-settings-datetime-help = সময় অঞ্চল ও স্বয়ংক্রিয় সময়ের জন্য প্রশাসকের পাসওয়ার্ড লাগে।
+settings-datetime-help = সময় অঞ্চল বা স্বয়ংক্রিয় সময় বদলাতে প্রশাসকের পাসওয়ার্ড লাগে।
 
 # Spoken name of the picture of the clock at the top of the page.
 settings-datetime-time-now = এখনকার সময়
@@ -41,7 +41,7 @@ settings-datetime-minute = মিনিট
 settings-datetime-no-time = সময় ঠিক করা যায়নি।
 
 # Red words when the time was set by hand while automatic time is on.
-settings-datetime-keeps-right = ঘড়ি এখন নিজে থেকেই ঠিক থাকছে। উপরে সেটি বন্ধ করুন, তারপর হাতে সময় ঠিক করুন।
+settings-datetime-keeps-right = ঘড়ি নিজে থেকেই সময় ঠিক করে। উপরে সেটি বন্ধ করুন, তারপর হাতে সময় ঠিক করুন।
 
 # Red words when the system's message bus could not be reached.
 settings-datetime-no-bus = সিস্টেম বাসে পৌঁছানো যায়নি।
@@ -50,7 +50,7 @@ settings-datetime-no-bus = সিস্টেম বাসে পৌঁছান
 settings-datetime-not-answering = সময় পরিষেবা সাড়া দিচ্ছে না।
 
 # Red words when automatic time could not be turned on.
-settings-datetime-ntp-on-failed = ঘড়িকে নিজে থেকে ঠিক রাখতে বলা যায়নি।
+settings-datetime-ntp-on-failed = স্বয়ংক্রিয় সময় চালু করা যায়নি।
 
 # Red words when automatic time could not be turned off.
 settings-datetime-ntp-off-failed = স্বয়ংক্রিয় সময় বন্ধ করা যায়নি।
@@ -68,10 +68,10 @@ settings-datetime-it-is = { $date } তারিখে এখন { $time }।
 settings-datetime-service-down = সময় পরিষেবা সাড়া দিচ্ছে না, তাই এখানে ঘড়ি বদলানো যাবে না।
 
 # Headline of the page when the clock is automatic and in step: { $time } is the time and { $date } the date.
-settings-datetime-it-is-right = { $date } তারিখে এখন { $time }, আর ঘড়ি নিজে থেকেই ঠিক থাকে।
+settings-datetime-it-is-right = { $date } তারিখে এখন { $time }। ঘড়ি নিজে থেকে সময় ঠিক করে নেয়।
 
 # Headline of the page when the clock is automatic but not yet in step: { $time } is the time and { $date } the date.
-settings-datetime-it-is-checks = { $date } তারিখে এখন { $time }। ইন্টারনেট পেলে ঘড়ি নিজেকে মিলিয়ে নেবে।
+settings-datetime-it-is-checks = { $date } তারিখে এখন { $time }। কম্পিউটার ইন্টারনেটে যুক্ত হলে ঘড়ি নিজে সময় ঠিক করে নেবে।
 
 # Headline of the page when the clock is set by hand: { $time } is the time and { $date } the date.
 settings-datetime-it-is-hand = { $date } তারিখে এখন { $time }। ঘড়ি হাতে ঠিক করা।
@@ -86,7 +86,7 @@ settings-datetime-city-region-offset = { $city }, { $region }, { $offset }
 settings-datetime-tip = { $date } তারিখে এখন { $time }, { $zone }।
 
 # Help text of the clock card when the time service is not answering or not yet read.
-settings-datetime-ring-about = রিংয়ের মাঝখানের ঘড়ি ২৪ বা ১২ ঘণ্টায়, সেকেন্ডসহ বা সেকেন্ড ছাড়া লেখা হয়। শুধু রিংয়ের ঘড়ি এটি মানে; প্রোগ্রামের তারিখ ও সময় অঞ্চল ও ভাষা-তে বেছে নেওয়া ধরন মানে।
+settings-datetime-ring-about = রিংয়ের মাঝখানের ঘড়ি ২৪ বা ১২ ঘণ্টায় দেখানো যায়, সেকেন্ডসহ বা সেকেন্ড ছাড়া। এটি শুধু রিংয়ের ঘড়ি বদলায়। প্রোগ্রামের তারিখ ও সময় অঞ্চল ও ভাষা-তে আপনার বেছে নেওয়া ধরন অনুসরণ করে।
 
 # Heading of the card with the clock settings.
 settings-datetime-the-clock = ঘড়ি
@@ -94,11 +94,8 @@ settings-datetime-the-clock = ঘড়ি
 # Heading of the line shown when the time service is not answering.
 settings-datetime-service-down-line = সময় পরিষেবা সাড়া দিচ্ছে না
 
-# Under Set the time automatically when the internet can be used.
-settings-datetime-from-internet = ইন্টারনেট থেকে, সংযুক্ত থাকলে।
-
 # Under Set the time automatically when the time service is not installed.
-settings-datetime-needs-timesyncd = systemd-timesyncd ইনস্টল থাকা দরকার।
+settings-datetime-needs-timesyncd = আগে systemd-timesyncd ইনস্টল করুন।
 
 # Label of the switch for automatic time, and heading of its line.
 settings-datetime-set-auto = সময় নিজে থেকে ঠিক করুন
@@ -112,16 +109,13 @@ settings-datetime-set-date-time = তারিখ ও সময় ঠিক ক
 # Heading of the line for setting the time by hand.
 settings-datetime-by-hand = হাতে সময় ঠিক করুন
 
-# Under the Set the time by hand heading.
-settings-datetime-by-hand-sub = আগে স্বয়ংক্রিয় সময় বন্ধ করুন, যেমন এখন আছে।
-
 # Help text of the clock card (the information button) when the time service can keep the time from the internet.
 # SAFETY: needs a human review before it ships
-settings-datetime-about = স্বয়ংক্রিয়ভাবে ঠিক করা থাকলে কম্পিউটার সংযুক্ত থাকলেই ইন্টারনেটের টাইম সার্ভারের সঙ্গে ঘড়ি মিলিয়ে নেওয়া হয় এবং ঘড়ি নিজে থেকেই ঠিক থাকে। বন্ধ থাকলে তারিখ ও সময় হাতে লিখতে হয়। সময় অঞ্চল থেকে নাইট লাইট জানতে পারে সূর্য কখন ডোবে। দুটোর জন্যই প্রশাসকের পাসওয়ার্ড লাগে। রিংয়ের মাঝখানের ঘড়ি ২৪ বা ১২ ঘণ্টায়, সেকেন্ডসহ বা সেকেন্ড ছাড়া লেখা হয়। শুধু রিংয়ের ঘড়ি এটি মানে; প্রোগ্রামের তারিখ ও সময় অঞ্চল ও ভাষা-তে বেছে নেওয়া ধরন মানে।
+settings-datetime-about = স্বয়ংক্রিয় সময় চালু থাকলে কম্পিউটার সংযুক্ত থাকলেই ঘড়ি ইন্টারনেটের টাইম সার্ভারের সঙ্গে নিজেকে মিলিয়ে নেয়। বন্ধ থাকলে তারিখ ও সময় হাতে লিখতে হয়। সময় অঞ্চল থেকে নাইট লাইট জানতে পারে সূর্য কখন ডোবে। দুটোর জন্যই প্রশাসকের পাসওয়ার্ড লাগে। রিংয়ের মাঝখানের ঘড়ি ২৪ বা ১২ ঘণ্টায় দেখানো যায়, সেকেন্ডসহ বা সেকেন্ড ছাড়া। এটি শুধু রিংয়ের ঘড়ি বদলায়। প্রোগ্রামের তারিখ ও সময় অঞ্চল ও ভাষা-তে আপনার বেছে নেওয়া ধরন অনুসরণ করে।
 
 # Help text of the clock card (the information button) when the time service is not installed.
 # SAFETY: needs a human review before it ships
-settings-datetime-about-no-ntp = স্বয়ংক্রিয়ভাবে ঠিক করা থাকলে কম্পিউটার সংযুক্ত থাকলেই ইন্টারনেটের টাইম সার্ভারের সঙ্গে ঘড়ি মিলিয়ে নেওয়া হয় এবং ঘড়ি নিজে থেকেই ঠিক থাকে। বন্ধ থাকলে তারিখ ও সময় হাতে লিখতে হয়। সময় অঞ্চল থেকে নাইট লাইট জানতে পারে সূর্য কখন ডোবে। দুটোর জন্যই প্রশাসকের পাসওয়ার্ড লাগে। ইন্টারনেট থেকে সময় ঠিক রাখতে systemd-timesyncd লাগে: sudo apt install systemd-timesyncd রিংয়ের মাঝখানের ঘড়ি ২৪ বা ১২ ঘণ্টায়, সেকেন্ডসহ বা সেকেন্ড ছাড়া লেখা হয়। শুধু রিংয়ের ঘড়ি এটি মানে; প্রোগ্রামের তারিখ ও সময় অঞ্চল ও ভাষা-তে বেছে নেওয়া ধরন মানে।
+settings-datetime-about-no-ntp = স্বয়ংক্রিয় সময় চালু থাকলে কম্পিউটার সংযুক্ত থাকলেই ঘড়ি ইন্টারনেটের টাইম সার্ভারের সঙ্গে নিজেকে মিলিয়ে নেয়। বন্ধ থাকলে তারিখ ও সময় হাতে লিখতে হয়। সময় অঞ্চল থেকে নাইট লাইট জানতে পারে সূর্য কখন ডোবে। দুটোর জন্যই প্রশাসকের পাসওয়ার্ড লাগে। ইন্টারনেট থেকে সময় ঠিক করতে systemd-timesyncd লাগে: sudo apt install systemd-timesyncd। রিংয়ের মাঝখানের ঘড়ি ২৪ বা ১২ ঘণ্টায় দেখানো যায়, সেকেন্ডসহ বা সেকেন্ড ছাড়া। এটি শুধু রিংয়ের ঘড়ি বদলায়। প্রোগ্রামের তারিখ ও সময় অঞ্চল ও ভাষা-তে আপনার বেছে নেওয়া ধরন অনুসরণ করে।
 
 # An item in the list of ways to write the ring's clock: { $time } is the time written that way and { $what } its name.
 settings-datetime-clock-option = { $time }  ({ $what })
@@ -131,6 +125,3 @@ settings-datetime-show-as = এভাবে দেখান
 
 # Heading of the line for the ring's clock.
 settings-datetime-rings-clock = রিংয়ের ঘড়ি
-
-# Under The ring's clock heading.
-settings-datetime-rings-clock-sub = রিং কীভাবে সময় লেখে।

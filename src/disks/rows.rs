@@ -20,7 +20,7 @@ impl Drives {
                 .key(k.clone()).width(Length::Fixed(180.0)), rename.clone()),
             button(super::SAVE_ICON, t!("disks-rename-tip")).on_press(rename).off_because(self.shut()),
         ];
-        self.line(&d.path, &k, label(t!("disks-name")), t!("disks-name-note"), controls, None)
+        self.line(&d.path, &k, label(t!("disks-name")), "", controls, None)
     }
 
     pub(super) fn folder_row(&self, d: &Drive, v: &Vol) -> Node<Msg> {
@@ -34,7 +34,7 @@ impl Drives {
                 .key(k.clone()).width(Length::Fixed(160.0)), save.clone()),
             button(super::SAVE_ICON, t!("disks-use-folder")).on_press(save).off_because(self.shut()),
         ];
-        self.line(&d.path, &k, label(t!("disks-folder")), t!("disks-folder-note"), controls, None)
+        self.line(&d.path, &k, label(t!("disks-folder")), "", controls, None)
     }
 
     pub(super) fn startup_row(&self, d: &Drive, v: &Vol) -> Node<Msg> {
@@ -42,8 +42,7 @@ impl Drives {
         let on = v.fstab.as_ref().is_some_and(|f| plan::starts_at_boot(&f.opts));
         let (dp, vp) = (d.path.clone(), v.path.clone());
         let controls = vec![switch(on, t!("disks-mount-startup"), move |on| Msg::Startup { drive: dp.clone(), vol: vp.clone(), on }).key(k.clone())];
-        self.line(&d.path, &k, label(t!("disks-mount-startup")),
-            t!("disks-startup-note"), controls, None)
+        self.line(&d.path, &k, label(t!("disks-mount-startup")), "", controls, None)
     }
 
     pub(super) fn resize_row(&self, d: &Drive, v: &Vol) -> Option<Node<Msg>> {
@@ -93,7 +92,7 @@ impl Drives {
                     button("view-fullscreen-symbolic", t!("disks-room-tip")).on_press(Msg::Act(Act::Room { drive: d.path.clone(), vol: v.path.clone() })).off_because(self.shut()),
                 ];
                 let warning = t!("disks-room-warning", name = v.name(), drive = d.words(), size = plan::gb_text(gb));
-                Some(self.line(&d.path, &k, head, t!("disks-room-note"), controls, Some((format!("room:{}", v.path), warning))))
+                Some(self.line(&d.path, &k, head, "", controls, Some((format!("room:{}", v.path), warning))))
             }
         }
     }
@@ -110,9 +109,7 @@ impl Drives {
                 .on_press(Msg::Act(Act::Repair { drive: d.path.clone(), vol: v.path.clone() })).off_because(self.shut()));
         }
         let warning = t!("disks-repair-warning", name = v.name(), drive = d.words());
-        self.line(&d.path, &k, label(t!("disks-faults")),
-            t!("disks-faults-note"),
-            controls, Some((format!("repair:{}", v.path), warning)))
+        self.line(&d.path, &k, label(t!("disks-faults")), "", controls, Some((format!("repair:{}", v.path), warning)))
     }
 
     fn kind_note(&self, key: &str, kinds: &[(&'static str, String)]) -> String {
@@ -122,7 +119,7 @@ impl Drives {
 
     pub(super) fn format_row(&self, d: &Drive, target: &str, whole: bool, kinds: &[(&'static str, String)]) -> Node<Msg> {
         let fk = format_key(&d.path, target, whole);
-        let (head, sub) = if whole { (t!("disks-erase-whole"), t!("disks-format-whole")) } else { (t!("disks-format"), t!("disks-format-part")) };
+        let head = if whole { t!("disks-erase-whole") } else { t!("disks-format") };
         let words = match d.vols.iter().find(|v| v.path == target) {
             Some(v) if !whole && v.part.is_some() => t!("disks-part-where", name = v.name(), size = size_text(v.size as f64), drive = d.words()),
             _ => d.words(),
@@ -141,7 +138,7 @@ impl Drives {
         let warning = t!("disks-format-warning", words = &words);
 
         let shown = if whole { "\u{0}" } else { at.as_str() };
-        let sub = format!("{sub} {}", self.kind_note(&kk, kinds));
+        let sub = self.kind_note(&kk, kinds);
 
         column(vec![
             note(t!("disks-format-erases", words = &words)).tone(Tone::Problem),
@@ -154,9 +151,7 @@ impl Drives {
         let name = t!("disks-delete-name", name = v.name(), size = size_text(v.size as f64), drive = d.words());
         let controls = vec![crate::toolkit::widget::remove("user-trash-symbolic", name).key(format!("delete:{}", v.path))
             .on_press(Msg::Act(Act::Delete { drive: d.path.clone(), vol: v.path.clone() })).off_because(self.shut())];
-        self.line(&d.path, "\u{0}", label(t!("disks-delete-label")),
-            t!("disks-delete-note"),
-            controls, None)
+        self.line(&d.path, "\u{0}", label(t!("disks-delete-label")), "", controls, None)
     }
 
     fn gap_able(&self, d: &Drive, kinds: &[(&'static str, String)]) -> bool {
@@ -190,7 +185,7 @@ impl Drives {
             button("list-add-symbolic", t!("disks-make-tip")).on_press(Msg::Act(Act::Make { drive: d.path.clone(), offset, size })).off_because(self.shut()),
         ];
         let warning = t!("disks-make-warning", size = plan::gb_text(gb), drive = d.words());
-        self.line(&d.path, "\u{0}", label(t!("disks-new-part")), t!("disks-new-part-note"),
+        self.line(&d.path, "\u{0}", label(t!("disks-new-part")), "",
             controls, Some((format!("make:{gk}"), warning)))
     }
 }

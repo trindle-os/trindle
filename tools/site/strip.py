@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Make the clean copy of Trindle that is published: .publish/, with the comments taken out.
 
-The working tree keeps every comment; nothing here ever touches it. Each run
+The working tree keeps every comment; nothing here changes it. Each run
 throws the old copy away and starts again from the last commit, so the build
 folder, anything ignored and any change not yet committed never go in.
 
@@ -173,7 +173,7 @@ def strip_css(src, keep_header=True):
                 i = n if j < 0 else j + 2
                 continue
             if not out and not header:
-                header.append(f"/* {first_sentence(src[i + 2:j].split(chr(10))[:1] + [l for l in src[i + 2:j].split(chr(10))[1:]]).replace('*/', '')} */")
+                header.append(f"/* {first_sentence(src[i + 2:j].split(chr(10))).replace('*/', '')} */")
             i = n if j < 0 else j + 2
             out.append(GONE)
         elif c in "\"'":
@@ -384,9 +384,7 @@ def committed(rel):
 def rust_check():
     """Builds and tests the copy; the files named in any error, or None."""
     env = dict(os.environ, CARGO_TARGET_DIR=str(ROOT / "target" / "publish-check"))
-    envsh = ROOT / "target" / "devlibs" / "env.sh"
-    prefix = f". {envsh} && " if envsh.exists() else ""
-    r = subprocess.run(["sh", "-c", prefix + "cargo build --release 2>&1 && cargo test --release 2>&1"],
+    r = subprocess.run(["sh", "-c", "cargo build --release 2>&1 && cargo test --release 2>&1"],
                        cwd=OUT, env=env, capture_output=True, text=True)
     if r.returncode == 0:
         return None, r.stdout
@@ -436,10 +434,6 @@ def main():
         at = body.find("</div>")
         at = body.find("\n", at) + 1 if at >= 0 else 0
         readme.write_text(f"{body[:at]}\n{LINE}\n{body[at:]}")
-
-    gi = ROOT / ".gitignore"
-    if ".publish/" not in gi.read_text().split():
-        gi.write_text(gi.read_text().rstrip("\n") + "\n.publish/\n")
 
     if not quick:
         for _ in range(5):

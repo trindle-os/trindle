@@ -6,13 +6,16 @@ settings-common-saved = Tersimpan
 # Said beside a button that worked, when nothing more is known.
 settings-common-done = Selesai
 
+# Words that only say "that worked", in lower case and separated by bars. A line saying one of them under a control that has already moved is left out, as the glow says it. Translate each word, and keep the bars.
+settings-common-quiet-words = tersimpan|selesai|sedang dipakai|diubah|diatur|diambil|ditambahkan|dibebaskan|dihapus|disimpan|terpasang|diperbarui|bergabung|disalin|sekarang bawaan|diputar|terkirim|tersambung|menyambung|hidup|mati|dilupakan|berhenti di 80%|mengisi sampai penuh|mulai saat login|disimpan, tetapi tidak dijalankan|sudah terbaru
+
 # Said beside a button that failed, when nothing more is known.
 settings-common-not-done = Tidak berhasil
 
 # Tip of the information button at the top of every Settings page.
 settings-common-about-page = Tentang halaman ini
 
-# Tip of the information button on a card: { $name } is the card's heading in lower case.
+# Tip of the information button on a card: { $name } is the card's heading as it is written.
 settings-common-about-card = Tentang { $name }
 
 # Heading of the question when a name is already taken: { $name } is the name.
@@ -29,7 +32,7 @@ settings-common-same-for-rest = Lakukan hal yang sama untuk sisanya
 
 # Tip of the button that keeps the one already there.
 # SAFETY: needs a human review before it ships
-settings-common-skip = Lewati: pertahankan yang sudah ada
+settings-common-skip = Lewati dan pertahankan yang sudah ada
 
 # Button that replaces the one already there.
 # SAFETY: needs a human review before it ships
@@ -37,10 +40,10 @@ settings-common-replace = Ganti
 
 # Spoken name of the Replace button.
 # SAFETY: needs a human review before it ships
-settings-common-replace-spoken = Ganti yang sudah ada dengan yang sedang dibawa
+settings-common-replace-spoken = Ganti yang sudah ada dengan yang baru
 
 # Heading of the line that shows the new one, in the question about a name already taken.
-settings-common-being-brought = Yang sedang dibawa
+settings-common-being-brought = Yang baru
 
 # Heading of the line that shows the one already there.
 settings-common-already-line = Yang sudah ada
@@ -52,17 +55,17 @@ settings-common-replace-question = Ganti yang sudah ada?
 # At the foot of the window while a change is on trial: how many seconds are left.
 settings-common-goes-back =
     { $left ->
-       *[other] Kembali dalam { $left } detik.
+       *[other] Dibatalkan dalam { $left } detik.
     }
 
 # At the foot of the window while a change is on trial: the seconds left, then { $more } such as what Escape does.
 settings-common-goes-back-more =
     { $left ->
-       *[other] Kembali dalam { $left } detik. { $more }
+       *[other] Dibatalkan dalam { $left } detik. { $more }
     }
 
 # Button at the foot of the window that undoes the change on trial.
-settings-common-go-back-now = Kembali sekarang
+settings-common-go-back-now = Urungkan sekarang
 
 # Button at the foot of the window that keeps the change on trial.
 settings-common-keep = Pertahankan
@@ -71,31 +74,31 @@ settings-common-keep = Pertahankan
 settings-common-not-available = { $what } tidak tersedia
 
 # Under that heading: { $package } is the name of the package to install.
-settings-common-install-with = Pasang dengan: sudo apt install { $package }
+settings-common-install-with = Untuk memasangnya, jalankan: sudo apt install { $package }
 
 # Red words when a web page could not be opened.
-settings-common-no-browser = Halaman web tidak dapat dibuka: tidak ada peramban web yang dapat dimulai.
+settings-common-no-browser = Trindle tidak dapat membuka halaman web, karena tidak dapat memulai peramban web.
 
 # Red words when one of Trindle's programs could not be opened: { $name } is its name.
-settings-common-could-not-open = { $name } tidak dapat dibuka.
+settings-common-could-not-open = Tidak dapat membuka { $name }.
 
 # Red words when a change could not be kept and nothing more is known.
 settings-common-not-saved = Tidak dapat disimpan.
 
 # Red words when an action needs the system's message bus and there is none.
-settings-common-no-system-bus = Tidak berhasil: bus pesan sistem tidak dapat dijangkau. Nyalakan ulang komputer, lalu coba lagi.
+settings-common-no-system-bus = Trindle tidak dapat melakukannya karena bagian sistem tidak merespons. Nyalakan ulang komputer, lalu coba lagi.
 
 # Red words when an action needs this login's message bus and there is none.
-settings-common-no-session-bus = Tidak berhasil: bus pesan login ini tidak dapat dijangkau. Keluar dan masuk lagi, lalu coba lagi.
+settings-common-no-session-bus = Trindle tidak dapat melakukannya karena bagian login Anda tidak merespons. Keluar dan masuk lagi, lalu coba lagi.
 
 # Red words when the window for choosing a file or folder could not be opened.
-settings-common-no-chooser = Jendela pemilihan tidak dapat dibuka. Keluar dan masuk lagi, lalu coba lagi.
+settings-common-no-chooser = Trindle tidak dapat membuka jendela untuk memilih file atau folder. Keluar dan masuk lagi, lalu coba lagi.
 
 # Cause given in red words after an action failed: the disk is full.
 settings-common-why-full = Disk penuh.
 
 # Cause given in red words after an action failed: the disk is read only.
-settings-common-why-read-only = Disk tidak dapat ditulisi saat ini.
+settings-common-why-read-only = Trindle tidak dapat menulis ke disk sekarang.
 
 # Cause given in red words after an action failed: the part of the system that does it is not running.
 settings-common-why-not-running = Bagian sistem yang mengerjakan ini tidak berjalan.
@@ -124,19 +127,19 @@ settings-common-and = { $rest } dan { $last }
 settings-common-list-comma = { ", " }
 
 # Spoken name of the picture of the ring opening on a small screen.
-settings-common-ring-picture = Cincin terbuka dengan klik di tepi layar.
+settings-common-ring-picture = Anda membuka cincin dengan klik dua kali di tepi layar.
 
 # Word drawn in the middle of that picture.
 settings-common-ring-name = Cincin
 
 # Red words under the charge limit switch when the laptop's firmware door could not be opened; { $error } is the system's reason.
-charge-no-firmware-door = Firmware laptop tidak dapat dijangkau: { $error }
+charge-no-firmware-door = Trindle tidak dapat menjangkau kontrol pengisian daya laptop: { $error }
 
 # Red words under the charge limit switch when the laptop's firmware refused the limit.
-charge-firmware-refused = Firmware laptop tidak menerima batas pengisian daya.
+charge-firmware-refused = Laptop tidak menerima batas pengisian daya.
 
 # Red words under the charge limit switch on a computer that cannot stop charging early.
-charge-not-allowed = Komputer ini tidak mengizinkan pengisian dayanya dihentikan lebih awal.
+charge-not-allowed = Komputer ini tidak mengizinkan Anda menghentikan pengisian lebih awal.
 
 # Red words under the charge limit switch when a battery setting file could not be written; { $path } is the file and { $error } the system's reason.
 charge-could-not-set = Tidak dapat mengatur { $path }: { $error }
@@ -145,7 +148,10 @@ charge-could-not-set = Tidak dapat mengatur { $path }: { $error }
 graphics-vm-title = Mencoba Trindle di mesin virtual
 
 # Note to someone in a virtual machine that has 3D graphics; { $machine } is the machine's name.
-graphics-vm-body-fast = Trindle berjalan di { $machine }. Berjalan baik di sana, tetapi mesin virtual tidak pernah secepat atau selancar komputer sungguhan, jadi nilailah kecepatannya di perangkat keras sungguhan.
+graphics-vm-body-fast = Trindle berjalan di { $machine }. Berjalan baik di sana, tetapi mesin virtual tidak pernah secepat atau selancar komputer sungguhan. Nilailah kecepatannya di perangkat keras sungguhan.
 
 # Note to someone in a virtual machine without 3D graphics; { $machine } is the machine's name.
-graphics-vm-body-slow = Trindle berjalan di { $machine } tanpa grafis 3D, jadi prosesor harus menggambar semua yang biasanya digambar chip grafis. Jendela, video, dan halaman web akan terasa lebih lambat daripada di komputer sungguhan, dan Trindle menghilangkan animasinya untuk membantu. Jika komputer yang menjalankannya mampu, menyalakan akselerasi 3D di pengaturan layar mesin virtual sangat membantu. Jika dipasang di komputer sungguhan, semua ini tidak berlaku.
+graphics-vm-body-slow = Trindle berjalan di { $machine } tanpa grafis 3D. Prosesor harus menggambar semua yang biasanya digambar chip grafis. Jendela, video, dan halaman web akan terasa lebih lambat daripada di komputer sungguhan, jadi Trindle menghilangkan animasinya. Jika komputer yang menjalankannya mampu, nyalakan akselerasi 3D di pengaturan layar mesin virtual. Itu sangat membantu. Semua ini tidak berlaku jika Anda memasang Trindle di komputer sungguhan.
+
+# A list of choices ends with this: { $rest } is the names before the last, { $last } the last.
+settings-common-or = { $rest } atau { $last }

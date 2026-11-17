@@ -407,6 +407,9 @@ fn pixels(dst: &mut [u32], ys: &[i32], k: i32, rs: &[i32], gs: &[i32], bs: &[i32
     }
 }
 
+/// # Safety
+/// The processor must have AVX2; the caller checks with
+/// `is_x86_feature_detected!("avx2")` first.
 #[cfg(target_arch = "x86_64")]
 #[target_feature(enable = "avx2")]
 unsafe fn pixels_avx2(dst: &mut [u32], ys: &[i32], k: i32, rs: &[i32], gs: &[i32], bs: &[i32]) {
@@ -444,14 +447,17 @@ pub fn main(_args: Vec<String>) -> i32 {
     child(Part::Decode)
 }
 
-fn shut_in() {
+fn shut_in() -> bool {
     let none = libc::rlimit { rlim_cur: 0, rlim_max: 0 };
-    // SAFETY: two plain calls that read the limit handed to them and
+    // SAFETY: a plain call that reads the limit handed to it and
 
-    unsafe {
-        libc::setrlimit(libc::RLIMIT_NOFILE, &none);
-        libc::setrlimit(libc::RLIMIT_FSIZE, &none);
-    }
+    shut_in_with(|resource| unsafe { libc::setrlimit(resource, &none) } == 0)
+}
+
+fn shut_in_with(set: impl Fn(libc::__rlimit_resource_t) -> bool) -> bool {
+    let files = set(libc::RLIMIT_NOFILE);
+    let size = set(libc::RLIMIT_FSIZE);
+    files && size
 }
 
 fn limit(time: Duration) {
@@ -516,7 +522,9 @@ fn child(part: Part) -> i32 {
     let fresh = move || Decoder::new(codec);
     let Some(decoder) = fresh() else { return NO_START };
     let Some(room) = Room::of(room, w as usize * h as usize * 4) else { return NO_START };
-    shut_in();
+    if !shut_in() {
+        return NO_START;
+    }
     if talk.write_all(&hello(&clip, said_width(part, w))).is_err() {
         return NO_START;
     }
@@ -578,6 +586,18 @@ fn serve_frames(part: Part, talk: &mut UnixStream, (clip, fresh): (&Clip, &dyn F
 #[cfg(test)]
 pub(super) mod tests {
     use super::*;
+
+    #[test]
+    fn shutting_in_fails_closed_when_either_limit_will_not_be_set() {
+        use std::cell::Cell;
+        assert!(shut_in_with(|_| true));
+        assert!(!shut_in_with(|_| false));
+        for failing in [libc::RLIMIT_NOFILE, libc::RLIMIT_FSIZE] {
+            let tried = Cell::new(0);
+            assert!(!shut_in_with(|r| { tried.set(tried.get() + 1); r != failing }));
+            assert_eq!(tried.get(), 2, "the second limit was not tried");
+        }
+    }
 
     #[test]
     fn the_decoders_endings_are_its_own() {

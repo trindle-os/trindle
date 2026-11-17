@@ -17,14 +17,14 @@ store-deb-ready = { $name } siap dipasang di foldernya sendiri.
 store-deb-elsewhere = Paket ini untuk komputer { $arch }, jadi tidak dapat dipasang di komputer ini.
 
 # Red words at the top of the window when the package is Trindle itself.
-store-deb-trindle = Ini adalah Trindle sendiri. Trindle diperbarui dari halaman Pembaruan di Aplikasi, bukan dari file.
+store-deb-trindle = Ini adalah Trindle sendiri. Perbarui dari halaman Pembaruan di Aplikasi, bukan dari file.
 
 # Red words at the top of the window for a driver or a background service.
-store-deb-service = { $name } adalah driver atau layanan latar belakang, yang tidak dapat berfungsi dari foldernya sendiri, jadi tidak dapat dipasang di sini.
+store-deb-service = { $name } adalah driver atau layanan latar belakang. Paket ini tidak dapat berjalan dari foldernya sendiri, jadi tidak dapat dipasang di sini.
 
 # SAFETY: needs a human review before it ships
 # Words on the caution card above every package.
-store-deb-caution = Paket dari luar Debian dan Trindle dipasang di foldernya sendiri, tempat paket itu dibatasi tetapi tidak sepenuhnya terkurung. Pasanglah hanya paket dari pembuat yang Anda percaya.
+store-deb-caution = Paket dari luar Debian dan Trindle dipasang di foldernya sendiri. Di sana paket dibatasi, tetapi tidak sepenuhnya terkurung. Pasang hanya paket dari pembuat yang Anda percaya.
 
 # Words at the top of the window once the package is installed.
 store-deb-installed = { $name } terpasang di foldernya sendiri.
@@ -37,7 +37,7 @@ store-deb-where = Asalnya
 
 # SAFETY: needs a human review before it ships
 # Tip and spoken name of the round button that removes the package and what it saved.
-store-deb-remove = Hapus paket beserta yang disimpannya
+store-deb-remove = Hapus paket beserta datanya
 
 # Word beside the ring while the package goes in.
 store-deb-installing = Memasang
@@ -56,23 +56,20 @@ store-deb-update = Perbarui
 
 # SAFETY: needs a human review before it ships
 # Heading of the card for a package not installed yet.
-store-deb-goes-in = Dipasang di foldernya sendiri, dibatasi secara bawaan
+store-deb-goes-in = Dipasang di folder tersendiri yang dibatasi
 
 # SAFETY: needs a human review before it ships
 # Under that heading.
-store-deb-goes-in-note = Tidak perlu kata sandi. Paket tidak dapat menjangkau internet, suara, atau file Anda sampai Anda mengizinkannya.
+store-deb-goes-in-note = Tidak perlu kata sandi. Paket tidak dapat memakai internet atau suara, atau melihat file Anda, sampai Anda mengizinkannya.
 
 # Heading of the card for a package installed at this version.
 store-deb-same-version = Versi { $version } terpasang di foldernya sendiri
-
-# Under that heading.
-store-deb-same-version-note = Pasang ulang di sana jika paket berhenti berfungsi dengan benar.
 
 # Heading of the card for a package installed at another version.
 store-deb-other-version = Versi { $version } terpasang di foldernya sendiri
 
 # Under that heading: the version this brings.
-store-deb-other-version-note = Memasang ini di sana akan memperbaruinya ke versi { $version }, dengan tetap menyimpan data yang sudah disimpannya.
+store-deb-other-version-note = Ini memperbarui ke versi { $version } dan tetap menyimpan data yang sudah disimpannya.
 
 # Facts line: how big the package is once installed.
 store-deb-fact-size = Ukuran setelah terpasang
@@ -84,13 +81,13 @@ store-deb-fact-arch = Dibuat untuk
 store-deb-no-description = Paket ini tidak memiliki deskripsi.
 
 # Words at the top of the window while the package goes in.
-store-deb-installing-note = Memasang di foldernya sendiri. Mengambil yang dibutuhkannya dapat memakan waktu beberapa menit.
+store-deb-installing-note = Memasang di foldernya sendiri. Mengunduh bagian yang dibutuhkannya dapat memakan waktu beberapa menit.
 
 # Words at the top of the window once the package is installed.
 store-deb-done = Terpasang di foldernya sendiri. Anda akan menemukannya di ring.
 
 # Red words at the top of the window when parts the package needs could not be found; the parts follow.
-store-deb-missing = Terpasang di foldernya sendiri, tetapi bagian berikut tidak ditemukan, jadi mungkin tidak dapat dimulai: { $parts }.
+store-deb-missing = Terpasang di foldernya sendiri, tetapi bagian berikut tidak ada, jadi mungkin tidak dapat dimulai: { $parts }.
 
 # SAFETY: needs a human review before it ships
 # Words at the top of the window once the package is removed.
@@ -112,7 +109,7 @@ store-parts-not-deb = { $path } bukan paket Debian yang dapat dipasang.
 store-parts-not-unpacked = { $path } tidak dapat diekstrak.
 
 # Red words when the program is not one kept in a box.
-store-loose-not-boxed = Program itu tidak disimpan dalam kotak.
+store-loose-not-boxed = Program itu tidak berjalan dalam kotak.
 
 # Name of Trindle's own terminal in the ring.
 store-boxed-terminal = Terminal
@@ -134,16 +131,16 @@ store-boxed-x-could-not-open = { $app } tidak dapat dibuka
 
 # SAFETY: needs a human review before it ships
 # Body of the notice the first time a terminal opens outside its box.
-store-boxed-terminal-told = Terminal dapat menjangkau lebih banyak isi komputer Anda daripada aplikasi lain, karena pekerjaannya memerlukan itu. Ketik hanya perintah yang Anda pahami, dari orang yang Anda percaya.
+store-boxed-terminal-told = Terminal dapat menjangkau lebih banyak isi komputer Anda daripada aplikasi lain. Ketik hanya perintah yang Anda pahami, dari orang yang Anda percaya.
 
-# Title of the notice when a plugin allowed the home network has none.
-store-boxed-home-off = Jaringan rumah mati
+# Title of the notice when a plugin allowed the local network has none.
+store-boxed-home-off = Tanpa jaringan lokal
 
 # Body of that notice: the plugin's name and why.
 store-boxed-home-off-why = { $app } tidak memiliki jaringan: { $why }
 
 # Why a plugin allowed the home network has none: Trindle could not find its own program.
-store-boxed-home-why-self = tidak dapat menemukan programnya sendiri
+store-boxed-home-why-self = program Trindle tidak ditemukan
 
 # The same: the unshare program is missing.
 store-boxed-home-why-unshare = unshare belum terpasang
@@ -152,16 +149,16 @@ store-boxed-home-why-unshare = unshare belum terpasang
 store-boxed-home-why-pasta = pasta belum terpasang
 
 # The same: the network room was not made.
-store-boxed-home-why-not-made = ruang jaringannya tidak dibuat
+store-boxed-home-why-not-made = jaringannya tidak disiapkan
 
 # The same: the room was not a new one, so it was left alone.
-store-boxed-home-why-not-new = ruang jaringannya bukan yang baru
+store-boxed-home-why-not-new = jaringannya sudah ada
 
 # The same: the filter that keeps a box from making a room of its own could not be made.
-store-boxed-home-why-filter = filter panggilan sistem tidak dapat dibuat
+store-boxed-home-why-filter = Trindle tidak dapat menyiapkan filter keamanan
 
 # The same: the room's rules would not load.
-store-boxed-home-why-rules = aturan ruang itu tidak dapat dimuat
+store-boxed-home-why-rules = aturan jaringannya tidak dapat dimuat
 
 # The same: a program would not start, with its name and the reason.
 store-boxed-home-why-would-not-start = { $program } tidak dapat dimulai: { $why }
@@ -170,12 +167,24 @@ store-boxed-home-why-would-not-start = { $program } tidak dapat dimulai: { $why 
 store-boxed-home-why-pasta-said = pasta menyatakan: { $why }
 
 # The same: pasta could not join the room and said nothing.
-store-boxed-home-why-pasta-no-join = pasta tidak dapat bergabung ke ruang itu
+store-boxed-home-why-pasta-no-join = pasta tidak dapat menyambungkannya
+
+# Said when an app can't be installed because its package has a link as a top folder. { $name } is the folder.
+store-parts-link = Folder teratas { $name } adalah tautan, jadi paket ini tidak dapat dipakai.
+
+# Said when an app can't be installed in a box because it is a driver or a background service. { $name } is the app.
+store-boxed-driver = { $name } adalah driver atau layanan latar belakang. Yang seperti itu tidak dapat berfungsi dari folder sendiri, jadi tidak dipasang.
 
 
 # Title of the notice when a program was given a downloaded file and run in a box with no internet.
 store-downloaded-opened = Dibuka tanpa internet
 
 # Body of that notice: why, and what the program was given.
-store-downloaded-why = File ini diunduh, jadi program hanya mendapat file itu, hanya baca.
+store-downloaded-why = Karena diunduh, program hanya dapat membaca satu file itu.
 
+
+# Title of the notice when the desktop could not be asked for a display for an older program.
+store-boxed-x-unasked = Program lama tidak dapat dibuka
+
+# Body of that notice: what to do.
+store-boxed-x-unasked-why = Keluar lalu masuk lagi, kemudian coba lagi

@@ -8,14 +8,14 @@ settings-users-keywords = akaunti watu nenosiri picha msimamizi
 
 # Help line at the foot of the Users page.
 # SAFETY: needs a human review before it ships
-settings-users-help = Kuongeza watu, kubadilisha manenosiri na kufuta akaunti kunahitaji nenosiri la msimamizi.
+settings-users-help = Unahitaji nenosiri la msimamizi ili kuongeza watu, kubadilisha manenosiri au kufuta akaunti.
 
 # Beside a change that is waiting for the administrator's password to be typed.
 # SAFETY: needs a human review before it ships
-settings-users-waiting = Inasubiri nenosiri...
+settings-users-waiting = Inasubiri nenosiri lako…
 
 # Headline of the Users page when nobody on the computer is an administrator.
-settings-users-sum-nobody-admin = Hakuna msimamizi hapa, kwa hiyo hakuna kinachoweza kuwekwa au kubadilishwa kwa kila mtu.
+settings-users-sum-nobody-admin = Hakuna msimamizi hapa, kwa hiyo hakuna anayeweza kuweka wala kubadilisha vitu kwa kila mtu.
 
 # Headline of the Users page when you are the only person and an administrator.
 settings-users-sum-only-you = Wewe pekee unatumia kompyuta hii, na wewe ni msimamizi wake.
@@ -48,7 +48,7 @@ settings-users-sum-admins =
 settings-users-this-is-you = Huyu ni wewe.
 
 # Under a person's name on their card when the card is someone else's: the name shown is their login name.
-settings-users-login-name = Jina lao la kuingia.
+settings-users-login-name = Jina la kuingia
 
 # Tip of the round button on a person's card that picks their picture, and title of the window that opens.
 settings-users-choose-picture = Chagua picha
@@ -62,7 +62,7 @@ settings-users-change-password = Badilisha nenosiri
 
 # Tip of the round button on a person's card that deletes them and their files.
 # SAFETY: needs a human review before it ships
-settings-users-delete = Futa, pamoja na faili zao
+settings-users-delete = Futa akaunti na faili
 
 # Said beside a person once they are deleted.
 # SAFETY: needs a human review before it ships
@@ -72,13 +72,9 @@ settings-users-deleted = Imefutwa
 # SAFETY: needs a human review before it ships
 settings-users-administrator = Msimamizi
 
-# Under the Administrator line: what an administrator can do.
-# SAFETY: needs a human review before it ships
-settings-users-admin-can = Anaweza kuweka na kubadilisha vitu kwa kila mtu.
-
 # Tip of the administrator switch on your own card, and said when you press it: you cannot remove your own administrator rights.
 # SAFETY: needs a human review before it ships
-settings-users-cannot-take-away = Huwezi kujiondolea hili mwenyewe.
+settings-users-cannot-take-away = Huwezi kujiondolea haki zako za usimamizi.
 
 # Said beside a person after they are made an administrator.
 # SAFETY: needs a human review before it ships
@@ -90,7 +86,7 @@ settings-users-admin-no-longer = Si msimamizi tena
 
 # Help text for a person's card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-person-about = Picha yao, nenosiri lao na, kwa yeyote isipokuwa wewe, kuwafuta pamoja na faili zao ni vitufe vya duara kando ya jina lao. Msimamizi anaweza kuweka programu na kubadilisha vitu kwa kila mtu; huwezi kujiondolea hili mwenyewe. Kila badiliko linaomba nenosiri la msimamizi.
+settings-users-person-about = Msimamizi anaweza kuweka programu na kubadilisha vitu kwa kila mtu. Huwezi kujiondolea haki zako za usimamizi. Kila badiliko linahitaji nenosiri la msimamizi.
 
 # Typing box in the change password form, for your own current password.
 # SAFETY: needs a human review before it ships
@@ -101,7 +97,7 @@ settings-users-current-password = Nenosiri la sasa
 settings-users-new-password = Nenosiri jipya
 
 # Typing box in the change password form where the new password is typed again.
-settings-users-again = Tena
+settings-users-again = Andika tena
 
 # Button in the change password form that saves the new password.
 settings-users-save = Hifadhi
@@ -116,11 +112,11 @@ settings-users-cancel = Ghairi
 
 # Red words in the change password form when your current password was left empty.
 # SAFETY: needs a human review before it ships
-settings-users-need-current = Nenosiri lako la sasa pia, ili kuingia kwako kulikohifadhiwa kuendelee kufanya kazi.
+settings-users-need-current = Andika pia nenosiri lako la sasa, ili kuingia kwako kulikohifadhiwa kuendelee kufanya kazi.
 
 # Red words in the change password form when the new password is too short.
 # SAFETY: needs a human review before it ships
-settings-users-at-least-8 = Angalau herufi 8, tafadhali.
+settings-users-at-least-8 = Tumia angalau herufi 8.
 
 # Red words in the change password form when the two new passwords differ.
 # SAFETY: needs a human review before it ships
@@ -132,32 +128,29 @@ settings-users-password-changed = Nenosiri limebadilishwa
 
 # Red words after a password change when the saved logins could not take the new password.
 # SAFETY: needs a human review before it ships
-settings-users-not-rekeyed = Nenosiri limebadilishwa, lakini kuingia kulikohifadhiwa bado kunafunguka kwa lile la zamani.
+settings-users-not-rekeyed = Nenosiri limebadilishwa, lakini kuingia kwako kulikohifadhiwa bado kunatumia nenosiri la zamani.
 
 # Red words when the chosen file is not a picture the page can use.
 settings-users-png-please = PNG, JPG au WebP, tafadhali.
 
 # Red words when a person's picture could not be changed.
-settings-users-picture-not-changed = Picha haikuweza kubadilishwa.
+settings-users-picture-not-changed = Haikuweza kubadilisha picha.
 
 # Said beside a person once their picture is saved.
 settings-users-saved = Imehifadhiwa
 
 # Red words when your new picture works at login but could not be copied to your home folder.
-settings-users-picture-not-shared = Picha inaonekana wakati wa kuingia, lakini haikuweza kupewa programu zako nyingine.
+settings-users-picture-not-shared = Picha yako inaonekana kwenye skrini ya kuingia, lakini Trindle haikuweza kuishiriki na programu zako nyingine.
 
 # Heading of the form for adding a person.
 settings-users-add-someone = Ongeza mtu
 
 # Help text for the Add someone form (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-add-about = Akaunti mpya ya mtu mwingine: jina lake kamili, jina la kuingia la herufi ndogo na namba, linaloanza na herufi, na nenosiri la angalau herufi 8. Anaweza kuingia mara moja. Msimamizi anaweza kuweka programu na kubadilisha vitu kwa kila mtu.
+settings-users-add-about = Andika jina lake kamili, jina la kuingia na nenosiri la angalau herufi 8. Jina la kuingia linaweza kuwa na herufi ndogo na namba tu, na lazima lianze na herufi. Anaweza kuingia mara moja. Msimamizi anaweza kuweka programu na kubadilisha vitu kwa kila mtu.
 
 # Heading of the line in the Add someone form that holds the button.
 settings-users-new-account = Akaunti mpya
-
-# Under the New account heading.
-settings-users-new-account-sub = Wanaweza kuingia mara moja kwa nenosiri hili.
 
 # Typing box in the Add someone form for the person's full name.
 settings-users-full-name = Jina kamili
@@ -173,7 +166,7 @@ settings-users-password = Nenosiri
 settings-users-add-this = Ongeza mtu huyu
 
 # Red words when the login name typed is not allowed.
-settings-users-login-rules = Majina ya kuingia ni herufi ndogo na namba, yanayoanza na herufi.
+settings-users-login-rules = Jina la kuingia hutumia herufi ndogo na namba, na huanza na herufi.
 
 # Red words when the new person's password is too short.
 # SAFETY: needs a human review before it ships
@@ -190,19 +183,16 @@ settings-users-saved-logins = Kuingia kulikohifadhiwa
 
 # Help text for the Saved logins card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-keyring-about = Manenosiri ambayo programu hukuhifadhia, kama ya barua pepe au Wi-Fi, huwekwa kwenye keyring inayofunguka unapoingia. Kila mtu huhamia kwenye keyring ya Trindle yeye mwenyewe wakati wa kuingia. Kama yako haikuweza kuhamishwa, kuhamisha hunakili kila kuingia kulikohifadhiwa, na huomba nenosiri la keyring yoyote ambayo yako haifunui, na faili za GNOME huachwa kama zilivyo.
+settings-users-keyring-about = Programu hukuhifadhia manenosiri, kama ya barua pepe au Wi-Fi, kwenye keyring inayofunguka unapoingia. Unapoingia, Trindle huhamisha keyring yako hadi ya kwake. Kama hilo halikufanya kazi, unaweza kuihamisha hapa. Kila kuingia kulikohifadhiwa hunakiliwa. Unaweza kuombwa nenosiri la keyring ambayo kuingia kwako hakufunui. Faili za GNOME huachwa kama zilivyo.
 
 # Heading of the line on the Saved logins card when the logins are kept by Trindle's keyring.
-settings-users-kept-trindle = Imehifadhiwa na keyring ya Trindle
+settings-users-kept-trindle = Kwenye keyring ya Trindle
 
 # Heading of the line on the Saved logins card when the logins are kept by GNOME's keyring.
-settings-users-kept-gnome = Imehifadhiwa na keyring ya GNOME
-
-# Under the heading when the logins are kept by Trindle's keyring.
-settings-users-opens-login = Hufunguka unapoingia.
+settings-users-kept-gnome = Kwenye keyring ya GNOME
 
 # Under the heading when the logins are still kept by GNOME's keyring.
-settings-users-could-not-move = Kuingia kwako hakukuweza kuvihamisha.
+settings-users-could-not-move = Trindle haikuweza kuvihamisha wakati wa kuingia.
 
 # Tip of the button that moves saved logins to Trindle's keyring.
 settings-users-move-keyring = Hamishia kwenye keyring ya Trindle
@@ -212,7 +202,7 @@ settings-users-move-keyring = Hamishia kwenye keyring ya Trindle
 settings-users-your-password = Nenosiri lako
 
 # Tip of the button that starts moving the saved logins.
-settings-users-go-ahead = Endelea
+settings-users-go-ahead = Hamisha sasa
 
 # Typing box for the password of one GNOME keyring that stayed shut: the keyring's name is { $name }.
 # SAFETY: needs a human review before it ships
@@ -220,10 +210,10 @@ settings-users-password-for = Nenosiri la { $name }
 
 # Red words when the move of saved logins was started without a password.
 # SAFETY: needs a human review before it ships
-settings-users-your-password-please = Nenosiri lako, tafadhali.
+settings-users-your-password-please = Andika nenosiri lako.
 
 # Said beside the Saved logins line while they are copied.
-settings-users-copying = Inanakili kuingia kwako kulikohifadhiwa...
+settings-users-copying = Inanakili kuingia kwako kulikohifadhiwa…
 
 # Said beside the Saved logins line when the copy is done: how many logins were copied.
 settings-users-copied = { $n } vimenakiliwa
@@ -232,18 +222,18 @@ settings-users-copied = { $n } vimenakiliwa
 # SAFETY: needs a human review before it ships
 settings-users-nothing-moved =
     { $n ->
-        [one] Hakuna kilichohamishwa bado: { $names } inahitaji nenosiri lake yenyewe.
-       *[other] Hakuna kilichohamishwa bado: { $names } zinahitaji manenosiri yake yenyewe.
+        [one] Hakuna kilichohamishwa bado. Andika nenosiri la { $names }.
+       *[other] Hakuna kilichohamishwa bado. Andika manenosiri ya { $names }.
     }
 
 # Red words when the move of saved logins stopped unexpectedly.
-settings-users-stopped = Ilisimama njiani.
+settings-users-stopped = Haikumaliza.
 
 # Words in place of the people while the accounts are still being read.
-settings-users-looking-accounts = Inaangalia akaunti…
+settings-users-looking-accounts = Inakagua akaunti…
 
 # Heading of the placeholder card shown while the accounts are being read.
 settings-users-people = Watu
 
 # Under the Administrator line of the placeholder card.
-settings-users-looking = Inatafuta…
+settings-users-looking = Inapakia…

@@ -17,7 +17,7 @@ store-app-state-removing = جارٍ الإزالة
 store-app-state-downloading = جارٍ التنزيل
 
 # The state beside the dot while Flatpak is putting the fetched app in.
-store-app-state-putting-in = جارٍ وضعه في مكانه
+store-app-state-putting-in = جارٍ التثبيت
 
 # The state beside the dot while the app's own update goes in.
 store-app-state-updating = جارٍ التحديث
@@ -63,7 +63,7 @@ store-app-remove = إزالة
 store-app-open-round = فتح
 
 # Main button that releases an app whose updates are held back.
-store-app-release = إطلاق
+store-app-release = السماح بالتحديثات
 
 # Main button that updates the app.
 store-app-update = تحديث
@@ -81,13 +81,13 @@ store-app-website = الموقع
 store-app-no-pictures = لا توجد صور لهذا التطبيق.
 
 # In the picture frame when the picture could not be fetched.
-store-app-picture-missed = تعذّر جلب هذه الصورة.
+store-app-picture-missed = تعذّر على Trindle جلب هذه الصورة.
 
 # In the picture frame while the picture is being fetched.
 store-app-picture-fetching = جارٍ جلب الصورة…
 
 # In the picture frame when the computer has no internet.
-store-app-picture-offline = لا يمكن جلب الصور ما دام هذا الحاسوب غير متصل بالإنترنت.
+store-app-picture-offline = اتصل بالإنترنت لرؤية الصور.
 
 # Between the picture buttons: which picture, when it has no caption.
 store-app-picture-of = الصورة { $at } من { $n }
@@ -166,13 +166,13 @@ store-app-review-no-title = بلا عنوان
 store-app-people-none = لم يكتب أحد عن هذا التطبيق بعد.
 
 # Under What people say when there is no internet.
-store-app-people-offline = لا يمكن جلب آراء الناس ما دام هذا الحاسوب غير متصل بالإنترنت.
+store-app-people-offline = اتصل بالإنترنت لقراءة المراجعات.
 
 # Under What people say while reviews are being fetched.
-store-app-people-looking = جارٍ البحث عن آراء الناس…
+store-app-people-looking = جارٍ تحميل المراجعات…
 
 # Name of the card of reviews.
-store-app-people = ماذا يقول الناس
+store-app-people = المراجعات
 
 # Facts line: when the app's project was made.
 store-app-fact-created = أُنشئ

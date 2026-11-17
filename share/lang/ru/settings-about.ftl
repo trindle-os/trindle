@@ -7,7 +7,7 @@ settings-about-title = Об этом компьютере
 settings-about-keywords = имя узла имя компьютера имя в сети о системе версия debian trindle память оперативная озу процессор cpu диск графика видеокарта экран модель ядро kernel активность запущенные программы занято диспетчер задач системный монитор диски накопители usb место
 
 # Text behind the info button of the About page.
-settings-about-help = Имя этого компьютера в сети, из чего он состоит и сколько времени занимает запуск. Что он делает прямо сейчас и какие программы используют память и процессор, показывает «Активность», а диски и место на них показывают «Диски». Это отдельные окна: они открываются стрелками в разделе «Подробнее».
+settings-about-help = На этой странице показано имя этого компьютера в сети, из чего он состоит и сколько времени занимает запуск. «Активность» показывает, что компьютер делает прямо сейчас и какие программы используют память и процессор. «Диски» показывает ваши диски и место на них. Каждый из этих разделов открывается в отдельном окне. Откройте их стрелками в разделе «Подробнее».
 
 # What is shown when a fact about the computer cannot be found.
 settings-about-unknown = Неизвестно
@@ -88,17 +88,17 @@ settings-about-up-days =
     }
 
 # Red words under the computer name box when the name is not allowed.
-settings-about-name-bad = Только буквы, цифры и дефисы; имя не должно начинаться или заканчиваться дефисом.
+settings-about-name-bad = Используйте только буквы, цифры и дефисы. Имя не должно начинаться или заканчиваться дефисом.
 
 # Words under the computer name box while the password window is open.
 # SAFETY: needs a human review before it ships
-settings-about-name-waiting = Ожидание пароля...
+settings-about-name-waiting = Ожидание вашего пароля…
 
 # Red words under the computer name box when renaming failed.
 settings-about-name-failed = Не удалось переименовать компьютер.
 
 # Words under the computer name box after renaming worked.
-settings-about-name-done = Уже открытые программы увидят новое имя после следующего входа.
+settings-about-name-done = Уже открытые программы будут использовать новое имя после следующего входа.
 
 # Placeholder and spoken name of the typing box for the computer's name.
 settings-about-name-entry = Имя компьютера
@@ -109,51 +109,27 @@ settings-about-rename = Переименовать этот компьютер
 # Bold line of the computer name setting.
 settings-about-name = Имя компьютера
 
-# Quiet line under the computer name setting.
-settings-about-name-sub = Буквы, цифры и дефисы.
-
 # Heading of the card with the computer's name.
 settings-about-name-group = Имя
 
 # Text behind the info button of the Name card.
 # SAFETY: needs a human review before it ships
-settings-about-name-about = Как этот компьютер отображается в сети и в приглашении Терминала. Буквы, цифры и дефисы; имя не должно начинаться или заканчиваться дефисом. Для смены имени потребуется ваш пароль.
+settings-about-name-about = Это имя компьютера в сети и в приглашении Терминала. Используйте буквы, цифры и дефисы, но имя не должно начинаться или заканчиваться дефисом. Чтобы изменить имя, нужно ввести пароль.
 
 # Heading of the card about the computer's hardware.
 settings-about-hardware = Компьютер
 
 # Text behind the info button of the hardware card.
-settings-about-hardware-about = Производитель и модель, процессор и число потоков, которые он выполняет одновременно, графика и каждый используемый экран с его размером и частотой обновления.
-
-# Quiet line under the maker and model.
-settings-about-hw-computer = Компьютер
-
-# Quiet line under the processor.
-settings-about-hw-processor = Процессор
-
-# Quiet line under the graphics.
-settings-about-hw-graphics = Рисует изображение
-
-# Quiet line under the screens.
-settings-about-hw-screen = Экран
+settings-about-hardware-about = Здесь показаны производитель и модель компьютера, его процессор и графика. Также показано, сколько потоков процессор может выполнять одновременно, и каждый используемый экран с его размером и частотой обновления.
 
 # Heading of the card about the software.
 settings-about-software = Программы
 
 # Text behind the info button of the software card.
-settings-about-software-about = Trindle - это рабочий стол поверх Debian, который управляет программами под ним. Ядро отвечает за связь с оборудованием, а собственный композитор Trindle рисует рабочий стол в Wayland.
-
-# Quiet line under the Debian version.
-settings-about-sw-debian = Работает в основе
-
-# Quiet line under the kernel version.
-settings-about-sw-kernel = Ядро
+settings-about-software-about = Trindle - это рабочий стол, который работает поверх Debian. Debian управляет программами под ним. Ядро - часть, которая работает с оборудованием. Собственный композитор Trindle рисует рабочий стол с помощью Wayland.
 
 # Bold line naming Trindle's compositor.
 settings-about-sw-compositor = Собственный композитор Trindle
-
-# Quiet line under the compositor line.
-settings-about-sw-compositor-sub = Рисует рабочий стол в Wayland
 
 # Bold line saying how many apps are installed; n is the count.
 settings-about-sw-apps =
@@ -164,9 +140,6 @@ settings-about-sw-apps =
        *[other] { $n } приложения
     }
 
-# Quiet line under the number of apps.
-settings-about-sw-apps-sub = Установлены, готовы в кольце
-
 # Heading of the card with the ways to Activity and Drives.
 settings-about-more = Подробнее
 
@@ -176,23 +149,23 @@ settings-about-more-about = Что компьютер делает прямо с
 # Bold line of the setting that opens Activity.
 settings-about-activity = Что сейчас работает
 
-# Quiet line under the setting that opens Activity.
-settings-about-activity-sub = Программы, использующие память и процессор.
-
 # Tip of the arrow that opens the Activity program.
 settings-about-activity-name = Активность
 
 # Bold line of the setting that opens Drives.
 settings-about-drives = Диски и место
 
-# Quiet line under the setting that opens Drives.
-settings-about-drives-sub = Все диски, их заполненность и состояние.
-
 # Tip of the arrow that opens the Drives program.
 settings-about-drives-name = Диски
 
 # Red words under the start-up times line when the file could not be saved.
 settings-about-times-failed = Не удалось сохранить время запуска в Загрузки.
+
+# First line of the saved start-up times file: the two columns, separated by a comma.
+settings-about-times-heading = Дата и время,Секунды
+
+# File name of the saved start-up times, in Downloads.
+settings-about-times-file = Время запуска Trindle.csv
 
 # Words under the start-up times line after the file was saved; file is the file's name.
 settings-about-times-saved = В Загрузках, файл { $file }
@@ -204,7 +177,7 @@ settings-about-times-save = Сохранить
 settings-about-times-save-spoken = Сохранить время каждого запуска в Загрузки
 
 # Bold line of the setting that saves the start-up times.
-settings-about-times-keep = Каждый запуск, на память
+settings-about-times-keep = Сохранять время каждого запуска
 
 # Quiet line under that setting.
 settings-about-times-keep-sub = Сохраняется в Загрузки как таблица.
@@ -224,30 +197,62 @@ settings-about-memory = Память
 # Heading of the disk tile.
 settings-about-disk = Диск
 
+# Heading of the card on About that holds the switch and the optional names for problem reports.
+settings-about-reports = Отчёты о проблемах
+
+# Text behind the round i of that card. Buildmorphic is the community that helps build Trindle; keep its name.
+settings-about-reports-about = Отчёты уходят в Buildmorphic, сообщество, которое помогает создавать Trindle. Присоединиться можно с одним лишь адресом электронной почты. За проблемы, о которых вы сообщили первым, вы получаете баллы и уровни, даже если не можете их исправить. В отчёте только заранее заданный набор сведений, и без нажатия «Отправить» ничего не уходит. Имя пользователя или имя на GitHub указывать необязательно, а именем пользователя никогда не бывает ваша почта.
+
+# Switch: whether Trindle asks about problems and about sharing reports. Name of the switch for the screen reader too.
+settings-about-reports-offer = Предлагать отправить отчёт, когда что-то пошло не так
+
+# Box for the optional Buildmorphic username, also its name for the screen reader. Buildmorphic is a name.
+settings-about-reports-name = Имя пользователя в Buildmorphic
+
+# Box for the optional GitHub name, also its name for the screen reader. GitHub is a name.
+settings-about-reports-github = Имя на GitHub
+
+# Name of the round button that opens the Buildmorphic community website, and of its line.
+settings-about-reports-community = О сообществе
+
+# Said under the switch when it is turned off and reports that were waiting to be sent were deleted; n is how many.
+settings-about-reports-deleted =
+    { $n ->
+        [one] Выключено. Удалён { $n } ожидавший отчёт.
+        [few] Выключено. Удалены { $n } ожидавших отчёта.
+        [many] Выключено. Удалено { $n } ожидавших отчётов.
+       *[other] Выключено. Удалено { $n } ожидавших отчёта.
+    }
+
+# Said in red under the switch when it is turned off but some waiting reports could not be deleted; n is how many.
+settings-about-reports-kept =
+    { $n ->
+        [one] Выключено. Не удалось удалить { $n } ожидающий отчёт.
+        [few] Выключено. Не удалось удалить { $n } ожидающих отчёта.
+        [many] Выключено. Не удалось удалить { $n } ожидающих отчётов.
+       *[other] Выключено. Не удалось удалить { $n } ожидающих отчёта.
+    }
+
 
 # Heading of the card with the switch for looking for updates.
 settings-about-updates = Обновления
 
 # Text behind the info button of the updates card.
-settings-about-updates-about = Trindle ищет новые версии приложений, плагинов, прошивок и самой себя вскоре после входа и каждые несколько часов, а исправления безопасности Debian ставятся каждый день. Когда это выключено, Trindle ищет только когда вы нажимаете «Проверить обновления» в «Приложениях» или кнопку обновлений на кольце. У исправлений безопасности Debian свой переключатель: когда он выключен, они больше не ставятся сами, и известные ошибки остаются, пока вы не обновитесь. Изменение любого переключателя требует пароля администратора, чтобы службы самого компьютера тоже узнали о выборе.
+settings-about-updates-about = Trindle проверяет новые версии приложений, плагинов, прошивок и самой себя вскоре после входа, а затем каждые несколько часов. Если это выключить, Trindle проверяет только когда вы нажимаете «Проверить обновления» в «Приложениях» или кнопку обновлений на кольце. Исправления безопасности Debian ставятся каждый день, и у них свой переключатель. Если выключить его, они больше не ставятся сами, и известные уязвимости остаются, пока вы не обновитесь. Для изменения любого из переключателей нужен пароль администратора, чтобы выбор действовал на весь компьютер.
 
 # Bold line of the switch for looking for updates by itself; also the switch's name for a screen reader.
 settings-about-updates-by-itself = Проверять обновления
 
 # Words under the Check for updates switch while the password window is open.
-settings-about-updates-waiting = Ожидание пароля...
-
-# Quiet line under that switch.
-settings-about-updates-by-itself-sub = Выключено: ничего не ищется, пока вы не попросите.
+settings-about-updates-waiting = Ожидание вашего пароля…
 
 
 
 # Bold line of the switch for Debian's security fixes; also the switch's name for a screen reader.
 settings-about-security = Обновления безопасности
 
-# Quiet line under the Security updates switch when it is on.
-settings-about-security-sub = Исправления безопасности ставятся сами каждый день.
-
 # Warning line under the Security updates switch when it is off.
 settings-about-security-off = Исправления безопасности больше не ставятся сами.
 
+# Said in red under the switch when it is turned off but the Reporting add-on could not delete the reports it keeps; the reason follows.
+settings-about-reports-addon-kept = Выключено, но ожидающие отчёты дополнения Reporting не были удалены.

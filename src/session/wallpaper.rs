@@ -242,11 +242,16 @@ fn named_picture(named: &Path) -> Option<PathBuf> {
     path.is_file().then_some(path)
 }
 
+fn forget_pidfile(file: &Path) {
+    let mine = std::fs::read_to_string(file).is_ok_and(|p| p.trim() == std::process::id().to_string());
+    if mine {
+        let _ = std::fs::remove_file(file);
+    }
+}
+
 fn running() -> Option<i32> {
     let pid: i32 = std::fs::read_to_string(pidfile()).ok()?.trim().parse().ok()?;
-    let cmdline = std::fs::read(format!("/proc/{pid}/cmdline")).ok()?;
-    let text = String::from_utf8_lossy(&cmdline);
-    (text.contains("trindle-wallpaper") && pid != std::process::id() as i32).then_some(pid)
+    (pid != std::process::id() as i32 && super::screensaver::is_named(pid, "trindle-wallpaper")).then_some(pid)
 }
 
 pub fn main(args: Vec<String>) -> i32 {
@@ -280,7 +285,7 @@ pub fn main(args: Vec<String>) -> i32 {
 
     let ml = events.clone();
     let Some(screen) = super::backdrop::Backdrop::start(first, &events, move || ml.quit()) else {
-        let _ = std::fs::remove_file(pidfile());
+        forget_pidfile(&pidfile());
         return 1;
     };
     if let Some(old) = old {
@@ -291,6 +296,7 @@ pub fn main(args: Vec<String>) -> i32 {
     on_signals(&events, &changer, &settings);
     change_with_time(&events, &changer, &settings);
     events.run();
+    forget_pidfile(&pidfile());
     0
 }
 
@@ -403,6 +409,18 @@ fn change_with_time(events: &Loop, changer: &Rc<RefCell<Changer>>, settings: &Rc
 mod tests {
     use super::*;
 
+    #[test]
+    fn the_pid_file_goes_only_when_it_holds_our_number() {
+        let dir = scratch("pidfile");
+        let file = dir.join("w.pid");
+        std::fs::write(&file, "1\n").unwrap();
+        forget_pidfile(&file);
+        assert!(file.exists());
+        std::fs::write(&file, std::process::id().to_string()).unwrap();
+        forget_pidfile(&file);
+        assert!(!file.exists());
+    }
+
     fn scratch(name: &str) -> PathBuf {
         let dir = std::env::temp_dir().join(format!("trindle-wallpaper-test-{}-{name}", std::process::id()));
         let _ = std::fs::remove_dir_all(&dir);
@@ -473,7 +491,7 @@ mod tests {
         std::fs::File::create(folder.join("d-heavy.webm")).unwrap().set_len(super::super::wallpaper_limits::MOST_MOVING_BYTES + 1).unwrap();
         let found = looked_in(&folder);
         assert_eq!(found.pictures, [folder.join("a-fits.png")]);
-        assert_eq!(found.left.words().as_deref(), Some("3 left out: larger than 4K or over 20 MB (200 MB if moving)."));
+        assert_eq!(found.left.words().as_deref(), Some("Trindle left out 3 pictures because they're larger than 4K or over 20 MB (200 MB animated)."));
         assert_eq!(pictures_used(&folder), [folder.join("a-fits.png")]);
         std::fs::remove_dir_all(&folder).unwrap();
     }

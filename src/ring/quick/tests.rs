@@ -4,11 +4,11 @@ include!("../quick_site_shots_test.rs");
 
 use super::*;
 use super::battery::hours;
-use super::bluetooth::{mac_of, parse_bt};
-use super::clip_panel::forget_one;
+use super::bluetooth::{agent_call, mac_of, parse_bt, AgentCall};
+use super::clip_panel::{forget_one, preview};
 use super::notifications::newest_first;
 use super::shortcuts::shortcut_lines;
-use super::sound::short_names;
+use super::sound::{heard_level, short_names};
 use super::wifi::{parse_wifi, signal_level};
 
 pub(in crate::ring) fn quick_code() -> &'static str {
@@ -476,4 +476,66 @@ fn shoot_clipboard_labels() {
         ui.paint(&mut pix.as_mut(), scale);
         pix.save_png(out.join(format!("{name}.png"))).unwrap();
     }
+}
+
+#[test]
+fn a_device_asking_to_use_a_service_is_asked_about_and_unknown_calls_are_refused() {
+    assert_eq!(agent_call("AuthorizeService"), AgentCall::Pair, "never let in silently");
+    assert_eq!(agent_call("RequestAuthorization"), AgentCall::Pair);
+    assert_eq!(agent_call("Release"), AgentCall::Release);
+    assert_eq!(agent_call("SomethingNew"), AgentCall::Refuse);
+    assert_eq!(agent_call(""), AgentCall::Refuse);
+}
+
+#[test]
+fn the_microphone_bar_changes_only_by_steps_it_can_show() {
+    assert_eq!(heard_level(None), 0.0);
+    assert_eq!(heard_level(Some(f32::NAN)), 0.0);
+    assert_eq!(heard_level(Some(7.0)), 1.0);
+    assert_eq!(heard_level(Some(-1.0)), 0.0);
+    assert_eq!(heard_level(Some(0.5001)), heard_level(Some(0.5)));
+}
+
+#[test]
+fn a_huge_copy_is_cut_for_showing_and_searching() {
+    let huge = format!("start {}", "word ".repeat(1_000_000));
+    let shown = preview(&huge);
+    assert!(shown.chars().count() <= 2000 && shown.starts_with("start word"));
+    assert_eq!(preview("one\n two\t three"), "one two three");
+    assert_eq!(preview(&"x".repeat(1_000_000)).chars().count(), 2000);
+}
+
+fn with_fake_nmcli(script: &str) -> (String, String) {
+    use std::os::unix::fs::PermissionsExt;
+    let dir = std::env::temp_dir().join(format!("trindle-nmcli-{}-{:?}", std::process::id(), std::thread::current().id()));
+    std::fs::create_dir_all(&dir).unwrap();
+    let fake = dir.join("nmcli");
+    std::fs::write(&fake, "#!/bin/sh\necho \"$LC_ALL $*\" >> \"$LOG\"\ncase \"$*\" in\n\
+        \"-t -f UUID,TYPE con show\") printf 'u1:802-11-wireless\\nu2:ethernet\\nu3:802-11-wireless\\n';;\n\
+        \"-g 802-11-wireless.ssid con show uuid u1\") echo 'Home';;\n\
+        \"-g 802-11-wireless.ssid con show uuid u3\") echo 'Cafe';;\n\
+        \"-t -f DEVICE,TYPE dev\") printf 'wlan0:wifi\\neth0:ethernet\\n';;\nesac\n").unwrap();
+    std::fs::set_permissions(&fake, std::fs::Permissions::from_mode(0o755)).unwrap();
+    let log = dir.join("log");
+    let out = std::process::Command::new("env")
+        .env("PATH", format!("{}:/usr/bin:/bin", dir.display())).env("LOG", &log).env("LC_ALL", "fr_FR.UTF-8").env("LANG", "fr_FR.UTF-8")
+        .args(crate::ring::plain(&["sh", "-c", script])).output().unwrap();
+    let said = String::from_utf8_lossy(&out.stdout).to_string();
+    let logged = std::fs::read_to_string(&log).unwrap_or_default();
+    std::fs::remove_dir_all(&dir).unwrap();
+    (said, logged)
+}
+
+#[test]
+fn the_saved_networks_are_found_by_the_name_they_broadcast_and_nmcli_is_asked_in_english() {
+    let (said, logged) = with_fake_nmcli(super::wifi::WIFI_LOOK);
+    let saved: Vec<&str> = said.lines().skip_while(|l| *l != "#saved").skip(1).take_while(|l| *l != "#near").collect();
+    assert_eq!(saved, ["Home", "Cafe"], "{said}");
+    assert!(logged.lines().all(|l| l.starts_with("C ")), "run in the C locale: {logged}");
+}
+
+#[test]
+fn leaving_a_network_lets_go_on_each_wifi_adapter_whatever_its_connection_is_called() {
+    let (_, logged) = with_fake_nmcli(super::wifi::WIFI_LEAVE);
+    assert!(logged.contains("C dev disconnect wlan0") && !logged.contains("eth0"), "{logged}");
 }

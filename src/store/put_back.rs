@@ -27,6 +27,7 @@ pub(super) enum Holds {
 fn gentle_tar() -> Command {
     let mut tar = Command::new("tar");
     crate::common::gentle::program(&mut tar);
+    crate::common::run::parsed(&mut tar);
     tar
 }
 
@@ -47,10 +48,6 @@ pub(super) fn list_of(pack: &Path, how: Option<&str>) -> Result<String, String> 
     let mut args: Vec<&OsStr> = how.iter().map(OsStr::new).collect();
     args.extend([OsStr::new("-tf"), pack.as_os_str()]);
     tar(&args)
-}
-
-pub(super) fn holds_in(listing: &str, member: &str) -> bool {
-    has(listing, member)
 }
 
 pub(super) fn too_big() -> &'static str {
@@ -93,7 +90,7 @@ pub(super) fn read_out(pack: &Path, how: Option<&str>, member: &str, most: u64) 
     Ok(bytes)
 }
 
-fn has(listing: &str, member: &str) -> bool {
+pub(super) fn has(listing: &str, member: &str) -> bool {
     listing.lines().any(|l| l == member || l.trim_end_matches('/') == member || l.starts_with(&format!("{member}/")))
 }
 
@@ -201,13 +198,20 @@ fn moved(from: &File, to: &File, name: &OsStr) -> std::io::Result<()> {
 
 #[cfg(test)]
 pub(super) fn holds(pack: &Path, how: Option<&str>, member: &str) -> Result<bool, String> {
-    Ok(holds_in(&list_of(pack, how)?, member))
+    Ok(has(&list_of(pack, how)?, member))
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::common::needs;
+
+    #[test]
+    fn tar_is_asked_in_the_c_locale() {
+        let tar = gentle_tar();
+        let set = tar.get_envs().find(|(k, _)| *k == "LC_ALL").and_then(|(_, v)| v);
+        assert_eq!(set, Some(std::ffi::OsStr::new("C")));
+    }
 
     #[test]
     fn what_is_in_the_way_is_said_with_every_path_and_nothing_is_put_back() {
@@ -300,20 +304,10 @@ mod tests {
         super::super::backup::home_part_into(pack, work, into)
     }
 
-    fn old_pack(_: &Path, inner: &Path, _: &Path) -> PathBuf {
-        inner.to_path_buf()
-    }
-
-    fn old_door(pack: &Path, _: &Path, into: &Path) -> Result<(), String> {
-        super::super::backup::old_into(pack, into)
-    }
-
-    const DOORS: [Door; 5] = [
+    const DOORS: [Door; 3] = [
         Door { name: "an app's folder in a Flat backup", under: APP, links_kept: true, clears: true, pack: flat_pack, open: flat_door },
         Door { name: "Trindle's settings in a Flat backup", under: ".config/trindle", links_kept: false, clears: false, pack: home_pack, open: home_door },
         Door { name: "the AppImages in a Flat backup", under: ".appimage", links_kept: false, clears: false, pack: home_pack, open: home_door },
-        Door { name: "Trindle's settings in an earlier backup", under: ".config/trindle", links_kept: false, clears: false, pack: old_pack, open: old_door },
-        Door { name: "an app's folder in an earlier backup", under: ".var/app/org.example.Notes", links_kept: true, clears: false, pack: old_pack, open: old_door },
     ];
 
     struct Try {

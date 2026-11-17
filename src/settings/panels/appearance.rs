@@ -22,8 +22,8 @@ use colours::highlights;
 use fonts_icons::{sample, SAMPLES};
 use pointers::{cursor_themes, pointer_art, PointerArt};
 
-fn icon_sets() -> [(&'static str, &'static str); 1] {
-    [(icons::CIRCLES, t!("settings-appearance-icons-circles"))]
+fn icon_sets() -> [(&'static str, &'static str); 2] {
+    [(icons::CIRCLES, t!("settings-appearance-icons-circles")), (icons::SQUARES, t!("settings-appearance-icons-squares"))]
 }
 
 fn says() -> &'static str {
@@ -88,6 +88,8 @@ pub struct Appearance {
     set: &'static str,
 
     samples: Vec<Vec<String>>,
+
+    tile_samples: std::cell::RefCell<std::collections::HashMap<(String, bool, String), (String, crate::toolkit::theme::Sample)>>,
     font: String,
     families: Vec<String>,
     cursors: Vec<String>,
@@ -154,7 +156,7 @@ impl Page for Appearance {
     fn view(&self, kit: &Kit) -> Node<Msg> {
 
         let all = page(kit, self.title(), self.help(), vec![
-            self.top(kit),
+            self.top(),
             self.theme_card(kit),
             self.highlight_card(kit),
             self.pointer_card(kit),

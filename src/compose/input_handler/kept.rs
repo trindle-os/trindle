@@ -1,20 +1,17 @@
 // Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
-use crate::{focus::PointerFocusTarget, state::Backend, AnvilState};
+use crate::{focus::PointerFocusTarget, state::Backend, Compose};
 
 use smithay::{desktop::{layer_map_for_output, WindowSurfaceType}, wayland::seat::WaylandFocus};
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     pub(crate) fn only_the_person_answers(&self) -> bool {
         self.question_on_a_panel() || self.keys_kept_for_the_person()
     }
 
     pub(super) fn roots_question(&self) -> bool {
-        let shown = self.space.outputs().any(|o| layer_map_for_output(o).layers().any(crate::trusted::counts));
-        let focused = self.seat.get_keyboard().and_then(|k| k.current_focus())
-            .is_some_and(|held| held.wl_surface().is_some_and(|s| crate::trusted::is_trusted(&s)));
-        shown || focused
+        self.root_is_asking(crate::trusted::counts)
     }
 
     pub(super) fn say_refused(&mut self, did: &crate::virtual_input::Did) {
@@ -35,7 +32,11 @@ impl<BackendData: Backend> AnvilState<BackendData> {
     }
 
     pub(super) fn question_on_a_panel(&self) -> bool {
-        let shown = self.space.outputs().any(|o| layer_map_for_output(o).layers().any(crate::trusted::asks));
+        self.root_is_asking(crate::trusted::asks)
+    }
+
+    fn root_is_asking(&self, is_question: impl Fn(&smithay::desktop::LayerSurface) -> bool) -> bool {
+        let shown = self.space.outputs().any(|o| layer_map_for_output(o).layers().any(&is_question));
         let focused = self.seat.get_keyboard().and_then(|k| k.current_focus())
             .is_some_and(|held| held.wl_surface().is_some_and(|s| crate::trusted::is_trusted(&s)));
         shown || focused

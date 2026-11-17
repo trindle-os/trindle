@@ -26,21 +26,13 @@ use crate::toolkit::bus::{Asked, Bus, Listen, Offer, Props, Served};
 use crate::toolkit::event::{Loop, Post};
 use crate::toolkit::t;
 use crate::toolkit::ui::Shown;
-use crate::toolkit::widget::{
-                             note, row, Length, Node, Rect, Tone};
+use crate::toolkit::widget::{note, row, Length, Node, Rect, Tone};
 use crate::toolkit::window::{Display, Kind};
 pub(crate) use plan::size_text;
 pub(crate) use udisks::{mount_points, num, text};
-use crate::disks::udisks::UD;
-use crate::disks::udisks::UD_PATH;
-use crate::disks::udisks::OBJECT_MANAGER;
-use crate::disks::udisks::Objects;
-use crate::disks::udisks::take_snapshot;
-use crate::disks::model::Drive;
-use crate::disks::model::Caps;
-use crate::disks::steps::Said;
-use crate::disks::steps::Carried;
-use crate::disks::steps::noted_folder;
+use crate::disks::udisks::{OBJECT_MANAGER, Objects, UD, UD_PATH, switch_swap, take_snapshot};
+use crate::disks::model::{Caps, Drive};
+use crate::disks::steps::{Carried, Said, noted_folder};
 
 const NAME: &str = "org.trindle.Drives";
 const PATH: &str = "/org/trindle/Drives";
@@ -108,6 +100,10 @@ enum Do {
     Carry(Carried),
 
     Snapped { drive: String, vol: String, row: String, want: u64, desc: String, res: Result<(), String> },
+
+    SwappedOff { drive: String, vol: String, row: String, want: u64, files: Vec<String>, res: Result<String, String> },
+
+    SwappedOn { drive: String, row: String, res: Result<String, String>, standing: bool },
 
     CarryKnown { carried: Carried, uuid: String },
     Soon(u32),
@@ -179,12 +175,17 @@ struct Drives {
 
     snapping: bool,
 
+    swapped: HashMap<String, Vec<String>>,
+
     snap: fn(String, Box<dyn FnOnce(Result<(), String>)>),
+    swap: fn(bool, Vec<String>, Box<dyn FnOnce(Result<String, String>)>),
     world: fn() -> room::World,
     #[cfg(test)]
     ran: Vec<Ran>,
     #[cfg(test)]
     snaps: Vec<String>,
+    #[cfg(test)]
+    swaps: Vec<(bool, Vec<String>)>,
 }
 
 fn hidden_file() -> PathBuf {
@@ -235,12 +236,16 @@ impl Drives {
             stays: false,
             session: None,
             snapping: false,
+            swapped: HashMap::new(),
             snap: take_snapshot,
+            swap: switch_swap,
             world: room::World::read,
             #[cfg(test)]
             ran: Vec::new(),
             #[cfg(test)]
             snaps: Vec::new(),
+            #[cfg(test)]
+            swaps: Vec::new(),
         }
     }
 }

@@ -67,6 +67,10 @@ fn handle_key(state: &mut State, qh: &QueueHandle<State>, key: Key) {
         }
 
         (_, Key::Phone) | (_, Key::Enter) if state.phone && (key == Key::Phone || state.entered.is_empty()) => ask_phone(state),
+        (Mode::Password, Key::Enter) if !state.entered.is_empty() && state.refused_check().is_some() => {
+            state.message = state.refused_check().unwrap_or_default();
+            state.wrong = true;
+        }
         (Mode::Password, Key::Char(c)) if !c.is_control() => {
             state.entered.push(c);
             state.message.clear();
@@ -97,6 +101,11 @@ fn light_key(state: &mut State, key: Key) {
 }
 
 fn pin_digit(state: &mut State, c: char) -> bool {
+    if let Some(words) = state.wait_words() {
+        state.message = words;
+        state.wrong = true;
+        return false;
+    }
     state.entered.push(c);
     state.message.clear();
     if state.entered.len() == pin::LENGTH {
@@ -108,11 +117,11 @@ fn pin_digit(state: &mut State, c: char) -> bool {
             unlock(state);
             return true;
         }
-        state.tries += 1;
-        if state.tries >= pin::TRIES {
+        let left = state.count_wrong(true);
+        if left == 0 {
             state.ask_for_password(t!("session-lock-too-many-pins"));
         } else {
-            state.message = t!("session-lock-wrong-pin", n = pin::TRIES - state.tries);
+            state.message = t!("session-lock-wrong-pin", n = left);
             state.wrong = true;
             state.reader.wrong();
         }
@@ -121,11 +130,16 @@ fn pin_digit(state: &mut State, c: char) -> bool {
 }
 
 fn ask_phone(state: &mut State) {
+    if !super::check_may_start(state.outstanding.map(|(_, at)| at), Instant::now()) {
+        state.message = t!("session-lock-still-checking").into();
+        state.wrong = true;
+        return;
+    }
     state.entered.zeroize();
     state.eye.shut();
     state.wrong = false;
     state.message = t!("session-lock-asking-phone").into();
-    let user = account_name();
+    let user = state.user.clone();
     let turn = state.begin_check();
     answer_later(turn, move || if phone_ok(&user) { CHECK_OK } else { CHECK_PHONE_NO });
 }
@@ -133,7 +147,7 @@ fn ask_phone(state: &mut State) {
 fn check_password(state: &mut State) {
     state.eye.shut();
     let password = std::mem::take(&mut state.entered);
-    let user = account_name();
+    let user = state.user.clone();
     let turn = state.begin_check();
     answer_later(turn, move || if password_ok(&user, &password) { CHECK_OK } else { CHECK_WRONG });
 }
@@ -155,7 +169,7 @@ fn answer_later(turn: u8, check: impl FnOnce() -> u8 + Send + 'static) {
     let started = std::thread::Builder::new().spawn(move || {
         let byte = [check(), turn];
         if let Some(fd) = tx {
-            // SAFETY: one byte from a local array to the writing end of the
+            // SAFETY: two bytes from a local array to the writing end of the
 
             unsafe { libc::write(fd, byte.as_ptr() as *const c_void, 2) };
         }
@@ -170,23 +184,30 @@ fn answer_later(turn: u8, check: impl FnOnce() -> u8 + Send + 'static) {
     }
 }
 
-pub(super) fn account_name() -> String {
-    // SAFETY: getpwuid returns null or a record valid until the next call; the name is copied out at once, on the main thread, which makes no other such call.
-    unsafe {
-        let pw = libc::getpwuid(libc::getuid());
-        if pw.is_null() {
-            return String::new();
-        }
-        std::ffi::CStr::from_ptr((*pw).pw_name).to_string_lossy().into_owned()
+pub(crate) fn account_name() -> String {
+    // SAFETY: an all-zero passwd is a valid value to be filled in.
+    let mut pw: libc::passwd = unsafe { std::mem::zeroed() };
+    let mut found: *mut libc::passwd = std::ptr::null_mut();
+    let mut buf = vec![0 as libc::c_char; 16_384];
+    // SAFETY: getpwuid_r fills `pw` with pointers into `buf`, which outlives
+
+    let rc = unsafe { libc::getpwuid_r(libc::getuid(), &mut pw, buf.as_mut_ptr(), buf.len(), &mut found) };
+    if rc != 0 || found.is_null() || pw.pw_name.is_null() {
+        return String::new();
     }
+    // SAFETY: getpwuid_r succeeded, so pw_name points to a NUL-terminated name inside `buf`.
+    unsafe { std::ffi::CStr::from_ptr(pw.pw_name) }.to_string_lossy().into_owned()
 }
 
 pub(super) fn on_phone(state: &State, (px, py): (f64, f64)) -> bool {
+    if !state.phone {
+        return false;
+    }
     let Some(on) = &state.pointer_on else { return false };
     let Some(screen) = state.screens.iter().find(|s| s.surface.as_ref() == Some(on)) else { return false };
     let (cx, cy) = (screen.size.0 as f64 / 2.0, screen.size.1 as f64 / 2.0);
     let (x, y, r) = phone_button(state.mode, cx, cy, state.pin_allowed());
-    state.phone && (px - x).hypot(py - y) <= r
+    (px - x).hypot(py - y) <= r
 }
 
 pub(super) fn eye_holds(mode: Mode, (cx, cy): (f64, f64), (px, py): (f64, f64)) -> bool {

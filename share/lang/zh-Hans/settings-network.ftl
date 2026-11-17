@@ -5,7 +5,7 @@
 settings-network-rfkill-hard = { $radio } 已被电脑上的开关或按键关闭。请先把它打开，然后再试一次。
 
 # Said in red when the system blocks a radio and the block could not be taken off; the radio is Wi-Fi or Bluetooth.
-settings-network-rfkill-refused = { $radio } 被系统屏蔽，且无法解除屏蔽。
+settings-network-rfkill-refused = 系统正在屏蔽 { $radio }，Trindle 无法解除屏蔽。
 
 # Said in red under a Wi-Fi network when its password was typed and not accepted.
 # SAFETY: needs a human review before it ships
@@ -13,20 +13,20 @@ settings-network-join-password-typed = 密码未被接受。请再试一次。
 
 # Said in red under a Wi-Fi network when the password kept for it was not accepted.
 # SAFETY: needs a human review before it ships
-settings-network-join-password-kept = 为此网络保存的密码未被接受。请用垃圾桶忘记该网络，然后重新加入。
+settings-network-join-password-kept = 为此网络保存的密码未被接受。请点击垃圾桶按钮忘记该网络，然后重新加入。
 
 # Said in red under a Wi-Fi network that could not be found.
-settings-network-join-not-found = 找不到该网络。请检查网络名称，以及它是否在范围内。
+settings-network-join-not-found = Trindle 找不到该网络。请检查网络名称，并确认它在范围内。
 
 # Said in red under a Wi-Fi network that let the computer in but gave it no address.
-settings-network-join-no-address = 网络允许这台电脑加入，但没有分配地址。请重试，或重启路由器。
+settings-network-join-no-address = 这台电脑已加入网络，但没有获得地址。请重试，或重启路由器。
 
 # Said in red under a Wi-Fi network that did not let the computer join, for any other reason.
-settings-network-join-failed = 网络不允许这台电脑加入。请靠近一些，然后再试一次。
+settings-network-join-failed = 这台电脑无法加入网络。请靠近路由器一些，然后再试一次。
 
 # Said in red when the password typed is one a Wi-Fi network cannot have.
 # SAFETY: needs a human review before it ships
-settings-network-bad-password = Wi-Fi 网络不能使用这样的密码。请检查后再试一次。
+settings-network-bad-password = 这不可能是 Wi-Fi 密码。请检查后再试一次。
 
 # Said in red when joining a network failed for no known reason.
 settings-network-join-refused = 无法加入该网络。
@@ -39,13 +39,13 @@ settings-network-access-open = 用你的密码可打开
 # SAFETY: needs a human review before it ships
 settings-network-access-change = 用你的密码可打开和更改
 
-# Small line of a shared folder: anyone at home may open it.
+# Small line of a shared folder: anyone on the local network may open it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-open = 家中任何人都可以打开
+settings-network-access-guests-open = 本地网络中的任何人都可以打开
 
-# Small line of a shared folder: anyone at home may change it.
+# Small line of a shared folder: anyone on the local network may change it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-change = 家中任何人都可以更改
+settings-network-access-guests-change = 本地网络中的任何人都可以更改
 
 # Small line of a shared folder: where it is, then who may do what with it; both are already written.
 settings-network-shared-sub = { $place }：{ $access }
@@ -67,7 +67,7 @@ settings-network-state-disconnected = 未连接
 settings-network-state-preparing = 准备中
 
 # State of a network device that is being set up.
-settings-network-state-configuring = 配置中
+settings-network-state-configuring = 正在设置
 
 # State of a network device that needs a password.
 # SAFETY: needs a human review before it ships
@@ -97,10 +97,10 @@ settings-network-top-both = 已通过网线连接，并通过 Wi-Fi 连接到 { 
 # Headline of the page when connected to a Wi-Fi network; the level is strong, good, fair or weak.
 settings-network-top-wifi =
     { $level ->
-        [strong] 已连接到 { $name }，信号很强。
-        [good] 已连接到 { $name }，信号良好。
-        [fair] 已连接到 { $name }，信号一般。
-       *[other] 已连接到 { $name }，信号较弱。
+        [strong] 已连接到 { $name }。信号很强。
+        [good] 已连接到 { $name }。信号良好。
+        [fair] 已连接到 { $name }。信号一般。
+       *[other] 已连接到 { $name }。信号较弱。
     }
 
 # Headline of the page when connected by cable only.
@@ -116,7 +116,7 @@ settings-network-top-none = 未连接。请在下方选择一个网络。
 settings-network-top-looking = 正在查找网络…
 
 # Headline of the page when NetworkManager is not running.
-settings-network-top-gone = 无法查看网络：NetworkManager 没有运行。
+settings-network-top-gone = 因为 NetworkManager 没有运行，Trindle 无法显示网络。
 
 # The word for the system bus in "The system bus is not available".
 settings-network-the-bus = 系统总线
@@ -140,7 +140,7 @@ settings-network-signal-from =
     }
 
 # Small line under the Use Wi-Fi switch when the Wi-Fi chip needs a newer Linux.
-settings-network-chip = 它的芯片需要更新的 Linux。
+settings-network-chip = Wi-Fi 需要更新的 Linux。
 
 # Small line under the Use Wi-Fi line when the computer has no working Wi-Fi.
 settings-network-no-wifi = 这台电脑没有可用的 Wi-Fi。
@@ -149,7 +149,7 @@ settings-network-no-wifi = 这台电脑没有可用的 Wi-Fi。
 settings-network-wifi-off = 已关闭。打开后才能加入网络。
 
 # Small line under the Use Wi-Fi switch when Wi-Fi is on and no network is joined.
-settings-network-wifi-idle = 已开启，尚未加入网络。
+settings-network-wifi-idle = 已开启，但未连接任何网络。
 
 # Heading of the line with the Wi-Fi switch, and the name of the switch.
 settings-network-use-wifi = 使用 Wi-Fi
@@ -161,14 +161,11 @@ settings-network-wifi-card = Wi-Fi
 settings-network-wifi-cable-card = Wi-Fi 和网线
 
 # Help text (i button) of the Wi-Fi card.
-settings-network-wifi-about = Wi-Fi 让这台电脑无需网线就能加入网络。关闭后，它不再查找网络，可以节省一点电量。不广播名称的网络不会出现在范围内的网络列表中：请在这里准确输入它的名称来加入，注意大小写。如果这台电脑的 Wi-Fi 芯片尚未被它的 Linux 中的任何驱动支持，就需要比 Trindle 当前所用更新的 Linux。网线有单独的一行，带有连接或断开的按钮。
+settings-network-wifi-about = Wi-Fi 让这台电脑无需网线就能连接网络。关闭后，它不再查找网络，可以节省一点电量。隐藏名称的网络不会出现在范围内的网络列表中。要加入这样的网络，请准确输入它的名称，注意大小写。有些 Wi-Fi 芯片需要的驱动，Trindle 所用的 Linux 版本还没有。这时你需要更新版本的 Linux。网线有单独的一行，带有连接或断开的按钮。
 
 # Heading of the line with the switch that lets other computers connect, and the name of the switch.
 # SAFETY: needs a human review before it ships
 settings-network-share-switch = 允许其他电脑连接
-
-# Small line under that switch.
-settings-network-share-switch-sub = 用于在家中共享文件夹和打印机。
 
 # Line in the Sharing card while the shared folders are read.
 settings-network-share-looking = 正在查找共享文件夹…
@@ -180,35 +177,32 @@ settings-network-share-unreadable = 无法读取共享文件夹
 settings-network-not-reachable = 暂时无法访问
 
 # Small line under it.
-settings-network-not-reachable-sub = 开关关闭时，其他人无法打开这些文件夹。
+settings-network-not-reachable-sub = 共享关闭时，其他电脑无法打开这些文件夹。
 
 # Line in the Sharing card when no folder is shared.
 settings-network-no-shared = 没有共享的文件夹
-
-# Small line under it.
-settings-network-no-shared-sub = 在“文件夹”中右键点击一个文件夹即可共享。
 
 # Heading of the Sharing card.
 settings-network-sharing = 共享
 
 # Help text (i button) of the Sharing card.
 # SAFETY: needs a human review before it ships
-settings-network-sharing-about = “允许其他电脑连接”关闭时，网络上的任何设备都无法访问这台电脑，除非是它自己先发起的连接，所以同一 Wi-Fi 上的人无法试探。打开它即可与家中的其他电脑共享文件夹或打印机。要共享文件夹，请在“文件夹”中右键点击它并选择“在网络上共享”。每个共享都会说明谁可以做什么。用你的密码：其他人用你的共享密码可以打开文件，或打开并更改文件。家中任何人：网络上的任何人无需密码就可以打开文件，或打开并更改文件。开关关闭时，家中的其他电脑都无法打开其中任何一个。
+settings-network-sharing-about = “允许其他电脑连接”关闭时，网络上的其他电脑只有在这台电脑先联系它们时，才能访问这台电脑。这样可以防止同一 Wi-Fi 上的人试图闯入。打开它即可与家中的其他电脑共享文件夹或打印机。要共享文件夹，请在 Folders 中右键点击它并选择“在网络上共享”。每个共享文件夹都会显示谁可以做什么。用你的密码：其他人如果有你的共享密码，就可以打开文件，或打开并更改文件。家中任何人：网络上的任何人无需密码就可以打开文件，或打开并更改文件。开关关闭时，家中的其他电脑都无法打开其中任何一个。
 
 # Shown under a shared folder while sharing it is stopped.
 settings-network-stopping = 正在停止…
 
 # Shown beside the sharing switch while the password is asked for.
 # SAFETY: needs a human review before it ships
-settings-network-waiting = 正在等待输入密码...
+settings-network-waiting = 正在等待你输入密码…
 
 # Shown beside the sharing switch after other computers were allowed in.
 # SAFETY: needs a human review before it ships
-settings-network-sharing-allowed = 已允许共享
+settings-network-sharing-allowed = 共享已开启
 
 # Shown beside the sharing switch after other computers were kept out.
 # SAFETY: needs a human review before it ships
-settings-network-kept-out = 已拒绝访问
+settings-network-kept-out = 已阻止
 
 # Said in red when Wi-Fi could not be switched on.
 settings-network-on-failed = 无法打开 Wi-Fi。
@@ -227,20 +221,17 @@ settings-network-disconnect = 断开连接
 settings-network-connect = 连接
 
 # Shown under a network or cable while it is being connected.
-settings-network-connecting = 正在连接...
+settings-network-connecting = 正在连接…
 
 # Line in the Networks in range card when there are none.
 settings-network-none-in-range = 范围内没有网络
-
-# Small line under it.
-settings-network-none-in-range-sub = 每次打开此页面都会重新查找。
 
 # Heading of the card that lists Wi-Fi networks in range.
 settings-network-in-range = 范围内的网络
 
 # Help text (i button) of the Networks in range card.
 # SAFETY: needs a human review before it ships
-settings-network-in-range-about = 这台电脑能收到的所有 Wi-Fi 网络。页面打开时，正在使用的排在最前，然后是这里保存过的，其余的按信号强弱排列；页面打开期间，各行位置不会变。按箭头即可加入；有加密的网络首次加入时会要求输入密码。垃圾桶会忘记已保存的网络及其密码。开放网络没有加密，附近的人可能看到通过它发送的内容。
+settings-network-in-range-about = 这台电脑能收到的所有 Wi-Fi 网络。打开页面时，正在使用的网络排在最前，然后是已保存的网络，其余的按信号强弱排列。页面打开期间，顺序不会改变。按箭头即可加入网络。有加密的网络首次加入时会要求输入密码。垃圾桶按钮会忘记已保存的网络及其密码。开放网络没有加密，附近的人可能看到你通过它发送的内容。
 
 # Shown on the Networks in range card while Wi-Fi is off.
 settings-network-switch-on = 打开 Wi-Fi 即可查看范围内的网络。
@@ -278,7 +269,7 @@ settings-network-join = 加入
 settings-network-cancel = 取消
 
 # Shown under a network while it is being joined.
-settings-network-joining = 正在加入...
+settings-network-joining = 正在加入…
 
 # Said in red when a Wi-Fi password is too short.
 # SAFETY: needs a human review before it ships
@@ -286,9 +277,6 @@ settings-network-password-short = Wi-Fi 密码至少需要 8 个字符。
 
 # Heading of the line for joining a hidden network, and tip of its button.
 settings-network-hidden = 加入隐藏网络
-
-# Small line under it.
-settings-network-hidden-sub = 请准确输入名称，注意大小写。
 
 # Placeholder of the box where a hidden network's name is typed.
 settings-network-hidden-name = 网络名称
@@ -298,14 +286,62 @@ settings-network-hidden-name = 网络名称
 settings-network-hidden-password = 密码（如果有）
 
 # Said in red when no name was typed for a hidden network.
-settings-network-name-needed = 需要输入网络名称。
+settings-network-name-needed = 请输入网络名称。
 
 # Shown under a network after it was joined.
 settings-network-joined = 已加入
 
 # Said in red when a join failed and the settings made for it could not be forgotten; the first sentence says why it failed.
-settings-network-kept-anyway = { $words } 但它仍被保存了：重新加入之前，请先用垃圾桶忘记它。
+settings-network-kept-anyway = { $words } 但该网络仍被保存了。重新加入之前，请先用垃圾桶按钮忘记它。
 
 # Said in red when a network would not disconnect.
 settings-network-disconnect-failed = 无法断开连接。
 
+
+# Heading of the card that lists the ports opened by hand.
+settings-network-ports = 开放的端口
+
+# Help text (i button) of the Open ports card.
+settings-network-ports-about = 除非这台电脑先联系对方，否则每个端口都是关闭的。等待别人连接的程序，例如游戏服务器或同步工具，必须先在这里开放它的端口才能被连上。开放的端口允许与这台电脑在同一本地网络中的任何电脑连入，但绝不会对更广的互联网开放。在咖啡馆、酒店或办公室的网络上，这也包括那里的其他所有人。开放或关闭端口需要输入管理员密码。
+
+# Line in the Open ports card when no port is open.
+settings-network-ports-none = 没有开放的端口
+
+# Tooltip of the button that closes an open port. { $port } is like TCP 37666.
+settings-network-port-close = 关闭 { $port }
+
+# Heading of the line that opens a port.
+settings-network-port-add = 开放端口
+
+# Placeholder in the box where the port number is typed.
+settings-network-port-number = 端口号
+
+# Tooltip of the choice of TCP, UDP or both.
+settings-network-port-protocol = 协议
+
+# Choice: the TCP protocol only. Usually left as TCP.
+settings-network-port-tcp = TCP
+
+# Choice: the UDP protocol only. Usually left as UDP.
+settings-network-port-udp = UDP
+
+# Choice: both TCP and UDP.
+settings-network-port-both = 两者
+
+# Button that opens the typed port.
+settings-network-port-open = 开放
+
+# Red words when what was typed is not a port number.
+settings-network-port-not-a-port = 请输入 1 到 65535 之间的数字。
+
+# Red words when the port is already open.
+settings-network-port-already = 已经开放。
+
+# Said under the line once the port is open.
+settings-network-port-opened = 已开放
+
+# Part of a network's small line: it signs in with a username as well as a password, as work and university networks do.
+settings-network-username = 需要用户名
+
+# Red words when someone tries to join a network that signs in with a username.
+settings-network-username-unsupported = 这个网络除了密码还需要用户名。Trindle 暂时还无法加入这类网络。

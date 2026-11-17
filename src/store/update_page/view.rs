@@ -10,14 +10,14 @@ use super::cards::{apps_card, held_card, plugins_card};
 use super::check::{check_all};
 use super::install::{install_all, restart};
 use super::system_cards::{firmware_card, security_card, system_card};
-use super::words::{headline, overall};
+use super::words::{headline, overall_ring};
 use super::{Phase, going_under, phase};
 
 pub fn view(s: &Store) -> Node<Msg> {
     let (_, words) = headline(s);
     let mut fw = firmware_card(s).key(crate::store::spot::SPOT);
-    if s.spot_last == crate::store::spot::SPOT {
-        fw = fw.lit(s.lit);
+    if s.spot.last == crate::store::spot::SPOT {
+        fw = fw.lit(s.fade_in.lit);
     }
     let mut tiles = vec![
         apps_card(s),
@@ -27,7 +27,7 @@ pub fn view(s: &Store) -> Node<Msg> {
 
     if !s.plugins.installed.is_empty() {
         let card = plugins_card(s).key(crate::store::spot::SPOT_PLUGINS);
-        tiles.push(if s.spot_last == crate::store::spot::SPOT_PLUGINS { card.lit(s.lit) } else { card });
+        tiles.push(if s.spot.last == crate::store::spot::SPOT_PLUGINS { card.lit(s.fade_in.lit) } else { card });
     }
 
     if s.upd.held_card {
@@ -45,7 +45,7 @@ fn actions(s: &Store) -> Vec<Node<Msg>> {
     match phase(s) {
         Phase::Checking => vec![spinner(), main_action("view-refresh-symbolic", t!("store-upd-checking-main")).off(true)],
 
-        Phase::Installing => vec![ring_with_figure(overall(s), theme::sheet().action_height), main_action(crate::settings::ui::UPDATE_ICON, t!("store-upd-installing-main")).off(true)],
+        Phase::Installing => vec![ring_with_figure(overall_ring(s), theme::sheet().action_height), main_action(crate::settings::ui::UPDATE_ICON, t!("store-upd-installing-main")).off(true)],
         Phase::Found => {
             let n = s.waiting_updates();
             vec![again(), main_action(crate::settings::ui::UPDATE_ICON, t!("store-upd-install-n", n = n))

@@ -159,7 +159,7 @@ pub fn needed(path: &Path) -> Vec<String> {
         return Vec::new();
     }
     let (shoff, shentsize, shnum) = (u64_at(&head, 0x28), u16_at(&head, 0x3a), u16_at(&head, 0x3c));
-    if shentsize < 64 || shnum == 0 || shnum > 4096 {
+    if shentsize != 64 || shnum == 0 || shnum > 4096 {
         return Vec::new();
     }
     let Some(table) = at(shoff, (shentsize * shnum) as usize) else { return Vec::new() };
@@ -246,13 +246,42 @@ pub fn control_of(deb: &Path) -> String {
         .stderr(Stdio::null()).output().map(|o| String::from_utf8_lossy(&o.stdout).into_owned()).unwrap_or_default()
 }
 
+pub const OWN: &str = "_own-";
+
 pub fn make(deb: &Path) -> Result<String, String> {
-    let control = control_of(deb);
-    let (p, v, a) = (field_of(&control, "Package"), field_of(&control, "Version"), field_of(&control, "Architecture"));
+    make_as(deb, true)
+}
+
+pub fn make_from_apt(deb: &Path) -> Result<String, String> {
+    make_as(deb, false)
+}
+
+fn file_hash(deb: &Path) -> std::io::Result<String> {
+    use sha2::{Digest, Sha256};
+    let mut hash = Sha256::new();
+    std::io::copy(&mut std::fs::File::open(deb)?, &mut hash)?;
+    Ok(hash.finalize().iter().take(12).fold(String::new(), |a, b| a + &format!("{b:02x}")))
+}
+
+fn key_of(control: &str, own_hash: Option<&str>) -> Option<String> {
+    let (p, v, a) = (field_of(control, "Package"), field_of(control, "Version"), field_of(control, "Architecture"));
     if p.is_empty() || v.is_empty() || p.starts_with('.') {
-        return Err(t!("store-parts-not-deb", path = deb.display().to_string()));
+        return None;
     }
     let key = key(&p, &v, &a);
+    Some(own_hash.map_or(key.clone(), |h| format!("{key}{OWN}{h}")))
+}
+
+pub fn from_apt(key: &str) -> bool {
+    !key.contains(OWN) && !key.contains(".new")
+}
+
+fn make_as(deb: &Path, own: bool) -> Result<String, String> {
+    let control = control_of(deb);
+    let hash = if own { Some(file_hash(deb).map_err(|e| e.to_string())?) } else { None };
+    let Some(key) = key_of(&control, hash.as_deref()) else {
+        return Err(t!("store-parts-not-deb", path = deb.display().to_string()));
+    };
     if has(&key) {
         return Ok(key);
     }
@@ -274,9 +303,19 @@ pub fn make(deb: &Path) -> Result<String, String> {
 }
 
 pub fn link_tree(from: &Path, into: &Path) -> std::io::Result<()> {
-    for e in std::fs::read_dir(from)?.flatten() {
+
+    let entries: Vec<std::fs::DirEntry> = std::fs::read_dir(from)?.collect::<std::io::Result<_>>()?;
+    for e in &entries {
+        let name = e.file_name();
+        if e.file_type()?.is_symlink() && !MERGED.iter().any(|m| name == *m) {
+            return Err(std::io::Error::new(std::io::ErrorKind::InvalidData,
+                t!("store-parts-link", name = name.to_string_lossy().to_string()).to_string()));
+        }
+    }
+    for e in entries {
         let name = e.file_name();
         let merged = MERGED.iter().any(|m| name == *m);
+
         if merged && e.file_type()?.is_symlink() {
             continue;
         }
@@ -335,6 +374,17 @@ pub fn sweep() {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_strangers_deb_cannot_stand_in_for_a_library() {
+        let control = "Package: libssl3t64\nVersion: 3.0.1\nArchitecture: amd64\n";
+        let apt = key_of(control, None).unwrap();
+        let (a, b) = (key_of(control, Some("aa")).unwrap(), key_of(control, Some("bb")).unwrap());
+        assert_eq!(apt, "libssl3t64_3.0.1_amd64");
+        assert!(a != apt && b != apt && a != b);
+        assert!(from_apt(&apt) && !from_apt(&a) && !from_apt(&b));
+        assert_eq!(key_of("Package: .x\nVersion: 1\n", None), None);
+    }
 
     #[test]
     fn reads_what_a_package_needs() {
@@ -459,6 +509,42 @@ mod tests {
         assert_eq!(std::fs::read_link(dir.join("one/usr/bin/alias")).unwrap(), PathBuf::from("tool"));
         assert!(dir.join("one/usr/lib/x86_64-linux-gnu/libold.so.1").is_file(), "/lib goes inside /usr");
         assert!(!dir.join("one/lib").exists());
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn a_part_whose_top_folder_is_a_link_is_refused() {
+        let dir = std::env::temp_dir().join(format!("trindle-parts-link-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        let (part, into, outside) = (dir.join("part"), dir.join("box"), dir.join("persons-own"));
+        for d in [&part, &into, &outside] {
+            std::fs::create_dir_all(d).unwrap();
+        }
+        for top in ["opt", "usr", "etc", "srv"] {
+            let _ = std::fs::remove_file(part.join("opt"));
+            let _ = std::fs::remove_file(part.join("usr"));
+            let _ = std::fs::remove_file(part.join("etc"));
+            let _ = std::fs::remove_file(part.join("srv"));
+            std::os::unix::fs::symlink(&outside, part.join(top)).unwrap();
+            assert!(link_tree(&part, &into).is_err(), "{top} as a link is refused");
+            assert!(std::fs::symlink_metadata(into.join(top)).is_err(), "nothing of {top} is put in the box");
+        }
+
+        std::fs::remove_file(part.join("srv")).unwrap();
+        std::fs::create_dir_all(part.join("usr/share")).unwrap();
+        std::fs::write(part.join("usr/share/good"), "good").unwrap();
+        std::os::unix::fs::symlink(&outside, part.join("opt")).unwrap();
+        let empty = dir.join("empty-box");
+        std::fs::create_dir_all(&empty).unwrap();
+        assert!(link_tree(&part, &empty).is_err());
+        assert_eq!(std::fs::read_dir(&empty).unwrap().count(), 0, "a refused part leaves nothing behind");
+        std::fs::remove_file(part.join("opt")).unwrap();
+        std::os::unix::fs::symlink(&outside, part.join("srv")).unwrap();
+
+        std::fs::remove_file(part.join("srv")).unwrap();
+        std::os::unix::fs::symlink("usr/bin", part.join("bin")).unwrap();
+        std::fs::create_dir_all(part.join("usr/bin")).unwrap();
+        assert!(link_tree(&part, &into).is_ok());
         let _ = std::fs::remove_dir_all(&dir);
     }
 }

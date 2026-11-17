@@ -64,7 +64,7 @@ store-app-remove = 移除
 store-app-open-round = 打开
 
 # Main button that releases an app whose updates are held back.
-store-app-release = 解除暂缓
+store-app-release = 允许更新
 
 # Main button that updates the app.
 store-app-update = 更新
@@ -82,13 +82,13 @@ store-app-website = 网站
 store-app-no-pictures = 此应用没有图片。
 
 # In the picture frame when the picture could not be fetched.
-store-app-picture-missed = 无法获取这张图片。
+store-app-picture-missed = Trindle 无法获取这张图片。
 
 # In the picture frame while the picture is being fetched.
 store-app-picture-fetching = 正在获取图片…
 
 # In the picture frame when the computer has no internet.
-store-app-picture-offline = 这台电脑没有连接互联网，无法获取图片。
+store-app-picture-offline = 连接互联网后才能查看图片。
 
 # Between the picture buttons: which picture, when it has no caption.
 store-app-picture-of = 第 { $at } 张，共 { $n } 张
@@ -162,13 +162,13 @@ store-app-review-no-title = 无标题
 store-app-people-none = 还没有人评价过这个应用。
 
 # Under What people say when there is no internet.
-store-app-people-offline = 这台电脑没有连接互联网，无法获取大家的评价。
+store-app-people-offline = 连接互联网后才能阅读评价。
 
 # Under What people say while reviews are being fetched.
-store-app-people-looking = 正在查找大家的评价…
+store-app-people-looking = 正在加载评价…
 
 # Name of the card of reviews.
-store-app-people = 大家怎么说
+store-app-people = 评价
 
 # Facts line: when the app's project was made.
 store-app-fact-created = 创建于

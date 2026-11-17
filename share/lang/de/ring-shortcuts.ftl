@@ -90,7 +90,7 @@ ring-shortcuts-console = Zu einer Textkonsole wechseln
 ring-shortcuts-console-keys = Strg+Alt+F1 bis F12
 
 # Words for the keys the screen reader takes while it is on.
-ring-shortcuts-reader-keys = Die eigenen Tasten des Bildschirmlesers, solange er an ist
+ring-shortcuts-reader-keys = Tasten für den Bildschirmleser, solange er an ist
 
 # The keys the screen reader takes while it is on.
 ring-shortcuts-reader-keys-keys = Feststelltaste, Einfügen

@@ -21,7 +21,7 @@ settings-bluetooth-cause-turned-down = { $could_not } Сопряжение от�
 settings-bluetooth-cause-timeout = { $could_not } Другое устройство не ответило вовремя. Переведите его в режим сопряжения и попробуйте снова.
 
 # Said in red when the same thing is already being done; the first sentence says what could not be done.
-settings-bluetooth-cause-in-progress = { $could_not } Это уже выполняется. Подождите немного.
+settings-bluetooth-cause-in-progress = { $could_not } Trindle уже выполняет это. Подождите немного.
 
 # Said in red when the device did not answer; the first sentence says what could not be done.
 settings-bluetooth-cause-no-answer = { $could_not } Устройство не ответило. Проверьте, что оно включено и находится рядом, и попробуйте снова.
@@ -33,7 +33,7 @@ settings-bluetooth-cause-not-available = { $could_not } Устройство н�
 settings-bluetooth-the-bus = Системная шина
 
 # Headline of the page while Bluetooth is looked for.
-settings-bluetooth-top-looking = Поиск Bluetooth…
+settings-bluetooth-top-looking = Проверка Bluetooth…
 
 # Headline of the page when the Bluetooth service is not running.
 settings-bluetooth-top-gone = Bluetooth не работает на этом компьютере.
@@ -42,16 +42,22 @@ settings-bluetooth-top-gone = Bluetooth не работает на этом ко
 settings-bluetooth-top-off = Bluetooth выключен.
 
 # Headline of the page when Bluetooth is off at a switch or key on the computer itself.
-settings-bluetooth-top-hard = Bluetooth выключен на самом компьютере.
+settings-bluetooth-top-hard = Bluetooth выключен переключателем или клавишей на компьютере.
 
 # Headline of the page when the computer has no Bluetooth.
 settings-bluetooth-top-none = На этом компьютере нет Bluetooth.
+
+# Headline of the page when the computer has an adapter that Bluetooth has not finished setting up.
+settings-bluetooth-top-starting = Bluetooth запускается…
+
+# Headline of the page when the adapter was there a moment ago and has gone.
+settings-bluetooth-top-lost = Адаптер Bluetooth пропал.
 
 # Headline of the page when Bluetooth is on and searching.
 settings-bluetooth-top-searching = Включён, идёт поиск устройств поблизости…
 
 # Headline of the page when Bluetooth is on and nothing is connected.
-settings-bluetooth-top-idle = Включён, пока ничего не подключено.
+settings-bluetooth-top-idle = Включён, но ничего не подключено.
 
 # Headline of the page when Bluetooth is on and devices are connected; the names are already joined into a list.
 settings-bluetooth-top-connected =
@@ -63,47 +69,47 @@ settings-bluetooth-top-connected =
     }
 
 # Help text (i button) of the Bluetooth card.
-settings-bluetooth-card-about = Переключатель включает и выключает Bluetooth этого компьютера; под ним название адаптера. Пока включено «Видим для других устройств», устройства поблизости могут найти этот компьютер.
+settings-bluetooth-card-about = Под переключателем показано название вашего адаптера Bluetooth. Пока включено «Видим для других устройств», устройства поблизости могут найти этот компьютер.
 
 # Heading of the Bluetooth card, of its switch's line, and the name of its switch.
 settings-bluetooth-title = Bluetooth
-
-# Small line under the Bluetooth switch when Bluetooth is blocked by the system.
-settings-bluetooth-switched-off = Выключен.
 
 # Heading of the line with the switch that makes this computer visible, and the name of that switch.
 # SAFETY: needs a human review before it ships
 settings-bluetooth-visible = Видим для других устройств
 
-# Small line under the Visible to other devices switch.
-settings-bluetooth-visible-sub = Устройства поблизости могут найти этот компьютер.
-
 # Heading of the card when Bluetooth is off at a switch on the computer itself.
 settings-bluetooth-hard-line = Выключен на самом компьютере
 
 # Small line under it.
-settings-bluetooth-hard-line-sub = Переключателем или клавишей. Сначала включите его.
+settings-bluetooth-hard-line-sub = Включите его переключателем или клавишей на самом компьютере.
 
 # Heading of the card when the computer has no Bluetooth adapter.
 settings-bluetooth-no-adapter = Нет адаптера Bluetooth
 
 # Help text (i button) of that card.
-settings-bluetooth-no-adapter-about = В этом компьютере не найден адаптер Bluetooth. Адаптер, который вставляется в разъём USB, появится здесь, как только его вставят.
+settings-bluetooth-no-adapter-about = Trindle не нашла адаптер Bluetooth в этом компьютере. Если подключить его к разъёму USB, он сразу появится здесь.
 
 # Line in that card.
 settings-bluetooth-none-found = Не найден
 
+# Line in the no-adapter card while Bluetooth finishes setting up the adapter.
+settings-bluetooth-starting = Запуск
+
+# Line in the no-adapter card when the adapter was there a moment ago.
+settings-bluetooth-lost = Адаптер пропал
+
 # Small line under it.
-settings-bluetooth-none-found-sub = Адаптер USB появится здесь после подключения.
+settings-bluetooth-lost-sub = Trindle продолжает искать его и покажет здесь, если он вернётся. Если не вернётся, перезагрузите компьютер.
 
 # Shown beside the Bluetooth switch while the password is asked for.
-settings-bluetooth-waiting = Ожидание пароля...
+settings-bluetooth-waiting = Ожидание вашего пароля…
 
 # Said in red when this computer could not be made visible to other devices.
-settings-bluetooth-visible-failed = Не удалось сделать этот компьютер видимым для других устройств.
+settings-bluetooth-visible-failed = Trindle не удалось сделать этот компьютер видимым для других устройств.
 
 # Said in red when this computer could not be hidden from other devices.
-settings-bluetooth-hidden-failed = Не удалось скрыть этот компьютер от других устройств.
+settings-bluetooth-hidden-failed = Trindle не удалось скрыть этот компьютер от других устройств.
 
 # Shown on the two device lists while Bluetooth is off.
 settings-bluetooth-switch-on-first = Включите Bluetooth, чтобы пользоваться этим.
@@ -111,18 +117,15 @@ settings-bluetooth-switch-on-first = Включите Bluetooth, чтобы по
 # Line in the My devices card when nothing is paired.
 settings-bluetooth-none-paired = Пока нет сопряжённых
 
-# Small line under it.
-settings-bluetooth-none-paired-sub = Найдите устройства, чтобы сопрячь одно.
-
 # Heading of the card that lists paired devices.
 settings-bluetooth-mine = Мои устройства
 
 # Help text (i button) of the My devices card.
 # SAFETY: needs a human review before it ships
-settings-bluetooth-mine-about = Устройства, сопряжённые с этим компьютером, у каждого показан заряд батареи, если он известен. Подключённые при открытии страницы идут первыми, а строка остаётся на месте, пока страница открыта. Круглые кнопки подключают или отключают устройство; корзина забывает его, и потом его нужно сопрягать заново.
+settings-bluetooth-mine-about = Устройства, сопряжённые с этим компьютером, с уровнем заряда батареи, если его можно узнать. Устройства, подключённые при открытии страницы, идут первыми, и порядок не меняется, пока страница открыта. Если забыть устройство, его придётся сопрягать заново.
 
 # Line in the Nearby card while the search runs.
-settings-bluetooth-looking = Поиск устройств...
+settings-bluetooth-looking = Поиск устройств…
 
 # Tip of the button that stops the search.
 settings-bluetooth-stop-looking = Остановить поиск
@@ -130,17 +133,14 @@ settings-bluetooth-stop-looking = Остановить поиск
 # Heading of the line that starts the search, and tip of its button.
 settings-bluetooth-look = Найти устройства
 
-# Small line under it.
-settings-bluetooth-look-sub = Сначала переведите другое устройство в режим сопряжения.
-
 # Heading of the card that lists devices nearby.
 settings-bluetooth-nearby = Поблизости
 
 # Help text (i button) of the Nearby card.
-settings-bluetooth-nearby-about = Нажмите «Найти устройства», переведите другое устройство в режим сопряжения, затем нажмите «Сопрячь» рядом с ним. При открытии страницы устройства поблизости идут по силе сигнала, а каждое новое найденное добавляется в конец. Некоторые показывают число для сверки с числом здесь, а некоторые просят PIN-код, который часто указан в их инструкции, или 0000.
+settings-bluetooth-nearby-about = Нажмите «Найти устройства», переведите другое устройство в режим сопряжения, затем нажмите «Сопрячь» рядом с ним. При открытии страницы первым в списке стоит устройство с самым сильным сигналом, а каждое новое добавляется в конец. Некоторые устройства показывают число для сверки с числом здесь. Некоторые просят PIN-код, который часто указан в их инструкции, или 0000.
 
 # Said in red when the search could not be stopped.
-settings-bluetooth-stop-failed = Не удалось остановить поиск устройств.
+settings-bluetooth-stop-failed = Trindle не удалось остановить поиск устройств.
 
 # Said in red when the search could not be started.
 settings-bluetooth-start-failed = Не удалось начать поиск устройств.
@@ -175,19 +175,19 @@ settings-bluetooth-disconnect-failed = Не удалось отключить.
 settings-bluetooth-forget-failed = Не удалось забыть.
 
 # Shown under a device while it is being paired.
-settings-bluetooth-pairing = Сопряжение...
+settings-bluetooth-pairing = Сопряжение…
 
 # Said in red when a device could not be paired.
 settings-bluetooth-pair-failed = Не удалось сопрячь.
 
 # Shown under a device while it is being connected.
-settings-bluetooth-connecting = Подключение...
+settings-bluetooth-connecting = Подключение…
 
 # Said in red when a device could not be connected.
-settings-bluetooth-connect-failed = Не удалось подключить.
+settings-bluetooth-connect-failed = Не удалось подключиться.
 
 # Said under a device that paired but could not be set to connect by itself.
-settings-bluetooth-not-trusted = Подключено, но не удалось настроить автоматическое подключение в следующий раз. Подключайте его здесь, когда он понадобится.
+settings-bluetooth-not-trusted = Подключено, но Trindle не удалось настроить автоматическое подключение в следующий раз. Подключайте его здесь, когда он понадобится.
 
 # Said under a device that shows a code to be typed on it; the code is already written.
 settings-bluetooth-type-code = Введите { $code } на устройстве, затем нажмите на нём Enter.
@@ -217,37 +217,36 @@ settings-bluetooth-cancel = Отмена
 
 # Help line above the box where a device's PIN is typed.
 # SAFETY: needs a human review before it ships
-settings-bluetooth-pin-help = Введите PIN-код этого устройства. Его часто указывают в инструкции, или это 0000.
+settings-bluetooth-pin-help = Введите PIN-код этого устройства. Обычно он указан в инструкции. Если нет, попробуйте 0000.
 
 # Words the settings search looks for on this page (not shown).
 settings-bluetooth-keywords = наушники мышь клавиатура сопряжение устройства беспроводной блютуз
 
 # Help text at the top of the page.
-settings-bluetooth-help = Нажмите «Найти», переведите другое устройство в режим сопряжения, затем нажмите «Сопрячь» рядом с ним.
+settings-bluetooth-help = Нажмите «Найти устройства», переведите другое устройство в режим сопряжения, затем нажмите «Сопрячь» рядом с ним.
 
 # Said in red under the Bluetooth switch when restarting the sound service after Bluetooth came back on failed; $why is the system's own reason.
-settings-bluetooth-sound-failed = Не удалось перезапустить звук Bluetooth, поэтому наушники могут звучать в базовом качестве, пока вы не войдёте снова. { $why }
+settings-bluetooth-sound-failed = Trindle не удалось перезапустить звук Bluetooth, поэтому наушники могут звучать хуже обычного, пока вы не войдёте снова. { $why }
 
 # Tooltip of the help button beside the Bluetooth switch.
-settings-bluetooth-sound-help = Почему наушники звучат в базовом качестве после выключения и включения Bluetooth
+settings-bluetooth-sound-help = Почему наушники звучат хуже после выключения и включения Bluetooth
 
 
 
 # Said in red when a device is no longer in BlueZ's list; the first sentence says what could not be done.
-settings-bluetooth-cause-gone = { $could_not } Устройство больше не известно. Найдите его снова.
+settings-bluetooth-cause-gone = { $could_not } Это устройство больше не сохранено на этом компьютере. Найдите его снова.
 
 # Said in red when a paired device's saved pairing is refused; the first sentence says what could not be done.
-settings-bluetooth-cause-old-pairing = { $could_not } Сохранённое сопряжение больше не принимается. Забудьте устройство и сопрягите его заново.
+settings-bluetooth-cause-old-pairing = { $could_not } Устройство больше не принимает сохранённое сопряжение. Забудьте устройство и сопрягите его заново.
 
 # Said in red under a device that connected and then dropped at once.
-settings-bluetooth-dropped = Оно подключилось, затем отключилось. Возможно, сохранённое сопряжение устарело.
+settings-bluetooth-dropped = Оно подключилось, затем соединение пропало. Возможно, сохранённое сопряжение устарело.
 
 # Tooltip of the button that forgets a paired device and looks for it afresh.
 settings-bluetooth-pair-again = Забыть и сопрячь заново
 
 # Said under Look for devices after a device was forgotten to be paired afresh.
-settings-bluetooth-forgotten-pair = Забыто. Переведите устройство в режим сопряжения, затем нажмите «Сопрячь», когда оно появится ниже.
+settings-bluetooth-forgotten-pair = Устройство забыто. Переведите его в режим сопряжения, затем нажмите «Сопрячь», когда оно появится ниже.
 
 # Tooltip of the button that opens Help from a failed connection.
 settings-bluetooth-more = Подробнее
-

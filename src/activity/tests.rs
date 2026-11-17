@@ -236,16 +236,16 @@ fn shares_in_words() {
     assert_eq!(percent(0.001), "under 1%");
     assert_eq!(tidy("rustc"), "Rustc");
     assert_eq!(tidy("NetworkManager"), "NetworkManager");
-    assert_eq!(busy_words(0.01), "resting");
+    assert_eq!(busy_words(0.01), "idle");
     assert_eq!(busy_words(0.8), "80% busy");
 }
 
 #[test]
 fn work_and_time_in_words() {
-    assert_eq!(effort(0.01, 0.0), "Resting");
+    assert_eq!(effort(0.01, 0.0), "Idle");
     assert_eq!(effort(0.3, 0.02), "Working a little");
     assert_eq!(effort(3.0, 0.19), "Working hard");
-    assert_eq!(effort(15.0, 0.95), "Working flat out");
+    assert_eq!(effort(15.0, 0.95), t!("activity-effort-flat-out"));
     assert_eq!(running_words(30), "Under a minute");
     assert_eq!(running_words(60), "1 minute");
     assert_eq!(running_words(7300), "2 hours");
@@ -267,15 +267,15 @@ fn say(busy: f64, memory: f64, busiest: &[(&str, f64)], biggest: Option<&str>) -
 
 #[test]
 fn the_moment_in_one_sentence() {
-    assert_eq!(say(0.03, 0.4, &[("Firefox", 0.01)], Some("Firefox")).1, "All calm: nothing is working hard.");
+    assert_eq!(say(0.03, 0.4, &[("Firefox", 0.01)], Some("Firefox")).1, "No programs are working hard.");
     assert_eq!(say(0.6, 0.4, &[("Firefox", 0.45), ("Steam", 0.1)], None).1, "Firefox is doing most of the work right now.");
     assert_eq!(say(0.6, 0.4, &[("Firefox", 0.25), ("Steam", 0.2)], None).1,
                "Firefox and Steam are keeping the computer busy.");
     assert_eq!(say(0.97, 0.4, &[("Steam", 0.5), ("Firefox", 0.4)], None),
-               (Mood::FlatOut, "Your computer is flat out: Steam and Firefox are using all 16 threads.".into()));
-    assert_eq!(say(0.99, 0.4, &[("Rustc", 0.95)], None).1, "Your computer is flat out: Rustc is using all 16 threads.");
+               (Mood::FlatOut, "Your computer is working as hard as it can: Steam and Firefox are using all 16 threads.".into()));
+    assert_eq!(say(0.99, 0.4, &[("Rustc", 0.95)], None).1, "Your computer is working as hard as it can: Rustc is using all 16 threads.");
     assert_eq!(say(0.2, 0.95, &[("Firefox", 0.1)], Some("Chrome")),
-               (Mood::MemoryFull, "Memory is nearly full; Chrome is holding the most.".into()));
+               (Mood::MemoryFull, "Memory is nearly full. Chrome is using the most.".into()));
 
     assert_eq!(say(0.07, 0.4, &[("Rustc", 0.0625)], None).1,
                "Rustc is working hard, but the computer has plenty to spare.");
@@ -344,4 +344,12 @@ fn who_has_a_bubble() {
     assert!(!own_bubble(&group(Kind::Other, false), 0.02, 0.0));
     assert!(own_bubble(&group(Kind::Other, false), 0.0, 0.9));
     assert!(own_bubble(&group(Kind::Other, true), 0.02, 0.0));
+}
+
+#[test]
+fn no_card_of_activity_explains_itself() {
+    let words = include_str!("../../share/lang/en/activity.ftl");
+    for key in ["activity-caption", "activity-list-caption"] {
+        assert!(!words.lines().any(|l| l.starts_with(&format!("{key} ="))), "{key} is back");
+    }
 }

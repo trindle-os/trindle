@@ -29,15 +29,25 @@ fn uid() -> u32 {
 pub fn take_key() -> Option<Key> {
     let path = Path::new(KEYS).join(uid().to_string());
     let mut file = OpenOptions::new().read(true).write(true)
-        .custom_flags(libc::O_NOFOLLOW | libc::O_NONBLOCK).open(path).ok()?;
+        .custom_flags(libc::O_NOFOLLOW | libc::O_NONBLOCK).open(&path).ok()?;
     let meta = file.metadata().ok()?;
     if !meta.is_file() || meta.uid() != uid() {
         return None;
     }
     let mut key = Key::default();
     let got = file.read_exact(key.as_mut());
-    let _ = file.set_len(0);
+    used_up(&file, &path);
     got.ok().map(|()| key)
+}
+
+fn used_up(file: &std::fs::File, path: &Path) {
+    let Err(emptied) = file.set_len(0) else { return };
+    match fs::remove_file(path) {
+        Err(e) if e.kind() != std::io::ErrorKind::NotFound => {
+            eprintln!("trindle-keyring: the login key could not be emptied ({emptied}) or removed ({e})");
+        }
+        _ => {}
+    }
 }
 
 pub fn put_back(key: &Key) {
@@ -52,9 +62,9 @@ pub fn put_back(key: &Key) {
 pub fn clear_key() {
     let path = Path::new(KEYS).join(uid().to_string());
     let Ok(file) = OpenOptions::new().write(true)
-        .custom_flags(libc::O_NOFOLLOW | libc::O_NONBLOCK).open(path) else { return };
+        .custom_flags(libc::O_NOFOLLOW | libc::O_NONBLOCK).open(&path) else { return };
     if file.metadata().is_ok_and(|m| m.is_file() && m.uid() == uid()) {
-        let _ = file.set_len(0);
+        used_up(&file, &path);
     }
 }
 
@@ -76,8 +86,10 @@ fn leave_key() -> Result<(), String> {
     let (uid, gid, home) = account(&user).ok_or("no such user")?;
 
     if password.is_empty() {
-        let _ = fs::remove_file(Path::new(KEYS).join(uid.to_string()));
-        return Ok(());
+        return match fs::remove_file(Path::new(KEYS).join(uid.to_string())) {
+            Err(e) if e.kind() != std::io::ErrorKind::NotFound => Err(format!("an earlier login's key was left: {e}")),
+            _ => Ok(()),
+        };
     }
     let moved = home.join(".local/share").join(super::migrate::DBUS_FILE);
     let path = home.join(".local/share/trindle/keyring");
@@ -178,4 +190,24 @@ fn write_key(uid: u32, gid: u32, key: &Key) -> Result<(), String> {
     file.set_permissions(fs::Permissions::from_mode(0o600)).map_err(|e| e.to_string())?;
     std::os::unix::fs::fchown(&file, Some(uid), Some(gid)).map_err(|e| e.to_string())?;
     file.write_all(key.as_ref()).map_err(|e| e.to_string())
+}
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn a_key_that_cannot_be_emptied_is_removed() {
+        let dir = crate::common::files::private_temp("kpam").unwrap();
+        let path = dir.join("1000");
+        std::fs::write(&path, [7u8; 32]).unwrap();
+
+        let file = std::fs::File::open(&path).unwrap();
+        super::used_up(&file, &path);
+        assert!(!path.exists(), "the key was left behind");
+        std::fs::write(&path, [7u8; 32]).unwrap();
+        let file = std::fs::OpenOptions::new().write(true).open(&path).unwrap();
+        super::used_up(&file, &path);
+        assert_eq!(std::fs::metadata(&path).unwrap().len(), 0);
+        std::fs::remove_dir_all(&dir).unwrap();
+    }
 }

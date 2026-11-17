@@ -11,16 +11,19 @@ ring-updates-look =
 ring-updates-none = Semuanya sudah terbaru
 
 # Answer to a spoken question about updates when the updates button installs them all; "it" for one, "them" for more.
-ring-updates-spoken-all =
+ring-updates-spoken-all = 
     { $n ->
-       *[other] { $n } menunggu: tombol pembaruan di samping Aplikasi akan memasangnya
+       *[other] { $n } pembaruan menunggu. Gunakan tombol pembaruan di samping Aplikasi untuk memasangnya.
     }
 
 # Answer to a spoken question about updates when only plugin updates that need a look wait; the clause that follows says so.
-ring-updates-spoken-look = { $n } menunggu: { $look }
+ring-updates-spoken-look =
+    { $n ->
+       *[other] { $n } pembaruan menunggu. { $look }.
+    }
 
 # Answer to a spoken question about updates when some install and some need a look; the last clause says which need a look.
-ring-updates-spoken-mixed = { $n } menunggu: tombol pembaruan di samping Aplikasi akan memasang { $put }, dan { $look }
+ring-updates-spoken-mixed = { $n } pembaruan menunggu. Gunakan tombol pembaruan di samping Aplikasi untuk memasang { $put } di antaranya. { $look }.
 
 # Name and tip of the updates button when only firmware updates wait: the button takes the person to them.
 ring-updates-see-firmware =
@@ -41,9 +44,9 @@ ring-updates-install =
     }
 
 # Name and tip of the updates button when only plugin updates that ask for more than before wait.
-ring-updates-see-plugin =
+ring-updates-see-plugin = 
     { $n ->
-       *[other] Lihat { $n } pembaruan plugin, yang meminta lebih dari sebelumnya
+       *[other] Lihat { $n } pembaruan plugin, yang meminta lebih banyak izin daripada sebelumnya
     }
 
 # Name and tip of the updates button when some updates install and some plugin updates need a look; the clause after the semicolon says which.
@@ -93,13 +96,13 @@ ring-tray-vpn = Tersambung melalui VPN
 ring-tray-wired = Kabel
 
 # Name of the network button when connected by cable but the internet is not reachable.
-ring-tray-wired-limited = Kabel, konektivitas terbatas
+ring-tray-wired-limited = Kabel, tanpa internet
 
 # Name of the network button on Wi-Fi: the network's name and its signal strength.
 ring-tray-wifi = { $name }, sinyal { $strength }%
 
 # Name of the network button on Wi-Fi when the internet is not reachable.
-ring-tray-wifi-limited = { $name }, sinyal { $strength }%, konektivitas terbatas
+ring-tray-wifi-limited = { $name }, sinyal { $strength }%, akses terbatas
 
 # Name of the Bluetooth button when Bluetooth is off.
 ring-tray-bt-off = Bluetooth mati
@@ -126,10 +129,9 @@ ring-tray-show = Tampilkan di cincin
 ring-tray-take-out = Keluarkan dari cincin
 
 # Quiet words in a tray icon's menu in place of Show in the ring, when the row is full.
-ring-tray-full = Sudah ada empat di cincin. Keluarkan satu dulu.
+ring-tray-full = Sudah ada empat ikon di cincin. Keluarkan satu dulu.
 
 
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = Pemeriksaan mati
-

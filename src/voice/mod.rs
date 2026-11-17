@@ -96,7 +96,7 @@ impl Listener {
         }
 
         if std::env::var_os("XDG_RUNTIME_DIR").is_none() {
-            return Err(t!("voice-mic-failed", why = "no private folder"));
+            return Err(t!("voice-mic-failed", why = t!("voice-no-private-folder")));
         }
         self.stop_now();
         let path = wav_path();

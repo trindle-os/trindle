@@ -56,7 +56,7 @@ screenshot-tool-circle = Duara
 screenshot-tool-highlighter = Kialama
 
 # Name of the drawing tool that writes words.
-screenshot-tool-words = Maneno
+screenshot-tool-words = Maandishi
 
 # Name of the drawing tool that puts numbered spots.
 screenshot-tool-numbers = Nambari
@@ -107,19 +107,19 @@ screenshot-not-saved = Picha ya skrini haikuhifadhiwa
 screenshot-not-copied = Picha ya skrini haikunakiliwa
 
 # Words of that notice.
-screenshot-clipboard-refused = Ubao wa kunakili haukuweza kuipokea.
+screenshot-clipboard-refused = Trindle haikuweza kuinakili.
 
 # Words of the notice that the screenshot could not be saved: the picture was not made.
-screenshot-no-picture = picha haikuweza kutengenezwa
+screenshot-no-picture = Haikuweza kupiga picha ya skrini.
 
 # Words of the notice that the screenshot could not be saved: no bus to ask on.
-screenshot-no-bus = hakuna session bus ya kuuliza wapi
+screenshot-no-bus = Trindle haiwezi kuuliza wapi pa kuhifadhi.
 
 # Words of the notice that the screenshot could not be saved: the file chooser could not be asked.
-screenshot-no-chooser = kichagua faili hakikuweza kuulizwa
+screenshot-no-chooser = Haikuweza kufungua kichagua faili.
 
 # Words of the notice that the screenshot could not be saved: every file name was taken.
-screenshot-no-free-name = hakuna jina lililo huru
+screenshot-no-free-name = Hakuna jina lililo huru
 
 # Words of the notice that the screenshot could not be saved: the path and why it failed.
 screenshot-write-failed = { $path }: { $why }
@@ -128,7 +128,7 @@ screenshot-write-failed = { $path }: { $why }
 screenshot-eye-title = Kichukua rangi
 
 # Words that float beside the i of the eye dropper's window.
-screenshot-eye-help = Bonyeza kichukua rangi, kisha bofya popote kwenye skrini ili kuchukua rangi iliyo chini ya kielekezi. Escape inaghairi. Kila rangi hunakiliwa mara moja kama msimbo wa hex na kuhifadhiwa kwenye orodha iliyo chini, mpya ikiwa juu, ili iweze kunakiliwa tena baadaye.
+screenshot-eye-help = Bonyeza kichukua rangi, kisha bofya popote kwenye skrini ili kuchukua rangi iliyo chini ya kielekezi. Bonyeza Escape ili kughairi. Kila rangi hunakiliwa mara moja kama msimbo wa hex na kuongezwa kwenye orodha iliyo chini, mpya ikiwa juu, ili uweze kuinakili tena baadaye.
 
 # Name of the i button beside the title.
 screenshot-eye-about = Kuhusu kichukua rangi
@@ -137,17 +137,17 @@ screenshot-eye-about = Kuhusu kichukua rangi
 screenshot-eye-take = Chukua rangi
 
 # Sentence under the title while no colour has been taken.
-screenshot-eye-none = Chukua rangi kutoka popote kwenye skrini.
+screenshot-eye-none = Chukua rangi kutoka kwenye skrini.
 
 # Sentence under the title once colours have been taken.
 screenshot-eye-taken =
     { $n ->
         [one] Rangi moja imechukuliwa: { $newest }.
-       *[other] Rangi { $n } zimechukuliwa; mpya zaidi ni { $newest }.
+       *[other] Rangi { $n } zimechukuliwa. Mpya zaidi ni { $newest }.
     }
 
 # Shown in the big card while no colour has been taken.
-screenshot-eye-latest-empty = Rangi unayochukua huonekana hapa, kubwa, tayari kunakiliwa.
+screenshot-eye-latest-empty = Bado hujachukua rangi yoyote.
 
 # Name of the card that holds the latest colour.
 screenshot-eye-latest = Rangi ya hivi karibuni
@@ -157,10 +157,10 @@ screenshot-eye-latest = Rangi ya hivi karibuni
 screenshot-eye-clear = Futa orodha
 
 # Head of the card with the list of colours taken.
-screenshot-eye-list = Rangi zilizochukuliwa
+screenshot-eye-list = Rangi zako
 
 # Shown in the list card while no colour has been taken.
-screenshot-eye-list-empty = Rangi zilizochukuliwa kwa kichukua rangi huhifadhiwa hapa, mpya ikiwa juu.
+screenshot-eye-list-empty = Bado hujachukua rangi yoyote.
 
 # Name of the round button that takes a colour out of the list.
 # SAFETY: needs a human review before it ships
@@ -175,11 +175,11 @@ screenshot-pick-title = Shiriki skrini yako na { $app }?
 
 # Sentence under the title when several things can be picked.
 # SAFETY: needs a human review before it ships
-screenshot-pick-many = Chagua kimoja au zaidi. Kinachochaguliwa pekee ndicho kinachoshirikiwa, hadi programu isimame au ifungwe.
+screenshot-pick-many = Chagua kimoja au zaidi. Kinachochaguliwa pekee ndicho kinachoshirikiwa, hadi programu iache kushiriki au ifungwe.
 
 # Sentence under the title when one thing can be picked.
 # SAFETY: needs a human review before it ships
-screenshot-pick-one = Chagua kimoja. Kinachochaguliwa pekee ndicho kinachoshirikiwa, hadi programu isimame au ifungwe.
+screenshot-pick-one = Chagua kimoja. Kinachochaguliwa pekee ndicho kinachoshirikiwa, hadi programu iache kushiriki au ifungwe.
 
 # Heading over the screens that can be shared.
 screenshot-pick-screens = Skrini
@@ -194,7 +194,7 @@ screenshot-pick-nothing = Hakuna cha kushiriki.
 screenshot-pick-desktop = Eneo-kazi lote
 
 # Words under that choice.
-screenshot-pick-desktop-detail = Skrini zote, jinsi zilivyo
+screenshot-pick-desktop-detail = Skrini zote, jinsi zilivyopangwa
 
 # Words under a screen's choice: its size in pixels.
 screenshot-pick-size = { $width } kwa { $height }
@@ -233,11 +233,11 @@ screenshot-portal-name = Jina
 
 # Heading when an unknown program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks-unknown = Programu inauliza wewe ni nani
+screenshot-account-asks-unknown = Programu inataka taarifa zako
 
 # Heading when a program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks = { $who } inauliza wewe ni nani
+screenshot-account-asks = { $who } inataka taarifa zako
 
 # Name the screen reader gives to the person's picture.
 screenshot-account-picture = Picha yako
@@ -249,7 +249,7 @@ screenshot-account-signed-in = Umeingia kama { $id }
 screenshot-apps-search = Tafuta programu
 
 # Shown when no app can open the file.
-screenshot-apps-none = Hakuna programu hapa inayoweza kuifungua
+screenshot-apps-none = Hakuna programu inayoweza kuifungua
 
 # Name of the switch that remembers the choice.
 screenshot-apps-always = Tumia programu hii kila mara kwa aina hii ya faili
@@ -306,7 +306,7 @@ screenshot-launcher-add = Ongeza
 screenshot-wallpaper-ask = Weka picha hii kama mandhari yako?
 
 # Heading when a program offers a wallpaper.
-screenshot-wallpaper-asks = { $who } inapendekeza mandhari mpya
+screenshot-wallpaper-asks = { $who } inataka kuweka mandhari
 
 # Name the screen reader gives to the picture offered.
 screenshot-wallpaper-picture = Mandhari mpya
@@ -315,7 +315,7 @@ screenshot-wallpaper-picture = Mandhari mpya
 screenshot-wallpaper-set = Weka kama mandhari
 
 # Red line under the printer box when no printer is set up.
-screenshot-print-no-printer = Hakuna printa iliyowekwa. Ongeza moja kwenye Mipangilio, Printa.
+screenshot-print-no-printer = Hakuna printa iliyowekwa. Ongeza moja kwenye Mipangilio, chini ya Printa.
 
 # Red line under the printer box when the printing system does not answer.
 screenshot-print-not-answering = Uchapishaji hauitikii.
@@ -369,7 +369,7 @@ screenshot-print-from = Chapisha kutoka { $who }
 screenshot-print-failed = Haikuweza kuchapisha
 
 # Words of that notice when the choices made were not kept.
-screenshot-print-lost = Chaguo zake hazikuhifadhiwa. Chapisha tena.
+screenshot-print-lost = Haikuweza kuhifadhi mipangilio. Chapisha tena.
 
 # Line in the menu on a file or folder: change its name.
 screenshot-chooser-rename = Badilisha jina
@@ -413,7 +413,7 @@ screenshot-chooser-no-folder = Folda hiyo haipo.
 
 # Words under the box when saving would replace a file.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-ask = { $name } tayari ipo. Bonyeza Badilisha, au Enter tena, ili kuweka hii mahali pake.
+screenshot-chooser-replace-ask = { $name } tayari ipo. Ili kuibadilisha, bonyeza Badilisha au bonyeza Enter tena.
 
 # Words under the box when a key is pressed on Recent, which is not a folder.
 screenshot-chooser-recent-not-folder = Za hivi karibuni si folda. Fungua folda kwanza.
@@ -452,52 +452,52 @@ screenshot-chooser-replace = Badilisha
 
 # What the screen reader says for the button that replaces a folder.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-spoken = Badilisha: folda iliyopo huenda kwenye Tupio
+screenshot-chooser-replace-spoken = Badilisha. Folda iliyopo huhamishiwa kwenye Tupio.
 
 # Name of the main button that merges two folders.
 # SAFETY: needs a human review before it ships
 screenshot-chooser-merge = Unganisha folda
 
 # Words in the question when folders are being pasted.
-screenshot-chooser-rest-folders = Jibu lilelile kwa kila folda iliyopo tayari.
+screenshot-chooser-rest-folders = Fanya hivi kwa kila folda iliyopo.
 
 # Words in the question when files are being pasted.
-screenshot-chooser-rest-files = Jibu lilelile kwa kila faili iliyopo tayari.
+screenshot-chooser-rest-files = Fanya hivi kwa kila faili iliyopo.
 
 # Name of the switch that gives the same answer to the rest.
 screenshot-chooser-same = Fanya vivyo hivyo kwa zilizobaki
 
 # Words under the box after Cut.
-screenshot-chooser-was-cut = Umekata { $what }. Kibandike kwenye folda.
+screenshot-chooser-was-cut = Tayari kuhamishwa: { $what }
 
 # Words under the box after Copy.
-screenshot-chooser-was-copied = Umenakili { $what }. Kibandike kwenye folda.
+screenshot-chooser-was-copied = Tayari kunakiliwa: { $what }
 
 # Words under the box when Paste is pressed and there is nothing to paste.
 screenshot-chooser-nothing-cut = Hakuna kilichokatwa wala kunakiliwa.
 
 # Words under the box when Paste is pressed while a paste is still going.
-screenshot-chooser-paste-busy = Kubandika bado kunaendelea.
+screenshot-chooser-paste-busy = Trindle bado inabandika.
 
 # Red line after some items could not be moved.
 screenshot-chooser-not-moved =
     { $n ->
-        [one] Kipengee kimoja hakikuweza kuhamishwa: { $names }.
-       *[other] Vipengee { $n } havikuweza kuhamishwa: { $names }.
+        [one] Trindle haikuweza kuhamisha kipengee kimoja: { $names }.
+       *[other] Trindle haikuweza kuhamisha vipengee { $n }: { $names }.
     }
 
 # Red line after some items could not be copied.
 screenshot-chooser-not-copied =
     { $n ->
-        [one] Kipengee kimoja hakikuweza kunakiliwa: { $names }.
-       *[other] Vipengee { $n } havikuweza kunakiliwa: { $names }.
+        [one] Trindle haikuweza kunakili kipengee kimoja: { $names }.
+       *[other] Trindle haikuweza kunakili vipengee { $n }: { $names }.
     }
 
 # Red line after some items could not be put in the Trash.
 screenshot-chooser-not-trashed =
     { $n ->
-        [one] Kipengee kimoja hakikuweza kuwekwa kwenye Tupio: { $names }.
-       *[other] Vipengee { $n } havikuweza kuwekwa kwenye Tupio: { $names }.
+        [one] Trindle haikuweza kuhamishia kipengee kimoja kwenye Tupio: { $names }.
+       *[other] Trindle haikuweza kuhamishia vipengee { $n } kwenye Tupio: { $names }.
     }
 
 # Name of the box where a file or folder is renamed.
@@ -511,10 +511,10 @@ screenshot-chooser-items =
     }
 
 # Title of the notice when an email could not be started.
-screenshot-mail-failed = Barua pepe haikuweza kuanzishwa
+screenshot-mail-failed = Haikuweza kuunda barua pepe
 
 # Why: no mail program is chosen or installed.
-screenshot-mail-no-app = Hakuna programu ya barua pepe iliyowekwa. Chagua moja kwenye Mipangilio, Programu chaguomsingi.
+screenshot-mail-no-app = Hujachagua programu ya barua pepe. Chagua moja kwenye Mipangilio, Programu chaguomsingi.
 
 # Why: a program asked to attach more files than allowed.
 screenshot-mail-too-many = Faili nyingi mno za kuambatisha.
@@ -523,19 +523,19 @@ screenshot-mail-too-many = Faili nyingi mno za kuambatisha.
 screenshot-mail-too-big = Faili ni kubwa mno kuambatishwa.
 
 # Why: a file could not be read as a plain file.
-screenshot-mail-bad-file = Faili moja haikuweza kuambatishwa.
+screenshot-mail-bad-file = Haikuweza kuambatisha faili.
 
 # Why: an address was not a plain address.
-screenshot-mail-bad-address = Anwani moja haikuwa halali.
+screenshot-mail-bad-address = Anwani moja si halali.
 
 # Why: the subject was too long or had odd characters.
-screenshot-mail-bad-subject = Mada haikuwa halali.
+screenshot-mail-bad-subject = Mada si halali.
 
 # Why: the words were too long or had odd characters.
-screenshot-mail-bad-words = Maneno hayakuwa halali.
+screenshot-mail-bad-words = Maandishi si halali.
 
 # Why: no private place to keep the files.
-screenshot-mail-no-place = Faili hazikuweza kuhifadhiwa kwa usalama.
+screenshot-mail-no-place = Haikuweza kuhifadhi faili kwa usalama.
 
 # Why: the mail program did not start.
 screenshot-mail-not-started = Programu ya barua pepe haikuanza.
@@ -556,12 +556,17 @@ screenshot-chooser-pin = Bandika kwenye utepe wa pembeni
 screenshot-chooser-unpin = Ondoa kibandiko
 
 # Red line after a pin could not be kept.
-screenshot-chooser-pin-not-kept = Kibandiko hakikuweza kuhifadhiwa.
+screenshot-chooser-pin-not-kept = Haikuweza kuhifadhi kibandiko.
 
 # Red line after some items could not be deleted.
 screenshot-chooser-not-deleted =
     { $n ->
-        [one] Kipengee kimoja hakikuweza kufutwa: { $names }.
-       *[other] Vipengee { $n } havikuweza kufutwa: { $names }.
+        [one] Trindle haikuweza kufuta kipengee kimoja: { $names }.
+       *[other] Trindle haikuweza kufuta vipengee { $n }: { $names }.
     }
 
+# What the screen reader says for the list of places down the left of the file chooser.
+screenshot-chooser-places = Maeneo
+
+# What the screen reader says for the list of files and folders in the file chooser.
+screenshot-chooser-files = Faili

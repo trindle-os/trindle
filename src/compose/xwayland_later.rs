@@ -4,6 +4,7 @@ use std::os::unix::process::CommandExt;
 
 pub const WAITING_ROOM: &str = "/usr/lib/trindle/xwayland-later";
 
+#[cfg(test)]
 const WAITING_ROOM_ENV: &str = "TRINDLE_XWAYLAND_LATER";
 const REAL: &str = "/usr/bin/Xwayland";
 
@@ -67,14 +68,36 @@ pub fn real_args(args: &[String], stop: Option<&str>) -> Vec<String> {
     out
 }
 
+#[cfg(test)]
+fn test_room() -> Option<std::path::PathBuf> {
+    std::env::var_os(WAITING_ROOM_ENV).map(std::path::PathBuf::from)
+}
+
+#[cfg(not(test))]
+fn test_room() -> Option<std::path::PathBuf> {
+    None
+}
+
 fn waiting_room() -> Option<std::path::PathBuf> {
-    let at = std::env::var_os(WAITING_ROOM_ENV).map(std::path::PathBuf::from)
-        .unwrap_or_else(|| std::path::PathBuf::from(WAITING_ROOM));
+    let at = test_room().unwrap_or_else(|| std::path::PathBuf::from(WAITING_ROOM));
     at.join("Xwayland").exists().then_some(at)
 }
 
+const SYSTEM_PATH: &str = "/usr/bin:/bin";
+
+fn search_path(room: Option<&std::path::Path>) -> String {
+    match room {
+        Some(at) => format!("{}:{SYSTEM_PATH}", at.display()),
+        None => SYSTEM_PATH.to_string(),
+    }
+}
+
 pub fn path() -> Option<String> {
-    waiting_room().map(|at| format!("{}:{}", at.display(), std::env::var("PATH").unwrap_or_default()))
+    waiting_room().map(|at| search_path(Some(&at)))
+}
+
+pub fn path_without_stand_in() -> String {
+    search_path(None)
 }
 
 #[cfg(test)]
@@ -83,6 +106,12 @@ mod tests {
 
     fn v(a: &[&str]) -> Vec<String> {
         a.iter().map(|s| s.to_string()).collect()
+    }
+
+    #[test]
+    fn xwayland_is_looked_for_in_system_folders_only() {
+        assert_eq!(search_path(None), "/usr/bin:/bin");
+        assert_eq!(search_path(Some(std::path::Path::new("/usr/lib/trindle/x"))), "/usr/lib/trindle/x:/usr/bin:/bin");
     }
 
     #[test]

@@ -5,50 +5,51 @@
 use std::path::Path;
 
 use super::files;
+use crate::toolkit::t;
 use super::sheet::{self, Values, LOOK_KEY, NAMING, NAMING_KEY, THEME_KEY, THEME_MOST, TRIAL_FOR, TRIAL_KEY};
 
 const MOST: usize = 40;
 
 const LOOKED_AT: usize = 400;
 
-pub const TOO_BIG: &str = "This file is too big to be a theme, so it is not used. A theme is at most 64 KB.";
+pub fn too_big() -> &'static str { t!("common-theme-too-big") }
 
-pub const NOT_A_SHEET: &str = "This is not an ordinary file of words, so it cannot be a theme and is not used.";
+pub fn not_a_sheet() -> &'static str { t!("common-theme-not-a-sheet") }
 
-pub const GONE: &str = "Its file is no longer there.";
+pub fn gone() -> &'static str { t!("common-theme-gone") }
 
-pub const TOO_SLOW: &str = "Its file took too long to read, so it is not used.";
-pub const LIST_SLOW: &str = "The folders of themes took too long to read, so only Trindle's own look is listed.";
+pub fn too_slow() -> &'static str { t!("common-theme-too-slow") }
+pub fn list_slow() -> &'static str { t!("common-theme-list-slow") }
 
-pub const OWN_TOO_BIG: &str = "Your own style sheet, style.css, is over 256 KB, so it is not used.";
-pub const OWN_NOT_A_SHEET: &str = "Your own style sheet, style.css, is not an ordinary file of words, so it is not used.";
-pub const OWN_TOO_SLOW: &str = "Your own style sheet, style.css, took too long to read, so it is not used.";
+pub fn own_too_big() -> &'static str { t!("common-theme-own-too-big") }
+pub fn own_not_a_sheet() -> &'static str { t!("common-theme-own-not-a-sheet") }
+pub fn own_too_slow() -> &'static str { t!("common-theme-own-too-slow") }
 
-pub const OWN_HARD_TO_READ: &str = "Some colours are hard to read.";
-pub const OWN_NO_TARGET: &str = "Your own style sheet, style.css, is a link to a file that is not there, so it is not used.";
+pub fn own_hard_to_read() -> &'static str { t!("common-theme-own-hard-to-read") }
+pub fn own_no_target() -> &'static str { t!("common-theme-own-no-target") }
 
 const LIST_WITHIN: std::time::Duration = std::time::Duration::from_secs(2);
 
 pub fn why(unread: sheet::Unread) -> &'static str {
     match unread {
-        sheet::Unread::TooBig => TOO_BIG,
+        sheet::Unread::TooBig => too_big(),
 
-        sheet::Unread::NotASheet | sheet::Unread::NoTarget => NOT_A_SHEET,
-        sheet::Unread::TooSlow => TOO_SLOW,
-        sheet::Unread::Gone => GONE,
+        sheet::Unread::NotASheet | sheet::Unread::NoTarget => not_a_sheet(),
+        sheet::Unread::TooSlow => too_slow(),
+        sheet::Unread::Gone => gone(),
     }
 }
 
 pub fn own_sheet_trouble() -> Option<&'static str> {
     sheet::refused().own.map(|unread| match unread {
-        sheet::Unread::TooBig => OWN_TOO_BIG,
-        sheet::Unread::TooSlow => OWN_TOO_SLOW,
-        sheet::Unread::NotASheet | sheet::Unread::Gone => OWN_NOT_A_SHEET,
-        sheet::Unread::NoTarget => OWN_NO_TARGET,
+        sheet::Unread::TooBig => own_too_big(),
+        sheet::Unread::TooSlow => own_too_slow(),
+        sheet::Unread::NotASheet | sheet::Unread::Gone => own_not_a_sheet(),
+        sheet::Unread::NoTarget => own_no_target(),
     })
 }
 
-pub const NOT_ALL: &str = "A folder of themes may hold more than are listed: only the first forty themes in a folder are shown, and only its first 400 files are looked at.";
+pub fn not_all() -> &'static str { t!("common-theme-not-all") }
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Theme {
@@ -106,9 +107,21 @@ fn theme(id: &str, css: &str, mine: bool) -> Theme {
         }
         c
     };
-    Theme { id: id.to_string(), name, about: word(&v, "trindle-theme-about", 120), author: word(&v, "trindle-theme-author", 60),
+    let about = if mine { None } else { own_about(id) }.map_or_else(|| word(&v, "trindle-theme-about", 120), str::to_string);
+    Theme { id: id.to_string(), name, about, author: word(&v, "trindle-theme-author", 60),
             version: word(&v, "trindle-theme-version", 20), mine, css: if id.is_empty() { String::new() } else { css.to_string() },
             only: if id.is_empty() { None } else { sheet::one_look(css) }, refused: None }
+}
+
+fn own_about(id: &str) -> Option<&'static str> {
+    Some(match id {
+        "" => t!("common-theme-trindle-about"),
+        "bold" => t!("common-theme-bold-about"),
+        "midnight" => t!("common-theme-midnight-about"),
+        "paper" => t!("common-theme-paper-about"),
+        "snug" => t!("common-theme-snug-about"),
+        _ => return None,
+    })
 }
 
 fn refused(id: &str, mine: bool, why: &'static str) -> Theme {
@@ -153,12 +166,12 @@ pub fn listed() -> Listed {
     let (system, own) = (sheet::system_themes(), sheet::own_themes());
 
     sheet::within(LIST_WITHIN, move || listed_in(&system, &own))
-        .unwrap_or_else(|| Listed { themes: vec![theme("", sheet::CSS, false)], said: vec![LIST_SLOW] })
+        .unwrap_or_else(|| Listed { themes: vec![theme("", sheet::CSS, false)], said: vec![list_slow()] })
 }
 
 fn listed_in(system: &Path, own: &Path) -> Listed {
     let (themes, more) = list_of(system, own);
-    Listed { themes, said: if more { vec![NOT_ALL] } else { Vec::new() } }
+    Listed { themes, said: if more { vec![not_all()] } else { Vec::new() } }
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -224,7 +237,7 @@ pub fn chosen() -> String {
 }
 
 fn no_such() -> std::io::Error {
-    std::io::Error::new(std::io::ErrorKind::NotFound, "There is no theme of that name.")
+    std::io::Error::new(std::io::ErrorKind::NotFound, t!("common-themes-no-such"))
 }
 
 fn usable(id: &str) -> std::io::Result<()> {
@@ -235,11 +248,11 @@ fn usable(id: &str) -> std::io::Result<()> {
 }
 
 #[cfg(test)]
-fn usable_in(id: &str, file: Option<&Path>) -> std::io::Result<()> {
+fn usable_in(id: &str, own: &Path, system: &Path) -> std::io::Result<()> {
     if id.is_empty() {
         return Ok(());
     }
-    usable_as(file.map_or(Err(sheet::Unread::Gone), |f| if f.symlink_metadata().is_ok() { sheet::read_sheet(f, THEME_MOST) } else { Err(sheet::Unread::Gone) }))
+    usable_as(sheet::theme_words_in(id, own, system))
 }
 
 fn usable_as(words: Result<String, sheet::Unread>) -> std::io::Result<()> {
@@ -324,16 +337,16 @@ pub fn add(file: &Path) -> Result<String, String> {
 fn add_to(file: &Path, own: &Path, system: &Path) -> Result<String, String> {
     let name = file.file_name().map(|n| n.to_string_lossy().to_string()).unwrap_or_default();
     if !name.to_ascii_lowercase().ends_with(".css") {
-        return Err(format!("{name} is not a theme. A theme is one file whose name ends in .css."));
+        return Err(t!("common-theme-add-not-css", name = name.as_str()).to_string());
     }
-    let size = std::fs::metadata(file).map_err(|_| format!("{name} could not be read."))?.len();
+    let size = std::fs::metadata(file).map_err(|_| t!("common-theme-add-unreadable", name = name.as_str()).to_string())?.len();
     if size > THEME_MOST {
-        return Err(format!("{name} is too big to be a theme. A theme is at most 64 KB."));
+        return Err(t!("common-theme-add-too-big", name = name.as_str()).to_string());
     }
     let css = sheet::read_sheet(file, THEME_MOST).map_err(|why| match why {
-        sheet::Unread::TooBig => format!("{name} is too big to be a theme. A theme is at most 64 KB."),
-        sheet::Unread::NotASheet | sheet::Unread::Gone | sheet::Unread::NoTarget => format!("{name} is not a style sheet: it holds more than words."),
-        sheet::Unread::TooSlow => format!("{name} took too long to read."),
+        sheet::Unread::TooBig => t!("common-theme-add-too-big", name = name.as_str()).to_string(),
+        sheet::Unread::NotASheet | sheet::Unread::Gone | sheet::Unread::NoTarget => t!("common-theme-add-not-a-sheet", name = name.as_str()).to_string(),
+        sheet::Unread::TooSlow => t!("common-theme-add-too-slow", name = name.as_str()).to_string(),
     })?;
     crate::toolkit::theme::check(&css).map_err(|f| f.words())?;
 
@@ -344,7 +357,7 @@ fn add_to(file: &Path, own: &Path, system: &Path) -> Result<String, String> {
         id = format!("{base}-{n}");
         n += 1;
     }
-    keep_file(&own.join(format!("{id}.css")), &css).map_err(|e| format!("The theme could not be kept: {e}."))?;
+    keep_file(&own.join(format!("{id}.css")), &css).map_err(|e| t!("common-themes-not-kept", error = e.to_string()))?;
     Ok(id)
 }
 
@@ -363,7 +376,7 @@ fn keep_file(to: &Path, css: &str) -> std::io::Result<()> {
 
 pub fn remove(id: &str) -> std::io::Result<()> {
     if !sheet::theme_id(id) {
-        return Err(std::io::Error::new(std::io::ErrorKind::NotFound, "There is no theme of that name."));
+        return Err(std::io::Error::new(std::io::ErrorKind::NotFound, t!("common-themes-no-such")));
     }
     if sheet::chosen_theme() == id {
         choose("")?;
@@ -399,6 +412,31 @@ mod tests {
 
         assert_eq!(list(&dir.join("none"), &dir.join("nor-this")).len(), 1);
         let _ = std::fs::remove_dir_all(dir);
+    }
+
+    #[test]
+    fn the_themes_that_come_with_trindle_are_described_in_the_language() {
+        use crate::toolkit::lang::{english, with_catalogue, Bundle, Catalogue};
+        let folder = crate::common::source::root().join("share/themes");
+        let (mut ids, _) = ids_in(&folder);
+        for id in &ids {
+            let css = std::fs::read_to_string(folder.join(format!("{id}.css"))).unwrap();
+            let sheet = word(&Values::parse(&css), "trindle-theme-about", 120);
+            assert_eq!(theme(id, &css, false).about, sheet, "{id}: the English words are the sheet's");
+        }
+        assert_eq!(theme("", sheet::CSS, false).about, word(&Values::parse(sheet::CSS), "trindle-theme-about", 120));
+        ids.push(String::new());
+        let made_up = ids.iter().fold(String::new(), |mut all, id| {
+            all.push_str(&format!("common-theme-{}-about = Mots {id}.\n", if id.is_empty() { "trindle" } else { id }));
+            all
+        });
+        with_catalogue(Catalogue::new(Bundle::from_text("fr", &made_up), english()), || {
+            for id in &ids {
+                assert_eq!(theme(id, HARBOUR, false).about, format!("Mots {id}."), "{id:?}");
+                assert_eq!(theme(id, HARBOUR, true).about, "Cool greys.", "{id:?}: a person's own keeps its words");
+            }
+            assert_eq!(theme("harbour", HARBOUR, false).about, "Cool greys.");
+        });
     }
 
     #[test]
@@ -459,11 +497,11 @@ mod tests {
         };
         assert!(refused("picture.png", HARBOUR.as_bytes()).contains("ends in .css"));
         assert!(refused("big.css", &vec![b' '; 70 * 1024]).contains("too big"));
-        assert!(refused("binary.css", &[0xff, 0xfe, 0x00, 0x41]).contains("not a style sheet"));
+        assert!(refused("binary.css", &[0xff, 0xfe, 0x00, 0x41]).contains("isn't a style sheet"));
         assert_eq!(refused("wrong.css", b":root {\n  --trindle-page: #101820;\n  --trindle-card: porridge;\n}\n"),
-                   "Line 3: --trindle-card is not a colour Trindle can read.");
-        assert!(refused("empty.css", b"body { color: red; }").contains("Nothing in the file"));
-        assert!(add_to(&dir.join("not-there.css"), &own, &system).unwrap_err().contains("could not be read"));
+                   "Line 3: Trindle can't read --trindle-card as a colour.");
+        assert!(refused("empty.css", b"body { color: red; }").contains("doesn't recognise any settings"));
+        assert!(add_to(&dir.join("not-there.css"), &own, &system).unwrap_err().contains("couldn't read"));
 
         assert_eq!(ids_in(&own).0, ["harbour-2", "my-harbour-2", "theme"]);
         let _ = std::fs::remove_dir_all(dir);
@@ -482,7 +520,7 @@ mod tests {
         assert_eq!(sheet::read_sheet(&own.join("harbour.css"), THEME_MOST), Err(sheet::Unread::NotASheet));
         let all = list(&system, &own);
         assert_eq!(all.len(), 2);
-        assert_eq!((all[1].id.as_str(), all[1].refused, all[1].css.as_str(), all[1].name.as_str()), ("harbour", Some(NOT_A_SHEET), "", "Harbour"));
+        assert_eq!((all[1].id.as_str(), all[1].refused, all[1].css.as_str(), all[1].name.as_str()), ("harbour", Some(not_a_sheet()), "", "Harbour"));
         assert!(!format!("{:?}", all[1]).contains("keep me"));
 
         let from = dir.join("harbour.css");
@@ -646,8 +684,8 @@ mod tests {
         std::fs::create_dir_all(own.join("snug.css")).unwrap();
         let all = list(&system, &own);
         let seen: Vec<(&str, bool, Option<&str>)> = all.iter().map(|t| (t.id.as_str(), t.mine, t.refused)).collect();
-        assert_eq!(seen, [("", false, None), ("paper", false, None), ("snug", false, None), ("binary", true, Some(NOT_A_SHEET)),
-                          ("bold", true, Some(NOT_A_SHEET)), ("linked", true, Some(NOT_A_SHEET)), ("pipe", true, Some(NOT_A_SHEET))]);
+        assert_eq!(seen, [("", false, None), ("paper", false, None), ("snug", false, None), ("binary", true, Some(not_a_sheet())),
+                          ("bold", true, Some(not_a_sheet())), ("linked", true, Some(not_a_sheet())), ("pipe", true, Some(not_a_sheet()))]);
 
         assert_eq!(sheet::theme_file_in("bold", &own, &system), Some(own.join("bold.css")));
         assert_eq!(sheet::theme_file_in("pipe", &own, &system), Some(own.join("pipe.css")));
@@ -655,10 +693,10 @@ mod tests {
         assert_eq!(sheet::theme_file_in("paper", &own, &system), Some(system.join("paper.css")));
         assert_eq!(sheet::theme_file_in("none", &own, &system), None);
         for id in ["bold", "linked", "pipe", "binary"] {
-            let no = usable_in(id, sheet::theme_file_in(id, &own, &system).as_deref()).unwrap_err();
-            assert_eq!(no.to_string(), NOT_A_SHEET, "{id}");
+            let no = usable_in(id, &own, &system).unwrap_err();
+            assert_eq!(no.to_string(), not_a_sheet(), "{id}");
         }
-        assert!(!NOT_A_SHEET.contains('\u{2014}') && NOT_A_SHEET.ends_with('.'));
+        assert!(!not_a_sheet().contains('\u{2014}') && not_a_sheet().ends_with('.'));
         let _ = std::fs::remove_dir_all(dir);
     }
 
@@ -669,9 +707,9 @@ mod tests {
         std::fs::write(system.join("harbour.css"), HARBOUR).unwrap();
         std::fs::write(own.join("grown.css"), vec![b' '; THEME_MOST as usize + 1]).unwrap();
         std::os::unix::fs::symlink(dir.join("nowhere.css"), own.join("harbour-2.css")).unwrap();
-        assert_eq!(unusable_in("grown", &own, &system), Some(("Grown".to_string(), TOO_BIG)));
-        assert_eq!(unusable_in("harbour-2", &own, &system), Some(("Harbour 2".to_string(), NOT_A_SHEET)));
-        assert_eq!(unusable_in("taken-away", &own, &system), Some(("Taken away".to_string(), GONE)));
+        assert_eq!(unusable_in("grown", &own, &system), Some(("Grown".to_string(), too_big())));
+        assert_eq!(unusable_in("harbour-2", &own, &system), Some(("Harbour 2".to_string(), not_a_sheet())));
+        assert_eq!(unusable_in("taken-away", &own, &system), Some(("Taken away".to_string(), gone())));
 
         assert_eq!(unusable_in("harbour", &own, &system), None);
         assert_eq!(unusable_in("", &own, &system), None);
@@ -689,13 +727,13 @@ mod tests {
         assert_eq!((all.themes.len(), all.said.as_slice()), (1 + MOST, &[][..]), "forty are all shown");
         std::fs::write(own.join("theme-999.css"), HARBOUR).unwrap();
         let all = listed_in(&system, &own);
-        assert_eq!((all.themes.len(), all.said.as_slice()), (1 + MOST, &[NOT_ALL][..]));
+        assert_eq!((all.themes.len(), all.said.as_slice()), (1 + MOST, &[not_all()][..]));
 
         let shown = all.themes.iter().filter(|t| t.mine).count();
         let names = |theme_at: usize| (0..1000).map(move |n| if n == theme_at { "harbour.css".to_string() } else { format!("note-{n}.txt") });
         let looked = (0..1000).take_while(|at| ids_among(names(*at)).0 == ["harbour"]).count();
         assert_eq!((shown, looked), (40, 400));
-        assert!(NOT_ALL.contains("first forty themes") && NOT_ALL.contains(&format!("first {looked} files")), "{NOT_ALL}");
+        assert!(not_all().contains("first forty themes") && not_all().contains(&format!("first {looked} files")), "{}", not_all());
 
         let _ = std::fs::remove_dir_all(dir);
         let dir = room("overfull");
@@ -703,7 +741,7 @@ mod tests {
         for n in 0..=LOOKED_AT {
             std::fs::write(own.join(format!("note-{n}.txt")), "").unwrap();
         }
-        assert_eq!(listed_in(&system, &own).said, [NOT_ALL]);
+        assert_eq!(listed_in(&system, &own).said, [not_all()]);
         let _ = std::fs::remove_dir_all(dir);
     }
 
@@ -735,17 +773,17 @@ mod tests {
         let all = list(&system, &own);
         let seen: Vec<(&str, &str, Option<&str>, &str)> = all.iter().map(|t| (t.id.as_str(), t.name.as_str(), t.refused, t.css.as_str())).collect();
         assert_eq!(seen[0], ("", "Trindle", None, ""));
-        assert_eq!(seen[1], ("huge", "Huge", Some(TOO_BIG), ""));
+        assert_eq!(seen[1], ("huge", "Huge", Some(too_big()), ""));
         assert_eq!((seen[2].0, seen[2].1, seen[2].2), ("just-fits", "Harbour", None));
-        assert_eq!(seen[3], ("too-big", "Too big", Some(TOO_BIG), ""));
+        assert_eq!(seen[3], ("too-big", "Too big", Some(too_big()), ""));
         assert!(all[3].mine && !all[1].mine);
 
-        let no = usable_in("too-big", Some(&own.join("too-big.css"))).unwrap_err();
-        assert_eq!(no.to_string(), TOO_BIG);
-        assert!(usable_in("just-fits", Some(&own.join("just-fits.css"))).is_ok());
-        assert!(usable_in("gone", None).is_err() && usable_in("gone", Some(&own.join("gone.css"))).is_err());
-        assert!(usable_in("", None).is_ok(), "Trindle's own look needs no file");
-        assert!(!TOO_BIG.contains('\u{2014}') && TOO_BIG.ends_with('.'));
+        let no = usable_in("too-big", &own, &system).unwrap_err();
+        assert_eq!(no.to_string(), too_big());
+        assert!(usable_in("just-fits", &own, &system).is_ok());
+        assert!(usable_in("gone", &own, &system).is_err());
+        assert!(usable_in("", &own, &system).is_ok(), "Trindle's own look needs no file");
+        assert!(!too_big().contains('\u{2014}') && too_big().ends_with('.'));
         let _ = std::fs::remove_dir_all(dir);
     }
 

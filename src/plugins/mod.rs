@@ -152,6 +152,7 @@ pub fn main(args: Vec<String>) -> i32 {
         },
         ("shortcuts", _) => list_shortcuts(),
         ("list", _) => list_plugins(),
+        ("offers", _) => list_offers(),
         ("run", id) if !id.is_empty() => run(id, arg(3), arg(4), args.get(4..).unwrap_or_default()),
 
         #[cfg(any(test, feature = "publisher"))]
@@ -175,7 +176,7 @@ pub fn main(args: Vec<String>) -> i32 {
         },
         _ => {
             eprintln!("trindle-plugin: remove ID, list, shortcuts, run ID ring|background|menu ITEM|shortcut ITEM|pin COMPUTER|unlock COMPUTER, \
-                       ask ID [again], restart ID, firewall ID or close ID");
+                       ask ID [again], restart ID, firewall ID, close ID or offers");
             2
         }
     }
@@ -186,6 +187,14 @@ fn list_shortcuts() -> i32 {
     for b in shortcuts::bindings() {
         let keys = b.keys.as_ref().map_or("off".to_string(), |k| k.shown());
         println!("{}\t{}\t{keys}\t{}", b.plugin, b.id, b.refused.as_deref().unwrap_or(""));
+    }
+    0
+}
+
+fn list_offers() -> i32 {
+    let clean = |s: &str| s.replace(['\t', '\n', '\r'], " ");
+    for o in catalogue::gather().0 {
+        println!("{}\t{}\t{}", clean(&o.entry.name), clean(&o.entry.summary), o.icon.as_deref().map_or(String::new(), |p| clean(&p.to_string_lossy())));
     }
     0
 }

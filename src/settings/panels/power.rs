@@ -5,16 +5,17 @@ use std::collections::HashMap;
 
 use zbus::zvariant::{OwnedValue, Value};
 use zbus::Message;
+use zeroize::{Zeroize, Zeroizing};
 
 use crate::common::files::{set_setting, setting};
 use crate::common::pin;
-use crate::common::run::{admin_error, admin_helper, capture, spawn};
+use crate::common::run::spawn;
 use crate::session::idle;
-use crate::settings::ui::{confirm, confirm_by_hand, dropdown, group, headline, kept, line, no_more, on, page, Kit, Msg, Page, not_saved, SAVE_ICON};
+use crate::settings::ui::{admin_step, confirm, confirm_by_hand, dropdown, group, headline, kept, line, no_more, on, page, Kit, Msg, Page, not_saved, place_or_extra, SAVE_ICON};
 use crate::toolkit::bus::{get_bool, get_f64, get_i64, get_str, get_u32, Failed, Listen, Props};
 use crate::toolkit::theme::Palette;
 use crate::toolkit::tiles::sketch;
-use crate::toolkit::widget::{button, column, entry, note, row, switch, Length, Node, Secret, Tone};
+use crate::toolkit::widget::{button, column, entry, note, switch, Length, Node, Secret, Tone};
 use crate::toolkit::t;
 
 const UPOWER: &str = "org.freedesktop.UPower";
@@ -76,12 +77,12 @@ fn lid_choices() -> [(&'static str, &'static str); 5] {
 
 const WARN_LEVELS: &[u32] = &[0, 5, 10, 15, 20, 25, 30];
 
-fn timers() -> [(&'static str, &'static str, &'static str); 4] {
+fn timers() -> [(&'static str, &'static str); 4] {
     [
-        ("dim_after", t!("settings-power-timer-dim"), t!("settings-power-timer-dim-about")),
-        ("screensaver_after", t!("settings-power-timer-clock"), t!("settings-power-timer-clock-about")),
-        ("blank_after", t!("settings-power-timer-off"), t!("settings-power-timer-off-about")),
-        ("suspend_after", t!("settings-power-timer-suspend"), t!("settings-power-timer-suspend-about")),
+        ("dim_after", t!("settings-power-timer-dim")),
+        ("screensaver_after", t!("settings-power-timer-clock")),
+        ("blank_after", t!("settings-power-timer-off")),
+        ("suspend_after", t!("settings-power-timer-suspend")),
     ]
 }
 
@@ -119,6 +120,10 @@ impl When {
             When::Charger => t!("settings-power-named-charger", title = title),
         }
     }
+}
+
+fn minutes_in_words(raw: &str) -> String {
+    raw.trim().parse::<u32>().map_or_else(|_| raw.to_string(), pin::window_label)
 }
 
 fn profile_name(p: &str) -> String {
@@ -202,6 +207,8 @@ pub struct Power {
     pin_set: bool,
 
     pin: String,
+
+    account: Zeroizing<String>,
     values: HashMap<String, String>,
     hearing: Option<Listen>,
 }
@@ -231,7 +238,7 @@ impl Page for Power {
         };
 
         page(kit, self.title(), self.help(), vec![
-            headline(kit, words),
+            headline(words),
             self.battery_card(kit),
             self.screen_card(kit),
             self.sleep_card(kit),
@@ -377,31 +384,32 @@ impl Power {
         if self.profiles.is_empty() {
             return None;
         }
-        let names: Vec<String> = self.profiles.iter().map(|p| profile_name(p)).collect();
-        let chosen = self.profiles.iter().position(|p| *p == self.active);
+        let mut names: Vec<String> = self.profiles.iter().map(|p| profile_name(p)).collect();
+        let found = self.profiles.iter().position(|p| *p == self.active);
+        let chosen = (found.is_some() || !self.active.is_empty()).then(|| place_or_extra(&mut names, found, &profile_name(&self.active)));
         let ids = self.profiles.clone();
-        let pick = dropdown(kit, MODE, names, chosen, t!("settings-power-mode"), move |i| {
-            let id = ids[i].clone();
+        let pick = dropdown(MODE, names, chosen, t!("settings-power-mode"), move |i| {
+            let Some(id) = ids.get(i).cloned() else { return on::<Power>(|_, _| {}) };
             on::<Power>(move |me, k| me.choose_profile(k, id.clone()))
         });
         Some(line(t!("settings-power-mode"))
-            .sub(t!("settings-power-mode-about"))
             .key(MODE)
             .below(pick)
             .node(kit))
     }
 
-    fn timed(&self, kit: &Kit, line_key: &'static str, key: String, title: &str, caption: Option<When>,
+    fn timed(&self, line_key: &'static str, key: String, title: &str, caption: Option<When>,
              options: Vec<(&'static str, &'static str)>, restart: bool) -> Node<Msg> {
         let now = self.value(&key);
-        let chosen = options.iter().position(|(v, _)| *v == now).or(Some(0));
-        let names: Vec<String> = options.iter().map(|(_, l)| l.to_string()).collect();
+        let mut names: Vec<String> = options.iter().map(|(_, l)| l.to_string()).collect();
+        let chosen = Some(place_or_extra(&mut names, options.iter().position(|(v, _)| *v == now), &minutes_in_words(&now)));
         let values: Vec<&'static str> = options.iter().map(|(v, _)| *v).collect();
         let dd_key = format!("power:dd:{key}");
 
         let named = caption.map_or_else(|| title.to_string(), |c| c.named(title));
-        let pick = dropdown(kit, &dd_key, names, chosen, &named, move |i| {
-            let (key, value) = (key.clone(), values[i]);
+        let pick = dropdown(&dd_key, names, chosen, &named, move |i| {
+            let Some(&value) = values.get(i) else { return on::<Power>(|_, _| {}) };
+            let key = key.clone();
             on::<Power>(move |me, k| {
                 if me.save(k, line_key, &key, value, restart) {
                     k.say(line_key, t!("settings-power-saved"), true, false);
@@ -414,21 +422,20 @@ impl Power {
         }
     }
 
-    fn timer_line(&self, kit: &Kit, key: &'static str, title: &str, sub: &str) -> Node<Msg> {
-        let l = line(title).sub(sub).key(key);
+    fn timer_line(&self, kit: &Kit, key: &'static str, title: &str) -> Node<Msg> {
+        let l = line(title).key(key);
         if !self.laptop {
-            return l.control(self.timed(kit, key, key.to_string(), title, None, times(), true)).node(kit);
+            return l.control(self.timed(key, key.to_string(), title, None, times(), true)).node(kit);
         }
-        l.below(row(vec![
-            self.timed(kit, key, format!("{key}_battery"), title, Some(When::Battery), times(), true),
-            self.timed(kit, key, key.to_string(), title, Some(When::Charger), times(), true),
-        ]).gap(PAIR_GAP)).node(kit)
+        l.below(pair(vec![
+            self.timed(key, format!("{key}_battery"), title, Some(When::Battery), times(), true),
+            self.timed(key, key.to_string(), title, Some(When::Charger), times(), true),
+        ])).node(kit)
     }
 
     fn screen_card(&self, kit: &Kit) -> Node<Msg> {
 
         let awake = line(t!("settings-power-awake"))
-            .sub(t!("settings-power-awake-about"))
             .key(AWAKE)
             .control(switch(self.awake, t!("settings-power-awake"), |v| on::<Power>(move |me, k| {
                 idle::set_keep_awake(v);
@@ -438,8 +445,8 @@ impl Power {
             })))
             .node(kit);
         let mut rows = vec![awake];
-        for &(key, title, sub) in &timers()[..2] {
-            rows.push(self.timer_line(kit, key, title, sub));
+        for &(key, title) in &timers()[..2] {
+            rows.push(self.timer_line(kit, key, title));
         }
 
         group(t!("settings-power-screen-title")).icon("video-display-symbolic")
@@ -449,17 +456,16 @@ impl Power {
     }
 
     fn sleep_card(&self, kit: &Kit) -> Node<Msg> {
-        let mut rows: Vec<Node<Msg>> = timers()[2..].iter().map(|&(key, title, sub)| self.timer_line(kit, key, title, sub)).collect();
+        let mut rows: Vec<Node<Msg>> = timers()[2..].iter().map(|&(key, title)| self.timer_line(kit, key, title)).collect();
 
         if self.laptop {
-            let pair = [("lid_close_battery", When::Battery), ("lid_close", When::Charger)]
+            let pair_of_lids = [("lid_close_battery", When::Battery), ("lid_close", When::Charger)]
                 .iter()
-                .map(|&(key, when)| self.lid(kit, key, when))
+                .map(|&(key, when)| self.lid(key, when))
                 .collect();
             rows.push(line(t!("settings-power-lid"))
-                .sub(t!("settings-power-lid-about"))
                 .key("lid_close")
-                .below(row(pair).gap(PAIR_GAP))
+                .below(pair(pair_of_lids))
                 .node(kit));
         }
         group(t!("settings-power-sleep-title")).icon("system-suspend-symbolic")
@@ -470,10 +476,10 @@ impl Power {
 
     fn battery_card(&self, kit: &Kit) -> Node<Msg> {
         let level = self.warn_level();
-        let names: Vec<String> = WARN_LEVELS.iter().map(|l| if *l == 0 { t!("settings-power-never").to_string() } else { format!("{l}%") }).collect();
-        let chosen = WARN_LEVELS.iter().position(|l| *l == level).or(Some(0));
-        let warn = dropdown(kit, "power:dd:battery_warn", names, chosen, t!("settings-power-warn-name"), |i| {
-            let v = WARN_LEVELS[i].to_string();
+        let mut names: Vec<String> = WARN_LEVELS.iter().map(|l| if *l == 0 { t!("settings-power-never").to_string() } else { format!("{l}%") }).collect();
+        let chosen = Some(place_or_extra(&mut names, WARN_LEVELS.iter().position(|l| *l == level), &format!("{level}%")));
+        let warn = dropdown("power:dd:battery_warn", names, chosen, t!("settings-power-warn-name"), |i| {
+            let Some(v) = WARN_LEVELS.get(i).map(|l| l.to_string()) else { return on::<Power>(|_, _| {}) };
             on::<Power>(move |me, k| {
                 if me.save(k, "battery_warn", "battery_warn", &v, false) {
                     k.say("battery_warn", t!("settings-power-saved"), true, false);
@@ -482,14 +488,12 @@ impl Power {
         });
         let mut rows: Vec<Node<Msg>> = self.mode_line(kit).into_iter().collect();
         rows.push(line(t!("settings-power-warn"))
-            .sub(t!("settings-power-warn-about"))
             .key("battery_warn")
             .control(warn)
             .node(kit));
 
         if self.limit_supported {
             rows.push(line(t!("settings-power-limit"))
-                .sub(t!("settings-power-limit-about"))
                 .key(LIMIT)
                 .control(switch(self.limit_on, t!("settings-power-limit"), |v| on::<Power>(move |me, k| me.charge_limit(k, v))))
                 .node(kit));
@@ -514,57 +518,47 @@ impl Power {
             .node(kit)
     }
 
-    fn lid(&self, kit: &Kit, key: &'static str, when: When) -> Node<Msg> {
+    fn lid(&self, key: &'static str, when: When) -> Node<Msg> {
         let choices: Vec<(&'static str, &'static str)> =
             lid_choices().into_iter().filter(|(id, _)| *id != "hibernate" || self.can_hibernate).collect();
         let now = self.value(key);
-        let chosen = choices.iter().position(|(v, _)| *v == now).or(Some(0));
-        let names: Vec<String> = choices.iter().map(|(_, l)| l.to_string()).collect();
-        let pick = dropdown(kit, &format!("power:dd:{key}"), names, chosen, when.caption(), move |i| {
-            let value = choices[i].0;
+        let mut names: Vec<String> = choices.iter().map(|(_, l)| l.to_string()).collect();
+        let in_words = lid_choices().iter().find(|(v, _)| *v == now).map_or_else(|| now.clone(), |(_, l)| l.to_string());
+        let chosen = Some(place_or_extra(&mut names, choices.iter().position(|(v, _)| *v == now), &in_words));
+
+        let pick = crate::toolkit::widget::dropdown(names, chosen, when.caption(), move |i| {
+            let Some(&(value, _)) = choices.get(i) else { return on::<Power>(|_, _| {}) };
             on::<Power>(move |me, k| {
                 if me.save(k, "lid_close", key, value, false) {
                     k.say("lid_close", t!("settings-power-saved"), true, false);
                 }
             })
-        });
+        })
+        .key(format!("dropdown:power:dd:{key}"));
         column(vec![note(when.caption().to_string()), pick]).gap(4.0)
     }
 
     fn charge_limit(&mut self, kit: &mut Kit, on: bool) {
         self.limit_on = on;
-        kit.say(LIMIT, t!("settings-power-limit-waiting"), true, true);
-        let back = kit.then::<Power, (bool, String, String)>(move |me, k, (ok, _, err)| {
-            let err = admin_error(&err);
-            k.done(LIMIT, if ok { None } else { Some(&err) }, if on { t!("settings-power-limit-on") } else { t!("settings-power-limit-off") });
+        let done = if on { t!("settings-power-limit-on") } else { t!("settings-power-limit-off") };
+        admin_step::<Power>(kit, LIMIT, &["charge-limit", if on { "on" } else { "off" }], t!("settings-power-limit-waiting"), done, move |me, _, ok| {
             if !ok {
                 me.limit_on = !on;
             }
         });
-        let helper = admin_helper();
-        capture(&["pkexec", &helper, "charge-limit", if on { "on" } else { "off" }], None,
-                move |ok, out, err| back((ok, out, err)));
     }
 
     fn locking_card(&self, kit: &Kit) -> Node<Msg> {
         let lock_on = self.value("lock") == "on";
         let mut rows = vec![line(t!("settings-power-lock"))
-            .sub(t!("settings-power-lock-about"))
             .key(LOCK)
-            .control(switch(lock_on, t!("settings-power-lock"), |now| on::<Power>(move |me, k| {
-                if me.save(k, LOCK, "lock", if now { "on" } else { "off" }, false) {
-                    if !now {
-                        me.forget_pin(k, LOCK);
-                    }
-                    idle::restart();
-                }
-            })))
+            .control(switch(lock_on, t!("settings-power-lock"), |now| on::<Power>(move |me, k| me.lock_switched(k, now))))
             .node(kit)];
 
         let off = !lock_on;
         rows.extend(self.lock_rows(kit, off));
         group(t!("settings-power-lock-title")).icon("system-lock-screen-symbolic")
-            .about(t!("settings-power-lock-card-about"))
+            .about(format!("{} {}", t!("settings-power-lock-card-about"), t!("settings-power-lock-now-about")))
             .rows(rows)
             .node(kit)
     }
@@ -576,11 +570,11 @@ impl Power {
             after = "10".into();
         }
         let lock_times = lock_times();
-        let chosen = lock_times.iter().position(|(v, _)| *v == after).or(Some(0));
-        let names: Vec<String> = lock_times.iter().map(|(_, l)| l.to_string()).collect();
+        let mut names: Vec<String> = lock_times.iter().map(|(_, l)| l.to_string()).collect();
+        let chosen = Some(place_or_extra(&mut names, lock_times.iter().position(|(v, _)| *v == after), &minutes_in_words(&after)));
         let values: Vec<&'static str> = lock_times.iter().map(|(v, _)| *v).collect();
-        let pick = dropdown(kit, "power:dd:lock_after", names, chosen, t!("settings-power-lock-after-name"), move |i| {
-            let v = values[i];
+        let pick = dropdown("power:dd:lock_after", names, chosen, t!("settings-power-lock-after-name"), move |i| {
+            let Some(&v) = values.get(i) else { return on::<Power>(|_, _| {}) };
             on::<Power>(move |me, k| {
                 if me.save(k, "lock_after", "lock_after", v, true) {
                     k.say("lock_after", t!("settings-power-saved"), true, false);
@@ -588,12 +582,10 @@ impl Power {
             })
         });
         rows.push(line(t!("settings-power-lock-after-name"))
-            .sub(t!("settings-power-lock-after-about"))
             .key("lock_after")
             .control(pick)
             .node(kit).off(off));
         rows.push(line(t!("settings-power-lock-sleep"))
-            .sub(t!("settings-power-lock-sleep-about"))
             .key("lock_on_suspend")
             .control(switch(self.value("lock_on_suspend") != "no", t!("settings-power-lock-sleep"), |v| on::<Power>(move |me, k| {
                 if me.save(k, "lock_on_suspend", "lock_on_suspend", if v { "yes" } else { "no" }, true) {
@@ -602,7 +594,6 @@ impl Power {
             })))
             .node(kit).off(off));
         rows.push(line(t!("settings-power-lock-now"))
-            .sub(t!("settings-power-lock-now-about"))
             .key(LOCK_NOW)
             .control(button("system-lock-screen-symbolic", t!("settings-power-lock-now")).on_press(on::<Power>(|_, k| {
                 let started = spawn(&["trindle-lock"]);
@@ -618,16 +609,15 @@ impl Power {
         let mut rows = Vec::new();
         if !self.pin_set {
             rows.push(line(t!("settings-power-pin-add"))
-                .sub(t!("settings-power-pin-add-about"))
                 .key(PIN)
                 .controls(self.pin_entry())
                 .node(kit));
         } else {
             let minutes = self.value("pin_minutes").parse().unwrap_or_else(|_| pin::minutes());
-            let names: Vec<String> = pin::WINDOWS.iter().map(|m| pin::window_label(*m)).collect();
-            let chosen = pin::WINDOWS.iter().position(|m| *m == minutes).or(Some(0));
-            let pick = dropdown(kit, "power:dd:pin_minutes", names, chosen, t!("settings-power-pin-works-name"), |i| {
-                let v = pin::WINDOWS[i].to_string();
+            let mut names: Vec<String> = pin::WINDOWS.iter().map(|m| pin::window_label(*m)).collect();
+            let chosen = Some(place_or_extra(&mut names, pin::WINDOWS.iter().position(|m| *m == minutes), &pin::window_label(minutes)));
+            let pick = dropdown("power:dd:pin_minutes", names, chosen, t!("settings-power-pin-works-name"), |i| {
+                let Some(v) = pin::WINDOWS.get(i).map(|m| m.to_string()) else { return on::<Power>(|_, _| {}) };
                 on::<Power>(move |me, k| {
                     if me.save(k, "pin_minutes", "pin_minutes", &v, false) {
                         k.say("pin_minutes", t!("settings-power-saved"), true, false);
@@ -635,14 +625,12 @@ impl Power {
                 })
             });
             rows.push(line(t!("settings-power-pin-works-name"))
-                .sub(t!("settings-power-pin-works-about"))
                 .key("pin_minutes")
                 .control(pick)
                 .node(kit));
             let mut controls = self.pin_entry();
-            controls.push(confirm::<Power>(kit, PIN, "user-trash-symbolic", t!("settings-power-pin-stop"), |me, k| me.forget_pin(k, PIN)));
+            controls.push(confirm::<Power>(PIN, "user-trash-symbolic", t!("settings-power-pin-stop"), |me, k| me.forget_pin(k, PIN)));
             rows.push(line(t!("settings-power-pin-kept"))
-                .sub(t!("settings-power-pin-kept-about"))
                 .key(PIN)
                 .controls(controls)
                 .node(kit));
@@ -653,6 +641,13 @@ impl Power {
     fn pin_entry(&self) -> Vec<Node<Msg>> {
         let keep = on::<Power>(|me, k| me.keep_pin(k));
         vec![
+            entry(self.account.to_string(), t!("settings-power-pin-password"), |t| {
+                on::<Power>(move |me, _| me.account = Zeroizing::new(t.clone()))
+            })
+            .key("power:pin-password")
+            .secret()
+            .on_submit(keep.clone())
+            .width(Length::Fixed(170.0)),
             entry(self.pin.clone(), t!("settings-power-pin-new"), |t| {
                 let clean: String = t.chars().filter(|c| c.is_ascii_digit()).take(pin::LENGTH).collect();
                 on::<Power>(move |me, _| me.pin = clean.clone())
@@ -671,16 +666,43 @@ impl Power {
         kit.settle_quietly(line, kept(!self.pin_set), t!("settings-power-pin-not-removed"));
     }
 
+    fn lock_switched(&mut self, kit: &mut Kit, now: bool) {
+        if !now && !crate::toolkit::window::persons_own(crate::common::person_only::SETTINGS_POWER) {
+            return;
+        }
+        if self.save(kit, LOCK, "lock", if now { "on" } else { "off" }, false) {
+            if !now {
+                self.forget_pin(kit, LOCK);
+            }
+            idle::restart();
+        }
+    }
+
     fn keep_pin(&mut self, kit: &mut Kit) {
         if !pin::valid(&self.pin) {
             kit.say(PIN, &t!("settings-power-pin-digits", n = pin::LENGTH), false, false);
+            return;
+        }
+        if self.account.is_empty() {
+            kit.say(PIN, t!("settings-power-pin-need-password"), false, false);
+            return;
+        }
+        let (user, password) = (crate::session::lock::account_name(), std::mem::take(&mut self.account));
+        let checked = kit.then::<Power, bool>(|me, k, ok| me.pin_checked(k, ok));
+        crate::common::run::on_thread(move || crate::session::lock::password_ok(&user, &password), checked);
+    }
+
+    fn pin_checked(&mut self, kit: &mut Kit, right: bool) {
+        if !right {
+            self.pin.zeroize();
+            kit.say(PIN, t!("settings-power-pin-wrong-password"), false, false);
             return;
         }
         if let Err(e) = pin::set(&self.pin) {
             kit.say(PIN, &e, false, false);
             return;
         }
-        self.pin.clear();
+        self.pin.zeroize();
         self.pin_set = true;
         idle::restart();
         kit.say(PIN, t!("settings-power-saved"), true, false);
@@ -688,14 +710,13 @@ impl Power {
 
     fn session_card(&self, kit: &Kit) -> Node<Msg> {
         let mut rows = vec![line(t!("settings-power-log-out"))
-            .sub(t!("settings-power-log-out-about"))
-            .control(confirm_by_hand::<Power>(kit, "power:logout", "system-log-out-symbolic", t!("settings-power-log-out"), crate::common::person_only::SETTINGS_POWER, |me, k| me.way_out(k, None)))
+            .control(confirm_by_hand::<Power>("power:logout", "system-log-out-symbolic", t!("settings-power-log-out"), crate::common::person_only::SETTINGS_POWER, |me, k| me.way_out(k, None)))
             .node(kit)];
         rows.extend(session().iter().map(|&(title, method, icon)| {
             let key = format!("power:{method}");
             line(title)
                 .key(key.clone())
-                .control(confirm_by_hand::<Power>(kit, &key, icon, title, crate::common::person_only::SETTINGS_POWER, move |me, k| me.way_out(k, Some(method))))
+                .control(confirm_by_hand::<Power>(&key, icon, title, crate::common::person_only::SETTINGS_POWER, move |me, k| me.way_out(k, Some(method))))
                 .node(kit)
         }));
         group(t!("settings-power-session-title")).icon("system-shutdown-symbolic")
@@ -798,7 +819,9 @@ fn limits_art(warn: u32, limit: bool) -> Node<Msg> {
     })
 }
 
-const PAIR_GAP: f32 = 24.0;
+fn pair(both: Vec<Node<Msg>>) -> Node<Msg> {
+    crate::toolkit::widget::flow(both)
+}
 
 #[cfg(test)]
 impl Power {
@@ -811,6 +834,10 @@ impl Power {
     }
 
     pub(crate) fn made_up() -> Power {
+        Power::made_up_with(true)
+    }
+
+    pub(crate) fn made_up_with(can_hibernate: bool) -> Power {
         let values = [
             ("dim_after", "5"), ("dim_after_battery", "2"), ("screensaver_after", "0"), ("screensaver_after_battery", "0"),
             ("blank_after", "10"), ("blank_after_battery", "5"), ("suspend_after", "30"), ("suspend_after_battery", "15"),
@@ -819,13 +846,41 @@ impl Power {
         ];
         Power { charge: Some(Charge { percent: 82.0, state: 2, left: "4 h 10 min".into() }),
                 profiles: vec!["power-saver".into(), "balanced".into(), "performance".into()], active: "balanced".into(),
-                mode_name: "Balanced".into(), read: 3, laptop: true, limit_supported: true, can_hibernate: true,
+                mode_name: "Balanced".into(), read: 3, laptop: true, limit_supported: true, can_hibernate,
                 values: values.iter().map(|(k, v)| (k.to_string(), v.to_string())).collect(), ..Power::default() }
     }
 }
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn no_line_under_a_power_control_explains_it() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let kit = Kit::new(events, asks, None, None);
+        let said = Power::made_up().view(&kit).said().join("|");
+        for old in [
+            "Battery saver runs cooler. Performance runs faster.",
+            "The cup in the ring does the same.",
+            "Not while a second screen is plugged in.",
+            "It shows once, in the middle.",
+            "Best if it's mostly plugged in.",
+            "Your password or a PIN unlocks it.",
+            "Move the mouse to brighten it again.",
+            "Only the time, drifting slowly.",
+            "A key or the mouse wakes it.",
+            "If nobody uses it for this long.",
+            "Back to the login screen.",
+            "Or press Super and L.",
+            "Four digits, quicker than your password.",
+            "Locks after this long without use, whatever else is set.",
+            "So it always wakes up locked.",
+            "After that, you need your password.",
+        ] {
+            assert!(!said.contains(old), "{old} is still on the page");
+        }
+    }
     #[test]
     fn a_low_battery_is_orange_and_never_red() {
         for pct in 0..=100 {
@@ -851,6 +906,32 @@ mod tests {
         own + n.items().iter().map(pictures).sum::<usize>()
     }
 
+    fn chosen_words(n: &Node<Msg>, out: &mut Vec<String>) {
+        match &n.what {
+            crate::toolkit::widget::What::Dropdown { options, chosen: Some(c), .. } => out.extend(options.get(*c).cloned()),
+            crate::toolkit::widget::What::Choice { options, chosen, .. } => out.extend(options.get(*chosen).cloned()),
+            _ => {}
+        }
+        for item in n.items() {
+            chosen_words(item, out);
+        }
+    }
+
+    #[test]
+    fn a_saved_value_not_in_a_list_is_shown_in_words() {
+        let kit = kit();
+        let mut p = Power::made_up_with(false);
+        p.values.insert("lid_close".into(), "hibernate".into());
+        p.values.insert("dim_after".into(), "7".into());
+        p.values.insert("lock_after".into(), "25".into());
+        p.active = "quiet".into();
+        let mut shown = Vec::new();
+        chosen_words(&p.view(&kit), &mut shown);
+        for want in [t!("settings-power-lid-hibernate").to_string(), pin::window_label(7), pin::window_label(25), "quiet".to_string()] {
+            assert!(shown.contains(&want), "{want} is not shown as chosen: {shown:?}");
+        }
+    }
+
     #[test]
     fn the_time_pies_are_gone_and_the_battery_pictures_stay() {
         let (p, kit) = (Power::made_up(), kit());
@@ -861,7 +942,7 @@ mod tests {
         let plain = Power { profiles: Vec::new(), ..Power::made_up() };
         assert_eq!(pictures(&plain.battery_card(&kit)), 2, "the battery and the charge bar");
         let said = p.view(&kit).said();
-        for &(_, line, _) in &timers() {
+        for &(_, line) in &timers() {
             assert!(said.iter().any(|w| w == line), "{line} is still set on the page: {said:?}");
         }
     }
@@ -884,7 +965,7 @@ mod tests {
         assert_eq!(sentence(Some(&low), ""), "Battery at 9%.");
         let charging = Charge { percent: 40.0, state: 1, left: "1 h 5 min".into() };
         assert_eq!(sentence(Some(&charging), ""), "Charging, 40%, full in 1 h 5 min.");
-        assert_eq!(sentence(None, "Balanced"), "Plugged in, in Balanced mode: no battery to look after.");
+        assert_eq!(sentence(None, "Balanced"), "Plugged in, in Balanced mode. This computer has no battery.");
     }
 
     #[test]
@@ -902,9 +983,40 @@ mod tests {
     }
 
     #[test]
+    fn a_new_pin_is_kept_only_after_the_right_account_password() {
+        let Some(_home) = crate::common::scratch_home::inside() else {
+            return crate::common::scratch_home::rerun(module_path!(), "a_new_pin_is_kept_only_after_the_right_account_password");
+        };
+        let mut kit = kit();
+        let mut page = Power { pin: "1234".into(), ..Power::made_up() };
+        page.keep_pin(&mut kit);
+        assert!(!pin::is_set(), "no password typed");
+        page.account = Zeroizing::new("john-smith-17".into());
+        page.keep_pin(&mut kit);
+        assert!(!pin::is_set(), "the check is not over");
+        assert!(page.account.is_empty(), "the password typed is not kept for the check");
+        page.pin_checked(&mut kit, false);
+        assert!(!pin::is_set() && page.pin.is_empty(), "a wrong password keeps no PIN and no digits");
+        page.pin = "1234".into();
+        page.pin_checked(&mut kit, true);
+        assert!(pin::is_set() && pin::check("1234") && page.pin.is_empty());
+    }
+
+    #[test]
     fn a_wild_guess_at_time_left_is_not_given() {
         assert_eq!(duration(90 * 60), "1 h 30 min");
         assert_eq!(duration(930 * 60 * 60), "");
+    }
+
+    #[test]
+    fn a_made_up_press_cannot_switch_the_lock_off() {
+        use crate::toolkit::window::{with_named, with_press};
+        let mut kit = kit();
+        let mut page = Power::made_up();
+        with_named(true, Some(7), || with_press(Some(8), || page.lock_switched(&mut kit, false)));
+        with_named(true, Some(7), || page.lock_switched(&mut kit, false));
+        assert_eq!(page.value("lock"), "on");
+        assert_eq!(kit.said(LOCK), None, "nothing was done or said");
     }
 
     #[test]
@@ -931,7 +1043,7 @@ mod tests {
         assert_eq!(code.matches("me.way_out(k, ").count(), 2, "Log out, and the three logind is asked for");
 
         assert_eq!(code.matches("confirm_by_hand::<Power>(").count(), 2, "a way out of the session can be armed by a made-up press");
-        assert_eq!(code.matches("crate::common::person_only::SETTINGS_POWER").count(), 3, "the arming and the running are not one act");
+        assert_eq!(code.matches("crate::common::person_only::SETTINGS_POWER").count(), 4, "the arming and the running are not one act");
         assert_eq!(code.matches("end_session").count(), 1, "logging out is run in one place");
         assert_eq!(code.matches(".logind(").count(), 1, "logind is asked from one place");
         assert_eq!(code.matches("send_logind(").count(), 3, "the function, and its two calls in logind");

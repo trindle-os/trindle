@@ -9,7 +9,7 @@ use crate::common::files::{set_setting, setting};
 use crate::common::outputs::{self, Head, Resolution, Setting, Turn};
 use crate::common::run::on_thread;
 use crate::session::{nightlight, scale};
-use crate::settings::ui::{dropdown, group, headline, help_link, line, on, page, FootLook, Kit, Msg, Page, Trial, not_saved};
+use crate::settings::ui::{dropdown, group, headline, help_link, line, on, own_or_why, page, FootLook, Kit, Msg, Page, Trial, not_saved};
 use crate::toolkit::theme::{alpha, mix, Palette};
 use crate::toolkit::tiles::{picture, sketch, Sketch};
 use crate::toolkit::widget::{column, note, row, slider, switch, Length, Node};
@@ -145,6 +145,27 @@ pub struct Display {
     nvidia: bool,
 
     warming: u32,
+
+    desk: Desk,
+}
+
+#[derive(Clone, Copy)]
+struct Desk {
+    apply: fn(&[Setting]) -> Result<(), String>,
+    save: fn(&[Setting]) -> std::io::Result<()>,
+    remember: fn(&[Head]),
+}
+
+impl Default for Desk {
+    fn default() -> Desk {
+        Desk { apply: outputs::apply, save: outputs::save, remember: outputs::remember_for_login }
+    }
+}
+
+fn in_plain_words(said: &str, could_not: &str) -> String {
+    own_or_why(said, &[t!("common-displays-refused"), t!("common-displays-kept-changing"), t!("common-displays-no-desktop"),
+                       t!("common-displays-cannot-say"), t!("common-displays-did-not-say"), t!("common-displays-none-on"),
+                       t!("common-displays-stopped-answering")], could_not)
 }
 
 impl Display {
@@ -201,7 +222,7 @@ impl Display {
             let guess = guess_place(out, anchor);
             let chosen = places().iter().position(|(v, _)| *v == guess);
             let (o, a) = (out.clone(), anchor.clone());
-            let pick = dropdown(kit, &format!("display:{}:place", out.name), place_words, chosen, &t!("settings-display-place-name", display = &out.name), move |i| {
+            let pick = dropdown(&format!("display:{}:place", out.name), place_words, chosen, &t!("settings-display-place-name", display = &out.name), move |i| {
                 let (o, a, v) = (o.clone(), a.clone(), places()[i].0);
                 on::<Display>(move |me, k| me.place(k, &o, &a, v))
             });
@@ -248,16 +269,20 @@ impl Display {
         }
         self.refused = None;
         kit.hush(REFUSED);
-        on_thread(move || outputs::apply(&settings), kit.then::<Display, _>(|me, k, done| me.applied(k, done)));
+        let apply = self.desk.apply;
+        on_thread(move || apply(&settings), kit.then::<Display, _>(|me, k, done| me.applied(k, done)));
     }
 
     fn applied(&mut self, kit: &mut Kit, done: Result<(), String>) {
         if let Err(err) = done {
+
+            if self.trial.left().is_none() {
+                self.before = None;
+            }
             self.load(kit);
-            let e = err.trim();
-            let words = if e.is_empty() { t!("settings-display-refused") } else { e };
-            self.refused = Some(words.to_string());
-            kit.say(REFUSED, words, false, false);
+            let words = in_plain_words(&err, t!("settings-display-refused"));
+            kit.say(REFUSED, &words, false, false);
+            self.refused = Some(words);
             return;
         }
         on_thread(outputs::heads, kit.then::<Display, _>(|me, k, got| {
@@ -283,10 +308,11 @@ impl Display {
             self.load(kit);
             return;
         };
-        on_thread(move || outputs::apply(&before), kit.then::<Display, _>(|me, k, undone: Result<(), String>| {
+        let apply = self.desk.apply;
+        on_thread(move || apply(&before), kit.then::<Display, _>(|me, k, undone: Result<(), String>| {
 
             if let Err(e) = undone {
-                k.say(REFUSED, &t!("settings-display-not-undone", why = e), false, false);
+                k.say(REFUSED, t!("settings-display-not-undone", why = in_plain_words(&e, "").trim()).trim_end(), false, false);
             }
             me.load(k);
         }));
@@ -295,20 +321,20 @@ impl Display {
     fn keep(&mut self, kit: &mut Kit) {
         self.stop_countdown();
         self.before = None;
-        let saved = outputs::save(&settings_for(&self.outputs));
+        let saved = (self.desk.save)(&settings_for(&self.outputs));
         if let Err(e) = &saved {
             eprintln!("trindle-settings: could not keep the display arrangement: {e}");
             crate::common::crash::error("E_SAVE_FAILED");
         }
         kit.settle_quietly(REFUSED, saved, t!("settings-display-not-kept"));
-        outputs::remember_for_login(&self.outputs);
+        (self.desk.remember)(&self.outputs);
         self.load(kit);
     }
 
     fn keep_line(&self, kit: &Kit) -> Node<Msg> {
         let (heading, sub) = match &self.refused {
             Some(_) if self.trial.left().is_none() => (t!("settings-display-nothing-changed"), t!("settings-display-refused-change").to_string()),
-            _ => (t!("settings-display-apply-at-once"), t!("settings-display-keep-asked", seconds = REVERT_AFTER)),
+            _ => (t!("settings-display-apply-at-once"), String::new()),
         };
         line(heading).sub(sub).key(REFUSED).node(kit)
     }
@@ -329,7 +355,6 @@ impl Display {
             on::<Display>(move |me, k| me.save_night(k, nightlight::ON, if lit { "on" } else { "off" }))
         });
         rows.push(line(t!("settings-display-night"))
-            .sub(t!("settings-display-night-about-line"))
             .control(on_switch)
             .key(nightlight::ON)
             .node(kit));
@@ -340,7 +365,7 @@ impl Display {
         };
         let whens = [nightlight::BY_SUN, nightlight::BY_TIMES];
         let chosen = whens.iter().position(|w| *w == n.when);
-        let pick = dropdown(kit, "night:when", vec![t!("settings-display-when-sun").to_string(), t!("settings-display-when-times").to_string()], chosen,
+        let pick = dropdown("night:when", vec![t!("settings-display-when-sun").to_string(), t!("settings-display-when-times").to_string()], chosen,
                             t!("settings-display-when"), move |i| {
             let v = whens[i];
             on::<Display>(move |me, k| me.save_night(k, nightlight::WHEN, v))
@@ -367,7 +392,7 @@ impl Display {
         let scale = column(vec![warm, ends]).gap(4.0).width(Length::Fixed(220.0));
         let span = (nightlight::LEAST_WARM - nightlight::WARMEST).max(1) as f32;
         let share = (shown - nightlight::WARMEST as f32) / span;
-        vec![line(t!("settings-display-warmth")).sub(t!("settings-display-warmth-about")).control(scale)
+        vec![line(t!("settings-display-warmth")).control(scale)
                  .key(nightlight::WARMTH).below(warmth_strip(share)).node(kit)]
     }
 
@@ -396,7 +421,7 @@ fn use_line(kit: &Kit, out: &Head, only: bool) -> Node<Msg> {
             }
         })
     });
-    let sub = if only { t!("settings-display-use-only") } else { t!("settings-display-use-off") };
+    let sub = if only { t!("settings-display-use-only") } else { "" };
     line(t!("settings-display-use")).sub(sub).control(sw.off(only)).node(kit)
 }
 
@@ -421,11 +446,11 @@ fn resolution_line(kit: &Kit, out: &Head, off: bool) -> Node<Msg> {
     let cur = out.current_mode().map(|m| m.resolution());
     let chosen = cur.and_then(|c| modes.iter().position(|m| *m == c));
     let name = out.name.clone();
-    let pick = dropdown(kit, &format!("display:{}:mode", out.name), labels, chosen, &t!("settings-display-resolution-of", display = &out.name), move |i| {
+    let pick = dropdown(&format!("display:{}:mode", out.name), labels, chosen, &t!("settings-display-resolution-of", display = &out.name), move |i| {
         let (name, m) = (name.clone(), modes[i]);
         on::<Display>(move |me, k| me.change(k, &name, Change::Mode(m)))
     });
-    line(t!("settings-display-resolution")).sub(t!("settings-display-resolution-about")).control(pick).node(kit).off(off)
+    line(t!("settings-display-resolution")).control(pick).node(kit).off(off)
 }
 
 fn size_line(kit: &Kit, out: &Head, off: bool) -> Node<Msg> {
@@ -442,28 +467,28 @@ fn size_line(kit: &Kit, out: &Head, off: bool) -> Node<Msg> {
         .collect();
     let chosen = SIZES.iter().position(|s| *s == size);
     let name = out.name.clone();
-    let pick = dropdown(kit, &format!("display:{}:size", out.name), sizes, chosen, &t!("settings-display-size-on", display = &out.name), move |i| {
+    let pick = dropdown(&format!("display:{}:size", out.name), sizes, chosen, &t!("settings-display-size-on", display = &out.name), move |i| {
         let (name, v) = (name.clone(), SIZES[i]);
         on::<Display>(move |me, k| me.change(k, &name, Change::Scale((v * base * 10000.0).round() / 10000.0)))
     });
-    line(t!("settings-display-size")).sub(t!("settings-display-size-about")).control(pick).node(kit).off(off)
+    line(t!("settings-display-size")).control(pick).node(kit).off(off)
 }
 
 fn turn_line(kit: &Kit, out: &Head, off: bool) -> Node<Msg> {
     let turns_words: Vec<String> = turns().iter().map(|(_, l)| l.to_string()).collect();
     let chosen = turns().iter().position(|(t, _)| *t == out.turn);
     let name = out.name.clone();
-    let pick = dropdown(kit, &format!("display:{}:turn", out.name), turns_words, chosen, &t!("settings-display-rotation-of", display = &out.name), move |i| {
+    let pick = dropdown(&format!("display:{}:turn", out.name), turns_words, chosen, &t!("settings-display-rotation-of", display = &out.name), move |i| {
         let (name, t) = (name.clone(), turns()[i].0);
         on::<Display>(move |me, k| me.change(k, &name, Change::Turn(t)))
     });
-    line(t!("settings-display-rotation")).sub(t!("settings-display-rotation-about")).control(pick).node(kit).off(off)
+    line(t!("settings-display-rotation")).control(pick).node(kit).off(off)
 }
 
 fn time_line(kit: &Kit, title: &str, key: &'static str, times: Vec<String>, now: &str) -> Node<Msg> {
     let chosen = times.iter().position(|t| t == now);
     let options = times.clone();
-    let pick = dropdown(kit, &format!("night:{key}"), options, chosen, title, move |i| {
+    let pick = dropdown(&format!("night:{key}"), options, chosen, title, move |i| {
         let v = times[i].clone();
         on::<Display>(move |me, k| me.save_night(k, key, &v))
     });
@@ -565,11 +590,11 @@ impl Page for Display {
         };
         let mut items = Vec::new();
         if !self.loaded {
-            items.push(headline(kit, t!("settings-display-looking")));
+            items.push(headline(t!("settings-display-looking")));
         } else if self.outputs.is_empty() {
-            items.push(headline(kit, t!("settings-display-none-found")));
+            items.push(headline(t!("settings-display-none-found")));
         } else {
-            items.push(headline(kit, sum_up(&self.outputs, night)));
+            items.push(headline(sum_up(&self.outputs, night)));
         }
 
         let screens: Vec<Screen> = self.outputs.iter().filter(|o| o.enabled).filter_map(|o| {
@@ -644,7 +669,15 @@ impl Display {
         let night = Night { on: true, when: nightlight::BY_SUN.to_string(), from: "20:00".into(), to: "07:00".into(),
                             warmth: 4000, place: Some((52.0, 0.0)), zone: "Europe/London".into() };
         Display { loaded: true, outputs: vec![head("eDP-1", (2256, 1504), (0, 0)), head("HDMI-A-1", (2560, 1440), (2256, 0))],
-                  night: Some(night), ..Display::default() }
+                  night: Some(night), desk: Desk::idle(), ..Display::default() }
+    }
+}
+
+#[cfg(test)]
+impl Desk {
+
+    fn idle() -> Desk {
+        Desk { apply: |_| Ok(()), save: |_| Ok(()), remember: |_| {} }
     }
 }
 
@@ -657,6 +690,66 @@ mod tests {
     use crate::toolkit::event::Loop;
     use crate::toolkit::theme::Theme;
     use crate::toolkit::ui::{App as _, Ui};
+
+    fn kit() -> Kit {
+        let events = Loop::new();
+        let asks = events.post(|_: Do| {});
+        Kit::new(events, asks, None, None)
+    }
+
+    #[test]
+    fn a_refused_change_is_said_in_plain_words_and_leaves_nothing_to_go_back_to() {
+        let mut kit = kit();
+        let mut d = Display::made_up();
+        d.apply(&mut kit, vec![Setting::on("eDP-1")]);
+        assert!(d.before.is_some(), "the arrangement before the change is kept");
+        d.applied(&mut kit, Err("wl_output@12: mode 2256x1504@0 not in list".into()));
+        assert_eq!(d.refused.as_deref(), Some(t!("settings-display-refused")), "the desktop's raw reason is not shown");
+        assert!(d.before.is_none(), "nothing changed, so there is nothing to go back to");
+        d.applied(&mut kit, Err(t!("common-displays-none-on").to_string()));
+        assert_eq!(d.refused.as_deref(), Some(t!("common-displays-none-on")), "a sentence of Trindle's own is shown as it is");
+    }
+
+    #[test]
+    fn a_second_change_keeps_what_was_there_before_the_first() {
+        let mut kit = kit();
+        let mut d = Display::on_trial();
+        let first = settings_for(&d.outputs);
+        d.before = Some(first.clone());
+        d.outputs[1].enabled = false;
+        d.apply(&mut kit, vec![Setting::on("HDMI-A-1")]);
+        assert_eq!(d.before.as_ref(), Some(&first));
+        d.applied(&mut kit, Err(String::new()));
+        assert_eq!(d.before.as_ref(), Some(&first), "Go back still has the first arrangement");
+    }
+
+    static PUT_BACK: std::sync::Mutex<Vec<Vec<Setting>>> = std::sync::Mutex::new(Vec::new());
+    static KEPT: std::sync::Mutex<Vec<Vec<Setting>>> = std::sync::Mutex::new(Vec::new());
+
+    #[test]
+    fn going_back_ends_the_trial_and_puts_back_what_was_there() {
+        let mut kit = kit();
+        let mut d = Display { desk: Desk { apply: |s| { PUT_BACK.lock().unwrap().push(s.to_vec()); Ok(()) }, ..Desk::idle() }, ..Display::on_trial() };
+        let before = settings_for(&d.outputs);
+        d.before = Some(before.clone());
+        d.revert(&mut kit);
+        assert!(d.trial.left().is_none() && d.before.is_none());
+        let end = std::time::Instant::now() + Duration::from_secs(5);
+        while PUT_BACK.lock().unwrap().is_empty() && std::time::Instant::now() < end {
+            std::thread::sleep(Duration::from_millis(10));
+        }
+        assert_eq!(*PUT_BACK.lock().unwrap(), vec![before]);
+    }
+
+    #[test]
+    fn keep_ends_the_trial_and_saves_what_is_shown() {
+        let mut kit = kit();
+        let mut d = Display { desk: Desk { save: |s| { KEPT.lock().unwrap().push(s.to_vec()); Ok(()) }, ..Desk::idle() }, ..Display::on_trial() };
+        d.before = Some(Vec::new());
+        d.keep(&mut kit);
+        assert!(d.trial.left().is_none() && d.before.is_none());
+        assert_eq!(*KEPT.lock().unwrap(), vec![settings_for(&d.outputs)]);
+    }
 
     fn head(name: &str, size: (i32, i32), at: (i32, i32)) -> Head {
         let mode = Mode { width: size.0, height: size.1, refresh: 60000, preferred: true };
@@ -692,7 +785,22 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
+    fn a_refused_change_forgets_what_to_go_back_to_unless_one_is_on_trial() {
+        let events = Loop::new();
+        let asks = events.post(|_: Do| {});
+        let mut kit = Kit::new(events, asks, None, None);
+        let mut d = Display::made_up();
+        d.before = Some(Vec::new());
+        d.applied(&mut kit, Err("refused".into()));
+        assert!(d.before.is_none(), "the refused change left a stale arrangement to go back to");
+        d.offer_keep(&mut kit);
+        d.before = Some(Vec::new());
+        d.applied(&mut kit, Err("refused".into()));
+        assert!(d.before.is_some(), "a change on trial lost its way back");
+    }
+
+    #[test]
+    #[ignore = "writes pictures to TRINDLE_SHOTS and asserts nothing; run it by hand with --ignored"]
     fn shoot_with_made_up_displays() {
         let out = std::path::PathBuf::from(std::env::var("TRINDLE_SHOTS").unwrap_or_else(|_| "target/style-check".into()));
         let size = std::env::var("TRINDLE_SHOT_SIZE").unwrap_or_else(|_| "1280x800".into());
@@ -700,7 +808,7 @@ mod tests {
         let two = std::env::var("TRINDLE_SHOT_HEADS").is_ok_and(|v| v == "2");
         let events = Loop::new();
         let asks = events.post(|_: Do| {});
-        let mut d = Display { loaded: true, ..Display::default() };
+        let mut d = Display { loaded: true, desk: Desk::idle(), ..Display::default() };
         d.outputs = vec![head("eDP-1", (2256, 1504), (0, 0))];
         if two {
             d.outputs.push(head("HDMI-A-1", (2560, 1440), (2256, 0)));
@@ -719,7 +827,7 @@ mod tests {
     fn made_up(by_times: bool) -> Settings {
         let events = Loop::new();
         let asks = events.post(|_: Do| {});
-        let mut d = Display { loaded: true, ..Display::default() };
+        let mut d = Display { loaded: true, desk: Desk::idle(), ..Display::default() };
         d.outputs = vec![head("eDP-1", (2256, 1504), (0, 0)), head("HDMI-A-1", (2560, 1440), (2256, 0))];
         d.night = Some(Night {
             on: true, when: if by_times { nightlight::BY_TIMES } else { nightlight::BY_SUN }.to_string(),
@@ -762,7 +870,7 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
+    #[ignore = "writes pictures to TRINDLE_SHOTS and asserts nothing; run it by hand with --ignored"]
     fn shoot_before_and_after_the_times_show() {
         let out = std::path::PathBuf::from(std::env::var("TRINDLE_SHOTS").unwrap_or_else(|_| "target/style-check".into()));
         std::fs::create_dir_all(&out).unwrap();

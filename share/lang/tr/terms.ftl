@@ -4,5 +4,5 @@
 terms-accept = [Kullanım koşullarını (EULA)](eula) kabul ediyorum
 
 # In the foot, while the box is not ticked, saying why the button beside it is off.
-terms-needed = Devam etmek için kutuyu işaretleyin
+terms-needed = Onayınız gerekli
 

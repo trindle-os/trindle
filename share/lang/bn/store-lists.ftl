@@ -37,25 +37,12 @@ store-tab-count = { $name } { $n }
 # Spoken name of a strip of tabs on the Installed page.
 store-tabs-show = দেখান
 
-# How long is left when it is a minute or less.
-store-left-minute = প্রায় এক মিনিট বাকি
-
-# How long is left, in minutes.
-store-left-minutes = প্রায় { $n } মিনিট বাকি
-
-# How long is left, in hours.
-store-left-hours =
-    { $n ->
-        [one] প্রায় ১ ঘণ্টা বাকি
-       *[other] প্রায় { $n } ঘণ্টা বাকি
-    }
-
 # Credit under a package's page for the list its site was checked against.
 store-origin-credit = HaGeZi-র Threat Intelligence তালিকার সঙ্গে মিলিয়ে দেখা হয়েছে
 
 # Where a download came from: the site and the page that led to it.
 # SAFETY: needs a human review before it ships
-store-origin-both = { $site } থেকে নামানো, { $referrer } থেকে পৌঁছানো।
+store-origin-both = আপনি এটি { $site } থেকে ডাউনলোড করেছেন, { $referrer } থেকে এসে।
 
 # Where a download came from: the site.
 # SAFETY: needs a human review before it ships
@@ -63,7 +50,7 @@ store-origin-site = { $site } থেকে নামানো।
 
 # Where a download came from: the page that led to it.
 # SAFETY: needs a human review before it ships
-store-origin-referrer = { $referrer } থেকে পৌঁছানো।
+store-origin-referrer = { $referrer } থেকে লিঙ্ক করা।
 
 # Said when nothing tells where a download came from.
 # SAFETY: needs a human review before it ships
@@ -75,20 +62,20 @@ store-origin-listed = { $from } { $name } HaGeZi-র Threat Intelligence তা�
 
 # Said when the site is not on the list; the first part says where the download came from.
 # SAFETY: needs a human review before it ships
-store-origin-clear = { $from } সাইটটি HaGeZi-র Threat Intelligence তালিকায় নেই, কিন্তু তালিকাটি সম্পূর্ণ নয়, তাই এটি নিরাপদ বলে প্রমাণ হয় না।
+store-origin-clear = { $from } সাইটটি HaGeZi-র Threat Intelligence তালিকায় নেই। তালিকাটি সম্পূর্ণ নয়, তাই এটি নিরাপদ বলে প্রমাণ হয় না।
 
 # Said when the list could not be fetched; the first part says where the download came from.
 # SAFETY: needs a human review before it ships
-store-origin-not-checked = { $from } সাইটটি যাচাই করা যায়নি, কারণ HaGeZi-র Threat Intelligence তালিকা আনা যায়নি।
+store-origin-not-checked = { $from } Trindle সাইটটি যাচাই করতে পারেনি, কারণ HaGeZi-র Threat Intelligence তালিকা পায়নি।
 
 # Name shown for a review whose writer gave none.
 store-review-someone = কেউ একজন
 
 # Red words when the keyring could not be reached.
-store-key-unreached = কীরিং পাওয়া যায়নি: { $why }।
+store-key-unreached = Trindle কীরিংয়ে পৌঁছাতে পারেনি: { $why }।
 
 # Red words when the key kept in the keyring is not text.
-store-key-not-text = রাখা কী-টি লেখা নয়।
+store-key-not-text = সংরক্ষিত কী-টি লেখা নয়।
 
 # Red words when a file that held the key could not be removed.
 store-key-not-removed = { $path } সরানো যায়নি: { $why }

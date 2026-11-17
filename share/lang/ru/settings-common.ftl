@@ -6,13 +6,16 @@ settings-common-saved = Сохранено
 # Said beside a button that worked, when nothing more is known.
 settings-common-done = Готово
 
+# Words that only say "that worked", in lower case and separated by bars. A line saying one of them under a control that has already moved is left out, as the glow says it. Translate each word, and keep the bars.
+settings-common-quiet-words = сохранено|готово|используется сейчас|изменено|задано|принято|добавлено|освобождено|удалено|сохранено|установлено|обновлено|присоединено|скопировано|по умолчанию сейчас|воспроизведено|отправлено|подключено|подключается|включено|выключено|забыто|останавливается на 80%|заряжается до полной|запускается при входе|сохранено, но не запускается|актуально
+
 # Said beside a button that failed, when nothing more is known.
 settings-common-not-done = Не получилось
 
 # Tip of the information button at the top of every Settings page.
 settings-common-about-page = Об этой странице
 
-# Tip of the information button on a card: { $name } is the card's heading in lower case.
+# Tip of the information button on a card: { $name } is the card's heading as it is written.
 settings-common-about-card = О разделе «{ $name }»
 
 # Heading of the question when a name is already taken: { $name } is the name.
@@ -33,7 +36,7 @@ settings-common-same-for-rest-more =
 settings-common-same-for-rest = Сделать так же для остальных
 
 # Tip of the button that keeps the one already there.
-settings-common-skip = Пропустить: оставить то, что уже есть
+settings-common-skip = Пропустить и оставить существующее
 
 # Button that replaces the one already there.
 # SAFETY: needs a human review before it ships
@@ -41,10 +44,10 @@ settings-common-replace = Заменить
 
 # Spoken name of the Replace button.
 # SAFETY: needs a human review before it ships
-settings-common-replace-spoken = Заменить то, что уже есть, на то, что переносится
+settings-common-replace-spoken = Заменить существующее новым
 
 # Heading of the line that shows the new one, in the question about a name already taken.
-settings-common-being-brought = Тот, который переносится
+settings-common-being-brought = Новое
 
 # Heading of the line that shows the one already there.
 settings-common-already-line = Тот, который уже есть
@@ -56,23 +59,23 @@ settings-common-replace-question = Заменить то, что уже есть
 # At the foot of the window while a change is on trial: how many seconds are left.
 settings-common-goes-back =
     { $left ->
-        [one] Прежнее состояние вернётся через { $left } секунду.
-        [few] Прежнее состояние вернётся через { $left } секунды.
-        [many] Прежнее состояние вернётся через { $left } секунд.
-       *[other] Прежнее состояние вернётся через { $left } секунды.
+        [one] Отмена через { $left } секунду.
+        [few] Отмена через { $left } секунды.
+        [many] Отмена через { $left } секунд.
+       *[other] Отмена через { $left } секунды.
     }
 
 # At the foot of the window while a change is on trial: the seconds left, then { $more } such as what Escape does.
 settings-common-goes-back-more =
     { $left ->
-        [one] Прежнее состояние вернётся через { $left } секунду. { $more }
-        [few] Прежнее состояние вернётся через { $left } секунды. { $more }
-        [many] Прежнее состояние вернётся через { $left } секунд. { $more }
-       *[other] Прежнее состояние вернётся через { $left } секунды. { $more }
+        [one] Отмена через { $left } секунду. { $more }
+        [few] Отмена через { $left } секунды. { $more }
+        [many] Отмена через { $left } секунд. { $more }
+       *[other] Отмена через { $left } секунды. { $more }
     }
 
 # Button at the foot of the window that undoes the change on trial.
-settings-common-go-back-now = Вернуть сейчас
+settings-common-go-back-now = Отменить сейчас
 
 # Button at the foot of the window that keeps the change on trial.
 settings-common-keep = Оставить
@@ -81,10 +84,10 @@ settings-common-keep = Оставить
 settings-common-not-available = «{ $what }» недоступно
 
 # Under that heading: { $package } is the name of the package to install.
-settings-common-install-with = Установите командой: sudo apt install { $package }
+settings-common-install-with = Чтобы установить, выполните: sudo apt install { $package }
 
 # Red words when a web page could not be opened.
-settings-common-no-browser = Не удалось открыть веб-страницу: не получилось запустить браузер.
+settings-common-no-browser = Trindle не удалось открыть веб-страницу, потому что не получилось запустить браузер.
 
 # Red words when one of Trindle's programs could not be opened: { $name } is its name.
 settings-common-could-not-open = Не удалось открыть «{ $name }».
@@ -93,19 +96,19 @@ settings-common-could-not-open = Не удалось открыть «{ $name }�
 settings-common-not-saved = Не удалось сохранить.
 
 # Red words when an action needs the system's message bus and there is none.
-settings-common-no-system-bus = Не получилось: нет доступа к системной шине сообщений. Перезагрузите компьютер и попробуйте снова.
+settings-common-no-system-bus = Trindle не смогла это сделать, потому что часть системы не отвечает. Перезагрузите компьютер и попробуйте снова.
 
 # Red words when an action needs this login's message bus and there is none.
-settings-common-no-session-bus = Не получилось: нет доступа к шине сообщений этого сеанса. Выйдите и войдите снова, затем повторите.
+settings-common-no-session-bus = Trindle не смогла это сделать, потому что часть вашего сеанса не отвечает. Выйдите и войдите снова, затем повторите.
 
 # Red words when the window for choosing a file or folder could not be opened.
-settings-common-no-chooser = Не удалось открыть окно выбора. Выйдите и войдите снова, затем повторите.
+settings-common-no-chooser = Trindle не удалось открыть окно выбора файла или папки. Выйдите и войдите снова, затем повторите.
 
 # Cause given in red words after an action failed: the disk is full.
 settings-common-why-full = Диск заполнен.
 
 # Cause given in red words after an action failed: the disk is read only.
-settings-common-why-read-only = Сейчас на диск нельзя записывать.
+settings-common-why-read-only = Trindle сейчас не может записывать на диск.
 
 # Cause given in red words after an action failed: the part of the system that does it is not running.
 settings-common-why-not-running = Часть системы, которая это делает, не запущена.
@@ -134,16 +137,16 @@ settings-common-and = { $rest } и { $last }
 settings-common-list-comma = { ", " }
 
 # Spoken name of the picture of the ring opening on a small screen.
-settings-common-ring-picture = Кольцо открывается щелчком у края экрана.
+settings-common-ring-picture = Кольцо открывается двойным щелчком у края экрана.
 
 # Word drawn in the middle of that picture.
 settings-common-ring-name = Кольцо
 
 # Red words under the charge limit switch when the laptop's firmware door could not be opened; { $error } is the system's reason.
-charge-no-firmware-door = Не удалось связаться с прошивкой ноутбука: { $error }
+charge-no-firmware-door = Trindle не удалось связаться с управлением зарядкой ноутбука: { $error }
 
 # Red words under the charge limit switch when the laptop's firmware refused the limit.
-charge-firmware-refused = Прошивка ноутбука не приняла ограничение зарядки.
+charge-firmware-refused = Ноутбук не принял ограничение зарядки.
 
 # Red words under the charge limit switch on a computer that cannot stop charging early.
 charge-not-allowed = Этот компьютер не позволяет прекращать зарядку раньше времени.
@@ -155,7 +158,10 @@ charge-could-not-set = Не удалось записать { $path }: { $error 
 graphics-vm-title = Trindle в виртуальной машине
 
 # Note to someone in a virtual machine that has 3D graphics; { $machine } is the machine's name.
-graphics-vm-body-fast = Trindle работает в { $machine }. Там она работает хорошо, но виртуальная машина никогда не бывает такой быстрой и плавной, как настоящий компьютер, поэтому оценивайте скорость на настоящем оборудовании.
+graphics-vm-body-fast = Trindle работает в { $machine }. Там она работает хорошо, но виртуальная машина никогда не бывает такой быстрой и плавной, как настоящий компьютер. Оценивайте скорость на настоящем оборудовании.
 
 # Note to someone in a virtual machine without 3D graphics; { $machine } is the machine's name.
-graphics-vm-body-slow = Trindle работает в { $machine } без 3D-графики, поэтому процессору приходится рисовать всё то, что обычно рисует графический чип. Окна, видео и веб-страницы будут работать медленнее, чем на настоящем компьютере, а Trindle отключает анимацию, чтобы помочь. Если компьютер, на котором она запущена, это позволяет, включите 3D-ускорение в настройках экрана виртуальной машины: это сильно поможет. На настоящем компьютере всё это неактуально.
+graphics-vm-body-slow = Trindle работает в { $machine } без 3D-графики. Процессору приходится рисовать всё, что обычно рисует графический чип. Окна, видео и веб-страницы будут работать медленнее, чем на настоящем компьютере, поэтому Trindle отключает анимацию. Если компьютер, на котором она запущена, это позволяет, включите 3D-ускорение в настройках экрана виртуальной машины. Это сильно помогает. Если установить Trindle на настоящий компьютер, ничего из этого вас не коснётся.
+
+# A list of choices ends with this: { $rest } is the names before the last, { $last } the last.
+settings-common-or = { $rest } или { $last }

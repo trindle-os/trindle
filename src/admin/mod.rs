@@ -10,7 +10,9 @@ mod home_room;
 mod home_snapshots;
 mod machine;
 mod packages;
-mod protected;
+#[cfg(test)]
+mod packaging;
+pub(crate) mod protected;
 mod read_only;
 #[cfg(test)]
 mod kept;
@@ -18,6 +20,7 @@ mod shares;
 mod sharing;
 mod snapshots;
 mod sources;
+mod swap;
 #[cfg(test)]
 mod stand_in;
 mod tailscale;
@@ -42,24 +45,37 @@ fn run(argv: &[&str], stdin: Option<&str>) -> Outcome {
     if let Some(answer) = stand_in::run(argv) {
         return answer;
     }
-    let mut cmd = Command::new(argv[0]);
-    cmd.args(&argv[1..]).stdout(Stdio::null()).stderr(Stdio::piped());
-    if stdin.is_some() {
-        cmd.stdin(Stdio::piped());
-    }
-    let mut child = cmd.spawn().map_err(|e| t!("admin-tool-error", tool = argv[0], why = e.to_string()))?;
+    tool(argv, stdin, &[]).map_err(|fault| match fault {
+        Fault::NoStart(why) => t!("admin-tool-error", tool = argv[0], why = why),
+        Fault::Stopped(why) => t!("admin-tool-stopped", tool = argv[0], why = why),
+        Fault::Failed(err) if err.is_empty() => t!("admin-tool-failed", tool = argv[0]),
+        Fault::Failed(err) => err,
+    })
+}
+
+pub enum Fault {
+    NoStart(String),
+
+    Stopped(String),
+
+    Failed(String),
+}
+
+pub fn tool(argv: &[&str], stdin: Option<&str>, ok: &[i32]) -> Result<(), Fault> {
+    let mut child = Command::new(argv[0]).args(&argv[1..])
+        .stdin(if stdin.is_some() { Stdio::piped() } else { Stdio::null() })
+        .stdout(Stdio::null()).stderr(Stdio::piped())
+        .spawn().map_err(|e| Fault::NoStart(e.to_string()))?;
 
     let mut given = Ok(());
     if let (Some(text), Some(mut pipe)) = (stdin, child.stdin.take()) {
         given = pipe.write_all(text.as_bytes());
     }
-    let out = child.wait_with_output().map_err(|e| e.to_string())?;
-    if out.status.success() {
-        given.map_err(|e| t!("admin-tool-stopped", tool = argv[0], why = e.to_string()))
-    } else {
-        let err = String::from_utf8_lossy(&out.stderr).trim().to_string();
-        Err(if err.is_empty() { t!("admin-tool-failed", tool = argv[0]) } else { err })
+    let out = child.wait_with_output().map_err(|e| Fault::NoStart(e.to_string()))?;
+    if out.status.success() || out.status.code().is_some_and(|c| ok.contains(&c)) {
+        return given.map_err(|e| Fault::Stopped(e.to_string()));
     }
+    Err(Fault::Failed(String::from_utf8_lossy(&out.stderr).trim().to_string()))
 }
 
 fn apt_run(args: &[&str]) -> Outcome {
@@ -156,9 +172,11 @@ fn and_undone(why: String, undone: Outcome) -> String {
 fn replace(path: &Path, data: &[u8], mode: u32) -> Outcome {
     use std::os::unix::fs::OpenOptionsExt;
     let tmp = path.with_extension("trindle-new");
-    let mut f = std::fs::OpenOptions::new().write(true).create(true).truncate(true).mode(mode)
-        .open(&tmp).map_err(|e| e.to_string())?;
+    gone(&tmp)?;
+    let mut f = std::fs::OpenOptions::new().write(true).create_new(true).mode(mode)
+        .custom_flags(libc::O_NOFOLLOW).open(&tmp).map_err(|e| e.to_string())?;
     std::io::Write::write_all(&mut f, data).map_err(|e| e.to_string())?;
+    f.sync_all().map_err(|e| e.to_string())?;
     drop(f);
     std::fs::rename(&tmp, path).map_err(|e| e.to_string())
 }
@@ -180,7 +198,7 @@ pub fn main(args: Vec<String>) -> i32 {
         return 1;
     }
     let Some(verb) = args.get(1) else {
-        eprintln!("usage: trindle-admin add|password|admin|delete|face|locale|hostname ...");
+        eprintln!("usage: trindle-admin VERB [ARGUMENTS...]");
         return 1;
     };
 
@@ -225,6 +243,8 @@ fn command(verb: &str, rest: &[String]) -> Outcome {
         "firewall-sharing" => firewall::firewall_sharing(rest),
         "firewall-apply" => firewall::firewall_apply(),
         "firewall-plugin" => firewall::firewall_plugin(rest),
+        "firewall-port" => firewall::firewall_port(rest),
+        "firewall" => firewall::firewall_switch(rest),
         "firewall-plugin-close" => firewall::firewall_plugin_close(rest),
         "firmware-update" => packages::firmware_update(rest),
         "tailscale-on" => tailscale::tailscale_on(),
@@ -241,7 +261,9 @@ fn command(verb: &str, rest: &[String]) -> Outcome {
 
 fn system_command(verb: &str, rest: &[String]) -> Outcome {
     match verb {
-        "snapshot-create" => snapshots::create(rest),
+        "snapshot-create" | "snapshot-create-drives" => snapshots::create(rest),
+        "swap-off" => swap::off(rest),
+        "swap-on" => swap::on(rest),
         "snapshot-delete" => snapshots::delete(rest),
         "snapshot-restore" => snapshots::restore(rest),
         "snapshot-forget-set-aside" => snapshots::forget_set_aside(rest),
@@ -276,11 +298,25 @@ fn system_command(verb: &str, rest: &[String]) -> Outcome {
 #[cfg(test)]
 mod tests {
     #[test]
+    fn a_link_left_where_the_new_file_is_made_is_not_written_through() {
+        let dir = std::env::temp_dir().join(format!("trindle-replace-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        let victim = dir.join("victim");
+        std::fs::write(&victim, "keep").unwrap();
+        std::os::unix::fs::symlink(&victim, dir.join("file.trindle-new")).unwrap();
+        super::replace(&dir.join("file"), b"new", 0o644).unwrap();
+        assert_eq!(std::fs::read_to_string(&victim).unwrap(), "keep");
+        assert_eq!(std::fs::read_to_string(dir.join("file")).unwrap(), "new");
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
     fn a_tool_that_stops_before_it_has_its_input_is_not_called_done() {
 
         let much = "x".repeat(1 << 20);
         let said = super::run(&["true"], Some(&much)).unwrap_err();
-        assert!(said.starts_with("true stopped before it was given everything"), "{said}");
+        assert!(said.starts_with("true stopped before it had all it needed"), "{said}");
         assert!(super::run(&["sh", "-c", "cat >/dev/null"], Some(&much)).is_ok());
     }
 
@@ -291,6 +327,19 @@ mod tests {
         let mut heard = Vec::new();
         assert!(super::watched(tool, "sh", &mut |share| heard.push(share)).is_ok());
         assert_eq!(heard, [0.75], "what came after the line that is not text was still read");
+    }
+
+    #[test]
+    fn what_deletes_or_wipes_asks_for_the_password_every_time() {
+        let policy = include_str!("../../system/polkit/org.trindle.admin.policy");
+        let code = include_str!("mod.rs");
+        let asked = |action: &str| policy.split("<action ").find(|a| a.starts_with(&format!("id=\"{action}\""))).unwrap_or_else(|| panic!("no action {action}"));
+        assert!(asked("org.trindle.admin").contains("auth_admin_keep"), "everything else keeps its answer for a while");
+        for verb in ["delete", "snapshot-delete", "snapshot-restore", "snapshot-forget-set-aside", "home-snapshots-clear"] {
+            let action = policy.split("<action ").find(|a| a.contains(&format!("exec.argv1\">{verb}<"))).unwrap_or_else(|| panic!("{verb} has no action of its own"));
+            assert!(action.contains("<allow_active>auth_admin</allow_active>"), "{verb} must ask every time");
+            assert!(code.contains(&format!("\"{verb}\" =>")), "{verb} is not a verb of the helper");
+        }
     }
 
     #[test]

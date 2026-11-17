@@ -7,7 +7,7 @@ settings-wallpaper-title = Обои
 settings-wallpaper-keywords = фон картинка изображение слайд-шоу фото обои
 
 # Introduction under the heading of the wallpaper page, and the words behind the page i.
-settings-wallpaper-help = Один цвет, или одно изображение, или папка, в которой изображение меняется само через заданное время.
+settings-wallpaper-help = Один цвет, одно изображение или папка с изображениями, которые меняются с выбранной вами периодичностью.
 
 # Choice in the list of how long each picture stays.
 settings-wallpaper-every-10s = 10 секунд
@@ -37,7 +37,7 @@ settings-wallpaper-every-1d = 1 день
 settings-wallpaper-fit-fill = Заполнить экран
 
 # Choice in the list of how the picture fits the screen.
-settings-wallpaper-fit-fit = Вписать, показать целиком
+settings-wallpaper-fit-fit = Вписать изображение целиком
 
 # Choice in the list of how the picture fits the screen.
 settings-wallpaper-fit-center = По центру, реальный размер
@@ -55,7 +55,7 @@ settings-wallpaper-order-shuffle = В случайном порядке
 settings-wallpaper-order-name = По имени файла
 
 # Red words when the program that draws the wallpaper would not start.
-settings-wallpaper-no-changer = Не удалось сменить обои: программа для них не запустилась.
+settings-wallpaper-no-changer = Trindle не смог запустить программу, которая меняет обои.
 
 # Under the large picture, when counting; { $used } of { $all } pictures are used.
 settings-wallpaper-count =
@@ -94,10 +94,10 @@ settings-wallpaper-file-own = { $name }, одно из изображений и
 settings-wallpaper-plain-below = Один цвет, задаётся ниже.
 
 # Under the large picture when the picture or folder has gone.
-settings-wallpaper-gone-below = Здесь больше ничего нет. Выберите изображение или папку.
+settings-wallpaper-gone-below = Изображения или папки здесь больше нет. Выберите другое изображение или другую папку.
 
 # Sentence about the wallpaper when it is a plain colour.
-settings-wallpaper-plain = Один цвет, без изображения.
+settings-wallpaper-plain = Просто один цвет.
 
 # Sentence about the wallpaper when Trindle's own pictures change; { $every } is how often, { $used } of { $all } pictures are used and { $extra } is any added sentences, each after a space.
 settings-wallpaper-changing-own =
@@ -121,16 +121,16 @@ settings-wallpaper-changing-folder =
 settings-wallpaper-empty-folder-choose = В папке «{ $folder }» нет изображений. Выберите другую.
 
 # Added to the sentence about the wallpaper when a folder holds more than Trindle looks through.
-settings-wallpaper-more-than-looked-at = В папке больше файлов, чем просматривает Trindle, поэтому некоторые изображения могут быть пропущены.
+settings-wallpaper-more-than-looked-at = В папке больше изображений, чем Trindle может проверить, поэтому некоторые могут быть пропущены.
 
 # Sentence about the wallpaper for one of Trindle's own pictures; { $name } is its name.
 settings-wallpaper-file-own-said = { $name }, одно из изображений из комплекта Trindle.
 
 # Sentence about the wallpaper for one chosen picture; { $name } is its name, written to read in the middle of a sentence.
-settings-wallpaper-file-one = Всё время одно изображение: { $name }.
+settings-wallpaper-file-one = { $name } показывается всегда.
 
 # Sentence about the wallpaper when the chosen picture cannot be used; { $why } is the reason.
-settings-wallpaper-file-refused = Это изображение не используется. { $why } Показано изображение из комплекта Trindle.
+settings-wallpaper-file-refused = Trindle не использует это изображение. { $why } Вместо него показано изображение из комплекта Trindle.
 
 # Sentence about the wallpaper when the picture has gone.
 settings-wallpaper-file-gone = Изображения больше нет. Выберите изображение или папку.
@@ -165,14 +165,8 @@ settings-wallpaper-card-title = Обои
 # Heading of the wallpaper line, and name of its switch.
 settings-wallpaper-wallpaper = Обои
 
-# Small words under the wallpaper line.
-settings-wallpaper-wallpaper-about = Если выключено, экран залит одним цветом.
-
 # Heading of the line for choosing where the picture comes from.
 settings-wallpaper-picture = Изображение
-
-# Small words under that line.
-settings-wallpaper-picture-about = Одно изображение, папка или изображения из комплекта Trindle.
 
 # Name of the round button that chooses one picture.
 settings-wallpaper-choose-picture-button = Выбрать изображение
@@ -186,26 +180,20 @@ settings-wallpaper-own-pictures = Изображения из комплекта
 # Heading of the fit line.
 settings-wallpaper-fit = Размещение
 
-# Small words under that line.
-settings-wallpaper-fit-about = Как изображение размещается на экране.
-
 # Name of the list of how the picture fits the screen.
 settings-wallpaper-fit-name = Как изображение размещается на экране
 
 # Heading of the colour line.
 settings-wallpaper-colour = Цвет
 
-# Small words under the colour line when the colour can be seen.
-settings-wallpaper-colour-shown = Виден сам по себе или вокруг изображения.
-
 # Small words under the colour line when a picture covers it.
-settings-wallpaper-colour-hidden = Скрыт: изображение закрывает экран.
+settings-wallpaper-colour-hidden = Скрыт изображением.
 
 # Placeholder and name of the box for typing the colour as a hex code; the example is a code.
-settings-wallpaper-colour-hex = Цвет в виде hex-кода, например #09090b
+settings-wallpaper-colour-hex = Hex-код, например #09090b
 
 # Words behind the i of the Wallpaper card.
-settings-wallpaper-card-about = Один цвет, или одно изображение, или папка, в которой изображение меняется само через заданное время. Цвет виден сам по себе, если нет изображения, и вокруг изображения, которое не закрывает весь экран; введите его в виде hex-кода, например #09090b.
+settings-wallpaper-card-about = Один цвет, одно изображение или папка с изображениями, которые меняются с выбранной вами периодичностью. Цвет виден сам по себе, если нет изображения, и вокруг изображения, которое не закрывает весь экран. Введите его в виде hex-кода, например #09090b.
 
 # Small words on the cards that are greyed while the wallpaper is off.
 settings-wallpaper-waits = Включите «Обои», чтобы пользоваться этим.
@@ -213,38 +201,26 @@ settings-wallpaper-waits = Включите «Обои», чтобы польз�
 # Heading of the line, and name of its switch, for changing the picture now and then.
 settings-wallpaper-rotate = Время от времени менять изображение
 
-# Small words under that line.
-settings-wallpaper-rotate-about = Все изображения из папки по очереди.
-
 # Heading of the line, and name of its list, for how long each picture stays.
 settings-wallpaper-every = Менять каждые
-
-# Small words under that line.
-settings-wallpaper-every-about = Сколько времени остаётся каждое изображение.
 
 # Heading of the line, and name of its list, for the order pictures change in.
 settings-wallpaper-order = Порядок
 
-# Small words under the order line.
-settings-wallpaper-order-about = В случайном порядке или по имени файла.
-
 # Heading of the line, and name of its button, for moving to the next picture.
-settings-wallpaper-next = Следующее изображение сейчас
-
-# Small words under that line.
-settings-wallpaper-next-about = Сразу переходит к следующему.
+settings-wallpaper-next = Следующее изображение
 
 # Title of the Changing pictures card.
 settings-wallpaper-changing-title = Смена изображений
 
 # Words behind the i of that card.
-settings-wallpaper-changing-about = Использует все изображения из папки одно за другим, меняя их через выбранное здесь время, в случайном порядке или по имени файла.
+settings-wallpaper-changing-about = Показывает все изображения из папки одно за другим с выбранной здесь периодичностью, в случайном порядке или по имени файла.
 
 # Words behind the i of the Pictures card when pictures change by themselves.
-settings-wallpaper-pictures-rotating = Используются только подсвеченные изображения. Нажмите на изображение, чтобы приглушить его, и оно будет пропускаться; нажмите ещё раз, чтобы вернуть. Ничего не удаляется, так что вы можете передумать. Изображение, которое сейчас на экране, показано в большом окне.
+settings-wallpaper-pictures-rotating = Trindle использует все изображения, которые не приглушены. Нажмите на изображение, чтобы пропустить его, и нажмите ещё раз, чтобы вернуть. Ничего не удаляется. Изображение, которое сейчас на экране, показано в большом окне.
 
 # Words behind the i of the Pictures card when one picture is on.
-settings-wallpaper-pictures-one = Нажмите на изображение, чтобы поставить его на экран. Ничего не удаляется.
+settings-wallpaper-pictures-one = Нажмите на изображение, чтобы использовать его.
 
 # Title of the Pictures card.
 settings-wallpaper-pictures-title = Изображения
@@ -254,6 +230,3 @@ settings-wallpaper-no-pictures-name = Пока нет изображений
 
 # Heading of the line shown when there are no pictures to choose from.
 settings-wallpaper-no-pictures = Нет изображений для выбора
-
-# Small words under that line.
-settings-wallpaper-no-pictures-about = Выберите папку с изображениями выше.

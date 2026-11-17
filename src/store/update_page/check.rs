@@ -7,7 +7,7 @@ use crate::store::{firmware, updates, Store};
 use crate::common::held::{self};
 use crate::common::run;
 use super::hold::{held_rows_follow, remind_flatpak};
-use super::install::{forget_failures, install_all_in};
+use super::install::{forget_failures, install_all};
 use super::read::{read_flatpaks, read_system};
 use super::words::{CHECK_LIMIT, no_flathub, not_fetched, too_long};
 use super::{APPS, FIRMWARE, Phase, SYSTEM, busy, own_busy, phase, refresh_off};
@@ -54,7 +54,7 @@ pub(super) fn start_asked(s: &mut Store) {
         return;
     }
     if phase(s) == Phase::Found && s.firmware.iter().all(|f| s.held.firmware(&f.id)) {
-        install_all_in(s);
+        install_all(s);
     }
 }
 
@@ -89,7 +89,7 @@ pub fn check_all(s: &mut Store) {
         plugin_page::opened(s);
     }
 
-    run::stream(&run::line_by_line(&["flatpak", "update", "--user", "--appstream", REMOTE]), |_| {},
+    run::stream(&run::line_by_line(&["flatpak", "update", "--appstream", REMOTE]), |_| {},
                 s.then(|s: &mut Store, ok: bool| read_flatpaks(s, false, move |s| {
                     if !ok {
                         could_not(s, APPS, no_flathub());

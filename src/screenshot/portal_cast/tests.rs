@@ -9,7 +9,7 @@ use cast_capture::{Screen, Window};
 use zbus::zvariant::{OwnedObjectPath, OwnedValue};
 
 use super::{offer, sender_of, wait_for, Cast, FRAME_GAP, INTERFACE, Kept, MONITOR, SESSION, Session, Wants};
-use super::desktop::{desktop_layout, kept, place, recall};
+use super::desktop::{desktop_layout, kept, place, recall, Out};
 use super::methods::{restore_of, started};
 use super::super::cast_capture;
 use super::super::cast_pick::Choice;
@@ -77,13 +77,13 @@ fn screens_are_placed_and_the_rest_is_black() {
     let (w, h, stride) = (4u32, 2u32, 16u32);
     let mut out = vec![0u8; (stride * h) as usize];
     let src = vec![9u8; 2 * 2 * 4];
-    place(&mut out, stride, (w, h), &src, (2, 2), (1, 0, 2, 2));
+    place(&Out::of(&mut out), stride, (w, h), &src, (2, 2), (1, 0, 2, 2));
     assert_eq!(&out[0..4], &[0, 0, 0, 0]);
     assert_eq!(&out[4..12], &[9; 8]);
     assert_eq!(&out[12..16], &[0, 0, 0, 0]);
 
     let mut out = vec![0u8; (stride * h) as usize];
-    place(&mut out, stride, (w, h), &src, (2, 2), (2, 0, 4, 4));
+    place(&Out::of(&mut out), stride, (w, h), &src, (2, 2), (2, 0, 4, 4));
     assert_eq!(&out[8..16], &[9; 8]);
     assert_eq!(&out[16 + 8..32], &[9; 8]);
 }
@@ -136,4 +136,17 @@ fn the_interface_answers_and_a_session_opens_and_closes() {
     let d = done.clone();
     assert!(crate::toolkit::bus::testing::until(&rig.lp, move || d.get()));
     assert_eq!(rig.stay.busy.get(), 0, "a closed session lets the portal go");
+}
+
+#[test]
+fn a_picture_past_the_end_of_the_memory_is_left_out() {
+    let (w, h, stride) = (4u32, 2u32, 16u32);
+    let mut out = vec![1u8; (stride * h) as usize - 8];
+    let src = vec![9u8; 4 * 2 * 4];
+    place(&Out::of(&mut out), stride, (w, h), &src, (4, 2), (0, 0, 4, 2));
+    assert_eq!(&out[0..16], &[9; 16], "the first row fits");
+    assert_eq!(&out[16..], &[1; 8], "the second does not, and nothing was written past the end");
+    let o = Out::of(&mut out);
+    o.zero();
+    assert!(out.iter().all(|b| *b == 0));
 }

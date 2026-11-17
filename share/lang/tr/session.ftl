@@ -24,15 +24,15 @@ session-lock-use-pin = PIN kullan
 session-lock-use-phone = Telefon kullan
 
 # Shown while the typed password or PIN is being checked.
-session-lock-checking = Denetleniyor...
+session-lock-checking = Denetleniyor…
 
 # SAFETY: needs a human review before it ships
 # Shown when the PIN has run out of time and the password is asked for instead.
-session-lock-pin-timed-out = PIN'in süresi doldu; parolanızı yazın.
+session-lock-pin-timed-out = PIN'in süresi doldu. Parolanızı yazın.
 
 # SAFETY: needs a human review before it ships
 # Shown after too many wrong PINs, and the password is asked for instead.
-session-lock-too-many-pins = Çok fazla yanlış PIN girildi; parolanızı yazın.
+session-lock-too-many-pins = Çok fazla yanlış PIN girildi. Parolanızı kullanın.
 
 # SAFETY: needs a human review before it ships
 # Shown after a wrong PIN, with how many tries are left (1 is one try left).
@@ -43,13 +43,13 @@ session-lock-wrong-pin =
     }
 
 # Shown while the phone is asked to unlock the screen.
-session-lock-asking-phone = Telefonunuza soruluyor...
+session-lock-asking-phone = Telefonunuza soruluyor…
 
 # Shown when the phone did not unlock the screen and the PIN may be typed.
-session-lock-phone-no-pin = Telefonunuz kilidi açmadı. PIN'inizi kullanın.
+session-lock-phone-no-pin = Trindle telefonunuzla kilidi açamadı. PIN'inizi kullanın.
 
 # Shown when the phone did not unlock the screen and the password must be typed.
-session-lock-phone-no-password = Telefonunuz kilidi açmadı. Parolanızı yazın.
+session-lock-phone-no-password = Trindle telefonunuzla kilidi açamadı. Parolanızı yazın.
 
 # SAFETY: needs a human review before it ships
 # Shown when the password typed is not the person's password.
@@ -83,7 +83,11 @@ session-wallpaper-over-200 = 200 MB üzeri
 session-wallpaper-reasons-or = { $first } veya { $second }
 
 # The line that says how many wallpapers were left out and why; the count and the reasons come in.
-session-wallpaper-left-out = { $count } tanesi dışarıda bırakıldı: { $why }.
+session-wallpaper-left-out =
+    { $count ->
+        [one] Trindle, { $why } olduğu için { $count } resmi dışarıda bıraktı.
+       *[other] Trindle, { $why } olduğu için { $count } resmi dışarıda bıraktı.
+    }
 
 # Under the lock screen when a phone or password check was given up on.
 session-lock-check-abandoned = Bu çok uzun sürdü. Tekrar deneyin.
@@ -94,11 +98,16 @@ session-lock-check-abandoned = Bu çok uzun sürdü. Tekrar deneyin.
 session-restart-question = Tüm masaüstü yeniden başlatılsın mı?
 
 # Under the heading: what restarting everything does to the open windows.
-session-restart-windows = Açık her pencere kapanır ve içlerinde kaydedilmeyen her şey kaybolur.
+session-restart-windows = Açık her pencere kapanır. Kaydetmediğiniz her şey kaybolur.
 
 # Tip of the round button that leaves everything as it is.
 session-restart-cancel = İptal
 
 # Main button that restarts the whole desktop.
 session-restart-go = Yeniden başlat
-
+session-lock-still-checking = Son denemeniz hâlâ denetleniyor. Biraz sonra yeniden deneyin.
+session-lock-wait =
+    { $n ->
+        [one] Çok fazla yanlış deneme. { $n } saniye sonra yeniden deneyin.
+       *[other] Çok fazla yanlış deneme. { $n } saniye sonra yeniden deneyin.
+    }

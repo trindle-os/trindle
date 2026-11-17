@@ -1,0 +1,23 @@
+extends: substitution
+message: "Use '%s', not '%s', so the same thing has one name everywhere."
+level: error
+ignorecase: true
+swap:
+  # "The pound sign in Trindle Sans" is a sign, not signing in.
+  (?<!\b(?:pound|plus|minus|hash|dollar|euro|equals|percent) )sign in: log in
+  signed in: logged in
+  sign out: log out
+  cursor: pointer
+  turn on: switch on
+  turns on: switches on
+  turned on: switched on
+  turn off: switch off
+  turns off: switches off
+  turned off: switched off
+  power (?:it )?off: switch off
+  goes in: installs
+  go in: install
+  name lookups?: website lookups
+  bring in: import
+  brings in: imports
+  brought in: imported

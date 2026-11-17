@@ -9,25 +9,25 @@ settings-permissions-keywords = разрешения разрешить конф
 
 # Help line at the foot of the Permissions page.
 # SAFETY: needs a human review before it ships
-settings-permissions-help = Что может использовать каждое приложение. Приложения из Flathub, программы, установленные в собственную папку, и плагины устанавливаются каждое в свою папку и по умолчанию ограничены. Закрашенный значок означает «разрешено»; щёлкните по нему, чтобы изменить. Изменение для приложения из Flathub вступает в силу при следующем запуске. Разрешённые устройства Thunderbolt и USB4 всегда подключаются без вопросов; забудьте устройство, чтобы вас спросили снова.
+settings-permissions-help = На этой странице показано, что может использовать каждое приложение. Приложения из Flathub, программы, установленные в собственную папку, и плагины работают каждое в своей изолированной среде с ограничениями по умолчанию. Изменение для приложения из Flathub вступает в силу при следующем запуске. Разрешённые устройства Thunderbolt и USB4 всегда подключаются без вопросов. Забудьте устройство, если хотите, чтобы вас спросили снова.
 
 # Red words when a permission could not be changed and nothing more is known.
 # SAFETY: needs a human review before it ships
 settings-permissions-not-changed = Не удалось изменить.
 
 # Words beside a plugin when its change was saved but the plugin could not be started again.
-settings-permissions-plugin-not-restarted = Сохранено, но плагин не удалось запустить снова. Изменение вступит в силу при следующем запуске.
+settings-permissions-plugin-not-restarted = Сохранено, но Trindle не смогла перезапустить плагин. Изменение вступит в силу при следующем запуске.
 
 # Said beside an app, plugin or switch once a permission change is saved.
 settings-permissions-saved = Сохранено
 
 # Help text of the AppImages card (the information button).
 # SAFETY: needs a human review before it ships
-settings-permissions-loose-images = Каждый AppImage запускается в отдельной изолированной среде с личной домашней папкой. Закрашенный значок означает «разрешено»; щёлкните по нему, чтобы изменить. Изменение вступает в силу при следующем запуске AppImage.
+settings-permissions-loose-images = Каждый AppImage запускается в своей изолированной среде с личной домашней папкой. Изменение вступает в силу при следующем запуске AppImage.
 
 # Help text of the Started from Folders card (the information button).
 # SAFETY: needs a human review before it ships
-settings-permissions-loose-programs = Программы, запущенные из «Папок», работают каждая в отдельной изолированной среде с личной домашней папкой. Закрашенный значок означает «разрешено»; щёлкните по нему, чтобы изменить. Изменение вступает в силу при следующем запуске программы.
+settings-permissions-loose-programs = Каждая программа, которую вы запускаете из Folders, работает в своей изолированной среде с личной домашней папкой. Изменение вступает в силу при следующем запуске программы.
 
 # A permission's name and what is true with it off, one after another in a card's help text: { $title } is the permission, { $words } what it means.
 settings-permissions-title-and-words = { $title }: { $words }
@@ -44,20 +44,20 @@ settings-permissions-older = Старые программы
 settings-permissions-allow-older = Разрешить старые программы
 
 # Help text on the Thunderbolt and USB4 card when the ports only carry screens.
-settings-permissions-lets-in-screens = Эти порты передают только изображение на экран, поэтому ни одно устройство не может получить доступ к памяти этого компьютера, и спрашивать не о чем.
+settings-permissions-lets-in-screens = Эти порты предназначены только для экранов, поэтому ни одно устройство не может получить доступ к памяти этого компьютера. Спрашивать не о чем.
 
 # Help text on the Thunderbolt and USB4 card when the ports only carry USB and screens.
-settings-permissions-lets-in-usb = Эти порты передают только USB и изображение на экран, поэтому ни одно устройство не может получить доступ к памяти этого компьютера, и спрашивать не о чем.
+settings-permissions-lets-in-usb = Эти порты предназначены только для USB и экранов, поэтому ни одно устройство не может получить доступ к памяти этого компьютера. Спрашивать не о чем.
 
 # Help text on the Thunderbolt and USB4 card when the ports let every device in.
 # SAFETY: needs a human review before it ships
-settings-permissions-lets-in-all = Эти порты сами подключают любое устройство, поэтому спрашивать не о чем. Это задаётся в прошивке компьютера.
+settings-permissions-lets-in-all = Эти порты подключают любое устройство, поэтому спрашивать не о чем. Это задаётся в прошивке компьютера.
 
 # Under Nothing to ask on the Thunderbolt and USB4 card, when the ports only carry screens.
-settings-permissions-short-screens = Эти порты передают только изображение на экран.
+settings-permissions-short-screens = Эти порты используются только для экранов.
 
 # Under Nothing to ask on the Thunderbolt and USB4 card, when the ports only carry USB and screens.
-settings-permissions-short-usb = Эти порты передают только USB и изображение на экран.
+settings-permissions-short-usb = Эти порты используются только для USB и экранов.
 
 # Under Nothing to ask on the Thunderbolt and USB4 card, when the firmware lets every device in.
 # SAFETY: needs a human review before it ships
@@ -68,6 +68,9 @@ settings-permissions-version = Версия { $v }
 
 # Under a plugin's name when it asks for nothing: its version number is { $v }.
 settings-permissions-version-asks-nothing = Версия { $v }. Ничего не запрашивает.
+
+# Under a plugin's name: its version number is { $v }, and { $notes } lists what it may do that matters most, such as "it can act as you and it can type into your windows".
+settings-permissions-version-notes = Версия { $v }: { $notes }.
 
 # Under a plugin's name: the words so far are { $sub }, then the ports it listens on in { $detail }.
 settings-permissions-sub-listen = { $sub }. { $detail }
@@ -81,23 +84,23 @@ settings-permissions-thunder = Thunderbolt и USB4
 
 # Help text of the Thunderbolt and USB4 card: { $about } is a further sentence, or nothing.
 # SAFETY: needs a human review before it ships
-settings-permissions-thunder-about = Разрешённые устройства Thunderbolt и USB4 всегда подключаются без вопросов; забудьте устройство, чтобы вас спросили снова. { $about }
+settings-permissions-thunder-about = Разрешённые вами устройства Thunderbolt и USB4 всегда подключаются без вопросов. Забудьте устройство, если хотите, чтобы вас спросили снова. { $about }
 
 # Heading of a line on the Thunderbolt and USB4 card while it is read.
 settings-permissions-ports = Порты
 
 # Under The ports while the Thunderbolt and USB4 card is read.
-settings-permissions-reading-ports = Узнаём, что они пропускают…
+settings-permissions-reading-ports = Проверяем порты…
 
 # Heading of a line on the Thunderbolt and USB4 card.
 # SAFETY: needs a human review before it ships
 settings-permissions-devices-allowed = Разрешённые устройства
 
 # Under a line of the Thunderbolt and USB4 card while it is read.
-settings-permissions-reading = Чтение…
+settings-permissions-reading = Загрузка…
 
 # Heading of a line on the Thunderbolt and USB4 card while it is read.
-settings-permissions-memory-apart = Память отделена
+settings-permissions-memory-apart = Защита памяти
 
 # Heading of the line on the Thunderbolt and USB4 card when the computer has no such ports.
 settings-permissions-no-ports = Нет портов Thunderbolt и USB4
@@ -106,30 +109,26 @@ settings-permissions-no-ports = Нет портов Thunderbolt и USB4
 settings-permissions-nothing-to-ask = Поэтому спрашивать не о чем.
 
 # Under Devices allowed when the computer has no Thunderbolt or USB4 ports.
-settings-permissions-none-plug = Нет: так ничего не подключается.
+settings-permissions-none-plug = Устройства так не подключаются.
 
 # Heading of the line on the Thunderbolt and USB4 card when the ports let every device in.
 settings-permissions-nothing-ask = Спрашивать не о чем
 
 # Under Devices allowed when the ports let every device in themselves.
 # SAFETY: needs a human review before it ships
-settings-permissions-every-one = Все, сами порты.
+settings-permissions-every-one = Все. Решают сами порты.
 
 # Help text of the Thunderbolt and USB4 card when the computer keeps devices away from memory.
 # SAFETY: needs a human review before it ships
-settings-permissions-iommu = Этот компьютер также не пускает устройства к памяти, которую им не выдали, поэтому риск меньше. Если забыть устройство, оно останется подключённым, пока его не отключат.
+settings-permissions-iommu = Этот компьютер также не пускает устройства к памяти, которая им не принадлежит, поэтому риск меньше. Если забыть устройство, оно останется подключённым, пока вы его не отключите.
 
 # Help text of the Thunderbolt and USB4 card when the computer does not keep devices away from memory.
 # SAFETY: needs a human review before it ships
-settings-permissions-no-iommu = Если забыть устройство, оно останется подключённым, пока его не отключат; в следующий раз о нём спросят снова.
+settings-permissions-no-iommu = Если забыть устройство, оно останется подключённым, пока вы его не отключите. При следующем подключении вас спросят снова.
 
 # Heading of the line on the Thunderbolt and USB4 card that lists the devices.
 # SAFETY: needs a human review before it ships
-settings-permissions-asked-before = Вопрос перед подключением нового устройства
-
-# Under the heading above.
-# SAFETY: needs a human review before it ships
-settings-permissions-forget-one = Забудьте устройство, чтобы вас спросили снова.
+settings-permissions-asked-before = Вас спрашивают о новых устройствах
 
 # Red words when the list of allowed Thunderbolt devices could not be read: the reason is { $why }.
 settings-permissions-devices-not-read = Не удалось прочитать список разрешённых устройств: { $why }
@@ -153,30 +152,30 @@ settings-permissions-may-always = Всегда может подключатьс
 settings-permissions-made-by = Производитель: { $vendor }. Всегда может подключаться.
 
 # Headline while the list of apps is being read.
-settings-permissions-reading-apps = Узнаём, что может использовать каждое приложение…
+settings-permissions-reading-apps = Проверяем, что могут использовать приложения…
 
 # Headline while Flatpak is still answering: how many apps are listed.
 settings-permissions-reading-each =
     { $n ->
-        [one] Узнаём, что может использовать каждое из приложений: { $n }…
-        [few] Узнаём, что может использовать каждое из приложений: { $n }…
-        [many] Узнаём, что может использовать каждое из приложений: { $n }…
-       *[other] Узнаём, что может использовать каждое из приложений: { $n }…
+        [one] Проверяем, что могут использовать приложения (всего { $n })…
+        [few] Проверяем, что могут использовать приложения (всего { $n })…
+        [many] Проверяем, что могут использовать приложения (всего { $n })…
+       *[other] Проверяем, что могут использовать приложения (всего { $n })…
     }
 
 # Headline when no app or plugin is kept in a box of its own.
-settings-permissions-no-apps = Нет установленных приложений или плагинов в собственной изолированной среде.
+settings-permissions-no-apps = Вы не установили приложений или плагинов, которые работают в собственной изолированной среде.
 
 # Headline when exactly one app is kept in a box of its own.
-settings-permissions-one-app = Одно приложение работает в собственной изолированной среде и использует только то, что разрешено здесь.
+settings-permissions-one-app = Одно приложение работает в собственной изолированной среде и может использовать только то, что вы разрешите здесь.
 
 # Headline: how many apps and plugins are kept in a box of their own.
 settings-permissions-many-apps =
     { $n ->
-        [one] { $n } приложение или плагин работает в собственной изолированной среде и использует только то, что разрешено здесь.
-        [few] Приложения и плагины в собственных изолированных средах: { $n }. Они используют только то, что разрешено здесь.
-        [many] Приложения и плагины в собственных изолированных средах: { $n }. Они используют только то, что разрешено здесь.
-       *[other] Приложения и плагины в собственных изолированных средах: { $n }. Они используют только то, что разрешено здесь.
+        [one] { $n } приложение или плагин работает в собственной изолированной среде и может использовать только то, что вы разрешите здесь.
+        [few] Приложений и плагинов: { $n }. Каждый работает в своей изолированной среде и может использовать только то, что вы разрешите здесь.
+        [many] Приложений и плагинов: { $n }. Каждый работает в своей изолированной среде и может использовать только то, что вы разрешите здесь.
+       *[other] Приложений и плагинов: { $n }. Каждый работает в своей изолированной среде и может использовать только то, что вы разрешите здесь.
     }
 
 # Heading of the card for apps from Flathub.
@@ -192,40 +191,37 @@ settings-permissions-plugins = Плагины
 settings-permissions-appimages = AppImage
 
 # Heading of the card for programs started from Folders.
-settings-permissions-from-folders = Запущены из «Папок»
+settings-permissions-from-folders = Запущены из Folders
 
 # Under a kind of app on the Permissions page when none is installed.
 settings-permissions-none-installed = Ничего не установлено.
 
 # Under a kind of app on the Permissions page when none has been run.
-settings-permissions-none-run = Пока ничего не запускалось.
+settings-permissions-none-run = Пока нет.
 
 # Help text of the Flathub apps card (the information button).
 # SAFETY: needs a human review before it ships
-settings-permissions-flathub-about = Каждое приложение из Flathub работает в собственной изолированной среде и может использовать только то, что разрешено здесь. Закрашенный значок означает «разрешено»; щёлкните по нему, чтобы изменить. Изменение вступает в силу при следующем запуске приложения.
+settings-permissions-flathub-about = Каждое приложение из Flathub работает в собственной изолированной среде и может использовать только то, что разрешено здесь. Изменение вступает в силу при следующем запуске приложения.
 
 # Help text of the In their own folder card (the information button).
 # SAFETY: needs a human review before it ships
-settings-permissions-debs-about = Программы, установленные в собственную папку, по умолчанию ограничены. Закрашенный значок означает «разрешено»; щёлкните по нему, чтобы изменить.
+settings-permissions-debs-about = Программы, которые поставляются с Trindle, например Терминал, и программы, которые вы установили из файлов .deb. Каждая работает в собственной папке с ограничениями по умолчанию.
 
 # Help text of the Plugins card (the information button).
 # SAFETY: needs a human review before it ships
-settings-permissions-plugins-about = Плагины по умолчанию ограничены, и им можно разрешить только то, что они запрашивают. Плагин, работающий в фоне, сразу запускается снова с изменением.
+settings-permissions-plugins-about = Плагины сначала ограничены, и вы можете разрешить только то, что плагин запрашивает. Плагин, работающий в фоне, сразу перезапускается, когда вы что-то меняете.
 
 # Typing codes card: every short code Trindle swaps for words as you type.
 settings-permissions-codes = Коды для набора
 
 # SAFETY: needs a human review before it ships
-settings-permissions-codes-about = Короткие коды, которые Trindle заменяет словами при наборе, и модуль, которому принадлежит каждый код. Отключите коды модуля круглой кнопкой.
+settings-permissions-codes-about = Короткие коды, которые Trindle заменяет словами при наборе. Для каждого указан плагин, которому он принадлежит.
 
 settings-permissions-codes-none = Активных кодов нет
 
-# SAFETY: needs a human review before it ships
-settings-permissions-codes-none-sub = Здесь перечислены коды модулей, которым разрешено их раскрывать.
-
 # Button on a plugin's row: stops that plugin's codes.
 # SAFETY: needs a human review before it ships
-settings-permissions-codes-off = Отключить коды модуля { $name }
+settings-permissions-codes-off = Отключить коды плагина { $name }
 
 settings-permissions-codes-count =
     { $n ->
@@ -254,7 +250,7 @@ settings-permissions-codes-unread-line = Не удалось прочитать 
 # SAFETY: needs a human review before it ships
 settings-permissions-codes-unread = Не удалось прочитать папку плагинов, поэтому в списке могут отсутствовать некоторые коды.
 
-settings-permissions-not-added = Запущено из Folders, не добавлено в Apps
+settings-permissions-not-added = Открыто из Folders, нет в «Приложениях»
 
 settings-permissions-kind-tip = Тип приложения
 
@@ -264,22 +260,22 @@ settings-permissions-kind-tip = Тип приложения
 settings-outside-heading = Программы вне изолированной среды
 
 # Help text of that card (the information button): what Trindle can and cannot do for them.
-settings-outside-about = Trindle проверяет каждые несколько секунд и сообщает вам. Она не может остановить эти программы и может пропустить быструю. Программа в изолированной среде ограничена ею.
+settings-outside-about = Trindle проверяет каждые несколько секунд и сообщает вам, что нашла. Она не может остановить эти программы и может пропустить ту, что работает лишь мгновение. Программы в изолированной среде могут использовать только то, что она разрешает.
 
 # Label of the switch for the notice about the network.
-settings-outside-network = Сообщать, когда программа выходит в сеть
+settings-outside-network = Сообщать мне, когда программы используют сеть
 
 # Label of the switch for the notice about the person's files.
-settings-outside-files = Сообщать, когда у программы открыты ваши файлы
+settings-outside-files = Сообщать мне, когда программы открывают мои файлы
 
 # Under those two switches.
 settings-outside-once = Один раз для каждой программы.
 
 # Tip of the round button that makes a program be said again; { $name } is the program.
-settings-outside-forget = Сообщить снова про «{ $name }»
+settings-outside-forget = Больше не игнорировать «{ $name }»
 
 # Under a program marked fine for the network.
-settings-outside-fine-network = Выход в сеть допустим.
+settings-outside-fine-network = Использование сети допустимо.
 
 # Under a program marked fine for the person's files.
 settings-outside-fine-files = Открытые файлы допустимы.
@@ -291,13 +287,10 @@ settings-outside-no-fine = Ни одна программа не отмечен�
 settings-downloads-heading = Скачанные файлы
 
 # Help text of that card (the information button).
-settings-downloads-about = Файл из интернета это файл в «Загрузках» или отмеченный браузером. Программа, которая его открывает, получает только этот файл, только для чтения, без интернета и без ваших папок. Это не относится к собственной кнопке «Открыть» в браузере, которая запускает программу сама.
+settings-downloads-about = Файлы в «Загрузках» и файлы, которые браузер пометил как скачанные, открываются в изолированной среде. Программа, которая открывает такой файл, получает только его. Она может только читать его и не может пользоваться интернетом и вашими папками. Это не относится к собственной кнопке «Открыть» в браузере, которая запускает программу сама.
 
 # Label of the switch that opens downloaded files in a box.
 settings-downloads-box = Открывать скачанные файлы в изолированной среде
-
-# Under that switch.
-settings-downloads-box-sub = Без интернета и только этот файл, только для чтения.
 
 # Tip of the switch that opens one type of downloaded file as normal; { $kind } is the type, such as pdf.
 settings-downloads-normal = Открывать файлы { $kind } как обычно
@@ -306,8 +299,7 @@ settings-downloads-normal = Открывать файлы { $kind } как об�
 settings-downloads-type = Файлы { $kind }
 
 # Under a file type's switch.
-settings-downloads-normal-sub = Включено: открываются как обычно, с интернетом.
+settings-downloads-normal-sub = Открываются как обычно, с интернетом.
 
 # The line in the card when no downloaded file has been opened in a box yet.
-settings-downloads-none = Типов пока нет. Тип появится в списке, когда скачанный файл откроется в изолированной среде.
-
+settings-downloads-none = Типов файлов пока нет. Тип появится здесь после того, как скачанный файл откроется в изолированной среде.

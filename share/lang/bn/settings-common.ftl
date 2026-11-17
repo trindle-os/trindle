@@ -7,13 +7,16 @@ settings-common-saved = সংরক্ষিত
 # Said beside a button that worked, when nothing more is known.
 settings-common-done = হয়েছে
 
+# Words that only say "that worked", in lower case and separated by bars. A line saying one of them under a control that has already moved is left out, as the glow says it. Translate each word, and keep the bars.
+settings-common-quiet-words = সংরক্ষিত|হয়ে গেছে|এখন ব্যবহার হচ্ছে|বদলেছে|সেট হয়েছে|নেওয়া হয়েছে|যোগ হয়েছে|মুক্ত হয়েছে|সরানো হয়েছে|জমা আছে|ইনস্টল হয়েছে|হালনাগাদ হয়েছে|যোগ দিয়েছে|কপি হয়েছে|এখন ডিফল্ট|বাজানো হয়েছে|পাঠানো হয়েছে|যুক্ত|যুক্ত হচ্ছে|চালু|বন্ধ|ভুলে গেছে|৮০%-এ থামে|পুরো চার্জ হয়|লগইনে চালু হয়|রাখা আছে, কিন্তু চালু হয় না|হালনাগাদ আছে
+
 # Said beside a button that failed, when nothing more is known.
 settings-common-not-done = হয়নি
 
 # Tip of the information button at the top of every Settings page.
 settings-common-about-page = এই পাতা সম্পর্কে
 
-# Tip of the information button on a card: { $name } is the card's heading in lower case.
+# Tip of the information button on a card: { $name } is the card's heading as it is written.
 settings-common-about-card = { $name } সম্পর্কে
 
 # Heading of the question when a name is already taken: { $name } is the name.
@@ -30,7 +33,7 @@ settings-common-same-for-rest-more =
 settings-common-same-for-rest = বাকিগুলোর জন্য একই করুন
 
 # Tip of the button that keeps the one already there.
-settings-common-skip = বাদ দিন: আগে থেকে থাকাটি রাখুন
+settings-common-skip = বাদ দিন এবং আগেরটি রাখুন
 
 # Button that replaces the one already there.
 # SAFETY: needs a human review before it ships
@@ -38,10 +41,10 @@ settings-common-replace = বদলে দিন
 
 # Spoken name of the Replace button.
 # SAFETY: needs a human review before it ships
-settings-common-replace-spoken = আগে থেকে থাকাটিকে যেটি আনা হচ্ছে সেটি দিয়ে বদলে দিন
+settings-common-replace-spoken = আগেরটির জায়গায় নতুনটি বসান
 
 # Heading of the line that shows the new one, in the question about a name already taken.
-settings-common-being-brought = যেটি আনা হচ্ছে
+settings-common-being-brought = নতুনটি
 
 # Heading of the line that shows the one already there.
 settings-common-already-line = যেটি আগে থেকে আছে
@@ -53,19 +56,19 @@ settings-common-replace-question = আগে থেকে থাকাটি ব
 # At the foot of the window while a change is on trial: how many seconds are left.
 settings-common-goes-back =
     { $left ->
-        [one] { $left } সেকেন্ডে আগের অবস্থায় ফিরবে।
-       *[other] { $left } সেকেন্ডে আগের অবস্থায় ফিরবে।
+        [one] { $left } সেকেন্ডে ফিরিয়ে নেওয়া হবে।
+       *[other] { $left } সেকেন্ডে ফিরিয়ে নেওয়া হবে।
     }
 
 # At the foot of the window while a change is on trial: the seconds left, then { $more } such as what Escape does.
 settings-common-goes-back-more =
     { $left ->
-        [one] { $left } সেকেন্ডে আগের অবস্থায় ফিরবে। { $more }
-       *[other] { $left } সেকেন্ডে আগের অবস্থায় ফিরবে। { $more }
+        [one] { $left } সেকেন্ডে ফিরিয়ে নেওয়া হবে। { $more }
+       *[other] { $left } সেকেন্ডে ফিরিয়ে নেওয়া হবে। { $more }
     }
 
 # Button at the foot of the window that undoes the change on trial.
-settings-common-go-back-now = এখনই ফিরে যান
+settings-common-go-back-now = এখনই আগের অবস্থায় ফেরান
 
 # Button at the foot of the window that keeps the change on trial.
 settings-common-keep = রাখুন
@@ -74,10 +77,10 @@ settings-common-keep = রাখুন
 settings-common-not-available = { $what } পাওয়া যায় না
 
 # Under that heading: { $package } is the name of the package to install.
-settings-common-install-with = এটি ইনস্টল করুন: sudo apt install { $package }
+settings-common-install-with = ইনস্টল করতে এটি চালান: sudo apt install { $package }
 
 # Red words when a web page could not be opened.
-settings-common-no-browser = ওয়েব পাতা খোলা যায়নি: কোনো ওয়েব ব্রাউজার চালু করা যায়নি।
+settings-common-no-browser = Trindle ওয়েব পাতা খুলতে পারেনি, কারণ কোনো ওয়েব ব্রাউজার চালু করা যায়নি।
 
 # Red words when one of Trindle's programs could not be opened: { $name } is its name.
 settings-common-could-not-open = { $name } খোলা যায়নি।
@@ -86,19 +89,19 @@ settings-common-could-not-open = { $name } খোলা যায়নি।
 settings-common-not-saved = এটি সংরক্ষণ করা যায়নি।
 
 # Red words when an action needs the system's message bus and there is none.
-settings-common-no-system-bus = হয়নি: সিস্টেমের মেসেজ বাসে পৌঁছানো যায়নি। কম্পিউটার রিস্টার্ট করে আবার চেষ্টা করুন।
+settings-common-no-system-bus = Trindle এটি করতে পারেনি, কারণ সিস্টেমের একটি অংশ সাড়া দিচ্ছে না। কম্পিউটার রিস্টার্ট করে আবার চেষ্টা করুন।
 
 # Red words when an action needs this login's message bus and there is none.
-settings-common-no-session-bus = হয়নি: এই লগইনের মেসেজ বাসে পৌঁছানো যায়নি। লগ আউট করে আবার ঢুকে চেষ্টা করুন।
+settings-common-no-session-bus = Trindle এটি করতে পারেনি, কারণ আপনার লগইনের একটি অংশ সাড়া দিচ্ছে না। লগ আউট করে আবার ঢুকে চেষ্টা করুন।
 
 # Red words when the window for choosing a file or folder could not be opened.
-settings-common-no-chooser = বাছাইয়ের জানালা খোলা যায়নি। লগ আউট করে আবার ঢুকে চেষ্টা করুন।
+settings-common-no-chooser = Trindle ফাইল বা ফোল্ডার বাছাইয়ের জানালা খুলতে পারেনি। লগ আউট করে আবার ঢুকে চেষ্টা করুন।
 
 # Cause given in red words after an action failed: the disk is full.
 settings-common-why-full = ডিস্ক ভরা।
 
 # Cause given in red words after an action failed: the disk is read only.
-settings-common-why-read-only = ডিস্কে এখন লেখা যাচ্ছে না।
+settings-common-why-read-only = Trindle এখন ডিস্কে লিখতে পারছে না।
 
 # Cause given in red words after an action failed: the part of the system that does it is not running.
 settings-common-why-not-running = সিস্টেমের যে অংশ এটি করে তা চলছে না।
@@ -127,16 +130,16 @@ settings-common-and = { $rest } ও { $last }
 settings-common-list-comma = { ", " }
 
 # Spoken name of the picture of the ring opening on a small screen.
-settings-common-ring-picture = স্ক্রিনের কিনারায় ক্লিক করলে রিং খোলে।
+settings-common-ring-picture = স্ক্রিনের কিনারায় ডাবল ক্লিক করে রিং খুলুন।
 
 # Word drawn in the middle of that picture.
 settings-common-ring-name = রিং
 
 # Red words under the charge limit switch when the laptop's firmware door could not be opened; { $error } is the system's reason.
-charge-no-firmware-door = ল্যাপটপের ফার্মওয়্যারে পৌঁছানো যায়নি: { $error }
+charge-no-firmware-door = Trindle ল্যাপটপের চার্জ নিয়ন্ত্রণে পৌঁছাতে পারেনি: { $error }
 
 # Red words under the charge limit switch when the laptop's firmware refused the limit.
-charge-firmware-refused = ল্যাপটপের ফার্মওয়্যার চার্জের সীমা নেয়নি।
+charge-firmware-refused = ল্যাপটপ চার্জের সীমা মেনে নেয়নি।
 
 # Red words under the charge limit switch on a computer that cannot stop charging early.
 charge-not-allowed = এই কম্পিউটারে আগেভাগে চার্জ থামানো যায় না।
@@ -153,3 +156,6 @@ graphics-vm-body-fast = Trindle { $machine }-এ চলছে। সেখান
 # Note to someone in a virtual machine without 3D graphics; { $machine } is the machine's name.
 graphics-vm-body-slow = Trindle { $machine }-এ ৩ডি গ্রাফিক্স ছাড়া চলছে, তাই গ্রাফিক্স চিপ সাধারণত যা আঁকে তা প্রসেসরকে আঁকতে হচ্ছে। জানালা, ভিডিও ও ওয়েব পাতা আসল কম্পিউটারের চেয়ে ধীর লাগবে, এবং Trindle সাহায্যের জন্য অ্যানিমেশন বাদ দেয়। যে কম্পিউটারে এটি চলে সে পারলে, ভার্চুয়াল মেশিনের ডিসপ্লে সেটিংসে ৩ডি অ্যাক্সেলারেশন চালু করলে অনেক তফাত হয়। আসল কম্পিউটারে ইনস্টল করলে এর কিছুই প্রযোজ্য নয়।
 
+
+# A list of choices ends with this: { $rest } is the names before the last, { $last } the last.
+settings-common-or = { $rest } বা { $last }

@@ -13,17 +13,17 @@ greeter-ready-phone = Type your password, or press Enter to use your phone.
 # Under the boxes, before a name is in.
 greeter-ready-name = Type your name and password, then press Enter.
 # Red line under the boxes after the phone did not log the person in.
-greeter-phone-failed = Your phone did not log you in. Type your password.
+greeter-phone-failed = Your phone didn't log you in. Type your password.
 # Under the password box for a few seconds, where a phone is paired.
-greeter-phone-hint = The phone button logs you in with your phone.
+greeter-phone-hint = Log in with your phone
 # At the foot of the screen, for when nothing else works.
 greeter-trouble = Trouble logging in? Press Ctrl+Alt+F2 for a text login.
 # Beside the light drawing switch, on a computer with no graphics chip.
-greeter-no-chip = No graphics chip was found, so light drawing keeps things quick.
+greeter-no-chip = Trindle couldn't find a graphics chip, so it's using simpler graphics to keep the desktop responsive.
 # The main button's name (a round button with an arrow) that logs in.
-greeter-sign-in = Sign in
+greeter-sign-in = Log in
 # Red line under the boxes when the name and password are wrong, or the account is unknown.
-greeter-no-match = That name and password do not match.
+greeter-no-match = That name and password don't match.
 # Red line under the boxes after too many wrong passwords.
 greeter-pam-max-tries = Too many tries. Wait a minute, then try again.
 # Red line under the boxes when the account has run out.
@@ -31,7 +31,7 @@ greeter-pam-account-expired = This account has expired.
 # Red line under the boxes when the password must be changed before logging in.
 greeter-pam-password-expired = This password has expired. Log in on a text console (Ctrl+Alt+F2) to change it.
 # Red line under the boxes, or the sentence at the top, when the login failed and the system gave no reason.
-greeter-login-failed = Logging in did not work.
+greeter-login-failed = Couldn't log you in.
 # Red line under the name box when Enter is pressed with no name.
 greeter-name-first = Type your name first.
 # Sentence at the top while waiting for the phone to answer.
@@ -47,7 +47,7 @@ greeter-answer-box = Answer
 # Name and tip of the round button that logs in with a paired phone.
 greeter-use-phone = Use phone
 # Name of the switch for light drawing on a computer with no graphics chip, and the word under it.
-greeter-light-drawing = Light drawing
+greeter-light-drawing = Low graphics
 # Tip of the round button that shows or hides the on-screen keyboard.
 greeter-keyboard-tip = On-screen keyboard
 # Word under the on-screen keyboard button.
@@ -65,20 +65,20 @@ greeter-shut-down = Shut down
 # Tip of the shut down button after the first press.
 greeter-shut-down-sure = Press again to shut down
 # Red line under the boxes when a power button is pressed and the system has no bus to ask.
-greeter-no-bus = The system bus is not available.
+greeter-no-bus = Trindle can't reach the system.
 # Red line under the boxes when the system refused to restart; the reason follows, as the system worded it.
-greeter-restart-failed = Could not restart: { $why }
+greeter-restart-failed = Couldn't restart: { $why }
 # Red line under the boxes when the system refused to turn off; the reason follows, as the system worded it.
-greeter-shut-down-failed = Could not shut down: { $why }
+greeter-shut-down-failed = Couldn't shut down: { $why }
 # Red line under the boxes when the login service could not be spoken to.
-greeter-service-no-talk = Could not talk to the login service.
+greeter-service-no-talk = Couldn't reach the login service.
 # Red line under the boxes when the login service was too slow.
-greeter-service-timeout = The login service did not answer in time.
+greeter-service-timeout = The login service took too long.
 # Red line under the boxes when the login service hung up.
 greeter-service-closed = greetd closed the connection.
 # Red line under the boxes when the login service's answer was far too large.
-greeter-service-too-big = The login service answered with something too big to read.
+greeter-service-too-big = The login service sent a reply that was too big to read.
 # Red line under the boxes when the login screen was started by hand and not by the login service.
-greeter-service-not-started = GREETD_SOCK is not set: the login screen was not started by greetd.
+greeter-service-not-started = GREETD_SOCK is not set, so greetd did not start this login screen.
 # Red line under the boxes when there is no connection to the login service.
 greeter-service-no-connection = no connection

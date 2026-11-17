@@ -22,11 +22,11 @@ session-lock-use-pin = Use PIN
 # Name shown beside the phone button, to unlock with the person's phone.
 session-lock-use-phone = Use phone
 # Shown while the typed password or PIN is being checked.
-session-lock-checking = Checking...
+session-lock-checking = Checking…
 # Shown when the PIN has run out of time and the password is asked for instead.
-session-lock-pin-timed-out = The PIN has timed out; type your password.
+session-lock-pin-timed-out = The PIN has timed out. Type your password.
 # Shown after too many wrong PINs, and the password is asked for instead.
-session-lock-too-many-pins = Too many wrong PINs; type your password.
+session-lock-too-many-pins = Too many wrong PINs. Use your password.
 # Shown after a wrong PIN, with how many tries are left (1 is one try left).
 session-lock-wrong-pin =
     { $n ->
@@ -34,13 +34,13 @@ session-lock-wrong-pin =
        *[other] Wrong PIN. { $n } tries left.
     }
 # Shown while the phone is asked to unlock the screen.
-session-lock-asking-phone = Asking your phone...
+session-lock-asking-phone = Asking your phone…
 # Shown when the phone did not unlock the screen and the PIN may be typed.
-session-lock-phone-no-pin = Your phone did not unlock it. Use your PIN.
+session-lock-phone-no-pin = Trindle couldn't unlock with your phone. Use your PIN.
 # Shown when the phone did not unlock the screen and the password must be typed.
-session-lock-phone-no-password = Your phone did not unlock it. Type your password.
+session-lock-phone-no-password = Trindle couldn't unlock with your phone. Type your password.
 # Shown when the password typed is not the person's password.
-session-lock-wrong-password = That password is not right.
+session-lock-wrong-password = That password isn't right.
 
 ## One moment, please (src/session/starting.rs)
 
@@ -58,7 +58,7 @@ session-wallpaper-larger-4k = larger than 4K
 # A reason a wallpaper was left out: the film is bigger than the screen.
 session-wallpaper-larger-screen = larger than your screen
 # A reason a wallpaper was left out: its file is over 20 MB, or over 200 MB if it moves.
-session-wallpaper-over-20-or-200 = over 20 MB (200 MB if moving)
+session-wallpaper-over-20-or-200 = over 20 MB (200 MB animated)
 # A reason a wallpaper was left out: its file is over 20 MB.
 session-wallpaper-over-20 = over 20 MB
 # A reason a wallpaper was left out: its file is over 200 MB.
@@ -66,17 +66,29 @@ session-wallpaper-over-200 = over 200 MB
 # Two reasons joined, as in "larger than 4K or over 20 MB"; the two come in.
 session-wallpaper-reasons-or = { $first } or { $second }
 # The line that says how many wallpapers were left out and why; the count and the reasons come in.
-session-wallpaper-left-out = { $count } left out: { $why }.
+session-wallpaper-left-out =
+    { $count ->
+        [one] Trindle left out { $count } picture because it's { $why }.
+       *[other] Trindle left out { $count } pictures because they're { $why }.
+    }
 
 # Under the lock screen when a phone or password check was given up on.
 session-lock-check-abandoned = That took too long. Try again.
+# Under the lock screen when Enter is pressed while the last try, given up on, is still being checked.
+session-lock-still-checking = Still checking your last try. Try again in a moment.
+# Under the lock screen after several wrong tries, with how many seconds to wait (1 is one second).
+session-lock-wait =
+    { $n ->
+        [one] Too many wrong tries. Try again in { $n } second.
+       *[other] Too many wrong tries. Try again in { $n } seconds.
+    }
 
 ## The question before everything is restarted (src/session/restart_ask.rs)
 
 # Heading of the question asked by Ctrl+Alt+Shift+Esc and by the Restart everything button in Settings.
 session-restart-question = Restart the whole desktop?
 # Under the heading: what restarting everything does to the open windows.
-session-restart-windows = Every open window will close, and anything not saved in them will be lost.
+session-restart-windows = Every open window will close. Anything you haven't saved will be lost.
 # Tip of the round button that leaves everything as it is.
 session-restart-cancel = Cancel
 # Main button that restarts the whole desktop.

@@ -2,7 +2,7 @@
 # machine translated (Vietnamese), not yet reviewed by a person.
 
 # Sentence at the top of the page when there are no printers.
-settings-printers-sum-none = Chưa có máy in nào. Các máy in tìm thấy trên mạng của bạn được liệt kê bên dưới.
+settings-printers-sum-none = Chưa có máy in nào. Các máy in Trindle tìm thấy trên mạng của bạn được liệt kê bên dưới.
 
 # Sentence at the top of the page when the printer used first is paused.
 settings-printers-sum-paused = { $name } đang tạm dừng, nên tạm thời sẽ không in gì trên nó.
@@ -17,20 +17,23 @@ settings-printers-sum-ready = Sẵn sàng in trên { $name }.
 settings-printers-sum-state = { $name } đang ở trạng thái { $state }.
 
 # Sentence at the top of the page when one printer is set up and none is chosen to print on first.
-settings-printers-sum-one-unchosen = { $name } đã được thiết lập; chưa chọn máy in nào để in trước.
+settings-printers-sum-one-unchosen = { $name } đã được thiết lập, nhưng bạn chưa chọn máy in mặc định.
 
 # Sentence at the top of the page when several printers are set up and none is chosen to print on first.
-settings-printers-sum-many-unchosen = Đã thiết lập { $n } máy in; chưa chọn máy nào để in trước.
+settings-printers-sum-many-unchosen = Đã thiết lập { $n } máy in, nhưng bạn chưa chọn máy in mặc định.
 
 # Red words under the Print jobs line when a job number is not one CUPS knows.
-settings-printers-bad-job = CUPS không biết lệnh in đó.
+settings-printers-bad-job = Lệnh in đó không còn nữa.
 
 # Shown beside a print job after it was cancelled.
 # SAFETY: needs a human review before it ships
 settings-printers-cancelled = Đã huỷ
 
 # Red words when CUPS fails and says nothing more.
-settings-printers-lpstat-failed = lpstat không chạy được
+settings-printers-lpstat-failed = Kiểm tra không thành công.
+
+# Red words when Trindle cannot reach CUPS at all, after trying twice.
+printers-unreachable = Dịch vụ in không chạy hoặc không kết nối được.
 
 # Words in the ring while the network is searched for printers.
 settings-printers-searching = Đang tìm
@@ -52,13 +55,13 @@ settings-printers-removed = Đã gỡ
 settings-printers-type-address = Hãy nhập địa chỉ của máy in trước.
 
 # Shown under the By its address line while the printer is added.
-settings-printers-adding = Đang thêm...
+settings-printers-adding = Đang thêm…
 
 # Shown beside a printer or the address line after it was added.
 settings-printers-added = Đã thêm
 
 # Shown beside a found printer while a driver is looked for.
-settings-printers-finding-driver = Đang tìm trình điều khiển của nó...
+settings-printers-finding-driver = Đang tìm trình điều khiển của nó…
 
 # Heading of a print job in the queue: its number and the printer.
 settings-printers-job = Lệnh in { $number } trên { $printer }
@@ -75,25 +78,19 @@ settings-printers-jobs = Lệnh in
 
 # Help text (i button) of the Print jobs card.
 # SAFETY: needs a human review before it ships
-settings-printers-jobs-about = Mọi lệnh in đang chờ, trên bất kỳ máy in nào, như hiện tại. Danh sách được đọc lại vài giây một lần khi trang này đang mở. Dấu chéo huỷ một lệnh in; giấy đã in rồi thì vẫn đã in.
+settings-printers-jobs-about = Mọi lệnh in đang chờ, trên bất kỳ máy in nào. Trindle cập nhật danh sách vài giây một lần khi trang này đang mở. Không thể huỷ những trang đã in xong.
 
 # Line in the Print jobs card when CUPS does not answer.
 settings-printers-cups-silent = CUPS không phản hồi
 
 # Small line under "CUPS is not answering" in the Print jobs card.
-settings-printers-queue-unreadable = Không thể đọc hàng đợi.
+settings-printers-queue-unreadable = Không đọc được hàng đợi.
 
 # Line in the Print jobs card while the queue is first read, and on the page while it is read.
 settings-printers-looking = Đang xem…
 
-# Small line under "Looking…" in the Print jobs card.
-settings-printers-queue = Hàng đợi.
-
 # Line in the Print jobs card when no job is waiting.
 settings-printers-nothing-waiting = Không có gì đang chờ
-
-# Small line under "Nothing waiting".
-settings-printers-nothing-waiting-sub = Các lệnh in hiện ở đây khi đang in.
 
 # State of a printer shown in its small line when it is paused.
 settings-printers-state-paused = Tạm dừng
@@ -108,7 +105,7 @@ settings-printers-state-printing = Đang in
 settings-printers-default-state = Mặc định, { $state }
 
 # Tip of the star button that makes a printer the one used first.
-settings-printers-make-default = In trên máy này trước
+settings-printers-make-default = Đặt làm mặc định
 
 # Tip of the button that prints a test page.
 settings-printers-test-page = In một trang thử
@@ -121,19 +118,13 @@ settings-printers-remove = Gỡ máy in này
 settings-printers-needs-filters = Việc tìm kiếm cần cups-filters
 
 # Small line under it; the command is to be typed as it is.
-settings-printers-install-filters = Hãy cài bằng lệnh: sudo apt install cups-filters
+settings-printers-install-filters = Để cài, hãy chạy lệnh: sudo apt install cups-filters
 
 # Tip of the plus button that adds a printer that was found.
 settings-printers-add-found = Thêm máy in này
 
 # Line in the Add a printer card when the search found nothing new.
 settings-printers-nothing-new = Không tìm thấy gì mới
-
-# Small line under "Nothing new found".
-settings-printers-nothing-new-sub = Máy in đã bật và cùng mạng chưa?
-
-# Small line under "Looking…" in the Add a printer card.
-settings-printers-looking-sub = Các máy tự thông báo, rồi lần lượt từng máy.
 
 # Placeholder of the box where a printer's address is typed.
 settings-printers-address-placeholder = 192.168.1.50
@@ -142,16 +133,13 @@ settings-printers-address-placeholder = 192.168.1.50
 settings-printers-add-it = Thêm
 
 # Heading of the line where a printer's address is typed.
-settings-printers-by-address = Theo địa chỉ
-
-# Small line under "By its address".
-settings-printers-by-address-sub = Như 192.168.1.50, hiện trên màn hình của chính máy in.
+settings-printers-by-address = Thêm theo địa chỉ
 
 # Heading of the card for adding printers.
 settings-printers-add-card = Thêm máy in
 
 # Help text (i button) of the Add a printer card.
-settings-printers-add-about = Trước hết tìm các máy in tự thông báo, sau đó lần lượt hỏi từng máy trên mạng. Máy in phải được bật và cùng mạng. Một số máy in không tự thông báo, và một số mạng không chuyển tiếp thông báo đó: hãy thêm theo địa chỉ, như 192.168.1.50. Bạn có thể thấy địa chỉ trên màn hình của chính máy in, trong phần cài đặt mạng.
+settings-printers-add-about = Trước hết Trindle tìm các máy in tự thông báo, sau đó lần lượt kiểm tra từng thiết bị trên mạng. Máy in phải được bật và cùng mạng. Một số máy in không tự thông báo, và một số mạng không chuyển tiếp thông báo đó. Nếu vậy, hãy thêm máy in theo địa chỉ, như 192.168.1.50. Bạn sẽ thấy địa chỉ trên màn hình của chính máy in, trong phần cài đặt mạng.
 
 # Name of the page in the list of settings pages.
 settings-printers-title = Máy in
@@ -160,7 +148,7 @@ settings-printers-title = Máy in
 settings-printers-keywords = máy in in máy quét printer print scanner
 
 # Help text at the top of the page.
-settings-printers-help = Máy in trên mạng của bạn tự được tìm thấy. Bấm Thêm bên cạnh một máy để dùng.
+settings-printers-help = Trindle tự tìm máy in trên mạng của bạn. Để dùng một máy, hãy bấm Thêm máy in này bên cạnh nó.
 
 # Headline of the page when printing is not installed.
 settings-printers-top-not-installed = Máy tính này chưa cài tính năng in.
@@ -169,13 +157,13 @@ settings-printers-top-not-installed = Máy tính này chưa cài tính năng in.
 settings-printers-top-looking = Đang xem…
 
 # Headline of the page when the printing service does not answer.
-settings-printers-top-silent = Dịch vụ in không phản hồi, nên lúc này chưa in được gì.
+settings-printers-top-silent = Trindle không kết nối được với dịch vụ in, nên lúc này chưa in được gì.
 
 # Heading of the card shown when printing is not installed.
 settings-printers-printing = In ấn
 
 # Help text (i button) of that card.
-settings-printers-printing-about = In ấn cần CUPS, mà máy tính này chưa có. Khi đã cài, máy in trên mạng của bạn sẽ tự được tìm thấy.
+settings-printers-printing-about = In ấn cần CUPS, mà máy tính này chưa có. Khi đã cài, Trindle sẽ tự tìm máy in trên mạng của bạn.
 
 # Line in that card.
 settings-printers-unavailable = Chưa dùng được tính năng in
@@ -184,32 +172,26 @@ settings-printers-unavailable = Chưa dùng được tính năng in
 settings-printers-install-cups = Hãy cài bằng lệnh: sudo apt install cups
 
 # Line in that card.
-settings-printers-then-found = Sau đó sẽ tìm thấy máy in
-
-# Small line under it.
-settings-printers-then-found-sub = Những máy trên mạng của bạn, tự động.
+settings-printers-then-found = Tìm máy in
 
 # Small line under "CUPS is not answering" in the Printers card.
-settings-printers-service = Dịch vụ in.
+settings-printers-service = Dịch vụ in
 
 # Line in the Printers card when there are none.
 settings-printers-none = Chưa có máy in nào
-
-# Small line under "No printers yet".
-settings-printers-none-sub = Hãy thêm một máy bên cạnh.
 
 # Heading of the card that lists the printers.
 settings-printers-card = Máy in
 
 # Help text (i button) of the Printers card.
 # SAFETY: needs a human review before it ships
-settings-printers-card-about = Mọi máy in đã thiết lập trên máy tính này. Ngôi sao đặt một máy làm máy in trước; biểu tượng trang in một trang thử trên máy đó; thùng rác gỡ nó đi, hỏi hai lần. Việc thay đổi cần tài khoản của bạn thuộc nhóm lpadmin.
+settings-printers-card-about = Mọi máy in đã thiết lập trên máy tính này. Tài khoản của bạn cần thuộc nhóm lpadmin để thay đổi.
 
 # Red words under a page range box that cannot be used.
-printers-bad-range = Các trang như 1-3, 5
+printers-bad-range = Ví dụ: 1-3, 5
 
 # Red words under a copies box that cannot be used.
-printers-bad-copies = Số bản: 1 đến 99
+printers-bad-copies = 1 đến 99 bản.
 
 # Name of the choice to print on one side of the paper.
 printers-sides-one = Một mặt
@@ -243,13 +225,13 @@ printers-orientation-landscape = Ngang
 
 # Red words when a printing error is a refusal because the account is not in the lpadmin group.
 # SAFETY: needs a human review before it ships
-printers-not-allowed = Không được phép. Tài khoản của bạn cần thuộc nhóm lpadmin; hãy đăng xuất rồi đăng nhập lại khi đã thuộc.
+printers-not-allowed = Bạn không được phép làm việc này. Tài khoản của bạn cần thuộc nhóm lpadmin. Sau đó, hãy đăng xuất rồi đăng nhập lại.
 
 # Red words when CUPS refuses and gives no reason.
 printers-refused = CUPS từ chối.
 
 # Red words when the printer name chosen is not one CUPS accepts.
-printers-bad-name = CUPS không chấp nhận tên máy in đó.
+printers-bad-name = Tên máy in đó không được phép.
 
 # Red words when printing is not installed on the computer.
 printers-not-installed = Máy tính này chưa cài tính năng in.
@@ -262,3 +244,21 @@ printers-paused = { $name } đang tạm dừng.
 
 # Red words when sending the document to CUPS took too long.
 printers-too-slow = Gửi tài liệu mất quá nhiều thời gian.
+
+# Red words when a print job could not be cancelled.
+settings-printers-not-cancelled = Trindle không hủy được lệnh in.
+
+# Red words when a printer could not be made the default.
+settings-printers-not-default = Trindle không đặt được làm máy in mặc định.
+
+# Red words when the test page could not be sent.
+settings-printers-not-sent = Trindle không gửi được trang in thử.
+
+# Red words when a printer could not be removed.
+settings-printers-not-removed = Trindle không gỡ được máy in.
+
+# Red words when a printer could not be added.
+settings-printers-not-added = Trindle không thêm được máy in.
+
+# Red words when the list of printers could not be read.
+settings-printers-not-read = Trindle không đọc được danh sách máy in.

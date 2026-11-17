@@ -19,16 +19,24 @@ polkit-cancel = İptal
 
 # Said when the password typed is not accepted, and the question is asked again.
 # SAFETY: needs a human review before it ships
-polkit-not-accepted = Parola kabul edilmedi. Yeniden deneyin.
+polkit-not-accepted = Parola doğru değil. Yeniden deneyin.
 
 # Name a screen reader speaks for the password question window.
-polkit-spoken = Kimlik doğrulama
+polkit-spoken = Parolanız
 
 # Under the password box, when other requests for a password are waiting for
 # this one to end. { $n } is how many.
 polkit-waiting-behind =
     { $n ->
-        [one] Bunu başka bir istek bekliyor.
-       *[other] Bunu { $n } istek daha bekliyor.
+        [one] Başka bir istek bekliyor.
+       *[other] { $n } istek daha bekliyor.
     }
 
+# Under the heading, when Drives asks for the password to take the snapshot before making room.
+polkit-reason-drives-snapshot = Sürücüler, yer açmadan önce anlık görüntü almak için bir yöneticinin parolasına ihtiyaç duyar.
+
+# Under the heading, when Drives asks for the password to switch a swap file off before making room.
+polkit-reason-drives-swap-off = Sürücüler, yer açarken takas dosyasını kapatmak için bir yöneticinin parolasına ihtiyaç duyar.
+
+# Under the heading, when Drives asks for the password to switch a swap file back on.
+polkit-reason-drives-swap-on = Sürücüler, takas dosyasını yeniden açmak için bir yöneticinin parolasına ihtiyaç duyar.

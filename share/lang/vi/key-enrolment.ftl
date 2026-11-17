@@ -18,10 +18,10 @@ key-enrol-why-addon = Một trình điều khiển bổ sung được tạo ngay
 
 # Step 1: the password, made before the restart.
 # SAFETY: needs a human review before it ships
-key-enrol-step1 = Tự đặt một mật khẩu chỉ gồm chữ cái và chữ số. Màn hình xanh dùng bàn phím kiểu Mỹ, nên các ký hiệu có thể nằm ở phím khác. Hãy ghi lại; mật khẩu chỉ dùng một lần.
+key-enrol-step1 = Tự đặt một mật khẩu chỉ gồm chữ cái và chữ số. Màn hình xanh dùng bàn phím kiểu Mỹ, nên các ký hiệu có thể nằm ở phím khác. Hãy ghi mật khẩu ra giấy. Bạn chỉ cần dùng nó một lần.
 
 # Step 2: the restart and how long the blue screen waits.
-key-enrol-step2 = Khởi động lại. Một màn hình xanh có tiêu đề Enroll MOK hiện ra trước khi Trindle khởi động. Nó tự bỏ qua sau khoảng 10 giây, nên hãy sẵn sàng nhấn một phím.
+key-enrol-step2 = Khởi động lại. Một màn hình xanh có tên Enroll MOK hiện ra trước khi Trindle khởi động. Bạn chỉ có khoảng 10 giây để nhấn một phím, nên hãy sẵn sàng.
 
 # Step 3: the first two screens.
 key-enrol-step3 = Chọn Enroll MOK, rồi Continue.
@@ -31,7 +31,7 @@ key-enrol-step3 = Chọn Enroll MOK, rồi Continue.
 key-enrol-step4 = Chọn Yes, rồi gõ mật khẩu bạn đã đặt.
 
 # Step 5: the last screen.
-key-enrol-step5 = Chọn Reboot. Trình điều khiển sẽ được tải khi máy tính khởi động xong.
+key-enrol-step5 = Chọn Reboot. Trình điều khiển sẽ được tải khi máy tính khởi động lại.
 
 # Tip after the steps: what happens when the blue screen is missed and how to be asked again.
-key-enrol-missed = Nếu lỡ màn hình xanh, máy tính vẫn khởi động mà không có trình điều khiển, như trước. Không có gì bị hỏng; hãy chạy sudo mokutil --import /var/lib/dkms/mok.pub rồi khởi động lại để được hỏi lại.
+key-enrol-missed = Nếu bạn lỡ màn hình xanh, máy tính vẫn khởi động mà không có trình điều khiển, như trước. Không có gì bị hỏng. Muốn được hỏi lại, hãy chạy sudo mokutil --import /var/lib/dkms/mok.pub rồi khởi động lại.

@@ -72,6 +72,8 @@ fn the_same_file_by_a_link_is_one_tab_and_a_huge_one_is_not_read() {
     let big = std::fs::File::create(dir.join("big.bin")).unwrap();
     big.set_len(store::LARGEST + 1).unwrap();
     assert!(store::read_document(&dir.join("big.bin")).is_err(), "a file past the limit was read");
+    text.open_path(&dir.join("big.bin"));
+    assert!(text.said.as_deref().is_some_and(|s| s.contains("too big")), "{:?}", text.said);
     let _ = std::fs::remove_dir_all(&dir);
 }
 
@@ -103,7 +105,7 @@ fn a_pipe_named_as_a_document_is_refused_and_text_does_not_wait() {
     let took = began.elapsed();
     helper.join().unwrap();
     assert!(took < Duration::from_secs(1), "the pipe was waited on for {took:?}");
-    assert!(text.said.as_deref().is_some_and(|s| s.contains("could not be opened")), "{:?}", text.said);
+    assert!(text.said.as_deref().is_some_and(|s| s.contains("couldn't open")), "{:?}", text.said);
     assert!(text.tabs.len() == tabs && !text.tabs.iter().any(|t| t.path.as_deref() == Some(pipe.as_path())), "a pipe was opened as a document");
     assert!(store::read_document(&pipe).is_err() && store::read_document(&dir).is_err());
     std::fs::write(dir.join("real.txt"), "words\n").unwrap();
@@ -165,31 +167,6 @@ fn text_draws_only_pairs_the_table_holds() {
         t.update(Msg::Back);
         t.pane().borrow_mut().doc.undo();
     }));
-    let _ = std::fs::remove_dir_all(&dir);
-}
-
-#[test]
-#[ignore = "writes pictures when TRINDLE_SHOTS names a folder"]
-fn shoot_a_found_word_that_is_selected() {
-    use crate::common::style::{ASKED_FOR_TEST, DEFAULT_ACCENT};
-    use crate::toolkit::ui::Ui;
-    let Some(out) = std::env::var_os("TRINDLE_SHOTS").map(PathBuf::from) else { return };
-    std::fs::create_dir_all(&out).unwrap();
-    let (_events, mut text, dir) = text_in("shoot-found");
-    std::fs::write(dir.join("shopping.txt"), "milk\neggs\nmilk again, and bread\n").unwrap();
-    text.open_path(&dir.join("shopping.txt"));
-    text.update(Msg::Bar(Bar::Find));
-    text.update(Msg::FindText("milk".into()));
-    ASKED_FOR_TEST.with(|a| *a.borrow_mut() = Some((false, DEFAULT_ACCENT.to_string())));
-    for (when, as_was) in [("before", true), ("after", false)] {
-        theme::WASH_AS_WAS.set(as_was);
-        let mut ui = Ui::new(text.view(), theme::Theme::for_page("text"));
-        let mut pix = tiny_skia::Pixmap::new(900, 360).unwrap();
-        ui.paint(&mut pix.as_mut(), 1.0);
-        pix.save_png(out.join(format!("text-found-and-selected-dark-{when}.png"))).unwrap();
-    }
-    theme::WASH_AS_WAS.set(false);
-    ASKED_FOR_TEST.with(|a| *a.borrow_mut() = None);
     let _ = std::fs::remove_dir_all(&dir);
 }
 
@@ -325,7 +302,7 @@ fn a_save_that_fails_keeps_the_file_and_the_unsaved_words() {
     files::FULL.set(false);
     assert_eq!(std::fs::read_to_string(&file).unwrap(), "milk\n", "the old words were lost");
     let said = text.said.clone().unwrap_or_default();
-    assert!(said.contains("shopping.txt could not be saved"), "{said:?}");
+    assert!(said.contains("couldn't save ") && said.contains("shopping.txt"), "{said:?}");
     assert!(text.tabs[at].pane.borrow().doc.modified(), "the words were counted as saved");
     assert!(text.tabs[at].pane.borrow().doc.text().contains("eggs"));
     text.update(Msg::Save);
@@ -415,6 +392,50 @@ fn an_unchanged_file_saves_normally_and_so_does_a_deleted_one() {
     assert_eq!(std::fs::read_to_string(&file).unwrap(), "bread\n");
     assert!(!text.tabs[text.active].changed);
     let _ = std::fs::remove_dir_all(&dir);
+}
+
+#[test]
+fn a_file_changed_while_text_was_closed_is_not_overwritten_by_save() {
+    let (_events, mut text, dir) = text_in("changed-closed");
+    let file = dir.join("shopping.txt");
+    std::fs::write(&file, "milk\n").unwrap();
+    text.open_path(&file);
+    overwrite(&text.tabs[text.active], "eggs\n");
+    text.keep();
+    drop(text);
+    std::fs::write(&file, "milk and bread\n").unwrap();
+    let events = Loop::new();
+    let asks = events.post(|_: Do| {});
+    let mut again = Text::in_folder(&events, asks, None, store::Settings { spell: false, ..store::Settings::default() }, dir.clone());
+    again.active = again.tabs.iter().position(|t| t.path.as_deref() == Some(file.as_path())).unwrap();
+    again.update(Msg::Save);
+    assert_eq!(std::fs::read_to_string(&file).unwrap(), "milk and bread\n");
+    assert!(again.tabs[again.active].changed);
+    let _ = std::fs::remove_dir_all(&dir);
+}
+
+#[test]
+fn a_keep_that_fails_leaves_the_older_kept_words() {
+    use std::os::unix::fs::PermissionsExt;
+    let (_events, mut text, dir) = text_in("keep-fails");
+    text.pane().borrow_mut().doc.put("first words", doc::Kind::Type);
+    text.keep();
+    let id = text.tabs[text.active].id;
+
+    let (locked, kept) = (dir.join("locked"), dir.join(format!("kept-{id}.txt")));
+    std::fs::create_dir(&locked).unwrap();
+    std::fs::rename(&kept, locked.join("kept.txt")).unwrap();
+    std::os::unix::fs::symlink(locked.join("kept.txt"), &kept).unwrap();
+    std::fs::set_permissions(&locked, std::fs::Permissions::from_mode(0o500)).unwrap();
+    text.pane().borrow_mut().doc.put(" and more", doc::Kind::Type);
+    text.keep();
+    let failed = text.said.is_some();
+    let (left, listed) = (store::kept_text(&dir, id), store::read_list(&dir).0);
+    std::fs::set_permissions(&locked, std::fs::Permissions::from_mode(0o700)).unwrap();
+    let _ = std::fs::remove_dir_all(&dir);
+    assert!(failed, "the keep did not fail");
+    assert_eq!(left.as_deref(), Some("first words"));
+    assert!(listed.iter().any(|e| e.id == id && e.unsaved));
 }
 
 fn greyed(text: &Text, name: &str) -> Option<bool> {

@@ -26,10 +26,10 @@ settings-window-group-about = Über
 settings-window-in-apps = In Apps
 
 # Small grey heading over the row a search finds that opens the Folders program's settings.
-settings-window-in-folders = In Ordner
+settings-window-in-folders = In Folders
 
 # The side bar row that opens the Folders program at its own settings.
-settings-window-in-folders-name = Eigene Einstellungen von Ordner
+settings-window-in-folders-name = Eigene Einstellungen von Folders
 
 # Words the Settings search matches the Folders settings row by, in lower case, separated by spaces.
 settings-window-in-folders-keywords =
@@ -42,7 +42,7 @@ settings-window-no-page = Keine Seite passt. Versuche ein kürzeres Wort oder sc
 settings-window-theme-refused = {"  "}{ $id }  { $name } (kann nicht verwendet werden: { $why })
 
 # Printed in a terminal when trindle-settings --theme is given no theme name.
-settings-window-theme-name = Nenne ein Design, zum Beispiel: trindle-settings --theme default
+settings-window-theme-name = Gib einen Namen für ein Design ein, zum Beispiel: trindle-settings --theme default
 
 # Printed in a terminal after trindle-settings --theme worked; theme is the theme's name.
 settings-window-theme-now = Das Design ist jetzt { $theme }.
@@ -51,13 +51,13 @@ settings-window-theme-now = Das Design ist jetzt { $theme }.
 settings-window-theme-own = Trindles eigenes
 
 # Printed in a terminal when the theme could not be chosen; error says why and ends with a full stop.
-settings-window-themes-list = { $error } trindle-settings --themes listet sie auf.
+settings-window-themes-list = { $error } Führe trindle-settings --themes aus, um die Liste zu sehen.
 
 # Printed in a terminal when trindle-settings --keys is not given the word default.
-settings-window-keys-how = Um alle Tasten und Schaltflächen zurückzusetzen: trindle-settings --keys default
+settings-window-keys-how = Um alle Tasten und Schaltflächen auf die Normalwerte zurückzusetzen, führe aus: trindle-settings --keys default
 
 # Printed in a terminal after every key and button was put back.
-settings-window-keys-back = Alle Tasten und Schaltflächen sind wieder so, wie sie ausgegeben wurden.
+settings-window-keys-back = Alle Tasten und Schaltflächen sind wieder normal.
 
 # Printed in a terminal when the keys could not be put back; error says why.
-settings-window-keys-failed = Die Tasten konnten nicht zurückgesetzt werden: { $error }
+settings-window-keys-failed = Trindle konnte die Tasten nicht zurücksetzen: { $error }

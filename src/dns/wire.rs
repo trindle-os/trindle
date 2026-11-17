@@ -49,6 +49,10 @@ pub fn question(m: &[u8]) -> Option<Question> {
             return None;
         }
         let label = m.get(i..i + len)?;
+
+        if !label.iter().all(|b| b.is_ascii_alphanumeric() || matches!(b, b'-' | b'_')) {
+            return None;
+        }
         if !name.is_empty() {
             name.push('.');
         }
@@ -77,7 +81,7 @@ fn skip_name(m: &[u8], mut i: usize) -> Option<usize> {
 
 fn records(m: &[u8], from: usize) -> Option<Vec<(usize, u16)>> {
     let n = count(m, 1) + count(m, 2) + count(m, 3);
-    let mut out = Vec::with_capacity(n);
+    let mut out = Vec::new();
     let mut i = from;
     for _ in 0..n {
         i = skip_name(m, i)?;
@@ -374,6 +378,17 @@ pub mod tests {
             r.extend_from_slice(&[0, 4, 93, 184, 215, 14]);
         }
         r
+    }
+
+    #[test]
+    fn a_label_with_a_dot_or_an_odd_byte_is_refused() {
+        let mut dotted = vec![0x12, 0x34, 0x01, 0x00, 0, 1, 0, 0, 0, 0, 0, 0];
+        dotted.extend_from_slice(&[3, b'a', b'.', b'b', 3, b'c', b'o', b'm', 0, 0, 1, 0, 1]);
+        assert_eq!(question(&dotted), None);
+        let mut odd = query("ab.com", 1, None);
+        odd[13] = b' ';
+        assert_eq!(question(&odd), None);
+        assert!(question(&query("_dmarc.a-b.com", 16, None)).is_some(), "underscores and dashes are real");
     }
 
     #[test]

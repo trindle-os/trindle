@@ -10,7 +10,8 @@ use crate::common::filling;
 use crate::toolkit::bus::Bus;
 use crate::toolkit::event::{Flow, Loop};
 use crate::toolkit::ui::{App, Shown};
-use crate::toolkit::widget::{card, column, label, ring, Length, Node};
+use crate::toolkit::tiles::RingShare;
+use crate::toolkit::widget::{card, column, label, Length, Node, Tone};
 use crate::toolkit::window::{Display, Edges, Keys, Kind, Layer, Panel};
 
 const RING: &str = "org.trindle.Ring";
@@ -22,7 +23,6 @@ const SHOW_AFTER: Duration = Duration::from_millis(250);
 
 const RING_SIZE: f32 = 44.0;
 const EXPECTED_SECS: f64 = 8.0;
-const TICK: Duration = Duration::from_millis(250);
 const FADE: Duration = Duration::from_millis(300);
 const FRAME: Duration = Duration::from_millis(16);
 const CARD_WIDTH: f32 = 220.0;
@@ -30,7 +30,19 @@ const CARD_WIDTH: f32 = 220.0;
 const MARGIN: f32 = 16.0;
 
 struct Words {
-    share: f32,
+    ring: RingShare,
+}
+
+impl Words {
+    fn new(share: f32) -> Words {
+        Words { ring: RingShare::new(Some(share)) }
+    }
+
+    fn advance(&self, share: f32) -> bool {
+        let was = self.ring.get().unwrap_or(0.0);
+        self.ring.set(Some(was.max(share)));
+        filling::percent(was) != filling::percent(was.max(share))
+    }
 }
 
 impl App for Words {
@@ -38,7 +50,7 @@ impl App for Words {
     fn update(&mut self, _: ()) {}
     fn view(&self) -> Node<()> {
         column(vec![
-            card(column(vec![ring(self.share, RING_SIZE), label(t!("session-one-moment"))]).centred().gap(14.0)).floats()
+            card(column(vec![filling::following_ring(&self.ring, RING_SIZE, Tone::Plain), label(t!("session-one-moment"))]).centred().gap(14.0)).floats()
                 .width(Length::Fixed(CARD_WIDTH)),
         ]).padding(MARGIN).centred()
     }
@@ -54,6 +66,7 @@ struct Starting {
 
     seen: Cell<f32>,
     fading: Cell<u32>,
+    turning: filling::Turning,
 }
 
 pub fn main(_args: Vec<String>) -> i32 {
@@ -62,7 +75,7 @@ pub fn main(_args: Vec<String>) -> i32 {
     let Some(display) = Display::connect(&events, move || gone.quit()) else { return 1 };
     let me = Rc::new(Starting {
         events: events.clone(), display, shown: RefCell::new(None), began: Instant::now(),
-        over: Cell::new(false), seen: Cell::new(0.0), fading: Cell::new(0),
+        over: Cell::new(false), seen: Cell::new(0.0), fading: Cell::new(0), turning: Default::default(),
     });
 
     let bus = Bus::session(&events).ok();
@@ -93,7 +106,7 @@ impl Starting {
             name: "trindle-starting".into(), screen: None,
         });
         let width = (CARD_WIDTH + 2.0 * MARGIN) as u32;
-        let Some(shown) = Shown::open(&self.events, &self.display, kind, (width, 1), Words { share: self.by_clock() }) else {
+        let Some(shown) = Shown::open(&self.events, &self.display, kind, (width, 1), Words::new(self.by_clock())) else {
             self.events.quit();
             return;
         };
@@ -103,7 +116,7 @@ impl Starting {
         *self.shown.borrow_mut() = Some(shown);
         self.fade(true, || {});
         let me = self.clone();
-        self.events.every(TICK, move || {
+        self.events.every(filling::TURN, move || {
             if me.over.get() {
                 return Flow::Stop;
             }
@@ -119,7 +132,9 @@ impl Starting {
 
     fn set_share(&self, share: f32) {
         if let Some(shown) = &*self.shown.borrow() {
-            shown.change(|w| w.share = w.share.max(share));
+            if self.turning.turned_alone(shown.with(|w| w.advance(share))) {
+                shown.change(|_| {});
+            }
         }
     }
 
@@ -164,7 +179,10 @@ impl Starting {
         };
 
         if up {
-            self.set_share(1.0);
+            if let Some(shown) = &*self.shown.borrow() {
+                shown.with(|w| w.advance(1.0));
+                shown.change(|_| {});
+            }
             self.events.after(filling::JOINED, fade_out);
         } else {
             fade_out();
@@ -179,8 +197,30 @@ mod tests {
     use crate::toolkit::ui::Ui;
 
     #[test]
+    fn the_line_goes_round_with_no_new_card() {
+        use std::cell::Cell;
+        struct Counted { words: Words, built: Cell<u32> }
+        impl App for Counted {
+            type Msg = ();
+            fn update(&mut self, _: ()) {}
+            fn view(&self) -> Node<()> {
+                self.built.set(self.built.get() + 1);
+                self.words.view()
+            }
+        }
+        let size = ((CARD_WIDTH + 2.0 * MARGIN) as u32, 160);
+        let mut h = crate::toolkit::testing::Harness::new(Counted { words: Words::new(0.1), built: Cell::new(0) }, size);
+        let first = h.picture(1.0);
+        assert!(h.app().words.advance(0.6), "a new whole percentage");
+        assert!(!h.app().words.advance(0.3), "never back");
+        assert_eq!(h.app().words.ring.get(), Some(0.6));
+        assert_ne!(h.picture(1.0).data(), first.data(), "the ring shows the new figure");
+        assert_eq!(h.app().built.get(), 1, "the card was built once");
+    }
+
+    #[test]
     fn the_card_fits_its_window() {
-        let ui = Ui::new(Words { share: 0.3 }.view(), Theme::chosen());
+        let ui = Ui::new(Words::new(0.3).view(), Theme::chosen());
         let width = CARD_WIDTH + 2.0 * MARGIN;
         let h = ui.natural_height(width);
 
@@ -193,7 +233,7 @@ mod tests {
         use crate::toolkit::theme::drawn;
         drawn::none(drawn::in_every_look("One moment, please", 1, || {
             for share in [0.3, 1.0] {
-                drawn::window(&format!("filled {share}"), Words { share }.view(), Theme::chosen(), ((CARD_WIDTH + 2.0 * MARGIN) as u32, 160), true);
+                drawn::window(&format!("filled {share}"), Words::new(share).view(), Theme::chosen(), ((CARD_WIDTH + 2.0 * MARGIN) as u32, 160), true);
             }
         }));
     }

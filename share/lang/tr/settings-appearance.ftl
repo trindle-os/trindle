@@ -8,13 +8,13 @@ settings-appearance-title = Görünüm
 settings-appearance-keywords = renk renkler vurgu tema temalar görünüm kaplama cam koyu açık mod güneş parlak simgeler yazı tipi imleç işaretçi ekran okuyucu görme engelli sesli okuma erişilebilirlik etiketler ipuçları adlar işaret
 
 # Introduction under the heading of the appearance page, and the words behind the page i.
-settings-appearance-help = Açık veya koyu, renkler, simgeler, yazı tipleri, işaretçi ve ekranı sesli okuma. Bazı programlar ancak yeniden açıldıktan sonra fark eder.
+settings-appearance-help = Açık veya koyu görünümü, renkleri, simgeleri, yazı tiplerini ve işaretçiyi seçin ya da ekran okuyucuyu açın. Bazı programlar bir değişikliği ancak yeniden açtığınızda gösterir.
 
 # Question along the bottom of the page while a theme is on trial.
 settings-appearance-foot-keep = Bu görünüm kalsın mı?
 
 # Small words beside the question along the bottom while a theme is on trial.
-settings-appearance-foot-escape = Escape şimdi geri döner.
+settings-appearance-foot-escape = Escape şimdi geri alır.
 
 # Name of the dark look, on a theme's button and in the top sentence.
 settings-appearance-look-dark = Koyu
@@ -38,7 +38,7 @@ settings-appearance-sample-spoken = { $name } nasıl görünür, { $look }
 settings-appearance-aloud-look = { $look } görünüm.
 
 # Sentence at the top of the page when a theme cannot be used; { $theme } is its name and { $why } the reason.
-settings-appearance-top-unusable = Trindle'ın kendi görünümü, çünkü { $theme } teması kullanılamıyor. { $why }
+settings-appearance-top-unusable = { $theme } teması kullanılamadığı için Trindle'ın kendi görünümü kullanılıyor. { $why }
 
 # Sentence at the top of the page for a theme that has dark and light looks; { $theme } is the theme, { $look } dark or light, { $accent } the highlight colour and { $shape } round or square.
 settings-appearance-top-theme-look = { $theme } teması, { $look }, { $accent } vurgu ve { $shape } simgelerle.
@@ -50,25 +50,28 @@ settings-appearance-top-theme = { $theme } teması, { $accent } vurgu ve { $shap
 settings-appearance-top-look = { $look }, { $accent } vurgu ve { $shape } simgelerle.
 
 # Shape of the icons in the top sentence.
+settings-appearance-shape-square = kare
+
+# Shape of the icons in the top sentence.
 settings-appearance-shape-round = yuvarlak
 
 # Name of Trindle's own highlight colour, first in the list of colours.
 settings-appearance-trindle-yellow = Trindle sarısı
 
 # Start of the words behind the i of the reading the screen card.
-settings-appearance-reading-says = Ekranda ne olduğunu ve ne yazdığınızı söyler. Super, Alt ve S birlikte de açıp kapatır.
+settings-appearance-reading-says = Ekran okuyucu ekrandakileri ve yazdıklarınızı sesli okur. Açmak ya da kapatmak için Super, Alt ve S tuşlarına birlikte basın.
 
 # Red words under the icon shape line when the icons could not be remade.
-settings-appearance-no-icons = Simgeler yeniden yapılamadı, bu yüzden bazıları eski biçimini koruyor. Yeniden denemek için seti yeniden seçin.
+settings-appearance-no-icons = Trindle simgelerin hepsini güncelleyemedi, bu yüzden bazıları eski biçimini koruyor. Yeniden denemek için seti yeniden seçin.
 
 # Small words on a theme's tile when Trindle made some of its colours clearer.
-settings-appearance-corrected = Bazı renkler daha okunaklı yapıldı.
+settings-appearance-corrected = Trindle bazı yazıları daha okunaklı yaptı.
 
 # Said aloud when a theme is tried; { $theme } is its name and { $seconds } how long until the old look comes back.
 settings-appearance-aloud-trying =
     { $seconds ->
-        [one] { $theme } teması deneniyor. Tut'a basmazsanız önceki görünümünüz { $seconds } saniye içinde geri gelir. Escape şimdi geri döner.
-       *[other] { $theme } teması deneniyor. Tut'a basmazsanız önceki görünümünüz { $seconds } saniye içinde geri gelir. Escape şimdi geri döner.
+        [one] { $theme } teması deneniyor. Tut'a basmazsanız önceki görünümünüz { $seconds } saniye içinde geri gelir. Şimdi geri dönmek için Escape'e basın.
+       *[other] { $theme } teması deneniyor. Tut'a basmazsanız önceki görünümünüz { $seconds } saniye içinde geri gelir. Şimdi geri dönmek için Escape'e basın.
     }
 
 # Name of Trindle's own theme when none is named.
@@ -78,7 +81,7 @@ settings-appearance-trindle = Trindle
 settings-appearance-aloud-kept = { $theme } teması tutuldu.
 
 # Red words under the Theme line when the old look could not be written back.
-settings-appearance-back-failed = Süre dolunca önceki görünümünüz geri gelir.
+settings-appearance-back-failed = Süre dolunca önceki görünümünüz geri gelecek.
 
 # Said aloud when the look from before is back.
 settings-appearance-aloud-back = Önceki görünümünüz geri geldi.
@@ -90,24 +93,14 @@ settings-appearance-chooser-title = Bir tema seçin
 settings-appearance-chooser-filter = Temalar
 
 # Green words under the Add a theme line after a theme was added; { $name } is its name.
-settings-appearance-added = { $name } yukarıdaki listede. Kullanmak için üzerine basın.
+settings-appearance-added = { $name } artık yukarıdaki listede.
 
 # Red words under the Theme line when a theme could not be removed.
 # SAFETY: needs a human review before it ships
 settings-appearance-not-removed = Tema kaldırılamadı.
 
 # Red words under the theme tiles when a theme cannot be used; { $theme } is its name and { $why } the reason.
-settings-appearance-cannot-use = { $theme } teması kullanılamıyor. { $why }
-
-# Heading of the line saying a theme is tried first.
-settings-appearance-tried-first = Tema önce denenir
-
-# Small words under that line; { $seconds } is how long Keep is asked for.
-settings-appearance-tried-first-about =
-    { $seconds ->
-        [one] Tut, pencerenin altında { $seconds } saniye sorulur.
-       *[other] Tut, pencerenin altında { $seconds } saniye sorulur.
-    }
+settings-appearance-cannot-use = Trindle { $theme } temasını kullanamıyor. { $why }
 
 # Name of the bin button that removes one of the person's own themes.
 # SAFETY: needs a human review before it ships
@@ -129,25 +122,22 @@ settings-appearance-looking = Temalar aranıyor
 settings-appearance-theme-card = Tema
 
 # Words behind the i of the Theme card.
-settings-appearance-theme-about = Tema, tek dosyada tüm bir görünümdür: renkler, köşeler, boyutlar ve boşluk. Denemek için birine basın: her Trindle penceresi bir anda değişir ve Tut'a basmazsanız önceki görünümünüz 30 saniye içinde kendiliğinden geri gelir; böylece okunamayan bir tema asla kalmaz. Hem koyu hem açık görünümü olan temanın resminin yanında Koyu ve Açık düğmeleri bulunur; Açık, parlak güneşte daha kolay görülür ve Uygulamalar'dan gelen uygulamalar bunu bir sonraki açılışta alır. Tek görünümlü temada bu düğmeler yoktur. Vurgu renginiz her temada size ait kalır. Eklediğiniz tema yalnızca okunur, asla çalıştırılmaz ve okumayı zorlaştıracak sözcükler daha okunaklı yapılır. Bir uçbirimden trindle-settings --theme default komutu Trindle'ın kendi görünümünü her zaman geri getirir.
+settings-appearance-theme-about = Tema, tek dosyada tüm bir görünümdür: renkler, köşeler, boyutlar ve boşluklar. Denemek için bir temaya basın. Her Trindle penceresi bir anda değişir. Tut'a basmazsanız önceki görünümünüz 30 saniye sonra kendiliğinden geri gelir, böylece okuyamadığınız bir temada asla takılıp kalmazsınız. Bir temanın hem koyu hem açık görünümü varsa resminin yanında Koyu ve Açık düğmeleri belirir. Açık, parlak güneşte daha kolay görülür ve Uygulamalar'dan gelen uygulamalar bunu bir sonraki açılışta kullanır. Tek görünümlü temada bu düğmeler yoktur. Vurgu renginiz her temada size ait kalır. Trindle eklediğiniz temayı yalnızca okur, asla çalıştırmaz ve okunması zor sözcükleri daha okunaklı yapar. Trindle'ın kendi görünümünü bir uçbirimden geri getirmek için trindle-settings --theme default komutunu çalıştırın.
 
 # Heading of the line holding the theme tiles.
 settings-appearance-theme-line = Tema
 
-# Small words under that line.
-settings-appearance-theme-line-about = Görünümün tamamı. İkisi de olan temanın yanında Koyu veya Açık bulunur.
-
 # Small words under the Add a theme line.
-settings-appearance-add-theme-about = Birinin paylaştığı gibi tek bir .css dosyası.
+settings-appearance-add-theme-about = Tek bir .css dosyası, örneğin biri sizinle paylaştıysa.
 
 # Words of the link that opens help about what a theme file holds.
 settings-appearance-theme-file-help = Tema dosyasında ne var
 
 # Red words under the colour box when what was typed is not a colour.
-settings-appearance-hex-bad = 0-9 ve a-f arasından altı karakter, örneğin #fbc711.
+settings-appearance-hex-bad = 0-9 ve a-f kullanın, örneğin #fbc711.
 
 # Spoken description of the small dot that shows the colour typed.
-settings-appearance-dot = Yazılan renk
+settings-appearance-dot = Yazdığınız renk
 
 # Placeholder of the box for typing a colour code.
 settings-appearance-hex-code = Onaltılık kod
@@ -165,16 +155,10 @@ settings-appearance-any-colour-about = Altı veya sekiz basamak, örneğin #fbc7
 settings-appearance-colour-title = Renk
 
 # Words behind the i of the Colour card.
-settings-appearance-colour-about = Vurgu; düğmeleri, anahtarları, dolan halkayı ve bulunduğunuz yeri işaretler. Trindle'ın kendi pencereleri bir anda değişir; halka bir sonraki açılışta. Kart üzerinde görülemeyecek kadar koyu bir renk okunana kadar açılır, açık bir görünümde fazla soluk olan ise koyulaştırılır. Koyu veya Açık, Tema altında temanın kendi kutucuğunda seçilir.
+settings-appearance-colour-about = Vurgu; düğmeleri, anahtarları, dolarken halkayı ve bulunduğunuz yeri işaretler. Trindle'ın kendi pencereleri bir anda değişir, halka ise bir sonraki açılışında değişir. Bir renk kartta görülemeyecek kadar koyuysa Trindle okunana kadar onu açar. Açık görünümde fazla soluk bir rengi ise koyulaştırır. Koyu veya Açık seçimini Tema altında temanın kendi kutucuğunda yapın.
 
 # Heading of the line with the highlight colour swatches.
 settings-appearance-highlight = Vurgu
-
-# Small words under that line.
-settings-appearance-highlight-about = Düğmeler, anahtarlar ve bulunduğunuz yer.
-
-# Small words under the read the screen aloud switch when a screen reader is installed.
-settings-appearance-reader-on = Super, Alt ve S de açıp kapatır.
 
 # Heading of the line, and name of its switch, for reading the screen aloud.
 settings-appearance-reader = Ekranı sesli oku
@@ -182,17 +166,17 @@ settings-appearance-reader = Ekranı sesli oku
 # Heading of the line, and name of its switch, for keeping labels while pointing.
 settings-appearance-labels = İşaret ederken etiketleri tut
 
-# Small words under that line.
-settings-appearance-labels-about = İşaret ettiğiniz sürece düğmenin adı kalır.
-
 # Title of the Reading the screen card.
 settings-appearance-reading-title = Ekranı okuma
 
 # Words behind the i of that card; { $says } is the first sentences, from the key reading-says.
-settings-appearance-reading-about = { $says } Düğmenin adı genellikle bir buçuk saniye sonra kaybolur; tutulursa işaretçi üzerinde olduğu sürece kalır. Ekran sesli okunurken her düğme altında adını gösterir.
+settings-appearance-reading-about = { $says } Düğmenin adı genellikle bir buçuk saniye sonra kaybolur. Adları tutarsanız işaretçi düğmenin üzerinde olduğu sürece kalır. Ekran sesli okunurken her düğme altında adını gösterir.
 
 # Name of the set of round icons.
 settings-appearance-icons-circles = Daireler
+
+# Name of the set of square icons.
+settings-appearance-icons-squares = Kareler
 
 # Words beside the turning ring while the icons are remade.
 settings-appearance-icons-working = Simgeler değiştiriliyor
@@ -206,14 +190,11 @@ settings-appearance-icons-set = { $name } simgeler
 # Heading of the line for the shape of the icons.
 settings-appearance-shape = Biçim
 
-# Small words under that line.
-settings-appearance-shape-about = Trindle Simgeleri, yuvarlak veya kare.
-
 # Title of the Icons card.
 settings-appearance-icons-title = Simgeler
 
 # Words behind the i of the Icons card.
-settings-appearance-icons-about = Trindle Simgeleri yuvarlak veya kare olur. Çizmedikleri bir uygulama için uyumlu bir tane yapılır; halka ve panel yeni biçimle yeniden çizilir.
+settings-appearance-icons-about = Trindle Simgeleri yuvarlak veya kare olur. Bir uygulama için Trindle'ın simgesi yoksa Trindle uyumlu bir tane yapar. Halka da yeni biçimi kullanır.
 
 # Name of the list of font families, and heading of the font line.
 settings-appearance-font = Yazı tipi
@@ -224,14 +205,8 @@ settings-appearance-font-default = Varsayılan
 # Name of the list of font sizes.
 settings-appearance-font-size = Yazı boyutu
 
-# Small words under the font line.
-settings-appearance-font-about = Programların pencerelerindeki yazı.
-
 # Name of the button that adds fonts, and heading of its line.
 settings-appearance-add-fonts = Yazı tipi ekle
-
-# Small words under the Add fonts line.
-settings-appearance-add-fonts-about = Bir .ttf veya .otf dosyası ya da bunların zip'i.
 
 # Words of the link that opens help about what a font file must contain.
 settings-appearance-fonts-help = Dosyada ne olmalı
@@ -240,7 +215,7 @@ settings-appearance-fonts-help = Dosyada ne olmalı
 settings-appearance-text-title = Yazı
 
 # Words behind the i of the Text card.
-settings-appearance-text-about = Programların yazılarında kullandığı yazı tipi ve boyutu. Buraya eklenen yazı tipleri, bir .ttf veya .otf dosyası ya da bunların zip'i, yalnızca sizin için yazı tipi listesine katılır; bazı programlar ancak yeniden açıldıktan sonra fark eder.
+settings-appearance-text-about = Programların yazılarında kullandığı yazı tipi ve boyut. Buraya .ttf veya .otf dosyası ya da bunların zip'i olarak eklediğiniz yazı tipleri yalnızca sizin için yazı tipi listesine girer. Bazı programlar bunları ancak yeniden açtığınızda gösterir.
 
 # Title of the window for choosing font files.
 settings-appearance-chooser-fonts = Yazı tipi seçin
@@ -249,20 +224,20 @@ settings-appearance-chooser-fonts = Yazı tipi seçin
 settings-appearance-font-not-replaced = { $name } değiştirilemedi.
 
 # Green words after one font took the place of the one there; { $name } is the file name.
-settings-appearance-font-replaced-one = { $name } değiştirildi. Şu andan sonra başlatılan programlar onu kullanır.
+settings-appearance-font-replaced-one = Trindle { $name } yazı tipini değiştirdi. Şu andan sonra başlattığınız programlar onu kullanır.
 
 # Green words after several fonts took the place of the ones there; { $n } of { $total } were done.
-settings-appearance-font-replaced-some = { $total } tanesinden { $n } tanesi değiştirildi. Şu andan sonra başlatılan programlar onları kullanır.
+settings-appearance-font-replaced-some = Trindle { $total } yazı tipinden { $n } tanesini değiştirdi. Şu andan sonra başlattığınız programlar bunları kullanır.
 
 # Green words after fonts were added; { $n } is how many.
 settings-appearance-fonts-added =
     { $n ->
-        [one] { $n } yazı tipi yukarıdaki listede. Yukarıdan seçin.
-       *[other] { $n } yazı tipi yukarıdaki listede. Yukarıdan seçin.
+        [one] { $n } yazı tipi artık yukarıdaki listede.
+       *[other] { $n } yazı tipi artık yukarıdaki listede.
     }
 
 # Green words after added fonts were already in the list.
-settings-appearance-fonts-in-list = Bu yazı tipleri listede zaten var.
+settings-appearance-fonts-in-list = Bu yazı tipleri zaten listede.
 
 # Choice in the list of cursor sizes: the normal size.
 settings-appearance-cursor-normal = Normal
@@ -280,17 +255,10 @@ settings-appearance-pointer-spoken = { $size } işaretçi
 settings-appearance-cursor-standard = Standart
 
 # Name of the list of cursor themes, and heading of its line.
-settings-appearance-cursor = İmleç
+settings-appearance-cursor = İşaretçi
 
 # Name of the list of cursor sizes, and heading of its line.
-settings-appearance-cursor-size = İmleç boyutu
-
-# Small words under the cursor line.
-settings-appearance-cursor-about = İşaretçinin nasıl çizildiği.
-
-# Small words under the cursor size line.
-settings-appearance-cursor-size-about = Büyük olanı bulmak daha kolay.
+settings-appearance-cursor-size = İşaretçi boyutu
 
 # Title of the Pointer card.
 settings-appearance-pointer-title = İşaretçi
-

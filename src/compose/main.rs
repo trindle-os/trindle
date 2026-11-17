@@ -82,6 +82,7 @@ mod lock;
 mod newcomers;
 mod own_ring;
 mod panel;
+mod peer;
 mod protocols;
 mod clean_start;
 mod modal;
@@ -96,6 +97,7 @@ mod rig;
 mod screen_edge;
 mod scroll;
 mod session;
+mod settings_watch;
 mod shell;
 mod trusted;
 mod virtual_input;
@@ -109,11 +111,14 @@ mod xdnd;
 mod xrooms;
 mod xwayland_later;
 
-pub use state::{AnvilState, ClientState};
+pub use state::{Compose, ClientState};
 
 fn kept_in_log(rest: bool) -> String {
     let rest = if rest { format!(",{}=info", rest::LOG) } else { String::new() };
-    format!("warn,{}=info,{}=info{rest}", capture::LOG, own_ring::LOG)
+    format!(
+        "warn,{}=info,{}=info,{}=info,{}=info,{}=info{rest}",
+        capture::LOG, own_ring::LOG, lock::LOG, shell::FULL_SCREEN_LOG, udev::SCREENS_BACK_LOG
+    )
 }
 
 fn main() {

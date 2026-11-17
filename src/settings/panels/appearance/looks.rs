@@ -13,6 +13,12 @@ use crate::toolkit::t;
 use crate::toolkit::widget::{self, button, column, drawing, label, note, row, Length, Node, Rect};
 use tiny_skia::PixmapMut;
 
+#[cfg(test)]
+thread_local! {
+
+    pub(super) static SAMPLED: std::cell::Cell<u32> = const { std::cell::Cell::new(0) };
+}
+
 impl Appearance {
 
     fn pick_theme(&mut self, kit: &mut Kit, id: &str, look: Option<bool>) {
@@ -157,7 +163,7 @@ impl Appearance {
         self.said = seen.listed.said;
         self.said.extend(seen.own);
         if seen.hard {
-            self.said.push(themes::OWN_HARD_TO_READ);
+            self.said.push(themes::own_hard_to_read());
         }
         self.unusable = seen.unusable;
         self.theme = seen.in_use;
@@ -175,15 +181,9 @@ impl Appearance {
         all
     }
 
-    fn tried_first(&self, kit: &Kit) -> Node<Msg> {
-        line(t!("settings-appearance-tried-first"))
-            .sub(t!("settings-appearance-tried-first-about", seconds = TRIAL_FOR))
-            .node(kit)
-    }
-
     pub(super) fn theme_card(&self, kit: &Kit) -> Node<Msg> {
         let accent = if self.accent.is_empty() { saved_accent() } else { self.accent.clone() };
-        let cards = self.themes.iter().map(|t| self.theme_tile(kit, t, &accent)).collect::<Vec<_>>();
+        let cards = self.themes.iter().map(|t| self.theme_tile(t, &accent)).collect::<Vec<_>>();
         let add = button("list-add-symbolic", t!("settings-appearance-add-theme")).on_press(on::<Appearance>(|me, k| me.take_theme(k)));
 
         let mut tiles = if self.listing && self.themes.is_empty() {
@@ -195,25 +195,41 @@ impl Appearance {
             note(words).tone(widget::Tone::Problem).key(trouble_key(n)).width(Length::Fill)
         }));
         group(t!("settings-appearance-theme-card")).icon("applications-graphics-symbolic")
-            .about(t!("settings-appearance-theme-about"))
+            .about(format!("{} {}", t!("settings-appearance-theme-about"), t!("settings-appearance-add-theme-about")))
             .rows(vec![
-                self.tried_first(kit),
-                line(t!("settings-appearance-theme-line")).sub(t!("settings-appearance-theme-line-about")).key(THEME).below(column(tiles).gap(8.0).width(Length::Fill)).node(kit),
+                line(t!("settings-appearance-theme-line")).key(THEME).below(column(tiles).gap(8.0).width(Length::Fill)).node(kit),
                 line(t!("settings-appearance-add-theme"))
-                    .sub(t!("settings-appearance-add-theme-about"))
                     .key(ADD_THEME)
                     .controls(vec![add, help_link(t!("settings-appearance-theme-file-help"), "theme-files")])
                     .node(kit),
             ])
             .span(12, 12)
             .node(kit)
+            .span_grows(12, 12, crate::toolkit::theme::bento().words)
     }
 
-    fn theme_tile(&self, kit: &Kit, t: &themes::Theme, accent: &str) -> Node<Msg> {
+    fn tile_sample(&self, t: &themes::Theme, light: bool, accent: &str) -> crate::toolkit::theme::Sample {
+        let mut kept = self.tile_samples.borrow_mut();
+
+        if kept.len() > 64 {
+            kept.clear();
+        }
+        let key = (t.id.clone(), light, accent.to_string());
+        if let Some((_, found)) = kept.get(&key).filter(|(css, _)| *css == t.css) {
+            return found.clone();
+        }
+        #[cfg(test)]
+        SAMPLED.with(|n| n.set(n.get() + 1));
+        let made = crate::toolkit::theme::sample(&t.css, light, accent);
+        kept.insert(key, (t.css.clone(), made.clone()));
+        made
+    }
+
+    fn theme_tile(&self, t: &themes::Theme, accent: &str) -> Node<Msg> {
 
         if let Some(why) = t.refused {
             let said = note(why).tone(widget::Tone::Problem).key(refused_key(&t.id)).width(Length::Fill);
-            return widget::card(column(vec![row(name_head(kit, t)).gap(8.0).width(Length::Fill), said]).gap(8.0));
+            return widget::card(column(vec![row(name_head(t, Length::Fill)).gap(8.0).width(Length::Fill), said]).gap(8.0));
         }
         let chosen = self.theme == t.id;
         let id = t.id.clone();
@@ -223,13 +239,14 @@ impl Appearance {
         };
 
         let light = t.light(self.light);
-        let s = crate::toolkit::theme::sample(&t.css, light, accent);
+        let s = self.tile_sample(t, light, accent);
         let corrected = s.theme.corrected;
-        let mut head = name_head(kit, t);
-        head.push(crate::toolkit::widget::word_button(t!("settings-appearance-use-theme", name = &t.name)).on(chosen).on_press(pick()));
+
+        let mut head = name_head(t, Length::Shrink);
+        head.push(crate::toolkit::widget::word_button(t!("settings-appearance-use-theme", name = &t.name)).on(chosen).on_press(pick()).key(use_key(&t.id)));
         let picture = theme_sample(&t.name, look_name_lower(light), s).key(picture_key(&t.id));
         let picture = if t.looks().len() == 2 { with_look_buttons(t, picture, chosen, light) } else { picture };
-        let mut lines = vec![row(head).gap(8.0).width(Length::Fill), picture];
+        let mut lines = vec![widget::flow(head), picture];
         if !t.about.is_empty() {
             lines.push(note(t.about.clone()));
         }
@@ -241,14 +258,13 @@ impl Appearance {
         }
         widget::card(column(lines).gap(8.0)).on_press(pick())
     }
-
 }
 
-fn name_head(kit: &Kit, t: &themes::Theme) -> Vec<Node<Msg>> {
-    let mut head = vec![label(t.name.clone()).width(Length::Fill)];
+fn name_head(t: &themes::Theme, width: Length) -> Vec<Node<Msg>> {
+    let mut head = vec![label(t.name.clone()).width(width)];
     if t.mine {
         let id = t.id.clone();
-        head.push(confirm::<Appearance>(kit, &format!("theme:{}", t.id), "user-trash-symbolic", t!("settings-appearance-remove-theme"),
+        head.push(confirm::<Appearance>(&format!("theme:{}", t.id), "user-trash-symbolic", t!("settings-appearance-remove-theme"),
                                         move |me, k| me.remove_theme(k, &id)));
     }
     head
@@ -289,6 +305,10 @@ pub(super) fn look_name_lower(light: bool) -> &'static str {
 
 fn look_id(light: bool) -> &'static str {
     if light { "light" } else { "dark" }
+}
+
+pub(super) fn use_key(id: &str) -> String {
+    format!("theme-use:{}", if id.is_empty() { "default" } else { id })
 }
 
 pub(super) fn picture_key(id: &str) -> String {

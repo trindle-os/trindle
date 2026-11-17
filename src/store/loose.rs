@@ -28,6 +28,7 @@ const NOT_SETTINGS: &[&str] = &[
     "zsh", "zshrc", "zprofile", "local", "config", "cache", "share", "dbus-1", "pulse", "pipewire", "wireplumber", "keyrings",
     "password-store", "kwalletrc", "xdg", "user-dirs", "xinitrc", "xprofile", "xsession", "session", "login", "history",
     "bash_history", "bash_profile", "bash_login", "bash_logout", "netrc", "pam_environment", "inputrc", "mozilla-sync",
+    "mozilla", "thunderbird", "aws", "kube", "docker", "gh", "rclone", "chromium", "google-chrome", "bravesoftware", "pass",
 ];
 
 const SYSTEM: &[&str] = &["/usr", "/etc", "/proc", "/dev", "/sys", "/run", "/bin", "/sbin", "/lib", "/lib64", "/opt", "/var", "/app"];
@@ -135,7 +136,7 @@ pub fn handed(words: &[String], home: &Path, exists: impl Fn(&Path) -> bool) -> 
         if p.components().any(|c| matches!(c, std::path::Component::ParentDir | std::path::Component::CurDir)) {
             continue;
         }
-        if p == home || p == Path::new("/") || SYSTEM.iter().any(|s| p.starts_with(s)) || !exists(&p) || out.contains(&p) {
+        if home.starts_with(&p) || hidden_in(&p, home) || SYSTEM.iter().any(|s| p.starts_with(s)) || !exists(&p) || out.contains(&p) {
             continue;
         }
         out.push(p);
@@ -144,6 +145,37 @@ pub fn handed(words: &[String], home: &Path, exists: impl Fn(&Path) -> bool) -> 
         }
     }
     out
+}
+
+fn hidden_in(p: &Path, home: &Path) -> bool {
+    p.strip_prefix(home).ok().and_then(|rest| rest.components().next()).is_some_and(|c| c.as_os_str().as_encoded_bytes().starts_with(b"."))
+}
+
+fn plain_path(p: &Path) -> bool {
+    std::fs::canonicalize(p).is_ok_and(|c| c == p)
+}
+
+fn settings_for(base: &str, found: Option<&Path>, home: &Path, is_folder: impl Fn(&Path) -> bool, kept: impl Fn(&Path) -> bool) -> Vec<PathBuf> {
+    match found {
+        Some(p) if kept(p) => own_settings(base, home, is_folder),
+        _ => Vec::new(),
+    }
+}
+
+fn named(command: &[String]) -> Option<&String> {
+    command.iter().find(|a| *a != "env" && !a.ends_with("/env") && !a.contains('=') && !a.starts_with('-')).or(command.first())
+}
+
+fn settings_of(command: &[String], home: &Path, is_folder: impl Fn(&Path) -> bool, kept: impl Fn(&Path) -> bool) -> Vec<PathBuf> {
+    let Some(named) = named(command) else { return Vec::new() };
+    let base = Path::new(named).file_name().map(|n| n.to_string_lossy().into_owned()).unwrap_or_default();
+    let found = crate::common::run::find(named).and_then(|p| std::fs::canonicalize(p).ok());
+    settings_for(&base, found.as_deref(), home, is_folder, kept)
+}
+
+fn root_kept(p: &Path) -> bool {
+    use std::os::unix::fs::MetadataExt;
+    p.is_absolute() && p.ancestors().all(|a| std::fs::symlink_metadata(a).is_ok_and(|m| m.uid() == 0 && m.mode() & 0o022 == 0))
 }
 
 pub fn own_settings(program: &str, home: &Path, is_folder: impl Fn(&Path) -> bool) -> Vec<PathBuf> {
@@ -211,6 +243,33 @@ pub fn binds_closed(settings: &[PathBuf], files: &[PathBuf], program: Option<&Pa
     a
 }
 
+const START_IMAGE: &str = r#"i="$1"; shift; [ -x "$i" ] || { cp -- "$i" /tmp/image && chmod 700 /tmp/image && i=/tmp/image; } && exec "$i" "$@""#;
+
+fn image_command(args: &[String]) -> Vec<String> {
+    let mut command: Vec<String> = ["/bin/sh", "-c", START_IMAGE, "sh", IMAGE_AT].map(String::from).into();
+    command.extend(args.iter().cloned());
+    command
+}
+
+pub fn appimage_read(file: &Path, out: &Path, pattern: &str) -> i32 {
+    let (Ok(file), Ok(out)) = (std::fs::canonicalize(file), std::fs::canonicalize(out)) else { return 1 };
+    if !file.is_file() || !out.is_dir() {
+        return 1;
+    }
+    let Ok(at) = crate::common::files::private_temp("trindle-appimage-box") else { return 1 };
+    let code = match prepare(&at, &[]) {
+        Ok(()) => {
+            let extra = ["--ro-bind".to_string(), file.to_string_lossy().into_owned(), IMAGE_AT.to_string(),
+                         "--bind".to_string(), out.to_string_lossy().into_owned(), "/out".to_string(), "--chdir".to_string(), "/out".to_string()];
+            let command = image_command(&["--appimage-extract".to_string(), pattern.to_string()]);
+            boxed::run::run_boxed_extra(&at, "appimage-reader", &[], &extra, &command)
+        }
+        Err(_) => 1,
+    };
+    let _ = std::fs::remove_dir_all(&at);
+    code
+}
+
 pub fn appimage(file: &Path, args: &[String]) -> i32 {
     let Ok(file) = std::fs::canonicalize(file) else {
         eprintln!("trindle-boxed: {} is not there", file.display());
@@ -233,11 +292,10 @@ pub fn appimage(file: &Path, args: &[String]) -> i32 {
     let image = file.to_string_lossy().into_owned();
     extra.extend(["--ro-bind".to_string(), image, IMAGE_AT.to_string()]);
     extra.extend(["--setenv".to_string(), "APPIMAGE_EXTRACT_AND_RUN".to_string(), "1".to_string()]);
-    let mut command = vec![IMAGE_AT.to_string()];
-    command.extend(args.iter().cloned());
-    let (more, allowed) = plan(&handed(args, &home, |p| p.exists()), &[], None, boxed::allowed_at(&at, boxed::ALLOWED));
+    let command = image_command(args);
+    let (more, allowed) = plan(&handed(args, &home, plain_path), &[], None, boxed::allowed_at(&at, boxed::ALLOWED));
     extra.extend(more);
-    boxed::run::run_boxed_extra(&at, &format!("appimage-{id}"), &allowed, &extra, &command)
+    boxed::run::run_boxed_bus(&at, &format!("appimage-{id}"), &allowed, &extra, &command)
 }
 
 pub fn program(id: &str, command: &[String]) -> i32 {
@@ -248,13 +306,11 @@ pub fn program(id: &str, command: &[String]) -> i32 {
         return 1;
     }
     let home = home();
-
-    let named = command.iter().find(|a| *a != "env" && !a.ends_with("/env") && !a.contains('=') && !a.starts_with('-')).unwrap_or(first);
-    let base = Path::new(named).file_name().map(|n| n.to_string_lossy().into_owned()).unwrap_or_default();
+    let base = named(command).and_then(|n| Path::new(n).file_name()).map(|n| n.to_string_lossy().into_owned()).unwrap_or_default();
     remember_name(&at, if base.is_empty() { id } else { &base });
-    let settings = own_settings(&base, &home, real_folder);
-    let files = handed(&command[1..], &home, |p| p.exists());
-    let found = crate::common::run::find(first);
+    let found = crate::common::run::find(first).and_then(|p| std::fs::canonicalize(p).ok());
+    let settings = settings_of(command, &home, real_folder, root_kept);
+    let files = handed(&command[1..], &home, plain_path);
     let outside = found.filter(|p| !SYSTEM.iter().any(|s| p.starts_with(s)) && p.is_file());
     let (extra, allowed) = plan(&files, &settings, outside.as_deref(), boxed::allowed_at(&at, boxed::ALLOWED));
     boxed::run::run_boxed_extra(&at, &format!("program-{}", id_for(id)), &allowed, &extra, command)
@@ -266,6 +322,27 @@ mod tests {
 
     fn words(w: &[&str]) -> Vec<String> {
         w.iter().map(|s| s.to_string()).collect()
+    }
+
+    #[test]
+    fn an_image_is_started_in_the_box_without_changing_its_file() {
+        let c = image_command(&words(&["--flag", "/tmp/a b"]));
+        assert_eq!(c[..5], words(&["/bin/sh", "-c", START_IMAGE, "sh", IMAGE_AT])[..]);
+        assert_eq!(c[5..], words(&["--flag", "/tmp/a b"])[..]);
+        assert!(START_IMAGE.contains("cp -- \"$i\" /tmp/image") && !START_IMAGE.contains("/home"));
+        let dir = std::env::temp_dir().join(format!("trindle-image-test-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let file = dir.join("p.AppImage");
+        std::fs::write(&file, "#!/bin/sh\necho \"$@\" > \"$OUT\"\n").unwrap();
+        std::fs::set_permissions(&file, std::os::unix::fs::PermissionsExt::from_mode(0o600)).unwrap();
+        let out = dir.join("out");
+        let status = std::process::Command::new("/bin/sh").arg("-c").arg(START_IMAGE.replace("/tmp/image", &dir.join("copy").to_string_lossy()))
+            .args(["sh"]).arg(&file).args(["one", "two"]).env("OUT", &out).status().unwrap();
+        assert!(status.success());
+        assert_eq!(std::fs::read_to_string(&out).unwrap().trim(), "one two");
+        let mode = std::os::unix::fs::PermissionsExt::mode(&std::fs::metadata(&file).unwrap().permissions());
+        assert_eq!(mode & 0o111, 0, "the file outside keeps its mode");
+        let _ = std::fs::remove_dir_all(&dir);
     }
 
     #[test]
@@ -293,6 +370,52 @@ mod tests {
         let many: Vec<String> = (0..200).map(|i| format!("/home/john/Documents/{i}.txt")).collect();
         assert_eq!(handed(&many, &home, all).len(), MOST_FILES);
         assert!(path_of("file:///home/john/%zz").is_none());
+    }
+
+    #[test]
+    fn nothing_above_or_hidden_in_the_home_and_no_link_is_handed_in() {
+        let home = PathBuf::from("/home/john");
+        let got = handed(&words(&["/home", "/home/john/.ssh/key", "/home/john/.config", "/home/john/.local/share/trindle/x", "/home/john/Pictures/a.png"]), &home, |_| true);
+        assert_eq!(got, [PathBuf::from("/home/john/Pictures/a.png")]);
+        let room = std::env::temp_dir().join(format!("trindle-loose-handed-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&room);
+        std::fs::create_dir_all(room.join("real")).unwrap();
+        std::os::unix::fs::symlink(room.join("real"), room.join("link")).unwrap();
+        let room = std::fs::canonicalize(&room).unwrap();
+        assert!(plain_path(&room.join("real")) && !plain_path(&room.join("link")) && !plain_path(&room.join("nothing")));
+        std::fs::remove_dir_all(&room).unwrap();
+    }
+
+    #[test]
+    fn only_the_computers_own_programs_get_settings_by_name() {
+        let home = PathBuf::from("/home/john");
+        let there = |_: &Path| true;
+        let system = |p: &Path| p.starts_with("/usr");
+        assert_eq!(settings_for("gimp", Some(Path::new("/usr/bin/gimp")), &home, there, system).len(), 4);
+        assert!(settings_for("gimp", Some(Path::new("/home/john/Downloads/gimp")), &home, there, system).is_empty());
+        assert!(settings_for("gimp", None, &home, there, system).is_empty());
+        for name in ["mozilla", "thunderbird", "aws", "kube", "docker", "gh", "rclone", "chromium", "google-chrome", "BraveSoftware", "pass"] {
+            assert!(own_settings(name, &home, there).is_empty(), "{name} was given a settings folder");
+        }
+    }
+
+    #[test]
+    fn a_wrapper_or_a_shared_folder_does_not_pass_a_program_off_as_the_computers() {
+        let home = PathBuf::from("/home/john");
+        let there = |_: &Path| true;
+        let dir = std::env::temp_dir().join(format!("trindle-loose-kept-{}-{:?}", std::process::id(), std::thread::current().id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let gimp = dir.join("gimp");
+        std::fs::write(&gimp, "").unwrap();
+        let gimp = gimp.to_string_lossy().into_owned();
+        assert!(settings_of(&words(&["/usr/bin/env", "A=1", &gimp]), &home, there, root_kept).is_empty(), "env lent the program its place");
+        assert!(settings_of(&words(&[&gimp]), &home, there, root_kept).is_empty());
+        assert_eq!(settings_of(&words(&["/usr/bin/env", "/bin/sh"]), &home, there, root_kept).len(), 4, "the computer's own sh keeps its folders");
+        assert!(root_kept(Path::new("/usr/bin/env")));
+        for not in [Path::new(&gimp), &dir, Path::new("/var/tmp"), Path::new("/var/tmp/gimp"), Path::new("usr/bin/env"), Path::new("/usr/bin/no-such-program")] {
+            assert!(!root_kept(not), "{} passed as the computer's own", not.display());
+        }
+        std::fs::remove_dir_all(&dir).unwrap();
     }
 
     #[test]

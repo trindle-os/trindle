@@ -23,7 +23,7 @@ fn settings_draws_only_pairs_the_table_holds() {
 }
 
 #[test]
-#[ignore]
+#[ignore = "writes pictures to TRINDLE_SHOTS and asserts nothing; run it by hand with --ignored"]
 fn shoot_the_wallpaper_page() {
     let out = std::path::PathBuf::from(std::env::var("TRINDLE_SHOTS").unwrap_or_else(|_| "target/style-check".into()));
     let prefix = std::env::var("TRINDLE_SHOT_PREFIX").unwrap_or_else(|_| "wallpaper-".into());
@@ -40,7 +40,8 @@ fn shoot_the_wallpaper_page() {
 #[test]
 fn a_change_on_trial_is_asked_in_a_foot_that_never_scrolls_away() {
     use ui::{TRIAL_BACK, TRIAL_FOOT, TRIAL_KEEP};
-    let (w, h) = (1100u32, 700u32);
+
+    let (w, h) = (1100u32, 600u32);
     for id in ["appearance", "display"] {
         let (plain, trying) = on_trial(id);
         let (plain, trying) = (showing(plain, h as f32), showing(trying, h as f32));
@@ -113,7 +114,7 @@ fn the_foot_is_painted_across(ui: &mut Ui<Msg>, trying: &Settings, id: &str, (w,
 }
 
 #[test]
-#[ignore]
+#[ignore = "writes pictures to TRINDLE_SHOTS and asserts nothing; run it by hand with --ignored"]
 fn shoot_the_trial_foot() {
     let out = std::path::PathBuf::from(std::env::var("TRINDLE_SHOTS").unwrap_or_else(|_| "target/style-check".into()));
     std::fs::create_dir_all(&out).unwrap();
@@ -135,8 +136,7 @@ fn no_page_has_a_loose_tile() {
     let asks = events.post(|_: Do| {});
     let mut pages = panels::all();
     pages.extend([
-        Box::new(panels::crash_reports::CrashReports::default()) as Box<dyn Page>,
-        Box::new(panels::plugins::Plugins::default()),
+        Box::new(panels::plugins::Plugins::default()) as Box<dyn Page>,
     ]);
     let mut s = Settings { kit: Kit::new(events.clone(), asks, None, None), pages, current: 0, search: String::new(), tall: 0.0 };
     let fonts = crate::toolkit::text::Fonts::new();

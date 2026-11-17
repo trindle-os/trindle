@@ -11,19 +11,13 @@ activity-about-page = Kuhusu ukurasa huu
 activity-try-again = Jaribu tena
 
 # Red words in place of the room when the computer could not be read at the first look.
-activity-cannot-read = Haikuwezekana kupata taarifa kuhusu shughuli za kompyuta.
+activity-cannot-read = Trindle haikuweza kuangalia shughuli za kompyuta.
 
 # In place of the room when no program is running.
 activity-no-programs = Hakuna programu zinazoendeshwa bado.
 
 # In place of the list when the room could not be read, so there is nothing to list.
-activity-nothing-to-list = Hakuna cha kuorodhesha hadi taarifa za kompyuta ziweze kusomwa.
-
-# The one sentence above the room, saying what it shows.
-activity-caption = Kila kiputo kinawakilisha programu; ukubwa wake unalingana na kiasi cha kumbukumbu kinachotumiwa na programu hiyo.
-
-# The one sentence above the list of programs.
-activity-list-caption = Bonyeza programu ili kuiona kwenye chumba.
+activity-nothing-to-list = Trindle haiwezi kuonyesha programu zozote hadi iweze kuangalia shughuli za kompyuta.
 
 # Heading of the card that lists the programs.
 activity-programs = Programu
@@ -38,20 +32,20 @@ activity-memory = Kumbukumbu
 activity-processor = Kichakataji
 
 # Words the screen reader gives the room when no bubble is picked.
-activity-room-spoken = Programu, kila moja kubwa kama kumbukumbu inayoshikilia
+activity-room-spoken = Viputo vya programu, ukubwa wake kulingana na matumizi ya kumbukumbu
 
 # First paragraph of the words behind the i: what the computer is doing.
-activity-help-1 = Kompyuta hii inafanya nini sasa hivi. Kila programu ni kiputo ndani ya duara kubwa, kikubwa kama kumbukumbu inayoshikilia, kwa hiyo duara likijaa zaidi, kumbukumbu inajaa zaidi.
+activity-help-1 = Hapa unaona kompyuta yako inafanya nini sasa hivi. Kila programu inaonekana kama kiputo ndani ya duara. Viputo vikubwa vinamaanisha matumizi ya kumbukumbu ni makubwa. Duara likijaa zaidi, kumbukumbu nyingi zaidi inatumika.
 
 # Second paragraph of the words behind the i: how the colours and bars show the work.
-activity-help-2 = Programu inayofanya kazi huangaza na kupiga mapigo, kwa kasi na mwanga zaidi kadiri inavyofanya kazi kwa bidii: rangi ya baridi ni kazi kidogo, chungwa ni kazi nzito na nyekundu ni kwa nguvu zote. Kuzunguka ukingo kuna upau mmoja kwa kila uzi wa kichakataji, unaokua na kupata joto kadiri unavyozidi kuwa na shughuli, kwa hiyo zote zikiwa ndefu na nyekundu kompyuta iko kwa nguvu zote na kiputo chenye mwanga zaidi ndicho sababu.
+activity-help-2 = Kiputo cha programu huangaza na kupiga mapigo wakati programu inafanya kazi. Mapigo ya haraka na yenye mwanga zaidi yanamaanisha kazi zaidi. Rangi za baridi zinamaanisha kazi kidogo, chungwa inamaanisha matumizi makubwa, na nyekundu inamaanisha nguvu zote. Kila upau kuzunguka ukingo unaonyesha uzi mmoja, yaani sehemu ya kichakataji inayoshughulikia kazi. Pau ndefu zaidi na rangi zenye joto zaidi zinamaanisha kazi zaidi. Pau zote zikiwa ndefu na nyekundu, kompyuta inafanya kazi kwa nguvu zake zote. Kiputo chenye mwanga zaidi kinaonyesha programu inayofanya kazi nyingi zaidi.
 
 # Third paragraph of the words behind the i: how to look at a program and stop it, and what the two grey bubbles are.
 # SAFETY: needs a human review before it ships
-activity-help-3 = Bofya kiputo, au programu kwenye orodha, ili uone inachofanya kwa namba rahisi, na uisimamishe ikiwa imeacha kujibu: kitufe cha kusimamisha, kikibonyezwa mara mbili, kinaiomba ifunge, na chochote kisichohifadhiwa ndani yake kinaweza kupotea. Viputo viwili vya kijivu vilivyotulia vinabeba vilivyobaki: Trindle desktop, ambayo ni kicheza picha kinachochora skrini, pete, kichupo na mandhari, na Linux na programu nyingine, ambayo ni Linux yenyewe na programu zinazotunza kompyuta.
+activity-help-3 = Bofya kiputo, au programu kwenye orodha, ili uone inachofanya kwa namba rahisi. Unaweza pia kusimamisha programu ambayo imeacha kujibu. Bonyeza kitufe cha kusimamisha mara mbili na Trindle itaomba programu hiyo ifunge. Chochote ambacho hujahifadhi ndani yake kinaweza kupotea. Viputo viwili vya kijivu vinaonyesha kila kitu kingine. Trindle desktop ni sehemu inayochora skrini, pete, kichupo na mandhari. Linux na programu nyingine ni Linux yenyewe na programu zinazotunza kompyuta.
 
 # Fourth paragraph of the words behind the i: how memory, the processor, the disk and the swap file are counted.
-activity-help-4 = Kumbukumbu inahesabiwa kwa njia ya haki, kama zana kama smem zinavyohesabu: kumbukumbu inayoshirikiwa na programu mbili inagawanywa kati yake, na kumbukumbu iliyohamishiwa kwenye faili ya swap inajumuishwa, kwa hiyo hakuna kinachohesabiwa mara mbili wala kuachwa. Kadi zilizo kando ya picha zinaonyesha kumbukumbu, kichakataji, diski na faili ya swap zimejaa kiasi gani; pete hugeuka chungwa, kisha nyekundu, tu pale moja inapokaribia kujaa.
+activity-help-4 = Trindle huhesabu kumbukumbu kwa uangalifu, kama zana kama smem zinavyofanya. Kumbukumbu inayoshirikiwa na programu mbili inagawanywa kati yake, na kumbukumbu iliyohamishiwa kwenye faili ya swap inajumuishwa, kwa hiyo hakuna kinachohesabiwa mara mbili wala kuachwa. Kadi zilizo kando ya picha zinaonyesha kumbukumbu, kichakataji, diski na faili ya swap zimejaa kiasi gani. Pete hugeuka chungwa, kisha nyekundu, tu inapokaribia kujaa.
 
 # Heading of the card that shows the room and its sentence, at the top of the room.
 activity-right-now = Sasa hivi
@@ -60,34 +54,34 @@ activity-right-now = Sasa hivi
 activity-looking = Inatazama…
 
 # The sentence at the top when the computer could not be read at all.
-activity-unread = Kompyuta haikuweza kusomwa kwa sasa.
+activity-unread = Trindle haikuweza kuangalia kompyuta.
 
 # The sentence at the top when the whole processor is flat out, and one program is using most of it. $a is its name.
-activity-flat-out-one = Kompyuta yako inafanya kazi kwa nguvu zote: { $a } inatumia { $threads }.
+activity-flat-out-one = Kompyuta yako inafanya kazi kwa nguvu zake zote: { $a } inatumia { $threads }.
 
 # The sentence at the top when the whole processor is flat out, and two programs are using most of it. $a and $b are their names.
-activity-flat-out-two = Kompyuta yako inafanya kazi kwa nguvu zote: { $a } na { $b } zinatumia { $threads }.
+activity-flat-out-two = Kompyuta yako inafanya kazi kwa nguvu zake zote: { $a } na { $b } zinatumia { $threads }.
 
 # The sentence at the top when the whole processor is flat out, and one program is the busiest. $a is its name.
-activity-flat-out-busiest = Kompyuta yako inafanya kazi kwa nguvu zote kwenye { $threads }; { $a } ndiyo yenye shughuli zaidi.
+activity-flat-out-busiest = Kompyuta yako inafanya kazi kwa nguvu zake zote kwenye { $threads }. { $a } ndiyo yenye shughuli zaidi.
 
 # The sentence at the top when the whole processor is flat out and no one program stands out.
-activity-flat-out = Kompyuta yako inafanya kazi kwa nguvu zote kwenye { $threads }.
+activity-flat-out = Kompyuta yako inafanya kazi kwa nguvu zake zote kwenye { $threads }.
 
 # The sentence at the top when memory is nearly full, and one program holds the most. $b is its name.
-activity-memory-full-named = Kumbukumbu inakaribia kujaa; { $b } ndiyo inayoshikilia zaidi.
+activity-memory-full-named = Kumbukumbu inakaribia kujaa. { $b } ndiyo inayotumia zaidi.
 
 # The sentence at the top when memory is nearly full, and no program is named.
 activity-memory-full = Kumbukumbu inakaribia kujaa.
 
 # The sentence at the top when the computer is busy and one program is the busiest. $a is its name.
-activity-ticking-busiest = Kompyuta inaendelea vizuri; { $a } ndiyo yenye shughuli zaidi.
+activity-ticking-busiest = Kompyuta haina shughuli nyingi. { $a } ndiyo inayofanya kazi zaidi.
 
 # The sentence at the top when the computer is busy and nothing is named.
 activity-busy = Kompyuta ina shughuli nyingi.
 
 # The sentence at the top when the computer is only lightly busy and nothing is named.
-activity-ticking-over = Kompyuta inaendelea vizuri.
+activity-ticking-over = Kompyuta haina shughuli nyingi.
 
 # The sentence at the top when one program is doing most of the work. $a is its name.
 activity-doing-most = { $a } inafanya sehemu kubwa ya kazi sasa hivi.
@@ -99,10 +93,10 @@ activity-two-keeping-busy = { $a } na { $b } zinaifanya kompyuta iwe na shughuli
 activity-plenty-to-spare = { $a } inafanya kazi kwa bidii, lakini kompyuta ina nguvu nyingi zaidi.
 
 # The sentence at the top when all is calm but memory is filling up. $b is the program holding the most.
-activity-calm-memory-filling = Utulivu wote, lakini kumbukumbu inajaa; { $b } ndiyo inayoshikilia zaidi.
+activity-calm-memory-filling = Kompyuta haifanyi kazi nyingi, lakini matumizi ya kumbukumbu yanaongezeka. { $b } ndiyo inayotumia zaidi.
 
 # The sentence at the top when all is calm and nothing is working hard.
-activity-all-calm = Utulivu wote: hakuna kinachofanya kazi kwa bidii.
+activity-all-calm = Hakuna programu inayofanya kazi kwa bidii.
 
 # How many threads, as a phrase inside a sentence: all of them. $n is the number of threads.
 activity-all-threads = { $n ->
@@ -138,13 +132,13 @@ activity-under-one-percent = chini ya 1%
 activity-size-under-mb = chini ya MB 1
 
 # How a thread is described in its tip when it is resting.
-activity-resting = imetulia
+activity-resting = haifanyi kazi
 
 # How a thread is described in its tip when it is busy. $percent is the share, such as 80%.
 activity-busy-percent = ina shughuli { $percent }
 
 # How hard a program is working, when it is resting.
-activity-effort-resting = Imetulia
+activity-effort-resting = Haifanyi kazi
 
 # How hard a program is working, when it is working a little.
 activity-effort-little = Inafanya kazi kidogo
@@ -186,16 +180,16 @@ activity-note-working-hardest = Inafanya kazi kwa bidii zaidi
 activity-working-hardest = { $effort }: { $work }
 
 # The words under that heading when it also holds the most memory. $effort is how hard, $work is its share.
-activity-working-hardest-most = { $effort }: { $work }, na inashikilia kumbukumbu nyingi zaidi
+activity-working-hardest-most = { $effort }: { $work }, na inatumia kumbukumbu nyingi zaidi
 
 # Heading of the card beside the room for the program holding the most memory.
-activity-note-most-memory = Inashikilia kumbukumbu nyingi zaidi
+activity-note-most-memory = Inatumia kumbukumbu nyingi zaidi
 
 # Heading of the card beside the room for the program holding the next most memory.
 activity-note-next-memory = Kumbukumbu nyingi inayofuata
 
 # The words under a heading for memory. $amount is the memory, $how is its share of the whole.
-activity-holding = Inashikilia { $amount }, { $how }
+activity-holding = Inatumia { $amount }, { $how }
 
 # The words under the memory figure of a card: how much a program holds, as a share of the whole.
 activity-share-of-memory = { $share } ya kumbukumbu
@@ -251,19 +245,19 @@ activity-separate-parts = sehemu { $n } tofauti
 activity-running-for = Inaendeshwa kwa
 
 # A card's fact: the name of the facts' heading for what a program is made of.
-activity-made-of = Imeundwa na
+activity-made-of = Sehemu zake
 
 # Words under a memory card when it could not be read at the first look.
-activity-ring-not-read = Haikuweza kusomwa bado.
+activity-ring-not-read = Haiwezi kuangalia hii bado.
 
 # Sentence under the memory figure: how much memory is in use, and how much of it Trindle itself holds. $used and $ours are sizes.
-activity-memory-sentence = { $used } zinatumika; Trindle yenyewe inashikilia { $ours }.
+activity-memory-sentence = { $used } zinatumika. Trindle yenyewe inatumia { $ours }.
 
 # Sentence under the processor figure: how busy all the threads have been. $threads is "all 16 threads" or similar.
-activity-processor-sentence = Jinsi { $threads } zilivyokuwa na shughuli kwa dakika mbili.
+activity-processor-sentence = Jinsi { $threads } zilivyokuwa na shughuli katika dakika mbili zilizopita.
 
 # Sentence under the disk figure: how much is used and how much is still free. $used and $free are sizes.
-activity-disk-sentence = { $used } zimetumika; { $free } bado ziko wazi.
+activity-disk-sentence = { $used } zimetumika na { $free } ziko wazi.
 
 # Limit under a memory, disk or swap figure. $amount is the whole.
 activity-of-size = kati ya { $amount }
@@ -275,13 +269,13 @@ activity-disk = Diski
 activity-swap-file = Faili ya swap
 
 # Sentence under the swap file figure: how much is in use, and the rest is room to hibernate. $used is a size.
-activity-swap-sentence = { $used } zinatumika; zilizobaki ni nafasi ya kulaza kompyuta (hibernate).
+activity-swap-sentence = { $used } zinatumika.
 
 # Name of the temperature card, shown when the computer has a temperature to read.
 activity-temperature = Joto
 
 # Sentence under the temperature figure.
-activity-temperature-sentence = Kichakataji kina joto kiasi gani sasa hivi.
+activity-temperature-sentence = Joto la kichakataji
 
 # Limit under the temperature figure. The degree sign is written as it is.
 activity-of-hundred-degrees = kati ya 100°C
@@ -291,5 +285,4 @@ activity-no-swap = Kompyuta hii haina faili ya swap, kwa hiyo hakuna kinachohami
 
 
 # Short line in the Activity window after a program that did not answer Stop within five seconds was ended by force. $title is the program.
-activity-forced = Imelazimishwa kufunga: { $title } haikujibu
-
+activity-forced = { $title } haikujibu, kwa hiyo Trindle imeilazimisha kufunga

@@ -8,11 +8,11 @@ plugins-pin-four = PIN terdiri dari 4 angka.
 plugins-pin-not-saved = PIN tidak disimpan
 
 # Red words on the PIN card when the unlocking command gave no answer of its own.
-plugins-pin-no-answer = Tidak ada jawaban dari komputer lain.
+plugins-pin-no-answer = Komputer lain tidak menjawab.
 
 # Red words on the PIN card when the unlocking command refused without saying why.
 # SAFETY: needs a human review before it ships
-plugins-pin-not-unlocked = Tidak terbuka.
+plugins-pin-not-unlocked = Masih terkunci.
 
 # Name the screen reader gives to the four dots on the PIN card.
 plugins-pin-dots = PIN
@@ -31,4 +31,3 @@ plugins-pin-send = Kirim
 # Heading of the PIN card, and the title of its window.
 # SAFETY: needs a human review before it ships
 plugins-pin-title = Buka kunci dengan PIN
-

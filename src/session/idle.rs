@@ -7,7 +7,7 @@ use std::cell::RefCell;
 use std::path::PathBuf;
 use std::process::{Command, Stdio};
 use std::rc::Rc;
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 use wayland_client::globals::{registry_queue_init, GlobalList, GlobalListContents};
 use wayland_client::protocol::{wl_output, wl_registry, wl_seat};
@@ -94,20 +94,31 @@ fn start_again() {
 }
 
 pub fn restart() {
-    stop_running();
-    if !keep_awake() && !held() {
-        start_again();
-    }
+    start_again();
 }
+
+pub fn running() -> bool {
+    std::fs::read_to_string(pidfile()).ok().and_then(|p| p.trim().parse::<i32>().ok())
+        .is_some_and(|pid| std::fs::read_to_string(format!("/proc/{pid}/comm")).is_ok_and(|c| c.trim() == "trindle-idle"))
+}
+
+fn awake() -> bool {
+    keep_awake() || held()
+}
+
+fn timers(awake: bool, plan: impl FnOnce() -> Vec<(Step, u32)>) -> Vec<(Step, u32)> {
+    if awake { Vec::new() } else { plan() }
+}
+
+const AWAKE_CHECK: std::time::Duration = std::time::Duration::from_secs(30);
 
 pub fn set_keep_awake(on: bool) {
     if on {
         let _ = std::fs::write(caffeine_mark(), "Trindle keeps the screen awake while this file is here.\n");
-        stop_running();
     } else {
         let _ = std::fs::remove_file(caffeine_mark());
-        restart();
     }
+    restart();
 }
 
 fn holds() -> PathBuf {
@@ -131,7 +142,7 @@ pub fn hold_awake(tag: &str) {
     let dir = holds();
     let _ = std::fs::create_dir_all(&dir);
     let _ = std::fs::write(dir.join(format!("{}-{tag}", std::process::id())), "Kept awake while this file is here.\n");
-    stop_running();
+    restart();
 }
 
 pub fn release_awake(tag: &str) {
@@ -275,9 +286,33 @@ fn set_brightness(name: &str, value: u32) {
     }
 }
 
+mod hold;
+
 thread_local! {
 
     static DELAY: RefCell<Option<zbus::zvariant::OwnedFd>> = const { RefCell::new(None) };
+
+    static FELL_BACK: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+}
+
+#[derive(Debug, PartialEq, Eq)]
+enum BeforeSleep {
+
+    Locked,
+
+    FellBack,
+
+    Open,
+}
+
+fn lock_or_hold(lock: impl FnMut() -> bool, fallback: impl FnOnce() -> bool) -> BeforeSleep {
+    if lock_before_sleep(lock) {
+        BeforeSleep::Locked
+    } else if fallback() {
+        BeforeSleep::FellBack
+    } else {
+        BeforeSleep::Open
+    }
 }
 
 fn hold_off_sleep(bus: &Bus, events: &Loop) {
@@ -290,12 +325,69 @@ fn hold_off_sleep(bus: &Bus, events: &Loop) {
     });
 }
 
+const LOCK_WAIT: Duration = Duration::from_millis(1500);
+
+fn finished_within(cmd: &mut Command, limit: Duration) -> Result<bool, String> {
+    let mut child = cmd.spawn().map_err(|e| format!("could not start: {e}"))?;
+    let since = Instant::now();
+    loop {
+        match child.try_wait() {
+            Ok(Some(status)) => return Ok(status.success()),
+            Ok(None) if since.elapsed() < limit => std::thread::sleep(Duration::from_millis(20)),
+            Ok(None) => {
+                std::thread::spawn(move || {
+                    let _ = child.wait();
+                });
+                return Err(format!("not done after {} ms", limit.as_millis()));
+            }
+            Err(e) => return Err(format!("could not be waited for: {e}")),
+        }
+    }
+}
+
+fn lock_screen_now() -> bool {
+    match finished_within(Command::new("trindle-lock").stdin(Stdio::null()), LOCK_WAIT) {
+        Ok(true) => true,
+        Ok(false) => {
+            record("the lock screen ended without locking before sleep");
+            false
+        }
+        Err(e) => {
+            record(&format!("the lock screen before sleep: {e}"));
+            false
+        }
+    }
+}
+
 fn before_sleep() {
     if setting("lock") == "on" && setting("lock_on_suspend") != "no" {
+        let lock = lock_screen_now;
+        match lock_or_hold(lock, hold::compositor_lock) {
+            BeforeSleep::Locked => {}
+            BeforeSleep::FellBack => {
+                record("the lock screen did not come up before sleep: the compositor's own lock was taken");
+                FELL_BACK.with(|f| f.set(true));
+            }
+            BeforeSleep::Open => {
 
-        let _ = Command::new("trindle-lock").stdin(Stdio::null()).status();
+                record("nothing would lock before sleep: sleep is held off as long as logind allows");
+                eprintln!("trindle-idle: nothing would lock before sleep");
+                return;
+            }
+        }
     }
     DELAY.with(|d| *d.borrow_mut() = None);
+}
+
+const LOCK_TRIES: usize = 2;
+
+fn lock_before_sleep(mut lock: impl FnMut() -> bool) -> bool {
+    for _ in 0..LOCK_TRIES {
+        if lock() {
+            return true;
+        }
+    }
+    false
 }
 
 fn watch_logind(bus: &Bus, events: &Loop, screens_on: impl Fn() + 'static) -> Rc<RefCell<Vec<Listen>>> {
@@ -308,22 +400,48 @@ fn watch_logind(bus: &Bus, events: &Loop, screens_on: impl Fn() + 'static) -> Rc
             before_sleep();
         } else {
 
+            if FELL_BACK.with(|f| f.replace(false)) {
+                spawn(&["trindle-lock", "--now"]);
+            }
             screens_on();
             hold_off_sleep(&b, &e);
         }
     });
-    hearing.borrow_mut().extend(sleep.ok());
+    match sleep {
+        Ok(l) => hearing.borrow_mut().push(l),
+        Err(e) => record(&format!("not hearing logind's sleep: {}", e.text)),
+    }
 
     let (b, h) = (bus.clone(), hearing.clone());
     bus.call(LOGIN, LOGIN_PATH, MANAGER).method("GetSessionByPID", &(std::process::id(),), false, Some(ANSWER), events,
                                                 move |r| {
-        let Some(path) = r.ok().and_then(|m| m.body().deserialize::<zbus::zvariant::OwnedObjectPath>().ok()) else { return };
-        let lock = b.listen(Some(LOGIN), SESSION, Some("Lock"), Some(path.as_str()), |_| {
+        let path = r.and_then(|m| m.body().deserialize::<zbus::zvariant::OwnedObjectPath>().map_err(Into::into));
+        let lock = path.and_then(|path| b.listen(Some(LOGIN), SESSION, Some("Lock"), Some(path.as_str()), |_| {
             spawn(&["trindle-lock", "--now"]);
-        });
-        h.borrow_mut().extend(lock.ok());
+        }));
+        match lock {
+            Ok(l) => h.borrow_mut().push(l),
+            Err(e) => record(&format!("not hearing lock-session: {}", e.text)),
+        }
     });
     hearing
+}
+
+const LISTENERS: usize = 2;
+
+fn listen_logind(events: &Loop, state: &Rc<RefCell<State>>, qh: &QueueHandle<State>, conn: &Connection)
+    -> Option<Rc<RefCell<Vec<Listen>>>> {
+    let bus = Bus::system(events).map_err(|e| record(&format!("no system bus, so sleep and lock-session go unheard: {}", e.text))).ok()?;
+    state.borrow_mut().system = Some((bus.clone(), events.clone()));
+    let (st, qh, c) = (state.clone(), qh.clone(), conn.clone());
+    Some(watch_logind(&bus, events, move || {
+        st.borrow_mut().screens(true, &qh);
+        let _ = c.flush();
+    }))
+}
+
+fn hears_all(hearing: &Option<Rc<RefCell<Vec<Listen>>>>) -> bool {
+    hearing.as_ref().is_some_and(|h| h.borrow().len() >= LISTENERS)
 }
 
 pub fn main(args: Vec<String>) -> i32 {
@@ -337,35 +455,41 @@ pub fn main(args: Vec<String>) -> i32 {
         set_keep_awake(on);
         return 0;
     }
-    if keep_awake() || held() {
-        return 0;
-    }
 
-    stop_running();
-    let _ = std::fs::write(pidfile(), std::process::id().to_string());
-    put_brightness_back();
-
+    let awake_at_start = awake();
     let Ok(conn) = Connection::connect_to_env() else {
         eprintln!("trindle-idle: no desktop to watch");
         return 1;
     };
     let Ok((globals, mut queue)) = registry_queue_init::<State>(&conn) else { return 1 };
     let qh = queue.handle();
-    let Some(mut state) = watching_state(&globals, &mut queue, &qh) else { return 1 };
+    let Some(state) = watching_state(&globals, &mut queue, &qh, awake_at_start) else { return 1 };
 
     let events = Loop::new();
-    let system = Bus::system(&events).ok();
-    state.system = system.clone().map(|bus| (bus, events.clone()));
     let queue = Rc::new(RefCell::new(queue));
     let state = Rc::new(RefCell::new(state));
-    let _hearing = system.as_ref().map(|bus| {
-        let (st, qh, c) = (state.clone(), qh.clone(), conn.clone());
-        watch_logind(bus, &events, move || {
-            st.borrow_mut().screens(true, &qh);
-            let _ = c.flush();
-        })
-    });
+    let hearing = RefCell::new(listen_logind(&events, &state, &qh, &conn));
+
+    stop_running();
+    if let Err(e) = std::fs::write(pidfile(), std::process::id().to_string()) {
+        record(&format!("pid file not written, so the session may start a second watcher: {e}"));
+    }
+    put_brightness_back();
     super::wayland_loop::dispatch_on(&events, &queue, &state, &conn);
+    let (ev, st, q, c) = (events.clone(), state.clone(), qh.clone(), conn.clone());
+    events.every(AWAKE_CHECK, move || {
+        if !hears_all(&hearing.borrow()) {
+            record("logind not heard in full: listening again");
+            hearing.replace(None);
+            hearing.replace(listen_logind(&ev, &st, &q, &c));
+        }
+        if awake() != awake_at_start {
+
+            record(if awake_at_start { "no longer kept awake: timers back" } else { "kept awake: timers stopped, sleep and lock still heard" });
+            start_again();
+        }
+        Flow::Continue
+    });
     let ev = events.clone();
     events.on_signal(libc::SIGTERM, move || {
         ev.quit();
@@ -392,7 +516,7 @@ fn put_brightness_back() {
     }
 }
 
-fn watching_state(globals: &GlobalList, queue: &mut EventQueue<State>, qh: &QueueHandle<State>) -> Option<State> {
+fn watching_state(globals: &GlobalList, queue: &mut EventQueue<State>, qh: &QueueHandle<State>, awake: bool) -> Option<State> {
     let Ok(notifier) = globals.bind::<ExtIdleNotifierV1, _, _>(qh, 1..=1, ()) else {
         eprintln!("trindle-idle: this desktop cannot say when it is left alone");
         return None;
@@ -413,7 +537,10 @@ fn watching_state(globals: &GlobalList, queue: &mut EventQueue<State>, qh: &Queu
         }
     }
     let seat = state.seat.clone()?;
-    let steps = plan();
+    let steps = timers(awake, plan);
+    if awake {
+        record("kept awake: no timers; sleep and lock-session still lock");
+    }
     record(&format!("watching: {}", steps.iter().map(|(s, m)| format!("{s:?} {m} min")).collect::<Vec<_>>().join(", ")));
     for (i, (step, after)) in steps.into_iter().enumerate() {
         state.steps.push(step);
@@ -494,6 +621,73 @@ mod tests {
         assert_eq!(super::dimmed(30, 1000), Some(20));
         assert_eq!(super::dimmed(20, 1000), None);
         assert_eq!(super::dimmed(1, 1), None);
+    }
+
+    #[test]
+    fn kept_awake_runs_no_timers_but_the_watcher_still_runs_and_locks() {
+        let plan = || vec![(super::Step::Lock, 5)];
+        assert!(super::timers(true, plan).is_empty());
+        assert_eq!(super::timers(false, plan), plan());
+        let main = crate::common::source::code(include_str!("idle.rs"));
+        let main = &main[main.find("pub fn main(").unwrap()..];
+        let main = &main[..main.find("\n}\n").unwrap()];
+
+        let watcher = &main[main.find("let awake_at_start").expect("the watcher's own start")..];
+        let listening = watcher.find("listen_logind(").expect("main listens to logind");
+        assert!(!watcher[..listening].contains("return 0") && !main.contains("if keep_awake() || held()"),
+                "main leaves before it listens for sleep and lock-session");
+        for f in ["pub fn restart()", "pub fn set_keep_awake(", "pub fn hold_awake("] {
+            let code = crate::common::source::code(include_str!("idle.rs"));
+            let body = &code[code.find(f).unwrap()..];
+            let body = &body[..body.find("\n}\n").unwrap()];
+            assert!(!body.contains("keep_awake() && !held()") && (body.contains("restart()") || body.contains("start_again()")),
+                    "{f} leaves no watcher running");
+        }
+    }
+
+    #[test]
+    fn a_lock_that_always_fails_asks_the_compositor_before_sleep_and_never_sleeps_open() {
+        use super::{lock_or_hold, BeforeSleep};
+        let order = std::cell::RefCell::new(Vec::new());
+        let got = lock_or_hold(|| { order.borrow_mut().push("lock"); false }, || { order.borrow_mut().push("compositor"); true });
+        assert_eq!(got, BeforeSleep::FellBack);
+        assert_eq!(*order.borrow(), ["lock", "lock", "compositor"]);
+        assert_eq!(lock_or_hold(|| false, || false), BeforeSleep::Open);
+        let mut asked = false;
+        assert_eq!(lock_or_hold(|| true, || { asked = true; true }), BeforeSleep::Locked);
+        assert!(!asked, "the compositor is not asked when the lock screen came up");
+    }
+
+    #[test]
+    fn a_lock_that_fails_before_sleep_is_tried_again_and_said() {
+        let mut tries = 0;
+        assert!(super::lock_before_sleep(|| { tries += 1; tries == 2 }));
+        assert_eq!(tries, 2);
+        let mut tries = 0;
+        assert!(!super::lock_before_sleep(|| { tries += 1; false }));
+        assert_eq!(tries, super::LOCK_TRIES);
+    }
+
+    #[test]
+    fn a_lock_before_sleep_is_waited_for_only_so_long() {
+        use std::process::Command;
+        use std::time::{Duration, Instant};
+        crate::common::needs::programs(&["sleep", "true", "false"]);
+        let short = Duration::from_millis(300);
+        let since = Instant::now();
+        let hung = super::finished_within(Command::new("sleep").arg("30"), short);
+        assert!(hung.is_err_and(|e| e.contains("not done")));
+        assert!(since.elapsed() < Duration::from_secs(5), "waited past its limit");
+        assert_eq!(super::finished_within(&mut Command::new("true"), short), Ok(true));
+        assert_eq!(super::finished_within(&mut Command::new("false"), short), Ok(false));
+        assert!(super::finished_within(&mut Command::new("/nonexistent/trindle-lock"), short).is_err());
+    }
+
+    #[test]
+    fn logind_is_heard_only_with_both_listeners() {
+        assert!(!super::hears_all(&None));
+        let none = std::rc::Rc::new(std::cell::RefCell::new(Vec::new()));
+        assert!(!super::hears_all(&Some(none)));
     }
 
     #[test]

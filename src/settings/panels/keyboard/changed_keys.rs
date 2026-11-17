@@ -26,7 +26,12 @@ impl Keyboard {
         self.allowed = crate::common::own_helpers::allowed_devices();
     }
 
-    fn keep_keys(&mut self, kit: &mut Kit, key: &str) {
+    pub(super) fn keep_keys(&mut self, kit: &mut Kit, key: &str) {
+
+        if self.table_unread.is_some() {
+            kit.done(key, Some(t!("settings-keyboard-keys-not-saved-unread")), "");
+            return;
+        }
         if kit.settle(key, remap::save(&self.table), not_saved()).is_none() {
             self.load_keys();
         }
@@ -40,10 +45,9 @@ impl Keyboard {
 
     fn change_typed(&mut self, kit: &mut Kit, i: usize, text: String) {
         self.typed.insert(i, text);
-        self.typed_round = self.typed_round.wrapping_add(1);
-        let mine = self.typed_round;
+        let (box_, mine) = (change_key(i), self.typing.next(&change_key(i)));
         kit.after::<Keyboard>(KEYS_PAUSE, move |me, k| {
-            if me.typed_round != mine {
+            if !me.typing.latest(&box_, mine) {
                 return;
             }
             let Some(text) = me.typed.get(&i).cloned() else { return };
@@ -140,7 +144,7 @@ impl Keyboard {
             let chosen = devices.clone();
             let title = remap::name(change.from);
             let typed = self.typed.get(&i).cloned().unwrap_or_else(|| change.to.words());
-            let device = dropdown(kit, &format!("keys-device:{i}"), devices, at, &t!("settings-keyboard-which-device", key = &title), move |n| {
+            let device = dropdown(&format!("keys-device:{i}"), devices, at, &t!("settings-keyboard-which-device", key = &title), move |n| {
                 let device = (n > 0).then(|| chosen[n].clone());
                 on::<Keyboard>(move |me, k| me.change_device(k, i, device.clone()))
             });
@@ -148,8 +152,7 @@ impl Keyboard {
                 on::<Keyboard>(move |me, k| me.change_typed(k, i, text.clone()))
             }).width(Length::Fixed(220.0));
             let gone = button("user-trash-symbolic", t!("settings-keyboard-take-away")).on_press(on::<Keyboard>(move |me, k| me.take_away(k, i)));
-            rows.push(line(title).sub(change.device.clone().unwrap_or_else(|| t!("settings-keyboard-every-device-about").into()))
-                .key(change_key(i)).control(becomes).control(device).control(gone).node(kit));
+            rows.push(line(title).key(change_key(i)).control(becomes).control(device).control(gone).node(kit));
         }
         for (n, text, why) in &self.table.unread {
             rows.push(line(text.clone()).sub(t!("settings-keyboard-line-unused", n = *n, why = *why)).node(kit));
@@ -157,15 +160,12 @@ impl Keyboard {
         if let Some(why) = &self.table_unread {
             rows.push(line(t!("settings-keyboard-keys-unread")).sub(t!("settings-keyboard-keys-unread-about", why = why)).key(KEYS_FILE).node(kit));
         }
-        let all: Vec<(u32, &str)> = remap::named().collect();
-        let words: Vec<String> = all.iter().map(|(_, n)| n.to_string()).collect();
-        let codes: Vec<u32> = all.iter().map(|(c, _)| *c).collect();
-        let list = dropdown(kit, "keys-list", words, None, t!("settings-keyboard-keys-list"), move |n| {
-            let code = codes.get(n).copied();
+        let list = dropdown("keys-list", key_names().to_vec(), None, t!("settings-keyboard-keys-list"), move |n| {
+            let code = remap::named().nth(n).map(|(c, _)| c);
             on::<Keyboard>(move |me, k| me.picked(k, code))
         });
         let press = button("list-add-symbolic", t!("settings-keyboard-keys-press")).on_press(on::<Keyboard>(|me, k| me.wait_for_press(k)));
-        let sub = if self.picking { press_now() } else { t!("settings-keyboard-keys-add-about") };
+        let sub = if self.picking { press_now() } else { "" };
         rows.push(line(t!("settings-keyboard-keys-add")).sub(sub).key(KEYS_ADD).control(press).control(list).node(kit));
         group(t!("settings-keyboard-keys-title")).icon("input-keyboard-symbolic")
             .about(t!("settings-keyboard-keys-about"))
@@ -177,9 +177,8 @@ impl Keyboard {
         let made: Vec<&String> = self.devices.iter().filter(|d| d.0).map(|d| &d.1).collect();
         let mut rows: Vec<Node<Msg>> = made.iter().map(|name| {
             let allowed = self.allowed.contains(name);
-            let sub = if allowed { t!("settings-keyboard-made-yes") } else { t!("settings-keyboard-made-no") };
             let named = (*name).clone();
-            line((*name).clone()).sub(sub).key(made_key(name))
+            line((*name).clone()).key(made_key(name))
                 .control(switch(allowed, t!("settings-keyboard-made-switch", name = *name), move |b| {
                     let named = named.clone();
                     on::<Keyboard>(move |me, k| me.allow_made(k, named.clone(), b))
@@ -187,11 +186,12 @@ impl Keyboard {
                 .node(kit)
         }).collect();
         if rows.is_empty() {
-            rows.push(line(t!("settings-keyboard-made-none")).sub(t!("settings-keyboard-made-none-about")).node(kit));
+            rows.push(line(t!("settings-keyboard-made-none")).node(kit));
         }
         group(t!("settings-keyboard-made-title")).icon("input-mouse-symbolic")
             .about(t!("settings-keyboard-made-about"))
             .rows(rows)
+            .grows()
             .node(kit)
     }
 
@@ -201,7 +201,7 @@ impl Keyboard {
             let (plugin, id) = (b.plugin.clone(), b.id.clone());
             let sub = match &b.refused {
                 Some(why) => t!("settings-keyboard-plugin-refused", plugin = &b.plugin_name, why = why),
-                None => t!("settings-keyboard-plugin-about", plugin = &b.plugin_name),
+                None => b.plugin_name.clone(),
             };
             line(b.label.clone()).sub(sub).key(key)
                 .control(entry(b.shown(), t!("settings-keyboard-plugin-keys-name", label = &b.label), move |text| {
@@ -216,10 +216,10 @@ impl Keyboard {
         if let Some(b) = self.plugin_keys.iter_mut().find(|b| b.plugin == plugin && b.id == id) {
             b.typed = Some(text);
         }
-        self.keys_round = self.keys_round.wrapping_add(1);
-        let (mine, plugin, id) = (self.keys_round, plugin.to_string(), id.to_string());
+        let box_ = format!("pluginkeys:{plugin}:{id}");
+        let (mine, plugin, id) = (self.typing.next(&box_), plugin.to_string(), id.to_string());
         kit.after::<Keyboard>(KEYS_PAUSE, move |me, k| {
-            if me.keys_round != mine {
+            if !me.typing.latest(&box_, mine) {
                 return;
             }
             let text = me.plugin_keys.iter().find(|b| b.plugin == plugin && b.id == id)
@@ -228,7 +228,6 @@ impl Keyboard {
             k.done(&format!("pluginkeys:{plugin}:{id}"), said.as_deref(), t!("settings-keyboard-plugin-saved"));
         });
     }
-
 }
 
 const KEYS_ADD: &str = "keys-add";
@@ -258,4 +257,9 @@ fn type_it() -> &'static str {
 
 fn every_device() -> &'static str {
     t!("settings-keyboard-every-device")
+}
+
+pub(super) fn key_names() -> &'static [String] {
+    static NAMES: std::sync::OnceLock<Vec<String>> = std::sync::OnceLock::new();
+    NAMES.get_or_init(|| remap::named().map(|(_, n)| n.to_string()).collect())
 }

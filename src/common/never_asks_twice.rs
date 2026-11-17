@@ -61,7 +61,7 @@ fn nothing_is_asked_twice() {
             assert_ne!(a, b);
         }
     }
-    assert!(said[2].contains("No password was typed"), "no password at log in is said plainly");
+    assert!(said[2].contains("You didn't type a password"), "no password at log in is said plainly");
 
     let helper = body(pam(), "fn leave_key()");
     assert!(helper.contains("password.is_empty()") && helper.contains("remove_file"), "leave_key guards an empty password");
@@ -77,6 +77,5 @@ fn nothing_is_asked_twice() {
     let call = body(polkit(), "fn call(");
     assert!(call.contains("self.enter(r)") && !call.contains(".start("), "every request waits its turn through enter");
     assert!(!polkit().replace("self.start(None)", "").contains(".start(None)"), "start is only through begin");
-    assert!(body(polkit(), "fn left(").contains("reuse"));
-    assert!(body(polkit(), "fn ask(").contains("self.reuse.borrow_mut().take()"), "the accepted password is tried before any window");
+    assert!(!body(polkit(), "fn left(").contains("reuse") && !body(polkit(), "fn ask(").contains("reuse"), "a password is never tried again for the next request");
 }

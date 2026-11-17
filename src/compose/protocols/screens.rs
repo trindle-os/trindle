@@ -4,6 +4,7 @@
 
 use std::sync::Mutex;
 
+use super::Filtered;
 use smithay::reexports::wayland_server::backend::ClientId;
 use smithay::reexports::wayland_server::protocol::wl_output::Transform as WlTurn;
 use smithay::reexports::wayland_server::{Client, DataInit, Dispatch, DisplayHandle, GlobalDispatch, New, Resource};
@@ -35,6 +36,8 @@ const RATE_SLACK: i32 = 1000;
 
 const SCALE_FLOOR: u32 = 30;
 const SCALE_CEILING: u32 = 1200;
+
+const POSITION_LIMIT: i32 = 1 << 20;
 
 const MOST_SCREENS: usize = 64;
 
@@ -198,7 +201,7 @@ pub fn resolve(now: &[ScreenFacts], wishes: &[Wish]) -> Result<Vec<ScreenPlan>, 
             name: facts.name.clone(),
             on: true,
             mode: Some(mode),
-            position: wish.position,
+            position: (wish.position.0.clamp(-POSITION_LIMIT, POSITION_LIMIT), wish.position.1.clamp(-POSITION_LIMIT, POSITION_LIMIT)),
             turn,
             scale: f64::from(wish.scale_120ths) / 120.0,
             varies_rate: wish.varies_rate,
@@ -219,10 +222,6 @@ pub struct PlanData {
     serial: u32,
     wishes: Mutex<Vec<Wish>>,
     used: Mutex<bool>,
-}
-
-pub struct ScreensGlobalData {
-    filter: Box<dyn for<'c> Fn(&'c Client) -> bool + Send + Sync>,
 }
 
 #[derive(Debug)]
@@ -250,7 +249,7 @@ impl ScreensState {
 
     pub fn new<D, F>(display: &DisplayHandle, filter: F) -> ScreensState
     where
-        D: GlobalDispatch<TrindleScreensManagerV1, ScreensGlobalData>
+        D: GlobalDispatch<TrindleScreensManagerV1, Filtered>
             + Dispatch<TrindleScreensManagerV1, ()>
             + Dispatch<TrindleScreenV1, ScreenKey>
             + Dispatch<TrindleScreenPlanV1, PlanData>
@@ -258,7 +257,7 @@ impl ScreensState {
             + 'static,
         F: for<'c> Fn(&'c Client) -> bool + Send + Sync + 'static,
     {
-        display.create_global::<D, TrindleScreensManagerV1, _>(VERSION, ScreensGlobalData { filter: Box::new(filter) });
+        display.create_global::<D, TrindleScreensManagerV1, _>(VERSION, Filtered::new(filter));
         ScreensState { display: display.clone(), serial: 1, now: Vec::new(), listeners: Vec::new() }
     }
 
@@ -344,9 +343,9 @@ where
     }
 }
 
-impl<D> GlobalDispatch<TrindleScreensManagerV1, ScreensGlobalData, D> for ScreensState
+impl<D> GlobalDispatch<TrindleScreensManagerV1, Filtered, D> for ScreensState
 where
-    D: GlobalDispatch<TrindleScreensManagerV1, ScreensGlobalData>
+    D: GlobalDispatch<TrindleScreensManagerV1, Filtered>
         + Dispatch<TrindleScreensManagerV1, ()>
         + Dispatch<TrindleScreenV1, ScreenKey>
         + Dispatch<TrindleScreenPlanV1, PlanData>
@@ -358,7 +357,7 @@ where
         _: &DisplayHandle,
         _: &Client,
         resource: New<TrindleScreensManagerV1>,
-        _: &ScreensGlobalData,
+        _: &Filtered,
         data_init: &mut DataInit<'_, D>,
     ) {
         let manager = data_init.init(resource, ());
@@ -377,8 +376,8 @@ where
         st.tell::<D>(last);
     }
 
-    fn can_view(client: Client, data: &ScreensGlobalData) -> bool {
-        (data.filter)(&client)
+    fn can_view(client: Client, data: &Filtered) -> bool {
+        data.can_view(&client)
     }
 }
 
@@ -495,7 +494,7 @@ fn answer<D: ScreensHandler>(state: &mut D, data: &PlanData, test_only: bool) ->
 macro_rules! delegate_screens {
     ($(@<$( $lt:tt $( : $clt:tt $(+ $dlt:tt )* )? ),+>)? $ty: ty) => {
         smithay::reexports::wayland_server::delegate_global_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
-            $crate::protocols::screens::TrindleScreensManagerV1: $crate::protocols::screens::ScreensGlobalData
+            $crate::protocols::screens::TrindleScreensManagerV1: $crate::protocols::Filtered
         ] => $crate::protocols::screens::ScreensState);
         smithay::reexports::wayland_server::delegate_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
             $crate::protocols::screens::TrindleScreensManagerV1: ()
@@ -632,6 +631,15 @@ mod tests {
         let got = resolve(&[a, b.clone()], &[wish, keep(&b)]).unwrap();
         assert_eq!(got[0].mode, Some(3));
         assert_eq!(got[0].scale, 2.0);
+    }
+
+    #[test]
+    fn a_screen_put_absurdly_far_away_is_held_to_a_sane_place() {
+        let a = screen("A", true);
+        for (x, y) in [(i32::MAX, i32::MIN), (i32::MIN, i32::MAX)] {
+            let got = resolve(std::slice::from_ref(&a), &[Wish { position: (x, y), ..keep(&a) }]).unwrap();
+            assert!(got[0].position.0.abs() <= POSITION_LIMIT && got[0].position.1.abs() <= POSITION_LIMIT);
+        }
     }
 
     #[test]

@@ -15,9 +15,18 @@ use crate::toolkit::widget::{button, card, column, label, Length, Node, note, ri
 
 use super::Face;
 
-const UNINSTALL_SECS: u64 = 10;
+fn failure(detail: String) -> String {
+    eprintln!("trindle-ring: a removal failed: {}", detail.trim());
+    t!("ring-uninstall-failed").to_string()
+}
 
-const PACKAGE_SECS: u64 = 600;
+fn begin_removal(removing: &mut Vec<String>, id: &str) -> bool {
+    if removing.iter().any(|r| r == id) {
+        return false;
+    }
+    removing.push(id.to_string());
+    true
+}
 
 fn uninstall_words() -> [&'static str; 3] {
     [t!("ring-uninstall"), t!("ring-uninstalling"), t!("ring-uninstalled")]
@@ -32,12 +41,11 @@ const TIP_SECONDS: u64 = 2;
 pub(super) const MENU_TITLE_CHARS: usize = 28;
 
 pub(super) enum Gone {
-    Running,
     Done(bool, String),
 }
 
 pub(super) struct FlatAsk {
-    i: usize,
+    id: String,
     bytes: Option<u64>,
     uncounted: bool,
     working: bool,
@@ -56,7 +64,17 @@ pub(super) fn startup_button(launcher: &Path) -> Node<Msg> {
         }))
 }
 
+pub(super) fn still_at<'a>(all: &'a [Program], i: usize, id: &str) -> Option<&'a Program> {
+    all.get(i).filter(|a| a.id == id)
+}
+
 impl Face {
+
+    pub(super) fn menu_app(&self, i: usize) -> Option<Program> {
+        let (_, id, _) = self.menu.as_ref().filter(|(j, ..)| *j == i)?;
+        still_at(&self.all(), i, id).cloned()
+    }
+
     pub(in crate::ring) fn close_menu(&mut self) {
         self.menu = None;
         self.gone = None;
@@ -64,24 +82,37 @@ impl Face {
     }
 
     pub(super) fn open_menu(&mut self, i: usize, at: [f32; 4]) {
-        self.menu = Some((i, at));
         self.how = None;
+        self.gone = None;
         self.wipe = false;
         self.flat_ask = None;
-        let Some(app) = self.all().get(i).cloned() else { return };
+        let Some(app) = self.all().get(i).cloned() else {
+            self.menu = None;
+            return;
+        };
+        let id = app.id.clone();
+        self.menu = Some((i, id.clone(), at));
         let (ctx, images) = (self.ctx.clone(), self.images_there.clone());
         on_thread(move || removal::how(&app, &removal::Real, &images), move |how| {
-            ctx.face(move |f| if matches!(f.menu, Some((j, _)) if j == i) { f.how = Some((i, how)) })
+            ctx.face(move |f| if f.menu_app(i).is_some_and(|a| a.id == id) { f.how = Some((id, how)) })
         });
     }
 
+    fn how_of(&self, i: usize) -> Option<(Program, How)> {
+        let app = self.menu_app(i)?;
+        match &self.how {
+            Some((id, Some(how))) if *id == app.id => Some((app, how.clone())),
+            _ => None,
+        }
+    }
+
     fn ask_flatpak(&mut self, i: usize) {
-        let Some((_, Some(How::Flatpak { id, .. }))) = self.how.clone().filter(|(j, _)| *j == i) else { return };
-        self.flat_ask = Some(FlatAsk { i, bytes: None, uncounted: false, working: false, said: None });
+        let Some((app, How::Flatpak { id, .. })) = self.how_of(i) else { return };
+        self.flat_ask = Some(FlatAsk { id: app.id.clone(), bytes: None, uncounted: false, working: false, said: None });
         let ctx = self.ctx.clone();
         on_thread(move || removal::data_dir(&crate::common::files::home(), &id).map_or(Ok(0), |d| removal::data_size(&d)), move |n: std::io::Result<u64>| {
             ctx.face(move |f| {
-                if let Some(a) = f.flat_ask.as_mut().filter(|a| a.i == i) {
+                if let Some(a) = f.flat_ask.as_mut().filter(|a| a.id == app.id) {
                     match n {
                         Ok(n) => a.bytes = Some(n),
                         Err(_) => a.uncounted = true,
@@ -104,14 +135,14 @@ impl Face {
         if !kept::own_press() {
             return;
         }
-        let Some((_, Some(How::Flatpak { id, .. }))) = self.how.clone().filter(|(j, _)| *j == i) else { return };
-        let Some(a) = self.flat_ask.as_mut().filter(|a| a.i == i && !a.working) else { return };
+        let Some((app, How::Flatpak { id, .. })) = self.how_of(i) else { return };
+        let Some(a) = self.flat_ask.as_mut().filter(|a| a.id == app.id && !a.working) else { return };
         a.working = true;
         a.said = Some((t!("store-flatpak-data-going").into(), Tone::Plain));
         let ctx = self.ctx.clone();
         on_thread(move || removal::delete_data_only(&crate::common::files::home(), &id), move |res: Result<(), &'static str>| {
             ctx.face(move |f| {
-                let Some(a) = f.flat_ask.as_mut().filter(|a| a.i == i) else { return };
+                let Some(a) = f.flat_ask.as_mut().filter(|a| a.id == app.id) else { return };
                 a.working = false;
                 match res {
                     Ok(()) => {
@@ -124,9 +155,8 @@ impl Face {
         });
     }
 
-    fn flatpak_card(&self, a: &FlatAsk, name: &str) -> Node<Msg> {
+    fn flatpak_card(&self, i: usize, a: &FlatAsk, name: &str) -> Node<Msg> {
         use crate::toolkit::widget::{form_label, main_word};
-        let i = a.i;
         let size = match a.bytes {
             None if a.uncounted => t!("store-flatpak-ask-uncounted").to_string(),
             None => t!("store-flatpak-ask-measuring").to_string(),
@@ -153,36 +183,29 @@ impl Face {
         if !kept::own_press() {
             return;
         }
-        let all = self.all();
-        let Some(app) = all.get(i) else { return };
-        let Some((_, Some(how))) = self.how.clone().filter(|(j, _)| *j == i) else { return };
+        let Some((app, how)) = self.how_of(i) else { return };
         if matches!(how, How::Refused(_)) {
             return;
         }
-        self.gone = Some((i, Gone::Running));
-        self.gone_turn += 1;
-        let (ctx, turn) = (self.ctx.clone(), self.gone_turn);
-        let done = Self::removal_done(ctx, i, app.id.clone());
-        let wait = if matches!(how, How::Package(_)) { PACKAGE_SECS } else { UNINSTALL_SECS };
+        if !begin_removal(&mut self.removing, &app.id) {
+            return;
+        }
+        let done = Self::removal_done(self.ctx.clone(), app.id.clone());
         Self::start_removal(how, &app.id, &mut self.wipe, done);
-        let ctx = self.ctx.clone();
-        self.ctx.lp.after(Duration::from_secs(wait), move || {
-
-            ctx.face(move |f| if f.gone_turn == turn && matches!(f.gone, Some((_, Gone::Running))) { f.gone = None })
-        });
     }
 
-    fn removal_done(ctx: Rc<Ctx>, i: usize, id: String) -> impl FnOnce(bool, String) + 'static {
+    fn removal_done(ctx: Rc<Ctx>, id: String) -> impl FnOnce(bool, String) + 'static {
         move |ok: bool, err: String| {
             ctx.face(move |f| {
-                f.gone = Some((i, Gone::Done(ok, err.trim().to_string())));
+                f.removing.retain(|r| *r != id);
+                f.gone = (ok || !crate::common::refused::closed_box(&err)).then(|| (id.clone(), Gone::Done(ok, err.trim().to_string())));
                 if ok {
                     let ctx = f.ctx.clone();
                     f.ctx.lp.after(Duration::from_secs(TIP_SECONDS), move || {
                         ctx.reread_apps();
                         ctx.face(move |f| {
 
-                            if matches!(f.menu, Some((j, _)) if j == i) {
+                            if f.menu.as_ref().is_some_and(|(_, j, _)| *j == id) {
                                 f.close_menu();
                             }
                             f.set_favourite(&id, false);
@@ -197,7 +220,7 @@ impl Face {
     fn start_removal(how: How, key: &str, wipe: &mut bool, done: impl FnOnce(bool, String) + 'static) {
         let on_disk = |r: std::io::Result<()>| match r {
             Ok(()) => (true, String::new()),
-            Err(e) => (false, e.to_string()),
+            Err(e) => (false, failure(e.to_string())),
         };
         match how {
             How::Flatpak { place, id, launcher } => {
@@ -206,11 +229,11 @@ impl Face {
                 let (home, key) = (crate::common::files::home(), key.to_string());
                 capture(&argv, None, move |ok, _, err| {
                     if !ok {
-                        return done(false, err);
+                        return done(false, failure(err));
                     }
 
                     on_thread(move || launcher.map(|l| removal::hide(&l, &key, &home)), move |hidden| match hidden {
-                        Some(Err(e)) => done(false, e.to_string()),
+                        Some(Err(e)) => done(false, failure(e.to_string())),
                         _ => done(true, String::new()),
                     });
                 });
@@ -231,24 +254,23 @@ impl Face {
     }
 
     pub(super) fn menu_card(&self, i: usize) -> Node<Msg> {
-        let all = self.all();
-        let Some(app) = all.get(i) else { return space() };
-        if let Some(ask) = self.flat_ask.as_ref().filter(|a| a.i == i) {
-            return self.flatpak_card(ask, &app.name);
+        let Some(app) = self.menu_app(i) else { return space() };
+        if let Some(ask) = self.flat_ask.as_ref().filter(|a| a.id == app.id) {
+            return self.flatpak_card(i, ask, &app.name);
         }
-        let open = self.windows_of(app);
+        let open = self.windows_of(&app);
         let mut items = vec![title(app.name.chars().take(MENU_TITLE_CHARS).collect::<String>())];
-        items.extend(Self::window_rows(app, &open));
+        items.extend(Self::window_rows(&app, &open));
         let mut tools = Self::open_tools(i, open.len());
         let fav = self.favourites.contains(&app.id);
         let full = !fav && self.favourites.len() >= store::MAX_FAVOURITES;
-        tools.push(Self::star_button(app, fav, full));
+        tools.push(Self::star_button(&app, fav, full));
         if !favourites::is_path(&app.id) {
             tools.push(startup_button(&app.path));
         }
 
         let how = match &self.how {
-            Some((j, Some(how))) if *j == i => Some(how),
+            Some((id, Some(how))) if *id == app.id => Some(how),
             _ => None,
         };
         let refused = match how {
@@ -256,7 +278,7 @@ impl Face {
             _ => None,
         };
         if let Some(how) = how.filter(|h| !matches!(h, How::Refused(_))) {
-            tools.push(self.uninstall_button(i, how));
+            tools.push(self.uninstall_button(i, &app.id, how));
         }
 
         items.push(row(tools.into_iter().map(|t| t.size(menu_button())).collect()).gap(8.0));
@@ -290,16 +312,14 @@ impl Face {
         let mut tools = vec![button(if windows == 0 { "media-playback-start-symbolic" } else { "window-new-symbolic" },
                                     if windows == 0 { t!("ring-open") } else { t!("ring-new-window") })
             .on_press(msg(move |f| {
-                let all = f.all();
-                if let Some(a) = all.get(i) {
-                    f.launch_new(a)
+                if let Some(a) = f.menu_app(i) {
+                    f.launch_new(&a)
                 }
             }))];
         if windows > 0 {
             let words = t!("ring-close-window", n = windows);
             tools.push(button("window-close-symbolic", words).on_press(msg(move |f| {
-                let all = f.all();
-                let wins = all.get(i).map(|a| f.windows_of(a)).unwrap_or_default();
+                let wins = f.menu_app(i).map(|a| f.windows_of(&a)).unwrap_or_default();
                 if let Some(ws) = &f.windows {
                     wins.iter().for_each(|w| ws.close(w));
                 }
@@ -322,12 +342,12 @@ impl Face {
             }))
     }
 
-    fn uninstall_button(&self, i: usize, how: &How) -> Node<Msg> {
+    fn uninstall_button(&self, i: usize, id: &str, how: &How) -> Node<Msg> {
         let [words, running, finished] = if how.only_hides() { hide_words() } else { uninstall_words() };
         match &self.gone {
-            Some((j, Gone::Running)) if *j == i => row(vec![ring(0.0, 16.0), note(running)]).gap(8.0),
-            Some((j, Gone::Done(true, _))) if *j == i => note(finished),
-            Some((j, Gone::Done(false, e))) if *j == i => button("dialog-error-symbolic", e.clone()).tone(Tone::Problem).spoken(t!("ring-not-done")),
+            _ if self.removing.iter().any(|r| r == id) => row(vec![ring(0.0, 16.0), note(running)]).gap(8.0),
+            Some((j, Gone::Done(true, _))) if j == id => note(finished),
+            Some((j, Gone::Done(false, e))) if j == id => button("dialog-error-symbolic", e.clone()).tone(Tone::Problem).spoken(t!("ring-not-done")),
 
             _ if matches!(how, How::Flatpak { .. }) => button("user-trash-symbolic", words).key(format!("uninstall-{i}"))
                 .on_press(msg(move |f| f.ask_flatpak(i))),
@@ -335,5 +355,38 @@ impl Face {
             _ => crate::toolkit::widget::remove("user-trash-symbolic", words).key(format!("uninstall-{i}"))
                 .on_press(msg(move |f| f.uninstall(i))),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{begin_removal, failure, still_at, Program};
+
+    #[test]
+    fn a_failed_removal_shows_a_plain_sentence_not_the_programs_words() {
+        let shown = failure("error: Failed to uninstall org.example.One: not installed\n".into());
+        assert_eq!(shown, "Couldn't remove it.");
+    }
+
+    #[test]
+    fn a_removal_already_running_is_not_started_again() {
+        let mut running = Vec::new();
+        assert!(begin_removal(&mut running, "a.desktop"));
+        assert!(!begin_removal(&mut running, "a.desktop"));
+        assert!(begin_removal(&mut running, "b.desktop"));
+    }
+
+    fn app(id: &str) -> Program {
+        Program { id: id.into(), name: id.into(), icon: None, exec: String::new(), try_exec: None, wm_class: String::new(), program: String::new(),
+                  kinds: Vec::new(), path: Default::default(), category: "", keywords: Vec::new(), flatpak: None, appimage: None, terminal: false }
+    }
+
+    #[test]
+    fn a_menu_opened_on_an_app_does_not_follow_another_into_its_place() {
+        let before = [app("a.desktop"), app("b.desktop"), app("c.desktop")];
+        assert_eq!(still_at(&before, 1, "b.desktop").map(|a| a.id.as_str()), Some("b.desktop"));
+        let after = [app("a.desktop"), app("c.desktop")];
+        assert!(still_at(&after, 1, "b.desktop").is_none(), "c now sits where b was");
+        assert!(still_at(&after, 2, "b.desktop").is_none(), "the place is gone");
     }
 }

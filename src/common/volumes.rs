@@ -12,6 +12,7 @@ use zeroize::Zeroizing;
 use super::hidden_drives;
 use crate::disks::plan::{self, Mounted};
 use crate::disks::{mount_points, num, text};
+use crate::toolkit::t;
 use crate::toolkit::bus::{self as dbus, Bus, Failed, Listen, Props};
 use crate::toolkit::event::{Flow, Loop};
 use crate::toolkit::window::Display;
@@ -47,10 +48,10 @@ impl Kind {
 
     pub fn arrived(self) -> &'static str {
         match self {
-            Kind::Usb => "USB drive connected",
-            Kind::Card => "Memory card connected",
-            Kind::Disc => "Disc inserted",
-            Kind::Other => "Drive connected",
+            Kind::Usb => t!("common-drive-arrived-usb"),
+            Kind::Card => t!("common-drive-arrived-card"),
+            Kind::Disc => t!("common-drive-arrived-disc"),
+            Kind::Other => t!("common-drive-arrived-other"),
         }
     }
 }
@@ -325,29 +326,33 @@ pub fn best<'a>(parts: &[&'a Volume]) -> Option<&'a Volume> {
 
 pub fn words(e: &Failed) -> String {
     let all = e.to_string();
-    let l = all.to_lowercase();
-    if l.contains("no key available") || l.contains("failed to activate") || l.contains("incorrect passphrase")
-        || l.contains("bad passphrase") || l.contains("operation not permitted")
-    {
-        "That passphrase did not open it.".into()
-    } else if l.contains("already mounted") {
-        "It is already open.".into()
+    if all.to_lowercase().contains("already mounted") {
+        t!("common-volumes-already-open").to_string()
     } else {
         plan::plain_error(&all)
+    }
+}
+
+fn unlock_words(e: &Failed) -> String {
+    let l = e.to_string().to_lowercase();
+    if ["no key available", "failed to activate", "incorrect passphrase", "bad passphrase", "operation not permitted"].iter().any(|w| l.contains(w)) {
+        t!("common-volumes-wrong-passphrase").to_string()
+    } else {
+        words(e)
     }
 }
 
 pub fn mount(bus: &Bus, lp: &Loop, v: &Volume, done: impl FnOnce(Result<String, String>) + 'static) {
     match v.mounted() {
         Some(m) => done(Ok(m.to_string())),
-        None if v.locked => done(Err("A passphrase is needed to open it.".into())),
+        None if v.locked => done(Err(t!("common-volumes-needs-passphrase").to_string())),
         None => mount_at(bus, lp, &v.id, done),
     }
 }
 
 pub fn unlock(bus: &Bus, lp: &Loop, id: &str, passphrase: &str, done: impl FnOnce(Result<String, String>) + 'static) {
     bus.call(UD, id, ENCRYPTED).method("Unlock", &(passphrase, Opts::new()), true, Some(INTERACTIVE), lp, move |r| {
-        done(r.map_err(|e| words(&e)).and_then(|m| {
+        done(r.map_err(|e| unlock_words(&e)).and_then(|m| {
             m.body().deserialize::<(OwnedObjectPath,)>().map(|b| b.0.to_string()).map_err(|e| e.to_string())
         }))
     });
@@ -378,10 +383,10 @@ pub fn ask_and_mount(bus: &Bus, lp: &Loop, display: &Rc<Display>, v: &Volume,
             _ => done(Err(String::new())),
         }
     };
-    let why = format!("Passphrase for {}", v.name());
-    if prompt::ask(lp, display, "Unlock drive", &why, None, check, closed).is_none() {
+    let why = t!("common-volumes-passphrase-for", name = v.name()).to_string();
+    if prompt::ask(lp, display, t!("common-volumes-unlock-title"), &why, None, check, closed).is_none() {
         if let Some(done) = finish.borrow_mut().take() {
-            done(Err("The passphrase window would not open.".into()));
+            done(Err(t!("common-volumes-window-failed").to_string()));
         }
     }
 }

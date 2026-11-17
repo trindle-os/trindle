@@ -1,7 +1,6 @@
 // Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
 use std::io::{Read, Write};
-use std::os::fd::AsRawFd;
 use std::os::unix::net::{UnixListener, UnixStream};
 use std::process::Stdio;
 use std::time::{Duration, Instant};
@@ -18,12 +17,12 @@ use smithay::{
     wayland::{compositor::CompositorHandler, selection::SelectionTarget},
     xwayland::{xwm::XwmId, X11Surface, X11Wm, XWayland, XWaylandClientData, XWaylandEvent},
 };
-use tracing::{info, warn};
+use tracing::{debug, info, warn};
 
 use crate::cursor::Cursor;
 use crate::focus::KeyboardFocusTarget;
 use crate::shell::WindowElement;
-use crate::state::{selection_slot, AnvilState, Backend};
+use crate::state::{selection_slot, Compose, Backend};
 use crate::x11_rooms::{self, Answer, Told};
 
 pub const STOP_AFTER_SECS: u32 = 10;
@@ -37,11 +36,14 @@ const WATCH_EVERY: Duration = Duration::from_secs(2);
 const RESTART_AFTER: Duration = Duration::from_millis(500);
 
 const FAILURES_MAX: usize = 3;
+
+const ASKERS_MAX: usize = 64;
+const ASKS_WITHIN: Duration = Duration::from_secs(5);
 const RESTART_WINDOW: Duration = Duration::from_secs(60);
 
 fn programs_connected(n: u32) -> Option<usize> {
     use smithay::reexports::x11rb::{
-        protocol::res::{ClientIdMask, ClientIdSpec, ConnectionExt},
+        protocol::res::ConnectionExt,
         rust_connection::RustConnection,
     };
     let (conn, _) = RustConnection::connect(Some(&format!(":{n}"))).ok()?;
@@ -53,14 +55,61 @@ fn programs_connected(n: u32) -> Option<usize> {
         if c.resource_base == 0 {
             continue;
         }
-        let spec = ClientIdSpec { client: c.resource_base, mask: ClientIdMask::LOCAL_CLIENT_PID };
-        let ids = conn.res_query_client_ids(&[spec]).ok()?.reply().ok()?.ids;
-        let pid = ids.first().and_then(|v| v.value.first()).copied();
+        let pid = crate::panel::x11_program(&conn, c.resource_base);
         if pid != Some(me) {
             others += 1;
         }
     }
     Some(others)
+}
+
+#[derive(Default)]
+struct Heard {
+    asking: bool,
+    last: Option<(Instant, Option<usize>)>,
+}
+
+const HEARD_FOR: Duration = Duration::from_secs(10);
+
+impl Heard {
+
+    fn known(&self, now: Instant) -> Option<usize> {
+        self.last.filter(|(at, _)| now.saturating_duration_since(*at) < HEARD_FOR).and_then(|(_, n)| n)
+    }
+
+    fn start(&mut self) -> bool {
+        !std::mem::replace(&mut self.asking, true)
+    }
+
+    fn done(&mut self, count: Option<usize>, now: Instant) {
+        self.asking = false;
+        self.last = Some((now, count));
+    }
+}
+
+static HEARD: std::sync::Mutex<Vec<(u32, Heard)>> = std::sync::Mutex::new(Vec::new());
+
+fn programs_known(n: u32) -> Option<usize> {
+    let mut all = HEARD.lock().ok()?;
+    let at = all.iter().position(|(d, _)| *d == n).unwrap_or_else(|| {
+        all.push((n, Heard::default()));
+        all.len() - 1
+    });
+    let known = all[at].1.known(Instant::now());
+    if all[at].1.start() {
+        let spawned = std::thread::Builder::new().name("x-programs".into()).spawn(move || {
+            let count = programs_connected(n);
+            if let Ok(mut all) = HEARD.lock() {
+                if let Some((_, heard)) = all.iter_mut().find(|(d, _)| *d == n) {
+                    heard.done(count, Instant::now());
+                }
+            }
+        });
+        if spawned.is_err() {
+            all[at].1.asking = false;
+        }
+    }
+    known
 }
 
 #[derive(Clone, Copy, Debug, Default)]
@@ -166,11 +215,17 @@ impl Room {
 
 type Parked = (u32, Keep, Vec<(u64, UnixStream)>);
 
+pub fn x11_window<K: PartialEq, T>(windows: impl IntoIterator<Item = (K, u32, T)>, xwm: K, id: u32) -> Option<T> {
+    windows.into_iter().find(|(k, w, _)| *k == xwm && *w == id).map(|(_, _, t)| t)
+}
+
 #[derive(Debug, Default)]
 pub struct Rooms {
     pub list: Vec<Room>,
     next: u64,
     next_holder: u64,
+
+    askers: usize,
 
     parked: usize,
     left: Vec<u64>,
@@ -206,16 +261,8 @@ impl Rooms {
 }
 
 fn same_person(stream: &UnixStream) -> bool {
-    let mut cred = libc::ucred { pid: 0, uid: u32::MAX, gid: u32::MAX };
-    let mut len = std::mem::size_of::<libc::ucred>() as libc::socklen_t;
-    // SAFETY: the fd is an open socket for the call, and cred and len are
-
-    let rc = unsafe {
-        libc::getsockopt(stream.as_raw_fd(), libc::SOL_SOCKET, libc::SO_PEERCRED,
-                         (&mut cred as *mut libc::ucred).cast(), &mut len)
-    };
     // SAFETY: geteuid takes nothing and cannot fail.
-    rc == 0 && len as usize == std::mem::size_of::<libc::ucred>() && cred.uid == unsafe { libc::geteuid() }
+    crate::peer::credentials(stream).is_some_and(|c| c.uid == unsafe { libc::geteuid() })
 }
 
 fn woken(client: &Client) -> bool {
@@ -229,13 +276,15 @@ fn woken(client: &Client) -> bool {
 fn tell_holders(holders: &[(u64, UnixStream)], told: Told) {
     for (_, s) in holders {
         let mut s: &UnixStream = s;
-        let _ = s.write_all(told.line().as_bytes());
+        if let Err(e) = s.write_all(told.line().as_bytes()) {
+            debug!("a box holding an Xwayland could not be told: {e}");
+        }
     }
 }
 
 fn tell_person() {
     std::thread::spawn(|| {
-        let _ = std::process::Command::new("busctl")
+        let _ = std::process::Command::new("/usr/bin/busctl")
             .args(["--user", "call", "org.freedesktop.Notifications", "/org/freedesktop/Notifications",
                    "org.freedesktop.Notifications", "Notify", "susssasa{sv}i", "Trindle", "0", "dialog-warning-symbolic",
                    x11_rooms::would_not_start(), x11_rooms::try_again(), "0", "0", "-1"])
@@ -243,7 +292,7 @@ fn tell_person() {
     });
 }
 
-impl<BackendData: Backend + 'static> AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> Compose<BackendData> {
 
     pub fn start_xwayland(&mut self) {
         self.listen_for_rooms();
@@ -270,7 +319,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
     }
 
     fn watch_rooms(&mut self) {
-        let _ = self.handle.insert_source(Timer::from_duration(WATCH_EVERY), |_, _, state| {
+        crate::session::watch(&self.handle, Timer::from_duration(WATCH_EVERY), |_, _, state| {
             state.stop_idle_rooms();
             TimeoutAction::ToDuration(WATCH_EVERY)
         });
@@ -286,7 +335,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
             let seen = Seen {
                 running,
                 starting: !running && free && room.keep.owner.is_some() && woken(&room.client),
-                programs: if running && free { programs_connected(room.display) } else { None },
+                programs: if running && free { programs_known(room.display) } else { None },
             };
             if room.keep.stops(seen, now) {
                 stopping.push((room.key, room.keep.owner.is_none(), room.wm.as_ref().map(|w| w.id())));
@@ -306,7 +355,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
         if owner.is_some() && later.is_none() {
             return Err(format!("{} is not installed", crate::xwayland_later::WAITING_ROOM));
         }
-        let mut envs: Vec<(String, String)> = later.into_iter().map(|p| ("PATH".to_string(), p)).collect();
+        let mut envs = vec![("PATH".to_string(), later.unwrap_or_else(crate::xwayland_later::path_without_stand_in))];
         if owner.is_none() {
             envs.push((crate::xwayland_later::STOP_ENV.to_string(), STOP_AFTER_SECS.to_string()));
         }
@@ -342,7 +391,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
     }
 
     fn room_ready(&mut self, key: u64, socket: UnixStream, client: Client) {
-        let scale = std::env::var("ANVIL_XWAYLAND_SCALE").ok().and_then(|s| s.parse::<f64>().ok()).unwrap_or(1.);
+        let scale = std::env::var("TRINDLE_XWAYLAND_SCALE").ok().and_then(|s| s.parse::<f64>().ok()).unwrap_or(1.);
         self.client_compositor_state(&client).set_client_scale(scale);
         let mut wm = match X11Wm::start_wm(self.handle.clone(), socket, client) {
             Ok(wm) => wm,
@@ -406,7 +455,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
                 }
             }
             self.rooms.retired.push(wm);
-            let _ = self.handle.insert_source(Timer::from_duration(Duration::from_secs(RETIRE_SECS)), move |_, _, state| {
+            crate::session::watch(&self.handle, Timer::from_duration(Duration::from_secs(RETIRE_SECS)), move |_, _, state| {
                 state.rooms.retired.retain(|w| w.id() != id);
                 TimeoutAction::Drop
             });
@@ -463,7 +512,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
         let wait = if given_up { RESTART_WINDOW } else { RESTART_AFTER };
         self.rooms.parked += 1;
         let mut parked: Option<Parked> = Some((display, keep, holders));
-        let _ = self.handle.insert_source(Timer::from_duration(wait), move |_, _, state| {
+        crate::session::watch(&self.handle, Timer::from_duration(wait), move |_, _, state| {
             if let Some(p) = parked.take() {
                 state.rooms.parked -= 1;
                 state.reopen(p);
@@ -539,7 +588,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
             Ok(n) if crate::xwayland_later::path().is_some() => {
                 if self.xdisplay != Some(n) {
                     self.xdisplay = Some(n);
-                    std::env::set_var("DISPLAY", format!(":{n}"));
+                    crate::session::set_env("DISPLAY", format!(":{n}"));
                 }
             }
             Ok(_) => {}
@@ -632,10 +681,25 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
         if !same_person(&stream) || stream.set_nonblocking(true).is_err() {
             return;
         }
+        if self.rooms.askers >= ASKERS_MAX {
+            warn!("too many connections to the rooms socket");
+            return;
+        }
+        let silent = stream.try_clone().ok();
+        let answered = std::rc::Rc::new(std::cell::Cell::new(false));
+        let asked = answered.clone();
+        if let Some(silent) = silent {
+            crate::session::watch(&self.handle, Timer::from_duration(ASKS_WITHIN), move |_, _, _| {
+                if !asked.get() {
+                    let _ = silent.shutdown(std::net::Shutdown::Both);
+                }
+                TimeoutAction::Drop
+            });
+        }
+        self.rooms.askers += 1;
         let holder = self.rooms.next_holder;
         self.rooms.next_holder += 1;
         let mut heard: Vec<u8> = Vec::new();
-        let mut answered = false;
         let mut holding = false;
         let ret = self.handle.insert_source(Generic::new(stream, Interest::READ, Mode::Level), move |_, stream, state| {
             let mut chunk = [0u8; 256];
@@ -643,7 +707,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
                 let mut s: &UnixStream = stream;
                 match s.read(&mut chunk) {
                     Ok(0) => break,
-                    Ok(n) if !answered => {
+                    Ok(n) if !answered.get() => {
                         heard.extend_from_slice(&chunk[..n]);
                         let Some(end) = heard.iter().position(|&b| b == b'\n') else {
                             if heard.len() > x11_rooms::NAME_MAX + 8 {
@@ -652,7 +716,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
                             }
                             continue;
                         };
-                        answered = true;
+                        answered.set(true);
                         let request = String::from_utf8_lossy(&heard[..end]).into_owned();
                         let answer = match (x11_rooms::name_in(&request), s.try_clone()) {
                             (Some(name), Ok(told)) => state.room_for_box(name, holder, told),
@@ -673,9 +737,11 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
             if std::mem::take(&mut holding) {
                 state.holder_left(holder);
             }
+            state.rooms.askers = state.rooms.askers.saturating_sub(1);
             Ok(PostAction::Remove)
         });
         if let Err(e) = ret {
+            self.rooms.askers = self.rooms.askers.saturating_sub(1);
             warn!("{}: {e}", x11_rooms::ROOMS_SOCKET);
         }
     }
@@ -918,6 +984,72 @@ mod tests {
         until("the desktop's waits again", 5, || server(desktop).is_some_and(|s| s.0 == "waiting"));
     }
 
+    fn pixels_of(rgb: u32) -> usize {
+        let shot = std::env::var("TRINDLE_XROOMS_SHOT").expect("TRINDLE_XROOMS_SHOT");
+        let out = std::process::Command::new("sh").args([shot.as_str(), "-t", "ppm", "-"]).output().unwrap();
+        let mut fields = out.stdout.splitn(5, |b| b.is_ascii_whitespace());
+        assert_eq!(fields.next(), Some(&b"P6"[..]), "not a PPM screenshot");
+        let (_w, _h, _max) = (fields.next(), fields.next(), fields.next());
+        let want = rgb.to_be_bytes();
+        fields.next().unwrap_or_default().chunks_exact(3).filter(|p| *p == &want[1..]).count()
+    }
+
+    fn coloured(n: u32, rgb: u32, (w, h): (u16, u16)) -> RustConnection {
+        let (conn, screen) = RustConnection::connect(Some(&format!(":{n}"))).expect("X11 connects");
+        let root = conn.setup().roots[screen].root;
+        let win = conn.generate_id().unwrap();
+        let aux = CreateWindowAux::new().background_pixel(rgb);
+        conn.create_window(0, win, root, 0, 0, w, h, 0, WindowClass::INPUT_OUTPUT, 0, &aux).unwrap();
+        conn.map_window(win).unwrap();
+        conn.get_input_focus().unwrap().reply().unwrap();
+        conn
+    }
+
+    const SMALL: (u16, u16) = (200, 100);
+    const LARGE: (u16, u16) = (600, 400);
+
+    fn area((w, h): (u16, u16)) -> usize {
+        w as usize * h as usize
+    }
+
+    fn shown(n: u32, rgb: u32, size: (u16, u16), what: &str) -> RustConnection {
+        let conn = coloured(n, rgb, size);
+        until(what, 10, || pixels_of(rgb) >= area(size) / 2);
+        conn
+    }
+
+    fn an_xwayland_that_dies_shows_its_next_windows(desktop: u32) {
+
+        const COLOURS: [u32; 2] = [0x12eb5a, 0xeb5a12];
+        const DESK: u32 = 0x5a12eb;
+        let desk = shown(desktop, DESK, LARGE, "the desktop's window shows");
+        let (held, answer) = x11_rooms::ask("xrooms-test-five").unwrap();
+        let Answer::Display(n) = answer else { panic!("{answer:?}") };
+        for round in 0..3 {
+            let colour = COLOURS[round % 2];
+            let first = shown(n, colour, SMALL, &format!("round {round}: the window shows"));
+            let (_, _, pid) = server_pid(n).expect("the fifth box's Xwayland");
+            // SAFETY: a plain signal to the harness's own Xwayland.
+            unsafe { libc::kill(pid, libc::SIGKILL) };
+            drop(first);
+            until("the fifth box's Xwayland waits again", 10, || server_pid(n).is_some_and(|(_, _, now)| now != pid));
+            until("the dead window goes", 10, || pixels_of(colour) == 0);
+            let left = pixels_of(DESK);
+            assert!(left >= area(LARGE) / 2, "the desktop's window lost its picture: {left} pixels");
+        }
+        let last = shown(n, COLOURS[0], SMALL, "a window on the last Xwayland shows");
+        drop((last, desk, held));
+    }
+
+    #[test]
+    #[ignore]
+    fn an_xwayland_started_again_shows_its_windows() {
+        let Ok(run) = std::env::var("TRINDLE_XROOMS_TEST") else { return };
+        let desktop: u32 = std::env::var("TRINDLE_XROOMS_DESKTOP").unwrap().parse().unwrap();
+        std::env::set_var("XDG_RUNTIME_DIR", &run);
+        an_xwayland_that_dies_shows_its_next_windows(desktop);
+    }
+
     #[test]
     #[ignore]
     fn each_box_has_its_own_xwayland_started_and_stopped_as_needed() {
@@ -943,7 +1075,15 @@ mod keeping {
 
     use std::time::{Duration, Instant};
 
-    use super::{room_of, Keep, Seen, FIRST_PROGRAM_SECS, STOP_AFTER_SECS};
+    use super::{room_of, x11_window, Keep, Seen, FIRST_PROGRAM_SECS, STOP_AFTER_SECS};
+
+    #[test]
+    fn a_window_number_is_looked_up_in_its_own_xwayland_only() {
+        let windows = [("desktop", 0x400001, "desktop's"), ("box", 0x400001, "box's"), ("box", 0x400002, "dialog")];
+        assert_eq!(x11_window(windows, "box", 0x400001), Some("box's"));
+        assert_eq!(x11_window(windows, "desktop", 0x400001), Some("desktop's"));
+        assert_eq!(x11_window(windows, "desktop", 0x400002), None);
+    }
 
     fn secs(n: u32) -> Duration {
         Duration::from_secs(n as u64)
@@ -951,6 +1091,21 @@ mod keeping {
 
     fn running(programs: usize) -> Seen {
         Seen { running: true, starting: false, programs: Some(programs) }
+    }
+
+    use super::{Heard, HEARD_FOR};
+
+    #[test]
+    fn programs_on_a_display_are_asked_for_on_one_thread_at_a_time_and_old_answers_are_dropped() {
+        let t = Instant::now();
+        let mut heard = Heard::default();
+        assert!(heard.start(), "the first ask starts");
+        assert!(!heard.start(), "an ask still out is not started again");
+        assert_eq!(heard.known(t), None);
+        heard.done(Some(2), t);
+        assert_eq!(heard.known(t), Some(2));
+        assert_eq!(heard.known(t + HEARD_FOR), None, "an old answer was used");
+        assert!(heard.start());
     }
 
     const WAITING: Seen = Seen { running: false, starting: false, programs: None };

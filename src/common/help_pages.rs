@@ -3,11 +3,6 @@
 use std::path::Path;
 use trindle_help::CONTENT;
 
-pub fn page(id: &str) -> String {
-    let path = Path::new(CONTENT).join(format!("{id}.md"));
-    std::fs::read_to_string(&path).unwrap_or_else(|e| panic!("Help has no page {id}: {e}"))
-}
-
 fn slug(heading: &str) -> String {
     let mut out = String::new();
     let mut gap = false;

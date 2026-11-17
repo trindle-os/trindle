@@ -8,22 +8,22 @@ settings-sounds-title = آوازیں
 settings-sounds-keywords = آواز آوازیں گھنٹی اسٹارٹ اپ لاگ ان لاگ آؤٹ شٹ ڈاؤن چارجر بیٹری الرٹ بیپ بند خاموش اپنی شامل فائل sound sounds chime startup start up login log in logout shut down shutdown charger plugged unplugged battery alert beep off quiet own custom add file wav ogg mp3
 
 # Introduction under the heading of the sounds page, and the words behind the page i.
-settings-sounds-help = ہر موقع کی آواز۔ ایک چننے پر وہ بجتی ہے، اور بند اس موقع کو خاموش رکھتا ہے۔ اپنی آوازیں شامل کی جا سکتی ہیں اور دوسروں کی طرح چنی جا سکتی ہیں۔
+settings-sounds-help = ہر موقع کے لیے آواز چنیں، جیسے لاگ ان کرنا۔ آپ اپنی آوازیں بھی شامل کر سکتے ہیں۔
 
 # First choice in each moment's list of sounds: that moment makes no sound.
 settings-sounds-off = بند
 
 # Sentence at the top of the page when no moment makes a sound.
-settings-sounds-top-none = سب خاموش: کسی موقع پر آواز نہیں آتی۔
+settings-sounds-top-none = سب کچھ خاموش ہے۔
 
 # Sentence at the top of the page when every moment makes a sound.
-settings-sounds-top-all = ہر موقع کی اپنی آواز ہے۔
+settings-sounds-top-all = تمام آوازیں چالو ہیں۔
 
 # Sentence at the top of the page when some moments make a sound; { $n } is how many of the { $total } do.
 settings-sounds-top-some =
     { $n ->
-        [one] { $total } مواقع میں سے { $n } پر آواز آتی ہے؛ باقی خاموش ہیں۔
-       *[other] { $total } مواقع میں سے { $n } پر آواز آتی ہے؛ باقی خاموش ہیں۔
+        [one] { $total } آوازوں میں سے { $n } چالو ہے۔ باقی بند ہیں۔
+       *[other] { $total } آوازوں میں سے { $n } چالو ہیں۔ باقی بند ہیں۔
     }
 
 # Name of a sound that comes with Trindle, in the lists of sounds.
@@ -80,26 +80,11 @@ settings-sounds-moment-logout-short = لاگ آؤٹ
 # Heading of the notifications line.
 settings-sounds-moment-notification-short = اطلاعات
 
-# Small words under the logging in line.
-settings-sounds-moment-login-about = جب ڈیسک ٹاپ ظاہر ہو۔
-
 # Small words under the logging out line.
 settings-sounds-moment-logout-about = دوبارہ شروع اور بند کرنے پر بھی۔
 
-# Small words under the charger plugged in line.
-settings-sounds-moment-plug-about = جب چارجر لگے۔
-
-# Small words under the charger unplugged line.
-settings-sounds-moment-unplug-about = جب چارجر نکلے۔
-
-# Small words under the battery low line.
-settings-sounds-moment-battery-about = جب چارج کرنے کا وقت ہو۔
-
-# Small words under the notifications line.
-settings-sounds-moment-notification-about = جب کوئی اطلاع نمودار ہو۔
-
 # Heading and slider name for the volume of the logging in and out sounds.
-settings-sounds-volume-coming = آنے جانے کی آواز
+settings-sounds-volume-coming = لاگ ان اور لاگ آؤٹ کی آواز کی بلندی
 
 # Heading and slider name for the volume of notification sounds.
 settings-sounds-volume-notifications = اطلاعات کی آواز
@@ -108,31 +93,28 @@ settings-sounds-volume-notifications = اطلاعات کی آواز
 settings-sounds-volume-power = بجلی کی آوازوں کی بلندی
 
 # Name of the round button that plays the sound chosen for a moment, or an added sound.
-settings-sounds-hear = سنیں
+settings-sounds-hear = بجائیں
 
 # Name of the button that opens a window to add sound files.
 settings-sounds-add = آواز کی فائلیں شامل کریں
 
 # Name of the button that opens the folder where added sounds are kept.
-settings-sounds-open-folder = جس فولڈر میں رکھی ہیں اسے کھولیں
+settings-sounds-open-folder = شامل کی گئی آوازوں کا فولڈر کھولیں
 
 # Red words under the add sounds line when the folder could not be opened.
 settings-sounds-folder-not-opened = فولڈر کھولا نہیں جا سکا۔
 
 # Red words under the add sounds line when the folder for added sounds could not be made.
-settings-sounds-folder-not-made = آپ کی آوازوں کا فولڈر بنایا نہیں جا سکا۔
+settings-sounds-folder-not-made = Trindle آپ کی آوازوں کا فولڈر نہیں بنا سکا۔
 
 # Name of the button that plays the sound being added, when one of the same name is already there.
-settings-sounds-hear-new = جو لائی جا رہی ہے اسے سنیں
+settings-sounds-hear-new = نئی آواز بجائیں
 
 # Name of the button that plays the sound already there, when one of the same name is being added.
-settings-sounds-hear-old = جو پہلے سے موجود ہے اسے سنیں
+settings-sounds-hear-old = موجودہ آواز بجائیں
 
 # Heading of the line for adding sounds.
 settings-sounds-add-heading = آوازیں شامل کریں
-
-# Small words under the add sounds line, listing the kinds of file that can be added.
-settings-sounds-add-formats = WAV، OGG، Opus، FLAC یا MP3۔
 
 # SAFETY: needs a human review before it ships
 # Name of the bin button that removes a sound added by the person.
@@ -140,9 +122,6 @@ settings-sounds-remove = یہ آواز ہٹائیں
 
 # Heading of the line shown when no sounds have been added.
 settings-sounds-none-yet = ابھی کوئی شامل نہیں کی گئی
-
-# Small words under that line.
-settings-sounds-none-yet-about = کسی بھی موقع کے لیے چننے کی خاطر ایک شامل کریں۔
 
 # Red words under a moment's line when its chosen sound file is gone.
 settings-sounds-gone = وہ آواز اب اس کمپیوٹر پر نہیں ہے۔ کوئی اور چنیں۔
@@ -157,13 +136,17 @@ settings-sounds-chooser-title = آواز کی فائلیں چنیں
 settings-sounds-chooser-filter = آوازیں
 
 # Red words under the add sounds line when a chosen file is not a sound; { $name } is the file name.
-settings-sounds-not-playable = { $name } ایسی آواز نہیں جو Trindle بجا سکے۔
+settings-sounds-not-playable = Trindle { $name } کو نہیں بجا سکتا کیونکہ وہ فائل کی قسم کو نہیں پہچانتا۔
 
 # Red words under the add sounds line when a file could not be copied in; { $name } is the file name.
 settings-sounds-not-copied = { $name } نقل نہیں ہو سکی۔
 
 # Green words under the add sounds line after sounds were added; { $n } is how many.
-settings-sounds-added = { $n } شامل کی گئیں۔ اسے اوپر کسی موقع کے ساتھ چنیں۔
+settings-sounds-added =
+    { $n ->
+        [one] { $n } آواز شامل کی گئی۔ اب آپ اسے اوپر کسی بھی موقع کے لیے چن سکتے ہیں۔
+       *[other] { $n } آوازیں شامل کی گئیں۔ اب آپ انہیں اوپر کسی بھی موقع کے لیے چن سکتے ہیں۔
+    }
 
 # SAFETY: needs a human review before it ships
 # Red words under the question about a sound of the same name when it could not be replaced; { $name } is the file name.
@@ -173,9 +156,9 @@ settings-sounds-not-replaced = { $name } بدلی نہیں جا سکی۔
 # Green words after one sound took the place of the one there; { $name } is the file name.
 settings-sounds-replaced-one = { $name } بدل دی گئی۔
 
-# SAFETY: needs a human review before it ships
 # Green words after several sounds took the place of the ones there; { $n } of { $total } were done.
-settings-sounds-replaced-some = { $total } میں سے { $n } بدل دی گئیں۔
+# SAFETY: needs a human review before it ships
+settings-sounds-replaced-some = { $total } میں سے { $n } بدلی گئیں۔
 
 # SAFETY: needs a human review before it ships
 # Red words under a sound's line when it could not be removed.
@@ -183,22 +166,22 @@ settings-sounds-not-removed = یہ ہٹائی نہیں جا سکی۔
 
 # SAFETY: needs a human review before it ships
 # Red words under a moment's line when its sound was removed and the moment could not be set back to its own sound.
-settings-sounds-not-set-back = اس کی آواز ہٹا دی گئی، اور اسے اس کی اپنی آواز پر واپس نہیں لایا جا سکا۔
+settings-sounds-not-set-back = Trindle نے آواز ہٹا دی، لیکن اس موقع کی عام آواز واپس نہیں رکھ سکا۔
 
 # Title of the card with the sounds for logging in and out and notifications.
-settings-sounds-coming-title = آنا جانا
+settings-sounds-coming-title = لاگ ان اور لاگ آؤٹ
 
 # Words behind the i of that card.
-settings-sounds-coming-about = آواز چننے پر وہ بجتی ہے، اور بند اس موقع کو خاموش رکھتا ہے۔ ہر ایک کے ساتھ گول بٹن اب چنی ہوئی آواز بجاتا ہے۔ ہر آواز کی بلندی 0 سے 100 تک دس دس کے قدم میں جاتی ہے اور چھوڑنے پر ایک بار بجتی ہے۔
+settings-sounds-coming-about = ہر آواز کی بلندی 0 سے 100 تک دس دس کے قدم میں جاتی ہے۔ آپ چھوڑتے ہیں تو آواز ایک بار سنائی دیتی ہے۔
 
 # Title of the card with the charger and battery sounds.
 settings-sounds-power-title = بجلی
 
 # Words behind the i of that card.
-settings-sounds-power-about = چارجر لگنے اور نکلنے، اور بیٹری کم ہونے کی آوازیں۔ بلندی 0 سے 100 تک دس دس کے قدم میں جاتی ہے اور چھوڑنے پر ایک بار بجتی ہے۔
+settings-sounds-power-about = چارجر لگانے اور نکالنے، اور بیٹری کم ہونے کی آوازیں۔ بلندی 0 سے 100 تک دس دس کے قدم میں جاتی ہے۔ آپ چھوڑتے ہیں تو آواز ایک بار سنائی دیتی ہے۔
 
 # Title of the card with the sounds the person added.
 settings-sounds-own-title = آپ کی اپنی آوازیں
 
 # Words behind the i of that card.
-settings-sounds-own-about = WAV، OGG، Opus، FLAC یا MP3۔ یہ آپ کے اپنے فولڈر میں نقل ہو جاتی ہیں، اس لیے اصل فائلیں ہٹائی یا حذف کی جا سکتی ہیں، اور پھر دوسروں کی طرح کسی بھی موقع کے ساتھ چنی جا سکتی ہیں۔ ایک ہٹانے سے وہ ہر موقع جس نے اسے استعمال کیا تھا اپنی آواز پر واپس آ جاتا ہے۔
+settings-sounds-own-about = WAV، OGG، Opus، FLAC یا MP3۔ Trindle انہیں آپ کے اپنے فولڈر میں نقل کر دیتا ہے، اس لیے آپ اصل فائلیں ہٹا یا حذف کر سکتے ہیں۔ پھر آپ انہیں دوسروں کی طرح کسی بھی موقع کے لیے چن سکتے ہیں۔ اگر آپ ایک ہٹائیں تو جس موقع پر وہ استعمال ہوتی تھی وہ اپنی عام آواز پر واپس آ جاتا ہے۔

@@ -29,10 +29,22 @@ fn only_the_answer_to_the_check_now_running_counts() {
 
 #[test]
 fn the_account_is_the_user_id_s_not_the_environment_s() {
-    let name = account_name();
-    assert!(!name.is_empty());
-    std::env::set_var("USER", "someone-else-entirely");
-    assert_eq!(account_name(), name);
+    let id = crate::common::needs::program("id");
+    let out = std::process::Command::new(id).arg("-un").env("LC_ALL", "C").env("USER", "someone-else-entirely")
+        .output().unwrap();
+    let name = String::from_utf8(out.stdout).unwrap();
+    assert!(!name.trim().is_empty());
+    assert_eq!(account_name(), name.trim());
+}
+
+#[test]
+fn no_check_starts_beside_one_still_running_until_its_limit() {
+    use std::time::{Duration, Instant};
+    let now = Instant::now();
+    assert!(super::check_may_start(None, now));
+    assert!(!super::check_may_start(Some(now), now), "a check still running, given up on or not");
+    assert!(!super::check_may_start(Some(now), now + Duration::from_secs(5)));
+    assert!(super::check_may_start(Some(now), now + super::input::CHECK_LIMIT), "a check stuck for good never shuts the person out");
 }
 
 #[test]

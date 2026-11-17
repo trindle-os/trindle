@@ -66,7 +66,8 @@ pub struct Opt {
 
 #[derive(Clone, Debug)]
 pub enum Kind {
-    Switch { field: String, on: String, off: String },
+
+    Switch { field: String, on: String, off: String, run_off: Option<Run> },
     Choice { field: String, template: String, options: Vec<Opt>, run: Option<Run> },
     Send { line: String },
     Launch { run: Run },
@@ -144,6 +145,7 @@ struct RawRow {
     send_off: Option<String>,
     send: Option<String>,
     run: Option<String>,
+    run_off: Option<String>,
     #[serde(default)]
     options: Vec<RawOpt>,
 }
@@ -313,7 +315,10 @@ impl Rows {
     pub fn act(&self, row: usize, what: Act) -> Done {
         let Some(row) = self.rows.get(row) else { return Done::Failed(None) };
         match (&row.kind, what) {
-            (Kind::Switch { on, off, .. }, Act::Switch(now)) => self.send(if now { on } else { off }),
+            (Kind::Switch { on, off, run_off, .. }, Act::Switch(now)) => match (self.send(if now { on } else { off }), run_off) {
+                (Done::Refused, Some(r)) if !now => self.elevated(r, ""),
+                (done, _) => done,
+            },
             (Kind::Choice { template, options, run, .. }, Act::Pick(i)) => {
                 let Some(opt) = options.get(i) else { return Done::Failed(None) };
                 match self.send(&template.replace("{}", &opt.value)) {
@@ -402,7 +407,14 @@ fn row_of(r: &RawRow, dir: &str, roots: &Roots) -> Option<Row> {
     let plain = |s: &Option<String>| s.as_ref().filter(|s| line_ok(s) && !s.contains(['{', '}'])).cloned();
     let field = || r.field.as_ref().filter(|f| field_ok(f)).cloned();
     let kind = match r.kind.as_str() {
-        "switch" => Kind::Switch { field: field()?, on: plain(&r.send_on)?, off: plain(&r.send_off)? },
+        "switch" => {
+            let run_off = match &r.run_off {
+                Some(t) if !t.contains("{}") => Some(run_of(t, dir, roots, true)?),
+                Some(_) => return None,
+                None => None,
+            };
+            Kind::Switch { field: field()?, on: plain(&r.send_on)?, off: plain(&r.send_off)?, run_off }
+        }
         "choice" => {
             let template = r.send.as_ref().filter(|s| line_ok(s) && s.matches("{}").count() <= 1 && s.replace("{}", "").find(['{', '}']).is_none())?.clone();
             if r.options.is_empty() || r.options.len() > OPTIONS_MOST {
@@ -533,6 +545,7 @@ label = "t-on-label"
 field = "on"
 send_on = "on"
 send_off = "off"
+run_off = "/usr/lib/trindle-thing/set off"
 [[row]]
 kind = "choice"
 label = "t-delay"
@@ -738,6 +751,25 @@ run = "/usr/lib/trindle-thing/pairing"
         let d = daemon_again(&w, vec!["none\n"]);
         assert_eq!(r.act(1, Act::Pick(0)), Done::Refused);
         d.join().unwrap();
+    }
+
+    #[test]
+    fn a_refused_switch_off_runs_its_helper_through_pkexec() {
+        let w = world();
+        let r = rows(&w);
+        let out = w.top.join("heard-off");
+        program(&w, "set", &format!("echo \"$@\" > {}; echo ok", out.display()));
+        let d = daemon(&w, vec!["none\n"]);
+        assert_eq!(r.act(0, Act::Switch(false)), Done::Kept);
+        assert_eq!(std::fs::read_to_string(&out).unwrap().trim(), "off");
+        assert_eq!(d.join().unwrap(), ["off\n"]);
+        let d = daemon_again(&w, vec!["none\n"]);
+        assert_eq!(r.act(0, Act::Switch(true)), Done::Refused, "switching on is never raised");
+        d.join().unwrap();
+        let bad = FILE.replace("run_off = \"/usr/lib/trindle-thing/set off\"", "run_off = \"/usr/lib/trindle-thing/set {}\"");
+        assert!(Rows::parse("thing", &bad, &w.roots).is_none(), "an off helper takes no value");
+        let out_of_place = FILE.replace("run_off = \"/usr/lib/trindle-thing/set off\"", "run_off = \"/usr/bin/sh -c x\"");
+        assert!(Rows::parse("thing", &out_of_place, &w.roots).is_none());
     }
 
     fn daemon_again(w: &World, replies: Vec<&'static str>) -> std::thread::JoinHandle<Vec<String>> {

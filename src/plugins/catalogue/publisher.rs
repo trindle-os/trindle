@@ -285,9 +285,12 @@ mod release_tests {
 
     #[test]
     fn a_release_made_with_a_throwaway_key_checks_and_every_change_is_refused() {
-        let top = PathBuf::from("/tmp").join(format!("trindle-release-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&top);
-        std::fs::create_dir_all(&top).unwrap();
+
+        use std::os::unix::fs::DirBuilderExt;
+        let mut bytes = [0u8; 8];
+        std::io::Read::read_exact(&mut std::fs::File::open("/dev/urandom").unwrap(), &mut bytes).unwrap();
+        let top = Path::new("/tmp").join(format!("trindle-release-{:x}", u64::from_le_bytes(bytes)));
+        std::fs::DirBuilder::new().mode(0o700).create(&top).unwrap();
         let shelf = fake(&top);
         let key = top.join("throwaway.key");
         assert_eq!(new_key_main(&key), 0);

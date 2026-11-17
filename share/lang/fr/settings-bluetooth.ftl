@@ -2,10 +2,10 @@
 # machine translated (French), not yet reviewed by a person.
 
 # Said in red under the Bluetooth switch when switching it on failed for no known reason.
-settings-bluetooth-on-failed = Le Bluetooth n'a pas pu être activé.
+settings-bluetooth-on-failed = Impossible d'activer le Bluetooth.
 
 # Said in red under the Bluetooth switch when switching it off failed for no known reason.
-settings-bluetooth-off-failed = Le Bluetooth n'a pas pu être désactivé.
+settings-bluetooth-off-failed = Impossible de désactiver le Bluetooth.
 
 # Said in red when Bluetooth refuses something because it is not switched on; the first sentence says what could not be done.
 settings-bluetooth-cause-not-ready = { $could_not } Le Bluetooth n'est pas activé.
@@ -16,13 +16,13 @@ settings-bluetooth-cause-auth-failed = { $could_not } Le code PIN ou le nombre n
 
 # SAFETY: needs a human review before it ships
 # Said in red when the pairing was turned down; the first sentence says what could not be done.
-settings-bluetooth-cause-turned-down = { $could_not } Il a été refusé, ici ou sur l'autre appareil.
+settings-bluetooth-cause-turned-down = { $could_not } L'appairage a été refusé, ici ou sur l'autre appareil.
 
 # Said in red when the other device did not answer in time; the first sentence says what could not be done.
 settings-bluetooth-cause-timeout = { $could_not } L'autre appareil n'a pas répondu à temps. Mettez-le en mode d'appairage, puis réessayez.
 
 # Said in red when the same thing is already being done; the first sentence says what could not be done.
-settings-bluetooth-cause-in-progress = { $could_not } C'est déjà en cours. Patientez un instant.
+settings-bluetooth-cause-in-progress = { $could_not } Trindle est déjà en train de le faire. Patientez un instant.
 
 # Said in red when the device did not answer; the first sentence says what could not be done.
 settings-bluetooth-cause-no-answer = { $could_not } L'appareil n'a pas répondu. Vérifiez qu'il est allumé et à proximité, puis réessayez.
@@ -34,7 +34,7 @@ settings-bluetooth-cause-not-available = { $could_not } L'appareil n'est pas pr�
 settings-bluetooth-the-bus = Le bus système
 
 # Headline of the page while Bluetooth is looked for.
-settings-bluetooth-top-looking = Recherche du Bluetooth…
+settings-bluetooth-top-looking = Vérification du Bluetooth…
 
 # Headline of the page when the Bluetooth service is not running.
 settings-bluetooth-top-gone = Le Bluetooth ne fonctionne pas sur cet ordinateur.
@@ -43,16 +43,22 @@ settings-bluetooth-top-gone = Le Bluetooth ne fonctionne pas sur cet ordinateur.
 settings-bluetooth-top-off = Le Bluetooth est désactivé.
 
 # Headline of the page when Bluetooth is off at a switch or key on the computer itself.
-settings-bluetooth-top-hard = Le Bluetooth est coupé sur l'ordinateur lui-même.
+settings-bluetooth-top-hard = Le Bluetooth est coupé par un interrupteur ou une touche de l'ordinateur.
 
 # Headline of the page when the computer has no Bluetooth.
 settings-bluetooth-top-none = Cet ordinateur n'a pas de Bluetooth.
 
+# Headline of the page when the computer has an adapter that Bluetooth has not finished setting up.
+settings-bluetooth-top-starting = Le Bluetooth démarre…
+
+# Headline of the page when the adapter was there a moment ago and has gone.
+settings-bluetooth-top-lost = L'adaptateur Bluetooth a disparu.
+
 # Headline of the page when Bluetooth is on and searching.
-settings-bluetooth-top-searching = Activé, recherche d'appareils à proximité…
+settings-bluetooth-top-searching = Activé, recherche d'appareils…
 
 # Headline of the page when Bluetooth is on and nothing is connected.
-settings-bluetooth-top-idle = Activé, rien n'est connecté pour le moment.
+settings-bluetooth-top-idle = Activé, mais rien n'est connecté.
 
 # Headline of the page when Bluetooth is on and devices are connected; the names are already joined into a list.
 settings-bluetooth-top-connected =
@@ -63,46 +69,46 @@ settings-bluetooth-top-connected =
     }
 
 # Help text (i button) of the Bluetooth card.
-settings-bluetooth-card-about = L'interrupteur active ou désactive le Bluetooth de cet ordinateur ; en dessous figure le nom de l'adaptateur. Tant que « Visible par les autres appareils » est activé, les appareils proches peuvent trouver cet ordinateur.
+settings-bluetooth-card-about = Le nom sous l'interrupteur est celui de votre adaptateur Bluetooth. Tant que « Visible par les autres appareils » est activé, les appareils proches peuvent trouver cet ordinateur.
 
 # Heading of the Bluetooth card, of its switch's line, and the name of its switch.
 settings-bluetooth-title = Bluetooth
 
-# Small line under the Bluetooth switch when Bluetooth is blocked by the system.
-settings-bluetooth-switched-off = Désactivé.
-
 # Heading of the line with the switch that makes this computer visible, and the name of that switch.
 settings-bluetooth-visible = Visible par les autres appareils
-
-# Small line under the Visible to other devices switch.
-settings-bluetooth-visible-sub = Les appareils proches peuvent trouver cet ordinateur.
 
 # Heading of the card when Bluetooth is off at a switch on the computer itself.
 settings-bluetooth-hard-line = Coupé sur l'ordinateur lui-même
 
 # Small line under it.
-settings-bluetooth-hard-line-sub = Par un interrupteur ou une touche. Activez-le d'abord.
+settings-bluetooth-hard-line-sub = Utilisez l'interrupteur ou la touche de l'ordinateur pour l'activer.
 
 # Heading of the card when the computer has no Bluetooth adapter.
 settings-bluetooth-no-adapter = Aucun adaptateur Bluetooth
 
 # Help text (i button) of that card.
-settings-bluetooth-no-adapter-about = Aucun adaptateur Bluetooth n'a été trouvé dans cet ordinateur. Un adaptateur qui se branche sur une prise USB s'affiche ici dès qu'il est branché.
+settings-bluetooth-no-adapter-about = Trindle n'a pas trouvé d'adaptateur Bluetooth dans cet ordinateur. Si vous en branchez un sur une prise USB, il s'affiche ici tout de suite.
 
 # Line in that card.
 settings-bluetooth-none-found = Aucun trouvé
 
+# Line in the no-adapter card while Bluetooth finishes setting up the adapter.
+settings-bluetooth-starting = Démarrage
+
+# Line in the no-adapter card when the adapter was there a moment ago.
+settings-bluetooth-lost = L'adaptateur a disparu
+
 # Small line under it.
-settings-bluetooth-none-found-sub = Un adaptateur USB s'affiche ici une fois branché.
+settings-bluetooth-lost-sub = Trindle continue de le chercher et l'affiche ici s'il revient. Sinon, redémarrez l'ordinateur.
 
 # Shown beside the Bluetooth switch while the password is asked for.
-settings-bluetooth-waiting = En attente du mot de passe...
+settings-bluetooth-waiting = En attente de votre mot de passe…
 
 # Said in red when this computer could not be made visible to other devices.
-settings-bluetooth-visible-failed = Cet ordinateur n'a pas pu être rendu visible par les autres appareils.
+settings-bluetooth-visible-failed = Trindle n'a pas pu rendre cet ordinateur visible par les autres appareils.
 
 # Said in red when this computer could not be hidden from other devices.
-settings-bluetooth-hidden-failed = Cet ordinateur n'a pas pu être masqué aux autres appareils.
+settings-bluetooth-hidden-failed = Trindle n'a pas pu masquer cet ordinateur aux autres appareils.
 
 # Shown on the two device lists while Bluetooth is off.
 settings-bluetooth-switch-on-first = Activez le Bluetooth pour les utiliser.
@@ -110,17 +116,14 @@ settings-bluetooth-switch-on-first = Activez le Bluetooth pour les utiliser.
 # Line in the My devices card when nothing is paired.
 settings-bluetooth-none-paired = Aucun appareil appairé pour l'instant
 
-# Small line under it.
-settings-bluetooth-none-paired-sub = Recherchez des appareils pour en appairer un.
-
 # Heading of the card that lists paired devices.
 settings-bluetooth-mine = Mes appareils
 
 # Help text (i button) of the My devices card.
-settings-bluetooth-mine-about = Les appareils appairés avec cet ordinateur, chacun avec sa batterie quand elle est indiquée. Ceux qui sont connectés à l'ouverture de la page viennent en premier, et une ligne reste à sa place tant que la page est ouverte. Les boutons ronds connectent ou déconnectent un appareil ; la corbeille l'oublie, il faudra donc l'appairer à nouveau.
+settings-bluetooth-mine-about = Les appareils appairés avec cet ordinateur, avec leur niveau de batterie quand il peut être lu. Les appareils connectés à l'ouverture de la page viennent en premier, et l'ordre ne change pas tant qu'elle reste ouverte. Si vous oubliez un appareil, il faudra l'appairer à nouveau.
 
 # Line in the Nearby card while the search runs.
-settings-bluetooth-looking = Recherche d'appareils...
+settings-bluetooth-looking = Recherche d'appareils…
 
 # Tip of the button that stops the search.
 settings-bluetooth-stop-looking = Arrêter la recherche
@@ -128,20 +131,17 @@ settings-bluetooth-stop-looking = Arrêter la recherche
 # Heading of the line that starts the search, and tip of its button.
 settings-bluetooth-look = Rechercher des appareils
 
-# Small line under it.
-settings-bluetooth-look-sub = Mettez d'abord l'autre appareil en mode d'appairage.
-
 # Heading of the card that lists devices nearby.
 settings-bluetooth-nearby = À proximité
 
 # Help text (i button) of the Nearby card.
-settings-bluetooth-nearby-about = Appuyez sur Rechercher des appareils, mettez l'autre appareil en mode d'appairage, puis appuyez sur Appairer à côté de lui. Les appareils à proximité sont listés du signal le plus fort au plus faible à l'ouverture de la page, et chaque nouvel appareil trouvé est ajouté à la fin. Certains affichent un nombre à comparer avec celui d'ici, et certains demandent un code PIN, souvent indiqué dans leur mode d'emploi, ou 0000.
+settings-bluetooth-nearby-about = Appuyez sur Rechercher des appareils, mettez l'autre appareil en mode d'appairage, puis appuyez sur Appairer à côté de lui. À l'ouverture de la page, l'appareil au signal le plus fort est listé en premier, et chaque nouvel appareil trouvé est ajouté à la fin. Certains appareils affichent un nombre à comparer avec celui d'ici. D'autres demandent un code PIN, souvent indiqué dans leur mode d'emploi, ou 0000.
 
 # Said in red when the search could not be stopped.
-settings-bluetooth-stop-failed = La recherche d'appareils n'a pas pu être arrêtée.
+settings-bluetooth-stop-failed = Trindle n'a pas pu arrêter la recherche d'appareils.
 
 # Said in red when the search could not be started.
-settings-bluetooth-start-failed = La recherche d'appareils n'a pas pu être lancée.
+settings-bluetooth-start-failed = Impossible de rechercher des appareils.
 
 # Small line of a device that is connected.
 settings-bluetooth-connected = Connecté
@@ -167,25 +167,25 @@ settings-bluetooth-connect = Connecter
 settings-bluetooth-forget = Oublier cet appareil
 
 # Said in red when a device could not be disconnected.
-settings-bluetooth-disconnect-failed = Il n'a pas pu être déconnecté.
+settings-bluetooth-disconnect-failed = Impossible de le déconnecter.
 
 # Said in red when a device could not be forgotten.
-settings-bluetooth-forget-failed = Il n'a pas pu être oublié.
+settings-bluetooth-forget-failed = Impossible de l'oublier.
 
 # Shown under a device while it is being paired.
-settings-bluetooth-pairing = Appairage...
+settings-bluetooth-pairing = Appairage…
 
 # Said in red when a device could not be paired.
-settings-bluetooth-pair-failed = Il n'a pas pu être appairé.
+settings-bluetooth-pair-failed = Impossible de l'appairer.
 
 # Shown under a device while it is being connected.
-settings-bluetooth-connecting = Connexion...
+settings-bluetooth-connecting = Connexion…
 
 # Said in red when a device could not be connected.
-settings-bluetooth-connect-failed = Il n'a pas pu être connecté.
+settings-bluetooth-connect-failed = Impossible de le connecter.
 
 # Said under a device that paired but could not be set to connect by itself.
-settings-bluetooth-not-trusted = Connecté, mais il n'a pas pu être réglé pour se connecter tout seul la prochaine fois. Connectez-le ici quand vous en avez besoin.
+settings-bluetooth-not-trusted = Connecté, mais Trindle n'a pas pu le régler pour qu'il se connecte tout seul la prochaine fois. Connectez-le ici quand vous voulez l'utiliser.
 
 # Said under a device that shows a code to be typed on it; the code is already written.
 settings-bluetooth-type-code = Saisissez { $code } sur l'appareil, puis appuyez sur Entrée sur celui-ci.
@@ -214,7 +214,7 @@ settings-bluetooth-pin = Code PIN
 settings-bluetooth-cancel = Annuler
 
 # Help line above the box where a device's PIN is typed.
-settings-bluetooth-pin-help = Saisissez le code PIN de cet appareil. Il figure souvent dans son mode d'emploi, ou c'est 0000.
+settings-bluetooth-pin-help = Saisissez le code PIN de cet appareil. Il figure souvent dans le mode d'emploi. Sinon, essayez 0000.
 
 # Words the settings search looks for on this page (not shown).
 settings-bluetooth-keywords = headphones mouse keyboard pair devices wireless casque souris clavier appairer appareils sans fil
@@ -223,27 +223,26 @@ settings-bluetooth-keywords = headphones mouse keyboard pair devices wireless ca
 settings-bluetooth-help = Appuyez sur Rechercher, mettez l'autre appareil en mode d'appairage, puis appuyez sur Appairer à côté de lui.
 
 # Said in red under the Bluetooth switch when restarting the sound service after Bluetooth came back on failed; $why is the system's own reason.
-settings-bluetooth-sound-failed = Le son Bluetooth n'a pas pu être redémarré : le casque peut donc fonctionner en qualité de base jusqu'à votre prochaine ouverture de session. { $why }
+settings-bluetooth-sound-failed = Trindle n'a pas pu redémarrer le son Bluetooth : le son du casque peut donc être moins bon que d'habitude jusqu'à votre prochaine ouverture de session. { $why }
 
 # Tooltip of the help button beside the Bluetooth switch.
-settings-bluetooth-sound-help = Pourquoi le casque sonne en qualité de base après avoir désactivé puis réactivé le Bluetooth
+settings-bluetooth-sound-help = Pourquoi le son du casque est moins bon après avoir désactivé puis réactivé le Bluetooth
 
 
 # Said in red when a device is no longer in BlueZ's list; the first sentence says what could not be done.
-settings-bluetooth-cause-gone = { $could_not } Il n'est plus connu. Recherchez-le de nouveau.
+settings-bluetooth-cause-gone = { $could_not } Cet appareil n'est plus enregistré sur cet ordinateur. Recherchez-le de nouveau.
 
 # Said in red when a paired device's saved pairing is refused; the first sentence says what could not be done.
-settings-bluetooth-cause-old-pairing = { $could_not } L'appairage enregistré n'est plus accepté. Oubliez l'appareil, puis appairez-le de nouveau.
+settings-bluetooth-cause-old-pairing = { $could_not } L'appareil n'accepte plus l'appairage enregistré. Oubliez l'appareil, puis appairez-le de nouveau.
 
 # Said in red under a device that connected and then dropped at once.
-settings-bluetooth-dropped = Il s'est connecté, puis a décroché. L'appairage enregistré est peut-être périmé.
+settings-bluetooth-dropped = Il s'est connecté, puis a perdu la connexion. L'appairage enregistré est peut-être périmé.
 
 # Tooltip of the button that forgets a paired device and looks for it afresh.
 settings-bluetooth-pair-again = Oublier et appairer de nouveau
 
 # Said under Look for devices after a device was forgotten to be paired afresh.
-settings-bluetooth-forgotten-pair = Oublié. Mettez-le en mode d'appairage, puis appuyez sur Appairer quand il s'affiche ci-dessous.
+settings-bluetooth-forgotten-pair = L'appareil a été oublié. Mettez-le en mode d'appairage, puis appuyez sur Appairer quand il s'affiche ci-dessous.
 
 # Tooltip of the button that opens Help from a failed connection.
 settings-bluetooth-more = En savoir plus
-

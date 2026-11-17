@@ -10,8 +10,20 @@ report-title-crash = کچھ غلط ہو گیا۔ رپورٹ بھیجیں؟
 # Under the title: what a report holds, and what it never holds.
 report-summary = یہ خرابی، کمپیوٹر کا خلاصہ اور لاگ کی آخری سطریں بھیجتا ہے، جن میں سے نام، ای میل پتے، نیٹ ورک پتے اور Wi-Fi کے نام نکال دیے جاتے ہیں۔ لاگ کی سطروں میں فائلوں کے نام اور ویب پتے پھر بھی ہو سکتے ہیں۔ یہ آپ کی فائلیں یا پاس ورڈ نہیں بھیجتا۔
 
-# Typing box at the top of the window, shown quietly while empty.
-report-what-doing = آپ کیا کر رہے تھے؟ (اختیاری)
+# Big typing box in the middle of the window, shown quietly while empty.
+report-what-doing = کیا ہوا؟
+
+# Beside the dropdown at the top of the window that says which app the report is about; also its name for the screen reader.
+report-app-box = کون سی ایپ؟
+
+# Dropdown choice: the person doesn't know which app it was.
+report-app-unsure = یقین نہیں
+
+# Dropdown choice: the app is not one of Trindle's own.
+report-app-other = کوئی اور پروگرام
+
+# Dropdown choice: the desktop itself (the panels, windows and session), not a single app.
+report-app-desktop = ڈیسک ٹاپ
 
 # Button at the bottom of the window that sends the report; it is also the word beside it when it is switched off.
 report-send = بھیجیں
@@ -37,7 +49,7 @@ report-copy = کاپی کریں
 report-save = محفوظ کریں
 
 # Written where the Send button would be, when Buildmorphic says it is not taking reports or cannot be reached.
-report-not-taken = رپورٹیں ابھی قبول نہیں ہو رہیں۔
+report-not-taken = رپورٹیں ابھی بھیجی نہیں جا سکتیں۔
 
 # Written where the Send button would be, while Buildmorphic is being asked whether it is taking reports.
 report-checking = جانچ ہو رہی ہے۔
@@ -67,16 +79,16 @@ report-sending = بھیجی جا رہی ہے۔
 report-saved-as = Downloads/{ $name } کے طور پر محفوظ ہو گئی۔
 
 # Red words when the Buildmorphic username holds an email address.
-report-no-at = اپنا Buildmorphic صارف نام استعمال کریں، ای میل پتا نہیں، یعنی @ نہ ہو۔
+report-no-at = اپنا Buildmorphic صارف نام لکھیں، ای میل پتا نہیں۔ @ استعمال نہ کریں۔
 
 # Red words when the Buildmorphic username holds letters that are not allowed.
-report-name-chars = صارف نام 2 سے 31 چھوٹے حروف، اعداد یا ڈیشز پر مشتمل ہوتا ہے۔
+report-name-chars = صارف نام 2 سے 31 حروف کا ہونا چاہیے، جس میں چھوٹے حروف، اعداد یا ڈیش استعمال ہو سکتے ہیں۔
 
 # Red words in Settings, Crash reports, when the GitHub name holds letters that are not allowed.
-report-github-chars = GitHub نام میں صرف حروف، اعداد اور ڈیش ہو سکتے ہیں۔
+report-github-chars = GitHub نام میں صرف حروف، اعداد اور ڈیش استعمال ہو سکتے ہیں۔
 
 # Red words when a report could not be kept for later. $reason is one of the four reasons below.
-report-keep-failed = بعد کے لیے رکھا نہیں جا سکا: { $reason }۔
+report-keep-failed = Trindle رپورٹ کو بعد کے لیے محفوظ نہیں کر سکا: { $reason }۔
 
 # Red words when a report could not be saved. $reason is one of the four reasons below.
 report-save-failed = محفوظ نہیں ہو سکا: { $reason }۔
@@ -91,7 +103,7 @@ report-reason-full = ڈرائیو بھری ہوئی ہے
 report-reason-missing = فولڈر موجود نہیں
 
 # The reason inside "Could not save it: ...": any other refusal.
-report-reason-refused = ڈرائیو نے انکار کر دیا
+report-reason-refused = ڈرائیو کی خرابی
 
 # Why a report could not be posted: the program that posts it is not installed.
 report-curl-missing = curl موجود نہیں ہے۔
@@ -103,7 +115,7 @@ report-not-posted = یہ بھیجی نہیں جا سکی۔
 report-no-connection = کوئی کنکشن نہیں۔
 
 # Why a report could not be posted: the address replied with a fault. $code is the number it replied with.
-report-answered = پتے نے { $code } کا جواب دیا۔
+report-answered = سرور نے { $code } بھیجا۔
 
 # Beside the Send button, when the note is too short: Buildmorphic needs a few words with the log.
 report-say-more = کیا ہوا، یہ بتانے کے لیے چند الفاظ اور لکھیں۔
@@ -114,17 +126,55 @@ report-reading-log = لاگ پڑھا جا رہا ہے۔
 # Beside the Send button, when no log lines were found: a report with no log is not sent.
 report-no-log = اس کے ساتھ بھیجنے کے لیے کوئی لاگ نہیں ہے، اس لیے اسے بھیجا نہیں جا سکتا۔ اس کی جگہ محفوظ کر لیں۔
 
+# Beside the picture buttons, and beside the picture once one is chosen: who can see it.
+report-picture-line = اختیاری تصویر۔ اسے صرف پروجیکٹ کا مالک دیکھتا ہے۔
+
+# Tooltip of the round button that opens the file chooser for a picture.
+report-picture-choose = PNG تصویر چنیں
+
+# Tooltip of the round button that takes a picture of the screen now.
+report-picture-shot = اسکرین شاٹ لیں
+
+# Tooltip of the round button that takes the picture off the report.
+report-picture-remove = تصویر ہٹائیں
+
+# Name of the small picture for a screen reader. $width and $height are in pixels.
+report-picture-name = آپ کی تصویر، { $width } ضرب { $height }
+
+# Title of the file chooser, and the name of its one filter.
+report-picture-choose-title = PNG تصویر چنیں
+
+report-picture-filter = PNG تصویریں
+
+# Under the picture while it is being read.
+report-picture-reading = پڑھا جا رہا ہے۔
+
+# Red words under the picture when the screenshot could not be taken, or no file chooser answers.
+report-picture-no-shot = اسکرین شاٹ نہیں لیا جا سکا۔
+
+report-picture-no-chooser = Trindle فائل چننے والا نہیں کھول سکا۔
+
+# Red words under the picture, each the reason it is refused.
+report-picture-not-png = یہ PNG تصویر نہیں ہے۔
+
+report-picture-too-big = یہ { $megabytes } MB سے بڑی ہے۔
+
+report-picture-too-large = تصویر بہت بڑی ہے۔ وہ زیادہ سے زیادہ { $side } پکسل چوڑی اور { $side } پکسل اونچی ہو سکتی ہے۔
+
+report-picture-damaged = تصویر خراب ہے۔
+
+report-picture-unreadable = پڑھی نہیں جا سکی۔
 
 
-report-sent-as-bug = بھیج دیا گیا۔ خرابی { $number } کے طور پر درج ہوا۔ شکریہ۔
+
+report-sent-as-bug = بھیج دیا گیا۔ آپ کی خرابی کی رپورٹ کا نمبر { $number } ہے۔ شکریہ۔
 
 
 # Under the title, beta only: why a report matters and what it holds.
-report-beta = Trindle بیٹا میں ہے، اور ہر رپورٹ اسے بہترین طریقے سے چلانے میں ہماری مدد کرتی ہے۔ رپورٹ گمنام ہوتی ہے اور اس میں کوئی نجی یا ذاتی چیز نہیں ہوتی۔ ای میل کی ضرورت نہیں اور صارف نام اختیاری ہے۔ جب تک آپ بھیجیں نہ دبائیں، کچھ نہیں بھیجا جاتا۔
+report-beta = Trindle بیٹا میں ہے۔ رپورٹیں گمنام ہوتی ہیں: نام، ای میل پتے اور ہوم فولڈر ہٹا دیے جاتے ہیں۔ صارف نام اختیاری ہے۔
 
 # Typing box under the first one: the optional Buildmorphic username that credits the report.
 report-username-box = Buildmorphic صارف نام (اختیاری)
 
 # Red words when a report posted by hand could not get through. $why is the reason, such as "No connection."
-report-try-again = نہیں بھیجا گیا۔ { $why } دوبارہ کوشش کے لیے بھیجیں دبائیں۔
-
+report-try-again = Trindle رپورٹ نہیں بھیج سکا۔ { $why } دوبارہ کوشش کے لیے بھیجیں دبائیں۔

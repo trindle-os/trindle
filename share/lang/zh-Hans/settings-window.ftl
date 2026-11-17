@@ -25,10 +25,10 @@ settings-window-group-about = 关于
 settings-window-in-apps = 在“应用”中
 
 # Small grey heading over the row a search finds that opens the Folders program's settings.
-settings-window-in-folders = 在“文件夹”中
+settings-window-in-folders = 在 Folders 中
 
 # The side bar row that opens the Folders program at its own settings.
-settings-window-in-folders-name = “文件夹”自己的设置
+settings-window-in-folders-name = Folders 自己的设置
 
 # Words the Settings search matches the Folders settings row by, in lower case, separated by spaces.
 settings-window-in-folders-keywords =
@@ -41,7 +41,7 @@ settings-window-no-page = 没有匹配的页面。请试试更短的词，或到
 settings-window-theme-refused = {"  "}{ $id }  { $name }（无法使用：{ $why }）
 
 # Printed in a terminal when trindle-settings --theme is given no theme name.
-settings-window-theme-name = 请给出主题名称，例如：trindle-settings --theme default
+settings-window-theme-name = 请输入主题名称，例如：trindle-settings --theme default
 
 # Printed in a terminal after trindle-settings --theme worked; theme is the theme's name.
 settings-window-theme-now = 当前主题为 { $theme }。
@@ -50,13 +50,13 @@ settings-window-theme-now = 当前主题为 { $theme }。
 settings-window-theme-own = Trindle 自带
 
 # Printed in a terminal when the theme could not be chosen; error says why and ends with a full stop.
-settings-window-themes-list = { $error } trindle-settings --themes 可列出所有主题。
+settings-window-themes-list = { $error } 运行 trindle-settings --themes 可查看列表。
 
 # Printed in a terminal when trindle-settings --keys is not given the word default.
-settings-window-keys-how = 要恢复所有按键和按钮：trindle-settings --keys default
+settings-window-keys-how = 要把所有按键和按钮恢复正常，请运行：trindle-settings --keys default
 
 # Printed in a terminal after every key and button was put back.
-settings-window-keys-back = 所有按键和按钮已恢复为打印所示的状态。
+settings-window-keys-back = 所有按键和按钮已恢复正常。
 
 # Printed in a terminal when the keys could not be put back; error says why.
-settings-window-keys-failed = 无法恢复按键：{ $error }
+settings-window-keys-failed = Trindle 无法恢复按键：{ $error }

@@ -14,15 +14,19 @@ ring-updates-none = Her şey güncel
 # Answer to a spoken question about updates when the updates button installs them all; "it" for one, "them" for more.
 ring-updates-spoken-all =
     { $n ->
-        [one] { $n } bekliyor: Uygulamalar'ın yanındaki güncelleme düğmesi onu kurar
-       *[other] { $n } bekliyor: Uygulamalar'ın yanındaki güncelleme düğmesi hepsini kurar
+        [one] { $n } güncelleme bekliyor. Kurmak için Uygulamalar'ın yanındaki güncelleme düğmesini kullanın.
+       *[other] { $n } güncelleme bekliyor. Hepsini kurmak için Uygulamalar'ın yanındaki güncelleme düğmesini kullanın.
     }
 
 # Answer to a spoken question about updates when only plugin updates that need a look wait; the clause that follows says so.
-ring-updates-spoken-look = { $n } bekliyor: { $look }
+ring-updates-spoken-look =
+    { $n ->
+        [one] { $n } güncelleme bekliyor. { $look }.
+       *[other] { $n } güncelleme bekliyor. { $look }.
+    }
 
 # Answer to a spoken question about updates when some install and some need a look; the last clause says which need a look.
-ring-updates-spoken-mixed = { $n } bekliyor: Uygulamalar'ın yanındaki güncelleme düğmesi { $put } tanesini kurar, ve { $look }
+ring-updates-spoken-mixed = { $n } güncelleme bekliyor. Bunlardan { $put } tanesini kurmak için Uygulamalar'ın yanındaki güncelleme düğmesini kullanın. { $look }.
 
 # Name and tip of the updates button when only firmware updates wait: the button takes the person to them.
 ring-updates-see-firmware =
@@ -34,8 +38,8 @@ ring-updates-see-firmware =
 # Name and tip of the updates button when firmware updates wait among others: the button takes the person to them.
 ring-updates-see-among =
     { $n ->
-        [one] { $n } güncellemeye bak, aralarında donanım yazılımı da var
-       *[other] { $n } güncellemeye bak, aralarında donanım yazılımı da var
+        [one] { $n } güncellemeye bak, donanım yazılımı dahil
+       *[other] { $n } güncellemeye bak, donanım yazılımı dahil
     }
 
 # Name and tip of the updates button when updates wait that it will install.
@@ -48,8 +52,8 @@ ring-updates-install =
 # Name and tip of the updates button when only plugin updates that ask for more than before wait.
 ring-updates-see-plugin =
     { $n ->
-        [one] Önceden daha fazla izin isteyen eklenti güncellemesine bak
-       *[other] Önceden daha fazla izin isteyen { $n } eklenti güncellemesine bak
+        [one] Öncekinden daha fazla izin isteyen eklenti güncellemesine bak
+       *[other] Öncekinden daha fazla izin isteyen { $n } eklenti güncellemesine bak
     }
 
 # Name and tip of the updates button when some updates install and some plugin updates need a look; the clause after the semicolon says which.
@@ -100,13 +104,13 @@ ring-tray-vpn = VPN üzerinden bağlı
 ring-tray-wired = Kablolu
 
 # Name of the network button when connected by cable but the internet is not reachable.
-ring-tray-wired-limited = Kablolu, sınırlı bağlantı
+ring-tray-wired-limited = Kablolu, ama internet yok
 
 # Name of the network button on Wi-Fi: the network's name and its signal strength.
 ring-tray-wifi = { $name }, sinyal %{ $strength }
 
 # Name of the network button on Wi-Fi when the internet is not reachable.
-ring-tray-wifi-limited = { $name }, sinyal %{ $strength }, sınırlı bağlantı
+ring-tray-wifi-limited = { $name }, sinyal %{ $strength }, sınırlı erişim
 
 # Name of the Bluetooth button when Bluetooth is off.
 ring-tray-bt-off = Bluetooth kapalı
@@ -130,13 +134,12 @@ ring-tray-none = Tepsi simgesi yok
 ring-tray-show = Halkada göster
 
 # Line of a tray icon's menu: take the icon out of the ring's row.
-ring-tray-take-out = Halkadan çıkar
+ring-tray-take-out = Halkadan kaldır
 
 # Quiet words in a tray icon's menu in place of Show in the ring, when the row is full.
-ring-tray-full = Halkada zaten dört tane var. Önce birini çıkar.
+ring-tray-full = Halkada zaten dört simge var. Önce birini çıkar.
 
 
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = Denetim kapalı
-

@@ -18,10 +18,10 @@ use smithay::{
     },
 };
 
-use super::{AnvilState, UdevData};
+use super::{Compose, UdevData};
 use crate::state::SurfaceDmabufFeedback;
 
-impl DmabufHandler for AnvilState<UdevData> {
+impl DmabufHandler for Compose<UdevData> {
     fn dmabuf_state(&mut self) -> &mut DmabufState {
         &mut self.backend_data.dmabuf_state.as_mut().unwrap().0
     }
@@ -44,22 +44,22 @@ impl DmabufHandler for AnvilState<UdevData> {
         });
         if let Some(node) = taken {
             dmabuf.set_node(node);
-            let _ = notifier.successful::<AnvilState<UdevData>>();
+            let _ = notifier.successful::<Compose<UdevData>>();
         } else {
             notifier.failed();
         }
     }
 }
-delegate_dmabuf!(AnvilState<UdevData>);
+delegate_dmabuf!(Compose<UdevData>);
 
-impl DrmSyncobjHandler for AnvilState<UdevData> {
+impl DrmSyncobjHandler for Compose<UdevData> {
     fn drm_syncobj_state(&mut self) -> Option<&mut DrmSyncobjState> {
         self.backend_data.syncobj_state.as_mut()
     }
 }
-smithay::delegate_drm_syncobj!(AnvilState<UdevData>);
+smithay::delegate_drm_syncobj!(Compose<UdevData>);
 
-impl AnvilState<UdevData> {
+impl Compose<UdevData> {
 
     pub(super) fn default_dmabuf_feedback(&mut self) -> Option<DmabufFeedback> {
         let primary = self.backend_data.primary_gpu;
@@ -82,18 +82,19 @@ impl AnvilState<UdevData> {
     }
 
     pub(super) fn check_syncobj(&mut self) {
-        if self.backend_data.syncobj_state.is_some() {
-            return;
-        }
         let Some(primary_node) = self.backend_data.primary_gpu.node_with_type(NodeType::Primary).and_then(|x| x.ok())
         else {
             return;
         };
         let Some(backend) = self.backend_data.backends.get(&primary_node) else { return };
         let import_device = backend.drm_output_manager.device().device_fd().clone();
-        if supports_syncobj_eventfd(&import_device) {
-            self.backend_data.syncobj_state =
-                Some(DrmSyncobjState::new::<AnvilState<UdevData>>(&self.display_handle, import_device));
+        match self.backend_data.syncobj_state.as_mut() {
+            Some(state) => state.update_device(import_device),
+            None if supports_syncobj_eventfd(&import_device) => {
+                self.backend_data.syncobj_state =
+                    Some(DrmSyncobjState::new::<Compose<UdevData>>(&self.display_handle, import_device));
+            }
+            None => {}
         }
     }
 
@@ -141,20 +142,20 @@ pub(super) fn get_surface_dmabuf_feedback(
             .clone()
             .add_preference_tranche(render_node.dev_id(), None, render_formats.clone())
             .build()
-            .unwrap()
+            .ok()?
     } else {
-        builder.clone().build().unwrap()
+        builder.clone().build().ok()?
     };
 
     let scanout_feedback = builder
         .add_preference_tranche(
-            surface.device_fd().dev_id().unwrap(),
+            surface.device_fd().dev_id().ok()?,
             Some(zwp_linux_dmabuf_feedback_v1::TrancheFlags::Scanout),
             planes_formats,
         )
         .add_preference_tranche(scanout_node.dev_id(), None, render_formats)
         .build()
-        .unwrap();
+        .ok()?;
 
     Some(SurfaceDmabufFeedback {
         render_feedback,

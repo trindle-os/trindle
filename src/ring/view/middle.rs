@@ -23,6 +23,9 @@ pub(super) const FINDING: (f32, f32) = (196.0, 34.0);
 
 const DATE_SIZE: f32 = 17.0;
 
+const CLOCK_MARGIN: f32 = 6.0;
+const CLOCK_GAP: f32 = 8.0;
+
 pub(super) fn core() -> f32 {
     menu_button()
 }
@@ -42,10 +45,6 @@ pub(super) fn tool_rows() -> [Vec<(&'static str, &'static str, &'static str)>; 2
     ]
 }
 
-pub(super) fn lower_tools() -> Vec<(&'static str, &'static str, &'static str)> {
-    tool_rows()[1].to_vec()
-}
-
 pub(super) fn centre_of(upper: Vec<Node<Msg>>, status: Vec<Node<Msg>>, clock: Node<Msg>, lower: Vec<Node<Msg>>, foot: Option<Node<Msg>>) -> Node<Msg> {
     let mut tools = vec![band(lower)];
 
@@ -63,13 +62,26 @@ pub(super) fn centre_of(upper: Vec<Node<Msg>>, status: Vec<Node<Msg>>, clock: No
 pub(super) fn time_and_date_drawn(time: String, date: String) -> Node<Msg> {
     drawing(FINDING, t!("ring-date-time"), move |pm, pen| {
         let s = pen.scale;
-        let mut big = Style::new(CLOCK_SIZE * s);
-        big.weight = 600;
-        let a = pen.fonts.layout(&time, &big, None);
-        let b = pen.fonts.layout(&date, &Style::new(DATE_SIZE * s), None);
-        let x = (pm.width() as f32 - a.width - b.width - 8.0 * s) / 2.0;
+        let room = pm.width() as f32 - 2.0 * CLOCK_MARGIN * s;
+        let mut shrink = 1.0_f32;
+        let lay = |k: f32| {
+            let mut big = Style::new(CLOCK_SIZE * s * k);
+            big.weight = 600;
+            (pen.fonts.layout(&time, &big, None), pen.fonts.layout(&date, &Style::new(DATE_SIZE * s * k), None))
+        };
+        let (mut a, mut b) = lay(shrink);
+        for _ in 0..4 {
+            let wide = a.width + b.width + CLOCK_GAP * s * shrink;
+            if wide <= room {
+                break;
+            }
+            shrink *= room / wide;
+            (a, b) = lay(shrink);
+        }
+        let gap = CLOCK_GAP * s * shrink;
+        let x = (pm.width() as f32 - a.width - b.width - gap) / 2.0;
         pen.fonts.draw(pm, &a, x, (pm.height() as f32 - a.height) / 2.0, pen.theme.fg);
-        pen.fonts.draw(pm, &b, x + a.width + 8.0 * s, (pm.height() as f32 - b.height) / 2.0, pen.theme.muted);
+        pen.fonts.draw(pm, &b, x + a.width + gap, (pm.height() as f32 - b.height) / 2.0, pen.theme.muted);
     })
 }
 
@@ -93,11 +105,11 @@ impl Face {
 
     pub(super) fn backdrop(&self, bare: bool) -> Node<Msg> {
         let lay = self.lay.clone();
-        let (seg, listening, pulse, all, dim) = (self.segment_lit(), self.listening, self.pulse, self.level == ALL, self.dim);
+        let (seg, all, dim) = (self.segment_lit(), self.level == ALL, self.dim);
 
         let top = self.tray.battery().map(|_| self.top_hover);
         let empty = lay.placed.is_empty() && self.level == FAVOURITES;
-        let scene = Scene { seg, top, bare, listening, pulse, empty, all, dim };
+        let scene = Scene { seg, top, bare, empty, all, dim };
         drawing((self.size.0 as f32, self.size.1 as f32), "", move |pm, pen| {
             paint_ring(pm, pen, &lay, &scene);
         })
@@ -206,10 +218,10 @@ impl Face {
     pub(super) fn centre(&self) -> Node<Msg> {
         let mut upper: Vec<Node<Msg>> = tool_rows()[0].iter().map(|(k, i, t)| self.tool(k, i, t, Job::Programs)).collect();
 
-        upper.extend(self.updates.button(core()).map(|u| u.tinted(Job::Programs.share())));
+        upper.push(self.updates.button(core()).tinted(Job::Programs.share()));
         let power = button("system-shutdown-symbolic", t!("ring-power")).size(core()).tinted(Job::Computer.share()).spoken(t!("ring-power-spoken")).on_press(msg(|f| f.show_power(true)));
         let status: Vec<Node<Msg>> = std::iter::once(power).chain(self.tray.buttons(core())).collect();
-        let mut lower: Vec<Node<Msg>> = lower_tools().into_iter().map(|(k, i, t)| self.tool(k, i, t, Job::Tools)).collect();
+        let mut lower: Vec<Node<Msg>> = tool_rows()[1].iter().map(|(k, i, t)| self.tool(k, i, t, Job::Tools)).collect();
         lower.extend(self.tray.keyboard_button(core()));
 
         let foot = sni::tray().map(|t| t.strip()).filter(|(_, w)| *w > 0.0).map(|(strip, width)| strip_of(strip, width));

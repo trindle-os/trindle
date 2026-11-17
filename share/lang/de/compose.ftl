@@ -17,3 +17,25 @@ compose-stopped-shot = Der Bildschirmfoto-Dienst wurde angehalten und geschlosse
 
 # Tip of the round button on that notice, which starts the stopped part again.
 compose-stopped-try-again = Erneut versuchen
+
+# Sent to Flow when you try its PIN and the screen isn't locked.
+compose-flow-not-locked = Der Bildschirm ist nicht gesperrt.
+
+# Sent to Flow when you try its PIN and no PIN is set.
+compose-flow-no-pin = Es ist keine PIN festgelegt.
+
+# Sent to Flow when you try its PIN after the time allowed for it has run out.
+compose-flow-late = Die Zeit für die PIN ist abgelaufen.
+
+# Sent to Flow when the wrong PIN has been tried too many times.
+compose-flow-too-many = Zu viele Versuche.
+
+# Sent to Flow when what was typed isn't a PIN of 4 digits.
+compose-flow-not-a-pin = Eine PIN hat 4 Ziffern.
+
+# Sent to Flow when the PIN is wrong. { $left } is the tries left.
+compose-flow-wrong-pin =
+    { $left ->
+        [one] Falsche PIN. 1 Versuch übrig.
+       *[other] Falsche PIN. { $left } Versuche übrig.
+    }

@@ -7,7 +7,7 @@ store-refusal-nothing = Hiçbir şey geri konmadı, çünkü { $why }.
 
 # A refusal of a restore that went part of the way; the reason follows "because".
 # SAFETY: needs a human review before it ships
-store-refusal-part = Yedeğin bir kısmı geri konmadı, çünkü { $why }.
+store-refusal-part = Trindle yedeğin yalnızca bir kısmını geri koydu, çünkü { $why }.
 
 # The reason when the backup holds a link or something else that would reach outside the folder it goes into.
 # SAFETY: needs a human review before it ships
@@ -20,14 +20,11 @@ store-because-in-the-way = bu bilgisayarda yedeğin bir kısmının gideceği ye
 # The reason when there is nowhere to unpack the backup.
 store-because-no-unpack = yedeği açacak bir yer yok
 
-# The reason when the backup file cannot be read.
-store-because-unreadable = yedek dosyası okunamadı
-
 # The reason when the file is not a Trindle backup.
 store-because-not-trindle = bu dosya bir Trindle yedeği değil
 
 # The reason when the backup's list is damaged or too big.
-store-because-damaged-list = yedek bozuk ve listesi okunamadı
+store-because-damaged-list = yedek bozuk ve Trindle listesini okuyamadı
 
 # The reason when the file is not a Flat backup.
 store-because-not-flat = bu dosya bir Flat yedeğine benzemiyor
@@ -36,7 +33,7 @@ store-because-not-flat = bu dosya bir Flat yedeğine benzemiyor
 store-because-no-flat-list = bu dosyada Flat uygulama listesi yok
 
 # The reason when the backup was made by a newer Flat than Trindle can read.
-store-because-newer-flat = bu, Trindle'ın okuyabileceğinden daha yeni bir Flat ile yapılmış
+store-because-newer-flat = Trindle'ın okuyabileceğinden daha yeni bir Flat sürümüyle yapılmış
 
 # The reason when the file holds no apps.
 store-because-no-apps = bu dosyada uygulama yok
@@ -45,11 +42,11 @@ store-because-no-apps = bu dosyada uygulama yok
 store-because-not-read = yedek okunamadı: { $why }
 
 # The reason when the program gave none.
-store-because-none = hiçbir neden vermedi
+store-because-none = neden belirtilmedi
 
 # The reason when the system said permission was denied.
 # SAFETY: needs a human review before it ships
-store-because-permission = bu bilgisayar Trindle'ın oraya yazmasına izin vermedi
+store-because-permission = Trindle'ın oraya yazmasına izin verilmiyor
 
 # The reason when the disk is full.
 store-because-space = bu bilgisayarda yer kalmadı
@@ -73,27 +70,27 @@ store-because-no-name = adı yok
 store-because-outside-own = yedekteki ayarları kendi klasörünün dışına uzanıyor
 
 # The reason when something is too big to be read whole.
-store-because-too-big = bütün olarak okunamayacak kadar büyük
+store-because-too-big = okunamayacak kadar büyük
 
 # The reason when an app's settings in the backup do not match their checksum.
-store-because-checksum = yedekteki ayarları sağlama toplamıyla uyuşmuyor
+store-because-checksum = yedekteki ayarları bozulmuş ya da değiştirilmiş
 
 # Said when the person's account picture was not put back; the reason follows.
 # SAFETY: needs a human review before it ships
-store-refusal-picture-only = Geri konuldu, hesap resminiz hariç. { $why }
+store-refusal-picture-only = Hesap resminiz hariç her şey geri konuldu. { $why }
 
 # Said when something else failed and the account picture was not put back either.
 # SAFETY: needs a human review before it ships
-store-refusal-picture-too = { $words } Hesap resminiz de geri konmadı. { $why }
+store-refusal-picture-too = { $words } Trindle hesap resminizi de geri koymadı. { $why }
 
 # Said when the pkexec program could not be started.
-store-refusal-pkexec = pkexec başlatılamadı: { $why }
+store-refusal-pkexec = Parola istenemedi: { $why }
 
 # Said when the backup could not be read at all.
-store-refusal-not-read-from = Yedekten okunamadı: { $why }.
+store-refusal-not-read-from = Trindle bunu yedekten okuyamadı: { $why }.
 
 # Said when a backup was not made; the reason follows "because".
-store-backup-not-made = Yedek alınmadı, çünkü { $why }.
+store-backup-not-made = Trindle yedeği almadı, çünkü { $why }.
 
 # Beside the size of a part of the backup that is not there yet.
 store-backup-nothing-yet = henüz yok
@@ -102,36 +99,23 @@ store-backup-nothing-yet = henüz yok
 store-backup-about = yaklaşık { $size }
 
 # Step shown while Trindle's own settings and AppImages are put back.
-store-backup-step-trindle = Trindle ayarları ve AppImage dosyaları geri konuluyor...
-
-# Step shown while the settings and data are put back.
-store-backup-step-data = Ayarlar ve veriler geri konuluyor...
-
-# Step shown while apps are installed from Flathub.
-store-backup-step-installing =
-    { $count ->
-        [one] Flathub'dan { $count } uygulama kuruluyor... bu biraz sürebilir.
-       *[other] Flathub'dan { $count } uygulama kuruluyor... bu biraz sürebilir.
-    }
+store-backup-step-trindle = Trindle ayarları ve AppImage dosyaları geri konuluyor…
 
 # Said after a restore when some apps could not be installed because Flatpak refused them.
-store-not-installed-failed = Ayarlar ve veriler geri konuldu, ama şu uygulamalar kurulmadı, çünkü Flatpak bunları reddetti: { $failed }.
-
-# The same, when other apps were also left out for another reason.
-store-not-installed-both = Ayarlar ve veriler geri konuldu, ama şu uygulamalar kurulmadı, çünkü Flatpak bunları reddetti: { $failed }. Kurulmayanlar ayrıca: { $refused }.
+store-not-installed-failed = Trindle ayarlarınızı ve verilerinizi geri koydu, ama Flatpak şu uygulamaları kurmadı: { $failed }.
 
 # Said after a restore when some apps were left out before Flatpak was asked.
-store-not-installed-refused = Ayarlar ve veriler geri konuldu, ama şu uygulamalar kurulmadı: { $refused }.
+store-not-installed-refused = Trindle ayarlarınızı ve verilerinizi geri koydu, ama şu uygulamaları kurmadı: { $refused }.
 
 # Said among what could not be done, when some apps were skipped because their names were not valid.
 store-flat-skipped =
     { $n ->
-        [one] 1 uygulama atlandı: adı geçerli değildi.
-       *[other] { $n } uygulama atlandı: adları geçerli değildi.
+        [one] Trindle 1 uygulamayı atladı, çünkü adı geçerli değildi.
+       *[other] Trindle { $n } uygulamayı atladı, çünkü adları geçerli değildi.
     }
 
 # Said beside an app whose source is not secure: the source's name is given.
-store-flat-not-secure = { $name } kaynağı şifreli değil ve kabul edilmedi, bu yüzden kullanılmadı
+store-flat-not-secure = { $name } kaynağı şifreli değil, bu yüzden Trindle onu kullanmadı
 
 # Said when a source is not on this computer and the backup does not say where it is.
 store-flat-no-address = { $name } kaynağı bu bilgisayarda yok ve yedek nerede olduğunu söylemiyor
@@ -146,14 +130,14 @@ store-flat-source-name = { $name } (çünkü kaynağının adı geçerli değil)
 store-flat-failed-because = { $what } (çünkü { $why })
 
 # Said among what could not be done: the app Flatpak refused.
-store-flat-flatpak-refused = { $name } (çünkü Flatpak onu reddetti: { $why })
+store-flat-flatpak-refused = { $name } (Flatpak kuramadı: { $why })
 
 # Said among what could not be done when there was nowhere to unpack the backup.
 store-flat-nowhere = her şey (çünkü yedeği açacak bir yer yok)
 
 # Said among what could not be done: the settings that apply to every app.
 # SAFETY: needs a human review before it ships
-store-flat-every-app = her uygulamaya verilen izinler
+store-flat-every-app = her uygulamanın izinleri
 
 # Said among what could not be done: one app's settings.
 store-flat-app-settings = { $name } ayarları
@@ -162,10 +146,10 @@ store-flat-app-settings = { $name } ayarları
 store-flat-kept-as = { $why }. Önceden orada olan { $path } olarak saklandı: { $error }
 
 # Step shown for each app being installed, with its place in the list.
-store-flat-step-installing = { $name } kuruluyor ({ $at }/{ $total })...
+store-flat-step-installing = { $name } kuruluyor ({ $at }/{ $total })…
 
 # Step shown for each app's settings being put back, with its place in the list.
-store-flat-step-settings = { $name } ayarları geri konuluyor ({ $at }/{ $total })...
+store-flat-step-settings = { $name } ayarları geri konuluyor ({ $at }/{ $total })…
 
 # Summary of a restore from a Flat backup: how many apps were installed.
 store-flat-summary-installed =
@@ -175,21 +159,21 @@ store-flat-summary-installed =
     }
 
 # Summary of a restore: how many apps had their settings put back.
-store-flat-summary-settings = { $n } uygulamanın ayarları geri konuldu.
+store-flat-summary-settings =
+    { $n ->
+        [one] Bir uygulamanın ayarları geri konuldu.
+       *[other] { $n } uygulamanın ayarları geri konuldu.
+    }
 
 # Summary of a restore: how many apps were already installed and left alone.
 store-flat-summary-already =
     { $n ->
-        [one] { $n } tanesi zaten vardı, olduğu gibi bırakıldı.
-       *[other] { $n } tanesi zaten vardı, olduğu gibi bırakıldı.
+        [one] { $n } uygulama zaten kuruluydu.
+       *[other] { $n } uygulama zaten kuruluydu.
     }
 
 # Summary of a restore: what could not be put back, as a list.
-store-flat-summary-failed = Geri konmayanlar: { $list }
+store-flat-summary-failed = Dışarıda kalanlar: { $list }
 
-# Name of Flat's backup program, which Trindle reads backups from.
-store-flat-name = Trindle Flat
-
-# Said among the apps that were not installed: the app and why.
-store-backup-app-why = { $id } ({ $why })
-
+# Said among what could not be done when a backup's permissions asked for more than the app had: only ones that take access away are put back.
+store-flat-grants-left-out = { $what }: Trindle yalnızca erişimi kaldıran izinleri geri koydu.

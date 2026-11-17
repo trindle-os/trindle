@@ -4,10 +4,10 @@
 
 use std::time::Duration;
 
-use crate::common::cups::{explain, is_job_id, parse_default, parse_jobs, parse_printers, Printer, Queued};
-use crate::common::run::{capture, have};
-use crate::settings::panels::network::banded;
-use crate::settings::ui::{confirm, group, headline, line, on, page, Kit, Msg, Page};
+use crate::common::cups::{explain, is_job_id, parse_jobs, read_printers, run_blocking, Listing, Printer, Queued, WAKE};
+use crate::common::run::{capture, have, on_thread};
+use crate::toolkit::widget::banded_list;
+use crate::settings::ui::{confirm, group, headline, line, on, own_or_why, page, Kit, Msg, Page};
 use crate::toolkit::t;
 use crate::toolkit::widget::{button, entry, note, row, Length, Node, Tone};
 
@@ -114,8 +114,13 @@ fn queue_name(uri: &str) -> String {
     if name.is_empty() { "Printer".to_string() } else { name }
 }
 
-fn fail(ok: bool, err: &str) -> Option<String> {
-    (!ok).then(|| explain(err))
+fn fail(ok: bool, err: &str, could_not: &str) -> Option<String> {
+    (!ok).then(|| plain(err, could_not))
+}
+
+fn plain(err: &str, could_not: &str) -> String {
+    own_or_why(&explain(err), &[t!("printers-not-allowed"), t!("printers-refused"), t!("printers-unreachable"),
+                                t!("settings-printers-lpstat-failed"), t!("printers-bad-name"), t!("printers-not-installed")], could_not)
 }
 
 fn sum_up(printers: &[Printer], default: Option<&str>) -> (String, Tone) {
@@ -174,6 +179,8 @@ pub struct Printers {
 
 const WATCH_SECS: u32 = 3;
 
+const RETRY_SECS: u32 = 10;
+
 const JOBS: &str = "printers:jobs";
 
 fn job_key(id: &str) -> String {
@@ -182,17 +189,28 @@ fn job_key(id: &str) -> String {
 
 impl Printers {
     fn refresh(&mut self, kit: &mut Kit) {
-        run(kit, &["lpstat", "-p", "-d"], |me, k, ok, out, err| me.got(k, ok, &out, &err));
+        let back = kit.then::<Printers, Listing>(|me, k, listing| me.got(k, listing));
+        on_thread(
+            || read_printers(run_blocking, || std::thread::sleep(WAKE)),
+            back,
+        );
     }
 
     fn refresh_jobs(&mut self, kit: &mut Kit) {
         self.waited = 0;
-        run(kit, &["lpstat", "-o"], |me, _k, ok, out, _err| {
-            if ok {
-                me.jobs = parse_jobs(&out);
-                me.jobs_read = true;
-            }
-        });
+
+        let back = kit.then_if::<Printers, (bool, String)>(|me, _, (ok, out)| me.got_jobs(ok, &out));
+        capture(&["lpstat", "-o"], None, move |ok, out, _| back((ok, out)));
+    }
+
+    fn got_jobs(&mut self, ok: bool, out: &str) -> bool {
+        if !ok {
+            return false;
+        }
+        let jobs = parse_jobs(out);
+        let news = !self.jobs_read || jobs != self.jobs;
+        (self.jobs, self.jobs_read) = (jobs, true);
+        news
     }
 
     fn cancel(&mut self, kit: &mut Kit, id: &str) {
@@ -202,24 +220,30 @@ impl Printers {
             return;
         }
         run(kit, &["cancel", id], move |me, k, ok, _o, e| {
-            k.done(&key, fail(ok, &e).as_deref(), t!("settings-printers-cancelled"));
+            k.done(&key, fail(ok, &e, t!("settings-printers-not-cancelled")).as_deref(), t!("settings-printers-cancelled"));
             me.refresh_jobs(k);
         });
     }
 
-    fn got(&mut self, kit: &mut Kit, ok: bool, out: &str, err: &str) {
+    fn got(&mut self, kit: &mut Kit, listing: Listing) {
         self.read = true;
-        if !ok && !err.contains("No destinations") && !err.to_lowercase().contains("no system default") {
-            let e = err.trim();
-            self.broken = Some(e.to_string());
-            kit.say(CUPS, if e.is_empty() { t!("settings-printers-lpstat-failed") } else { e }, false, false);
-            return;
-        }
+        let (printers, default) = match listing {
+            Listing::Unreachable(why) => {
+                let why = plain(&why, t!("settings-printers-not-read"));
+                kit.say(CUPS, &why, false, false);
+                self.broken = Some(why);
+                return;
+            }
+            Listing::Ready { printers, default } => (printers, default),
+        };
         self.broken = None;
-        self.printers = parse_printers(out);
-        self.default = parse_default(out);
+        self.printers = printers;
+        self.default = default;
         self.refresh_jobs(kit);
-        self.search(kit);
+
+        if !self.searched {
+            self.search(kit);
+        }
     }
 
     fn known(&self, name: &str) -> bool {
@@ -275,20 +299,20 @@ impl Printers {
     fn make_default(&mut self, kit: &mut Kit, name: &str) {
         let key = printer_key(name);
         run(kit, &["lpoptions", "-d", name], move |me, k, ok, _o, e| {
-            k.done(&key, fail(ok, &e).as_deref(), t!("settings-printers-default-now"));
+            k.done(&key, fail(ok, &e, t!("settings-printers-not-default")).as_deref(), t!("settings-printers-default-now"));
             me.refresh(k);
         });
     }
 
     fn test_page(&mut self, kit: &mut Kit, name: &str) {
         let key = printer_key(name);
-        run(kit, &["lp", "-d", name, TEST_PAGE], move |_, k, ok, _o, e| k.done(&key, fail(ok, &e).as_deref(), t!("settings-printers-sent")));
+        run(kit, &["lp", "-d", name, TEST_PAGE], move |_, k, ok, _o, e| k.done(&key, fail(ok, &e, t!("settings-printers-not-sent")).as_deref(), t!("settings-printers-sent")));
     }
 
     fn remove(&mut self, kit: &mut Kit, name: &str) {
         let key = printer_key(name);
         run(kit, &["lpadmin", "-x", name], move |me, k, ok, _o, e| {
-            k.done(&key, fail(ok, &e).as_deref(), t!("settings-printers-removed"));
+            k.done(&key, fail(ok, &e, t!("settings-printers-not-removed")).as_deref(), t!("settings-printers-removed"));
             if ok {
                 me.refresh(k);
             }
@@ -313,11 +337,11 @@ impl Printers {
                 return;
             }
             let Some(fallback) = fallback else {
-                k.done(ADDRESS, Some(&explain(&e)), t!("settings-printers-added"));
+                k.done(ADDRESS, Some(&plain(&e, t!("settings-printers-not-added"))), t!("settings-printers-added"));
                 return;
             };
             run(k, &["lpadmin", "-p", &name2, "-E", "-v", &fallback, "-m", "everywhere"], move |me, k, ok, _o, e| {
-                k.done(ADDRESS, if ok { None } else { Some(explain(&e)) }.as_deref(), t!("settings-printers-added"));
+                k.done(ADDRESS, fail(ok, &e, t!("settings-printers-not-added")).as_deref(), t!("settings-printers-added"));
                 if ok {
                     me.refresh(k);
                 }
@@ -340,7 +364,7 @@ impl Printers {
         run(kit, &["timeout", "30", "lpinfo", "-m"], move |_, k, _ok, out, _e| {
             let driver = best_driver(&out, &model).unwrap_or_else(|| "everywhere".into());
             run(k, &["lpadmin", "-p", &name, "-E", "-v", &uri, "-m", &driver], move |me, k, ok, _o, e| {
-                k.done(&key, if ok { None } else { Some(explain(&e)) }.as_deref(), t!("settings-printers-added"));
+                k.done(&key, fail(ok, &e, t!("settings-printers-not-added")).as_deref(), t!("settings-printers-added"));
                 if ok {
                     me.refresh(k);
                 }
@@ -352,7 +376,7 @@ impl Printers {
         kit.say(key, t!("settings-printers-adding"), true, true);
         let key = key.to_string();
         run(kit, &["lpadmin", "-p", name, "-E", "-v", uri, "-m", "everywhere"], move |me, k, ok, _o, e| {
-            k.done(&key, if ok { None } else { Some(explain(&e)) }.as_deref(), t!("settings-printers-added"));
+            k.done(&key, fail(ok, &e, t!("settings-printers-not-added")).as_deref(), t!("settings-printers-added"));
             if ok {
                 me.refresh(k);
             }
@@ -363,11 +387,11 @@ impl Printers {
         let rows = if self.broken.is_some() {
             vec![line(t!("settings-printers-cups-silent")).sub(t!("settings-printers-queue-unreadable")).key(JOBS).node(kit)]
         } else if !self.jobs_read {
-            vec![line(t!("settings-printers-looking")).sub(t!("settings-printers-queue")).key(JOBS).node(kit)]
+            vec![line(t!("settings-printers-looking")).key(JOBS).node(kit)]
         } else if self.jobs.is_empty() {
-            vec![line(t!("settings-printers-nothing-waiting")).sub(t!("settings-printers-nothing-waiting-sub")).key(JOBS).node(kit)]
+            vec![line(t!("settings-printers-nothing-waiting")).key(JOBS).node(kit)]
         } else {
-            banded(self.jobs.iter().map(|j| {
+            banded_list(self.jobs.iter().map(|j| {
                 let id = j.id.clone();
                 line(t!("settings-printers-job", number = j.id.rsplit_once('-').map_or("", |(_, n)| n), printer = &j.printer))
                     .sub(t!("settings-printers-job-sub", user = &j.user, size = crate::common::volumes::size_words(j.bytes), when = &j.when))
@@ -409,7 +433,7 @@ impl Printers {
         l = l.control(button("document-print-symbolic", t!("settings-printers-test-page"))
             .on_press(on::<Printers>(move |me, k| me.test_page(k, &n))));
         let n = p.name.clone();
-        l = l.control(confirm::<Printers>(kit, &key, "user-trash-symbolic", t!("settings-printers-remove"),
+        l = l.control(confirm::<Printers>(&key, "user-trash-symbolic", t!("settings-printers-remove"),
                                           move |me, k| me.remove(k, &n)));
         l.node(kit)
     }
@@ -434,12 +458,12 @@ impl Printers {
                         .on_press(on::<Printers>(move |me, k| me.add_found(k, &p, &name))))
                     .node(kit));
             }
-            rows.extend(banded(lines));
+            rows.extend(banded_list(lines));
             if rows.is_empty() {
-                rows.push(line(t!("settings-printers-nothing-new")).sub(t!("settings-printers-nothing-new-sub")).node(kit));
+                rows.push(line(t!("settings-printers-nothing-new")).node(kit));
             }
         } else {
-            let mut wait = line(t!("settings-printers-looking")).sub(t!("settings-printers-looking-sub"));
+            let mut wait = line(t!("settings-printers-looking"));
             if let Some(d) = kit.dials.get(SEARCH) {
                 wait = wait.control(row(vec![d.node(), note(d.words()).tone(d.tone())]).gap(8.0).width(Length::Shrink));
             }
@@ -451,7 +475,6 @@ impl Printers {
             .on_submit(on::<Printers>(|me, k| me.add_typed(k)));
         let add = button("list-add-symbolic", t!("settings-printers-add-it")).on_press(on::<Printers>(|me, k| me.add_typed(k)));
         rows.push(line(t!("settings-printers-by-address"))
-            .sub(t!("settings-printers-by-address-sub"))
             .key(ADDRESS)
             .below(row(vec![typing, add]).gap(8.0).width(Length::Fill))
             .node(kit));
@@ -489,13 +512,13 @@ impl Page for Printers {
         } else {
             sum_up(&self.printers, self.default.as_deref())
         };
-        let mut items = vec![headline(kit, words)];
+        let mut items = vec![headline(words)];
         if !self.installed {
             items.push(group(t!("settings-printers-printing")).icon("printer-symbolic")
                 .about(t!("settings-printers-printing-about"))
                 .rows(vec![
                     line(t!("settings-printers-unavailable")).sub(t!("settings-printers-install-cups")).node(kit),
-                    line(t!("settings-printers-then-found")).sub(t!("settings-printers-then-found-sub")).node(kit),
+                    line(t!("settings-printers-then-found")).node(kit),
                 ])
                 .node(kit));
             return page(kit, self.title(), self.help(), items);
@@ -504,9 +527,9 @@ impl Page for Printers {
         let rows = if self.broken.is_some() {
             vec![line(t!("settings-printers-cups-silent")).sub(t!("settings-printers-service")).key(CUPS).node(kit)]
         } else if self.printers.is_empty() {
-            vec![line(t!("settings-printers-none")).sub(t!("settings-printers-none-sub")).node(kit)]
+            vec![line(t!("settings-printers-none")).node(kit)]
         } else {
-            banded(self.printers.iter().map(|p| self.printer_line(kit, p)).collect())
+            banded_list(self.printers.iter().map(|p| self.printer_line(kit, p)).collect())
         };
         items.push(group(t!("settings-printers-card")).icon("printer-symbolic")
             .about(t!("settings-printers-card-about"))
@@ -520,15 +543,23 @@ impl Page for Printers {
     }
     fn shown(&mut self, kit: &mut Kit) {
         self.installed = have("lpstat");
+        self.searched = false;
         if self.installed {
             self.refresh(kit);
         }
     }
     fn second(&mut self, kit: &mut Kit) -> bool {
-        if !self.installed || !self.read || self.broken.is_some() {
+        if !self.installed || !self.read {
             return false;
         }
         self.waited += 1;
+        if self.broken.is_some() {
+            if self.waited >= RETRY_SECS {
+                self.waited = 0;
+                self.refresh(kit);
+            }
+            return false;
+        }
         if self.waited >= WATCH_SECS {
             self.refresh_jobs(kit);
         }
@@ -561,7 +592,71 @@ impl Printers {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn a_printing_failure_is_said_in_the_pages_own_words() {
+        assert_eq!(super::plain("lpadmin: Unable to connect to server", t!("settings-printers-not-added")), t!("settings-printers-not-added"));
+        assert_eq!(super::plain("lp: Forbidden", t!("settings-printers-not-sent")), t!("printers-not-allowed"));
+        assert_eq!(super::fail(true, "lpadmin: odd", t!("settings-printers-not-removed")), None);
+    }
+
+    #[test]
+    fn no_line_under_a_printers_control_explains_it() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let kit = Kit::new(events, asks, None, None);
+        let said = { let p = Printers::made_up(); let mut s = p.view(&kit).said(); s.extend(Printers { jobs: Vec::new(), ..Printers::made_up() }.view(&kit).said()); s }.join("|");
+        for old in [
+            "Jobs show here while they print.",
+            "Is it on, and on the same network?",
+            "Ones that announce themselves first, then each device.",
+            "Such as 192.168.1.50, from its screen.",
+            "Trindle finds them on your network.",
+            "Add a printer.",
+            "The queue",
+        ] {
+            assert!(!said.contains(old), "{old} is still on the page");
+        }
+    }
     use super::*;
+
+    #[test]
+    fn the_same_queue_again_is_no_news() {
+        let mut page = Printers::default();
+        let queue = "Office-12   john   1024   Sat 18 Oct 2026 10:00:00 AM BST\n";
+        assert!(page.got_jobs(true, queue), "the first look is news");
+        assert!(!page.got_jobs(true, queue), "an unchanged queue was drawn again");
+        assert!(page.got_jobs(true, ""), "the job finished");
+        assert!(!page.got_jobs(false, ""), "a failed look changes nothing");
+    }
+
+    #[test]
+    fn a_change_to_the_printers_does_not_search_the_network_again() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let mut kit = Kit::new(events, asks, None, None);
+        let mut page = Printers::made_up();
+        assert!(page.searched && page.found.is_some());
+        let office = crate::common::cups::parse_printers("printer Office is idle.  enabled since Sat\n");
+        page.got(&mut kit, Listing::Ready { printers: office, default: None });
+        assert!(page.found.is_some(), "the found list was emptied by a change that is not a showing");
+        assert_eq!(page.round, 0, "a new search was started");
+    }
+
+    #[test]
+    fn a_service_that_comes_back_clears_the_fault() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let mut kit = Kit::new(events, asks, None, None);
+        let mut page = Printers::made_up();
+        page.got(&mut kit, Listing::Unreachable("down".into()));
+        assert!(page.broken.is_some());
+        page.waited = RETRY_SECS - 1;
+        page.second(&mut kit);
+        assert_eq!(page.waited, 0, "no new read was started");
+        page.got(&mut kit, Listing::Ready { printers: vec![], default: None });
+        assert!(page.broken.is_none());
+    }
 
     fn printer(name: &str, state: &str, disabled: bool) -> Printer {
         Printer { name: name.into(), state: state.into(), disabled }
@@ -595,7 +690,7 @@ mod tests {
             let ready = [printer("Office", "idle", false)];
             assert_eq!(sum_up(&ready, Some("Office")).0, "Prêt à imprimer sur Office.");
             assert_eq!((Paper::Letter.label(), Paper::A4.label()), ("Lettre", "A4"));
-            assert_eq!(sum_up(&[], None).0, "No printers yet. Any found on your network are listed below.");
+            assert_eq!(sum_up(&[], None).0, "No printers yet. Any that Trindle finds on your network are listed below.");
         });
     }
 }

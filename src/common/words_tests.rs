@@ -21,9 +21,9 @@ fn the_program_gives_the_toolkit_its_english_words() {
     assert!(english.get("report-send").is_some() && english.get("kit-copy").is_some());
 }
 
-const CONVERTED: [&str; 74] = ["report", "controller", "corner", "dns", "settings/panels/games.rs", "settings/panels/games", "settings/panels/pads.rs", "settings/panels/outside_card.rs", "settings/session_env.rs", "settings/pad_picture.rs", "settings/wordsheet.rs", "settings/wordsheet", "settings/ui", "settings/window.rs", "settings/command_line.rs", "settings/panels/network", "settings/panels/wallpaper", "settings/panels/appearance", "settings/panels/keyboard", "unlock", "greeter", "ring", "installer", "welcome", "screenshot", "store", "settings/panels/network.rs",
+const CONVERTED: [&str; 85] = ["common/keyfile.rs", "common/screen_scale.rs", "report", "controller", "corner", "dns", "settings/panels/games.rs", "settings/panels/games", "settings/panels/pads.rs", "settings/panels/outside_card.rs", "settings/session_env.rs", "settings/pad_picture.rs", "settings/wordsheet.rs", "settings/wordsheet", "settings/ui", "settings/window.rs", "settings/command_line.rs", "settings/panels/network", "settings/panels/wallpaper", "settings/panels/appearance", "settings/panels/keyboard", "unlock", "greeter", "ring", "installer", "screenshot", "store", "settings/panels/network.rs",
     "settings/panels/bluetooth.rs", "settings/panels/tailscale.rs", "settings/panels/printers.rs", "settings/panels/blocking.rs",
-    "common/cups.rs", "common/dns.rs", "keyring", "voice", "mcp", "session", "polkit", "admin", "disks", "compose", "plugins", "settings/ui.rs", "settings/pictures.rs", "settings/panels/users.rs", "settings/panels/permissions.rs", "settings/panels/plugin_rows.rs", "settings/panels/ai_programs.rs", "settings/panels/crash_reports.rs", "settings/panels/snapshots.rs", "settings/panels/region.rs", "settings/panels/datetime.rs", "settings/panels/plugins.rs", "activity", "text", "thunder", "usbretry", "icons", "settings/panels/display.rs", "settings/panels/wallpaper.rs", "settings/panels/appearance.rs", "settings/panels/audio.rs", "settings/panels/sounds.rs", "settings/panels/power.rs", "settings/panels/keyboard.rs", "settings/panels/ring.rs", "settings/panels/startup.rs", "settings/panels/default_apps.rs", "settings/mod.rs", "settings/help_topics.rs", "settings/panels/help.rs", "settings/panels/about.rs", "settings/panels/thanks.rs", "settings/panels/mod.rs"];
+    "common/cups.rs", "common/dns.rs", "common/home_snapshots.rs", "common/firewall.rs", "common/apps.rs", "common/drive_leave.rs", "common/hidden_drives.rs", "common/capture.rs", "common/screen_reader.rs", "common/sharing.rs", "common/volumes.rs", "common/ring_said.rs", "common/themes.rs", "keyring", "voice", "mcp", "session", "polkit", "admin", "disks", "compose", "plugins", "settings/ui.rs", "settings/pictures.rs", "settings/panels/users.rs", "settings/panels/permissions.rs", "settings/panels/plugin_rows.rs", "settings/panels/ai_programs.rs", "settings/panels/snapshots.rs", "settings/panels/region.rs", "settings/panels/datetime.rs", "settings/panels/plugins.rs", "activity", "text", "thunder", "usbretry", "icons", "settings/panels/display.rs", "settings/panels/wallpaper.rs", "settings/panels/appearance.rs", "settings/panels/audio.rs", "settings/panels/sounds.rs", "settings/panels/power.rs", "settings/panels/keyboard.rs", "settings/panels/ring.rs", "settings/panels/startup.rs", "settings/panels/default_apps.rs", "settings/mod.rs", "settings/help_topics.rs", "settings/panels/help.rs", "settings/panels/about.rs", "settings/panels/thanks.rs", "settings/panels/mod.rs"];
 
 const NOT_WORDS_BLUETOOTH: [&str; 5] = ["No row for this device", "Not supported", "That is not a number", "No PIN was given", "Numbers did not match"];
 
@@ -36,21 +36,23 @@ const SHOWING: [&str; 21] = [
 
 const NOT_WORDS_FONTS: [&str; 5] = ["DejaVu Sans Mono", "Noto Sans Mono", "Liberation Mono", "Fira Mono", "Source Code Pro"];
 
-const NOT_WORDS_COMPOSE: [&str; 15] = ["A made-up mouse and keyboard", "Upside Down", "Left Side Up", "Right Side Up", "WAYLAND_DISPLAY", "WAYLAND_SOCKET",
+const NOT_WORDS_COMPOSE: [&str; 16] = ["A made-up mouse and keyboard", "Upside Down", "Left Side Up", "Right Side Up", "WAYLAND_DISPLAY", "WAYLAND_SOCKET",
     "Common key action handler encountered backend specific action {:?}", "Failed to request current wayland primary selection for Xwayland",
     "Failed to open device using libseat: {0}", "Failed to initialize drm device: {0}", "Failed to initialize gbm device: {0}",
-    "Failed to access drm node: {0}", "Failed to add device to GpuManager: {0}", "Primary GPU is missing",
+    "Failed to access drm node: {0}", "Failed to add device to GpuManager: {0}", "Primary GPU is missing", "Failed to watch the card for vblanks: {0}",
     "Flip refused ({} in a row), starting the screen over: {}"];
 
-const NOT_WORDS: [&str; 11] = [
+const NOT_WORDS: [&str; 12] = [
     "Pocketkey is switched off",
     "Closed", "Refused", "Trindle", "handed over", "The app {name} ({program}) crashed: {what}",
     "AuthenticationFailed", "Rejected", "Canceled", "Secrets were required",
 
     "No such file",
+
+    "Remv ",
 ];
 
-const NOT_WORDS_LATE: [&str; 6] = ["Stack trace of", "Command Line:", "PRI * HTTP/2.0\\r\\n\\r\\nSM\\r\\n\\r\\n", "Key ", "Trindle word sheet", "Closed"];
+const NOT_WORDS_LATE: [&str; 10] = ["Module ", "Default Applications", "Added Associations", "Authentication is required to ", "Stack trace of", "Command Line:", "PRI * HTTP/2.0\\r\\n\\r\\nSM\\r\\n\\r\\n", "Key ", "Trindle word sheet", "Closed"];
 
 const NOT_WORDS_SMALL_PROGRAMS: [&str; 49] = [
     "org.freedesktop.DBus.Error.InvalidArgs", "org.freedesktop.DBus.Error.UnknownMethod", "org.freedesktop.portal.Error.NotFound",
@@ -100,7 +102,7 @@ const NOT_WORDS_FILES: [&str; 22] = [
     "Trindle Folders",
 ];
 
-const NOT_WORDS_STORE: [&str; 27] = [
+const NOT_WORDS_STORE: [&str; 29] = [
     "Another request is waiting for you to answer it.", "You did not allow this.", "It could not be started outside the fence.",
     "Give the full path of the folder.", "You did not share it.", "Shared. It is there the next time this program starts.",
     "Name the computer to reach.", "That is not a computer name ssh may reach from the fence.", "Name a command to run.",
@@ -110,9 +112,11 @@ const NOT_WORDS_STORE: [&str; 27] = [
     "GitHub key for Apps", "Reverse Provides:", "DISPLAY", "Exiting with failure status", "Permission denied",
     "No space left on device", "Read-only file system", "Disk quota exceeded", "No such file or directory", "Content-Type: application/json",
     "Content-Type: text/plain", "Icon", "No current mask", "The following packages have been kept back",
+    "Session Bus Policy", "System Bus Policy",
 ];
 
-const NOT_WORDS_KEYRING_MCP: [&str; 80] = [
+const NOT_WORDS_KEYRING_MCP: [&str; 81] = [
+    "The keyring is busy with another password",
     "something was under way for too long", "the bus's queue for the name was not this keyring and then the new one",
     "the bus did not let the name go", "the new keyring said something else", "the new keyring went before it was queued",
     "The property was not changed", "Deleted", "Created", "The keyring is locked", "No such object",
@@ -212,6 +216,154 @@ fn a_key_or_name(s: &str) -> bool {
     !s.chars().any(|c| c.is_ascii_uppercase() || c == ' ') && s.chars().all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || "_-.:/@%{}=#".contains(c))
 }
 
+const NOT_PEOPLE_FILES: &[(&str, &str)] = &[
+    ("compose/protocols/", "Wayland protocol errors, read by the program that asked"),
+    ("keyring/service", "Secret Service D-Bus errors, read by the program that asked"),
+    ("keyring/pam.rs", "errors written to the login log"),
+    ("keyring/migrate.rs", "errors written to the log"),
+    ("keyring/store.rs", "errors handed to the keyring service, which answers programs"),
+    ("screenshot/portal_", "desktop portal D-Bus errors, read by the program that asked"),
+    ("screenshot/pw/", "errors handed back to the program that asked for the stream"),
+    ("screenshot/mod.rs", "the name of a picture file, a file name and not a sentence"),
+    ("polkit/", "polkit agent D-Bus errors, read by the program that asked"),
+    ("mcp/", "answers to an AI program over MCP, which no person reads"),
+    ("store/fence", "answers to an AI program through the fence, which no person reads"),
+    ("store/copied_guard.rs", "refusals inside the fence's copy guard, read by the fence"),
+    ("store/home_net", "lines the net-keeper prints to its log; the person reads the store-boxed-home-why keys"),
+    ("store/put_back.rs", "an error inside the put-back step, logged"),
+    ("store/reason.rs", "words matched in what Flatpak said"),
+    ("session/idle.rs", "log lines of the idle watcher"),
+    ("session/start.rs", "lines of the session log"),
+    ("session/brightness.rs", "log lines"),
+    ("session/wsdd/", "network protocol text between computers"),
+    ("compose/udev/", "the compositor's log lines about screens and frames"),
+    ("compose/drm_extras/", "the compositor's log lines"),
+    ("compose/rig/", "the compositor's test rig"),
+    ("compose/own_ring/ended.rs", "how the ring ended, written to the log"),
+    ("compose/xrooms.rs", "errors written to the compositor's log"),
+    ("compose/game_pads.rs", "a Debug line for the log"),
+    ("compose/winit.rs", "errors for the compositor's test window"),
+    ("controller/uinput.rs", "an error written to the log"),
+    ("dns/", "lines the background list refresh and the resolver print to their log"),
+    ("text/pdf.rs", "PDF file syntax"),
+    ("voice/commands.rs", "phrases the person says, matched against what they spoke"),
+    ("ring/crashes.rs", "the hand-over text for an AI program, which Trindle's ring sends on"),
+    ("ring/kept.rs", "a guard that reads the ring's own source"),
+    ("ring/mod.rs", "the usage line of a command"),
+    ("report/probe.rs", "the body of a bug report, English for the people who read it"),
+    ("report/which.rs", "the body of a bug report, English for the people who read it"),
+    ("plugins/catalogue/publisher.rs", "output of the catalogue maker's tool, for the person publishing"),
+    ("plugins/shortcuts.rs", "section names and XML written into files"),
+    ("plugins/menu.rs", "section names written into files"),
+    ("plugins/manifest.rs", "section names written into files"),
+    ("installer/steps.rs", "lines written into the installed system's files"),
+    ("icons/mod.rs", "the icon maker's own output and the theme file it writes"),
+    ("settings/wordsheet", "the word sheet's own column names"),
+    ("settings/panels/about.rs", "the name of the operating system, as the system gives it"),
+    ("admin/kept.rs", "a guard whose fixtures are made-up source lines"),
+    ("admin/stand_in.rs", "a stand-in used only in tests"),
+];
+
+const NOT_BUILT: &[&str] = &[
+
+    "not a package's name",
+
+    "screen {} {}",
+
+    "circle-{:?}",
+
+    "{sub} {}",
+];
+
+const NOT_PEOPLE_TEXT: &[(&str, &str)] = &[
+    ("usage: trindle-admin", "the helper's usage line, read by the program that ran it"),
+    ("# ", "a comment written into a file"),
+    ("table inet", "firewall rules handed to nft"),
+    ("nameserver ", "a resolv.conf line"),
+    ("Exec=", "a launcher file line"),
+    ("version: ", "the word sheet's own header"),
+    ("UUID=", "a line written into fstab"),
+];
+
+fn not_for_people(at: &str, lit: &str) -> bool {
+    NOT_PEOPLE_FILES.iter().any(|(f, _)| at.starts_with(f)) || NOT_PEOPLE_TEXT.iter().any(|(t, _)| lit.starts_with(t)) || NOT_BUILT.contains(&lit)
+}
+
+fn machine_line(line: &str) -> bool {
+    [".arg(", ".args(", "Command::new", "env::var", "include_str!", "#[", "b\""].iter().any(|m| line.contains(m))
+}
+
+fn built_sentence(lit: &str) -> bool {
+    let mut bare = String::new();
+    let mut hole = false;
+    for c in lit.chars() {
+        match c {
+            '{' => hole = true,
+            '}' => hole = false,
+            _ if !hole => bare.push(c),
+            _ => {}
+        }
+    }
+    let words = bare.split_whitespace().filter(|w| {
+        let w = w.trim_matches(|c: char| ".,:;!?()'\"".contains(c));
+        w.len() >= 2 && w.chars().all(|c| c.is_ascii_alphabetic() || c == '\'')
+    });
+    words.count() >= 2 && lit.chars().any(|c| c.is_ascii_lowercase())
+}
+
+fn strip_keys(line: &str) -> String {
+    let mut out = line.to_string();
+    let mut from = 0;
+    while let Some(found) = out[from..].find("t!(\"") {
+        let a = from + found;
+        if out[..a].chars().next_back().is_some_and(|c| c.is_alphanumeric() || c == '_') {
+            from = a + 4;
+            continue;
+        }
+        let end = out[a + 4..].find('"').map_or(out.len(), |e| a + 4 + e + 1);
+        out.replace_range(a + 3..end, "");
+        from = a + 3;
+    }
+    out
+}
+
+fn strip_asked(line: &str) -> String {
+    let mut out = line.to_string();
+    for call in [".contains(", ".starts_with(", ".ends_with(", ".find(", ".strip_prefix(", ".strip_suffix(", ".eq_ignore_ascii_case(", ".split(", ".split_once(", ".replace(", ".trim_start_matches(", ".trim_end_matches(", "== ", "!= "] {
+        let mut from = 0;
+        while let Some(found) = out[from..].find(call) {
+            let at = from + found + call.len();
+            if out[at..].starts_with('"') {
+                let end = out[at + 1..].find('"').map_or(out.len(), |e| at + 1 + e + 1);
+                out.replace_range(at..end, "");
+            }
+            from = at;
+        }
+    }
+    out
+}
+
+fn made(line: &str) -> bool {
+    ["Err(", ".into()", "to_string()", "String::from", "format!", "push_str", "write!", "writeln!", "ok_or", "map_err"].iter().any(|m| line.contains(m))
+}
+
+fn built_in(line: &str) -> Vec<String> {
+    if machine_line(line) {
+        return Vec::new();
+    }
+    literals(&strip_asked(&strip_keys(line))).into_iter().filter(|l| built_sentence(l) && (made(line) || l.contains('{'))).collect()
+}
+
+#[test]
+fn the_guard_catches_a_sentence_built_with_format() {
+    let old = r#"return Err(format!("{name} is not a theme. A theme is one file whose name ends in .css."));"#;
+    assert_eq!(built_in(old).len(), 1, "the old form of common/themes.rs must be caught");
+    assert!(built_in(r#"return Err(t!("common-theme-add-not-css", name = name).to_string());"#).is_empty());
+    assert_eq!(built_in(r#"Some(_) => "two weeks".into(),"#).len(), 1);
+    assert!(built_in(r#"let x = key.get("a_key");"#).is_empty());
+    assert!(built_in(r#"cmd.arg("--panel power");"#).is_empty());
+}
+
 #[test]
 fn nothing_a_converted_program_shows_is_written_inline() {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("src");
@@ -233,19 +385,17 @@ fn nothing_a_converted_program_shows_is_written_inline() {
                 let showing = SHOWING.iter().any(|c| line.contains(c));
                 let at = format!("{}:{}", file.strip_prefix(&root).unwrap().display(), n + 1);
 
-                let mut without_keys = line.to_string();
-                while let Some(a) = without_keys.find("t!(\"") {
-                    let end = without_keys[a + 4..].find('"').map_or(without_keys.len(), |e| a + 4 + e + 1);
-                    without_keys.replace_range(a + 3..end, "");
-                }
+                let without_keys = strip_asked(&strip_keys(line));
                 for lit in literals(&without_keys) {
-                    if NOT_WORDS.contains(&lit.as_str()) || NOT_WORDS_FONTS.contains(&lit.as_str()) || NOT_WORDS_LATE.contains(&lit.as_str()) || NOT_WORDS_SMALL_PROGRAMS.contains(&lit.as_str()) || NOT_WORDS_STORE.contains(&lit.as_str()) || NOT_WORDS_BLUETOOTH.contains(&lit.as_str()) || NOT_WORDS_COMPOSE.contains(&lit.as_str()) || NOT_WORDS_KEYRING_MCP.contains(&lit.as_str()) || NOT_WORDS_SETTINGS.contains(&lit.as_str()) || NOT_WORDS_FILES.contains(&lit.as_str()) || NOT_WORDS_SETTINGS_HELP.contains(&lit.as_str()) || lit.is_empty() {
+                    if not_for_people(&at, &lit) || NOT_WORDS.contains(&lit.as_str()) || NOT_WORDS_FONTS.contains(&lit.as_str()) || NOT_WORDS_LATE.contains(&lit.as_str()) || NOT_WORDS_SMALL_PROGRAMS.contains(&lit.as_str()) || NOT_WORDS_STORE.contains(&lit.as_str()) || NOT_WORDS_BLUETOOTH.contains(&lit.as_str()) || NOT_WORDS_COMPOSE.contains(&lit.as_str()) || NOT_WORDS_KEYRING_MCP.contains(&lit.as_str()) || NOT_WORDS_SETTINGS.contains(&lit.as_str()) || NOT_WORDS_FILES.contains(&lit.as_str()) || NOT_WORDS_SETTINGS_HELP.contains(&lit.as_str()) || lit.is_empty() {
                         continue;
                     }
                     let has_letters = lit.chars().filter(|c| c.is_ascii_alphabetic()).count() >= 2;
                     let sentence = lit.chars().next().is_some_and(|c| c.is_ascii_uppercase()) && lit.contains(' ') && lit.chars().any(|c| c.is_ascii_lowercase());
                     if (showing && has_letters && !a_key_or_name(&lit)) || (sentence && !quiet) {
                         found.push(format!("{at}: {lit}"));
+                    } else if !quiet && built_sentence(&lit) && (made(line) || lit.contains('{')) && !machine_line(line) {
+                        found.push(format!("{at}: built inline: {lit}"));
                     }
                 }
             }
@@ -275,7 +425,7 @@ fn the_people_pages_follow_the_language_and_fall_back_word_by_word() {
     let french = "settings-users-title = Utilisateurs\nsettings-region-count =\n    { $n ->\n        [one] { $n } langue installée.\n       *[other] { $n } langues installées.\n    }\n";
     with_catalogue(Catalogue::new(Bundle::from_text("fr", french), english()), || {
         assert_eq!(crate::toolkit::t!("settings-users-title"), "Utilisateurs");
-        assert_eq!(crate::toolkit::t!("settings-users-help"), "Adding people, changing passwords and deleting accounts need an administrator's password.");
+        assert_eq!(crate::toolkit::t!("settings-users-help"), "You need an administrator's password to add people, change passwords or delete accounts.");
         assert_eq!(crate::toolkit::t!("settings-region-count", n = 1), "1 langue installée.");
         assert_eq!(crate::toolkit::t!("settings-region-count", n = 3), "3 langues installées.");
     });
@@ -325,4 +475,72 @@ fn none_of_the_fifteen_longer_wordings_remains() {
             assert!(!text.contains(words.as_str()), "{} still says \"{words}\"", file.display());
         }
     }
+}
+
+#[test]
+fn the_words_are_installed_where_every_program_looks_for_them() {
+    let script = include_str!("../../tools/system-files.sh");
+    assert!(script.contains("--exclude=./lang"), "the words must not be copied under /usr/lib/trindle/share");
+    assert!(script.contains("\"$dest/usr/share/trindle/lang\""), "the words must be installed to /usr/share/trindle/lang");
+    let looked = crate::toolkit::lang::folders();
+    if std::env::var("XDG_DATA_DIRS").map_or(true, |d| d.is_empty() || d.split(':').any(|p| p == "/usr/share")) {
+        assert!(looked.contains(&PathBuf::from("/usr/share/trindle/lang")), "{looked:?}");
+    }
+}
+
+fn plural_choices_without_one(text: &str) -> Vec<String> {
+    let plural = ["zero", "one", "two", "few", "many", "other"];
+    let (mut key, mut open, mut short): (&str, Vec<Vec<String>>, Vec<String>) = ("", Vec::new(), Vec::new());
+    for line in text.lines() {
+        if let Some((k, _)) = line.split_once(" =").filter(|_| !line.starts_with([' ', '#'])) {
+            key = k;
+            open.clear();
+        }
+        let t = line.trim_start().trim_start_matches('*');
+        if let Some(name) = t.strip_prefix('[').and_then(|r| r.split_once(']')).map(|(n, _)| n) {
+            if let Some(variants) = open.last_mut() {
+                variants.push(name.to_string());
+            }
+        } else if t.starts_with('}') {
+            if let Some(variants) = open.pop() {
+                let numbered = variants.iter().all(|l| plural.contains(&l.as_str()) || l.parse::<i64>().is_ok());
+                if !variants.is_empty() && numbered && !variants.iter().any(|l| l == "one") {
+                    short.push(key.to_string());
+                }
+            }
+        }
+        if line.trim_end().ends_with("->") {
+            open.push(Vec::new());
+        }
+    }
+    short
+}
+
+#[test]
+fn every_english_plural_choice_has_a_one_line() {
+    let dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("share/lang/en");
+    let mut short = Vec::new();
+    for file in std::fs::read_dir(&dir).unwrap().flatten() {
+        let text = std::fs::read_to_string(file.path()).unwrap();
+        short.extend(plural_choices_without_one(&text).into_iter().map(|k| format!("{}: {k}", file.file_name().to_string_lossy())));
+    }
+    assert!(short.is_empty(), "{short:?}");
+}
+
+#[test]
+fn the_plural_check_follows_nested_selects() {
+    let ok = "a = { $n ->\n    [one] one\n   *[other] many\n  }\n";
+    assert!(plural_choices_without_one(ok).is_empty());
+
+    let nested_ok = "b = { $who ->\n    [him] { $n ->\n        [one] x\n       *[other] y\n    }\n   *[other] z\n  }\n";
+    assert!(plural_choices_without_one(nested_ok).is_empty());
+
+    let nested_bad = "c = { $who ->\n    [him] { $n ->\n        [few] x\n       *[other] y\n    }\n   *[her] z\n  }\n";
+    assert_eq!(plural_choices_without_one(nested_bad), ["c"]);
+
+    let named = "d = { $who ->\n    [him] x\n   *[her] y\n  }\n";
+    assert!(plural_choices_without_one(named).is_empty());
+
+    let numbered = "e = { $n ->\n    [1] x\n   *[other] y\n  }\n";
+    assert_eq!(plural_choices_without_one(numbered), ["e"]);
 }

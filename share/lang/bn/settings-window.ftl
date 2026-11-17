@@ -25,10 +25,10 @@ settings-window-group-about = সম্পর্কে
 settings-window-in-apps = অ্যাপসে
 
 # Small grey heading over the row a search finds that opens the Folders program's settings.
-settings-window-in-folders = ফোল্ডারে
+settings-window-in-folders = Folders-এ
 
 # The side bar row that opens the Folders program at its own settings.
-settings-window-in-folders-name = ফোল্ডারের নিজস্ব সেটিংস
+settings-window-in-folders-name = Folders-এর নিজস্ব সেটিংস
 
 # Words the Settings search matches the Folders settings row by, in lower case, separated by spaces.
 settings-window-in-folders-keywords =
@@ -41,7 +41,7 @@ settings-window-no-page = কোনো পাতা মেলেনি। ছো
 settings-window-theme-refused = {"  "}{ $id }  { $name } (ব্যবহার করা যাবে না: { $why })
 
 # Printed in a terminal when trindle-settings --theme is given no theme name.
-settings-window-theme-name = একটি থিমের নাম দিন, যেমন: trindle-settings --theme default
+settings-window-theme-name = একটি থিমের নাম লিখুন, যেমন: trindle-settings --theme default
 
 # Printed in a terminal after trindle-settings --theme worked; theme is the theme's name.
 settings-window-theme-now = থিম এখন { $theme }।
@@ -50,13 +50,13 @@ settings-window-theme-now = থিম এখন { $theme }।
 settings-window-theme-own = Trindle-এর নিজস্ব
 
 # Printed in a terminal when the theme could not be chosen; error says why and ends with a full stop.
-settings-window-themes-list = { $error } trindle-settings --themes দিয়ে তালিকা দেখুন।
+settings-window-themes-list = { $error } তালিকা দেখতে trindle-settings --themes চালান।
 
 # Printed in a terminal when trindle-settings --keys is not given the word default.
-settings-window-keys-how = সব কী ও বোতাম আগের অবস্থায় ফেরাতে: trindle-settings --keys default
+settings-window-keys-how = সব কী ও বোতাম স্বাভাবিক অবস্থায় ফেরাতে চালান: trindle-settings --keys default
 
 # Printed in a terminal after every key and button was put back.
-settings-window-keys-back = সব কী ও বোতাম ছাপা অবস্থায় ফিরে এসেছে।
+settings-window-keys-back = সব কী ও বোতাম স্বাভাবিক অবস্থায় ফিরে এসেছে।
 
 # Printed in a terminal when the keys could not be put back; error says why.
-settings-window-keys-failed = কী ফেরানো যায়নি: { $error }
+settings-window-keys-failed = Trindle কী ফেরাতে পারেনি: { $error }

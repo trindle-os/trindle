@@ -1,8 +1,7 @@
-//! Flow unlocking the lock screen with the PIN, and with nothing else
-//! Flow alone may do this, and never with the password.
-//! The compositor asks
-//! `judge` what to say to each request; this file holds the rule, the words
-//! and the note kept of each unlock, and knows nothing of Wayland.
+//! Flow unlocking the lock screen with the PIN: Flow alone may do this, and
+//! never with the password. The compositor asks `judge` what to say to each
+//! request; this file holds the rule, the words and the note kept of each
+//! unlock, and knows nothing of Wayland.
 
 use std::path::{Path, PathBuf};
 use std::time::Duration;
@@ -11,14 +10,24 @@ pub const TRIES: u32 = super::pin::TRIES;
 
 const KEPT: usize = 200;
 
-pub const NOT_LOCKED: &str = "Not locked.";
-pub const NO_PIN: &str = "No PIN set.";
-pub const LATE: &str = "PIN time is over.";
-pub const TOO_MANY: &str = "Too many tries.";
-pub const NOT_A_PIN: &str = "A PIN is 4 digits.";
+pub fn not_locked() -> String {
+    trindle_toolkit::t!("compose-flow-not-locked").to_string()
+}
+pub fn no_pin() -> String {
+    trindle_toolkit::t!("compose-flow-no-pin").to_string()
+}
+pub fn late() -> String {
+    trindle_toolkit::t!("compose-flow-late").to_string()
+}
+pub fn too_many() -> String {
+    trindle_toolkit::t!("compose-flow-too-many").to_string()
+}
+pub fn not_a_pin() -> String {
+    trindle_toolkit::t!("compose-flow-not-a-pin").to_string()
+}
 
 pub fn wrong(left: u32) -> String {
-    format!("Wrong PIN. {left} tries left.")
+    trindle_toolkit::t!("compose-flow-wrong-pin", left = left).to_string()
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -30,19 +39,19 @@ pub enum Verdict {
 
 pub fn judge(locked: bool, set: bool, since: Duration, window: u32, used: u32, pin: &str, right: impl FnOnce(&str) -> bool) -> Verdict {
     if !locked {
-        return Verdict::No(NOT_LOCKED.into(), false);
+        return Verdict::No(not_locked(), false);
     }
     if !set {
-        return Verdict::No(NO_PIN.into(), false);
+        return Verdict::No(no_pin(), false);
     }
     if since.as_secs() >= u64::from(window) * 60 {
-        return Verdict::No(LATE.into(), false);
+        return Verdict::No(late(), false);
     }
     if used >= TRIES {
-        return Verdict::No(TOO_MANY.into(), false);
+        return Verdict::No(too_many(), false);
     }
     if !super::pin::valid(pin) {
-        return Verdict::No(NOT_A_PIN.into(), false);
+        return Verdict::No(not_a_pin(), false);
     }
     if right(pin) {
         Verdict::Unlock
@@ -77,7 +86,7 @@ mod tests {
 
     #[test]
     fn the_words_of_a_refused_unlock_are_short() {
-        for words in [NOT_LOCKED, NO_PIN, LATE, TOO_MANY, NOT_A_PIN] {
+        for words in [not_locked(), no_pin(), late(), too_many(), not_a_pin()] {
             assert!(words.split_whitespace().count() <= 5 && !words.contains('\u{2014}'), "{words}");
         }
         assert_eq!(wrong(2), "Wrong PIN. 2 tries left.");
@@ -89,13 +98,13 @@ mod tests {
         assert_eq!(go(true, true, SOON, 0, "1234", true), Verdict::Unlock);
         assert_eq!(go(true, true, SOON, 0, "1234", false), Verdict::No(wrong(4), true));
         assert_eq!(go(true, true, SOON, 4, "1234", false), Verdict::No(wrong(0), true));
-        assert_eq!(go(true, true, SOON, 5, "1234", true), Verdict::No(TOO_MANY.into(), false));
-        assert_eq!(go(false, true, SOON, 0, "1234", true), Verdict::No(NOT_LOCKED.into(), false));
-        assert_eq!(go(true, false, SOON, 0, "1234", true), Verdict::No(NO_PIN.into(), false));
-        assert_eq!(go(true, true, Duration::from_secs(3600), 0, "1234", true), Verdict::No(LATE.into(), false));
+        assert_eq!(go(true, true, SOON, 5, "1234", true), Verdict::No(too_many(), false));
+        assert_eq!(go(false, true, SOON, 0, "1234", true), Verdict::No(not_locked(), false));
+        assert_eq!(go(true, false, SOON, 0, "1234", true), Verdict::No(no_pin(), false));
+        assert_eq!(go(true, true, Duration::from_secs(3600), 0, "1234", true), Verdict::No(late(), false));
 
         let never = judge(true, true, SOON, 60, 0, "correct horse", |_| panic!("asked about a password"));
-        assert_eq!(never, Verdict::No(NOT_A_PIN.into(), false));
+        assert_eq!(never, Verdict::No(not_a_pin(), false));
     }
 
     #[test]

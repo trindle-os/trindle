@@ -65,7 +65,7 @@ fn ask_about(s: &mut Store, repo: &str) {
 
 pub fn gather(s: &Store, f: &Found) -> Shown {
     let key = key_of(f);
-    let problem_at = Some(&key).filter(|k| s.said.get(*k).is_some_and(|(words, tone)| *tone == Tone::Problem && !words.is_empty()));
+    let problem_at = Some(&key).filter(|k| s.words.said.get(*k).is_some_and(|(words, tone)| *tone == Tone::Problem && !words.is_empty()));
     let release = match s.github.releases.get(&f.repo) {
         Some(r) => Asked::Here(r.clone()),
         None if f.repo.is_empty() || s.github.unreleased.contains(&f.repo) || problem_at.is_some() => Asked::Nothing,
@@ -78,10 +78,10 @@ pub fn gather(s: &Store, f: &Found) -> Shown {
     };
     Shown {
         found: f.clone(), back: links::back_name(&s.view), standing: standing(s, f), release, project,
-        problem: problem_at.and_then(|k| s.said.get(k)).map(|(words, _)| words.clone()),
+        problem: problem_at.and_then(|k| s.words.said.get(k)).map(|(words, _)| words.clone()),
         problem_page: problem_at.map_or(help::INSTALL, |k| s.page_of(k)),
-        icon: s.shots.get(&f.icon).cloned().flatten(),
-        now: age::now(), across: s.across, pulsing: s.pulsing.clone(),
+        icon: s.heard.shots.get(&f.icon).cloned().flatten(),
+        now: age::now(), across: s.size.across, pulsing: s.pulse.on.clone(),
     }
 }
 
@@ -141,8 +141,8 @@ fn head(v: &Shown, narrow: bool) -> Node<Msg> {
 
 fn state_words(v: &Shown) -> (Dot, String) {
     match &v.standing {
-        Standing::Going(share, true) => (Dot::Filling(*share), t!("store-app-state-downloading").into()),
-        Standing::Going(share, false) => (Dot::Filling(*share), t!("store-app-state-putting-in").into()),
+        Standing::Going(share, true) => (Dot::Filling(share.get().unwrap_or(0.0)), t!("store-app-state-downloading").into()),
+        Standing::Going(share, false) => (Dot::Filling(share.get().unwrap_or(0.0)), t!("store-app-state-putting-in").into()),
         Standing::Here(_) => (Dot::Quiet, t!("store-list-installed").into()),
         Standing::Absent => match file_of(v).map(|d| d.size).filter(|n| *n > 0) {
             Some(size) => (Dot::Quiet, t!("store-app-state-absent-size", size = github::size_text(size))),
@@ -153,13 +153,12 @@ fn state_words(v: &Shown) -> (Dot, String) {
 
 fn actions(v: &Shown, first: bool) -> Node<Msg> {
     let f = &v.found;
-    let k = theme::app_page();
     let round = Length::Fixed(theme::icon_button());
     let link = |key: &str| CameFrom::of(f).link().map(|(url, tip)| links::link_button(tip, &url).key(key.to_string()));
-    let pill = |icon: &str, words: &str| main_action(icon, words).width(Length::Fixed(k.action)).key(MAIN_ACTION);
+    let pill = |icon: &str, words: &str| main_action(icon, words).width(Length::Fixed(look::action_room())).key(MAIN_ACTION);
     let (website, main) = match &v.standing {
-        Standing::Going(share, true) => (link(WEBSITE), row(vec![look::ring_with_figure(*share, theme::sheet().action_height)])),
-        Standing::Going(_, false) => (link(WEBSITE), row(vec![spinner(), label(t!("store-app-busy-installing")).cut()]).gap(8.0)),
+        Standing::Going(share, true) => (link(WEBSITE), row(vec![look::ring_with_figure(share, theme::sheet().action_height)])),
+        Standing::Going(_, false) => (link(WEBSITE), row(vec![spinner(), label(t!("store-app-busy-installing")).cut()]).gap(look::busy_gap())),
         Standing::Here(path) => {
             let path = path.clone();
             (link(WEBSITE), pill("media-playback-start-symbolic", t!("store-app-open")).on_press(go(move |_| open_file(&path))))
@@ -169,8 +168,8 @@ fn actions(v: &Shown, first: bool) -> Node<Msg> {
             (link(WEBSITE), pill(crate::settings::ui::INSTALL_ICON, t!("store-app-install")).on_press(go(move |s| pressed_install(s, |s| install_repo(s, &repo)))))
         }
         Standing::Absent => {
-            let beside = link(MAIN_LINK).map(|b| row(if first { vec![b, space()] } else { vec![space(), b] }).width(Length::Fixed(k.action)));
-            (None, beside.unwrap_or_else(|| space().width(Length::Fixed(k.action))))
+            let beside = link(MAIN_LINK).map(|b| row(if first { vec![b, space()] } else { vec![space(), b] }).width(Length::Fixed(look::action_room())));
+            (None, beside.unwrap_or_else(|| space().width(Length::Fixed(look::action_room()))))
         }
     };
     action_places(None, None, website.unwrap_or_else(|| space().width(round)), main, first)

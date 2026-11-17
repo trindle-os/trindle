@@ -12,24 +12,48 @@ pub(super) const CARD_GAP: f32 = 16.0;
 const HEADLINE_ROOM: f32 = 12.0;
 
 pub(super) const HEADLINE_LINES: u8 = 2;
+const HEADLINE_MOST: u8 = 3;
 
 pub(super) const HEADLINE: &str = "apps-headline";
 
 thread_local! {
 
-    static PAGE: std::cell::RefCell<String> = const { std::cell::RefCell::new(String::new()) };
+    static PAGE: std::cell::RefCell<(String, f32)> = const { std::cell::RefCell::new((String::new(), 0.0)) };
+
+    static LINES: std::cell::RefCell<Option<(crate::common::widest::Stamp, u32, u8)>> = const { std::cell::RefCell::new(None) };
 }
 
-pub(crate) fn new_page(name: String) {
-    PAGE.with(|p| *p.borrow_mut() = name);
+pub(crate) fn new_page(name: String, across: f32) {
+    PAGE.with(|p| *p.borrow_mut() = (name, across));
+}
+
+pub(super) fn across() -> f32 {
+    PAGE.with(|p| p.borrow().1)
+}
+
+pub(super) fn headline_lines() -> u8 {
+    let room = super::app_page::room(across());
+    let now = crate::common::widest::stamp();
+    LINES.with(|kept| {
+        if let Some((had, at, lines)) = &*kept.borrow() {
+            if *had == now && *at == room.to_bits() {
+                return *lines;
+            }
+        }
+        let need = super::update_page::words::longest_headlines().iter()
+            .map(|w| crate::common::widest::headline_lines(w, room)).max().unwrap_or(0);
+        let lines = u8::try_from(need).unwrap_or(u8::MAX).clamp(HEADLINE_LINES, HEADLINE_MOST);
+        *kept.borrow_mut() = Some((now, room.to_bits(), lines));
+        lines
+    })
 }
 
 pub(crate) fn page_area() -> String {
-    PAGE.with(|p| format!("page:{}", p.borrow()))
+    PAGE.with(|p| format!("page:{}", p.borrow().0))
 }
 
 pub fn screen(head: Node<Msg>, words: impl Into<String>, tiles: Vec<Node<Msg>>) -> Node<Msg> {
-    let line = column(vec![headline(words).room_for(HEADLINE_LINES).width(Length::Fill).key(HEADLINE), space().height(Length::Fixed(HEADLINE_ROOM))]).gap(0.0);
+    let line = column(vec![headline(words).room_for(headline_lines()).width(Length::Fill).key(HEADLINE), space().height(Length::Fixed(HEADLINE_ROOM))]).gap(0.0);
     let mut all = vec![head, line];
     all.extend(tiles);
     scroll(page_area(), bento(CARD_LEAST, theme::bento().page_gap, all).padding(theme::sheet().page_padding)).height(Length::Fill)

@@ -10,7 +10,7 @@ settings-region-keywords = भाषा लोकेल देश प्रा�
 settings-region-help = भाषा और प्रारूप अगली बार लॉग इन करने पर लागू होते हैं।
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = देखने के लिए लॉग आउट करके फिर लॉग इन करें।
+settings-region-later = हर जगह देखने के लिए दोबारा लॉग इन करें।
 
 # Shown while the page reads the computer.
 settings-region-looking = देख रहा है…
@@ -54,13 +54,10 @@ settings-region-language = भाषा
 settings-region-formats = प्रारूप
 
 # Help text of the Language card (the information button).
-settings-region-language-about = भाषा वह है जिसमें मेनू और संदेश होते हैं। प्रारूप बताते हैं कि तारीख़, समय, संख्याएँ, मुद्रा, माप और कागज़ का आकार कैसे लिखे जाते हैं, और ये किसी दूसरे देश के तरीक़े भी हो सकते हैं। दोनों अगली बार लॉग इन करने पर लागू होते हैं।
+settings-region-language-about = भाषा मेनू और संदेशों के लिए इस्तेमाल होती है। प्रारूप तय करते हैं कि तारीख़, समय, संख्याएँ, मुद्रा और माप कैसे लिखे जाएँ, और कागज़ का आकार क्या हो। वे किसी दूसरे देश की शैली भी अपना सकते हैं। दोनों अगली बार लॉग इन करने पर लागू होते हैं।
 
 # Under the Language heading.
-settings-region-language-sub = मेनू और संदेश, अगले लॉगिन से।
-
-# Under the Formats heading.
-settings-region-formats-sub = तारीख़ें, संख्याएँ, मुद्रा और कागज़ का आकार।
+settings-region-language-sub = मेनू और संदेश अगले लॉगिन पर बदलते हैं।
 
 # Heading of the line that shows a date and a number in the chosen formats.
 settings-region-date-number = एक तारीख़ और एक संख्या
@@ -75,7 +72,7 @@ settings-region-in-use = अभी इस्तेमाल में
 settings-region-add = भाषा जोड़ें
 
 # Help text of the Add a language card (the information button).
-settings-region-add-about = एक और भाषा इंस्टॉल करता है, ताकि उसे मेनू या प्रारूपों के लिए चुना जा सके। एक बनाने में थोड़ा समय लगता है और एडमिनिस्ट्रेटर का पासवर्ड चाहिए।
+settings-region-add-about = एक और भाषा इंस्टॉल करता है, ताकि आप उसे मेनू या प्रारूपों के लिए चुन सकें। एक भाषा इंस्टॉल करने में थोड़ा समय लगता है और एडमिनिस्ट्रेटर का पासवर्ड चाहिए।
 
 # Heading of the line shown when every language is already installed.
 settings-region-all-installed = हर भाषा पहले से इंस्टॉल है
@@ -94,10 +91,7 @@ settings-region-count =
 settings-region-install-another = और इंस्टॉल करें
 
 # Tip of the button that installs the chosen language.
-settings-region-install-this = यह भाषा इंस्टॉल करें (पासवर्ड माँगता है)
-
-# Under the Install another heading.
-settings-region-needs-password = एडमिनिस्ट्रेटर का पासवर्ड चाहिए।
+settings-region-install-this = यह भाषा इंस्टॉल करें
 
 # Heading of the line saying how many more languages can be made.
 settings-region-ready = जोड़ने के लिए तैयार
@@ -105,8 +99,8 @@ settings-region-ready = जोड़ने के लिए तैयार
 # Under the Ready to add heading: how many more languages can be made.
 settings-region-more =
     { $n ->
-        [one] { $n } और भाषा जो यह कंप्यूटर बना सकता है।
-       *[other] { $n } और भाषाएँ जो यह कंप्यूटर बना सकता है।
+        [one] आप { $n } और भाषा इंस्टॉल कर सकते हैं।
+       *[other] आप { $n } और भाषाएँ इंस्टॉल कर सकते हैं।
     }
 
 settings-region-removing = हटाया जा रहा है
@@ -117,7 +111,6 @@ settings-region-remove-language = यह भाषा हटाएँ
 
 settings-region-kept = इस कंप्यूटर की भाषाएँ
 
-settings-region-kept-about = यहाँ इंस्टॉल की गई सभी भाषाएँ। जिन्हें आप इस्तेमाल नहीं करते, उन्हें हटा दें; जो भाषा आप इस्तेमाल कर रहे हैं वह रहेगी। एडमिनिस्ट्रेटर पासवर्ड माँगता है।
+settings-region-kept-about = इस कंप्यूटर पर इंस्टॉल की गई सभी भाषाएँ। जो आप इस्तेमाल नहीं करते उन्हें हटा दें, सिवाय उसके जो आप अभी इस्तेमाल कर रहे हैं। किसी भाषा को हटाने के लिए एडमिनिस्ट्रेटर का पासवर्ड चाहिए।
 
-settings-region-in-use-stays = उपयोग में है, इसलिए रहेगी
-
+settings-region-in-use-stays = यह उपयोग में है।

@@ -1,0 +1,129 @@
+## What an app can be allowed to do, and what goes wrong without it. Each
+## permission has a name (said after "asks for", as in "Weather asks for
+## the internet and sound"), the line under its switch, and for some a warning.
+
+access-network-name = internet
+access-network-without = İnternete ya da yakındaki diğer bilgisayarlara ulaşamaz.
+access-sound-name = ses
+access-sound-without = Ses çıkarmaz.
+access-microphone-name = mikrofonunuz
+access-microphone-without = Sizi duyamaz.
+access-sound-and-microphone-name = ses ve mikrofonunuz
+access-sound-and-microphone-without = Ses çıkarmaz ve sizi duyamaz.
+access-files-name = Belgeler, İndirilenler, Resimler, Müzik, Videolar ve Masaüstü klasörleriniz
+access-files-without = Dosyalarınızı açamaz ya da klasörlerinize kaydedemez.
+access-home-name = ana klasörünüzdeki her şey, gizli ayar dosyaları dahil
+access-home-without = Dosyalarınızı açamaz ya da klasörlerinize kaydedemez.
+access-devices-name = kameranız ve takılı diğer aygıtlar
+access-devices-without = Sizi göremez ya da taktığınız hiçbir şeyi kullanamaz.
+access-bluetooth-name = kulaklık gibi Bluetooth aygıtları
+access-bluetooth-without = Bluetooth üzerinden hiçbir şeye bağlanamaz.
+access-notifications-name = bildirimler
+access-notifications-without = Bir şey olduğunda size haber veremez.
+access-background-name = oturum açtığınızda kendiliğinden başlama
+access-background-without = Yalnızca siz açıkken çalışır.
+access-screen-name = ekranınızın görüntüleri, kopyaladıklarınız ve klavyeniz gibi sizin yerinize yazma
+access-screen-without = Diğer pencereleri göremez, kopyaladıklarınızı da istediği zaman okuyamaz.
+access-x11-name = pencerelerini eski yöntemle çizme; bu, diğer eski uygulamaları ve onlara yazılanları izlemesini sağlar
+access-x11-without = Pencereleri açılmaz.
+access-computer-name = kutusunun dışında çalışma, kendinizin ulaşabildiği her şeyle
+access-computer-without = İçine yazdığınız şey kutusunun içinde kalır, bu yüzden sudo ve kendi dosyalarınız orada çalışmaz.
+access-control-name = klavyenizin, farenizin ve panonuzun denetimi
+access-control-without = İşaretçiyi oynatamaz, yazı yazamaz ya da kopyaladıklarınızı paylaşamaz.
+access-capture-name = farenizi ve klavyenizi başka bir bilgisayarla paylaşma
+access-capture-without = İşaretçi başka bir bilgisayara geçemez.
+access-copied-name = kopyaladığınız dosyalar
+access-copied-without = Kopyaladığınız dosyaları okuyamaz, bu yüzden bunları başka bir bilgisayara taşıyamaz.
+access-summon-name = tuşa basmışsınız gibi halkayı tam ekran pencerenin üstünde açma
+access-summon-without = Tuşları ve tıklamaları halkayı yalnızca masaüstünde açar, tam ekran pencerenin üstünde asla açmaz.
+access-listen-name = yerel ağınızdaki diğer bilgisayarların ona ulaşabilmesi
+access-listen-without = Yerel ağınızdaki diğer bilgisayarlar onu bulamaz ya da ona bağlanamaz.
+access-home-network-name = yalnızca yerel ağınızdaki aygıtlar
+access-home-network-without = Yerel ağdaki yazıcıları, tarayıcıları ya da diğer aygıtları bulamaz veya bunlarla konuşamaz.
+access-usb-devices-name = tarayıcılar ve USB aygıtları
+access-usb-devices-without = Bu bilgisayara takılı bir tarayıcıyı kullanamaz.
+access-expand-name = yazarken kısa kodlarınızı açma
+access-expand-without = Kısa kodları siz yazarken açılmaz.
+access-accessibility-name = her pencereyi sesli okuma
+access-accessibility-without = Pencerelerinizi sesli okuyamaz.
+access-unnamed-name = adını vermediği bir şey
+
+access-control-warning = Siz gibi yazı yazabilir, tıklayabilir ve kopyaladıklarınızı okuyabilir. Buna yalnızca güvendiğiniz bir eklenti için izin verin.
+access-capture-warning = İşaretçi öbür bilgisayardayken yazdığınız ve tıkladığınız her şey bu eklentiye gider. Buna yalnızca güvendiğiniz bir eklenti için izin verin.
+access-copied-warning = İzin verildiği sürece yalnızca kopyaladığınız dosyaları okuyabilir, başka hiçbir şeyi okuyamaz. Buna yalnızca güvendiğiniz bir eklenti için izin verin.
+access-summon-warning = Siz hiçbir tuşa dokunmadan, yazdığınız her şeyi alan halkayı bir oyunun ya da filmin üstüne getirebilir. Buna yalnızca güvendiğiniz bir eklenti için izin verin.
+access-home-network-warning = Yönlendiriciniz dahil yerel ağınızdaki her aygıtla konuşabilir, ama internete ulaşamaz. Buna yalnızca güvendiğiniz bir eklenti için izin verin.
+access-usb-devices-warning = Başladığında takılı olan tarayıcıları ve görüntü aygıtlarını kullanabilir, başka hiçbir USB aygıtını kullanamaz. Buna yalnızca güvendiğiniz bir eklenti için izin verin.
+access-expand-warning = Trindle kodlar için yazdıklarınızı izler ve sözcüklerini sizin yerinize yazar. Eklenti yazdıklarınızı hiçbir zaman görmez. Buna yalnızca güvendiğiniz bir eklenti için izin verin.
+access-accessibility-warning = Ekranınızdaki her şeyi okuyabilir. Her ekran okuyucu gibi diğer pencerelerde düğmelere basabilir ve yazı da yazabilir, ama kendi klavyesi ya da faresi yoktur. Buna yalnızca güvendiğiniz bir eklenti için izin verin.
+
+## Titles (for a tooltip) and the line under a switch, which says what switching it off means.
+access-network-title = İnternet
+access-network-off = Kapalıyken internete ya da yakındaki diğer bilgisayarlara ulaşamaz.
+access-sound-title = Ses çal
+access-sound-off = Kapalıyken ses çıkarmaz.
+access-microphone-title = Mikrofonunuz
+access-microphone-off = Kapalıyken sizi duyamaz.
+access-sound-and-microphone-title = Ses çal ve mikrofonunuzu kullan
+access-sound-and-microphone-off = Kapalıyken ses çıkarmaz ve sizi duyamaz.
+access-files-title = Belgeler, İndirilenler, Resimler, Müzik, Videolar ve Masaüstü klasörleriniz
+access-files-off = Kapalıyken dosyalarınızı açamaz ya da klasörlerinize kaydedemez.
+access-home-title = Ana klasörünüzdeki her şey, gizli ayar dosyaları dahil
+access-home-off = Kapalıyken dosyalarınızı açamaz ya da klasörlerinize kaydedemez.
+access-devices-title = Kameranız ve takılı diğer aygıtlar
+access-devices-off = Kapalıyken kameranızı ya da taktığınız hiçbir şeyi kullanamaz.
+access-bluetooth-title = Bluetooth, kulaklıklar ve yakındaki başka şeyler için
+access-bluetooth-off = Kapalıyken Bluetooth üzerinden hiçbir şeye bağlanamaz.
+access-notifications-title = Bildirim göster
+access-notifications-off = Kapalıyken bir şey olduğunda size haber veremez.
+access-background-title = Oturum açtığınızda kendiliğinden başla
+access-background-off = Kapalıyken yalnızca siz açıkken çalışır.
+access-screen-title = Ekranınızın görüntülerini al, kopyaladıklarınızı oku ve klavyeniz gibi yaz
+access-screen-off = Kapalıyken diğer pencereleri göremez, kopyaladıklarınızı da istediği zaman okuyamaz.
+access-x11-title = Pencerelerini eski yöntemle çiz; bu, diğer eski uygulamaları ve onlara yazılanları izlemesini sağlar
+access-x11-off = Kapalıyken pencereleri açılmaz.
+access-computer-title = Kutusunun dışında çalış, kendinizin ulaşabildiği her şeyle
+access-computer-off = Kapalıyken içine yazdığınız şey kutusunun içinde kalır, bu yüzden sudo ve kendi dosyalarınız orada çalışmaz.
+access-control-title = Klavyenizi, farenizi ve panonuzu denetle
+access-control-off = Kapalıyken işaretçiyi oynatamaz, yazı yazamaz ya da kopyaladıklarınızı paylaşamaz.
+access-capture-title = Farenizi ve klavyenizi başka bir bilgisayarla paylaş
+access-capture-off = Kapalıyken işaretçi başka bir bilgisayara geçemez.
+access-copied-title = Kopyaladığınız dosyaları oku
+access-copied-off = Kapalıyken kopyaladığınız dosyaları okuyamaz ya da başka bir bilgisayara gönderemez.
+access-summon-title = Tuşa basmışsınız gibi halkayı tam ekran pencerenin üstünde aç
+access-summon-off = Kapalıyken tuşları ve tıklamaları halkayı yalnızca masaüstünde açar, tam ekran pencerenin üstünde asla açmaz.
+access-listen-title = Yerel ağınızdaki diğer bilgisayarlar ona ulaşabilsin
+access-listen-off = Kapalıyken yerel ağınızdaki diğer bilgisayarlar onu bulamaz ya da ona bağlanamaz.
+access-home-network-title = Yalnızca yerel ağınızdaki aygıtlara ulaş
+access-home-network-off = Kapalıyken yerel ağdaki yazıcıları, tarayıcıları ya da diğer aygıtları bulamaz veya bunlara bağlanamaz.
+access-usb-devices-title = Tarayıcıları ve USB aygıtlarını kullan
+access-usb-devices-off = Kapalıyken bu bilgisayara takılı bir tarayıcıyı kullanamaz.
+access-expand-title = Yazarken kısa kodlarınızı aç
+access-expand-off = Kapalıyken Trindle yazarken kısa kodlarını açmaz.
+access-accessibility-title = Her pencerenin gösterdiğini oku ve sesli söyle
+access-accessibility-off = Kapalıyken pencerelerinizi sesli okuyamaz.
+access-unnamed-title = Adını vermediği bir şey
+
+## The few words on a plugin's row of the Permissions page.
+access-note-acts-as-you = sizin gibi davranabilir
+access-note-home-network = yerel ağınızdaki her aygıta ulaşabilir
+access-note-usb-devices = tarayıcıları ve görüntü aygıtlarını kullanabilir
+access-note-expand = pencerelerinize yazı yazabilir
+access-note-accessibility = ekranınızdaki her şeyi okuyabilir
+
+access-listen-detail = { $ports }, yalnızca yerel ağınızdaki bilgisayarlardan. İnternete de izin verilmesi gerekir.
+
+## A request that is unusual for the kind of app that makes it.
+access-unusual = Bu, { $kind } için olağan değil. Yalnızca bu uygulamanın nereden geldiğine güveniyorsanız izin verin.
+access-kind-terminal = bir terminal uygulaması
+access-kind-calculator = bir hesap makinesi
+access-kind-photo = bir fotoğraf uygulaması
+access-kind-text-editor = bir metin düzenleyici
+access-kind-browser = bir web tarayıcısı
+access-kind-office = bir ofis uygulaması
+access-kind-graphics = bir grafik uygulaması
+access-kind-game = bir oyun
+access-kind-sound-video = bir ses ve video uygulaması
+access-kind-programming = bir programlama aracı
+access-kind-utility = bir yardımcı uygulama
+access-kind-other = böyle bir uygulama

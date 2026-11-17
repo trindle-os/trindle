@@ -12,14 +12,14 @@ thunder-let-connect = السماح لـ{ $name } بالاتصال؟
 thunder-no-name = جهاز Thunderbolt
 
 # Under the device's name when its maker did not say who it is.
-thunder-no-maker = لم يذكر صانعه من هو.
+thunder-no-maker = الصانع غير معروف.
 
 # Under the device's name: who made it. $maker is the maker's name.
 thunder-made-by = صنعته { $maker }.
 
 # Warning under the question when the device gives the name of one allowed before, but cannot be proved to be it.
 # SAFETY: needs a human review before it ships
-thunder-doubt = يذكر اسم جهاز سمحت له من قبل، لكن تعذّر إثبات أنه هو.
+thunder-doubt = له اسم جهاز سمحت له من قبل، لكن تعذّر على Trindle التحقق من أنه هو.
 
 # Button that refuses the device.
 # SAFETY: needs a human review before it ships
@@ -37,7 +37,7 @@ thunder-always = اسمح دائمًا
 thunder-not-connected = تعذّر الاتصال به.
 
 # Red words under the question when it could not be connected after it was unplugged and plugged in again.
-thunder-unplug = تعذّر الاتصال به. افصله ثم صِله من جديد للمحاولة مرة أخرى.
+thunder-unplug = تعذّر على Trindle الاتصال به. افصله ثم صِله من جديد للمحاولة مرة أخرى.
 
 # Red words under the question when the part of Trindle that answers for the guard is not running.
-thunder-guard-silent = حارس Thunderbolt في Trindle لا يجيب الآن.
+thunder-guard-silent = حماية Thunderbolt في Trindle لا تستجيب.

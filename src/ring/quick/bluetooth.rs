@@ -9,7 +9,7 @@ use zbus::zvariant::{ObjectPath, OwnedObjectPath, Value};
 
 use crate::common::rfkill;
 use crate::common::run::capture;
-use crate::ring::ctx::Msg;
+use crate::ring::{ctx::Msg, plain};
 use crate::toolkit::t;
 use crate::toolkit::bus::{Asked, Failed, Offer, Props};
 use crate::toolkit::widget::{button, card, label, Node, row, space, switch};
@@ -50,6 +50,29 @@ const BT_VERB_TIMEOUT: &str = "25";
 
 const SCAN_TIMEOUT: &str = "120";
 
+#[derive(Debug, PartialEq)]
+pub(super) enum AgentCall {
+    Pin { passkey: bool },
+    Show { passkey: bool },
+    Same,
+    Pair,
+    Cancel,
+    Release,
+    Refuse,
+}
+
+pub(super) fn agent_call(member: &str) -> AgentCall {
+    match member {
+        "RequestPinCode" | "RequestPasskey" => AgentCall::Pin { passkey: member == "RequestPasskey" },
+        "DisplayPasskey" | "DisplayPinCode" => AgentCall::Show { passkey: member == "DisplayPasskey" },
+        "RequestConfirmation" => AgentCall::Same,
+        "RequestAuthorization" | "AuthorizeService" => AgentCall::Pair,
+        "Cancel" => AgentCall::Cancel,
+        "Release" => AgentCall::Release,
+        _ => AgentCall::Refuse,
+    }
+}
+
 pub(super) fn parse_bt(out: &str) -> (bool, Vec<Dev>, Vec<(String, String)>) {
     let on = out.lines().next() == Some("on");
     let (mut all, mut paired, mut connected) = (Vec::new(), HashSet::new(), HashSet::new());
@@ -73,7 +96,7 @@ pub(super) fn parse_bt(out: &str) -> (bool, Vec<Dev>, Vec<(String, String)>) {
         .filter(|(mac, name)| !name.is_empty() && name.replace('-', ":") != *mac)
         .map(|(mac, name)| Dev { mac: mac.clone(), name: name.clone(), paired: paired.contains(mac), connected: connected.contains(mac) })
         .collect();
-    devices.sort_by_key(|d| (!d.connected, !d.paired, d.name.to_lowercase()));
+    devices.sort_by_cached_key(|d| (!d.connected, !d.paired, crate::ring::view::arrange::sort_key(&d.name)));
     (on, devices, all)
 }
 
@@ -129,8 +152,8 @@ impl Quick {
 
     fn bt_draw(&mut self) {
         let b = self.back();
-        capture(&["sh", "-c", "bluetoothctl show | grep -q 'Powered: yes' && echo on; echo '#all'; bluetoothctl devices; \
-                               echo '#paired'; bluetoothctl devices Paired; echo '#connected'; bluetoothctl devices Connected"],
+        capture(&plain(&["sh", "-c", "bluetoothctl show | grep -q 'Powered: yes' && echo on; echo '#all'; bluetoothctl devices; \
+                               echo '#paired'; bluetoothctl devices Paired; echo '#connected'; bluetoothctl devices Connected"]),
                 None, move |_, out, _| b.then(move |q| q.bt_drawn(&out)));
     }
 
@@ -156,7 +179,7 @@ impl Quick {
             }
         }
         let b = self.back();
-        capture(&["bluetoothctl", "power", if on { "on" } else { "off" }], None, move |_, _, _| b.then(|q| q.bt_draw()));
+        capture(&plain(&["bluetoothctl", "power", if on { "on" } else { "off" }]), None, move |_, _, _| b.then(|q| q.bt_draw()));
     }
 
     fn start_scan(&mut self) {
@@ -190,7 +213,7 @@ impl Quick {
         }
         self.say(&if verb == "connect" { t!("ring-quick-bt-connecting", name = name) } else { t!("ring-quick-bt-disconnecting", name = name) });
         let (b, mine) = (self.back(), mac.to_string());
-        capture(&["bluetoothctl", "--timeout", BT_VERB_TIMEOUT, verb, mac], None, move |ok, out, _| b.then(move |q| {
+        capture(&plain(&["bluetoothctl", "--timeout", BT_VERB_TIMEOUT, verb, mac]), None, move |ok, out, _| b.then(move |q| {
             let mac = mine;
             q.busy.remove(&mac);
             let failed = !ok || out.contains("Failed") || out.contains("not available");
@@ -274,17 +297,17 @@ impl Quick {
             return;
         }
         let body = asked.message().body();
-        let member = asked.member();
-        match member.as_str() {
-            "RequestPinCode" | "RequestPasskey" => self.ask_for_pin(asked, &body, member == "RequestPasskey"),
-            "DisplayPasskey" | "DisplayPinCode" => self.show_pin(asked, &body, member == "DisplayPasskey"),
-            "RequestConfirmation" => self.ask_same_number(asked, &body),
-            "RequestAuthorization" => self.ask_to_pair(asked, &body),
-            "Cancel" => {
+        match agent_call(asked.member().as_str()) {
+            AgentCall::Pin { passkey } => self.ask_for_pin(asked, &body, passkey),
+            AgentCall::Show { passkey } => self.show_pin(asked, &body, passkey),
+            AgentCall::Same => self.ask_same_number(asked, &body),
+            AgentCall::Pair => self.ask_to_pair(asked, &body),
+            AgentCall::Cancel => {
                 asked.reply(&());
                 self.cancel_ask();
             }
-            _ => asked.reply(&()),
+            AgentCall::Release => asked.reply(&()),
+            AgentCall::Refuse => asked.fail(REJECTED, "Refused"),
         }
     }
 
@@ -338,7 +361,11 @@ impl Quick {
     }
 
     fn ask_to_pair(&mut self, asked: Asked, body: &zbus::message::Body) {
-        let Ok((path,)) = body.deserialize::<(OwnedObjectPath,)>() else { return asked.fail(REJECTED, "Refused") };
+        let path = match asked.member().as_str() {
+            "AuthorizeService" => body.deserialize::<(OwnedObjectPath, String)>().map(|(p, _)| p),
+            _ => body.deserialize::<(OwnedObjectPath,)>().map(|(p,)| p),
+        };
+        let Ok(path) = path else { return asked.fail(REJECTED, "Refused") };
         let name = self.bt_name(&mac_of(path.as_str()));
         self.ask("bluetooth-active-symbolic", name, t!("ring-quick-bt-pair-this"), None, None, t!("ring-quick-bt-ask-pair"), t!("ring-quick-no"),
                  move |_, typed| match typed {

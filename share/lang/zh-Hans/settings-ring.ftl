@@ -8,7 +8,7 @@ settings-ring-title = 圆环
 settings-ring-keywords = 收藏 常用 启动器 边缘 点击 热角 语音 说话 窗口 打开的窗口 剪贴板 复制 粘贴 历史 忘记 通知
 
 # Introduction under the heading of the ring page, and the words behind the page i.
-settings-ring-help = 你收藏的应用围绕在圆环中间。收藏要在圆环上选择：右键点击圆环中的任意应用即可添加或移除，把一个收藏拖到另一个的位置即可更改顺序。
+settings-ring-help = 你收藏的应用围绕在圆环中间。你可以直接在圆环中选择收藏：右键点击圆环中的任意应用即可添加或移除，把收藏拖到另一个位置即可更改顺序。
 
 # Sentence at the top of the ring page saying how the ring opens.
 settings-ring-headline = 圆环从屏幕边缘打开，你打开的窗口也在其中。
@@ -16,32 +16,20 @@ settings-ring-headline = 圆环从屏幕边缘打开，你打开的窗口也在�
 # Name of the picture on the ring page that shows where things open.
 settings-ring-picture = 打开的位置
 
-# Heading of the line saying the ring opens by clicking at the screen edge.
-settings-ring-open-click = 点击屏幕边缘
-
-# Small words under that line about the Super key.
-settings-ring-open-super = 按 Super 键也可以打开。
-
 # Line saying how many favourites the ring has; { $n } is the number.
 settings-ring-favourites =
     { $n ->
        *[other] { $n } 个收藏
     }
 
-# Small words under the favourites line.
-settings-ring-favourites-about = 右键点击圆环中的应用即可添加。
-
 # Title of the card about opening the ring.
 settings-ring-opening = 打开圆环
 
 # Words behind the i of the card about opening the ring.
-settings-ring-opening-about = 把指针移到屏幕边缘并点击，或按 Super 键，圆环就会打开。你收藏的应用围绕在圆环中间，你打开的窗口排成一圈围绕在它们外面：点击窗口可把它带到前面，右键点击可显示它的按钮。右键点击圆环中的任意应用即可添加或移除。
+settings-ring-opening-about = 把指针移到屏幕边缘并双击，或按 Super 键，即可打开圆环。你收藏的应用围绕在圆环中间，你打开的窗口排成一圈围绕在它们外面。点击窗口可把它带到前面，右键点击可显示它的按钮。右键点击圆环中的任意应用即可添加或移除。
 
 # Heading of the switch line, and the spoken name of the switch, for showing notifications as they arrive.
 settings-ring-notify-show = 通知到达时显示
-
-# Small words under the switch for showing notifications as they arrive.
-settings-ring-notify-show-about = 关闭后，它们仍会汇集在圆环里。
 
 # Heading of the list line, and the name of the list, for how long a notification stays.
 settings-ring-notify-long = 显示多久
@@ -63,9 +51,6 @@ settings-ring-notify-about = 程序有事要告诉你时，通知会出现几秒
 
 # Heading of the list line, and the name of the list, for when copied lines are forgotten.
 settings-ring-clip-forget = 何时忘记复制的内容
-
-# Small words under the list for when copied lines are forgotten.
-settings-ring-clip-forget-about = 已固定的行会保留。
 
 # Heading of the line saying how many lines the clipboard holds now.
 settings-ring-clip-now = 当前已复制
@@ -100,9 +85,6 @@ settings-ring-voice-onoff-on = 已开启
 # Said, in green, under the voice switch after voice is turned off.
 settings-ring-voice-onoff-off = 已关闭
 
-# Small words under the voice switch.
-settings-ring-voice-about = 只在这台电脑上识别。
-
 # Heading of the line, and the name of its button, that removes voice.
 # SAFETY: needs a human review before it ships
 settings-ring-voice-remove = 移除语音
@@ -111,23 +93,23 @@ settings-ring-voice-remove = 移除语音
 settings-ring-voice-remove-about = 可释放约 150 MB。
 
 # Words on the line offering to remove the build tools that stayed after voice was added.
-settings-ring-voice-tools-left = 语音已就绪。构建工具已保留。
+settings-ring-voice-tools-left = 已就绪。构建工具已保留。
 
 # Name of the button that removes the build tools voice left behind.
 # SAFETY: needs a human review before it ships
 settings-ring-voice-tools-remove = 移除构建工具
 
 # Name of the button that adds voice control to the computer.
-settings-ring-voice-add = 添加语音控制（约 150 MB）
+settings-ring-voice-add = 添加语音控制
 
 # Small words under the voice line before voice is added.
-settings-ring-voice-optional = 可选；添加约需 150 MB。
+settings-ring-voice-optional = 可选。需要约 150 MB。
 
 # Title of the card about voice.
 settings-ring-voice-title = 语音
 
 # Words behind the i of the voice card; the quoted words are examples of what to say.
-settings-ring-voice-card-about = 说出应用的名称、“调大音量”或“Wi-Fi 设置”，代替点击。点按圆环中间后开始说话；你再次点按时它就停止聆听。语音只在这台电脑上识别，不会发送到任何地方。添加约需 150 MB 和几分钟，期间你可以继续做别的事；移除会删除语音引擎及其模型。
+settings-ring-voice-card-about = 说出应用的名称、“调大音量”或“Wi-Fi 设置”，代替点击。点按圆环中间，然后说话。你停止说话时，Trindle 就会停止聆听。你说的话只留在这台电脑上，不会发送到任何地方。添加语音需要约 150 MB 和几分钟，期间你可以继续工作。移除它会删除语音引擎及其模型。
 
 # Words beside the round progress dial while voice is being added.
 settings-ring-voice-working-add = 正在添加语音
@@ -154,8 +136,16 @@ settings-ring-forget-fortnight = 两周后
 settings-ring-forget-never = 从不
 
 # Heading of the switch line, and the spoken name of the switch, for showing a window's title under its picture when pointing at it in the ring.
-settings-ring-names = 指向时显示标题
+settings-ring-names = 悬停时显示窗口标题
 
 # Small words under that switch.
-settings-ring-names-about = 关闭后只显示快照。屏幕阅读器仍会读出标题。
+settings-ring-names-about = 关闭后，屏幕阅读器仍会读出标题。
 
+# Red words when voice could not be added.
+settings-ring-voice-not-added = Trindle 无法添加语音。
+
+# Red words when voice could not be removed.
+settings-ring-voice-not-removed = Trindle 无法移除语音。
+
+# Red words when the build tools left after adding voice could not be removed.
+settings-ring-voice-tools-not-removed = Trindle 无法移除构建工具。

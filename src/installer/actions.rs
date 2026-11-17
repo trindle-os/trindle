@@ -10,6 +10,7 @@ use std::time::Duration;
 use super::{ABOUT_YOU, DISK_PASSWORD, READY, this_machine, steps, FRAME, Installer, Machine, Msg, PAGE_COUNT, RUNNING, SLIDE, roll, tour};
 use super::pages::{half_way, matching};
 use super::plan::{self, Lock, Plan, Where};
+use crate::common::live_language;
 use crate::common::run;
 use crate::common::ui::DISARM_SECONDS;
 use crate::toolkit::colour::Colour;
@@ -19,8 +20,7 @@ use zeroize::Zeroizing;
 
 impl Installer {
     pub(super) fn new(name: String, accent: Colour, machine: Machine, events: Loop, asks: Post<Msg>, wake: Post<()>) -> Self {
-        let leave = machine.disks.iter().flat_map(|d| d.parts.iter()).filter(|p| p.shrinkable())
-            .map(|p| (p.dev.clone(), half_way(p))).collect();
+        let leave = leave_of(&machine.disks);
         Installer {
             name,
             accent,
@@ -32,6 +32,7 @@ impl Installer {
             disk_one: Zeroizing::default(),
             disk_two: Zeroizing::default(),
             suggested: 0,
+            suggest_failed: false,
             full: String::new(),
             user: String::new(),
             host: String::new(),
@@ -50,6 +51,8 @@ impl Installer {
             arms: 0,
             terms: false,
             reading_terms: false,
+            rereading: false,
+            read_disks: plan::disks,
             roll_at: Rc::new(Cell::new(0.0)),
             roll_to: Rc::new(Cell::new(0.0)),
             rolling: Rc::new(Cell::new(false)),
@@ -59,6 +62,7 @@ impl Installer {
             events,
             asks,
             wake,
+            retitle: Cell::new(false),
         }
     }
 
@@ -134,6 +138,7 @@ impl Installer {
                     None
                 }
             }
+            1 if self.rereading => Some(t!("installer-disks-rereading")),
             1 => p.target.is_none().then_some(t!("installer-missing-disk")),
 
             2 => (p.lock != Lock::None && !self.machine.uefi).then_some(t!("installer-lock-needs-uefi")),
@@ -168,6 +173,11 @@ impl Installer {
 
     fn choose_language(&mut self, locale: &str) {
         self.plan.locale = locale.to_string();
+        let tags = live_language::for_locale(locale);
+        if live_language::differs(&tags) {
+            live_language::switch(tags);
+            self.retitle.set(true);
+        }
         let (layout, variant) = plan::layout_for(locale);
         let key = format!("{layout}\t{variant}");
         if self.machine.keyboards.iter().any(|(k, _)| *k == key) {
@@ -203,7 +213,16 @@ impl Installer {
 
     pub(super) fn beside(&mut self, part: String) {
         let leave = self.leave.get(&part).copied().unwrap_or(0);
-        self.plan.target = Some(Where::Beside { part, leave });
+        self.choose(Where::Beside { part, leave });
+    }
+
+    pub(super) fn choose(&mut self, target: Where) {
+        let whole = match &target {
+            Where::Erase { disk } => disk.clone(),
+            Where::Beside { part, .. } => plan::whole_disk(part),
+        };
+        self.plan.disk_id = self.machine.disks.iter().find(|d| d.dev == whole).map(|d| d.id.clone()).unwrap_or_default();
+        self.plan.target = Some(target);
     }
 
     pub(super) fn disk_typed(&mut self) {
@@ -271,6 +290,7 @@ impl Installer {
         self.share = 0.0;
         if free {
             self.machine = this_machine();
+            self.leave = leave_of(&self.machine.disks);
             self.show(1);
         } else {
             self.stuck = true;
@@ -310,6 +330,27 @@ impl Installer {
         }
     }
 
+    pub(super) fn disk_changed(&mut self, said: &str) {
+        self.fail(&plain(said));
+        self.plan.target = None;
+        self.plan.disk_id.clear();
+        if self.rereading {
+            return;
+        }
+        self.rereading = true;
+        let (read, asks) = (self.read_disks, self.asks.clone());
+        std::thread::spawn(move || asks.send(Msg::Disks(read())));
+    }
+
+    pub(super) fn got_disks(&mut self, disks: Vec<plan::Disk>) {
+        self.rereading = false;
+        self.leave = leave_of(&disks);
+        self.machine.disks = disks;
+
+        self.plan.target = None;
+        self.plan.disk_id.clear();
+    }
+
     pub(super) fn fail(&mut self, why: &str) {
         self.helper = None;
         self.armed = false;
@@ -334,7 +375,11 @@ impl Installer {
     }
 
     pub(super) fn suggest(&mut self) {
-        let words = plan::suggest_passphrase();
+        let Some(words) = plan::suggest_passphrase() else {
+            self.suggest_failed = true;
+            return;
+        };
+        self.suggest_failed = false;
         self.disk_one = Zeroizing::new(words.clone());
         self.disk_two = Zeroizing::new(words);
         self.suggested += 1;
@@ -395,21 +440,23 @@ pub(super) fn follow(mut child: Child, lines: Receiver<Zeroizing<String>>, asks:
         }
     }
     let said = errors.and_then(|h| h.join().ok()).unwrap_or_default();
-    let result = match child.wait() {
-        Ok(status) if status.code() == Some(steps::STOPPED) => {
-            asks.send(Msg::Stopped(true));
-            return;
-        }
-        Ok(status) if status.code() == Some(steps::STUCK) => {
-            asks.send(Msg::Stopped(false));
-            return;
-        }
-        Ok(status) if status.success() => Ok(()),
-        Ok(status) if said.trim().is_empty() => Err(status.to_string()),
-        Ok(_) => Err(said),
-        Err(e) => Err(e.to_string()),
-    };
-    asks.send(Msg::Finished(result));
+    asks.send(ended(child.wait(), said));
+}
+
+pub(super) fn ended(status: std::io::Result<std::process::ExitStatus>, said: String) -> Msg {
+    match status {
+        Ok(status) if status.code() == Some(steps::STOPPED) => Msg::Stopped(true),
+        Ok(status) if status.code() == Some(steps::STUCK) => Msg::Stopped(false),
+        Ok(status) if status.code() == Some(steps::CHANGED) => Msg::DiskChanged(said),
+        Ok(status) if status.success() => Msg::Finished(Ok(())),
+        Ok(status) if said.trim().is_empty() => Msg::Finished(Err(status.to_string())),
+        Ok(_) => Msg::Finished(Err(said)),
+        Err(e) => Msg::Finished(Err(e.to_string())),
+    }
+}
+
+fn leave_of(disks: &[plan::Disk]) -> std::collections::HashMap<String, u64> {
+    disks.iter().flat_map(|d| d.parts.iter()).filter(|p| p.shrinkable()).map(|p| (p.dev.clone(), half_way(p))).collect()
 }
 
 pub(super) fn plain(err: &str) -> String {

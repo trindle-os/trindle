@@ -38,29 +38,17 @@ store-tab-count = { $name } { $n }
 # Spoken name of a strip of tabs on the Installed page.
 store-tabs-show = Hiển thị
 
-# How long is left when it is a minute or less.
-store-left-minute = còn khoảng một phút
-
-# How long is left, in minutes.
-store-left-minutes = còn khoảng { $n } phút
-
-# How long is left, in hours.
-store-left-hours =
-    { $n ->
-       *[other] còn khoảng { $n } giờ
-    }
-
 # Credit under a package's page for the list its site was checked against.
 store-origin-credit = Đã đối chiếu với danh sách Threat Intelligence của HaGeZi
 
 # Where a download came from: the site and the page that led to it.
-store-origin-both = Tải từ { $site }, truy cập từ { $referrer }.
+store-origin-both = Bạn đã tải thứ này từ { $site }, sau khi đến từ { $referrer }.
 
 # Where a download came from: the site.
 store-origin-site = Tải từ { $site }.
 
 # Where a download came from: the page that led to it.
-store-origin-referrer = Truy cập từ { $referrer }.
+store-origin-referrer = Có liên kết từ { $referrer }.
 
 # Said when nothing tells where a download came from.
 store-origin-unknown = Trindle không biết thứ này đến từ đâu.
@@ -71,20 +59,20 @@ store-origin-listed = { $from } { $name } nằm trong danh sách Threat Intellig
 
 # Said when the site is not on the list; the first part says where the download came from.
 # SAFETY: needs a human review before it ships
-store-origin-clear = { $from } Trang này không nằm trong danh sách Threat Intelligence của HaGeZi, nhưng danh sách này chưa đầy đủ, nên điều đó không chứng minh là an toàn.
+store-origin-clear = { $from } Trang này không nằm trong danh sách Threat Intelligence của HaGeZi. Danh sách đó chưa đầy đủ, nên điều này không chứng minh là an toàn.
 
 # Said when the list could not be fetched; the first part says where the download came from.
 # SAFETY: needs a human review before it ships
-store-origin-not-checked = { $from } Không thể kiểm tra trang này vì không tải được danh sách Threat Intelligence của HaGeZi.
+store-origin-not-checked = { $from } Trindle không thể kiểm tra trang này, vì không lấy được danh sách Threat Intelligence của HaGeZi.
 
 # Name shown for a review whose writer gave none.
 store-review-someone = Một người nào đó
 
 # Red words when the keyring could not be reached.
-store-key-unreached = Không thể truy cập chùm khóa: { $why }.
+store-key-unreached = Trindle không thể truy cập chùm khóa: { $why }.
 
 # Red words when the key kept in the keyring is not text.
-store-key-not-text = Khóa được lưu không phải là văn bản.
+store-key-not-text = Khóa đã lưu không phải là văn bản.
 
 # Red words when a file that held the key could not be removed.
 store-key-not-removed = Không thể gỡ { $path }: { $why }

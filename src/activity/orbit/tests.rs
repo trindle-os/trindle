@@ -89,5 +89,5 @@ fn the_keyboard_steps_through_the_bubbles_and_opens_their_cards() {
     o.pointer(Pointer::Down(0.0, 0.0));
     assert!(o.keyed.borrow().is_none(), "the pointer takes the ring away");
     o.key(&Input::Focus(false));
-    assert_eq!(o.spoken(), "Programs, each as big as the memory it holds");
+    assert_eq!(o.spoken(), "Program bubbles sized by memory use");
 }

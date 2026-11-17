@@ -4,10 +4,15 @@ use std::process::{Child, Command, Stdio};
 use std::sync::OnceLock;
 use std::time::Duration;
 
+use smithay::reexports::calloop::generic::Generic;
 use smithay::reexports::calloop::timer::{TimeoutAction, Timer};
+use smithay::reexports::calloop::{Interest, Mode, PostAction};
 use smithay::input::keyboard::XkbConfig;
 
-use crate::state::{AnvilState, Backend};
+use crate::settings_watch::SettingsWatch;
+use crate::state::{Compose, Backend};
+
+const SETTINGS_LOOK: Duration = Duration::from_secs(3);
 
 fn settings_stamp() -> Vec<Option<std::time::SystemTime>> {
     crate::config::sources().iter().map(|p| std::fs::metadata(p).and_then(|m| m.modified()).ok()).collect()
@@ -24,6 +29,15 @@ pub struct Launch {
 }
 
 pub const AUTOSTART: &str = "trindle-autostart";
+
+pub fn watch<B: Backend + 'static, F>(handle: &smithay::reexports::calloop::LoopHandle<'static, Compose<B>>, timer: Timer, callback: F)
+where
+    F: FnMut(std::time::Instant, &mut (), &mut Compose<B>) -> TimeoutAction + 'static,
+{
+    if let Err(e) = handle.insert_source(timer, callback) {
+        tracing::warn!("a timer could not be put on the loop: {e}");
+    }
+}
 
 pub static LAUNCH: OnceLock<Launch> = OnceLock::new();
 
@@ -45,8 +59,24 @@ pub fn more_files() {
     unsafe { libc::setrlimit(libc::RLIMIT_NOFILE, &more) };
 }
 
+static SESSION_ENV: std::sync::Mutex<Vec<(String, String)>> = std::sync::Mutex::new(Vec::new());
+
+pub fn set_env(name: &str, value: impl Into<String>) {
+    let mut env = SESSION_ENV.lock().unwrap_or_else(|e| e.into_inner());
+    env.retain(|(n, _)| n != name);
+    env.push((name.to_string(), value.into()));
+}
+
+pub fn env_var(name: &str) -> Option<String> {
+    let set = SESSION_ENV.lock().unwrap_or_else(|e| e.into_inner()).iter().find(|(n, _)| n == name).map(|(_, v)| v.clone());
+    set.or_else(|| std::env::var(name).ok())
+}
+
 pub fn usual_files(cmd: &mut Command) {
     use std::os::unix::process::CommandExt;
+    for (name, value) in SESSION_ENV.lock().unwrap_or_else(|e| e.into_inner()).iter() {
+        cmd.env(name, value);
+    }
     let Some(&limit) = FILES.get() else { return };
     // SAFETY: between fork and exec the hook only calls setrlimit, which is
 
@@ -58,17 +88,17 @@ pub fn usual_files(cmd: &mut Command) {
     }
 }
 
-impl<BackendData: Backend + 'static> AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> Compose<BackendData> {
 
     pub fn session_ready(&mut self) {
         if let Some(name) = &self.socket_name {
-            std::env::set_var("WAYLAND_DISPLAY", name);
+            set_env("WAYLAND_DISPLAY", name.as_str());
         }
         if let Some(x) = self.xdisplay {
-            std::env::set_var("DISPLAY", format!(":{x}"));
+            set_env("DISPLAY", format!(":{x}"));
         }
 
-        std::env::set_var("TRINDLE_COMPOSE_PID", std::process::id().to_string());
+        set_env("TRINDLE_COMPOSE_PID", std::process::id().to_string());
         let Some(cmd) = self.startup.take() else { return };
         let mut child = Command::new("/bin/sh");
         child.arg("-c").arg(&cmd).stdin(Stdio::null());
@@ -93,7 +123,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
 
     fn end_with(&mut self, child: Child) {
         let mut child = Some(child);
-        let _ = self.handle.insert_source(Timer::from_duration(Duration::from_millis(250)), move |_, _, state| {
+        watch(&self.handle, Timer::from_duration(Duration::from_millis(250)), move |_, _, state| {
             let gone = child.as_mut().map(|c| !matches!(c.try_wait(), Ok(None))).unwrap_or(true);
             if gone {
                 child = None;
@@ -108,7 +138,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
         if !self.reader_keys.start_watching() {
             return;
         }
-        let _ = self.handle.insert_source(Timer::from_duration(Duration::from_millis(100)), |_, _, state| {
+        watch(&self.handle, Timer::from_duration(Duration::from_millis(100)), |_, _, state| {
             state.reader_listen();
             if state.reader_keys.keep_watching() {
                 TimeoutAction::ToDuration(Duration::from_millis(100))
@@ -119,20 +149,48 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
     }
 
     pub fn watch_settings(&mut self) {
+        let heard = SettingsWatch::new(crate::config::sources()).and_then(|watch| {
+            let source = Generic::new(watch.fd()?, Interest::READ, Mode::Level);
+            Ok((watch, source))
+        });
+        let (mut watch, source) = match heard {
+            Ok(both) => both,
+            Err(e) => return self.look_at_settings(&e),
+        };
+        let added = self.handle.insert_source(source, move |_, _, state| match watch.take_news() {
+            Ok(true) => {
+                state.reconfigure();
+                Ok(PostAction::Continue)
+            }
+            Ok(false) => Ok(PostAction::Continue),
+            Err(e) => {
+                state.reconfigure();
+                state.look_at_settings(&e);
+                Ok(PostAction::Remove)
+            }
+        });
+        if let Err(e) = added {
+            self.look_at_settings(&e.error);
+        }
+    }
+
+    fn look_at_settings(&mut self, why: &dyn std::fmt::Display) {
+        tracing::warn!("settings changes are looked for every {} seconds: inotify could not watch them: {why}", SETTINGS_LOOK.as_secs());
         let mut last = settings_stamp();
-        let _ = self.handle.insert_source(Timer::from_duration(Duration::from_secs(1)), move |_, _, state| {
+        watch(&self.handle, Timer::from_duration(SETTINGS_LOOK), move |_, _, state| {
             let now = settings_stamp();
             if now != last {
                 last = now;
                 state.reconfigure();
             }
-            TimeoutAction::ToDuration(Duration::from_secs(1))
+            TimeoutAction::ToDuration(SETTINGS_LOOK)
         });
     }
 
     pub fn reconfigure(&mut self) {
-        crate::config::apply_environment();
+        crate::config::reapply_environment();
         crate::sheet::reread();
+        crate::config::note_reread();
         let older_before = self.config.older_programs;
         self.config = crate::config::Config::load();
         if !launch().greeter {
@@ -173,4 +231,21 @@ pub fn let_go(mut child: Child) {
     std::thread::spawn(move || {
         let _ = child.wait();
     });
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn the_session_environment_goes_to_programs_started_and_not_into_this_one() {
+        set_env("TRINDLE_TEST_SESSION_ENV", "one");
+        set_env("TRINDLE_TEST_SESSION_ENV", "two");
+        let mut cmd = Command::new("true");
+        usual_files(&mut cmd);
+        let given: Vec<_> = cmd.get_envs().filter(|(n, _)| *n == "TRINDLE_TEST_SESSION_ENV").collect();
+        assert_eq!(given.len(), 1);
+        assert_eq!(given[0].1, Some(std::ffi::OsStr::new("two")));
+        assert!(std::env::var_os("TRINDLE_TEST_SESSION_ENV").is_none());
+    }
 }

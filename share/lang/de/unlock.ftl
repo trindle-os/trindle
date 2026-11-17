@@ -7,7 +7,7 @@ unlock-title-default = Festplattenpasswort
 
 # Heading of the box in place of cryptsetup's own wording ("Please unlock disk ...", "Enter passphrase").
 # SAFETY: needs a human review before it ships
-unlock-title-encryption = Verschlüsselungspasswort eingeben
+unlock-title-encryption = Datenträger-Passwort eingeben
 
 # Key hint under the box: Tab, or the eye, shows the typed password.
 unlock-show = Anzeigen
@@ -26,4 +26,3 @@ unlock-turn-off = Ausschalten
 # Red line inside the card when Enter is pressed with nothing typed.
 # SAFETY: needs a human review before it ships
 unlock-type-first = Gib das Passwort ein und drücke dann die Eingabetaste
-

@@ -8,7 +8,7 @@ settings-power-keywords = batterie veille suspendre éteindre redémarrer décon
 
 # Introduction under the heading of the power page, and the words behind the page i.
 # SAFETY: needs a human review before it ships
-settings-power-help = La batterie, le mode d'alimentation, et quand l'écran s'assombrit, se verrouille et s'éteint, sur un portable séparément pour la batterie et pour le chargeur. La tasse sur l'onglet garde l'écran éveillé. Verrouiller, redémarrer et éteindre sont ici aussi.
+settings-power-help = Choisissez votre mode d'alimentation, ainsi que le moment où l'écran s'assombrit, se verrouille et s'éteint. Sur un portable, vous les réglez séparément pour la batterie et pour le chargeur. La tasse dans l'anneau garde l'écran éveillé. Vous pouvez aussi verrouiller, redémarrer et éteindre depuis ici.
 
 # Choice in a list of how long to wait.
 settings-power-time-never = Jamais
@@ -77,32 +77,20 @@ settings-power-lid-shut-down = Éteindre
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-dim = Assombrir l'écran après
 
-# Small words under an idle timer line.
-settings-power-timer-dim-about = Le moindre mouvement rétablit la luminosité.
-
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-clock = Afficher l'horloge mobile après
 
-# Small words under an idle timer line.
-settings-power-timer-clock-about = L'heure seule, qui se déplace lentement.
-
 # Heading of an idle timer line, and the name of its lists.
-settings-power-timer-off = Éteindre l'écran après
-
-# Small words under an idle timer line.
-settings-power-timer-off-about = Une touche ou un mouvement le rallume.
+settings-power-timer-off = Écran éteint après
 
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-suspend = Mettre en veille après
 
-# Small words under an idle timer line.
-settings-power-timer-suspend-about = Laissé tranquille aussi longtemps, il s'endort.
-
 # Red words under the keep the screen awake switch when turning it on could not be saved.
-settings-power-no-awake = L'écran n'a pas pu être gardé éveillé : le choix n'a pas pu être enregistré.
+settings-power-no-awake = Trindle n'a pas pu garder l'écran éveillé, car il n'a pas pu enregistrer votre choix.
 
 # Red words under the keep the screen awake switch when turning it off could not be saved.
-settings-power-no-sleep = Garder l'écran éveillé n'a pas pu être désactivé : le choix n'a pas pu être enregistré.
+settings-power-no-sleep = Trindle n'a pas pu enregistrer votre choix : l'écran restera donc éveillé.
 
 # Name of the power mode that saves the battery.
 settings-power-profile-saver = Économie de batterie
@@ -135,10 +123,10 @@ settings-power-hours-minutes = { $h } h { $m } min
 settings-power-minutes = { $m } min
 
 # Sentence at the top of the page on a computer with no battery.
-settings-power-top-no-battery = Branché : cet ordinateur n'a pas de batterie à surveiller.
+settings-power-top-no-battery = Branché. Cet ordinateur n'a pas de batterie.
 
 # Sentence at the top of the page on a computer with no battery; { $mode } is the power mode.
-settings-power-top-no-battery-mode = Branché, en mode { $mode } : pas de batterie à surveiller.
+settings-power-top-no-battery-mode = Branché, en mode { $mode }. Cet ordinateur n'a pas de batterie.
 
 # Sentence at the top of the page while charging; { $percent } is how full.
 settings-power-top-charging = En charge, { $percent } %.
@@ -159,16 +147,13 @@ settings-power-top-battery = Batterie à { $percent } %.
 settings-power-top-battery-left = Batterie à { $percent } %, environ { $left } restantes.
 
 # Sentence at the top of the page while the battery is being read.
-settings-power-top-looking = Examen de la batterie…
+settings-power-top-looking = Vérification de la batterie…
 
 # Red words under the power mode line when the mode could not be changed.
-settings-power-mode-failed = Le mode d'alimentation n'a pas pu être changé.
+settings-power-mode-failed = Impossible de changer le mode d'alimentation.
 
 # Heading of the power mode line, and the name of its list.
 settings-power-mode = Mode d'alimentation
-
-# Small words under the power mode line.
-settings-power-mode-about = L'économie chauffe moins ; la performance va plus vite.
 
 # Said in green under a line after its choice was kept.
 settings-power-saved = Enregistré
@@ -179,17 +164,11 @@ settings-power-warn-name = Avertir quand la batterie descend à
 # Heading of the line for the battery warning.
 settings-power-warn = Avertir quand elle descend à
 
-# Small words under the battery warning line.
-settings-power-warn-about = Une fois, au milieu de l'écran.
-
 # Choice in the list of battery levels: never warn.
 settings-power-never = Jamais
 
 # Heading of the line, and name of its switch, for stopping charging at 80%.
 settings-power-limit = Arrêter la charge à 80 %
-
-# Small words under the charge limit line.
-settings-power-limit-about = Plus doux pour une batterie surtout branchée.
 
 # Title of the battery card on a laptop.
 settings-power-card-battery = Batterie
@@ -198,11 +177,11 @@ settings-power-card-battery = Batterie
 settings-power-card-looking-after = Entretien de la batterie
 
 # Words behind the i of the battery card.
-settings-power-battery-about = L'économie de batterie chauffe moins et fait durer la batterie plus longtemps ; la performance va plus vite ; équilibré se place entre les deux. L'avertissement apparaît une fois au milieu de l'écran, pendant que la batterie se vide. S'arrêter à 80 % est plus doux pour la batterie d'un portable surtout branché : elle se charge à 80 % et pas plus, et dure plus d'années. Désactivez cela avant une journée loin d'une prise.
+settings-power-battery-about = L'économie de batterie chauffe moins et fait durer la batterie plus longtemps. La performance va plus vite. Équilibré se place entre les deux. L'avertissement apparaît une fois, au milieu de l'écran, quand la batterie se vide. S'arrêter à 80 % est préférable pour un portable branché la plupart du temps, et aide la batterie à durer plus d'années. Désactivez cela avant une journée loin d'une prise.
 
 # Words under the charge limit line while the password window is open.
 # SAFETY: needs a human review before it ships
-settings-power-limit-waiting = En attente du mot de passe...
+settings-power-limit-waiting = En attente de votre mot de passe…
 
 # Green words under the charge limit line after charging was limited to 80%.
 settings-power-limit-on = S'arrête à 80 %
@@ -213,26 +192,20 @@ settings-power-limit-off = Charge jusqu'au plein
 # Heading of the keep the screen awake line, and name of its switch.
 settings-power-awake = Garder l'écran éveillé
 
-# Small words under the keep the screen awake line.
-settings-power-awake-about = La tasse sur l'onglet fait la même chose.
-
 # Title of the card about dimming and the moving clock.
 settings-power-screen-title = Écran
 
 # Words behind the i of the Screen card.
-settings-power-screen-about = Tant que « Garder l'écran éveillé » est activé, rien de cela n'arrive ; la tasse sur l'onglet l'active et le désactive aussi. Assombrissement : le moindre mouvement rétablit la luminosité ; seuls les écrans qui ont leur propre luminosité, comme celui d'un portable, s'assombrissent. L'horloge mobile : l'écran devient sombre avec seulement l'heure dessus, qui se déplace lentement, et une touche ou un mouvement ramène tout. Sur un portable, chaque durée se règle deux fois, pour la batterie et pour le chargeur.
+settings-power-screen-about = Tant que « Garder l'écran éveillé » est activé, rien de cela n'arrive. La tasse dans l'anneau l'active et le désactive aussi. Seuls les écrans qui ont leur propre réglage de luminosité, comme celui d'un portable, peuvent s'assombrir. L'horloge mobile assombrit l'écran et affiche seulement l'heure, qui se déplace lentement. Bouger la souris ou appuyer sur une touche remet tout comme avant. Sur un portable, vous réglez chaque durée deux fois : une pour la batterie et une pour le chargeur.
 
 # Title of the card about turning the screen off and sleeping.
 settings-power-sleep-title = Écran éteint et veille
 
 # Words behind the i of the Screen off and sleep card.
-settings-power-sleep-about = Une touche ou un mouvement rallume l'écran. Mettre en veille endort l'ordinateur jusqu'à ce que vous le réveilliez. Sur un portable, chaque durée se règle deux fois, pour la batterie et pour le chargeur. Avec un second écran branché, fermer le capot ne fait rien, pour que vous puissiez continuer avec le plus grand écran.
+settings-power-sleep-about = Appuyer sur une touche ou bouger la souris rallume l'écran. La mise en veille met l'ordinateur en pause jusqu'à ce que vous le réveilliez. Sur un portable, vous réglez chaque durée deux fois : une pour la batterie et une pour le chargeur. Si un second écran est branché, fermer le capot ne fait rien, pour que vous puissiez continuer avec le plus grand écran.
 
 # Heading of the line for what closing the lid does.
 settings-power-lid = Quand le capot est fermé
-
-# Small words under that line.
-settings-power-lid-about = Il ne se passe rien avec un second écran branché.
 
 # Caption above a list that applies while the laptop runs on its battery.
 settings-power-when-battery = Sur batterie
@@ -250,110 +223,96 @@ settings-power-named-charger = { $title } : branché
 # SAFETY: needs a human review before it ships
 settings-power-lock = Verrouiller l'écran
 
-# Small words under the lock the screen line.
-# SAFETY: needs a human review before it ships
-settings-power-lock-about = Votre mot de passe ou un code PIN vous fait revenir.
-
 # Heading of the lock after line, and the name of its list.
 settings-power-lock-after-name = Verrouiller après
-
-# Small words under the lock after line.
-settings-power-lock-after-about = Laissé tranquille aussi longtemps, quels que soient les autres réglages.
 
 # Heading of the line, and name of its switch, for locking when the computer sleeps.
 # SAFETY: needs a human review before it ships
 settings-power-lock-sleep = Verrouiller quand l'ordinateur s'endort
-
-# Small words under that line.
-settings-power-lock-sleep-about = Pour qu'il se réveille toujours verrouillé.
 
 # Heading of the line, and name of its button, that locks the screen now.
 # SAFETY: needs a human review before it ships
 settings-power-lock-now = Verrouiller maintenant
 
 # Small words under the lock now line.
-settings-power-lock-now-about = Aussi Super et L ensemble.
+settings-power-lock-now-about = Ou appuyez sur Super et L.
 
 # Red words under the lock now line when the lock screen would not start.
-settings-power-lock-now-failed = L'écran n'a pas pu être verrouillé : l'écran de verrouillage n'a pas voulu démarrer.
+settings-power-lock-now-failed = Trindle n'a pas pu verrouiller l'écran, car l'écran de verrouillage n'a pas démarré.
 
 # Title of the locking card.
 settings-power-lock-title = Verrouillage
 
 # Words behind the i of the locking card.
 # SAFETY: needs a human review before it ships
-settings-power-lock-card-about = Quand vous êtes absent, l'écran se verrouille, et votre mot de passe, ou un code PIN à quatre chiffres si vous en choisissez un, vous fait revenir. Rien n'est visible à l'écran jusque-là. Se connecter demande toujours votre mot de passe. « Verrouiller après » est la durée pendant laquelle l'ordinateur est laissé tranquille avant de se verrouiller, quels que soient les délais d'écran et de veille ; jusque-là, revenir ne demande aucun code PIN. Désactiver le verrouillage fait aussi oublier le code PIN. Quatre chiffres sont plus rapides à écrire que votre mot de passe : après la durée choisie pour le code PIN, ou après cinq essais ratés, votre mot de passe est demandé à la place. La corbeille cesse d'utiliser un code PIN.
+settings-power-lock-card-about = Quand vous êtes absent, l'écran se verrouille. Rien ne s'affiche tant que vous ne le déverrouillez pas avec votre mot de passe, ou avec un code PIN à quatre chiffres si vous en avez défini un. Se connecter demande toujours votre mot de passe. « Verrouiller après » est la durée pendant laquelle l'ordinateur peut rester sans surveillance avant de se verrouiller, quels que soient les délais d'écran et de veille. Jusque-là, vous n'avez pas besoin de code PIN à votre retour. Désactiver le verrouillage supprime aussi le code PIN. Après la durée définie dans « Le code PIN fonctionne pendant », ou après cinq essais ratés, il vous faut votre mot de passe.
 
 # Heading of the line for adding a PIN.
 # SAFETY: needs a human review before it ships
 settings-power-pin-add = Déverrouiller aussi avec un code PIN
 
-# Small words under that line.
-settings-power-pin-add-about = Quatre chiffres, plus rapide que votre mot de passe.
-
 # Heading of the line, and name of its list, for how long a PIN works after the screen locks.
 # SAFETY: needs a human review before it ships
 settings-power-pin-works-name = Le code PIN fonctionne pendant
-
-# Small words under that line.
-settings-power-pin-works-about = Ensuite, votre mot de passe est demandé à la place.
 
 # Name of the bin button that stops using a PIN.
 # SAFETY: needs a human review before it ships
 settings-power-pin-stop = Cesser d'utiliser un code PIN
 
 # Heading of the line shown when a PIN is kept.
-settings-power-pin-kept = Un code PIN est enregistré
-
-# Small words under that line.
-settings-power-pin-kept-about = Écrivez quatre nouveaux chiffres pour le changer.
+settings-power-pin-kept = Un code PIN est défini
 
 # Placeholder of the box for typing a new PIN.
 settings-power-pin-new = Nouveau code PIN
 
 # Name of the button that keeps the PIN typed.
-settings-power-pin-keep = Garder ce code PIN
+settings-power-pin-keep = Enregistrer ce code PIN
+
+# Placeholder of the box for typing your account password before a PIN is saved.
+settings-power-pin-password = Votre mot de passe
+
+# Red words under the PIN box when no password was typed.
+settings-power-pin-need-password = Saisissez d'abord votre mot de passe, puis enregistrez le code PIN.
+
+# Red words under the PIN box when the password typed was wrong.
+settings-power-pin-wrong-password = Ce mot de passe n'est pas le bon, Trindle n'a donc pas enregistré le code PIN.
 
 # Red words under the PIN line when the PIN could not be removed.
 # SAFETY: needs a human review before it ships
-settings-power-pin-not-removed = Le code PIN n'a pas pu être retiré, il déverrouille donc toujours l'écran.
+settings-power-pin-not-removed = Trindle n'a pas pu retirer le code PIN : il déverrouille donc toujours l'écran.
 
 # Red words under the PIN box when it is not the right length; { $n } is how many digits a PIN has.
 settings-power-pin-digits =
     { $n ->
-        [one] Un code PIN fait { $n } chiffre.
-        [many] Un code PIN fait { $n } de chiffres.
-       *[other] Un code PIN fait { $n } chiffres.
+        [one] Utilisez { $n } chiffre.
+       *[other] Utilisez { $n } chiffres.
     }
 
 # Heading of the log out line, and name of its round button.
 # SAFETY: needs a human review before it ships
 settings-power-log-out = Se déconnecter
 
-# Small words under the log out line.
-settings-power-log-out-about = Retour à l'écran de connexion.
-
 # Title of the card with log out, suspend, restart and shut down.
 settings-power-session-title = Session
 
 # Words behind the i of the session card.
 # SAFETY: needs a human review before it ships
-settings-power-session-about = Se déconnecter ferme toutes les fenêtres et revient à l'écran de connexion. Mettre en veille endort l'ordinateur jusqu'à ce que vous le réveilliez. Chaque bouton demande deux fois, comme le choix d'alimentation dans l'anneau, pour qu'un faux geste ne fasse rien.
+settings-power-session-about = Se déconnecter ferme toutes les fenêtres et vous ramène à l'écran de connexion. La mise en veille met l'ordinateur en pause jusqu'à ce que vous le réveilliez. Chaque bouton demande une seconde pression pour confirmer, comme les choix d'alimentation dans l'anneau, pour qu'un faux geste ne fasse rien.
 
 # Red words under a session button when the system bus is not there.
-settings-power-no-bus = Le bus du système n'est pas disponible.
+settings-power-no-bus = Impossible de joindre le service système.
 
 # Red words under a session button when the computer would not do it.
-settings-power-would-not = L'ordinateur n'a pas voulu le faire.
+settings-power-would-not = L'ordinateur n'a pas pu le faire.
 
 # Spoken description of the battery picture while the battery is being read.
-settings-power-art-looking-tip = Examen de la batterie.
+settings-power-art-looking-tip = Vérification de la batterie.
 
 # Spoken description of the battery picture; { $percent } is how full and { $state } what it is doing, such as Charging.
 settings-power-art-tip = Batterie à { $percent } %. { $state }
 
 # Word drawn in the empty battery picture while the battery is being read.
-settings-power-art-looking = Examen
+settings-power-art-looking = Chargement
 
 # Word drawn under the battery figure when its state is not known.
 settings-power-art-battery = Batterie
@@ -366,10 +325,10 @@ settings-power-art-left =
     }
 
 # Spoken description of the battery range bar when there is no warning; { $top } is the percent it charges to.
-settings-power-limits-tip = Charge jusqu'à { $top } % ; pas d'avertissement.
+settings-power-limits-tip = Charge jusqu'à { $top } %, sans avertissement.
 
 # Spoken description of the battery range bar; { $top } is the percent it charges to and { $warn } where a warning comes.
-settings-power-limits-tip-warn = Charge jusqu'à { $top } % ; un avertissement à { $warn } %.
+settings-power-limits-tip-warn = Charge jusqu'à { $top } %, avec un avertissement à { $warn } %.
 
 # A length of time in the list of how long a PIN works, in minutes; { $n } is the number.
 settings-power-pin-minutes =

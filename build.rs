@@ -7,9 +7,9 @@ fn main() {
     let root = std::env::var("CARGO_MANIFEST_DIR").unwrap();
     let dir = Path::new(&root).join("share/lang/en");
     println!("cargo:rerun-if-changed=share/lang/en");
-    let mut names: Vec<String> = std::fs::read_dir(&dir)
-        .map(|r| r.flatten().filter_map(|e| e.file_name().into_string().ok()).filter(|n| n.ends_with(".ftl")).collect())
-        .unwrap_or_default();
+    let entries = std::fs::read_dir(&dir).unwrap_or_else(|e| panic!("cannot read {}: {e}", dir.display()));
+    let mut names: Vec<String> = entries.flatten().filter_map(|e| e.file_name().into_string().ok()).filter(|n| n.ends_with(".ftl")).collect();
+    assert!(!names.is_empty(), "{} holds no .ftl files: the English words would be missing", dir.display());
     names.sort();
     let mut out = String::from("&[\n");
     for n in &names {

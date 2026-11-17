@@ -271,12 +271,12 @@ fn second_screen(rig: &mut Rig) -> Output {
     let mode = Mode { size: (1280, 800).into(), refresh: crate::render::ASSUMED_REFRESH };
     output.change_current_state(Some(mode), None, None, Some((1280, 0).into()));
     output.set_preferred(mode);
-    output.create_global::<crate::state::AnvilState<crate::rig::RigData>>(&rig.state.display_handle);
+    output.create_global::<crate::state::Compose<crate::rig::RigData>>(&rig.state.display_handle);
     rig.state.space.map_output(&output, (1280, 0));
     output
 }
 
-fn until_drawn(rig: &mut Rig, most: Duration, mut done: impl FnMut(&mut Rig) -> bool) -> bool {
+pub(crate) fn until_drawn(rig: &mut Rig, most: Duration, mut done: impl FnMut(&mut Rig) -> bool) -> bool {
     rig.until(most, |r| {
         let output = r.output.clone();
         for w in r.state.space.elements() {
@@ -444,7 +444,7 @@ fn a_game_asking_keeps_the_screen_awake_only_while_it_shows() {
     });
 }
 
-mod older {
+pub(crate) mod older {
 
     use super::*;
     use x11rb::connection::Connection as _;

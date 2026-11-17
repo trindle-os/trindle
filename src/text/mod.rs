@@ -102,6 +102,7 @@ impl Tab {
             unsaved: self.unsaved(),
             caret: pane.doc.caret,
             markdown: self.markdown,
+            stamp: self.stamp,
         }
     }
 }
@@ -392,7 +393,8 @@ impl Text {
                 let (text, form) = enc::read_as(&bytes, named);
                 (text, form, false)
             };
-            let stamp = e.path.as_deref().and_then(store::stamp);
+
+            let stamp = if unsaved { e.stamp } else { e.path.as_deref().and_then(store::stamp) };
             let mut doc = Doc::new(text);
             if unsaved {
                 doc.mark_unsaved();

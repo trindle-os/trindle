@@ -77,10 +77,10 @@ fn setting_kept() -> Result<Setting, String> {
 }
 
 fn write_state(state: &State) -> Outcome {
-    if let Some(dir) = Path::new(home::STATE).parent() {
+    if let Some(dir) = at(home::STATE).parent() {
         std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
     }
-    replace(Path::new(home::STATE), state.text().as_bytes(), 0o644)
+    replace(&at(home::STATE), state.text().as_bytes(), 0o644)
 }
 
 fn measure() -> Option<u64> {
@@ -170,7 +170,7 @@ pub fn daily(args: &[String]) -> Outcome {
         return Ok(());
     }
 
-    let setting = Setting { on: Path::new(home::SNAPPER_CONFIG).exists() && Setting::read().on, ..Setting::read() };
+    let setting = Setting { on: at(home::SNAPPER_CONFIG).exists() && Setting::read().on, ..Setting::read() };
     ensure_config(setting.days)?;
     secure_folder()?;
     look(setting, true)
@@ -201,8 +201,8 @@ mod tests {
         for no in ["0", "1", "8", "365", "-7", "7 ", "seven", "", "7;reboot", "../7"] {
             assert!(days_of(no).is_err(), "{no}");
 
-            assert_eq!(on(&strings(&[no])).unwrap_err(), "That is not a time earlier versions can be kept for.");
-            assert_eq!(keep(&strings(&[no])).unwrap_err(), "That is not a time earlier versions can be kept for.");
+            assert_eq!(on(&strings(&[no])).unwrap_err(), "That isn't a valid length of time to keep earlier versions.");
+            assert_eq!(keep(&strings(&[no])).unwrap_err(), "That isn't a valid length of time to keep earlier versions.");
         }
     }
 

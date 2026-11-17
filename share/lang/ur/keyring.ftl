@@ -51,7 +51,7 @@ keyring-stopped = کی رنگ رک گئی ہے
 keyring-not-the-keyring-password = یہ کی رنگ کا پاس ورڈ نہیں ہے
 
 # Shown under the box when the keyring file is damaged and has been left as it is.
-keyring-damaged-left = کی رنگ کی فائل خراب ہے، اس لیے اسے جوں کا توں چھوڑ دیا گیا
+keyring-damaged-left = کی رنگ کی فائل خراب ہے، اس لیے Trindle نے اسے نہیں بدلا
 
 # Shown under the box when the password is not the person's login password.
 # SAFETY: needs a human review before it ships
@@ -73,7 +73,7 @@ keyring-error-locked = کی رنگ مقفل ہے
 keyring-error-wrong-password = یہ پاس ورڈ کی رنگ نہیں کھولتا
 
 # Said when the collection or item asked for is not there.
-keyring-error-no-such = ایسا کوئی مجموعہ یا آئٹم موجود نہیں
+keyring-error-no-such = وہ آئٹم موجود نہیں
 
 # Said when the keyring file cannot be read as a keyring.
 keyring-error-damaged = کی رنگ کی فائل خراب ہے
@@ -83,8 +83,10 @@ keyring-error-damaged = کی رنگ کی فائل خراب ہے
 keyring-asked-by = { $program } نے مانگا
 
 # Told to a program that asked while the keyring was taking over from the one before and many calls already waited.
-keyring-starting = کی رنگ شروع ہو رہی ہے۔ دوبارہ مانگیں۔
+keyring-starting = کی رنگ شروع ہو رہی ہے۔ دوبارہ کوشش کریں۔
 
 # The program in "Asked for by", for a program on the bus: $name is the name it gives itself, which anything can claim.
 keyring-named-itself = ایک پروگرام جو خود کو { $name } کہتا ہے
 
+# Said to a program that gave a password with letters the keyring can't read, so no keyring is made with it.
+keyring-password-unreadable = اس پاس ورڈ میں ایسے حروف ہیں جو کی رنگ نہیں پڑھ سکتی

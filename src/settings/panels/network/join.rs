@@ -24,6 +24,10 @@ impl Network {
                                              Some(Duration::from_secs(30)), &kit.events, back);
             return;
         }
+        if ap.enterprise {
+            kit.say(&ap_key(name), t!("settings-network-username-unsupported"), false, false);
+            return;
+        }
         if !ap.secure {
             self.add(kit, name, ap, None);
             return;
@@ -62,7 +66,6 @@ impl Network {
 
     pub(super) fn hidden_line(&self, kit: &Kit) -> Node<Msg> {
         let mut l = line(t!("settings-network-hidden"))
-            .sub(t!("settings-network-hidden-sub"))
             .icon("network-wireless-encrypted-symbolic")
             .key(HIDDEN)
             .control(button("list-add-symbolic", t!("settings-network-hidden")).on_press(on::<Network>(|me, k| {
@@ -186,7 +189,6 @@ impl Network {
         });
         bus.call(NM, &added, CONNECTION).method("Delete", &(), false, None, &kit.events, back);
     }
-
 }
 
 const ACTIVE: &str = "org.freedesktop.NetworkManager.Connection.Active";

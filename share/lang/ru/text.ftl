@@ -46,7 +46,7 @@ text-find-replace-key = Найти и заменить (Ctrl+H)
 text-go-to-line-key = Перейти к строке (Ctrl+G)
 
 # Button in the menu for a Markdown file that shows it as it will look finished, with its shortcut.
-text-finished-key = Готовый вид (Ctrl+E)
+text-finished-key = Предпросмотр (Ctrl+E)
 
 # Button in the menu for a Markdown file that exports it as a web page. Also the title of the chooser for that.
 text-export-html = Экспортировать как веб-страницу
@@ -61,7 +61,7 @@ text-wrap = Переносить длинные строки
 text-line-numbers = Номера строк
 
 # Button in the menu that opens the Text settings.
-text-settings = Параметры
+text-settings = Настройки
 
 # Tip of the button on a tab that closes it. $name is the tab's file name.
 text-close-tab = Закрыть { $name }
@@ -70,7 +70,7 @@ text-close-tab = Закрыть { $name }
 text-close-bar = Закрыть панель
 
 # Words the screen reader gives the button that shows the finished look of the text, with its shortcut.
-text-finished-look = Готовый вид
+text-finished-look = Предпросмотр
 
 # Menu item that copies everything in the text.
 text-copy-all = Скопировать весь текст
@@ -159,7 +159,7 @@ text-replace-all = Заменить все
 text-replace-all-spoken = Заменить каждое найденное слово
 
 # Words on the find bar when a find has been asked for and has no match.
-text-none-found = Не найдено
+text-none-found = Нет совпадений
 
 # Words on the find bar when a find has matches. $at is which one is shown, $n how many there are.
 text-of-found = { $at } из { $n }
@@ -197,7 +197,7 @@ text-back = Назад к тексту
 text-spell-added = теперь входит в ваши слова
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are no suggestions.
-text-spell-none = нет в словаре, там нет ничего похожего
+text-spell-none = нет в словаре, и подсказок нет
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are suggestions.
 text-spell-offers = нет в словаре. Вы имели в виду одно из этих?
@@ -219,7 +219,7 @@ text-files-here = Здесь будут файлы, которые вы откр
 text-clear-list = Очистить список
 
 # Heading of the Text settings page.
-text-settings-title = Параметры «Текста»
+text-settings-title = Настройки «Текста»
 
 # Heading of the group on the settings page for when Text starts.
 text-starting = Запуск
@@ -228,16 +228,16 @@ text-starting = Запуск
 text-when-opens = При открытии «Текста»
 
 # First choice: Text opens the files it had open last time.
-text-reopen = Открыть файлы прошлого раза
+text-reopen = Снова открыть прежние файлы
 
 # Second choice: Text opens with an empty page.
 text-start-blank = Начать с пустой страницы
 
 # Note under the start choice: work not saved to a file is kept whichever choice is made.
-text-keep-note = Работа, не сохранённая в файл, всегда сохраняется и возвращается при любом выборе.
+text-keep-note = Несохранённая работа сохраняется и восстанавливается при любом выборе.
 
 # Heading of the group on the settings page for how the text looks.
-text-showing = Отображение текста
+text-showing = Вид текста
 
 # Label of the size slider: how big the text is.
 text-size = Размер
@@ -277,7 +277,7 @@ text-next-save = При следующем сохранении файл буд�
 
 # SAFETY: needs a human review before it ships
 # Words saying the text has changes that are not saved to its file. $path is the file.
-text-changes-not-saved = В { $name } есть изменения, не сохранённые в файл.
+text-changes-not-saved = В { $name } есть несохранённые изменения.
 
 # SAFETY: needs a human review before it ships
 # Words saying the text has changes and no file yet.
@@ -288,7 +288,13 @@ text-not-saved = Этот текст не сохранён в файл.
 text-save-named = Сохранить { $name }?
 
 # Words in the question before closing: how many other tabs with changes are left after this one. $left is the number.
-text-more-after = Ещё после этой: { $left }.
+text-more-after =
+    { $left ->
+        [one] Осталось сохранить { $left } вкладку.
+        [few] Осталось сохранить { $left } вкладки.
+        [many] Осталось сохранить { $left } вкладок.
+       *[other] Осталось сохранить { $left } вкладки.
+    }
 
 # SAFETY: needs a human review before it ships
 # Button in the question before closing that closes the tab without saving it.
@@ -325,7 +331,7 @@ text-work-not-kept = Не удалось сохранить работу в { $f
 text-settings-not-saved = Не удалось сохранить параметры: { $reason }
 
 # Shown when a word could not be added to the person's own words. $word is the word and $reason why.
-text-word-not-added = Не удалось добавить { $word } в ваши слова: { $reason }
+text-word-not-added = Не удалось добавить { $word } в ваш словарь: { $reason }
 
 # Shown when the list of recent files could not be cleared. $reason says why.
 text-list-not-cleared = Не удалось очистить список: { $reason }
@@ -334,7 +340,7 @@ text-list-not-cleared = Не удалось очистить список: { $re
 text-chooser-failed = Не удалось открыть окно выбора файла.
 
 # Shown when the file chooser cannot be used because there is no session bus.
-text-no-bus = Без шины сеанса выбрать файлы нельзя.
+text-no-bus = Trindle сейчас не может открыть окно выбора файла.
 
 # Shown when the spelling language asked for is not on the computer. $lang is its name.
 text-no-dictionary = Словаря «{ $lang }» нет.
@@ -344,23 +350,23 @@ text-dictionary-unreadable = Не удалось прочитать словар
 
 # SAFETY: needs a human review before it ships
 # Shown when a save was stopped and the text it held before was kept in a folder. $reason says what went wrong and $path is where the old text is kept.
-text-kept-before = { $reason }. То, что было в файле раньше, сохранено в { $path }.
+text-kept-before = { $reason }. Прежний текст сохранён в { $path }.
 
 # SAFETY: needs a human review before it ships
 # Shown when a save was stopped part way and the old text is kept. $why says why, and $path is where the old text is kept.
-text-kept-before-that = { $why } То, что было в файле до этого сохранения, сохранено в { $path }.
+text-kept-before-that = { $why } Текст, который был до этого сохранения, находится в { $path }.
 
 # SAFETY: needs a human review before it ships
 # Shown when a save was stopped and what was kept of it cannot be read. $name is the file's path.
-text-saved-unreadable = { $name } сохранялся, когда «Текст» был остановлен, и сохранённое от этого сохранения нельзя прочитать.
+text-saved-unreadable = «Текст» закрылся во время сохранения { $name }, и Trindle не может прочитать ту часть, которая была сохранена.
 
 # SAFETY: needs a human review before it ships
 # Shown when a save was stopped and the file has changed since. $name is the file's path.
-text-saved-changed = { $name } сохранялся, когда «Текст» был остановлен, и с тех пор изменился, поэтому оставлен как есть.
+text-saved-changed = «Текст» закрылся во время сохранения { $name }. С тех пор файл изменился, поэтому Trindle оставил его как есть.
 
 # SAFETY: needs a human review before it ships
 # Shown when a save was stopped and the old text could not be put back. $name is the file's path, $reason why, and $path where the old text is kept.
-text-saved-not-put-back = { $name } сохранялся, когда «Текст» был остановлен, и его не удалось вернуть в прежний вид: { $reason }. То, что было в файле до этого сохранения, сохранено в { $path }.
+text-saved-not-put-back = «Текст» закрылся во время сохранения { $name }, и Trindle не смог вернуть файл в прежний вид: { $reason }. Текст, который был до этого сохранения, находится в { $path }.
 
 # Quiet word beside what was just saved, exported or changed.
 text-done = Готово
@@ -368,10 +374,13 @@ text-done = Готово
 # Suggested file name in the Save as chooser for text never saved before.
 text-untitled-file = Без имени.txt
 
+# The misspelt word, shown in quotation marks on the spelling bar. { $word } is the word.
+text-spell-word = «{ $word }»
+
 
 
 # Line under the Save button when the file was changed by something else after Text opened, saved or reloaded it. Nothing has been saved.
-text-changed-elsewhere = Изменено в другом месте после того, как вы это открыли.
+text-changed-elsewhere = Этот файл изменился после того, как вы его открыли.
 
 # Button beside that line: save the words here over the changed file.
 text-save-anyway = Всё равно сохранить
@@ -379,3 +388,5 @@ text-save-anyway = Всё равно сохранить
 # Button beside that line: read the file again from disk and drop the unsaved changes here.
 text-reload = Загрузить заново
 
+# Shown when a link in the finished look is pressed and is not a web address, or no browser started.
+text-link-not-opened = Отсюда открываются только веб-адреса.

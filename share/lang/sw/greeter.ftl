@@ -28,13 +28,13 @@ greeter-phone-failed = Simu yako haikukuingiza. Andika nenosiri lako.
 
 # Under the password box for a few seconds, where a phone is paired.
 # SAFETY: needs a human review before it ships
-greeter-phone-hint = Kitufe cha simu hukuingiza kwa simu yako.
+greeter-phone-hint = Ingia kwa simu yako
 
 # At the foot of the screen, for when nothing else works.
 greeter-trouble = Una tatizo la kuingia? Bonyeza Ctrl+Alt+F2 kwa kuingia kwa maandishi.
 
 # Beside the light drawing switch, on a computer with no graphics chip.
-greeter-no-chip = Hakuna chipu ya michoro iliyopatikana, kwa hiyo uchoraji mwepesi huifanya iwe haraka.
+greeter-no-chip = Trindle haikupata chipu ya michoro, kwa hiyo inatumia michoro rahisi ili eneo-kazi liendelee kujibu haraka.
 
 # The main button's name (a round button with an arrow) that logs in.
 # SAFETY: needs a human review before it ships
@@ -57,7 +57,7 @@ greeter-pam-account-expired = Akaunti hii imekwisha muda.
 greeter-pam-password-expired = Nenosiri hili limekwisha muda. Ingia kwenye koni ya maandishi (Ctrl+Alt+F2) ili ulibadilishe.
 
 # Red line under the boxes, or the sentence at the top, when the login failed and the system gave no reason.
-greeter-login-failed = Kuingia hakukufanikiwa.
+greeter-login-failed = Haikuweza kukuingiza.
 
 # Red line under the name box when Enter is pressed with no name.
 greeter-name-first = Andika jina lako kwanza.
@@ -84,7 +84,7 @@ greeter-answer-box = Jibu
 greeter-use-phone = Tumia simu
 
 # Name of the switch for light drawing on a computer with no graphics chip, and the word under it.
-greeter-light-drawing = Uchoraji mwepesi
+greeter-light-drawing = Michoro ya chini
 
 # Tip of the round button that shows or hides the on-screen keyboard.
 greeter-keyboard-tip = Kibodi ya skrini
@@ -111,7 +111,7 @@ greeter-shut-down = Zima
 greeter-shut-down-sure = Bonyeza tena ili uzime
 
 # Red line under the boxes when a power button is pressed and the system has no bus to ask.
-greeter-no-bus = Basi ya mfumo haipatikani.
+greeter-no-bus = Trindle haiwezi kufikia mfumo.
 
 # Red line under the boxes when the system refused to restart; the reason follows, as the system worded it.
 greeter-restart-failed = Haikuweza kuanzisha upya: { $why }
@@ -120,19 +120,19 @@ greeter-restart-failed = Haikuweza kuanzisha upya: { $why }
 greeter-shut-down-failed = Haikuweza kuzima: { $why }
 
 # Red line under the boxes when the login service could not be spoken to.
-greeter-service-no-talk = Haikuweza kuwasiliana na huduma ya kuingia.
+greeter-service-no-talk = Haikuweza kufikia huduma ya kuingia.
 
 # Red line under the boxes when the login service was too slow.
-greeter-service-timeout = Huduma ya kuingia haikujibu kwa wakati.
+greeter-service-timeout = Huduma ya kuingia ilichukua muda mrefu mno.
 
 # Red line under the boxes when the login service hung up.
 greeter-service-closed = greetd ilifunga muunganisho.
 
 # Red line under the boxes when the login service's answer was far too large.
-greeter-service-too-big = Huduma ya kuingia ilijibu kwa kitu kikubwa mno kusomeka.
+greeter-service-too-big = Huduma ya kuingia ilituma jibu kubwa mno kusomeka.
 
 # Red line under the boxes when the login screen was started by hand and not by the login service.
-greeter-service-not-started = GREETD_SOCK haijawekwa: skrini ya kuingia haikuanzishwa na greetd.
+greeter-service-not-started = GREETD_SOCK haijawekwa, kwa hiyo greetd haikuanzisha skrini hii ya kuingia.
 
 # Red line under the boxes when there is no connection to the login service.
 greeter-service-no-connection = hakuna muunganisho

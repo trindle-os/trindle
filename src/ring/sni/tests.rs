@@ -1,6 +1,7 @@
 //! Tests of the tray icons.
 
 use crate::toolkit::colour::Colour;
+use crate::toolkit::icon::Icons;
 use crate::toolkit::widget::{Pen, Rect};
 
 use super::*;
@@ -104,4 +105,12 @@ fn a_tray_icon_with_none_is_drawn_in_the_ink_alone() {
     let drawn: Vec<_> = pix.pixels().iter().filter(|p| p.alpha() > 0).collect();
     assert!(!drawn.is_empty(), "something is drawn");
     assert!(drawn.iter().all(|p| p.red() == p.green() && p.green() == p.blue()), "only the ink's own colour");
+}
+
+#[test]
+fn the_tray_takes_no_more_than_its_ceiling_of_items() {
+    assert!(room_for_another(0, 0) && room_for_another(ITEMS_MOST - 1, 0));
+    assert!(!room_for_another(ITEMS_MOST, 0) && !room_for_another(usize::MAX, 0));
+
+    assert!(room_for_another(ITEMS_PER_PROCESS - 1, ITEMS_PER_PROCESS - 1) && !room_for_another(ITEMS_PER_PROCESS, ITEMS_PER_PROCESS));
 }

@@ -117,7 +117,6 @@ impl App for Magnifier {
 fn paint(canvas: &mut tiny_skia::PixmapMut, pen: &Pen, picture: &Pixmap, (x, y): (f32, f32)) {
     let scale = pen.scale;
     let (glass, rim) = (SIZE * scale, (SIZE + RIM) * scale);
-    let Some(circle) = PathBuilder::from_circle(x, y, glass) else { return };
     let whole = Rect { x: x - rim, y: y - rim, w: 2.0 * rim, h: 2.0 * rim };
     super::notice::float_shadow(canvas, pen, whole, rim);
     if let Some(frame) = PathBuilder::from_circle(x, y, rim) {
@@ -125,14 +124,19 @@ fn paint(canvas: &mut tiny_skia::PixmapMut, pen: &Pen, picture: &Pixmap, (x, y):
         ink.set_color(pen.theme.raised.to_skia());
         canvas.fill_path(&frame, &ink, FillRule::Winding, Transform::identity(), None);
     }
-    let Some(mut clip) = Mask::new(canvas.width(), canvas.height()) else { return };
-    clip.fill_path(&circle, FillRule::Winding, true, Transform::identity());
+
+    let (ox, oy) = ((x - rim).floor() - 2.0, (y - rim).floor() - 2.0);
+    let side = (2.0 * rim).ceil() as u32 + 6;
+    let (Some(mut lens), Some(mut clip)) = (Pixmap::new(side, side), Mask::new(side, side)) else { return };
+    let Some(inside) = PathBuilder::from_circle(x - ox, y - oy, glass) else { return };
+    clip.fill_path(&inside, FillRule::Winding, true, Transform::identity());
 
     let k = (picture.width() as f32 / canvas.width().max(1) as f32).max(0.0001);
     let grow = TIMES / k;
-    let t = Transform::from_translate(x, y).pre_scale(grow, grow).pre_translate(-x * k, -y * k);
+    let t = Transform::from_translate(x, y).pre_scale(grow, grow).pre_translate(-x * k, -y * k).post_translate(-ox, -oy);
     let good = PixmapPaint { quality: FilterQuality::Bilinear, ..PixmapPaint::default() };
-    canvas.draw_pixmap(0, 0, picture.as_ref(), &good, t, Some(&clip));
+    lens.as_mut().draw_pixmap(0, 0, picture.as_ref(), &good, t, Some(&clip));
+    canvas.draw_pixmap(ox as i32, oy as i32, lens.as_ref(), &PixmapPaint::default(), Transform::identity(), None);
 }
 
 fn picture(shot: &capture::Picture) -> Option<Pixmap> {
@@ -183,7 +187,7 @@ pub fn start(ctx: &Rc<Ctx>, at: Option<(i32, i32, i32, i32)>, finished: impl Fn(
         let (me, finished) = (Rc::downgrade(&s), finished.clone());
         on_thread(move || capture::take(area, false), move |shot| {
             let Some(s) = me.upgrade() else { return };
-            match shot.map_err(|e| e.to_string()).and_then(|p| picture(&p).ok_or_else(|| "the picture was the wrong size".to_string())) {
+            match shot.map_err(|e| e.to_string()).and_then(|p| picture(&p).ok_or_else(|| t!("ring-magnify-wrong-size").to_string())) {
                 Ok(p) => s.change(|m| m.picture = Some(Rc::new(p))),
                 Err(e) => {
                     eprintln!("trindle-ring: magnifier: {e}");

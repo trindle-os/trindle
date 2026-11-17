@@ -28,13 +28,13 @@ greeter-phone-failed = Dein Telefon hat dich nicht angemeldet. Gib dein Passwort
 
 # Under the password box for a few seconds, where a phone is paired.
 # SAFETY: needs a human review before it ships
-greeter-phone-hint = Mit der Telefon-Taste meldest du dich mit deinem Telefon an.
+greeter-phone-hint = Mit deinem Telefon anmelden
 
 # At the foot of the screen, for when nothing else works.
 greeter-trouble = Probleme beim Anmelden? Drücke Strg+Alt+F2 für eine Textanmeldung.
 
 # Beside the light drawing switch, on a computer with no graphics chip.
-greeter-no-chip = Es wurde kein Grafikchip gefunden, deshalb hält einfaches Zeichnen alles flott.
+greeter-no-chip = Trindle hat keinen Grafikchip gefunden und nutzt einfachere Grafik, damit der Desktop flott reagiert.
 
 # The main button's name (a round button with an arrow) that logs in.
 greeter-sign-in = Anmelden
@@ -82,7 +82,7 @@ greeter-answer-box = Antwort
 greeter-use-phone = Telefon verwenden
 
 # Name of the switch for light drawing on a computer with no graphics chip, and the word under it.
-greeter-light-drawing = Einfaches Zeichnen
+greeter-light-drawing = Einfache Grafik
 
 # Tip of the round button that shows or hides the on-screen keyboard.
 greeter-keyboard-tip = Bildschirmtastatur
@@ -113,7 +113,7 @@ greeter-shut-down = Herunterfahren
 greeter-shut-down-sure = Erneut drücken, um herunterzufahren
 
 # Red line under the boxes when a power button is pressed and the system has no bus to ask.
-greeter-no-bus = Der Systembus ist nicht verfügbar.
+greeter-no-bus = Trindle erreicht das System nicht.
 
 # Red line under the boxes when the system refused to restart; the reason follows, as the system worded it.
 greeter-restart-failed = Neustart nicht möglich: { $why }
@@ -125,13 +125,13 @@ greeter-shut-down-failed = Herunterfahren nicht möglich: { $why }
 greeter-service-no-talk = Der Anmeldedienst war nicht erreichbar.
 
 # Red line under the boxes when the login service was too slow.
-greeter-service-timeout = Der Anmeldedienst hat nicht rechtzeitig geantwortet.
+greeter-service-timeout = Der Anmeldedienst hat zu lange gebraucht.
 
 # Red line under the boxes when the login service hung up.
 greeter-service-closed = greetd hat die Verbindung geschlossen.
 
 # Red line under the boxes when the login service's answer was far too large.
-greeter-service-too-big = Der Anmeldedienst hat mit etwas geantwortet, das zu groß zum Lesen ist.
+greeter-service-too-big = Die Antwort des Anmeldedienstes war zu groß zum Lesen.
 
 # Red line under the boxes when the login screen was started by hand and not by the login service.
 greeter-service-not-started = GREETD_SOCK ist nicht gesetzt: Der Anmeldebildschirm wurde nicht von greetd gestartet.

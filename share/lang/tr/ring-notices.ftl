@@ -38,7 +38,7 @@ ring-snooze-for-1-hour = 1 saat ertele
 ring-snooze-for-6-hours = 6 saat ertele
 
 # Tip and screen reader name of the snooze choice for the next morning.
-ring-snooze-for-next-morning = Ertesi sabaha ertele
+ring-snooze-for-next-morning = Sabaha kadar ertele
 
 # Tip of the button on the snooze page that goes back to the notification's message.
 ring-act-back = İletiye geri dön
@@ -111,7 +111,7 @@ ring-lid-nothing = Hiçbir şey
 ring-lid-shut-down = Kapat
 
 # Reason the system lists beside Trindle's hold on the lid switch (shown by tools that list what stops sleep).
-ring-lid-reason = Kapağı kapatmak, Ayarlar'daki Güç bölümünde belirtileni yapar
+ring-lid-reason = Kapağı kapattığınızda ne olacağını Ayarlar'da, Güç bölümünden seçebilirsiniz.
 
 # Notice at the foot of the screen for a few seconds when the magnifier starts.
 ring-magnify-hint = Büyütmek için herhangi bir yere basılı tutun
@@ -131,10 +131,10 @@ ring-mic-on-tip = Mikrofonu yeniden aç
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when something other than the person pressed the microphone switch on.
-ring-mic-own-press = Mikrofonu yalnızca sizin basmanız yeniden açabilir.
+ring-mic-own-press = Mikrofonu yalnızca siz yeniden açabilirsiniz.
 
 # Line in the ring when the microphone switch could not be changed; the reason follows.
-ring-mic-not-changed = Mikrofon anahtarı değiştirilemedi: { $why }
+ring-mic-not-changed = Trindle mikrofon anahtarını değiştiremedi: { $why }
 
 # Notice when a notification was clicked and no program could be found for it.
 ring-goes-no-program = Program bulunamadı
@@ -152,7 +152,7 @@ ring-notes-copied = Asistanınız için kopyalandı
 ring-notes-name = Bildirim
 
 # Said when a pinned notification has been held long enough and now follows the pointer.
-ring-notes-moving = Taşınıyor. Bırakmak için fareyi bırakın, geri koymak için Escape'e basın.
+ring-notes-moving = Bildirim taşınıyor. Bırakmak için fareyi bırakın, geri koymak için Escape'e basın.
 
 # Said when a pinned notification has been dropped or moved by keys.
 ring-notes-moved = Taşındı
@@ -194,7 +194,11 @@ ring-plugin-needs = { $name } izninize ihtiyaç duyor
 
 # SAFETY: needs a human review before it ships
 # Line under the notice that a plugin needs permission: none of the permissions it asks for are given.
-ring-plugin-cannot-work = Henüz çalışamaz: istenen { $asks } izinden 0'ı verildi.
+ring-plugin-cannot-work =
+    { $asks ->
+        [one] Henüz çalışamaz. İstediği tek izni vermediniz.
+       *[other] Henüz çalışamaz. İstediği { $asks } izinden hiçbirini vermediniz.
+    }
 
 # Said to a screen reader when a notification was copied; $said is what the circle said.
 ring-copied-said = Kopyalandı. { $said }
@@ -211,7 +215,9 @@ ring-outside-files = Dosyalarınızı açık tutuyor
 ring-outside-body =
     { $more ->
         [0] { $names }
-        [one] { $names } ve { $more } tane daha
+        [one] { $names } ve 1 tane daha
        *[other] { $names } ve { $more } tane daha
     }
 
+# Said under the magnifier when the screen picture it took has the wrong size.
+ring-magnify-wrong-size = Görüntünün boyutu yanlıştı.

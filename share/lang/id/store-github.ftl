@@ -3,7 +3,7 @@
 
 # Said wherever the page offers a file from GitHub to install.
 # SAFETY: needs a human review before it ships
-store-gh-unchecked = Diunduh dengan aman, tetapi belum ada yang memeriksa file ini: pembuatnya tidak menerbitkan tanda tangan.
+store-gh-unchecked = File ini diunduh dengan aman, tetapi belum ada yang memeriksanya, karena pembuatnya tidak menerbitkan tanda tangan.
 
 # What a project with nothing to install here is told as.
 store-gh-no-files = Rilis proyek ini tidak punya file AppImage atau Flatpak untuk komputer ini.
@@ -21,33 +21,33 @@ store-gh-keyis-stored = Sebuah kunci tersimpan
 store-gh-keyis-none = Tidak ada kunci tersimpan
 
 # In the GitHub key's box: there is no keyring.
-store-gh-keyis-nokeyring = Tidak ada gantungan kunci di komputer ini, jadi kunci tidak bisa disimpan
+store-gh-keyis-nokeyring = Komputer ini tidak punya gantungan kunci, jadi tidak dapat menyimpan kunci
 
 # Red words: the key is still in a plain file; why it was not moved follows.
 # SAFETY: needs a human review before it ships
-store-gh-keyis-plain = Kunci GitHub Anda masih ada di file biasa di komputer ini dan dipakai dari sana: kunci tidak bisa dipindahkan ke gantungan kunci. { $why }
+store-gh-keyis-plain = Kunci GitHub Anda masih ada di file biasa lama di komputer ini, yang tidak lagi dibaca Trindle. { $why }
 
 # Red words: the keyring could not say; why is given first.
-store-gh-keyis-hidden = { $why } Jadi GitHub ditanyai tanpa kunci, baik ada kunci tersimpan maupun tidak.
+store-gh-keyis-hidden = { $why } Jadi Trindle memakai GitHub tanpa kunci, meskipun ada kunci yang tersimpan.
 
 # Red words: a stored key has a space or line break in it.
 # SAFETY: needs a human review before it ships
-store-gh-keyis-unsendable = Sebuah kunci GitHub tersimpan, tetapi tidak bisa dikirim: ada spasi atau pindah baris di dalamnya, seperti kunci yang ditempel dalam dua bagian. Jadi GitHub ditanyai tanpa kunci. Hapus kunci itu dan tempel lagi.
+store-gh-keyis-unsendable = Trindle tidak dapat mengirim kunci GitHub Anda yang tersimpan, karena ada spasi atau pindah baris di dalamnya. Jadi Trindle memakai GitHub tanpa kunci. Hapus kunci itu dan tempel lagi.
 
 # Reason the plain file holding the key could not be removed.
 store-gh-keyis-file-stays = File tidak bisa dihapus.
 
 # Reason the keyring did not take the key.
-store-gh-keyis-not-taken = Gantungan kunci tidak menerimanya.
+store-gh-keyis-not-taken = Gantungan kunci tidak menyimpannya, jadi Trindle memakai GitHub tanpa kunci.
 
 # Red words when a pasted key has a space or line break in it.
-store-gh-key-spaces = Kunci adalah satu baris tanpa spasi, dan yang ini punya pindah baris atau spasi di dalamnya. Tempel kuncinya saja.
+store-gh-key-spaces = Kunci adalah satu baris tanpa spasi. Yang ini punya pindah baris atau spasi di dalamnya. Tempel kuncinya saja.
 
 # GitHub's limit was reached: which limit, when it answers again.
-store-gh-limit = GitHub berhenti menjawab untuk sementara: { $which }. { $when }
+store-gh-limit = GitHub berhenti menjawab untuk sementara, karena { $which }. { $when }
 
 # The same, with where the key goes that raises the limit.
-store-gh-limit-hint = GitHub berhenti menjawab untuk sementara: { $which }. { $when } { $hint }
+store-gh-limit-hint = GitHub berhenti menjawab untuk sementara, karena { $which }. { $when } { $hint }
 
 # Part of the limit words: how long to wait is not known.
 store-gh-wait-later = Coba lagi nanti.
@@ -59,36 +59,36 @@ store-gh-wait-minutes =
     }
 
 # Part of the limit words: the limit of searches with a key.
-store-gh-limit-search-key = GitHub menjawab 30 pencarian per menit
+store-gh-limit-search-key = GitHub mengizinkan 30 pencarian per menit
 
 # Part of the limit words: the limit of searches without a key.
-store-gh-limit-search = GitHub menjawab 10 pencarian per menit
+store-gh-limit-search = GitHub mengizinkan 10 pencarian per menit
 
 # Part of the limit words: the limit of questions with a key.
-store-gh-limit-key = GitHub menjawab 5.000 pertanyaan per jam dengan kunci Anda, dan jatahnya sudah habis
+store-gh-limit-key = Anda sudah memakai habis 5.000 permintaan per jam yang diizinkan kunci Anda
 
 # Part of the limit words: the limit of questions without a key.
-store-gh-limit-plain = GitHub menjawab 60 pertanyaan per jam dari satu alamat tanpa kunci
+store-gh-limit-plain = GitHub mengizinkan 60 permintaan per jam dari satu alamat tanpa kunci
 
 # Part of the limit words: how the key raises the limit.
-store-gh-limit-key-hint = Kunci GitHub menaikkannya menjadi 5.000: tekan kunci di kanan atas Cari di GitHub.
+store-gh-limit-key-hint = Kunci GitHub menaikkannya menjadi 5.000. Tekan tombol kunci di kanan atas Cari.
 
 # Red words when GitHub does not accept the key.
-store-gh-key-refused = GitHub tidak menerima kunci itu. Buat yang baru, atau hapus: tekan kunci di kanan atas Cari di GitHub.
+store-gh-key-refused = GitHub tidak menerima kunci itu. Buat yang baru, atau hapus kunci ini, dengan tombol kunci di kanan atas Cari.
 
 # Red words when GitHub answered with a code and no words.
-store-gh-answered = GitHub menjawab { $code }.
+store-gh-answered = GitHub mengembalikan { $code }.
 
 # Red words when GitHub refused a question without saying why.
-store-gh-refused-plain = GitHub menolak ini, padahal jatah jawabannya belum habis.
+store-gh-refused-plain = GitHub memblokir ini, meskipun Anda belum mencapai batasnya.
 
 # Red words when GitHub refused a question; its reason is given.
-store-gh-refused = GitHub menolak ini: { $why }.
+store-gh-refused = GitHub memblokir ini: { $why }.
 
 # Red words: projects found could not be looked at.
 store-gh-unread =
     { $n ->
-       *[other] { $n } proyek yang ditemukan tidak bisa dilihat, jadi tidak ditampilkan
+       *[other] Trindle tidak dapat melihat { $n } proyek yang ditemukannya, jadi tidak ditampilkan
     }
 
 # Red words: the above made a sentence.
@@ -101,7 +101,7 @@ store-gh-unread-why = { $which }: { $why }.
 store-gh-unreached = GitHub tidak bisa dijangkau.
 
 # Red words over what a search found when only half of it was answered; why GitHub did not answer follows.
-store-gh-half = Hanya proyek dengan AppImage yang dicari: GitHub tidak menjawab pencarian Flatpak. { $why }
+store-gh-half = Trindle hanya mencari proyek dengan AppImage, karena GitHub tidak menjawab pencarian Flatpak. { $why }
 
 # Word on a GitHub file's dial while it downloads.
 store-gh-step-downloading = Mengunduh
@@ -114,4 +114,3 @@ store-gh-download-failed = Unduhan tidak selesai. { $why }
 
 # The size of a download that is under a megabyte.
 store-size-under = di bawah 1 MB
-

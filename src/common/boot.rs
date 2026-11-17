@@ -31,45 +31,15 @@ fn before_linux() -> f64 {
     s
 }
 
+const FIRMWARE_HANDED_OVER: &str = "/sys/firmware/acpi/fpdt/boot/exitbootservices_end_ns";
+
 fn from_firmware() -> Option<f64> {
-    use std::os::unix::fs::FileExt;
-    let table = std::fs::read("/sys/firmware/acpi/tables/FPDT").ok()?;
-    let u64_at = |b: &[u8], i: usize| b.get(i..i + 8).map(|v| u64::from_le_bytes(v.try_into().unwrap()));
+    nanoseconds_file(std::path::Path::new(FIRMWARE_HANDED_OVER))
+}
 
-    let mut at = 36;
-    let address = loop {
-        let (kind, len) = (u16::from_le_bytes(table.get(at..at + 2)?.try_into().ok()?), *table.get(at + 2)? as usize);
-        if kind == 0 {
-            break u64_at(&table, at + 8)?;
-        }
-        if len == 0 {
-            return None;
-        }
-        at += len;
-    };
-    let memory = std::fs::File::open("/dev/mem").ok()?;
-    let mut head = [0u8; 8];
-    memory.read_exact_at(&mut head, address).ok()?;
-    let len = u32::from_le_bytes(head[4..].try_into().ok()?) as usize;
-    if &head[..4] != b"FBPT" || !(8..=4096).contains(&len) {
-        return None;
-    }
-    let mut body = vec![0u8; len - 8];
-    memory.read_exact_at(&mut body, address + 8).ok()?;
-
-    let mut at = 0;
-    while at + 4 <= body.len() {
-        let (kind, len) = (u16::from_le_bytes(body[at..at + 2].try_into().ok()?), body[at + 2] as usize);
-        if kind == 2 && len >= 48 {
-            let s = u64_at(&body, at + 40)? as f64 / 1e9;
-            return (s > 0.0 && s < 600.0).then_some(s);
-        }
-        if len == 0 {
-            return None;
-        }
-        at += len;
-    }
-    None
+fn nanoseconds_file(path: &std::path::Path) -> Option<f64> {
+    let s = std::fs::read_to_string(path).ok()?.trim().parse::<u64>().ok()? as f64 / 1e9;
+    (s > 0.0 && s < 600.0).then_some(s)
 }
 
 pub const HISTORY: &str = "/var/lib/trindle/start-times";
@@ -125,6 +95,18 @@ pub fn words(seconds: f64) -> String {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn the_firmware_time_is_read_from_the_kernels_file() {
+        let dir = std::env::temp_dir().join(format!("trindle-boot-fpdt-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        for (text, want) in [("4320000000\n", Some(4.32)), ("0\n", None), ("99999999999999\n", None), ("junk", None), ("-5", None)] {
+            std::fs::write(dir.join("ns"), text).unwrap();
+            assert_eq!(super::nanoseconds_file(&dir.join("ns")), want, "{text:?}");
+        }
+        assert_eq!(super::nanoseconds_file(&dir.join("none")), None);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
     #[test]
     fn the_history_reads_back() {
         let h = super::parse_history("1790000000 19.90 abc\nbroken\n1790003600 18.25 def\n");

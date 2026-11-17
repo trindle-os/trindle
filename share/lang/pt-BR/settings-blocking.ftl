@@ -29,7 +29,7 @@ settings-blocking-ago-days =
 
 # Shown beside the Block adverts and bad sites switch while the person is asked for the password.
 # SAFETY: needs a human review before it ships
-settings-blocking-waiting = Aguardando a senha...
+settings-blocking-waiting = Aguardando a sua senha…
 
 # Shown beside the switch after blocking is turned on.
 settings-blocking-done-on = Bloqueio ligado
@@ -44,22 +44,22 @@ settings-blocking-saved = Salvo
 settings-blocking-bad-site = Digite o nome de um site, como example.com.
 
 # Headline of the page when blocking is off.
-settings-blocking-top-off = O bloqueio está desligado. As consultas vão para os servidores da sua própria rede, como antes.
+settings-blocking-top-off = O bloqueio está desligado. Os sites são consultados pelos servidores da sua própria rede, como antes.
 
 # Headline of the page while blocking is starting.
 settings-blocking-top-starting = O bloqueio está iniciando.
 
 # Headline of the page when blocking works and lookups go privately to the chosen server.
-settings-blocking-top-private = Anúncios e sites ruins estão bloqueados, e as consultas vão em privado para { $provider }.
+settings-blocking-top-private = Anúncios e sites ruins estão bloqueados, e os sites são consultados em privado por meio de { $provider }.
 
 # Headline of the page when the private server cannot be reached on this network.
-settings-blocking-top-fallback = O servidor privado não pode ser acessado nesta rede, então os servidores da sua própria rede são usados por enquanto. O bloqueio continua funcionando.
+settings-blocking-top-fallback = O Trindle não consegue acessar o servidor privado nesta rede, então está usando os servidores da sua própria rede por enquanto. O bloqueio continua funcionando.
 
 # Headline of the page when lookups go to the network's own servers.
-settings-blocking-top-network = Anúncios e sites ruins estão bloqueados. As consultas vão para os servidores da sua própria rede, que podem vê-las.
+settings-blocking-top-network = Anúncios e sites ruins estão bloqueados. Os sites são consultados pelos servidores da sua própria rede, que podem ver cada site que você visita.
 
 # Headline of the page when lookups go through the VPN.
-settings-blocking-top-vpn = Anúncios e sites ruins estão bloqueados. As consultas vão para os servidores da sua VPN, pela VPN.
+settings-blocking-top-vpn = Anúncios e sites ruins estão bloqueados. Os sites são consultados pelos servidores da sua VPN.
 
 # Headline of the page when blocking is on and the lookups are still being set up.
 settings-blocking-top-on = Anúncios e sites ruins estão bloqueados.
@@ -86,7 +86,7 @@ settings-blocking-tile-today-note = consultas bloqueadas hoje
 settings-blocking-tile-lists = Listas
 
 # Number of the lists tile while the lists are being fetched.
-settings-blocking-tile-fetching = Baixando
+settings-blocking-tile-fetching = Atualizando
 
 # Number of the lists tile when no list has been fetched yet.
 settings-blocking-tile-none = Nenhuma ainda
@@ -95,13 +95,10 @@ settings-blocking-tile-none = Nenhuma ainda
 settings-blocking-tile-lists-note = as listas de sites
 
 # Line under the lists tile: how many sites are listed and how long ago they were fetched.
-settings-blocking-tile-listed-note = sites listados, baixados { $ago }
+settings-blocking-tile-listed-note = sites listados, atualizados { $ago }
 
 # Line in the Recently blocked card when nothing has been blocked.
 settings-blocking-nothing = Nada bloqueado ainda
-
-# Small line under "Nothing blocked yet".
-settings-blocking-nothing-sub = Os sites aparecem aqui, os mais recentes primeiro.
 
 # Tip of the plus button on a blocked site, and beside the Add a site box: lets the site through.
 # SAFETY: needs a human review before it ships
@@ -111,20 +108,17 @@ settings-blocking-let-through = Sempre deixar este site passar
 settings-blocking-recent = Bloqueados recentemente
 
 # Help text (i button) of the Recently blocked card.
-settings-blocking-recent-about = Os sites aparecem aqui conforme são bloqueados, os mais recentes primeiro. O mais deixa um passar daqui em diante. Só os sites bloqueados são mostrados aqui. Os sites deixados passar nunca são guardados.
+settings-blocking-recent-about = Os sites aparecem aqui conforme são bloqueados, os mais recentes primeiro. Pressione o mais para deixar um site passar daqui em diante. O Trindle não guarda registro dos sites que deixa passar.
 
 # Shown on the Recently blocked card while blocking is off.
 settings-blocking-recent-waits = Ligue o bloqueio para ver o que ele bloqueia.
 
 # Placeholder of the box where a site name is typed.
-settings-blocking-site-placeholder = por exemplo, example.com
+settings-blocking-site-placeholder = example.com
 
 # Heading of the line with the box for adding a site.
 # SAFETY: needs a human review before it ships
 settings-blocking-add = Adicionar um site
-
-# Small line under "Add a site".
-settings-blocking-add-sub = Ele e todos os seus subdomínios nunca são bloqueados.
 
 # Tip of the minus button on a site that is let through: blocks it again.
 # SAFETY: needs a human review before it ships
@@ -136,7 +130,7 @@ settings-blocking-allowed = Sempre liberados
 
 # Help text (i button) of the Always let through card.
 # SAFETY: needs a human review before it ships
-settings-blocking-allowed-about = Os sites listados aqui, e todos os seus subdomínios, nunca são bloqueados, mesmo que estejam nas listas. O menos bloqueia um de novo.
+settings-blocking-allowed-about = Estes sites, e todos os endereços abaixo deles, nunca são bloqueados, mesmo que estejam nas listas. Pressione o menos para bloquear um site de novo.
 
 # Name of the page in the list of settings pages and its heading.
 settings-blocking-title = Bloqueio
@@ -145,7 +139,7 @@ settings-blocking-title = Bloqueio
 settings-blocking-keywords = bloquear anúncios propaganda rastreadores malware golpes dns privado consultas quad9 mullvad cloudflare permitir
 
 # Help text at the top of the page.
-settings-blocking-help = Bloqueia anúncios, rastreadores e sites ruins conhecidos para todos os navegadores e aplicativos deste computador, e envia suas consultas de nomes por uma conexão criptografada, para que a rede em que você está não possa lê-las nem alterá-las.
+settings-blocking-help = Bloqueia anúncios, rastreadores e sites ruins conhecidos para todos os navegadores e aplicativos deste computador. Também consulta os sites por uma conexão criptografada, para que a rede em que você está não possa ver nem alterar quais sites você consulta.
 
 # Text of the switch that turns blocking on or off.
 settings-blocking-switch = Bloquear anúncios e sites ruins
@@ -154,16 +148,36 @@ settings-blocking-switch = Bloquear anúncios e sites ruins
 settings-blocking-where = Para onde vão as consultas
 
 # Help text (i button) of the Blocking card.
-settings-blocking-card-about = Usa as listas da HaGeZi de anúncios, rastreadores e sites ruins conhecidos, baixadas uma vez por dia. Enquanto estiver desligado, nada é executado. As consultas de nomes vão por uma conexão criptografada ao servidor privado escolhido aqui. A Quad9 não guarda registro de quem perguntou. "Sua rede" ainda bloqueia, mas não é privada: os servidores da sua própria rede veem cada consulta.
-
-# Small line under the Block adverts and bad sites switch.
-settings-blocking-switch-sub = Listas da HaGeZi, baixadas uma vez por dia.
+settings-blocking-card-about = Usa as listas da HaGeZi de anúncios, rastreadores e sites ruins conhecidos, atualizadas uma vez por dia. Enquanto o bloqueio estiver desligado, nada é executado. Os sites são consultados por uma conexão criptografada, pelo servidor privado que você escolhe aqui. A Quad9 não guarda registro de quem perguntou. "Sua rede" ainda bloqueia, mas não é privada, porque os servidores da sua própria rede veem cada site que você consulta.
 
 # Heading of the line with the private server dropdown.
 settings-blocking-private = Servidor privado
 
-# Small line under Private server.
-settings-blocking-private-sub = A Quad9 não guarda registro de quem perguntou.
-
 # Name of the choice in Private server that uses the network's own servers.
 settings-blocking-provider-network = Sua rede
+
+# Heading of the Firewall card, first on the Firewall and blocking page.
+settings-firewall = Firewall
+
+# Help text (i button) of the Firewall card.
+settings-firewall-about = Quando o firewall está ligado, outros computadores não podem se conectar a este, a menos que este computador tenha iniciado a conexão. Assim, ninguém no mesmo Wi-Fi pode tentar entrar. Navegar, atualizações e impressoras continuam funcionando. Um programa que espera conexões de outros computadores, como um servidor de jogo, precisa ter a porta aberta abaixo. Quando o firewall está desligado, qualquer computador da rede pode alcançar todo programa que está esperando conexões. Você precisa da senha do administrador para ligar ou desligar o firewall.
+
+# Name of the firewall's on and off switch.
+settings-firewall-switch = Firewall
+
+# Small line under the switch while the firewall is off.
+settings-firewall-off-sub = Outros computadores podem alcançar programas que esperam por eles.
+
+# Said beside the switch once the firewall is on.
+settings-firewall-done-on = Firewall ligado
+
+# Said beside the switch once the firewall is off.
+settings-firewall-done-off = Firewall desligado
+
+# Heading of the card that blocks adverts and bad sites, on the Firewall and blocking page.
+settings-blocking-card = Bloqueio
+
+
+
+# Small line under the firewall switch when it is on but its rules are not loaded.
+settings-firewall-not-in-force = O firewall está ligado, mas não está funcionando, porque as regras dele não carregaram quando o computador iniciou. Desligue e ligue de novo.

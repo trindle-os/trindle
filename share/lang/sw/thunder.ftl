@@ -13,14 +13,14 @@ thunder-let-connect = Ruhusu { $name } kuunganishwa?
 thunder-no-name = Kifaa cha Thunderbolt
 
 # Under the device's name when its maker did not say who it is.
-thunder-no-maker = Mtengenezaji wake hakusema ni nani.
+thunder-no-maker = Mtengenezaji hajulikani.
 
 # Under the device's name: who made it. $maker is the maker's name.
 thunder-made-by = Kimetengenezwa na { $maker }.
 
 # Warning under the question when the device gives the name of one allowed before, but cannot be proved to be it.
 # SAFETY: needs a human review before it ships
-thunder-doubt = Kinajitambulisha kwa jina la kifaa ulichokubali hapo awali, lakini haikuweza kuthibitishwa kuwa ni kifaa hicho.
+thunder-doubt = Kina jina sawa na kifaa ulichokubali hapo awali, lakini Trindle haikuweza kuthibitisha kuwa ni kifaa hicho.
 
 # Button that refuses the device.
 # SAFETY: needs a human review before it ships
@@ -38,7 +38,7 @@ thunder-always = Kubali kila mara
 thunder-not-connected = Haikuweza kuunganishwa.
 
 # Red words under the question when it could not be connected after it was unplugged and plugged in again.
-thunder-unplug = Haikuweza kuunganishwa. Kitoe kisha ukichomeke tena ujaribu mara moja zaidi.
+thunder-unplug = Trindle haikuweza kukiunganisha. Kitoe kisha ukichomeke tena ujaribu mara moja zaidi.
 
 # Red words under the question when the part of Trindle that answers for the guard is not running.
-thunder-guard-silent = Mlinzi wa Thunderbolt wa Trindle hajibu kwa sasa.
+thunder-guard-silent = Ulinzi wa Thunderbolt wa Trindle haujibu.

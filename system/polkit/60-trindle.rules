@@ -5,7 +5,7 @@
 // administrator's password, as udisks allows for drives. trindle-admin
 // itself only ever mounts a cifs share in that person's own folder under
 // /run/media, owned by them, and only closes their own.
-// Closing the ports a plugin had open for the home network only keeps more
+// Closing the ports a plugin had open for the local network only keeps more
 // out, so it asks for nothing either; trindle-admin closes only the asking
 // person's own plugin. Opening them still asks for the password.
 // Everything else trindle-admin does still asks.
@@ -25,7 +25,7 @@ polkit.addRule(function(action, subject) {
     return polkit.Result.NOT_HANDLED;
 });
 
-// Nothing changes a drive unasked (11 October 2026). UDisks' own answers
+// Nothing changes a drive unasked. UDisks' own answers
 // let the person at the computer format, erase or repartition a drive that
 // plugs in with no password at all. Every action of UDisks' that changes a
 // drive, a part of one, or what the computer does with it at start-up is

@@ -18,3 +18,24 @@ compose-stopped-shot = 截图工具已停止并关闭。
 
 # Tip of the round button on that notice, which starts the stopped part again.
 compose-stopped-try-again = 重试
+
+# Sent to Flow when you try its PIN and the screen isn't locked.
+compose-flow-not-locked = 屏幕没有锁定。
+
+# Sent to Flow when you try its PIN and no PIN is set.
+compose-flow-no-pin = 没有设置 PIN。
+
+# Sent to Flow when you try its PIN after the time allowed for it has run out.
+compose-flow-late = PIN 的有效时间已过。
+
+# Sent to Flow when the wrong PIN has been tried too many times.
+compose-flow-too-many = 尝试次数太多。
+
+# Sent to Flow when what was typed isn't a PIN of 4 digits.
+compose-flow-not-a-pin = PIN 是 4 位数字。
+
+# Sent to Flow when the PIN is wrong. { $left } is the tries left.
+compose-flow-wrong-pin =
+    { $left ->
+       *[other] PIN 错误。还剩 { $left } 次机会。
+    }

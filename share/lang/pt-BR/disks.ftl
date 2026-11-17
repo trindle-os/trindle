@@ -8,24 +8,21 @@ disks-title = Unidades
 disks-about-tip = Sobre esta página
 
 # First paragraph of the longer words that open from the i beside the title.
-disks-help-1 = Cada unidade dentro do computador ou ligada a ele, desenhada como uma barra com as suas partições. Cada partição é tão larga quanto é grande e preenchida até onde está em uso, então uma partição cheia é fácil de ver.
+disks-help-1 = Aqui aparecem todas as unidades dentro do computador ou ligadas a ele, em uma barra dividida em partições. A largura de cada partição mostra o tamanho dela, e o sombreado mostra o quanto ela está cheia, então uma partição cheia é fácil de ver.
 
 # Second paragraph of the longer words that open from the i beside the title.
 # SAFETY: needs a human review before it ships
-disks-help-2 = Sob a imagem, cada unidade tem um cartão. Abra uma partição, monte-a ou desmonte-a, ou retire uma unidade com segurança ou desligue-a. O lápis em uma partição abre as alterações dela: o nome, uma pasta própria e se fica pronta ao iniciar, o tamanho, verificá-la e repará-la, formatá-la ou excluí-la. O sinal de mais no espaço livre cria uma nova partição.
+disks-help-2 = Sob a imagem, cada unidade tem um cartão. Você pode abrir uma partição, montá-la ou desmontá-la, remover uma unidade com segurança ou desligá-la. O lápis em uma partição permite renomeá-la, escolher a pasta dela, montá-la ao iniciar, redimensioná-la, verificá-la, repará-la, formatá-la ou excluí-la. O sinal de mais no espaço livre cria uma nova partição.
 
 # Third paragraph of the longer words that open from the i beside the title.
 # SAFETY: needs a human review before it ships
-disks-help-3 = A unidade de onde o sistema roda aparece, mas nunca é oferecida para nenhuma alteração que apague ou mova coisas. Toda alteração em qualquer unidade pede a senha de um administrador, a cada vez. O olho esconde uma unidade ou uma partição das Pastas e do anel: ela continua aqui, em cinza, e não fica bloqueada.
-
-# Sentence under the title of the main card, saying what the picture of the drives shows.
-disks-map-caption = Cada partição de cada unidade, preenchida até onde está em uso.
+disks-help-3 = Você vê a unidade de onde o sistema roda, mas não pode fazer nela nenhuma alteração que apague ou mova coisas. Toda alteração em qualquer unidade pede a senha de um administrador, a cada vez. O olho esconde uma unidade ou uma partição do Folders e do anel. Ela continua aqui, em cinza, e não fica bloqueada.
 
 # Title of the main card, which draws every drive as a bar of its parts.
 disks-your-drives = Suas unidades
 
 # Red sentence at the top of the page when the list of drives could not be read at all.
-disks-cannot-read = Não foi possível ler as unidades agora.
+disks-cannot-read = Não consigo ler as unidades agora.
 
 # Tip of the round button that asks for the list of drives again, on the card shown when the drive service is missing.
 disks-try-again = Tentar de novo
@@ -34,7 +31,7 @@ disks-try-again = Tentar de novo
 disks-look-again = Olhar de novo
 
 # Line shown on the main card when the computer lists no drive at all.
-disks-no-drives = Nenhuma unidade foi encontrada. Ligue uma e ela aparece aqui.
+disks-no-drives = Nenhuma unidade foi encontrada. Ligue uma e ela vai aparecer aqui.
 
 # Name of the program that is missing, in the red words when the drive service cannot be reached.
 disks-missing-service = O serviço de unidades
@@ -43,13 +40,13 @@ disks-missing-service = O serviço de unidades
 disks-missing-bus = O barramento do sistema
 
 # Red words on the card shown when what Drives needs is not there. { $what } is the name of the missing program; { $package } is the package to install.
-disks-missing = { $what } não está disponível. Instale com: sudo apt install { $package }
+disks-missing = { $what } não está disponível. Para instalar, execute: sudo apt install { $package }
 
 # Sentence at the top of the page while the first look at the drives is being taken.
 disks-headline-loading = Olhando as unidades…
 
 # Red sentence at the top of the page when a drive says it is failing. { $name } is the drive's name.
-disks-headline-failing = { $name } está falhando. Copie agora tudo o que quiser guardar dele.
+disks-headline-failing = { $name } está falhando. Copie agora para outra unidade os arquivos que você quiser guardar.
 
 # Sentence at the top of the page when a drive has worn-out or damaged spots. { $name } is the drive's name; { $troubles } lists what is wrong.
 disks-headline-look = { $name } precisa de atenção: { $troubles }.
@@ -57,37 +54,33 @@ disks-headline-look = { $name } precisa de atenção: { $troubles }.
 # Sentence at the top of the page when nothing is wrong. { $plugged } is how many drives are plugged in from outside.
 disks-headline-calm =
     { $plugged ->
-        [0] As unidades e o espaço nelas.
-        [one] As unidades e o espaço nelas, e uma unidade ligada.
-       *[other] As unidades e o espaço nelas, e { $plugged } unidades ligadas.
-        [many] As unidades e o espaço nelas, e { $plugged } unidades ligadas.
+        [0] As suas unidades e o espaço nelas.
+        [one] As suas unidades e o espaço nelas, com uma unidade ligada.
+       *[other] As suas unidades e o espaço nelas, com { $plugged } unidades ligadas.
     }
 
 # Red sentence at the top of the page when the computer's own disk is almost full. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-full =
     { $plugged ->
-        [0] Quase cheio: só { $free } livres neste computador. Exclua ou mova alguns arquivos em breve.
-        [one] Quase cheio: só { $free } livres neste computador, e uma unidade ligada. Exclua ou mova alguns arquivos em breve.
-       *[other] Quase cheio: só { $free } livres neste computador, e { $plugged } unidades ligadas. Exclua ou mova alguns arquivos em breve.
-        [many] Quase cheio: só { $free } livres neste computador, e { $plugged } unidades ligadas. Exclua ou mova alguns arquivos em breve.
+        [0] Este computador está quase cheio, com só { $free } livres. Exclua ou mova alguns arquivos em breve.
+        [one] Este computador está quase cheio, com só { $free } livres. Há uma unidade ligada. Exclua ou mova alguns arquivos em breve.
+       *[other] Este computador está quase cheio, com só { $free } livres. Há { $plugged } unidades ligadas. Exclua ou mova alguns arquivos em breve.
     }
 
 # Sentence at the top of the page when the computer's own disk is filling up. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-getting-full =
     { $plugged ->
-        [0] Ficando cheio: { $free } livres neste computador.
-        [one] Ficando cheio: { $free } livres neste computador, e uma unidade ligada.
-       *[other] Ficando cheio: { $free } livres neste computador, e { $plugged } unidades ligadas.
-        [many] Ficando cheio: { $free } livres neste computador, e { $plugged } unidades ligadas.
+        [0] Este computador está ficando cheio, com { $free } livres.
+        [one] Este computador está ficando cheio, com { $free } livres. Há uma unidade ligada.
+       *[other] Este computador está ficando cheio, com { $free } livres. Há { $plugged } unidades ligadas.
     }
 
 # Sentence at the top of the page when the computer's own disk has plenty of room. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-plenty =
     { $plugged ->
-        [0] Muito espaço: { $free } livres neste computador.
-        [one] Muito espaço: { $free } livres neste computador, e uma unidade ligada.
-       *[other] Muito espaço: { $free } livres neste computador, e { $plugged } unidades ligadas.
-        [many] Muito espaço: { $free } livres neste computador, e { $plugged } unidades ligadas.
+        [0] Há muito espaço neste computador, com { $free } livres.
+        [one] Há muito espaço neste computador, com { $free } livres. Há uma unidade ligada.
+       *[other] Há muito espaço neste computador, com { $free } livres. Há { $plugged } unidades ligadas.
     }
 
 # Title of the card with the ring for the disk the system is on.
@@ -99,7 +92,7 @@ disks-ring-files = Seus arquivos
 # Sentence on a ring's card. { $free } is the free space; { $place } is system for the disk the system is on, or files for the place that holds your own files.
 disks-ring-still-free =
     { $place ->
-        [system] { $free } ainda livres, onde está o sistema.
+        [system] { $free } ainda livres no disco em que o sistema está.
        *[files] { $free } ainda livres, para os seus próprios arquivos.
     }
 
@@ -110,24 +103,23 @@ disks-ring-tip = { $name }: { $full } cheio, { $free } livres de { $whole }
 disks-ring-of = de { $whole }
 
 # Health reading in the line under the picture when no drive has taken a reading yet.
-disks-health-none = Sem leituras, as unidades não dizem como estão
+disks-health-none = As unidades ainda não enviaram nenhuma leitura de saúde
 
 # Health reading in the line under the picture when the one drive that has taken a reading is fine.
-disks-health-one = Saudável, como a própria unidade informa
+disks-health-one = Saudável, pela verificação da unidade
 
 # Health reading in the line under the picture when every drive is fine. { $n } is how many drives say so.
 disks-health-all =
     { $n ->
-        [one] Saudáveis, como todas as { $n } unidades informam
-       *[other] Saudáveis, como todas as { $n } unidades informam
+        [one] Saudável, segundo a verificação da própria unidade
+       *[other] Todas as { $n } unidades passaram nas próprias verificações
     }
 
 # Health reading in the line under the picture when some drives need a look. { $n } is how many.
 disks-health-look =
     { $n ->
-        [one] { $n } precisa de atenção, veja o cartão dela
-       *[other] { $n } precisam de atenção, veja os cartões delas
-        [many] { $n } precisam de atenção, veja os cartões delas
+        [one] { $n } precisa de atenção: veja o cartão dela
+       *[other] { $n } precisam de atenção: veja os cartões delas
     }
 
 # Line under the picture of the drives. { $n } is how many drives there are; { $total } is their size together; { $health } says how healthy they are.
@@ -193,7 +185,7 @@ disks-kind-crypto-open = Criptografada, desbloqueada
 disks-kind-crypto-locked = Criptografada, bloqueada
 
 # Kind of a part that holds other parts.
-disks-kind-container = Contém outras partições
+disks-kind-container = Contém partições
 
 # Kind of a part that has no filesystem on it.
 disks-kind-none = Sem sistema de arquivos
@@ -231,16 +223,16 @@ disks-trouble-temperature = quente demais
 disks-trouble-wearing-out = se desgastando
 
 # Trouble a drive reports when it has made itself read-only.
-disks-trouble-readonly = passou sozinha para somente leitura
+disks-trouble-readonly = passou a somente leitura
 
 # Trouble a drive reports about the memory it uses to back up its work.
 disks-trouble-volatile = a cópia de segurança da memória falhou
 
 # Trouble a drive reports when part of it has made itself read-only.
-disks-trouble-pmr = parte dela passou sozinha para somente leitura
+disks-trouble-pmr = parte dela passou a somente leitura
 
 # Trouble a drive reports when it has been used past what its maker expects.
-disks-trouble-worn = desgastada além do que o fabricante espera
+disks-trouble-worn = desgastada além da vida útil esperada
 
 # Trouble a drive reports about damaged spots. { $n } is how many.
 disks-health-damaged =
@@ -262,7 +254,7 @@ disks-health-hours =
     }
 
 # How a drive says it is when it is failing, on its card.
-disks-health-failing = Falhando: copie agora tudo o que quiser guardar dela
+disks-health-failing = Falhando. Copie agora tudo o que quiser guardar dela
 
 # How a drive says it is when something is wrong, on its card. { $troubles } lists what is wrong.
 disks-health-attention = Precisa de atenção: { $troubles }
@@ -274,16 +266,16 @@ disks-health-ok = Saudável
 disks-health-line = { $state }, { $readings }
 
 # Line under a drive's name when its case answers but the drive inside it does not.
-disks-no-answer = Nenhuma unidade respondendo
+disks-no-answer = Não responde
 
 # Red words on a drive's card when its case answers but the drive inside it does not.
-disks-no-answer-help = A caixa responde, mas a unidade dentro dela não. Desconecte, espere dez segundos e ligue em uma porta azul ou USB-C com o cabo dela; se continuar assim, a unidade dentro pode ter se soltado ou falhado.
+disks-no-answer-help = A caixa da unidade está conectada, mas a unidade dentro dela não responde. Desconecte, espere dez segundos e ligue em uma porta azul ou USB-C usando o cabo dela. Se continuar assim, a unidade dentro pode ter se soltado ou falhado.
 
 # Tip of the round button on a drive's card that takes the drive out safely.
 disks-remove-safely = Remover com segurança
 
 # Tip of the round button on a drive's card that powers the drive off.
-disks-power-off-tip = Desligá-la
+disks-power-off-tip = Desligar
 
 # Tip of the round button on a drive's card that opens the box for erasing the whole drive, and the name of that box's row and its button.
 # SAFETY: needs a human review before it ships
@@ -293,25 +285,25 @@ disks-erase-whole = Apagar a unidade inteira
 disks-eye-show =
     { $what ->
         [drive] Mostrar esta unidade
-       *[part] Mostrar esta partição
+       *[partition] Mostrar esta partição
     }
 
 # Tip of the eye that hides a drive or part. { $what } is drive or part; { $lock } is the note that hiding does not protect it.
 disks-eye-hide =
     { $what ->
         [drive] Esconder esta unidade. { $lock }
-       *[part] Esconder esta partição. { $lock }
+       *[partition] Esconder esta partição. { $lock }
     }
 
 # Note on the card of a hidden drive. { $lock } is the note that hiding does not protect it.
-disks-hidden-note = Escondida das Pastas e do anel. { $lock }
+disks-hidden-note = Escondida do Folders e do anel. { $lock }
 
 # Note on the card of the drive the system runs from.
 # SAFETY: needs a human review before it ships
-disks-system-note = O sistema roda a partir dela: nada aqui pode ser apagado.
+disks-system-note = O sistema roda a partir dela, então nada aqui pode ser apagado.
 
 # Note on the card of a drive that has no partition table.
-disks-no-table = Sem tabela de partições: a unidade inteira está livre.
+disks-no-table = Esta unidade não tem tabela de partições, então ela inteira está livre.
 
 # Part of the line under a part's name, when it holds files but is not mounted.
 disks-part-not-mounted = não montada
@@ -335,7 +327,7 @@ disks-mount = Montar
 disks-unmount = Desmontar
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = Alterar
+disks-change-it = Fazer alterações
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = Nome
@@ -365,7 +357,7 @@ disks-folder-note = Onde os arquivos aparecem. Deixe vazio para o computador esc
 disks-mount-startup = Montar ao iniciar
 
 # Note under the row with the switch for mounting a part at start-up.
-disks-startup-note = Pronta sempre que o computador inicia. Se não estiver lá, o computador inicia mesmo assim.
+disks-startup-note = Monta a partição sempre que o computador inicia. Se ela não estiver lá, o computador inicia mesmo assim.
 
 # Spoken name of the sliders that choose a size in gigabytes, for resizing a part and for making a new one.
 disks-size-gb = Tamanho em GB
@@ -385,14 +377,14 @@ disks-size = Tamanho
 
 # Said above the Format and Erase buttons at all times. { $words } names what is erased.
 # SAFETY: needs a human review before it ships
-disks-format-erases = Isto vai apagar tudo em { $words }. Não pode ser desfeito.
+disks-format-erases = Isto vai apagar tudo em { $words }. Não é possível desfazer.
 
 # Warning shown after the first press of the resize button. { $name } is the part; { $drive } is the drive; { $from } is its size now; { $to } is the size asked for.
 # SAFETY: needs a human review before it ships
-disks-resize-warning = Clique de novo: { $name } em { $drive } vai de { $from } para { $to }
+disks-resize-warning = Clique de novo para alterar { $name } em { $drive } de { $from } para { $to }
 
 # Label of the row where room is made for a new part under a part that is in use.
-disks-room-label = Abrir espaço para uma nova partição
+disks-room-label = Espaço para uma nova partição
 
 # Spoken name of the slider that chooses how much room to make.
 disks-room-gb = Espaço em GB
@@ -402,10 +394,10 @@ disks-room-tip = Abrir espaço
 
 # Warning shown after the first press of the make room button. { $name } is the part; { $drive } is the drive; { $size } is the room asked for.
 # SAFETY: needs a human review before it ships
-disks-room-warning = Clique de novo: { $name } em { $drive } perde { $size }, depois de um instantâneo
+disks-room-warning = Clique de novo para tirar { $size } de { $name } em { $drive }. O Trindle cria um instantâneo antes.
 
 # Note under the row that makes room.
-disks-room-note = Diminuída em uso, depois de um instantâneo, deixando espaço livre.
+disks-room-note = O Trindle cria um instantâneo e depois diminui a partição enquanto ela está em uso. O espaço liberado fica vazio.
 
 # Tip of the button that checks a part for faults.
 disks-check-tip = Verificar se há falhas
@@ -416,10 +408,6 @@ disks-repair-tip = Repará-la
 
 # Label of the row where a part is checked and repaired.
 disks-faults = Falhas
-
-# Note under the Faults row.
-# SAFETY: needs a human review before it ships
-disks-faults-note = Procura falhas na forma como os arquivos são guardados e as corrige. Ela é desmontada enquanto isto roda.
 
 # Warning shown after the first press of the repair button. { $name } is the part; { $drive } is the drive.
 # SAFETY: needs a human review before it ships
@@ -436,17 +424,9 @@ disks-format = Formatar
 # SAFETY: needs a human review before it ships
 disks-format-tip = Formatá-la
 
-# Note under the row that erases the whole drive.
-# SAFETY: needs a human review before it ships
-disks-format-whole = Recomeça como uma só partição, ocupando a unidade.
-
-# Note under the row that formats one part.
-# SAFETY: needs a human review before it ships
-disks-format-part = Apaga tudo só nesta partição.
-
 # Warning shown after the first press of the format or erase button. { $words } names what is erased.
 # SAFETY: needs a human review before it ships
-disks-format-warning = Clique de novo: tudo em { $words } será apagado
+disks-format-warning = Clique de novo para apagar tudo em { $words }
 
 # Names a part in the warning before it is formatted. { $name } is the part; { $size } is its size; { $drive } is the drive.
 disks-part-where = { $name }, { $size }, em { $drive }
@@ -457,11 +437,7 @@ disks-delete-name = Excluir { $name }, { $size }, em { $drive }
 
 # Label of the row where a part is deleted.
 # SAFETY: needs a human review before it ships
-disks-delete-label = Excluir esta partição
-
-# Note under the row that deletes a part.
-# SAFETY: needs a human review before it ships
-disks-delete-note = O espaço dela fica livre, pronto para uma nova partição ou para a anterior crescer.
+disks-delete-label = Excluir partição
 
 # Tip of the round button on free space that opens the box for making a new part.
 disks-new-part-tip = Criar uma nova partição aqui
@@ -469,14 +445,11 @@ disks-new-part-tip = Criar uma nova partição aqui
 # Label of the row where a new part is made.
 disks-new-part = Nova partição
 
-# Note under the row where a new part is made.
-disks-new-part-note = Criada neste espaço livre e formatada, pronta para usar.
-
 # Tip of the button that makes a new part.
 disks-make-tip = Criá-la
 
 # Warning shown after the first press of the button that makes a new part. { $size } is the size asked for; { $drive } is the drive.
-disks-make-warning = Clique de novo para criar uma partição de { $size } em { $drive }
+disks-make-warning = Clique de novo para criar uma partição nova de { $size } em { $drive }
 
 # Title of the box for erasing a whole drive. { $name } is the drive.
 # SAFETY: needs a human review before it ships
@@ -486,7 +459,7 @@ disks-sheet-erase = Apagar { $name }
 disks-sheet-part = { $size }, em { $drive }
 
 # Title of the box for making a new part in free space.
-disks-sheet-new = Uma nova partição
+disks-sheet-new = Nova partição
 
 # Line under the title of the box for making a new part. { $size } is the free space; { $drive } is the drive.
 disks-sheet-gap = { $size } livres, em { $drive }
@@ -516,7 +489,7 @@ disks-safe-remove = Seguro para remover
 disks-powering-off = Desligando
 
 # Words on a drive's row when it has been powered off.
-disks-off-safe = Desligada: seguro desconectar
+disks-off-safe = Seguro para desconectar
 
 # Words on a row while a part is being renamed.
 disks-renaming = Renomeando
@@ -525,7 +498,7 @@ disks-renaming = Renomeando
 disks-renamed = Renomeada
 
 # Words on a row when the person emptied the folder box, so the computer chooses the folder.
-disks-folder-auto = O computador escolhe a pasta de novo
+disks-folder-auto = A pasta agora é escolhida para você
 
 # Words on a row when a part has been given a folder. { $dir } is the folder.
 disks-folder-appears = Aparece em { $dir }
@@ -534,7 +507,7 @@ disks-folder-appears = Aparece em { $dir }
 disks-startup-on = Monta ao iniciar em { $dir }
 
 # Words on a row when a part is set not to mount at start-up.
-disks-startup-off = Deixada em paz ao iniciar
+disks-startup-off = Não montada ao iniciar
 
 # Words on a row while a folder or start-up choice is being saved.
 disks-saving = Salvando
@@ -546,22 +519,31 @@ disks-resizing = Redimensionando
 disks-resized = Redimensionada para { $size }
 
 # Red words on the row that makes room, when the files to make smaller cannot be found.
-disks-room-files-missing = Os arquivos não foram encontrados, então não é possível abrir espaço.
+disks-room-files-missing = O Trindle não encontrou os arquivos, então não consegue abrir espaço.
 
 # Words on a row while the snapshot is taken before room is made.
 disks-snapshot-taking = Criando um instantâneo
 
 # Red words when the snapshot taken before making room could not be found afterwards.
-disks-snapshot-missing = O instantâneo não foi encontrado depois.
+disks-snapshot-missing = O Trindle não encontrou o instantâneo depois.
 
-# Red words when the snapshot before making room failed. { $why } is why, as a sentence.
+# Red words when the snapshot, or switching off the swap file, before making room failed. { $why } is why, as a sentence.
 disks-snapshot-failed = { $why } Nada foi redimensionado.
 
 # Red words when things changed while the snapshot was being taken.
-disks-snapshot-changed = As coisas mudaram enquanto o instantâneo era criado, então nada foi redimensionado.
+disks-snapshot-changed = Algo mudou enquanto o Trindle criava o instantâneo, então nada foi redimensionado.
 
 # Words on a row while room is being made.
 disks-making-room = Abrindo espaço
+
+# Words on a row while the swap file is switched off before room is made.
+disks-swap-off-doing = Desligando o arquivo de swap
+
+# Words on a row while the swap file is switched back on after room is made.
+disks-swap-on-doing = Religando o arquivo de swap
+
+# Red words when the swap file couldn't be switched back on after making room. { $done } is how making room went, { $why } why the swap file is still off, both as sentences.
+disks-swap-still-off = { $done } O arquivo de swap fica desligado até você reiniciar. { $why }
 
 # Words on a row when room has been made. { $size } is how much.
 disks-room-made = { $size } de espaço aberto
@@ -573,7 +555,7 @@ disks-repairing = Reparando
 disks-repaired = Reparada
 
 # Red words when some faults could not be put right.
-disks-repair-failed = Algumas falhas não puderam ser corrigidas. Copie o que quiser guardar.
+disks-repair-failed = O Trindle não conseguiu reparar algumas falhas. Copie para outra unidade os arquivos que você quiser guardar.
 
 # Words on a row while a part is being checked.
 disks-checking = Verificando
@@ -582,7 +564,7 @@ disks-checking = Verificando
 disks-no-faults = Nenhuma falha encontrada
 
 # Red words when the check found faults.
-disks-faults-found = Falhas encontradas: pressione a chave inglesa para repará-las.
+disks-faults-found = Falhas encontradas. Pressione a chave inglesa para repará-las.
 
 # Words on a row while a part or drive is being formatted.
 # SAFETY: needs a human review before it ships
@@ -597,13 +579,13 @@ disks-formatted = Formatada
 disks-erasing-whole = apagando a unidade inteira
 
 # Red words when a freshly formatted part could not be found to give it its folder again.
-disks-new-part-missing = A nova partição não foi encontrada.
+disks-new-part-missing = Não achei a nova partição.
 
 # Red words when the drive service could not be reached to give a formatted part its folder again.
-disks-service-unreachable = Não foi possível alcançar o serviço de unidades.
+disks-service-unreachable = Não foi possível acessar o serviço de unidades.
 
 # Red words when the identifier of a freshly formatted part could not be read.
-disks-uuid-unread = Não foi possível ler o identificador da nova partição.
+disks-uuid-unread = O Trindle não conseguiu ler o identificador da nova partição.
 
 # Words on a row while a part is being deleted.
 # SAFETY: needs a human review before it ships
@@ -620,7 +602,7 @@ disks-making-it = Criando
 disks-made = Criada
 
 # Red words under an eye when hiding or showing could not be kept. { $why } is the system's reason.
-disks-hide-failed = Isso não pôde ser guardado: { $why }
+disks-hide-failed = Não foi possível salvar: { $why }
 
 # Words on a row while a change is being made. { $doing } says what is being done.
 disks-working = { $doing }…
@@ -637,9 +619,8 @@ disks-name-empty = Dê um nome primeiro.
 # Red words under the folder name box when it is too long. { $max } is the most letters allowed.
 disks-name-too-long =
     { $max ->
-        [one] Esse nome é longo demais: no máximo { $max } letra.
-       *[other] Esse nome é longo demais: no máximo { $max } letras.
-        [many] Esse nome é longo demais: no máximo { $max } letras.
+        [one] Esse nome é longo demais. Use no máximo { $max } letra.
+       *[other] Esse nome é longo demais. Use no máximo { $max } letras.
     }
 
 # Red words under the folder name box when it has letters that are not allowed.
@@ -654,9 +635,8 @@ disks-name-taken = { $dir } já está em uso.
 # Red words under a part's name box when the name is too long for its kind of file system. { $max } is the most letters allowed.
 disks-label-too-long =
     { $max ->
-        [one] Esse nome é longo demais para este tipo: no máximo { $max } letra.
-       *[other] Esse nome é longo demais para este tipo: no máximo { $max } letras.
-        [many] Esse nome é longo demais para este tipo: no máximo { $max } letras.
+        [one] Esse nome é longo demais para esta partição. Use no máximo { $max } letra.
+       *[other] Esse nome é longo demais para esta partição. Use no máximo { $max } letras.
     }
 
 # Red words under a part's name box when a FAT name has marks that are not allowed.
@@ -665,8 +645,8 @@ disks-label-fat-marks = Nomes FAT não podem conter * ? . , ; : / \ | + = < > [ 
 # Red words under the Size row when the kind of part must be mounted before it can be resized. { $way } is larger or smaller.
 disks-resize-mount-first =
     { $way ->
-        [larger] Monte primeiro: este tipo só pode ser aumentado quando montado.
-       *[smaller] Monte primeiro: este tipo só pode ser diminuído quando montado.
+        [larger] Monte primeiro. Este tipo de partição só pode ser aumentada enquanto está montada.
+       *[smaller] Monte primeiro. Este tipo de partição só pode ser diminuída enquanto está montada.
     }
 
 # Red words under the Size row when the kind of part cannot be resized. { $way } is larger or smaller.
@@ -678,35 +658,35 @@ disks-resize-cannot =
 
 # Red words when the password box was closed with no password. Said whole, as a sentence.
 # SAFETY: needs a human review before it ships
-disks-no-password = Nenhuma senha foi informada, então nada mudou.
+disks-no-password = Você não informou uma senha, então nada mudou.
 
 # Red words when the password box was closed with no password, after some steps of a change were already done.
 # SAFETY: needs a human review before it ships
-disks-no-password-part-way = Nenhuma senha foi informada, então o trabalho parou no meio.
+disks-no-password-part-way = Você não informou uma senha, então o trabalho parou no meio.
 
 # Red words when another change is pressed while one is still being made.
 disks-one-at-a-time = Outra alteração ainda está sendo feita. Tente de novo quando terminar.
 
 # Red words when it could not be made sure that the password would be asked for.
 # SAFETY: needs a human review before it ships
-disks-not-sure = Não foi possível ter certeza de que a senha seria pedida, então nada mudou.
+disks-not-sure = O Trindle não conseguiu garantir que pediria a sua senha, então nada mudou.
 
 # Red words after how a change ended, when the password just given could not be taken back.
 # SAFETY: needs a human review before it ships
-disks-standing = A senha que acabou de ser dada não pôde ser retirada, então por alguns minutos outra alteração em uma unidade pode não pedir senha. Está sendo tentado de novo.
+disks-standing = O Trindle não conseguiu cancelar a senha que você acabou de informar. Por alguns minutos, outra alteração em uma unidade pode não pedir senha. O Trindle está tentando de novo.
 
 # Words after how a change ended, when the password just given has been taken back after all.
 # SAFETY: needs a human review before it ships
-disks-taken-back = A senha dada foi retirada: a próxima alteração vai pedir uma.
+disks-taken-back = A senha que você informou foi cancelada, então a próxima alteração vai pedir uma.
 
 # Red words when a change could not be started because there is no drive service to ask.
-disks-no-service = Não foi possível alcançar o serviço de unidades, então nada mudou.
+disks-no-service = O Trindle não conseguiu alcançar o serviço de unidades, então nada mudou.
 
 # Red words said the next time Drives opens, about a change it was closed or ended in the middle of.
 disks-closed = Unidades foi fechado enquanto esta alteração era feita.
 
 # Words on the row of a change still being made when the window is asked to close.
-disks-stays-open = Unidades continua aberto até isto terminar, para poder dizer como acabou.
+disks-stays-open = Unidades continua aberto até isto terminar, para você ver como foi.
 
 # Red words for a refusal. { $reason } says why, without a full stop.
 disks-nothing-changed = { $reason }, então nada mudou.
@@ -739,26 +719,26 @@ disks-list-not-known = Não se sabe: { $steps }.
 disks-left-unmounted = { $dev } foi desmontada para isto e não está montada agora.
 
 # Red words about a part that was unmounted for a change that did nothing to the drive. { $dev } is the part.
-disks-still-unmounted = { $dev } foi desmontada para isto e continua desmontada: monte-a pela linha dela.
+disks-still-unmounted = { $dev } foi desmontada para isto e continua desmontada. Monte-a pela linha dela.
 
 # Red words about a part that the step that stopped may have unmounted. { $dev } is the part.
-disks-may-be-unmounted = { $dev } pode ter sido desmontada: olhe a linha dela.
+disks-may-be-unmounted = { $dev } pode ter sido desmontada. Olhe a linha dela.
 
 # Red words about a part that could not be mounted again because that needs a password. { $dev } is the part.
 # SAFETY: needs a human review before it ships
-disks-put-back-password = { $dev } foi desmontada para isto, e montá-la de novo pede uma senha própria: monte-a pela linha dela.
+disks-put-back-password = { $dev } foi desmontada para isto. Monte-a de novo pela linha dela e digite a senha quando for pedida.
 
 # Red words about a part that could not be mounted again. { $dev } is the part; { $why } is why.
-disks-put-back-failed = { $dev } foi desmontada para isto e não pôde ser montada de novo ({ $why }): monte-a pela linha dela.
+disks-put-back-failed = { $dev } foi desmontada para isto e não pôde ser montada de novo ({ $why }). Monte-a pela linha dela.
 
 # Red words under a freshly formatted part whose folder could not be kept. { $dir } is the folder; { $why } is why, as a sentence.
-disks-folder-not-kept = Formatada, mas não recebeu de novo a pasta { $dir }. { $why } Escolha a pasta de novo pela linha dela.
+disks-folder-not-kept = A formatação terminou, mas o Trindle não conseguiu dar a ela de novo a pasta { $dir }. { $why } Escolha a pasta de novo pela linha dela.
 
 # Red words when a drive is in use and cannot be unmounted.
 disks-busy = Algo ainda a está usando. Feche as janelas ou programas que mostram os arquivos dela e tente de novo.
 
 # Red words when there is not enough room for what is on a part at the size asked for.
-disks-no-room = Não há espaço suficiente para o que há nela nesse tamanho.
+disks-no-room = Esse tamanho é pequeno demais para os arquivos que já estão nela.
 
 # Step of a change. { $dev } is the part.
 disks-step-unmount = desmontando { $dev }
@@ -767,7 +747,7 @@ disks-step-unmount = desmontando { $dev }
 disks-step-mount = montando { $dev } de novo
 
 # Step of a change.
-disks-step-eject = fechando a unidade para ser removida
+disks-step-eject = preparando a unidade para a remoção
 
 # Step of a change.
 disks-step-power-off = desligando a unidade
@@ -777,14 +757,14 @@ disks-step-power-off = desligando a unidade
 disks-step-format = formatando { $dev }
 
 # Step of a change.
-disks-step-create = criando a nova partição
+disks-step-create = criando uma partição
 
 # Step of a change. { $dev } is the part.
 # SAFETY: needs a human review before it ships
 disks-step-delete = excluindo { $dev }
 
 # Step of a change. { $dev } is the part.
-disks-step-resize-part = redimensionando a partição { $dev }
+disks-step-resize-part = redimensionando { $dev }
 
 # Step of a change. { $dev } is the part.
 disks-step-resize = redimensionando o que há em { $dev }
@@ -799,85 +779,82 @@ disks-step-check = verificando { $dev }
 disks-step-rename = renomeando { $dev }
 
 # Step of a change. { $dev } is the part.
-disks-step-fstab = guardando a pasta e a escolha de inicialização de { $dev }
+disks-step-fstab = guardando as configurações de pasta e de inicialização de { $dev }
 
 # Step of a change that has no words of its own. { $method } is what the drive service was asked; { $dev } is the part.
 disks-step-other = a etapa { $method } em { $dev }
 
 # Red words under the Make room row for a part of a kind that cannot be made smaller in use, and that can when it is not in use. { $kind } is the kind of file system.
-disks-room-ext-offline = Esta partição { $kind } só pode ser diminuída quando não está em uso, então não é possível abrir espaço a partir dela aqui.
+disks-room-ext-offline = Esta partição { $kind } só pode ser diminuída quando não está em uso, então o Trindle não consegue abrir espaço a partir dela aqui.
 
 # Red words under the Make room row for an xfs part.
-disks-room-xfs-fixed = Esta partição xfs não pode ser diminuída.
+disks-room-xfs-fixed = Partições xfs não podem ser reduzidas.
 
 # Red words under the Make room row for any other kind of part in use. { $kind } is the kind of file system.
 disks-room-other-kind = Esta partição { $kind } não pode ser diminuída enquanto está em uso.
 
 # Red words under the Make room row when a snapshot cannot be taken of the part.
-disks-room-no-snapshot = Só é possível criar um instantâneo do disco do próprio sistema, então não é possível abrir espaço aqui.
+disks-room-no-snapshot = O Trindle só pode criar um instantâneo do disco do próprio sistema, então não consegue abrir espaço aqui.
 
 # Red words under the Make room row.
-disks-room-not-in-table = Ela não é uma partição da tabela de uma unidade, então não é possível abrir espaço a partir dela.
+disks-room-not-in-table = Ela não é uma partição na tabela de partições de uma unidade, então o Trindle não consegue abrir espaço a partir dela.
 
 # Red words under the Make room row.
-disks-room-no-online-shrink = O serviço de unidades não consegue diminuir o Btrfs enquanto está em uso aqui, então não é possível abrir espaço.
+disks-room-no-online-shrink = O serviço de unidades não consegue diminuir o Btrfs enquanto está em uso aqui, então o Trindle não consegue abrir espaço.
 
 # Red words under the Make room row.
-disks-room-holds-parts = Ela contém outras partições, então não é possível abrir espaço a partir dela.
+disks-room-holds-parts = Ela tem outras partições dentro, então o Trindle não consegue abrir espaço a partir dela.
 
 # Red words under the Make room row.
-disks-room-not-gpt = A unidade dela não tem tabela GPT, então não é possível abrir espaço a partir dela.
+disks-room-not-gpt = A unidade dela não tem tabela de partições GPT, então o Trindle não consegue abrir espaço a partir dela.
 
 # Red words under the Make room row.
 disks-room-mount-first = Monte primeiro: o Btrfs é diminuído enquanto está montado.
 
 # Red words under the Make room row.
-disks-room-mounts-not-one = Ela não está montada em exatamente um lugar, então não é possível abrir espaço.
+disks-room-mounts-not-one = Ela não está montada, então o Trindle não consegue abrir espaço.
 
 # Red words under the Make room row.
-disks-room-read-only = Ela está montada como somente leitura, então não é possível abrir espaço.
+disks-room-read-only = Ela está montada como somente leitura, então o Trindle não consegue abrir espaço.
 
 # Red words under the Make room row.
-disks-room-read-only-unknown = Não foi possível saber se ela é somente leitura, então não é possível abrir espaço.
+disks-room-read-only-unknown = O Trindle não conseguiu saber se ela é somente leitura, então não consegue abrir espaço.
 
 # Red words under the Make room row.
-disks-room-many-drives = Os arquivos se espalham por mais de uma unidade, então não é possível abrir espaço.
+disks-room-many-drives = Os arquivos estão espalhados por mais de uma unidade, então o Trindle não consegue abrir espaço.
 
 # Red words under the Make room row.
-disks-room-drives-unknown = Não foi possível saber por quantas unidades os arquivos se espalham, então não é possível abrir espaço.
+disks-room-drives-unknown = O Trindle não conseguiu saber por quantas unidades os arquivos estão espalhados, então não consegue abrir espaço.
 
 # Red words under the Make room row.
-disks-room-swap-file = Há um arquivo de swap nela, então não é possível abrir espaço.
+disks-room-swap-unknown = O Trindle não conseguiu saber se há um arquivo de swap nela, então não consegue abrir espaço.
 
 # Red words under the Make room row.
-disks-room-swap-unknown = Não foi possível saber se há um arquivo de swap nela, então não é possível abrir espaço.
+disks-room-used-unknown = O Trindle não conseguiu ler quanto dela está em uso, então não consegue abrir espaço.
 
 # Red words under the Make room row.
-disks-room-used-unknown = Não foi possível ler quanto dela está em uso, então não é possível abrir espaço.
+disks-room-area-unknown = O serviço de unidades não informa o tamanho do sistema de arquivos, então o Trindle não consegue verificá-lo nem abrir espaço.
 
 # Red words under the Make room row.
-disks-room-area-unknown = O serviço de unidades não diz o tamanho da área dos arquivos, então não foi possível verificar e não é possível abrir espaço.
+disks-room-open-missing = O Trindle não encontrou a cópia desbloqueada dela, então não consegue abrir espaço.
 
 # Red words under the Make room row.
-disks-room-open-missing = A cópia aberta dela não foi encontrada, então não é possível abrir espaço.
+disks-room-encryption-sizes = Os tamanhos dados para a criptografia não coincidem, então o Trindle não consegue abrir espaço.
 
 # Red words under the Make room row.
-disks-room-encryption-sizes = Os tamanhos dados para a criptografia não concordam, então não é possível abrir espaço.
-
-# Red words under the Make room row.
-disks-room-sizes = Os tamanhos dados para ela não concordam, então não é possível abrir espaço.
+disks-room-sizes = Os tamanhos dados para ela não coincidem, então o Trindle não consegue abrir espaço.
 
 # Red words under the Make room row. { $used } is how much the files use.
-disks-room-too-little = Ela contém { $used } e precisa que mais do que isso seja mantido, então pouco pode ser liberado.
+disks-room-too-little = Ela tem { $used } e precisa manter mais do que isso, então há pouco espaço para liberar.
 
 # Red words under the Make room row.
-disks-room-sizes-unread = Não foi possível ler os tamanhos dela.
+disks-room-sizes-unread = Não foi possível ler os tamanhos.
 
 # Red words under the Make room row when the room asked for is out of range. { $least } and { $most } are the smallest and largest room.
-disks-room-range = É possível abrir de { $least } a { $most } de espaço.
+disks-room-range = Você pode abrir entre { $least } e { $most } de espaço.
 
 # Red words when making room was stopped. { $what } says what was found wrong, without a full stop.
-disks-room-stopped = { $what }, então o trabalho foi interrompido.
+disks-room-stopped = { $what }, então o Trindle parou.
 
 # What was found wrong while making room.
 disks-room-check-unmounted = Os arquivos não estão mais montados
@@ -886,33 +863,33 @@ disks-room-check-unmounted = Os arquivos não estão mais montados
 disks-room-check-part = A partição está com { $is } e deveria ter { $should }
 
 # What was found wrong while making room.
-disks-room-check-open = A cópia aberta da criptografia não tem o tamanho que deveria
+disks-room-check-open = A cópia desbloqueada da criptografia não tem o tamanho que deveria
 
 # What was found wrong while making room. { $is } is the size the files' area has; { $should } is the size it should have.
-disks-room-check-area = A área dos arquivos está com { $is } e deveria ter { $should }
+disks-room-check-area = O sistema de arquivos está com { $is } e deveria ter { $should }
 
 # What was found wrong while making room.
-disks-room-check-area-small = A área dos arquivos é menor do que o que está em uso
+disks-room-check-area-small = O sistema de arquivos é menor do que o que está em uso
 
 # What was found wrong while making room.
-disks-room-check-fit = O que contém o conteúdo já não cabe
+disks-room-check-fit = O sistema de arquivos já não cabe
 
 # Red words when making room was stopped because the drive service no longer lists something. { $what } is part, copy or files.
 disks-room-gone =
     { $what ->
-        [part] A partição não aparece mais na lista do serviço de unidades, então o trabalho foi interrompido.
-        [copy] A cópia aberta não aparece mais na lista do serviço de unidades, então o trabalho foi interrompido.
+        [partition] A partição não aparece mais na lista do serviço de unidades, então o trabalho foi interrompido.
+        [copy] A cópia desbloqueada não aparece mais na lista do serviço de unidades, então o trabalho foi interrompido.
        *[files] O sistema de arquivos não aparece mais na lista do serviço de unidades, então o trabalho foi interrompido.
     }
 
 # Step of making room, in the account of one that stopped part-way.
-disks-room-step-files = diminuindo a área dos arquivos
+disks-room-step-files = diminuindo o sistema de arquivos
 
 # Step of making room, in the account of one that stopped part-way.
-disks-room-step-open = diminuindo a cópia aberta da criptografia
+disks-room-step-open = diminuindo a cópia desbloqueada da criptografia
 
 # Step of making room, in the account of one that stopped part-way.
-disks-room-step-part = diminuindo a partição
+disks-room-step-part = reduzindo a partição
 
 # Step of making room, in the account of one that stopped part-way.
 disks-room-step-check = verificando os tamanhos
@@ -920,14 +897,16 @@ disks-room-step-check = verificando os tamanhos
 # Description the snapshot taken before making room is saved under, which Settings lists. { $dev } is the part; { $at } is a number that tells it from another.
 disks-room-snapshot-note = Antes de abrir espaço em { $dev } ({ $at })
 
+# Red words when the swap file is back on after making room, but Trindle met a problem doing it. { $done } is how making room went, { $why } the problem, both as sentences.
+disks-swap-on-but = { $done } { $why }
+
 
 # Red words when another change is pressed while one is still being made.
 disks-change-going = Uma alteração está sendo feita.
 
 
 # Warning shown after the first press of the resize button when the part gets smaller. { $name } is the part; { $drive } is the drive; { $from } is its size now; { $to } is the size asked for.
-disks-resize-warning-shrink = Clique de novo: { $name } em { $drive } vai de { $from } para { $to }. Faça antes um backup dos arquivos dela, pois uma queda de energia durante a redução pode fazê-los se perder.
+disks-resize-warning-shrink = Clique de novo para alterar { $name } em { $drive } de { $from } para { $to }. Faça antes um backup dos arquivos dela, porque uma queda de energia durante a redução pode fazê-los se perder.
 
 # Red words under the size when a Windows part was hibernated or left in fast start-up and so is not made smaller. { $name } is the part.
 disks-windows-asleep = O Windows em { $name } foi hibernado ou deixado na inicialização rápida, então reduzi-la pode fazer com que perca seus arquivos. Inicie o Windows, escolha Reiniciar e tente de novo.
-

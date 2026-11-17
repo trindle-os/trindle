@@ -13,14 +13,17 @@ ring-updates-none = Mọi thứ đều đã mới nhất
 # Answer to a spoken question about updates when the updates button installs them all; "it" for one, "them" for more.
 ring-updates-spoken-all =
     { $n ->
-       *[other] Có { $n } bản đang chờ: nút cập nhật cạnh Ứng dụng sẽ cài tất cả
+       *[other] Có { $n } bản cập nhật đang chờ. Hãy dùng nút cập nhật cạnh Ứng dụng để cài chúng.
     }
 
 # Answer to a spoken question about updates when only plugin updates that need a look wait; the clause that follows says so.
-ring-updates-spoken-look = Có { $n } bản đang chờ: { $look }
+ring-updates-spoken-look =
+    { $n ->
+       *[other] Có { $n } bản cập nhật đang chờ. { $look }.
+    }
 
 # Answer to a spoken question about updates when some install and some need a look; the last clause says which need a look.
-ring-updates-spoken-mixed = Có { $n } bản đang chờ: nút cập nhật cạnh Ứng dụng sẽ cài { $put } bản, và { $look }
+ring-updates-spoken-mixed = Có { $n } bản cập nhật đang chờ. Hãy dùng nút cập nhật cạnh Ứng dụng để cài { $put } bản trong số đó. { $look }.
 
 # Name and tip of the updates button when only firmware updates wait: the button takes the person to them.
 ring-updates-see-firmware =
@@ -31,7 +34,7 @@ ring-updates-see-firmware =
 # Name and tip of the updates button when firmware updates wait among others: the button takes the person to them.
 ring-updates-see-among =
     { $n ->
-       *[other] Xem { $n } bản cập nhật, trong đó có firmware
+       *[other] Xem { $n } bản cập nhật, gồm cả firmware
     }
 
 # Name and tip of the updates button when updates wait that it will install.
@@ -43,7 +46,7 @@ ring-updates-install =
 # Name and tip of the updates button when only plugin updates that ask for more than before wait.
 ring-updates-see-plugin =
     { $n ->
-       *[other] Xem { $n } bản cập nhật plugin, yêu cầu nhiều quyền hơn trước
+       *[other] Xem { $n } bản cập nhật plugin, xin nhiều quyền hơn trước
     }
 
 # Name and tip of the updates button when some updates install and some plugin updates need a look; the clause after the semicolon says which.
@@ -93,7 +96,7 @@ ring-tray-vpn = Đã kết nối qua VPN
 ring-tray-wired = Có dây
 
 # Name of the network button when connected by cable but the internet is not reachable.
-ring-tray-wired-limited = Có dây, kết nối hạn chế
+ring-tray-wired-limited = Có dây, không có internet
 
 # Name of the network button on Wi-Fi: the network's name and its signal strength.
 ring-tray-wifi = { $name }, tín hiệu { $strength }%
@@ -132,4 +135,3 @@ ring-tray-full = Vòng đã có bốn biểu tượng. Hãy bỏ bớt một cá
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = Việc kiểm tra đang tắt
-

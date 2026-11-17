@@ -2,7 +2,7 @@
 # machine translated (Vietnamese), not yet reviewed by a person.
 
 # Name of Debian's group of updates, on its row and in the headline.
-store-upd-debian-name = Các gói của Debian
+store-upd-debian-name = Gói Debian
 
 # On a row held back: the version it is held at, and the one that waits.
 store-upd-held-version-waits = Đang giữ lại ở phiên bản { $have }; { $waits }
@@ -17,7 +17,7 @@ store-upd-held-version = Đang giữ lại ở phiên bản { $have }
 store-upd-held = Đang giữ lại
 
 # On the Held back card: the version a thing is held at, and nothing newer waits.
-store-upd-held-version-nothing = Đang giữ lại ở phiên bản { $have }; chưa có bản mới hơn
+store-upd-held-version-nothing = Đang giữ lại ở phiên bản { $have }. Chưa có bản mới hơn.
 
 # On the Held back card: nothing newer waits.
 store-upd-held-nothing = Đang giữ lại; chưa có bản mới hơn
@@ -56,7 +56,7 @@ store-upd-sentence = { $text }.
 store-upd-and-then = { $first } { $second }
 
 # Added to the headline when firmware is among the updates.
-store-upd-firmware-restart = Firmware cần khởi động lại để hoàn tất.
+store-upd-firmware-restart = Khởi động lại để hoàn tất cập nhật firmware.
 
 # Headline while the check runs.
 store-upd-checking = Đang kiểm tra bản cập nhật.
@@ -69,19 +69,19 @@ store-upd-installing-all = Đang cài các bản cập nhật. Bạn có thể t
 
 # Headline when the updates are in and the computer must start again.
 # SAFETY: needs a human review before it ships
-store-upd-restart = Khởi động lại để hoàn tất: các bản cập nhật đã được cài, và sẽ có hiệu lực khi máy tính khởi động lại.
+store-upd-restart = Hãy khởi động lại máy tính để cài xong các bản cập nhật.
 
 # Added to the headline when what went in needs a restart.
-store-upd-gone-in-restart = Những gì vừa cài cần khởi động lại để hoàn tất.
+store-upd-gone-in-restart = Khởi động lại để hoàn tất cài đặt.
 
 # Added to the headline with no internet.
-store-upd-no-more = Máy tính này chưa kết nối internet nên không thể tìm thêm.
+store-upd-no-more = Máy tính này chưa kết nối internet nên Trindle không thể tìm thêm bản cập nhật.
 
 # Headline when nothing is ready (updates held back are added after it).
 store-upd-none-ready = Không có bản cập nhật nào sẵn sàng
 
 # Headline with nothing waiting and no internet to look with.
-store-upd-nothing-known = Theo máy tính này biết, không có bản cập nhật nào đang chờ. Máy không thể tìm thêm khi chưa kết nối internet.
+store-upd-nothing-known = Trindle không biết có bản cập nhật nào đang chờ. Nó không thể tìm thêm khi máy tính này chưa kết nối internet.
 
 # Name of the apps in the headline's list of what could not be checked.
 store-upd-name-apps = các ứng dụng
@@ -93,7 +93,7 @@ store-upd-name-system = Trindle và Debian
 store-upd-name-firmware = firmware
 
 # Headline when some checks failed; the list of what was not checked is given.
-store-upd-check-failed = Không thể kiểm tra bản cập nhật cho { $names }.
+store-upd-check-failed = Trindle không kiểm tra được bản cập nhật cho { $names }.
 
 # Headline when everything is up to date.
 store-upd-current = Mọi thứ đều đã mới nhất.
@@ -105,7 +105,7 @@ store-upd-last-checked = Kiểm tra lần cuối lúc { $time }.
 store-upd-not-checked = Không thể kiểm tra khi không có internet
 
 # Red words under a card when a check took too long.
-store-upd-too-long = Phản hồi mất quá nhiều thời gian.
+store-upd-too-long = Việc kiểm tra mất quá nhiều thời gian.
 
 # Tip of the round button that checks again.
 store-upd-check-again = Kiểm tra lại
@@ -133,7 +133,7 @@ store-upd-check-for = Kiểm tra bản cập nhật
 
 # Tip of the round button that releases a thing held back.
 # SAFETY: needs a human review before it ships
-store-upd-release = Bỏ giữ { $name }
+store-upd-release = Cho phép cập nhật { $name }
 
 # Tip of the round button that holds a thing's updates back.
 # SAFETY: needs a human review before it ships
@@ -171,11 +171,11 @@ store-upd-shared-part = Một phần dùng chung, từ { $from }
 
 # Note under the Apps card.
 # SAFETY: needs a human review before it ships
-store-upd-yours-alone = Chỉ của riêng bạn, nên được cập nhật mà không cần mật khẩu. Ứng dụng mang theo các phần dùng chung mà phiên bản mới của nó cần.
+store-upd-yours-alone = Các ứng dụng này chỉ của riêng bạn, nên được cập nhật mà không cần mật khẩu. Bản cập nhật của một ứng dụng cũng cài các phần dùng chung mà nó cần.
 
 # Note under the Apps card: what holding back does.
 # SAFETY: needs a human review before it ships
-store-upd-hold-why = Bản cập nhật bị giữ lại sẽ ở nguyên phiên bản hiện có, và không nằm trong Cài tất cả ở đây và trên vòng tròn, cho đến khi bạn bỏ giữ.
+store-upd-hold-why = Bản cập nhật bị giữ lại sẽ ở nguyên phiên bản hiện tại. Nó bị bỏ qua khi bạn cài tất cả bản cập nhật, ở đây và trên vòng tròn, cho đến khi bạn cho phép cập nhật lại.
 
 # Heading of the Apps card.
 store-upd-card-apps = Ứng dụng
@@ -204,11 +204,11 @@ store-upd-card-plugins = Plugin
 store-upd-nothing-held = Không có gì bị giữ lại.
 
 # On a row of the Held back card for a thing released while the page is open.
-store-upd-released = Đã bỏ giữ
+store-upd-released = Không bị giữ lại
 
 # Note under the Held back card: what releasing does.
 # SAFETY: needs a human review before it ships
-store-upd-release-why = Mục được bỏ giữ sẽ được cài cùng các mục khác trở lại, từ Cài tất cả ở đây và trên vòng tròn.
+store-upd-release-why = Khi bạn cho phép cập nhật lại, nó sẽ được cài cùng các mục khác, ở đây và trên vòng tròn.
 
 # Name on the Held back card of a device whose firmware is not named now.
 store-upd-device-firmware = Firmware của một thiết bị
@@ -233,7 +233,7 @@ store-upd-debian-count =
 store-upd-from-debian = Từ Debian
 
 # Under Debian's rows: how many of them show.
-store-upd-debian-showing = Đang hiện { $shown } trên { $total } bản cập nhật của Debian.
+store-upd-debian-showing = Đang hiện { $shown } trên { $total } bản cập nhật Debian.
 
 # Note on the Trindle and Debian card: which version of Trindle the computer has.
 store-upd-has-trindle = Máy tính này đang dùng Trindle { $version }.
@@ -242,7 +242,7 @@ store-upd-has-trindle = Máy tính này đang dùng Trindle { $version }.
 store-upd-card-system = Trindle và Debian
 
 # Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Các gói của Debian được làm để khớp với nhau, và cài riêng một gói có thể kéo theo các gói khác hoặc làm chúng lệch nhau. Vì vậy chúng được cài cùng nhau, từ một nút.
+store-upd-debian-why = Các gói Debian được làm để hoạt động cùng nhau. Cài riêng một gói có thể kéo theo gói khác hoặc làm chúng lệch nhau, nên tất cả được cài cùng nhau.
 
 # Note on the Trindle and Debian card: why no row has a Hold back button.
 # SAFETY: needs a human review before it ships
@@ -256,17 +256,9 @@ store-upd-card-security = Cập nhật bảo mật
 # SAFETY: needs a human review before it ships
 store-upd-security-on = Bật, mỗi ngày
 
-# On the security card.
-# SAFETY: needs a human review before it ships
-store-upd-security-note = Các bản vá của Debian được cài mỗi ngày mà không hỏi.
-
-# On the security card.
-# SAFETY: needs a human review before it ships
-store-upd-security-part = Là một phần của Trindle; không thể tắt.
-
 # On the security card: that holding back never stops these.
 # SAFETY: needs a human review before it ships
-store-upd-never-held = Việc giữ lại một bản cập nhật không bao giờ chặn các bản này.
+store-upd-never-held = Giữ lại một bản cập nhật không bao giờ chặn các bản cập nhật bảo mật.
 
 # Firmware card: the computer has no updater.
 store-upd-fw-none = Máy tính này không có trình cập nhật firmware.
@@ -294,22 +286,22 @@ store-upd-fw-no-list = fwupd không tải được danh sách mới nhất.
 store-upd-no-flathub = Không kết nối được với Flathub.
 
 # Red words when Debian's lists could not be fetched.
-store-upd-no-lists = Không tải được danh sách của Debian.
+store-upd-no-lists = Trindle không lấy được danh sách của Debian.
 
 # Red words when Debian's lists could not be fetched; the reason follows.
-store-upd-no-lists-why = Không tải được danh sách của Debian. { $why }
+store-upd-no-lists-why = Trindle không lấy được danh sách của Debian. { $why }
 
 # Red words under a row when its updates could not be held back or released: the list of what is held could not be kept.
-store-upd-not-held-list = Chưa giữ lại được. Không thể lưu danh sách những gì đang giữ lại: { $why }.
+store-upd-not-held-list = Trindle không giữ lại được vì không lưu được danh sách các bản cập nhật bị giữ lại: { $why }.
 
 # The same, for a release.
-store-upd-not-released-list = Chưa bỏ giữ được. Không thể lưu danh sách những gì đang giữ lại: { $why }.
+store-upd-not-released-list = Trindle không cho phép cập nhật lại được vì không lưu được danh sách các bản cập nhật bị giữ lại: { $why }.
 
 # Red words when Flatpak could not be told a thing is held back.
-store-upd-held-not-told = Đã giữ lại trong Ứng dụng, nhưng không báo được cho chính Flatpak, nên công cụ khác cập nhật ứng dụng vẫn có thể cài nó.
+store-upd-held-not-told = Đã giữ lại trong Ứng dụng, nhưng Trindle không đổi được điều này trong Flatpak. Một chương trình khác cập nhật ứng dụng vẫn có thể cài nó.
 
 # Red words when Flatpak could not be told a thing is released.
-store-upd-released-not-told = Đã bỏ giữ trong Ứng dụng, nhưng không báo được cho chính Flatpak và nó vẫn có thể bỏ qua mục này. Hãy giữ lại rồi bỏ giữ lần nữa.
+store-upd-released-not-told = Đã cho phép cập nhật lại trong Ứng dụng, nhưng Trindle không đổi được điều này trong Flatpak, nên Flatpak vẫn có thể bỏ qua nó. Hãy giữ lại rồi cho phép cập nhật lại.
 
 # Red words: the above, then what Flatpak itself said.
 store-upd-flatpak-said = { $words } Flatpak báo: { $why }
@@ -317,9 +309,15 @@ store-upd-flatpak-said = { $words } Flatpak báo: { $why }
 # Name of Trindle itself on its row of updates.
 store-upd-trindle = Trindle
 
+# Said when a security fix for a boxed app can't be downloaded. { $package } is the package, { $version } the fixed version.
+store-patch-not-fetched = Trindle không tải được { $package } { $version }.
+
+# Said when a security fix for a boxed app was downloaded but isn't there to use.
+store-patch-not-found = Trindle không tìm thấy gói đã tải.
+
 
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
-store-upd-off = Việc tự kiểm tra cập nhật đang tắt. Nhấn Kiểm tra cập nhật để xem.
+store-upd-off = Tự động kiểm tra cập nhật đang tắt.
 
 # How a card stands with nothing known to wait, looking by itself switched off and no check pressed yet.
 store-upd-not-looked = Chưa kiểm tra
@@ -334,8 +332,7 @@ store-upd-stopping = Đang dừng
 store-upd-stopped = Đã dừng. Nhấn Cập nhật để tiếp tục.
 
 # Under the Apps card when Install all was stopped.
-store-upd-stopped-all = Đã dừng. Nhấn Cài đặt để tiếp tục.
+store-upd-stopped-all = Đã dừng. Hãy cài đặt lại để tiếp tục.
 
 # Note under the Apps card.
 store-upd-steam-restarts = Steam sẽ khởi động lại khi không còn trò chơi nào đang chạy.
-

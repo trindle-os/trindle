@@ -25,13 +25,27 @@ fi
 # so the login screen is drawn at their size before anyone logs in. Anyone
 # may add a file but nobody may change another's (the sticky bit, as /tmp).
 install -d -m 1777 /var/lib/trindle/login-scales
-# And the keys and buttons each person changed, the same way.
+# And the ready-made key swaps each person chose, the same way: the login
+# screen takes nothing else from a file left there, since any account may leave one.
 install -d -m 1777 /var/lib/trindle/login-remaps
+
+# The firewall is off on a new computer until the person switches it on, in
+# the Welcome or in Settings. A computer that had it before there was a
+# switch keeps it on.
+if [ ! -e /etc/trindle/firewall-chosen ]; then
+    install -d /etc/trindle
+    if [ -n "$2" ]; then
+        echo on > /etc/trindle/firewall-on
+    fi
+    echo kept > /etc/trindle/firewall-chosen
+fi
 
 # The blocker's own user, then a running blocker picks up the new program.
 systemd-sysusers trindle-dns.conf >/dev/null 2>&1 || true
 if [ -d /run/systemd/system ]; then
     systemctl daemon-reload >/dev/null 2>&1 || true
+    # Kernel settings take effect now, not at the next start.
+    systemd-sysctl 90-trindle-games.conf 90-trindle-hardening.conf 90-trindle-watches.conf >/dev/null 2>&1 || true
     systemctl try-restart trindle-dns.service >/dev/null 2>&1 || true
     # The charge limit is told again at once, so a change to how it is told
     # does not wait for a restart.
@@ -39,7 +53,9 @@ if [ -d /run/systemd/system ]; then
     # The Thunderbolt guard starts now on a computer that has the ports,
     # rather than at the next start, and a running one takes the new program.
     udevadm control --reload >/dev/null 2>&1 || true
-    if [ -d /sys/bus/thunderbolt ] && ls /sys/bus/thunderbolt/devices | grep -q '^domain'; then
+    tb=
+    for d in /sys/bus/thunderbolt/devices/domain*; do [ -e "$d" ] && tb=1; done
+    if [ -n "$tb" ]; then
         systemctl restart trindle-thunder.service >/dev/null 2>&1 || true
     fi
     # The USB retry service, where the computer has a USB bus. A port it has
@@ -55,7 +71,10 @@ if [ -d /run/systemd/system ]; then
         loginctl list-users --no-legend 2>/dev/null | while read -r uid name _; do
             [ "$uid" -ge 1000 ] 2>/dev/null || continue
             run=/run/user/$uid
-            sock=$(ls "$run"/wayland-* 2>/dev/null | grep -v '\.lock$' | head -n 1)
+            sock=
+            for f in "$run"/wayland-*; do
+                case $f in *.lock) ;; *) [ -e "$f" ] && { sock=$f; break; } ;; esac
+            done
             [ -n "$sock" ] || continue
             setsid runuser -u "$name" -- env XDG_RUNTIME_DIR="$run" WAYLAND_DISPLAY="$(basename "$sock")" \
                 /usr/bin/trindle-boxed --restart-parts-after-update >/dev/null 2>&1 </dev/null &
@@ -66,21 +85,28 @@ fi
 [ -d /usr/share/icons/hicolor ] && gtk-update-icon-cache -qf /usr/share/icons/hicolor 2>/dev/null || true
 [ -d /usr/share/applications ] && update-desktop-database -q /usr/share/applications 2>/dev/null || true
 
+# Another login screen is switched off for the next start only and never
+# stopped: this install may be running inside the session it draws.
 if [ -d /run/systemd/system ]; then
-    current=$(readlink /etc/systemd/system/display-manager.service 2>/dev/null || true)
+    dm=/etc/systemd/system/display-manager.service
+    current=$(readlink "$dm" 2>/dev/null || true)
     # A link left pointing at a login screen that has since been removed
     # blocks greetd from taking the name, and the computer then stops at
     # its start-up logo. It is taken away first.
-    if [ -L /etc/systemd/system/display-manager.service ] && [ ! -e /etc/systemd/system/display-manager.service ]; then
-        rm -f /etc/systemd/system/display-manager.service
+    if [ -L "$dm" ] && [ ! -e "$dm" ]; then
+        rm -f "$dm"
         current=""
     fi
     case "$current" in
         *greetd.service|"") ;;
-        *) deb-systemd-invoke stop "$(basename "$current")" >/dev/null 2>&1 || true
-           systemctl disable "$(basename "$current")" >/dev/null 2>&1 || true ;;
+        *) old=$(basename "$current")
+           systemctl disable "$old" >/dev/null 2>&1 || true
+           echo "trindle: $old keeps running until the computer restarts; Trindle's login screen starts after that" >&2 ;;
     esac
     systemctl enable greetd.service >/dev/null 2>&1 || true
+fi
+
+if [ -d /run/systemd/system ]; then
     systemctl set-default graphical.target >/dev/null 2>&1 || true
     # The kept system log (journald.conf.d/60-trindle.conf) starts now,
     # not at the next start.
@@ -112,6 +138,7 @@ list=/usr/share/trindle/protected-packages.txt
 if [ -f "$list" ] && command -v apt-mark >/dev/null 2>&1; then
     names=$(sed -e 's/#.*//' "$list")
     set -f
+    # shellcheck disable=SC2086 # one package name per word, globbing off
     have=$(dpkg-query -W -f='${db:Status-Abbrev}\t${binary:Package}\n' $names 2>/dev/null | awk -F'\t' '$1 ~ /^ii/ {print $2}')
     set +f
     [ -z "$have" ] || echo "$have" | xargs apt-mark manual >/dev/null 2>&1 || true
