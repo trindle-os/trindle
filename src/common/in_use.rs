@@ -417,9 +417,18 @@ pub fn is_video_link(target: &Path) -> bool {
 const MIDDLEMEN: [&str; 4] = ["pipewire", "pipewire-pulse", "wireplumber", "pipewire-media-session"];
 
 pub fn is_middleman(proc_root: &Path, pid: u32) -> bool {
-    let Ok(exe) = std::fs::read_link(proc_root.join(pid.to_string()).join("exe")) else { return false };
-    exe.starts_with("/usr/")
-        && exe.file_name().and_then(|n| n.to_str()).is_some_and(|n| MIDDLEMEN.contains(&n))
+    is_middleman_in(proc_root, Path::new("/usr"), pid)
+}
+
+fn is_middleman_in(proc_root: &Path, system: &Path, pid: u32) -> bool {
+    use std::os::unix::fs::MetadataExt;
+    let exe = proc_root.join(pid.to_string()).join("exe");
+    let Some(name) = std::fs::read_link(&exe).ok().and_then(|l| l.file_name().and_then(|n| n.to_str()).map(String::from)) else { return false };
+    if !MIDDLEMEN.contains(&name.as_str()) {
+        return false;
+    }
+    let (Ok(running), Ok(own)) = (std::fs::metadata(&exe), std::fs::metadata(system.join("bin").join(name))) else { return false };
+    (running.dev(), running.ino()) == (own.dev(), own.ino())
 }
 
 pub fn video_holders(proc_root: &Path) -> Vec<(u32, String)> {
@@ -609,9 +618,7 @@ pub fn decode(text: &str) -> Vec<User> {
 }
 
 pub fn write(at: &Path, users: &[User]) -> std::io::Result<()> {
-    let tmp = at.with_extension("new");
-    std::fs::write(&tmp, encode(users))?;
-    std::fs::rename(&tmp, at)
+    super::files::write_text(at, &encode(users))
 }
 
 pub fn read(at: &Path) -> Vec<User> {
@@ -719,16 +726,6 @@ pub fn read_all() -> Vec<User> {
         }
     }
     users
-}
-
-pub fn fake(spec: &str) -> Vec<User> {
-    spec.split(',').filter_map(|part| {
-        let (word, app) = part.trim().split_once(':').unwrap_or((part.trim(), ""));
-        let kind = Kind::from_word(word)?;
-        let app_ids = if app.is_empty() { Vec::new() } else { vec![app.to_string()] };
-        let name = if app.is_empty() { format!("Test {}", kind.word()) } else { app.to_string() };
-        Some(User { kind, pid: None, name, app_ids })
-    }).collect()
 }
 
 #[cfg(test)]
@@ -888,21 +885,31 @@ mod tests {
         use std::os::unix::fs::symlink;
         let root = std::env::temp_dir().join(format!("trindle-in-use-proc-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&root);
+        let (system, elsewhere) = (root.join("usr"), root.join("elsewhere"));
+        for dir in [system.join("bin"), elsewhere.clone()] {
+            std::fs::create_dir_all(&dir).unwrap();
+            for program in ["pipewire", "cheese"] {
+                std::fs::write(dir.join(program), program).unwrap();
+            }
+        }
 
-        for (pid, comm, exe, target) in [(100, "cheese", "/usr/bin/cheese", "/dev/video0"),
-                                         (200, "pipewire", "/usr/bin/pipewire", "/dev/video0"),
-                                         (300, "bash", "/usr/bin/bash", "/dev/null"),
-                                         (400, "pipewire", "/var/tmp/pipewire", "/dev/video1")] {
-            let at = root.join(pid.to_string());
+        let proc = root.join("proc");
+        for (pid, comm, exe, target) in [(100, "cheese", system.join("bin/cheese"), "/dev/video0"),
+                                         (200, "pipewire", system.join("bin/pipewire"), "/dev/video0"),
+                                         (400, "pipewire", elsewhere.join("pipewire"), "/dev/video1")] {
+            let at = proc.join(pid.to_string());
             let fd = at.join("fd");
             std::fs::create_dir_all(&fd).unwrap();
             symlink(target, fd.join("3")).unwrap();
             symlink(exe, at.join("exe")).unwrap();
             std::fs::write(at.join("comm"), format!("{comm}\n")).unwrap();
         }
-        std::fs::create_dir_all(root.join("self")).unwrap();
-        assert_eq!(video_holders(&root), vec![(100, "cheese".to_string()), (400, "pipewire".to_string())]);
-        assert!(is_middleman(&root, 200) && !is_middleman(&root, 400) && !is_middleman(&root, 999));
+        std::fs::create_dir_all(proc.join("self")).unwrap();
+        assert!(is_middleman_in(&proc, &system, 200));
+        assert!(!is_middleman_in(&proc, &system, 100), "not a PipeWire name");
+        assert!(!is_middleman_in(&proc, &system, 400), "same name, another file");
+        assert!(!is_middleman_in(&proc, &system, 999));
+        assert!(!is_middleman_in(&proc, &root.join("none"), 200), "no such program of the computer's own");
         let _ = std::fs::remove_dir_all(&root);
     }
 
@@ -982,11 +989,8 @@ mod tests {
     }
 
     #[test]
-    fn the_test_hook() {
-        let users = fake("microphone, camera:foot ,screen,bogus");
-        assert_eq!(users.len(), 3);
-        assert_eq!(users[1].app_ids, vec!["foot"]);
-        assert_eq!(mask(&users), 7);
+    fn no_made_up_state_can_be_asked_for_by_a_variable() {
+        assert!(!include_str!("../compose/indicators.rs").contains("TRINDLE_FAKE_IN_USE"));
     }
 
     #[test]
@@ -995,7 +999,7 @@ mod tests {
         let users = vec![u(Kind::Screen, "obs", &[]), u(Kind::Microphone, "Firefox", &[]), u(Kind::Microphone, "Firefox", &[]),
                          u(Kind::Microphone, "", &["org.example.Talk"]), u(Kind::Camera, "", &[])];
         assert_eq!(lines(&users, false), vec!["Microphone in use by Firefox, org.example.Talk", "Camera in use", "Screen being recorded by obs"]);
-        assert_eq!(lines(&users, true)[0], "Microphone switched off, wanted by Firefox, org.example.Talk");
+        assert_eq!(lines(&users, true)[0], "Microphone switched off. Firefox, org.example.Talk tried to use it.");
         assert!(lines(&[], true).is_empty());
     }
 
@@ -1017,7 +1021,7 @@ mod tests {
         let both = [user(Kind::HomeNetwork, "Scan"), user(Kind::Usb, "Scan")];
         let users = decode_box(&encode(&both));
         assert_eq!(users, both);
-        assert_eq!(lines(&users, false), ["Home network in use by Scan", "Scanners and USB devices in use by Scan"]);
+        assert_eq!(lines(&users, false), ["Local network in use by Scan", "Scanners and USB devices in use by Scan"]);
         assert_eq!(Kind::from_word("home-network"), Some(Kind::HomeNetwork));
         assert_eq!(Kind::from_word("usb"), Some(Kind::Usb));
         assert_eq!(mask(&users), 32 | 64);

@@ -1,0 +1,129 @@
+## What an app can be allowed to do, and what goes wrong without it. Each
+## permission has a name (said after "asks for", as in "Weather asks for
+## the internet and sound"), the line under its switch, and for some a warning.
+
+access-network-name = intaneti
+access-network-without = Haitaweza kufikia intaneti wala kompyuta nyingine zilizo karibu.
+access-sound-name = sauti
+access-sound-without = Haitatoa sauti.
+access-microphone-name = maikrofoni yako
+access-microphone-without = Haitaweza kukusikia.
+access-sound-and-microphone-name = sauti na maikrofoni yako
+access-sound-and-microphone-without = Haitatoa sauti na haitaweza kukusikia.
+access-files-name = folda zako za Nyaraka, Vipakuliwa, Picha, Muziki, Video na Eneo-kazi
+access-files-without = Haitaweza kufungua faili zako wala kuhifadhi kwenye folda zako.
+access-home-name = kila kitu kwenye folda yako ya nyumbani, pamoja na faili zilizofichwa za mipangilio
+access-home-without = Haitaweza kufungua faili zako wala kuhifadhi kwenye folda zako.
+access-devices-name = kamera yako na vifaa vingine vilivyochomekwa
+access-devices-without = Haitaweza kukuona wala kutumia unachochomeka.
+access-bluetooth-name = vifaa vya Bluetooth kama vipokea sauti
+access-bluetooth-without = Haitaweza kuwasiliana na kitu chochote kupitia Bluetooth.
+access-notifications-name = arifa
+access-notifications-without = Haitaweza kukuambia kitu kinapotokea.
+access-background-name = kuanza unapoingia
+access-background-without = Itaendeshwa tu ukiwa umeifungua.
+access-screen-name = picha za skrini yako, unachonakili, na kuandika kana kwamba ni kibodi yako
+access-screen-without = Haitaweza kuona madirisha mengine wala kusoma unachonakili wakati wowote.
+access-x11-name = kuchora madirisha yake kwa njia ya zamani, inayoiruhusu kutazama programu nyingine za zamani na kinachoandikwa ndani yake
+access-x11-without = Madirisha yake hayatafunguka.
+access-computer-name = kufanya kazi nje ya uzio wake, na kila kitu unachoweza kufikia wewe mwenyewe
+access-computer-without = Unachoandika ndani yake kitabaki kwenye uzio wake, kwa hiyo sudo na faili zako mwenyewe hazitafanya kazi huko.
+access-control-name = udhibiti wa kibodi, kipanya na clipboard yako
+access-control-without = Haitaweza kusogeza kielekezi, kuandika wala kushiriki unachonakili.
+access-capture-name = kushiriki kipanya na kibodi yako na kompyuta nyingine
+access-capture-without = Kielekezi hakitaweza kuvuka hadi kompyuta nyingine.
+access-copied-name = faili unazonakili
+access-copied-without = Haitaweza kusoma faili unazonakili, kwa hiyo haiwezi kuzipeleka kwa kompyuta nyingine.
+access-summon-name = kufungua pete juu ya dirisha la skrini nzima, kana kwamba umebonyeza kitufe
+access-summon-without = Vitufe na mibofyo yake vitafungua pete kwenye eneo-kazi pekee, kamwe si juu ya dirisha la skrini nzima.
+access-listen-name = kufikiwa na kompyuta nyingine kwenye mtandao wako wa ndani
+access-listen-without = Kompyuta nyingine kwenye mtandao wako wa ndani hazitaweza kuipata wala kuunganishwa nayo.
+access-home-network-name = vifaa vilivyo kwenye mtandao wako wa ndani pekee
+access-home-network-without = Haitaweza kupata wala kuwasiliana na printa, vichanganuzi au vifaa vingine kwenye mtandao wa ndani.
+access-usb-devices-name = vichanganuzi na vifaa vya USB
+access-usb-devices-without = Haitaweza kutumia kichanganuzi kilichochomekwa kwenye kompyuta hii.
+access-expand-name = kupanua misimbo mifupi unapoandika
+access-expand-without = Misimbo yake mifupi haitapanuliwa unapoandika.
+access-accessibility-name = kusoma kila dirisha kwa sauti
+access-accessibility-without = Haitaweza kusoma madirisha yako kwa sauti.
+access-unnamed-name = kitu ambacho haikukitaja
+
+access-control-warning = Inaweza kuandika, kubofya na kusoma unachonakili kana kwamba ni wewe. Ruhusu hili kwa programu jalizi unayoiamini pekee.
+access-capture-warning = Kielekezi kikiwa kwenye kompyuta nyingine, kila unachoandika na kubofya kinakwenda kwa programu jalizi hii. Ruhusu hili kwa programu jalizi unayoiamini pekee.
+access-copied-warning = Inaweza kusoma faili unazonakili tu, wakati imeruhusiwa, na si kingine chochote. Ruhusu hili kwa programu jalizi unayoiamini pekee.
+access-summon-warning = Inaweza kuweka pete, inayopokea kila unachoandika, juu ya mchezo au filamu bila wewe kubonyeza kitufe. Ruhusu hili kwa programu jalizi unayoiamini pekee.
+access-home-network-warning = Inaweza kuwasiliana na kila kifaa kwenye mtandao wako wa ndani, ikiwemo rauta yako, lakini si intaneti. Ruhusu hili kwa programu jalizi unayoiamini pekee.
+access-usb-devices-warning = Inaweza kutumia vichanganuzi na vifaa vya picha vilivyochomekwa inapoanza, na si kifaa kingine chochote cha USB. Ruhusu hili kwa programu jalizi unayoiamini pekee.
+access-expand-warning = Trindle hutazama unachoandika ili kupata misimbo yake na kuandika maneno yake kwa ajili yako. Programu jalizi haioni kamwe unachoandika. Ruhusu hili kwa programu jalizi unayoiamini pekee.
+access-accessibility-warning = Inaweza kusoma kila kitu kwenye skrini yako. Kama kisoma-skrini chochote, inaweza pia kubonyeza vitufe na kuandika maandishi kwenye madirisha mengine, ingawa haina kibodi wala kipanya chake. Ruhusu hili kwa programu jalizi unayoiamini pekee.
+
+## Titles (for a tooltip) and the line under a switch, which says what switching it off means.
+access-network-title = Intaneti
+access-network-off = Kuzima kunamaanisha haiwezi kufikia intaneti wala kompyuta nyingine zilizo karibu.
+access-sound-title = Kucheza sauti
+access-sound-off = Kuzima kunamaanisha hakuna sauti.
+access-microphone-title = Maikrofoni yako
+access-microphone-off = Kuzima kunamaanisha haiwezi kukusikia.
+access-sound-and-microphone-title = Kucheza sauti na kutumia maikrofoni yako
+access-sound-and-microphone-off = Kuzima kunamaanisha haitoi sauti na haiwezi kukusikia.
+access-files-title = Folda zako za Nyaraka, Vipakuliwa, Picha, Muziki, Video na Eneo-kazi
+access-files-off = Kuzima kunamaanisha haiwezi kufungua faili zako wala kuhifadhi kwenye folda zako.
+access-home-title = Kila kitu kwenye folda yako ya nyumbani, pamoja na faili zilizofichwa za mipangilio
+access-home-off = Kuzima kunamaanisha haiwezi kufungua faili zako wala kuhifadhi kwenye folda zako.
+access-devices-title = Kamera yako na vifaa vingine vilivyochomekwa
+access-devices-off = Kuzima kunamaanisha haiwezi kutumia kamera yako wala chochote unachochomeka.
+access-bluetooth-title = Bluetooth, kwa vipokea sauti na vitu vingine vilivyo karibu
+access-bluetooth-off = Kuzima kunamaanisha haiwezi kujiunganisha na kitu chochote kupitia Bluetooth.
+access-notifications-title = Kuonyesha arifa
+access-notifications-off = Kuzima kunamaanisha haiwezi kukuambia kitu kinapotokea.
+access-background-title = Kuanza yenyewe unapoingia
+access-background-off = Kuzima kunamaanisha huendeshwa tu ukiwa umeifungua.
+access-screen-title = Kupiga picha za skrini yako, kusoma unachonakili na kuandika kana kwamba ni kibodi yako
+access-screen-off = Kuzima kunamaanisha haiwezi kuona madirisha mengine wala kusoma unachonakili wakati wowote inapotaka.
+access-x11-title = Kuchora madirisha yake kwa njia ya zamani, inayoiruhusu kutazama programu nyingine za zamani na kinachoandikwa ndani yake
+access-x11-off = Kuzima kunazuia madirisha yake kufunguka.
+access-computer-title = Kufanya kazi nje ya uzio wake, na kila kitu unachoweza kufikia wewe mwenyewe
+access-computer-off = Kuzima kunamaanisha unachoandika ndani yake kinabaki kwenye uzio wake, kwa hiyo sudo na faili zako mwenyewe hazitafanya kazi huko.
+access-control-title = Kudhibiti kibodi, kipanya na clipboard yako
+access-control-off = Kuzima kunamaanisha haiwezi kusogeza kielekezi, kuandika wala kushiriki unachonakili.
+access-capture-title = Kushiriki kipanya na kibodi yako na kompyuta nyingine
+access-capture-off = Kuzima kunamaanisha kielekezi hakiwezi kuvuka hadi kompyuta nyingine.
+access-copied-title = Kusoma faili unazonakili
+access-copied-off = Kuzima kunamaanisha haiwezi kusoma faili unazonakili wala kuzituma kwa kompyuta nyingine.
+access-summon-title = Kufungua pete juu ya dirisha la skrini nzima, kana kwamba umebonyeza kitufe
+access-summon-off = Kuzima kunamaanisha vitufe na mibofyo yake hufungua pete kwenye eneo-kazi pekee, kamwe si juu ya dirisha la skrini nzima.
+access-listen-title = Kuruhusu kompyuta nyingine kwenye mtandao wako wa ndani ziifikie
+access-listen-off = Kuzima kunamaanisha kompyuta nyingine kwenye mtandao wako wa ndani haziwezi kuipata wala kuunganishwa nayo.
+access-home-network-title = Kufikia vifaa vilivyo kwenye mtandao wako wa ndani pekee
+access-home-network-off = Kuzima kunamaanisha haiwezi kupata wala kuunganishwa na printa, vichanganuzi au vifaa vingine kwenye mtandao wa ndani.
+access-usb-devices-title = Kutumia vichanganuzi na vifaa vya USB
+access-usb-devices-off = Kuzima kunamaanisha haiwezi kutumia kichanganuzi kilichochomekwa kwenye kompyuta hii.
+access-expand-title = Kupanua misimbo yako mifupi unapoandika
+access-expand-off = Kuzima kunamaanisha Trindle haitapanua misimbo yake mifupi unapoandika.
+access-accessibility-title = Kusoma kinachoonyeshwa na kila dirisha na kukisema kwa sauti
+access-accessibility-off = Kuzima kunamaanisha haiwezi kusoma madirisha yako kwa sauti.
+access-unnamed-title = Kitu ambacho haikukitaja
+
+## The few words on a plugin's row of the Permissions page.
+access-note-acts-as-you = inaweza kutenda kama wewe
+access-note-home-network = inaweza kufikia kila kifaa kwenye mtandao wako wa ndani
+access-note-usb-devices = inaweza kutumia vichanganuzi na vifaa vya picha
+access-note-expand = inaweza kuandika kwenye madirisha yako
+access-note-accessibility = inaweza kusoma kila kitu kwenye skrini yako
+
+access-listen-detail = { $ports }, kutoka kwa kompyuta za mtandao wako wa ndani pekee. Inahitaji pia intaneti iruhusiwe.
+
+## A request that is unusual for the kind of app that makes it.
+access-unusual = Hili si la kawaida kwa { $kind }. Liruhusu tu ukiamini mahali programu hii ilipotoka.
+access-kind-terminal = terminal
+access-kind-calculator = kikokotoo
+access-kind-photo = programu ya picha
+access-kind-text-editor = kihariri cha maandishi
+access-kind-browser = kivinjari cha wavuti
+access-kind-office = programu ya ofisi
+access-kind-graphics = programu ya michoro
+access-kind-game = mchezo
+access-kind-sound-video = programu ya sauti na video
+access-kind-programming = zana ya kuandika programu
+access-kind-utility = zana ya matumizi
+access-kind-other = programu kama hii

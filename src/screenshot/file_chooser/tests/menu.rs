@@ -68,8 +68,8 @@ fn rename_changes_a_name_in_the_list_and_keeps_the_thing_picked() {
     c.update(Msg::Choose(i));
     pick(&mut c, "Rename");
     assert!(c.view().said().contains(&"entry: New name for Letters".to_string()), "{:?}", c.view().said());
-    for (typed, why) in [("Albums", "A folder called Albums is already here."), ("a/b", "A name cannot hold a slash."), ("", "A name cannot be empty."),
-                         ("..", "That name is kept for the system.")] {
+    for (typed, why) in [("Albums", "A folder called Albums already exists here."), ("a/b", "A name can't have a slash."), ("", "A name can't be empty."),
+                         ("..", "The system uses that name.")] {
         c.update(Msg::RenameText(typed.into()));
         c.update(Msg::RenameDone);
         assert!(c.renaming.is_some() && c.view().said().contains(&why.to_string()), "{typed:?}: {:?}", c.view().said());
@@ -284,7 +284,7 @@ fn ctrl_c_x_v_and_delete_do_the_menus_acts() {
     let i = at(&c, "list.txt");
     c.update(Msg::Choose(i));
     press(&mut c, Keysym::c, ctrl);
-    assert!(c.said.starts_with("Copied list.txt"), "{}", c.said);
+    assert!(c.said.starts_with("Ready to copy: list.txt"), "{}", c.said);
     c.update(Msg::Open(at(&c, "Albums")));
     press(&mut c, Keysym::v, ctrl);
     assert!(dir.join("in/Albums/list.txt").is_file() && dir.join("in/list.txt").is_file());
@@ -305,7 +305,7 @@ fn ctrl_c_x_v_and_delete_do_the_menus_acts() {
 
     c.chosen = None;
     press(&mut c, Keysym::Delete, none);
-    assert_eq!(c.said, "Nothing is picked.");
+    assert_eq!(c.said, "Nothing is chosen.");
     std::fs::remove_dir_all(&dir).unwrap();
 }
 
@@ -360,13 +360,13 @@ fn copy_cut_paste_and_the_trash_are_folders_own() {
 
     c.update(Msg::RoomMenu(false));
     pick(&mut c, "Paste");
-    assert!(c.view().said().contains(&"Nothing has been cut or copied.".to_string()));
+    assert!(c.view().said().contains(&"Nothing is cut or copied.".to_string()));
 
     let i = at(&c, "notes.txt");
     c.update(Msg::Choose(i));
     c.update(Msg::Menu(i, 300.0, 200.0));
     pick(&mut c, "Copy");
-    assert!(c.view().said().contains(&"Copied notes.txt. Paste it into a folder.".to_string()), "{:?}", c.view().said());
+    assert!(c.view().said().contains(&"Ready to copy: notes.txt".to_string()), "{:?}", c.view().said());
     c.update(Msg::Open(at(&c, "Albums")));
     c.update(Msg::RoomMenu(false));
     pick(&mut c, "Paste");
@@ -383,7 +383,7 @@ fn copy_cut_paste_and_the_trash_are_folders_own() {
     c.update(Msg::Choose(i));
     c.update(Msg::Menu(i, 300.0, 200.0));
     pick(&mut c, "Cut");
-    assert!(c.view().said().contains(&"Cut Letters. Paste it into a folder.".to_string()));
+    assert!(c.view().said().contains(&"Ready to move: Letters".to_string()));
     c.update(Msg::Open(at(&c, "Albums")));
     c.update(Msg::RoomMenu(false));
     pick(&mut c, "Paste");
@@ -397,7 +397,7 @@ fn copy_cut_paste_and_the_trash_are_folders_own() {
     c.update(Msg::Open(at(&c, "Albums")));
     c.update(Msg::RoomMenu(false));
     pick(&mut c, "Paste");
-    assert!(c.failed.starts_with("One item could not be copied: ") && c.failed.contains("Albums"), "{}", c.failed);
+    assert!(c.failed.starts_with("Trindle couldn't copy one item: ") && c.failed.contains("Albums"), "{}", c.failed);
     assert!(!dir.join("in/Albums/Albums").exists());
 
     c.go(Where::Folder(dir.join("in")));
@@ -572,4 +572,39 @@ fn the_file_chooser_draws_only_pairs_the_table_holds() {
         shoot(&saving, "saving over a name that is there");
         std::fs::remove_dir_all(&dir).unwrap();
     }));
+}
+
+#[test]
+fn no_line_of_the_menu_is_cut_in_any_language() {
+    use crate::common::shipped_languages::{in_language, tags};
+    use crate::toolkit::text::{Fonts, Style};
+    use crate::toolkit::theme::Theme;
+    use crate::toolkit::ui::Ui;
+    let k = crate::toolkit::theme::sheet();
+    let paint = |menu: &Popup, w: f32| {
+        let menu = Popup { width: w, place: popup::Place::At(0.0, 0.0), ..menu.clone() };
+        let mut ui = Ui::new(menu.over(crate::toolkit::widget::space(), |_| ()), Theme::new(false, crate::common::style::DEFAULT_ACCENT));
+        let mut pix = tiny_skia::Pixmap::new(1200, 600).unwrap();
+        ui.paint(&mut pix.as_mut(), 1.0);
+        pix
+    };
+    for tag in tags() {
+        in_language(&tag, || {
+            let (dir, mut c) = menu_chooser(&format!("cut-{tag}"), Mode::Open { many: false, folder: true });
+            let i = at(&c, "Letters");
+            c.update(Msg::Menu(i, 0.0, 0.0));
+            let menu = c.menu.as_ref().unwrap().0.clone();
+            let (opened, wide) = (paint(&menu, menu.width), paint(&menu, menu.width + 400.0));
+            let fonts = Fonts::new();
+            for (n, r) in menu.rows.iter().enumerate() {
+                let keys = if r.keys.is_empty() { 0.0 } else { fonts.layout(&r.keys, &Style::new(k.note.0), None).width + k.menu_padding };
+                let words_end = (menu.width - 3.0 * k.menu_padding - keys) as u32;
+                let top = (k.menu_padding + n as f32 * menu.row_height()) as u32;
+                let differs = (top..top + menu.row_height() as u32)
+                    .any(|y| (0..words_end).any(|x| opened.pixel(x, y) != wide.pixel(x, y)));
+                assert!(!differs, "{tag}: {:?} is cut in a menu {} wide", r.words, menu.width);
+            }
+            std::fs::remove_dir_all(&dir).unwrap();
+        });
+    }
 }

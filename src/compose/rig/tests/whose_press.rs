@@ -552,7 +552,7 @@ fn only_flow_may_unlock_and_only_with_the_pin() {
 fn flow_gets_the_password_and_wrong_pins_refused(rig: &mut Rig, flow: usize, locker: usize, note: &Path) {
 
     let said = rig.asks_to_unlock(flow, "correct horse battery").unwrap();
-    assert_eq!(said, Err(crate::flow_unlock::NOT_A_PIN.to_string()));
+    assert_eq!(said, Err(crate::flow_unlock::not_a_pin()));
     assert_eq!(rig.asks_to_unlock(flow, "1111").unwrap(), Err(crate::flow_unlock::wrong(4)));
     assert!(rig.state.is_locked() && !note.exists(), "a wrong PIN unlocked, or was noted as an unlock");
 
@@ -567,12 +567,12 @@ fn flow_unlocks_with_the_right_pin_in_time(rig: &mut Rig, flow: usize, locker: u
     for left in (0..4).rev() {
         assert_eq!(rig.asks_to_unlock(flow, "2222").unwrap(), Err(crate::flow_unlock::wrong(left)));
     }
-    assert_eq!(rig.asks_to_unlock(flow, "4821").unwrap(), Err(crate::flow_unlock::TOO_MANY.to_string()));
+    assert_eq!(rig.asks_to_unlock(flow, "4821").unwrap(), Err(crate::flow_unlock::too_many()));
     assert!(rig.state.is_locked());
     rig.state.session_lock.flow_tries = 0;
 
     rig.state.session_lock.locked_at = Some(std::time::Instant::now() - std::time::Duration::from_secs(60 * 60 * 3));
-    assert_eq!(rig.asks_to_unlock(flow, "4821").unwrap(), Err(crate::flow_unlock::LATE.to_string()));
+    assert_eq!(rig.asks_to_unlock(flow, "4821").unwrap(), Err(crate::flow_unlock::late()));
     rig.state.session_lock.locked_at = Some(std::time::Instant::now());
 
     assert_eq!(rig.asks_to_unlock(flow, "4821").unwrap(), Ok(()));
@@ -581,11 +581,11 @@ fn flow_unlocks_with_the_right_pin_in_time(rig: &mut Rig, flow: usize, locker: u
     assert_eq!(kept.lines().count(), 1);
     assert!(kept.trim_end().ends_with("Z Flow unlocked with the PIN"), "{kept}");
 
-    assert_eq!(rig.asks_to_unlock(flow, "4821").unwrap(), Err(crate::flow_unlock::NOT_LOCKED.to_string()));
+    assert_eq!(rig.asks_to_unlock(flow, "4821").unwrap(), Err(crate::flow_unlock::not_locked()));
     crate::pin::remove();
     let again = rig.join(ClientState::default());
     rig.lock_by(again);
-    assert_eq!(rig.asks_to_unlock(flow, "4821").unwrap(), Err(crate::flow_unlock::NO_PIN.to_string()));
+    assert_eq!(rig.asks_to_unlock(flow, "4821").unwrap(), Err(crate::flow_unlock::no_pin()));
     assert!(rig.state.is_locked());
 }
 

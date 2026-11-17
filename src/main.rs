@@ -26,7 +26,8 @@ mod thunder;
 mod usbretry;
 mod report;
 mod voice;
-mod welcome;
+#[cfg(test)]
+mod shipped_tests;
 
 use std::process::ExitCode;
 
@@ -36,12 +37,17 @@ use trindle_toolkit as toolkit;
 #[link_section = ".init_array"]
 static TOOLKIT_HOST: extern "C" fn() = common::host::set;
 
+#[cfg(test)]
+#[used]
+#[link_section = ".init_array"]
+static BOX_START: unsafe extern "C" fn(i32, *const *const libc::c_char, *const *const libc::c_char) = store::boxed::start::as_test_program;
+
 pub const NAMES: &[&str] = &[
     "trindle-ring", "trindle-settings", "trindle-apps", "trindle-greeter",
     "trindle-wallpaper", "trindle-idle", "trindle-wsdd", "trindle-icons", "trindle-scale",
     "trindle-session", "trindle-greeter-session", "trindle-autostart",
     "trindle-admin", "trindle-voice-setup", "trindle-lock", "trindle-clipboard",
-    "trindle-installer", "trindle-welcome", "trindle-live-welcome", "trindle-windows-grub", "trindle-starting", "trindle-screensaver",
+    "trindle-installer", "trindle-live-welcome", "trindle-windows-grub", "trindle-starting", "trindle-screensaver",
     "trindle-nightlight", "trindle-screenshot", "trindle-brightness", "trindle-activity",
     "trindle-portal", "trindle-drives", "trindle-eye-dropper", "trindle-keyring", "trindle-mcp", "trindle-boxed",
     "trindle-plugin", "trindle-dns", "trindle-thunder", "trindle-controller", "trindle-usb-retry",
@@ -73,6 +79,10 @@ fn started_bare(part: &str, args: &[String]) -> Option<i32> {
     }
     if !part.starts_with("trindle") && store::fence::programs(&store::fence::root()).iter().any(|(n, _)| *n == part) {
         return Some(store::fence::main_for(part, &args[1..]));
+    }
+
+    if part == store::boxed::start::STARTER {
+        return Some(store::boxed::start::main(args));
     }
 
     if part == store::home_net::KEEPER {
@@ -145,7 +155,6 @@ fn run_part(part: &str, args: Vec<String>) -> i32 {
         "trindle-screenshot" => screenshot::main(args),
         "trindle-portal" => screenshot::portal::main(args),
         "trindle-installer" => installer::main(args),
-        "trindle-welcome" => welcome::main(args),
         "trindle-live-welcome" => installer::welcome::main(args),
 
         "42_trindle_snapshots" | "trindle-snapshots-grub" => common::snapshots::grub_main(),
@@ -212,7 +221,7 @@ mod tests {
         assert!(include_str!("../tools/iso/build.sh").contains("system/apt/hardware-packages.txt"), "the image must install the list");
         assert!(include_str!("../tools/deb/build.sh").contains("system/apt/hardware-packages.txt"), "the package must recommend the list");
         let thanks = include_str!("../share/lang/en/settings-thanks.ftl");
-        assert!(thanks.contains("settings-thanks-included-firmware = Debian's firmware. Not free software."), "the Thanks page must say the firmware is not free software");
+        assert!(thanks.contains("settings-thanks-included-firmware = Debian's firmware, not free software."), "the Thanks page must say the firmware is not free software");
     }
 
     #[test]

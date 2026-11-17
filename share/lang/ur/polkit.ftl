@@ -19,15 +19,24 @@ polkit-cancel = منسوخ کریں
 
 # SAFETY: needs a human review before it ships
 # Said when the password typed is not accepted, and the question is asked again.
-polkit-not-accepted = یہ پاس ورڈ قبول نہیں ہوا۔ دوبارہ کوشش کریں۔
+polkit-not-accepted = یہ پاس ورڈ درست نہیں تھا۔ دوبارہ کوشش کریں۔
 
 # Name a screen reader speaks for the password question window.
-polkit-spoken = تصدیق
+polkit-spoken = آپ کا پاس ورڈ
 
 # Under the password box, when other requests for a password are waiting for
 # this one to end. { $n } is how many.
 polkit-waiting-behind =
     { $n ->
-        [one] ایک اور درخواست اس کے ختم ہونے کی منتظر ہے۔
-       *[other] { $n } اور درخواستیں اس کے ختم ہونے کی منتظر ہیں۔
+        [one] ایک اور درخواست انتظار میں ہے۔
+       *[other] { $n } اور درخواستیں انتظار میں ہیں۔
     }
+
+# Under the heading, when Drives asks for the password to take the snapshot before making room.
+polkit-reason-drives-snapshot = جگہ بنانے سے پہلے اسنیپ شاٹ لینے کے لیے ڈرائیوز کو ایڈمنسٹریٹر کا پاس ورڈ چاہیے۔
+
+# Under the heading, when Drives asks for the password to switch a swap file off before making room.
+polkit-reason-drives-swap-off = جگہ بناتے وقت سواپ فائل بند کرنے کے لیے ڈرائیوز کو ایڈمنسٹریٹر کا پاس ورڈ چاہیے۔
+
+# Under the heading, when Drives asks for the password to switch a swap file back on.
+polkit-reason-drives-swap-on = سواپ فائل دوبارہ چالو کرنے کے لیے ڈرائیوز کو ایڈمنسٹریٹر کا پاس ورڈ چاہیے۔

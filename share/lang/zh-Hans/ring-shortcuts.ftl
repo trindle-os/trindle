@@ -89,7 +89,7 @@ ring-shortcuts-console = 切换到文本控制台
 ring-shortcuts-console-keys = Ctrl+Alt+F1 至 F12
 
 # Words for the keys the screen reader takes while it is on.
-ring-shortcuts-reader-keys = 屏幕阅读器自己的按键（开启时）
+ring-shortcuts-reader-keys = 屏幕阅读器开启时使用的按键
 
 # The keys the screen reader takes while it is on.
 ring-shortcuts-reader-keys-keys = Caps Lock, Insert

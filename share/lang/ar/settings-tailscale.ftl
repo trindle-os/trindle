@@ -15,11 +15,11 @@ settings-tailscale-last-online = آخر اتصال { $day }
 
 # Shown beside the Use Tailscale switch while the password is asked for, when Tailscale is already installed.
 # SAFETY: needs a human review before it ships
-settings-tailscale-waiting = بانتظار كلمة المرور...
+settings-tailscale-waiting = بانتظار كلمة مرورك…
 
 # Shown beside the Use Tailscale switch while the password is asked for, before Tailscale is installed.
 # SAFETY: needs a human review before it ships
-settings-tailscale-waiting-install = بانتظار كلمة المرور، ثم يُثبَّت Tailscale...
+settings-tailscale-waiting-install = بانتظار كلمة مرورك قبل تثبيت Tailscale…
 
 # Shown beside the switch after Tailscale is turned on.
 settings-tailscale-done-on = Tailscale يعمل
@@ -28,13 +28,13 @@ settings-tailscale-done-on = Tailscale يعمل
 settings-tailscale-done-off = Tailscale متوقف
 
 # Shown under the Sign in line once the browser is being opened.
-settings-tailscale-opening = جارٍ فتح صفحة تسجيل الدخول في المتصفح...
+settings-tailscale-opening = جارٍ فتح صفحة تسجيل الدخول في المتصفح…
 
 # Red words under the Sign in line when Tailscale could not be started.
 settings-tailscale-not-started = تعذّر تشغيل Tailscale.
 
 # Red words under the Sign out line when signing out did not work.
-settings-tailscale-sign-out-failed = رفض Tailscale تسجيل الخروج.
+settings-tailscale-sign-out-failed = تعذّر على Tailscale تسجيل الخروج.
 
 # Headline of the page while Tailscale is being asked how it is.
 settings-tailscale-top-asking = جارٍ سؤال Tailscale…
@@ -69,29 +69,20 @@ settings-tailscale-keywords = tailscale vpn شبكة خاصة أجهزة عن ب
 # Help text at the top of the page.
 settings-tailscale-help = يربط Tailscale حواسيبك وهواتفك في شبكة خاصة واحدة، أينما كان كل منها. لا يُثبَّت منه شيء حتى تشغّله، وما دام متوقفًا لا يستهلك ذاكرة.
 
-# Small line under the Use Tailscale switch before Tailscale is installed.
-settings-tailscale-switch-sub-first = يُثبَّت من مصدر Tailscale نفسه.
-
-# Small line under the Use Tailscale switch once Tailscale is installed.
-settings-tailscale-switch-sub = متوقف: لا يعمل ولا يبدأ مع الحاسوب.
-
 # Text of the switch that turns Tailscale on or off, and heading of its line.
 settings-tailscale-switch = استخدم Tailscale
 
 # Help text (i button) of the Tailscale card when Tailscale is off or has not answered.
-settings-tailscale-about-plain = عند التشغيل أول مرة يُثبَّت Tailscale من مصدر برامج Tailscale نفسه ثم يبدأ. تستهلك خدمته في الخلفية ذاكرة وهي تعمل، لذلك لا تعمل إلا حين يكون هذا المفتاح مشغّلًا. وعندما يكون متوقفًا، يتوقف Tailscale ولا يبدأ مع الحاسوب. يسمح جدار الحماية لأجهزتك أنت على Tailscale بالدخول، ويبقي كل ما عداها خارجًا كما كان.
+settings-tailscale-about-plain = عند التشغيل أول مرة، يثبّت Trindle برنامج Tailscale من مصدر برامج Tailscale نفسه ثم يشغّله. تستهلك خدمة Tailscale في الخلفية ذاكرة وهي تعمل، لذلك لا تعمل إلا حين يكون هذا المفتاح مشغّلًا. وعندما يكون متوقفًا، يتوقف Tailscale ولا يبدأ مع الحاسوب. يسمح جدار الحماية لأجهزتك أنت على Tailscale بالدخول، ويبقي كل ما عداها خارجًا كما كان.
 
 # Help text (i button) of the Tailscale card when Tailscale is on but not yet connected.
 settings-tailscale-about-sign-in = { settings-tailscale-about-plain } يفتح تسجيل الدخول صفحة تسجيل الدخول الخاصة بـ Tailscale في المتصفح. استخدم الحساب نفسه على كل جهاز من أجهزتك.
 
 # Help text (i button) of the Tailscale card when connected.
-settings-tailscale-about-connected = { settings-tailscale-about-plain } يُخرج تسجيل الخروج هذا الحاسوب من شبكتك الخاصة إلى أن تسجّل الدخول من جديد.
+settings-tailscale-about-connected = { settings-tailscale-about-plain } إذا سجّلت الخروج، يغادر هذا الحاسوب شبكتك الخاصة إلى أن تسجّل الدخول من جديد.
 
 # Line in the devices card when there are no other devices.
 settings-tailscale-no-devices = لا توجد أجهزة أخرى بعد
-
-# Small line under "No other devices yet".
-settings-tailscale-no-devices-sub = سجّل الدخول على جهاز آخر بالحساب نفسه.
 
 # Shown on the devices card while Tailscale is off.
 settings-tailscale-waits-off = شغّل Tailscale لترى أجهزتك.
@@ -117,26 +108,17 @@ settings-tailscale-this-computer = هذا الحاسوب
 # Heading of the line that signs in to Tailscale, and tip of its round button.
 settings-tailscale-sign-in = تسجيل الدخول
 
-# Small line under the Sign in line.
-settings-tailscale-sign-in-sub = يفتح صفحة تسجيل الدخول في المتصفح.
-
 # Heading of the line that joins the private network again, and tip of its round button.
 settings-tailscale-connect = اتصال
 
-# Small line under the Connect line.
-settings-tailscale-connect-sub = ينضم إلى شبكتك الخاصة من جديد.
-
 # Heading of the line that says the firewall lets the person's own devices in.
-settings-tailscale-firewall = أجهزتك أنت تدخل
+settings-tailscale-firewall = يمكن لأجهزتك الدخول
 
 # Small line under that heading.
-settings-tailscale-firewall-sub = كل ما عداها يبقى خارجًا كما كان.
+settings-tailscale-firewall-sub = ما يزال جدار الحماية يحجب الباقي.
 
 # Heading of the line that signs out, and tip of its button.
 settings-tailscale-sign-out = تسجيل الخروج
-
-# Small line under the Sign out line.
-settings-tailscale-sign-out-sub = يغادر شبكتك الخاصة.
 
 # Heading of the card with the Tailscale switch.
 settings-tailscale-card = Tailscale
@@ -146,4 +128,3 @@ settings-tailscale-devices = أجهزتك
 
 # Help text (i button) of the Your devices card.
 settings-tailscale-devices-about = كل جهاز سجّل الدخول إلى شبكتك الخاصة، مع عنوانه عليها وما يعمل عليه ووقت آخر اتصال له. لإضافة جهاز، ثبّت Tailscale على هاتفك أو حاسوب آخر وسجّل الدخول بالحساب نفسه.
-

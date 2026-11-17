@@ -1,5 +1,5 @@
 //! Bluetooth via BlueZ: adapter, pairing, connecting, forgetting.
-//! Registers an agent that accepts just-works pairing and shows numeric-comparison passkeys.
+//! Registers an agent that asks the person before every pairing, showing a passkey to compare or asking for a PIN.
 
 use std::cell::RefCell;
 use std::collections::{HashMap, HashSet};
@@ -10,11 +10,10 @@ use zbus::zvariant::{ObjectPath, OwnedObjectPath, Value};
 use zbus::Message;
 
 use crate::common::kept_order::KeptOrder;
-use crate::settings::panels::network::banded;
+use crate::toolkit::widget::banded_list;
 use crate::common::bt_audio;
 use crate::common::rfkill::{self, Block, Radio, Refused};
-use crate::common::run::{admin_helper, capture};
-use crate::settings::ui::{asked, confirm, group, headline, help_link, in_words, line, missing, on, page, Cause, Kit, Msg, Page};
+use crate::settings::ui::{admin_run, confirm, group, headline, help_link, in_words, line, missing, on, page, Cause, Kit, Msg, Page};
 use crate::toolkit::bus::{get_bool, get_str, Asked, Failed, Listen, Offer, Props, Served};
 use crate::toolkit::t;
 use crate::toolkit::widget::{button, column, entry, label, row, switch, Length, Node, Tone};
@@ -50,6 +49,39 @@ const HELP_CONNECT: &str = "bluetooth-connect";
 const DROP_CHECK: Duration = Duration::from_secs(3);
 
 const VISIBLE: &str = "bluetooth:visible";
+
+const KERNEL_ADAPTERS: &str = "/sys/class/bluetooth";
+
+const LOOK_AGAIN: Duration = Duration::from_secs(3);
+
+fn kernel_adapter(dir: &std::path::Path) -> bool {
+    std::fs::read_dir(dir).is_ok_and(|d| {
+        d.flatten().any(|e| {
+            let n = e.file_name();
+            let n = n.to_string_lossy();
+            n.starts_with("hci") && !n.contains(':')
+        })
+    })
+}
+
+#[derive(Debug, PartialEq)]
+enum Lack {
+
+    Starting,
+
+    Lost,
+    None,
+}
+
+fn lack(kernel: bool, seen: bool) -> Lack {
+    if kernel {
+        Lack::Starting
+    } else if seen {
+        Lack::Lost
+    } else {
+        Lack::None
+    }
+}
 
 const UNBLOCK_SETTLES: Duration = Duration::from_millis(500);
 
@@ -207,6 +239,10 @@ pub struct Bluetooth {
     block: Option<Block>,
 
     turn_on: bool,
+
+    kernel: bool,
+
+    seen: bool,
 }
 
 impl Page for Bluetooth {
@@ -228,7 +264,7 @@ impl Page for Bluetooth {
 
     fn view(&self, kit: &Kit) -> Node<Msg> {
         let (words, _) = self.sentence();
-        let mut items = vec![headline(kit, words)];
+        let mut items = vec![headline(words)];
         match self.state {
             State::Looking => {}
             State::NoBus => items.push(missing(kit, t!("settings-bluetooth-the-bus"), "dbus")),
@@ -359,9 +395,24 @@ impl Bluetooth {
             me.got(r);
 
             me.block = if me.state == State::NoAdapter { rfkill::state(Radio::Bluetooth) } else { None };
+            me.kernel = me.state == State::NoAdapter && kernel_adapter(std::path::Path::new(KERNEL_ADAPTERS));
             me.found(k);
+            me.look_again(k);
         });
         bus.call(BLUEZ, "/", OBJECT_MANAGER).method("GetManagedObjects", &(), false, None, &kit.events, back);
+    }
+
+    fn look_again(&mut self, kit: &mut Kit) {
+        if self.hearing.is_empty() || !matches!(self.state, State::NoAdapter | State::Gone) {
+            return;
+        }
+        self.wait += 1;
+        let n = self.wait;
+        kit.after::<Bluetooth>(LOOK_AGAIN, move |me, k| {
+            if me.wait == n && !me.hearing.is_empty() {
+                me.refresh(k);
+            }
+        });
     }
 
     fn got(&mut self, reply: Result<Message, Failed>) {
@@ -404,6 +455,7 @@ impl Bluetooth {
             })
             .collect();
         self.arrange();
+        self.seen = true;
         self.state = if adapter.powered { State::On } else { State::Off };
         self.adapter = Some(adapter);
     }
@@ -415,7 +467,11 @@ impl Bluetooth {
             State::NoAdapter => (match self.block {
                 Some(Block::Soft) => t!("settings-bluetooth-top-off"),
                 Some(Block::Hard) => t!("settings-bluetooth-top-hard"),
-                Some(Block::Clear) | None => t!("settings-bluetooth-top-none"),
+                Some(Block::Clear) | None => match lack(self.kernel, self.seen) {
+                    Lack::Starting => t!("settings-bluetooth-top-starting"),
+                    Lack::Lost => t!("settings-bluetooth-top-lost"),
+                    Lack::None => t!("settings-bluetooth-top-none"),
+                },
             }.into(), Tone::Plain),
             State::Off => (t!("settings-bluetooth-top-off").into(), Tone::Plain),
             State::On => {
@@ -436,13 +492,13 @@ impl Bluetooth {
         let about = t!("settings-bluetooth-card-about");
         let Some(a) = &self.adapter else {
 
-            let power = line(t!("settings-bluetooth-title")).sub(t!("settings-bluetooth-switched-off")).key(POWER)
+            let power = line(t!("settings-bluetooth-title")).key(POWER)
                 .control(switch(self.turn_on, t!("settings-bluetooth-title"), |v| on::<Bluetooth>(move |me, k| {
                     if v {
                         me.unblock(k, None);
                     }
                 })));
-            let visible = line(t!("settings-bluetooth-visible")).sub(t!("settings-bluetooth-visible-sub")).key(VISIBLE)
+            let visible = line(t!("settings-bluetooth-visible")).key(VISIBLE)
                 .control(switch(false, t!("settings-bluetooth-visible"), |_| on::<Bluetooth>(|_, _| {})))
                 .node(kit).off(true);
             return group(t!("settings-bluetooth-title")).icon("bluetooth-active-symbolic").about(about).rows(vec![power.node(kit), visible]).node(kit);
@@ -458,7 +514,7 @@ impl Bluetooth {
         let mut rows = vec![power.node(kit)];
 
         let path = a.path.clone();
-        rows.push(line(t!("settings-bluetooth-visible")).sub(t!("settings-bluetooth-visible-sub")).key(VISIBLE)
+        rows.push(line(t!("settings-bluetooth-visible")).key(VISIBLE)
             .control(switch(a.powered && a.discoverable, t!("settings-bluetooth-visible"), move |v| {
                 let path = path.clone();
                 on::<Bluetooth>(move |me, k| me.set_visible(k, &path, v))
@@ -477,10 +533,17 @@ impl Bluetooth {
                 .about(rfkill::hard_words(Radio::Bluetooth))
                 .rows(vec![line(t!("settings-bluetooth-hard-line")).sub(t!("settings-bluetooth-hard-line-sub")).node(kit)])
                 .node(kit),
-            Some(Block::Clear) | None => group(t!("settings-bluetooth-no-adapter")).icon("bluetooth-disabled-symbolic")
-                .about(t!("settings-bluetooth-no-adapter-about"))
-                .rows(vec![line(t!("settings-bluetooth-none-found")).sub(t!("settings-bluetooth-none-found-sub")).node(kit)])
-                .node(kit),
+            Some(Block::Clear) | None => {
+                let (what, sub) = match lack(self.kernel, self.seen) {
+                    Lack::Starting => (t!("settings-bluetooth-starting"), ""),
+                    Lack::Lost => (t!("settings-bluetooth-lost"), t!("settings-bluetooth-lost-sub")),
+                    Lack::None => (t!("settings-bluetooth-none-found"), ""),
+                };
+                group(t!("settings-bluetooth-no-adapter")).icon("bluetooth-disabled-symbolic")
+                    .about(t!("settings-bluetooth-no-adapter-about"))
+                    .rows(vec![line(what).sub(sub).node(kit)])
+                    .node(kit)
+            }
         }
     }
 
@@ -513,8 +576,7 @@ impl Bluetooth {
                     }
                     Err(e) => k.say(POWER, &e, false, false),
                 });
-                let helper = admin_helper();
-                capture(&["pkexec", &helper, "radio-unblock", Radio::Bluetooth.word()], None, move |ok, _, err| back(asked(ok, &err)));
+                admin_run(&["radio-unblock", Radio::Bluetooth.word()], back);
             }
             Err(Refused::Other(_)) => kit.say(POWER, &rfkill::refused_words(Radio::Bluetooth), false, false),
         }
@@ -601,9 +663,9 @@ impl Bluetooth {
 
     fn mine(&self, kit: &Kit) -> Node<Msg> {
         let paired: Vec<&Device> = self.devices.iter().filter(|d| d.paired).collect();
-        let mut rows: Vec<Node<Msg>> = banded(paired.iter().map(|d| self.device_line(kit, d)).collect());
+        let mut rows: Vec<Node<Msg>> = banded_list(paired.iter().map(|d| self.device_line(kit, d)).collect());
         if rows.is_empty() {
-            rows.push(line(t!("settings-bluetooth-none-paired")).sub(t!("settings-bluetooth-none-paired-sub")).node(kit));
+            rows.push(line(t!("settings-bluetooth-none-paired")).node(kit));
         }
         group(t!("settings-bluetooth-mine")).icon("bluetooth-active-symbolic")
             .about(t!("settings-bluetooth-mine-about"))
@@ -620,13 +682,13 @@ impl Bluetooth {
             line(t!("settings-bluetooth-looking"))
                 .control(button("media-playback-stop-symbolic", t!("settings-bluetooth-stop-looking")).on_press(press))
         } else {
-            line(t!("settings-bluetooth-look")).sub(t!("settings-bluetooth-look-sub"))
+            line(t!("settings-bluetooth-look"))
                 .control(button("edit-find-symbolic", t!("settings-bluetooth-look")).on_press(press))
         }
         .key(SEARCH);
         let near: Vec<&Device> = self.devices.iter().filter(|d| !d.paired && d.named).collect();
         let mut rows = vec![search.node(kit)];
-        rows.extend(banded(near.iter().map(|d| self.device_line(kit, d)).collect()));
+        rows.extend(banded_list(near.iter().map(|d| self.device_line(kit, d)).collect()));
         group(t!("settings-bluetooth-nearby")).icon("edit-find-symbolic")
             .about(t!("settings-bluetooth-nearby-about"))
             .span(4, 8)
@@ -681,7 +743,7 @@ impl Bluetooth {
         }
         if d.known() {
             let p = d.path.clone();
-            l = l.control(confirm::<Bluetooth>(kit, &d.path, "user-trash-symbolic", t!("settings-bluetooth-forget"), move |me, k| {
+            l = l.control(confirm::<Bluetooth>(&d.path, "user-trash-symbolic", t!("settings-bluetooth-forget"), move |me, k| {
                 me.forget(k, &p);
             }));
         }
@@ -1067,12 +1129,12 @@ mod tests {
         let blocked = Failed::new("org.bluez.Error.Blocked", "Blocked through rfkill");
         let odd = Failed::new("org.bluez.Error.Failed", "0x03");
         assert_eq!(power_words(&blocked, true, Some(Block::Hard)),
-                   "Bluetooth is switched off by a switch or a key on the computer itself. Turn that on, then try again.");
+                   "Bluetooth is switched off by a switch or key on the computer itself. Switch it on, then try again.");
         assert_eq!(power_words(&odd, true, Some(Block::Hard)), power_words(&blocked, true, Some(Block::Hard)));
-        assert_eq!(power_words(&blocked, true, None), "Bluetooth is blocked by the system, and the block could not be taken off.");
+        assert_eq!(power_words(&blocked, true, None), "The system is blocking Bluetooth, and Trindle couldn't remove the block.");
         assert_eq!(power_words(&odd, true, Some(Block::Soft)), power_words(&blocked, true, None));
-        assert_eq!(power_words(&odd, true, Some(Block::Clear)), "Bluetooth could not be switched on.");
-        assert_eq!(power_words(&odd, false, Some(Block::Hard)), "Bluetooth could not be switched off.");
+        assert_eq!(power_words(&odd, true, Some(Block::Clear)), "Couldn't switch on Bluetooth.");
+        assert_eq!(power_words(&odd, false, Some(Block::Hard)), "Couldn't switch off Bluetooth.");
         for words in [power_words(&blocked, true, Some(Block::Hard)), power_words(&blocked, true, None), power_words(&odd, true, None)] {
             let low = words.to_lowercase();
             assert!(!low.contains("rfkill") && !low.contains("org.bluez") && !low.contains("0x"), "{words}");
@@ -1095,7 +1157,7 @@ mod tests {
             b.powered(k, false, Err(Failed::new("org.bluez.Error.Failed", "0x03")), None);
         });
         assert!(powered(&mut s).0);
-        assert_eq!(s.red(POWER).as_deref(), Some("Bluetooth could not be switched off."));
+        assert_eq!(s.red(POWER).as_deref(), Some("Couldn't switch off Bluetooth."));
 
         s.page::<Bluetooth, _>(|b, k| {
             b.adapter.as_mut().unwrap().powered = true;
@@ -1113,7 +1175,7 @@ mod tests {
         });
         assert!(!visible(&mut s).1, "the switch does not stay looking switched");
         assert_eq!(s.red(VISIBLE).as_deref(),
-                   Some("This computer could not be made visible to other devices. Bluetooth is not switched on."));
+                   Some("Trindle couldn't make this computer visible to other devices. Bluetooth isn't switched on."));
         s.page::<Bluetooth, _>(|b, k| {
             b.adapter.as_mut().unwrap().discoverable = true;
             b.visible_set(k, true, Ok(()));
@@ -1127,6 +1189,29 @@ mod tests {
     }
 
     #[test]
+    fn an_adapter_that_goes_or_is_starting_is_not_called_missing() {
+        let dir = std::env::temp_dir().join(format!("trindle-bt-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        assert!(!kernel_adapter(&dir));
+        std::fs::create_dir(dir.join("hci0:256")).unwrap();
+        assert!(!kernel_adapter(&dir), "a connection under an adapter is not an adapter");
+        std::fs::create_dir(dir.join("hci0")).unwrap();
+        assert!(kernel_adapter(&dir));
+        assert!(!kernel_adapter(&dir.join("absent")));
+        let _ = std::fs::remove_dir_all(&dir);
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: Do| {});
+        let kit = Kit::new(events.clone(), asks, None, None);
+        let page = |kernel, seen| Bluetooth { state: State::NoAdapter, kernel, seen, ..Bluetooth::default() };
+        assert_eq!(page(false, false).sentence().0, "This computer has no Bluetooth.");
+        assert_eq!(page(true, false).sentence().0, "Bluetooth is starting…");
+        assert_eq!(page(false, true).sentence().0, "The Bluetooth adapter has gone.");
+        assert!(page(false, true).no_adapter_card(&kit).said().contains(&"The adapter has gone".to_string()));
+        assert!(page(true, true).no_adapter_card(&kit).said().contains(&"Starting up".to_string()));
+    }
+
+    #[test]
     fn with_no_adapter_the_page_says_whether_bluetooth_is_blocked_or_not_there() {
         let events = crate::toolkit::event::Loop::new();
         let asks = events.post(|_: Do| {});
@@ -1136,20 +1221,19 @@ mod tests {
         let soft = page(Some(Block::Soft));
         assert_eq!(soft.sentence().0, "Bluetooth is off.");
         let card = soft.no_adapter_card(&kit);
-        assert!(card.said().contains(&"Switched off.".to_string()));
 
         assert!(soft.mine(&kit).said().contains(&"Switch on Bluetooth to use these.".to_string()));
         assert!(card.said().contains(&"switch: Bluetooth".to_string()), "{:?}", card.said());
 
         let hard = page(Some(Block::Hard));
-        assert_eq!(hard.sentence().0, "Bluetooth is switched off on the computer itself.");
+        assert_eq!(hard.sentence().0, "Bluetooth is switched off by a switch or key on the computer.");
         let card = hard.no_adapter_card(&kit);
         assert!(card.said().contains(&"Switched off on the computer itself".to_string()));
         assert!(!card.said().iter().any(|w| w.starts_with("switch:")), "{:?}", card.said());
 
         let none = page(None);
         assert_eq!(none.sentence().0, "This computer has no Bluetooth.");
-        assert!(none.no_adapter_card(&kit).said().contains(&"None was found".to_string()));
+        assert!(none.no_adapter_card(&kit).said().contains(&"None found".to_string()));
         for p in [soft, hard, none] {
             for words in p.no_adapter_card(&kit).said() {
                 assert!(!words.to_lowercase().contains("rfkill"), "the page names the kernel's switch: {words}");
@@ -1162,11 +1246,11 @@ mod tests {
         let could_not = "It could not be paired.";
         let say = |name: &str, text: &str| bluez_words(&Failed::new(name, text), could_not);
         assert_eq!(say("org.bluez.Error.AuthenticationFailed", "Authentication Failed"),
-                   "It could not be paired. The PIN or the number was not accepted. Try again.");
-        assert_eq!(say("org.bluez.Error.AuthenticationCanceled", ""), "It could not be paired. It was turned down, here or on the other device.");
+                   "It could not be paired. The PIN or number wasn't accepted. Try again.");
+        assert_eq!(say("org.bluez.Error.AuthenticationCanceled", ""), "It could not be paired. The pairing was turned down, either here or on the other device.");
         assert_eq!(say("org.bluez.Error.Failed", "br-connection-page-timeout"),
-                   "It could not be paired. The device did not answer. Check it is switched on and near, then try again.");
-        assert_eq!(say("org.bluez.Error.InProgress", "Operation already in progress"), "It could not be paired. It is already being done. Wait a moment.");
+                   "It could not be paired. The device didn't answer. Check it is switched on and nearby, then try again.");
+        assert_eq!(say("org.bluez.Error.InProgress", "Operation already in progress"), "It could not be paired. Trindle is already doing this. Wait a moment.");
 
         assert_eq!(say("org.bluez.Error.Failed", "le-connection-abort-by-local"), could_not);
         assert_eq!(say("org.freedesktop.DBus.Error.NoReply", ""), "It could not be paired. It took too long to answer. Try again.");
@@ -1175,24 +1259,24 @@ mod tests {
     #[test]
     fn a_refused_connection_is_always_said_and_an_old_pairing_is_named() {
         let said = |name: &str, text: &str| connect_refusal(&Failed::new(name, text));
-        let sorry = "It could not be connected.";
+        let sorry = "Couldn't connect to it.";
         for (name, text) in [("org.bluez.Error.AuthenticationFailed", "Authentication Failed"),
                              ("org.bluez.Error.AuthenticationRejected", ""),
                              ("org.bluez.Error.AuthenticationCanceled", ""),
                              ("org.bluez.Error.Failed", "br-connection-key-missing")] {
             let r = said(name, text);
             assert!(r.old_pairing, "{name} {text}");
-            assert_eq!(r.words, "It could not be connected. The saved pairing is not accepted any more. Forget the device and pair it again.");
+            assert_eq!(r.words, "Couldn't connect to it. The device no longer accepts the saved pairing. Forget the device and pair it again.");
         }
         for (name, text, words) in [
-            ("org.bluez.Error.NotReady", "Resource Not Ready", "It could not be connected. Bluetooth is not switched on."),
-            ("org.bluez.Error.Failed", "br-connection-page-timeout", "It could not be connected. The device did not answer. Check it is switched on and near, then try again."),
-            ("org.bluez.Error.ConnectionAttemptFailed", "", "It could not be connected. The device did not answer. Check it is switched on and near, then try again."),
-            ("org.bluez.Error.InProgress", "Operation already in progress", "It could not be connected. It is already being done. Wait a moment."),
-            ("org.bluez.Error.NotAvailable", "", "It could not be connected. The device is not ready to be used. Put it in pairing mode, then try again."),
-            ("org.bluez.Error.DoesNotExist", "Does Not Exist", "It could not be connected. It is no longer known. Look for it again."),
-            ("org.freedesktop.DBus.Error.UnknownObject", "no such object", "It could not be connected. It is no longer known. Look for it again."),
-            ("org.freedesktop.DBus.Error.NoReply", "", "It could not be connected. It took too long to answer. Try again."),
+            ("org.bluez.Error.NotReady", "Resource Not Ready", "Couldn't connect to it. Bluetooth isn't switched on."),
+            ("org.bluez.Error.Failed", "br-connection-page-timeout", "Couldn't connect to it. The device didn't answer. Check it is switched on and nearby, then try again."),
+            ("org.bluez.Error.ConnectionAttemptFailed", "", "Couldn't connect to it. The device didn't answer. Check it is switched on and nearby, then try again."),
+            ("org.bluez.Error.InProgress", "Operation already in progress", "Couldn't connect to it. Trindle is already doing this. Wait a moment."),
+            ("org.bluez.Error.NotAvailable", "", "Couldn't connect to it. The device isn't ready to use. Put it in pairing mode, then try again."),
+            ("org.bluez.Error.DoesNotExist", "Does Not Exist", "Couldn't connect to it. This device isn't saved on this computer any more. Look for it again."),
+            ("org.freedesktop.DBus.Error.UnknownObject", "no such object", "Couldn't connect to it. This device isn't saved on this computer any more. Look for it again."),
+            ("org.freedesktop.DBus.Error.NoReply", "", "Couldn't connect to it. It took too long to answer. Try again."),
             ("org.bluez.Error.Failed", "le-connection-abort-by-local", sorry),
             ("", "", sorry),
         ] {

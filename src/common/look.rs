@@ -77,7 +77,7 @@ pub fn gtk_files() -> [PathBuf; 2] {
 pub fn now() -> Vec<Entry> {
     let light = super::style::kept_light();
     let ini = files::read_text(&gtk_files()[0]);
-    table(light, &ini, super::graphics::moving())
+    table(light, &ini, super::graphics::moving(), &super::style::accent())
 }
 
 pub fn ini_value<'a>(ini: &'a str, key: &str) -> Option<&'a str> {
@@ -87,7 +87,20 @@ pub fn ini_value<'a>(ini: &'a str, key: &str) -> Option<&'a str> {
         .filter(|v| !v.is_empty())
 }
 
-fn table(light: bool, ini: &str, moving: bool) -> Vec<Entry> {
+const ACCENTS: [(&str, [u8; 3]); 9] = [
+    ("blue", [0x35, 0x84, 0xe4]), ("teal", [0x21, 0x90, 0xa4]), ("green", [0x3a, 0x94, 0x4a]),
+    ("yellow", [0xc8, 0x88, 0x00]), ("orange", [0xed, 0x5b, 0x00]), ("red", [0xe6, 0x2d, 0x42]),
+    ("pink", [0xd5, 0x61, 0x99]), ("purple", [0x91, 0x41, 0xac]), ("slate", [0x6f, 0x83, 0x96]),
+];
+
+fn nearest_accent(accent: &str) -> &'static str {
+    let Some(c) = crate::toolkit::colour::Colour::parse(accent) else { return "blue" };
+    let mine = [c.r, c.g, c.b].map(|v| v * 255.0);
+    let away = |theirs: &[u8; 3]| (0..3).map(|i| (mine[i] - f32::from(theirs[i])).powi(2)).sum::<f32>();
+    ACCENTS.iter().min_by(|a, b| away(&a.1).total_cmp(&away(&b.1))).map_or("blue", |a| a.0)
+}
+
+fn table(light: bool, ini: &str, moving: bool, accent: &str) -> Vec<Entry> {
     let from = |key, default| ini_value(ini, key).unwrap_or(default).to_string();
     let font = from("gtk-font-name", FONT);
     let size = from("gtk-cursor-theme-size", "").parse().unwrap_or(CURSOR_SIZE);
@@ -101,7 +114,7 @@ fn table(light: bool, ini: &str, moving: bool) -> Vec<Entry> {
         (INTERFACE, "font-name", Value::S(font.clone())),
         (INTERFACE, "document-font-name", Value::S(font)),
         (INTERFACE, "monospace-font-name", Value::s(MONOSPACE)),
-        (INTERFACE, "accent-color", Value::s("blue")),
+        (INTERFACE, "accent-color", Value::s(nearest_accent(accent))),
         (INTERFACE, "text-scaling-factor", Value::D(1.0)),
 
         (INTERFACE, "enable-animations", Value::B(moving)),
@@ -326,7 +339,7 @@ mod tests {
     #[test]
     fn the_look_comes_from_the_files() {
         let ini = "[Settings]\ngtk-icon-theme-name=Trindle\ngtk-cursor-theme-size=32\ngtk-font-name=Inter 12\n";
-        let look = table(true, ini, false);
+        let look = table(true, ini, false, "");
         let get = |ns: &str, key: &str| look.iter().find(|e| e.0 == ns && e.1 == key).unwrap().2.clone();
         assert_eq!(get(INTERFACE, "icon-theme"), Value::s("Trindle"));
         assert_eq!(get(INTERFACE, "cursor-size"), Value::I(32));
@@ -335,7 +348,7 @@ mod tests {
         assert_eq!(get(INTERFACE, "color-scheme"), Value::s("prefer-light"));
         assert_eq!(get(APPEARANCE, "color-scheme"), Value::U(2));
         assert_eq!(get(INTERFACE, "enable-animations"), Value::B(false));
-        let dark = table(false, "", true);
+        let dark = table(false, "", true, "");
         assert_eq!(get(KDE_GENERAL, "ColorScheme"), Value::s("TrindleLight"));
         assert_eq!(changed(&look, &dark).len(), 8);
         assert!(changed(&dark, &dark).is_empty());
@@ -356,7 +369,7 @@ mod tests {
                 let layers = crate::common::sheet::Layers::themed(CSS, css, "");
                 assert_eq!(light, layers.light(saved == "light"), "{name} with {saved:?} saved");
                 assert_eq!(crate::toolkit::theme::sample(css, saved == "light", "#2196f3").theme.light, light, "{name} with {saved:?} saved");
-                let told = table(light, "", true);
+                let told = table(light, "", true, "");
                 let get = |ns: &str, key: &str| told.iter().find(|e| e.0 == ns && e.1 == key).unwrap().2.clone();
                 assert_eq!(get(INTERFACE, "color-scheme"), Value::s(if light { "prefer-light" } else { "prefer-dark" }), "{name} with {saved:?} saved");
                 assert_eq!(get(APPEARANCE, "color-scheme"), Value::U(if light { 2 } else { 1 }), "{name} with {saved:?} saved");
@@ -408,5 +421,15 @@ mod tests {
                 }
             }
         }
+    }
+
+    #[test]
+    fn other_programs_are_told_the_nearest_of_the_accents_they_know() {
+        for (hex, name) in [("#3584e4", "blue"), ("#e62d42", "red"), ("#ffc006", "yellow"), ("#ff7800", "orange"), ("#a020c0", "purple"), ("rgb(111, 131, 150)", "slate")] {
+            assert_eq!(nearest_accent(hex), name, "{hex}");
+        }
+        assert_eq!(nearest_accent("not a colour"), "blue");
+        let told = table(false, "", true, "#e62d42");
+        assert!(told.iter().any(|(_, k, v)| *k == "accent-color" && matches!(v, Value::S(s) if s == "red")));
     }
 }

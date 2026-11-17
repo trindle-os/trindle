@@ -21,8 +21,6 @@ use crate::toolkit::ui::rounded;
 use crate::toolkit::widget::Rect;
 use crate::toolkit::window::{Edges, Keys, Kind, Layer, Panel, Window};
 
-const SIZE: i32 = 8;
-
 const REACH: i32 = 120;
 
 const CORNERS: [&str; 2] = ["top-left", "top-right"];
@@ -47,41 +45,33 @@ fn ring_just_closed() -> bool {
 fn edges(place: &str) -> Edges {
     match place {
         "top-right" => Edges::TOP | Edges::RIGHT,
-        "bottom-left" => Edges::BOTTOM | Edges::LEFT,
-        "bottom-right" => Edges::BOTTOM | Edges::RIGHT,
         _ => Edges::TOP | Edges::LEFT,
     }
 }
 
 fn the_edges(place: &str, w: i32, h: i32, thick: i32) -> [[i32; 4]; 2] {
-    let (right, bottom) = (place.contains("right"), place.contains("bottom"));
-    let down = [if right { w - thick } else { 0 }, 0, thick, h];
-    let across = [0, if bottom { h - thick } else { 0 }, w, thick];
+    let down = [if place.contains("right") { w - thick } else { 0 }, 0, thick, h];
+    let across = [0, 0, w, thick];
     [down, across]
 }
 
-fn corner(ctx: &Rc<Ctx>, place: &'static str, namespace: &str, command: &'static [&'static str]) -> Option<Window> {
-    let touch = ctx.display.has_touch();
-    let thick = if touch { TOUCH_SIZE } else { SIZE };
+fn corner(ctx: &Rc<Ctx>, place: &'static str) -> Option<Window> {
+    let thick = TOUCH_SIZE;
     let kind = Kind::Panel(Panel {
         layer: Layer::Top,
         edges: edges(place),
         keep: -1,
         margins: [0; 4],
         keys: Keys::Never,
-        name: namespace.into(),
+        name: "trindle-corner".into(),
         screen: None,
     });
     let win = ctx.display.open(kind, (REACH as u32, REACH as u32), move |canvas, scale| {
         canvas.fill(FAINT.to_skia());
-        if !touch {
-            return;
-        }
 
-        let (right, bottom) = (place.contains("right"), place.contains("bottom"));
         let (t, reach, r) = (thick as f32, REACH as f32, MARK_RADIUS);
-        let x = if right { reach - t } else { -r };
-        let y = if bottom { reach - t } else { -r };
+        let x = if place.contains("right") { reach - t } else { -r };
+        let y = -r;
         let Some(path) = rounded(Rect { x, y, w: t + r, h: t + r }, r) else { return };
         let mut paint = Paint::default();
         paint.set_color(theme::alpha(Theme::chosen().accent, MARK_STRENGTH).to_skia());
@@ -99,7 +89,7 @@ fn corner(ctx: &Rc<Ctx>, place: &'static str, namespace: &str, command: &'static
             return;
         }
         last.set(Some(Instant::now()));
-        spawn(command);
+        spawn(&["trindle-ring"]);
     });
     Some(win)
 }
@@ -126,7 +116,7 @@ fn build(ctx: &Rc<Ctx>) {
 
     if ctx.display.has_touch() {
         for place in CORNERS {
-            made.extend(corner(ctx, place, "trindle-corner", &["trindle-ring"]));
+            made.extend(corner(ctx, place));
         }
     }
     MADE.with(|m| *m.borrow_mut() = made);
@@ -137,7 +127,7 @@ mod tests {
     #[test]
     fn only_the_edges_take_the_finger() {
         assert_eq!(super::the_edges("top-left", 120, 120, 44), [[0, 0, 44, 120], [0, 0, 120, 44]]);
-        assert_eq!(super::the_edges("bottom-right", 120, 120, 44), [[76, 0, 44, 120], [0, 76, 120, 44]]);
+        assert_eq!(super::the_edges("top-right", 120, 120, 44), [[76, 0, 44, 120], [0, 0, 120, 44]]);
     }
 
     #[test]

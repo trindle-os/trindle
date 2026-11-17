@@ -2,7 +2,7 @@
 # machine translated (Urdu), not yet reviewed by a person.
 
 # Tip of the pin button on a clipboard or notification item that is not pinned: keeps it for good.
-ring-quick-pin = پن کریں: ہمیشہ کے لیے رکھیں
+ring-quick-pin = اسے رکھنے کے لیے پن کریں
 
 # Tip of the pin button on a clipboard or notification item that is pinned.
 ring-quick-unpin = پن ہٹائیں
@@ -13,7 +13,7 @@ ring-quick-forget-one = اسے بھلا دیں
 
 # SAFETY: needs a human review before it ships
 # Tip of the bin button that forgets everything on the page except what is pinned; it asks twice.
-ring-quick-forget-all = پن کی ہوئی چیزوں کے سوا سب کچھ بھلا دیں
+ring-quick-forget-all = پن کی ہوئی چیزوں کے سوا سب کچھ صاف کریں
 
 # Name of the volume slider for the speakers on the sound page.
 ring-quick-speakers = اسپیکر
@@ -70,7 +70,7 @@ ring-quick-bt-switch = Bluetooth
 ring-quick-bt-off = Bluetooth بند ہے۔
 
 # Line on the Bluetooth page while it looks for devices and none is found yet.
-ring-quick-bt-searching = تلاش جاری ہے... آلے کو جوڑنے کے موڈ میں رکھیں۔
+ring-quick-bt-searching = تلاش جاری ہے… آلے کو جوڑنے کے موڈ میں رکھیں۔
 
 # Tip of the button beside a connected Bluetooth device that disconnects it.
 ring-quick-bt-disconnect = منقطع کریں
@@ -85,20 +85,20 @@ ring-quick-bt-pair = جوڑا بنائیں اور جوڑیں
 ring-quick-bt-device = Bluetooth آلہ
 
 # Line under the Bluetooth page while pairing with a device.
-ring-quick-bt-pairing = { $name } کے ساتھ جوڑا بنایا جا رہا ہے...
+ring-quick-bt-pairing = { $name } کے ساتھ جوڑا بنایا جا رہا ہے…
 
 # Line under the Bluetooth page while connecting a device.
-ring-quick-bt-connecting = { $name } جڑ رہا ہے...
+ring-quick-bt-connecting = { $name } جڑ رہا ہے…
 
 # Line under the Bluetooth page while disconnecting a device.
-ring-quick-bt-disconnecting = { $name } منقطع ہو رہا ہے...
+ring-quick-bt-disconnecting = { $name } منقطع ہو رہا ہے…
 
 # Line under the Bluetooth page when connecting or disconnecting did not work.
 ring-quick-bt-failed = یہ نہیں ہو سکا۔ کیا وہ چالو اور قریب ہے؟
 
-# SAFETY: needs a human review before it ships
 # Line under the Bluetooth page when pairing failed because the codes were not accepted.
-ring-quick-bt-codes = جوڑا نہیں بنا: کوڈ قبول نہیں ہوئے۔
+# SAFETY: needs a human review before it ships
+ring-quick-bt-codes = جوڑ نہیں بنا۔ کوڈ قبول نہیں ہوئے۔
 
 # Line under the Bluetooth page when pairing failed.
 ring-quick-bt-not-paired = جوڑا نہیں بنا۔ کیا وہ جوڑنے کے موڈ میں اور قریب ہے؟
@@ -108,7 +108,7 @@ ring-quick-bt-paired-not-connected = جوڑا بن گیا، مگر کنکشن ن
 
 # SAFETY: needs a human review before it ships
 # Question in the ring when a Bluetooth device wants a PIN typed.
-ring-quick-bt-ask-pin = اس آلے کا PIN لکھیں۔ یہ اکثر اس کی ہدایات میں ہوتا ہے، یا 0000۔
+ring-quick-bt-ask-pin = اس آلے کا PIN لکھیں۔ یہ اکثر آلے کی ہدایات میں مل جاتا ہے، یا 0000 آزمائیں۔
 
 # SAFETY: needs a human review before it ships
 # Typing box for the PIN of a Bluetooth device, shown quietly while empty.
@@ -148,7 +148,7 @@ ring-quick-wifi-switch = Wi-Fi
 ring-quick-wifi-off = Wi-Fi بند ہے۔
 
 # Line on the Wi-Fi page while it looks for networks.
-ring-quick-wifi-looking = نیٹ ورک تلاش کیے جا رہے ہیں...
+ring-quick-wifi-looking = نیٹ ورک تلاش کیے جا رہے ہیں…
 
 # Tip of the button beside the Wi-Fi network in use that leaves it.
 ring-quick-wifi-disconnect = منقطع کریں
@@ -165,7 +165,7 @@ ring-quick-wifi-password-box = پاس ورڈ
 ring-quick-wifi-join = شامل ہوں
 
 # Line under the Wi-Fi page while joining a network.
-ring-quick-wifi-joining = { $ssid } میں شامل ہوا جا رہا ہے...
+ring-quick-wifi-joining = { $ssid } میں شامل ہوا جا رہا ہے…
 
 # SAFETY: needs a human review before it ships
 # Question text in the ring when the Wi-Fi password was not accepted.
@@ -181,7 +181,7 @@ ring-quick-battery-none = اس کمپیوٹر میں بیٹری نہیں ہے۔
 ring-quick-brightness-fixed = اس اسکرین کی روشنی یہاں سے بدلی نہیں جا سکتی
 
 # Line on the clipboard page when nothing has been copied yet.
-ring-quick-clip-empty = ابھی کچھ کاپی نہیں ہوا۔ جو آپ کاپی کریں گے وہ یہاں رکھا جائے گا۔
+ring-quick-clip-empty = ابھی کچھ کاپی نہیں ہوا۔
 
 # Line on the clipboard page for a copied picture.
 ring-quick-clip-picture = ایک تصویر
@@ -193,7 +193,7 @@ ring-quick-clip-again = اسے دوبارہ کاپی کریں
 ring-quick-clip-filter = چھانٹیں
 
 # Line on the notifications page when nothing has been said yet.
-ring-quick-notes-empty = ابھی کچھ نہیں کہا گیا۔
+ring-quick-notes-empty = ابھی کوئی اطلاع نہیں۔
 
 # Tip of the button on one notification's page that goes back to the list.
 ring-quick-notes-back = تمام اطلاعات پر واپس
@@ -211,7 +211,7 @@ ring-quick-charging-full = چارج ہو رہی ہے: تقریباً { $time } �
 ring-quick-charging = چارج ہو رہی ہے
 
 # Line on the battery page on battery, with the time left and the power in watts.
-ring-quick-on-battery-left = بیٹری پر: تقریباً { $time } باقی، { $rate } W استعمال ہو رہا ہے
+ring-quick-on-battery-left = بیٹری پاور پر۔ تقریباً { $time } باقی، { $rate } W استعمال ہو رہا ہے۔
 
 # Line on the battery page on battery, when the time is not known.
 ring-quick-on-battery = بیٹری پر
@@ -225,9 +225,9 @@ ring-quick-plugged = پلگ لگا ہے، چارج نہیں ہو رہی
 # Line on the battery page about how much charge the battery still holds. The health is good, worn, or something else for worn out.
 ring-quick-health =
     { $how ->
-        [good] صحت: اچھی۔ یہ نئی ہونے پر کے مقابلے میں { $capacity }% رکھتی ہے۔
-        [worn] صحت: گھسی ہوئی۔ یہ نئی ہونے پر کے مقابلے میں { $capacity }% رکھتی ہے۔
-       *[old] صحت: ختم ہو چکی: نئی کا وقت آ گیا۔ یہ نئی ہونے پر کے مقابلے میں { $capacity }% رکھتی ہے۔
+        [good] بیٹری کی صحت اچھی ہے۔ اب یہ نئی ہونے پر جتنا چارج رکھ سکتی تھی، اس کا { $capacity }% رکھ سکتی ہے۔
+        [worn] بیٹری گھس چکی ہے۔ اب یہ نئی ہونے پر جتنا چارج رکھ سکتی تھی، اس کا { $capacity }% رکھ سکتی ہے۔
+       *[old] بیٹری پوری طرح گھس چکی ہے، اس لیے نئی لینے کا وقت آ گیا ہے۔ اب یہ نئی ہونے پر جتنا چارج رکھ سکتی تھی، اس کا { $capacity }% رکھ سکتی ہے۔
     }
 
 # Line on the battery page about how many times the battery has been charged.
@@ -238,10 +238,10 @@ ring-quick-cycles =
     }
 
 # Tip of the button that turns notification circles off.
-ring-quick-notes-on = اطلاعات چالو ہیں: بند کریں
+ring-quick-notes-on = اطلاعات چالو ہیں۔ انہیں بند کریں
 
 # Tip of the button that turns notification circles back on.
-ring-quick-notes-off = اطلاعات بند ہیں: چالو کریں
+ring-quick-notes-off = اطلاعات بند ہیں۔ انہیں چالو کریں
 
 # A time of under an hour on the battery page.
 ring-quick-minutes = { $m } منٹ
@@ -266,3 +266,5 @@ ring-quick-title-tray = ٹرے آئیکن
 # Heading of the shortcut list page, opened with Super and K.
 ring-quick-title-shortcuts = شارٹ کٹ
 
+# Line under the Wi-Fi page when leaving the network did not work.
+ring-quick-wifi-leave-failed = منقطع نہیں ہو سکا۔

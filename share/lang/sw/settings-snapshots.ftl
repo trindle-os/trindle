@@ -7,10 +7,10 @@ settings-snap-title = Vijipicha vya mfumo
 settings-snap-keywords = kijipicha vijipicha snapshots snapshot rejesha tendua rollback backup nakala sasisho update btrfs snapper boot menu grub matoleo ya awali toleo la zamani faili iliyofutwa rudisha nyumbani home copies
 
 # Help line at the foot of the Snapshots page.
-settings-snap-help = Mfumo kama ulivyokuwa kabla na baada ya kila mabadiliko ya programu, na kila unapochukua kijipicha. Kurejesha kijipicha huurudisha mfumo mzima kwake kuanzia mwanzo ujao; faili zako mwenyewe huachwa kama zilivyo ikiwa folda ya nyumbani ina sehemu yake ya diski, kama kisakinishi cha Trindle kinavyoitengeneza. Kompyuta isipoanza, chagua vijipicha vya Trindle kwenye menyu ya kuanzisha. Matoleo ya awali huhifadhi nakala ya faili za kila mtu kila siku, mbali na vijipicha vya mfumo.
+settings-snap-help = Kijipicha ni nakala ya mfumo kama ulivyokuwa kabla na baada ya kila mabadiliko ya programu, na kila unapochukua kimoja. Kurejesha kijipicha huurudisha mfumo mzima kama ulivyokuwa utakapoanzisha upya mara ijayo. Faili zako mwenyewe hubaki kama zilivyo ikiwa folda yako ya nyumbani ina sehemu yake ya diski, kama kisakinishi cha Trindle kinavyoiandaa. Kompyuta isipoanza, chagua vijipicha vya Trindle kwenye menyu ya kuanzisha. Matoleo ya awali huhifadhi nakala ya kila siku ya faili za kila mtu, tofauti na vijipicha vya mfumo.
 
 # Red words under the Earlier versions switch when a daily copy was skipped because the disk is nearly full.
-settings-snap-nearly-full = Hakuna nakala iliyochukuliwa: diski imekaribia kujaa.
+settings-snap-nearly-full = Trindle haikuchukua nakala kwa sababu diski imekaribia kujaa.
 
 # Time of a snapshot taken today: { $time } is the hour and minute.
 settings-snap-today = leo saa { $time }
@@ -28,7 +28,7 @@ settings-snap-not-restart = Kompyuta haikuanza upya. Ianzishe upya kutoka kwenye
 settings-snap-taking = Inachukua kijipicha
 
 # Said beside the set aside line while the space is freed.
-settings-snap-freeing = Inaachilia...
+settings-snap-freeing = Inaachilia…
 
 # Said beside the set aside line once the space is freed.
 settings-snap-freed = Imeachiliwa
@@ -39,7 +39,7 @@ settings-snap-restoring = Inarejesha
 
 # Said beside a snapshot once it is restored: { $n } is the snapshot's number.
 # SAFETY: needs a human review before it ships
-settings-snap-restored = Mfumo ni kijipicha { $n } kuanzia mwanzo ujao. Chochote kilichobadilika tangu hapo kimewekwa kando, hakijapotea.
+settings-snap-restored = Utakapoanzisha upya mara ijayo, mfumo utakuwa kama ulivyokuwa kwenye kijipicha { $n }. Chochote kilichobadilika tangu hapo kimewekwa kando, hakijapotea.
 
 # Said beside a snapshot while it is deleted.
 # SAFETY: needs a human review before it ships
@@ -51,13 +51,13 @@ settings-snap-deleted = Imefutwa
 
 # Said beside a setting while the administrator's password is awaited.
 # SAFETY: needs a human review before it ships
-settings-snap-waiting = Inasubiri nenosiri...
+settings-snap-waiting = Inasubiri nenosiri lako…
 
 # Said beside the Earlier versions switch once it is turned on.
 settings-snap-copy-daily = Nakala huchukuliwa kila siku
 
 # Said beside the Earlier versions switch once it is turned off.
-settings-snap-no-more = Hakuna nakala zaidi zinazochukuliwa
+settings-snap-no-more = Hakuna nakala zaidi
 
 # Said beside the list of how long copies are kept once the choice is saved.
 settings-snap-kept = Imehifadhiwa
@@ -85,7 +85,7 @@ settings-snap-first-soon = Ya kwanza itachukuliwa ndani ya siku moja.
 settings-snap-they-take = Zinachukua { $size }, zilipimwa { $when }.
 
 # Under the number of earlier copies when their room has not been measured.
-settings-snap-measured-daily = Nafasi yake hupimwa mara moja kwa siku.
+settings-snap-measured-daily = Nafasi yake hupimwa kila siku.
 
 # Tip of the button that clears all earlier copies, and its label while working.
 # SAFETY: needs a human review before it ships
@@ -96,7 +96,7 @@ settings-snap-earlier = Matoleo ya awali
 
 # Help text of the Earlier versions card (the information button).
 # SAFETY: needs a human review before it ships
-settings-snap-earlier-about = Trindle inaweza kuhifadhi nakala ya faili za kila mtu kama zilivyokuwa kila siku, ili toleo la zamani la faili, au faili iliyofutwa kwa makosa, ifunguliwe au irudishwe kutoka Folda. Kila mtu anaweza kusoma kwenye nakala yale tu aliyoweza kusoma siku hiyo, kwa hiyo nyumbani pa faragha hubaki pa faragha; faili iliyokuwa wazi kwa wengine hubaki wazi kwao kwenye nakala hiyo hadi iondoke. Nakala ziko mbali na vijipicha vya mfumo: kurejesha mfumo hakubadilishi faili zako, na hizi hazibadilishi mfumo. Gharama ni nafasi: faili unayofuta au kubadilisha bado inachukua nafasi yake hadi nakala ya mwisho inayoishikilia iondoke, kwa hiyo kufuta vitu hakuachilii diski mara moja. Kufuta nakala huiachilia sasa, kwa kila mtu kwenye kompyuta hii, na hakuwezi kutenduliwa. Hakuna nakala inayochukuliwa diski ikiwa karibu kujaa. Kubadilisha lolote kati ya haya kunahitaji nenosiri la msimamizi.
+settings-snap-earlier-about = Trindle inaweza kuhifadhi nakala ya kila siku ya faili za kila mtu. Kisha unaweza kufungua toleo la zamani la faili, au kurudisha faili uliyoifuta kwa makosa, kutoka Folders. Kwenye nakala, kila mtu huona tu kile ambacho angeweza kuona siku hiyo, kwa hiyo folda za nyumbani za faragha hubaki za faragha. Faili ambayo wengine wangeweza kuifungua hubaki wazi kwao kwenye nakala hiyo hadi nakala iondolewe. Nakala hizi ni tofauti na vijipicha vya mfumo, na hakuna kinachobadilisha kingine. Zinatumia nafasi ya diski. Faili unayofuta au kubadilisha bado inachukua nafasi hadi nakala ya mwisho inayoishikilia iondolewe. Kufuta nakala huachilia nafasi mara moja kwa kila mtu, na huwezi kutendua. Hakuna nakala inayochukuliwa diski ikiwa karibu kujaa. Unahitaji nenosiri la msimamizi ili kubadilisha lolote kati ya haya.
 
 # Label of the switch for keeping earlier versions, and heading of its line.
 settings-snap-keep-earlier = Hifadhi matoleo ya awali ya faili zako
@@ -111,19 +111,19 @@ settings-snap-keep-each = Hifadhi nakala ya kila siku kwa
 settings-snap-how-long = Nakala ya kila siku inahifadhiwa kwa muda gani
 
 # Headline of the Snapshots page while the snapshots are read.
-settings-snap-looking = Inatazama vijipicha…
+settings-snap-looking = Inakagua vijipicha…
 
 # Headline of the Snapshots page when the snapshots could not be read.
 settings-snap-not-read = Vijipicha havikuweza kusomwa.
 
 # Headline of the Snapshots page when the computer started from a snapshot: { $n } is its number.
-settings-snap-started-from = Imeanza kutoka kijipicha { $n }, kwa hiyo hakuna unachofanya sasa kinachohifadhiwa.
+settings-snap-started-from = Umeanza kutoka kijipicha { $n }, kwa hiyo hakuna unachofanya sasa kinachohifadhiwa.
 
 # Headline of the Snapshots page: how many snapshots there are and { $when } the time of the newest.
 settings-snap-go-back =
     { $n ->
-        [one] Kijipicha { $n } cha kurudi, cha karibuni zaidi kutoka { $when }.
-       *[other] Vijipicha { $n } vya kurudi, cha karibuni zaidi kutoka { $when }.
+        [one] Unaweza kurudi kwenye kijipicha { $n }, kutoka { $when }.
+       *[other] Unaweza kurudi kwenye vijipicha { $n }. Cha karibuni zaidi ni kutoka { $when }.
     }
 
 # Headline of the Snapshots page when there are none yet.
@@ -134,7 +134,7 @@ settings-snap-kept-until-deleted = { $what }, kimehifadhiwa hadi kifutwe
 
 # Tip of the button that restores the system to a snapshot, and its label while working.
 # SAFETY: needs a human review before it ships
-settings-snap-restore-this = Rejesha mfumo kwenye hiki
+settings-snap-restore-this = Rejesha kijipicha hiki
 
 # Tip of the button that deletes a snapshot.
 # SAFETY: needs a human review before it ships
@@ -146,9 +146,6 @@ settings-snap-restart-now = Anzisha upya sasa
 # Under the heading when snapshots are not set up on a Btrfs computer.
 settings-snap-not-set-up-sub = Bado havijaandaliwa.
 
-# Under the To have them heading when snapshots are not set up.
-settings-snap-reinstall = Sakinisha upya kifurushi cha trindle.
-
 # Help text of the No snapshots card when snapshots are not set up on a Btrfs computer.
 settings-snap-not-set-up-about = Vijipicha havijaandaliwa. Kusakinisha upya kifurushi cha trindle kunaviandaa: sudo apt install --reinstall trindle.
 
@@ -156,13 +153,10 @@ settings-snap-not-set-up-about = Vijipicha havijaandaliwa. Kusakinisha upya kifu
 settings-snap-another-kind = aina nyingine
 
 # Under the heading when the computer does not use Btrfs: { $fs } is the kind it uses.
-settings-snap-need-btrfs = Vinahitaji Btrfs; kompyuta hii inatumia { $fs }.
-
-# Under the To have them heading when the computer does not use Btrfs.
-settings-snap-choose-btrfs = Chagua Btrfs wakati wa kusakinisha Debian.
+settings-snap-need-btrfs = Vijipicha vinahitaji Btrfs. Kompyuta hii inatumia { $fs }.
 
 # Help text of the No snapshots card when the computer does not use Btrfs: { $fs } is the kind it uses.
-settings-snap-need-btrfs-about = Vijipicha vinahitaji mfumo kwenye Btrfs, na kompyuta hii inatumia { $fs }. Chagua Btrfs kwa mfumo wakati wa kusakinisha Debian ili kuvipata.
+settings-snap-need-btrfs-about = Vijipicha vinahitaji mfumo uwe kwenye Btrfs, na kompyuta hii inatumia { $fs }. Ili kupata vijipicha, chagua Btrfs kwa mfumo unaposakinisha Debian.
 
 # Headline of the Snapshots page when the computer has none.
 settings-snap-no-snapshots = Hakuna vijipicha kwenye kompyuta hii.
@@ -173,11 +167,8 @@ settings-snap-no-snapshots-title = Hakuna vijipicha
 # Heading of the line shown when the computer has no snapshots.
 settings-snap-no-snapshots-line = Hakuna vijipicha kwenye kompyuta hii
 
-# Heading of the line saying how to have snapshots.
-settings-snap-to-have = Ili kuvipata
-
 # Shown in place of the list while the snapshots are read.
-settings-snap-looking-short = Inatazama…
+settings-snap-looking-short = Inapakia…
 
 # Heading of the line shown when the snapshots could not be read; the reason is under it.
 settings-snap-not-read-line = Vijipicha havikuweza kusomwa
@@ -185,31 +176,22 @@ settings-snap-not-read-line = Vijipicha havikuweza kusomwa
 # Heading of the line shown when there are no snapshots yet.
 settings-snap-none-line = Bado hakuna
 
-# Under the None yet heading.
-settings-snap-none-line-sub = Kimoja huchukuliwa kabla ya kila mabadiliko ya programu.
-
 # Help text of the Snapshots card (the information button).
 # SAFETY: needs a human review before it ships
-settings-snap-list-about = Kila kijipicha kinaweza kurejesha mfumo mzima kama ulivyokuwa wakati huo, kuanzia mwanzo ujao, au kufutwa. Vyote viwili vinahitaji kubonyezwa mara mbili na vinahitaji nenosiri la msimamizi. Baada ya kurejesha, kitufe cha kuanzisha upya kinatokea kando yake.
+settings-snap-list-about = Kila kijipicha kinaweza kurudisha mfumo mzima kama ulivyokuwa, utakapoanzisha upya mara ijayo. Unahitaji nenosiri la msimamizi ili kurejesha au kufuta kimoja.
 
 # Tip of the button that takes a snapshot now, and heading of its line.
 settings-snap-take-now = Chukua kijipicha sasa
 
 # Under the Take a snapshot now heading when the computer started from a snapshot.
-settings-snap-not-while = Si wakati umeanza kutoka kijipicha.
-
-# Under the Take a snapshot now heading.
-settings-snap-kept-until-you = Kinahifadhiwa hadi ukifute.
+settings-snap-not-while = Anzisha upya kawaida ili kufanya hili.
 
 # Heading of the line about systems set aside by restoring: how many there are.
 settings-snap-set-aside =
     { $n ->
-        [one] Mfumo mmoja uliowekwa kando kwa kurejesha
-       *[other] Mifumo { $n } iliyowekwa kando kwa kurejesha
+        [one] Mfumo mmoja wa zamani umewekwa kando baada ya urejeshaji
+       *[other] Mifumo { $n } ya zamani imewekwa kando baada ya urejeshaji
     }
-
-# Under the set aside heading.
-settings-snap-free-space = Achilia nafasi mara kila kitu kikiwa sawa.
 
 # Tip of the button that frees the space the set aside systems use.
 # SAFETY: needs a human review before it ships
@@ -219,13 +201,13 @@ settings-snap-free-them = Achilia nafasi wanayotumia
 settings-snap-take-one = Chukua kimoja
 
 # Help text of the Take one card (the information button).
-settings-snap-take-about = Chukua kijipicha kabla ya kujaribu kitu ambacho unaweza kutaka kukitendua; kile unachochukua kinahifadhiwa hadi ukifute. Kompyuta ikiwa imeanza kutoka kijipicha, hakuna kitakachochukuliwa kitakachohifadhiwa, kwa hiyo anzisha upya kawaida kwanza. Kila kurejesha huweka kando mfumo ulivyokuwa kabla yake, kwa hiyo hakuna kinachopotea; achilia nafasi wanayotumia mara kila kitu kikiwa sawa.
+settings-snap-take-about = Chukua kijipicha kabla ya kujaribu kitu ambacho unaweza kutaka kukitendua. Vijipicha unavyochukua huhifadhiwa hadi uvifute. Ikiwa umeanza kutoka kijipicha, anzisha upya kawaida kwanza, la sivyo kijipicha chako kipya hakitahifadhiwa. Kila kurejesha huweka kando mfumo ulivyokuwa kabla yake, kwa hiyo hakuna kinachopotea. Faili za mfumo zikiwa zimefungwa, ni usakinishaji na masasisho tu yanayoweza kuzibadilisha, na kila kimoja hupata kijipicha kabla na baada. Unahitaji nenosiri la msimamizi ili kubadilisha kufuli.
 
 # Heading of a line on the Before restoring card: { $n } is the number of the snapshot started from.
 settings-snap-started-line = Imeanza kutoka kijipicha { $n }
 
 # Under the Started from snapshot heading.
-settings-snap-nothing-kept = Hakuna unachofanya sasa kinachohifadhiwa.
+settings-snap-nothing-kept = Mabadiliko hayatahifadhiwa.
 
 # Heading of a line on the Before restoring card.
 settings-snap-files-too = Faili zako ziko kwenye vijipicha pia
@@ -239,7 +221,7 @@ settings-snap-before = Kabla ya kurejesha
 
 # Help text of the Before restoring card (the information button).
 # SAFETY: needs a human review before it ships
-settings-snap-before-about = Ukiwa umeanza kutoka kijipicha, hakuna unachofanya sasa kinachohifadhiwa: ikiwa mfumo unapaswa kuwa hivi, bonyeza rejesha kwenye orodha, kisha anzisha upya. Kwenye kompyuta hii folda ya nyumbani inaweza kuwa sehemu ya mfumo, na hapo kurejesha kijipicha pia kunarudisha faili zako mwenyewe kama zilivyokuwa wakati huo, kwa hiyo nakili chochote kipya mahali salama kwanza.
+settings-snap-before-about = Kwa kuwa umeanza kutoka kijipicha, hakuna unachofanya sasa kinachohifadhiwa. Ili kuweka mfumo hivi, bonyeza Rejesha kijipicha hiki kando yake kwenye orodha, kisha anzisha upya. Kwenye kompyuta hii, folda ya nyumbani inaweza kuwa sehemu ya mfumo. Ikiwa ndivyo, kurejesha kijipicha pia kunarudisha faili zako mwenyewe kama zilivyokuwa wakati huo, kwa hiyo nakili chochote kipya mahali salama kwanza.
 
 
 
@@ -254,4 +236,3 @@ settings-snap-locked-now = Zimefungwa
 
 # Said beside the System files locked switch once it is turned off.
 settings-snap-unlocked-now = Zimefunguliwa
-

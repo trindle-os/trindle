@@ -1,19 +1,15 @@
-//! The Updates page: one check for everything, one card for each area,
-//! and the house style's flow. Checking: the headline dot pulses blue and
-//! each card shows a spinner until its answer comes. Found: the dot is
-//! the highlight colour, the headline says how many and how big, each
-//! update is a row with its size and its own round Update button at the
-//! far end, and the one main button installs them all. Installing: a
-//! row's size gives way to its percentage and the line runs round its own
-//! button. Done: green, or blue with Restart now when something needs the
-//! computer to start again.
+//! The Updates page: one check for everything and one card for each area.
+//! Each update also goes in alone from its own button, taking the same turn
+//! as Install all (common::updating), so only one runs. Debian's packages
+//! are made to fit each other, so they go in as one group. What is held
+//! back (common::held, shared with the ring) is left out of every count.
 
 pub(super) mod cards;
 pub(super) mod check;
 pub(super) mod hold;
 pub(super) mod install;
 pub(super) mod read;
-pub(super) mod rows;
+pub(in crate::store) mod rows;
 pub(super) mod stopping;
 pub(super) mod system_cards;
 pub(super) mod view;
@@ -22,6 +18,7 @@ pub(super) mod words;
 mod tests;
 
 use crate::toolkit::t;
+use crate::toolkit::tiles::RingShare;
 use std::collections::{BTreeSet, HashMap};
 use crate::store::pages::job_rows::updating;
 use crate::store::plugin_page;
@@ -39,6 +36,8 @@ const FIRMWARE: &str = "firmware";
 
 const APPS_ROW: &str = "up:apps";
 const SYSTEM_ROW: &str = "up:system";
+
+const SECURITY_ROW: &str = "up:security";
 
 const TRINDLE_ROW: &str = "up:trindle";
 const DEBIAN_ROW: &str = "up:debian";
@@ -139,11 +138,15 @@ pub struct UpdatesPage {
 
     pub(super) off: bool,
 
+    pub(super) security_off: bool,
+
     sizes: HashMap<String, u64>,
 
     jobs: u32,
 
-    app_rows: HashMap<String, f32>,
+    app_rows: HashMap<String, RingShare>,
+
+    overall: crate::toolkit::tiles::RingShare,
 
     app_order: Vec<String>,
 
@@ -227,7 +230,7 @@ pub(super) fn made_up(checking: &[&'static str], jobs: u32, restart: bool, sizes
         checked_at: Some("14:32".into()),
         sizes: sizes.iter().map(|(k, n)| (k.to_string(), *n)).collect(),
         jobs, restart,
-        app_rows: rows.iter().map(|(k, n)| (k.to_string(), *n)).collect(),
+        app_rows: rows.iter().map(|(k, n)| (k.to_string(), RingShare::new(Some(*n)))).collect(),
         ..UpdatesPage::default()
     }
 }
@@ -245,6 +248,7 @@ pub(super) fn refresh_off(s: &mut Store) {
     #[cfg(not(test))]
     {
         s.upd.off = !crate::common::update_checks::on();
+        s.upd.security_off = !crate::common::security_updates::switch_on();
     }
     #[cfg(test)]
     let _ = s;
@@ -273,12 +277,35 @@ pub fn app_share(s: &Store, id: &str) -> Option<f32> {
     if let Some(d) = s.dials.get(&app_key(id)).filter(|d| d.running()) {
         return Some(d.share());
     }
+    apps_row(s, id).map(|r| r.get().unwrap_or(0.0))
+}
+
+fn apps_row<'a>(s: &'a Store, id: &str) -> Option<&'a RingShare> {
     s.dials.get(APPS_ROW).filter(|d| d.running())?;
-    s.upd.app_rows.get(id).copied()
+    s.upd.app_rows.get(id)
+}
+
+pub fn app_ring(s: &Store, id: &str) -> Option<RingShare> {
+    match s.dials.get(&app_key(id)).filter(|d| d.running()) {
+        Some(d) => Some(d.ring()),
+        None => apps_row(s, id).cloned(),
+    }
+}
+
+pub fn job_ring(s: &Store, key: &str) -> Option<RingShare> {
+    s.dials.get(key).filter(|d| d.running()).map(|d| d.ring())
+}
+
+fn job_under<'a>(s: &'a Store, starts: &[&str]) -> Option<&'a crate::common::filling::Dial> {
+    s.dials.iter().find(|(k, d)| d.running() && starts.iter().any(|w| k.starts_with(w))).map(|(_, d)| d)
 }
 
 fn going_under(s: &Store, starts: &[&str]) -> Option<f32> {
-    s.dials.iter().find(|(k, d)| d.running() && starts.iter().any(|w| k.starts_with(w))).map(|(_, d)| d.share())
+    job_under(s, starts).map(|d| d.share())
+}
+
+fn ring_under(s: &Store, starts: &[&str]) -> Option<RingShare> {
+    job_under(s, starts).map(|d| d.ring())
 }
 
 pub(super) fn installing(s: &Store) -> bool {

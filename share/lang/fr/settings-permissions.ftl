@@ -8,31 +8,31 @@ settings-permissions-keywords = autorisations permissions autoriser confidential
 
 # Help line at the foot of the Permissions page.
 # SAFETY: needs a human review before it ships
-settings-permissions-help = Ce que chaque application peut utiliser. Les applications de Flathub, les programmes installés dans leur propre dossier et les modules sont chacun installés dans leur propre dossier, avec des restrictions par défaut. Une icône pleine signifie autorisé ; cliquez dessus pour changer. Un changement pour une application de Flathub prend effet à son prochain démarrage. Les appareils Thunderbolt et USB4 autorisés se connectent toujours sans demander ; oubliez-en un pour qu'on vous le demande à nouveau.
+settings-permissions-help = Cette page montre ce que chaque application peut utiliser. Les applications de Flathub, les programmes installés dans leur propre dossier et les modules s'exécutent chacun dans leur propre boîte, avec des limites fixées par défaut. Un changement pour une application de Flathub prend effet à son prochain démarrage. Les appareils Thunderbolt et USB4 que vous avez autorisés se connectent toujours sans demander. Oubliez un appareil si vous voulez qu'on vous le demande à nouveau.
 
 # Red words when a permission could not be changed and nothing more is known.
-settings-permissions-not-changed = Cela n'a pas pu être modifié.
+settings-permissions-not-changed = Impossible de le modifier.
 
 # Words beside a plugin when its change was saved but the plugin could not be started again.
-settings-permissions-plugin-not-restarted = Enregistré, mais le module n'a pas pu être relancé. Le changement prend effet à son prochain démarrage.
+settings-permissions-plugin-not-restarted = Enregistré, mais Trindle n'a pas pu relancer le module. Le changement prend effet à son prochain démarrage.
 
 # Said beside an app, plugin or switch once a permission change is saved.
 settings-permissions-saved = Enregistré
 
 # Help text of the AppImages card (the information button).
 # SAFETY: needs a human review before it ships
-settings-permissions-loose-images = Chaque AppImage s'exécute dans une boîte à part, avec un dossier personnel privé. Une icône pleine signifie autorisé ; cliquez dessus pour changer. Un changement prend effet au prochain démarrage de l'AppImage.
+settings-permissions-loose-images = Chaque AppImage s'exécute dans sa propre boîte, avec un dossier personnel privé. Un changement prend effet au prochain démarrage de l'AppImage.
 
 # Help text of the Started from Folders card (the information button).
 # SAFETY: needs a human review before it ships
-settings-permissions-loose-programs = Les programmes lancés depuis Dossiers s'exécutent chacun dans une boîte à part, avec un dossier personnel privé. Une icône pleine signifie autorisé ; cliquez dessus pour changer. Un changement prend effet au prochain démarrage du programme.
+settings-permissions-loose-programs = Chaque programme que vous lancez depuis Folders s'exécute dans sa propre boîte, avec un dossier personnel privé. Un changement prend effet au prochain démarrage du programme.
 
 # A permission's name and what is true with it off, one after another in a card's help text: { $title } is the permission, { $words } what it means.
 settings-permissions-title-and-words = { $title } : { $words }
 
 # Under the Allow older programs switch.
 # SAFETY: needs a human review before it ships
-settings-permissions-older-why = Chacun est tenu à l'écart des autres. Désactivé, ils ne s'ouvrent pas.
+settings-permissions-older-why = Chacun s'exécute séparément. Si c'est désactivé, ils ne s'ouvriront pas.
 
 # Heading of the card with the switch for older programs.
 settings-permissions-older = Anciens programmes
@@ -42,20 +42,20 @@ settings-permissions-older = Anciens programmes
 settings-permissions-allow-older = Autoriser les anciens programmes
 
 # Help text on the Thunderbolt and USB4 card when the ports only carry screens.
-settings-permissions-lets-in-screens = Ces ports ne transportent que des écrans, aucun appareil ne peut donc atteindre la mémoire de cet ordinateur et il n'y a rien à demander.
+settings-permissions-lets-in-screens = Ces ports ne servent qu'aux écrans, aucun appareil ne peut donc atteindre la mémoire de cet ordinateur. Il n'y a rien à demander.
 
 # Help text on the Thunderbolt and USB4 card when the ports only carry USB and screens.
-settings-permissions-lets-in-usb = Ces ports ne transportent que de l'USB et des écrans, aucun appareil ne peut donc atteindre la mémoire de cet ordinateur et il n'y a rien à demander.
+settings-permissions-lets-in-usb = Ces ports ne servent qu'à l'USB et aux écrans, aucun appareil ne peut donc atteindre la mémoire de cet ordinateur. Il n'y a rien à demander.
 
 # Help text on the Thunderbolt and USB4 card when the ports let every device in.
 # SAFETY: needs a human review before it ships
-settings-permissions-lets-in-all = Ces ports laissent tout appareil se connecter de lui-même, il n'y a donc rien à demander. Cela se règle dans le micrologiciel de l'ordinateur.
+settings-permissions-lets-in-all = Ces ports laissent tout appareil se connecter, il n'y a donc rien à demander. Cela se règle dans le micrologiciel de l'ordinateur.
 
 # Under Nothing to ask on the Thunderbolt and USB4 card, when the ports only carry screens.
-settings-permissions-short-screens = Ces ports ne transportent que des écrans.
+settings-permissions-short-screens = Seuls des écrans utilisent ces ports.
 
 # Under Nothing to ask on the Thunderbolt and USB4 card, when the ports only carry USB and screens.
-settings-permissions-short-usb = Ces ports ne transportent que de l'USB et des écrans.
+settings-permissions-short-usb = Seuls l'USB et les écrans utilisent ces ports.
 
 # Under Nothing to ask on the Thunderbolt and USB4 card, when the firmware lets every device in.
 # SAFETY: needs a human review before it ships
@@ -67,33 +67,36 @@ settings-permissions-version = Version { $v }
 # Under a plugin's name when it asks for nothing: its version number is { $v }.
 settings-permissions-version-asks-nothing = Version { $v }. Il ne demande rien.
 
+# Under a plugin's name: its version number is { $v }, and { $notes } lists what it may do that matters most, such as "it can act as you and it can type into your windows".
+settings-permissions-version-notes = Version { $v } : { $notes }.
+
 # Under a plugin's name: the words so far are { $sub }, then the ports it listens on in { $detail }.
 settings-permissions-sub-listen = { $sub }. { $detail }
 
 # Red words when a Thunderbolt or USB4 device could not be forgotten.
-settings-permissions-not-forgotten = Il n'a pas pu être oublié.
+settings-permissions-not-forgotten = Impossible de l'oublier.
 
 # Heading of the Thunderbolt and USB4 card.
 settings-permissions-thunder = Thunderbolt et USB4
 
 # Help text of the Thunderbolt and USB4 card: { $about } is a further sentence, or nothing.
 # SAFETY: needs a human review before it ships
-settings-permissions-thunder-about = Les appareils Thunderbolt et USB4 autorisés se connectent toujours sans demander ; oubliez-en un pour qu'on vous le demande à nouveau. { $about }
+settings-permissions-thunder-about = Les appareils Thunderbolt et USB4 que vous avez autorisés se connectent toujours sans demander. Oubliez un appareil si vous voulez qu'on vous le demande à nouveau. { $about }
 
 # Heading of a line on the Thunderbolt and USB4 card while it is read.
-settings-permissions-ports = Les ports
+settings-permissions-ports = Ports
 
 # Under The ports while the Thunderbolt and USB4 card is read.
-settings-permissions-reading-ports = Lecture de ce qu'ils laissent entrer…
+settings-permissions-reading-ports = Vérification des ports…
 
 # Heading of a line on the Thunderbolt and USB4 card.
 settings-permissions-devices-allowed = Appareils autorisés
 
 # Under a line of the Thunderbolt and USB4 card while it is read.
-settings-permissions-reading = Lecture…
+settings-permissions-reading = Chargement…
 
 # Heading of a line on the Thunderbolt and USB4 card while it is read.
-settings-permissions-memory-apart = Mémoire tenue à l'écart
+settings-permissions-memory-apart = Protection de la mémoire
 
 # Heading of the line on the Thunderbolt and USB4 card when the computer has no such ports.
 settings-permissions-no-ports = Aucun port Thunderbolt ou USB4
@@ -102,33 +105,29 @@ settings-permissions-no-ports = Aucun port Thunderbolt ou USB4
 settings-permissions-nothing-to-ask = Il n'y a donc rien à demander.
 
 # Under Devices allowed when the computer has no Thunderbolt or USB4 ports.
-settings-permissions-none-plug = Aucun : rien ne se branche de cette façon.
+settings-permissions-none-plug = Aucun appareil ne se connecte de cette façon.
 
 # Heading of the line on the Thunderbolt and USB4 card when the ports let every device in.
 settings-permissions-nothing-ask = Rien à demander
 
 # Under Devices allowed when the ports let every device in themselves.
 # SAFETY: needs a human review before it ships
-settings-permissions-every-one = Tous, par les ports eux-mêmes.
+settings-permissions-every-one = Tous. Ce sont les ports qui décident.
 
 # Help text of the Thunderbolt and USB4 card when the computer keeps devices away from memory.
 # SAFETY: needs a human review before it ships
-settings-permissions-iommu = Cet ordinateur tient aussi les appareils à l'écart de la mémoire qui ne leur a pas été donnée, le risque est donc plus faible. Oublier un appareil le laisse connecté jusqu'à ce qu'il soit débranché.
+settings-permissions-iommu = Cet ordinateur empêche aussi les appareils d'atteindre une mémoire qui n'est pas la leur, le risque est donc plus faible. Si vous oubliez un appareil, il reste connecté jusqu'à ce que vous le débranchiez.
 
 # Help text of the Thunderbolt and USB4 card when the computer does not keep devices away from memory.
 # SAFETY: needs a human review before it ships
-settings-permissions-no-iommu = Oublier un appareil le laisse connecté jusqu'à ce qu'il soit débranché ; la fois suivante, on vous le demandera à nouveau.
+settings-permissions-no-iommu = Si vous oubliez un appareil, il reste connecté jusqu'à ce que vous le débranchiez. La prochaine fois que vous le brancherez, on vous le demandera à nouveau.
 
 # Heading of the line on the Thunderbolt and USB4 card that lists the devices.
 # SAFETY: needs a human review before it ships
-settings-permissions-asked-before = Demandé avant qu'un nouvel appareil se connecte
-
-# Under the heading above.
-# SAFETY: needs a human review before it ships
-settings-permissions-forget-one = Oubliez-en un pour qu'on vous le demande à nouveau.
+settings-permissions-asked-before = On vous demande pour les nouveaux appareils
 
 # Red words when the list of allowed Thunderbolt devices could not be read: the reason is { $why }.
-settings-permissions-devices-not-read = Les appareils autorisés n'ont pas pu être lus : { $why }
+settings-permissions-devices-not-read = Trindle n'a pas pu lire la liste des appareils autorisés : { $why }
 
 # Shown when no Thunderbolt or USB4 device has been allowed always.
 settings-permissions-no-device = Aucun appareil n'a encore le droit de se connecter sans demander.
@@ -149,28 +148,28 @@ settings-permissions-may-always = Peut toujours se connecter
 settings-permissions-made-by = Fabriqué par { $vendor }. Peut toujours se connecter.
 
 # Headline while the list of apps is being read.
-settings-permissions-reading-apps = Lecture de ce que chaque application peut utiliser…
+settings-permissions-reading-apps = Vérification de ce que les applications peuvent utiliser…
 
 # Headline while Flatpak is still answering: how many apps are listed.
 settings-permissions-reading-each =
     { $n ->
-        [one] Lecture de ce que chacune des { $n } peut utiliser…
-        [many] Lecture de ce que chacune des { $n } peut utiliser…
-       *[other] Lecture de ce que chacune des { $n } peut utiliser…
+        [one] Vérification de ce que { $n } application peut utiliser…
+        [many] Vérification de ce que { $n } d'applications peuvent utiliser…
+       *[other] Vérification de ce que { $n } applications peuvent utiliser…
     }
 
 # Headline when no app or plugin is kept in a box of its own.
-settings-permissions-no-apps = Aucune application ni aucun module tenu dans une boîte à part n'est installé.
+settings-permissions-no-apps = Vous n'avez installé aucune application ni aucun module qui s'exécute dans sa propre boîte.
 
 # Headline when exactly one app is kept in a box of its own.
-settings-permissions-one-app = Une application est tenue dans une boîte à part et n'utilise que ce qui est autorisé ici.
+settings-permissions-one-app = Une application s'exécute dans sa propre boîte et ne peut utiliser que ce que vous autorisez ici.
 
 # Headline: how many apps and plugins are kept in a box of their own.
 settings-permissions-many-apps =
     { $n ->
-        [one] { $n } application ou module est tenu dans une boîte à part, et n'utilise que ce qui est autorisé ici.
-        [many] { $n } d'applications et de modules sont chacun tenus dans une boîte à part, et n'utilisent que ce qui est autorisé ici.
-       *[other] { $n } applications et modules sont chacun tenus dans une boîte à part, et n'utilisent que ce qui est autorisé ici.
+        [one] { $n } application ou module s'exécute dans sa propre boîte et ne peut utiliser que ce que vous autorisez ici.
+        [many] { $n } d'applications et de modules s'exécutent chacun dans leur propre boîte et ne peuvent utiliser que ce que vous autorisez ici.
+       *[other] { $n } applications et modules s'exécutent chacun dans leur propre boîte et ne peuvent utiliser que ce que vous autorisez ici.
     }
 
 # Heading of the card for apps from Flathub.
@@ -186,36 +185,33 @@ settings-permissions-plugins = Modules
 settings-permissions-appimages = AppImages
 
 # Heading of the card for programs started from Folders.
-settings-permissions-from-folders = Lancés depuis Dossiers
+settings-permissions-from-folders = Lancés depuis Folders
 
 # Under a kind of app on the Permissions page when none is installed.
 settings-permissions-none-installed = Aucun d'installé.
 
 # Under a kind of app on the Permissions page when none has been run.
-settings-permissions-none-run = Aucun lancé pour le moment.
+settings-permissions-none-run = Aucun pour le moment.
 
 # Help text of the Flathub apps card (the information button).
 # SAFETY: needs a human review before it ships
-settings-permissions-flathub-about = Les applications de Flathub sont chacune tenues dans une boîte à part et ne peuvent utiliser que ce qui est autorisé ici. Une icône pleine signifie autorisé ; cliquez dessus pour changer. Un changement prend effet au prochain démarrage de l'application.
+settings-permissions-flathub-about = Chaque application de Flathub s'exécute dans sa propre boîte et ne peut utiliser que ce qui est autorisé ici. Un changement prend effet au prochain démarrage de l'application.
 
 # Help text of the In their own folder card (the information button).
 # SAFETY: needs a human review before it ships
-settings-permissions-debs-about = Les programmes installés dans leur propre dossier sont restreints par défaut. Une icône pleine signifie autorisé ; cliquez dessus pour changer.
+settings-permissions-debs-about = Les programmes fournis avec Trindle, comme le Terminal, et les programmes que vous avez installés à partir de fichiers .deb. Chacun s'exécute dans son propre dossier, avec des limites fixées par défaut.
 
 # Help text of the Plugins card (the information button).
 # SAFETY: needs a human review before it ships
-settings-permissions-plugins-about = Les modules sont restreints par défaut et ne peuvent recevoir que ce qu'ils demandent. Un module qui tourne en arrière-plan redémarre aussitôt avec le changement.
+settings-permissions-plugins-about = Les modules démarrent avec des limites, et vous ne pouvez autoriser que ce qu'un module demande. Un module qui tourne en arrière-plan redémarre aussitôt quand vous changez quelque chose.
 
 # Typing codes card: every short code Trindle swaps for words as you type.
 settings-permissions-codes = Codes de saisie
 
 # SAFETY: needs a human review before it ships
-settings-permissions-codes-about = Codes courts que Trindle remplace par des mots pendant que vous tapez, avec le module qui les gère. Désactivez les codes d'un module avec son icône ronde.
+settings-permissions-codes-about = Codes courts que Trindle remplace par des mots pendant que vous tapez. Chacun indique le module dont il vient.
 
 settings-permissions-codes-none = Aucun code n'est actif
-
-# SAFETY: needs a human review before it ships
-settings-permissions-codes-none-sub = Un module autorisé à développer des codes les liste ici.
 
 # Button on a plugin's row: stops that plugin's codes.
 # SAFETY: needs a human review before it ships
@@ -240,13 +236,13 @@ settings-permissions-codes-more =
 
 # Line on the typing codes card when the plugins folder could not be read: the list may be missing codes.
 # SAFETY: needs a human review before it ships
-settings-permissions-codes-unread-line = Le dossier des extensions n'a pas pu être lu
+settings-permissions-codes-unread-line = Impossible de lire le dossier des modules
 
 # Red words under that line.
 # SAFETY: needs a human review before it ships
-settings-permissions-codes-unread = Le dossier des extensions n'a pas pu être lu, donc certains codes peuvent manquer.
+settings-permissions-codes-unread = Trindle n'a pas pu lire le dossier des modules, donc certains codes peuvent manquer.
 
-settings-permissions-not-added = Lancée depuis Folders, non ajoutée à Apps
+settings-permissions-not-added = Ouverte depuis Folders, pas dans Apps
 
 settings-permissions-kind-tip = Type d'application
 
@@ -256,19 +252,19 @@ settings-permissions-kind-tip = Type d'application
 settings-outside-heading = Programmes hors d'une boîte
 
 # Help text of that card (the information button): what Trindle can and cannot do for them.
-settings-outside-about = Trindle regarde toutes les quelques secondes et vous prévient. Il ne peut pas arrêter ces programmes, et il peut en rater un très rapide. Un programme dans une boîte est retenu par sa boîte.
+settings-outside-about = Trindle regarde toutes les quelques secondes et vous dit ce qu'il trouve. Il ne peut pas arrêter ces programmes, et il peut en rater un qui ne tourne qu'un instant. Un programme dans une boîte ne peut utiliser que ce que sa boîte autorise.
 
 # Label of the switch for the notice about the network.
-settings-outside-network = Prévenir quand un programme accède au réseau
+settings-outside-network = Me prévenir quand des programmes utilisent le réseau
 
 # Label of the switch for the notice about the person's files.
-settings-outside-files = Prévenir quand un programme a vos fichiers ouverts
+settings-outside-files = Me prévenir quand des programmes ouvrent mes fichiers
 
 # Under those two switches.
 settings-outside-once = Une seule fois par programme.
 
 # Tip of the round button that makes a program be said again; { $name } is the program.
-settings-outside-forget = Prévenir à nouveau pour { $name }
+settings-outside-forget = Ne plus ignorer { $name }
 
 # Under a program marked fine for the network.
 settings-outside-fine-network = L'accès au réseau est autorisé.
@@ -283,13 +279,10 @@ settings-outside-no-fine = Aucun programme n'est marqué comme autorisé.
 settings-downloads-heading = Fichiers téléchargés
 
 # Help text of that card (the information button).
-settings-downloads-about = Un fichier venu d'internet est un fichier de Téléchargements, ou un fichier marqué par le navigateur. Le programme qui l'ouvre reçoit ce fichier seulement, en lecture seule, sans internet et sans aucun de vos dossiers. Cela ne couvre pas le bouton Ouvrir propre à un navigateur, qui lance lui-même le programme.
+settings-downloads-about = Les fichiers de Téléchargements, et les fichiers que votre navigateur a marqués comme téléchargés, s'ouvrent dans une boîte. Le programme qui en ouvre un reçoit uniquement ce fichier. Il ne peut que le lire, et il ne peut utiliser ni internet ni vos dossiers. Cela ne couvre pas le bouton Ouvrir propre à un navigateur, qui lance lui-même le programme.
 
 # Label of the switch that opens downloaded files in a box.
 settings-downloads-box = Ouvrir les fichiers téléchargés dans une boîte
-
-# Under that switch.
-settings-downloads-box-sub = Sans internet, et seulement ce fichier, en lecture seule.
 
 # Tip of the switch that opens one type of downloaded file as normal; { $kind } is the type, such as pdf.
 settings-downloads-normal = Ouvrir les fichiers { $kind } normalement
@@ -298,8 +291,7 @@ settings-downloads-normal = Ouvrir les fichiers { $kind } normalement
 settings-downloads-type = Fichiers { $kind }
 
 # Under a file type's switch.
-settings-downloads-normal-sub = Activé : s'ouvre normalement, avec internet.
+settings-downloads-normal-sub = Ils s'ouvrent normalement, avec internet.
 
 # The line in the card when no downloaded file has been opened in a box yet.
-settings-downloads-none = Aucun type pour l'instant. Un type apparaît ici quand un fichier téléchargé s'ouvre dans une boîte.
-
+settings-downloads-none = Aucun type de fichier pour l'instant. Un type apparaît ici dès qu'un fichier téléchargé s'est ouvert dans une boîte.

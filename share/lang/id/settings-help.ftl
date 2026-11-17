@@ -49,14 +49,11 @@ settings-help-read = Baca { $title }
 # Bold line in the Reading card of Help when no topic is open.
 settings-help-nothing-open = Tidak ada yang terbuka
 
-# Quiet line under "Nothing open" in Help.
-settings-help-nothing-open-sub = Tekan panah di samping topik untuk membacanya di sini.
-
 # Heading of the Help card that shows the open topics.
 settings-help-reading = Sedang dibaca
 
 # Placeholder and spoken name of the typing box that searches Help.
-settings-help-search-placeholder = Cari bantuan, misalnya “wifi”, “printer” atau “matikan”
+settings-help-search-placeholder = Cari bantuan
 
 # Heading of the Help card with the search box.
 settings-help-search = Cari bantuan
@@ -71,4 +68,4 @@ settings-help-program = Bantuan di jendelanya sendiri
 settings-help-program-open = Buka Bantuan
 
 # Red words under the line "Help in its own window" when the Help program could not be started.
-settings-help-program-not-opened = Bantuan tidak dapat dibuka.
+settings-help-program-not-opened = Tidak dapat membuka Bantuan.

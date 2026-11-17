@@ -5,7 +5,7 @@
 settings-network-rfkill-hard = { $radio } imezimwa kwa swichi au kitufe kwenye kompyuta yenyewe. Iwashe, kisha jaribu tena.
 
 # Said in red when the system blocks a radio and the block could not be taken off; the radio is Wi-Fi or Bluetooth.
-settings-network-rfkill-refused = { $radio } imezuiwa na mfumo, na kizuizi hakikuweza kuondolewa.
+settings-network-rfkill-refused = Mfumo unazuia { $radio }, na Trindle haikuweza kuondoa kizuizi hicho.
 
 # Said in red under a Wi-Fi network when its password was typed and not accepted.
 # SAFETY: needs a human review before it ships
@@ -13,23 +13,23 @@ settings-network-join-password-typed = Nenosiri hilo halikukubaliwa. Lijaribu te
 
 # Said in red under a Wi-Fi network when the password kept for it was not accepted.
 # SAFETY: needs a human review before it ships
-settings-network-join-password-kept = Nenosiri lililohifadhiwa kwa mtandao huu halikukubaliwa. Sahau mtandao kwa kutumia pipa, kisha ujiunge nao tena.
+settings-network-join-password-kept = Nenosiri lililohifadhiwa la mtandao huu halikukubaliwa. Bonyeza kitufe cha pipa ili kusahau mtandao, kisha ujiunge nao tena.
 
 # Said in red under a Wi-Fi network that could not be found.
-settings-network-join-not-found = Mtandao huo haukupatikana. Angalia jina lake, na kwamba uko karibu.
+settings-network-join-not-found = Trindle haikupata mtandao huo. Angalia jina lake, na uhakikishe kuwa uko karibu nao.
 
 # Said in red under a Wi-Fi network that let the computer in but gave it no address.
-settings-network-join-no-address = Mtandao uliruhusu kompyuta hii lakini haukuipa anwani. Jaribu tena, au anzisha upya kipanga njia.
+settings-network-join-no-address = Kompyuta hii ilijiunga na mtandao lakini haikupata anwani. Jaribu tena, au anzisha upya kipanga njia.
 
 # Said in red under a Wi-Fi network that did not let the computer join, for any other reason.
-settings-network-join-failed = Mtandao haukuruhusu kompyuta hii kujiunga. Sogea karibu nao, kisha jaribu tena.
+settings-network-join-failed = Kompyuta hii haikuweza kujiunga na mtandao. Sogea karibu na kipanga njia, kisha jaribu tena.
 
 # Said in red when the password typed is one a Wi-Fi network cannot have.
 # SAFETY: needs a human review before it ships
-settings-network-bad-password = Nenosiri hilo si la aina ambayo mtandao wa Wi-Fi unaweza kuwa nayo. Liangalie, kisha jaribu tena.
+settings-network-bad-password = Hilo haliwezi kuwa nenosiri la Wi-Fi. Liangalie, kisha jaribu tena.
 
 # Said in red when joining a network failed for no known reason.
-settings-network-join-refused = Mtandao haukuweza kujiunganishwa.
+settings-network-join-refused = Haikuweza kujiunga na mtandao.
 
 # Small line of a shared folder: who may open it with a password.
 # SAFETY: needs a human review before it ships
@@ -39,13 +39,13 @@ settings-network-access-open = fungua kwa nenosiri lako
 # SAFETY: needs a human review before it ships
 settings-network-access-change = fungua na ubadilishe kwa nenosiri lako
 
-# Small line of a shared folder: anyone at home may open it.
+# Small line of a shared folder: anyone on the local network may open it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-open = yeyote nyumbani anaweza kufungua
+settings-network-access-guests-open = yeyote kwenye mtandao wa ndani anaweza kufungua
 
-# Small line of a shared folder: anyone at home may change it.
+# Small line of a shared folder: anyone on the local network may change it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-change = yeyote nyumbani anaweza kubadilisha
+settings-network-access-guests-change = yeyote kwenye mtandao wa ndani anaweza kubadilisha
 
 # Small line of a shared folder: where it is, then who may do what with it; both are already written.
 settings-network-shared-sub = { $place }: { $access }
@@ -67,7 +67,7 @@ settings-network-state-disconnected = Imekatwa
 settings-network-state-preparing = Inajiandaa
 
 # State of a network device that is being set up.
-settings-network-state-configuring = Inawekwa mipangilio
+settings-network-state-configuring = Inaandaliwa
 
 # State of a network device that needs a password.
 settings-network-state-needs-password = Inahitaji nenosiri
@@ -96,10 +96,10 @@ settings-network-top-both = Imeunganishwa kwa kebo, na kwa { $name } kupitia Wi-
 # Headline of the page when connected to a Wi-Fi network; the level is strong, good, fair or weak.
 settings-network-top-wifi =
     { $level ->
-        [strong] Imeunganishwa na { $name }, mawimbi yenye nguvu.
-        [good] Imeunganishwa na { $name }, mawimbi mazuri.
-        [fair] Imeunganishwa na { $name }, mawimbi ya wastani.
-       *[other] Imeunganishwa na { $name }, mawimbi hafifu.
+        [strong] Imeunganishwa na { $name }. Mawimbi ni yenye nguvu.
+        [good] Imeunganishwa na { $name }. Mawimbi ni mazuri.
+        [fair] Imeunganishwa na { $name }. Mawimbi ni ya wastani.
+       *[other] Imeunganishwa na { $name }. Mawimbi ni hafifu.
     }
 
 # Headline of the page when connected by cable only.
@@ -115,7 +115,7 @@ settings-network-top-none = Haijaunganishwa. Chagua mtandao hapa chini.
 settings-network-top-looking = Inatafuta mitandao…
 
 # Headline of the page when NetworkManager is not running.
-settings-network-top-gone = Mitandao haiwezi kutazamwa: NetworkManager haiendeshwi.
+settings-network-top-gone = Trindle haiwezi kuonyesha mitandao kwa sababu NetworkManager haiendeshwi.
 
 # The word for the system bus in "The system bus is not available".
 settings-network-the-bus = Basi ya mfumo
@@ -127,7 +127,7 @@ settings-network-title = Mtandao
 settings-network-keywords = wifi wi-fi pasiwaya intaneti ethernet kebo nenosiri unganisha firewall kushiriki printa folda wireless internet wired password connect sharing share printer folder
 
 # Help text at the top of the page.
-settings-network-help = Washa au zima Wi-Fi, jiunge na mtandao, sahau ule usiouhitaji tena, au ruhusu kompyuta nyingine ziunganishwe.
+settings-network-help = Washa au zima Wi-Fi, jiunge na mtandao, sahau mtandao usioutaka tena, au ruhusu kompyuta nyingine ziunganishwe.
 
 # Small line under the Use Wi-Fi switch when joined to a network; the level is strong, good, fair or weak.
 settings-network-signal-from =
@@ -139,7 +139,7 @@ settings-network-signal-from =
     }
 
 # Small line under the Use Wi-Fi switch when the Wi-Fi chip needs a newer Linux.
-settings-network-chip = Chipu yake inahitaji Linux mpya zaidi.
+settings-network-chip = Wi-Fi inahitaji Linux mpya zaidi.
 
 # Small line under the Use Wi-Fi line when the computer has no working Wi-Fi.
 settings-network-no-wifi = Kompyuta hii haina Wi-Fi inayofanya kazi.
@@ -148,7 +148,7 @@ settings-network-no-wifi = Kompyuta hii haina Wi-Fi inayofanya kazi.
 settings-network-wifi-off = Imezimwa. Iwashe ili ujiunge na mtandao.
 
 # Small line under the Use Wi-Fi switch when Wi-Fi is on and no network is joined.
-settings-network-wifi-idle = Imewashwa, na haijajiunga na mtandao.
+settings-network-wifi-idle = Imewashwa, lakini haijajiunga na mtandao.
 
 # Heading of the line with the Wi-Fi switch, and the name of the switch.
 settings-network-use-wifi = Tumia Wi-Fi
@@ -160,14 +160,11 @@ settings-network-wifi-card = Wi-Fi
 settings-network-wifi-cable-card = Wi-Fi na kebo
 
 # Help text (i button) of the Wi-Fi card.
-settings-network-wifi-about = Wi-Fi huunganisha kompyuta hii na mtandao bila kebo. Ikizimwa, huacha kutafuta mitandao na kuokoa betri kidogo. Mtandao usiotangaza jina lake haujitokezi kwenye orodha ya mitandao iliyo karibu: jiunge nao hapa kwa kuandika jina lake kama lilivyo, pamoja na herufi kubwa. Chipu ya Wi-Fi ya kompyuta hii ikiwa ni ile ambayo bado hakuna dereva wa Linux yake aliyeikubali, inahitaji Linux mpya zaidi kuliko ile ambayo Trindle inaendesha. Kebo ya mtandao ina mstari wake, wenye kitufe cha kuunganisha au kukata.
+settings-network-wifi-about = Wi-Fi huunganisha kompyuta hii na mtandao bila kebo. Ukiizima, huacha kutafuta mitandao na kuokoa betri kidogo. Mtandao unaoficha jina lake haujitokezi kamwe kwenye orodha ya mitandao iliyo karibu. Ili kujiunga na mtandao kama huo, andika jina lake kama lilivyo, pamoja na herufi kubwa. Baadhi ya chipu za Wi-Fi zinahitaji dereva ambaye toleo la Linux linalotumiwa na Trindle halina bado. Kwa chipu hizo, unahitaji toleo jipya zaidi la Linux. Kebo ya mtandao ina mstari wake, wenye kitufe cha kuunganisha au kukata.
 
 # Heading of the line with the switch that lets other computers connect, and the name of the switch.
 # SAFETY: needs a human review before it ships
 settings-network-share-switch = Ruhusu kompyuta nyingine ziunganishwe
-
-# Small line under that switch.
-settings-network-share-switch-sub = Ili kushiriki folda na printa nyumbani.
 
 # Line in the Sharing card while the shared folders are read.
 settings-network-share-looking = Inatafuta folda zilizoshirikiwa…
@@ -179,35 +176,32 @@ settings-network-share-unreadable = Folda zilizoshirikiwa hazikuweza kusomwa
 settings-network-not-reachable = Bado hazipatikani
 
 # Small line under it.
-settings-network-not-reachable-sub = Wengine hawawezi kuzifungua hizi ikiwa imezimwa.
+settings-network-not-reachable-sub = Kompyuta nyingine haziwezi kuzifungua wakati kushiriki kumezimwa.
 
 # Line in the Sharing card when no folder is shared.
 settings-network-no-shared = Hakuna folda zilizoshirikiwa
-
-# Small line under it.
-settings-network-no-shared-sub = Bofya kulia moja kwenye Folda ili kuishiriki.
 
 # Heading of the Sharing card.
 settings-network-sharing = Kushiriki
 
 # Help text (i button) of the Sharing card.
 # SAFETY: needs a human review before it ships
-settings-network-sharing-about = Ruhusu kompyuta nyingine ziunganishwe ikiwa imezimwa, hakuna kitu kwenye mtandao kinachoweza kufikia kompyuta hii isipokuwa kama iliomba kwanza, hivyo hakuna aliye kwenye Wi-Fi ile ile anayeweza kujaribu bahati yake. Iwashe ili kushiriki folda au printa na kompyuta nyingine nyumbani. Ili kushiriki folda, ibofye kulia kwenye Folda na uchague Shiriki kwenye mtandao. Kila moja husema nani anaweza kufanya nini. Kwa nenosiri lako: wengine wanaweza kufungua faili, au kufungua na kubadilisha, kwa nenosiri lako la kushiriki. Yeyote nyumbani: yeyote kwenye mtandao anaweza kufungua faili, au kufungua na kubadilisha, bila nenosiri. Kompyuta nyingine nyumbani haziwezi kufungua yoyote kati yake swichi ikiwa imezimwa.
+settings-network-sharing-about = Wakati Ruhusu kompyuta nyingine ziunganishwe imezimwa, kompyuta nyingine kwenye mtandao zinaweza kufikia hii tu ikiwa kompyuta hii iliwasiliana nazo kwanza. Hii inazuia yeyote aliye kwenye Wi-Fi ile ile asijaribu kuingia. Iwashe ili kushiriki folda au printa na kompyuta nyingine nyumbani. Ili kushiriki folda, ibofye kulia kwenye Folders na uchague Shiriki kwenye mtandao. Kila folda iliyoshirikiwa huonyesha nani anaweza kufanya nini. Kwa nenosiri lako: wengine wanaweza kufungua faili, au kufungua na kubadilisha, ikiwa wana nenosiri lako la kushiriki. Yeyote nyumbani: yeyote kwenye mtandao anaweza kufungua faili, au kufungua na kubadilisha, bila nenosiri. Swichi ikiwa imezimwa, kompyuta nyingine nyumbani haziwezi kufungua yoyote kati yake.
 
 # Shown under a shared folder while sharing it is stopped.
 settings-network-stopping = Inasimamisha…
 
 # Shown beside the sharing switch while the password is asked for.
 # SAFETY: needs a human review before it ships
-settings-network-waiting = Inasubiri nenosiri...
+settings-network-waiting = Inasubiri nenosiri lako…
 
 # Shown beside the sharing switch after other computers were allowed in.
 # SAFETY: needs a human review before it ships
-settings-network-sharing-allowed = Kushiriki kunaruhusiwa
+settings-network-sharing-allowed = Kushiriki kumewashwa
 
 # Shown beside the sharing switch after other computers were kept out.
 # SAFETY: needs a human review before it ships
-settings-network-kept-out = Wamezuiwa
+settings-network-kept-out = Zimezuiwa
 
 # Said in red when Wi-Fi could not be switched on.
 settings-network-on-failed = Wi-Fi haikuweza kuwashwa.
@@ -225,20 +219,17 @@ settings-network-disconnect = Kata muunganisho
 settings-network-connect = Unganisha
 
 # Shown under a network or cable while it is being connected.
-settings-network-connecting = Inaunganisha...
+settings-network-connecting = Inaunganisha…
 
 # Line in the Networks in range card when there are none.
 settings-network-none-in-range = Hakuna mitandao iliyo karibu
-
-# Small line under it.
-settings-network-none-in-range-sub = Hutafutwa tena kila ukurasa huu unapofunguliwa.
 
 # Heading of the card that lists Wi-Fi networks in range.
 settings-network-in-range = Mitandao iliyo karibu
 
 # Help text (i button) of the Networks in range card.
 # SAFETY: needs a human review before it ships
-settings-network-in-range-about = Kila mtandao wa Wi-Fi ambao kompyuta hii inaweza kuusikia. Ukurasa unapofunguliwa, ule unaotumika uko kwanza, kisha ule uliohifadhiwa hapa, kisha mingine kwa nguvu ya mawimbi yake; mstari hubaki mahali pake ukurasa ukiwa wazi. Bonyeza mishale kujiunga na mmoja; mtandao uliolindwa huomba nenosiri lake mara ya kwanza. Pipa husahau mtandao uliohifadhiwa na nenosiri lake. Mtandao wazi haujasimbwa, kwa hiyo walio karibu wanaweza kuona kinachotumwa kupitia huo.
+settings-network-in-range-about = Kila mtandao wa Wi-Fi ambao kompyuta hii inaweza kuupata. Unapofungua ukurasa, mtandao unaoutumia huja kwanza, kisha mitandao iliyohifadhiwa, kisha mingine kwa nguvu ya mawimbi. Mpangilio haubadiliki ukurasa ukiwa wazi. Bonyeza mshale ili kujiunga na mtandao. Mtandao uliolindwa huomba nenosiri lake mara ya kwanza. Kitufe cha pipa husahau mtandao uliohifadhiwa na nenosiri lake. Mtandao wazi haujasimbwa, kwa hiyo walio karibu wanaweza kuona unachotuma kupitia huo.
 
 # Shown on the Networks in range card while Wi-Fi is off.
 settings-network-switch-on = Washa Wi-Fi ili kuona mitandao iliyo karibu.
@@ -274,17 +265,14 @@ settings-network-join = Jiunge
 settings-network-cancel = Ghairi
 
 # Shown under a network while it is being joined.
-settings-network-joining = Inajiunga...
+settings-network-joining = Inajiunga…
 
 # Said in red when a Wi-Fi password is too short.
 # SAFETY: needs a human review before it ships
-settings-network-password-short = Manenosiri ya Wi-Fi ni angalau herufi 8.
+settings-network-password-short = Manenosiri ya Wi-Fi yana angalau herufi 8.
 
 # Heading of the line for joining a hidden network, and tip of its button.
 settings-network-hidden = Jiunge na mtandao uliofichwa
-
-# Small line under it.
-settings-network-hidden-sub = Andika jina lake kama lilivyo, herufi kubwa pia.
 
 # Placeholder of the box where a hidden network's name is typed.
 settings-network-hidden-name = Jina la mtandao
@@ -294,13 +282,60 @@ settings-network-hidden-name = Jina la mtandao
 settings-network-hidden-password = Nenosiri, ikiwa lipo
 
 # Said in red when no name was typed for a hidden network.
-settings-network-name-needed = Jina la mtandao linahitajika.
+settings-network-name-needed = Andika jina la mtandao.
 
 # Shown under a network after it was joined.
 settings-network-joined = Imejiunga
 
 # Said in red when a join failed and the settings made for it could not be forgotten; the first sentence says why it failed.
-settings-network-kept-anyway = { $words } Hata hivyo ilihifadhiwa: isahau kwa pipa kabla ya kujiunga tena.
+settings-network-kept-anyway = { $words } Mtandao ulihifadhiwa hata hivyo. Usahau kwa kitufe cha pipa kabla ya kujiunga tena.
 
 # Said in red when a network would not disconnect.
-settings-network-disconnect-failed = Haikukubali kukatwa.
+settings-network-disconnect-failed = Haikuweza kukatwa.
+
+
+# Heading of the card that lists the ports opened by hand.
+settings-network-ports = Milango iliyofunguliwa
+
+# Help text (i button) of the Open ports card.
+settings-network-ports-about = Kila mlango umefungwa isipokuwa kompyuta hii iliwasiliana kwanza na ile nyingine. Programu inayosubiri wengine waunganishe, kama seva ya mchezo au zana ya kusawazisha, haiwezi kufikiwa hadi ufungue mlango wake hapa. Mlango uliofunguliwa huruhusu kompyuta yoyote kwenye mtandao wa ndani ule ule wa kompyuta hii, lakini kamwe si intaneti pana. Kwenye mtandao wa mkahawa, hoteli au ofisi, hiyo inajumuisha kila mtu aliye pale. Ili kufungua au kufunga mlango, unahitaji nenosiri la msimamizi.
+
+# Line in the Open ports card when no port is open.
+settings-network-ports-none = Hakuna milango iliyofunguliwa
+
+# Tooltip of the button that closes an open port. { $port } is like TCP 37666.
+settings-network-port-close = Funga { $port }
+
+# Heading of the line that opens a port.
+settings-network-port-add = Fungua mlango
+
+# Placeholder in the box where the port number is typed.
+settings-network-port-number = Nambari ya mlango
+
+# Tooltip of the choice of TCP, UDP or both.
+settings-network-port-protocol = Itifaki
+
+# Choice: the TCP protocol only. Usually left as TCP.
+settings-network-port-tcp = TCP
+
+# Choice: the UDP protocol only. Usually left as UDP.
+settings-network-port-udp = UDP
+
+# Choice: both TCP and UDP.
+settings-network-port-both = Zote mbili
+
+# Button that opens the typed port.
+settings-network-port-open = Fungua
+
+# Red words when what was typed is not a port number.
+settings-network-port-not-a-port = Andika nambari kutoka 1 hadi 65535.
+
+# Red words when the port is already open.
+settings-network-port-already = Tayari umefunguliwa.
+
+# Said under the line once the port is open.
+settings-network-port-opened = Umefunguliwa
+
+settings-network-username = Inahitaji jina la mtumiaji
+
+settings-network-username-unsupported = Mtandao huu unahitaji jina la mtumiaji pamoja na nenosiri. Trindle bado haiwezi kujiunga na mitandao ya aina hiyo.

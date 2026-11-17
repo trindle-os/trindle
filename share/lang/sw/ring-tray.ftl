@@ -14,15 +14,19 @@ ring-updates-none = Kila kitu kimesasishwa
 # Answer to a spoken question about updates when the updates button installs them all; "it" for one, "them" for more.
 ring-updates-spoken-all =
     { $n ->
-        [one] { $n } linasubiri: kitufe cha masasisho kando ya Programu kitalisakinisha
-       *[other] { $n } yanasubiri: kitufe cha masasisho kando ya Programu kitayasakinisha
+        [one] Sasisho { $n } linasubiri. Tumia kitufe cha masasisho kando ya Programu kulisakinisha.
+       *[other] Masasisho { $n } yanasubiri. Tumia kitufe cha masasisho kando ya Programu kuyasakinisha.
     }
 
 # Answer to a spoken question about updates when only plugin updates that need a look wait; the clause that follows says so.
-ring-updates-spoken-look = { $n } yanasubiri: { $look }
+ring-updates-spoken-look =
+    { $n ->
+        [one] Sasisho { $n } linasubiri. { $look }.
+       *[other] Masasisho { $n } yanasubiri. { $look }.
+    }
 
 # Answer to a spoken question about updates when some install and some need a look; the last clause says which need a look.
-ring-updates-spoken-mixed = { $n } yanasubiri: kitufe cha masasisho kando ya Programu kitasakinisha { $put }, na { $look }
+ring-updates-spoken-mixed = Masasisho { $n } yanasubiri. Tumia kitufe cha masasisho kando ya Programu kusakinisha { $put } kati yake. { $look }.
 
 # Name and tip of the updates button when only firmware updates wait: the button takes the person to them.
 ring-updates-see-firmware =
@@ -34,8 +38,8 @@ ring-updates-see-firmware =
 # Name and tip of the updates button when firmware updates wait among others: the button takes the person to them.
 ring-updates-see-among =
     { $n ->
-        [one] Tazama sasisho { $n }, firmware likiwemo
-       *[other] Tazama masasisho { $n }, firmware ikiwemo
+        [one] Tazama sasisho { $n }, ikiwemo firmware
+       *[other] Tazama masasisho { $n }, yakiwemo ya firmware
     }
 
 # Name and tip of the updates button when updates wait that it will install.
@@ -48,8 +52,8 @@ ring-updates-install =
 # Name and tip of the updates button when only plugin updates that ask for more than before wait.
 ring-updates-see-plugin =
     { $n ->
-        [one] Tazama sasisho la programu jalizi, linaloomba ruhusa zaidi ya awali
-       *[other] Tazama masasisho { $n } ya programu jalizi, yanayoomba ruhusa zaidi ya awali
+        [one] Tazama sasisho la programu jalizi, linaloomba ruhusa nyingi zaidi ya awali
+       *[other] Tazama masasisho { $n } ya programu jalizi, yanayoomba ruhusa nyingi zaidi ya awali
     }
 
 # Name and tip of the updates button when some updates install and some plugin updates need a look; the clause after the semicolon says which.
@@ -100,13 +104,13 @@ ring-tray-vpn = Imeunganishwa kupitia VPN
 ring-tray-wired = Kwa kebo
 
 # Name of the network button when connected by cable but the internet is not reachable.
-ring-tray-wired-limited = Kwa kebo, muunganisho mdogo
+ring-tray-wired-limited = Kwa kebo, lakini hakuna intaneti
 
 # Name of the network button on Wi-Fi: the network's name and its signal strength.
 ring-tray-wifi = { $name }, mawimbi { $strength }%
 
 # Name of the network button on Wi-Fi when the internet is not reachable.
-ring-tray-wifi-limited = { $name }, mawimbi { $strength }%, muunganisho mdogo
+ring-tray-wifi-limited = { $name }, mawimbi { $strength }%, ufikiaji mdogo
 
 # Name of the Bluetooth button when Bluetooth is off.
 ring-tray-bt-off = Bluetooth imezimwa
@@ -130,13 +134,12 @@ ring-tray-none = Hakuna aikoni za treya
 ring-tray-show = Onyesha kwenye pete
 
 # Line of a tray icon's menu: take the icon out of the ring's row.
-ring-tray-take-out = Toa kwenye pete
+ring-tray-take-out = Ondoa kwenye pete
 
 # Quiet words in a tray icon's menu in place of Show in the ring, when the row is full.
-ring-tray-full = Nne tayari ziko kwenye pete. Toa moja kwanza.
+ring-tray-full = Aikoni nne tayari ziko kwenye pete. Toa moja kwanza.
 
 
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = Ukaguzi umezimwa
-

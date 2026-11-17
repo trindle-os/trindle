@@ -8,12 +8,11 @@ use smithay::reexports::wayland_server::backend::DisconnectReason;
 use smithay::reexports::wayland_server::protocol::wl_surface::WlSurface;
 use smithay::reexports::wayland_server::Resource;
 
-use super::ended::still_running;
 use super::launch::{nonblocking, pipe, start_on};
 use super::{Shot, SHOT};
-use crate::state::{AnvilState, Backend, ClientState};
+use crate::state::{Compose, Backend, ClientState};
 
-impl<BackendData: Backend + 'static> AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> Compose<BackendData> {
 
     pub fn screenshot_asked_for(&mut self, command: &str) -> bool {
         if command.trim() != SHOT || !self.ring.by_hand {
@@ -35,7 +34,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
             Ok(child) => {
                 self.ring.last_shot += 1;
                 let number = self.ring.last_shot;
-                let pid = child.id();
+                let pidfd = crate::peer::pidfd_open(child.id());
                 let (read, _write) = pulse.unzip();
                 let pulse = read.and_then(nonblocking);
 
@@ -43,7 +42,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
                     let source = Generic::new(pipe, Interest::READ, Mode::Level);
                     self.handle.insert_source(source, move |_, _, data| Ok(data.ring.hear_shot(number))).ok()
                 });
-                self.ring.shots.push(Shot { number, pid, pulse, heard: None, hearing, client: handed, given_up: false });
+                self.ring.shots.push(Shot { number, pidfd, pulse, heard: None, hearing, client: handed, given_up: false });
 
                 crate::stopped::clear(crate::stopped::Stopped::Shot);
                 crate::session::let_go(child);
@@ -86,11 +85,9 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
         shot.given_up = true;
         shot.hearing = None;
         tracing::warn!("the screenshot tool holds the keyboard and has stopped answering: the keyboard is taken back, its connection closed, and the tool ended");
-        let (pid, client) = (shot.pid, shot.client.clone());
-        if still_running(pid) {
-            // SAFETY: kill only sends a signal. The tool was handed to
-
-            unsafe { libc::kill(pid as libc::pid_t, libc::SIGKILL) };
+        let client = shot.client.clone();
+        if let Some(pidfd) = &shot.pidfd {
+            crate::peer::signal(pidfd, libc::SIGKILL);
         }
         if let Some(id) = client {
             self.display_handle.backend_handle().kill_client(id, DisconnectReason::ConnectionClosed);

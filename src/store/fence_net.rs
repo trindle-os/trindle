@@ -28,7 +28,17 @@ pub struct Policy {
     pub hosts: Vec<String>,
     pub ports: Vec<u16>,
 
+    #[cfg(test)]
     pub allow_local: bool,
+}
+
+impl Policy {
+    fn local_ok(&self) -> bool {
+        #[cfg(test)]
+        return self.allow_local;
+        #[cfg(not(test))]
+        false
+    }
 }
 
 pub fn host_pattern_ok(h: &str) -> bool {
@@ -89,13 +99,16 @@ fn one(mut conn: UnixStream, policy: &Policy, resolve: &Resolver) -> std::io::Re
     reader.by_ref().take(HEAD_MAX as u64).read_line(&mut first)?;
 
     let mut seen = first.len();
-    loop {
+    let mut ended = false;
+    while seen <= HEAD_MAX && !ended {
         let mut l = String::new();
         let n = reader.by_ref().take(HEAD_MAX as u64).read_line(&mut l)?;
         seen += n;
-        if n == 0 || l == "\r\n" || l == "\n" || seen > HEAD_MAX {
-            break;
-        }
+        ended = n == 0 || l == "\r\n" || l == "\n";
+    }
+    if !ended {
+        refuse(&mut conn, "431 Request Header Fields Too Large", "That request head is too long.");
+        return Ok(());
     }
     let mut words = first.split_whitespace();
     let (Some("CONNECT"), Some(target), Some(version)) = (words.next(), words.next(), words.next()) else {
@@ -110,7 +123,7 @@ fn one(mut conn: UnixStream, policy: &Policy, resolve: &Resolver) -> std::io::Re
         refuse(&mut conn, "403 Forbidden", &format!("{host} is not on the list of hosts AI programs may reach. Add it in Settings, AI programs."));
         return Ok(());
     }
-    let addrs: Vec<SocketAddr> = resolve(host, port).into_iter().filter(|a| policy.allow_local || !is_local(&a.ip())).collect();
+    let addrs: Vec<SocketAddr> = resolve(host, port).into_iter().filter(|a| policy.local_ok() || !is_local(&a.ip())).collect();
     let Some(out) = addrs.iter().find_map(|a| TcpStream::connect_timeout(a, Duration::from_secs(10)).ok()) else {
         refuse(&mut conn, "502 Bad Gateway", &format!("{host} could not be reached."));
         return Ok(());
@@ -190,6 +203,23 @@ mod tests {
         for a in ["8.8.8.8", "1.1.1.1", "2606:4700::1111"] {
             assert!(!is_local(&a.parse().unwrap()), "{a}");
         }
+    }
+
+    #[test]
+    fn a_head_that_is_too_long_is_refused() {
+        let (mut ours, theirs) = UnixStream::pair().unwrap();
+        let policy = Policy { hosts: vec!["listed.example.com".into()], ports: vec![443], allow_local: false };
+        let resolver: Resolver = Arc::new(|_, p| vec![SocketAddr::from(([127, 0, 0, 1], p))]);
+        let writer = std::thread::spawn(move || {
+            let head = format!("CONNECT listed.example.com:443 HTTP/1.1\r\n{}\r\n", "X-Pad: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\r\n".repeat(400));
+            let _ = ours.write_all(head.as_bytes());
+            let mut got = String::new();
+            let _ = ours.read_to_string(&mut got);
+            got
+        });
+        one(theirs, &policy, &resolver).unwrap();
+        let got = writer.join().unwrap();
+        assert!(got.starts_with("HTTP/1.1 431"), "{got}");
     }
 
     fn ask(socket: &Path, request: &str) -> String {

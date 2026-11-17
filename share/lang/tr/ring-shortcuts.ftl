@@ -90,7 +90,7 @@ ring-shortcuts-console = Metin konsoluna geç
 ring-shortcuts-console-keys = Ctrl+Alt+F1 ile F12 arası
 
 # Words for the keys the screen reader takes while it is on.
-ring-shortcuts-reader-keys = Ekran okuyucunun kendi tuşları, açıkken
+ring-shortcuts-reader-keys = Ekran okuyucu açıkken kullanılan tuşlar
 
 # The keys the screen reader takes while it is on.
 ring-shortcuts-reader-keys-keys = Caps Lock, Insert

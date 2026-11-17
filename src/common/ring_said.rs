@@ -4,6 +4,7 @@
 //! start-up leave one word here, and the next ring to open says it in red
 //! under itself.
 
+use crate::toolkit::t;
 use std::path::PathBuf;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -35,11 +36,11 @@ impl Said {
 
     pub fn words(self) -> &'static str {
         match self {
-            Said::HeldBack => "The ring stopped several times in a row and was held back for a while. It is running again now.",
-            Said::NotStarted => "The ring could not be started for a while. It is running again now.",
-            Said::NotEnded => "The ring stopped answering and could not be ended for a while. It is running again now.",
-            Said::NotDone => "The computer was asked to suspend, restart or shut down and did not do it.",
-            Said::ByName => "The desktop could not start this ring itself, so it cannot open over a full-screen window and its notifications are not kept on top. Logging out and in again may put it right.",
+            Said::HeldBack => t!("common-ring-held-back"),
+            Said::NotStarted => t!("common-ring-not-started"),
+            Said::NotEnded => t!("common-ring-not-ended"),
+            Said::NotDone => t!("common-ring-not-done"),
+            Said::ByName => t!("common-ring-by-name"),
         }
     }
 

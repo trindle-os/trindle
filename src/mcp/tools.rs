@@ -3,6 +3,7 @@
 //! asked about exactly what will happen, and only then carried out.
 
 use std::fmt::Write as _;
+use std::io::Write as _;
 use std::path::{Path, PathBuf};
 use std::process::Command;
 use std::rc::Rc;
@@ -11,24 +12,26 @@ use serde_json::{json, Value};
 use wayland_client::Proxy;
 
 use crate::activity::procs::Reader;
-use crate::common::files::{data_home, default_setting, home, read_text, set_setting, setting, trindle_conf};
+use crate::common::files::{data_home, home, read_text, set_setting, setting, state_home, trindle_conf};
 use crate::common::{access, audio, pointer, run, style};
 use crate::ring::windows::{Window, Windows};
 
 use crate::toolkit::t;
+use super::mend;
 use super::outside::quoted;
+use crate::report::scrub::unescape;
 
 fn listed(words: &[String]) -> String {
     words.iter().map(|w| quoted(w)).collect::<Vec<_>>().join(", ")
 }
 
 fn settable(key: &str) -> bool {
-    !default_setting(key).is_empty()
+    KEYS.contains(&key)
 }
 
 const KEYS: &[&str] = &[
-    "clock_format", "wallpaper_color", "dim_after", "lock_after", "lock_on_suspend", "lock", "blank_after",
-    "suspend_after", "dim_after_battery", "screensaver_after", "lid_close", "lid_close_battery",
+    "clock_format", "wallpaper_color", "dim_after", "blank_after",
+    "suspend_after", "dim_after_battery", "screensaver_after",
     "screensaver_after_battery", "blank_after_battery", "suspend_after_battery", "wallpaper_every",
     "wallpaper_order", "wallpaper_fit", "icon_source", pointer::SPEED, pointer::SCROLL, pointer::MOUSE_NATURAL,
     pointer::LEFT_HANDED, pointer::TAP, pointer::TOUCHPAD_NATURAL, pointer::QUIET_TYPING,
@@ -45,8 +48,8 @@ pub struct Plan {
 
 enum Action {
     Open(String),
-    Focus(u32),
-    Close(u32),
+    Focus(Target),
+    Close(Target),
     Set(String, String),
     Theme(String, Option<String>),
     Install(String),
@@ -55,6 +58,51 @@ enum Action {
     Network(String),
     Pair(String),
     Undo(PathBuf),
+    Restart(String),
+    AppSetting(AppLine),
+    ClearCache(String),
+}
+
+struct AppLine {
+    id: String,
+    file: String,
+    section: String,
+    key: String,
+    value: String,
+}
+
+const APP: &str = "app";
+
+const SINCE: &str = "cache-since";
+
+const TRINDLE: &str = "That is part of Trindle, which an assistant never changes. Pass the fault on as a bug report \
+instead; list_crashes gives what is known.";
+
+impl Plan {
+
+    fn keeps(&self, home: &Path, part: &Path) -> std::io::Result<()> {
+        let id = match &self.action {
+            Action::AppSetting(l) => &l.id,
+            Action::ClearCache(id) => id,
+            _ => return Ok(()),
+        };
+        let app = part.join(APP);
+        std::fs::create_dir(&app)?;
+        write_synced(&app.join("id"), id)?;
+        if let Action::AppSetting(l) = &self.action {
+            let (text, mode) = mend::read(home, &l.id, &l.file).map_err(std::io::Error::other)?;
+            write_synced(&app.join("file"), &l.file)?;
+            write_synced(&app.join("mode"), &mode.to_string())?;
+            write_synced(&app.join("settings"), &text)?;
+        }
+        Ok(())
+    }
+}
+
+struct Target {
+    id: u32,
+    title: String,
+    app_id: String,
 }
 
 #[derive(Default)]
@@ -92,6 +140,7 @@ impl Desk {
             "read_logs" => logs(args)?,
             "list_crashes" => crashes(),
             "list_devices" => devices(),
+            "list_app_settings" => mend::names(&home(), &mendable(args["app"].as_str().unwrap_or("").trim())?)?,
             _ => return Err("No such reading tool.".into()),
         })
     }
@@ -109,36 +158,42 @@ impl Desk {
             "connect_network" => plan_network(text("network"))?,
             "pair_bluetooth" => plan_pair(text("address").to_uppercase())?,
             "undo_change" => plan_undo(text("snapshot"))?,
+            "restart_app" => plan_restart(&text("app"))?,
+            "set_app_setting" => plan_app_setting(AppLine {
+                id: text("app"), file: text("file"), section: text("section"), key: text("key"), value: text("value"),
+            })?,
+            "clear_app_cache" => plan_cache(&text("app"))?,
             _ => return Err("No such changing tool.".into()),
         };
         Ok(Plan { question, action })
     }
 
     fn plan_window(&mut self, tool: &str, args: &Value) -> Result<(String, Action), String> {
-        let id = args["window"].as_u64().ok_or("window must be a number from list_windows.")? as u32;
+        let id = args["window"].as_u64().and_then(|n| u32::try_from(n).ok()).ok_or("window must be a number from list_windows.")?;
         let win = self.window(id)?;
-        let name = if win.title.is_empty() { win.app_id.clone() } else { win.title.clone() };
+        let name = quoted(if win.title.is_empty() { &win.app_id } else { &win.title });
+        let target = Target { id, title: win.title, app_id: win.app_id };
         Ok(if tool == "focus_window" {
-            (t!("mcp-ask-focus", name = quoted(&name)), Action::Focus(id))
+            (t!("mcp-ask-focus", name = name), Action::Focus(target))
         } else {
-            (format!("close {}", quoted(&name)), Action::Close(id))
+            (t!("mcp-ask-close", name = name), Action::Close(target))
         })
     }
 
-    pub fn change(&mut self, plan: Plan) -> Result<String, String> {
+    pub fn change(&mut self, plan: Plan, place: &Path) -> Result<String, String> {
         match plan.action {
             Action::Open(id) => {
                 let app = find_app(&id).ok_or("The app has gone.")?;
                 crate::common::apps::start_file(&app.path)?;
                 Ok(format!("Opened {}.", quoted(&app.name)))
             }
-            Action::Focus(id) => {
-                let win = self.window(id)?;
+            Action::Focus(target) => {
+                let win = self.same_window(&target)?;
                 self.windows.clone().flatten().ok_or("No window list.")?.activate(&win);
                 Ok("Brought to the front.".into())
             }
-            Action::Close(id) => {
-                let win = self.window(id)?;
+            Action::Close(target) => {
+                let win = self.same_window(&target)?;
                 self.windows.clone().flatten().ok_or("No window list.")?.close(&win);
                 Ok("Asked it to close.".into())
             }
@@ -169,6 +224,19 @@ impl Desk {
                 Ok(format!("Paired and connected with {address}."))
             }
             Action::Undo(place) => undo(&place),
+            Action::Restart(id) => {
+                stop(&id)?;
+                if !run::spawn(&["flatpak", "run", &id]) {
+                    return Err(format!("{id} was closed and could not be started again."));
+                }
+                Ok(format!("{id} was closed and started again."))
+            }
+            action => {
+                if let Action::AppSetting(AppLine { id, .. }) | Action::ClearCache(id) = &action {
+                    stop(id)?;
+                }
+                mend_now(action, &home(), place)
+            }
         }
     }
 
@@ -187,6 +255,15 @@ impl Desk {
         self.windows()?.into_iter().find(|w| w.handle.id().protocol_id() == id).ok_or(format!("No window {id}; list_windows gives the ids."))
     }
 
+    fn same_window(&mut self, target: &Target) -> Result<Window, String> {
+        let win = self.window(target.id)?;
+        if win.title == target.title && win.app_id == target.app_id {
+            Ok(win)
+        } else {
+            Err("That window has gone or changed since the question, so nothing was done.".into())
+        }
+    }
+
     fn processes(&mut self) -> Value {
         let look = self.reader.look(&crate::activity::names(&crate::common::apps::entries()));
         let mut groups: Vec<_> = look.groups.iter().filter(|g| g.kb > 0).collect();
@@ -201,7 +278,7 @@ impl Desk {
 
 fn plan_open(id: &str) -> Result<(String, Action), String> {
     let app = find_app(id).ok_or(format!("No app called {} is installed.", quoted(id)))?;
-    Ok((format!("open {}", quoted(&app.name)), Action::Open(app.id)))
+    Ok((t!("mcp-ask-open", name = quoted(&app.name)), Action::Open(app.id)))
 }
 
 fn plan_setting(key: String, value: String) -> Result<(String, Action), String> {
@@ -250,7 +327,7 @@ fn plan_permission(app: &str, what: &str, args: &Value) -> Result<(String, Actio
     let allow = args["allow"].as_bool().ok_or("allow must be true or false.")?;
     let p = access::FLATPAK.iter().find(|p| p.key == what)
         .ok_or("permission must be network, home, devices, sound or bluetooth.")?;
-    let q = if allow { format!("let {id} use {what}") } else { format!("stop {id} using {what}") };
+    let q = if allow { t!("mcp-ask-allow", id = id.as_str(), what = what) } else { t!("mcp-ask-deny", id = id.as_str(), what = what) };
     Ok((q, Action::Permission(id, p.key, allow)))
 }
 
@@ -269,17 +346,129 @@ fn plan_pair(address: String) -> Result<(String, Action), String> {
     if !bluetooth_address(&address) {
         return Err("address must look like 00:11:22:33:44:55.".into());
     }
-    Ok((t!("mcp-ask-pair", address = address.as_str()), Action::Pair(address)))
+    let question = match bluetooth_name(&address) {
+        Some(name) => t!("mcp-ask-pair-named", name = quoted(&name), address = address.as_str()),
+        None => t!("mcp-ask-pair", address = address.as_str()),
+    };
+    Ok((question, Action::Pair(address)))
 }
 
 fn plan_undo(snapshot: String) -> Result<(String, Action), String> {
-    let place = match snapshot {
-        n if n.is_empty() => snapshots().pop().ok_or("No snapshots have been taken yet.")?,
-        n if n.chars().all(|c| c.is_ascii_digit()) && snapshots_dir().join(&n).is_dir() => snapshots_dir().join(n),
-        n => return Err(format!("No snapshot called {}.", quoted(&n))),
+    let place = pick(&snapshots_dir(), snapshot)?;
+    let note = quoted(read_text(place.join("note")).trim());
+    let app = read_text(place.join(APP).join("id")).trim().to_string();
+    let question = if app.is_empty() {
+        t!("mcp-ask-undo", note = note)
+    } else {
+        t!("mcp-ask-undo-app", id = kept_id(&app)?.as_str(), note = note)
     };
-    let note = read_text(place.join("note")).trim().to_string();
-    Ok((t!("mcp-ask-undo", note = quoted(&note)), Action::Undo(place)))
+    Ok((question, Action::Undo(place)))
+}
+
+fn mendable(app: &str) -> Result<String, String> {
+    let id = flatpak_id(app)?;
+    if mend::trindle_own(&id) {
+        return Err(TRINDLE.into());
+    }
+    if !user_apps().contains(&id) {
+        return Err(format!("{} is not an app this person installed from Flathub, so it is left alone.", quoted(&id)));
+    }
+    Ok(id)
+}
+
+fn kept_id(id: &str) -> Result<String, String> {
+    let id = flatpak_id(id)?;
+    if mend::trindle_own(&id) { Err(TRINDLE.into()) } else { Ok(id) }
+}
+
+fn plan_restart(app: &str) -> Result<(String, Action), String> {
+    let id = mendable(app)?;
+    Ok((t!("mcp-ask-restart", id = id.as_str()), Action::Restart(id)))
+}
+
+fn plan_app_setting(mut line: AppLine) -> Result<(String, Action), String> {
+    line.id = mendable(&line.id)?;
+    mend::check_line(&line.section, &line.key, &line.value)?;
+    let (text, _) = mend::read(&home(), &line.id, &line.file)?;
+    let (id, file, key, to) = (line.id.as_str(), quoted(&line.file), quoted(&line.key), quoted(&line.value));
+    let question = match mend::value_of(&text, &line.section, &line.key) {
+        Some(from) => t!("mcp-ask-app-setting", id = id, key = key, file = file, from = quoted(&from), to = to),
+        None => t!("mcp-ask-app-setting-new", id = id, key = key, file = file, to = to),
+    };
+    Ok((question, Action::AppSetting(line)))
+}
+
+fn plan_cache(app: &str) -> Result<(String, Action), String> {
+    let id = mendable(app)?;
+    if !mend::has_cache(&home(), &id)? {
+        return Err(format!("{id} has no cache to clear."));
+    }
+    Ok((t!("mcp-ask-cache", id = id.as_str()), Action::ClearCache(id)))
+}
+
+fn stop(id: &str) -> Result<(), String> {
+    use crate::common::removal::flatpak_running;
+    if !flatpak_running(id) {
+        return Ok(());
+    }
+    quiet(&["flatpak", "kill", id])?;
+    for _ in 0..20 {
+        if !flatpak_running(id) {
+            return Ok(());
+        }
+        std::thread::sleep(std::time::Duration::from_millis(250));
+    }
+    Err(format!("{id} is still running, so nothing was changed."))
+}
+
+fn mend_now(action: Action, home: &Path, place: &Path) -> Result<String, String> {
+    match action {
+        Action::AppSetting(l) => {
+            let (text, mode) = mend::read(home, &l.id, &l.file)?;
+            let new = mend::edited(&text, &l.section, &l.key, &l.value);
+            if new.len() as u64 > mend::MOST_FILE {
+                return Err("The file would be too big, so it is left alone.".into());
+            }
+            mend::write(home, &l.id, &l.file, &new, mode)?;
+            Ok(format!("{} in {} is now {} for {}.", quoted(&l.key), quoted(&l.file), quoted(&l.value), l.id))
+        }
+        Action::ClearCache(id) => {
+            mend::move_cache(home, &id, &place.join(APP), mend::CACHE)?;
+            Ok(format!("The cache of {id} is cleared. It is kept with the snapshot, so undo_change can put it back."))
+        }
+        _ => Err("No such repair.".into()),
+    }
+}
+
+fn put_app_back(home: &Path, place: &Path, stop: impl Fn(&str) -> Result<(), String>) -> Result<String, String> {
+    let app = place.join(APP);
+    let id = read_text(app.join("id")).trim().to_string();
+    if id.is_empty() {
+        return Ok(String::new());
+    }
+    let id = kept_id(&id)?;
+    stop(&id)?;
+    let mut said = String::new();
+    if app.join("settings").is_file() {
+        let file = read_text(app.join("file")).trim().to_string();
+        let text = std::fs::read_to_string(app.join("settings")).map_err(|e| e.to_string())?;
+        let mode = read_text(app.join("mode")).trim().parse::<u32>().unwrap_or(0o600);
+        mend::write(home, &id, &file, &text, mode)?;
+        let _ = write!(said, " {} of {id} is back as it was.", quoted(&file));
+    }
+    if std::fs::symlink_metadata(app.join(mend::CACHE)).is_ok_and(|m| m.is_dir()) {
+        mend::put_cache_back(home, &id, &app, mend::CACHE, SINCE)?;
+        let _ = write!(said, " The cache of {id} is back.");
+    }
+    Ok(said)
+}
+
+fn pick(dir: &Path, name: String) -> Result<PathBuf, String> {
+    match name {
+        n if n.is_empty() => snapshots(dir).pop().ok_or_else(|| "No snapshots have been taken yet.".into()),
+        n if numbered(&n) && whole(&dir.join(&n)) => Ok(dir.join(n)),
+        n => Err(format!("No snapshot called {}.", quoted(&n))),
+    }
 }
 
 fn theme_now(look: &str, accent: Option<&str>) -> Result<String, String> {
@@ -316,7 +505,26 @@ pub fn check_setting(key: &str, value: &str) -> Result<(), String> {
     if value.is_empty() || value.len() > NAME_MOST || value.chars().any(char::is_control) {
         return Err("The value must be one short line of text.".into());
     }
+    if !value_fits(key, value) {
+        return Err(format!("{} is not a value {key} takes.", quoted(value)));
+    }
     Ok(())
+}
+
+fn value_fits(key: &str, value: &str) -> bool {
+    let whole = |most: u32| value.parse::<u32>().is_ok_and(|n| n <= most);
+    let within = |r: &pointer::Range| value.parse::<f64>().is_ok_and(|n| n.is_finite() && (r.least..=r.most).contains(&n));
+    match key {
+        "wallpaper_every" => whole(7 * 24 * 3600),
+        "wallpaper_order" => ["shuffle", "name"].contains(&value),
+        "wallpaper_fit" => ["fill", "fit", "center", "stretch", "tile"].contains(&value),
+        "wallpaper_color" => hex(value),
+        pointer::SPEED => within(&pointer::SPEEDS),
+        pointer::SCROLL => within(&pointer::SCROLLS),
+        pointer::MOUSE_NATURAL | pointer::LEFT_HANDED | pointer::TAP | pointer::TOUCHPAD_NATURAL | pointer::QUIET_TYPING => ["yes", "no"].contains(&value),
+        k if k.contains("_after") => whole(24 * 60),
+        _ => true,
+    }
 }
 
 fn hex(s: &str) -> bool {
@@ -334,6 +542,17 @@ pub fn flatpak_id(id: &str) -> Result<String, String> {
     if good { Ok(id.to_string()) } else { Err(format!("{} is not a Flathub app id, which looks like org.gnome.Calculator.", quoted(id))) }
 }
 
+fn bluetooth_name(address: &str) -> Option<String> {
+    name_in(&run::text(&["bluetoothctl", "devices"]), address)
+}
+
+fn name_in(devices: &str, address: &str) -> Option<String> {
+    devices.lines().find_map(|l| {
+        let mut f = l.splitn(3, ' ');
+        (f.next() == Some("Device") && f.next().is_some_and(|a| a.eq_ignore_ascii_case(address))).then(|| f.next().map(str::to_string)).flatten()
+    }).filter(|n| !n.trim().is_empty())
+}
+
 pub fn bluetooth_address(a: &str) -> bool {
     a.len() == 17 && a.split(':').count() == 6 && a.split(':').all(|p| p.len() == 2 && p.chars().all(|c| c.is_ascii_hexdigit()))
 }
@@ -349,12 +568,12 @@ fn user_apps() -> Vec<String> {
 
 fn known_network(name: &str) -> bool {
     run::text(&["nmcli", "-t", "-f", "NAME,TYPE", "connection", "show"]).lines()
-        .any(|l| l.rsplit_once(':').is_some_and(|(n, t)| n.replace("\\:", ":") == name && t.contains("wireless")))
+        .any(|l| l.rsplit_once(':').is_some_and(|(n, t)| unescape(n) == name && t.contains("wireless")))
 }
 
 fn open_network(name: &str) -> bool {
     run::text(&["nmcli", "-t", "-f", "SSID,SECURITY", "device", "wifi", "list"]).lines()
-        .any(|l| l.rsplit_once(':').is_some_and(|(n, s)| n.replace("\\:", ":") == name && (s.is_empty() || s == "--")))
+        .any(|l| l.rsplit_once(':').is_some_and(|(n, s)| unescape(n) == name && (s.is_empty() || s == "--")))
 }
 
 fn quiet(argv: &[&str]) -> Result<(), String> {
@@ -438,77 +657,154 @@ fn devices() -> Value {
 }
 
 fn snapshots_dir() -> PathBuf {
-    std::env::var_os("XDG_STATE_HOME").map(PathBuf::from).filter(|p| p.is_absolute())
-        .unwrap_or_else(|| home().join(".local/state"))
-        .join("trindle/assistant")
+    state_home().join("trindle/assistant")
 }
 
 fn overrides_dir() -> PathBuf {
     data_home().join("flatpak/overrides")
 }
 
-fn snapshots() -> Vec<PathBuf> {
-    let Ok(dir) = std::fs::read_dir(snapshots_dir()) else { return Vec::new() };
-    let mut all: Vec<PathBuf> = dir.flatten().map(|e| e.path())
-        .filter(|p| p.is_dir() && p.file_name().and_then(|n| n.to_str()).is_some_and(|n| n.chars().all(|c| c.is_ascii_digit())))
+const WHOLE: &str = "whole";
+
+const STALE: std::time::Duration = std::time::Duration::from_secs(3600);
+
+fn numbered(name: &str) -> bool {
+    !name.is_empty() && name.chars().all(|c| c.is_ascii_digit())
+}
+
+fn whole(place: &Path) -> bool {
+    place.join(WHOLE).is_file()
+}
+
+fn snapshots(dir: &Path) -> Vec<PathBuf> {
+    let Ok(read) = std::fs::read_dir(dir) else { return Vec::new() };
+    let mut all: Vec<PathBuf> = read.flatten().map(|e| e.path())
+        .filter(|p| p.file_name().and_then(|n| n.to_str()).is_some_and(numbered) && p.is_dir() && whole(p))
         .collect();
     all.sort();
     all
 }
 
-pub fn snapshot(note: &str) -> Result<String, String> {
+pub fn snapshot(plan: &Plan) -> Result<(String, PathBuf), String> {
     let now = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map(|d| d.as_millis()).unwrap_or(0);
     let name = now.to_string();
-    let place = snapshots_dir().join(&name);
-    let fail = |e: std::io::Error| format!("No snapshot could be taken, so nothing was changed: {e}");
-    std::fs::create_dir_all(place.join("overrides")).map_err(fail)?;
-    if trindle_conf().is_file() {
-        std::fs::copy(trindle_conf(), place.join("trindle.conf")).map_err(fail)?;
-    }
-    copy_files(&overrides_dir(), &place.join("overrides")).map_err(fail)?;
-    std::fs::write(place.join("apps"), user_apps().join("\n")).map_err(fail)?;
-    std::fs::write(place.join("note"), note).map_err(fail)?;
-    let all = snapshots();
+    let dir = snapshots_dir();
+    let extra = |part: &Path| plan.keeps(&home(), part);
+    let place = keep(&dir, &name, &trindle_conf(), &overrides_dir(), &user_apps(), &plan.question, &extra)
+        .map_err(|e| format!("No snapshot could be taken, so nothing was changed: {e}"))?;
+    tidy(&dir, STALE);
+    Ok((name, place))
+}
+
+fn tidy(dir: &Path, stale: std::time::Duration) {
+    let all = snapshots(dir);
     for old in all.iter().take(all.len().saturating_sub(KEEP)) {
-        let _ = std::fs::remove_dir_all(old);
+
+        if std::fs::remove_file(old.join(WHOLE)).is_ok() {
+            let _ = std::fs::remove_dir_all(old);
+        }
     }
-    Ok(name)
+    let Ok(read) = std::fs::read_dir(dir) else { return };
+    for e in read.flatten() {
+        let p = e.path();
+        let old = e.metadata().and_then(|m| m.modified()).ok().and_then(|t| t.elapsed().ok()).is_some_and(|age| age >= stale);
+        let kept = e.file_name().to_str().is_some_and(numbered) && whole(&p);
+        if old && !kept {
+            let _ = std::fs::remove_dir_all(&p);
+        }
+    }
+}
+
+fn keep(dir: &Path, name: &str, conf: &Path, overrides: &Path, apps: &[String], note: &str,
+        extra: &dyn Fn(&Path) -> std::io::Result<()>) -> std::io::Result<PathBuf> {
+    let part = dir.join(format!("{name}.part"));
+    std::fs::create_dir_all(dir)?;
+    std::fs::create_dir(&part)?;
+    let place = dir.join(name);
+    let built = (|| {
+        std::fs::create_dir(part.join("overrides"))?;
+        match std::fs::metadata(conf) {
+            Err(e) if e.kind() == std::io::ErrorKind::NotFound => {}
+            m => if m?.is_file() {
+                copy_synced(conf, &part.join("trindle.conf"))?;
+            },
+        }
+        copy_files(overrides, &part.join("overrides"))?;
+        write_synced(&part.join("apps"), &apps.join("\n"))?;
+        write_synced(&part.join("note"), note)?;
+        extra(&part)?;
+        write_synced(&part.join(WHOLE), "")?;
+        std::fs::rename(&part, &place)
+    })();
+    if built.is_err() {
+        let _ = std::fs::remove_dir_all(&part);
+    }
+    built.map(|()| place)
+}
+
+fn put_back(place: &Path, conf: &Path, overrides: &Path) -> Result<(), String> {
+    let s = |e: std::io::Error| e.to_string();
+    let kept = place.join("trindle.conf");
+    if kept.is_file() {
+
+        let was = std::fs::read(&kept).map_err(s)?;
+        crate::common::files::write_whole(conf, &was).map_err(s)?;
+    } else {
+        absent(std::fs::remove_file(conf)).map_err(s)?;
+    }
+
+    for e in listing(overrides).map_err(s)?.into_iter().flatten() {
+        let e = e.map_err(s)?;
+        if !place.join("overrides").join(e.file_name()).try_exists().map_err(s)? {
+            absent(std::fs::remove_file(e.path())).map_err(s)?;
+        }
+    }
+    std::fs::create_dir_all(overrides).map_err(s)?;
+    copy_files(&place.join("overrides"), overrides).map_err(s)
+}
+
+fn absent(r: std::io::Result<()>) -> std::io::Result<()> {
+    match r {
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(()),
+        r => r,
+    }
+}
+
+fn listing(dir: &Path) -> std::io::Result<Option<std::fs::ReadDir>> {
+    match std::fs::read_dir(dir) {
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(None),
+        r => r.map(Some),
+    }
 }
 
 fn copy_files(from: &Path, to: &Path) -> std::io::Result<()> {
-    let Ok(dir) = std::fs::read_dir(from) else { return Ok(()) };
-    for e in dir.flatten() {
-        if e.file_type().is_ok_and(|t| t.is_file()) {
-            std::fs::copy(e.path(), to.join(e.file_name()))?;
+    for e in listing(from)?.into_iter().flatten() {
+        let e = e?;
+        if e.file_type()?.is_file() {
+            copy_synced(&e.path(), &to.join(e.file_name()))?;
         }
     }
     Ok(())
 }
 
+fn copy_synced(from: &Path, to: &Path) -> std::io::Result<()> {
+    std::fs::copy(from, to)?;
+    std::fs::File::open(to)?.sync_all()
+}
+
+fn write_synced(to: &Path, text: &str) -> std::io::Result<()> {
+    let mut f = std::fs::File::create(to)?;
+    f.write_all(text.as_bytes())?;
+    f.sync_all()
+}
+
 fn undo(place: &Path) -> Result<String, String> {
-    let kept = place.join("trindle.conf");
-    if kept.is_file() {
-
-        let was = std::fs::read(&kept).map_err(|e| e.to_string())?;
-        crate::common::files::write_whole(&trindle_conf(), &was).map_err(|e| e.to_string())?;
-    } else {
-        let _ = std::fs::remove_file(trindle_conf());
-    }
-
-    let now = overrides_dir();
-    if let Ok(dir) = std::fs::read_dir(&now) {
-        for e in dir.flatten() {
-            if !place.join("overrides").join(e.file_name()).exists() {
-                let _ = std::fs::remove_file(e.path());
-            }
-        }
-    }
-    std::fs::create_dir_all(&now).map_err(|e| e.to_string())?;
-    copy_files(&place.join("overrides"), &now).map_err(|e| e.to_string())?;
+    let app = put_app_back(&home(), place, stop)?;
+    put_back(place, &trindle_conf(), &overrides_dir())?;
     restyle();
     let then: Vec<String> = read_text(place.join("apps")).lines().map(str::to_string).collect();
     let apps = user_apps();
-    let mut said = String::from("Settings and app permissions are back as they were.");
+    let mut said = format!("Settings and app permissions are back as they were.{app}");
     let added: Vec<String> = apps.iter().filter(|a| !then.contains(a)).cloned().collect();
     let gone: Vec<String> = then.iter().filter(|a| !apps.contains(a)).cloned().collect();
     if !added.is_empty() {
@@ -531,16 +827,104 @@ mod tests {
     use super::*;
 
     #[test]
+    fn a_snapshot_then_an_undo_puts_settings_and_permissions_back() {
+        let dir = std::env::temp_dir().join(format!("trindle-assistant-undo-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        let (conf, overrides, snaps) = (dir.join("trindle.conf"), dir.join("overrides"), dir.join("snaps"));
+        std::fs::create_dir_all(&overrides).unwrap();
+        std::fs::write(&conf, "lock_after=15\n").unwrap();
+        std::fs::write(overrides.join("org.example.Kept"), "[Context]\nfilesystems=home\n").unwrap();
+        let place = keep(&snaps, "1", &conf, &overrides, &["org.example.Kept".into()], "before a change", &|_| Ok(())).unwrap();
+
+        std::fs::write(&conf, "lock_after=1\n").unwrap();
+        std::fs::write(overrides.join("org.example.Kept"), "[Context]\nfilesystems=host\n").unwrap();
+        std::fs::write(overrides.join("org.example.New"), "[Context]\nshared=network\n").unwrap();
+        put_back(&place, &conf, &overrides).unwrap();
+        assert_eq!(std::fs::read_to_string(&conf).unwrap(), "lock_after=15\n");
+        assert_eq!(std::fs::read_to_string(overrides.join("org.example.Kept")).unwrap(), "[Context]\nfilesystems=home\n");
+        assert!(!overrides.join("org.example.New").exists(), "an app that had no permissions has none again");
+        assert_eq!(std::fs::read_to_string(place.join("note")).unwrap(), "before a change");
+
+        std::fs::remove_file(&conf).unwrap();
+        let bare = keep(&snaps, "2", &conf, &overrides, &[], "", &|_| Ok(())).unwrap();
+        std::fs::write(&conf, "lock_after=1\n").unwrap();
+        put_back(&bare, &conf, &overrides).unwrap();
+        assert!(!conf.exists());
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn a_half_made_snapshot_is_never_taken_as_whole() {
+        let dir = std::env::temp_dir().join(format!("trindle-assistant-half-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        let (conf, snaps) = (dir.join("trindle.conf"), dir.join("snaps"));
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(&conf, "dim_after=5\n").unwrap();
+        let kept = keep(&snaps, "1", &conf, &dir.join("none"), &[], "", &|_| Ok(())).unwrap();
+
+        let bad = dir.join("not-a-folder");
+        std::fs::write(&bad, "").unwrap();
+        assert!(keep(&snaps, "3", &conf, &bad, &[], "", &|_| Ok(())).is_err());
+        assert!(!snaps.join("3").exists() && !snaps.join("3.part").exists(), "nothing is left behind");
+
+        std::fs::create_dir_all(snaps.join("2/overrides")).unwrap();
+        assert_eq!(snapshots(&snaps), vec![kept.clone()], "undo with no name never picks a half-made folder");
+        assert!(pick(&snaps, "2".into()).is_err());
+        tidy(&snaps, std::time::Duration::ZERO);
+        assert!(!snaps.join("2").exists() && kept.join(WHOLE).is_file());
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn security_and_privacy_settings_are_never_settable() {
+        for key in ["security_updates", "downloads_boxed", "outside_network", "outside_files", "check_updates_by_itself",
+            "report_offer", "older_programs", "lock", "lock_after", "lock_on_suspend", "lid_close", "lid_close_battery",
+            "restart-parts-keys", "restart-all-keys", "screenshot-keys", "shortcut-list-keys", "report-keys"] {
+            assert!(check_setting(key, "no").is_err(), "{key}");
+        }
+    }
+
+    #[test]
     fn only_known_settings_with_plain_values() {
-        assert!(check_setting("lock_after", "15").is_ok());
+        assert!(check_setting("dim_after", "15").is_ok());
         assert!(check_setting(pointer::TAP, "no").is_ok());
         for key in ["theme", "accent", "PATH", "", "../x", "nonsense"] {
             assert!(check_setting(key, "1").is_err(), "{key}");
         }
         for value in ["", "a\nb=c", "x\r", &"y".repeat(201)] {
-            assert!(check_setting("lock_after", value).is_err(), "{value:?}");
+            assert!(check_setting("dim_after", value).is_err(), "{value:?}");
         }
-        assert!(KEYS.iter().all(|k| settable(k)));
+        assert!(KEYS.iter().all(|k| !crate::common::files::default_setting(k).is_empty()), "each has a Settings page");
+    }
+
+    #[test]
+    fn each_setting_takes_only_values_its_page_can_make() {
+        for key in KEYS {
+            let default = crate::common::files::default_setting(key);
+            assert!(check_setting(key, default).is_ok(), "{key} must take its own default {default:?}");
+        }
+        for (key, value) in [("dim_after", "soon"), ("dim_after", "-5"), ("dim_after", "99999"), ("suspend_after_battery", "1.5"),
+            ("wallpaper_every", "-1"), ("wallpaper_every", "9999999999"), ("wallpaper_fit", "bogus"), ("wallpaper_order", "random"),
+            ("wallpaper_color", "red"), ("wallpaper_color", "#12345g"), (pointer::SPEED, "9"), (pointer::SPEED, "NaN"),
+            (pointer::SPEED, "inf"), (pointer::SCROLL, "0"), (pointer::TAP, "maybe")] {
+            assert!(check_setting(key, value).is_err(), "{key} = {value}");
+        }
+        for (key, value) in [("dim_after", "0"), ("wallpaper_fit", "tile"), (pointer::SPEED, "-0.5"), (pointer::SCROLL, "6")] {
+            assert!(check_setting(key, value).is_ok(), "{key} = {value}");
+        }
+    }
+
+    #[test]
+    fn a_window_number_too_big_is_refused_not_wrapped_and_a_device_is_named() {
+        let mut desk = Desk::default();
+        for n in [4_294_967_296u64, 4_294_967_297, u64::MAX] {
+            let said = desk.plan("close_window", &json!({ "window": n })).err().unwrap();
+            assert!(said.contains("must be a number"), "{n}: {said}");
+        }
+        let list = "Device 00:11:22:33:44:55 Blue Speaker\nDevice AA:BB:CC:DD:EE:FF \n";
+        assert_eq!(name_in(list, "00:11:22:33:44:55").as_deref(), Some("Blue Speaker"));
+        assert_eq!(name_in(list, "AA:BB:CC:DD:EE:FF"), None);
+        assert_eq!(name_in(list, "00:00:00:00:00:00"), None);
     }
 
     #[test]
@@ -565,6 +949,85 @@ mod tests {
         assert!(!unit_name("a;b"));
     }
 
+    fn app_home(tag: &str) -> (PathBuf, PathBuf) {
+        let home = std::env::temp_dir().join(format!("trindle-assistant-mend-{tag}-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&home);
+        let app = home.join(".var/app/org.example.App");
+        std::fs::create_dir_all(app.join("config")).unwrap();
+        std::fs::create_dir_all(app.join("cache")).unwrap();
+        std::fs::write(app.join("config/app.conf"), "[General]\nzoom=2\n").unwrap();
+        std::fs::write(app.join("cache/thumb"), "x").unwrap();
+        (home, app)
+    }
+
+    fn mended(home: &Path, action: Action) -> (PathBuf, String) {
+        let plan = Plan { question: "a repair".into(), action };
+        let extra = |part: &Path| plan.keeps(home, part);
+        let place = keep(&home.join("snaps"), "1", &home.join("trindle.conf"), &home.join("overrides"), &[], "a repair", &extra).unwrap();
+        let said = mend_now(plan.action, home, &place).unwrap();
+        (place, said)
+    }
+
+    #[test]
+    fn an_apps_setting_is_changed_after_a_snapshot_and_undone() {
+        let (home, app) = app_home("setting");
+        let line = AppLine { id: "org.example.App".into(), file: "app.conf".into(), section: "General".into(), key: "zoom".into(), value: "3".into() };
+        let (place, said) = mended(&home, Action::AppSetting(line));
+        assert_eq!(std::fs::read_to_string(app.join("config/app.conf")).unwrap(), "[General]\nzoom=3\n", "{said}");
+        assert_eq!(std::fs::read_to_string(place.join("app/settings")).unwrap(), "[General]\nzoom=2\n");
+        std::fs::write(app.join("config/app.conf"), "[General]\nzoom=7\nnew=1\n").unwrap();
+        let back = put_app_back(&home, &place, |_| Ok(())).unwrap();
+        assert!(back.contains("back as it was"), "{back}");
+        assert_eq!(std::fs::read_to_string(app.join("config/app.conf")).unwrap(), "[General]\nzoom=2\n");
+        let _ = std::fs::remove_dir_all(&home);
+    }
+
+    #[test]
+    fn an_apps_cache_is_cleared_after_a_snapshot_and_undone() {
+        let (home, app) = app_home("cache");
+        let (place, said) = mended(&home, Action::ClearCache("org.example.App".into()));
+        assert!(!app.join("cache/thumb").exists() && app.join("cache").is_dir(), "{said}");
+        assert!(place.join("app/cache/thumb").is_file());
+        std::fs::write(app.join("cache/since"), "y").unwrap();
+        let back = put_app_back(&home, &place, |_| Ok(())).unwrap();
+        assert!(back.contains("cache"), "{back}");
+        assert!(app.join("cache/thumb").is_file() && !app.join("cache/since").exists());
+
+        let (place, _) = { let _ = std::fs::remove_dir_all(home.join("snaps")); mended(&home, Action::ClearCache("org.example.App".into())) };
+        assert!(put_app_back(&home, &place, |_| Err("still running".into())).is_err());
+        assert!(place.join("app/cache/thumb").is_file());
+        let _ = std::fs::remove_dir_all(&home);
+    }
+
+    #[test]
+    fn a_snapshot_whose_app_is_not_an_app_or_is_trindle_puts_nothing_back() {
+        let (home, _) = app_home("forged");
+        for id in ["../../..", "org.trindle.Store", "--system"] {
+            let place = home.join(format!("forged-{}", id.len()));
+            std::fs::create_dir_all(place.join("app/cache")).unwrap();
+            std::fs::write(place.join("app/id"), id).unwrap();
+            assert!(put_app_back(&home, &place, |_| Ok(())).is_err(), "{id}");
+        }
+
+        assert_eq!(put_app_back(&home, &home.join("none"), |_| panic!("nothing to close")).unwrap(), "");
+        let _ = std::fs::remove_dir_all(&home);
+    }
+
+    #[test]
+    fn repairs_refuse_trindle_and_anything_not_a_flathub_app_before_asking() {
+        let mut d = Desk::default();
+        for tool in ["restart_app", "clear_app_cache", "set_app_setting"] {
+            for app in ["org.trindle.Settings", "io.github.trindle_os.Voice"] {
+                let said = d.plan(tool, &json!({ "app": app, "file": "a.conf", "key": "k", "value": "v" })).err().unwrap();
+                assert_eq!(said, TRINDLE, "{tool} {app}");
+            }
+            for app in ["--system", "../x", "org.example"] {
+                assert!(d.plan(tool, &json!({ "app": app, "file": "a.conf", "key": "k", "value": "v" })).is_err(), "{tool} {app}");
+            }
+        }
+        assert_eq!(d.read("list_app_settings", &json!({ "app": "org.trindle.Store" })).err().unwrap(), TRINDLE);
+    }
+
     #[test]
     fn plans_refuse_before_asking() {
         let mut d = Desk::default();
@@ -576,6 +1039,6 @@ mod tests {
         assert!(no(&mut d, "pair_bluetooth", json!({ "address": "nope" })));
         assert!(no(&mut d, "undo_change", json!({ "snapshot": "../../etc" })));
         let p = d.plan("set_theme", &json!({ "look": "Light", "accent": "#FFC107" })).unwrap();
-        assert_eq!(p.question, "switch to the light look with the accent colour #ffc107");
+        assert_eq!(p.question, "use the light theme with #ffc107 as the accent colour");
     }
 }

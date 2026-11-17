@@ -11,19 +11,13 @@ activity-about-page = Über diese Seite
 activity-try-again = Erneut versuchen
 
 # Red words in place of the room when the computer could not be read at the first look.
-activity-cannot-read = Die aktuellen Aktivitäten des Computers konnten nicht ausgelesen werden.
+activity-cannot-read = Trindle konnte die Aktivität des Computers nicht prüfen.
 
 # In place of the room when no program is running.
 activity-no-programs = Es laufen noch keine Programme.
 
 # In place of the list when the room could not be read, so there is nothing to list.
-activity-nothing-to-list = Keine Einträge, solange die Computeraktivität nicht ausgelesen werden kann.
-
-# The one sentence above the room, saying what it shows.
-activity-caption = Jede Blase ist ein Programm, so groß wie der Speicher, den es belegt.
-
-# The one sentence above the list of programs.
-activity-list-caption = Tippe auf ein Programm, um es im Raum zu sehen.
+activity-nothing-to-list = Trindle kann keine Programme anzeigen, solange es die Aktivität des Computers nicht prüfen kann.
 
 # Heading of the card that lists the programs.
 activity-programs = Programme
@@ -38,20 +32,20 @@ activity-memory = Speicher
 activity-processor = Prozessor
 
 # Words the screen reader gives the room when no bubble is picked.
-activity-room-spoken = Programme, jedes so groß wie der Speicher, den es belegt
+activity-room-spoken = Programmblasen, so groß wie ihr Speicherverbrauch
 
 # First paragraph of the words behind the i: what the computer is doing.
-activity-help-1 = Was dieser Computer gerade tut. Jedes Programm ist eine Blase im großen Kreis, so groß wie der Speicher, den es belegt. Je voller der Kreis, desto voller der Speicher.
+activity-help-1 = Das zeigt, was dein Computer gerade tut. Jedes Programm erscheint als Blase im Kreis. Größere Blasen bedeuten mehr Speicherverbrauch. Je voller der Kreis, desto mehr Speicher ist belegt.
 
 # Second paragraph of the words behind the i: how the colours and bars show the work.
-activity-help-2 = Ein Programm, das arbeitet, leuchtet und pulsiert, schneller und heller, je härter es arbeitet: Eine kühle Farbe bedeutet wenig Arbeit, Orange harte Arbeit und Rot Volllast. Am Rand steht für jeden Thread des Prozessors ein Balken, der wächst und wärmer wird, je mehr zu tun ist. Wenn alle lang und rot sind, läuft der Computer auf Volllast, und die hellste Blase ist der Grund.
+activity-help-2 = Die Blase eines Programms leuchtet und pulsiert, solange es arbeitet. Schnelleres, helleres Pulsieren bedeutet mehr Arbeit. Kühle Farben bedeuten wenig Arbeit, Orange starke Auslastung und Rot volle Auslastung. Jeder Balken am Rand steht für einen Thread, einen Teil des Prozessors, der Arbeit erledigt. Längere Balken und wärmere Farben bedeuten mehr Arbeit. Wenn alle Balken lang und rot sind, arbeitet der Computer so hart, wie er kann. Die hellste Blase zeigt, welches Programm am meisten arbeitet.
 
 # Third paragraph of the words behind the i: how to look at a program and stop it, and what the two grey bubbles are.
 # SAFETY: needs a human review before it ships
-activity-help-3 = Klicke auf eine Blase oder ein Programm in der Liste, um in einfachen Zahlen zu sehen, was es tut, und um es zu beenden, wenn es nicht mehr antwortet: Die Stopp-Taste, zweimal gedrückt, bittet es, sich zu schließen, und alles Ungespeicherte darin kann verloren gehen. Zwei ruhige graue Blasen enthalten den Rest: Trindle-Desktop, das ist der Compositor, der den Bildschirm, den Ring, den Tab und den Hintergrund zeichnet, und Linux und andere Programme, das ist Linux selbst und die Programme, die den Computer betreuen.
+activity-help-3 = Klicke auf eine Blase oder ein Programm in der Liste, um in einfachen Zahlen zu sehen, was es tut. Du kannst auch ein Programm beenden, das nicht mehr reagiert. Drücke die Stopp-Taste zweimal, dann bittet Trindle das Programm, sich zu schließen. Alles, was du darin nicht gespeichert hast, kann verloren gehen. Die zwei grauen Blasen zeigen alles andere. Trindle-Desktop ist der Teil, der den Bildschirm, den Ring, den Tab und den Hintergrund zeichnet. Linux und andere Programme ist Linux selbst und die Programme, die den Computer betreuen.
 
 # Fourth paragraph of the words behind the i: how memory, the processor, the disk and the swap file are counted.
-activity-help-4 = Der Speicher wird auf die faire Weise gezählt, wie es Werkzeuge wie smem tun: Speicher, den sich zwei Programme teilen, wird zwischen ihnen aufgeteilt, und in die Auslagerungsdatei verschobener Speicher ist eingerechnet, damit nichts doppelt gezählt oder ausgelassen wird. Die Karten neben dem Bild zeigen, wie voll Speicher, Prozessor, Festplatte und Auslagerungsdatei sind; ein Ring wird erst orange, dann rot, wenn etwas fast voll ist.
+activity-help-4 = Trindle zählt den Speicher sorgfältig, genauso wie Werkzeuge wie smem. Speicher, den sich zwei Programme teilen, wird zwischen ihnen aufgeteilt, und in die Auslagerungsdatei verschobener Speicher ist eingerechnet, damit nichts doppelt gezählt oder ausgelassen wird. Die Karten neben dem Bild zeigen, wie voll Speicher, Prozessor, Festplatte und Auslagerungsdatei sind. Ein Ring wird nur orange und dann rot, wenn er fast voll ist.
 
 # Heading of the card that shows the room and its sentence, at the top of the room.
 activity-right-now = Gerade jetzt
@@ -60,7 +54,7 @@ activity-right-now = Gerade jetzt
 activity-looking = Es wird nachgesehen…
 
 # The sentence at the top when the computer could not be read at all.
-activity-unread = Der Computer konnte gerade nicht gelesen werden.
+activity-unread = Trindle konnte den Computer nicht prüfen.
 
 # The sentence at the top when the whole processor is flat out, and one program is using most of it. $a is its name.
 activity-flat-out-one = Dein Computer läuft auf Volllast: { $a } nutzt { $threads }.
@@ -69,25 +63,25 @@ activity-flat-out-one = Dein Computer läuft auf Volllast: { $a } nutzt { $threa
 activity-flat-out-two = Dein Computer läuft auf Volllast: { $a } und { $b } nutzen { $threads }.
 
 # The sentence at the top when the whole processor is flat out, and one program is the busiest. $a is its name.
-activity-flat-out-busiest = Dein Computer läuft auf Volllast bei { $threads }; { $a } ist am meisten beschäftigt.
+activity-flat-out-busiest = Dein Computer läuft auf Volllast bei { $threads }. { $a } ist am meisten beschäftigt.
 
 # The sentence at the top when the whole processor is flat out and no one program stands out.
 activity-flat-out = Dein Computer läuft auf Volllast bei { $threads }.
 
 # The sentence at the top when memory is nearly full, and one program holds the most. $b is its name.
-activity-memory-full-named = Der Speicher ist fast voll; { $b } belegt am meisten.
+activity-memory-full-named = Der Speicher ist fast voll. { $b } belegt am meisten.
 
 # The sentence at the top when memory is nearly full, and no program is named.
 activity-memory-full = Der Speicher ist fast voll.
 
 # The sentence at the top when the computer is busy and one program is the busiest. $a is its name.
-activity-ticking-busiest = Der Computer läuft ruhig vor sich hin; { $a } ist am meisten beschäftigt.
+activity-ticking-busiest = Der Computer ist nicht ausgelastet. { $a } arbeitet am meisten.
 
 # The sentence at the top when the computer is busy and nothing is named.
 activity-busy = Der Computer ist beschäftigt.
 
 # The sentence at the top when the computer is only lightly busy and nothing is named.
-activity-ticking-over = Der Computer läuft ruhig vor sich hin.
+activity-ticking-over = Der Computer hat wenig zu tun.
 
 # The sentence at the top when one program is doing most of the work. $a is its name.
 activity-doing-most = { $a } leistet gerade den größten Teil der Arbeit.
@@ -99,10 +93,10 @@ activity-two-keeping-busy = { $a } und { $b } halten den Computer beschäftigt.
 activity-plenty-to-spare = { $a } arbeitet hart, aber der Computer hat reichlich Reserve.
 
 # The sentence at the top when all is calm but memory is filling up. $b is the program holding the most.
-activity-calm-memory-filling = Alles ruhig, aber der Speicher füllt sich; { $b } belegt am meisten.
+activity-calm-memory-filling = Der Computer hat wenig zu tun, aber der Speicher füllt sich. { $b } belegt am meisten.
 
 # The sentence at the top when all is calm and nothing is working hard.
-activity-all-calm = Alles ruhig: Nichts arbeitet hart.
+activity-all-calm = Kein Programm arbeitet hart.
 
 # How many threads, as a phrase inside a sentence: all of them. $n is the number of threads.
 activity-all-threads = alle { $n ->
@@ -138,19 +132,19 @@ activity-under-one-percent = unter 1 %
 activity-size-under-mb = unter 1 MB
 
 # How a thread is described in its tip when it is resting.
-activity-resting = ruht
+activity-resting = im Leerlauf
 
 # How a thread is described in its tip when it is busy. $percent is the share, such as 80%.
 activity-busy-percent = { $percent } ausgelastet
 
 # How hard a program is working, when it is resting.
-activity-effort-resting = Ruht
+activity-effort-resting = Im Leerlauf
 
 # How hard a program is working, when it is working a little.
 activity-effort-little = Arbeitet ein wenig
 
 # How hard a program is working, when it is working flat out.
-activity-effort-flat-out = Arbeitet auf Volllast
+activity-effort-flat-out = Volle Leistung
 
 # How hard a program is working, when it is working hard.
 activity-effort-hard = Arbeitet hart
@@ -251,19 +245,19 @@ activity-separate-parts = { $n } getrennte Teile
 activity-running-for = Läuft seit
 
 # A card's fact: the name of the facts' heading for what a program is made of.
-activity-made-of = Besteht aus
+activity-made-of = Bestandteile
 
 # Words under a memory card when it could not be read at the first look.
-activity-ring-not-read = Konnte noch nicht gelesen werden.
+activity-ring-not-read = Das lässt sich noch nicht auslesen.
 
 # Sentence under the memory figure: how much memory is in use, and how much of it Trindle itself holds. $used and $ours are sizes.
-activity-memory-sentence = { $used } belegt; Trindle selbst belegt { $ours }.
+activity-memory-sentence = { $used } belegt. Trindle selbst belegt { $ours }.
 
 # Sentence under the processor figure: how busy all the threads have been. $threads is "all 16 threads" or similar.
 activity-processor-sentence = Wie stark { $threads } in den letzten zwei Minuten ausgelastet waren.
 
 # Sentence under the disk figure: how much is used and how much is still free. $used and $free are sizes.
-activity-disk-sentence = { $used } belegt; { $free } noch frei.
+activity-disk-sentence = { $used } belegt und { $free } frei.
 
 # Limit under a memory, disk or swap figure. $amount is the whole.
 activity-of-size = von { $amount }
@@ -275,13 +269,13 @@ activity-disk = Festplatte
 activity-swap-file = Auslagerungsdatei
 
 # Sentence under the swap file figure: how much is in use, and the rest is room to hibernate. $used is a size.
-activity-swap-sentence = { $used } belegt; der Rest ist Platz für den Ruhezustand.
+activity-swap-sentence = { $used } belegt.
 
 # Name of the temperature card, shown when the computer has a temperature to read.
 activity-temperature = Temperatur
 
 # Sentence under the temperature figure.
-activity-temperature-sentence = Wie warm der Prozessor gerade ist.
+activity-temperature-sentence = Temperatur des Prozessors
 
 # Limit under the temperature figure. The degree sign is written as it is.
 activity-of-hundred-degrees = von 100°C
@@ -291,5 +285,4 @@ activity-no-swap = Dieser Computer hat keine Auslagerungsdatei, deshalb wird nic
 
 
 # Short line in the Activity window after a program that did not answer Stop within five seconds was ended by force. $title is the program.
-activity-forced = Zwangsbeendet: { $title } hat nicht geantwortet
-
+activity-forced = { $title } hat nicht reagiert, daher hat Trindle das Beenden erzwungen

@@ -32,7 +32,7 @@ fn searching_for_chatgpt_shows_why_it_is_not_there() {
     let asks = events.post(|_: crate::store::Do| {});
     let mut s = Store::new(&events, asks, None);
     let line = t!("store-chatgpt-returns").to_string();
-    assert_eq!(line, "ChatGPT returns once OpenAI signs its download.");
+    assert_eq!(line, "ChatGPT will be back once OpenAI signs its download.");
     for text in ["chatgpt", "ChatGPT", "OPENAI", "codex", "open ai codex cli"] {
         assert!(asks_for_chatgpt(text), "{text}");
         s.view = View::Search(text.to_string());
@@ -96,16 +96,23 @@ fn backup_put_back_plugin_off_and_plugin_removal_are_the_persons_own_press() {
     };
     let mut s = Store::new(&events, asks, None);
     made_up(&mut || choose_backup(&mut s));
-    assert!(!s.said.contains_key("bk:back"), "a made-up press started putting a backup back");
+    assert!(!s.words.said.contains_key("bk:back"), "a made-up press started putting a backup back");
     with_named(true, Some(7), || with_press(Some(7), || choose_backup(&mut s)));
-    assert!(s.said.contains_key("bk:back"), "the person's own press was refused");
+    assert!(s.words.said.contains_key("bk:back"), "the person's own press was refused");
 
     let noted = std::rc::Rc::new(std::cell::RefCell::new(Vec::new()));
     s.owned.removals = Some(noted.clone());
     made_up(&mut || remove_installed(&mut s, &item, false));
     assert!(noted.borrow().is_empty(), "a made-up press removed a plugin");
     with_named(true, Some(7), || with_press(Some(7), || remove_installed(&mut s, &item, false)));
-    assert_eq!(*noted.borrow(), [(Removal::Plugin, item.id.clone())]);
+    assert_eq!(*noted.borrow(), [(Removal::Plugin, item.id.clone(), false)]);
+
+    let boxed = Installed { id: "zoom".into(), name: "Zoom".into(), version: String::new(), size: String::new(), source: Source::Deb { launcher: None, icon: None } };
+    noted.borrow_mut().clear();
+    made_up(&mut || remove_installed(&mut s, &boxed, false));
+    assert!(noted.borrow().is_empty(), "a made-up press removed a program and what it saved");
+    with_named(true, Some(7), || with_press(Some(7), || remove_installed(&mut s, &boxed, false)));
+    assert_eq!(*noted.borrow(), [(Removal::Deb, boxed.id.clone(), false)]);
 
     made_up(&mut || assert!(!plugin_page::may_remove()));
     with_named(true, Some(7), || with_press(Some(7), || {
@@ -123,11 +130,11 @@ fn no_project_drops_out_of_a_github_search_without_a_word() {
     assert!(g.problems().is_empty() && g.unread == 0);
 
     g.release_failed("GitHub could not be reached.".into());
-    assert_eq!(g.problems(), vec!["1 project found could not be looked at, so it is not listed: GitHub could not be reached.".to_string()]);
-    g.release_failed("GitHub refused this: Repository access blocked.".into());
-    assert_eq!(g.problems(), vec!["2 projects found could not be looked at, so they are not listed: GitHub refused this: Repository access blocked.".to_string()]);
+    assert_eq!(g.problems(), vec!["Trindle couldn't look at 1 project it found, so it isn't listed: GitHub could not be reached.".to_string()]);
+    g.release_failed("GitHub blocked this: Repository access blocked.".into());
+    assert_eq!(g.problems(), vec!["Trindle couldn't look at 2 projects it found, so they aren't listed: GitHub blocked this: Repository access blocked.".to_string()]);
 
-    let limit = "GitHub has stopped answering for now: it answers 60 questions an hour from one address without a key. Try again later.";
+    let limit = "GitHub has stopped answering for now, because it allows 60 requests an hour from one address without a key. Try again later.";
     g.release_failed(limit.into());
     assert_eq!(g.problems().len(), 2);
     assert!(g.problems()[0].starts_with("GitHub has stopped answering") && g.unread == 2);
@@ -135,7 +142,7 @@ fn no_project_drops_out_of_a_github_search_without_a_word() {
     g.half = Some(limit.into());
     let said = g.problems();
     assert_eq!(said.len(), 3);
-    assert!(said[0].starts_with("Only projects with an AppImage were searched for: GitHub did not answer the search for Flatpaks."), "{}", said[0]);
+    assert!(said[0].starts_with("Trindle only searched for projects with an AppImage, because GitHub didn't answer the search for Flatpaks."), "{}", said[0]);
     for words in &said {
         assert!(words.ends_with('.') && !words.contains('\u{2014}'), "{words}");
     }
@@ -144,7 +151,7 @@ fn no_project_drops_out_of_a_github_search_without_a_word() {
 #[test]
 fn the_installed_sentence_counts_every_kind() {
     let says = |counts: [usize; updates::KINDS], waiting| installed_sentence(counts.iter().sum(), counts, waiting);
-    assert_eq!(says([0, 0, 0, 0, 0], 0), "Nothing is installed yet. Discover is full of things to try.");
+    assert_eq!(says([0, 0, 0, 0, 0], 0), "Nothing is installed yet. You'll find apps to try in Discover.");
     assert_eq!(says([9, 0, 0, 0, 0], 0), "9 programs are installed, all from Flathub. All are up to date.");
     assert_eq!(says([1, 0, 0, 0, 0], 0), "1 program is installed, from Flathub. It is up to date.");
     assert_eq!(says([6, 2, 1, 0, 0], 2), "9 programs are installed, 6 from Flathub, 2 from Flatpak files and 1 AppImage. 2 have updates waiting.");
@@ -164,8 +171,8 @@ fn every_kind_has_its_tab_and_its_own_removal() {
     use updates::{Installed, Removal, Source};
     let thing = |source: Source| Installed { id: "org.example.Thing".into(), name: "Thing".into(), version: String::new(), size: String::new(), source };
     let kinds = [
-        (thing(Source::Flatpak { origin: "flathub".into(), installation: "system".into() }), "Flathub", Removal::Flatpak { system: true, delete_data: false }, "org.example.Thing"),
-        (thing(Source::Flatpak { origin: "example-origin".into(), installation: "user".into() }), "Flatpak files", Removal::Flatpak { system: false, delete_data: false }, "org.example.Thing"),
+        (thing(Source::Flatpak { origin: "flathub".into(), installation: "system".into() }), "Flathub", Removal::Flatpak { system: true }, "org.example.Thing"),
+        (thing(Source::Flatpak { origin: "example-origin".into(), installation: "user".into() }), "Flatpak files", Removal::Flatpak { system: false }, "org.example.Thing"),
         (thing(Source::AppImage("/nonexistent/thing.AppImage".into())), "AppImages", Removal::AppImage("/nonexistent/thing.AppImage".into()), "org.example.Thing"),
         (thing(Source::Deb { launcher: None, icon: None }), "Deb files", Removal::Deb, "deb:org.example.Thing"),
         (thing(Source::Plugin { icon: None }), "Plugins", Removal::Plugin, "plugin:org.example.Thing"),
@@ -209,8 +216,8 @@ fn every_way_to_install_an_appimage_shows_the_warning_first() {
     let events = crate::toolkit::event::Loop::new();
     let asks = events.post(|_: crate::store::Do| {});
     let mut s = Store::new(&events, asks, None);
-    s.conf = std::env::temp_dir().join(format!("trindle-gate-{}", std::process::id())).join("trindle.conf");
-    s.warning_off = false;
+    s.prefs.conf = std::env::temp_dir().join(format!("trindle-gate-{}", std::process::id())).join("trindle.conf");
+    s.prefs.warning_off = false;
     let nothing_started = |s: &Store| s.dials.is_empty() && s.working == 0 && s.owned.adding.is_none();
     let found = github::Found { repo: "john-smith/thing".into(), name: "Thing".into(), listed: true, ..Default::default() };
     let file = |name: &str, kind| github::Download { name: name.into(), url: format!("https://example.org/{name}"), size: 1, kind };
@@ -251,4 +258,17 @@ fn every_way_to_install_an_appimage_shows_the_warning_first() {
     s.apply(crate::store::opts::Opts { appimage: Some(elf), ..Default::default() });
     assert!(showing(&s) && nothing_started(&s), "Folders");
     let _ = std::fs::remove_dir_all(&dir);
+}
+
+#[test]
+fn an_installed_row_s_update_button_follows_the_job() {
+    use updates::{Installed, Source};
+    let events = crate::toolkit::event::Loop::new();
+    let mut s = Store::new(&events, events.post(|_: crate::store::Do| {}), None);
+    let item = Installed { id: "org.example.Thing".into(), name: "Thing".into(), version: String::new(), size: String::new(),
+                           source: Source::Flatpak { origin: "flathub".into(), installation: "system".into() } };
+    s.dials.insert(crate::store::update_page::app_key(&item.id), crate::common::filling::Dial::default());
+    let shown = crate::common::filling::following_buttons(&super::installed_row::installed_row(&s, &item));
+    let ring = crate::store::update_page::app_ring(&s, &item.id).expect("it is going in");
+    assert_eq!(shown.into_iter().map(|(_, r)| r).collect::<Vec<_>>(), vec![ring]);
 }

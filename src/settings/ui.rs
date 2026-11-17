@@ -1,5 +1,6 @@
 //! The parts every Settings page is built from: the page and its "i", cards, the line with its words and the glow that says a change was kept, the round button that becomes a ring while its job runs, and the button pressed twice.
 
+mod admin;
 mod clashes;
 mod controls;
 mod failures;
@@ -8,8 +9,10 @@ mod icons;
 mod kit;
 mod line;
 mod page;
+mod rounds;
 mod trial;
 
+pub use admin::*;
 pub use clashes::*;
 pub use controls::*;
 pub use failures::*;
@@ -18,6 +21,7 @@ pub use icons::*;
 pub use kit::*;
 pub use line::*;
 pub use page::*;
+pub use rounds::Rounds;
 pub use trial::*;
 
 use std::any::Any;
@@ -39,6 +43,8 @@ pub struct Msg(pub(crate) Rc<dyn Fn(&mut Settings)>);
 
 pub(crate) enum Do {
     Then(Box<dyn FnOnce(&mut Settings)>),
+
+    Look(Box<dyn FnOnce(&mut Settings) -> bool>),
     Show,
     Open(Vec<String>),
     Tick,
@@ -117,4 +123,3 @@ pub(crate) mod stand;
 
 #[cfg(test)]
 mod tests;
-

@@ -22,7 +22,7 @@ voice-keep-awake-on = Экран не гаснет
 voice-updates = Поиск обновлений
 
 # Said under the ring when nothing was heard at all.
-voice-nothing-heard = Ничего не слышно. Нажмите на середину кольца и говорите.
+voice-nothing-heard = Trindle вас не расслышал. Нажмите на середину кольца и говорите.
 
 # Said under the ring when the volume goes up.
 voice-louder = Громче
@@ -85,7 +85,7 @@ voice-showing-app = Показываю { $name }
 voice-opening-app = Открываю { $name }
 
 # Said under the ring when the request was heard but not understood; what was heard comes in.
-voice-heard-unknown = Услышано «{ $heard }», но непонятно, что делать
+voice-heard-unknown = Trindle не распознал команду «{ $heard }»
 
 # Said in the ring when voice has not been added yet.
 voice-optional = Голосовое управление необязательно. Добавьте его в Настройках, на странице «Кольцо».
@@ -94,16 +94,16 @@ voice-optional = Голосовое управление необязатель�
 voice-switched-off = Голосовое управление выключено. Включите его в Настройках, на странице «Кольцо».
 
 # Said in the ring when the microphone cannot be opened; the reason comes after it.
-voice-mic-failed = Не удалось открыть микрофон: { $why }
+voice-mic-failed = Trindle не смог получить доступ к микрофону: { $why }
 
 # Said in the ring when the microphone's recorder would not start.
-voice-mic-not-started = Не удалось открыть микрофон: pw-record не запустился
+voice-mic-not-started = Trindle не смог получить доступ к микрофону, потому что программа записи не запустилась
 
 # Said in the ring when listening stopped and nothing was recorded.
 voice-nothing-recorded = Ничего не записано.
 
 # Said in the ring when the recording had no speech in it.
-voice-nothing-heard-after = Ничего не слышно. Нажмите на середину кольца и говорите.
+voice-nothing-heard-after = Trindle вас не расслышал. Нажмите на середину кольца и говорите.
 
 # Said in the ring when the speech engine failed and gave no reason.
 voice-whisper-failed = Whisper дал сбой
@@ -112,13 +112,13 @@ voice-whisper-failed = Whisper дал сбой
 voice-installing-tools = Временно устанавливаю инструменты сборки: { $names }
 
 # Progress line while whisper.cpp is built; its version comes in.
-voice-building = Собираю whisper.cpp { $version } для голосового управления (минуту или две)
+voice-building = Собираю whisper.cpp { $version } для голосового управления. Это займёт минуту или две.
 
 # Progress line while the speech model is downloaded (148 MB).
 voice-fetching-model = Загружаю модель речи (148 МБ)
 
 # Progress line while the build tools are taken away again.
-voice-removing-tools = Снова удаляю инструменты сборки
+voice-removing-tools = Теперь удаляю инструменты сборки
 
 # Said once voice is added and ready to use.
 voice-ready = Голосовое управление готово. Откройте кольцо, нажмите на середину и говорите.
@@ -131,3 +131,15 @@ voice-press-enter = Нажмите Enter, чтобы закрыть.
 
 # Shown when the command is run with neither install nor remove.
 voice-usage = использование: trindle-voice-setup install | remove
+
+# Said when a step of the voice set-up fails. { $program } is the program that was run, with its first word.
+voice-step-failed = { $program } не сработал.
+
+# Said when the whisper.cpp download isn't the one Trindle checks for, so nothing is built from it.
+voice-whisper-fingerprint = Загруженный whisper.cpp не тот, который ожидал Trindle, поэтому он не собран.
+
+# Said when the speech model download isn't the one Trindle checks for, so it isn't installed.
+voice-model-fingerprint = Загруженная модель речи не та, которую ожидал Trindle, поэтому она не установлена.
+
+# The reason after "Trindle couldn't access the microphone:" when the session has no private folder to keep a recording in.
+voice-no-private-folder = нет доступной личной папки.

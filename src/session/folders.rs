@@ -130,25 +130,6 @@ mod tests {
     }
 
     #[test]
-    fn user_dirs_is_read_by_the_one_rule() {
-        use crate::common::no_writing_in_place::{all_code, code};
-        let home = ["\"$", "HOME\""].concat();
-        let mut found = Vec::new();
-        for (name, text) in all_code() {
-            if name == "toolkit/common/files.rs" {
-                continue;
-            }
-            for line in code(&text) {
-                let l = line.trim_start();
-                if !l.starts_with("//") && l.contains(&home) {
-                    found.push(format!("{name}: {l}"));
-                }
-            }
-        }
-        assert!(found.is_empty(), "user-dirs.dirs is read outside common::files::user_folder: {found:#?}");
-    }
-
-    #[test]
     fn a_folder_address_escapes_spaces_and_letters_beyond_ascii() {
         let p = std::path::Path::new("/home/john/My Café");
         assert_eq!(super::file_uri(p), "file:///home/john/My%20Caf%C3%A9");

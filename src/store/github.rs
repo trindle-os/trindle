@@ -18,10 +18,6 @@ pub fn unchecked() -> &'static str {
     t!("store-gh-unchecked")
 }
 
-pub fn says_unchecked(offered: usize) -> bool {
-    offered > 0
-}
-
 #[cfg(not(test))]
 const API: &str = "https://api.github.com";
 
@@ -191,8 +187,8 @@ fn stored_key(ring: &key::Ring) -> (Option<Zeroizing<String>>, KeyIs) {
 
         (Ok(Some(key)), Some(_)) => (Some(key), KeyIs::Plain(moved.err().unwrap_or_else(|| t!("store-gh-keyis-file-stays").into()))),
         (Ok(None), None) => (None, KeyIs::None),
-        (Ok(None), Some(plain)) => (Some(plain), KeyIs::Plain(moved.err().unwrap_or_else(|| t!("store-gh-keyis-not-taken").into()))),
-        (Err(why), Some(plain)) => (Some(plain), KeyIs::Plain(why)),
+        (Ok(None), Some(_)) => (None, KeyIs::Plain(moved.err().unwrap_or_else(|| t!("store-gh-keyis-not-taken").into()))),
+        (Err(why), Some(_)) => (None, KeyIs::Plain(why)),
         (Err(why), None) if why == key::missing_words() => (None, KeyIs::NoKeyring),
         (Err(why), None) => (None, KeyIs::Hidden(why)),
     }
@@ -500,7 +496,7 @@ impl Kept {
         let v = self.read("release", &repo_name(repo), RELEASE_KEPT, now)?;
         let files: Vec<Download> = v["files"].as_array()?.iter().filter_map(|f| Some(Download {
             name: f["name"].as_str()?.to_string(),
-            url: f["url"].as_str()?.to_string(),
+            url: f["url"].as_str().filter(|u| https(u))?.to_string(),
             size: f["size"].as_u64().unwrap_or(0),
             kind: if f["kind"] == "flatpak" { Kind::Flatpak } else { Kind::AppImage },
         })).collect();
@@ -636,6 +632,10 @@ fn wrong_machine(name: &str) -> bool {
     }
 }
 
+fn https(url: &str) -> bool {
+    url.starts_with("https://") && !url.contains(char::is_whitespace)
+}
+
 pub fn pick_files(assets: &Value) -> Vec<Download> {
     assets.as_array().map(|a| a.iter().filter_map(|x| {
         let name = x["name"].as_str()?.to_string();
@@ -644,7 +644,7 @@ pub fn pick_files(assets: &Value) -> Vec<Download> {
         if wrong_machine(&name) {
             return None;
         }
-        Some(Download { url: x["browser_download_url"].as_str()?.to_string(), size: x["size"].as_u64().unwrap_or(0), name, kind })
+        Some(Download { url: x["browser_download_url"].as_str().filter(|u| https(u))?.to_string(), size: x["size"].as_u64().unwrap_or(0), name, kind })
     }).collect()).unwrap_or_default()
 }
 
@@ -700,12 +700,15 @@ pub fn install(file: &Download, heard: impl Fn(&str) + 'static,
         Kind::AppImage => downloads(),
         Kind::Flatpak => cache(),
     };
+    if !https(&file.url) {
+        return done(Err(t!("store-gh-download-failed", why = "not an https address")));
+    }
     let _ = std::fs::create_dir_all(&dir);
 
     let base: String = file.name.chars().filter(|c| !matches!(c, '/' | '\0')).collect();
     let dest = dir.join(base.trim_start_matches('.'));
     let part = dest.with_extension("part");
-    let (p, d, kind) = (part.display().to_string(), dest.clone(), file.kind.clone());
+    let (p, d) = (part.display().to_string(), dest.clone());
     let heard = std::rc::Rc::new(heard);
     heard(&step_line(1, 2, t!("store-gh-step-downloading")));
     let arriving = std::rc::Rc::new(std::cell::Cell::new(true));
@@ -722,7 +725,7 @@ pub fn install(file: &Download, heard: impl Fn(&str) + 'static,
         });
     }
     capture(&["curl", "-fsSL", "--proto", "=https", "--proto-redir", "=https", "--max-time", "1800",
-              "--max-filesize", run::MAX_DOWNLOAD, "-o", &p, &file.url],
+              "--max-filesize", run::MAX_DOWNLOAD, "-o", &p, "--", &file.url],
             None, move |ok, _, err| {
         arriving.set(false);
         heard(&step_line(2, 2, t!("store-gh-step-installing")));
@@ -733,19 +736,7 @@ pub fn install(file: &Download, heard: impl Fn(&str) + 'static,
         if let Err(e) = std::fs::rename(&part, &d) {
             return done(Err(e.to_string()));
         }
-        match kind {
-            Kind::AppImage => done(Ok(Some(d))),
-            Kind::Flatpak => {
-                let path = d.display().to_string();
-                capture(&crate::common::gentle::argv(&["flatpak", "install", "--user", "-y", "--noninteractive", "--bundle", &path]), None,
-                        move |ok, _, err| {
-                    let _ = std::fs::remove_file(&d);
-                    done(if ok { Ok(None) } else {
-                        Err(err.trim().lines().last().unwrap_or(t!("store-add-ref-refused")).to_string())
-                    })
-                });
-            }
-        }
+        done(Ok(Some(d)));
     });
 }
 

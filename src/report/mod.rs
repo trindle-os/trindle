@@ -7,24 +7,30 @@
 //! reports.
 //! A report that cannot be posted waits in a private file and goes by
 //! itself when the computer is next online (`flush`). Nothing is sent,
-//! kept or copied until a button is pressed.
+//! kept or copied until a button is pressed. Opening the window does make
+//! one status request to Buildmorphic, to ask whether it is taking reports,
+//! and with the master switch on a crash opens the window by itself.
 
 use std::path::{Path, PathBuf};
 
 use serde_json::{json, Value};
 
 use crate::common::files::{home, setting};
-use crate::toolkit::bus::Bus;
+use crate::toolkit::bus::{Bus, Listen};
+use crate::toolkit::chooser::{self, Ask};
 use crate::toolkit::event::{Loop, Post};
 use crate::toolkit::input::{Input, Keysym};
 use crate::toolkit::t;
 use crate::toolkit::theme;
 use crate::toolkit::ui::App;
-use crate::toolkit::widget::{button, card, column, entry, label, main_word, page_title, row, scroll, space, Length, Node, Tone};
+use crate::toolkit::widget::{button, card, column, dropdown, entry, image_view, label, main_word, page_title, row, scroll, space, Length, Node, Tone};
 
+mod picture;
 pub mod probe;
 pub mod scrub;
 pub mod send;
+mod which;
+mod room;
 mod window;
 
 use probe::Crash;
@@ -47,7 +53,24 @@ const NOTE_LEAST: usize = 10;
 const NAME_MOST: usize = 39;
 
 const BM_NAME: std::ops::RangeInclusive<usize> = 2..=31;
-const SIZE: (u32, u32) = (520, 800);
+const SIZE: (u32, u32) = (640, 1000);
+
+const WRITING_LINES: usize = 10;
+
+const WRITING_LINES_LEAST: usize = 3;
+
+const WRITING_LINES_DETAILS_LEAST: usize = 1;
+
+const DETAILS_HIGH: f32 = 160.0;
+const DETAILS_LEAST: f32 = 16.0;
+
+const CARD_GAP: f32 = 12.0;
+const PAGE_GAP: f32 = 16.0;
+const GAP_TIGHT: f32 = 4.0;
+
+const ROW_GAP: f32 = CARD_GAP;
+
+const PAGE_PADDING_TIGHT: f32 = 8.0;
 const NAME: &str = "org.trindle.report";
 const PATH: &str = "/org/trindle/report";
 const XML: &str = r#"<interface name="org.trindle.report"><method name="Show"><arg type="b" name="crash" direction="in"/><arg type="s" name="program" direction="in"/><arg type="b" name="taken" direction="out"/></method></interface>"#;
@@ -55,6 +78,13 @@ const CANCEL_ICON: &str = "window-close-symbolic";
 const COPY_ICON: &str = "edit-copy-symbolic";
 const SEND_ICON: &str = "mail-send-symbolic";
 const DETAILS_ICON: &str = "view-reveal-symbolic";
+const PICTURE_ICON: &str = "image-x-generic-symbolic";
+const SHOT_ICON: &str = "camera-photo-symbolic";
+const REMOVE_ICON: &str = "list-remove-symbolic";
+
+const PICTURE_HIGH: f32 = 72.0;
+const PICTURE_HIGH_TIGHT: f32 = 36.0;
+const PICTURE_WIDE: f32 = 128.0;
 
 pub const OFFER_KEY: &str = "report_offer";
 pub const USERNAME_KEY: &str = "report_username";
@@ -70,10 +100,6 @@ pub fn username() -> String {
 
 pub fn server() -> Server {
     Server::live()
-}
-
-fn live_for(server: &Server, slug: &str) -> Server {
-    if *server == Server::live() { Server::of_slug(slug) } else { server.clone() }
 }
 
 pub fn github() -> String {
@@ -133,17 +159,7 @@ pub fn github_fault(n: &str) -> Option<&'static str> {
 }
 
 pub fn pending_dir() -> PathBuf {
-    home().join(".local/state/trindle/reports")
-}
-
-pub fn forget_pending(dir: &Path) -> usize {
-    let mut n = 0;
-    for f in std::fs::read_dir(dir).into_iter().flatten().flatten() {
-        if f.path().extension().is_some_and(|e| e == "json") && std::fs::remove_file(f.path()).is_ok() {
-            n += 1;
-        }
-    }
-    n
+    crate::common::files::state_home().join("trindle/reports")
 }
 
 fn keep_for_later(dir: &Path, body: &str) -> std::io::Result<()> {
@@ -152,7 +168,19 @@ fn keep_for_later(dir: &Path, body: &str) -> std::io::Result<()> {
     crate::common::files::write_whole_private(&dir.join(name), body.as_bytes())
 }
 
+const STALE: std::time::Duration = std::time::Duration::from_secs(30 * 24 * 3600);
+
+fn drop_stale(dir: &Path, age: std::time::Duration) {
+    for f in std::fs::read_dir(dir).into_iter().flatten().flatten() {
+        let old = f.metadata().and_then(|m| m.modified()).ok().and_then(|t| t.elapsed().ok()).is_some_and(|t| t >= age);
+        if old && f.path().extension().is_some_and(|e| e == "json") {
+            let _ = std::fs::remove_file(f.path());
+        }
+    }
+}
+
 pub fn flush_in(dir: &Path, on: bool, backoff: &mut Backoff, now: u64, accepting: &dyn Fn(&str) -> bool, post: &dyn Fn(&str) -> Answer) -> usize {
+    drop_stale(dir, STALE);
     if !on {
         return 0;
     }
@@ -208,7 +236,7 @@ pub fn flush_in(dir: &Path, on: bool, backoff: &mut Backoff, now: u64, accepting
 pub fn flush() -> usize {
     let server = server();
     let on = offered();
-    send::with_backoff(|b| flush_in(&pending_dir(), on, b, send::now_secs(), &|slug| send::accepting(&live_for(&server, slug)), &|body| send::post(&live_for(&server, &send::slug_of(body)), body)))
+    send::with_backoff(|b| flush_in(&pending_dir(), on, b, send::now_secs(), &|_| send::accepting(&server), &|body| send::post(&server, body)))
 }
 
 fn programs() -> Vec<&'static str> {
@@ -281,7 +309,7 @@ fn cut(text: &str, n: usize) -> String {
 
 fn plain(s: &str) -> String {
     s.chars()
-        .filter(|c| !matches!(c, '\u{200b}'..='\u{200f}' | '\u{202a}'..='\u{202e}' | '\u{2066}'..='\u{2069}' | '\u{feff}'))
+        .filter(|c| c.is_control() || !crate::common::unseen::unseen(*c))
         .map(|c| if c.is_control() && c != '\n' { ' ' } else { c })
         .collect()
 }
@@ -320,10 +348,15 @@ fn is_tag(inner: &str) -> bool {
     tail.is_empty() || tail == "/" || tail.contains('=') || element
 }
 
+#[cfg(test)]
 pub fn document(p: &Parts, who: &Who) -> String {
+    document_in(p, who, &p.crash.map_or(send::OWN.to_string(), |c| send::slug_for(&c.program)))
+}
+
+fn document_in(p: &Parts, who: &Who, project: &str) -> String {
     let mut doc = serde_json::Map::new();
     doc.insert("kind".into(), json!(p.mode.word()));
-    doc.insert("project".into(), json!(p.crash.map_or("trindle".to_string(), |c| send::slug_for(&c.program))));
+    doc.insert("project".into(), json!(project));
     let mut put = |key: &str, value: String| {
         if !value.trim().is_empty() {
             doc.insert(key.into(), json!(value));
@@ -367,8 +400,15 @@ pub fn document(p: &Parts, who: &Who) -> String {
 #[derive(Clone)]
 pub enum Msg {
     Typed(String),
+
+    App(usize),
     Username(String),
     Details,
+
+    PicturePick,
+
+    PictureShot,
+    PictureRemove,
     Send,
     Save,
     Copy,
@@ -382,7 +422,15 @@ enum Do {
     Copy(String),
     Post(String),
 
+    Chosen(Option<PathBuf>),
+
+    Shoot,
+
+    Picture(Result<picture::Loaded, picture::Fault>),
+
     Status(bool),
+
+    Fit,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -394,11 +442,35 @@ enum Gate {
     Shut,
 }
 
+struct Picked {
+    png: Vec<u8>,
+    size: (u32, u32),
+    preview: std::rc::Rc<image::DynamicImage>,
+}
+
 struct Reporter {
     mode: Mode,
+    picture: Option<Picked>,
+
+    picture_fault: Option<String>,
+
+    picture_busy: bool,
+
+    chooser: Option<Listen>,
+    bus: Option<Bus>,
+
+    lines: usize,
+    tight: bool,
+
+    box_high: Option<f32>,
+    details_high: f32,
 
     program: String,
     typed: String,
+
+    app: Option<String>,
+
+    plugins: Vec<(String, String)>,
     username: String,
     log: Option<Vec<String>>,
     hardware: Option<String>,
@@ -436,15 +508,25 @@ struct Reporter {
     asks: Option<Post<Do>>,
 
     outbox: Vec<String>,
+
+    shown: std::cell::RefCell<Option<(u64, String)>>,
 }
 
 impl Reporter {
     fn new(who: Who, model: String, dir: PathBuf) -> Reporter {
         Reporter {
-            mode: Mode::Note, program: String::new(), typed: String::new(), username: String::new(), log: None, hardware: None,
+            picture: None, picture_fault: None, picture_busy: false, chooser: None, bus: None, lines: WRITING_LINES, tight: false, box_high: None, details_high: DETAILS_HIGH, mode: Mode::Note, program: String::new(), typed: String::new(), app: None, plugins: Vec::new(), username: String::new(), log: None, hardware: None,
             crash: None, who, model, version: env!("CARGO_PKG_VERSION"), waiting_dir: dir.join("waiting"), dir, switch: false, keeps_username: false,
             gate: Gate::Asking, github: String::new(), rejected: false, details: false, saved: None, sent: false, posted: String::new(), sending: false,
-            delivered: false, bug: None, waiting: None, refusal: String::new(), events: None, asks: None, outbox: Vec::new(),
+            delivered: false, bug: None, waiting: None, refusal: String::new(), events: None, asks: None, outbox: Vec::new(), shown: Default::default(),
+        }
+    }
+
+    fn writing(&self) -> Node<Msg> {
+        let node = entry(self.typed.clone(), t!("report-what-doing"), Msg::Typed).lines(self.lines).first();
+        match self.box_high {
+            Some(high) => node.height(Length::Fixed(high)),
+            None => node,
         }
     }
 
@@ -458,10 +540,64 @@ impl Reporter {
             _ => None,
         };
         let log: &[String] = self.log.as_deref().unwrap_or(&[]);
-        document(&Parts {
-            mode: self.mode, version: self.version, words: &self.typed, hardware: &self.hardware_text(),
+        let app = self.app_picked();
+        let words = format!("{}{}", which::line(&app).unwrap_or_default(), self.typed);
+        document_in(&Parts {
+            mode: self.mode, version: self.version, words: &words, hardware: &self.hardware_text(),
             crash: crash.as_ref(), log, username: &self.username, github: &self.github,
-        }, &self.who)
+        }, &self.who, &send::slug_for(&app.program))
+    }
+
+    fn body(&self) -> String {
+        let text = self.text();
+        let Some(picked) = &self.picture else { return text };
+        match text.trim_end().strip_suffix('}') {
+            Some(head) => format!("{},\n  \"picture\": \"{}\"\n}}", head.trim_end(), picture::base64(&picked.png)),
+            None => text,
+        }
+    }
+
+    fn picks(&self) -> Vec<which::Pick> {
+        which::picks(&self.plugins, &self.program)
+    }
+
+    fn app_program(&self) -> String {
+        match (&self.app, &self.crash) {
+            (Some(program), _) => program.clone(),
+            (None, Some(crash)) => crash.program.clone(),
+            (None, None) => self.program.clone(),
+        }
+    }
+
+    fn app_row(&self) -> Node<Msg> {
+        let all = self.picks();
+        let at = which::place(&all, &self.app_program());
+        let names = all.into_iter().map(|p| p.name).collect();
+        row(vec![label(t!("report-app-box")), space(), dropdown(names, Some(at), t!("report-app-box"), Msg::App)]).gap(ROW_GAP)
+    }
+
+    fn app_picked(&self) -> which::Pick {
+        let mut all = self.picks();
+        let at = which::place(&all, &self.app_program());
+        all.swap_remove(at)
+    }
+
+    fn shown_text(&self) -> String {
+        use std::hash::{Hash, Hasher};
+        let mut h = std::collections::hash_map::DefaultHasher::new();
+        (format!("{:?}", self.mode), &self.program, &self.app, &self.typed, &self.username, &self.github, &self.log, &self.hardware, &self.model).hash(&mut h);
+        if let Some(c) = &self.crash {
+            (&c.program, &c.signal, &c.trace).hash(&mut h);
+        }
+        let key = h.finish();
+        if let Some((k, text)) = &*self.shown.borrow() {
+            if *k == key {
+                return text.clone();
+            }
+        }
+        let text = self.text();
+        *self.shown.borrow_mut() = Some((key, text.clone()));
+        text
     }
 
     fn refused(&self) -> Option<&'static str> {
@@ -473,6 +609,8 @@ impl Reporter {
             Some("")
         } else if self.sent {
             Some(already_sent())
+        } else if self.picture_busy {
+            Some(t!("report-picture-reading"))
         } else if self.mode == Mode::Note && self.typed.trim().chars().count() < NOTE_LEAST {
             Some(t!("report-say-more"))
         } else if self.mode == Mode::Note && self.log.is_none() {
@@ -503,13 +641,87 @@ impl Reporter {
         self.refusal.clear();
         self.sent = true;
         self.sending = true;
-        self.posted = self.text();
+        self.posted = self.body();
         match &self.asks {
             Some(asks) => {
                 asks.send(Do::Post(self.posted.clone()));
             }
             None => self.outbox.push(self.posted.clone()),
         }
+    }
+
+    fn pick_picture(&mut self) {
+        let (Some(events), Some(asks)) = (self.events.clone(), self.asks.clone()) else { return };
+        if self.picture_busy || self.sent {
+            return;
+        }
+        let Ok(bus) = Bus::session(&events) else {
+            self.picture_fault = Some(t!("report-picture-no-chooser").into());
+            return;
+        };
+        let ask = Ask { title: t!("report-picture-choose-title").into(), filters: vec![(t!("report-picture-filter").into(), vec!["*.png".into(), "*.PNG".into()])], ..Ask::default() };
+        self.chooser = chooser::open(&bus, &events, ask, move |path| {
+            asks.send(Do::Chosen(path));
+        });
+        self.picture_fault = self.chooser.is_none().then(|| t!("report-picture-no-chooser").into());
+        self.bus = Some(bus);
+    }
+
+    fn shoot_picture(&mut self) {
+        if self.picture_busy || self.sent {
+            return;
+        }
+        if let Some(asks) = &self.asks {
+            self.picture_busy = true;
+            self.picture_fault = None;
+            asks.send(Do::Shoot);
+        }
+    }
+
+    fn picture_is(&mut self, result: Result<picture::Loaded, picture::Fault>) {
+        self.picture_busy = false;
+        match result {
+            Err(picture::Fault::Cancelled) => {}
+            Ok(loaded) => {
+                self.picture_fault = None;
+                self.picture = Some(Picked { png: loaded.png, size: loaded.size, preview: std::rc::Rc::new(image::DynamicImage::ImageRgba8(loaded.preview)) });
+            }
+            Err(why) => self.picture_fault = Some(why.words()),
+        }
+    }
+
+    fn picture_view(&self, picked: &Picked) -> Node<Msg> {
+        let high = if self.tight { PICTURE_HIGH_TIGHT } else { PICTURE_HIGH };
+        let (w, h) = (picked.size.0 as f32, picked.size.1 as f32);
+        let wide = (high * w / h.max(1.0)).clamp(high / 4.0, PICTURE_WIDE);
+        image_view(picked.preview.clone(), t!("report-picture-name", width = picked.size.0, height = picked.size.1), (wide, high))
+    }
+
+    fn remove_button(&self) -> Node<Msg> {
+        button(REMOVE_ICON, t!("report-picture-remove")).on_press(Msg::PictureRemove).off(self.sent || self.picture_busy)
+    }
+
+    fn picture_shown(&self) -> Option<Node<Msg>> {
+        let picked = self.picture.as_ref().filter(|_| !self.tight)?;
+        Some(row(vec![self.picture_view(picked), label(t!("report-picture-line")), space(), self.remove_button()]).gap(ROW_GAP))
+    }
+
+    fn controls_row(&self) -> Node<Msg> {
+        let busy = self.picture_busy || self.sent;
+        let mut across = vec![];
+        let inline = self.picture.as_ref().filter(|_| self.tight);
+        across.extend(inline.map(|picked| self.picture_view(picked)));
+        across.push(button(PICTURE_ICON, t!("report-picture-choose")).on_press(Msg::PicturePick).off(busy));
+        across.push(button(SHOT_ICON, t!("report-picture-shot")).on_press(Msg::PictureShot).off(busy));
+        if inline.is_some() {
+            across.push(self.remove_button());
+        }
+        if self.picture.is_none() {
+            across.push(label(t!("report-picture-line")));
+        }
+        across.push(space());
+        across.push(button(DETAILS_ICON, if self.details { t!("report-hide-details") } else { t!("report-show-details") }).on_press(Msg::Details));
+        row(across).gap(ROW_GAP)
     }
 
     fn username_is(&mut self, t: String) {
@@ -538,7 +750,12 @@ impl Reporter {
                 return;
             }
             Answer::Refused(why) => {
-                self.rejected = true;
+
+                if self.picture.is_some() {
+                    self.sent = false;
+                } else {
+                    self.rejected = true;
+                }
                 self.refusal = why;
                 return;
             }
@@ -604,8 +821,23 @@ impl App for Reporter {
                 self.typed = t;
                 self.refusal.clear();
             }
+            Msg::App(at) => self.app = self.picks().get(at).map(|p| p.program.clone()),
             Msg::Username(t) => self.username_is(t),
-            Msg::Details => self.details = !self.details,
+            Msg::Details => {
+                self.details = !self.details;
+                if let Some(asks) = &self.asks {
+                    asks.send(Do::Fit);
+                }
+            }
+            Msg::PicturePick => self.pick_picture(),
+            Msg::PictureShot => self.shoot_picture(),
+            Msg::PictureRemove => {
+                if !self.sent {
+                    self.picture = None;
+                    self.picture_fault = None;
+                    self.refusal.clear();
+                }
+            }
             Msg::Send => self.send(),
             Msg::Save => self.save(),
             Msg::Copy => match self.refused() {
@@ -628,6 +860,10 @@ impl App for Reporter {
         };
         let below = if !self.refusal.is_empty() {
             label(self.refusal.clone()).tone(Tone::Problem)
+        } else if let Some(why) = &self.picture_fault {
+            label(why.clone()).tone(Tone::Problem)
+        } else if self.picture_busy {
+            label(t!("report-picture-reading"))
         } else if let Some(name) = &self.saved {
             label(t!("report-saved-as", name = name))
         } else if self.delivered {
@@ -653,21 +889,18 @@ impl App for Reporter {
         if off.is_none() {
             bottom.push(button(SEND_ICON, t!("report-send")).on_press(Msg::Send));
         }
-        let mut inner = vec![
-            label(t!("report-beta")),
-            entry(self.typed.clone(), t!("report-what-doing"), Msg::Typed).first(),
-            entry(self.username.clone(), t!("report-username-box"), Msg::Username),
-            below,
-            label(summary()),
-            row(vec![space(), button(DETAILS_ICON, if self.details { t!("report-hide-details") } else { t!("report-show-details") }).on_press(Msg::Details)]),
-        ];
+        let mut inner = vec![label(t!("report-beta")), self.app_row(), self.writing(), entry(self.username.clone(), t!("report-username-box"), Msg::Username)];
+        inner.extend(self.picture_shown());
+        inner.extend([below, label(summary()), self.controls_row()]);
         if self.details {
-            inner.push(scroll("report-details", label(self.text())).height(Length::Fixed(160.0)));
+            inner.push(scroll("report-details", label(self.shown_text())).height(Length::Fixed(self.details_high)));
             inner.push(row(vec![space(), button(COPY_ICON, t!("report-copy")).on_press(Msg::Copy),
-                                main_word(t!("report-save")).on_press(Msg::Save).off(self.saved.is_some())]).gap(12.0));
+                                main_word(t!("report-save")).on_press(Msg::Save).off(self.saved.is_some())]).gap(ROW_GAP));
         }
-        inner.push(row(bottom).gap(12.0));
-        column(vec![page_title(title), card(column(inner).gap(12.0))]).gap(16.0).padding(theme::sheet().page_padding)
+        inner.push(row(bottom).gap(ROW_GAP));
+        let padding = theme::sheet().page_padding;
+        let (card_gap, page_gap, padding) = if self.tight { (GAP_TIGHT, GAP_TIGHT, padding.min(PAGE_PADDING_TIGHT)) } else { (CARD_GAP, PAGE_GAP, padding) };
+        column(vec![page_title(title), card(column(inner).gap(card_gap))]).gap(page_gap).padding(padding)
     }
 
     fn intercept(&self, input: &Input, _keys: bool) -> Option<Msg> {
@@ -681,7 +914,7 @@ impl App for Reporter {
 fn mode_of(args: &[String]) -> (Mode, String) {
     if let Some(at) = args.iter().position(|a| a == "--crash") {
         let name = args.get(at + 1).map(String::as_str).unwrap_or("trindle");
-        let program = if crate::NAMES.contains(&name) { name } else { "trindle" };
+        let program = if crate::NAMES.contains(&name) || name == send::FOLDERS_PROGRAM { name } else { "trindle" };
         return (Mode::Crash, program.to_string());
     }
     (Mode::Note, String::new())
@@ -727,3 +960,5 @@ mod tests;
 mod tests_send;
 #[cfg(test)]
 mod tests_window;
+#[cfg(test)]
+mod tests_picture;

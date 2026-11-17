@@ -13,7 +13,7 @@ fn room_is_offered_for_btrfs_and_another_kind_says_why_not() {
     assert!(matches!(room::offer(&facts), room::Offer::Make { .. }), "{facts:?}");
     let kinds = d.kinds();
     assert_eq!(d.part_extras(&d.drives[0], &v, &kinds).len(), 1, "the system part has this row and no other");
-    for (kind, words) in [("ext4", "not in use"), ("xfs", "cannot be made smaller")] {
+    for (kind, words) in [("ext4", "isn't in use"), ("xfs", t!("disks-room-xfs-fixed"))] {
         let d = room_window(kind, false);
         let v = d.drives[0].vols.iter().find(|v| v.part.is_some()).unwrap().clone();
         let (facts, _) = d.room_facts(&v, false);
@@ -47,14 +47,96 @@ fn making_room_takes_a_snapshot_first_then_every_step_asks_and_is_checked() {
         assert!(d.ran.is_empty(), "nothing is sent to UDisks before the snapshot is known");
         assert!(d.snapping && d.busy == 1);
 
-        d.act(Act::Delete { drive: dp.clone(), vol: vp.clone() });
-        d.act(Act::Delete { drive: dp.clone(), vol: vp.clone() });
-        assert_eq!(d.told(&dp, "").map(|(w, _)| w).as_deref(), Some(plan::one_at_a_time()));
+        add_a_part_that_can_grow(&mut d);
+        let (other, part) = ("/d/grow".to_string(), "/b/Grow".to_string());
+        d.act(Act::Delete { drive: other.clone(), vol: part.clone() });
+        d.act(Act::Delete { drive: other.clone(), vol: part });
+        assert_eq!(d.told(&other, "").map(|(w, _)| w).as_deref(), Some(plan::one_at_a_time()));
         d.handle(Do::Snapped { drive: dp.clone(), vol: vp.clone(), row: format!("{vp}:room"), want: 100 * G, desc: d.snaps[0].clone(), res: Ok(()) });
         assert!(!d.snapping);
         let ran = d.ran.last().expect("the steps were sent");
         assert_eq!(ran.methods, methods, "encrypted: {encrypted}");
         assert!(ran.asked, "a password is asked for before the steps");
+    }
+}
+
+#[test]
+fn a_swap_file_is_switched_off_for_making_room_and_back_on_however_it_ends() {
+    let swapfile = vec!["/swap/swapfile".to_string()];
+    let mut rig = Rig::new();
+    let room = room_window("btrfs", false);
+    let d = &mut rig.d;
+    (d.drives, d.objects, d.caps) = (room.drives, room.objects, room.caps);
+    d.world = || room::World { swaps: Some("Filename Type\n/swap/swapfile file 100 0 -2\n".into()), ..made_up_world() };
+    let (dp, vp) = system_part(d);
+    let row = format!("{vp}:room");
+    d.gbs.insert(row.clone(), 100.0);
+    let v = d.vol(&dp, &vp).unwrap().1.clone();
+    assert!(matches!(room::offer(&d.room_facts(&v, false).0), room::Offer::Make { .. }), "a swap file is no refusal");
+    d.act(Act::Room { drive: dp.clone(), vol: vp.clone() });
+    d.act(Act::Room { drive: dp.clone(), vol: vp.clone() });
+    d.handle(Do::Snapped { drive: dp.clone(), vol: vp.clone(), row: row.clone(), want: 100 * G, desc: String::new(), res: Ok(()) });
+    assert_eq!(d.swaps, [(false, swapfile.clone())]);
+    assert!(d.ran.is_empty(), "nothing is resized while the swap file is on");
+    assert_eq!(d.told(&dp, &row).map(|(w, _)| w).as_deref(), Some("Switching off the swap file…"));
+
+    add_a_part_that_can_grow(d);
+    d.act(Act::Delete { drive: "/d/grow".into(), vol: "/b/Grow".into() });
+    d.act(Act::Delete { drive: "/d/grow".into(), vol: "/b/Grow".into() });
+    assert_eq!(d.told("/d/grow", "").map(|(w, _)| w).as_deref(), Some(plan::one_at_a_time()));
+    d.handle(Do::SwappedOff { drive: dp.clone(), vol: vp.clone(), row: row.clone(), want: 100 * G, files: swapfile.clone(), res: Ok(String::new()) });
+    assert_eq!(d.ran.last().map(|r| r.methods.clone()), Some(vec!["Verify", "Resize", "Verify", "Resize", "Verify"]));
+    assert!(d.swapped.contains_key(&spot(&dp, &row)), "the run began");
+
+    assert!(rig.until(|d| d.swaps.len() == 2), "the swap file is asked back on as the run ends");
+    let d = &mut rig.d;
+    assert_eq!(d.swaps.last(), Some(&(true, swapfile.clone())));
+    assert_eq!(d.told(&dp, &row).map(|(w, _)| w).as_deref(), Some("Switching the swap file back on…"));
+    assert!(d.busy == 1 && d.snapping, "the work is not over until the swap file is back");
+    let ended: Result<String, String> = Err("Example reason.".into());
+    d.handle(Do::SwappedOn { drive: dp.clone(), row: row.clone(), res: ended.clone(), standing: false });
+    assert_eq!(d.told(&dp, &row), Some(("Example reason.".to_string(), Tone::Problem)));
+    assert!(d.busy == 0 && !d.snapping && d.swapped.is_empty());
+}
+
+#[test]
+fn a_swap_file_left_off_or_not_switched_off_is_never_silent() {
+    let swapfile = vec!["/swap/swapfile".to_string()];
+    let mut d = room_window("btrfs", false);
+    d.world = || room::World { swaps: Some("Filename Type\n/swap/swapfile file 100 0 -2\n".into()), ..made_up_world() };
+    let (dp, vp) = system_part(&d);
+    let row = format!("{vp}:room");
+    d.gbs.insert(row.clone(), 100.0);
+    let press = |d: &mut Drives| {
+        d.act(Act::Room { drive: dp.clone(), vol: vp.clone() });
+        d.act(Act::Room { drive: dp.clone(), vol: vp.clone() });
+        d.handle(Do::Snapped { drive: dp.clone(), vol: vp.clone(), row: row.clone(), want: 100 * G, desc: String::new(), res: Ok(()) });
+    };
+    press(&mut d);
+    d.handle(Do::SwappedOff { drive: dp.clone(), vol: vp.clone(), row: row.clone(), want: 100 * G, files: swapfile.clone(), res: Err("swapoff: Cannot allocate memory".into()) });
+    let (said, tone) = d.told(&dp, &row).expect("said");
+    assert!(said.contains("Cannot allocate memory") && said.contains("Nothing was resized") && tone == Tone::Problem, "{said}");
+    assert!(d.ran.is_empty() && d.busy == 0 && d.swaps.len() == 1);
+
+    press(&mut d);
+    d.objects.get_mut(&vp).unwrap().get_mut(FILESYSTEM).unwrap().insert("MountPoints".into(), val(Vec::<Vec<u8>>::new()));
+    d.handle(Do::SwappedOff { drive: dp.clone(), vol: vp.clone(), row: row.clone(), want: 100 * G, files: swapfile.clone(), res: Ok(String::new()) });
+    assert!(d.ran.is_empty());
+    assert_eq!(d.swaps.last(), Some(&(true, swapfile.clone())));
+    assert_eq!(d.busy, 1);
+    d.handle(Do::SwappedOn { drive: dp.clone(), row: row.clone(), res: Err(t!("disks-snapshot-changed").into()), standing: false });
+    assert_eq!(d.busy, 0);
+
+    let off = Err("Couldn't switch the swap file /swap/swapfile back on: swapon: busy".to_string());
+    for ended in [Ok("Made 100 GB of room".to_string()), Err("Example reason.".to_string())] {
+        let news = |back| crate::disks::actions::swap_news(ended.clone(), back);
+        let said = news(off.clone()).expect_err("red");
+        assert!(said.starts_with(&plan::sentence(ended.as_ref().unwrap_or_else(|e| e))), "{said}");
+        assert!(said.contains("stays off until you restart") && said.ends_with("swapon: busy."), "{said}");
+        assert_eq!(news(Ok(String::new())), ended);
+
+        let said = news(Ok(t!("admin-swap-resume-unread").into())).expect_err("red");
+        assert!(said.ends_with(t!("admin-swap-resume-unread")) && !said.contains("stays off"), "{said}");
     }
 }
 
@@ -66,7 +148,7 @@ fn no_snapshot_or_a_changed_state_means_nothing_is_resized() {
     d.gbs.insert(row.clone(), 100.0);
     d.act(Act::Room { drive: dp.clone(), vol: vp.clone() });
     d.act(Act::Room { drive: dp.clone(), vol: vp.clone() });
-    d.handle(Do::Snapped { drive: dp.clone(), vol: vp.clone(), row: row.clone(), want: 100 * G, desc: String::new(), res: Err("No password was given, so nothing changed.".into()) });
+    d.handle(Do::Snapped { drive: dp.clone(), vol: vp.clone(), row: row.clone(), want: 100 * G, desc: String::new(), res: Err("You didn't enter a password, so nothing changed.".into()) });
     assert!(d.ran.is_empty() && !d.snapping);
     let (said, _) = d.told(&dp, &row).expect("said");
     assert!(said.contains("Nothing was resized"), "{said}");
@@ -77,7 +159,7 @@ fn no_snapshot_or_a_changed_state_means_nothing_is_resized() {
     d.handle(Do::Snapped { drive: dp.clone(), vol: vp.clone(), row: row.clone(), want: 100 * G, desc: String::new(), res: Ok(()) });
     assert!(d.ran.is_empty(), "nothing is sent when things changed");
     let (said, _) = d.told(&dp, &row).expect("said");
-    assert!(said.contains("Things changed"), "{said}");
+    assert!(said.contains("Something changed"), "{said}");
     assert_eq!(d.busy, 0);
 }
 
@@ -191,6 +273,46 @@ fn a_change_in_progress_refuses_another(d: &mut Drives) {
 }
 
 #[test]
+fn a_change_is_made_only_to_what_the_model_has_now() {
+    let mut d = sample();
+    let from = d.ran.len();
+    let system = (d.drives[0].path.clone(), d.drives[0].vols[0].path.clone());
+    let refused = [
+        Act::Delete { drive: system.0.clone(), vol: system.1.clone() },
+        Act::Format { drive: system.0.clone(), target: d.drives[0].whole.clone().unwrap(), whole: true },
+
+        Act::Format { drive: "/d/usb".into(), target: "/b/sdc".into(), whole: true },
+        Act::Format { drive: "/d/usb".into(), target: "/b/Backup".into(), whole: false },
+        Act::Format { drive: "/d/gone".into(), target: "/b/sdb".into(), whole: true },
+        Act::Rename { drive: system.0.clone(), vol: system.1.clone() },
+    ];
+    for act in refused {
+        d.act(act.clone());
+        d.act(act);
+    }
+    assert_eq!(d.ran.len(), from, "nothing was sent to UDisks");
+    let erase = Act::Format { drive: "/d/usb".into(), target: "/b/sdb".into(), whole: true };
+    d.act(erase.clone());
+    d.act(erase);
+    assert!(d.ran.len() > from, "what is there is still changed");
+}
+
+#[test]
+fn what_was_typed_for_a_drive_that_went_is_forgotten() {
+    let mut d = sample();
+    d.texts.insert("/b/Photos:name".into(), "Mine".into());
+    d.texts.insert("/b/Gone:name".into(), "Not mine".into());
+    d.picks.insert("/d/usb:wipe:kind".into(), 2);
+    d.picks.insert("/d/gone:wipe:kind".into(), 2);
+    d.gbs.insert("/b/Gone:size".into(), 3.0);
+    d.armed = Some("resize:/b/Gone".into());
+    d.forget_gone();
+    assert!(d.texts.contains_key("/b/Photos:name") && !d.texts.contains_key("/b/Gone:name"));
+    assert!(d.picks.contains_key("/d/usb:wipe:kind") && !d.picks.contains_key("/d/gone:wipe:kind"));
+    assert!(d.gbs.is_empty() && d.armed.is_none());
+}
+
+#[test]
 fn no_change_to_a_drive_runs_unasked() {
     assert_eq!(plan::FREE, ["Mount", "Unmount", "Eject", "PowerOff"], "nothing joins the free steps unnoticed");
     let mut d = sample();
@@ -292,7 +414,7 @@ fn password_steps(d: &mut Drives, log: &Rc<RefCell<Vec<String>>>, heard: &Rc<Ref
     assert_eq!(heard.borrow()[2], Err(plan::no_password().to_string()));
     assert_eq!(log.borrow().clone(), vec!["polkit: what leave is kept?", "Unmount", "Delete", "Mount", "polkit: what leave is kept?"]);
     assert!(!d.changing.get());
-    assert_eq!(plan::no_password(), "No password was given, so nothing changed.");
+    assert_eq!(plan::no_password(), "You didn't enter a password, so nothing changed.");
 }
 
 fn only_a_closed_box_is_no_password() {
@@ -345,4 +467,37 @@ fn a_change_asks_afresh_and_a_password_not_given_changes_nothing() {
     password_steps(&mut d, &log, &heard, &wait);
     only_a_closed_box_is_no_password();
     drop(served);
+}
+
+#[test]
+fn one_btrfs_mounted_in_three_places_is_one_filesystem() {
+    let mut d = room_window("btrfs", false);
+    let (_, vol) = system_part(&d);
+    let mut places = Vec::new();
+    for dir in ["/home", "/", "/swap"] {
+        places.push(dir.as_bytes().iter().copied().chain([0]).collect::<Vec<u8>>());
+    }
+    d.objects.get_mut(&vol).unwrap().get_mut(FILESYSTEM).unwrap().insert("MountPoints".into(), val(places));
+    let v = d.vol(&d.drives[0].path, &vol).unwrap().1.clone();
+    let (facts, _) = d.room_facts(&v, false);
+    assert_eq!(facts.mounts.len(), 3);
+    assert!(matches!(room::offer(&facts), room::Offer::Make { .. }), "{facts:?}");
+    d.world = || room::World {
+        swaps: Some("Filename\tType\tSize\tUsed\tPriority\n/swap/swapfile file 100 0 -2\n".into()),
+        mountinfo: "36 1 259:2 /@rootfs / rw,relatime - btrfs /dev/nvme9n1p2 rw\n37 36 259:2 /@home /home rw,relatime - btrfs /dev/nvme9n1p2 rw\n38 36 259:2 /@swap /swap rw,relatime - btrfs /dev/nvme9n1p2 rw\n".into(),
+        ..made_up_world()
+    };
+    let (facts, _) = d.room_facts(&v, false);
+    assert_eq!(facts.swap_files, Some(vec!["/swap/swapfile".to_string()]), "the swap file on the third mount is found");
+    assert!(matches!(room::offer(&facts), room::Offer::Make { .. }));
+}
+
+#[test]
+fn a_stick_is_closed_without_eject_when_there_is_no_eject_program() {
+    let parts = vec!["/org/freedesktop/UDisks2/block_devices/sdb1".to_string()];
+    let drive = "/org/freedesktop/UDisks2/drives/stick";
+    let methods = |method, can| crate::disks::actions::closing_steps(drive, &parts, method, can).iter().map(|s| s.method).collect::<Vec<_>>();
+    assert_eq!(methods("Eject", true), ["Unmount", "Eject"]);
+    assert_eq!(methods("Eject", false), ["Unmount"]);
+    assert_eq!(methods("PowerOff", false), ["Unmount", "PowerOff"]);
 }

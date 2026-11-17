@@ -828,7 +828,7 @@ mod tests {
         assert_eq!(health_line(&h), ("Healthy, 38 °C, used for 2,140 hours".into(), true));
         assert_eq!(health_line(&Health::default()), ("Healthy".into(), true));
         let bad = Health { failing: true, kelvin: 0.0, hours: 1, ..Default::default() };
-        assert_eq!(health_line(&bad), ("Failing: copy anything you want to keep off it now, used for 1 hour".into(), false));
+        assert_eq!(health_line(&bad), ("Failing. Copy anything you want to keep off it now, used for 1 hour".into(), false));
         let worn = Health { troubles: vec![nvme_trouble("spare").unwrap().into(), "too hot".into()], ..Default::default() };
         assert_eq!(health_line(&worn), ("Needs attention: running out of spare space, too hot".into(), false));
         assert_eq!(nvme_trouble("unknown"), None);
@@ -855,16 +855,16 @@ mod tests {
         assert_eq!(closed, Stopped { why: no_password().into(), refused: true });
         let refusal = (format!("{udisks}NotAuthorized"), "Not authorized to perform operation");
         let wrong = stopped(&refusal.0, refusal.1, || Some(true));
-        assert_eq!(wrong, Stopped { why: "The administrator's password was not accepted, so nothing changed.".into(), refused: true });
+        assert_eq!(wrong, Stopped { why: "The administrator's password wasn't accepted, so nothing changed.".into(), refused: true });
         let not_allowed = stopped(&refusal.0, refusal.1, || Some(false));
-        assert_eq!(not_allowed.why, "This login is not allowed to do that, whatever password is given, so nothing changed.");
+        assert_eq!(not_allowed.why, "Your account isn't allowed to do that, even with the right password, so nothing changed.");
         let unclear = stopped(&refusal.0, refusal.1, || None);
-        assert_eq!(unclear.why, "The administrator's password was not accepted, or this login is not allowed to do that, so nothing changed.");
+        assert_eq!(unclear.why, "The administrator's password wasn't accepted, or your account isn't allowed to do that, so nothing changed.");
         let nothing_asked = stopped(&format!("{udisks}NotAuthorizedCanObtain"), "Not authorized to perform operation", unasked);
-        assert_eq!(nothing_asked.why, "Nothing was there to ask for the administrator's password, so nothing changed.");
+        assert_eq!(nothing_asked.why, "The password box never appeared, so nothing changed.");
         let mut all = vec![closed.why, wrong.why, not_allowed.why, unclear.why, nothing_asked.why];
         for words in &all[1..] {
-            assert!(!words.contains("No password was given"), "{words}");
+            assert!(!words.contains("password was given"), "{words}");
         }
         for words in &all {
             assert!(words.ends_with(", so nothing changed.") && !words.contains('\u{2014}'), "{words}");
@@ -960,7 +960,7 @@ mod tests {
 
         let erase = &runs[1];
         assert_eq!(run_stopped(erase, 1, &stops[0]),
-                   "No password was given, so the work stopped part-way. Done: erasing the whole drive. Not done: making the new part.");
+                   "You didn't enter a password, so the work stopped part-way. Done: erasing the whole drive. Not done: making the new part.");
         assert_eq!(run_stopped(erase, 0, &stops[0]), no_password());
         assert_eq!(run_stopped(erase, 1, &stops[5]),
                    "Example reason. The work stopped part-way. Done: erasing the whole drive. Failed: making the new part.");
@@ -996,7 +996,7 @@ mod tests {
             } else if want == 1 {
                 let may_have = stop.as_ref().is_none_or(|s| !s.refused) && steps[at].changes;
                 let state = if changed || may_have { format!("{dev} was unmounted for this and is not mounted now.") }
-                            else { format!("{dev} was unmounted for this and is still unmounted: mount it from its row.") };
+                            else { format!("{dev} was unmounted for this and is still unmounted. Mount it from its row.") };
                 assert!(words.contains(&state), "{case}");
             }
         }
@@ -1035,8 +1035,9 @@ mod tests {
         let never = stopped("org.freedesktop.DBus.Error.UnknownMethod", "No such method", || None);
         assert!(never.refused && never.why.ends_with(", so nothing changed."), "{never:?}");
         assert_eq!(run_summed(&runs[2], 3, Some(&never), &[]),
-                   "The drive service could not be asked, so the work stopped part-way. Done: unmounting sdb1, unmounting sdb2, erasing the whole drive. \
-                    Not done: making the new part. sdb1 was unmounted for this and is not mounted now. sdb2 was unmounted for this and is not mounted now.");
+                   format!("{}, so the work stopped part-way. Done: unmounting sdb1, unmounting sdb2, erasing the whole drive. \
+                    Not done: making the new part. sdb1 was unmounted for this and is not mounted now. sdb2 was unmounted for this and is not mounted now.",
+                           t!("disks-service-not-asked")));
         assert!(!stopped("org.freedesktop.UDisks2.Error.Failed", "Example reason", || None).refused);
 
         let failed = Stopped { why: "Example reason".into(), refused: false };
@@ -1045,7 +1046,7 @@ mod tests {
 
         let busy = Stopped { why: "Something is still using it.".into(), refused: false };
         assert_eq!(run_summed(&runs[2], 1, Some(&busy), &[]),
-                   "Something is still using it. sdb1 was unmounted for this and is still unmounted: mount it from its row.");
+                   "Something is still using it. sdb1 was unmounted for this and is still unmounted. Mount it from its row.");
         assert_eq!(run_summed(&runs[1], 1, None, &[]),
                    "Drives was closed while this change was being made. Done: unmounting sdb1. Not known: renaming sdb1. Not done: mounting sdb1 again. \
                     sdb1 was unmounted for this and is not mounted now.");
@@ -1092,13 +1093,13 @@ mod tests {
         assert_eq!(standing_words("Formatted"), format!("Formatted. {}", standing()));
         assert_eq!(standing_words(no_password()), format!("{} {}", no_password(), standing()));
         assert_eq!(taken_back_words("Formatted"), format!("Formatted. {}", taken_back()));
-        assert!(standing().contains("could not be taken back") && standing().contains("for a few minutes") && standing().contains("tried again"));
+        assert!(standing().contains("couldn't cancel the password") && standing().contains("For a few minutes") && standing().contains("trying again"));
         let needs = Stopped { why: refusal_words(Refused::Unasked), refused: true };
-        assert_eq!(not_put_back("sdb1", &needs), "sdb1 was unmounted for this, and mounting it again needs a password of its own: mount it from its row.");
+        assert_eq!(not_put_back("sdb1", &needs), "sdb1 was unmounted for this. Mount it again from its row and enter its password when asked.");
         let failed = Stopped { why: "Something odd.".into(), refused: false };
-        assert_eq!(not_put_back("sdb1", &failed), "sdb1 was unmounted for this and could not be mounted again (Something odd): mount it from its row.");
+        assert_eq!(not_put_back("sdb1", &failed), "sdb1 was unmounted for this and could not be mounted again (Something odd). Mount it from its row.");
         assert_eq!(folder_not_kept("/mnt/example", one_at_a_time()),
-                   format!("Formatted, but it was not given its folder /mnt/example again. {} Choose the folder again from its row.", one_at_a_time()));
+                   format!("Formatting is done, but Trindle couldn't give it the folder /mnt/example again. {} Choose the folder again from its row.", one_at_a_time()));
         for words in [standing(), taken_back(), &folder_not_kept("/mnt/example", "No reason"), &not_put_back("sdb1", &failed)] {
             assert!(!words.contains('\u{2014}') && words.ends_with('.'), "{words}");
         }

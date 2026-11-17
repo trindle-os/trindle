@@ -1,7 +1,10 @@
 //! How far through an install Flatpak says it is.
 
-use crate::toolkit::t;
-use std::time::{Duration, Instant};
+pub fn english<'a>(argv: &[&'a str]) -> Vec<&'a str> {
+    let mut out = vec!["env", "LC_ALL=C"];
+    out.extend_from_slice(argv);
+    out
+}
 
 fn percent(line: &str) -> Option<f64> {
     let b = line.as_bytes();
@@ -68,7 +71,6 @@ pub struct Where {
 #[derive(Default)]
 pub struct Job {
     sizes: Vec<f64>,
-    began: Option<Instant>,
 }
 
 impl Job {
@@ -79,7 +81,6 @@ impl Job {
             return None;
         }
         let share = how_far(line)?;
-        self.began.get_or_insert_with(Instant::now);
         Some(self.weigh(line, share))
     }
 
@@ -94,10 +95,6 @@ impl Job {
         Where { share: (done / whole).clamp(0.0, 1.0), bytes: Some((done, whole)) }
     }
 
-    pub fn left(&self, at: Where) -> Option<Duration> {
-        let (done, whole) = at.bytes?;
-        time_left(self.began?.elapsed(), done, whole)
-    }
 }
 
 fn step_of(line: &str) -> Option<(usize, usize)> {
@@ -108,26 +105,29 @@ fn step_of(line: &str) -> Option<(usize, usize)> {
     (step >= 1 && step <= total).then_some((step, total))
 }
 
-fn time_left(spent: Duration, done: f64, whole: f64) -> Option<Duration> {
-    if spent < Duration::from_secs(10) || done <= 0.0 {
-        return None;
-    }
-    Some(Duration::from_secs_f64(spent.as_secs_f64() * (whole - done).max(0.0) / done))
-}
-
-pub fn left_in_words(left: Duration) -> String {
-    let mins = (left.as_secs_f64() / 60.0).round() as u64;
-    match mins {
-        0 | 1 => t!("store-left-minute").to_string(),
-        m if m < 90 => t!("store-left-minutes", n = m),
-        m => t!("store-left-hours", n = (m as f64 / 60.0).round() as u64),
-    }
-}
-
 #[cfg(test)]
 mod tests {
-    use super::{how_far, row_size, time_left, Job};
-    use std::time::Duration;
+    use super::{english, how_far, row_size, Job};
+
+    #[test]
+    fn a_command_whose_words_are_read_runs_in_the_c_locale() {
+        let argv = english(&["sh", "-c", "echo $LC_ALL"]);
+        assert_eq!(argv[..2], ["env", "LC_ALL=C"]);
+        let argv: Vec<String> = argv.iter().map(|a| a.to_string()).collect();
+        let (ok, out, _) = crate::common::run::captured(&argv, None);
+        assert!(ok && out.trim() == "C", "{out:?}");
+    }
+
+    #[test]
+    fn no_translated_command_is_read_in_the_persons_language() {
+        let needles = ["capture(&[\"flatpak\", \"list\"", "capture(&[\"flatpak\", \"remote", "capture(&[\"apt", "capture(&[\"du\"", "capture(&[\"tar\""];
+        for (name, text) in crate::common::source::every_file().into_iter().filter(|(n, _)| n.starts_with("store/") && !n.contains("test")) {
+            let code = text.split("#[cfg(test)]").next().unwrap_or_default();
+            for needle in needles {
+                assert!(!code.contains(needle) || name.ends_with("progress.rs"), "{name} reads {needle} in the person's language");
+            }
+        }
+    }
 
     fn near(got: Option<f64>, want: f64) -> bool {
         got.is_some_and(|g| (g - want).abs() < 0.001)
@@ -182,9 +182,4 @@ mod tests {
         assert_eq!(w.bytes, None);
     }
 
-    #[test]
-    fn time_left_goes_by_the_speed_so_far() {
-        assert_eq!(time_left(Duration::from_secs(5), 10.0, 100.0), None);
-        assert_eq!(time_left(Duration::from_secs(60), 25.0, 100.0), Some(Duration::from_secs(180)));
-    }
 }

@@ -14,7 +14,7 @@ voice-brighter = Lebih terang
 voice-dimmer = Lebih redup
 
 # Said under the ring when the request is to let the screen rest again.
-voice-keep-awake-off = Layar boleh beristirahat lagi
+voice-keep-awake-off = Layar bisa tidur lagi
 
 # Said under the ring when the screen is kept awake.
 voice-keep-awake-on = Tetap menyala
@@ -23,7 +23,7 @@ voice-keep-awake-on = Tetap menyala
 voice-updates = Mencari pembaruan
 
 # Said under the ring when nothing was heard at all.
-voice-nothing-heard = Tidak terdengar apa-apa. Ketuk bagian tengah cincin dan bicaralah.
+voice-nothing-heard = Trindle tidak bisa mendengar Anda. Ketuk bagian tengah cincin dan bicaralah.
 
 # Said under the ring when the volume goes up.
 voice-louder = Lebih keras
@@ -86,7 +86,7 @@ voice-showing-app = Menampilkan { $name }
 voice-opening-app = Membuka { $name }
 
 # Said under the ring when the request was heard but not understood; what was heard comes in.
-voice-heard-unknown = Terdengar “{ $heard }”, tetapi tidak tahu apa yang harus dilakukan
+voice-heard-unknown = Trindle tidak mengenali perintah “{ $heard }”
 
 # Said in the ring when voice has not been added yet.
 voice-optional = Suara adalah tambahan opsional. Tambahkan di Pengaturan, pada halaman Cincin.
@@ -95,31 +95,31 @@ voice-optional = Suara adalah tambahan opsional. Tambahkan di Pengaturan, pada h
 voice-switched-off = Suara dimatikan. Nyalakan di Pengaturan, pada halaman Cincin.
 
 # Said in the ring when the microphone cannot be opened; the reason comes after it.
-voice-mic-failed = Mikrofon tidak dapat dibuka: { $why }
+voice-mic-failed = Trindle tidak bisa mengakses mikrofon: { $why }
 
 # Said in the ring when the microphone's recorder would not start.
-voice-mic-not-started = Mikrofon tidak dapat dibuka: pw-record tidak mulai
+voice-mic-not-started = Trindle tidak bisa mengakses mikrofon karena program perekam tidak mulai
 
 # Said in the ring when listening stopped and nothing was recorded.
 voice-nothing-recorded = Tidak ada yang terekam.
 
 # Said in the ring when the recording had no speech in it.
-voice-nothing-heard-after = Tidak terdengar apa-apa. Ketuk bagian tengah cincin dan bicaralah.
+voice-nothing-heard-after = Trindle tidak bisa mendengar Anda. Ketuk bagian tengah cincin dan bicaralah.
 
 # Said in the ring when the speech engine failed and gave no reason.
 voice-whisper-failed = Whisper gagal
 
 # Progress line while the build tools are added for the build; the names of the packages come in.
-voice-installing-tools = Memasang alat pembangun untuk sementara: { $names }
+voice-installing-tools = Memasang alat pembangun sementara: { $names }
 
 # Progress line while whisper.cpp is built; its version comes in.
-voice-building = Membangun whisper.cpp { $version } untuk suara (satu atau dua menit)
+voice-building = Membangun whisper.cpp { $version } untuk kontrol suara. Ini memakan satu atau dua menit.
 
 # Progress line while the speech model is downloaded (148 MB).
-voice-fetching-model = Mengambil model ucapan (148 MB)
+voice-fetching-model = Mengunduh model ucapan (148 MB)
 
 # Progress line while the build tools are taken away again.
-voice-removing-tools = Menghapus alat pembangun lagi
+voice-removing-tools = Menghapus alat pembangun sekarang
 
 # Said once voice is added and ready to use.
 voice-ready = Kendali suara siap. Buka cincin, ketuk bagian tengah, dan bicaralah.
@@ -133,3 +133,15 @@ voice-press-enter = Tekan Enter untuk menutup.
 # Shown when the command is run with neither install nor remove.
 voice-usage = penggunaan: trindle-voice-setup install | remove
 
+# Said when a step of the voice set-up fails. { $program } is the program that was run, with its first word.
+voice-step-failed = { $program } tidak berhasil.
+
+# Said when the whisper.cpp download isn't the one Trindle checks for, so nothing is built from it.
+voice-whisper-fingerprint = Unduhan whisper.cpp bukan yang diharapkan Trindle, jadi tidak dibangun.
+
+# Said when the speech model download isn't the one Trindle checks for, so it isn't installed.
+voice-model-fingerprint = Unduhan model ucapan bukan yang diharapkan Trindle, jadi tidak dipasang.
+
+
+# The reason after "Trindle couldn't access the microphone:" when the session has no private folder to keep a recording in.
+voice-no-private-folder = tidak ada folder pribadi yang tersedia.

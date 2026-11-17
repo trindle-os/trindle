@@ -7,7 +7,7 @@ use crate::toolkit::t;
 use crate::toolkit::event::Flow;
 
 use super::{cast_capture, gbm, monotonic_ns, tell_in_use, wait_for, Cast, Casting, RETRY, SESSION, Session};
-use super::desktop::place;
+use super::desktop::{place, Out};
 use super::super::cast_capture::{Capture, Heard};
 use super::super::pw::stream;
 use super::super::pw::connection::PipeWire;
@@ -340,11 +340,11 @@ impl Casting {
         let stream::Store::Shared(memory) = &slot.store else { return };
         // SAFETY: the slot's memory is PipeWire's buffer, ours to write
 
-        let out = unsafe { std::slice::from_raw_parts_mut(memory.as_mut_ptr(), memory.len()) };
-        out.fill(0);
+        let out = unsafe { Out::raw(memory.as_mut_ptr(), memory.len()) };
+        out.zero();
         for part in cast.parts.borrow().iter() {
             if let Some(m) = &part.memory {
-                place(out, stride, (w, h), m.bytes(), part.size, part.at);
+                place(&out, stride, (w, h), m.bytes(), part.size, part.at);
             }
         }
         drop(held);

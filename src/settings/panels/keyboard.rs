@@ -16,11 +16,11 @@ use std::time::Duration;
 
 use layout::{Chosen, Variants};
 
-use crate::common::files::setting;
+use crate::ring::tray::keyboard_button_on;
 use crate::common::pointer::Pointer;
 use crate::common::remap::Table;
 use crate::plugins::shortcuts::Binding;
-use crate::settings::ui::{group, headline, line, on, page, Kit, Msg, Page, not_saved};
+use crate::settings::ui::{group, headline, line, on, page, Kit, Msg, Page, Rounds, not_saved};
 use crate::toolkit::t;
 use crate::toolkit::widget::Node;
 
@@ -37,10 +37,6 @@ fn not_told() -> &'static str {
     t!("settings-keyboard-not-told")
 }
 
-fn keyboard_button_on() -> bool {
-    setting("keyboard_button") != "off"
-}
-
 fn clicker_on() -> bool {
     crate::common::own_helpers::on(crate::common::own_helpers::Helper::Clicker)
 }
@@ -55,7 +51,8 @@ pub struct Keyboard {
 
     names: HashMap<String, String>,
 
-    all: Vec<(String, String)>,
+    layouts: layout::Options,
+    seconds: layout::Options,
     read: bool,
     pointer: Pointer,
     touchpad: bool,
@@ -69,13 +66,12 @@ pub struct Keyboard {
 
     restart_typed: Vec<(&'static str, String)>,
 
-    keys_round: u32,
+    typing: Rounds,
 
     table: Table,
     table_unread: Option<String>,
 
     typed: HashMap<usize, String>,
-    typed_round: u32,
 
     picking: bool,
     pick_round: u32,
@@ -93,7 +89,8 @@ impl Default for Keyboard {
             chosen: Chosen::default(),
             variants: Variants::new(),
             names: HashMap::new(),
-            all: Vec::new(),
+            layouts: layout::Options::default(),
+            seconds: layout::Options::default(),
             read: false,
             pointer: Pointer::load(),
             touchpad: false,
@@ -102,11 +99,10 @@ impl Default for Keyboard {
             rounds: [0; 3],
             plugin_keys: Vec::new(),
             restart_typed: Vec::new(),
-            keys_round: 0,
+            typing: Rounds::default(),
             table: Table::default(),
             table_unread: None,
             typed: HashMap::new(),
-            typed_round: 0,
             picking: false,
             pick_round: 0,
             devices: Vec::new(),
@@ -114,10 +110,6 @@ impl Default for Keyboard {
             usb: Vec::new(),
         }
     }
-}
-
-impl Keyboard {
-
 }
 
 impl Page for Keyboard {
@@ -164,13 +156,13 @@ impl Page for Keyboard {
     fn view(&self, kit: &Kit) -> Node<Msg> {
         let mut items = Vec::new();
         if self.names.is_empty() {
-            items.push(headline(kit, t!("settings-keyboard-no-list")));
+            items.push(headline(t!("settings-keyboard-no-list")));
             items.push(group(t!("settings-keyboard-no-list-title")).icon("input-keyboard-symbolic")
                 .rows(vec![line(t!("settings-keyboard-no-list-heading"))
                     .sub(t!("settings-keyboard-no-list-about")).node(kit)])
                 .node(kit));
         } else {
-            items.push(headline(kit, self.tell()));
+            items.push(headline(self.tell()));
             items.extend(self.keyboard_cards(kit));
         }
 
@@ -201,13 +193,59 @@ impl Keyboard {
         let devices = vec![(false, "AT Translated Set 2 keyboard".into()), (false, "Logitech MX Master 3".into()),
                            (true, "keyd virtual keyboard".into()), (true, "ydotoold virtual device".into())];
         Keyboard { chosen: Chosen { first: "gb".into(), second: "fr".into(), ..Chosen::default() },
-                   names: all.iter().cloned().collect(), all, read: true, touchpad: true, table, devices,
+                   names: all.iter().cloned().collect(), layouts: layout::Options::of(all.clone()),
+                   seconds: layout::Options::seconds(&all), read: true, touchpad: true, table, devices,
                    allowed: vec!["keyd virtual keyboard".into()], ..Keyboard::default() }
     }
 }
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn the_layout_lists_are_shared_by_each_drawing_not_copied() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let kit = Kit::new(events, asks, None, None);
+        let me = Keyboard::made_up();
+        let cards = me.keyboard_cards(&kit);
+        assert_eq!(me.layouts.strong(), 2, "the first layout's list is the kept one");
+        assert_eq!(me.seconds.strong(), 2, "the second layout's list is the kept one");
+        drop(cards);
+        assert_eq!(me.layouts.strong(), 1);
+    }
+
+    #[test]
+    fn the_key_names_are_made_once_in_the_order_of_their_codes() {
+        let names = changed_keys::key_names();
+        assert!(std::ptr::eq(names, changed_keys::key_names()));
+        assert!(names.iter().zip(crate::common::remap::named()).all(|(w, (_, n))| w == n));
+    }
+
+    #[test]
+    fn no_line_under_a_keyboard_or_mouse_control_explains_it() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let kit = Kit::new(events, asks, None, None);
+        let said = Keyboard::made_up().view(&kit).said().join("|");
+        for old in [
+            "On every keyboard and mouse.",
+            "Press it, or choose it from the list.",
+            "Trusted like a keyboard or mouse you plug in.",
+            "It can type and play, but it can\'t press protected buttons.",
+            "Press Alt and Shift together to switch between the two.",
+            "Such as Ctrl or Escape.",
+            "Opens a keyboard on the screen.",
+            "How far a page moves for each turn of the wheel.",
+            "The page moves with the wheel, as on a phone.",
+            "Swaps the left and right buttons.",
+            "Clicks from a dwell or switch clicker count as your own.",
+            "Type the keys, or leave it empty.",
+            "Type the keys, such as Ctrl+Alt+Escape, or leave it empty.",
+        ] {
+            assert!(!said.contains(old), "{old} is still on the page");
+        }
+    }
     use super::mouse::times;
     use crate::common::pointer;
     use super::*;
@@ -228,7 +266,7 @@ mod tests {
         let asks = events.post(|_: crate::settings::ui::Do| {});
         let mut kit = Kit::new(events.clone(), asks, None, None);
         assert!(!said(&mut kit, pointer::TAP, Err(std::io::Error::from_raw_os_error(28))));
-        assert_eq!(kit.said(pointer::TAP), Some(("It could not be saved. The disk is full.", true)));
+        assert_eq!(kit.said(pointer::TAP), Some(("Couldn't save it. The disk is full.", true)));
         assert!(said(&mut kit, pointer::TAP, Ok(())));
         assert_eq!(kit.said(pointer::TAP), None);
     }

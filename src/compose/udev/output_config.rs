@@ -11,7 +11,7 @@ use smithay::{
 };
 use tracing::warn;
 
-use super::{AnvilState, SurfaceData, UdevData, UdevOutputId, UdevRenderer};
+use super::{Compose, SurfaceData, UdevData, UdevOutputId, UdevRenderer};
 use crate::{
     protocols::screens::ScreenPlan,
     render::OutputRenderElements,
@@ -21,7 +21,7 @@ use crate::{
 
 type Planned<'a> = (DrmNode, crtc::Handle, &'a ScreenPlan, Option<DrmMode>);
 
-pub(super) fn apply(state: &mut AnvilState<UdevData>, targets: &[ScreenPlan], test_only: bool) -> Result<(), String> {
+pub(super) fn apply(state: &mut Compose<UdevData>, targets: &[ScreenPlan], test_only: bool) -> Result<(), String> {
 
     let plan = check(&state.backend_data, targets)?;
     if test_only {
@@ -142,15 +142,18 @@ impl UdevData {
             )
             .map_err(|err| err.to_string())?;
 
-        let _ = device.drm_output_manager.try_to_restore_modifiers::<_, OutputRenderElements<
+        if let Err(err) = device.drm_output_manager.try_to_restore_modifiers::<_, OutputRenderElements<
             UdevRenderer<'_>,
             WindowRenderElement<UdevRenderer<'_>>,
-        >>(&mut renderer, &DrmOutputRenderElements::default());
+        >>(&mut renderer, &DrmOutputRenderElements::default())
+        {
+            tracing::debug!(?err, "the faster buffer layouts were not restored");
+        }
         Ok(())
     }
 }
 
-impl AnvilState<UdevData> {
+impl Compose<UdevData> {
 
     pub(super) fn disable_surface(&mut self, node: DrmNode, crtc: crtc::Handle) {
         let active = self.backend_data.session.is_active();
@@ -175,7 +178,7 @@ impl AnvilState<UdevData> {
             self.handle.remove(timer);
         }
         if let Some(global) = surface.global.take() {
-            self.display_handle.remove_global::<AnvilState<UdevData>>(global);
+            self.display_handle.remove_global::<Compose<UdevData>>(global);
         }
         let output = surface.output.clone();
         self.space.unmap_output(&output);
@@ -215,7 +218,7 @@ impl AnvilState<UdevData> {
         if newly_enabled {
             surface.enabled = true;
             surface.powered = true;
-            surface.global = Some(output.create_global::<AnvilState<UdevData>>(&self.display_handle));
+            surface.global = Some(output.create_global::<Compose<UdevData>>(&self.display_handle));
         }
 
         surface.drm_output.reset_buffers();

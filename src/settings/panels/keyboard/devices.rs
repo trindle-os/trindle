@@ -1,7 +1,7 @@
-//! Keyboard: the keyboard button on the ring, the helper that clicks, and the keyboards and mice made by programs.
+//! Keyboard: Caps Lock, the keyboard button on the ring, the helper that clicks, and the other switches of the Other card.
 
 use super::{Keyboard, CAPS_KEY, CLICKER, said};
-use super::layout::{caps, Change};
+use super::layout::{caps, Change, Options};
 use crate::common::files::set_setting;
 use crate::common::pointer::{self};
 use crate::settings::ui::{group, line, on, Kit, Msg, not_saved};
@@ -9,8 +9,8 @@ use crate::toolkit::t;
 use crate::toolkit::widget::{switch, Node};
 
 impl Keyboard {
-    pub(super) fn switch_line(kit: &Kit, key: &'static str, on_now: bool, title: &str, sub: &str) -> Node<Msg> {
-        line(title).sub(sub).key(key)
+    pub(super) fn switch_line(kit: &Kit, key: &'static str, on_now: bool, title: &str) -> Node<Msg> {
+        line(title).key(key)
             .control(switch(on_now, title, move |b| {
                 on::<Keyboard>(move |me, k| {
                     me.flag(key, b);
@@ -63,19 +63,18 @@ impl Keyboard {
 
     pub(super) fn ring_card(&self, kit: &Kit) -> Node<Msg> {
         let c = &self.chosen;
-        let caps: Vec<(String, String)> = caps().iter().map(|(v, l)| (v.to_string(), l.to_string())).collect();
+        let caps = Options::of(caps().iter().map(|(v, l)| (v.to_string(), l.to_string())));
         group(t!("settings-keyboard-other-title")).icon("input-keyboard-symbolic")
             .about(t!("settings-keyboard-other-about"))
             .rows(vec![
-                line(t!("settings-keyboard-caps-acts-as")).sub(t!("settings-keyboard-caps-acts-as-about")).key(CAPS_KEY)
-                    .control(Self::pick(kit, CAPS_KEY, &caps, &c.caps, t!("settings-keyboard-caps-acts-as"), Change::Caps)).node(kit),
-                line(t!("settings-keyboard-ring-button")).sub(t!("settings-keyboard-ring-button-about")).key(BUTTON)
+                line(t!("settings-keyboard-caps-acts-as")).key(CAPS_KEY)
+                    .control(Self::pick(CAPS_KEY, &caps, &c.caps, t!("settings-keyboard-caps-acts-as"), Change::Caps)).node(kit),
+                line(t!("settings-keyboard-ring-button")).key(BUTTON)
                     .control(switch(self.button, t!("settings-keyboard-ring-button"), |b| on::<Keyboard>(move |me, k| me.keyboard_button(k, b))))
                     .node(kit),
             ])
             .node(kit)
     }
-
 }
 
 const BUTTON: &str = "keyboard-button";

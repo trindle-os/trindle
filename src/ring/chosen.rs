@@ -33,6 +33,8 @@ pub struct Choice {
     chosen: Option<Vec<String>>,
 
     appeared: Vec<String>,
+
+    left_out: Vec<String>,
 }
 
 impl Choice {
@@ -42,7 +44,7 @@ impl Choice {
             NONE => Some(Vec::new()),
             list => Some(list.split(',').filter(|i| !i.is_empty()).map(String::from).collect()),
         };
-        Choice { chosen, appeared: Vec::new() }
+        Choice { chosen, appeared: Vec::new(), left_out: Vec::new() }
     }
 
     fn text(&self) -> Option<String> {
@@ -57,7 +59,22 @@ impl Choice {
         }
         let mut order: Vec<&String> = present.iter().collect();
         order.sort_by_key(|id| self.appeared.iter().position(|a| a == *id));
-        order.into_iter().filter(|id| self.chosen.as_ref().is_none_or(|c| c.contains(*id))).take(MOST).cloned().collect()
+        let mut row: Vec<String> = order.iter().filter(|id| self.chosen.as_ref().is_none_or(|c| c.contains(**id))).take(MOST).map(|id| (*id).clone()).collect();
+        let waiting = |out: bool| order.iter().filter(|id| !row.contains(**id) && self.left_out.contains(**id) == out).map(|id| (*id).clone()).collect::<Vec<String>>();
+        let room = MOST.saturating_sub(row.len());
+        let mut more: Vec<String> = waiting(false).into_iter().take(room).collect();
+        let room = room - more.len();
+        more.extend(waiting(true).into_iter().take(room));
+        row.extend(more);
+        row
+    }
+
+    fn explicit(&mut self, present: &[String]) -> Vec<String> {
+        let row = self.shown(present);
+        match &self.chosen {
+            Some(c) => row.into_iter().filter(|i| c.contains(i)).collect(),
+            None => row,
+        }
     }
 
     pub fn settle(&mut self, present: &[String]) -> bool {
@@ -70,22 +87,26 @@ impl Choice {
     }
 
     pub fn show(&mut self, id: &str, present: &[String]) -> bool {
-        let mut now = self.shown(present);
-        if now.iter().any(|i| i == id) {
+        let mut chosen = self.explicit(present);
+        if chosen.iter().any(|i| i == id) {
             return true;
         }
-        if now.len() >= MOST {
+        if chosen.len() >= MOST {
             return false;
         }
-        now.push(id.to_string());
-        self.chosen = Some(now);
+        chosen.push(id.to_string());
+        self.chosen = Some(chosen);
+        self.left_out.retain(|i| i != id);
         true
     }
 
     pub fn take_out(&mut self, id: &str, present: &[String]) {
-        let mut now = self.shown(present);
-        now.retain(|i| i != id);
-        self.chosen = Some(now);
+        let mut chosen = self.explicit(present);
+        chosen.retain(|i| i != id);
+        self.chosen = Some(chosen);
+        if !self.left_out.iter().any(|i| i == id) {
+            self.left_out.push(id.to_string());
+        }
     }
 
     pub fn load_from(file: &Path) -> Choice {
@@ -208,27 +229,46 @@ mod tests {
         let mut c = Choice::default();
         let all = ids(6);
         assert_eq!(c.shown(&all).len(), MOST);
+        assert!(c.show(&all[0], &all));
+        assert!(c.show(&all[1], &all));
+        assert!(c.show(&all[2], &all));
+        assert!(c.show(&all[3], &all));
         assert!(!c.show(&all[5], &all));
         assert_eq!(c.shown(&all), all[..4]);
         c.take_out(&all[0], &all);
-        assert_eq!(c.shown(&all), all[1..4]);
+        assert_eq!(c.shown(&all), [all[1].clone(), all[2].clone(), all[3].clone(), all[4].clone()]);
         assert!(c.show(&all[5], &all));
         assert_eq!(c.shown(&all), [all[1].clone(), all[2].clone(), all[3].clone(), all[5].clone()]);
-
         assert!(c.show(&all[1], &all));
         assert_eq!(c.shown(&all).len(), MOST);
     }
 
     #[test]
-    fn every_icon_can_be_taken_out() {
+    fn the_row_is_always_full_when_there_are_icons_enough() {
+        let all = ids(6);
+
+        let mut c = Choice::read(&all[..4].join(","));
+        let without: Vec<String> = all.iter().filter(|i| **i != all[1]).cloned().collect();
+        assert_eq!(c.shown(&without).len(), MOST);
+
+        let mut c = Choice::read(&all[0]);
+        assert_eq!(c.shown(&all).len(), MOST);
+        assert_eq!(c.shown(&all[..3]).len(), 3);
+
+        let mut c = Choice::default();
+        c.take_out(&all[0], &all);
+        let row = c.shown(&all);
+        assert_eq!(row.len(), MOST);
+        assert!(!row.contains(&all[0]));
+    }
+
+    #[test]
+    fn with_four_icons_or_fewer_all_of_them_show_whatever_was_taken_out() {
         let mut c = Choice::default();
         let all = ids(2);
-        for i in &all {
-            c.take_out(i, &all);
-        }
-        assert!(c.shown(&all).is_empty());
-        assert_eq!(c.text().as_deref(), Some("none"));
-        assert_eq!(Choice::read("none").shown(&all), Vec::<String>::new());
+        c.take_out(&all[0], &all);
+        assert_eq!(c.shown(&all), [all[1].clone(), all[0].clone()]);
+        assert_eq!(Choice::read("none").shown(&all).len(), 2);
     }
 
     #[test]

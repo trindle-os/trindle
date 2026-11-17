@@ -349,7 +349,14 @@ fn route(name: &str, tailscale: bool, search: &[String], split: &[Split]) -> Way
     Way::Outside
 }
 
+const UPDATE_HOSTS: [&str; 12] = [
+    list::HOST, "deb.debian.org", "security.debian.org", "ftp.debian.org", "flathub.org", "dl.flathub.org",
+    "github.com", "api.github.com", "codeload.github.com", "objects.githubusercontent.com",
+    "raw.githubusercontent.com", "release-assets.githubusercontent.com",
+];
+
 fn allowed(allow: &[String], name: &str) -> bool {
+    UPDATE_HOSTS.contains(&name) ||
     allow.iter().any(|a| name.strip_suffix(a.as_str()).is_some_and(|r| r.is_empty() || r.ends_with('.')))
 }
 
@@ -471,9 +478,14 @@ fn written_through(text: &str) -> Option<Network> {
 }
 
 fn replace(path: &Path, text: &str) {
+    use std::io::Write;
+    use std::os::unix::fs::OpenOptionsExt;
     let mut new = path.as_os_str().to_owned();
     new.push(".new");
-    if std::fs::write(&new, text).is_ok() {
+    let _ = std::fs::remove_file(&new);
+    let made = std::fs::OpenOptions::new().write(true).create_new(true).mode(0o644)
+        .custom_flags(libc::O_NOFOLLOW).open(&new);
+    if made.and_then(|mut f| f.write_all(text.as_bytes())).is_ok() {
         let _ = std::fs::rename(&new, path);
     }
 }
@@ -729,6 +741,22 @@ mod tests {
     }
 
     #[test]
+    fn update_hosts_are_never_blocked_and_only_by_exact_name() {
+        for host in UPDATE_HOSTS {
+            assert!(allowed(&[], host), "{host}");
+        }
+        assert!(!allowed(&[], "ads.github.com") && !allowed(&[], "evil-deb.debian.org") && !allowed(&[], "debian.org"));
+    }
+
+    #[test]
+    fn a_list_can_never_block_its_own_fetching() {
+        for url in list::SOURCES {
+            let host = url.strip_prefix("https://").and_then(|r| r.split('/').next()).unwrap();
+            assert!(allowed(&[], host), "{host}");
+        }
+    }
+
+    #[test]
     fn allow_list() {
         let a = vec!["example.com".to_string()];
         assert!(allowed(&a, "example.com"));
@@ -957,6 +985,21 @@ mod tests {
         drop(other);
         let (udp, tcp) = took.join().unwrap();
         assert_eq!((udp.local_addr().unwrap(), tcp.local_addr().unwrap()), (at, at));
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn a_link_planted_where_root_writes_is_not_followed() {
+        let dir = std::env::temp_dir().join(format!("trindle-dns-link-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        let victim = dir.join("victim");
+        std::fs::write(&victim, "keep").unwrap();
+        let target = dir.join("resolv.conf");
+        std::os::unix::fs::symlink(&victim, dir.join("resolv.conf.new")).unwrap();
+        replace(&target, "nameserver 192.0.2.1\n");
+        assert_eq!(std::fs::read_to_string(&victim).unwrap(), "keep");
+        assert_eq!(std::fs::read_to_string(&target).unwrap(), "nameserver 192.0.2.1\n");
         let _ = std::fs::remove_dir_all(&dir);
     }
 }

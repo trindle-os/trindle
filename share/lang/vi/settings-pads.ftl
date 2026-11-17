@@ -14,20 +14,17 @@ settings-pads-top-picked = Bây giờ hãy nhấn phím cho { $name }.
 # Heading of the line shown when no game controller is plugged in.
 settings-pads-none = Chưa cắm tay cầm nào
 
-# Small words under that line.
-settings-pads-none-about = Cắm một cái vào và các nút của nó sẽ hiện ở đây.
-
 # Name of the list that chooses which controller is shown; { $title } is the one shown now.
 settings-pads-which = Tay cầm nào
 
 # What the picture is, for the screen reader.
-settings-pads-picture = Hình của { $title }, mỗi nút sáng lên khi được nhấn
+settings-pads-picture = Hình của { $title }. Mỗi nút sáng lên khi bạn nhấn.
 
 # Title of the card of the controller's buttons.
 settings-pads-buttons-title = Các nút
 
 # Words behind the i of that card.
-settings-pads-buttons-about = Mọi nút, cò và hướng của cần analog và phím chéo. Nút bạn nhấn gần nhất nằm ở trên cùng. Một nút được đổi thành phím sẽ gõ phím đó trong trò chơi không hỗ trợ tay cầm.
+settings-pads-buttons-about = Mọi nút và cò, cùng mọi hướng của cần analog và phím chéo. Nút bạn nhấn gần nhất nằm ở trên cùng. Nếu bạn đổi một nút thành phím, nó sẽ gõ phím đó trong trò chơi không hỗ trợ tay cầm.
 
 # Name of the round button that starts changing a button; { $name } is the button.
 settings-pads-change = Đổi { $name } thành một phím
@@ -36,7 +33,7 @@ settings-pads-change = Đổi { $name } thành một phím
 settings-pads-stop = Ngừng đổi { $name }
 
 # Name of the list of what a button becomes; { $name } is the button.
-settings-pads-choose = { $name } sẽ trở thành gì
+settings-pads-choose = { $name } làm gì
 
 # What the list says while a button waits for its key: the clue, and a choice that does nothing.
 settings-pads-waiting = Nhấn một phím hoặc chọn một nút
@@ -67,13 +64,13 @@ settings-pads-stick-left = Trái
 settings-pads-stick-right = Phải
 
 # Title of the card of the ready-made changes.
-settings-pads-quick-title = Thay đổi làm sẵn
+settings-pads-quick-title = Thay đổi thường dùng
 
 # Title of the card of changes that are not one button into another.
 settings-pads-other-title = Thay đổi khác
 
 # Words behind the i of that card.
-settings-pads-other-about = Cần đảo ngược, cần đổi chỗ và vùng chết. Gõ một cái như Left Stick dead zone = 10%, hoặc Right Stick Y = inverted.
+settings-pads-other-about = Đảo ngược hoặc đổi chỗ các cần analog, hoặc đặt vùng chết. Gõ một thay đổi như thế này: Left Stick dead zone = 10%, hoặc Right Stick Y = inverted.
 
 
 
@@ -97,12 +94,10 @@ settings-pads-middle-click = Nhấp chuột giữa
 settings-pads-profiles-title = Hồ sơ
 
 # Words behind the i of that card.
-settings-pads-profiles-about = Hồ sơ là một bộ thay đổi. Chuẩn không đổi gì cả, nên game có sẵn hỗ trợ tay cầm sẽ thấy tay cầm đúng như nó vốn có. Mọi game Steam đều dùng Chuẩn trừ khi bạn chọn hồ sơ cho nó ở đây, và hồ sơ tự đổi khi game đó khởi động. Game khác dành cho các game không do Steam khởi động.
+settings-pads-profiles-about = Hồ sơ là một bộ thay đổi. Chuẩn không đổi gì cả, nên game có sẵn hỗ trợ tay cầm sẽ thấy tay cầm đúng như nó vốn có. Mọi game Steam đều dùng Chuẩn trừ khi bạn chọn hồ sơ cho nó ở đây. Trindle chuyển sang hồ sơ đó khi game khởi động. Game khác nghĩa là mọi game không do Steam khởi động.
 
 # The one switch that turns every controller change off at once.
 settings-pads-changes = Thay đổi tay cầm
-
-settings-pads-changes-sub = Đang tắt, mọi tay cầm giữ nguyên như vốn có.
 
 # The game whose profile is shown.
 settings-pads-game = Game
@@ -118,8 +113,6 @@ settings-pads-profile = Hồ sơ
 
 settings-pads-standard = Chuẩn
 
-settings-pads-standard-sub = Không có thay đổi.
-
 settings-pads-profile-add = Thêm hồ sơ
 
 settings-pads-profile-remove = Xóa { $name }
@@ -129,7 +122,7 @@ settings-pads-profile-name = Tên hồ sơ
 # The name a new profile is given.
 settings-pads-profile-new = Hồ sơ { $n }
 
-settings-pads-profile-empty = Hồ sơ cần có tên.
+settings-pads-profile-empty = Hãy gõ tên hồ sơ.
 
 settings-pads-profile-standard = Tên Chuẩn đã được dùng.
 
@@ -143,7 +136,16 @@ settings-pads-not-a-game = Đây không phải mã ứng dụng Steam.
 settings-pads-standard-why = Chuẩn không đổi gì cả. Hãy thêm hồ sơ trước.
 
 # The headline while the shown game uses Standard, and while all changes are off.
-settings-pads-top-standard = Chuẩn: tay cầm đúng như vốn có.
+settings-pads-top-standard = Đang dùng Chuẩn, không có thay đổi nào.
 
 settings-pads-top-off = Thay đổi tay cầm đang tắt.
 
+
+# Heading of the line shown when the file of changed controller buttons could not be read.
+settings-pads-unread = Trindle không đọc được các nút bạn đã đổi
+
+# Small words under that line; { $why } is the reason.
+settings-pads-unread-about = Cho đến lúc đó, mọi nút vẫn hoạt động bình thường và không có gì được lưu. { $why }
+
+# Shown beside a change that was not saved because the file of changed buttons could not be read.
+settings-pads-not-saved-unread = Chưa lưu. Không đọc được tệp các nút đã đổi, nên tệp được giữ nguyên.

@@ -1,5 +1,7 @@
 //! What every Settings page shares: the loop, the buses, and what is said, armed or running under each key.
 
+use std::any::TypeId;
+use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
 use std::time::Duration;
@@ -45,19 +47,57 @@ pub struct Kit {
     pub(crate) icon: &'static str,
 
     pub(crate) pulse: std::cell::Cell<bool>,
+
+    pub(crate) retitle: std::cell::Cell<bool>,
+    turning: crate::common::filling::Turning,
+
+    awaiting: Awaiting,
+}
+
+type Awaiting = Rc<RefCell<HashMap<TypeId, usize>>>;
+
+struct Awaited(Awaiting, TypeId);
+
+impl Awaited {
+    fn new<P: 'static>(all: &Awaiting) -> Awaited {
+        let kind = TypeId::of::<P>();
+        *all.borrow_mut().entry(kind).or_default() += 1;
+        Awaited(all.clone(), kind)
+    }
+}
+
+impl Drop for Awaited {
+    fn drop(&mut self) {
+        let mut all = self.0.borrow_mut();
+        if let Some(n) = all.get_mut(&self.1) {
+            *n = n.saturating_sub(1);
+            if *n == 0 {
+                all.remove(&self.1);
+            }
+        }
+    }
 }
 
 impl Kit {
     pub(crate) fn new(events: Loop, asks: Post<Do>, session: Option<Bus>, system: Option<Bus>) -> Kit {
         Kit { events, asks, session, system, said: HashMap::new(), saying: 0, dials: HashMap::new(),
               info: None, pressed_at: None, hosted: false, want: None, back: false, from: None, current: String::new(),
-              icon: "", pulse: std::cell::Cell::new(false) }
+              icon: "", pulse: std::cell::Cell::new(false), retitle: std::cell::Cell::new(false), turning: Default::default(),
+              awaiting: Default::default() }
+    }
+
+    pub(crate) fn awaited(&self, page: TypeId) -> bool {
+        self.awaiting.borrow().contains_key(&page)
     }
 
     pub fn then<P: Page + 'static, T: 'static>(&self, f: impl FnOnce(&mut P, &mut Kit, T) + 'static) -> impl FnOnce(T) + 'static {
         let asks = self.asks.clone();
+        let waits = Awaited::new::<P>(&self.awaiting);
         move |t| {
-            asks.send(Do::Then(Box::new(move |s: &mut Settings| s.with::<P>(move |p, k| f(p, k, t)))));
+            asks.send(Do::Then(Box::new(move |s: &mut Settings| {
+                drop(waits);
+                s.with::<P>(move |p, k| f(p, k, t))
+            })));
         }
     }
 
@@ -70,9 +110,49 @@ impl Kit {
         }
     }
 
+    pub fn heard_if<P: Page + 'static>(&self, f: impl Fn(&mut P, &mut Kit, &str) -> bool + 'static) -> impl Fn(&str) + 'static {
+        let asks = self.asks.clone();
+        let f = Rc::new(f);
+        move |line: &str| {
+            let (f, line) = (f.clone(), line.to_string());
+            asks.send(Do::Look(Box::new(move |s: &mut Settings| {
+                let mut news = false;
+                s.with::<P>(|p, k| news = f(p, k, &line));
+                news
+            })));
+        }
+    }
+
+    pub fn each<P: Page + 'static, T: 'static>(&self, f: impl Fn(&mut P, &mut Kit, T) + 'static) -> impl Fn(T) + 'static {
+        let asks = self.asks.clone();
+        let f = Rc::new(f);
+        move |t: T| {
+            let f = f.clone();
+            asks.send(Do::Then(Box::new(move |s: &mut Settings| s.with::<P>(move |p, k| f(p, k, t)))));
+        }
+    }
+
     pub fn after<P: Page + 'static>(&self, wait: Duration, f: impl FnOnce(&mut P, &mut Kit) + 'static) {
         let back = self.then::<P, ()>(move |p, k, ()| f(p, k));
         self.events.after(wait, move || back(()));
+    }
+
+    pub fn look_after<P: Page + 'static>(&self, wait: Duration, f: impl FnOnce(&mut P, &mut Kit) -> bool + 'static) {
+        let back = self.then_if::<P, ()>(move |p, k, ()| f(p, k));
+        self.events.after(wait, move || back(()));
+    }
+
+    pub fn then_if<P: Page + 'static, T: 'static>(&self, f: impl FnOnce(&mut P, &mut Kit, T) -> bool + 'static) -> impl FnOnce(T) + 'static {
+        let asks = self.asks.clone();
+        let waits = Awaited::new::<P>(&self.awaiting);
+        move |t| {
+            asks.send(Do::Look(Box::new(move |s: &mut Settings| {
+                drop(waits);
+                let mut news = false;
+                s.with::<P>(|p, k| news = f(p, k, t));
+                news
+            })));
+        }
     }
 
     fn after_kit(&self, wait: Duration, f: impl FnOnce(&mut Kit) + 'static) {
@@ -198,7 +278,7 @@ impl Kit {
     }
 
     fn show(&mut self, key: &str, words: &str, ok: bool, stay: bool, glow: bool) {
-        if words.is_empty() && !glow {
+        if (words.is_empty() && !glow) || (!ok && crate::common::refused::closed_box(words)) {
             self.said.remove(key);
             return;
         }
@@ -261,5 +341,10 @@ impl Kit {
 
     pub(crate) fn moving(&self) -> bool {
         self.pulse.get() || self.dials.values().any(Dial::running)
+    }
+
+    pub(crate) fn turn(&self) -> bool {
+        let moved = self.dials.values().fold(false, |m, d| d.turn() | m);
+        self.turning.turned_alone(moved) | self.pulse.get()
     }
 }

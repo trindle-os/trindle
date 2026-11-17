@@ -80,6 +80,10 @@ fn inside(top: &Path, path: &Path) -> bool {
 }
 
 pub(super) fn command(at: &Path, group: &str, run: &str, problems: &mut Vec<String>) -> Option<Vec<String>> {
+    if run.trim().is_empty() {
+        problems.push(t!("plugins-needs-run", group = group));
+        return None;
+    }
     let Some(argv) = command_words(run) else {
         problems.push(t!("plugins-run-unreadable", group = group));
         return None;
@@ -156,7 +160,7 @@ fn links_out(top: &Path, dir: &Path, problems: &mut Vec<String>) {
 fn permission_rules(id: &str, asks: &[String], problems: &mut Vec<String>) {
     for (i, a) in asks.iter().enumerate() {
         if asks[..i].contains(a) {
-            problems.push(format!("Permission {a} is named twice."));
+            problems.push(t!("plugins-permission-twice", name = a));
         }
     }
     let has = |k: &str| asks.iter().any(|a| a == k);
@@ -164,7 +168,7 @@ fn permission_rules(id: &str, asks: &[String], problems: &mut Vec<String>) {
         problems.push(t!("plugins-accessibility-only-reader").into());
     }
     if has(HOME_NETWORK) && has("network") {
-        problems.push(format!("Ask for {HOME_NETWORK} or network, not both: network reaches the home network as well as the internet."));
+        problems.push(t!("plugins-home-network-or-network", home = HOME_NETWORK));
     }
 }
 
@@ -271,10 +275,8 @@ fn check_ring(at: &Path, kf: &KeyFile, problems: &mut Vec<String>) -> Option<(Pa
         problems.push(t!("plugins-plain-line", group = "Ring", key = "Label", max = NAME_MAX));
     }
     let run = text(kf, "Ring", "Run");
-    match command(at, "Ring", &run, problems) {
-        Some(argv) => ring = Some((path, label, argv)),
-        None if run.is_empty() => problems.push(t!("plugins-ring-needs-run").into()),
-        None => {}
+    if let Some(argv) = command(at, "Ring", &run, problems) {
+        ring = Some((path, label, argv));
     }
     menu_items(at, kf, problems);
     ring

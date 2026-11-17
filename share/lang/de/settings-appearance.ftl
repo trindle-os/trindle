@@ -8,13 +8,13 @@ settings-appearance-title = Aussehen
 settings-appearance-keywords = farbe farben akzent thema themen design aussehen oberfläche glas dunkel hell modus sonne sonnenschein symbole icons schrift schriftart zeiger cursor bildschirm vorlesen blind barrierefreiheit beschriftungen kurzinfos namen zeigen
 
 # Introduction under the heading of the appearance page, and the words behind the page i.
-settings-appearance-help = Hell oder dunkel, Farben, Symbole, Schriften, der Zeiger und das Vorlesen des Bildschirms. Manche Programme bemerken Änderungen erst nach einem Neustart.
+settings-appearance-help = Wähle Hell oder Dunkel, Farben, Symbole, Schriften und den Zeiger, oder schalte den Bildschirmleser ein. Manche Programme zeigen eine Änderung erst, nachdem du sie neu geöffnet hast.
 
 # Question along the bottom of the page while a theme is on trial.
 settings-appearance-foot-keep = Dieses Aussehen behalten?
 
 # Small words beside the question along the bottom while a theme is on trial.
-settings-appearance-foot-escape = Mit Esc geht es sofort zurück.
+settings-appearance-foot-escape = Mit Esc machst du es jetzt rückgängig.
 
 # Name of the dark look, on a theme's button and in the top sentence.
 settings-appearance-look-dark = Dunkel
@@ -38,7 +38,7 @@ settings-appearance-sample-spoken = So sieht { $name } aus, { $look }
 settings-appearance-aloud-look = Das Aussehen ist { $look }.
 
 # Sentence at the top of the page when a theme cannot be used; { $theme } is its name and { $why } the reason.
-settings-appearance-top-unusable = Das eigene Aussehen von Trindle, weil das Thema { $theme } nicht verwendet werden kann. { $why }
+settings-appearance-top-unusable = Das eigene Aussehen von Trindle ist aktiv, weil sich das Thema { $theme } nicht verwenden lässt. { $why }
 
 # Sentence at the top of the page for a theme that has dark and light looks; { $theme } is the theme, { $look } dark or light, { $accent } the highlight colour and { $shape } round or square.
 settings-appearance-top-theme-look = Das Thema { $theme }, { $look }, mit der Hervorhebung { $accent } und der Symbolform { $shape }.
@@ -50,32 +50,35 @@ settings-appearance-top-theme = Das Thema { $theme }, mit der Hervorhebung { $ac
 settings-appearance-top-look = { $look }, mit der Hervorhebung { $accent } und der Symbolform { $shape }.
 
 # Shape of the icons in the top sentence.
+settings-appearance-shape-square = quadratisch
+
+# Shape of the icons in the top sentence.
 settings-appearance-shape-round = rund
 
 # Name of Trindle's own highlight colour, first in the list of colours.
 settings-appearance-trindle-yellow = Trindle-Gelb
 
 # Start of the words behind the i of the reading the screen card.
-settings-appearance-reading-says = Sagt, was auf dem Bildschirm steht und was du tippst. Super, Alt und S zusammen schalten es ebenfalls ein und aus.
+settings-appearance-reading-says = Der Bildschirmleser liest vor, was auf dem Bildschirm steht und was du tippst. Drücke Super, Alt und S gleichzeitig, um ihn ein- oder auszuschalten.
 
 # Red words under the icon shape line when the icons could not be remade.
-settings-appearance-no-icons = Die Symbole konnten nicht neu erstellt werden, daher behalten einige ihre alte Form. Wähle den Satz erneut, um es noch einmal zu versuchen.
+settings-appearance-no-icons = Trindle konnte nicht alle Symbole aktualisieren, daher haben einige noch ihre alte Form. Wähle den Satz erneut, um es noch einmal zu versuchen.
 
 # Small words on a theme's tile when Trindle made some of its colours clearer.
-settings-appearance-corrected = Einige Farben wurden besser lesbar gemacht.
+settings-appearance-corrected = Trindle hat einigen Text besser lesbar gemacht.
 
 # Said aloud when a theme is tried; { $theme } is its name and { $seconds } how long until the old look comes back.
 settings-appearance-aloud-trying =
     { $seconds ->
-        [one] Das Thema { $theme } wird ausprobiert. Das bisherige Aussehen kommt in { $seconds } Sekunde zurück, außer du drückst Behalten. Mit Esc geht es sofort zurück.
-       *[other] Das Thema { $theme } wird ausprobiert. Das bisherige Aussehen kommt in { $seconds } Sekunden zurück, außer du drückst Behalten. Mit Esc geht es sofort zurück.
+        [one] Das Thema { $theme } wird ausprobiert. Das bisherige Aussehen kommt in { $seconds } Sekunde zurück, außer du drückst Behalten. Drücke Esc, um sofort zurückzugehen.
+       *[other] Das Thema { $theme } wird ausprobiert. Das bisherige Aussehen kommt in { $seconds } Sekunden zurück, außer du drückst Behalten. Drücke Esc, um sofort zurückzugehen.
     }
 
 # Name of Trindle's own theme when none is named.
 settings-appearance-trindle = Trindle
 
 # Said aloud when a theme was kept; { $theme } is its name.
-settings-appearance-aloud-kept = Das Thema { $theme } wird behalten.
+settings-appearance-aloud-kept = Das Thema { $theme } wurde behalten.
 
 # Red words under the Theme line when the old look could not be written back.
 settings-appearance-back-failed = Das bisherige Aussehen kommt zurück, wenn die Zeit abgelaufen ist.
@@ -90,23 +93,13 @@ settings-appearance-chooser-title = Thema auswählen
 settings-appearance-chooser-filter = Themen
 
 # Green words under the Add a theme line after a theme was added; { $name } is its name.
-settings-appearance-added = { $name } steht in der Liste oben. Tippe darauf, um es zu verwenden.
+settings-appearance-added = { $name } steht jetzt in der Liste oben.
 
 # Red words under the Theme line when a theme could not be removed.
 settings-appearance-not-removed = Das Thema konnte nicht entfernt werden.
 
 # Red words under the theme tiles when a theme cannot be used; { $theme } is its name and { $why } the reason.
-settings-appearance-cannot-use = Das Thema { $theme } kann nicht verwendet werden. { $why }
-
-# Heading of the line saying a theme is tried first.
-settings-appearance-tried-first = Ein Thema wird zuerst ausprobiert
-
-# Small words under that line; { $seconds } is how long Keep is asked for.
-settings-appearance-tried-first-about =
-    { $seconds ->
-        [one] Unten im Fenster wird { $seconds } Sekunde lang gefragt, ob du es behalten willst.
-       *[other] Unten im Fenster wird { $seconds } Sekunden lang gefragt, ob du es behalten willst.
-    }
+settings-appearance-cannot-use = Trindle kann das Thema { $theme } nicht verwenden. { $why }
 
 # Name of the bin button that removes one of the person's own themes.
 # SAFETY: needs a human review before it ships
@@ -128,25 +121,22 @@ settings-appearance-looking = Themen werden gesucht
 settings-appearance-theme-card = Thema
 
 # Words behind the i of the Theme card.
-settings-appearance-theme-about = Ein Thema ist ein ganzes Aussehen in einer Datei: Farben, Ecken, Größen und Abstände. Tippe auf eines, um es auszuprobieren: Jedes Trindle-Fenster ändert sich sofort, und das bisherige Aussehen kommt nach 30 Sekunden von selbst zurück, außer du drückst Behalten, sodass ein unlesbares Thema nie bleibt. Ein Thema mit dunklem und hellem Aussehen hat neben seinem Bild Dunkel und Hell; Hell ist bei hellem Sonnenschein besser zu sehen, und Apps aus Apps übernehmen es beim nächsten Öffnen. Ein Thema mit nur einem Aussehen hat diese Schaltflächen nicht. Deine Hervorhebungsfarbe bleibt in jedem Thema deine eigene. Ein hinzugefügtes Thema wird nur gelesen, nie ausgeführt, und Wörter, die damit schwer lesbar würden, werden besser lesbar gemacht. Im Terminal bringt trindle-settings --theme default immer das eigene Aussehen von Trindle zurück.
+settings-appearance-theme-about = Ein Thema ist ein ganzes Aussehen in einer Datei: Farben, Ecken, Größen und Abstände. Klicke auf ein Thema, um es auszuprobieren. Jedes Trindle-Fenster ändert sich sofort. Wenn du nicht auf Behalten drückst, kommt das bisherige Aussehen nach 30 Sekunden von selbst zurück, sodass du nie mit einem Thema festsitzt, das du nicht lesen kannst. Hat ein Thema ein dunkles und ein helles Aussehen, erscheinen neben seinem Bild die Schaltflächen Dunkel und Hell. Hell ist bei hellem Sonnenschein besser zu sehen, und Apps aus Apps verwenden es beim nächsten Öffnen. Ein Thema mit nur einem Aussehen hat diese Schaltflächen nicht. Deine Hervorhebungsfarbe bleibt in jedem Thema deine eigene. Trindle liest ein hinzugefügtes Thema nur und führt es nie aus, und es macht schwer lesbare Wörter besser lesbar. Um das eigene Aussehen von Trindle im Terminal zurückzuholen, führe trindle-settings --theme default aus.
 
 # Heading of the line holding the theme tiles.
 settings-appearance-theme-line = Thema
 
-# Small words under that line.
-settings-appearance-theme-line-about = Das ganze Aussehen. Dunkel oder Hell steht neben einem Thema, das beides hat.
-
 # Small words under the Add a theme line.
-settings-appearance-add-theme-about = Eine .css-Datei, zum Beispiel eine, die jemand geteilt hat.
+settings-appearance-add-theme-about = Eine .css-Datei, zum Beispiel eine, die jemand mit dir geteilt hat.
 
 # Words of the link that opens help about what a theme file holds.
-settings-appearance-theme-file-help = Was eine Themendatei enthält
+settings-appearance-theme-file-help = Was in einer Themendatei steht
 
 # Red words under the colour box when what was typed is not a colour.
-settings-appearance-hex-bad = Sechs Zeichen aus 0-9 und a-f, zum Beispiel #fbc711.
+settings-appearance-hex-bad = Verwende 0-9 und a-f, zum Beispiel #fbc711.
 
 # Spoken description of the small dot that shows the colour typed.
-settings-appearance-dot = Die eingegebene Farbe
+settings-appearance-dot = Eingegebene Farbe
 
 # Placeholder of the box for typing a colour code.
 settings-appearance-hex-code = Hex-Code
@@ -164,16 +154,10 @@ settings-appearance-any-colour-about = Sechs oder acht Ziffern, zum Beispiel #fb
 settings-appearance-colour-title = Farbe
 
 # Words behind the i of the Colour card.
-settings-appearance-colour-about = Die Hervorhebung markiert Schaltflächen, Schalter, den sich füllenden Ring und wo du dich befindest. Die eigenen Fenster von Trindle ändern sich sofort, der Ring beim nächsten Öffnen. Eine Farbe, die auf einer Karte zu dunkel ist, wird aufgehellt, bis sie lesbar ist, und in einem hellen Aussehen wird eine zu blasse abgedunkelt. Dunkel oder Hell wählst du auf der Kachel des Themas, unter Thema.
+settings-appearance-colour-about = Die Hervorhebung markiert Schaltflächen, Schalter, den Ring beim Füllen und wo du dich befindest. Die eigenen Fenster von Trindle ändern sich sofort, der Ring beim nächsten Öffnen. Ist eine Farbe auf einer Karte zu dunkel, hellt Trindle sie auf, bis sie lesbar ist. In einem hellen Aussehen dunkelt Trindle eine zu blasse Farbe ab. Dunkel oder Hell wählst du auf der Kachel des Themas, unter Thema.
 
 # Heading of the line with the highlight colour swatches.
 settings-appearance-highlight = Hervorhebung
-
-# Small words under that line.
-settings-appearance-highlight-about = Schaltflächen, Schalter und wo du dich befindest.
-
-# Small words under the read the screen aloud switch when a screen reader is installed.
-settings-appearance-reader-on = Super, Alt und S schalten es ebenfalls ein und aus.
 
 # Heading of the line, and name of its switch, for reading the screen aloud.
 settings-appearance-reader = Bildschirm vorlesen
@@ -181,17 +165,17 @@ settings-appearance-reader = Bildschirm vorlesen
 # Heading of the line, and name of its switch, for keeping labels while pointing.
 settings-appearance-labels = Beschriftungen beim Zeigen behalten
 
-# Small words under that line.
-settings-appearance-labels-about = Der Name einer Schaltfläche bleibt, solange du darauf zeigst.
-
 # Title of the Reading the screen card.
 settings-appearance-reading-title = Bildschirm vorlesen
 
 # Words behind the i of that card; { $says } is the first sentences, from the key reading-says.
-settings-appearance-reading-about = { $says } Der Name einer Schaltfläche verschwindet normalerweise nach anderthalb Sekunden; ist die Option aktiv, bleibt er, solange der Zeiger darauf ist. Während der Bildschirm vorgelesen wird, zeigt jede Schaltfläche ihren Namen darunter.
+settings-appearance-reading-about = { $says } Der Name einer Schaltfläche verschwindet normalerweise nach anderthalb Sekunden. Ist die Option aktiv, bleibt er, solange der Zeiger auf der Schaltfläche ist. Während der Bildschirm vorgelesen wird, zeigt jede Schaltfläche ihren Namen darunter.
 
 # Name of the set of round icons.
 settings-appearance-icons-circles = Kreise
+
+# Name of the set of square icons.
+settings-appearance-icons-squares = Quadrate
 
 # Words beside the turning ring while the icons are remade.
 settings-appearance-icons-working = Symbole werden geändert
@@ -205,14 +189,11 @@ settings-appearance-icons-set = Symbole: { $name }
 # Heading of the line for the shape of the icons.
 settings-appearance-shape = Form
 
-# Small words under that line.
-settings-appearance-shape-about = Die Trindle-Symbole, rund oder quadratisch.
-
 # Title of the Icons card.
 settings-appearance-icons-title = Symbole
 
 # Words behind the i of the Icons card.
-settings-appearance-icons-about = Die Trindle-Symbole gibt es rund oder quadratisch. Für eine App, die sie nicht zeichnen, wird ein passendes erstellt, und der Ring und die Leiste werden mit der neuen Form neu gezeichnet.
+settings-appearance-icons-about = Die Trindle-Symbole gibt es rund oder quadratisch. Hat Trindle für eine App kein Symbol, erstellt es ein passendes. Der Ring verwendet die neue Form ebenfalls.
 
 # Name of the list of font families, and heading of the font line.
 settings-appearance-font = Schrift
@@ -223,14 +204,8 @@ settings-appearance-font-default = Standard
 # Name of the list of font sizes.
 settings-appearance-font-size = Schriftgröße
 
-# Small words under the font line.
-settings-appearance-font-about = Die Wörter in den Fenstern der Programme.
-
 # Name of the button that adds fonts, and heading of its line.
 settings-appearance-add-fonts = Schriften hinzufügen
-
-# Small words under the Add fonts line.
-settings-appearance-add-fonts-about = Eine .ttf- oder .otf-Datei oder ein Zip davon.
 
 # Words of the link that opens help about what a font file must contain.
 settings-appearance-fonts-help = Was die Datei enthalten muss
@@ -239,7 +214,7 @@ settings-appearance-fonts-help = Was die Datei enthalten muss
 settings-appearance-text-title = Text
 
 # Words behind the i of the Text card.
-settings-appearance-text-about = Die Schrift, die Programme für ihre Wörter verwenden, und ihre Größe. Hier hinzugefügte Schriften, eine .ttf- oder .otf-Datei oder ein Zip davon, kommen nur für dich in die Schriftenliste; manche Programme bemerken es erst nach einem Neustart.
+settings-appearance-text-about = Die Schrift und Größe, die Programme für ihre Wörter verwenden. Schriften, die du hier hinzufügst, als .ttf- oder .otf-Dateien oder als Zip, kommen nur für dich in die Schriftenliste. Manche Programme zeigen sie erst, nachdem du sie neu geöffnet hast.
 
 # Title of the window for choosing font files.
 settings-appearance-chooser-fonts = Schriften auswählen
@@ -248,16 +223,16 @@ settings-appearance-chooser-fonts = Schriften auswählen
 settings-appearance-font-not-replaced = { $name } konnte nicht ersetzt werden.
 
 # Green words after one font took the place of the one there; { $name } is the file name.
-settings-appearance-font-replaced-one = { $name } ersetzt. Programme, die ab jetzt gestartet werden, verwenden sie.
+settings-appearance-font-replaced-one = Trindle hat { $name } ersetzt. Programme, die du ab jetzt startest, verwenden sie.
 
 # Green words after several fonts took the place of the ones there; { $n } of { $total } were done.
-settings-appearance-font-replaced-some = { $n } von { $total } ersetzt. Programme, die ab jetzt gestartet werden, verwenden sie.
+settings-appearance-font-replaced-some = Trindle hat { $n } von { $total } Schriften ersetzt. Programme, die du ab jetzt startest, verwenden sie.
 
 # Green words after fonts were added; { $n } is how many.
 settings-appearance-fonts-added =
     { $n ->
-        [one] { $n } Schrift steht in der Liste oben. Wähle sie oben aus.
-       *[other] { $n } Schriften stehen in der Liste oben. Wähle sie oben aus.
+        [one] { $n } Schrift steht jetzt in der Liste oben.
+       *[other] { $n } Schriften stehen jetzt in der Liste oben.
     }
 
 # Green words after added fonts were already in the list.
@@ -279,16 +254,10 @@ settings-appearance-pointer-spoken = Zeiger, { $size }
 settings-appearance-cursor-standard = Standard
 
 # Name of the list of cursor themes, and heading of its line.
-settings-appearance-cursor = Cursor
+settings-appearance-cursor = Zeiger
 
 # Name of the list of cursor sizes, and heading of its line.
-settings-appearance-cursor-size = Cursorgröße
-
-# Small words under the cursor line.
-settings-appearance-cursor-about = Wie der Zeiger gezeichnet wird.
-
-# Small words under the cursor size line.
-settings-appearance-cursor-size-about = Größer ist leichter zu finden.
+settings-appearance-cursor-size = Zeigergröße
 
 # Title of the Pointer card.
 settings-appearance-pointer-title = Zeiger

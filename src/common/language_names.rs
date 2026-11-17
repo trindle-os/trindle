@@ -9,14 +9,14 @@ pub const VARIANTS: [&str; 3] = ["en-GB", "en-GB-oxendict", "en-US"];
 
 const OWN_NAMES: &[(&str, &str)] = &[
     ("en", "English"), ("en-GB", "English (British)"), ("en-GB-oxendict", "English (Oxford)"), ("en-US", "English (American)"),
-    ("ar", "العربية"), ("bg", "Български"), ("ca", "Català"), ("cs", "Čeština"), ("cy", "Cymraeg"), ("da", "Dansk"),
+    ("ar", "العربية"), ("bg", "Български"), ("bn", "বাংলা"), ("ca", "Català"), ("cs", "Čeština"), ("cy", "Cymraeg"), ("da", "Dansk"),
     ("de", "Deutsch"), ("el", "Ελληνικά"), ("es", "Español"), ("et", "Eesti"), ("eu", "Euskara"), ("fa", "فارسی"),
     ("fi", "Suomi"), ("fr", "Français"), ("ga", "Gaeilge"), ("gd", "Gàidhlig"), ("gl", "Galego"), ("he", "עברית"),
     ("hi", "हिन्दी"), ("hr", "Hrvatski"), ("hu", "Magyar"), ("id", "Bahasa Indonesia"), ("is", "Íslenska"),
     ("it", "Italiano"), ("ja", "日本語"), ("ko", "한국어"), ("lt", "Lietuvių"), ("lv", "Latviešu"), ("nb", "Norsk bokmål"),
     ("nl", "Nederlands"), ("nn", "Norsk nynorsk"), ("pl", "Polski"), ("pt", "Português"), ("pt-BR", "Português (Brasil)"),
-    ("ro", "Română"), ("ru", "Русский"), ("sk", "Slovenčina"), ("sl", "Slovenščina"), ("sr", "Српски"), ("sv", "Svenska"),
-    ("th", "ไทย"), ("tr", "Türkçe"), ("uk", "Українська"), ("vi", "Tiếng Việt"), ("zh", "中文"),
+    ("ro", "Română"), ("ru", "Русский"), ("sk", "Slovenčina"), ("sl", "Slovenščina"), ("sr", "Српски"), ("sv", "Svenska"), ("sw", "Kiswahili"),
+    ("th", "ไทย"), ("tr", "Türkçe"), ("uk", "Українська"), ("ur", "اردو"), ("vi", "Tiếng Việt"), ("zh", "中文"),
     ("zh-Hans", "简体中文"), ("zh-Hant", "繁體中文"),
 ];
 
@@ -88,6 +88,14 @@ pub fn found(dirs: &[std::path::PathBuf], english: &Bundle) -> Vec<Tongue> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn every_language_trindle_ships_is_shown_by_its_own_name() {
+        let shipped = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("share/lang");
+        for code in codes_in(&[shipped]) {
+            assert_ne!(own_name(&code), code, "{code} has no name of its own in OWN_NAMES");
+        }
+    }
 
     fn scratch(name: &str) -> std::path::PathBuf {
         let dir = std::env::temp_dir().join(format!("trindle-tongues-{}-{name}", std::process::id()));

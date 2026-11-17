@@ -7,13 +7,13 @@ settings-appearance-title = Tampilan
 settings-appearance-keywords = warna aksen tema tampilan kulit kaca gelap terang mode cahaya matahari ikon font huruf kursor penunjuk layar pembaca layar buta bacakan aksesibilitas label tooltip nama menunjuk
 
 # Introduction under the heading of the appearance page, and the words behind the page i.
-settings-appearance-help = Terang atau gelap, warna, ikon, font, penunjuk, dan membacakan layar. Beberapa program baru menyadarinya setelah dibuka kembali.
+settings-appearance-help = Pilih terang atau gelap, warna, ikon, font, dan penunjuk, atau nyalakan pembaca layar. Beberapa program baru menampilkan perubahan setelah Anda membukanya kembali.
 
 # Question along the bottom of the page while a theme is on trial.
 settings-appearance-foot-keep = Pertahankan tampilan ini?
 
 # Small words beside the question along the bottom while a theme is on trial.
-settings-appearance-foot-escape = Escape untuk kembali sekarang.
+settings-appearance-foot-escape = Escape membatalkannya sekarang.
 
 # Name of the dark look, on a theme's button and in the top sentence.
 settings-appearance-look-dark = Gelap
@@ -37,7 +37,7 @@ settings-appearance-sample-spoken = Tampilan { $name }, { $look }
 settings-appearance-aloud-look = Tampilan { $look }.
 
 # Sentence at the top of the page when a theme cannot be used; { $theme } is its name and { $why } the reason.
-settings-appearance-top-unusable = Tampilan bawaan Trindle, karena tema { $theme } tidak dapat digunakan. { $why }
+settings-appearance-top-unusable = Tampilan bawaan Trindle sedang dipakai karena tema { $theme } tidak dapat digunakan. { $why }
 
 # Sentence at the top of the page for a theme that has dark and light looks; { $theme } is the theme, { $look } dark or light, { $accent } the highlight colour and { $shape } round or square.
 settings-appearance-top-theme-look = Tema { $theme }, { $look }, dengan sorotan { $accent } dan ikon { $shape }.
@@ -49,24 +49,27 @@ settings-appearance-top-theme = Tema { $theme }, dengan sorotan { $accent } dan 
 settings-appearance-top-look = { $look }, dengan sorotan { $accent } dan ikon { $shape }.
 
 # Shape of the icons in the top sentence.
+settings-appearance-shape-square = persegi
+
+# Shape of the icons in the top sentence.
 settings-appearance-shape-round = bulat
 
 # Name of Trindle's own highlight colour, first in the list of colours.
 settings-appearance-trindle-yellow = Kuning Trindle
 
 # Start of the words behind the i of the reading the screen card.
-settings-appearance-reading-says = Membacakan apa yang ada di layar dan apa yang Anda ketik. Super, Alt, dan S bersamaan juga menyalakan dan mematikannya.
+settings-appearance-reading-says = Pembaca layar membacakan apa yang ada di layar dan apa yang Anda ketik. Tekan Super, Alt, dan S bersamaan untuk menyalakan atau mematikannya.
 
 # Red words under the icon shape line when the icons could not be remade.
-settings-appearance-no-icons = Ikon tidak dapat dibuat ulang, jadi sebagian tetap berbentuk lama. Pilih set itu lagi untuk mencoba sekali lagi.
+settings-appearance-no-icons = Trindle tidak dapat memperbarui semua ikon, jadi sebagian tetap berbentuk lama. Pilih set itu lagi untuk mencoba ulang.
 
 # Small words on a theme's tile when Trindle made some of its colours clearer.
-settings-appearance-corrected = Beberapa warna dibuat lebih jelas dibaca.
+settings-appearance-corrected = Trindle membuat sebagian teks lebih mudah dibaca.
 
 # Said aloud when a theme is tried; { $theme } is its name and { $seconds } how long until the old look comes back.
-settings-appearance-aloud-trying =
+settings-appearance-aloud-trying = 
     { $seconds ->
-       *[other] Mencoba tema { $theme }. Tampilan sebelumnya kembali dalam { $seconds } detik kecuali Anda menekan Pertahankan. Escape untuk kembali sekarang.
+       *[other] Mencoba tema { $theme }. Tampilan sebelumnya kembali dalam { $seconds } detik kecuali Anda menekan Pertahankan. Tekan Escape untuk kembali sekarang.
     }
 
 # Name of Trindle's own theme when none is named.
@@ -88,22 +91,13 @@ settings-appearance-chooser-title = Pilih tema
 settings-appearance-chooser-filter = Tema
 
 # Green words under the Add a theme line after a theme was added; { $name } is its name.
-settings-appearance-added = { $name } ada di daftar di atas. Tekan untuk menggunakannya.
+settings-appearance-added = { $name } sekarang ada di daftar di atas.
 
 # Red words under the Theme line when a theme could not be removed.
 settings-appearance-not-removed = Tema tidak dapat dihapus.
 
 # Red words under the theme tiles when a theme cannot be used; { $theme } is its name and { $why } the reason.
-settings-appearance-cannot-use = Tema { $theme } tidak dapat digunakan. { $why }
-
-# Heading of the line saying a theme is tried first.
-settings-appearance-tried-first = Tema dicoba dulu
-
-# Small words under that line; { $seconds } is how long Keep is asked for.
-settings-appearance-tried-first-about =
-    { $seconds ->
-       *[other] Pertahankan ditanyakan di bagian bawah jendela selama { $seconds } detik.
-    }
+settings-appearance-cannot-use = Trindle tidak dapat menggunakan tema { $theme }. { $why }
 
 # Name of the bin button that removes one of the person's own themes.
 settings-appearance-remove-theme = Hapus tema ini
@@ -124,25 +118,22 @@ settings-appearance-looking = Mencari tema
 settings-appearance-theme-card = Tema
 
 # Words behind the i of the Theme card.
-settings-appearance-theme-about = Tema adalah seluruh tampilan dalam satu file: warna, sudut, ukuran, dan ruang. Tekan salah satu untuk mencobanya: semua jendela Trindle berubah sekaligus, dan tampilan sebelumnya kembali sendiri dalam 30 detik kecuali Anda menekan Pertahankan, jadi tema yang tidak dapat dibaca tidak akan menetap. Tema yang punya tampilan gelap dan terang memiliki tombol Gelap dan Terang di samping gambarnya; Terang lebih mudah dilihat di bawah sinar matahari, dan aplikasi dari Aplikasi memakainya saat dibuka berikutnya. Tema dengan satu tampilan tidak memiliki tombol itu. Warna sorotan Anda tetap milik Anda di setiap tema. Tema yang Anda tambahkan hanya dibaca, tidak pernah dijalankan, dan kata-kata yang akan sulit dibaca dibuat lebih jelas. Dari terminal, trindle-settings --theme default selalu mengembalikan tampilan bawaan Trindle.
+settings-appearance-theme-about = Tema adalah seluruh tampilan dalam satu file: warna, sudut, ukuran, dan jarak. Tekan sebuah tema untuk mencobanya. Semua jendela Trindle berubah sekaligus. Kecuali Anda menekan Pertahankan, tampilan sebelumnya kembali sendiri setelah 30 detik, jadi Anda tidak akan terjebak dengan tema yang tidak dapat dibaca. Jika sebuah tema memiliki tampilan gelap dan terang, tombol Gelap dan Terang muncul di samping gambarnya. Terang lebih mudah dilihat di bawah sinar matahari, dan aplikasi dari Aplikasi memakainya saat dibuka berikutnya. Tema dengan satu tampilan tidak memiliki tombol itu. Warna sorotan Anda tetap milik Anda di setiap tema. Trindle hanya membaca tema yang Anda tambahkan dan tidak pernah menjalankannya, dan kata-kata yang sulit dibaca dibuatnya lebih jelas. Untuk mengembalikan tampilan bawaan Trindle dari terminal, jalankan trindle-settings --theme default.
 
 # Heading of the line holding the theme tiles.
 settings-appearance-theme-line = Tema
 
-# Small words under that line.
-settings-appearance-theme-line-about = Seluruh tampilan. Gelap atau Terang ada di samping tema yang memiliki keduanya.
-
 # Small words under the Add a theme line.
-settings-appearance-add-theme-about = Satu file .css, misalnya yang dibagikan orang lain.
+settings-appearance-add-theme-about = Satu file .css, misalnya yang dibagikan orang lain kepada Anda.
 
 # Words of the link that opens help about what a theme file holds.
-settings-appearance-theme-file-help = Isi file tema
+settings-appearance-theme-file-help = Apa isi file tema
 
 # Red words under the colour box when what was typed is not a colour.
-settings-appearance-hex-bad = Enam karakter dari 0-9 dan a-f, seperti #fbc711.
+settings-appearance-hex-bad = Pakai 0-9 dan a-f, seperti #fbc711.
 
 # Spoken description of the small dot that shows the colour typed.
-settings-appearance-dot = Warna yang diketik
+settings-appearance-dot = Warna yang Anda ketik
 
 # Placeholder of the box for typing a colour code.
 settings-appearance-hex-code = Kode hex
@@ -160,16 +151,10 @@ settings-appearance-any-colour-about = Enam atau delapan digit, seperti #fbc711.
 settings-appearance-colour-title = Warna
 
 # Words behind the i of the Colour card.
-settings-appearance-colour-about = Sorotan menandai tombol, sakelar, cincin pengisi, dan posisi Anda. Jendela Trindle berubah seketika; cincin berubah saat dibuka berikutnya. Warna yang terlalu gelap untuk terlihat di kartu akan dicerahkan sampai terbaca, dan pada tampilan terang warna yang terlalu pucat akan digelapkan. Gelap atau Terang dipilih pada kotak tema, di bawah Tema.
+settings-appearance-colour-about = Sorotan menandai tombol, sakelar, cincin saat terisi, dan posisi Anda. Jendela Trindle sendiri berubah seketika, dan cincin berubah saat dibuka berikutnya. Jika sebuah warna terlalu gelap untuk terlihat di kartu, Trindle mencerahkannya sampai terbaca. Pada tampilan terang, Trindle menggelapkan warna yang terlalu pucat. Pilih Gelap atau Terang pada kotak tema, di bawah Tema.
 
 # Heading of the line with the highlight colour swatches.
 settings-appearance-highlight = Sorotan
-
-# Small words under that line.
-settings-appearance-highlight-about = Tombol, sakelar, dan posisi Anda.
-
-# Small words under the read the screen aloud switch when a screen reader is installed.
-settings-appearance-reader-on = Super, Alt, dan S juga menyalakan dan mematikannya.
 
 # Heading of the line, and name of its switch, for reading the screen aloud.
 settings-appearance-reader = Bacakan layar
@@ -177,17 +162,17 @@ settings-appearance-reader = Bacakan layar
 # Heading of the line, and name of its switch, for keeping labels while pointing.
 settings-appearance-labels = Pertahankan label saat menunjuk
 
-# Small words under that line.
-settings-appearance-labels-about = Nama tombol tetap terlihat selama Anda menunjuknya.
-
 # Title of the Reading the screen card.
 settings-appearance-reading-title = Membaca layar
 
 # Words behind the i of that card; { $says } is the first sentences, from the key reading-says.
-settings-appearance-reading-about = { $says } Nama tombol biasanya hilang setelah satu setengah detik; jika dipertahankan, tetap terlihat selama penunjuk berada di atasnya. Saat layar dibacakan, setiap tombol menampilkan namanya di bawahnya.
+settings-appearance-reading-about = { $says } Nama tombol biasanya hilang setelah satu setengah detik. Jika Anda mempertahankan label, nama itu tetap terlihat selama penunjuk berada di atas tombol. Saat layar dibacakan, setiap tombol menampilkan namanya di bawahnya.
 
 # Name of the set of round icons.
 settings-appearance-icons-circles = Lingkaran
+
+# Name of the set of square icons.
+settings-appearance-icons-squares = Persegi
 
 # Words beside the turning ring while the icons are remade.
 settings-appearance-icons-working = Mengubah ikon
@@ -201,14 +186,11 @@ settings-appearance-icons-set = Ikon { $name }
 # Heading of the line for the shape of the icons.
 settings-appearance-shape = Bentuk
 
-# Small words under that line.
-settings-appearance-shape-about = Ikon Trindle, bulat atau persegi.
-
 # Title of the Icons card.
 settings-appearance-icons-title = Ikon
 
 # Words behind the i of the Icons card.
-settings-appearance-icons-about = Ikon Trindle tersedia bulat atau persegi. Aplikasi yang tidak digambar olehnya mendapat ikon yang dibuat serasi, dan cincin serta panel digambar ulang dengan bentuk baru.
+settings-appearance-icons-about = Ikon Trindle tersedia dalam bentuk bulat atau persegi. Jika Trindle tidak punya ikon untuk sebuah aplikasi, Trindle membuatkan yang serasi. Cincin juga memakai bentuk baru itu.
 
 # Name of the list of font families, and heading of the font line.
 settings-appearance-font = Font
@@ -219,14 +201,8 @@ settings-appearance-font-default = Bawaan
 # Name of the list of font sizes.
 settings-appearance-font-size = Ukuran font
 
-# Small words under the font line.
-settings-appearance-font-about = Tulisan di jendela program.
-
 # Name of the button that adds fonts, and heading of its line.
 settings-appearance-add-fonts = Tambah font
-
-# Small words under the Add fonts line.
-settings-appearance-add-fonts-about = File .ttf atau .otf, atau zip berisi file itu.
 
 # Words of the link that opens help about what a font file must contain.
 settings-appearance-fonts-help = Apa yang harus ada di file
@@ -235,7 +211,7 @@ settings-appearance-fonts-help = Apa yang harus ada di file
 settings-appearance-text-title = Teks
 
 # Words behind the i of the Text card.
-settings-appearance-text-about = Font yang dipakai program untuk tulisannya, dan ukurannya. Font yang ditambahkan di sini, file .ttf atau .otf atau zip berisi file itu, masuk ke daftar font untuk Anda saja; beberapa program baru menyadarinya setelah dibuka kembali.
+settings-appearance-text-about = Font dan ukuran yang dipakai program untuk tulisannya. Font yang Anda tambahkan di sini, sebagai file .ttf atau .otf atau zip berisi file itu, masuk ke daftar font untuk Anda saja. Beberapa program baru menampilkannya setelah dibuka kembali.
 
 # Title of the window for choosing font files.
 settings-appearance-chooser-fonts = Pilih font
@@ -244,15 +220,15 @@ settings-appearance-chooser-fonts = Pilih font
 settings-appearance-font-not-replaced = { $name } tidak dapat diganti.
 
 # Green words after one font took the place of the one there; { $name } is the file name.
-settings-appearance-font-replaced-one = { $name } sudah diganti. Program yang dimulai mulai sekarang memakainya.
+settings-appearance-font-replaced-one = Trindle mengganti { $name }. Program yang Anda mulai mulai sekarang akan memakainya.
 
 # Green words after several fonts took the place of the ones there; { $n } of { $total } were done.
-settings-appearance-font-replaced-some = { $n } dari { $total } sudah diganti. Program yang dimulai mulai sekarang memakainya.
+settings-appearance-font-replaced-some = Trindle mengganti { $n } dari { $total } font. Program yang Anda mulai mulai sekarang akan memakainya.
 
 # Green words after fonts were added; { $n } is how many.
-settings-appearance-fonts-added =
+settings-appearance-fonts-added = 
     { $n ->
-       *[other] { $n } font ada di daftar di atas. Pilih di atas.
+       *[other] { $n } font sekarang ada di daftar di atas.
     }
 
 # Green words after added fonts were already in the list.
@@ -274,16 +250,10 @@ settings-appearance-pointer-spoken = Penunjuk { $size }
 settings-appearance-cursor-standard = Standar
 
 # Name of the list of cursor themes, and heading of its line.
-settings-appearance-cursor = Kursor
+settings-appearance-cursor = Penunjuk
 
 # Name of the list of cursor sizes, and heading of its line.
-settings-appearance-cursor-size = Ukuran kursor
-
-# Small words under the cursor line.
-settings-appearance-cursor-about = Cara penunjuk digambar.
-
-# Small words under the cursor size line.
-settings-appearance-cursor-size-about = Yang lebih besar lebih mudah ditemukan.
+settings-appearance-cursor-size = Ukuran penunjuk
 
 # Title of the Pointer card.
 settings-appearance-pointer-title = Penunjuk

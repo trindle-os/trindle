@@ -7,7 +7,7 @@ settings-thanks-kind-underneath-it-all = В основе всего
 settings-thanks-kind-the-desktop = Рабочий стол
 
 # Heading of a card on the Thanks page that groups projects: "Drawing and letters".
-settings-thanks-kind-drawing-and-letters = Рисование и буквы
+settings-thanks-kind-drawing-and-letters = Графика и шрифты
 
 # Heading of a card on the Thanks page that groups projects: "Folders and drives".
 settings-thanks-kind-folders-and-drives = Папки и диски
@@ -19,25 +19,25 @@ settings-thanks-kind-sound-networks-and-devices = Звук, сети и устр
 settings-thanks-kind-apps = Приложения
 
 # Short line under "Skrifa (Fontations)" on the Thanks page, used where its own description is long.
-settings-thanks-short-skrifa-fontations = Подгоняет буквы под пиксели экрана
+settings-thanks-short-skrifa-fontations = Делает буквы чёткими на экране
 
 # Short line under "Smithay" on the Thanks page, used where its own description is long.
-settings-thanks-short-smithay = Из чего сделан собственный композитор Trindle
+settings-thanks-short-smithay = Из чего построена оконная система Trindle
 
 # Short line under "Papirus" on the Thanks page, used where its own description is long.
 settings-thanks-short-papirus = На чём построены значки Trindle
 
 # Short line under "HaGeZi's DNS Blocklists" on the Thanks page, used where its own description is long.
-settings-thanks-short-hagezi-s-dns-blocklists = Проверяет, откуда взят скачанный пакет
+settings-thanks-short-hagezi-s-dns-blocklists = Блокирует вредные сайты и проверяет, откуда взяты загрузки
 
 # Short line under "ab_glyph" on the Thanks page, used where its own description is long.
-settings-thanks-short-ab-glyph = Буквы в заголовках окон и на экране запуска
+settings-thanks-short-ab-glyph = Рисует буквы в заголовках окон и на экране запуска
 
 # Short line under "ntfs-3g, exfatprogs, dosfstools" on the Thanks page, used where its own description is long.
 settings-thanks-short-ntfs-3g-exfatprogs-dosfstools = Диски, которые могут читать Windows и камеры
 
 # What the project "Debian" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-debian = Система, на которой всё работает
+settings-thanks-project-debian = Система, на которой работает Trindle
 
 # What the project "Linux" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-linux = Ядро, на котором всё работает
@@ -49,10 +49,10 @@ settings-thanks-project-rust = Язык, на котором написан Trin
 settings-thanks-project-tiny-skia = Рисует собственные окна Trindle
 
 # What the project "rustybuzz" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-rustybuzz = Формирует буквы в собственных окнах Trindle
+settings-thanks-project-rustybuzz = Размещает текст в собственных окнах Trindle
 
 # What the project "Skrifa (Fontations)" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-skrifa-fontations = Подгоняет буквы в собственных окнах Trindle под пиксели экрана
+settings-thanks-project-skrifa-fontations = Делает буквы в собственных окнах Trindle чёткими на экране
 
 # What the project "resvg" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-resvg = Рисует значки
@@ -61,19 +61,19 @@ settings-thanks-project-resvg = Рисует значки
 settings-thanks-project-accesskit = Позволяет программам чтения с экрана читать собственные окна Trindle
 
 # What the project "zbus" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-zbus = Связь Trindle с остальной системой
+settings-thanks-project-zbus = Как Trindle общается с остальной системой
 
 # What the project "fontdb" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-fontdb = Находит шрифты
 
 # What the project "Smithay" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-smithay = Строительные блоки на Rust, из которых сделан собственный композитор Trindle, и anvil, пример, с которого он начался
+settings-thanks-project-smithay = Строительные блоки на Rust для оконной системы Trindle и anvil, пример, с которого она началась
 
 # What the project "Alacritty" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-alacritty = Терминал, написанный на Rust
 
 # What the project "systemd" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-systemd = Запускает компьютер, впускает людей и переводит его в спящий режим
+settings-thanks-project-systemd = Запускает компьютер, выполняет вход в систему и переводит его в спящий режим
 
 # What the project "Mesa" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-mesa = Управляет графическим чипом
@@ -85,10 +85,10 @@ settings-thanks-project-pipewire = Звук
 settings-thanks-project-networkmanager = Wi-Fi и сети
 
 # What the project "libinput" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-libinput = Читает мышь, тачпад и сенсорный экран
+settings-thanks-project-libinput = Обрабатывает мышь, тачпад и сенсорный экран
 
 # What the project "wayland-rs" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-wayland-rs = Собственная связь Trindle с композитором
+settings-thanks-project-wayland-rs = Как Trindle общается со своей оконной системой
 
 # What the project "Flatpak" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-flatpak = Запускает приложения из раздела «Приложения»
@@ -97,25 +97,25 @@ settings-thanks-project-flatpak = Запускает приложения из �
 settings-thanks-project-flathub = Откуда берутся приложения раздела «Приложения»
 
 # What the project "Inter" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-inter = Буквы, из которых построен Trindle Sans
+settings-thanks-project-inter = Шрифт, на котором основан Trindle Sans
 
 # What the project "Radio Canada" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-radio-canada = Знак фунта в Trindle Sans
 
 # What the project "Papirus" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-papirus = На чём построены значки Trindle и картинки внутри тех, что делает Trindle
+settings-thanks-project-papirus = На чём построены значки Trindle и картинки внутри собственных значков Trindle
 
 # What the project "greetd" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-greetd = Менеджер экрана входа
+settings-thanks-project-greetd = Управляет экраном входа
 
 # What the project "Noto" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-noto = Буквы для всех языков
+settings-thanks-project-noto = Шрифты для всех языков
 
 # What the project "Samba" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-samba = Открывает общий доступ к папкам в домашней сети
+settings-thanks-project-samba = Открывает общий доступ к папкам по сети
 
 # What the project "libarchive" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-libarchive = Читает RAR, образы дисков и другие архивы для Folders
+settings-thanks-project-libarchive = Позволяет Folders открывать RAR-файлы, образы дисков и другие архивы
 
 # What the project "AppImageHub" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-appimagehub = Список AppImage, в котором ищут «Приложения»
@@ -124,7 +124,7 @@ settings-thanks-project-appimagehub = Список AppImage, в котором �
 settings-thanks-project-odrs = Отзывы о приложениях в «Приложениях»
 
 # What the project "HaGeZi's DNS Blocklists" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-hagezi-s-dns-blocklists = Сверяет источник скачанного пакета со своим списком Threat Intelligence
+settings-thanks-project-hagezi-s-dns-blocklists = Блокирует рекламу, трекеры и вредные сайты и сверяет источник скачанного пакета со своим списком Threat Intelligence
 
 # What the project "xdg-desktop-portal" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-xdg-desktop-portal = Позволяет приложениям открывать и сохранять файлы
@@ -145,7 +145,7 @@ settings-thanks-project-udisks = Диски и флешки USB
 settings-thanks-project-cups = Печать
 
 # What the project "polkit" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-polkit = Спрашивает пароль перед изменениями системы
+settings-thanks-project-polkit = Спрашивает ваш пароль перед изменениями системы
 
 # What the project "Xwayland" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-xwayland = Запускает старые программы X11
@@ -157,16 +157,16 @@ settings-thanks-project-wvkbd = Экранная клавиатура для к�
 settings-thanks-project-snapper = Снимки
 
 # What the project "Btrfs" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-btrfs = Устройство диска, благодаря которому возможны снимки
+settings-thanks-project-btrfs = Формат диска, благодаря которому возможны снимки
 
 # What the project "fwupd and the LVFS" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-fwupd-and-the-lvfs = Обновления прошивки
 
 # What the project "GVfs" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-gvfs = Сетевые папки и телефоны в других программах
+settings-thanks-project-gvfs = Позволяет другим программам использовать сетевые папки и телефоны
 
 # What the project "ntfs-3g, exfatprogs, dosfstools" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-ntfs-3g-exfatprogs-dosfstools = Форматирование и проверка дисков, которые могут читать Windows и камеры
+settings-thanks-project-ntfs-3g-exfatprogs-dosfstools = Форматирует и проверяет диски, которые могут читать Windows и камеры
 
 # What the project "ModemManager" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-modemmanager = Мобильный интернет
@@ -181,13 +181,13 @@ settings-thanks-project-hplip = Принтеры и сканеры HP
 settings-thanks-project-whisper-cpp = Голосовое управление на этом компьютере
 
 # What the project "ab_glyph" does in Trindle, the line under its name on the Thanks page (also on the website).
-settings-thanks-project-ab-glyph = Буквы в заголовках окон и на экране запуска, а также заливка каждой буквы, которую рисует Trindle
+settings-thanks-project-ab-glyph = Рисует буквы в заголовках окон и на экране запуска, а также форму каждой буквы, которую показывает Trindle
 
 # What the project "serde, quick-xml, flate2" does in Trindle, the line under its name on the Thanks page (also on the website).
 settings-thanks-project-serde-quick-xml-flate2 = Чтение каталогов приложений
 
 # Where to read the licence of an included work, behind the info button of the Licences card on the Thanks page (paths are file names).
-settings-thanks-where-copyright = Прочтите её в /usr/share/doc/trindle/copyright и THIRD-PARTY.txt.
+settings-thanks-where-copyright = Лицензии находятся в /usr/share/doc/trindle/copyright и THIRD-PARTY.txt.
 
 # Name of an included work in the Licences card on the Thanks page: "The compositor".
 settings-thanks-included-the-compositor-name = Композитор
@@ -202,7 +202,7 @@ settings-thanks-included-smithay-0-7-0-name = Smithay 0.7.0
 settings-thanks-included-smithay-0-7-0 = Хранится в исходном коде Trindle, с перечнем изменений. MIT.
 
 # Where to read the licence of "Smithay 0.7.0", behind the info button of the Licences card.
-settings-thanks-included-smithay-0-7-0-where = Хранится внутри исходного кода Trindle в vendor/smithay, рядом с перечнем изменений Trindle. Прочтите её в vendor/smithay/LICENSE.txt и THIRD-PARTY.txt.
+settings-thanks-included-smithay-0-7-0-where = Хранится в исходном коде Trindle в vendor/smithay, рядом с перечнем изменений Trindle. Лицензию прочтите в vendor/smithay/LICENSE.txt и THIRD-PARTY.txt.
 
 # Name of an included work in the Licences card on the Thanks page: "Screen helpers".
 settings-thanks-included-screen-helpers-name = Помощники экрана
@@ -214,7 +214,7 @@ settings-thanks-included-screen-helpers = Начались как smithay-drm-ex
 settings-thanks-included-spellbook-name = spellbook
 
 # What the included work "spellbook" is in Trindle and its licence, the line under its name in the Licences card.
-settings-thanks-included-spellbook = Проверяет правописание в Text, без изменений. MPL-2.0.
+settings-thanks-included-spellbook = Проверяет правописание в Text. Используется без изменений. MPL-2.0.
 
 # Where to read the licence of "spellbook", behind the info button of the Licences card.
 settings-thanks-included-spellbook-where = Используется как опубликовано, без изменений. Его исходный код: github.com/helix-editor/spellbook. Лицензию прочтите в /usr/share/doc/trindle/copyright и THIRD-PARTY.txt.
@@ -226,7 +226,7 @@ settings-thanks-included-trindle-sans-name = Trindle Sans
 settings-thanks-included-trindle-sans = Inter 4.1 с новым знаком фунта. SIL Open Font License 1.1.
 
 # Where to read the licence of "Trindle Sans", behind the info button of the Licences card.
-settings-thanks-included-trindle-sans-where = Знак фунта взят у Radio Canada. Прочтите лицензию в /usr/share/fonts/truetype/trindle-sans/.
+settings-thanks-included-trindle-sans-where = Знак фунта взят у Radio Canada. Лицензия находится в /usr/share/fonts/truetype/trindle-sans/.
 
 # Name of an included work in the Licences card on the Thanks page: "Emoji and spelling lists".
 settings-thanks-included-emoji-and-spelling-lists-name = Эмодзи и словари правописания
@@ -235,7 +235,7 @@ settings-thanks-included-emoji-and-spelling-lists-name = Эмодзи и сло�
 settings-thanks-included-emoji-and-spelling-lists = Noto Color Emoji и словари Hunspell из Debian.
 
 # Where to read the licence of "Emoji and spelling lists", behind the info button of the Licences card.
-settings-thanks-included-emoji-and-spelling-lists-where = Шрифт эмодзи распространяется по SIL Open Font License; у обоих сохраняются свои лицензии. Прочтите их в /usr/share/doc/ под именем каждого пакета.
+settings-thanks-included-emoji-and-spelling-lists-where = Шрифт эмодзи использует SIL Open Font License. У списков правописания свои лицензии. Прочтите их в /usr/share/doc/ под именем каждого пакета.
 
 # Name of an included work in the Licences card on the Thanks page: "Alacritty".
 settings-thanks-included-alacritty-name = Alacritty
@@ -253,7 +253,7 @@ settings-thanks-included-voice-control-name = Голосовое управле�
 settings-thanks-included-voice-control = whisper.cpp (MIT) и модель Whisper.
 
 # Where to read the licence of "Voice control", behind the info button of the Licences card.
-settings-thanks-included-voice-control-where = Оба загружаются на этот компьютер только при включении голосового управления. Прочтите их в папке, куда они загружены.
+settings-thanks-included-voice-control-where = Оба загружаются на этот компьютер только при включении голосового управления. Их лицензии находятся в папке, куда они загружены.
 
 # Name of an included work in the Licences card on the Thanks page: "Papirus icons".
 settings-thanks-included-papirus-icons-name = Значки Papirus
@@ -268,7 +268,7 @@ settings-thanks-included-papirus-icons-where = Прочтите её в /usr/sha
 settings-thanks-included-firmware-name = Прошивки
 
 # What the included work "Firmware" is in Trindle and its licence, the line under its name in the Licences card.
-settings-thanks-included-firmware = Прошивки Debian. Не свободное программное обеспечение.
+settings-thanks-included-firmware = Прошивки Debian, не свободное программное обеспечение.
 
 # Where to read the licence of "Firmware", behind the info button of the Licences card.
 settings-thanks-included-firmware-where = У каждого производителя своя лицензия. Прочтите её в /usr/share/doc/ под именем каждого пакета прошивки, например firmware-mediatek.
@@ -281,7 +281,7 @@ settings-thanks-keywords = благодарности авторы проект�
 
 # Text behind the info button of the Thanks page.
 settings-thanks-help =
-    Спасибо всем, кто их создаёт. Если какой-то из них важен для вас, сердечко ведёт туда, где принимают пожертвования.
+    Спасибо всем, кто создаёт эти проекты. Если какой-то из них важен для вас, нажмите на сердечко, чтобы увидеть, куда можно отправить пожертвование.
 
 # The sentence at the top of the Thanks page; n is how many projects are thanked.
 settings-thanks-headline =
@@ -305,7 +305,7 @@ settings-thanks-licences = Лицензии
 settings-thanks-trindle-licence = Свободное программное обеспечение по GPL-3.0-or-later.
 
 # First sentence behind the info button of the Licences card.
-settings-thanks-licences-about = То, с чего начался Trindle или что он включает, сохраняет свою лицензию.
+settings-thanks-licences-about = У того, что Trindle включает или с чего начался, своя лицензия.
 
 # One line behind the info button of the Licences card: the work's name and where its licence is read.
 settings-thanks-where = { $name }: { $where_read }
@@ -326,11 +326,10 @@ settings-thanks-rust-counts =
     }
 
 # Quiet line under the Rust libraries when the list of licences is not on this computer.
-settings-thanks-rust-missing = Список на этом компьютере не найден.
+settings-thanks-rust-missing = Trindle не смог найти список на этом компьютере.
 
 # Tip of the button that opens the full list of licences as a text page.
-settings-thanks-open-list = Открыть полный список как текстовую страницу
+settings-thanks-open-list = Открыть полный список как текст
 
 # Red words under the Rust libraries line when the list could not be opened.
 settings-thanks-open-failed = Не удалось открыть список.
-

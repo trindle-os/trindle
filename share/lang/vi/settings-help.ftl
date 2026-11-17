@@ -49,14 +49,11 @@ settings-help-read = Đọc { $title }
 # Bold line in the Reading card of Help when no topic is open.
 settings-help-nothing-open = Chưa mở chủ đề nào
 
-# Quiet line under "Nothing open" in Help.
-settings-help-nothing-open-sub = Bấm vào mũi tên cạnh một chủ đề để đọc ở đây.
-
 # Heading of the Help card that shows the open topics.
 settings-help-reading = Đang đọc
 
 # Placeholder and spoken name of the typing box that searches Help.
-settings-help-search-placeholder = Tìm trong Trợ giúp, như “wifi”, “máy in” hoặc “tắt máy”
+settings-help-search-placeholder = Tìm trong Trợ giúp
 
 # Heading of the Help card with the search box.
 settings-help-search = Tìm trong Trợ giúp

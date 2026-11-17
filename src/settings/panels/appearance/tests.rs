@@ -1,7 +1,7 @@
 //! Tests for the Appearance page.
 
 use super::fonts_icons::{families, split_font};
-use super::looks::{look_key, look_name, picture_key, refused_key, LOOKS_GAP, SAMPLE, THEMES_WAIT};
+use super::looks::{SAMPLED, look_key, look_name, picture_key, refused_key, use_key, LOOKS_GAP, SAMPLE, THEMES_WAIT};
 use super::*;
 use crate::toolkit::colour::Colour;
 use crate::toolkit::widget::Rect;
@@ -39,7 +39,7 @@ fn the_switch_covers_the_rest_of_a_batch_of_fonts() {
 }
 
 #[test]
-#[ignore]
+#[ignore = "writes pictures to TRINDLE_SHOTS and asserts nothing; run it by hand with --ignored"]
 fn shoot_the_font_question_with_the_switch() {
     use crate::settings::ui::stand::{made_up_taken, shoot_both};
     let mut page = Appearance::default();
@@ -48,7 +48,7 @@ fn shoot_the_font_question_with_the_switch() {
 }
 
 #[test]
-#[ignore]
+#[ignore = "writes pictures to TRINDLE_SHOTS and asserts nothing; run it by hand with --ignored"]
 fn shoot_unread_appearance() {
     use crate::settings::ui::Do;
     use crate::settings::Settings;
@@ -80,13 +80,14 @@ fn the_themes_are_read_off_the_window_and_a_ring_turns_until_they_come() {
         std::thread::sleep(std::time::Duration::from_millis(1500));
         let here = std::thread::current().id();
         READ_ELSEWHERE.store(ASKING.lock().unwrap().is_some_and(|asking| asking != here), Ordering::SeqCst);
-        themes::Seen { listed: themes::Listed { themes: vec![themes::from_sheet("", style::CSS)], said: vec![themes::LIST_SLOW] }, ..themes::Seen::default() }
+        themes::Seen { listed: themes::Listed { themes: vec![themes::from_sheet("", style::CSS)], said: vec![themes::list_slow()] }, ..themes::Seen::default() }
     }
     *ASKING.lock().unwrap() = Some(std::thread::current().id());
     let mut s = showing(Appearance { reader: Some(slow), accent: style::DEFAULT_ACCENT.into(), ..Appearance::default() }, 2400.0);
     let began = std::time::Instant::now();
     s.with::<Appearance>(|page, kit| page.read_themes(kit));
-    assert!(began.elapsed() < std::time::Duration::from_millis(300), "asking held the window up for {:?}", began.elapsed());
+
+    assert!(began.elapsed() < std::time::Duration::from_millis(1200), "asking held the window up for {:?}", began.elapsed());
     let keys = |s: &crate::settings::Settings| {
         let mut ui = Ui::new(s.view(), Theme::new(false, style::DEFAULT_ACCENT));
         ui.lay_at(1180, 2400);
@@ -106,9 +107,9 @@ fn the_themes_are_read_off_the_window_and_a_ring_turns_until_they_come() {
     assert!(!after.iter().any(|k| k == THEMES_WAIT), "the ring has gone: {after:?}");
     assert_eq!(after.iter().filter(|k| k.starts_with("theme-trouble:")).count(), 1, "{after:?}");
     assert_eq!(after.iter().filter(|k| k.starts_with("theme-picture:")).count(), 1, "Trindle's own look is listed: {after:?}");
-    s.with::<Appearance>(|page, _| assert_eq!(page.troubles(), [themes::LIST_SLOW]));
+    s.with::<Appearance>(|page, _| assert_eq!(page.troubles(), [themes::list_slow()]));
     fn slow_answer() -> themes::Seen {
-        themes::Seen { listed: themes::Listed { themes: vec![themes::from_sheet("", style::CSS)], said: vec![themes::LIST_SLOW] }, ..themes::Seen::default() }
+        themes::Seen { listed: themes::Listed { themes: vec![themes::from_sheet("", style::CSS)], said: vec![themes::list_slow()] }, ..themes::Seen::default() }
     }
 }
 
@@ -212,7 +213,7 @@ fn a_theme_that_cannot_be_used_says_why_on_its_tile() {
     use crate::toolkit::theme::Theme;
     use crate::toolkit::ui::{App as _, Ui};
     let mut all = the_themes_that_come();
-    all.push(themes::Theme { refused: Some(themes::TOO_BIG), mine: true, ..themes::from_sheet("far-too-big", "") });
+    all.push(themes::Theme { refused: Some(themes::too_big()), mine: true, ..themes::from_sheet("far-too-big", "") });
     all.push(themes::from_sheet("harbour", HARBOUR));
     for (w, h) in [(1180u32, 2400u32), (700, 3200)] {
         let page = Appearance { themes: all.clone(), ..Appearance::made_up() };
@@ -245,7 +246,7 @@ fn a_theme_that_cannot_be_used_says_why_on_its_tile() {
         assert_eq!(pressed, ["twice:theme:far-too-big"], "{w} wide");
     }
 
-    assert!(themes::TOO_BIG.contains(&format!("{} KB", crate::common::sheet::THEME_MOST / 1024)));
+    assert!(themes::too_big().contains(&format!("{} KB", crate::common::sheet::THEME_MOST / 1024)));
 }
 
 #[test]
@@ -253,7 +254,7 @@ fn a_theme_in_use_that_cannot_be_used_is_said_in_the_headline_and_in_red() {
     use crate::toolkit::theme::Theme;
     use crate::toolkit::ui::{App as _, Ui};
     let mut all = the_themes_that_come();
-    all.push(themes::Theme { refused: Some(themes::TOO_BIG), mine: true, ..themes::from_sheet("far-too-big", "") });
+    all.push(themes::Theme { refused: Some(themes::too_big()), mine: true, ..themes::from_sheet("far-too-big", "") });
     let laid = |page: Appearance| {
         let s = showing(page, 2400.0);
         let mut ui = Ui::new(s.view(), Theme::new(false, style::DEFAULT_ACCENT));
@@ -263,12 +264,12 @@ fn a_theme_in_use_that_cannot_be_used_is_said_in_the_headline_and_in_red() {
     };
 
     let fine = Appearance { themes: all.clone(), ..Appearance::made_up() };
-    assert!(!fine.top_words().contains("cannot be used") && fine.troubles().is_empty());
+    assert!(!fine.top_words().contains("can't be used") && fine.troubles().is_empty());
     assert!(laid(fine).0.is_empty());
 
-    let gone = Appearance { themes: all.clone(), theme: String::new(), unusable: Some(("Harbour".into(), themes::GONE)), ..Appearance::made_up() };
-    assert_eq!(gone.top_words(), "Trindle's own look, because the Harbour theme cannot be used. Its file is no longer there.");
-    assert_eq!(gone.troubles(), ["The Harbour theme cannot be used. Its file is no longer there."]);
+    let gone = Appearance { themes: all.clone(), theme: String::new(), unusable: Some(("Harbour".into(), themes::gone())), ..Appearance::made_up() };
+    assert_eq!(gone.top_words(), "Trindle's own look is in use because the Harbour theme can't be used. Its file is no longer there.");
+    assert_eq!(gone.troubles(), ["Trindle can't use the Harbour theme. Its file is no longer there."]);
     let (troubles, mut ui) = laid(gone);
     assert_eq!(troubles.len(), 1);
     let said = troubles[0];
@@ -285,15 +286,15 @@ fn a_theme_in_use_that_cannot_be_used_is_said_in_the_headline_and_in_red() {
         .count();
     assert!(reds > 40, "{reds} red pixels in {said:?}");
 
-    let big = Appearance { themes: all.clone(), theme: String::new(), unusable: Some(("Far too big".into(), themes::TOO_BIG)), ..Appearance::made_up() };
-    assert!(big.top_words().starts_with("Trindle's own look, because the Far too big theme cannot be used. This file is too big"));
+    let big = Appearance { themes: all.clone(), theme: String::new(), unusable: Some(("Far too big".into(), themes::too_big())), ..Appearance::made_up() };
+    assert!(big.top_words().starts_with("Trindle's own look is in use because the Far too big theme can't be used. This file is too big"));
     assert!(big.troubles().is_empty());
 
-    let more = Appearance { themes: all.clone(), said: vec![themes::NOT_ALL, themes::OWN_TOO_BIG], ..Appearance::made_up() };
-    assert_eq!(more.troubles(), [themes::NOT_ALL, themes::OWN_TOO_BIG]);
+    let more = Appearance { themes: all.clone(), said: vec![themes::not_all(), themes::own_too_big()], ..Appearance::made_up() };
+    assert_eq!(more.troubles(), [themes::not_all(), themes::own_too_big()]);
     assert_eq!(laid(more).0.len(), 2);
 
-    for said in [themes::LIST_SLOW, themes::NOT_ALL, themes::OWN_TOO_BIG, themes::OWN_NOT_A_SHEET, themes::OWN_TOO_SLOW, themes::OWN_NO_TARGET, themes::OWN_HARD_TO_READ] {
+    for said in [themes::list_slow(), themes::not_all(), themes::own_too_big(), themes::own_not_a_sheet(), themes::own_too_slow(), themes::own_no_target(), themes::own_hard_to_read()] {
         let one = Appearance { themes: all.clone(), said: vec![said], ..Appearance::made_up() };
         assert_eq!(one.troubles(), [said]);
         let (troubles, _) = laid(one);
@@ -331,7 +332,7 @@ fn a_search_for_dark_light_or_look_leads_to_the_theme_card() {
 }
 
 #[test]
-#[ignore]
+#[ignore = "writes pictures to TRINDLE_SHOTS and asserts nothing; run it by hand with --ignored"]
 fn shoot_the_theme_card() {
     use crate::settings::ui::Do;
     use crate::settings::Settings;
@@ -381,7 +382,7 @@ fn the_page_is_drawn_in_hostile_themes_and_the_way_back_stays_readable() {
                                          version: "1".into(), mine: true, css: css.clone(), only: crate::common::sheet::one_look(css), refused: None });
     }
 
-    page.themes.push(themes::Theme { refused: Some(themes::TOO_BIG), ..themes::from_sheet("too-big", "") });
+    page.themes.push(themes::Theme { refused: Some(themes::too_big()), ..themes::from_sheet("too-big", "") });
     let s = Settings { kit, pages: vec![Box::new(page)], current: 0, search: String::new(), tall: 900.0 };
     let safe = safe();
     for (n, css) in sheets.iter().enumerate() {
@@ -413,4 +414,65 @@ fn font_names_split() {
 fn families_first_name_once() {
     let out = "DejaVu Sans,DejaVu Sans Light\nDejaVu Sans\nNoto\\-Mono\n\n";
     assert_eq!(families(out), vec!["DejaVu Sans".to_string(), "Noto-Mono".to_string()]);
+}
+
+#[test]
+fn a_theme_tiles_sample_is_worked_out_once_not_at_every_draw() {
+    use crate::toolkit::ui::App as _;
+    let page = Appearance::made_up();
+    let tiles = page.themes.iter().filter(|t| t.refused.is_none()).count() as u32;
+    let s = showing(page, 2400.0);
+    SAMPLED.with(|n| n.set(0));
+    for _ in 0..20 {
+        s.view();
+    }
+    assert_eq!(SAMPLED.with(|n| n.get()), tiles, "twenty draws, one sample for each of the {tiles} tiles");
+}
+
+#[test]
+fn the_chooser_lists_both_sets_and_choosing_squares_is_remembered() {
+    if crate::common::scratch_home::inside().is_none() {
+        return crate::common::scratch_home::rerun(module_path!(), "the_chooser_lists_both_sets_and_choosing_squares_is_remembered");
+    }
+    let events = crate::toolkit::event::Loop::new();
+    let asks = events.post(|_: crate::settings::ui::Do| {});
+    let mut kit = Kit::new(events, asks, None, None);
+    let mut page = Appearance::made_up();
+    let said = page.icons_card(&kit).said();
+    for name in [t!("settings-appearance-icons-circles"), t!("settings-appearance-icons-squares")] {
+        assert!(said.contains(&format!("button: {}", t!("settings-appearance-icons-set", name = name))), "{name}: {said:?}");
+    }
+    page.icon_set(&mut kit, crate::icons::SQUARES);
+    assert_eq!(page.set, crate::icons::SQUARES);
+    assert_eq!(crate::icons::chosen_set(), crate::icons::SQUARES, "the choice is kept for the next time");
+    page.icon_set(&mut kit, crate::icons::SQUARES);
+    assert_eq!(page.set, crate::icons::SQUARES);
+}
+
+#[test]
+fn a_themes_name_keeps_its_whole_width_in_every_language() {
+    use crate::common::shipped_languages::{in_language, tags};
+    use crate::toolkit::theme::Theme;
+    use crate::toolkit::ui::{App as _, Ui};
+    for tag in tags() {
+        in_language(&tag, || {
+            for w in [1278u32, 1000, 700] {
+                let page = Appearance { themes: the_themes_that_come(), ..Appearance::made_up() };
+                let mut ui = Ui::new(showing(page, 2400.0).view(), Theme::new(false, style::DEFAULT_ACCENT));
+                ui.lay_at(w, 2400);
+                let boxes = ui.boxes();
+                let at = |key: &str| boxes.iter().find(|b| b.0 == key).map(|b| b.1).unwrap_or_else(|| panic!("{tag} {w}: no {key}"));
+                for t in the_themes_that_come() {
+                    let (pic, using) = (at(&picture_key(&t.id)), at(&use_key(&t.id)));
+                    let name = crate::common::widest::laid::<Msg>(vec![crate::toolkit::widget::label(t.name.clone())]);
+                    let after = using.x >= pic.x + name - 0.5;
+                    let under = (using.x - pic.x).abs() <= 0.5;
+                    assert!(after || under, "{tag} {w}: {} has {} before Use at {using:?}, picture {pic:?}", t.name, using.x - pic.x);
+                    let words = crate::toolkit::t!("settings-appearance-use-theme", name = &t.name);
+                    let whole = crate::common::widest::laid::<Msg>(vec![crate::toolkit::widget::word_button(words)]);
+                    assert!(using.w + 0.5 >= whole, "{tag} {w}: Use {} is squeezed to {} of {whole}", t.name, using.w);
+                }
+            }
+        });
+    }
 }

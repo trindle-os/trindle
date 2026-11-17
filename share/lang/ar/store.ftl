@@ -22,7 +22,7 @@ store-nav-updates-waiting = التحديثات ({ $n })
 store-nav-plugins = الإضافات
 
 # Side bar place: apps from GitHub.
-store-nav-github = من GitHub
+store-nav-github = بحث
 
 # Side bar place: where software comes from.
 store-nav-sources = مصادر البرامج
@@ -38,9 +38,6 @@ store-group-settings = إعدادات التطبيقات
 
 # Small heading over the categories of apps.
 store-group-categories = الفئات
-
-# Small heading over the other ways to get an app.
-store-group-more = طرق أخرى للحصول على التطبيقات
 
 # Title of a page of search results; the words searched for are in the quotes.
 store-grid-results = نتائج “{ $text }”
@@ -88,20 +85,23 @@ store-cat-utility = الأدوات
 store-cat-system = النظام
 
 # Red words when the list of apps could not be read.
-store-catalogue-unreadable = تعذّرت قراءة الفهرس: { $why }
+store-catalogue-unreadable = تعذّر على Trindle قراءة الفهرس: { $why }
 
 # Red words when Flathub's list of apps could not be fetched. { $why } is what Flatpak said.
-store-catalogue-not-fetched = تعذّر جلب قائمة التطبيقات من Flathub. تحقق من اتصال الإنترنت. { $why }
+store-catalogue-not-fetched = تعذّر على Trindle جلب قائمة التطبيقات من Flathub. تحقق من اتصالك بالإنترنت. { $why }
 
 # Red words under the search box when nothing that was dropped on the window is a kind Apps takes.
 store-dropped-only = يمكن إسقاط ملفات .deb و.AppImage و.flatpakref فقط هنا.
 
 # Red words under an app that Flatpak did not update; what Flatpak said follows.
-store-not-updated-said = لم يُحدَّث. قال Flatpak: { $why }
+store-not-updated-said = لم يُحدِّثه Flatpak: { $why }
 
 # Red words under an app that Flatpak did not update and gave no reason for.
-store-not-updated-none = لم يُحدَّث، ولم يذكر Flatpak سببًا.
+store-not-updated-none = لم يُحدَّث. ولم يُذكر سبب.
 
 # Side bar place and title: the AppImages AppImageHub lists.
 store-nav-browse = تصفّح AppImage
+
+# Heading of the Flatpaks a detailed search found on Flathub.
+store-gh-flathub = حزم Flatpak على Flathub ({ $n })
 

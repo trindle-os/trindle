@@ -26,17 +26,17 @@ greeter-ready-name = Adınızı ve parolanızı yazın, sonra Enter'a basın.
 greeter-phone-failed = Telefonunuz oturumunuzu açmadı. Parolanızı yazın.
 
 # Under the password box for a few seconds, where a phone is paired.
-greeter-phone-hint = Telefon düğmesi, telefonunuzla oturum açar.
+greeter-phone-hint = Telefonunuzla oturum açın
 
 # At the foot of the screen, for when nothing else works.
 greeter-trouble = Oturum açamıyor musunuz? Metin tabanlı oturum için Ctrl+Alt+F2 tuşlarına basın.
 
 # Beside the light drawing switch, on a computer with no graphics chip.
-greeter-no-chip = Grafik yongası bulunamadı, bu yüzden hafif çizim işleri hızlı tutar.
+greeter-no-chip = Trindle bir grafik yongası bulamadı, bu yüzden masaüstünü akıcı tutmak için daha basit grafik kullanıyor.
 
 # SAFETY: needs a human review before it ships
 # The main button's name (a round button with an arrow) that logs in.
-greeter-sign-in = Giriş yap
+greeter-sign-in = Oturum aç
 
 # SAFETY: needs a human review before it ships
 # Red line under the boxes when the name and password are wrong, or the account is unknown.
@@ -78,7 +78,7 @@ greeter-answer-box = Yanıt
 greeter-use-phone = Telefonu kullan
 
 # Name of the switch for light drawing on a computer with no graphics chip, and the word under it.
-greeter-light-drawing = Hafif çizim
+greeter-light-drawing = Düşük grafik
 
 # Tip of the round button that shows or hides the on-screen keyboard.
 greeter-keyboard-tip = Ekran klavyesi
@@ -109,7 +109,7 @@ greeter-shut-down = Kapat
 greeter-shut-down-sure = Kapatmak için yeniden basın
 
 # Red line under the boxes when a power button is pressed and the system has no bus to ask.
-greeter-no-bus = Sistem veri yolu kullanılamıyor.
+greeter-no-bus = Trindle sisteme ulaşamıyor.
 
 # Red line under the boxes when the system refused to restart; the reason follows, as the system worded it.
 greeter-restart-failed = Yeniden başlatılamadı: { $why }
@@ -118,10 +118,10 @@ greeter-restart-failed = Yeniden başlatılamadı: { $why }
 greeter-shut-down-failed = Kapatılamadı: { $why }
 
 # Red line under the boxes when the login service could not be spoken to.
-greeter-service-no-talk = Oturum açma hizmetiyle konuşulamadı.
+greeter-service-no-talk = Oturum açma hizmetine ulaşılamadı.
 
 # Red line under the boxes when the login service was too slow.
-greeter-service-timeout = Oturum açma hizmeti zamanında yanıt vermedi.
+greeter-service-timeout = Oturum açma hizmeti çok uzun sürdü.
 
 # Red line under the boxes when the login service hung up.
 greeter-service-closed = greetd bağlantıyı kapattı.
@@ -130,7 +130,7 @@ greeter-service-closed = greetd bağlantıyı kapattı.
 greeter-service-too-big = Oturum açma hizmeti okunamayacak kadar büyük bir yanıt verdi.
 
 # Red line under the boxes when the login screen was started by hand and not by the login service.
-greeter-service-not-started = GREETD_SOCK ayarlanmamış: oturum açma ekranı greetd tarafından başlatılmadı.
+greeter-service-not-started = GREETD_SOCK ayarlanmamış, bu yüzden bu oturum açma ekranını greetd başlatmadı.
 
 # Red line under the boxes when there is no connection to the login service.
 greeter-service-no-connection = bağlantı yok

@@ -42,7 +42,7 @@ use tracing::{error, info, warn};
 
 use crate::capture_scene::Scene;
 use crate::protocols::screens::{ScreenFacts, ScreenMode, ScreenPlan};
-use crate::state::{take_presentation_feedback, update_primary_scanout_output, AnvilState, Backend};
+use crate::state::{take_presentation_feedback, update_primary_scanout_output, Compose, Backend};
 use crate::{drawing::*, render::*};
 
 pub const OUTPUT_NAME: &str = "winit";
@@ -56,7 +56,7 @@ pub struct WinitData {
     full_redraw: u8,
 }
 
-impl DmabufHandler for AnvilState<WinitData> {
+impl DmabufHandler for Compose<WinitData> {
     fn dmabuf_state(&mut self) -> &mut DmabufState {
         &mut self.backend_data.dmabuf_state.0
     }
@@ -69,13 +69,13 @@ impl DmabufHandler for AnvilState<WinitData> {
             .import_dmabuf(&dmabuf, None)
             .is_ok()
         {
-            let _ = notifier.successful::<AnvilState<WinitData>>();
+            let _ = notifier.successful::<Compose<WinitData>>();
         } else {
             notifier.failed();
         }
     }
 }
-delegate_dmabuf!(AnvilState<WinitData>);
+delegate_dmabuf!(Compose<WinitData>);
 
 impl Backend for WinitData {
     fn seat_name(&self) -> String {
@@ -87,7 +87,7 @@ impl Backend for WinitData {
     fn early_import(&mut self, _surface: &wl_surface::WlSurface) {}
     fn update_led_state(&mut self, _led_state: LedState) {}
 
-    fn output_heads(state: &AnvilState<Self>) -> Vec<ScreenFacts> {
+    fn output_heads(state: &Compose<Self>) -> Vec<ScreenFacts> {
         let Some(output) = state.space.outputs().next() else {
             return Vec::new();
         };
@@ -120,7 +120,7 @@ impl Backend for WinitData {
     }
 
     fn apply_output_config(
-        state: &mut AnvilState<Self>,
+        state: &mut Compose<Self>,
         targets: &[ScreenPlan],
         test_only: bool,
     ) -> Result<(), String> {
@@ -214,7 +214,7 @@ pub fn run_winit() {
         dmabuf_state,
         full_redraw: 0,
     };
-    let mut state = AnvilState::init(display, event_loop.handle(), data, true);
+    let mut state = Compose::init(display, event_loop.handle(), data, true);
     start_session(&mut state, &output, card);
 
     info!("Initialization completed, starting the main loop.");
@@ -249,7 +249,7 @@ fn open_window() -> Option<(WinitGraphicsBackend<GlesRenderer>, WinitEventLoop)>
         Some((w, h)) => winit::init_from_attributes::<GlesRenderer>(
             smithay::reexports::winit::window::Window::default_attributes()
                 .with_inner_size(smithay::reexports::winit::dpi::LogicalSize::new(w, h))
-                .with_title("Smithay")
+                .with_title("Trindle")
                 .with_visible(true),
         ),
         None => winit::init::<GlesRenderer>(),
@@ -267,7 +267,7 @@ fn login_scale(size: Size<i32, Physical>) -> Option<f64> {
     crate::session::launch().greeter.then(|| {
         crate::screen_scale::for_login(&crate::screen_scale::Screen {
             connector: OUTPUT_NAME.into(),
-            make: "Smithay".into(),
+            make: "Trindle".into(),
             model: "Winit".into(),
             serial: String::new(),
             pixels: (size.w, size.h),
@@ -286,11 +286,11 @@ fn new_output(display_handle: &DisplayHandle, size: Size<i32, Physical>) -> Outp
         PhysicalProperties {
             size: (0, 0).into(),
             subpixel: Subpixel::Unknown,
-            make: "Smithay".into(),
+            make: "Trindle".into(),
             model: "Winit".into(),
         },
     );
-    let _global = output.create_global::<AnvilState<WinitData>>(display_handle);
+    let _global = output.create_global::<Compose<WinitData>>(display_handle);
     output.change_current_state(Some(mode), Some(WINDOW_FLIP), login_scale(size).map(OutputScale::Fractional), Some((0, 0).into()));
     output.set_preferred(mode);
     output
@@ -324,7 +324,7 @@ fn share_dmabuf(
 
     let dmabuf_state = if let Some(default_feedback) = dmabuf_default_feedback {
         let mut dmabuf_state = DmabufState::new();
-        let dmabuf_global = dmabuf_state.create_global_with_default_feedback::<AnvilState<WinitData>>(
+        let dmabuf_global = dmabuf_state.create_global_with_default_feedback::<Compose<WinitData>>(
             display_handle,
             &default_feedback,
         );
@@ -333,13 +333,13 @@ fn share_dmabuf(
         let dmabuf_formats = backend.renderer().dmabuf_formats();
         let mut dmabuf_state = DmabufState::new();
         let dmabuf_global =
-            dmabuf_state.create_global::<AnvilState<WinitData>>(display_handle, dmabuf_formats);
+            dmabuf_state.create_global::<Compose<WinitData>>(display_handle, dmabuf_formats);
         (dmabuf_state, dmabuf_global, None)
     };
     (dmabuf_state, card)
 }
 
-fn start_session(state: &mut AnvilState<WinitData>, output: &Output, card: Option<DrmNode>) {
+fn start_session(state: &mut Compose<WinitData>, output: &Output, card: Option<DrmNode>) {
 
     if let Some(node) = card {
         let formats = state.backend_data.backend.renderer().egl_context().dmabuf_render_formats().clone();
@@ -362,9 +362,9 @@ fn start_session(state: &mut AnvilState<WinitData>, output: &Output, card: Optio
     }
 }
 
-fn resized(state: &mut AnvilState<WinitData>, size: Size<i32, Physical>) {
+fn resized(state: &mut Compose<WinitData>, size: Size<i32, Physical>) {
 
-    let output = state.space.outputs().next().unwrap().clone();
+    let Some(output) = state.space.outputs().next().cloned() else { return };
     state.space.map_output(&output, output.current_location());
     let mode = Mode {
         size,
@@ -384,7 +384,7 @@ struct HostCursor {
 }
 
 fn draw(
-    state: &mut AnvilState<WinitData>,
+    state: &mut Compose<WinitData>,
     output: &Output,
     pointer_element: &mut PointerElement,
     host_cursor: &mut CursorIcon,
@@ -419,7 +419,7 @@ fn draw(
     drew
 }
 
-fn settle_cursor(state: &mut AnvilState<WinitData>) -> HostCursor {
+fn settle_cursor(state: &mut Compose<WinitData>) -> HostCursor {
     let mut reset = false;
     if let CursorImageStatus::Surface(ref surface) = state.cursor_status {
         reset = !surface.alive();
@@ -436,7 +436,7 @@ fn settle_cursor(state: &mut AnvilState<WinitData>) -> HostCursor {
 }
 
 fn render_window(
-    state: &mut AnvilState<WinitData>,
+    state: &mut Compose<WinitData>,
     output: &Output,
     pointer_element: &PointerElement,
 ) -> Result<(bool, RenderElementStates), SwapBuffersError> {
@@ -466,7 +466,7 @@ fn render_window(
         render_output(output, space, elements, renderer, &mut fb, damage_tracker, age, session_lock)
             .map_err(|err| match err {
                 OutputDamageTrackerError::Rendering(err) => err.into(),
-                _ => unreachable!(),
+                OutputDamageTrackerError::OutputNoMode(err) => SwapBuffersError::TemporaryFailure(Box::new(err)),
             })
     });
 
@@ -481,7 +481,7 @@ fn render_window(
     })
 }
 
-fn show_cursor(state: &mut AnvilState<WinitData>, cursor: &HostCursor, host_cursor: &mut CursorIcon) {
+fn show_cursor(state: &mut Compose<WinitData>, cursor: &HostCursor, host_cursor: &mut CursorIcon) {
     let backend = &mut state.backend_data.backend;
     backend.window().set_cursor_visible(cursor.visible);
 
@@ -492,7 +492,7 @@ fn show_cursor(state: &mut AnvilState<WinitData>, cursor: &HostCursor, host_curs
 }
 
 fn present(
-    state: &mut AnvilState<WinitData>,
+    state: &mut Compose<WinitData>,
     output: &Output,
     frame_target: Time<Monotonic>,
     has_rendered: bool,
@@ -526,7 +526,7 @@ fn present(
     state.lock_frame_shown(output);
 }
 
-fn fill_captures(state: &mut AnvilState<WinitData>, output: &Output, pointer_element: &PointerElement) {
+fn fill_captures(state: &mut Compose<WinitData>, output: &Output, pointer_element: &PointerElement) {
     let toplevels = state.image_capture_state.has_toplevel_frames();
     let pointers = state.image_capture_state.has_pointers();
     if !(state.image_capture_state.has_output_frames(output) || toplevels || pointers) {
@@ -551,8 +551,8 @@ fn fill_captures(state: &mut AnvilState<WinitData>, output: &Output, pointer_ele
 }
 
 fn wait_for_events(
-    event_loop: &mut EventLoop<'static, AnvilState<WinitData>>,
-    state: &mut AnvilState<WinitData>,
+    event_loop: &mut EventLoop<'static, Compose<WinitData>>,
+    state: &mut Compose<WinitData>,
     display_handle: &mut DisplayHandle,
     drew: bool,
 ) {
@@ -561,13 +561,8 @@ fn wait_for_events(
     if result.is_err() {
         state.running.store(false, Ordering::SeqCst);
     } else {
-        state.space.refresh();
-        state.popups.cleanup();
-        state.refresh_panel();
-        state.refresh_session_lock();
-        state.refresh_idle_inhibit();
-        state.refresh_suspended();
-        display_handle.flush_clients().unwrap();
+        state.tidy_after_a_turn();
+        crate::state::send_waiting(display_handle);
     }
 }
 

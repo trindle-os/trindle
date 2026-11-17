@@ -19,18 +19,18 @@ use smithay::{
     },
 };
 
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
 
-wayland_server::delegate_global_dispatch!(@<BackendData: Backend + 'static> AnvilState<BackendData>: [
+wayland_server::delegate_global_dispatch!(@<BackendData: Backend + 'static> Compose<BackendData>: [
     ZwpVirtualKeyboardManagerV1: VirtualKeyboardManagerGlobalData
 ] => VirtualKeyboardManagerState);
 
-wayland_server::delegate_dispatch!(@<BackendData: Backend + 'static> AnvilState<BackendData>: [
+wayland_server::delegate_dispatch!(@<BackendData: Backend + 'static> Compose<BackendData>: [
     ZwpVirtualKeyboardManagerV1: ()
 ] => VirtualKeyboardManagerState);
 
 impl<BackendData: Backend + 'static> Dispatch<ZwpVirtualKeyboardV1, VirtualKeyboardUserData<Self>>
-    for AnvilState<BackendData>
+    for Compose<BackendData>
 {
     fn request(
         state: &mut Self,
@@ -43,12 +43,13 @@ impl<BackendData: Backend + 'static> Dispatch<ZwpVirtualKeyboardV1, VirtualKeybo
     ) {
         let Some(request) = screened(state, client, request) else { return };
 
-        if holds(&request) && kept_from_a_made_up_keyboard(crate::own_helpers::on(crate::own_helpers::Helper::Keyboard), state.is_locked(), state.only_the_person_answers()) {
+        let keyboard_on = crate::own_helpers::on(crate::own_helpers::Helper::Keyboard);
+        if holds(&request) && kept_from_a_made_up_keyboard(keyboard_on, state.is_locked(), state.only_the_person_answers()) {
             return;
         }
 
         let typed = matches!(request, zwp_virtual_keyboard_v1::Request::Key { .. }) && !crate::virtual_input::from_box(client);
-        let named = if typed && crate::own_helpers::on(crate::own_helpers::Helper::Keyboard) { state.on_screen_key_coming() } else { None };
+        let named = if typed && keyboard_on { state.on_screen_key_coming() } else { None };
         <VirtualKeyboardManagerState as Dispatch<ZwpVirtualKeyboardV1, VirtualKeyboardUserData<Self>, Self>>::request(
             state, client, keyboard, request, data, dh, data_init,
         );
@@ -57,7 +58,7 @@ impl<BackendData: Backend + 'static> Dispatch<ZwpVirtualKeyboardV1, VirtualKeybo
 }
 
 fn screened<BackendData: Backend + 'static>(
-    state: &mut AnvilState<BackendData>,
+    state: &mut Compose<BackendData>,
     client: &Client,
     request: zwp_virtual_keyboard_v1::Request,
 ) -> Option<zwp_virtual_keyboard_v1::Request> {
@@ -78,7 +79,8 @@ fn screened<BackendData: Backend + 'static>(
             if !crate::virtual_input::from_box(client) && (state.capture.is_active() || pressed == 0) =>
         {
             let did = crate::capture::Taken::Key { time, code: key, pressed: pressed == 1 };
-            if state.captured(did) {
+
+            if state.captured(did) || (pressed == 1 && trusted_has_keyboard(state)) {
                 return None;
             }
             Some(zwp_virtual_keyboard_v1::Request::Key { time, key, state: pressed })
@@ -104,7 +106,7 @@ pub(crate) fn kept_from_a_made_up_keyboard(switched_on: bool, locked: bool, ques
     !switched_on && (locked || question)
 }
 
-fn trusted_has_keyboard<BackendData: Backend + 'static>(state: &AnvilState<BackendData>) -> bool {
+fn trusted_has_keyboard<BackendData: Backend + 'static>(state: &Compose<BackendData>) -> bool {
     state
         .seat
         .get_keyboard()
@@ -116,7 +118,7 @@ fn with_ending(fd: OwnedFd, size: u32) -> Option<(OwnedFd, u32)> {
     let given = File::from(fd);
 
     const MOST: u32 = 4 << 20;
-    if size == 0 || size > MOST {
+    if size == 0 || size > MOST || !in_memory(&given) {
         return None;
     }
     let mut text = vec![0u8; size as usize];
@@ -133,6 +135,16 @@ fn with_ending(fd: OwnedFd, size: u32) -> Option<(OwnedFd, u32)> {
     let copy = unsafe { File::from_raw_fd(made) };
     copy.write_all_at(&text, 0).ok()?;
     Some((copy.into(), text.len() as u32))
+}
+
+fn in_memory(file: &File) -> bool {
+    use std::os::fd::AsRawFd;
+    const TMPFS_MAGIC: i64 = 0x0102_1994;
+    let mut stat = std::mem::MaybeUninit::<libc::statfs>::uninit();
+    // SAFETY: the descriptor is open for as long as `file` is, and fstatfs fills the struct it is given when it returns 0.
+    let filled = unsafe { libc::fstatfs(file.as_raw_fd(), stat.as_mut_ptr()) } == 0;
+    // SAFETY: fstatfs returned 0, so the struct is filled.
+    filled && i64::from(unsafe { stat.assume_init() }.f_type as u32) == TMPFS_MAGIC
 }
 
 #[cfg(test)]
@@ -176,6 +188,15 @@ mod tests {
     fn a_descriptor_holding_less_than_it_says_is_refused() {
         assert!(super::with_ending(fd_of(b""), 4096).is_none());
         assert!(super::with_ending(fd_of(b"xkb_keymap {};"), 4096).is_none());
+    }
+
+    #[test]
+    fn a_keymap_in_a_file_on_a_disk_is_refused_so_a_mount_that_does_not_answer_holds_nothing() {
+        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(format!("keymap-on-disk-{}", std::process::id()));
+        std::fs::write(&path, b"xkb_keymap {};\0").unwrap();
+        let on_disk = std::fs::File::open(&path).unwrap();
+        std::fs::remove_file(&path).unwrap();
+        assert!(super::with_ending(on_disk.into(), 15).is_none());
     }
 
     #[test]

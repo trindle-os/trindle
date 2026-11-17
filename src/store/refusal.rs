@@ -1,4 +1,6 @@
-//! Why a backup was refused, in plain words, and what lies behind the words.
+//! Why a backup was refused, in plain words. The paths behind the words ride
+//! in front of them between control characters no sentence holds, and are
+//! taken apart where the words are shown (`apart`).
 
 use crate::toolkit::t;
 
@@ -142,10 +144,10 @@ mod tests {
     fn a_bare_reason_is_made_into_words_that_say_why() {
         let e = explained("tar: a/b: Cannot open: Permission denied".into());
         let (w, b) = apart(&e);
-        assert_eq!(w, "Part of the backup was not put back, because this computer would not let Trindle write there.");
+        assert_eq!(w, "Trindle put back only part of the backup, because Trindle isn't allowed to write there.");
         assert_eq!(b, vec!["tar: a/b: Cannot open: Permission denied".to_string()]);
         let (w, _) = apart(&explained("No space left on device".into()));
-        assert_eq!(w, "Part of the backup was not put back, because there is no room left on this computer.");
+        assert_eq!(w, "Trindle put back only part of the backup, because this computer has no room left.");
         let kept = in_the_way(&["/x".into()]);
         assert_eq!(explained(kept.clone()), kept);
         assert_eq!(last_said("tar: x: Cannot open: File exists\ntar: Exiting with failure status due to previous errors"),
@@ -164,10 +166,10 @@ mod tests {
 
     #[test]
     fn a_reason_follows_because_in_plain_words() {
-        assert_eq!(because("Permission denied"), "this computer would not let Trindle write there");
-        assert_eq!(because("No space left on device (os error 28)"), "there is no room left on this computer");
+        assert_eq!(because("Permission denied"), "Trindle isn't allowed to write there");
+        assert_eq!(because("No space left on device (os error 28)"), "this computer has no room left");
         assert_eq!(because("Unexpected EOF in archive."), "unexpected EOF in archive");
-        assert_eq!(because(""), "it gave no reason");
+        assert_eq!(because(""), t!("store-because-none"));
         assert_eq!(because(&in_the_way(&["/x".into()])), in_the_way_because());
     }
 }

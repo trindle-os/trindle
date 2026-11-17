@@ -6,6 +6,7 @@ use std::time::Duration;
 
 use crate::common::style;
 use crate::ring::kept;
+use crate::ring::ticker::Ticker;
 use crate::ring::ctx::{Ctx, time_and_date};
 use crate::ring::windows::Windows;
 use crate::toolkit::event::Flow;
@@ -23,32 +24,15 @@ pub struct Ring {
     open: Cell<bool>,
     windows: Option<Rc<Windows>>,
     fade: RefCell<Option<Tween>>,
+
+    tick: Ticker,
     me: std::rc::Weak<Ring>,
 }
 
 impl Ring {
     pub fn start(ctx: &Rc<Ctx>, windows: Option<Rc<Windows>>) -> Rc<Ring> {
         let face = Face::fresh(ctx, windows.clone());
-        let ring = Rc::new_cyclic(|me| Ring { ctx: ctx.clone(), shown: RefCell::new(None), spare: RefCell::new(Some(face)), open: Cell::new(false), windows, fade: RefCell::new(None), me: me.clone() });
-        let weak = Rc::downgrade(&ring);
-        ctx.lp.every(Duration::from_secs(1), move || {
-            let Some(r) = weak.upgrade() else { return Flow::Stop };
-            if r.is_open() {
-                let now = time_and_date();
-                let using = crate::common::in_use::read_all();
-
-                r.change_if(Box::new(move |f| {
-                    let new_time = f.clock != now;
-                    f.clock = now;
-                    let held = f.using_hold.settle(std::time::Instant::now(), using);
-                    let new_use = f.using != held;
-                    f.using = held;
-
-                    f.updates.notice() || new_time || new_use
-                }));
-            }
-            Flow::Continue
-        });
+        let ring = Rc::new_cyclic(|me| Ring { ctx: ctx.clone(), shown: RefCell::new(None), spare: RefCell::new(Some(face)), open: Cell::new(false), windows, fade: RefCell::new(None), tick: Ticker::default(), me: me.clone() });
         if let Some(ws) = ring.windows() {
             let weak = Rc::downgrade(&ring);
             ws.on_change(move || {
@@ -59,6 +43,21 @@ impl Ring {
         }
         ring
     }
+
+    fn look_at_the_clock(&self) {
+        let now = time_and_date();
+        let using = crate::common::in_use::read_all();
+        self.change_if(Box::new(move |f| {
+            let new_time = f.clock != now;
+            f.clock = now;
+            let held = f.using_hold.settle(std::time::Instant::now(), using);
+            let new_use = f.using != held;
+            f.using = held;
+
+            f.updates.notice() || new_time || new_use
+        }));
+    }
+
     pub fn is_open(&self) -> bool {
         self.open.get()
     }
@@ -98,6 +97,14 @@ impl Ring {
         }
         let size = self.size();
         self.open.set(true);
+        let weak = self.me.clone();
+        self.tick.start(&self.ctx.lp, Duration::from_secs(1), move || match weak.upgrade() {
+            Some(r) => {
+                r.look_at_the_clock();
+                Flow::Continue
+            }
+            None => Flow::Stop,
+        });
         if let Some(s) = self.shown.borrow().as_ref() {
             s.change(move |f| f.opened(size));
             s.set_look(look);
@@ -134,6 +141,7 @@ impl Ring {
         if !self.open.replace(false) {
             return;
         }
+        self.tick.stop();
         if let Some(s) = self.shown.borrow().as_ref() {
             s.change(|f| f.closed());
         }

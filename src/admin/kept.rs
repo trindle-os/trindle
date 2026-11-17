@@ -4,7 +4,7 @@ use std::collections::{BTreeMap, BTreeSet};
 
 const ELSEWHERE: [&str; 3] = ["voice/setup.rs", "common/charge.rs", "common/rfkill.rs"];
 
-const ONLY_TESTS: [&str; 2] = ["kept.rs", "stand_in.rs"];
+const ONLY_TESTS: [&str; 3] = ["kept.rs", "packaging.rs", "stand_in.rs"];
 
 const THROWN: &str = "thrown away";
 
@@ -33,6 +33,9 @@ const KEPT: &[(&str, &str, &str, &str)] = &[
     ("admin/machine.rs", "charge_limit_with", THROWN, "switches the start-up service off; left on with its file gone it sets charging to full, which is what was asked"),
 
     ("admin/firewall.rs", "firewall_apply", EMPTIED, "who is let through, read at every start and after every change: a list that cannot be read lets no plugin through, so the firewall only keeps more out"),
+    ("admin/firewall.rs", "approved_now", EMPTIED, "the ports each plugin was approved for, read at every start and after every change: a record that cannot be read approves no plugin, so the firewall only keeps more out; approving or closing one reads it honestly (approved_kept)"),
+    ("admin/firewall.rs", "parse_approved", EMPTIED, "a line of the record that is no approval is left out, and a plugin without one opens nothing"),
+    ("admin/firewall.rs", "firewall_rules", EMPTIED, "the ports opened by hand, read at every start and after every change: a list that cannot be read opens no port, so the firewall only keeps more out; changing the list itself reads it honestly (firewall_port)"),
 
     ("admin/packages.rs", "tidy", THROWN, "marks the programs Trindle replaced as no longer chosen; unmarked they only stay, and what is removed is carried"),
     ("admin/packages.rs", "installed_version", EMPTIED, "no version is an answer of its own, and the step that needs one refuses without it (apt_upgrade_debian_at)"),
@@ -43,9 +46,10 @@ const KEPT: &[(&str, &str, &str, &str)] = &[
     ("admin/tailscale.rs", "tailscale_on", EMPTIED, "who is asking: turned into the refusal on the same line"),
     ("admin/tailscale.rs", "tailscale_set", YES_OR_NO, "tried again while the service wakes; the last answer is the one carried"),
 
-    ("admin/dns.rs", "dns_on", THROWN, "asks NetworkManager to read its files again, which one not running does as it starts; and clears a name the link made next would fail on, a failure that is carried"),
-    ("admin/dns.rs", "dns_on", YES_OR_NO, "whether Tailscale is running and whether resolv.conf is there: each decides only which part is done"),
-    ("admin/dns.rs", "dns_on", EMPTIED, "not a failure: no lines of NetworkManager's to write"),
+    ("admin/dns.rs", "turn_on", THROWN, "asks NetworkManager to read its files again, which one not running does as it starts"),
+    ("admin/dns.rs", "turn_on", YES_OR_NO, "whether Tailscale is running: it decides only whether it is told to leave DNS alone"),
+    ("admin/dns.rs", "turn_on", EMPTIED, "not a failure: no lines of NetworkManager's to write"),
+    ("admin/dns.rs", "point_resolv", YES_OR_NO, "whether resolv.conf is there to keep a second name for; one that is not has nothing to keep"),
     ("admin/dns.rs", "dns_off", YES_OR_NO, "whether each thing dns_on made is there to undo, and whether Tailscale is running to be told"),
     ("admin/dns.rs", "dns_off", EMPTIED, "the network's own list of servers, to stand in; with none readable an empty one is written and the network writes it again"),
     ("admin/dns.rs", "dns_off", THROWN, "asks NetworkManager to read its files again, which one not running does as it starts"),
@@ -69,7 +73,8 @@ const KEPT: &[(&str, &str, &str, &str)] = &[
     ("admin/snapshots.rs", "top", EMPTIED, "not a failure: a path made here always has a folder above it"),
     ("admin/snapshots.rs", "aside_name", EMPTIED, "not a failure: a path made here always has a last part"),
     ("admin/snapshots.rs", "forget_in", YES_OR_NO, "each system set aside that would not go is gathered, named and said at the end"),
-    ("admin/snapshots.rs", "chrono_stamp", EMPTIED, "the date in a name: without the date program the name says `earlier`"),
+    ("admin/snapshots.rs", "chrono_stamp", EMPTIED, "the date in a name: without the date program the name carries the seconds since 1970 instead"),
+    ("admin/snapshots.rs", "swap_stamped", YES_OR_NO, "whether the name for the system set aside is already used: used or unreadable, the restore is refused before anything is changed"),
 
     ("admin/sharing.rs", "group_id", EMPTIED, "a fixed word that is always a C string; with no group found one is made, and that failure is carried"),
     ("admin/sharing.rs", "setup", THROWN, "switches off Samba's servers nothing here uses; one not on the computer cannot be, and the file server is stopped at every start while nothing is shared"),

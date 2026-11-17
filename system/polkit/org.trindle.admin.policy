@@ -4,13 +4,68 @@
 <policyconfig>
   <vendor>Trindle</vendor>
   <action id="org.trindle.admin">
-    <description>Change users and languages</description>
-    <message>Trindle Settings needs an administrator's password to change this.</message>
+    <description>Change system settings</description>
+    <message>Trindle needs an administrator's password to change this.</message>
     <defaults>
       <allow_any>no</allow_any>
       <allow_inactive>no</allow_inactive>
       <allow_active>auth_admin_keep</allow_active>
     </defaults>
     <annotate key="org.freedesktop.policykit.exec.path">/usr/lib/trindle/libexec/trindle-admin</annotate>
+  </action>
+  <action id="org.trindle.admin.delete-person">
+    <description>Delete a person</description>
+    <message>Trindle Settings needs an administrator's password to delete this person and their files.</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/lib/trindle/libexec/trindle-admin</annotate>
+    <annotate key="org.freedesktop.policykit.exec.argv1">delete</annotate>
+  </action>
+  <action id="org.trindle.admin.snapshot-delete">
+    <description>Delete a snapshot</description>
+    <message>Trindle Settings needs an administrator's password to delete this snapshot.</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/lib/trindle/libexec/trindle-admin</annotate>
+    <annotate key="org.freedesktop.policykit.exec.argv1">snapshot-delete</annotate>
+  </action>
+  <action id="org.trindle.admin.snapshot-restore">
+    <description>Restore a snapshot</description>
+    <message>Trindle Settings needs an administrator's password to put the system back to this snapshot.</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/lib/trindle/libexec/trindle-admin</annotate>
+    <annotate key="org.freedesktop.policykit.exec.argv1">snapshot-restore</annotate>
+  </action>
+  <action id="org.trindle.admin.snapshot-forget-set-aside">
+    <description>Delete the system set aside by a restore</description>
+    <message>Trindle Settings needs an administrator's password to delete the earlier system kept after a restore.</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/lib/trindle/libexec/trindle-admin</annotate>
+    <annotate key="org.freedesktop.policykit.exec.argv1">snapshot-forget-set-aside</annotate>
+  </action>
+  <action id="org.trindle.admin.home-snapshots-clear">
+    <description>Delete earlier versions of home folders</description>
+    <message>Trindle Settings needs an administrator's password to delete every earlier version of the home folders.</message>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/lib/trindle/libexec/trindle-admin</annotate>
+    <annotate key="org.freedesktop.policykit.exec.argv1">home-snapshots-clear</annotate>
   </action>
 </policyconfig>

@@ -8,7 +8,7 @@ use smithay::{
     utils::{Logical, Point, Rectangle, Size},
 };
 
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
 
 const CASCADE: i32 = 32;
 
@@ -21,10 +21,8 @@ fn parent_of(space: &Space<WindowElement>, window: &WindowElement) -> Option<Win
     }
     if let Some(x11) = window.0.x11_surface() {
         let parent = x11.is_transient_for()?;
-        return space
-            .elements()
-            .find(|w| w.0.x11_surface().is_some_and(|p| p.window_id() == parent))
-            .cloned();
+        let windows = space.elements().filter_map(|w| w.0.x11_surface().map(|p| (p.xwm_id(), p.window_id(), w)));
+        return crate::xrooms::x11_window(windows, x11.xwm_id(), parent).cloned();
     }
     None
 }
@@ -63,7 +61,6 @@ pub(super) fn place_new_window(
 ) -> Rectangle<i32, Logical> {
     let area = free_area_under(space, pointer_location);
 
-    #[allow(irrefutable_let_patterns)]
     if let Some(toplevel) = window.0.toplevel() {
 
         let room = room_inside(area.size, window.deco_extra());
@@ -131,7 +128,7 @@ fn stepped_clear_of_others(space: &Space<WindowElement>, window: &WindowElement,
     loc
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     pub(super) fn place_when_ready(&mut self, window: &WindowElement) {
         if window.user_data().get::<Placed>().is_some() || window.0.geometry().is_empty() {

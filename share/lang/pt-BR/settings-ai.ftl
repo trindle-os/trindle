@@ -11,10 +11,10 @@ settings-ai-help = Os programas de IA para programação rodam dentro de uma cer
 
 # Headline of the AI programs page.
 # SAFETY: needs a human review before it ships
-settings-ai-note = Isto mantém os programas de IA longe dos seus arquivos pessoais no uso diário, por exemplo se um deles for enganado para juntar seus extratos bancários e enviá-los. É uma proteção limitada, não uma garantia: um programa determinado, uma falha no software do computador, ou você aprovar um pedido ou compartilhar uma pasta ainda pode deixar algo passar.
+settings-ai-note = No uso diário, isto mantém os programas de IA longe dos seus arquivos pessoais. Por exemplo, impede que um programa enganado junte seus extratos bancários e os envie. A proteção tem limites e não é uma garantia. Algo ainda pode passar se um programa for determinado, se o software do computador tiver uma falha, ou se você aprovar um pedido ou compartilhar uma pasta.
 
 # Note under the headline of the AI programs page.
-settings-ai-inside = Tudo o que um programa de IA inicia, como programas instalados, scripts e outros programas, fica dentro da cerca com ele.
+settings-ai-inside = Tudo o que um programa de IA inicia, como programas instalados e scripts, fica dentro da cerca com ele.
 
 # Red words when a change to the fence could not be made.
 settings-ai-not-changed = Não foi possível alterar.
@@ -30,16 +30,13 @@ settings-ai-choose-folder = Escolha uma pasta para compartilhar com os programas
 settings-ai-key-not-made = Não foi possível criar a chave.
 
 # Label of the switch that limits the network of AI programs, and heading of its line.
-settings-ai-limit-net = Limitar a rede aos sites listados aqui
-
-# Under the Limit the network heading.
-settings-ai-limit-net-sub = Desligado: a rede fica aberta. Ligado: só os sites abaixo.
+settings-ai-limit-net = Permitir só os sites abaixo
 
 # Tip of the button that removes a site from the list AI programs may reach.
 settings-ai-stop-site = Impedir que os programas de IA acessem este site
 
 # Example in the box for typing a site AI programs may reach.
-settings-ai-eg-site = por exemplo, api.anthropic.com
+settings-ai-eg-site = api.anthropic.com
 
 # Tip of the button that adds a site AI programs may reach.
 # SAFETY: needs a human review before it ships
@@ -49,19 +46,16 @@ settings-ai-let-site = Permitir que os programas de IA acessem este site
 settings-ai-add-site = Adicionar um site
 
 # Under the Add a site heading.
-settings-ai-add-site-sub = O nome dele, ou *.example.com para todos os nomes abaixo dele.
+settings-ai-add-site-sub = Digite o nome dele, ou *.example.com para todos os sites abaixo dele.
 
 # Heading of the card that limits the network of AI programs.
 settings-ai-network = Rede
 
 # Help text of the Network card (the information button).
-settings-ai-network-about = Avançado. Desligado, os programas de IA usam a rede como você. Ligado, eles só alcançam os sites abaixo, por conexões seguras (https), e a cerca não tem rede própria. As ferramentas de um programa precisam usar as configurações de proxy que recebem. Adicione o site do serviço de IA e de qualquer fonte de pacotes que uma instalação precise.
+settings-ai-network-about = Quando está desligado, os programas de IA usam a rede do mesmo jeito que você. Quando está ligado, eles só alcançam os sites abaixo, por conexões seguras (https), e a cerca não tem rede própria. As ferramentas de um programa precisam usar as configurações de proxy que recebem. Adicione o site do serviço de IA e qualquer fonte de pacotes de que uma instalação precise.
 
 # Label of the switch that keeps AI programs inside the fence, and heading of its line.
 settings-ai-keep-inside = Manter os programas de IA dentro da cerca
-
-# Under the fence switch when it is on.
-settings-ai-hides-home = Esconde sua pasta pessoal, exceto as pastas compartilhadas abaixo.
 
 # Under the fence switch when it is off.
 # SAFETY: needs a human review before it ships
@@ -71,7 +65,7 @@ settings-ai-fence-off = A cerca está desligada. Os programas de IA agora podem 
 settings-ai-the-fence = A cerca
 
 # Help text of The fence card (the information button).
-settings-ai-fence-about = O sistema continua visível e utilizável para os programas de IA. Sua pasta pessoal é substituída por uma pasta pessoal privada e vazia que eles mantêm entre as execuções, só com as pastas que você compartilhar. Eles não veem seus outros programas, sua sessão, suas chaves nem suas senhas. Um programa iniciado de outra forma que não pelo nome dele nesta lista não fica dentro da cerca. Se você instalou a conexão do assistente (trindle-mcp), um assistente conectado pode ler isto sem perguntar: os títulos das suas janelas abertas e os aplicativos por trás delas, seus aplicativos instalados, os programas em execução e o uso de memória deles, memória, disco, bateria, tempo ligado e estado da rede, suas configurações do Trindle, até 500 linhas do registro do sistema de qualquer serviço, suas últimas notas de falha, e os nomes dos seus dispositivos de som, dispositivos Bluetooth pareados, redes Wi-Fi próximas e unidades. Ele sempre pergunta antes de mudar qualquer coisa.
+settings-ai-fence-about = Os programas de IA ainda podem ver e usar o sistema. No lugar da sua pasta pessoal, eles recebem uma pasta privada, que começa vazia e é mantida entre as execuções. Só as pastas que você compartilha aparecem nela. Eles não veem seus outros programas, sua sessão, suas chaves nem suas senhas. Um programa que você inicia de outra forma, e não por um nome desta lista, não fica dentro da cerca.
 
 # Label of the switch that fences one AI program: its name is { $name }.
 settings-ai-fence-name = Cercar { $name }
@@ -86,25 +80,19 @@ settings-ai-own-for = Usar minha pasta de configurações existente para { $name
 settings-ai-own = Usar minha pasta de configurações existente
 
 # Under the existing settings folder heading.
-settings-ai-own-sub = Ela guarda as conversas anteriores deste programa.
+settings-ai-own-sub = Esta pasta tem as conversas anteriores do programa.
 
 # Example in the box for typing the name of an AI program.
-settings-ai-eg-program = por exemplo, claude
+settings-ai-eg-program = claude
 
 # Tip of the button that adds an AI program, and heading of its line.
 settings-ai-add-program = Adicionar um programa
 
-# Under the Add a program heading.
-settings-ai-add-program-sub = Digite o nome pelo qual você o inicia.
-
 # Help text of the AI programs card (the information button).
-settings-ai-programs-about = Estes nomes iniciam dentro da cerca. Usar minha pasta de configurações existente: desligado, o programa começa com uma pasta privada nova. Os programas entram sozinhos, lá dentro: sua própria entrada não é compartilhada.
+settings-ai-programs-about = Estes programas iniciam dentro da cerca. Se Usar minha pasta de configurações existente estiver desligado, o programa começa com uma pasta privada nova. Cada programa faz login por conta própria, dentro da cerca. O seu próprio login não é compartilhado.
 
 # Heading of the line shown when no folder is shared with AI programs.
 settings-ai-nothing-shared = Nada é compartilhado
-
-# Under the Nothing is shared heading.
-settings-ai-none-seen = Os programas de IA não veem nenhuma das suas pastas.
 
 # Label of the switch that lets AI programs only read a shared folder.
 settings-ai-only-read = Permitir só a leitura desta pasta
@@ -120,19 +108,19 @@ settings-ai-only-read-short = Permitir só a leitura
 settings-ai-share-folder = Compartilhar uma pasta
 
 # Under the Share a folder heading.
-settings-ai-share-folder-sub = Vista no mesmo lugar, para ler e gravar.
+settings-ai-share-folder-sub = Aparece no mesmo lugar. Os programas de IA podem ler e gravar nela.
 
 # Heading of the card listing folders shared with AI programs.
 settings-ai-shared = Compartilhado com os programas de IA
 
 # Help text of the shared folders card (the information button).
-settings-ai-shared-about = Privado para os programas de IA é a regra para todo o resto da sua pasta pessoal. Pastas ocultas, e pastas que guardam chaves, senhas ou e-mail, nunca podem ser compartilhadas. Uma pasta compartilhada aqui estará lá na próxima vez que o programa iniciar.
+settings-ai-shared-about = Todas as outras pastas da sua pasta pessoal ficam privadas para os programas de IA. Você nunca pode compartilhar pastas ocultas, nem pastas que guardam chaves, senhas ou e-mail. Uma pasta compartilhada aqui fica disponível na próxima vez que o programa iniciar.
 
 # Tip of the button that removes a computer from the list AI programs may reach by ssh.
 settings-ai-stop-computer = Impedir que os programas de IA acessem este computador
 
 # Example in the box for typing a computer AI programs may reach by ssh.
-settings-ai-eg-computer = por exemplo, nas.local
+settings-ai-eg-computer = nas.local
 
 # Tip of the button that adds a computer AI programs may reach by ssh.
 # SAFETY: needs a human review before it ships
@@ -140,9 +128,6 @@ settings-ai-let-computer = Permitir que os programas de IA acessem este computad
 
 # Heading of the line for adding a computer.
 settings-ai-add-computer = Adicionar um computador
-
-# Under the Add a computer heading.
-settings-ai-add-computer-sub = Digite o nome dele.
 
 # Note showing the public key to put on each computer: the key is { $key }.
 settings-ai-put-key = Coloque esta chave em cada computador: { $key }
@@ -154,20 +139,17 @@ settings-ai-make-key = Criar a chave
 settings-ai-make-key-for = Criar uma chave para os programas de IA
 
 # Under the Make a key heading.
-settings-ai-make-key-sub = Uma chave separada, guardada fora das pastas que eles veem.
+settings-ai-make-key-sub = Uma chave separada, guardada fora das pastas que os programas de IA veem.
 
 # Heading of the card listing computers AI programs may reach by ssh.
 settings-ai-ssh = Computadores que eles podem acessar por ssh
 
 # Help text of the ssh card (the information button).
-settings-ai-ssh-about = Dentro da cerca, o ssh pergunta ao Trindle, que usa uma chave própria e só para os computadores listados aqui. Suas próprias chaves nunca são mostradas aos programas de IA.
+settings-ai-ssh-about = Dentro da cerca, o ssh se conecta por meio do Trindle. O Trindle usa uma chave própria, e só para os computadores listados aqui. Os programas de IA nunca veem as suas próprias chaves.
 
 # Tip of the button that stops giving AI programs a key.
 # SAFETY: needs a human review before it ships
 settings-ai-stop-key = Parar de dar esta chave aos programas de IA
-
-# Under the name of a key that AI programs are given.
-settings-ai-given = Dada aos programas de IA
 
 # Example in the box for typing a key to give AI programs: a name, an equals sign and the value.
 settings-ai-eg-key = NOME=valor
@@ -179,11 +161,8 @@ settings-ai-give-key = Dar esta chave aos programas de IA
 # Heading of the line for adding a key.
 settings-ai-add-key = Adicionar uma chave
 
-# Under the Add a key heading.
-settings-ai-add-key-sub = Escrita como NOME=valor.
-
 # Heading of the card listing keys given to AI programs.
 settings-ai-keys = Chaves dadas aos programas de IA
 
 # Help text of the keys card (the information button).
-settings-ai-keys-about = As chaves e tokens da sua sessão nunca chegam aos programas de IA. Uma chave digitada aqui é dada a eles, e só aqui.
+settings-ai-keys-about = Os programas de IA nunca recebem as chaves e tokens da sua sessão. Eles só recebem uma chave que você digitar aqui.

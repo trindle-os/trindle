@@ -1,6 +1,5 @@
 //! Network: Wi-Fi and wired connections, through NetworkManager over D-Bus.
 
-mod connection_sharing;
 mod join;
 mod refresh;
 
@@ -11,12 +10,10 @@ use zbus::zvariant::{ObjectPath, Value};
 use zbus::Message;
 
 use crate::common::kept_order::KeptOrder;
-use crate::common::sharing::{Problem, Shared};
 use crate::settings::ui::{confirm, group, headline, line, loading, missing, on, page, Cause, Kit, Msg, Page};
 use crate::toolkit::bus::{Failed, Listen};
 use crate::toolkit::t;
-use crate::toolkit::tiles::Sketch;
-use crate::toolkit::widget::{button, drawing, entry, layers, note, row, switch, Length, Node, Tone};
+use crate::toolkit::widget::{button, entry, note, row, switch, Length, Node, Tone};
 use join::{disconnect, joining, Password};
 
 const NM: &str = "org.freedesktop.NetworkManager";
@@ -38,25 +35,6 @@ fn refused_words(e: &Failed) -> String {
         e.words(t!("settings-network-join-refused"))
     }
 }
-
-pub(crate) fn banded(rows: Vec<Node<Msg>>) -> Vec<Node<Msg>> {
-    rows.into_iter().enumerate().map(|(i, r)| {
-        let padded = row(vec![r]).padding(BAND_PAD);
-        if i % 2 == 0 {
-            return padded;
-        }
-        let band = drawing((1.0, 1.0), "", |canvas, pen| {
-            let (w, h) = (canvas.width() as f32, canvas.height() as f32);
-            let radius = crate::toolkit::theme::sheet().corner_of(crate::toolkit::theme::Part::Row);
-            let mut s = Sketch::fit(canvas, pen, (w / pen.scale, h / pen.scale));
-            let c = s.theme().band;
-            s.rect((0.0, 0.0, w / pen.scale, h / pen.scale), radius, c);
-        }).width(Length::Fill).height(Length::Fill);
-        layers(vec![band, padded]).height(Length::Shrink)
-    }).collect()
-}
-
-const BAND_PAD: f32 = 8.0;
 
 fn device_state(state: u32) -> &'static str {
     match state {
@@ -114,6 +92,8 @@ struct Ap {
     path: String,
     strength: u32,
     secure: bool,
+
+    enterprise: bool,
 }
 
 #[derive(Clone)]
@@ -128,6 +108,8 @@ struct Found {
     waiting: usize,
     wired: Vec<Wired>,
     wifi: bool,
+
+    wifi_read: bool,
 
     device_state: u32,
     active_ap: String,
@@ -165,10 +147,6 @@ pub struct Network {
     asking: Option<Asking>,
     name_typed: String,
     pass_typed: String,
-
-    sharing: bool,
-
-    shared: Option<Result<Vec<Shared>, Problem>>,
 
     ap_names: Vec<String>,
     order: KeptOrder,
@@ -209,13 +187,14 @@ impl Page for Network {
                 self.hearing.push(l);
             }
         }
-        self.sharing = crate::common::firewall::sharing();
-        self.read_shared(kit);
         self.refresh(kit);
         self.scan(kit);
     }
     fn hidden(&mut self, _kit: &mut Kit) {
         self.hearing.clear();
+
+        self.pass_typed.clear();
+        self.asking = None;
 
         self.order.forget();
     }
@@ -223,28 +202,27 @@ impl Page for Network {
         let mut items = Vec::new();
         match self.state {
             State::NoBus => {
-                items.push(headline(kit, t!("settings-network-top-looking")));
+                items.push(headline(t!("settings-network-top-looking")));
                 items.push(missing(kit, t!("settings-network-the-bus"), "dbus"));
                 crate::settings::ui::add_no_driver(kit, &mut items, crate::common::no_driver::Class::Wifi);
                 return page(kit, self.title(), self.help(), items);
             }
             State::Gone => {
-                items.push(headline(kit, t!("settings-network-top-gone")));
+                items.push(headline(t!("settings-network-top-gone")));
                 items.push(missing(kit, "NetworkManager", "network-manager"));
 
-                items.push(self.sharing_card(kit));
                 crate::settings::ui::add_no_driver(kit, &mut items, crate::common::no_driver::Class::Wifi);
                 return page(kit, self.title(), self.help(), items);
             }
             _ if !self.ready => {
-                items.push(headline(kit, t!("settings-network-top-looking")));
+                items.push(headline(t!("settings-network-top-looking")));
                 items.push(loading());
                 crate::settings::ui::add_no_driver(kit, &mut items, crate::common::no_driver::Class::Wifi);
                 return page(kit, self.title(), self.help(), items);
             }
             _ => {
                 let (words, _) = headline_words(self.enabled, self.link().as_ref(), self.cabled());
-                items.push(headline(kit, words));
+                items.push(headline(words));
             }
         }
 
@@ -252,7 +230,6 @@ impl Page for Network {
         if self.shown.wifi || self.shown.listed {
             items.push(self.networks(kit));
         }
-        items.push(self.sharing_card(kit));
         crate::settings::ui::add_no_driver(kit, &mut items, crate::common::no_driver::Class::Wifi);
         page(kit, self.title(), self.help(), items)
     }
@@ -348,9 +325,9 @@ impl Network {
         let f = &self.shown;
         let lines: Vec<Node<Msg>> = self.ap_names.iter().filter_map(|name| Some(self.ap_line(kit, name, f.aps.get(name)?))).collect();
         let rows = if lines.is_empty() {
-            vec![line(t!("settings-network-none-in-range")).sub(t!("settings-network-none-in-range-sub")).node(kit)]
+            vec![line(t!("settings-network-none-in-range")).node(kit)]
         } else {
-            banded(lines)
+            crate::toolkit::widget::banded_list(lines)
         };
         group(t!("settings-network-in-range")).icon("network-wireless-signal-excellent-symbolic")
             .about(t!("settings-network-in-range-about"))
@@ -381,7 +358,7 @@ impl Network {
                 .on_press(on::<Network>(move |me, k| me.connect(k, &n, &ap))));
         }
         if let Some(conn) = saved {
-            l = l.control(forget_button(kit, &key, conn));
+            l = l.control(forget_button(&key, conn));
         }
         if self.asking.as_ref() == Some(&Asking::Password(name.to_string())) {
             l = l.below(self.password_row(name, ap));
@@ -403,7 +380,11 @@ impl Network {
         } else if saved {
             bits.push(t!("settings-network-saved"));
         }
-        bits.push(if ap.secure { t!("settings-network-secured") } else { t!("settings-network-open") });
+        bits.push(match (ap.secure, ap.enterprise) {
+            (_, true) => t!("settings-network-username"),
+            (true, false) => t!("settings-network-secured"),
+            (false, false) => t!("settings-network-open"),
+        });
         if !speed.is_empty() {
             bits.push(&speed);
         }
@@ -428,12 +409,11 @@ impl Network {
             button("window-close-symbolic", t!("settings-network-cancel")).on_press(on::<Network>(|me, _| me.close_entry())),
         ]).gap(8.0).width(Length::Fill)
     }
-
 }
 
-fn forget_button(kit: &Kit, key: &str, conn: String) -> Node<Msg> {
+fn forget_button(key: &str, conn: String) -> Node<Msg> {
     let k2 = key.to_string();
-    confirm::<Network>(kit, key, "user-trash-symbolic", t!("settings-network-forget"), move |_, k| {
+    confirm::<Network>(key, "user-trash-symbolic", t!("settings-network-forget"), move |_, k| {
         let Some(bus) = k.system_for(&k2) else { return };
 
         let back = k.settles::<Network, Message, Failed>(&k2, t!("settings-network-forget-failed"), |me, k, _| me.refresh(k));
@@ -463,19 +443,16 @@ impl Network {
                                 listed: true, ..Found::default() };
         for (i, (name, strength, secure)) in [("Home", 82, true), ("Home guests", 78, true), ("Cafe on the corner", 55, false),
                                               ("Number 14", 40, true), ("Printer setup", 22, false)].into_iter().enumerate() {
-            shown.aps.insert(name.to_string(), Ap { path: format!("/ap/{}", i + 1), strength, secure });
+            shown.aps.insert(name.to_string(), Ap { path: format!("/ap/{}", i + 1), strength, secure, enterprise: false });
         }
         shown.saved.insert("Home".into(), "/saved/1".into());
         shown.saved.insert("Number 14".into(), "/saved/2".into());
         shown.wired.push(Wired { path: "/wired/1".into(), name: "Wired".into(), state: STATE_DISCONNECTED });
         let mut me = Network { state: State::Ready, shown, ready: true, enabled: true, wifi_device: Some("/wifi".into()),
-                               shared: Some(Ok(vec![Shared { name: "photos".into(), path: "/home/john/Photos".into(),
-                                                             write: false, guests: false }])),
                                ..Network::default() };
         me.arrange();
         me
     }
-
 }
 
 #[cfg(test)]

@@ -1,4 +1,4 @@
-//! Every Settings page, in the order the sidebar shows them.
+//! Every Settings page; the sidebar's order is `page_groups` in settings/mod.rs.
 
 pub mod ring;
 pub mod display;
@@ -10,6 +10,7 @@ pub mod blocking;
 pub mod bluetooth;
 pub mod wallpaper;
 pub mod about;
+mod report_card;
 pub mod appearance;
 pub mod keyboard;
 pub mod pads;
@@ -24,7 +25,6 @@ pub mod users;
 pub mod snapshots;
 pub mod help;
 pub mod plugin_rows;
-pub mod crash_reports;
 pub mod plugins;
 pub mod permissions;
 mod outside_card;
@@ -62,7 +62,6 @@ pub fn all() -> Vec<Box<dyn Page>> {
         Box::new(help::Help::default()),
     ];
 
-    all.push(Box::new(crash_reports::CrashReports::default()));
     if plugins::here() {
         all.push(Box::new(plugins::Plugins::default()));
     }

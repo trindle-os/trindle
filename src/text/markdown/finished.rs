@@ -6,7 +6,7 @@ use crate::toolkit::input::Keysym;
 use crate::toolkit::theme::alpha;
 use crate::toolkit::theme;
 use crate::toolkit::widget::{Pen, Pointer};
-use super::parse;
+use super::{parse, Block};
 use super::layout::Piece;
 use super::layout::Laid;
 use super::layout::Palette;
@@ -19,6 +19,8 @@ const WHEEL_LINES: f32 = 3.0;
 
 pub struct Finished {
     laid: Option<Laid>,
+
+    parsed: Option<(u64, Vec<Block>)>,
 
     key: (u64, u32, u32, u32),
 
@@ -33,11 +35,18 @@ pub struct Finished {
 
 impl Default for Finished {
     fn default() -> Self {
-        Finished { laid: None, key: (u64::MAX, 0, 0, 0), scroll: 0.0, pending: 0.0, scale: 1.0, size: (0.0, 0.0), mono: None, over: false, hot: None }
+        Finished { laid: None, parsed: None, key: (u64::MAX, 0, 0, 0), scroll: 0.0, pending: 0.0, scale: 1.0, size: (0.0, 0.0), mono: None, over: false, hot: None }
     }
 }
 
 impl Finished {
+    fn blocks(&mut self, text: &str, version: u64) -> &[Block] {
+        if self.parsed.as_ref().is_none_or(|(v, _)| *v != version) {
+            self.parsed = Some((version, parse(text)));
+        }
+        self.parsed.as_ref().map_or(&[], |(_, b)| b)
+    }
+
     pub fn paint(&mut self, canvas: &mut PixmapMut, pen: &Pen, text: &str, version: u64, look: &Look) {
         let s = pen.scale;
         let (w, h) = (canvas.width() as f32, canvas.height() as f32);
@@ -52,7 +61,7 @@ impl Finished {
         let key = (version, width.to_bits(), s.to_bits(), look.size.to_bits());
         if self.key != key || self.laid.is_none() {
             self.key = key;
-            self.laid = Some(Lay::new(pen.fonts, look.size * s, mono).lay(&parse(text), width));
+            self.laid = Some(Lay::new(pen.fonts, look.size * s, mono).lay(self.blocks(text, version), width));
             self.hot = None;
         }
         let Some(laid) = &self.laid else { return };
@@ -151,5 +160,18 @@ impl Finished {
             _ => return false,
         }
         true
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_new_width_lays_out_again_but_reads_the_text_only_once_per_version() {
+        let mut f = Finished::default();
+        assert_eq!(f.blocks("# one", 1).len(), 1);
+        assert_eq!(f.blocks("# changed under it\n\npara", 1).len(), 1, "the same version is not read again");
+        assert_eq!(f.blocks("# changed under it\n\npara", 2).len(), 2, "a new version is");
     }
 }

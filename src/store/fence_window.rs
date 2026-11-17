@@ -8,8 +8,8 @@
 //! for a command 0 allows it.
 
 use crate::toolkit::t;
-use std::cell::{Cell, RefCell};
-use std::rc::{Rc, Weak};
+use std::cell::Cell;
+use std::rc::Rc;
 
 use crate::toolkit::event::Loop;
 use crate::toolkit::ui::{App, Shown};
@@ -94,10 +94,8 @@ pub fn main(kind: &str, text: &str) -> i32 {
     });
     let code = Rc::new(Cell::new(1));
     let ask = Ask { kind: kind.to_string(), text: text.to_string(), read_only: false, code: code.clone(), events: events.clone() };
-    let me: Rc<RefCell<Weak<Shown<Ask>>>> = Rc::new(RefCell::new(Weak::new()));
     let Some(shown) = Shown::open(&events, &display, shape, (WIDTH, 1), ask) else { return 1 };
     let shown = Rc::new(shown);
-    *me.borrow_mut() = Rc::downgrade(&shown);
     shown.fit();
     let quit = events.clone();
     shown.window.on_close(move || quit.quit());

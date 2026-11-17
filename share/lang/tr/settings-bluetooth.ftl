@@ -16,13 +16,13 @@ settings-bluetooth-cause-auth-failed = { $could_not } PIN ya da sayı kabul edil
 
 # Said in red when the pairing was turned down; the first sentence says what could not be done.
 # SAFETY: needs a human review before it ships
-settings-bluetooth-cause-turned-down = { $could_not } Burada ya da öbür aygıtta reddedildi.
+settings-bluetooth-cause-turned-down = { $could_not } Eşleştirme burada ya da öbür aygıtta reddedildi.
 
 # Said in red when the other device did not answer in time; the first sentence says what could not be done.
 settings-bluetooth-cause-timeout = { $could_not } Öbür aygıt zamanında yanıt vermedi. Eşleştirme kipine alın, sonra yeniden deneyin.
 
 # Said in red when the same thing is already being done; the first sentence says what could not be done.
-settings-bluetooth-cause-in-progress = { $could_not } Bu işlem zaten yapılıyor. Biraz bekleyin.
+settings-bluetooth-cause-in-progress = { $could_not } Trindle bunu zaten yapıyor. Biraz bekleyin.
 
 # Said in red when the device did not answer; the first sentence says what could not be done.
 settings-bluetooth-cause-no-answer = { $could_not } Aygıt yanıt vermedi. Açık ve yakında olduğunu denetleyin, sonra yeniden deneyin.
@@ -34,7 +34,7 @@ settings-bluetooth-cause-not-available = { $could_not } Aygıt kullanıma hazır
 settings-bluetooth-the-bus = Sistem veriyolu
 
 # Headline of the page while Bluetooth is looked for.
-settings-bluetooth-top-looking = Bluetooth aranıyor…
+settings-bluetooth-top-looking = Bluetooth denetleniyor…
 
 # Headline of the page when the Bluetooth service is not running.
 settings-bluetooth-top-gone = Bluetooth bu bilgisayarda çalışmıyor.
@@ -43,16 +43,22 @@ settings-bluetooth-top-gone = Bluetooth bu bilgisayarda çalışmıyor.
 settings-bluetooth-top-off = Bluetooth kapalı.
 
 # Headline of the page when Bluetooth is off at a switch or key on the computer itself.
-settings-bluetooth-top-hard = Bluetooth bilgisayarın kendisinde kapatılmış.
+settings-bluetooth-top-hard = Bluetooth, bilgisayardaki bir anahtar ya da tuşla kapatılmış.
 
 # Headline of the page when the computer has no Bluetooth.
 settings-bluetooth-top-none = Bu bilgisayarda Bluetooth yok.
 
+# Headline of the page when the computer has an adapter that Bluetooth has not finished setting up.
+settings-bluetooth-top-starting = Bluetooth başlıyor…
+
+# Headline of the page when the adapter was there a moment ago and has gone.
+settings-bluetooth-top-lost = Bluetooth bağdaştırıcısı kayboldu.
+
 # Headline of the page when Bluetooth is on and searching.
-settings-bluetooth-top-searching = Açık, yakındaki aygıtlar aranıyor…
+settings-bluetooth-top-searching = Açık ve aygıtlar aranıyor…
 
 # Headline of the page when Bluetooth is on and nothing is connected.
-settings-bluetooth-top-idle = Açık, şu anda bağlı bir şey yok.
+settings-bluetooth-top-idle = Açık, ama bağlı bir şey yok.
 
 # Headline of the page when Bluetooth is on and devices are connected; the names are already joined into a list.
 settings-bluetooth-top-connected =
@@ -62,47 +68,47 @@ settings-bluetooth-top-connected =
     }
 
 # Help text (i button) of the Bluetooth card.
-settings-bluetooth-card-about = Anahtar, bu bilgisayarın Bluetooth'unu açar ya da kapatır; altında bağdaştırıcının adı vardır. Diğer aygıtlara görünür açıkken yakındaki aygıtlar bu bilgisayarı bulabilir.
+settings-bluetooth-card-about = Anahtarın altındaki ad, Bluetooth bağdaştırıcınızın adıdır. Diğer aygıtlara görünür açıkken yakındaki aygıtlar bu bilgisayarı bulabilir.
 
 # Heading of the Bluetooth card, of its switch's line, and the name of its switch.
 settings-bluetooth-title = Bluetooth
 
-# Small line under the Bluetooth switch when Bluetooth is blocked by the system.
-settings-bluetooth-switched-off = Kapatıldı.
-
 # Heading of the line with the switch that makes this computer visible, and the name of that switch.
 settings-bluetooth-visible = Diğer aygıtlara görünür
-
-# Small line under the Visible to other devices switch.
-settings-bluetooth-visible-sub = Yakındaki aygıtlar bu bilgisayarı bulabilir.
 
 # Heading of the card when Bluetooth is off at a switch on the computer itself.
 settings-bluetooth-hard-line = Bilgisayarın kendisinde kapatılmış
 
 # Small line under it.
-settings-bluetooth-hard-line-sub = Bir anahtar ya da tuşla. Önce onu açın.
+settings-bluetooth-hard-line-sub = Açmak için bilgisayarın kendi anahtarını ya da tuşunu kullanın.
 
 # Heading of the card when the computer has no Bluetooth adapter.
 settings-bluetooth-no-adapter = Bluetooth bağdaştırıcısı yok
 
 # Help text (i button) of that card.
-settings-bluetooth-no-adapter-about = Bu bilgisayarda Bluetooth bağdaştırıcısı bulunamadı. USB girişine takılan bir bağdaştırıcı takılır takılmaz burada görünür.
+settings-bluetooth-no-adapter-about = Trindle bu bilgisayarda Bluetooth bağdaştırıcısı bulamadı. Bir USB girişine takarsanız burada hemen görünür.
 
 # Line in that card.
 settings-bluetooth-none-found = Hiçbiri bulunamadı
 
+# Line in the no-adapter card while Bluetooth finishes setting up the adapter.
+settings-bluetooth-starting = Başlatılıyor
+
+# Line in the no-adapter card when the adapter was there a moment ago.
+settings-bluetooth-lost = Bağdaştırıcı kayboldu
+
 # Small line under it.
-settings-bluetooth-none-found-sub = USB olanı takıldığında burada görünür.
+settings-bluetooth-lost-sub = Trindle aramaya devam eder ve geri gelirse burada gösterir. Gelmezse bilgisayarı yeniden başlatın.
 
 # Shown beside the Bluetooth switch while the password is asked for.
 # SAFETY: needs a human review before it ships
-settings-bluetooth-waiting = Parola bekleniyor...
+settings-bluetooth-waiting = Parolanız bekleniyor…
 
 # Said in red when this computer could not be made visible to other devices.
-settings-bluetooth-visible-failed = Bu bilgisayar diğer aygıtlara görünür yapılamadı.
+settings-bluetooth-visible-failed = Trindle bu bilgisayarı diğer aygıtlara görünür yapamadı.
 
 # Said in red when this computer could not be hidden from other devices.
-settings-bluetooth-hidden-failed = Bu bilgisayar diğer aygıtlardan gizlenemedi.
+settings-bluetooth-hidden-failed = Trindle bu bilgisayarı diğer aygıtlardan gizleyemedi.
 
 # Shown on the two device lists while Bluetooth is off.
 settings-bluetooth-switch-on-first = Bunları kullanmak için Bluetooth'u açın.
@@ -110,17 +116,14 @@ settings-bluetooth-switch-on-first = Bunları kullanmak için Bluetooth'u açın
 # Line in the My devices card when nothing is paired.
 settings-bluetooth-none-paired = Henüz eşleşen yok
 
-# Small line under it.
-settings-bluetooth-none-paired-sub = Eşleştirmek için aygıt arayın.
-
 # Heading of the card that lists paired devices.
 settings-bluetooth-mine = Aygıtlarım
 
 # Help text (i button) of the My devices card.
-settings-bluetooth-mine-about = Bu bilgisayarla eşleşmiş aygıtlar; pil durumu bildirenlerde pil düzeyi de görünür. Sayfa açıldığında bağlı olanlar başta gelir ve sayfa açıkken bir satır yerinde kalır. Yuvarlak düğmeler bir aygıtı bağlar ya da bağlantısını keser; çöp kutusu onu unutturur, bu yüzden yeniden eşleştirilmesi gerekir.
+settings-bluetooth-mine-about = Bu bilgisayarla eşleşmiş aygıtlar; pil düzeyi okunabiliyorsa onunla birlikte görünür. Sayfayı açtığınızda bağlı olan aygıtlar başta gelir ve sayfa açıkken sıra değişmez. Bir aygıtı unutturursanız yeniden eşleştirmeniz gerekir.
 
 # Line in the Nearby card while the search runs.
-settings-bluetooth-looking = Aygıtlar aranıyor...
+settings-bluetooth-looking = Aygıtlar aranıyor…
 
 # Tip of the button that stops the search.
 settings-bluetooth-stop-looking = Aramayı durdur
@@ -128,17 +131,14 @@ settings-bluetooth-stop-looking = Aramayı durdur
 # Heading of the line that starts the search, and tip of its button.
 settings-bluetooth-look = Aygıt ara
 
-# Small line under it.
-settings-bluetooth-look-sub = Önce öbür aygıtı eşleştirme kipine alın.
-
 # Heading of the card that lists devices nearby.
 settings-bluetooth-nearby = Yakında
 
 # Help text (i button) of the Nearby card.
-settings-bluetooth-nearby-about = Aygıt ara düğmesine basın, öbür aygıtı eşleştirme kipine alın, sonra yanındaki Eşleştir düğmesine basın. Yakındaki aygıtlar sayfa açılırken en güçlüden başlayarak listelenir ve bulunan her yeni aygıt sona eklenir. Bazıları buradakiyle karşılaştırmanız için bir sayı gösterir, bazıları da çoğunlukla kullanım kılavuzunda bulunan ya da 0000 olan bir PIN ister.
+settings-bluetooth-nearby-about = Aygıt ara düğmesine basın, öbür aygıtı eşleştirme kipine alın, sonra yanındaki Eşleştir düğmesine basın. Sayfayı açtığınızda sinyali en güçlü aygıt en üstte listelenir ve bulunan her yeni aygıt sona eklenir. Bazı aygıtlar buradakiyle karşılaştırmanız için bir sayı gösterir. Bazıları da çoğunlukla kullanım kılavuzunda bulunan ya da 0000 olan bir PIN ister.
 
 # Said in red when the search could not be stopped.
-settings-bluetooth-stop-failed = Aygıt arama durdurulamadı.
+settings-bluetooth-stop-failed = Trindle aygıt aramayı durduramadı.
 
 # Said in red when the search could not be started.
 settings-bluetooth-start-failed = Aygıtlar aranamadı.
@@ -174,19 +174,19 @@ settings-bluetooth-disconnect-failed = Bağlantısı kesilemedi.
 settings-bluetooth-forget-failed = Unutturulamadı.
 
 # Shown under a device while it is being paired.
-settings-bluetooth-pairing = Eşleştiriliyor...
+settings-bluetooth-pairing = Eşleştiriliyor…
 
 # Said in red when a device could not be paired.
 settings-bluetooth-pair-failed = Eşleştirilemedi.
 
 # Shown under a device while it is being connected.
-settings-bluetooth-connecting = Bağlanıyor...
+settings-bluetooth-connecting = Bağlanıyor…
 
 # Said in red when a device could not be connected.
 settings-bluetooth-connect-failed = Bağlanamadı.
 
 # Said under a device that paired but could not be set to connect by itself.
-settings-bluetooth-not-trusted = Bağlandı, ama bir sonraki sefer kendiliğinden bağlanacak şekilde ayarlanamadı. İstediğinizde buradan bağlayın.
+settings-bluetooth-not-trusted = Bağlandı, ama Trindle bir sonraki sefer kendiliğinden bağlanacak şekilde ayarlayamadı. Kullanmak istediğinizde buradan bağlayın.
 
 # Said under a device that shows a code to be typed on it; the code is already written.
 settings-bluetooth-type-code = Aygıtta { $code } yazın, sonra aygıtta Enter'a basın.
@@ -217,27 +217,27 @@ settings-bluetooth-cancel = İptal
 
 # Help line above the box where a device's PIN is typed.
 # SAFETY: needs a human review before it ships
-settings-bluetooth-pin-help = Bu aygıtın PIN'ini yazın. Genellikle kullanım kılavuzundadır ya da 0000'dır.
+settings-bluetooth-pin-help = Bu aygıtın PIN'ini yazın. Genellikle kullanım kılavuzundadır. Yoksa 0000'ı deneyin.
 
 # Words the settings search looks for on this page (not shown).
 settings-bluetooth-keywords = kulaklık fare klavye eşleştir aygıtlar kablosuz bluetooth
 
 # Help text at the top of the page.
-settings-bluetooth-help = Ara düğmesine basın, öbür aygıtı eşleştirme kipine alın, sonra yanındaki Eşleştir düğmesine basın.
+settings-bluetooth-help = Aygıt ara düğmesine basın, öbür aygıtı eşleştirme kipine alın, sonra yanındaki Eşleştir düğmesine basın.
 
 # Said in red under the Bluetooth switch when restarting the sound service after Bluetooth came back on failed; $why is the system's own reason.
-settings-bluetooth-sound-failed = Bluetooth sesi yeniden başlatılamadı, bu yüzden kulaklıklar siz yeniden oturum açana kadar temel kaliteyi kullanabilir. { $why }
+settings-bluetooth-sound-failed = Trindle Bluetooth sesini yeniden başlatamadı, bu yüzden kulaklıklar yeniden oturum açana kadar her zamankinden kötü ses verebilir. { $why }
 
 # Tooltip of the help button beside the Bluetooth switch.
-settings-bluetooth-sound-help = Bluetooth kapatılıp açıldıktan sonra kulaklıklar neden temel kalitede çalar
+settings-bluetooth-sound-help = Bluetooth kapatılıp açıldıktan sonra kulaklıklar neden daha kötü ses verir
 
 
 
 # Said in red when a device is no longer in BlueZ's list; the first sentence says what could not be done.
-settings-bluetooth-cause-gone = { $could_not } Aygıt artık tanınmıyor. Yeniden arayın.
+settings-bluetooth-cause-gone = { $could_not } Bu aygıt artık bu bilgisayarda kayıtlı değil. Yeniden arayın.
 
 # Said in red when a paired device's saved pairing is refused; the first sentence says what could not be done.
-settings-bluetooth-cause-old-pairing = { $could_not } Kayıtlı eşleştirme artık kabul edilmiyor. Aygıtı unutun ve yeniden eşleştirin.
+settings-bluetooth-cause-old-pairing = { $could_not } Aygıt kayıtlı eşleştirmeyi artık kabul etmiyor. Aygıtı unutun ve yeniden eşleştirin.
 
 # Said in red under a device that connected and then dropped at once.
 settings-bluetooth-dropped = Bağlandı, sonra koptu. Kayıtlı eşleştirme eskimiş olabilir.
@@ -246,8 +246,7 @@ settings-bluetooth-dropped = Bağlandı, sonra koptu. Kayıtlı eşleştirme esk
 settings-bluetooth-pair-again = Unut ve yeniden eşleştir
 
 # Said under Look for devices after a device was forgotten to be paired afresh.
-settings-bluetooth-forgotten-pair = Unutuldu. Aygıtı eşleştirme kipine alın, sonra aşağıda göründüğünde Eşleştir'e basın.
+settings-bluetooth-forgotten-pair = Aygıt unutuldu. Eşleştirme kipine alın, sonra aşağıda göründüğünde Eşleştir'e basın.
 
 # Tooltip of the button that opens Help from a failed connection.
 settings-bluetooth-more = Daha fazla bilgi
-

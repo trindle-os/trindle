@@ -90,7 +90,7 @@ ring-shortcuts-console = Cambiar a una consola de texto
 ring-shortcuts-console-keys = Ctrl+Alt+F1 a F12
 
 # Words for the keys the screen reader takes while it is on.
-ring-shortcuts-reader-keys = Las teclas propias del lector de pantalla, mientras está activado
+ring-shortcuts-reader-keys = Teclas del lector de pantalla mientras está activado
 
 # The keys the screen reader takes while it is on.
 ring-shortcuts-reader-keys-keys = Bloq Mayús, Insert

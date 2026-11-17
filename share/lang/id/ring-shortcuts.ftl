@@ -90,7 +90,7 @@ ring-shortcuts-console = Beralih ke konsol teks
 ring-shortcuts-console-keys = Ctrl+Alt+F1 sampai F12
 
 # Words for the keys the screen reader takes while it is on.
-ring-shortcuts-reader-keys = Tombol milik pembaca layar, saat hidup
+ring-shortcuts-reader-keys = Tombol untuk pembaca layar saat menyala
 
 # The keys the screen reader takes while it is on.
 ring-shortcuts-reader-keys-keys = Caps Lock, Insert

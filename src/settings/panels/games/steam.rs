@@ -5,13 +5,12 @@ use std::path::Path;
 use super::Games;
 use crate::common::run::capture;
 use crate::common::steam_files::{self as files, Game};
-use crate::settings::ui::{confirm, group, line, on, Kit, Msg};
+use crate::settings::ui::{confirm, group, line, on, own_or_why, why, Kit, Msg};
 use crate::toolkit::t;
 use crate::toolkit::widget::{row, switch, Length, Node};
 
 const ALL: &str = "games:proton-all";
 const UP: &str = "games:steam-up";
-const PROC: &str = "/proc";
 const DRM: &str = "/sys/class/drm";
 
 #[derive(Clone, Debug, Default)]
@@ -53,11 +52,16 @@ impl Games {
     }
 
     pub(super) fn read_steam(&mut self, kit: &mut Kit) {
-        let up = kit.then::<Games, (bool, String)>(|me, _, (ok, out)| {
-            me.steam.open = ok && out.lines().any(|l| l.trim() == files::STEAM);
+        self.read_open(kit);
+        self.read_tool(kit, |_, _| {});
+    }
+
+    pub(super) fn read_open(&mut self, kit: &mut Kit) {
+        let up = kit.then_if::<Games, (bool, String)>(|me, _, (ok, out)| {
+            let open = ok && out.lines().any(|l| l.trim() == files::STEAM);
+            std::mem::replace(&mut me.steam.open, open) != open
         });
         capture(&["flatpak", "ps", "--columns=application"], None, move |ok, out, _| up((ok, out)));
-        self.read_tool(kit, |_, _| {});
     }
 
     fn read_tool(&mut self, kit: &mut Kit, after: impl FnOnce(&mut Games, &mut Kit) + 'static) {
@@ -74,7 +78,7 @@ impl Games {
             Some(t!("settings-games-steam-open"))
         } else if self.steam.installing || self.busy {
             crate::common::ui::wait_while(true)
-        } else if id != 0 && files::game_running(Path::new(PROC), id) {
+        } else if id != 0 && self.pads.running.contains(&id) {
             Some(t!("settings-games-game-running"))
         } else {
             None
@@ -83,6 +87,10 @@ impl Games {
 
     fn set_stronger(&mut self, kit: &mut Kit, id: u32, on: bool) {
         let key = format!("games-game:{id}");
+        if let Some(why) = self.why_not(id) {
+            kit.done(&key, Some(why), "");
+            return;
+        }
         let result = files::set_prime(&files::root(), id, on);
         self.look_steam();
         kit.done(&key, result.as_ref().err().map(String::as_str), if on { t!("settings-games-stronger-on") } else { t!("settings-games-stronger-off") });
@@ -90,10 +98,14 @@ impl Games {
 
     fn set_community(&mut self, kit: &mut Kit, id: u32, on: bool) {
         let key = if id == 0 { ALL.to_string() } else { format!("games-game:{id}") };
+        if let Some(why) = self.why_not(id) {
+            kit.done(&key, Some(why), "");
+            return;
+        }
         if !on {
             let result = files::set_compat_tool(&files::root(), id, None);
             self.look_steam();
-            kit.done(&key, result.as_ref().err().map(String::as_str), t!("settings-games-proton-off"));
+            kit.done(&key, not_changed(&result).as_deref(), t!("settings-games-proton-off"));
             return;
         }
         if self.steam.tool.is_some() {
@@ -105,7 +117,7 @@ impl Games {
         let back = kit.then::<Games, (bool, String)>(move |me, k, (ok, err)| {
             me.steam.installing = false;
             if !ok {
-                k.done(&key, Some(&err), "");
+                k.done(&key, Some(&why(&err, t!("settings-games-proton-not-installed"))), "");
                 return;
             }
             me.read_tool(k, move |me, k| me.use_tool(k, id));
@@ -121,7 +133,7 @@ impl Games {
         };
         let result = files::set_compat_tool(&files::root(), id, Some(&name));
         self.look_steam();
-        kit.done(&key, result.as_ref().err().map(String::as_str), t!("settings-games-proton-on"));
+        kit.done(&key, not_changed(&result).as_deref(), t!("settings-games-proton-on"));
     }
 
     fn fresh_start(&mut self, kit: &mut Kit, id: u32) {
@@ -144,7 +156,7 @@ impl Games {
         }
         let id = e.id;
         controls.push(switch(e.community, t!("settings-games-proton-one"), move |v| on::<Games>(move |me, k| me.set_community(k, id, v))));
-        controls.push(confirm::<Games>(kit, &format!("games-fresh:{id}"), "edit-clear-symbolic", t!("settings-games-fresh"), move |me, k| me.fresh_start(k, id)));
+        controls.push(confirm::<Games>(&format!("games-fresh:{id}"), "edit-clear-symbolic", t!("settings-games-fresh"), move |me, k| me.fresh_start(k, id)));
         line(e.name.as_str()).key(format!("games-game:{id}")).sub(t!("settings-games-game-sub"))
             .control(row(controls).gap(8.0).width(Length::Shrink).off_because(why)).node(kit)
     }
@@ -156,17 +168,21 @@ impl Games {
         }
         let all = switch(self.steam.all_community, t!("settings-games-proton-all"), |v| on::<Games>(move |me, k| me.set_community(k, 0, v)))
             .off_because(self.why_not(0));
-        rows.push(line(t!("settings-games-proton-all")).key(ALL).sub(t!("settings-games-proton-all-sub")).control(all).node(kit));
+        rows.push(line(t!("settings-games-proton-all")).key(ALL).control(all).node(kit));
         if self.steam.entries.is_empty() {
-            rows.push(line(t!("settings-games-none")).sub(t!("settings-games-none-sub")).node(kit));
+            rows.push(line(t!("settings-games-none")).node(kit));
         }
         rows.extend(self.steam.entries.iter().map(|e| self.game_row(kit, e)));
         group(t!("settings-games-steam-title")).icon("input-gaming-symbolic")
-            .about(t!("settings-games-steam-about"))
+            .about(format!("{} {}", t!("settings-games-steam-about"), t!("settings-games-proton-all-sub")))
             .span(6, 8)
             .rows(rows)
             .node(kit)
     }
+}
+
+fn not_changed(result: &Result<(), String>) -> Option<String> {
+    result.as_ref().err().map(|e| own_or_why(e, &[t!("common-steam-unreadable")], t!("settings-games-proton-not-changed")))
 }
 
 pub fn fresh_start(library: &Path, id: u32, bin: Option<crate::toolkit::common::file_work::trash::Bin>) -> (bool, Option<String>) {
@@ -183,6 +199,29 @@ pub fn fresh_start(library: &Path, id: u32, bin: Option<crate::toolkit::common::
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_steam_failure_is_said_in_the_pages_own_words() {
+        assert_eq!(not_changed(&Ok(())), None);
+        assert_eq!(not_changed(&Err("config.vdf: Is a directory (os error 21)".into())).as_deref(), Some(t!("settings-games-proton-not-changed")));
+        assert_eq!(not_changed(&Err(t!("common-steam-unreadable").into())).as_deref(), Some(t!("common-steam-unreadable")));
+    }
+
+    #[test]
+    fn the_switches_are_refused_while_steam_is_open() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let mut kit = Kit::new(events, asks, None, None);
+        let mut games = Games::made_up();
+        games.steam.open = true;
+        let refused = |kit: &Kit, key: &str| kit.said(key).map(|(w, red)| (w.to_string(), red)) == Some((t!("settings-games-steam-open").to_string(), true));
+        games.set_stronger(&mut kit, 77, true);
+        assert!(refused(&kit, "games-game:77"));
+        games.set_community(&mut kit, 78, false);
+        assert!(refused(&kit, "games-game:78"));
+        games.set_community(&mut kit, 0, true);
+        assert!(refused(&kit, ALL));
+    }
 
     #[test]
     fn a_fresh_start_trashes_the_setup_folder_and_leaves_the_game_and_the_rest() {

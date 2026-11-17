@@ -106,7 +106,7 @@ fn find_named(name: &str, local: &[(PathBuf, String)], downloads: &Path) -> Opti
         }
         if std::fs::create_dir_all(downloads).is_ok() {
             if let Some(deb) = download(name, downloads) {
-                if let Ok(key) = parts::make(&deb) {
+                if let Ok(key) = parts::make_from_apt(&deb) {
                     return Some(key);
                 }
             }
@@ -114,6 +114,6 @@ fn find_named(name: &str, local: &[(PathBuf, String)], downloads: &Path) -> Opti
     }
     std::fs::read_dir(parts::store()).into_iter().flatten().flatten()
         .map(|e| e.file_name().to_string_lossy().into_owned())
-        .filter(|k| !k.contains(".new"))
+        .filter(|k| parts::from_apt(k))
         .find(|k| answers_to(&parts::control(k), name))
 }

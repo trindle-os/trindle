@@ -81,20 +81,28 @@ pub fn error(code: &'static str) {
     }
 }
 
+fn append_capped(path: &CString, line: &[u8]) {
+    // SAFETY: open, fstat, write and close are safe inside a signal handler,
+
+    unsafe {
+        let fd = libc::open(path.as_ptr(), libc::O_WRONLY | libc::O_APPEND | libc::O_CREAT | libc::O_CLOEXEC, 0o600);
+        if fd < 0 {
+            return;
+        }
+        let mut st: libc::stat = std::mem::zeroed();
+        if libc::fstat(fd, &mut st) == 0 && (st.st_size as u64) <= MOST {
+            libc::write(fd, line.as_ptr().cast(), line.len());
+        }
+        libc::close(fd);
+    }
+}
+
 extern "C" fn on_signal(sig: libc::c_int) {
     let Some((paths, lines)) = READY.get() else { return };
     let noted_panic = sig == libc::SIGABRT && PANICKED.load(Ordering::SeqCst);
     if let Some(i) = SIGNALS.iter().position(|(s, _)| *s == sig).filter(|_| !noted_panic) {
         for path in paths {
-            // SAFETY: open, write and close are safe inside a signal handler,
-
-            unsafe {
-                let fd = libc::open(path.as_ptr(), libc::O_WRONLY | libc::O_APPEND | libc::O_CREAT | libc::O_CLOEXEC, 0o600);
-                if fd >= 0 {
-                    libc::write(fd, lines[i].as_ptr().cast(), lines[i].len());
-                    libc::close(fd);
-                }
-            }
+            append_capped(path, &lines[i]);
         }
     }
 
@@ -208,6 +216,19 @@ mod tests {
         assert_eq!(fault(libc::SIGKILL), None);
         assert_eq!(fault(0), None);
         assert_eq!(fault(1 << 8), None);
+    }
+
+    #[test]
+    fn a_file_already_past_its_limit_is_not_added_to_by_the_handler() {
+        let file = std::env::temp_dir().join(format!("trindle-crash-capped-{}", std::process::id()));
+        let _ = fs::remove_file(&file);
+        let path = CString::new(file.as_os_str().as_encoded_bytes()).unwrap();
+        append_capped(&path, b"one\n");
+        assert_eq!(fs::read(&file).unwrap(), b"one\n");
+        fs::write(&file, vec![b'x'; MOST as usize + 1]).unwrap();
+        append_capped(&path, b"two\n");
+        assert_eq!(fs::metadata(&file).unwrap().len(), MOST + 1, "nothing was added");
+        let _ = fs::remove_file(&file);
     }
 
     #[test]

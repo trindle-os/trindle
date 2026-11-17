@@ -17,14 +17,14 @@ store-deb-ready = { $name } جاهز للتثبيت في مجلده الخاص.
 store-deb-elsewhere = هذه الحزمة مخصصة لحواسيب { $arch }، فلا يمكن تثبيتها على هذا الحاسوب.
 
 # Red words at the top of the window when the package is Trindle itself.
-store-deb-trindle = هذا هو Trindle نفسه. يُحدَّث من صفحة التحديثات في التطبيقات، لا من ملف.
+store-deb-trindle = هذا هو Trindle نفسه. حدّثه من صفحة التحديثات في التطبيقات، لا من ملف.
 
 # Red words at the top of the window for a driver or a background service.
-store-deb-service = { $name } برنامج تشغيل أو خدمة في الخلفية، ولا يعمل من مجلده الخاص، لذلك لا يمكن تثبيته هنا.
+store-deb-service = { $name } برنامج تشغيل أو خدمة في الخلفية. لا يمكنه العمل من مجلده الخاص، لذلك لا يمكن تثبيته هنا.
 
 # Words on the caution card above every package.
 # SAFETY: needs a human review before it ships
-store-deb-caution = الحزمة القادمة من خارج Debian وTrindle توضع في مجلدها الخاص، حيث تكون مقيّدة لكن غير معزولة تمامًا. ثبّت فقط الحزم من جهات تثق بها.
+store-deb-caution = الحزمة القادمة من خارج Debian وTrindle تُثبَّت في مجلدها الخاص. وهي مقيّدة هناك لكنها غير معزولة تمامًا. ثبّت فقط الحزم من جهات تثق بها.
 
 # Words at the top of the window once the package is installed.
 store-deb-installed = تم تثبيت { $name } في مجلده الخاص.
@@ -37,7 +37,7 @@ store-deb-where = مصدره
 
 # Tip and spoken name of the round button that removes the package and what it saved.
 # SAFETY: needs a human review before it ships
-store-deb-remove = أزِله مع ما حفظه
+store-deb-remove = أزِله مع بياناته
 
 # Word beside the ring while the package goes in.
 store-deb-installing = جارٍ التثبيت
@@ -52,23 +52,20 @@ store-deb-reinstall = أعد التثبيت
 store-deb-update = حدّث
 
 # Heading of the card for a package not installed yet.
-store-deb-goes-in = يوضع في مجلده الخاص، مقيّدًا افتراضيًا
+store-deb-goes-in = يُثبَّت في مجلده الخاص المقيّد
 
 # Under that heading.
 # SAFETY: needs a human review before it ships
-store-deb-goes-in-note = لا تلزم كلمة مرور. لا يستطيع الوصول إلى الإنترنت أو الصوت أو ملفاتك حتى تسمح له.
+store-deb-goes-in-note = لا تلزم كلمة مرور. لا يستطيع استخدام الإنترنت أو الصوت، ولا رؤية ملفاتك، حتى تسمح له.
 
 # Heading of the card for a package installed at this version.
 store-deb-same-version = الإصدار { $version } مثبّت في مجلده الخاص
-
-# Under that heading.
-store-deb-same-version-note = أعد تثبيته هناك إذا توقف عن العمل كما ينبغي.
 
 # Heading of the card for a package installed at another version.
 store-deb-other-version = الإصدار { $version } مثبّت في مجلده الخاص
 
 # Under that heading: the version this brings.
-store-deb-other-version-note = يرفعه التثبيت هناك إلى الإصدار { $version }، مع الإبقاء على ما حفظه.
+store-deb-other-version-note = هذا يحدّثه إلى الإصدار { $version } ويُبقي على ما حفظه.
 
 # Facts line: how big the package is once installed.
 store-deb-fact-size = الحجم بعد التثبيت
@@ -80,13 +77,13 @@ store-deb-fact-arch = مخصص لـ
 store-deb-no-description = ليس لهذه الحزمة وصف.
 
 # Words at the top of the window while the package goes in.
-store-deb-installing-note = جارٍ التثبيت في مجلده الخاص. قد يستغرق جلب ما يحتاجه بضع دقائق.
+store-deb-installing-note = جارٍ التثبيت في مجلده الخاص. قد يستغرق تنزيل الأجزاء التي يحتاجها بضع دقائق.
 
 # Words at the top of the window once the package is installed.
-store-deb-done = تم التثبيت في مجلده الخاص. ستجده في الحلقة.
+store-deb-done = تم تثبيته في مجلده الخاص. ستجده في الحلقة.
 
 # Red words at the top of the window when parts the package needs could not be found; the parts follow.
-store-deb-missing = تم التثبيت في مجلده الخاص، لكن تعذّر العثور على هذه الأجزاء، فقد لا يبدأ: { $parts }.
+store-deb-missing = تم تثبيته في مجلده الخاص، لكن هذه الأجزاء مفقودة، فقد لا يبدأ: { $parts }.
 
 # Words at the top of the window once the package is removed.
 # SAFETY: needs a human review before it ships
@@ -108,7 +105,7 @@ store-parts-not-deb = { $path } ليس حزمة Debian يمكن تثبيتها.
 store-parts-not-unpacked = تعذّر فك ضغط { $path }.
 
 # Red words when the program is not one kept in a box.
-store-loose-not-boxed = هذا البرنامج ليس محفوظًا في صندوق.
+store-loose-not-boxed = هذا البرنامج لا يعمل داخل صندوق.
 
 # Name of Trindle's own terminal in the ring.
 store-boxed-terminal = الطرفية
@@ -130,16 +127,16 @@ store-boxed-x-could-not-open = تعذّر فتح { $app }
 
 # Body of the notice the first time a terminal opens outside its box.
 # SAFETY: needs a human review before it ships
-store-boxed-terminal-told = تستطيع الطرفية الوصول إلى جزء أكبر من حاسوبك مما تصل إليه التطبيقات الأخرى، لأن عملها يتطلب ذلك. لا تكتب إلا أوامر تفهمها، ومن أشخاص تثق بهم.
+store-boxed-terminal-told = تستطيع الطرفية الوصول إلى جزء أكبر من حاسوبك مما تصل إليه التطبيقات الأخرى. لا تكتب إلا أوامر تفهمها، ومن أشخاص تثق بهم.
 
-# Title of the notice when a plugin allowed the home network has none.
-store-boxed-home-off = الشبكة المنزلية متوقفة
+# Title of the notice when a plugin allowed the local network has none.
+store-boxed-home-off = لا شبكة محلية
 
 # Body of that notice: the plugin's name and why.
 store-boxed-home-off-why = لا شبكة لدى { $app }: { $why }
 
 # Why a plugin allowed the home network has none: Trindle could not find its own program.
-store-boxed-home-why-self = تعذّر العثور على برنامجه الخاص
+store-boxed-home-why-self = برنامج Trindle مفقود
 
 # The same: the unshare program is missing.
 store-boxed-home-why-unshare = unshare غير مثبّت
@@ -148,25 +145,31 @@ store-boxed-home-why-unshare = unshare غير مثبّت
 store-boxed-home-why-pasta = pasta غير مثبّت
 
 # The same: the network room was not made.
-store-boxed-home-why-not-made = لم تُنشأ غرفة شبكته
+store-boxed-home-why-not-made = لم تُعَدّ شبكته
 
 # The same: the room was not a new one, so it was left alone.
-store-boxed-home-why-not-new = لم تكن غرفة شبكته جديدة
+store-boxed-home-why-not-new = كانت شبكته موجودة من قبل
 
 # The same: the filter that keeps a box from making a room of its own could not be made.
-store-boxed-home-why-filter = تعذّر إنشاء مرشّح استدعاءات النظام
+store-boxed-home-why-filter = لم يستطع Trindle إعداد مرشّح أمان
 
 # The same: the room's rules would not load.
-store-boxed-home-why-rules = لم تُحمَّل قواعد الغرفة
+store-boxed-home-why-rules = تعذّر تحميل قواعد شبكته
 
 # The same: a program would not start, with its name and the reason.
-store-boxed-home-why-would-not-start = لم يبدأ { $program }: { $why }
+store-boxed-home-why-would-not-start = تعذّر بدء { $program }: { $why }
 
 # The same: pasta refused, with what it said.
 store-boxed-home-why-pasta-said = قال pasta: { $why }
 
 # The same: pasta could not join the room and said nothing.
-store-boxed-home-why-pasta-no-join = تعذّر على pasta الانضمام إلى الغرفة
+store-boxed-home-why-pasta-no-join = تعذّر على pasta الاتصال به
+
+# Said when an app can't be installed because its package has a link as a top folder. { $name } is the folder.
+store-parts-link = المجلد الأعلى { $name } رابط، لذلك لا يمكن استخدام الحزمة.
+
+# Said when an app can't be installed in a box because it is a driver or a background service. { $name } is the app.
+store-boxed-driver = { $name } برنامج تشغيل أو خدمة تعمل في الخلفية. هذه لا تعمل من مجلدها الخاص، لذلك لم يُثبَّت.
 
 
 
@@ -174,5 +177,10 @@ store-boxed-home-why-pasta-no-join = تعذّر على pasta الانضمام إ
 store-downloaded-opened = فُتح دون إنترنت
 
 # Body of that notice: why, and what the program was given.
-store-downloaded-why = لقد نُزِّل، لذا يحصل البرنامج على ذلك الملف فقط، للقراءة فقط.
+store-downloaded-why = لأنه نُزِّل، لا يستطيع البرنامج إلا قراءة ذلك الملف وحده.
 
+# Title of the notice when the desktop could not be asked for a display for an older program.
+store-boxed-x-unasked = لا يمكن فتح البرامج الأقدم
+
+# Body of that notice: what to do.
+store-boxed-x-unasked-why = سجّل الخروج ثم الدخول مرة أخرى، ثم حاول من جديد

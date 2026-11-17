@@ -14,15 +14,19 @@ ring-updates-none = Alles ist auf dem neuesten Stand
 # Answer to a spoken question about updates when the updates button installs them all; "it" for one, "them" for more.
 ring-updates-spoken-all =
     { $n ->
-        [one] { $n } wartet: Die Update-Taste neben Apps spielt es ein
-       *[other] { $n } warten: Die Update-Taste neben Apps spielt sie ein
+        [one] { $n } Update wartet. Verwende die Update-Taste neben Apps, um es zu installieren.
+       *[other] { $n } Updates warten. Verwende die Update-Taste neben Apps, um sie zu installieren.
     }
 
 # Answer to a spoken question about updates when only plugin updates that need a look wait; the clause that follows says so.
-ring-updates-spoken-look = { $n } warten: { $look }
+ring-updates-spoken-look =
+    { $n ->
+        [one] { $n } Update wartet. { $look }.
+       *[other] { $n } Updates warten. { $look }.
+    }
 
 # Answer to a spoken question about updates when some install and some need a look; the last clause says which need a look.
-ring-updates-spoken-mixed = { $n } warten: Die Update-Taste neben Apps spielt { $put } ein, und { $look }
+ring-updates-spoken-mixed = { $n } Updates warten. Verwende die Update-Taste neben Apps, um { $put } davon zu installieren. { $look }.
 
 # Name and tip of the updates button when only firmware updates wait: the button takes the person to them.
 ring-updates-see-firmware =
@@ -48,8 +52,8 @@ ring-updates-install =
 # Name and tip of the updates button when only plugin updates that ask for more than before wait.
 ring-updates-see-plugin =
     { $n ->
-        [one] Plugin-Update ansehen, das mehr verlangt als zuvor
-       *[other] { $n } Plugin-Updates ansehen, die mehr verlangen als zuvor
+        [one] Plugin-Update ansehen, das mehr Berechtigungen verlangt als zuvor
+       *[other] { $n } Plugin-Updates ansehen, die mehr Berechtigungen verlangen als zuvor
     }
 
 # Name and tip of the updates button when some updates install and some plugin updates need a look; the clause after the semicolon says which.
@@ -100,13 +104,13 @@ ring-tray-vpn = Über ein VPN verbunden
 ring-tray-wired = Kabel
 
 # Name of the network button when connected by cable but the internet is not reachable.
-ring-tray-wired-limited = Kabel, eingeschränkte Verbindung
+ring-tray-wired-limited = Kabel, aber kein Internet
 
 # Name of the network button on Wi-Fi: the network's name and its signal strength.
 ring-tray-wifi = { $name }, Signal { $strength }%
 
 # Name of the network button on Wi-Fi when the internet is not reachable.
-ring-tray-wifi-limited = { $name }, Signal { $strength }%, eingeschränkte Verbindung
+ring-tray-wifi-limited = { $name }, Signal { $strength }%, eingeschränkter Zugriff
 
 # Name of the Bluetooth button when Bluetooth is off.
 ring-tray-bt-off = Bluetooth ist aus
@@ -130,13 +134,12 @@ ring-tray-none = Keine Tray-Symbole
 ring-tray-show = Im Ring zeigen
 
 # Line of a tray icon's menu: take the icon out of the ring's row.
-ring-tray-take-out = Aus dem Ring nehmen
+ring-tray-take-out = Aus dem Ring entfernen
 
 # Quiet words in a tray icon's menu in place of Show in the ring, when the row is full.
-ring-tray-full = Vier sind schon im Ring. Nimm zuerst eines heraus.
+ring-tray-full = Vier Symbole sind schon im Ring. Nimm zuerst eines heraus.
 
 
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = Die Suche ist aus
-

@@ -19,10 +19,10 @@ pub const PROXY_ENV: &str = "TRINDLE_FENCE_PROXY";
 
 const ALWAYS_PRIVATE: &[&str] = &["snap", "Mail", "mail", "Thunderbird", "Passwords", "Keys"];
 
-const HIDDEN_DIRS: &[&str] = &["/run/user", "/run/dbus", "/run/media", "/media", "/mnt", "/var/mail", "/var/spool/mail",
-                               "/run/libvirt", "/run/podman", "/run/containerd", "/run/lxd", "/var/lib/docker"];
+const HIDDEN_DIRS: &[&str] = &["/media", "/mnt", "/var/mail", "/var/spool/mail", "/var/lib/docker"];
 
-const HIDDEN_FILES: &[&str] = &["/run/docker.sock", "/run/snapd.socket", "/run/snapd-snap.socket", "/run/containerd/containerd.sock"];
+const RUN_KEPT: &[&str] = &["/run/systemd/resolve/stub-resolv.conf", "/run/systemd/resolve/resolv.conf", "/run/NetworkManager/resolv.conf",
+                            "/run/resolvconf/resolv.conf"];
 
 pub fn root() -> PathBuf {
     data_home().join("trindle/ai")
@@ -343,12 +343,15 @@ fn reserved(name: &str) -> bool {
         | "PROMPT_COMMAND" | "SHELLOPTS" | "BASHOPTS" | "PYTHONSTARTUP" | "NODE_OPTIONS" | "XDG_RUNTIME_DIR" | "DISPLAY" | "WAYLAND_DISPLAY")
 }
 
+fn env_name_ok(k: &str) -> bool {
+    !k.is_empty() && k.len() <= 64 && k.chars().all(|c| c.is_ascii_uppercase() || c.is_ascii_digit() || c == '_')
+        && !k.starts_with(|c: char| c.is_ascii_digit()) && !reserved(k)
+}
+
 pub fn typed_env(root: &Path) -> Vec<(String, String)> {
     lines(&root.join("env")).into_iter().filter_map(|l| {
         let (k, v) = l.split_once('=')?;
-        let ok = !k.is_empty() && k.len() <= 64 && k.chars().all(|c| c.is_ascii_uppercase() || c.is_ascii_digit() || c == '_')
-            && !k.starts_with(|c: char| c.is_ascii_digit()) && !reserved(k);
-        ok.then(|| (k.to_string(), v.to_string()))
+        env_name_ok(k).then(|| (k.to_string(), v.to_string()))
     }).collect()
 }
 
@@ -356,7 +359,7 @@ pub fn set_typed_env(root: &Path, text: &str) -> Result<(), &'static str> {
     let mut keep = Vec::new();
     for l in text.lines().map(str::trim).filter(|l| !l.is_empty()) {
         let Some((k, _)) = l.split_once('=') else { return Err(t!("store-fence-bad-env")) };
-        if k.is_empty() || !k.chars().all(|c| c.is_ascii_uppercase() || c.is_ascii_digit() || c == '_') || reserved(k) {
+        if !env_name_ok(k) {
             return Err(t!("store-fence-bad-env-capitals"));
         }
         keep.push(l.to_string());
@@ -385,7 +388,8 @@ pub struct Fence {
     pub secrets: Option<i32>,
 
     pub hide_dirs: Vec<PathBuf>,
-    pub hide_files: Vec<PathBuf>,
+
+    pub run_kept: Vec<PathBuf>,
 
     pub no_network: bool,
 
@@ -395,8 +399,8 @@ pub struct Fence {
 
 pub fn hidden_here(exists: impl Fn(&Path) -> bool) -> (Vec<PathBuf>, Vec<PathBuf>) {
     let dirs = HIDDEN_DIRS.iter().map(PathBuf::from).filter(|p| exists(p)).collect();
-    let files = HIDDEN_FILES.iter().map(PathBuf::from).filter(|p| exists(p)).collect();
-    (dirs, files)
+    let kept = RUN_KEPT.iter().map(PathBuf::from).filter(|p| exists(p)).collect();
+    (dirs, kept)
 }
 
 pub fn walls(f: &Fence, command: &[String]) -> Vec<String> {
@@ -408,11 +412,12 @@ pub fn walls(f: &Fence, command: &[String]) -> Vec<String> {
     }
     add(&["--disable-userns", "--seccomp", &f.seccomp.to_string()]);
     add(&["--ro-bind", "/", "/", "--dev", "/dev", "--proc", "/proc", "--tmpfs", "/tmp"]);
+    add(&["--tmpfs", "/run"]);
+    for p in &f.run_kept {
+        add(&["--ro-bind", &p.to_string_lossy(), &p.to_string_lossy()]);
+    }
     for d in &f.hide_dirs {
         add(&["--tmpfs", &d.to_string_lossy()]);
-    }
-    for p in &f.hide_files {
-        add(&["--ro-bind", "/dev/null", &p.to_string_lossy()]);
     }
     let home = f.home.to_string_lossy().into_owned();
     if f.home.starts_with("/home") {
@@ -486,7 +491,7 @@ pub fn scope_abstract_sockets() -> Result<(), String> {
     // SAFETY: attr is a valid landlock_ruleset_attr of 24 bytes.
     let fd = unsafe { libc::syscall(444, attr.as_ptr(), std::mem::size_of_val(&attr), 0u32) };
     if fd < 0 {
-        return Err(format!("Landlock refused: {}", std::io::Error::last_os_error()));
+        return Err(t!("store-fence-landlock", why = std::io::Error::last_os_error().to_string()));
     }
     // SAFETY: plain prctl and landlock_restrict_self on the descriptor just made.
     unsafe {
@@ -496,7 +501,7 @@ pub fn scope_abstract_sockets() -> Result<(), String> {
         let r = libc::syscall(446, fd as i32, 0u32);
         libc::close(fd as i32);
         if r != 0 {
-            return Err(format!("Landlock refused: {}", std::io::Error::last_os_error()));
+            return Err(t!("store-fence-landlock", why = std::io::Error::last_os_error().to_string()));
         }
     }
     Ok(())
@@ -519,7 +524,7 @@ pub fn start_bridge(socket: &Path) {
 pub fn inside(args: &[String]) -> i32 {
     use std::os::unix::process::CommandExt;
     if let Err(e) = scope_abstract_sockets() {
-        eprintln!("The fence did not start: {e}.");
+        eprintln!("{}", t!("store-fence-start-sockets", why = e.to_string()));
         return 1;
     }
     if let Some(sock) = std::env::var_os(PROXY_ENV) {
@@ -602,21 +607,39 @@ pub struct Start<'a> {
 
     pub name: Option<String>,
 
+    #[cfg(test)]
     pub run_dir: Option<PathBuf>,
 
+    #[cfg(test)]
     pub net_test: Option<(super::fence_net::Resolver, bool, u16)>,
+}
+
+impl Start<'_> {
+    fn run_dir_given(&self) -> Option<PathBuf> {
+        #[cfg(test)]
+        return self.run_dir.clone();
+        #[cfg(not(test))]
+        None
+    }
+
+    fn net_given(&self) -> Option<(super::fence_net::Resolver, bool, u16)> {
+        #[cfg(test)]
+        return self.net_test.clone();
+        #[cfg(not(test))]
+        None
+    }
 }
 
 pub fn run(s: &Start) -> i32 {
     let private = private_home(s.root);
     if let Err(e) = std::fs::create_dir_all(&private) {
-        eprintln!("The fence did not start: {}: {e}", private.display());
+        eprintln!("{}", t!("store-fence-start-home", path = private.display().to_string(), why = e.to_string()));
         return 1;
     }
     let first = !s.root.join("seen").exists();
     let _ = crate::common::files::write_whole(&s.root.join("seen"), b"");
     if first {
-        eprintln!("AI programs keep their own sign-in here, apart from yours: sign in inside when asked.");
+        eprintln!("{}", t!("store-fence-signin"));
     }
     let mut shared = shared(s.root, &s.home);
     for once in take_once(s.root, &s.home) {
@@ -626,10 +649,10 @@ pub fn run(s: &Start) -> i32 {
     }
     let (cwd, in_shared) = start_dir(&s.cwd, &shared, &s.home);
     if !in_shared {
-        eprintln!("Your folders are private from AI programs. Share one in Settings, AI programs, to work in it.");
+        eprintln!("{}", t!("store-fence-private"));
     }
     let Some(seccomp) = crate::common::seccomp::memfd() else {
-        eprintln!("The fence did not start: the system call filter could not be made.");
+        eprintln!("{}", t!("store-fence-start-filter"));
         return 1;
     };
     keep_open(&seccomp);
@@ -638,7 +661,7 @@ pub fn run(s: &Start) -> i32 {
     if let Some(fd) = &secrets {
         keep_open(fd);
     }
-    let run_dir = s.run_dir.clone().unwrap_or_else(|| crate::store::pulse_guard::runtime_dir().join("trindle-fence")).join(std::process::id().to_string());
+    let run_dir = s.run_dir_given().unwrap_or_else(|| crate::store::pulse_guard::runtime_dir().join("trindle-fence")).join(std::process::id().to_string());
     let _ = std::fs::remove_dir_all(&run_dir);
     let _ = std::fs::create_dir_all(&run_dir);
     let broker = super::fence_broker::start(&run_dir, s.root, &s.home, s.approver.clone());
@@ -653,12 +676,12 @@ pub fn run(s: &Start) -> i32 {
         None => None,
     };
     env.extend(s.extra_env.iter().cloned());
-    let (hide_dirs, hide_files) = hidden_here(|p| std::fs::symlink_metadata(p).is_ok_and(|m| !m.file_type().is_symlink()));
+    let (hide_dirs, run_kept) = hidden_here(|p| std::fs::symlink_metadata(p).is_ok_and(|m| !m.file_type().is_symlink()));
     let program = s.program.as_ref().filter(|p| p.starts_with(&s.home)).cloned();
     let fence = Fence {
         home: s.home.clone(), private, shared, trindle: s.trindle.clone(), broker, program, cwd, env,
         seccomp: std::os::fd::AsRawFd::as_raw_fd(&seccomp), secrets: secrets.as_ref().map(std::os::fd::AsRawFd::as_raw_fd),
-        hide_dirs, hide_files, no_network: limit.is_some(), proxy, extra: own_settings_args(s),
+        hide_dirs, run_kept, no_network: limit.is_some(), proxy, extra: own_settings_args(s),
     };
     let args: Vec<OsString> = walls(&fence, &s.command).into_iter().map(OsString::from).collect();
     let status = std::process::Command::new("bwrap").args(args).status();
@@ -670,14 +693,16 @@ pub fn run(s: &Start) -> i32 {
 fn start_proxy(s: &Start, hosts: &[String], run_dir: &Path, env: &mut Vec<(String, String)>) -> Option<PathBuf> {
     let socket = run_dir.join("proxy.sock");
     let Ok(listener) = std::os::unix::net::UnixListener::bind(&socket) else {
-        eprintln!("The fence did not start: the network limit could not be set up.");
+        eprintln!("{}", t!("store-fence-start-net"));
         return None;
     };
-    let (resolver, local, port) = match s.net_test.clone() {
+    let (resolver, local, port) = match s.net_given() {
         Some((r, l, p)) => (Some(r), l, p),
         None => (None, false, 443),
     };
-    let policy = super::fence_net::Policy { hosts: hosts.to_vec(), ports: vec![port], allow_local: local };
+    #[cfg(not(test))]
+    let _ = local;
+    let policy = super::fence_net::Policy { hosts: hosts.to_vec(), ports: vec![port], #[cfg(test)] allow_local: local };
     std::thread::spawn(move || super::fence_net::serve(listener, policy, resolver));
     env.extend(super::fence_net::proxy_env());
     Some(socket)
@@ -699,7 +724,7 @@ fn exit_code(status: std::io::Result<std::process::ExitStatus>) -> i32 {
             st.code().unwrap_or_else(|| 128 + st.signal().unwrap_or(0))
         }
         Err(e) => {
-            eprintln!("The fence did not start: bubblewrap would not run: {e}");
+            eprintln!("{}", t!("store-fence-start-bwrap", why = e.to_string()));
             1
         }
     }
@@ -720,7 +745,7 @@ pub fn main_for(name: &str, args: &[String]) -> i32 {
     let root = root();
     let path = std::env::var("PATH").unwrap_or_default();
     let Some(program) = find_program(name, &wrappers(&root), &path) else {
-        eprintln!("{name}: not found outside the fence");
+        eprintln!("{}", t!("store-fence-not-found", name = name));
         return 127;
     };
     if !fenced(&root, name) {
@@ -734,7 +759,11 @@ pub fn main_for(name: &str, args: &[String]) -> i32 {
     run(&Start {
         root: &root, home: home(), host_env: std::env::vars().collect(),
         cwd: std::env::current_dir().unwrap_or_else(|_| home()), trindle, command, program: Some(program),
-        approver: None, extra_env: Vec::new(), name: Some(name.to_string()), run_dir: None, net_test: None,
+        approver: None, extra_env: Vec::new(), name: Some(name.to_string()),
+        #[cfg(test)]
+        run_dir: None,
+        #[cfg(test)]
+        net_test: None,
     })
 }
 

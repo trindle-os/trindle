@@ -38,7 +38,7 @@ ring-snooze-for-1-hour = Tunda selama 1 jam
 ring-snooze-for-6-hours = Tunda selama 6 jam
 
 # Tip and screen reader name of the snooze choice for the next morning.
-ring-snooze-for-next-morning = Tunda sampai besok pagi
+ring-snooze-for-next-morning = Tunda sampai pagi
 
 # Tip of the button on the snooze page that goes back to the notification's message.
 ring-act-back = Kembali ke pesan
@@ -92,7 +92,7 @@ ring-crash-stopped = { $name } berhenti secara tak terduga
 ring-drive-gone = Drive itu sudah tidak ada
 
 # Title of the notice when a drive could not be opened; the reason follows under it.
-ring-drive-not-opened = { $name } tidak dapat dibuka
+ring-drive-not-opened = Tidak dapat membuka { $name }
 
 # Choice for what closing the laptop lid does: sleep.
 ring-lid-sleep = Tidur
@@ -110,7 +110,7 @@ ring-lid-nothing = Tidak melakukan apa-apa
 ring-lid-shut-down = Matikan
 
 # Reason the system lists beside Trindle's hold on the lid switch (shown by tools that list what stops sleep).
-ring-lid-reason = Menutup tutup laptop melakukan apa yang diatur di Pengaturan, Daya
+ring-lid-reason = Anda dapat memilih apa yang terjadi saat menutup laptop di Pengaturan, di bagian Daya.
 
 # Notice at the foot of the screen for a few seconds when the magnifier starts.
 ring-magnify-hint = Tahan di mana saja untuk memperbesar
@@ -127,15 +127,15 @@ ring-mic-off-tip = Matikan mikrofon untuk semua program
 
 # Tip of the switch in the ring that turns the microphone back on.
 # SAFETY: needs a human review before it ships
-ring-mic-on-tip = Nyalakan mikrofon kembali
+ring-mic-on-tip = Nyalakan mikrofon
 
 # Line in the ring when something other than the person pressed the microphone switch on.
 # SAFETY: needs a human review before it ships
-ring-mic-own-press = Hanya tekanan Anda sendiri yang dapat menyalakan mikrofon kembali.
+ring-mic-own-press = Hanya Anda yang dapat menyalakan mikrofon kembali.
 
 # Line in the ring when the microphone switch could not be changed; the reason follows.
 # SAFETY: needs a human review before it ships
-ring-mic-not-changed = Sakelar mikrofon tidak dapat diubah: { $why }
+ring-mic-not-changed = Trindle tidak dapat mengubah sakelar mikrofon: { $why }
 
 # Notice when a notification was clicked and no program could be found for it.
 ring-goes-no-program = Program tidak ditemukan
@@ -153,7 +153,7 @@ ring-notes-copied = Disalin untuk asisten Anda
 ring-notes-name = Notifikasi
 
 # Said when a pinned notification has been held long enough and now follows the pointer.
-ring-notes-moving = Sedang dipindah. Lepaskan untuk menjatuhkan, Escape untuk mengembalikan.
+ring-notes-moving = Sedang memindahkan notifikasi. Lepaskan untuk meletakkannya, atau tekan Escape untuk mengembalikannya.
 
 # Said when a pinned notification has been dropped or moved by keys.
 ring-notes-moved = Dipindahkan
@@ -194,7 +194,11 @@ ring-plugin-needs = { $name } memerlukan izin Anda
 
 # Line under the notice that a plugin needs permission: none of the permissions it asks for are given.
 # SAFETY: needs a human review before it ships
-ring-plugin-cannot-work = Belum dapat berfungsi: 0 dari { $asks } diizinkan.
+ring-plugin-cannot-work =
+    { $asks ->
+        [1] Belum dapat berfungsi. Anda belum mengizinkan satu-satunya izin yang diminta.
+       *[other] Belum dapat berfungsi. Anda belum mengizinkan satu pun dari { $asks } izin yang diminta.
+    }
 
 # Said to a screen reader when a notification was copied; $said is what the circle said.
 ring-copied-said = Disalin. { $said }
@@ -214,3 +218,5 @@ ring-outside-body =
        *[other] { $names } dan { $more } lainnya
     }
 
+# Said under the magnifier when the screen picture it took has the wrong size.
+ring-magnify-wrong-size = Ukuran gambarnya salah.

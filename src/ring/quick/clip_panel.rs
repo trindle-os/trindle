@@ -31,6 +31,26 @@ fn forget_all() -> &'static str {
     t!("ring-quick-forget-all")
 }
 
+const PREVIEW: usize = 2000;
+
+pub(super) fn preview(text: &str) -> String {
+    let mut out = String::new();
+    for word in text.split_whitespace() {
+        if out.chars().count() >= PREVIEW {
+            break;
+        }
+        if !out.is_empty() {
+            out.push(' ');
+        }
+        out.extend(word.chars().take(PREVIEW));
+    }
+    out.chars().take(PREVIEW).collect()
+}
+
+fn tip_text(text: &str) -> String {
+    text.chars().take(PREVIEW).filter(|c| *c != '\r').collect()
+}
+
 impl Quick {
     pub(super) fn clipboard(&mut self) {
         let items = clipboard::list();
@@ -47,22 +67,25 @@ impl Quick {
         let rows: Vec<Node<Msg>> = items.iter().filter_map(|item| {
             let (words, dim) = match &item.picture {
                 Some(_) => (t!("ring-quick-clip-picture").to_string(), true),
-                None => (item.text.split_whitespace().collect::<Vec<_>>().join(" "), false),
+                None => (preview(&item.text), false),
             };
             if !words.to_lowercase().contains(&want) {
                 return None;
             }
             let (id, pinned) = (item.id, item.pinned);
-            let copy = |item: clipboard::Item| msg(move |face| {
-                clipboard::copy(&item);
+
+            let copy = move || msg(move |face| {
+                if let Some(item) = clipboard::list().into_iter().find(|i| i.id == id) {
+                    clipboard::copy(&item);
+                }
                 face.close();
             });
 
-            let line = card(line_of(words, dim, 400)).flat().width(Length::Fill).on_press(copy(item.clone()));
-            let line = if item.picture.is_none() { line.whole(item.text.replace('\r', "")) } else { line };
+            let line = card(line_of(words, dim, 400)).flat().width(Length::Fill).on_press(copy());
+            let line = if item.picture.is_none() { line.whole(tip_text(&item.text)) } else { line };
             Some(row(vec![
                 line,
-                button("edit-copy-symbolic", t!("ring-quick-clip-again")).on_press(copy(item.clone())).well(),
+                button("edit-copy-symbolic", t!("ring-quick-clip-again")).on_press(copy()).well(),
                 pin_button(pinned, m(move |q| q.clip_pin(id))),
                 remove(TRASH_ICON, forget_one()).key(format!("forget-clip-{id}")).on_press(m(move |q| q.clip_forget(id))).well(),
             ]).gap(ROW_GAP))

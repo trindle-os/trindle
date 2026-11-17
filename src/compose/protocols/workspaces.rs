@@ -1,6 +1,7 @@
 //! trindle_workspaces_v1 (workspaces.xml): the length of the row of
 //! workspaces and the one showing, and the request to go to another.
 
+use super::Filtered;
 use smithay::reexports::wayland_server::backend::ClientId;
 use smithay::reexports::wayland_server::{
     Client, DataInit, Dispatch, DisplayHandle, GlobalDispatch, New, Resource,
@@ -32,10 +33,6 @@ pub trait WorkspacesHandler {
     fn workspace_asked(&mut self, index: usize);
 }
 
-pub struct WorkspacesGlobalData {
-    filter: Box<dyn for<'c> Fn(&'c Client) -> bool + Send + Sync>,
-}
-
 #[derive(Debug)]
 pub struct WorkspacesState {
     listeners: Vec<TrindleWorkspacesManagerV1>,
@@ -47,7 +44,7 @@ impl WorkspacesState {
 
     pub fn new<D, F>(display: &DisplayHandle, filter: F) -> WorkspacesState
     where
-        D: GlobalDispatch<TrindleWorkspacesManagerV1, WorkspacesGlobalData>
+        D: GlobalDispatch<TrindleWorkspacesManagerV1, Filtered>
             + Dispatch<TrindleWorkspacesManagerV1, ()>
             + WorkspacesHandler
             + 'static,
@@ -55,7 +52,7 @@ impl WorkspacesState {
     {
         display.create_global::<D, TrindleWorkspacesManagerV1, _>(
             VERSION,
-            WorkspacesGlobalData { filter: Box::new(filter) },
+            Filtered::new(filter),
         );
         WorkspacesState { listeners: Vec::new(), row: None }
     }
@@ -74,9 +71,9 @@ pub fn refresh<D: WorkspacesHandler>(state: &mut D, count: usize, showing: usize
     }
 }
 
-impl<D> GlobalDispatch<TrindleWorkspacesManagerV1, WorkspacesGlobalData, D> for WorkspacesState
+impl<D> GlobalDispatch<TrindleWorkspacesManagerV1, Filtered, D> for WorkspacesState
 where
-    D: GlobalDispatch<TrindleWorkspacesManagerV1, WorkspacesGlobalData>
+    D: GlobalDispatch<TrindleWorkspacesManagerV1, Filtered>
         + Dispatch<TrindleWorkspacesManagerV1, ()>
         + WorkspacesHandler
         + 'static,
@@ -86,7 +83,7 @@ where
         _: &DisplayHandle,
         _: &Client,
         resource: New<TrindleWorkspacesManagerV1>,
-        _: &WorkspacesGlobalData,
+        _: &Filtered,
         data_init: &mut DataInit<'_, D>,
     ) {
         let listener = data_init.init(resource, ());
@@ -97,8 +94,8 @@ where
         st.listeners.push(listener);
     }
 
-    fn can_view(client: Client, data: &WorkspacesGlobalData) -> bool {
-        (data.filter)(&client)
+    fn can_view(client: Client, data: &Filtered) -> bool {
+        data.can_view(&client)
     }
 }
 
@@ -130,7 +127,7 @@ where
 macro_rules! delegate_workspaces {
     ($(@<$( $lt:tt $( : $clt:tt $(+ $dlt:tt )* )? ),+>)? $ty: ty) => {
         smithay::reexports::wayland_server::delegate_global_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
-            $crate::protocols::workspaces::TrindleWorkspacesManagerV1: $crate::protocols::workspaces::WorkspacesGlobalData
+            $crate::protocols::workspaces::TrindleWorkspacesManagerV1: $crate::protocols::Filtered
         ] => $crate::protocols::workspaces::WorkspacesState);
         smithay::reexports::wayland_server::delegate_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
             $crate::protocols::workspaces::TrindleWorkspacesManagerV1: ()

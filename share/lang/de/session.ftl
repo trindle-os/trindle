@@ -23,7 +23,7 @@ session-lock-use-pin = PIN verwenden
 session-lock-use-phone = Handy verwenden
 
 # Shown while the typed password or PIN is being checked.
-session-lock-checking = Wird geprüft...
+session-lock-checking = Wird geprüft…
 
 # Shown when the PIN has run out of time and the password is asked for instead.
 # SAFETY: needs a human review before it ships
@@ -31,7 +31,7 @@ session-lock-pin-timed-out = Die PIN ist abgelaufen. Gib dein Passwort ein.
 
 # Shown after too many wrong PINs, and the password is asked for instead.
 # SAFETY: needs a human review before it ships
-session-lock-too-many-pins = Zu viele falsche PINs. Gib dein Passwort ein.
+session-lock-too-many-pins = Zu viele falsche PINs. Verwende dein Passwort.
 
 # Shown after a wrong PIN, with how many tries are left (1 is one try left).
 # SAFETY: needs a human review before it ships
@@ -42,15 +42,15 @@ session-lock-wrong-pin =
     }
 
 # Shown while the phone is asked to unlock the screen.
-session-lock-asking-phone = Dein Handy wird gefragt...
+session-lock-asking-phone = Dein Handy wird gefragt…
 
 # Shown when the phone did not unlock the screen and the PIN may be typed.
 # SAFETY: needs a human review before it ships
-session-lock-phone-no-pin = Dein Handy hat nicht entsperrt. Verwende deine PIN.
+session-lock-phone-no-pin = Trindle konnte nicht mit deinem Handy entsperren. Verwende deine PIN.
 
 # Shown when the phone did not unlock the screen and the password must be typed.
 # SAFETY: needs a human review before it ships
-session-lock-phone-no-password = Dein Handy hat nicht entsperrt. Gib dein Passwort ein.
+session-lock-phone-no-password = Trindle konnte nicht mit deinem Handy entsperren. Gib dein Passwort ein.
 
 # Shown when the password typed is not the person's password.
 # SAFETY: needs a human review before it ships
@@ -72,7 +72,7 @@ session-wallpaper-larger-4k = größer als 4K
 session-wallpaper-larger-screen = größer als dein Bildschirm
 
 # A reason a wallpaper was left out: its file is over 20 MB, or over 200 MB if it moves.
-session-wallpaper-over-20-or-200 = über 20 MB (200 MB, wenn bewegt)
+session-wallpaper-over-20-or-200 = über 20 MB (200 MB animiert)
 
 # A reason a wallpaper was left out: its file is over 20 MB.
 session-wallpaper-over-20 = über 20 MB
@@ -84,7 +84,11 @@ session-wallpaper-over-200 = über 200 MB
 session-wallpaper-reasons-or = { $first } oder { $second }
 
 # The line that says how many wallpapers were left out and why; the count and the reasons come in.
-session-wallpaper-left-out = { $count } ausgelassen: { $why }.
+session-wallpaper-left-out =
+    { $count ->
+        [one] Trindle hat { $count } Bild ausgelassen, weil es { $why } ist.
+       *[other] Trindle hat { $count } Bilder ausgelassen, weil sie { $why } sind.
+    }
 
 # Under the lock screen when a phone or password check was given up on.
 session-lock-check-abandoned = Das hat zu lange gedauert. Versuchen Sie es erneut.
@@ -95,7 +99,7 @@ session-lock-check-abandoned = Das hat zu lange gedauert. Versuchen Sie es erneu
 session-restart-question = Die ganze Arbeitsoberfläche neu starten?
 
 # Under the heading: what restarting everything does to the open windows.
-session-restart-windows = Alle offenen Fenster werden geschlossen, und alles darin Ungespeicherte geht verloren.
+session-restart-windows = Alle offenen Fenster werden geschlossen. Alles, was du nicht gespeichert hast, geht verloren.
 
 # Tip of the round button that leaves everything as it is.
 session-restart-cancel = Abbrechen
@@ -103,3 +107,12 @@ session-restart-cancel = Abbrechen
 # Main button that restarts the whole desktop.
 session-restart-go = Neu starten
 
+# Under the lock screen when Enter is pressed while the last try, given up on, is still being checked.
+session-lock-still-checking = Dein letzter Versuch wird noch geprüft. Versuche es gleich noch einmal.
+
+# Under the lock screen after several wrong tries, with how many seconds to wait (1 is one second).
+session-lock-wait =
+    { $n ->
+        [one] Zu viele falsche Versuche. Versuche es in { $n } Sekunde noch einmal.
+       *[other] Zu viele falsche Versuche. Versuche es in { $n } Sekunden noch einmal.
+    }

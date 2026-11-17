@@ -94,7 +94,7 @@ fn a_picture_shows_only_if_it_matches_its_signed_hash() {
 #[test]
 fn the_index_refuses_what_it_should() {
     assert!(parse("[Plugin a.b]\nName=A\n").is_err(), "no [Catalogue] part");
-    assert!(parse("[Catalogue]\nFormat=2\n").unwrap_err().contains("newer kind"));
+    assert!(parse("[Catalogue]\nFormat=2\n").unwrap_err().contains("newer format"));
     let good = write(&[entry()], 7);
     let sha = format!("SHA256={}", "ab".repeat(32));
     for (from, to, said) in [
@@ -151,7 +151,7 @@ fn a_shelf_of_archives_becomes_a_catalogue_and_installs() {
     assert_eq!(entries[0].version, "1.2", "the newer of two went in");
     assert_eq!(entries[0].icon.as_deref(), Some("org.example.Weather.svg"));
     assert!(shelf.join("org.example.Weather.svg").is_file(), "its ring icon was copied out beside");
-    assert!(problems.len() == 1 && problems[0].contains("broken.tar.zst") && problems[0].contains("hooks into nothing"), "{problems:?}");
+    assert!(problems.len() == 1 && problems[0].contains("broken.tar.zst") && problems[0].contains("doesn't connect to anything"), "{problems:?}");
     assert_eq!(main(&shelf), 1, "a plugin was left out, so it says so");
 
     let (listed, left_out) = parse(&std::fs::read_to_string(shelf.join(INDEX)).unwrap()).unwrap();
@@ -193,7 +193,7 @@ fn a_plugin_the_validator_refuses_is_not_installed() {
     let sha256 = sha256_of(&shelf.join("weather.tar.zst")).unwrap();
     let offer = Offer { entry: Entry { archive: "weather.tar.zst".into(), sha256, icon: None, ..entry() }, icon: None };
     let e = install_offer(&offer, &root, &from_shelf(&shelf)).unwrap_err();
-    assert!(e.contains("plugin check") && e.contains("/usr/bin/sh"), "{e}");
+    assert!(e.contains("failed its checks") && e.contains("/usr/bin/sh"), "{e}");
     assert!(!root.join("org.example.Weather").exists());
     let _ = std::fs::remove_dir_all(&top);
 }
@@ -277,23 +277,23 @@ fn a_catalogue_with_no_signature_or_a_bad_one_is_refused_whole_and_the_last_good
         };
 
         assert_eq!(said(Site { signature: None, ..Site::signed(&newer, &pair) }),
-                   format!("Trindle's plugin catalogue has no signature, so it was not used.{tail}"));
+                   format!("Trindle's plugin catalogue has no signature, so Trindle didn't use it.{tail}"));
 
-        assert_eq!(said(Site::signed(&newer, &other)), format!("Trindle's plugin catalogue is not signed with Trindle's key, so it was not used.{tail}"));
+        assert_eq!(said(Site::signed(&newer, &other)), format!("Trindle's plugin catalogue isn't signed with Trindle's key, so Trindle didn't use it.{tail}"));
 
         let mut changed = good.catalogue.clone().unwrap();
         let at = changed.len() - 2;
         changed[at] ^= 1;
         assert_eq!(said(Site { catalogue: Some(changed), ..Site::signed(&newer, &pair) }),
-                   format!("Trindle's plugin catalogue is not signed with Trindle's key, so it was not used.{tail}"));
+                   format!("Trindle's plugin catalogue isn't signed with Trindle's key, so Trindle didn't use it.{tail}"));
 
         let whole = good.signature.clone().unwrap();
         for wrong in [whole[..63].to_vec(), [whole.clone(), vec![0]].concat(), Vec::new(), vec![0; 4096]] {
             assert_eq!(said(Site { signature: Some(wrong), ..Site::signed(&newer, &pair) }),
-                       format!("The signature of Trindle's plugin catalogue is not the size a signature is, so the catalogue was not used.{tail}"));
+                       format!("The signature on Trindle's plugin catalogue is the wrong size, so Trindle didn't use the catalogue.{tail}"));
         }
 
-        assert!(said(Site { catalogue: Some(b"<html>Not found</html>".to_vec()), ..Site::signed(&newer, &pair) }).contains("not signed with Trindle's key"));
+        assert!(said(Site { catalogue: Some(b"<html>Not found</html>".to_vec()), ..Site::signed(&newer, &pair) }).contains("isn't signed with Trindle's key"));
     };
 
     refusals(&trust, &[], "");
@@ -305,7 +305,7 @@ fn a_catalogue_with_no_signature_or_a_bad_one_is_refused_whole_and_the_last_good
 
     let keyless = trust_in(&top.join("keyless"), &[]);
     assert_eq!(read(&good, Duration::ZERO, &keyless),
-               (Vec::new(), Some("This Trindle has no key to check its plugin catalogue with, so it accepts none.".to_string())));
+               (Vec::new(), Some("Trindle can't check the plugin catalogue because its verification key is missing.".to_string())));
 
     assert_eq!(read(&Site::down(), Duration::ZERO, &trust), (vec!["1.0".to_string()], None));
     assert_eq!(read(&Site::down(), Duration::ZERO, &keyless), (Vec::new(), None));
@@ -321,23 +321,23 @@ fn an_older_catalogue_is_refused_however_good_its_signature() {
 
     let old = Site::signed(&numbered("1.0", 5), &pair);
     assert_eq!(read(&old, Duration::ZERO, &trust),
-               (vec!["2.0".to_string()], Some("Trindle's plugin catalogue is older than the one accepted before (number 5, after 7), so it was not used. \
+               (vec!["2.0".to_string()], Some("Trindle didn't use this plugin catalogue because its version number, 5, is older than the one accepted before, 7. \
                                                The last good one is shown.".to_string())));
     assert_eq!(std::fs::read_to_string(&trust.note).unwrap(), "7");
 
     std::fs::remove_dir_all(top.join("cache")).unwrap();
     assert_eq!(read(&old, Duration::ZERO, &trust),
-               (Vec::new(), Some("Trindle's plugin catalogue is older than the one accepted before (number 5, after 7), so it was not used.".to_string())));
+               (Vec::new(), Some("Trindle didn't use this plugin catalogue because its version number, 5, is older than the one accepted before, 7.".to_string())));
 
     assert!(read(&Site::signed(&numbered("2.0", 7), &pair), Duration::ZERO, &trust).1.is_none());
     std::fs::remove_file(&trust.note).unwrap();
-    assert!(read(&old, Duration::ZERO, &trust).1.is_some_and(|w| w.contains("number 5, after 7")));
+    assert!(read(&old, Duration::ZERO, &trust).1.is_some_and(|w| w.contains("its version number, 5, is older than the one accepted before, 7")));
 
     let unnumbered = write(&[entry()], 1).replace("Serial=1\n", "");
     assert_eq!(number_of(&unnumbered), None);
-    assert!(read(&Site::signed(&unnumbered, &pair), Duration::ZERO, &trust).1.is_some_and(|w| w.starts_with("Trindle's plugin catalogue does not say which number it is")));
+    assert!(read(&Site::signed(&unnumbered, &pair), Duration::ZERO, &trust).1.is_some_and(|w| w.starts_with("Trindle's plugin catalogue has no version number")));
     let first = Trust { floor: 6, ..trust_in(&top.join("first"), &[public]) };
-    assert!(read(&old, Duration::ZERO, &first).1.is_some_and(|w| w.contains("number 5, after 6")));
+    assert!(read(&old, Duration::ZERO, &first).1.is_some_and(|w| w.contains("its version number, 5, is older than the one accepted before, 6")));
     assert_eq!(read(&Site::signed(&numbered("2.0", 7), &pair), Duration::ZERO, &first), (vec!["2.0".to_string()], None), "a first run takes any at or over it");
 
     for bad in ["-1", "+5", "5 6", "0x10", "", "99999999999999999999"] {
@@ -391,7 +391,7 @@ fn a_remembered_number_that_cannot_be_read_fails_shut() {
     let trust = trust_in(&top, &[public]);
     let site = Site::signed(&numbered("2.0", 7), &pair);
     std::fs::create_dir_all(trust.note.parent().unwrap()).unwrap();
-    const WORDS: &str = "Plugin updates are paused: the plugin list is damaged.";
+    const WORDS: &str = "Plugin updates are paused because the plugin list is damaged.";
     assert_eq!(WORDS, paused());
     assert!(is_paused(WORDS) && !is_paused("Another sentence."));
 
@@ -411,7 +411,7 @@ fn a_remembered_number_that_cannot_be_read_fails_shut() {
 
     assert_eq!(read(&site, Duration::ZERO, &trust), (vec!["2.0".to_string()], None));
     std::fs::write(&trust.note, "seven").unwrap();
-    assert!(read(&Site::signed(&numbered("1.0", 5), &pair), Duration::ZERO, &trust).1.is_some_and(|w| w.contains("number 5, after 7")));
+    assert!(read(&Site::signed(&numbered("1.0", 5), &pair), Duration::ZERO, &trust).1.is_some_and(|w| w.contains("its version number, 5, is older than the one accepted before, 7")));
     assert_eq!(read(&Site::signed(&numbered("3.0", 8), &pair), Duration::ZERO, &trust), (vec!["3.0".to_string()], None));
     assert_eq!(std::fs::read_to_string(&trust.note).unwrap(), "8");
     let _ = std::fs::remove_dir_all(&top);
@@ -426,7 +426,7 @@ fn an_old_key_and_a_new_one_are_both_accepted_while_both_are_built_in() {
     assert_eq!(read(&Site::signed(&numbered("1.1", 6), &new), Duration::ZERO, &both), (vec!["1.1".to_string()], None));
 
     let after = trust_in(&top.join("after"), &[new_public]);
-    assert!(read(&Site::signed(&numbered("1.2", 7), &old), Duration::ZERO, &after).1.is_some_and(|w| w.contains("not signed with Trindle's key")));
+    assert!(read(&Site::signed(&numbered("1.2", 7), &old), Duration::ZERO, &after).1.is_some_and(|w| w.contains("isn't signed with Trindle's key")));
     assert_eq!(read(&Site::signed(&numbered("1.2", 7), &new), Duration::ZERO, &after), (vec!["1.2".to_string()], None));
     let only_new = trust_in(&top, &[new_public]);
     assert!(only_new.kept_good().is_some(), "kept, signed with the new key");
@@ -465,7 +465,7 @@ fn the_signature_is_checked_before_anything_is_read_as_a_catalogue() {
     let junk = b"[Nothing]\n";
     assert!(matches!(accepted(junk, pair.sign(junk).as_ref(), &[public], 0), Err(Refused::NotACatalogue(_))));
     let not_text = b"\xff\xfe";
-    assert_eq!(accepted(not_text, pair.sign(not_text).as_ref(), &[public], 0), Err(Refused::NotACatalogue("It is not text.".into())));
+    assert_eq!(accepted(not_text, pair.sign(not_text).as_ref(), &[public], 0), Err(Refused::NotACatalogue("It isn't text.".into())));
 
     let source = crate::common::source::code(include_str!("../catalogue.rs")).split_once("#[cfg(test)]").unwrap().0;
     let judge = source.split_once("fn accepted(").unwrap().1.split_once("\n}\n").unwrap().0;
@@ -602,7 +602,7 @@ fn an_update_that_asks_for_more_is_not_put_in_unseen_whatever_the_catalogue_says
     };
 
     let v1 = offer_of(&plugin(&work.join("1"), "org.example.Weather", "1.0"), "w-1.0.tar.zst");
-    assert!(fetch_update_unseen(&v1, &root).unwrap_err().contains("not installed"));
+    assert!(fetch_update_unseen(&v1, &root).unwrap_err().contains("isn't installed"));
     assert!(!root.join("org.example.Weather").exists());
     let mine = fetch_install(&v1, &root).unwrap().plugin;
     std::fs::write(root.join("org.example.Weather/allowed"), "network\n").unwrap();
@@ -634,7 +634,7 @@ fn an_update_that_asks_for_more_is_not_put_in_unseen_whatever_the_catalogue_says
     let v4 = offer_of(&dir, "w-1.3.tar.zst");
     let quiet = Offer { entry: Entry { permissions: mine.asks.clone(), ..v4.entry.clone() }, ..v4.clone() };
     match fetch_update_unseen(&quiet, &root).unwrap() {
-        Unseen::AsksMore(more) => assert_eq!(more, ["let other computers on your home network reach it", "be reached on other ports than before"]),
+        Unseen::AsksMore(more) => assert_eq!(more, ["being reached by other computers on your local network", "being reached on different ports"]),
         other => panic!("{other:?}"),
     }
     assert_eq!(check(&root.join("org.example.Weather/app")).unwrap().version, "1.1");
@@ -716,12 +716,13 @@ fn a_catalogue_of_very_many_plugins_is_read_in_good_time() {
 fn a_first_run_takes_no_catalogue_numbered_before_the_first_key_was_made() {
 
     const _: () = assert!(NUMBER_FLOOR >= 1_791_763_200, "NUMBER_FLOOR is before 12 October 2026");
+    const _: () = assert!(NUMBER_FLOOR >= 1_794_324_682, "NUMBER_FLOOR is under the beta 4 catalogue");
     let top = temp("floor");
     let (pair, public) = test_key();
     let trust = Trust { floor: NUMBER_FLOOR, ..trust_in(&top, &[public]) };
     let said = read(&Site::signed(&numbered("1.0", 5), &pair), Duration::ZERO, &trust);
     assert_eq!(said.0, Vec::<String>::new());
-    assert!(said.1.is_some_and(|w| w.contains("is older than the one accepted before (number 5, after ")));
+    assert!(said.1.is_some_and(|w| w.contains("its version number, 5, is older than the one accepted before, ")));
     assert_eq!(read(&Site::signed(&numbered("1.0", NUMBER_FLOOR), &pair), Duration::ZERO, &trust), (vec!["1.0".to_string()], None));
     let _ = std::fs::remove_dir_all(&top);
 }
@@ -879,5 +880,40 @@ fn an_archive_that_unpacks_to_too_much_is_not_unpacked() {
     assert_eq!(within(&archive, 3000, 10), Ok(()));
     assert!(within(&archive, 2999, 10).is_err(), "too many bytes");
     assert!(within(&archive, 3000, 3).is_err(), "too many files");
+    let _ = std::fs::remove_dir_all(&top);
+}
+
+#[test]
+fn a_name_with_a_space_in_an_archive_does_not_hide_its_size() {
+    let top = temp("owner-space");
+    let dir = top.join("big");
+    std::fs::create_dir_all(&dir).unwrap();
+    std::fs::write(dir.join("f"), vec![b'a'; 5000]).unwrap();
+    let archive = top.join("big.tar");
+    let made = Command::new("tar").args(["--owner=my user", "--group=my group", "-cf"]).arg(&archive).arg("-C").arg(&top).arg("big").status().unwrap();
+    assert!(made.success());
+    assert!(within(&archive, 1000, 10).is_err(), "5000 bytes are counted");
+    assert_eq!(within(&archive, 6000, 10), Ok(()));
+    let _ = std::fs::remove_dir_all(&top);
+}
+
+#[test]
+fn a_cached_picture_that_matches_is_not_fetched_again() {
+    use std::cell::Cell;
+    let top = temp("icon-cached");
+    let svg = b"<svg/>";
+    std::fs::write(top.join("x"), svg).unwrap();
+    let hash = sha256_of(&top.join("x")).unwrap();
+    let e = Entry { icon_sha256: Some(hash), ..entry() };
+    let at = top.join("org.example.Weather.svg");
+    let calls = Cell::new(0);
+    let fetch = |_: &str, to: &Path| { calls.set(calls.get() + 1); std::fs::write(to, svg).is_ok() };
+    assert_eq!(icon_of(&e, &top, &fetch), Some(at.clone()));
+    assert_eq!(calls.get(), 1, "nothing cached: fetched");
+    assert_eq!(icon_of(&e, &top, &fetch), Some(at.clone()));
+    assert_eq!(calls.get(), 1, "cached and matching: not fetched");
+    std::fs::write(&at, "<svg onload='x'/>").unwrap();
+    assert_eq!(icon_of(&e, &top, &fetch), Some(at));
+    assert_eq!(calls.get(), 2, "cached and not matching: fetched again");
     let _ = std::fs::remove_dir_all(&top);
 }

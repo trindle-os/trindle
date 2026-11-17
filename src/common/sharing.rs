@@ -6,6 +6,7 @@
 //! that each share is made and taken away with `net usershare`, run as the
 //! person, never as root.
 
+use crate::toolkit::t;
 use std::path::{Path, PathBuf};
 
 pub const USERSHARES: &str = "/var/lib/samba/usershares";
@@ -95,26 +96,26 @@ pub fn problem_of(err: &str) -> Problem {
 pub fn words_of(err: &str) -> String {
     let l = err.to_lowercase();
     if l.contains("directories we own") {
-        return "Only folders that belong to you can be shared.".into();
+        return t!("common-share-not-yours").into();
     }
     if l.contains("valid system user name") {
-        return "That name is someone's login on this computer, so a share cannot have it. Choose another.".into();
+        return t!("common-share-name-is-login").into();
     }
     if l.contains("not a valid share name") || l.contains("invalid char") {
-        return "A share's name cannot hold any of % < > * ? | / \\ + = ; : \" or a comma.".into();
+        return t!("common-share-bad-name").into();
     }
     if l.contains("guest") && (l.contains("not allowed") || l.contains("allow guests")) {
-        return "This computer's Samba settings do not allow shares without a password.".into();
+        return t!("common-share-no-guests").into();
     }
     if l.contains("maximum number") {
-        return "This computer already shares as many folders as it allows.".into();
+        return t!("common-share-most").into();
     }
     if l.contains("is not a directory") || l.contains("cannot stat") || l.contains("no such file") {
-        return "That folder is no longer there.".into();
+        return t!("common-share-gone").into();
     }
     let last = err.trim().lines().last().unwrap_or("").trim();
     let last = last.strip_prefix("net usershare add:").or_else(|| last.strip_prefix("net usershare delete:")).unwrap_or(last).trim();
-    if last.is_empty() { "Samba did not say why.".into() } else { format!("Samba said: {last}") }
+    if last.is_empty() { t!("common-share-no-reason").into() } else { t!("common-share-said", said = last).to_string() }
 }
 
 pub fn quote(word: &str) -> String {
@@ -131,21 +132,35 @@ pub fn in_group(argv: Vec<String>, through_sg: bool) -> Vec<String> {
 
 #[cfg(not(test))]
 fn group_entry(user: &str) -> Option<(u32, bool)> {
-    let name = std::ffi::CString::new(GROUP).ok()?;
-    // SAFETY: getgrnam's entry is read at once, before anything else touches
+    group_named(GROUP, user)
+}
+
+fn group_named(group: &str, user: &str) -> Option<(u32, bool)> {
+    let name = std::ffi::CString::new(group).ok()?;
+    // SAFETY: the entry and the strings it points to are written into
 
     unsafe {
-        let g = libc::getgrnam(name.as_ptr());
-        if g.is_null() {
-            return None;
+        let mut entry: libc::group = std::mem::zeroed();
+        let mut found: *mut libc::group = std::ptr::null_mut();
+        let mut buf = vec![0 as libc::c_char; 1024];
+        loop {
+            let rc = libc::getgrnam_r(name.as_ptr(), &mut entry, buf.as_mut_ptr(), buf.len(), &mut found);
+            if rc == libc::ERANGE && buf.len() < (1 << 20) {
+                buf.resize(buf.len() * 2, 0);
+                continue;
+            }
+            if rc != 0 || found.is_null() {
+                return None;
+            }
+            break;
         }
         let mut listed = false;
-        let mut m = (*g).gr_mem;
+        let mut m = entry.gr_mem;
         while !m.is_null() && !(*m).is_null() {
             listed |= std::ffi::CStr::from_ptr(*m).to_bytes() == user.as_bytes();
             m = m.add(1);
         }
-        Some(((*g).gr_gid, listed))
+        Some((entry.gr_gid, listed))
     }
 }
 
@@ -324,6 +339,16 @@ pub use pretend::{list, remove};
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn a_group_is_read_into_a_buffer_of_the_calls_own() {
+        assert_eq!(super::group_named("root", "nobody-by-this-name"), Some((0, false)));
+        assert_eq!(super::group_named("no-such-group-here", "root"), None);
+        assert_eq!(super::group_named("with\0nul", "root"), None);
+
+        let all: Vec<_> = (0..8).map(|_| std::thread::spawn(|| (0..200).all(|_| super::group_named("root", "x") == Some((0, false))))).collect();
+        assert!(all.into_iter().all(|t| t.join().unwrap()));
+    }
+
     use super::*;
 
     #[test]

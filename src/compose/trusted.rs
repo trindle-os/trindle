@@ -1,13 +1,20 @@
-//! Not a back door: Pocketkey is an optional plugin the person downloads that lets a phone they paired say yes instead of typing the password. This does nothing unless that plugin is installed and switched on, only root can use it, and the typed password always works.
-//! Windows from programs running as root, which is how Trindle Pocketkey's
-//! yes/no question reaches the screen: its daemon connects as root and hands
-//! the connection to the question window. Nothing running as the person can
-//! connect as root, so nothing else can be one of these. Trindle's own ring
-//! is also shown over a full-screen window, and its notifications above
-//! other panels, but neither is trusted.
+//! What the compositor gives a program beyond an ordinary window, and what
+//! each rests on: the connection, never a name, an app id or a path.
+//! - Trusted panels (above everything, over a full-screen window, safe from
+//!   made-up keys, never ended by force): the connection came from root.
+//!   Pocketkey's question is one, only with that plugin installed and on;
+//!   the typed password always works.
+//! - Panels, the screen's picture, the window list, workspaces, screens,
+//!   their power and colour, locking, an input method and making a box:
+//!   the connection is outside every box (state.rs).
+//! - A made-up mouse or keyboard and the clipboard at any time: outside every
+//!   box, or a box whose maker said it may control.
+//! - News above every panel but the trusted, and the ring over a full-screen
+//!   window: the connection the compositor made itself and handed to its own
+//!   panel program (session.rs); only on it does a panel's name count.
 
 use std::cell::Cell;
-use std::os::{fd::AsRawFd, unix::net::UnixStream};
+use std::os::unix::net::UnixStream;
 use std::time::{Duration, Instant};
 
 use smithay::{
@@ -22,20 +29,7 @@ use smithay::{
 use crate::state::ClientState;
 
 pub fn from_root(stream: &UnixStream) -> bool {
-    let mut cred = libc::ucred { pid: 0, uid: u32::MAX, gid: u32::MAX };
-    let mut len = std::mem::size_of::<libc::ucred>() as libc::socklen_t;
-    // SAFETY: the fd is an open socket for the call, and cred and len are
-
-    let rc = unsafe {
-        libc::getsockopt(
-            stream.as_raw_fd(),
-            libc::SOL_SOCKET,
-            libc::SO_PEERCRED,
-            (&mut cred as *mut libc::ucred).cast(),
-            &mut len,
-        )
-    };
-    rc == 0 && len as usize == std::mem::size_of::<libc::ucred>() && cred.uid == 0
+    crate::peer::credentials(stream).is_some_and(|c| c.uid == 0)
 }
 
 pub fn is_trusted(surface: &WlSurface) -> bool {
@@ -176,10 +170,6 @@ pub(crate) fn kind_of(layer: &LayerSurface) -> Kind {
     } else {
         Kind::Ordinary
     }
-}
-
-pub fn standing(layer: &LayerSurface) -> Kind {
-    kind_of(layer)
 }
 
 pub const MODAL: &str = "trindle-modal";

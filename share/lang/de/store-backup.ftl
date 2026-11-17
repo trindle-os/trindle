@@ -5,7 +5,7 @@
 store-refusal-nothing = Es wurde nichts zurückgespielt, weil { $why }.
 
 # A refusal of a restore that went part of the way; the reason follows "because".
-store-refusal-part = Ein Teil der Sicherung wurde nicht zurückgespielt, weil { $why }.
+store-refusal-part = Trindle hat nur einen Teil der Sicherung zurückgespielt, weil { $why }.
 
 # The reason when the backup holds a link or something else that would reach outside the folder it goes into.
 # SAFETY: needs a human review before it ships
@@ -17,14 +17,11 @@ store-because-in-the-way = auf diesem Computer schon etwas dort liegt, wo ein Te
 # The reason when there is nowhere to unpack the backup.
 store-because-no-unpack = es keinen Ort zum Entpacken der Sicherung gibt
 
-# The reason when the backup file cannot be read.
-store-because-unreadable = die Sicherungsdatei nicht gelesen werden konnte
-
 # The reason when the file is not a Trindle backup.
 store-because-not-trindle = diese Datei keine Trindle-Sicherung ist
 
 # The reason when the backup's list is damaged or too big.
-store-because-damaged-list = die Sicherung beschädigt ist und ihre Liste nicht gelesen werden konnte
+store-because-damaged-list = die Sicherung beschädigt ist und Trindle ihre Liste nicht lesen konnte
 
 # The reason when the file is not a Flat backup.
 store-because-not-flat = diese Datei nicht wie eine Flat-Sicherung aussieht
@@ -33,7 +30,7 @@ store-because-not-flat = diese Datei nicht wie eine Flat-Sicherung aussieht
 store-because-no-flat-list = diese Datei keine Flat-App-Liste enthält
 
 # The reason when the backup was made by a newer Flat than Trindle can read.
-store-because-newer-flat = sie von einem neueren Flat gemacht wurde, als Trindle lesen kann
+store-because-newer-flat = sie von einer neueren Version von Flat gemacht wurde, als Trindle lesen kann
 
 # The reason when the file holds no apps.
 store-because-no-apps = in dieser Datei keine Apps sind
@@ -42,13 +39,13 @@ store-because-no-apps = in dieser Datei keine Apps sind
 store-because-not-read = die Sicherung nicht gelesen werden konnte: { $why }
 
 # The reason when the program gave none.
-store-because-none = es keinen Grund angegeben hat
+store-because-none = kein Grund genannt
 
 # The reason when the system said permission was denied.
-store-because-permission = dieser Computer Trindle dort nicht schreiben lässt
+store-because-permission = Trindle dort nicht schreiben darf
 
 # The reason when the disk is full.
-store-because-space = auf diesem Computer kein Platz mehr ist
+store-because-space = dieser Computer keinen Platz mehr hat
 
 # The reason when a part of the computer is read-only.
 store-because-read-only = dieser Teil des Computers nur lesbar ist
@@ -69,25 +66,25 @@ store-because-no-name = sie keinen Namen hat
 store-because-outside-own = ihre Einstellungen in der Sicherung aus ihrem eigenen Ordner herausreichen
 
 # The reason when something is too big to be read whole.
-store-because-too-big = sie zu groß ist, um ganz gelesen zu werden
+store-because-too-big = sie zu groß zum Lesen ist
 
 # The reason when an app's settings in the backup do not match their checksum.
-store-because-checksum = ihre Einstellungen in der Sicherung nicht zu ihrer Prüfsumme passen
+store-because-checksum = ihre Einstellungen in der Sicherung beschädigt oder verändert wurden
 
 # Said when the person's account picture was not put back; the reason follows.
-store-refusal-picture-only = Zurückgespielt, außer deinem Kontobild. { $why }
+store-refusal-picture-only = Alles wurde zurückgespielt, außer deinem Kontobild. { $why }
 
 # Said when something else failed and the account picture was not put back either.
-store-refusal-picture-too = { $words } Dein Kontobild wurde auch nicht zurückgespielt. { $why }
+store-refusal-picture-too = { $words } Trindle hat auch dein Kontobild nicht zurückgespielt. { $why }
 
 # Said when the pkexec program could not be started.
-store-refusal-pkexec = pkexec konnte nicht gestartet werden: { $why }
+store-refusal-pkexec = Das Passwort konnte nicht abgefragt werden: { $why }
 
 # Said when the backup could not be read at all.
-store-refusal-not-read-from = Es konnte nicht aus der Sicherung gelesen werden: { $why }.
+store-refusal-not-read-from = Trindle konnte es nicht aus der Sicherung lesen: { $why }.
 
 # Said when a backup was not made; the reason follows "because".
-store-backup-not-made = Die Sicherung wurde nicht erstellt, weil { $why }.
+store-backup-not-made = Trindle hat die Sicherung nicht erstellt, weil { $why }.
 
 # Beside the size of a part of the backup that is not there yet.
 store-backup-nothing-yet = noch nichts
@@ -96,37 +93,24 @@ store-backup-nothing-yet = noch nichts
 store-backup-about = etwa { $size }
 
 # Step shown while Trindle's own settings and AppImages are put back.
-store-backup-step-trindle = Trindles Einstellungen und AppImages werden zurückgespielt ...
-
-# Step shown while the settings and data are put back.
-store-backup-step-data = Einstellungen und Daten werden zurückgespielt ...
-
-# Step shown while apps are installed from Flathub.
-store-backup-step-installing =
-    { $count ->
-        [one] { $count } App wird von Flathub installiert ... das kann dauern.
-       *[other] { $count } Apps werden von Flathub installiert ... das kann dauern.
-    }
+store-backup-step-trindle = Trindles Einstellungen und AppImages werden zurückgespielt …
 
 # Said after a restore when some apps could not be installed because Flatpak refused them.
-store-not-installed-failed = Einstellungen und Daten wurden zurückgespielt, aber diese Apps wurden nicht installiert, weil Flatpak sie abgelehnt hat: { $failed }.
-
-# The same, when other apps were also left out for another reason.
-store-not-installed-both = Einstellungen und Daten wurden zurückgespielt, aber diese Apps wurden nicht installiert, weil Flatpak sie abgelehnt hat: { $failed }. Ebenfalls nicht installiert: { $refused }.
+store-not-installed-failed = Trindle hat deine Einstellungen und Daten zurückgespielt, aber Flatpak wollte diese Apps nicht installieren: { $failed }.
 
 # Said after a restore when some apps were left out before Flatpak was asked.
-store-not-installed-refused = Einstellungen und Daten wurden zurückgespielt, aber diese Apps wurden nicht installiert: { $refused }.
+store-not-installed-refused = Trindle hat deine Einstellungen und Daten zurückgespielt, aber diese Apps nicht installiert: { $refused }.
 
 # Said among what could not be done, when some apps were skipped because their names were not valid.
 store-flat-skipped =
     { $n ->
-        [one] 1 App übersprungen: Ihr Name war ungültig.
-       *[other] { $n } Apps übersprungen: Ihre Namen waren ungültig.
+        [one] Trindle hat 1 App übersprungen, weil ihr Name ungültig war.
+       *[other] Trindle hat { $n } Apps übersprungen, weil ihre Namen ungültig waren.
     }
 
 # Said beside an app whose source is not secure: the source's name is given.
 # SAFETY: needs a human review before it ships
-store-flat-not-secure = die Quelle { $name } nicht verschlüsselt ist und nicht akzeptiert wurde, deshalb wurde sie nicht benutzt
+store-flat-not-secure = die Quelle { $name } nicht verschlüsselt ist, darum hat Trindle sie nicht benutzt
 
 # Said when a source is not on this computer and the backup does not say where it is.
 store-flat-no-address = die Quelle { $name } nicht auf diesem Computer ist und die Sicherung nicht sagt, wo sie liegt
@@ -141,13 +125,13 @@ store-flat-source-name = { $name } (weil der Name ihrer Quelle ungültig ist)
 store-flat-failed-because = { $what } (weil { $why })
 
 # Said among what could not be done: the app Flatpak refused.
-store-flat-flatpak-refused = { $name } (weil Flatpak es abgelehnt hat: { $why })
+store-flat-flatpak-refused = { $name } (Flatpak konnte es nicht installieren: { $why })
 
 # Said among what could not be done when there was nowhere to unpack the backup.
 store-flat-nowhere = alles (weil es keinen Ort zum Entpacken der Sicherung gibt)
 
 # Said among what could not be done: the settings that apply to every app.
-store-flat-every-app = was jede App darf
+store-flat-every-app = Berechtigungen für jede App
 
 # Said among what could not be done: one app's settings.
 store-flat-app-settings = die Einstellungen von { $name }
@@ -156,10 +140,10 @@ store-flat-app-settings = die Einstellungen von { $name }
 store-flat-kept-as = { $why }. Was vorher da war, bleibt als { $path } erhalten: { $error }
 
 # Step shown for each app being installed, with its place in the list.
-store-flat-step-installing = { $name } wird installiert ({ $at } von { $total }) ...
+store-flat-step-installing = { $name } wird installiert ({ $at } von { $total }) …
 
 # Step shown for each app's settings being put back, with its place in the list.
-store-flat-step-settings = Die Einstellungen von { $name } werden zurückgespielt ({ $at } von { $total }) ...
+store-flat-step-settings = Die Einstellungen von { $name } werden zurückgespielt ({ $at } von { $total }) …
 
 # Summary of a restore from a Flat backup: how many apps were installed.
 store-flat-summary-installed =
@@ -169,21 +153,21 @@ store-flat-summary-installed =
     }
 
 # Summary of a restore: how many apps had their settings put back.
-store-flat-summary-settings = Einstellungen zurückgespielt für { $n }.
+store-flat-summary-settings =
+    { $n ->
+        [one] Die Einstellungen einer App zurückgespielt.
+       *[other] Die Einstellungen von { $n } Apps zurückgespielt.
+    }
 
 # Summary of a restore: how many apps were already installed and left alone.
 store-flat-summary-already =
     { $n ->
-        [one] { $n } schon da, so gelassen, wie sie war.
-       *[other] { $n } schon da, so gelassen, wie sie waren.
+        [one] { $n } App war schon installiert.
+       *[other] { $n } Apps waren schon installiert.
     }
 
 # Summary of a restore: what could not be put back, as a list.
-store-flat-summary-failed = Nicht zurückgespielt: { $list }
+store-flat-summary-failed = Ausgelassen: { $list }
 
-# Name of Flat's backup program, which Trindle reads backups from.
-store-flat-name = Trindle Flat
-
-# Said among the apps that were not installed: the app and why.
-store-backup-app-why = { $id } ({ $why })
-
+# Said among what could not be done when a backup's permissions asked for more than the app had: only ones that take access away are put back.
+store-flat-grants-left-out = { $what }: Trindle hat nur die Berechtigungen zurückgespielt, die Zugriff entziehen.

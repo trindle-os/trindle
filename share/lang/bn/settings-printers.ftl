@@ -2,7 +2,7 @@
 # machine translated (Bengali), not yet reviewed by a person.
 
 # Sentence at the top of the page when there are no printers.
-settings-printers-sum-none = এখনও কোনো প্রিন্টার নেই। আপনার নেটওয়ার্কে যা পাওয়া যায় তা নিচে দেখানো হয়েছে।
+settings-printers-sum-none = এখনও কোনো প্রিন্টার নেই। Trindle আপনার নেটওয়ার্কে যা খুঁজে পায় তা নিচে দেখানো হয়েছে।
 
 # Sentence at the top of the page when the printer used first is paused.
 settings-printers-sum-paused = { $name } থামানো আছে, তাই আপাতত এতে কিছু ছাপা হবে না।
@@ -17,19 +17,22 @@ settings-printers-sum-ready = { $name }-এ ছাপার জন্য তৈ�
 settings-printers-sum-state = { $name } এখন { $state }।
 
 # Sentence at the top of the page when one printer is set up and none is chosen to print on first.
-settings-printers-sum-one-unchosen = { $name } সাজানো আছে; আগে কোনটিতে ছাপা হবে তা বাছা হয়নি।
+settings-printers-sum-one-unchosen = { $name } সাজানো আছে, কিন্তু আপনি ডিফল্ট প্রিন্টার বাছেননি।
 
 # Sentence at the top of the page when several printers are set up and none is chosen to print on first.
-settings-printers-sum-many-unchosen = { $n }টি প্রিন্টার সাজানো আছে; আগে কোনটিতে ছাপা হবে তা বাছা হয়নি।
+settings-printers-sum-many-unchosen = { $n }টি প্রিন্টার সাজানো আছে, কিন্তু আপনি ডিফল্ট প্রিন্টার বাছেননি।
 
 # Red words under the Print jobs line when a job number is not one CUPS knows.
-settings-printers-bad-job = এটি CUPS-এর জানা কোনো কাজ নয়।
+settings-printers-bad-job = ওই কাজটি আর নেই।
 
 # Shown beside a print job after it was cancelled.
 settings-printers-cancelled = বাতিল হয়েছে
 
 # Red words when CUPS fails and says nothing more.
-settings-printers-lpstat-failed = lpstat ব্যর্থ হয়েছে
+settings-printers-lpstat-failed = পরীক্ষা ব্যর্থ হয়েছে।
+
+# Red words when Trindle cannot reach CUPS at all, after trying twice.
+printers-unreachable = প্রিন্টিং সেবা চলছে না বা পাওয়া যাচ্ছে না।
 
 # Words in the ring while the network is searched for printers.
 settings-printers-searching = খোঁজা হচ্ছে
@@ -50,13 +53,13 @@ settings-printers-removed = সরানো হয়েছে
 settings-printers-type-address = আগে প্রিন্টারের ঠিকানা লিখুন।
 
 # Shown under the By its address line while the printer is added.
-settings-printers-adding = যোগ করা হচ্ছে...
+settings-printers-adding = যোগ করা হচ্ছে…
 
 # Shown beside a printer or the address line after it was added.
 settings-printers-added = যোগ করা হয়েছে
 
 # Shown beside a found printer while a driver is looked for.
-settings-printers-finding-driver = এর ড্রাইভার খোঁজা হচ্ছে...
+settings-printers-finding-driver = এর ড্রাইভার খোঁজা হচ্ছে…
 
 # Heading of a print job in the queue: its number and the printer.
 settings-printers-job = { $printer }-এ কাজ { $number }
@@ -72,25 +75,19 @@ settings-printers-cancel-job = এই কাজটি বাতিল করু�
 settings-printers-jobs = ছাপার কাজ
 
 # Help text (i button) of the Print jobs card.
-settings-printers-jobs-about = যেকোনো প্রিন্টারে ছাপার অপেক্ষায় থাকা প্রতিটি কাজ, এখন যেমন আছে। এই পাতা খোলা থাকলে তালিকা কয়েক সেকেন্ড পরপর আবার পড়া হয়। ক্রস চিহ্ন একটি কাজ বাতিল করে; যে কাগজ আগেই ছাপা হয়ে গেছে তা ছাপাই থাকে।
+settings-printers-jobs-about = যেকোনো প্রিন্টারে ছাপার অপেক্ষায় থাকা প্রতিটি কাজ। এই পাতা খোলা থাকলে Trindle কয়েক সেকেন্ড পরপর তালিকা নতুন করে। যে পাতা আগেই ছাপা হয়ে গেছে তা বাতিল করা যায় না।
 
 # Line in the Print jobs card when CUPS does not answer.
 settings-printers-cups-silent = CUPS সাড়া দিচ্ছে না
 
 # Small line under "CUPS is not answering" in the Print jobs card.
-settings-printers-queue-unreadable = সারি পড়া যাচ্ছে না।
+settings-printers-queue-unreadable = সারি পড়া যায়নি।
 
 # Line in the Print jobs card while the queue is first read, and on the page while it is read.
 settings-printers-looking = দেখা হচ্ছে…
 
-# Small line under "Looking…" in the Print jobs card.
-settings-printers-queue = সারি।
-
 # Line in the Print jobs card when no job is waiting.
 settings-printers-nothing-waiting = কিছু অপেক্ষায় নেই
-
-# Small line under "Nothing waiting".
-settings-printers-nothing-waiting-sub = ছাপার সময় কাজগুলো এখানে দেখা যায়।
 
 # State of a printer shown in its small line when it is paused.
 settings-printers-state-paused = থামানো
@@ -105,7 +102,7 @@ settings-printers-state-printing = ছাপছে
 settings-printers-default-state = ডিফল্ট, { $state }
 
 # Tip of the star button that makes a printer the one used first.
-settings-printers-make-default = আগে এটিতে ছাপুন
+settings-printers-make-default = এটিকে ডিফল্ট করুন
 
 # Tip of the button that prints a test page.
 settings-printers-test-page = একটি পরীক্ষার পাতা ছাপুন
@@ -118,19 +115,13 @@ settings-printers-remove = এই প্রিন্টারটি সরিয
 settings-printers-needs-filters = খোঁজার জন্য cups-filters লাগে
 
 # Small line under it; the command is to be typed as it is.
-settings-printers-install-filters = এটি ইনস্টল করুন এই কমান্ডে: sudo apt install cups-filters
+settings-printers-install-filters = এটি ইনস্টল করতে এই কমান্ড চালান: sudo apt install cups-filters
 
 # Tip of the plus button that adds a printer that was found.
 settings-printers-add-found = এই প্রিন্টারটি যোগ করুন
 
 # Line in the Add a printer card when the search found nothing new.
 settings-printers-nothing-new = নতুন কিছু পাওয়া যায়নি
-
-# Small line under "Nothing new found".
-settings-printers-nothing-new-sub = এটি কি চালু, আর একই নেটওয়ার্কে আছে?
-
-# Small line under "Looking…" in the Add a printer card.
-settings-printers-looking-sub = আগে যারা নিজেদের জানান দেয়, তারপর একে একে প্রতিটি যন্ত্র।
 
 # Placeholder of the box where a printer's address is typed.
 settings-printers-address-placeholder = 192.168.1.50
@@ -139,16 +130,13 @@ settings-printers-address-placeholder = 192.168.1.50
 settings-printers-add-it = যোগ করুন
 
 # Heading of the line where a printer's address is typed.
-settings-printers-by-address = ঠিকানা দিয়ে
-
-# Small line under "By its address".
-settings-printers-by-address-sub = যেমন 192.168.1.50, যা প্রিন্টারের নিজের পর্দায় থাকে।
+settings-printers-by-address = ঠিকানা দিয়ে যোগ করুন
 
 # Heading of the card for adding printers.
 settings-printers-add-card = একটি প্রিন্টার যোগ করুন
 
 # Help text (i button) of the Add a printer card.
-settings-printers-add-about = যে প্রিন্টার নিজেদের জানান দেয় সেগুলো আগে খোঁজা হয়, তারপর নেটওয়ার্কের প্রতিটি যন্ত্রকে একে একে জিজ্ঞাসা করা হয়। প্রিন্টারটি চালু ও একই নেটওয়ার্কে থাকতে হবে। কিছু প্রিন্টার নিজেদের জানান দেয় না, আর কিছু নেটওয়ার্ক সেই ঘোষণা এগিয়ে দেয় না: তখন ঠিকানা দিয়ে যোগ করুন, যেমন 192.168.1.50। এটি প্রিন্টারের নিজের পর্দায়, নেটওয়ার্ক সেটিংসের ভেতরে পাবেন।
+settings-printers-add-about = Trindle আগে সেই প্রিন্টারগুলো খোঁজে যারা নিজেদের জানান দেয়, তারপর নেটওয়ার্কের প্রতিটি ডিভাইস একে একে পরীক্ষা করে। প্রিন্টারটি চালু ও একই নেটওয়ার্কে থাকতে হবে। কিছু প্রিন্টার নিজেদের জানান দেয় না, আর কিছু নেটওয়ার্ক সেই ঘোষণা এগিয়ে দেয় না। তখন প্রিন্টারটি তার ঠিকানা দিয়ে যোগ করুন, যেমন 192.168.1.50। ঠিকানাটি প্রিন্টারের নিজের পর্দায়, নেটওয়ার্ক সেটিংসের ভেতরে পাবেন।
 
 # Name of the page in the list of settings pages.
 settings-printers-title = প্রিন্টার
@@ -157,7 +145,7 @@ settings-printers-title = প্রিন্টার
 settings-printers-keywords = প্রিন্টার ছাপা স্ক্যানার printer print scanner
 
 # Help text at the top of the page.
-settings-printers-help = আপনার নেটওয়ার্কের প্রিন্টার নিজে থেকেই পাওয়া যায়। ব্যবহার করতে একটির পাশে যোগ করুন চাপুন।
+settings-printers-help = Trindle আপনার নেটওয়ার্কের প্রিন্টার নিজে থেকেই খুঁজে পায়। ব্যবহার করতে একটির পাশে "এই প্রিন্টারটি যোগ করুন" চাপুন।
 
 # Headline of the page when printing is not installed.
 settings-printers-top-not-installed = এই কম্পিউটারে ছাপার ব্যবস্থা ইনস্টল করা নেই।
@@ -166,13 +154,13 @@ settings-printers-top-not-installed = এই কম্পিউটারে ছ�
 settings-printers-top-looking = দেখা হচ্ছে…
 
 # Headline of the page when the printing service does not answer.
-settings-printers-top-silent = ছাপার সেবা সাড়া দিচ্ছে না, তাই এখন কিছু ছাপা যাবে না।
+settings-printers-top-silent = Trindle ছাপার সেবায় পৌঁছাতে পারছে না, তাই এখন কিছু ছাপা যাবে না।
 
 # Heading of the card shown when printing is not installed.
 settings-printers-printing = ছাপা
 
 # Help text (i button) of that card.
-settings-printers-printing-about = ছাপার জন্য CUPS লাগে, যা এই কম্পিউটারে নেই। এটি ইনস্টল হলে আপনার নেটওয়ার্কের প্রিন্টার নিজে থেকেই পাওয়া যাবে।
+settings-printers-printing-about = ছাপার জন্য CUPS লাগে, যা এই কম্পিউটারে নেই। এটি ইনস্টল হলে Trindle আপনার নেটওয়ার্কের প্রিন্টার নিজে থেকেই খুঁজে পাবে।
 
 # Line in that card.
 settings-printers-unavailable = ছাপা পাওয়া যাচ্ছে না
@@ -181,31 +169,25 @@ settings-printers-unavailable = ছাপা পাওয়া যাচ্ছ�
 settings-printers-install-cups = এটি ইনস্টল করুন এই কমান্ডে: sudo apt install cups
 
 # Line in that card.
-settings-printers-then-found = তারপর প্রিন্টার পাওয়া যাবে
-
-# Small line under it.
-settings-printers-then-found-sub = আপনার নেটওয়ার্কেরগুলো, নিজে থেকেই।
+settings-printers-then-found = প্রিন্টার খোঁজা
 
 # Small line under "CUPS is not answering" in the Printers card.
-settings-printers-service = ছাপার সেবা।
+settings-printers-service = ছাপার সেবা
 
 # Line in the Printers card when there are none.
 settings-printers-none = এখনও কোনো প্রিন্টার নেই
-
-# Small line under "No printers yet".
-settings-printers-none-sub = এর পাশে একটি যোগ করুন।
 
 # Heading of the card that lists the printers.
 settings-printers-card = প্রিন্টার
 
 # Help text (i button) of the Printers card.
-settings-printers-card-about = এই কম্পিউটারে সাজানো প্রতিটি প্রিন্টার। তারা চিহ্ন একটিকে আগে ব্যবহারের প্রিন্টার করে; পাতার আইকন তাতে একটি পরীক্ষার পাতা ছাপে; ঝুড়ি এটি সরিয়ে দেয়, দুইবার জিজ্ঞাসা করে। বদলাতে আপনার অ্যাকাউন্ট lpadmin গ্রুপে থাকতে হবে।
+settings-printers-card-about = এই কম্পিউটারে সাজানো প্রতিটি প্রিন্টার। বদলাতে আপনার অ্যাকাউন্ট lpadmin গ্রুপে থাকতে হবে।
 
 # Red words under a page range box that cannot be used.
-printers-bad-range = পৃষ্ঠা যেমন 1-3, 5
+printers-bad-range = উদাহরণ: 1-3, 5
 
 # Red words under a copies box that cannot be used.
-printers-bad-copies = কপি: ১ থেকে ৯৯
+printers-bad-copies = ১ থেকে ৯৯টি কপি।
 
 # Name of the choice to print on one side of the paper.
 printers-sides-one = এক পাশে
@@ -239,13 +221,13 @@ printers-orientation-landscape = আড়াআড়ি
 
 # Red words when a printing error is a refusal because the account is not in the lpadmin group.
 # SAFETY: needs a human review before it ships
-printers-not-allowed = অনুমতি নেই। আপনার অ্যাকাউন্ট lpadmin গ্রুপে থাকতে হবে; তা হলে লগ আউট করে আবার লগ ইন করুন।
+printers-not-allowed = আপনার এটি করার অনুমতি নেই। আপনার অ্যাকাউন্ট lpadmin গ্রুপে থাকতে হবে। তারপর লগ আউট করে আবার লগ ইন করুন।
 
 # Red words when CUPS refuses and gives no reason.
 printers-refused = CUPS রাজি হয়নি।
 
 # Red words when the printer name chosen is not one CUPS accepts.
-printers-bad-name = ওই প্রিন্টারের নাম CUPS মেনে নেয় না।
+printers-bad-name = এই প্রিন্টারের নাম অনুমোদিত নয়।
 
 # Red words when printing is not installed on the computer.
 printers-not-installed = এই কম্পিউটারে ছাপার ব্যবস্থা ইনস্টল করা নেই।
@@ -258,3 +240,21 @@ printers-paused = { $name } থামানো আছে।
 
 # Red words when sending the document to CUPS took too long.
 printers-too-slow = নথিটি পাঠাতে অনেক বেশি সময় লেগেছে।
+
+# Red words when a print job could not be cancelled.
+settings-printers-not-cancelled = Trindle কাজটি বাতিল করতে পারেনি।
+
+# Red words when a printer could not be made the default.
+settings-printers-not-default = Trindle এটিকে ডিফল্ট প্রিন্টার করতে পারেনি।
+
+# Red words when the test page could not be sent.
+settings-printers-not-sent = Trindle পরীক্ষার পাতা পাঠাতে পারেনি।
+
+# Red words when a printer could not be removed.
+settings-printers-not-removed = Trindle প্রিন্টারটি সরাতে পারেনি।
+
+# Red words when a printer could not be added.
+settings-printers-not-added = Trindle প্রিন্টারটি যোগ করতে পারেনি।
+
+# Red words when the list of printers could not be read.
+settings-printers-not-read = Trindle প্রিন্টারের তালিকা পড়তে পারেনি।

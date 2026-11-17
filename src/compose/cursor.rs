@@ -1,7 +1,4 @@
-//! Origin: began as a file of anvil, Smithay's example compositor (MIT, Victor Berger and
-//! Victoria Brekenfeld). About 17% of this file's lines still read as
-//! they did there; the rest is Trindle's own.
-//! The fallback pointer picture (resources/cursor.png) is anvil's cursor.rgba saved as a PNG.
+// Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
 use std::{collections::HashMap, path::PathBuf, time::Duration};
 
@@ -86,15 +83,19 @@ impl Cursor {
     }
 
     pub fn get_named(&mut self, icon: CursorIcon, scale: u32, time: Duration) -> Image {
+        self.picture(icon, scale, time).1.clone()
+    }
+
+    pub fn picture(&mut self, icon: CursorIcon, scale: u32, time: Duration) -> (usize, &Image) {
         if !self.shapes.contains_key(&icon) {
             let names: Vec<&str> = std::iter::once(icon.name()).chain(icon.alt_names().iter().copied()).collect();
-            if let Some(images) = self.read(&names) {
-                self.shapes.entry(icon).or_insert(images);
-            }
-        }
 
-        let images = &self.shapes[if self.shapes.contains_key(&icon) { &icon } else { &CursorIcon::Default }];
-        frame(time.as_millis() as u32, self.size * scale, images)
+            let images = self.read(&names).unwrap_or_else(|| self.shapes[&CursorIcon::Default].clone());
+            self.shapes.entry(icon).or_insert(images);
+        }
+        let images = &self.shapes[&icon];
+        let at = frame_at(time.as_millis() as u32, self.size.saturating_mul(scale), images);
+        (at, &images[at])
     }
 }
 
@@ -169,37 +170,36 @@ fn inherits(index: &str) -> Option<String> {
         .find(|set| !set.is_empty())
 }
 
-fn nearest_images(size: u32, images: &[Image]) -> impl Iterator<Item = &Image> {
-
-    let nearest_image = images
-        .iter()
-        .min_by_key(|image| (size as i32 - image.size as i32).abs())
-        .unwrap();
-
-    images
-        .iter()
-        .filter(move |image| image.width == nearest_image.width && image.height == nearest_image.height)
+fn nearest_images(size: u32, images: &[Image]) -> impl Iterator<Item = (usize, &Image)> {
+    let nearest = images.iter().min_by_key(|image| (i64::from(size) - i64::from(image.size)).abs()).map(|n| (n.width, n.height));
+    images.iter().enumerate().filter(move |(_, image)| Some((image.width, image.height)) == nearest)
 }
 
-fn frame(mut millis: u32, size: u32, images: &[Image]) -> Image {
-    let total = nearest_images(size, images).fold(0, |acc, image| acc + image.delay);
+fn frame_at(mut millis: u32, size: u32, images: &[Image]) -> usize {
+    let total = nearest_images(size, images).fold(0u32, |acc, (_, image)| acc.saturating_add(image.delay));
     if total == 0 {
-        return nearest_images(size, images).next().unwrap().clone();
+        return nearest_images(size, images).next().map_or(0, |(i, _)| i);
     }
     millis %= total;
-
-    for img in nearest_images(size, images) {
+    let mut last = 0;
+    for (i, img) in nearest_images(size, images) {
         if millis < img.delay {
-            return img.clone();
+            return i;
         }
         millis -= img.delay;
+        last = i;
     }
-
-    unreachable!()
+    last
 }
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn a_shape_the_set_lacks_is_looked_for_once() {
+        let mut cursor = super::Cursor::load_from("none".into(), 24, vec![]);
+        cursor.get_named(super::CursorIcon::Grabbing, 1, std::time::Duration::ZERO);
+        assert!(cursor.shapes.contains_key(&super::CursorIcon::Grabbing));
+    }
 
     #[test]
     fn the_pointer_picture_follows_the_screen_scale() {
@@ -214,8 +214,27 @@ mod tests {
         let big = |size: u32| xcursor::parser::Image {
             size, width: size, height: size, xhot: 0, yhot: 0, delay: 0, pixels_rgba: vec![0; (size * size * 4) as usize], pixels_argb: vec![],
         };
-        assert_eq!(super::frame(0, 24 * super::picture_scale(1.5), &[big(24), big(48)]).width, 48);
-        assert_eq!(super::frame(0, 24 * super::picture_scale(1.0), &[big(24), big(48)]).width, 24);
+        let set = [big(24), big(48)];
+        assert_eq!(set[super::frame_at(0, 24 * super::picture_scale(1.5), &set)].width, 48);
+        assert_eq!(set[super::frame_at(0, 24 * super::picture_scale(1.0), &set)].width, 24);
+    }
+
+    #[test]
+    fn a_pointer_file_with_huge_sizes_and_delays_still_gives_a_picture() {
+        let huge = |delay: u32| xcursor::parser::Image {
+            size: u32::MAX, width: 1, height: 1, xhot: 0, yhot: 0, delay, pixels_rgba: vec![0; 4], pixels_argb: vec![],
+        };
+        assert_eq!(super::frame_at(u32::MAX, 24, &[huge(u32::MAX), huge(u32::MAX)]), 0);
+        assert_eq!(super::frame_at(0, 24, &[]), 0, "no pictures at all");
+    }
+
+    #[test]
+    fn the_picture_for_a_moment_is_named_by_its_number_and_never_copied() {
+        let mut cursor = super::Cursor::load_from("none".into(), 24, vec![]);
+        let held: *const _ = &cursor.shapes[&smithay::input::pointer::CursorIcon::Default][0];
+        let (at, picture) = cursor.picture(smithay::input::pointer::CursorIcon::Default, 1, std::time::Duration::from_secs(5));
+        assert_eq!(at, 0);
+        assert!(std::ptr::eq(picture, held), "the picture was copied");
     }
 
     #[test]

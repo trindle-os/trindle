@@ -172,7 +172,7 @@ mod tests {
         put("12", b"/app/bin/steam\0-silent\0");
         put("self", b"SteamLaunch\0");
         assert!(!game_running(&proc));
-        put("40", b"/home/john/.steam/ubuntu12_32/reaper\0SteamLaunch\0AppId=289650\0--\0game.exe\0");
+        put("40", b"/home/john/.steam/reaper\0SteamLaunch\0AppId=289650\0--\0game.exe\0");
         assert!(game_running(&proc));
         let _ = std::fs::remove_dir_all(&proc);
     }

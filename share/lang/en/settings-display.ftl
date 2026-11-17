@@ -7,13 +7,13 @@ settings-display-title = Display
 # Words a person might type into the Settings search to find the display page; separate them with spaces.
 settings-display-keywords = screen monitor resolution size scale zoom bigger smaller rotate refresh night light warm blue light evening eyes
 # Introduction under the heading of the display page, and the words behind the page i.
-settings-display-help = Changes apply at once. If the screen goes wrong, do nothing: it goes back by itself after 15 seconds unless you press Keep. Night light turns the screen warmer in the evening.
+settings-display-help = Changes apply at once. If the screen goes wrong, do nothing. It goes back by itself after 15 seconds unless you press Keep. Night light makes the screen warmer in the evening.
 # Question along the bottom of the page while a change of displays waits to be kept.
 settings-display-foot-keep = Keep this arrangement?
 # Sentence at the top of the page while the displays are being found.
-settings-display-looking = Looking at the displays…
+settings-display-looking = Checking the displays…
 # Sentence at the top of the page when no display was found.
-settings-display-none-found = No displays were found.
+settings-display-none-found = Can't find a display.
 
 ## Top sentence
 
@@ -75,24 +75,16 @@ settings-display-size-on = Size on { $display }
 settings-display-rotation-of = Rotation of { $display }
 # Heading of the resolution line.
 settings-display-resolution = Resolution
-# Small words under that line.
-settings-display-resolution-about = How many dots it shows, how often.
 # Heading of the size line.
 settings-display-size = Size
-# Small words under that line.
-settings-display-size-about = How large everything looks on this screen.
 # Heading of the rotation line.
 settings-display-rotation = Rotation
-# Small words under that line.
-settings-display-rotation-about = For a screen stood on its side.
 # Heading of the line, and name of its switch, that turns a display on or off.
 settings-display-use = Use this display
 # Small words under that line for the only display in use.
-settings-display-use-only = The only display in use cannot be turned off.
-# Small words under that line otherwise.
-settings-display-use-off = Off, nothing is shown on it.
+settings-display-use-only = You can't switch off the only display in use.
 # Words behind the i of a display's card.
-settings-display-card-about = Changes apply at once. If the screen goes wrong, do nothing: it goes back by itself after 15 seconds unless you press Keep. The recommended resolution is the screen's own; standard size is the one Trindle chose for this screen.
+settings-display-card-about = Changes apply at once. If the screen goes wrong, do nothing. It goes back by itself after 15 seconds unless you press Keep. The recommended resolution is the one the screen is made for. The standard size is the one Trindle chose for this screen.
 
 ## Arrangement
 
@@ -105,14 +97,14 @@ settings-display-relative = { $display } relative to { $other }
 # Title of the card about where displays sit.
 settings-display-arrangement-title = Arrangement
 # Words behind the i of that card.
-settings-display-arrangement-about = Where the displays sit beside each other, so the pointer moves from one to the next across the edge they share.
+settings-display-arrangement-about = Set where the displays sit beside each other, so the pointer can move across the edge they share.
 # Small words on that card while fewer than two displays are in use.
-settings-display-arrangement-waits = Use two displays to place one beside the other.
+settings-display-arrangement-waits = You need two displays to place one beside the other.
 
 ## Changes and keeping
 
 # Red words when the desktop refused a change of displays and gave no reason.
-settings-display-refused = The desktop refused it.
+settings-display-refused = Couldn't change that.
 # Said aloud after the displays changed; { $seconds } is how long until they go back.
 settings-display-aloud-changed =
     { $seconds ->
@@ -120,36 +112,28 @@ settings-display-aloud-changed =
        *[other] The displays have changed. They go back in { $seconds } seconds unless you press Keep.
     }
 # Red words when a change of displays could not be undone; { $why } is the desktop's reason.
-settings-display-not-undone = The change could not be undone. { $why }
+settings-display-not-undone = Couldn't undo the change. { $why }
 # Red words when the arrangement could not be kept for the next login.
-settings-display-not-kept = The arrangement is in use now, but could not be kept for the next login.
+settings-display-not-kept = The arrangement is in use now, but Trindle couldn't save it for the next login.
 # Heading of the line under the picture of the displays when the desktop refused a change.
 settings-display-nothing-changed = Nothing was changed
 # Small words under that line.
-settings-display-refused-change = The desktop refused the change.
+settings-display-refused-change = Couldn't make that change.
 # Heading of the line under the picture of the displays.
 settings-display-apply-at-once = Changes apply at once
-# Small words under that line; { $seconds } is how long Keep is asked for.
-settings-display-keep-asked =
-    { $seconds ->
-        [one] Keep is asked at the foot of the window for { $seconds } second.
-       *[other] Keep is asked at the foot of the window for { $seconds } seconds.
-    }
 
 ## Night light
 
 # Title of the night light card.
 settings-display-night-title = Night light
 # Words behind the i of that card.
-settings-display-night-about = The screen turns warmer in the evening, which is easier on the eyes. It follows sunset and sunrise, worked out from the time zone, or set times of your own; when the time zone does not say where this computer is, the set times are used.
+settings-display-night-about = The screen turns warmer in the evening, which is easier on the eyes. It follows sunset and sunrise, worked out from your time zone, or times you set yourself. If Trindle can't tell where you are from your time zone, it uses the times you set.
 # Heading of the night light line, and name of its switch.
 settings-display-night = Night light
-# Small words under that line.
-settings-display-night-about-line = Warmer colours in the evening.
 # Small words under the When line; { $zone } is the time zone.
 settings-display-when-zone = Sunset and sunrise in { $zone }.
 # Small words under the When line when the time zone gives no place.
-settings-display-when-no-place = The time zone gives no place: set times.
+settings-display-when-no-place = Trindle is using set times because it doesn't know when sunset is.
 # Choice in the When list: from sunset to sunrise.
 settings-display-when-sun = Sunset to sunrise
 # Choice in the When list: between times the person sets.
@@ -162,8 +146,6 @@ settings-display-from = From
 settings-display-to = To
 # Heading of the warmth line, and name of its slider.
 settings-display-warmth = Warmth
-# Small words under the warmth line.
-settings-display-warmth-about = How warm the screen turns at night.
 # Small word under the left end of the warmth slider.
 settings-display-little = A little
 # Small word under the right end of the warmth slider.
@@ -180,26 +162,26 @@ settings-display-one-display-tip = { $name }, { $res }
 # Spoken description of the picture of the displays when several are in use; { $n } is how many.
 settings-display-many-displays-tip =
     { $n ->
-        [one] { $n } display, side by side as they are arranged
-       *[other] { $n } displays, side by side as they are arranged
+        [one] { $n } display
+       *[other] { $n } displays, as they are arranged
     }
 # Word drawn in the picture of the displays when none is in use.
 settings-display-no-display = No display
 # Name of the large picture of the displays.
 settings-display-your-displays = Your displays
 # Small words under Nothing to show on when the desktop listed no displays.
-settings-display-listed-none = The desktop listed no displays.
+settings-display-listed-none = Trindle found no displays.
 # Title of the card shown when no display was found.
 settings-display-none-title = No displays found
 # Heading of the line in that card.
-settings-display-none-heading = Nothing to show on
+settings-display-none-heading = No displays found
 # Title of the card about the graphics card.
 settings-display-graphics-title = Graphics
 # Words behind the i of that card.
-settings-display-graphics-about = This computer has an NVIDIA card, using the open driver. Everything works. On a card from about 2022 onwards it will feel slow, because the open driver cannot raise the card's speed. NVIDIA's own driver can be installed.
+settings-display-graphics-about = This computer has an NVIDIA graphics card that uses the open driver. It works, but a card from about 2022 onwards will feel slow, because the open driver can't raise the card's speed. You can install NVIDIA's own driver instead.
 # Heading of the line about an NVIDIA card on the open driver.
-settings-display-nvidia = An NVIDIA card, on the open driver
+settings-display-nvidia = NVIDIA card with the open driver
 # Small words under that line.
-settings-display-nvidia-about = Works; a card from 2022 on feels slow.
+settings-display-nvidia-about = Cards from 2022 on may run slowly.
 # Words of the link that opens help about the NVIDIA driver.
 settings-display-nvidia-help = What to do about it

@@ -5,7 +5,7 @@
 settings-network-rfkill-hard = { $radio } đang bị tắt bằng công tắc hoặc phím trên chính máy tính. Hãy bật lên, rồi thử lại.
 
 # Said in red when the system blocks a radio and the block could not be taken off; the radio is Wi-Fi or Bluetooth.
-settings-network-rfkill-refused = { $radio } đang bị hệ thống chặn, và không thể bỏ chặn.
+settings-network-rfkill-refused = Hệ thống đang chặn { $radio }, và Trindle không bỏ chặn được.
 
 # Said in red under a Wi-Fi network when its password was typed and not accepted.
 # SAFETY: needs a human review before it ships
@@ -13,20 +13,20 @@ settings-network-join-password-typed = Mật khẩu đó không được chấp 
 
 # Said in red under a Wi-Fi network when the password kept for it was not accepted.
 # SAFETY: needs a human review before it ships
-settings-network-join-password-kept = Mật khẩu đã lưu cho mạng này không được chấp nhận. Hãy quên mạng bằng nút thùng rác, rồi kết nối lại.
+settings-network-join-password-kept = Mật khẩu đã lưu cho mạng này không được chấp nhận. Hãy dùng nút thùng rác để quên mạng, rồi kết nối lại.
 
 # Said in red under a Wi-Fi network that could not be found.
-settings-network-join-not-found = Không tìm thấy mạng đó. Hãy kiểm tra tên mạng và xem mạng có trong tầm phủ sóng không.
+settings-network-join-not-found = Trindle không tìm thấy mạng đó. Hãy kiểm tra tên mạng và xem mạng có trong tầm phủ sóng không.
 
 # Said in red under a Wi-Fi network that let the computer in but gave it no address.
-settings-network-join-no-address = Mạng đã cho máy tính này vào nhưng không cấp địa chỉ. Hãy thử lại, hoặc khởi động lại bộ định tuyến.
+settings-network-join-no-address = Máy tính này đã vào được mạng nhưng không được cấp địa chỉ. Hãy thử lại, hoặc khởi động lại bộ định tuyến.
 
 # Said in red under a Wi-Fi network that did not let the computer join, for any other reason.
-settings-network-join-failed = Mạng không cho máy tính này kết nối. Hãy lại gần hơn, rồi thử lại.
+settings-network-join-failed = Máy tính này không kết nối được vào mạng. Hãy lại gần bộ định tuyến hơn, rồi thử lại.
 
 # Said in red when the password typed is one a Wi-Fi network cannot have.
 # SAFETY: needs a human review before it ships
-settings-network-bad-password = Mật khẩu đó không hợp lệ cho mạng Wi-Fi. Hãy kiểm tra, rồi thử lại.
+settings-network-bad-password = Đó không phải mật khẩu Wi-Fi hợp lệ. Hãy kiểm tra, rồi thử lại.
 
 # Said in red when joining a network failed for no known reason.
 settings-network-join-refused = Không thể kết nối vào mạng.
@@ -39,13 +39,13 @@ settings-network-access-open = mở bằng mật khẩu của bạn
 # SAFETY: needs a human review before it ships
 settings-network-access-change = mở và sửa bằng mật khẩu của bạn
 
-# Small line of a shared folder: anyone at home may open it.
+# Small line of a shared folder: anyone on the local network may open it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-open = ai ở nhà cũng có thể mở
+settings-network-access-guests-open = ai trong mạng cục bộ cũng có thể mở
 
-# Small line of a shared folder: anyone at home may change it.
+# Small line of a shared folder: anyone on the local network may change it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-change = ai ở nhà cũng có thể sửa
+settings-network-access-guests-change = ai trong mạng cục bộ cũng có thể sửa
 
 # Small line of a shared folder: where it is, then who may do what with it; both are already written.
 settings-network-shared-sub = { $place }: { $access }
@@ -97,10 +97,10 @@ settings-network-top-both = Đã kết nối bằng dây cáp, và với { $name
 # Headline of the page when connected to a Wi-Fi network; the level is strong, good, fair or weak.
 settings-network-top-wifi =
     { $level ->
-        [strong] Đã kết nối với { $name }, tín hiệu mạnh.
-        [good] Đã kết nối với { $name }, tín hiệu tốt.
-        [fair] Đã kết nối với { $name }, tín hiệu khá.
-       *[other] Đã kết nối với { $name }, tín hiệu yếu.
+        [strong] Đã kết nối với { $name }. Tín hiệu mạnh.
+        [good] Đã kết nối với { $name }. Tín hiệu tốt.
+        [fair] Đã kết nối với { $name }. Tín hiệu khá.
+       *[other] Đã kết nối với { $name }. Tín hiệu yếu.
     }
 
 # Headline of the page when connected by cable only.
@@ -116,7 +116,7 @@ settings-network-top-none = Chưa kết nối. Hãy chọn một mạng bên dư
 settings-network-top-looking = Đang tìm mạng…
 
 # Headline of the page when NetworkManager is not running.
-settings-network-top-gone = Không thể xem các mạng: NetworkManager không chạy.
+settings-network-top-gone = Trindle không hiện được các mạng vì NetworkManager không chạy.
 
 # The word for the system bus in "The system bus is not available".
 settings-network-the-bus = Bus hệ thống
@@ -140,7 +140,7 @@ settings-network-signal-from =
     }
 
 # Small line under the Use Wi-Fi switch when the Wi-Fi chip needs a newer Linux.
-settings-network-chip = Chip của nó cần một bản Linux mới hơn.
+settings-network-chip = Wi-Fi cần một bản Linux mới hơn.
 
 # Small line under the Use Wi-Fi line when the computer has no working Wi-Fi.
 settings-network-no-wifi = Máy tính này không có Wi-Fi hoạt động được.
@@ -149,7 +149,7 @@ settings-network-no-wifi = Máy tính này không có Wi-Fi hoạt động đư�
 settings-network-wifi-off = Đang tắt. Hãy bật để kết nối một mạng.
 
 # Small line under the Use Wi-Fi switch when Wi-Fi is on and no network is joined.
-settings-network-wifi-idle = Đang bật, và chưa kết nối mạng nào.
+settings-network-wifi-idle = Đang bật, nhưng chưa vào mạng nào.
 
 # Heading of the line with the Wi-Fi switch, and the name of the switch.
 settings-network-use-wifi = Dùng Wi-Fi
@@ -161,54 +161,48 @@ settings-network-wifi-card = Wi-Fi
 settings-network-wifi-cable-card = Wi-Fi và dây cáp
 
 # Help text (i button) of the Wi-Fi card.
-settings-network-wifi-about = Wi-Fi nối máy tính này với một mạng mà không cần dây cáp. Khi tắt, máy ngừng tìm mạng và tiết kiệm một chút pin. Mạng không phát tên sẽ không bao giờ hiện trong danh sách mạng trong tầm: hãy kết nối tại đây bằng cách gõ đúng tên của nó, kể cả chữ hoa. Khi chip Wi-Fi của máy tính này là loại mà chưa có trình điều khiển nào trong Linux của nó hỗ trợ, nó cần một bản Linux mới hơn bản mà Trindle đang chạy. Dây cáp mạng có một dòng riêng, với nút để kết nối hoặc ngắt kết nối.
+settings-network-wifi-about = Wi-Fi nối máy tính này với một mạng mà không cần dây cáp. Nếu tắt, máy ngừng tìm mạng và tiết kiệm một chút pin. Mạng ẩn tên sẽ không bao giờ hiện trong danh sách mạng trong tầm. Để kết nối với mạng đó, hãy gõ đúng tên của nó, kể cả chữ hoa. Một số chip Wi-Fi cần trình điều khiển mà bản Linux Trindle đang dùng chưa có. Với những chip đó, bạn cần một bản Linux mới hơn. Dây cáp mạng có một dòng riêng, với nút để kết nối hoặc ngắt kết nối.
 
 # Heading of the line with the switch that lets other computers connect, and the name of the switch.
 # SAFETY: needs a human review before it ships
 settings-network-share-switch = Cho phép các máy tính khác kết nối
 
-# Small line under that switch.
-settings-network-share-switch-sub = Để chia sẻ thư mục và máy in ở nhà.
-
 # Line in the Sharing card while the shared folders are read.
 settings-network-share-looking = Đang tìm các thư mục được chia sẻ…
 
 # Line in the Sharing card when the shared folders could not be read; the reason follows beneath.
-settings-network-share-unreadable = Không thể đọc các thư mục được chia sẻ
+settings-network-share-unreadable = Không đọc được các thư mục được chia sẻ
 
 # Line in the Sharing card when folders are shared but the switch is off.
 settings-network-not-reachable = Chưa truy cập được
 
 # Small line under it.
-settings-network-not-reachable-sub = Người khác không thể mở chúng khi công tắc đang tắt.
+settings-network-not-reachable-sub = Các máy tính khác không thể mở chúng khi chia sẻ đang tắt.
 
 # Line in the Sharing card when no folder is shared.
 settings-network-no-shared = Không có thư mục nào được chia sẻ
-
-# Small line under it.
-settings-network-no-shared-sub = Bấm chuột phải vào một thư mục trong Thư mục để chia sẻ.
 
 # Heading of the Sharing card.
 settings-network-sharing = Chia sẻ
 
 # Help text (i button) of the Sharing card.
 # SAFETY: needs a human review before it ships
-settings-network-sharing-about = Khi Cho phép các máy tính khác kết nối đang tắt, không gì trên mạng có thể truy cập máy tính này trừ khi nó hỏi trước, nên không ai dùng chung Wi-Fi có thể thử vận may. Hãy bật lên để chia sẻ thư mục hoặc máy in với các máy tính khác ở nhà. Để chia sẻ một thư mục, bấm chuột phải vào nó trong Thư mục và chọn Chia sẻ trên mạng. Mỗi mục cho biết ai được làm gì. Bằng mật khẩu của bạn: người khác có thể mở các tệp, hoặc mở và sửa chúng, bằng mật khẩu chia sẻ của bạn. Ai ở nhà cũng được: bất kỳ ai trên mạng có thể mở các tệp, hoặc mở và sửa chúng, mà không cần mật khẩu. Các máy tính khác ở nhà không thể mở bất kỳ mục nào trong số đó khi công tắc đang tắt.
+settings-network-sharing-about = Khi Cho phép các máy tính khác kết nối đang tắt, các máy tính khác trên mạng chỉ truy cập được máy này nếu máy này liên lạc với chúng trước. Nhờ vậy không ai dùng chung Wi-Fi có thể thử xâm nhập. Hãy bật lên để chia sẻ thư mục hoặc máy in với các máy tính khác ở nhà. Để chia sẻ một thư mục, bấm chuột phải vào nó trong Folders và chọn Chia sẻ trên mạng. Mỗi thư mục được chia sẻ cho biết ai được làm gì. Bằng mật khẩu của bạn: người khác có thể mở các tệp, hoặc mở và sửa chúng, nếu họ có mật khẩu chia sẻ của bạn. Ai ở nhà cũng được: bất kỳ ai trên mạng có thể mở các tệp, hoặc mở và sửa chúng, mà không cần mật khẩu. Khi công tắc đang tắt, các máy tính khác ở nhà không thể mở bất kỳ mục nào trong số đó.
 
 # Shown under a shared folder while sharing it is stopped.
 settings-network-stopping = Đang ngừng…
 
 # Shown beside the sharing switch while the password is asked for.
 # SAFETY: needs a human review before it ships
-settings-network-waiting = Đang chờ mật khẩu...
+settings-network-waiting = Đang chờ mật khẩu của bạn…
 
 # Shown beside the sharing switch after other computers were allowed in.
 # SAFETY: needs a human review before it ships
-settings-network-sharing-allowed = Đã cho phép chia sẻ
+settings-network-sharing-allowed = Đang bật chia sẻ
 
 # Shown beside the sharing switch after other computers were kept out.
 # SAFETY: needs a human review before it ships
-settings-network-kept-out = Đã chặn không cho vào
+settings-network-kept-out = Đã chặn
 
 # Said in red when Wi-Fi could not be switched on.
 settings-network-on-failed = Không thể bật Wi-Fi.
@@ -226,19 +220,16 @@ settings-network-disconnect = Ngắt kết nối
 settings-network-connect = Kết nối
 
 # Shown under a network or cable while it is being connected.
-settings-network-connecting = Đang kết nối...
+settings-network-connecting = Đang kết nối…
 
 # Line in the Networks in range card when there are none.
 settings-network-none-in-range = Không có mạng nào trong tầm
-
-# Small line under it.
-settings-network-none-in-range-sub = Tìm lại mỗi lần trang này mở ra.
 
 # Heading of the card that lists Wi-Fi networks in range.
 settings-network-in-range = Mạng trong tầm
 
 # Help text (i button) of the Networks in range card.
-settings-network-in-range-about = Mọi mạng Wi-Fi mà máy tính này bắt được. Khi trang mở ra, mạng đang dùng đứng đầu, rồi đến các mạng đã lưu ở đây, rồi những mạng còn lại theo độ mạnh tín hiệu; một dòng giữ nguyên vị trí khi trang đang mở. Bấm các mũi tên để kết nối một mạng; mạng có bảo mật sẽ hỏi mật khẩu lần đầu. Thùng rác sẽ quên một mạng đã lưu cùng mật khẩu của nó. Mạng mở không được mã hóa, nên người ở gần có thể thấy những gì gửi qua nó.
+settings-network-in-range-about = Mọi mạng Wi-Fi mà máy tính này bắt được. Khi bạn mở trang, mạng đang dùng đứng đầu, rồi đến các mạng đã lưu, rồi những mạng còn lại theo độ mạnh tín hiệu. Thứ tự không đổi khi trang đang mở. Bấm mũi tên để kết nối một mạng. Mạng có bảo mật sẽ hỏi mật khẩu lần đầu. Nút thùng rác sẽ quên một mạng đã lưu cùng mật khẩu của nó. Mạng mở không được mã hóa, nên người ở gần có thể thấy những gì bạn gửi qua nó.
 
 # Shown on the Networks in range card while Wi-Fi is off.
 settings-network-switch-on = Hãy bật Wi-Fi để xem các mạng trong tầm.
@@ -276,7 +267,7 @@ settings-network-join = Kết nối
 settings-network-cancel = Hủy
 
 # Shown under a network while it is being joined.
-settings-network-joining = Đang kết nối...
+settings-network-joining = Đang kết nối…
 
 # Said in red when a Wi-Fi password is too short.
 # SAFETY: needs a human review before it ships
@@ -284,9 +275,6 @@ settings-network-password-short = Mật khẩu Wi-Fi dài ít nhất 8 ký tự.
 
 # Heading of the line for joining a hidden network, and tip of its button.
 settings-network-hidden = Kết nối mạng ẩn
-
-# Small line under it.
-settings-network-hidden-sub = Gõ đúng tên của nó, kể cả chữ hoa.
 
 # Placeholder of the box where a hidden network's name is typed.
 settings-network-hidden-name = Tên mạng
@@ -296,15 +284,63 @@ settings-network-hidden-name = Tên mạng
 settings-network-hidden-password = Mật khẩu, nếu có
 
 # Said in red when no name was typed for a hidden network.
-settings-network-name-needed = Cần có tên mạng.
+settings-network-name-needed = Hãy gõ tên mạng.
 
 # Shown under a network after it was joined.
 settings-network-joined = Đã kết nối
 
 # Said in red when a join failed and the settings made for it could not be forgotten; the first sentence says why it failed.
 # SAFETY: needs a human review before it ships
-settings-network-kept-anyway = { $words } Mạng vẫn được lưu: hãy quên nó bằng nút thùng rác trước khi kết nối lại.
+settings-network-kept-anyway = { $words } Mạng vẫn được lưu. Hãy quên nó bằng nút thùng rác trước khi kết nối lại.
 
 # Said in red when a network would not disconnect.
-settings-network-disconnect-failed = Không thể ngắt kết nối.
+settings-network-disconnect-failed = Không ngắt kết nối được.
 
+
+# Heading of the card that lists the ports opened by hand.
+settings-network-ports = Cổng đang mở
+
+# Help text (i button) of the Open ports card.
+settings-network-ports-about = Mọi cổng đều đóng trừ khi máy tính này liên lạc với máy kia trước. Chương trình chờ người khác kết nối, như máy chủ trò chơi hoặc công cụ đồng bộ, không thể truy cập được cho đến khi bạn mở cổng của nó ở đây. Cổng mở cho mọi máy tính trong cùng mạng cục bộ với máy này vào, nhưng không bao giờ cho internet rộng lớn. Trên mạng quán cà phê, khách sạn hay văn phòng, điều đó gồm cả mọi người khác ở đó. Để mở hoặc đóng một cổng, bạn cần mật khẩu của quản trị viên.
+
+# Line in the Open ports card when no port is open.
+settings-network-ports-none = Chưa mở cổng nào
+
+# Tooltip of the button that closes an open port. { $port } is like TCP 37666.
+settings-network-port-close = Đóng { $port }
+
+# Heading of the line that opens a port.
+settings-network-port-add = Mở một cổng
+
+# Placeholder in the box where the port number is typed.
+settings-network-port-number = Số cổng
+
+# Tooltip of the choice of TCP, UDP or both.
+settings-network-port-protocol = Giao thức
+
+# Choice: the TCP protocol only. Usually left as TCP.
+settings-network-port-tcp = TCP
+
+# Choice: the UDP protocol only. Usually left as UDP.
+settings-network-port-udp = UDP
+
+# Choice: both TCP and UDP.
+settings-network-port-both = Cả hai
+
+# Button that opens the typed port.
+settings-network-port-open = Mở
+
+# Red words when what was typed is not a port number.
+settings-network-port-not-a-port = Hãy nhập một số từ 1 đến 65535.
+
+# Red words when the port is already open.
+settings-network-port-already = Đã mở rồi.
+
+# Said under the line once the port is open.
+settings-network-port-opened = Đã mở
+
+# Part of a network's small line: it signs in with a username as well as a password, as work and university networks do.
+settings-network-username = Cần tên người dùng
+
+# Red words when someone tries to join a network that signs in with a username.
+settings-network-username-unsupported = Mạng này cần tên người dùng cùng với mật khẩu. Trindle chưa kết nối được những mạng như vậy.

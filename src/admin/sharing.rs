@@ -1,4 +1,4 @@
-//! Sharing the person's own folders on the home network: root's part.
+//! Sharing the person's own folders on the local network: root's part.
 
 use std::os::unix::fs::PermissionsExt;
 use std::path::Path;
@@ -30,14 +30,10 @@ fn group_id() -> Result<u32, String> {
 }
 
 fn usershare_folder(gid: u32) -> Outcome {
-    let dir = Path::new(sharing::USERSHARES);
-    std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
-    let c = std::ffi::CString::new(sharing::USERSHARES).map_err(|e| e.to_string())?;
-    // SAFETY: a path with no nul in it, and plain numbers.
-    if unsafe { libc::chown(c.as_ptr(), 0, gid) } != 0 {
-        return Err(format!("{}: {}", sharing::USERSHARES, std::io::Error::last_os_error()));
-    }
-    std::fs::set_permissions(dir, std::fs::Permissions::from_mode(0o1770)).map_err(|e| e.to_string())
+    let dir = at(sharing::USERSHARES);
+    std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
+    std::os::unix::fs::chown(&dir, Some(0), Some(gid)).map_err(|e| format!("{}: {e}", dir.display()))?;
+    std::fs::set_permissions(&dir, std::fs::Permissions::from_mode(0o1770)).map_err(|e| e.to_string())
 }
 
 pub fn setup(args: &[String]) -> Outcome {
@@ -61,8 +57,8 @@ pub fn setup(args: &[String]) -> Outcome {
     usershare_folder(gid)?;
     conf_made_ready(&at(sharing::SMB_CONF))?;
     run(&["usermod", "-aG", sharing::GROUP, &me.name], None)?;
-    std::fs::create_dir_all("/etc/trindle").map_err(|e| e.to_string())?;
-    replace(Path::new(sharing::SET_UP), b"", 0o644)?;
+    std::fs::create_dir_all(at("/etc/trindle")).map_err(|e| e.to_string())?;
+    replace(&at(sharing::SET_UP), b"", 0o644)?;
     apply(&[])
 }
 
@@ -84,7 +80,7 @@ pub fn password(args: &[String]) -> Outcome {
     if !sharing::installed() {
         return Err(t!("admin-sharing-not-set-up").into());
     }
-    let pw = zeroize::Zeroizing::new(super::accounts::read_password()?);
+    let pw = super::accounts::read_password()?;
     let twice = zeroize::Zeroizing::new(format!("{}\n{}\n", pw.as_str(), pw.as_str()));
     run(&["smbpasswd", "-s", "-a", &me.name], Some(twice.as_str()))?;
     run(&["smbpasswd", "-e", &me.name], None)
@@ -101,7 +97,7 @@ pub fn apply(args: &[String]) -> Outcome {
             .map_err(|e| t!("admin-sharing-still-shown", why = e))?;
     }
 
-    if sharing::installed() && Path::new(sharing::SET_UP).exists() {
+    if sharing::installed() && at(sharing::SET_UP).exists() {
         let how = if shared { "start" } else { "stop" };
         run(&["systemctl", "--no-block", how, sharing::SERVICE], None)?;
     }
@@ -132,6 +128,18 @@ mod tests {
         assert!(setup(&strings(&["extra"])).unwrap_err().starts_with("usage:"));
         assert!(password(&strings(&["john"])).unwrap_err().starts_with("usage:"));
         assert!(apply(&strings(&["on"])).unwrap_err().starts_with("usage:"));
+    }
+
+    #[test]
+    fn the_shares_folder_is_made_where_the_stand_in_says_never_in_this_computers_var() {
+        let s = crate::admin::stand_in::StandIn::all_well("usershares");
+        let made = usershare_folder(0);
+        let dir = s.path(sharing::USERSHARES);
+        assert!(dir.is_dir(), "the folder was made somewhere else: {made:?}");
+
+        if let Err(why) = made {
+            assert!(why.starts_with(&dir.display().to_string()), "{why}");
+        }
     }
 
     #[test]

@@ -10,32 +10,32 @@ settings-permissions-keywords = izin perizinan mengizinkan privasi flatpak flath
 
 # Help line at the foot of the Permissions page.
 # SAFETY: needs a human review before it ships
-settings-permissions-help = Apa yang boleh dipakai setiap aplikasi. Aplikasi dari Flathub, program yang dipasang di folder sendiri, dan plugin masing-masing dipasang di folder sendiri dan dibatasi secara bawaan. Ikon terisi berarti diizinkan; klik untuk mengubahnya. Perubahan pada aplikasi Flathub berlaku saat aplikasi dimulai berikutnya. Perangkat Thunderbolt dan USB4 yang diizinkan selalu tersambung tanpa bertanya; lupakan satu perangkat agar ditanya lagi.
+settings-permissions-help = Halaman ini menampilkan apa yang boleh dipakai setiap aplikasi. Aplikasi dari Flathub, program yang dipasang di folder sendiri, dan plugin masing-masing berjalan dalam kotaknya sendiri, dengan batasan yang diatur secara bawaan. Perubahan pada aplikasi Flathub berlaku saat aplikasi dimulai berikutnya. Perangkat Thunderbolt dan USB4 yang Anda izinkan selalu tersambung tanpa bertanya. Lupakan sebuah perangkat jika Anda ingin ditanya lagi.
 
 # Red words when a permission could not be changed and nothing more is known.
 # SAFETY: needs a human review before it ships
-settings-permissions-not-changed = Tidak dapat diubah.
+settings-permissions-not-changed = Tidak dapat mengubahnya.
 
 # Words beside a plugin when its change was saved but the plugin could not be started again.
-settings-permissions-plugin-not-restarted = Tersimpan, tetapi plugin tidak dapat dimulai lagi. Perubahan berlaku saat plugin dimulai berikutnya.
+settings-permissions-plugin-not-restarted = Tersimpan, tetapi Trindle tidak dapat memulai ulang plugin. Perubahan berlaku saat plugin dimulai berikutnya.
 
 # Said beside an app, plugin or switch once a permission change is saved.
 settings-permissions-saved = Tersimpan
 
 # Help text of the AppImages card (the information button).
 # SAFETY: needs a human review before it ships
-settings-permissions-loose-images = Setiap AppImage dijalankan dalam kotak sendiri, dengan beranda pribadi. Ikon terisi berarti diizinkan; klik untuk mengubahnya. Perubahan berlaku saat AppImage dimulai berikutnya.
+settings-permissions-loose-images = Setiap AppImage berjalan dalam kotaknya sendiri, dengan folder beranda pribadi. Perubahan berlaku saat AppImage dimulai berikutnya.
 
 # Help text of the Started from Folders card (the information button).
 # SAFETY: needs a human review before it ships
-settings-permissions-loose-programs = Setiap program yang dimulai dari Folders dijalankan dalam kotak sendiri, dengan beranda pribadi. Ikon terisi berarti diizinkan; klik untuk mengubahnya. Perubahan berlaku saat program dimulai berikutnya.
+settings-permissions-loose-programs = Setiap program yang Anda mulai dari Folders berjalan dalam kotaknya sendiri, dengan folder beranda pribadi. Perubahan berlaku saat program dimulai berikutnya.
 
 # A permission's name and what is true with it off, one after another in a card's help text: { $title } is the permission, { $words } what it means.
 settings-permissions-title-and-words = { $title }: { $words }
 
 # Under the Allow older programs switch.
 # SAFETY: needs a human review before it ships
-settings-permissions-older-why = Masing-masing dipisahkan dari yang lain. Jika mati, program lama tidak terbuka.
+settings-permissions-older-why = Masing-masing berjalan terpisah. Jika mati, program lama tidak akan terbuka.
 
 # Heading of the card with the switch for older programs.
 settings-permissions-older = Program lama
@@ -45,20 +45,20 @@ settings-permissions-older = Program lama
 settings-permissions-allow-older = Izinkan program lama
 
 # Help text on the Thunderbolt and USB4 card when the ports only carry screens.
-settings-permissions-lets-in-screens = Port ini hanya membawa layar, jadi tidak ada perangkat yang dapat menjangkau memori komputer ini dan tidak ada yang perlu ditanyakan.
+settings-permissions-lets-in-screens = Port ini hanya untuk layar, jadi tidak ada perangkat yang dapat menjangkau memori komputer ini. Tidak ada yang perlu ditanyakan.
 
 # Help text on the Thunderbolt and USB4 card when the ports only carry USB and screens.
-settings-permissions-lets-in-usb = Port ini hanya membawa USB dan layar, jadi tidak ada perangkat yang dapat menjangkau memori komputer ini dan tidak ada yang perlu ditanyakan.
+settings-permissions-lets-in-usb = Port ini hanya untuk USB dan layar, jadi tidak ada perangkat yang dapat menjangkau memori komputer ini. Tidak ada yang perlu ditanyakan.
 
 # Help text on the Thunderbolt and USB4 card when the ports let every device in.
 # SAFETY: needs a human review before it ships
-settings-permissions-lets-in-all = Port ini membiarkan setiap perangkat tersambung sendiri, jadi tidak ada yang perlu ditanyakan. Ini diatur di firmware komputer.
+settings-permissions-lets-in-all = Port ini membiarkan setiap perangkat tersambung, jadi tidak ada yang perlu ditanyakan. Ini diatur di firmware komputer.
 
 # Under Nothing to ask on the Thunderbolt and USB4 card, when the ports only carry screens.
-settings-permissions-short-screens = Port ini hanya membawa layar.
+settings-permissions-short-screens = Hanya layar yang memakai port ini.
 
 # Under Nothing to ask on the Thunderbolt and USB4 card, when the ports only carry USB and screens.
-settings-permissions-short-usb = Port ini hanya membawa USB dan layar.
+settings-permissions-short-usb = Hanya USB dan layar yang memakai port ini.
 
 # Under Nothing to ask on the Thunderbolt and USB4 card, when the firmware lets every device in.
 settings-permissions-short-firmware = Firmware membiarkan setiap perangkat tersambung.
@@ -69,34 +69,37 @@ settings-permissions-version = Versi { $v }
 # Under a plugin's name when it asks for nothing: its version number is { $v }.
 settings-permissions-version-asks-nothing = Versi { $v }. Tidak meminta apa pun.
 
+# Under a plugin's name: its version number is { $v }, and { $notes } lists what it may do that matters most, such as "it can act as you and it can type into your windows".
+settings-permissions-version-notes = Versi { $v }: { $notes }.
+
 # Under a plugin's name: the words so far are { $sub }, then the ports it listens on in { $detail }.
 settings-permissions-sub-listen = { $sub }. { $detail }
 
 # Red words when a Thunderbolt or USB4 device could not be forgotten.
 # SAFETY: needs a human review before it ships
-settings-permissions-not-forgotten = Tidak dapat dilupakan.
+settings-permissions-not-forgotten = Tidak dapat melupakannya.
 
 # Heading of the Thunderbolt and USB4 card.
 settings-permissions-thunder = Thunderbolt dan USB4
 
 # Help text of the Thunderbolt and USB4 card: { $about } is a further sentence, or nothing.
 # SAFETY: needs a human review before it ships
-settings-permissions-thunder-about = Perangkat Thunderbolt dan USB4 yang diizinkan selalu tersambung tanpa bertanya; lupakan satu perangkat agar ditanya lagi. { $about }
+settings-permissions-thunder-about = Perangkat Thunderbolt dan USB4 yang Anda izinkan selalu tersambung tanpa bertanya. Lupakan sebuah perangkat jika Anda ingin ditanya lagi. { $about }
 
 # Heading of a line on the Thunderbolt and USB4 card while it is read.
 settings-permissions-ports = Port
 
 # Under The ports while the Thunderbolt and USB4 card is read.
-settings-permissions-reading-ports = Membaca apa yang mereka izinkan masuk…
+settings-permissions-reading-ports = Memeriksa port…
 
 # Heading of a line on the Thunderbolt and USB4 card.
 settings-permissions-devices-allowed = Perangkat yang diizinkan
 
 # Under a line of the Thunderbolt and USB4 card while it is read.
-settings-permissions-reading = Membaca…
+settings-permissions-reading = Memuat…
 
 # Heading of a line on the Thunderbolt and USB4 card while it is read.
-settings-permissions-memory-apart = Memori dipisahkan
+settings-permissions-memory-apart = Perlindungan memori
 
 # Heading of the line on the Thunderbolt and USB4 card when the computer has no such ports.
 settings-permissions-no-ports = Tidak ada port Thunderbolt atau USB4
@@ -105,34 +108,31 @@ settings-permissions-no-ports = Tidak ada port Thunderbolt atau USB4
 settings-permissions-nothing-to-ask = Jadi tidak ada yang perlu ditanyakan.
 
 # Under Devices allowed when the computer has no Thunderbolt or USB4 ports.
-settings-permissions-none-plug = Tidak ada: tidak ada yang tersambung dengan cara ini.
+settings-permissions-none-plug = Tidak ada perangkat yang tersambung dengan cara ini.
 
 # Heading of the line on the Thunderbolt and USB4 card when the ports let every device in.
 settings-permissions-nothing-ask = Tidak ada yang ditanyakan
 
 # Under Devices allowed when the ports let every device in themselves.
-settings-permissions-every-one = Semuanya, oleh port itu sendiri.
+settings-permissions-every-one = Semuanya. Port yang menentukan.
 
 # Help text of the Thunderbolt and USB4 card when the computer keeps devices away from memory.
 # SAFETY: needs a human review before it ships
-settings-permissions-iommu = Komputer ini juga menjauhkan perangkat dari memori yang tidak diberikan kepadanya, jadi risikonya lebih kecil. Melupakan perangkat membuatnya tetap tersambung sampai dicabut.
+settings-permissions-iommu = Komputer ini juga mencegah perangkat menjangkau memori yang bukan miliknya, jadi risikonya lebih kecil. Jika Anda melupakan sebuah perangkat, perangkat itu tetap tersambung sampai Anda mencabutnya.
 
 # Help text of the Thunderbolt and USB4 card when the computer does not keep devices away from memory.
 # SAFETY: needs a human review before it ships
-settings-permissions-no-iommu = Melupakan perangkat membuatnya tetap tersambung sampai dicabut; lain kali akan ditanya lagi.
+settings-permissions-no-iommu = Jika Anda melupakan sebuah perangkat, perangkat itu tetap tersambung sampai Anda mencabutnya. Saat Anda mencolokkannya lagi nanti, Anda akan ditanya lagi.
 
 # Heading of the line on the Thunderbolt and USB4 card that lists the devices.
-settings-permissions-asked-before = Ditanya sebelum perangkat baru tersambung
-
-# Under the heading above.
-settings-permissions-forget-one = Lupakan satu agar ditanya lagi.
+settings-permissions-asked-before = Anda ditanya tentang perangkat baru
 
 # Red words when the list of allowed Thunderbolt devices could not be read: the reason is { $why }.
-settings-permissions-devices-not-read = Perangkat yang diizinkan tidak dapat dibaca: { $why }
+settings-permissions-devices-not-read = Trindle tidak dapat membaca daftar perangkat yang diizinkan: { $why }
 
 # Shown when no Thunderbolt or USB4 device has been allowed always.
 # SAFETY: needs a human review before it ships
-settings-permissions-no-device = Belum ada perangkat yang boleh tersambung tanpa bertanya.
+settings-permissions-no-device = Belum ada perangkat yang diizinkan tersambung tanpa bertanya.
 
 # Tip of the button that forgets an allowed Thunderbolt or USB4 device.
 # SAFETY: needs a human review before it ships
@@ -150,24 +150,24 @@ settings-permissions-may-always = Boleh selalu tersambung
 settings-permissions-made-by = Dibuat oleh { $vendor }. Boleh selalu tersambung.
 
 # Headline while the list of apps is being read.
-settings-permissions-reading-apps = Membaca apa yang boleh dipakai setiap aplikasi…
+settings-permissions-reading-apps = Memeriksa apa yang boleh dipakai aplikasi…
 
 # Headline while Flatpak is still answering: how many apps are listed.
 settings-permissions-reading-each =
     { $n ->
-       *[other] Membaca apa yang boleh dipakai masing-masing dari { $n }…
+       *[other] Memeriksa apa yang boleh dipakai { $n } aplikasi…
     }
 
 # Headline when no app or plugin is kept in a box of its own.
-settings-permissions-no-apps = Belum ada aplikasi atau plugin dalam kotak sendiri yang terpasang.
+settings-permissions-no-apps = Anda belum memasang aplikasi atau plugin yang berjalan dalam kotaknya sendiri.
 
 # Headline when exactly one app is kept in a box of its own.
-settings-permissions-one-app = Satu aplikasi disimpan dalam kotak sendiri dan hanya memakai apa yang diizinkan di sini.
+settings-permissions-one-app = Satu aplikasi berjalan dalam kotaknya sendiri dan hanya dapat memakai apa yang Anda izinkan di sini.
 
 # Headline: how many apps and plugins are kept in a box of their own.
 settings-permissions-many-apps =
     { $n ->
-       *[other] { $n } aplikasi dan plugin masing-masing disimpan dalam kotak sendiri, hanya memakai apa yang diizinkan di sini.
+       *[other] { $n } aplikasi dan plugin masing-masing berjalan dalam kotaknya sendiri dan hanya dapat memakai apa yang Anda izinkan di sini.
     }
 
 # Heading of the card for apps from Flathub.
@@ -189,30 +189,27 @@ settings-permissions-from-folders = Dimulai dari Folders
 settings-permissions-none-installed = Belum ada yang terpasang.
 
 # Under a kind of app on the Permissions page when none has been run.
-settings-permissions-none-run = Belum ada yang dijalankan.
+settings-permissions-none-run = Belum ada.
 
 # Help text of the Flathub apps card (the information button).
 # SAFETY: needs a human review before it ships
-settings-permissions-flathub-about = Setiap aplikasi dari Flathub disimpan dalam kotak sendiri dan hanya boleh memakai apa yang diizinkan di sini. Ikon terisi berarti diizinkan; klik untuk mengubahnya. Perubahan berlaku saat aplikasi dimulai berikutnya.
+settings-permissions-flathub-about = Setiap aplikasi dari Flathub berjalan dalam kotaknya sendiri dan hanya boleh memakai apa yang diizinkan di sini. Perubahan berlaku saat aplikasi dimulai berikutnya.
 
 # Help text of the In their own folder card (the information button).
 # SAFETY: needs a human review before it ships
-settings-permissions-debs-about = Program yang dipasang di folder sendiri dibatasi secara bawaan. Ikon terisi berarti diizinkan; klik untuk mengubahnya.
+settings-permissions-debs-about = Program yang disertakan bersama Trindle, seperti Terminal, dan program yang Anda pasang dari file .deb. Masing-masing berjalan di folder sendiri, dengan batasan yang diatur secara bawaan.
 
 # Help text of the Plugins card (the information button).
 # SAFETY: needs a human review before it ships
-settings-permissions-plugins-about = Plugin dibatasi secara bawaan dan hanya boleh diizinkan apa yang diminta. Plugin yang berjalan di latar belakang dimulai lagi segera setelah perubahan.
+settings-permissions-plugins-about = Plugin dimulai dengan batasan, dan Anda hanya dapat mengizinkan apa yang diminta plugin. Plugin yang berjalan di latar belakang langsung dimulai ulang saat Anda mengubah sesuatu.
 
 # Typing codes card: every short code Trindle swaps for words as you type.
 settings-permissions-codes = Kode ketik
 
-settings-permissions-codes-about = Kode singkat yang diganti Trindle dengan kata saat Anda mengetik, masing-masing bersama plugin pemiliknya. Matikan kode sebuah plugin dengan ikon bulatnya.
+settings-permissions-codes-about = Kode singkat yang diganti Trindle dengan kata saat Anda mengetik. Masing-masing menunjukkan plugin asalnya.
 
 # SAFETY: needs a human review before it ships
 settings-permissions-codes-none = Tidak ada kode yang aktif
-
-# SAFETY: needs a human review before it ships
-settings-permissions-codes-none-sub = Plugin yang diizinkan memperluas kode mendaftarkannya di sini.
 
 # Button on a plugin's row: stops that plugin's codes.
 # SAFETY: needs a human review before it ships
@@ -233,13 +230,13 @@ settings-permissions-codes-more =
 
 # Line on the typing codes card when the plugins folder could not be read: the list may be missing codes.
 # SAFETY: needs a human review before it ships
-settings-permissions-codes-unread-line = Folder plugin tidak dapat dibaca
+settings-permissions-codes-unread-line = Tidak dapat membaca folder plugin
 
 # Red words under that line.
 # SAFETY: needs a human review before it ships
-settings-permissions-codes-unread = Folder plugin tidak dapat dibaca, sehingga beberapa kode mungkin tidak tercantum.
+settings-permissions-codes-unread = Trindle tidak dapat membaca folder plugin, sehingga beberapa kode mungkin tidak tercantum.
 
-settings-permissions-not-added = Dijalankan dari Folders, tidak ditambahkan ke Apps
+settings-permissions-not-added = Dibuka dari Folders, tidak ada di Apps
 
 settings-permissions-kind-tip = Jenis aplikasi
 
@@ -249,22 +246,22 @@ settings-permissions-kind-tip = Jenis aplikasi
 settings-outside-heading = Program di luar kotak
 
 # Help text of that card (the information button): what Trindle can and cannot do for them.
-settings-outside-about = Trindle memeriksa setiap beberapa detik dan memberi tahu Anda. Trindle tidak dapat menghentikan program-program ini, dan bisa terlewat satu yang cepat. Program dalam kotak ditahan oleh kotaknya.
+settings-outside-about = Trindle memeriksa setiap beberapa detik dan memberi tahu Anda apa yang ditemukan. Trindle tidak dapat menghentikan program-program ini, dan mungkin melewatkan program yang hanya berjalan sebentar. Program dalam kotak hanya dapat memakai apa yang diizinkan kotaknya.
 
 # Label of the switch for the notice about the network.
-settings-outside-network = Beri tahu saat program menjangkau jaringan
+settings-outside-network = Beri tahu saya saat program memakai jaringan
 
 # Label of the switch for the notice about the person's files.
-settings-outside-files = Beri tahu saat program membuka file Anda
+settings-outside-files = Beri tahu saya saat program membuka file saya
 
 # Under those two switches.
 settings-outside-once = Sekali untuk setiap program.
 
 # Tip of the round button that makes a program be said again; { $name } is the program.
-settings-outside-forget = Beri tahu lagi untuk { $name }
+settings-outside-forget = Berhenti mengabaikan { $name }
 
 # Under a program marked fine for the network.
-settings-outside-fine-network = Menjangkau jaringan tidak apa-apa.
+settings-outside-fine-network = Memakai jaringan tidak apa-apa.
 
 # Under a program marked fine for the person's files.
 settings-outside-fine-files = Membuka file Anda tidak apa-apa.
@@ -276,13 +273,10 @@ settings-outside-no-fine = Tidak ada program yang ditandai tidak apa-apa.
 settings-downloads-heading = File unduhan
 
 # Help text of that card (the information button).
-settings-downloads-about = File dari internet adalah file di Unduhan, atau yang ditandai oleh browser. Program yang membukanya hanya mendapat file itu, hanya baca, tanpa internet dan tanpa folder Anda. Ini tidak mencakup tombol Buka milik browser, yang memulai program itu sendiri.
+settings-downloads-about = File di Unduhan, dan file yang ditandai browser Anda sebagai hasil unduhan, dibuka dalam kotak. Program yang membukanya hanya mendapat file itu. Program hanya dapat membacanya, dan tidak dapat memakai internet atau folder Anda. Ini tidak mencakup tombol Buka milik browser, yang memulai program itu sendiri.
 
 # Label of the switch that opens downloaded files in a box.
 settings-downloads-box = Buka file unduhan dalam kotak
-
-# Under that switch.
-settings-downloads-box-sub = Tanpa internet, dan hanya file itu, hanya baca.
 
 # Tip of the switch that opens one type of downloaded file as normal; { $kind } is the type, such as pdf.
 settings-downloads-normal = Buka file { $kind } seperti biasa
@@ -291,8 +285,7 @@ settings-downloads-normal = Buka file { $kind } seperti biasa
 settings-downloads-type = File { $kind }
 
 # Under a file type's switch.
-settings-downloads-normal-sub = Hidup: terbuka seperti biasa, dengan internet.
+settings-downloads-normal-sub = Terbuka seperti biasa, dengan internet.
 
 # The line in the card when no downloaded file has been opened in a box yet.
-settings-downloads-none = Belum ada jenis. Satu akan didaftarkan saat file unduhan dibuka dalam kotak.
-
+settings-downloads-none = Belum ada jenis file. Jenis akan muncul di sini setelah file unduhan dibuka dalam kotak.

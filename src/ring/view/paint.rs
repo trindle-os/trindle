@@ -1,5 +1,7 @@
 //! The ring's drawing: the dim, the pieces of All apps, the disc, the bands across the middle and the labels.
 
+use std::time::Instant;
+
 use tiny_skia::{Color, FillRule, Mask, Paint, PathBuilder, Pixmap, PixmapMut, PixmapPaint, Rect as SkRect, Stroke, Transform};
 
 use crate::common::apps;
@@ -96,8 +98,6 @@ pub(super) struct Scene {
     pub(super) seg: bool,
     pub(super) top: Option<bool>,
     pub(super) bare: bool,
-    pub(super) listening: bool,
-    pub(super) pulse: f32,
     pub(super) empty: bool,
     pub(super) all: bool,
     pub(super) dim: f32,
@@ -123,11 +123,11 @@ impl Brush<'_> {
         pm.stroke_path(p, &paint, &Stroke { width, ..Stroke::default() }, self.t, None);
     }
 
-    fn edge(&self, pm: &mut PixmapMut, p: &tiny_skia::Path, mask: Option<&Mask>) {
+    fn edge(&self, pm: &mut PixmapMut, p: &tiny_skia::Path) {
         let mut paint = Paint::default();
         paint.set_color(colour(crate::toolkit::theme::mix(self.th.well, self.th.ring_edge, crate::toolkit::theme::sheet().ring_edge_strength), 1.0));
         paint.anti_alias = true;
-        pm.stroke_path(p, &paint, &Stroke { width: crate::toolkit::theme::sheet().ring_edge_width, ..Stroke::default() }, self.t, mask);
+        pm.stroke_path(p, &paint, &Stroke { width: crate::toolkit::theme::sheet().ring_edge_width, ..Stroke::default() }, self.t, None);
     }
 }
 
@@ -137,20 +137,16 @@ pub(super) fn paint_ring(pm: &mut PixmapMut, pen: &Pen, lay: &Layout<usize>, sce
     let brush = Brush { th, t: Transform::from_scale(s, s) };
     let (w, h) = (pm.width() as f32 / s, pm.height() as f32 / s);
     let centre = (w / 2.0, h / 2.0);
-    pm.fill(colour(th.shadow, scene.dim));
-    let mask = lay.clip.and_then(|(x, y, cw, ch)| {
-        let mut m = Mask::new(pm.width(), pm.height())?;
-        m.fill_path(&PathBuilder::from_rect(SkRect::from_xywh(x as f32, y as f32, cw as f32, ch as f32)?), FillRule::Winding, true, brush.t);
-        Some(m)
-    });
+    let dim = colour(th.shadow, scene.dim);
+    pm.fill(dim);
     if scene.all {
-        paint_pieces(pm, &brush, lay, centre, mask.as_ref());
+        paint_pieces(pm, &brush, lay, centre);
+        if let Some(clip) = lay.clip {
+            cut_to(pm, clip, s, dim);
+        }
     }
     paint_disc(pm, pen, &brush, lay, centre);
     paint_middle(pm, &brush, scene, centre);
-    if scene.listening {
-        paint_listening(pm, &brush, centre, scene.pulse);
-    }
     if scene.all {
         paint_labels(pm, pen, lay, centre);
     }
@@ -161,17 +157,31 @@ pub(super) fn paint_ring(pm: &mut PixmapMut, pen: &Pen, lay: &Layout<usize>, sce
     }
 }
 
-fn paint_pieces(pm: &mut PixmapMut, brush: &Brush, lay: &Layout<usize>, (cx, cy): (f32, f32), mask: Option<&Mask>) {
+pub(super) fn cut_to(pm: &mut PixmapMut, (x, y, w, h): (f64, f64, f64, f64), s: f32, dim: Color) {
+    let (pw, ph) = (pm.width() as f32, pm.height() as f32);
+    let (l, t) = ((x as f32 * s).clamp(0.0, pw), (y as f32 * s).clamp(0.0, ph));
+    let (r, b) = (((x + w) as f32 * s).clamp(l, pw), ((y + h) as f32 * s).clamp(t, ph));
+    let mut paint = Paint::default();
+    paint.set_color(dim);
+    paint.blend_mode = tiny_skia::BlendMode::Source;
+    for strip in [(0.0, 0.0, pw, t), (0.0, b, pw, ph - b), (0.0, t, l, b - t), (r, t, pw - r, b - t)] {
+        if let Some(rect) = SkRect::from_xywh(strip.0, strip.1, strip.2, strip.3) {
+            pm.fill_rect(rect, &paint, Transform::identity(), None);
+        }
+    }
+}
+
+fn paint_pieces(pm: &mut PixmapMut, brush: &Brush, lay: &Layout<usize>, (cx, cy): (f32, f32)) {
     let th = brush.th;
     for piece in &lay.pieces {
         let Some(p) = piece_path(cx, cy, piece.inner as f32, piece.outer as f32, piece.start as f32, piece.end as f32) else { continue };
         for (dy, a) in PIECE_SHADOW {
             if let Some(sh) = p.clone().transform(Transform::from_translate(0.0, dy)) {
-                brush.fill(pm, &sh, colour(th.shadow, a), mask);
+                brush.fill(pm, &sh, colour(th.shadow, a), None);
             }
         }
-        brush.fill(pm, &p, colour(th.well, 1.0), mask);
-        brush.edge(pm, &p, mask);
+        brush.fill(pm, &p, colour(th.well, 1.0), None);
+        brush.edge(pm, &p);
     }
 }
 
@@ -181,7 +191,7 @@ fn paint_disc(pm: &mut PixmapMut, pen: &Pen, brush: &Brush, lay: &Layout<usize>,
     notice::float_shadow(pm, pen, crate::toolkit::widget::Rect { x: (cx - d) * s, y: (cy - d) * s, w: 2.0 * d * s, h: 2.0 * d * s }, d * s);
     if let Some(p) = circle(cx, cy, d) {
         brush.fill(pm, &p, colour(brush.th.well, 1.0), None);
-        brush.edge(pm, &p, None);
+        brush.edge(pm, &p);
     }
 }
 
@@ -189,24 +199,50 @@ fn paint_middle(pm: &mut PixmapMut, brush: &Brush, scene: &Scene, (cx, cy): (f32
     let th = brush.th;
     let m = CENTRE as f32 / 2.0;
     let seg_h = SEGMENT as f32;
+
+    let s = brush.t.sx;
+    let (x0, y0) = (((cx - m - 1.0) * s).floor(), ((cy - m - 1.0) * s).floor());
+    let side = ((2.0 * m + 2.0) * s).ceil() as u32 + 2;
+    let (Some(mut small), Some(mut cut)) = (Pixmap::new(side, side), Mask::new(side, side)) else { return };
+    let local = Brush { th, t: Transform::from_scale(s, s).post_translate(-x0, -y0) };
     let Some(round) = circle(cx, cy, m) else { return };
-    let part = |pm: &mut PixmapMut, y0: f32, y1: f32, c: Colour| {
-        let Some(rect) = SkRect::from_ltrb(cx - m - 1.0, y0, cx + m + 1.0, y1) else { return };
-        let Some(mut cut) = Mask::new(pm.width(), pm.height()) else { return };
-        cut.fill_path(&PathBuilder::from_rect(rect), FillRule::Winding, true, brush.t);
-        brush.fill(pm, &round, colour(c, 1.0), Some(&cut));
+    let mut part = |top: f32, bottom: f32, c: Colour| {
+        let Some(rect) = SkRect::from_ltrb(cx - m - 1.0, top, cx + m + 1.0, bottom) else { return };
+        cut.clear();
+        cut.fill_path(&PathBuilder::from_rect(rect), FillRule::Winding, true, local.t);
+        local.fill(&mut small.as_mut(), &round, colour(c, 1.0), Some(&cut));
     };
     let lit = |on: bool| if on { th.accent } else { th.control };
     if scene.bare {
-        part(pm, cy - m - 1.0, cy + m + 1.0, th.bg);
+        part(cy - m - 1.0, cy + m + 1.0, th.bg);
     } else {
         let from = if scene.top.is_some() { cy - m + seg_h } else { cy - m - 1.0 };
-        part(pm, from, cy + m - seg_h, th.bg);
-        part(pm, cy + m - seg_h, cy + m + 1.0, lit(scene.seg));
+        part(from, cy + m - seg_h, th.bg);
+        part(cy + m - seg_h, cy + m + 1.0, lit(scene.seg));
         if let Some(on) = scene.top {
-            part(pm, cy - m - 1.0, cy - m + seg_h, lit(on));
+            part(cy - m - 1.0, cy - m + seg_h, lit(on));
         }
     }
+    pm.draw_pixmap(x0 as i32, y0 as i32, small.as_ref(), &PixmapPaint::default(), Transform::identity(), None);
+}
+
+const LISTENING_REACH: f32 = 6.0 + 10.0 + 3.0;
+
+const PULSE_TURN: f32 = 1.0;
+
+pub(super) fn pulse_at(since: Instant) -> f32 {
+    (since.elapsed().as_secs_f32() / PULSE_TURN).fract()
+}
+
+pub(super) fn listening_rings(since: Instant) -> Node<Msg> {
+    let side = CENTRE as f32 + 2.0 * LISTENING_REACH;
+    let moving = !crate::toolkit::motion::reduced();
+    let rings = drawing((side, side), "", move |pm, pen| {
+        let s = pen.scale;
+        let brush = Brush { th: pen.theme, t: Transform::from_scale(s, s) };
+        paint_listening(pm, &brush, (side / 2.0, side / 2.0), if moving { pulse_at(since) } else { 0.0 });
+    });
+    if moving { rings.alive() } else { rings }
 }
 
 fn paint_listening(pm: &mut PixmapMut, brush: &Brush, (cx, cy): (f32, f32), pulse: f32) {
@@ -218,6 +254,10 @@ fn paint_listening(pm: &mut PixmapMut, brush: &Brush, (cx, cy): (f32, f32), puls
     if let Some(p) = circle(cx, cy, m + 2.0) {
         brush.line(pm, &p, colour(accent, 1.0), 3.0);
     }
+}
+
+pub(super) fn short_title(category: &str) -> Option<&'static str> {
+    (category == "media").then(|| t!("ring-category-media-short"))
 }
 
 fn paint_labels(pm: &mut PixmapMut, pen: &Pen, lay: &Layout<usize>, (cx, cy): (f32, f32)) {
@@ -235,8 +275,8 @@ fn paint_labels(pm: &mut PixmapMut, pen: &Pen, lay: &Layout<usize>, (cx, cy): (f
         } * s;
         let mut l = pen.fonts.layout(&words, &style, None).spaced(LETTER_GAP * s);
         if l.width > room {
-            if let Some(cut) = words.split(" and ").next() {
-                l = pen.fonts.layout(cut, &style, None).spaced(LETTER_GAP * s);
+            if let Some(short) = short_title(&piece.category) {
+                l = pen.fonts.layout(short, &style, None).spaced(LETTER_GAP * s);
             }
         }
         if l.width > room {

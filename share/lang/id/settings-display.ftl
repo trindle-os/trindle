@@ -9,7 +9,7 @@ settings-display-keywords = layar monitor resolusi ukuran skala zoom lebih besar
 
 # Introduction under the heading of the display page, and the words behind the page i.
 # SAFETY: needs a human review before it ships
-settings-display-help = Perubahan berlaku seketika. Jika layar menjadi rusak, jangan lakukan apa-apa: layar kembali sendiri setelah 15 detik kecuali Anda menekan Pertahankan. Cahaya malam membuat layar lebih hangat di malam hari.
+settings-display-help = Perubahan berlaku seketika. Jika layar menjadi rusak, jangan lakukan apa-apa. Layar kembali sendiri setelah 15 detik kecuali Anda menekan Pertahankan. Cahaya malam membuat layar lebih hangat di malam hari.
 
 # Question along the bottom of the page while a change of displays waits to be kept.
 # SAFETY: needs a human review before it ships
@@ -19,7 +19,7 @@ settings-display-foot-keep = Pertahankan susunan ini?
 settings-display-looking = Memeriksa layar…
 
 # Sentence at the top of the page when no display was found.
-settings-display-none-found = Tidak ada layar yang ditemukan.
+settings-display-none-found = Layar tidak ditemukan.
 
 # First half of the sentence at the top of the page: no display is in use.
 settings-display-used-none = Tidak ada layar yang dipakai
@@ -96,20 +96,11 @@ settings-display-rotation-of = Rotasi { $display }
 # Heading of the resolution line.
 settings-display-resolution = Resolusi
 
-# Small words under that line.
-settings-display-resolution-about = Berapa banyak titik yang ditampilkan, seberapa sering.
-
 # Heading of the size line.
 settings-display-size = Ukuran
 
-# Small words under that line.
-settings-display-size-about = Seberapa besar semuanya tampak di layar ini.
-
 # Heading of the rotation line.
 settings-display-rotation = Rotasi
-
-# Small words under that line.
-settings-display-rotation-about = Untuk layar yang diputar miring.
 
 # Heading of the line, and name of its switch, that turns a display on or off.
 settings-display-use = Pakai layar ini
@@ -117,12 +108,9 @@ settings-display-use = Pakai layar ini
 # Small words under that line for the only display in use.
 settings-display-use-only = Satu-satunya layar yang dipakai tidak bisa dimatikan.
 
-# Small words under that line otherwise.
-settings-display-use-off = Mati, tidak ada yang ditampilkan di sana.
-
 # Words behind the i of a display's card.
 # SAFETY: needs a human review before it ships
-settings-display-card-about = Perubahan berlaku seketika. Jika layar menjadi rusak, jangan lakukan apa-apa: layar kembali sendiri setelah 15 detik kecuali Anda menekan Pertahankan. Resolusi yang disarankan adalah resolusi asli layar; ukuran standar adalah yang dipilih Trindle untuk layar ini.
+settings-display-card-about = Perubahan berlaku seketika. Jika layar menjadi rusak, jangan lakukan apa-apa. Layar kembali sendiri setelah 15 detik kecuali Anda menekan Pertahankan. Resolusi yang disarankan adalah resolusi yang menjadi tujuan pembuatan layar itu. Ukuran standar adalah yang dipilih Trindle untuk layar ini.
 
 # Name of the list of where a display sits, and heading of its line when there are more than two displays; { $display } is the display.
 settings-display-place-name = Letakkan { $display }
@@ -137,13 +125,13 @@ settings-display-relative = { $display } relatif terhadap { $other }
 settings-display-arrangement-title = Susunan
 
 # Words behind the i of that card.
-settings-display-arrangement-about = Letak layar di samping satu sama lain, sehingga penunjuk berpindah dari satu ke yang berikutnya melewati tepi yang dipakai bersama.
+settings-display-arrangement-about = Atur letak layar di samping satu sama lain, agar penunjuk bisa berpindah melewati tepi yang dipakai bersama.
 
 # Small words on that card while fewer than two displays are in use.
-settings-display-arrangement-waits = Pakai dua layar untuk meletakkan yang satu di samping yang lain.
+settings-display-arrangement-waits = Anda perlu dua layar untuk meletakkan yang satu di samping yang lain.
 
 # Red words when the desktop refused a change of displays and gave no reason.
-settings-display-refused = Desktop menolaknya.
+settings-display-refused = Tidak bisa mengubahnya.
 
 # Said aloud after the displays changed; { $seconds } is how long until they go back.
 settings-display-aloud-changed =
@@ -152,43 +140,34 @@ settings-display-aloud-changed =
     }
 
 # Red words when a change of displays could not be undone; { $why } is the desktop's reason.
-settings-display-not-undone = Perubahan tidak bisa dibatalkan. { $why }
+settings-display-not-undone = Tidak bisa membatalkan perubahan. { $why }
 
 # Red words when the arrangement could not be kept for the next login.
-settings-display-not-kept = Susunan sedang dipakai sekarang, tetapi tidak bisa disimpan untuk masuk berikutnya.
+settings-display-not-kept = Susunan sedang dipakai sekarang, tetapi Trindle tidak bisa menyimpannya untuk masuk berikutnya.
 
 # Heading of the line under the picture of the displays when the desktop refused a change.
 settings-display-nothing-changed = Tidak ada yang diubah
 
 # Small words under that line.
-settings-display-refused-change = Desktop menolak perubahan itu.
+settings-display-refused-change = Tidak bisa membuat perubahan itu.
 
 # Heading of the line under the picture of the displays.
 settings-display-apply-at-once = Perubahan berlaku seketika
-
-# Small words under that line; { $seconds } is how long Keep is asked for.
-settings-display-keep-asked =
-    { $seconds ->
-       *[other] Pertahankan ditanyakan di bagian bawah jendela selama { $seconds } detik.
-    }
 
 # Title of the night light card.
 settings-display-night-title = Cahaya malam
 
 # Words behind the i of that card.
-settings-display-night-about = Layar menjadi lebih hangat di malam hari, yang lebih nyaman bagi mata. Ini mengikuti matahari terbenam dan terbit, dihitung dari zona waktu, atau waktu yang Anda atur sendiri; jika zona waktu tidak menyebut letak komputer ini, waktu yang diatur dipakai.
+settings-display-night-about = Layar menjadi lebih hangat di malam hari, yang lebih nyaman bagi mata. Ini mengikuti matahari terbenam dan terbit, dihitung dari zona waktu Anda, atau waktu yang Anda atur sendiri. Jika Trindle tidak bisa mengetahui lokasi Anda dari zona waktu, Trindle memakai waktu yang Anda atur.
 
 # Heading of the night light line, and name of its switch.
 settings-display-night = Cahaya malam
-
-# Small words under that line.
-settings-display-night-about-line = Warna lebih hangat di malam hari.
 
 # Small words under the When line; { $zone } is the time zone.
 settings-display-when-zone = Matahari terbenam dan terbit di { $zone }.
 
 # Small words under the When line when the time zone gives no place.
-settings-display-when-no-place = Zona waktu tidak menyebut tempat: waktu yang diatur.
+settings-display-when-no-place = Trindle memakai waktu yang diatur karena tidak tahu kapan matahari terbenam.
 
 # Choice in the When list: from sunset to sunrise.
 settings-display-when-sun = Matahari terbenam sampai terbit
@@ -208,9 +187,6 @@ settings-display-to = Sampai
 # Heading of the warmth line, and name of its slider.
 settings-display-warmth = Kehangatan
 
-# Small words under the warmth line.
-settings-display-warmth-about = Seberapa hangat layar menjadi di malam hari.
-
 # Small word under the left end of the warmth slider.
 settings-display-little = Sedikit
 
@@ -229,7 +205,7 @@ settings-display-one-display-tip = { $name }, { $res }
 # Spoken description of the picture of the displays when several are in use; { $n } is how many.
 settings-display-many-displays-tip =
     { $n ->
-       *[other] { $n } layar, berdampingan sesuai susunannya
+       *[other] { $n } layar, sesuai susunannya
     }
 
 # Word drawn in the picture of the displays when none is in use.
@@ -239,26 +215,25 @@ settings-display-no-display = Tidak ada layar
 settings-display-your-displays = Layar Anda
 
 # Small words under Nothing to show on when the desktop listed no displays.
-settings-display-listed-none = Desktop tidak mendaftar layar apa pun.
+settings-display-listed-none = Trindle tidak menemukan layar apa pun.
 
 # Title of the card shown when no display was found.
 settings-display-none-title = Tidak ada layar ditemukan
 
 # Heading of the line in that card.
-settings-display-none-heading = Tidak ada tempat untuk menampilkan
+settings-display-none-heading = Layar tidak ditemukan
 
 # Title of the card about the graphics card.
 settings-display-graphics-title = Grafis
 
 # Words behind the i of that card.
-settings-display-graphics-about = Komputer ini punya kartu NVIDIA, memakai driver terbuka. Semuanya berfungsi. Pada kartu dari sekitar 2022 ke atas, rasanya akan lambat, karena driver terbuka tidak bisa menaikkan kecepatan kartu. Driver NVIDIA sendiri bisa dipasang.
+settings-display-graphics-about = Komputer ini punya kartu grafis NVIDIA yang memakai driver terbuka. Kartu ini berfungsi, tetapi kartu dari sekitar 2022 ke atas akan terasa lambat, karena driver terbuka tidak bisa menaikkan kecepatan kartu. Anda bisa memasang driver NVIDIA sendiri sebagai gantinya.
 
 # Heading of the line about an NVIDIA card on the open driver.
-settings-display-nvidia = Kartu NVIDIA, dengan driver terbuka
+settings-display-nvidia = Kartu NVIDIA dengan driver terbuka
 
 # Small words under that line.
-settings-display-nvidia-about = Berfungsi; kartu dari 2022 ke atas terasa lambat.
+settings-display-nvidia-about = Kartu dari 2022 ke atas mungkin berjalan lambat.
 
 # Words of the link that opens help about the NVIDIA driver.
 settings-display-nvidia-help = Apa yang bisa dilakukan
-

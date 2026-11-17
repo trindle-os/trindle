@@ -13,6 +13,7 @@ mod reader_events;
 mod reveal;
 pub(super) mod rest;
 pub(super) mod run;
+pub(super) mod tries;
 mod widgets;
 #[cfg(test)]
 mod tests;
@@ -21,7 +22,7 @@ use std::cell::RefCell;
 use std::ffi::{c_int, c_void};
 use std::sync::atomic::AtomicBool;
 use std::sync::Arc;
-use std::time::{Duration, Instant, SystemTime};
+use std::time::{Duration, Instant};
 
 use wayland_client::protocol::{wl_buffer, wl_compositor, wl_output, wl_shm, wl_surface};
 use wayland_client::QueueHandle;
@@ -31,10 +32,11 @@ use wayland_protocols::ext::session_lock::v1::client::{
 };
 use zeroize::{Zeroize, Zeroizing};
 
-use crate::common::{pin, shm};
+use crate::common::shm;
 use crate::toolkit::t;
 use crate::toolkit::text::Fonts;
 
+pub(crate) use input::account_name;
 pub(crate) use pam::password_ok;
 use reveal::Eye;
 use rest::{rest_step, Face};
@@ -83,12 +85,18 @@ struct State {
     eye: Eye,
     message: String,
     wrong: bool,
-    tries: u32,
-    locked_at: SystemTime,
+
+    tries: tries::Tries,
+
+    pin_minutes: Option<u32>,
+
+    user: String,
     checking: bool,
 
     check_since: Option<Instant>,
     check_turn: u8,
+
+    outstanding: Option<(u8, Instant)>,
     done: bool,
     pointer_on: Option<wl_surface::WlSurface>,
     pointer_at: (f64, f64),
@@ -120,10 +128,32 @@ struct State {
 impl State {
 
     fn begin_check(&mut self) -> u8 {
+        let now = Instant::now();
         self.checking = true;
-        self.check_since = Some(Instant::now());
+        self.check_since = Some(now);
         self.check_turn = self.check_turn.wrapping_add(1);
+        self.outstanding = Some((self.check_turn, now));
         self.check_turn
+    }
+
+    fn refused_check(&self) -> Option<String> {
+        if !check_may_start(self.outstanding.map(|(_, at)| at), Instant::now()) {
+            return Some(t!("session-lock-still-checking").into());
+        }
+        self.wait_words()
+    }
+
+    fn wait_words(&self) -> Option<String> {
+        let left = self.tries.wait_left(tries::boot_now())?;
+        Some(t!("session-lock-wait", n = left.as_secs() + u64::from(left.subsec_nanos() > 0)))
+    }
+
+    fn count_wrong(&mut self, pin: bool) -> u32 {
+        let left = self.tries.wrong(tries::boot_now(), pin);
+        if let Err(e) = self.tries.save(&tries::file()) {
+            eprintln!("trindle-lock: the count of wrong tries was not kept: {e}");
+        }
+        left
     }
 
     fn abandon_check(&mut self) {
@@ -143,8 +173,7 @@ impl State {
     }
 
     fn pin_allowed(&self) -> bool {
-        pin::is_set() && self.tries < pin::TRIES
-            && self.locked_at.elapsed().map(|e| e.as_secs() < pin::minutes() as u64 * 60).unwrap_or(false)
+        self.pin_minutes.is_some_and(|m| self.tries.pin_allowed(tries::boot_now(), m))
     }
 
     fn hint_showing(&self) -> bool {
@@ -160,7 +189,18 @@ impl State {
     }
 }
 
+fn check_may_start(running: Option<Instant>, now: Instant) -> bool {
+    running.is_none_or(|at| now.saturating_duration_since(at) >= input::CHECK_LIMIT)
+}
+
+fn lock_ended() {
+    if let Err(e) = tries::Tries::clear(&tries::file()) {
+        eprintln!("trindle-lock: the count of wrong tries was not cleared: {e}");
+    }
+}
+
 fn unlock(state: &mut State) {
+    lock_ended();
     if let Some(lock) = state.lock.take() {
         lock.unlock_and_destroy();
     }

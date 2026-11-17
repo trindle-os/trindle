@@ -7,7 +7,7 @@ settings-default-apps-title = Приложения по умолчанию
 settings-default-apps-keywords = браузер почта электронная почта файлы изображения музыка видео pdf календарь открыть в программе терминал
 
 # Introduction under the heading of the default apps page, and the words behind the page i.
-settings-default-apps-help = Какая программа открывает веб-ссылки, электронную почту, изображения, календарь и остальное. Терминал выбирается в ~/.config/xdg-terminals.list; если ничего не выбрано, Trindle использует первый из установленных.
+settings-default-apps-help = Выберите, какая программа открывает веб-ссылки, электронную почту, изображения, календарь и остальное. Терминал вы выбираете в ~/.config/xdg-terminals.list. Если вы его не выбрали, Trindle использует первый из установленных.
 
 # Name of a kind of thing to open, as the heading of a line and the name of its list on the default apps page.
 settings-default-apps-kind-web = Веб
@@ -67,46 +67,37 @@ settings-default-apps-kind-calendar-in-sentence = календарь
 settings-default-apps-card-internet = Интернет
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-internet-about = Программа, которая открывает веб-ссылку, где бы вы по ней ни щёлкнули, программа, которая пишет письмо, когда щёлкают по адресу, и программа, которая открывает приглашение в календарь.
+settings-default-apps-card-internet-about = Выберите, какие программы открывают веб-ссылки, адреса электронной почты и приглашения в календарь.
 
 # Title of a card on the default apps page.
 settings-default-apps-card-files = Файлы и документы
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-files-about = Программа, которая открывает папку, простой текстовый файл и документ PDF, когда вы открываете их из «Папок», с рабочего стола или из другого приложения.
+settings-default-apps-card-files-about = Выберите, какие программы открывают папки, простые текстовые файлы и документы PDF.
 
 # Title of a card on the default apps page.
 settings-default-apps-card-media = Изображения и звук
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-media-about = Программа, которая открывает изображение, музыку или видео, когда вы их открываете.
+settings-default-apps-card-media-about = Выберите, какие программы открывают изображения, музыку и видео.
 
 # Sentence at the top of the page when every kind has a program; { $web } is the program that opens web links.
-settings-default-apps-all-set-web = Для всего выбрана программа; веб-ссылки открывает { $web }.
+settings-default-apps-all-set-web = Для всего выбрана программа, а веб-ссылки открывает { $web }.
 
 # Sentence at the top of the page when every kind has a program and the one for web links is not known.
 settings-default-apps-all-set = Для всего выбрана программа.
 
 # Sentence at the top of the page when one kind has no program chosen; { $kind } is its name in lower case.
-settings-default-apps-one-missing = Пока не выбрано, чем открывать: { $kind }.
+settings-default-apps-one-missing = Выберите, чем открывать: { $kind }.
 
 # Sentence at the top of the page when several kinds have no program chosen; { $kinds } is their names as a list joined with "or".
-settings-default-apps-many-missing = Пока не выбрано, чем открывать: { $kinds }.
+settings-default-apps-many-missing = Вы ещё не выбрали, чем открывать: { $kinds }.
 
 # Small words under a kind that no installed program can open.
 settings-default-apps-none-installed = Пока ничего из установленного не может это открыть.
 
 # First choice in a list when no program is chosen for that kind yet.
 settings-default-apps-not-chosen = Пока не выбрано
-
-# Small words under a kind with a program list; { $n } is how many programs can open it.
-settings-default-apps-can-open =
-    { $n ->
-        [one] Единственная программа, которая может.
-        [few] Открыть это могут программы: { $n }.
-        [many] Открыть это могут программы: { $n }.
-       *[other] Открыть это могут программы: { $n }.
-    }
 
 # Said in green under a kind's list after the choice was kept.
 settings-default-apps-saved = Сохранено

@@ -50,7 +50,7 @@ mod tests {
             assert_eq!(n.steps.len(), 5, "{lead:?}");
             assert!(n.why.contains("before you restart"), "{lead:?}");
             let all = n.steps.join(" ");
-            assert!(all.contains("letters and digits only"));
+            assert!(all.contains("letters and numbers"));
             assert!(all.contains("American keyboard"));
             assert!(all.contains("about 10 seconds"));
             let at = |w: &str| all.find(w).unwrap_or_else(|| panic!("{w}"));

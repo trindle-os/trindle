@@ -126,13 +126,13 @@ mod tests {
   "Devices" : [
     {
       "Name" : "System Firmware",
-      "DeviceId" : "1e4fa9cea0b89e613370cf9657ffa0b6d3f37fec",
-      "Guid" : [ "b5f7dcc1-568c-50f8-a4dd-e39d1f93fda1" ],
+      "DeviceId" : "9f8e7d6c5b4a39281706f5e4d3c2b1a099887766",
+      "Guid" : [ "00000000-0000-4000-8000-000000000001" ],
       "Flags" : [ "internal", "updatable", "require-ac", "needs-reboot" ],
-      "Vendor" : "Framework",
+      "Vendor" : "Example Systems",
       "Version" : "0.0.3.18",
       "Releases" : [
-        { "Version" : "0.0.3.20", "Name" : "Laptop 13 AMD Ryzen 7040", "Size" : 36130020 },
+        { "Version" : "0.0.3.20", "Name" : "Example Laptop 1", "Size" : 36130020 },
         { "Version" : "0.0.3.19" }
       ]
     }
@@ -142,8 +142,8 @@ mod tests {
     #[test]
     fn reads_a_device_and_its_newest_release() {
         assert_eq!(parse_updates(ONE), vec![Firmware {
-            id: "1e4fa9cea0b89e613370cf9657ffa0b6d3f37fec".into(),
-            name: "Framework System Firmware".into(),
+            id: "9f8e7d6c5b4a39281706f5e4d3c2b1a099887766".into(),
+            name: "Example Systems System Firmware".into(),
             current: "0.0.3.18".into(),
             newest: "0.0.3.20".into(),
             size: 36130020,
@@ -157,9 +157,9 @@ mod tests {
 
     #[test]
     fn a_name_that_already_says_whose_is_left_alone() {
-        let json = r#"{"Devices":[{"Name":"Logitech Unifying Receiver","Vendor":"Logitech",
+        let json = r#"{"Devices":[{"Name":"Example Dock","Vendor":"Example",
             "DeviceId":"0123456789abcdef0123456789abcdef01234567","Version":"1","Releases":[{"Version":"2"}]}]}"#;
-        assert_eq!(parse_updates(json)[0].name, "Logitech Unifying Receiver");
+        assert_eq!(parse_updates(json)[0].name, "Example Dock");
     }
 
     #[test]

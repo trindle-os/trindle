@@ -32,12 +32,24 @@ impl Store {
         }
     }
 
+    pub(super) fn heard_if(&self, f: impl Fn(&mut Store, &str) -> bool + 'static) -> impl Fn(&str) + 'static {
+        let asks = self.asks.clone();
+        let f = Rc::new(f);
+        move |line: &str| {
+            let (f, line) = (f.clone(), line.to_string());
+            asks.send(Do::ThenIf(Box::new(move |s| f(s, &line))));
+        }
+    }
+
     pub(super) fn handle(&mut self, d: Do) {
         match d {
             Do::Then(f) => f(self),
+            Do::ThenIf(f) => {
+                f(self);
+            }
             Do::Open(args) => self.apply(Opts::read(&args)),
-            Do::Fade(t) => self.fade = t,
-            Do::Lit(t) => self.lit = t,
+            Do::Fade(t) => self.fade_in.shown = t,
+            Do::Lit(t) => self.fade_in.lit = t,
             Do::Settings(d) => {
                 if let Some(h) = self.hosted.as_mut() {
                     h.handle(d);

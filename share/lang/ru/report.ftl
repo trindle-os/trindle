@@ -8,10 +8,22 @@ report-title-crash = Что-то пошло не так. Отправить от
 
 # SAFETY: needs a human review before it ships
 # Under the title: what a report holds, and what it never holds.
-report-summary = Отправляются ошибка, сводка о компьютере и последние строки журнала, из которых удалены имена, адреса электронной почты, сетевые адреса и названия сетей Wi-Fi. Имена файлов и веб-адреса всё же могут остаться в строках журнала. Ваши файлы и пароли не отправляются.
+report-summary = Отправляются ошибка, сводка о вашем компьютере и последние строки журнала. Имена, адреса электронной почты, сетевые адреса и названия сетей Wi-Fi удаляются. Имена файлов и веб-адреса всё же могут остаться в строках журнала. Ваши файлы и пароли не отправляются.
 
-# Typing box at the top of the window, shown quietly while empty.
-report-what-doing = Что вы делали? (по желанию)
+# Big typing box in the middle of the window, shown quietly while empty.
+report-what-doing = Что произошло?
+
+# Beside the dropdown at the top of the window that says which app the report is about; also its name for the screen reader.
+report-app-box = Какое приложение?
+
+# Dropdown choice: the person doesn't know which app it was.
+report-app-unsure = Не уверен
+
+# Dropdown choice: the app is not one of Trindle's own.
+report-app-other = Другая программа
+
+# Dropdown choice: the desktop itself (the panels, windows and session), not a single app.
+report-app-desktop = Рабочий стол
 
 # SAFETY: needs a human review before it ships
 # Button at the bottom of the window that sends the report; it is also the word beside it when it is switched off.
@@ -38,7 +50,7 @@ report-copy = Копировать
 report-save = Сохранить
 
 # Written where the Send button would be, when Buildmorphic says it is not taking reports or cannot be reached.
-report-not-taken = Отчёты пока не принимаются.
+report-not-taken = Отчёты пока нельзя отправить.
 
 # Written where the Send button would be, while Buildmorphic is being asked whether it is taking reports.
 report-checking = Проверка.
@@ -68,16 +80,16 @@ report-sending = Отправка.
 report-saved-as = Сохранено как Downloads/{ $name }.
 
 # Red words when the Buildmorphic username holds an email address.
-report-no-at = Укажите имя пользователя Buildmorphic, а не адрес электронной почты, то есть без @.
+report-no-at = Укажите имя пользователя Buildmorphic, а не адрес электронной почты. Символ @ не нужен.
 
 # Red words when the Buildmorphic username holds letters that are not allowed.
-report-name-chars = Имя пользователя состоит из 2–31 строчных букв, цифр или дефисов.
+report-name-chars = Имя пользователя должно быть длиной от 2 до 31 символа и состоять из строчных букв, цифр или дефисов.
 
 # Red words in Settings, Crash reports, when the GitHub name holds letters that are not allowed.
 report-github-chars = Имя GitHub может содержать только буквы, цифры и дефисы.
 
 # Red words when a report could not be kept for later. $reason is one of the four reasons below.
-report-keep-failed = Не удалось сохранить на потом: { $reason }.
+report-keep-failed = Trindle не удалось сохранить отчёт на потом: { $reason }.
 
 # Red words when a report could not be saved. $reason is one of the four reasons below.
 report-save-failed = Не удалось сохранить: { $reason }.
@@ -92,7 +104,7 @@ report-reason-full = диск заполнен
 report-reason-missing = папка отсутствует
 
 # The reason inside "Could not save it: ...": any other refusal.
-report-reason-refused = диск отказал в записи
+report-reason-refused = ошибка диска
 
 # Why a report could not be posted: the program that posts it is not installed.
 report-curl-missing = не найдена программа curl.
@@ -104,7 +116,7 @@ report-not-posted = Не удалось отправить.
 report-no-connection = Нет подключения.
 
 # Why a report could not be posted: the address replied with a fault. $code is the number it replied with.
-report-answered = Адрес ответил кодом { $code }.
+report-answered = Сервер ответил кодом { $code }.
 
 # Beside the Send button, when the note is too short: Buildmorphic needs a few words with the log.
 report-say-more = Напишите ещё несколько слов о том, что произошло.
@@ -113,19 +125,57 @@ report-say-more = Напишите ещё несколько слов о том,
 report-reading-log = Чтение журнала.
 
 # Beside the Send button, when no log lines were found: a report with no log is not sent.
-report-no-log = Нет журнала, который можно отправить вместе с ним, поэтому отправить нельзя. Сохраните его вместо этого.
+report-no-log = Нет журнала, который можно отправить вместе с отчётом, поэтому отправить его нельзя. Сохраните отчёт вместо этого.
+
+# Beside the picture buttons, and beside the picture once one is chosen: who can see it.
+report-picture-line = Картинка по желанию. Её видит только владелец проекта.
+
+# Tooltip of the round button that opens the file chooser for a picture.
+report-picture-choose = Выбрать картинку PNG
+
+# Tooltip of the round button that takes a picture of the screen now.
+report-picture-shot = Сделать снимок экрана
+
+# Tooltip of the round button that takes the picture off the report.
+report-picture-remove = Убрать картинку
+
+# Name of the small picture for a screen reader. $width and $height are in pixels.
+report-picture-name = Ваша картинка, { $width } на { $height }
+
+# Title of the file chooser, and the name of its one filter.
+report-picture-choose-title = Выберите картинку PNG
+
+report-picture-filter = Картинки PNG
+
+# Under the picture while it is being read.
+report-picture-reading = Чтение.
+
+# Red words under the picture when the screenshot could not be taken, or no file chooser answers.
+report-picture-no-shot = Не удалось сделать снимок экрана.
+
+report-picture-no-chooser = Trindle не смог открыть окно выбора файла.
+
+# Red words under the picture, each the reason it is refused.
+report-picture-not-png = Это не картинка PNG.
+
+report-picture-too-big = Больше { $megabytes } МБ.
+
+report-picture-too-large = Снимок слишком большой. Он может быть до { $side } пикселей в ширину и { $side } в высоту.
+
+report-picture-damaged = Картинка повреждена.
+
+report-picture-unreadable = Не удалось прочитать.
 
 
 
-report-sent-as-bug = Отправлено. Принято как ошибка { $number }. Спасибо.
+report-sent-as-bug = Отправлено. Номер вашего отчёта об ошибке: { $number }. Спасибо.
 
 
 # Under the title, beta only: why a report matters and what it holds.
-report-beta = Trindle находится в бета-версии, и каждый отчёт помогает нам довести его работу до совершенства. Отчёт анонимный и не содержит ничего личного. Электронная почта не нужна, имя пользователя необязательно. Ничего не отправляется, пока вы не нажмёте «Отправить».
+report-beta = Trindle находится в бета-версии. Отчёты анонимны: имена, адреса электронной почты и домашние папки удаляются. Имя пользователя указывать необязательно.
 
 # Typing box under the first one: the optional Buildmorphic username that credits the report.
 report-username-box = Имя пользователя Buildmorphic (необязательно)
 
 # Red words when a report posted by hand could not get through. $why is the reason, such as "No connection."
-report-try-again = Не отправлено. { $why } Нажмите «Отправить», чтобы повторить.
-
+report-try-again = Trindle не удалось отправить отчёт. { $why } Нажмите «Отправить», чтобы повторить.

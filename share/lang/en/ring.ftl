@@ -21,27 +21,27 @@ ring-cli-command = { $program } [OPTION…]
 # Line of the ring's --help, printed in a terminal, above the list of options.
 ring-cli-options = Options:
 # Help for the ring's --say option, printed in a terminal.
-ring-cli-say = Do what these words ask, as if spoken to the ring (to try voice commands without a microphone)
+ring-cli-say = Run a voice command from text without using a microphone
 # Help for the ring's --background option, printed in a terminal.
-ring-cli-background = Start without showing, so the first opening is instant
+ring-cli-background = Start out of sight, so the ring opens instantly the first time
 # Help for the ring's --show-desktop option, printed in a terminal.
-ring-cli-show-desktop = Put every window away to show the desktop, or bring them back (Super and D asks for this)
+ring-cli-show-desktop = Hide every window to show the desktop, or bring them back (the Super and D keys do this)
 # Help for the ring's --listen option, printed in a terminal.
-ring-cli-listen = Open the ring already listening, as a keyboard shortcut can
+ring-cli-listen = Open the ring already listening for a voice command, as a keyboard shortcut does
 # Help for the ring's --all option, printed in a terminal.
-ring-cli-all = Open the ring with every app shown round it
+ring-cli-all = Open the ring with every app shown around it
 # Help for the ring's --power option, printed in a terminal.
-ring-cli-power = Open the ring at log out, restart and shut down
+ring-cli-power = Open the ring's power options: log out, restart and shut down
 # Help for the ring's --favourites option, printed in a terminal.
 ring-cli-favourites = Open the favourites page in Settings
 # Help for the ring's --restyle option, printed in a terminal.
-ring-cli-restyle = Take up a new look (light or dark, or a new accent) from Settings at once
+ring-cli-restyle = Apply a new look from Settings straight away (light or dark, or a new accent colour)
 # Help for the ring's --corners option, printed in a terminal.
-ring-cli-corners = Make the touch spots in the top corners again
+ring-cli-corners = Set up the touch spots in the top corners again
 # Help for the ring's --notes option, printed in a terminal.
-ring-cli-notes = Move the keyboard into the notification circles on the screen (Super and N asks for this)
+ring-cli-notes = Move keyboard control to the notification circles on the screen (the Super and N keys do this)
 # Help for the option that opens the shortcut list, or closes it when it is showing.
-ring-cli-shortcuts = Show every keyboard shortcut in a list, or put the list away (Super and K, unless changed in Settings)
+ring-cli-shortcuts = Show a list of every keyboard shortcut, or hide the list (Super and K, unless you change it in Settings)
 # Error printed in a terminal when the ring is given an option it does not know.
 ring-cli-unknown = unknown option { $option }
 # Error printed in a terminal when --say is given no words.
@@ -57,12 +57,14 @@ ring-uninstall = Uninstall
 ring-uninstalling = Uninstalling
 # Line that replaces the uninstall button once the app is removed.
 ring-uninstalled = Uninstalled
+# Tip on the app menu's red button when removing the app did not work.
+ring-uninstall-failed = Couldn't remove it.
 # Tip of the round button on the menu of an app put there by hand: it only leaves the ring.
-ring-take-off = Take off the ring
+ring-take-off = Remove from ring
 # Line that replaces that button while the app is being taken off the ring.
-ring-taking-off = Taking off
+ring-taking-off = Removing
 # Line that replaces that button once the app is off the ring.
-ring-taken-off = Taken off
+ring-taken-off = Removed
 # Name of the ring's round button that opens Apps.
 ring-tool-apps = Apps
 # Name of the ring's round button that opens Activity.
@@ -84,19 +86,23 @@ ring-tool-report = Report a problem
 # Line in the ring when the item that was pressed is not there any more.
 ring-gone = That is no longer there.
 # Line in the ring when nothing could open the item that was pressed.
-ring-could-not-open = Nothing could open that.
+ring-could-not-open = Trindle can't open that.
+# Shorter name of the Sound and video piece of All apps, for when the full name does not fit along it.
+ring-category-media-short = Sound
+# Line in the ring when a spoken command, such as turning the sound down, did not work.
+ring-voice-failed = That didn't work.
 # Line in the ring while it listens to a spoken command.
-ring-listening = Listening... speak, and it stops when you do
+ring-listening = Listening… Speak your command. Listening stops when you stop talking
 # Line in the ring while it works out what was said.
-ring-working-out = Working it out...
+ring-working-out = Working it out…
 # Answer to the spoken command to close windows when none are open.
 ring-nothing-to-close = Nothing to close
 # Answer to the spoken question what the time is: the time as 24 hour clock, then the weekday, day and month.
 ring-voice-time = It is { $time } on { $date }
 # Answer to the spoken command to change brightness when the screen has no brightness control.
-ring-brightness-fixed = This screen's brightness cannot be changed from here
+ring-brightness-fixed = This screen's brightness can't be changed from here
 # Answer to the spoken command for the on-screen keyboard when it is not installed.
-ring-keyboard-missing = The on-screen keyboard is not installed
+ring-keyboard-missing = The on-screen keyboard isn't installed
 # Screen reader name of the ring of open windows.
 ring-open-windows = Open windows
 # Tip of the button on a window's menu that brings a minimised window back.
@@ -138,7 +144,7 @@ ring-startup-add = Start at login
 
 ring-startup-remove = Stop starting at login
 # Screen reader name of the red button that shows why an uninstall failed.
-ring-not-done = Not done
+ring-not-done = Why not?
 # Note on an app's menu when the middle of the ring has no room for another favourite; the number is how many it holds.
 ring-middle-full =
     The middle holds { $n }.
@@ -148,7 +154,7 @@ ring-power-lock = Lock
 # Choice on the ring's power page: start the screensaver.
 ring-power-screensaver = Screensaver
 # Choice on the ring's power page: put the computer to sleep.
-ring-power-suspend = Suspend
+ring-power-suspend = Sleep
 # Choice on the ring's power page: hibernate.
 ring-power-hibernate = Hibernate
 # Choice on the ring's power page: log out.
@@ -160,13 +166,13 @@ ring-power-shut-down = Shut down
 # Grey line in the middle of the ring when there are no favourites.
 ring-empty-hint = Click All apps, then right-click any app to keep it here
 # Line in the ring when a spoken or typed power choice needs a click to confirm.
-ring-power-only-click = Only a click confirms this.
+ring-power-only-click = Click to confirm.
 # Line in the ring when something other than the person tried to shut the computer down.
 ring-power-only-own = Only you can shut this computer down.
 # Line in the ring when the power page closed because a program pressed a key.
-ring-power-closed = The power page closed: a program pressed a key, not you.
+ring-power-closed = The power page closed because a program sent a key press.
 
 # Notice from the new ring after the parts were restarted from the keyboard.
 ring-restarted = Restarted
 # Under the notice above.
-ring-restarted-why = The ring and the helper parts started again.
+ring-restarted-why = The ring and its helper parts have restarted.

@@ -172,7 +172,7 @@ pub(super) fn take_snapshot(desc: String, done: Box<dyn FnOnce(Result<(), String
         return;
     }
     let listed = desc.clone();
-    capture(&["pkexec", &admin_helper(), "snapshot-create", &desc], None, move |ok, _, err| {
+    capture(&["pkexec", &admin_helper(), "snapshot-create-drives", &desc], None, move |ok, _, err| {
         if !ok {
             return done(Err(admin_error(&err)));
         }
@@ -180,5 +180,20 @@ pub(super) fn take_snapshot(desc: String, done: Box<dyn FnOnce(Result<(), String
             let found = ok && snapshots::parse_list(&out).iter().any(|s| s.description == listed);
             done(if found { Ok(()) } else { Err(t!("disks-snapshot-missing").into()) });
         });
+    });
+}
+
+const NOTE_MOST: usize = 400;
+
+pub(super) fn switch_swap(on: bool, files: Vec<String>, done: Box<dyn FnOnce(Result<String, String>)>) {
+    use crate::common::run::{admin_error, admin_helper, capture};
+    if cfg!(test) {
+        return;
+    }
+    let helper = admin_helper();
+    let mut argv = vec!["pkexec", helper.as_str(), if on { "swap-on" } else { "swap-off" }];
+    argv.extend(files.iter().map(String::as_str));
+    capture(&argv, None, move |ok, out, err| {
+        done(if ok { Ok(out.trim().lines().last().unwrap_or("").chars().take(NOTE_MOST).collect()) } else { Err(admin_error(&err)) })
     });
 }

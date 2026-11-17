@@ -24,16 +24,12 @@ fn parse_remote_info(out: &str) -> Option<AppFacts> {
 }
 
 pub fn fetch_facts(s: &mut Store, a: &App) {
-    if s.facts.contains_key(&a.id) {
+    if !s.heard.facts.ask(&a.id) {
         return;
     }
-    s.facts.insert(a.id.clone(), None);
     let id = a.id.clone();
-    let back = s.then(move |s: &mut Store, out: String| {
-        s.facts_heard.insert(id.clone());
-        s.facts.insert(id, parse_remote_info(&out));
-    });
-    run::capture(&["flatpak", "remote-info", "--user", REMOTE, &a.id], None, move |_, out, _| back(out));
+    let back = s.then(move |s: &mut Store, out: String| s.heard.facts.answer(id, parse_remote_info(&out)));
+    run::capture(&progress::english(&["flatpak", "remote-info", "--user", REMOTE, &a.id]), None, move |_, out, _| back(out));
 }
 
 pub(crate) fn pressed_install(s: &mut Store, install: impl FnOnce(&mut Store)) {
@@ -45,23 +41,25 @@ pub(crate) fn pressed_install(s: &mut Store, install: impl FnOnce(&mut Store)) {
 
 pub(crate) fn install(s: &mut Store, a: &App) {
     let id = a.id.clone();
-    s.said.remove(&id);
+    s.words.said.remove(&id);
     s.busy.insert(id.clone(), "install");
     s.dials.insert(id.clone(), Dial::default());
     s.working += 1;
     let job = RefCell::new(progress::Job::default());
     let i = id.clone();
-    let on_line = s.heard(move |s, line| match job.borrow_mut().heard(line) {
+    let on_line = s.heard_if(move |s, line| match job.borrow_mut().heard(line) {
         Some(at) => {
             if let Some(d) = s.dials.get_mut(&i) {
                 d.within(at.share);
             }
+            false
         }
         None => {
             let line = line.trim();
             if !line.is_empty() {
                 s.trouble.insert(i.clone(), line.to_string());
             }
+            false
         }
     });
     let app = a.clone();
@@ -75,7 +73,7 @@ pub(crate) fn install(s: &mut Store, a: &App) {
         let e = s.trouble.remove(&app.id).unwrap_or_default();
         finished(s, &app, ok, &e, t!("store-done-installed-note"));
     });
-    if let Some(p) = run::stream_stoppable(&run::line_by_line(&crate::common::gentle::argv(&["flatpak", "install", "--user", "-y", REMOTE, &id])), on_line, done) {
+    if let Some(p) = run::stream_stoppable(&progress::english(&run::line_by_line(&crate::common::gentle::argv(&["flatpak", "install", "--user", "-y", REMOTE, &id]))), on_line, done) {
         s.jobs.insert(id, p);
     }
 }
@@ -87,7 +85,7 @@ pub(crate) fn give_up(s: &mut Store, id: &str) {
 }
 
 pub(crate) fn uninstall(s: &mut Store, a: &App, wipe: bool) {
-    s.said.remove(&a.id);
+    s.words.said.remove(&a.id);
     s.busy.insert(a.id.clone(), "uninstall");
     s.dials.insert(a.id.clone(), Dial::default());
     let system = s.installed.get(&a.id).is_some_and(|(place, _)| place == "system");
@@ -95,7 +93,7 @@ pub(crate) fn uninstall(s: &mut Store, a: &App, wipe: bool) {
     let app = a.clone();
     let argv = crate::common::removal::flatpak_uninstall(Some(place), &a.id, wipe);
     let argv: Vec<&str> = argv.iter().map(String::as_str).collect();
-    run::capture(&argv, None,
+    run::capture(&progress::english(&argv), None,
                  s.then(move |s: &mut Store, (ok, _o, e): (bool, String, String)| finished(s, &app, ok, &e, t!("store-done-removed"))).pipe3());
 }
 
@@ -112,7 +110,7 @@ fn finished(s: &mut Store, a: &App, ok: bool, err: &str, success: &'static str) 
         run::capture(&["trindle-icons", "--quiet"], None, |_, _, _| {});
     }
     let said = if ok { (success.to_string(), Tone::Plain) } else { (last_line(err, t!("store-flatpak-refused")), Tone::Problem) };
-    s.said.insert(a.id.clone(), said);
+    s.words.said.insert(a.id.clone(), said);
     if removed {
         update_page::hold::removed(s, &a.id);
     }

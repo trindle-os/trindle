@@ -21,12 +21,12 @@ impl Tile<'_> {
     }
 }
 
-fn words_of(text: &str) -> Vec<String> {
+pub(super) fn words_of(text: &str) -> Vec<String> {
     text.to_lowercase().split_whitespace().map(String::from).collect()
 }
 
 pub(crate) fn tiles(s: &Store) -> Vec<Tile<'_>> {
-    let listed: &[Found] = s.hub.as_deref().map_or(&[], |v| &v[..]);
+    let listed: &[Found] = s.appimagehub.list.as_deref().map_or(&[], |v| &v[..]);
     let (flat, images): (Vec<&App>, Vec<&Found>) = match &s.view {
         View::Home => (POPULAR.iter().filter_map(|i| s.apps.get(*i)).collect(), hub::popular(listed)),
         View::Category(code) => (s.apps.values().filter(|a| a.categories.contains(code)).collect(),
@@ -37,8 +37,8 @@ pub(crate) fn tiles(s: &Store) -> Vec<Tile<'_>> {
         }
         _ => return Vec::new(),
     };
-    let flat = flat.into_iter().map(Tile::Flat).filter(|_| s.show.flatpaks());
-    let images = images.into_iter().map(Tile::Image).filter(|_| s.show.appimages());
+    let flat = flat.into_iter().map(Tile::Flat).filter(|_| s.prefs.show.flatpaks());
+    let images = images.into_iter().map(Tile::Image).filter(|_| s.prefs.show.appimages());
     let mut all: Vec<Tile> = if s.view == View::Home { take_turns(flat, images) } else { flat.chain(images).collect() };
     match &s.view {
         View::Category(_) => all.sort_by_cached_key(|t| t.name().to_lowercase()),
@@ -64,8 +64,8 @@ fn take_turns<'a>(a: impl Iterator<Item = Tile<'a>>, b: impl Iterator<Item = Til
 }
 
 pub(crate) fn offered(s: &Store) -> (usize, usize) {
-    let listed = s.hub.as_deref().map_or(0, Vec::len);
-    (if s.show.flatpaks() { s.apps.len() } else { 0 }, if s.show.appimages() { listed } else { 0 })
+    let listed = s.appimagehub.list.as_deref().map_or(0, Vec::len);
+    (if s.prefs.show.flatpaks() { s.apps.len() } else { 0 }, if s.prefs.show.appimages() { listed } else { 0 })
 }
 
 pub(crate) fn icons(s: &Store) -> Vec<String> {
@@ -78,10 +78,10 @@ pub(crate) fn icons(s: &Store) -> Vec<String> {
 const ICONS_AT_ONCE: usize = 60;
 
 pub(crate) fn why_none(s: &Store) -> Option<&'static str> {
-    if !s.show.appimages() {
+    if !s.prefs.show.appimages() {
         return None;
     }
-    match s.hub.as_deref().map(Vec::as_slice) {
+    match s.appimagehub.list.as_deref().map(Vec::as_slice) {
         Some([]) if !s.online => Some(t!("store-browse-offline")),
         Some([]) => Some(t!("store-browse-failed")),
         _ => None,
@@ -89,9 +89,9 @@ pub(crate) fn why_none(s: &Store) -> Option<&'static str> {
 }
 
 pub(crate) fn set_show(s: &mut Store, show: Show) {
-    s.show = show;
+    s.prefs.show = show;
     s.shown = PAGE;
-    if let Err(e) = formats::set_show_in(&s.conf, show) {
+    if let Err(e) = formats::set_show_in(&s.prefs.conf, show) {
         s.top = Some((e.to_string(), Tone::Problem));
     }
     if show.appimages() {

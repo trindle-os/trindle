@@ -1,0 +1,129 @@
+## What an app can be allowed to do, and what goes wrong without it. Each
+## permission has a name (said after "asks for", as in "Weather asks for
+## the internet and sound"), the line under its switch, and for some a warning.
+
+access-network-name = the internet
+access-network-without = It will not be able to reach the internet or other computers nearby.
+access-sound-name = sound
+access-sound-without = It will make no sound.
+access-microphone-name = your microphone
+access-microphone-without = It will not be able to hear you.
+access-sound-and-microphone-name = sound and your microphone
+access-sound-and-microphone-without = It will make no sound and will not be able to hear you.
+access-files-name = your Documents, Downloads, Pictures, Music, Videos and Desktop folders
+access-files-without = It will not be able to open your files or save into your folders.
+access-home-name = everything in your home folder, including hidden settings files
+access-home-without = It will not be able to open your files or save into your folders.
+access-devices-name = your camera and other plugged-in devices
+access-devices-without = It will not be able to see you or use what you plug in.
+access-bluetooth-name = Bluetooth devices such as headphones
+access-bluetooth-without = It will not be able to talk to anything over Bluetooth.
+access-notifications-name = notifications
+access-notifications-without = It will not be able to tell you when something happens.
+access-background-name = starting when you log in
+access-background-without = It will only run while you have it open.
+access-screen-name = pictures of your screen, what you copy, and typing for you as if it were your keyboard
+access-screen-without = It will not be able to see other windows or read what you copy at any time.
+access-x11-name = drawing its windows the older way, which lets it watch other older apps and what's typed in them
+access-x11-without = Its windows will not open.
+access-computer-name = working outside its box, with everything you can reach yourself
+access-computer-without = What you type into it stays shut in its box, so sudo and your own files will not work there.
+access-control-name = control of your keyboard, mouse and clipboard
+access-control-without = It will not be able to move the pointer, type or share what you copy.
+access-capture-name = sharing your mouse and keyboard with another computer
+access-capture-without = The pointer will not be able to cross to another computer.
+access-copied-name = the files you copy
+access-copied-without = It will not be able to read the files you copy, so it cannot carry them to another computer.
+access-summon-name = opening the ring over a full-screen window, as if you pressed the key
+access-summon-without = Its keys and clicks will open the ring on the desktop only, never over a full-screen window.
+access-listen-name = being reached by other computers on your local network
+access-listen-without = Other computers on your local network will not be able to find it or connect to it.
+access-home-network-name = devices on your local network only
+access-home-network-without = It will not be able to find or talk to printers, scanners or other devices on the local network.
+access-usb-devices-name = scanners and USB devices
+access-usb-devices-without = It will not be able to use a scanner that is plugged into this computer.
+access-expand-name = expanding short codes as you type
+access-expand-without = Its short codes will not be expanded as you type.
+access-accessibility-name = reading every window aloud
+access-accessibility-without = It will not be able to read your windows aloud.
+access-unnamed-name = something it didn't name
+
+access-control-warning = It can type, click and read what you copy as if it were you. Only allow this for a plugin you trust.
+access-capture-warning = While the pointer is on the other computer, everything you type and click goes to this plugin. Only allow this for a plugin you trust.
+access-copied-warning = It can read exactly the files you copy while it is allowed, and nothing else. Only allow this for a plugin you trust.
+access-summon-warning = It can put the ring, which takes everything you type, over a game or a film without you touching a key. Only allow this for a plugin you trust.
+access-home-network-warning = It can talk to every device on your local network, your router included, but not to the internet. Only allow this for a plugin you trust.
+access-usb-devices-warning = It can use the scanners and image devices that are plugged in when it starts, and no other USB device. Only allow this for a plugin you trust.
+access-expand-warning = Trindle watches what you type for its codes and types its words for you. The plugin never sees what you type. Only allow this for a plugin you trust.
+access-accessibility-warning = It can read everything on your screen. Like any screen reader, it can also press buttons and type text in other windows, though it has no keyboard or mouse of its own. Only allow this for a plugin you trust.
+
+## Titles (for a tooltip) and the line under a switch, which says what switching it off means.
+access-network-title = The internet
+access-network-off = Off means it can't reach the internet or other computers nearby.
+access-sound-title = Play sound
+access-sound-off = Off means no sound.
+access-microphone-title = Your microphone
+access-microphone-off = Off means it can't hear you.
+access-sound-and-microphone-title = Play sound and use your microphone
+access-sound-and-microphone-off = Off means it makes no sound and can't hear you.
+access-files-title = Your Documents, Downloads, Pictures, Music, Videos and Desktop folders
+access-files-off = Off means it can't open your files or save into your folders.
+access-home-title = Everything in your home folder, including hidden settings files
+access-home-off = Off means it can't open your files or save into your folders.
+access-devices-title = Your camera and other plugged-in devices
+access-devices-off = Off means it can't use your camera or anything you plug in.
+access-bluetooth-title = Bluetooth, for headphones and other things nearby
+access-bluetooth-off = Off means it can't connect to anything over Bluetooth.
+access-notifications-title = Show notifications
+access-notifications-off = Off means it can't tell you when something happens.
+access-background-title = Start by itself when you log in
+access-background-off = Off means it only runs while you have it open.
+access-screen-title = Take pictures of your screen, read what you copy and type as if it were your keyboard
+access-screen-off = Off means it can't see other windows or read what you copy whenever it likes.
+access-x11-title = Draw its windows the older way, which lets it watch other older apps and what is typed in them
+access-x11-off = Off stops its windows opening.
+access-computer-title = Work outside its box, with everything you can reach yourself
+access-computer-off = Off means what you type into it stays shut in its box, so sudo and your own files won't work there.
+access-control-title = Control your keyboard, mouse and clipboard
+access-control-off = Off means it can't move the pointer, type or share what you copy.
+access-capture-title = Share your mouse and keyboard with another computer
+access-capture-off = Off means the pointer can't cross to another computer.
+access-copied-title = Read the files you copy
+access-copied-off = Off means it can't read the files you copy or send them to another computer.
+access-summon-title = Open the ring over a full-screen window, as if you pressed the key
+access-summon-off = Off means its keys and clicks open the ring on the desktop only, never over a full-screen window.
+access-listen-title = Let other computers on your local network reach it
+access-listen-off = Off means other computers on your local network can't find it or connect to it.
+access-home-network-title = Reach devices on your local network only
+access-home-network-off = Off means it can't find or connect to printers, scanners or other devices on the local network.
+access-usb-devices-title = Use scanners and USB devices
+access-usb-devices-off = Off means it can't use a scanner that's plugged into this computer.
+access-expand-title = Expand your short codes as you type
+access-expand-off = Off means Trindle won't expand its short codes as you type.
+access-accessibility-title = Read what every window shows and say it aloud
+access-accessibility-off = Off means it can't read your windows aloud.
+access-unnamed-title = Something it did not name
+
+## The few words on a plugin's row of the Permissions page.
+access-note-acts-as-you = it can act as you
+access-note-home-network = it can reach every device on your local network
+access-note-usb-devices = it can use scanners and image devices
+access-note-expand = it can type into your windows
+access-note-accessibility = it can read everything on your screen
+
+access-listen-detail = { $ports }, from computers on your local network only. It needs the internet allowed too.
+
+## A request that is unusual for the kind of app that makes it.
+access-unusual = This is unusual for { $kind }. Only allow it if you trust where this app came from.
+access-kind-terminal = a terminal
+access-kind-calculator = a calculator
+access-kind-photo = a photo app
+access-kind-text-editor = a text editor
+access-kind-browser = a web browser
+access-kind-office = an office app
+access-kind-graphics = a graphics app
+access-kind-game = a game
+access-kind-sound-video = a sound and video app
+access-kind-programming = a programming tool
+access-kind-utility = a utility
+access-kind-other = an app like this

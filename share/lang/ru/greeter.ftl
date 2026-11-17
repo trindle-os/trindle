@@ -27,13 +27,13 @@ greeter-ready-name = Введите имя и пароль и нажмите Ent
 greeter-phone-failed = Телефон не выполнил вход. Введите пароль.
 
 # Under the password box for a few seconds, where a phone is paired.
-greeter-phone-hint = Кнопка телефона выполняет вход с помощью телефона.
+greeter-phone-hint = Войти с помощью телефона
 
 # At the foot of the screen, for when nothing else works.
 greeter-trouble = Не получается войти? Нажмите Ctrl+Alt+F2 для текстового входа.
 
 # Beside the light drawing switch, on a computer with no graphics chip.
-greeter-no-chip = Графический чип не найден, поэтому облегчённая отрисовка ускоряет работу.
+greeter-no-chip = Trindle не нашёл графический чип, поэтому использует упрощённую графику, чтобы рабочий стол не тормозил.
 
 # The main button's name (a round button with an arrow) that logs in.
 greeter-sign-in = Войти
@@ -55,7 +55,7 @@ greeter-pam-account-expired = Срок действия этой учётной 
 greeter-pam-password-expired = Срок действия этого пароля истёк. Войдите в текстовой консоли (Ctrl+Alt+F2), чтобы сменить его.
 
 # Red line under the boxes, or the sentence at the top, when the login failed and the system gave no reason.
-greeter-login-failed = Войти не удалось.
+greeter-login-failed = Не удалось войти.
 
 # Red line under the name box when Enter is pressed with no name.
 greeter-name-first = Сначала введите имя.
@@ -81,7 +81,7 @@ greeter-answer-box = Ответ
 greeter-use-phone = Войти с телефоном
 
 # Name of the switch for light drawing on a computer with no graphics chip, and the word under it.
-greeter-light-drawing = Облегчённая отрисовка
+greeter-light-drawing = Упрощённая графика
 
 # Tip of the round button that shows or hides the on-screen keyboard.
 greeter-keyboard-tip = Экранная клавиатура
@@ -108,7 +108,7 @@ greeter-shut-down = Выключить
 greeter-shut-down-sure = Нажмите ещё раз, чтобы выключить
 
 # Red line under the boxes when a power button is pressed and the system has no bus to ask.
-greeter-no-bus = Системная шина недоступна.
+greeter-no-bus = Trindle не может связаться с системой.
 
 # Red line under the boxes when the system refused to restart; the reason follows, as the system worded it.
 greeter-restart-failed = Не удалось перезагрузить: { $why }
@@ -120,7 +120,7 @@ greeter-shut-down-failed = Не удалось выключить: { $why }
 greeter-service-no-talk = Не удалось связаться со службой входа.
 
 # Red line under the boxes when the login service was too slow.
-greeter-service-timeout = Служба входа не ответила вовремя.
+greeter-service-timeout = Служба входа слишком долго не отвечала.
 
 # Red line under the boxes when the login service hung up.
 greeter-service-closed = greetd закрыл соединение.
@@ -129,7 +129,7 @@ greeter-service-closed = greetd закрыл соединение.
 greeter-service-too-big = Служба входа прислала слишком большой ответ, его не удалось прочитать.
 
 # Red line under the boxes when the login screen was started by hand and not by the login service.
-greeter-service-not-started = GREETD_SOCK не задан: экран входа запущен не из greetd.
+greeter-service-not-started = GREETD_SOCK не задан, поэтому greetd не запускал этот экран входа.
 
 # Red line under the boxes when there is no connection to the login service.
 greeter-service-no-connection = нет соединения

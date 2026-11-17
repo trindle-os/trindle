@@ -90,7 +90,7 @@ ring-shortcuts-console = Chuyển sang bảng điều khiển văn bản
 ring-shortcuts-console-keys = Ctrl+Alt+F1 đến F12
 
 # Words for the keys the screen reader takes while it is on.
-ring-shortcuts-reader-keys = Các phím riêng của trình đọc màn hình, khi nó đang bật
+ring-shortcuts-reader-keys = Các phím cho trình đọc màn hình khi nó đang bật
 
 # The keys the screen reader takes while it is on.
 ring-shortcuts-reader-keys-keys = Caps Lock, Insert

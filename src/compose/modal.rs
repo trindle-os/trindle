@@ -11,7 +11,7 @@ use smithay::{
 };
 use tracing::warn;
 
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
 
 pub const LIMIT: Duration = Duration::from_secs(120);
 
@@ -23,7 +23,7 @@ pub struct Held {
     pointer_taken: bool,
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     fn modal_refusal(&self, surface: &WlrLayerSurface, layer: Layer) -> Option<&'static str> {
         if !crate::trusted::is_trusted(surface.wl_surface()) {

@@ -9,8 +9,20 @@ report-title-crash = Kuna kitu kimeharibika. Tuma ripoti?
 # Under the title: what a report holds, and what it never holds.
 report-summary = Hii hutuma kosa, muhtasari wa kompyuta na mistari ya mwisho ya kumbukumbu, huku majina, anwani za barua pepe, anwani za mtandao na majina ya Wi-Fi yakiondolewa. Majina ya faili na anwani za wavuti bado zinaweza kuwa katika mistari ya kumbukumbu. Haitumi faili zako wala nywila zako.
 
-# Typing box at the top of the window, shown quietly while empty.
-report-what-doing = Ulikuwa unafanya nini? (si lazima)
+# Big typing box in the middle of the window, shown quietly while empty.
+report-what-doing = Nini kilitokea?
+
+# Beside the dropdown at the top of the window that says which app the report is about; also its name for the screen reader.
+report-app-box = Programu gani?
+
+# Dropdown choice: the person doesn't know which app it was.
+report-app-unsure = Sina uhakika
+
+# Dropdown choice: the app is not one of Trindle's own.
+report-app-other = Programu nyingine
+
+# Dropdown choice: the desktop itself (the panels, windows and session), not a single app.
+report-app-desktop = Eneo-kazi
 
 # Button at the bottom of the window that sends the report; it is also the word beside it when it is switched off.
 report-send = Tuma
@@ -34,7 +46,7 @@ report-copy = Nakili
 report-save = Hifadhi
 
 # Written where the Send button would be, when Buildmorphic says it is not taking reports or cannot be reached.
-report-not-taken = Ripoti bado hazipokelewi.
+report-not-taken = Ripoti bado haziwezi kutumwa.
 
 # Written where the Send button would be, while Buildmorphic is being asked whether it is taking reports.
 report-checking = Inakagua.
@@ -64,16 +76,16 @@ report-sending = Inatuma.
 report-saved-as = Imehifadhiwa kama Downloads/{ $name }.
 
 # Red words when the Buildmorphic username holds an email address.
-report-no-at = Tumia jina lako la mtumiaji la Buildmorphic, si barua pepe, kwa hiyo bila @.
+report-no-at = Andika jina lako la mtumiaji la Buildmorphic, si anwani ya barua pepe. Usitumie @.
 
 # Red words when the Buildmorphic username holds letters that are not allowed.
-report-name-chars = Jina la mtumiaji lina herufi ndogo, nambari au vistari 2 hadi 31.
+report-name-chars = Jina la mtumiaji lazima liwe na urefu wa herufi 2 hadi 31, zikiwa herufi ndogo, nambari au vistari.
 
 # Red words in Settings, Crash reports, when the GitHub name holds letters that are not allowed.
-report-github-chars = Jina la GitHub lina herufi, namba na vistari tu.
+report-github-chars = Jina la GitHub linaweza kuwa na herufi, namba na vistari tu.
 
 # Red words when a report could not be kept for later. $reason is one of the four reasons below.
-report-keep-failed = Haikuweza kuhifadhiwa kwa baadaye: { $reason }.
+report-keep-failed = Trindle haikuweza kuhifadhi ripoti kwa baadaye: { $reason }.
 
 # Red words when a report could not be saved. $reason is one of the four reasons below.
 report-save-failed = Haikuweza kuhifadhiwa: { $reason }.
@@ -88,7 +100,7 @@ report-reason-full = diski imejaa
 report-reason-missing = folda haipo
 
 # The reason inside "Could not save it: ...": any other refusal.
-report-reason-refused = diski ilikataa
+report-reason-refused = hitilafu ya diski
 
 # Why a report could not be posted: the program that posts it is not installed.
 report-curl-missing = curl haipo.
@@ -100,7 +112,7 @@ report-not-posted = Haikuweza kutumwa.
 report-no-connection = Hakuna muunganisho.
 
 # Why a report could not be posted: the address replied with a fault. $code is the number it replied with.
-report-answered = Anwani ilijibu { $code }.
+report-answered = Seva ilijibu { $code }.
 
 # Beside the Send button, when the note is too short: Buildmorphic needs a few words with the log.
 report-say-more = Andika maneno machache zaidi kueleza kilichotokea.
@@ -111,17 +123,55 @@ report-reading-log = Inasoma kumbukumbu.
 # Beside the Send button, when no log lines were found: a report with no log is not sent.
 report-no-log = Hakuna kumbukumbu ya kutuma nayo, kwa hiyo haiwezi kutumwa. Ihifadhi badala yake.
 
+# Beside the picture buttons, and beside the picture once one is chosen: who can see it.
+report-picture-line = Picha ni hiari. Ni mmiliki wa mradi tu anayeiona.
+
+# Tooltip of the round button that opens the file chooser for a picture.
+report-picture-choose = Chagua picha ya PNG
+
+# Tooltip of the round button that takes a picture of the screen now.
+report-picture-shot = Piga picha ya skrini
+
+# Tooltip of the round button that takes the picture off the report.
+report-picture-remove = Ondoa picha
+
+# Name of the small picture for a screen reader. $width and $height are in pixels.
+report-picture-name = Picha yako, { $width } kwa { $height }
+
+# Title of the file chooser, and the name of its one filter.
+report-picture-choose-title = Chagua picha ya PNG
+
+report-picture-filter = Picha za PNG
+
+# Under the picture while it is being read.
+report-picture-reading = Inasomwa.
+
+# Red words under the picture when the screenshot could not be taken, or no file chooser answers.
+report-picture-no-shot = Imeshindwa kupiga picha ya skrini.
+
+report-picture-no-chooser = Trindle haikuweza kufungua kichagua faili.
+
+# Red words under the picture, each the reason it is refused.
+report-picture-not-png = Si picha ya PNG.
+
+report-picture-too-big = Ni zaidi ya MB { $megabytes }.
+
+report-picture-too-large = Picha ni kubwa mno. Inaweza kuwa hadi pikseli { $side } kwa upana na pikseli { $side } kwa urefu.
+
+report-picture-damaged = Picha imeharibika.
+
+report-picture-unreadable = Imeshindwa kuisoma.
 
 
-report-sent-as-bug = Imetumwa. Imehesabiwa kama hitilafu { $number }. Asante.
+
+report-sent-as-bug = Imetumwa. Nambari ya ripoti yako ya hitilafu ni { $number }. Asante.
 
 
 # Under the title, beta only: why a report matters and what it holds.
-report-beta = Trindle iko katika hatua ya beta, na kila ripoti hutusaidia kuifanya ifanye kazi kikamilifu. Ripoti haina jina na haina chochote cha faragha au cha kibinafsi. Barua pepe haihitajiki, na jina la mtumiaji ni la hiari. Hakuna kinachotumwa hadi ubonyeze Tuma.
+report-beta = Trindle iko katika hatua ya beta. Ripoti hazitambulishi mtu: majina, anwani za barua pepe na folda za nyumbani huondolewa. Jina la mtumiaji ni la hiari.
 
 # Typing box under the first one: the optional Buildmorphic username that credits the report.
 report-username-box = Jina la mtumiaji la Buildmorphic (la hiari)
 
 # Red words when a report posted by hand could not get through. $why is the reason, such as "No connection."
-report-try-again = Haikutumwa. { $why } Bonyeza Tuma ujaribu tena.
-
+report-try-again = Trindle haikuweza kutuma ripoti. { $why } Bonyeza Tuma ujaribu tena.

@@ -49,14 +49,11 @@ settings-help-read = { $title } पढ़ें
 # Bold line in the Reading card of Help when no topic is open.
 settings-help-nothing-open = कुछ खुला नहीं है
 
-# Quiet line under "Nothing open" in Help.
-settings-help-nothing-open-sub = यहाँ पढ़ने के लिए किसी विषय के पास वाला तीर दबाएँ।
-
 # Heading of the Help card that shows the open topics.
 settings-help-reading = पढ़ना
 
 # Placeholder and spoken name of the typing box that searches Help.
-settings-help-search-placeholder = सहायता खोजें, जैसे “वाई-फ़ाई”, “प्रिंटर” या “शट डाउन”
+settings-help-search-placeholder = सहायता खोजें
 
 # Heading of the Help card with the search box.
 settings-help-search = सहायता खोजें

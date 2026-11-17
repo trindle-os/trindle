@@ -341,11 +341,19 @@ fn prepare(mut mail: Mail, fds: Vec<OwnedFd>, root: Option<&Path>) -> Result<(Ma
     Ok((mail, Some(dir)))
 }
 
-#[cfg(test)]
-fn handle(options: &Options, root: Option<&Path>, open: &dyn Fn(&Mail) -> Result<(), Why>) -> Result<Option<PathBuf>, Why> {
-    let (mail, folder) = prepare(Mail::from(options)?, descriptors(options)?, root)?;
+fn checked(options: &Options) -> Result<(Mail, Vec<OwnedFd>), Why> {
+    Ok((Mail::from(options)?, descriptors(options)?))
+}
+
+fn open_then_clean(prepared: Result<(Mail, Option<PathBuf>), Why>, open: &dyn Fn(&Mail) -> Result<(), Why>, keep: impl FnOnce(PathBuf)) -> Result<(), Why> {
+    let (mail, folder) = prepared?;
     match open(&mail) {
-        Ok(()) => Ok(folder),
+        Ok(()) => {
+            if let Some(dir) = folder {
+                keep(dir);
+            }
+            Ok(())
+        }
         Err(why) => {
             if let Some(dir) = folder {
                 let _ = std::fs::remove_dir_all(dir);
@@ -355,15 +363,22 @@ fn handle(options: &Options, root: Option<&Path>, open: &dyn Fn(&Mail) -> Result
     }
 }
 
+#[cfg(test)]
+fn handle(options: &Options, root: Option<&Path>, open: &dyn Fn(&Mail) -> Result<(), Why>) -> Result<Option<PathBuf>, Why> {
+    let (mail, fds) = checked(options)?;
+    let kept = std::cell::RefCell::new(None);
+    open_then_clean(prepare(mail, fds, root), open, |dir| *kept.borrow_mut() = Some(dir))?;
+    Ok(kept.into_inner())
+}
+
 fn compose(kit: &Kit, asked: Asked) {
     let Ok((_handle, _app_id, _parent, options)) = asked.message().body().deserialize::<(OwnedObjectPath, String, String, Options)>() else {
         return asked.fail("org.freedesktop.DBus.Error.InvalidArgs", "ComposeEmail takes a handle, an app, a window and options");
     };
     let token = get::<String>(&options, "activation_token").filter(|t| !t.is_empty());
-    let (checked, fds) = (Mail::from(&options), descriptors(&options));
-    let (mail, fds) = match (checked, fds) {
-        (Ok(m), Ok(f)) => (m, f),
-        (Err(why), _) | (_, Err(why)) => {
+    let (mail, fds) = match checked(&options) {
+        Ok(both) => both,
+        Err(why) => {
             tell(kit, why);
             return asked.reply(&failed());
         }
@@ -373,20 +388,7 @@ fn compose(kit: &Kit, asked: Asked) {
     let root = stage_root();
     crate::common::run::on_thread(move || prepare(mail, fds, root.as_deref()), move |prepared| {
         kit.release();
-        let sent = prepared.and_then(|(mail, folder)| match start(&mail, token) {
-            Ok(()) => {
-                if let Some(dir) = folder {
-                    remove_later(dir);
-                }
-                Ok(())
-            }
-            Err(why) => {
-                if let Some(dir) = folder {
-                    let _ = std::fs::remove_dir_all(dir);
-                }
-                Err(why)
-            }
-        });
+        let sent = open_then_clean(prepared, &|mail| start(mail, token.clone()), remove_later);
         match sent {
             Ok(()) => asked.reply(&answer(DONE, HashMap::new())),
             Err(why) => {

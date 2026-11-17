@@ -5,18 +5,18 @@
 store-plugins-open-settings = Abrir as configurações dele
 
 # Red words under the plugin catalogue when starting again did not work; the reason follows.
-store-plugins-not-done = Não foi feito: { $why }
+store-plugins-not-done = Falhou: { $why }
 
 # Said on a plugin's row when its update asks for a new permission and so waits for the person.
 # SAFETY: needs a human review before it ships
-store-plugins-waits-for-you = Esta atualização precisa de uma permissão nova. Ela está esperando por você.
+store-plugins-waits-for-you = Esta atualização precisa de uma permissão nova, então está esperando que você a permita.
 
 # On a plugin's row: the version it has and the one that is ready.
-store-plugins-waiting = Versão { $mine } agora, a { $new } está pronta
+store-plugins-waiting = A versão { $new } está pronta. Você tem a versão { $mine }.
 
 # On a plugin's row: the same, and what the new one asks for that the old one did not; the list and the note that it waits follow.
 # SAFETY: needs a human review before it ships
-store-plugins-waiting-more = Versão { $mine } agora, a { $new } está pronta. Ela pede mais do que antes: { $more }. { $waits }
+store-plugins-waiting-more = Você tem a versão { $mine }. A versão { $new } precisa de mais permissões: { $more }. { $waits }
 
 # Said after who is putting updates in, on the Updates and Plugins pages.
 store-plugins-come-back = Os botões daqui voltam quando terminar.
@@ -30,9 +30,8 @@ store-plugins-none = Nenhum plugin está instalado, e ainda não há nenhum disp
 # Line under the title of the Plugins page when none are installed and some are on offer.
 store-plugins-none-ready =
     { $n ->
-        [one] Nenhum plugin está instalado ainda; 1 está pronto para instalar.
-        [many] Nenhum plugin está instalado ainda; { $n } de plugins estão prontos para instalar.
-       *[other] Nenhum plugin está instalado ainda; { $n } estão prontos para instalar.
+        [one] Nenhum plugin está instalado ainda. 1 está pronto para instalar.
+       *[other] Nenhum plugin está instalado ainda. { $n } estão prontos para instalar.
     }
 
 # How many plugins are installed, as part of a line.
@@ -60,7 +59,7 @@ store-plugins-count-held =
     }
 
 # Line under the title of the Plugins page: how many are installed, with some updates held back.
-store-plugins-line-held = { $installed }; { $held }.
+store-plugins-line-held = { $installed }. { $held }.
 
 # Line under the title of the Plugins page: how many are installed.
 store-plugins-line-installed = { $installed }.
@@ -72,7 +71,7 @@ store-plugins-line-current = { $installed }, todos atualizados.
 store-plugins-line-updates = { $installed }, e { $have }.
 
 # The same, with some updates held back.
-store-plugins-line-updates-held = { $installed }, e { $have }; { $held }.
+store-plugins-line-updates-held = { $installed }, e { $have }. { $held }.
 
 # On a plugin's card when it asks for nothing.
 store-plugins-asks-nothing = Ele não pede nada.
@@ -85,10 +84,10 @@ store-plugins-asks = O que ele pede: { $list }.
 store-plugins-title = Plugins
 
 # On a plugin's card: the new version is ready and held back is not said.
-store-plugins-version-ready = Versão { $mine } instalada; a { $new } está pronta.
+store-plugins-version-ready = A versão { $mine } está instalada. A versão { $new } está pronta.
 
 # On a plugin's card: its installed version.
-store-plugins-version-installed = Versão { $version }, instalada.
+store-plugins-version-installed = Versão { $version } instalada.
 
 # On a plugin's card: the version on offer.
 store-plugins-version-offered = Versão { $version }.
@@ -100,7 +99,7 @@ store-plugins-version-held = { $words }.
 store-plugins-install = Instalar { $name }
 
 # Tip of the round button that releases a plugin whose updates are held back.
-store-plugins-release = Liberar { $name }
+store-plugins-release = Permitir atualizações de { $name }
 
 # Tip of the round button that updates a plugin to a version.
 store-plugins-update-to = Atualizar para { $version }
@@ -109,7 +108,7 @@ store-plugins-update-to = Atualizar para { $version }
 store-plugins-where = De onde vêm os plugins
 
 # Information on the card that says where plugins come from.
-store-plugins-come-from = Os plugins vêm apenas da lista do próprio Trindle, lida em trindle.org toda vez que esta página abre. Para oferecer um, envie-o: cada um é testado antes de entrar no ar.
+store-plugins-come-from = Os plugins vêm apenas da lista do próprio Trindle, que o Trindle lê em trindle.org toda vez que esta página abre. Você pode enviar um plugin para a lista. Cada um é testado antes de aparecer.
 
 # Red words under a plugin that went in but whose background part is not running; the reason follows.
 store-plugins-not-running = Ele está instalado, mas a parte dele que roda em segundo plano não está funcionando: { $why }

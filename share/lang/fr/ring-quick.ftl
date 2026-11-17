@@ -2,7 +2,7 @@
 # machine translated (French), not yet reviewed by a person.
 
 # Tip of the pin button on a clipboard or notification item that is not pinned: keeps it for good.
-ring-quick-pin = Épingler : le garder définitivement
+ring-quick-pin = Épinglez-le pour le garder
 
 # Tip of the pin button on a clipboard or notification item that is pinned.
 ring-quick-unpin = Détacher
@@ -13,7 +13,7 @@ ring-quick-forget-one = Oublier celui-ci
 
 # SAFETY: needs a human review before it ships
 # Tip of the bin button that forgets everything on the page except what is pinned; it asks twice.
-ring-quick-forget-all = Tout oublier sauf les éléments épinglés
+ring-quick-forget-all = Tout effacer sauf les éléments épinglés
 
 # Name of the volume slider for the speakers on the sound page.
 ring-quick-speakers = Haut-parleurs
@@ -70,7 +70,7 @@ ring-quick-bt-switch = Bluetooth
 ring-quick-bt-off = Le Bluetooth est désactivé.
 
 # Line on the Bluetooth page while it looks for devices and none is found yet.
-ring-quick-bt-searching = Recherche... mettez l'appareil en mode d'appairage.
+ring-quick-bt-searching = Recherche… Mettez l'appareil en mode d'appairage.
 
 # Tip of the button beside a connected Bluetooth device that disconnects it.
 ring-quick-bt-disconnect = Déconnecter
@@ -86,29 +86,29 @@ ring-quick-bt-pair = Appairer et connecter
 ring-quick-bt-device = Appareil Bluetooth
 
 # Line under the Bluetooth page while pairing with a device.
-ring-quick-bt-pairing = Appairage avec { $name }...
+ring-quick-bt-pairing = Appairage avec { $name }…
 
 # Line under the Bluetooth page while connecting a device.
-ring-quick-bt-connecting = Connexion de { $name }...
+ring-quick-bt-connecting = Connexion de { $name }…
 
 # Line under the Bluetooth page while disconnecting a device.
-ring-quick-bt-disconnecting = Déconnexion de { $name }...
+ring-quick-bt-disconnecting = Déconnexion de { $name }…
 
 # Line under the Bluetooth page when connecting or disconnecting did not work.
 ring-quick-bt-failed = Cela n'a pas fonctionné. Est-il allumé et à proximité ?
 
 # Line under the Bluetooth page when pairing failed because the codes were not accepted.
-ring-quick-bt-codes = Non appairé : les codes n'ont pas été acceptés.
+ring-quick-bt-codes = Appairage impossible. Les codes ont échoué.
 
 # Line under the Bluetooth page when pairing failed.
-ring-quick-bt-not-paired = Non appairé. Est-il en mode d'appairage et à proximité ?
+ring-quick-bt-not-paired = L'appairage a échoué. Est-il en mode d'appairage et à proximité ?
 
 # Line under the Bluetooth page when pairing worked but connecting did not.
 ring-quick-bt-paired-not-connected = Appairé, mais la connexion a échoué. Réessayez dans un instant.
 
 # SAFETY: needs a human review before it ships
 # Question in the ring when a Bluetooth device wants a PIN typed.
-ring-quick-bt-ask-pin = Saisissez le code PIN de cet appareil. Il figure souvent dans son mode d'emploi, ou c'est 0000.
+ring-quick-bt-ask-pin = Saisissez le code PIN de cet appareil. Vous le trouverez souvent dans son mode d'emploi, ou essayez 0000.
 
 # Typing box for the PIN of a Bluetooth device, shown quietly while empty.
 ring-quick-bt-pin-box = Code PIN
@@ -147,7 +147,7 @@ ring-quick-wifi-switch = Wi-Fi
 ring-quick-wifi-off = Le Wi-Fi est désactivé.
 
 # Line on the Wi-Fi page while it looks for networks.
-ring-quick-wifi-looking = Recherche de réseaux...
+ring-quick-wifi-looking = Recherche de réseaux…
 
 # Tip of the button beside the Wi-Fi network in use that leaves it.
 ring-quick-wifi-disconnect = Déconnecter
@@ -162,7 +162,7 @@ ring-quick-wifi-password-box = Mot de passe
 ring-quick-wifi-join = Rejoindre
 
 # Line under the Wi-Fi page while joining a network.
-ring-quick-wifi-joining = Connexion à { $ssid }...
+ring-quick-wifi-joining = Connexion à { $ssid }…
 
 # Question text in the ring when the Wi-Fi password was not accepted.
 ring-quick-wifi-wrong-password = Ce mot de passe n'a pas fonctionné.
@@ -177,7 +177,7 @@ ring-quick-battery-none = Aucune batterie dans cet ordinateur.
 ring-quick-brightness-fixed = La luminosité de cet écran ne peut pas être modifiée d'ici
 
 # Line on the clipboard page when nothing has been copied yet.
-ring-quick-clip-empty = Rien n'a encore été copié. Ce que vous copiez est conservé ici.
+ring-quick-clip-empty = Rien n'a encore été copié.
 
 # Line on the clipboard page for a copied picture.
 ring-quick-clip-picture = Une image
@@ -189,7 +189,7 @@ ring-quick-clip-again = Copier à nouveau
 ring-quick-clip-filter = Filtrer
 
 # Line on the notifications page when nothing has been said yet.
-ring-quick-notes-empty = Rien n'a encore été signalé.
+ring-quick-notes-empty = Aucune notification pour le moment.
 
 # Tip of the button on one notification's page that goes back to the list.
 ring-quick-notes-back = Retour à toutes les notifications
@@ -207,7 +207,7 @@ ring-quick-charging-full = En charge : pleine dans environ { $time }
 ring-quick-charging = En charge
 
 # Line on the battery page on battery, with the time left and the power in watts.
-ring-quick-on-battery-left = Sur batterie : environ { $time } restantes, consommation { $rate } W
+ring-quick-on-battery-left = Sur batterie. Environ { $time } restantes, consommation de { $rate } W.
 
 # Line on the battery page on battery, when the time is not known.
 ring-quick-on-battery = Sur batterie
@@ -221,9 +221,9 @@ ring-quick-plugged = Branchée, ne charge pas
 # Line on the battery page about how much charge the battery still holds. The health is good, worn, or something else for worn out.
 ring-quick-health =
     { $how ->
-        [good] État : bon. Elle conserve { $capacity } % de sa capacité d'origine.
-        [worn] État : usée. Elle conserve { $capacity } % de sa capacité d'origine.
-       *[old] État : en fin de vie : il est temps d'en changer. Elle conserve { $capacity } % de sa capacité d'origine.
+        [good] La batterie est en bon état. Elle peut désormais stocker { $capacity } % de la charge qu'elle pouvait stocker à l'état neuf.
+        [worn] La batterie est usée. Elle peut désormais stocker { $capacity } % de la charge qu'elle pouvait stocker à l'état neuf.
+       *[old] La batterie est en fin de vie, il est temps d'en changer. Elle peut désormais stocker { $capacity } % de la charge qu'elle pouvait stocker à l'état neuf.
     }
 
 # Line on the battery page about how many times the battery has been charged.
@@ -235,10 +235,10 @@ ring-quick-cycles =
     }
 
 # Tip of the button that turns notification circles off.
-ring-quick-notes-on = Les notifications sont activées : les désactiver
+ring-quick-notes-on = Notifications activées. Les désactiver
 
 # Tip of the button that turns notification circles back on.
-ring-quick-notes-off = Les notifications sont désactivées : les activer
+ring-quick-notes-off = Notifications désactivées. Les activer
 
 # A time of under an hour on the battery page.
 ring-quick-minutes = { $m } min
@@ -263,3 +263,5 @@ ring-quick-title-tray = Icônes de la zone de notification
 # Heading of the shortcut list page, opened with Super and K.
 ring-quick-title-shortcuts = Raccourcis
 
+# Line under the Wi-Fi page when leaving the network did not work.
+ring-quick-wifi-leave-failed = Déconnexion impossible.

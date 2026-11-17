@@ -7,22 +7,22 @@ settings-sounds-title = ध्वनियाँ
 settings-sounds-keywords = ध्वनि आवाज़ घंटी चालू लॉगिन लॉगआउट बंद चार्जर बैटरी अलर्ट बीप चुप अपनी फ़ाइल sound sounds chime startup start up login log in logout shut down shutdown charger plugged unplugged battery alert beep off quiet own custom add file wav ogg mp3
 
 # Introduction under the heading of the sounds page, and the words behind the page i.
-settings-sounds-help = हर मौके की ध्वनि। एक चुनने पर वह बजती है, और "बंद" उस मौके को चुप रखता है। आप अपनी ध्वनियाँ जोड़ सकते हैं और फिर उन्हें बाकी की तरह चुन सकते हैं।
+settings-sounds-help = हर मौके के लिए एक ध्वनि चुनें, जैसे लॉग इन करना। आप अपनी ध्वनियाँ भी जोड़ सकते हैं।
 
 # First choice in each moment's list of sounds: that moment makes no sound.
 settings-sounds-off = बंद
 
 # Sentence at the top of the page when no moment makes a sound.
-settings-sounds-top-none = सब चुप: किसी मौके पर कोई ध्वनि नहीं बजती।
+settings-sounds-top-none = सब कुछ चुप है।
 
 # Sentence at the top of the page when every moment makes a sound.
-settings-sounds-top-all = हर मौके की अपनी ध्वनि है।
+settings-sounds-top-all = सभी ध्वनियाँ चालू हैं।
 
 # Sentence at the top of the page when some moments make a sound; { $n } is how many of the { $total } do.
 settings-sounds-top-some =
     { $n ->
-        [one] { $total } मौकों में से { $n } पर ध्वनि बजती है; बाकी चुप हैं।
-       *[other] { $total } मौकों में से { $n } पर ध्वनि बजती है; बाकी चुप हैं।
+        [one] { $total } ध्वनियों में से { $n } चालू है। बाकी बंद हैं।
+       *[other] { $total } ध्वनियों में से { $n } चालू हैं। बाकी बंद हैं।
     }
 
 # Name of a sound that comes with Trindle, in the lists of sounds.
@@ -71,7 +71,7 @@ settings-sounds-moment-unplug = चार्जर निकाला गया
 settings-sounds-moment-battery = बैटरी कम है
 
 # Name of a moment that can make a sound, as the heading of its line and the name of its list.
-settings-sounds-moment-notification = सूचना उभरती है
+settings-sounds-moment-notification = सूचना दिखती है
 
 # Heading of the logging out line.
 settings-sounds-moment-logout-short = लॉग आउट करना
@@ -79,26 +79,11 @@ settings-sounds-moment-logout-short = लॉग आउट करना
 # Heading of the notifications line.
 settings-sounds-moment-notification-short = सूचनाएँ
 
-# Small words under the logging in line.
-settings-sounds-moment-login-about = जब डेस्कटॉप दिखता है।
-
 # Small words under the logging out line.
 settings-sounds-moment-logout-about = रीस्टार्ट और बंद करने पर भी।
 
-# Small words under the charger plugged in line.
-settings-sounds-moment-plug-about = जब चार्जर लगता है।
-
-# Small words under the charger unplugged line.
-settings-sounds-moment-unplug-about = जब चार्जर निकलता है।
-
-# Small words under the battery low line.
-settings-sounds-moment-battery-about = जब चार्ज करने का समय हो।
-
-# Small words under the notifications line.
-settings-sounds-moment-notification-about = जब कोई सूचना उभरती है।
-
 # Heading and slider name for the volume of the logging in and out sounds.
-settings-sounds-volume-coming = आने-जाने की आवाज़ का वॉल्यूम
+settings-sounds-volume-coming = लॉग इन और आउट की आवाज़ का वॉल्यूम
 
 # Heading and slider name for the volume of notification sounds.
 settings-sounds-volume-notifications = सूचनाओं का वॉल्यूम
@@ -107,31 +92,28 @@ settings-sounds-volume-notifications = सूचनाओं का वॉल्
 settings-sounds-volume-power = पावर ध्वनियों का वॉल्यूम
 
 # Name of the round button that plays the sound chosen for a moment, or an added sound.
-settings-sounds-hear = सुनें
+settings-sounds-hear = बजाएँ
 
 # Name of the button that opens a window to add sound files.
 settings-sounds-add = ध्वनि फ़ाइलें जोड़ें
 
 # Name of the button that opens the folder where added sounds are kept.
-settings-sounds-open-folder = वह फ़ोल्डर खोलें जहाँ वे रखी जाती हैं
+settings-sounds-open-folder = जोड़ी गई ध्वनियों का फ़ोल्डर खोलें
 
 # Red words under the add sounds line when the folder could not be opened.
 settings-sounds-folder-not-opened = फ़ोल्डर खोला नहीं जा सका।
 
 # Red words under the add sounds line when the folder for added sounds could not be made.
-settings-sounds-folder-not-made = आपकी ध्वनियों का फ़ोल्डर बनाया नहीं जा सका।
+settings-sounds-folder-not-made = Trindle आपकी ध्वनियों का फ़ोल्डर नहीं बना सका।
 
 # Name of the button that plays the sound being added, when one of the same name is already there.
-settings-sounds-hear-new = जो लाई जा रही है उसे सुनें
+settings-sounds-hear-new = नई ध्वनि बजाएँ
 
 # Name of the button that plays the sound already there, when one of the same name is being added.
-settings-sounds-hear-old = जो पहले से है उसे सुनें
+settings-sounds-hear-old = मौजूदा ध्वनि बजाएँ
 
 # Heading of the line for adding sounds.
 settings-sounds-add-heading = ध्वनियाँ जोड़ें
-
-# Small words under the add sounds line, listing the kinds of file that can be added.
-settings-sounds-add-formats = WAV, OGG, Opus, FLAC या MP3।
 
 # Name of the bin button that removes a sound added by the person.
 settings-sounds-remove = यह ध्वनि हटाएँ
@@ -139,14 +121,11 @@ settings-sounds-remove = यह ध्वनि हटाएँ
 # Heading of the line shown when no sounds have been added.
 settings-sounds-none-yet = अभी कोई नहीं जोड़ी गई
 
-# Small words under that line.
-settings-sounds-none-yet-about = किसी भी मौके के लिए चुनने को एक जोड़ें।
-
 # Red words under a moment's line when its chosen sound file is gone.
 settings-sounds-gone = वह ध्वनि अब इस कंप्यूटर पर नहीं है। दूसरी चुनें।
 
 # Red words under a line when a sound would not play.
-settings-sounds-would-not-play = ध्वनि नहीं बजी। ऑडियो में स्पीकर जाँचें।
+settings-sounds-would-not-play = ध्वनि नहीं बजी। ऑडियो में अपने स्पीकर जाँचें।
 
 # Title of the window for choosing sound files.
 settings-sounds-chooser-title = ध्वनि फ़ाइलें चुनें
@@ -155,13 +134,17 @@ settings-sounds-chooser-title = ध्वनि फ़ाइलें चुन�
 settings-sounds-chooser-filter = ध्वनियाँ
 
 # Red words under the add sounds line when a chosen file is not a sound; { $name } is the file name.
-settings-sounds-not-playable = { $name } ऐसी ध्वनि नहीं है जिसे Trindle बजा सके।
+settings-sounds-not-playable = Trindle { $name } नहीं बजा सकता, क्योंकि वह फ़ाइल का प्रकार नहीं पहचानता।
 
 # Red words under the add sounds line when a file could not be copied in; { $name } is the file name.
 settings-sounds-not-copied = { $name } कॉपी नहीं हो सकी।
 
 # Green words under the add sounds line after sounds were added; { $n } is how many.
-settings-sounds-added = { $n } जोड़ी गईं। ऊपर किसी मौके के पास इसे चुनें।
+settings-sounds-added =
+    { $n ->
+        [one] { $n } ध्वनि जोड़ी गई। अब आप ऊपर किसी भी मौके के लिए इसे चुन सकते हैं।
+       *[other] { $n } ध्वनियाँ जोड़ी गईं। अब आप ऊपर किसी भी मौके के लिए इन्हें चुन सकते हैं।
+    }
 
 # Red words under the question about a sound of the same name when it could not be replaced; { $name } is the file name.
 settings-sounds-not-replaced = { $name } बदली नहीं जा सकी।
@@ -176,22 +159,22 @@ settings-sounds-replaced-some = { $total } में से { $n } बदली 
 settings-sounds-not-removed = इसे हटाया नहीं जा सका।
 
 # Red words under a moment's line when its sound was removed and the moment could not be set back to its own sound.
-settings-sounds-not-set-back = इसकी ध्वनि हटा दी गई, और इसे इसकी अपनी ध्वनि पर वापस नहीं किया जा सका।
+settings-sounds-not-set-back = Trindle ने ध्वनि हटा दी, पर उस मौके की सामान्य ध्वनि वापस नहीं रख सका।
 
 # Title of the card with the sounds for logging in and out and notifications.
-settings-sounds-coming-title = आना-जाना
+settings-sounds-coming-title = लॉग इन और आउट
 
 # Words behind the i of that card.
-settings-sounds-coming-about = एक ध्वनि चुनने पर वह बजती है, और "बंद" उस मौके को चुप रखता है। हर एक के पास का गोल बटन अभी चुनी ध्वनि बजाता है। हर वॉल्यूम 0 से 100 तक दस-दस में जाता है और छोड़ने पर एक बार बजता है।
+settings-sounds-coming-about = हर वॉल्यूम 0 से 100 तक दस-दस के कदम में जाता है। छोड़ने पर आपको ध्वनि एक बार सुनाई देती है।
 
 # Title of the card with the charger and battery sounds.
 settings-sounds-power-title = पावर
 
 # Words behind the i of that card.
-settings-sounds-power-about = चार्जर लगने और निकलने की, और बैटरी कम होने की ध्वनियाँ। वॉल्यूम 0 से 100 तक दस-दस में जाता है और छोड़ने पर एक बार बजता है।
+settings-sounds-power-about = चार्जर लगाने और निकालने की, और बैटरी कम होने की ध्वनियाँ। वॉल्यूम 0 से 100 तक दस-दस के कदम में जाता है। छोड़ने पर आपको ध्वनि एक बार सुनाई देती है।
 
 # Title of the card with the sounds the person added.
 settings-sounds-own-title = आपकी अपनी ध्वनियाँ
 
 # Words behind the i of that card.
-settings-sounds-own-about = WAV, OGG, Opus, FLAC या MP3। वे आपके अपने फ़ोल्डर में कॉपी हो जाती हैं, इसलिए मूल फ़ाइलें हटाई या मिटाई जा सकती हैं, और फिर उन्हें किसी भी मौके के पास बाकी की तरह चुना जा सकता है। एक हटाने पर जिस मौके में वह इस्तेमाल हो रही थी वह अपनी ध्वनि पर लौट आता है।
+settings-sounds-own-about = WAV, OGG, Opus, FLAC या MP3। Trindle इन्हें आपके अपने फ़ोल्डर में कॉपी कर लेता है, इसलिए आप मूल फ़ाइलें हटा या मिटा सकते हैं। फिर आप इन्हें बाकी की तरह किसी भी मौके के लिए चुन सकते हैं। अगर आप कोई ध्वनि हटाते हैं, तो जिस भी मौके में वह इस्तेमाल हो रही थी, वह अपनी सामान्य ध्वनि पर लौट आता है।

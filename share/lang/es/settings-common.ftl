@@ -7,13 +7,16 @@ settings-common-saved = Guardado
 # Said beside a button that worked, when nothing more is known.
 settings-common-done = Hecho
 
+# Words that only say "that worked", in lower case and separated by bars. A line saying one of them under a control that has already moved is left out, as the glow says it. Translate each word, and keep the bars.
+settings-common-quiet-words = guardado|hecho|en uso ahora|cambiado|establecido|tomado|añadido|liberado|quitado|almacenado|instalado|actualizado|unido|copiado|predeterminado ahora|reproducido|enviado|conectado|conectando|activado|desactivado|olvidado|se detiene al 80%|carga hasta el máximo|se inicia al entrar|guardado, pero no se inicia|al día
+
 # Said beside a button that failed, when nothing more is known.
 settings-common-not-done = No se hizo
 
 # Tip of the information button at the top of every Settings page.
 settings-common-about-page = Acerca de esta página
 
-# Tip of the information button on a card: { $name } is the card's heading in lower case.
+# Tip of the information button on a card: { $name } is the card's heading as it is written.
 settings-common-about-card = Acerca de { $name }
 
 # Heading of the question when a name is already taken: { $name } is the name.
@@ -34,7 +37,7 @@ settings-common-same-for-rest = Hacer lo mismo con el resto
 
 # SAFETY: needs a human review before it ships
 # Tip of the button that keeps the one already there.
-settings-common-skip = Omitir: conservar el que ya está
+settings-common-skip = Omitir y conservar el que ya está
 
 # SAFETY: needs a human review before it ships
 # Button that replaces the one already there.
@@ -42,10 +45,10 @@ settings-common-replace = Reemplazar
 
 # SAFETY: needs a human review before it ships
 # Spoken name of the Replace button.
-settings-common-replace-spoken = Reemplazar el que ya está por el que llega
+settings-common-replace-spoken = Reemplazar el que ya está por el nuevo
 
 # Heading of the line that shows the new one, in the question about a name already taken.
-settings-common-being-brought = El que llega
+settings-common-being-brought = El nuevo
 
 # Heading of the line that shows the one already there.
 settings-common-already-line = El que ya está
@@ -57,21 +60,19 @@ settings-common-replace-question = ¿Reemplazar el que ya está?
 # At the foot of the window while a change is on trial: how many seconds are left.
 settings-common-goes-back =
     { $left ->
-        [one] Vuelve atrás en { $left } segundo.
-        [many] Vuelve atrás en { $left } segundos.
-       *[other] Vuelve atrás en { $left } segundos.
+        [one] Se deshace en { $left } segundo.
+       *[other] Se deshace en { $left } segundos.
     }
 
 # At the foot of the window while a change is on trial: the seconds left, then { $more } such as what Escape does.
 settings-common-goes-back-more =
     { $left ->
-        [one] Vuelve atrás en { $left } segundo. { $more }
-        [many] Vuelve atrás en { $left } segundos. { $more }
-       *[other] Vuelve atrás en { $left } segundos. { $more }
+        [one] Se deshace en { $left } segundo. { $more }
+       *[other] Se deshace en { $left } segundos. { $more }
     }
 
 # Button at the foot of the window that undoes the change on trial.
-settings-common-go-back-now = Volver atrás ahora
+settings-common-go-back-now = Deshacer ahora
 
 # Button at the foot of the window that keeps the change on trial.
 settings-common-keep = Conservar
@@ -80,10 +81,10 @@ settings-common-keep = Conservar
 settings-common-not-available = { $what } no está disponible
 
 # Under that heading: { $package } is the name of the package to install.
-settings-common-install-with = Instálalo con: sudo apt install { $package }
+settings-common-install-with = Para instalarlo, ejecuta: sudo apt install { $package }
 
 # Red words when a web page could not be opened.
-settings-common-no-browser = No se pudo abrir la página web: no se pudo iniciar ningún navegador.
+settings-common-no-browser = Trindle no pudo abrir la página web porque no pudo iniciar un navegador.
 
 # Red words when one of Trindle's programs could not be opened: { $name } is its name.
 settings-common-could-not-open = No se pudo abrir { $name }.
@@ -92,19 +93,19 @@ settings-common-could-not-open = No se pudo abrir { $name }.
 settings-common-not-saved = No se pudo guardar.
 
 # Red words when an action needs the system's message bus and there is none.
-settings-common-no-system-bus = No se hizo: no se pudo acceder al bus de mensajes del sistema. Reinicia el equipo y vuelve a intentarlo.
+settings-common-no-system-bus = Trindle no pudo hacerlo porque una parte del sistema no responde. Reinicia el equipo y vuelve a intentarlo.
 
 # Red words when an action needs this login's message bus and there is none.
-settings-common-no-session-bus = No se hizo: no se pudo acceder al bus de mensajes de esta sesión. Cierra sesión, vuelve a iniciarla y prueba otra vez.
+settings-common-no-session-bus = Trindle no pudo hacerlo porque una parte de tu sesión no responde. Cierra sesión, vuelve a iniciarla y prueba otra vez.
 
 # Red words when the window for choosing a file or folder could not be opened.
-settings-common-no-chooser = No se pudo abrir la ventana para elegir. Cierra sesión, vuelve a iniciarla y prueba otra vez.
+settings-common-no-chooser = Trindle no pudo abrir la ventana para elegir un archivo o una carpeta. Cierra sesión, vuelve a iniciarla y prueba otra vez.
 
 # Cause given in red words after an action failed: the disk is full.
 settings-common-why-full = El disco está lleno.
 
 # Cause given in red words after an action failed: the disk is read only.
-settings-common-why-read-only = Ahora mismo no se puede escribir en el disco.
+settings-common-why-read-only = Trindle no puede escribir en el disco ahora.
 
 # Cause given in red words after an action failed: the part of the system that does it is not running.
 settings-common-why-not-running = La parte del sistema que hace esto no se está ejecutando.
@@ -114,11 +115,11 @@ settings-common-why-slow = Tardó demasiado en responder. Inténtalo de nuevo.
 
 # SAFETY: needs a human review before it ships
 # Cause given in red words after an action failed: the password was not given.
-settings-common-why-password = No se dio la contraseña.
+settings-common-why-password = No se dio ninguna contraseña.
 
 # SAFETY: needs a human review before it ships
 # Cause given in red words after an action failed: the account is not allowed.
-settings-common-why-not-allowed = Esta cuenta no tiene permiso para hacerlo.
+settings-common-why-not-allowed = Esta cuenta no puede hacer eso.
 
 # Cause given in red words after an action failed: something needed is missing.
 settings-common-why-missing = Falta en este equipo algo que necesita.
@@ -133,16 +134,16 @@ settings-common-and = { $rest } y { $last }
 settings-common-list-comma = { ", " }
 
 # Spoken name of the picture of the ring opening on a small screen.
-settings-common-ring-picture = El anillo se abre con un clic en el borde de la pantalla.
+settings-common-ring-picture = El anillo se abre con un doble clic en el borde de la pantalla.
 
 # Word drawn in the middle of that picture.
 settings-common-ring-name = El anillo
 
 # Red words under the charge limit switch when the laptop's firmware door could not be opened; { $error } is the system's reason.
-charge-no-firmware-door = No se pudo acceder al firmware del portátil: { $error }
+charge-no-firmware-door = Trindle no pudo acceder a los controles de carga del portátil: { $error }
 
 # Red words under the charge limit switch when the laptop's firmware refused the limit.
-charge-firmware-refused = El firmware del portátil no aceptó el límite de carga.
+charge-firmware-refused = El portátil no aceptó el límite de carga.
 
 # Red words under the charge limit switch on a computer that cannot stop charging early.
 charge-not-allowed = Este equipo no permite detener su carga antes de tiempo.
@@ -154,8 +155,10 @@ charge-could-not-set = No se pudo establecer { $path }: { $error }
 graphics-vm-title = Probando Trindle en una máquina virtual
 
 # Note to someone in a virtual machine that has 3D graphics; { $machine } is the machine's name.
-graphics-vm-body-fast = Trindle se está ejecutando en { $machine }. Funciona bien allí, pero una máquina virtual nunca es tan rápida ni tan fluida como un equipo real, así que juzga su velocidad en hardware real.
+graphics-vm-body-fast = Trindle se está ejecutando en { $machine }. Funciona bien allí, pero una máquina virtual nunca es tan rápida ni tan fluida como un equipo real. Juzga su velocidad en hardware real.
 
 # Note to someone in a virtual machine without 3D graphics; { $machine } is the machine's name.
-graphics-vm-body-slow = Trindle se está ejecutando en { $machine } sin gráficos 3D, así que el procesador tiene que dibujar todo lo que normalmente dibujaría un chip gráfico. Las ventanas, los vídeos y las páginas web irán más lentos que en un equipo real, y Trindle omite sus animaciones para ayudar. Si el equipo donde se ejecuta puede hacerlo, activar la aceleración 3D en los ajustes de pantalla de la máquina virtual marca una gran diferencia. Instalado en un equipo real, nada de esto se aplica.
+graphics-vm-body-slow = Trindle se está ejecutando en { $machine } sin gráficos 3D. El procesador tiene que dibujar todo lo que normalmente dibujaría un chip gráfico. Las ventanas, los vídeos y las páginas web irán más lentos que en un equipo real, por eso Trindle omite sus animaciones. Si el equipo donde se ejecuta puede hacerlo, activa la aceleración 3D en los ajustes de pantalla de la máquina virtual. Marca una gran diferencia. Nada de esto se aplica si instalas Trindle en un equipo real.
 
+# A list of choices ends with this: { $rest } is the names before the last, { $last } the last.
+settings-common-or = { $rest } o { $last }

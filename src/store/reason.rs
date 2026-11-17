@@ -29,6 +29,6 @@ mod tests {
             "Info: org.example.App is end-of-life, with reason: moved", "Updating 1/1… 100%"]
             .iter().map(|s| s.to_string()).collect();
         assert!(super::why_not_updated(&said).contains("end-of-life"));
-        assert!(super::why_not_updated(&[]).contains("no reason"));
+        assert!(super::why_not_updated(&[]).contains("No reason was given"));
     }
 }

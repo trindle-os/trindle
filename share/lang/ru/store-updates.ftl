@@ -16,7 +16,7 @@ store-upd-held-version = Отложено на версии { $have }
 store-upd-held = Отложено
 
 # On the Held back card: the version a thing is held at, and nothing newer waits.
-store-upd-held-version-nothing = Отложено на версии { $have }; более новых пока нет
+store-upd-held-version-nothing = Отложено на версии { $have }. Более новых пока нет
 
 # On the Held back card: nothing newer waits.
 store-upd-held-nothing = Отложено; более новых пока нет
@@ -61,7 +61,7 @@ store-upd-sentence = { $text }.
 store-upd-and-then = { $first } { $second }
 
 # Added to the headline when firmware is among the updates.
-store-upd-firmware-restart = Чтобы завершить обновление микропрограммы, нужна перезагрузка.
+store-upd-firmware-restart = Перезагрузите компьютер, чтобы завершить обновление микропрограммы.
 
 # Headline while the check runs.
 store-upd-checking = Проверка обновлений.
@@ -74,19 +74,19 @@ store-upd-installing-all = Устанавливаются обновления. 
 
 # Headline when the updates are in and the computer must start again.
 # SAFETY: needs a human review before it ships
-store-upd-restart = Перезагрузите компьютер, чтобы завершить: обновления установлены и вступят в силу при следующем запуске.
+store-upd-restart = Перезагрузите компьютер, чтобы закончить установку обновлений.
 
 # Added to the headline when what went in needs a restart.
-store-upd-gone-in-restart = Чтобы завершить установленное, нужна перезагрузка.
+store-upd-gone-in-restart = Перезагрузите компьютер, чтобы завершить установку.
 
 # Added to the headline with no internet.
-store-upd-no-more = Этот компьютер не подключён к интернету, поэтому искать новые обновления нельзя.
+store-upd-no-more = Этот компьютер не подключён к интернету, поэтому Trindle не может искать новые обновления.
 
 # Headline when nothing is ready (updates held back are added after it).
 store-upd-none-ready = Готовых обновлений нет
 
 # Headline with nothing waiting and no internet to look with.
-store-upd-nothing-known = Известных этому компьютеру обновлений нет. Пока он не подключён к интернету, искать новые нельзя.
+store-upd-nothing-known = Trindle не знает ни об одном ожидающем обновлении. Пока компьютер не подключён к интернету, он не может искать новые.
 
 # Name of the apps in the headline's list of what could not be checked.
 store-upd-name-apps = приложений
@@ -110,7 +110,7 @@ store-upd-last-checked = Последняя проверка: { $time }.
 store-upd-not-checked = Без интернета проверить нельзя
 
 # Red words under a card when a check took too long.
-store-upd-too-long = Ответ занял слишком много времени.
+store-upd-too-long = Проверка заняла слишком много времени.
 
 # Tip of the round button that checks again.
 store-upd-check-again = Проверить снова
@@ -138,7 +138,7 @@ store-upd-restart-now = Перезагрузить сейчас
 store-upd-check-for = Проверить обновления
 
 # Tip of the round button that releases a thing held back.
-store-upd-release = Снять отсрочку: { $name }
+store-upd-release = Разрешить обновления: { $name }
 
 # Tip of the round button that holds a thing's updates back.
 store-upd-hold = Отложить обновления: { $name }
@@ -174,10 +174,10 @@ store-upd-from = Источник: { $from }
 store-upd-shared-part = Общая часть, источник: { $from }
 
 # Note under the Apps card.
-store-upd-yours-alone = Только ваши, поэтому обновляются без пароля. Приложение приносит с собой общие части, которые нужны его новой версии.
+store-upd-yours-alone = Эти приложения только для вас, поэтому обновляются без пароля. Обновление приложения также устанавливает общие части, которые ему нужны.
 
 # Note under the Apps card: what holding back does.
-store-upd-hold-why = Отложенное обновление остаётся на текущей версии и не входит в «Установить все» здесь и в кольце, пока вы не снимете отсрочку.
+store-upd-hold-why = Отложенное обновление остаётся на текущей версии. При установке всех обновлений оно пропускается, здесь и в кольце, пока вы снова не разрешите обновления.
 
 # Heading of the Apps card.
 store-upd-card-apps = Приложения
@@ -210,10 +210,10 @@ store-upd-card-plugins = Плагины
 store-upd-nothing-held = Ничего не отложено.
 
 # On a row of the Held back card for a thing released while the page is open.
-store-upd-released = Отсрочка снята
+store-upd-released = Не отложено
 
 # Note under the Held back card: what releasing does.
-store-upd-release-why = Освобождённое снова устанавливается вместе с остальным через «Установить все» здесь и в кольце.
+store-upd-release-why = Когда вы снова разрешите обновления, оно будет установлено вместе с остальными, здесь и в кольце.
 
 # Name on the Held back card of a device whose firmware is not named now.
 store-upd-device-firmware = Микропрограмма устройства
@@ -249,7 +249,7 @@ store-upd-has-trindle = На этом компьютере установлен 
 store-upd-card-system = Trindle и Debian
 
 # Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Пакеты Debian подогнаны друг к другу, и один пакет, установленный отдельно, может потянуть за собой другие или нарушить согласованность. Поэтому они устанавливаются вместе, одной кнопкой.
+store-upd-debian-why = Пакеты Debian рассчитаны на совместную работу. Один пакет может потянуть другие или нарушить согласованность, поэтому все ставятся вместе.
 
 # Note on the Trindle and Debian card: why no row has a Hold back button.
 store-upd-not-held = Обновления Trindle и Debian содержат исправления безопасности для всего компьютера, поэтому их нельзя откладывать.
@@ -260,14 +260,8 @@ store-upd-card-security = Обновления безопасности
 # On the security card: its state.
 store-upd-security-on = Включены, каждый день
 
-# On the security card.
-store-upd-security-note = Исправления Debian устанавливаются каждый день без запроса.
-
-# On the security card.
-store-upd-security-part = Часть Trindle; отключить нельзя.
-
 # On the security card: that holding back never stops these.
-store-upd-never-held = Отсрочка обновления их никогда не останавливает.
+store-upd-never-held = Отсрочка обновления никогда не останавливает обновления безопасности.
 
 # Firmware card: the computer has no updater.
 store-upd-fw-none = На этом компьютере нет средства обновления микропрограмм.
@@ -294,22 +288,22 @@ store-upd-fw-no-list = fwupd не удалось получить свежий �
 store-upd-no-flathub = Не удалось подключиться к Flathub.
 
 # Red words when Debian's lists could not be fetched.
-store-upd-no-lists = Не удалось получить списки Debian.
+store-upd-no-lists = Trindle не удалось получить списки Debian.
 
 # Red words when Debian's lists could not be fetched; the reason follows.
-store-upd-no-lists-why = Не удалось получить списки Debian. { $why }
+store-upd-no-lists-why = Trindle не удалось получить списки Debian. { $why }
 
 # Red words under a row when its updates could not be held back or released: the list of what is held could not be kept.
-store-upd-not-held-list = Не отложено. Не удалось сохранить список отложенного: { $why }.
+store-upd-not-held-list = Trindle не смог отложить обновление, потому что не удалось сохранить список отложенных обновлений: { $why }.
 
 # The same, for a release.
-store-upd-not-released-list = Отсрочка не снята. Не удалось сохранить список отложенного: { $why }.
+store-upd-not-released-list = Trindle не смог снова разрешить обновления, потому что не удалось сохранить список отложенных обновлений: { $why }.
 
 # Red words when Flatpak could not be told a thing is held back.
-store-upd-held-not-told = Отложено в «Приложениях», но самому Flatpak сообщить не удалось, поэтому другое средство обновления приложений всё же может установить его.
+store-upd-held-not-told = Отложено в «Приложениях», но Trindle не смог изменить это во Flatpak. Другая программа, обновляющая приложения, всё равно может установить его.
 
 # Red words when Flatpak could not be told a thing is released.
-store-upd-released-not-told = Отсрочка снята в «Приложениях», но самому Flatpak сообщить не удалось, и он может по-прежнему пропускать это. Отложите и снимите отсрочку ещё раз.
+store-upd-released-not-told = Обновления снова разрешены в «Приложениях», но Trindle не смог изменить это во Flatpak, поэтому Flatpak может по-прежнему пропускать это приложение. Отложите его, затем снова разрешите обновления.
 
 # Red words: the above, then what Flatpak itself said.
 store-upd-flatpak-said = { $words } Flatpak сообщил: { $why }
@@ -317,9 +311,15 @@ store-upd-flatpak-said = { $words } Flatpak сообщил: { $why }
 # Name of Trindle itself on its row of updates.
 store-upd-trindle = Trindle
 
+# Said when a security fix for a boxed app can't be downloaded. { $package } is the package, { $version } the fixed version.
+store-patch-not-fetched = Trindle не смог загрузить { $package } { $version }.
+
+# Said when a security fix for a boxed app was downloaded but isn't there to use.
+store-patch-not-found = Trindle не нашёл загруженный пакет.
+
 
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
-store-upd-off = Автоматическая проверка обновлений выключена. Нажмите «Проверить обновления», чтобы посмотреть.
+store-upd-off = Автоматическая проверка обновлений выключена.
 
 # How a card stands with nothing known to wait, looking by itself switched off and no check pressed yet.
 store-upd-not-looked = Не проверено
@@ -334,8 +334,7 @@ store-upd-stopping = Остановка
 store-upd-stopped = Остановлено. Нажмите «Обновить», чтобы продолжить.
 
 # Under the Apps card when Install all was stopped.
-store-upd-stopped-all = Остановлено. Нажмите «Установить», чтобы продолжить.
+store-upd-stopped-all = Остановлено. Установите снова, чтобы продолжить.
 
 # Note under the Apps card.
 store-upd-steam-restarts = Steam перезапустится, когда не будет запущена ни одна игра.
-

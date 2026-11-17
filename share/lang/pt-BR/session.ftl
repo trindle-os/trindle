@@ -20,15 +20,15 @@ session-lock-use-pin = Usar PIN
 session-lock-use-phone = Usar celular
 
 # Shown while the typed password or PIN is being checked.
-session-lock-checking = Verificando...
+session-lock-checking = Verificando…
 
 # SAFETY: needs a human review before it ships
 # Shown when the PIN has run out of time and the password is asked for instead.
-session-lock-pin-timed-out = O PIN expirou; digite sua senha.
+session-lock-pin-timed-out = O PIN expirou. Digite sua senha.
 
 # SAFETY: needs a human review before it ships
 # Shown after too many wrong PINs, and the password is asked for instead.
-session-lock-too-many-pins = PINs incorretos demais; digite sua senha.
+session-lock-too-many-pins = PINs incorretos demais. Use sua senha.
 
 # SAFETY: needs a human review before it ships
 # Shown after a wrong PIN, with how many tries are left (1 is one try left).
@@ -40,13 +40,13 @@ session-lock-wrong-pin =
     }
 
 # Shown while the phone is asked to unlock the screen.
-session-lock-asking-phone = Consultando seu celular...
+session-lock-asking-phone = Consultando seu celular…
 
 # Shown when the phone did not unlock the screen and the PIN may be typed.
-session-lock-phone-no-pin = Seu celular não desbloqueou. Use seu PIN.
+session-lock-phone-no-pin = O Trindle não conseguiu desbloquear com o seu celular. Use seu PIN.
 
 # Shown when the phone did not unlock the screen and the password must be typed.
-session-lock-phone-no-password = Seu celular não desbloqueou. Digite sua senha.
+session-lock-phone-no-password = O Trindle não conseguiu desbloquear com o seu celular. Digite sua senha.
 
 # SAFETY: needs a human review before it ships
 # Shown when the password typed is not the person's password.
@@ -80,7 +80,11 @@ session-wallpaper-over-200 = acima de 200 MB
 session-wallpaper-reasons-or = { $first } ou { $second }
 
 # The line that says how many wallpapers were left out and why; the count and the reasons come in.
-session-wallpaper-left-out = { $count } deixados de fora: { $why }.
+session-wallpaper-left-out =
+    { $count ->
+        [one] O Trindle deixou de fora { $count } imagem porque ela está { $why }.
+       *[other] O Trindle deixou de fora { $count } imagens porque elas estão { $why }.
+    }
 
 # Under the lock screen when a phone or password check was given up on.
 session-lock-check-abandoned = Demorou demais. Tente novamente.
@@ -91,11 +95,18 @@ session-lock-check-abandoned = Demorou demais. Tente novamente.
 session-restart-question = Reiniciar a área de trabalho inteira?
 
 # Under the heading: what restarting everything does to the open windows.
-session-restart-windows = Todas as janelas abertas serão fechadas, e o que nelas não foi salvo será perdido.
+session-restart-windows = Todas as janelas abertas serão fechadas. O que você não salvou será perdido.
 
 # Tip of the round button that leaves everything as it is.
 session-restart-cancel = Cancelar
 
 # Main button that restarts the whole desktop.
 session-restart-go = Reiniciar
-
+# Under the lock screen when Enter is pressed while the last try, given up on, is still being checked.
+session-lock-still-checking = Ainda verificando a sua última tentativa. Tente de novo em instantes.
+# Under the lock screen after several wrong tries, with how many seconds to wait (1 is one second).
+session-lock-wait =
+    { $n ->
+        [one] Muitas tentativas erradas. Tente de novo em { $n } segundo.
+       *[other] Muitas tentativas erradas. Tente de novo em { $n } segundos.
+    }

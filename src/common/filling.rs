@@ -7,6 +7,9 @@
 use std::cell::Cell;
 use std::time::{Duration, Instant};
 
+use crate::toolkit::tiles::{RingShare, Sketch};
+use crate::toolkit::widget::{drawing, Node, Tone};
+
 pub const SIZE: i32 = 36;
 
 pub const STEP_SECS: f64 = 20.0;
@@ -18,6 +21,9 @@ const MOST: f64 = 0.98;
 const START: f64 = 0.03;
 
 pub const JOINED: Duration = Duration::from_millis(1500);
+
+pub const TURN: Duration = Duration::from_millis(250);
+const TURNS_A_SECOND: u32 = (1000 / TURN.as_millis()) as u32;
 
 pub fn step_line(n: usize, of: usize, words: &str) -> String {
     format!("step {n} of {of}: {words}")
@@ -55,18 +61,20 @@ pub struct Dial {
     stepped: bool,
     step: Option<(usize, usize)>,
     within: Option<f64>,
-    inner: (usize, usize),
     since: Instant,
     step_secs: f64,
     shown: Cell<f64>,
     ended: Option<bool>,
     words: String,
+    ring: RingShare,
+    whole: Cell<u8>,
 }
 
 impl Default for Dial {
     fn default() -> Self {
-        Dial { stepped: false, step: None, within: None, inner: (1, 1), since: Instant::now(),
-               step_secs: STEP_SECS, shown: Cell::new(0.0), ended: None, words: String::new() }
+        Dial { stepped: false, step: None, within: None, since: Instant::now(),
+               step_secs: STEP_SECS, shown: Cell::new(0.0), ended: None, words: String::new(),
+               ring: RingShare::new(Some(START as f32)), whole: Cell::new(percent(START as f32)) }
     }
 }
 
@@ -83,7 +91,6 @@ impl Dial {
     pub fn step(&mut self, n: usize, of: usize, words: &str) {
         self.step = Some((n, of));
         self.within = None;
-        self.inner = (1, 1);
         self.since = Instant::now();
         if !words.is_empty() {
             self.words = words.to_string();
@@ -104,6 +111,10 @@ impl Dial {
             return true;
         }
         false
+    }
+
+    pub fn hear(&mut self, line: &str) -> bool {
+        self.heard(line) && parse_within(line).is_none()
     }
 
     pub fn say(&mut self, words: &str) {
@@ -146,13 +157,85 @@ impl Dial {
         }
     }
 
-    pub fn round<M>(&self, b: crate::toolkit::widget::Node<M>) -> crate::toolkit::widget::Node<M> {
-        b.working(self.share(), self.tone())
+    pub fn round<M>(&self, b: Node<M>) -> Node<M> {
+        b.working_following(&self.ring(), self.tone())
     }
 
-    pub fn node<M>(&self) -> crate::toolkit::widget::Node<M> {
+    pub fn node<M>(&self) -> Node<M> {
+        if self.running() {
+            return following_ring(&self.ring(), SIZE as f32, Tone::Calm);
+        }
         crate::toolkit::widget::ring(self.share(), SIZE as f32).tone(self.tone())
     }
+
+    pub fn ring(&self) -> RingShare {
+        let share = self.share();
+        self.ring.set(Some(share));
+        self.whole.set(percent(share));
+        self.ring.clone()
+    }
+
+    pub fn turn(&self) -> bool {
+        let share = self.share();
+        self.ring.set(Some(share));
+        let whole = percent(share);
+        whole != self.whole.replace(whole)
+    }
+}
+
+pub fn percent(share: f32) -> u8 {
+    (share.clamp(0.0, 1.0) * 100.0).floor() as u8
+}
+
+pub fn following_ring<M>(share: &RingShare, size: f32, tone: Tone) -> Node<M> {
+    use crate::toolkit::theme::{alpha, calm};
+    let (now, kept, read) = (share.get(), share.clone(), share.clone());
+    let line = (size / 8.4).round().max(6.0);
+    let (middle, radius) = (size / 2.0, size / 2.0 - line / 2.0 - 1.0);
+    drawing((size, size), "", move |canvas, pen| {
+        let v = read.get().unwrap_or(0.0);
+        let ink = if v >= 1.0 && tone == Tone::Plain { pen.theme.fg } else { crate::toolkit::ui::state(pen.theme, tone, calm()) };
+        let mut s = Sketch::fit(canvas, pen, (size, size));
+        s.ring((middle, middle), radius, line, alpha(pen.theme.fg, 0.10));
+        s.arc((middle, middle), radius, line, 0.0, v, ink);
+    }).alive().progress(now).following(&kept).called(crate::toolkit::t!("kit-progress"))
+}
+
+#[derive(Default)]
+pub struct Turning {
+    turns: Cell<u32>,
+    moved: Cell<bool>,
+}
+
+impl Turning {
+    pub fn turned(&self, moved: bool) -> bool {
+        let turns = self.turns.get().wrapping_add(1);
+        self.turns.set(turns);
+        let moved = self.moved.get() | moved;
+        let due = moved && turns % TURNS_A_SECOND == 0;
+        self.moved.set(moved && !due);
+        due
+    }
+
+    pub fn turned_alone(&self, moved: bool) -> bool {
+        self.turned(moved && !crate::common::graphics::moving())
+    }
+
+    pub fn moved(&self) {
+        self.moved.set(true);
+    }
+}
+
+#[cfg(test)]
+pub fn following_buttons<M>(n: &Node<M>) -> Vec<(String, RingShare)> {
+    let mut out = Vec::new();
+    if let (crate::toolkit::widget::What::Button { tip, working: Some(_), .. }, Some(says)) = (&n.what, &n.says) {
+        out.extend(says.following.clone().map(|r| (tip.clone(), r)));
+    }
+    for i in n.items() {
+        out.extend(following_buttons(i));
+    }
+    out
 }
 
 #[cfg(test)]
@@ -239,6 +322,118 @@ mod tests {
         assert!(d.share() >= half);
         d.finish(true, "Installed");
         assert!(!d.running() && d.share() == 1.0);
+    }
+
+    struct Counted<F: Fn() -> Node<()>> {
+        draw: F,
+        built: Cell<u32>,
+    }
+
+    impl<F: Fn() -> Node<()>> crate::toolkit::ui::App for Counted<F> {
+        type Msg = ();
+        fn update(&mut self, _: ()) {}
+        fn view(&self) -> Node<()> {
+            self.built.set(self.built.get() + 1);
+            (self.draw)()
+        }
+    }
+
+    fn counted<F: Fn() -> Node<()>>(draw: F) -> crate::toolkit::testing::Harness<Counted<F>> {
+        let side = SIZE as u32 + 8;
+        crate::toolkit::testing::Harness::new(Counted { draw, built: Cell::new(0) }, (side, side))
+    }
+
+    #[test]
+    fn a_running_dial_moves_its_ring_with_no_new_view() {
+        let dial = std::rc::Rc::new({
+            let mut d = Dial::default();
+            d.expect(1.0);
+            d
+        });
+        let d = dial.clone();
+        let mut h = counted(move || d.node());
+        let first = h.picture(1.0);
+        if crate::common::graphics::moving() && !crate::toolkit::motion::reduced() {
+            assert!(h.ui().only_turns(), "the window paints the ring alone");
+        }
+        let mut moved = false;
+        for _ in 0..20 {
+            std::thread::sleep(Duration::from_millis(50));
+            moved |= dial.turn();
+        }
+        assert!(moved, "the guess moved on by whole percentages");
+        assert_ne!(h.picture(1.0).data(), first.data(), "the ring shows the new figure");
+        assert_eq!(h.app().built.get(), 1, "the view was built once");
+    }
+
+    #[test]
+    fn a_running_job_moves_its_button_edge_with_no_new_view() {
+        let dial = std::rc::Rc::new({
+            let mut d = Dial::default();
+            d.expect(1.0);
+            d
+        });
+        let d = dial.clone();
+        let mut h = counted(move || d.round(crate::toolkit::widget::button("list-add-symbolic", "Install")));
+        let first = h.picture(1.0);
+        let mut moved = false;
+        for _ in 0..20 {
+            std::thread::sleep(Duration::from_millis(50));
+            moved |= dial.turn();
+        }
+        assert!(moved, "the guess moved on by whole percentages");
+        assert_ne!(h.picture(1.0).data(), first.data(), "the button's edge shows the new figure");
+        assert_eq!(h.app().built.get(), 1, "the view was built once");
+        let shown = following_buttons(&dial.round(crate::toolkit::widget::button::<()>("list-add-symbolic", "Install")));
+        assert_eq!(shown.len(), 1);
+        assert_eq!(shown[0].1, dial.ring, "the edge follows the job's own figure");
+    }
+
+    #[test]
+    fn words_follow_a_moving_figure_at_most_once_a_second() {
+        let t = Turning::default();
+        let told: Vec<bool> = (0..12).map(|i| t.turned(i == 1 || i == 2)).collect();
+        assert_eq!(told.iter().filter(|b| **b).count(), 1, "{told:?}");
+        assert!(told[TURNS_A_SECOND as usize - 1], "told at the second");
+        assert_eq!((0..40).filter(|_| t.turned(true)).count(), 40 / TURNS_A_SECOND as usize);
+        assert_eq!((0..40).filter(|_| t.turned(false)).count(), 0);
+        t.moved();
+        assert_eq!((0..TURNS_A_SECOND).filter(|_| t.turned(false)).count(), 1, "a figure moved elsewhere is shown too");
+        let alone = Turning::default();
+        let shown = (0..40).filter(|_| alone.turned_alone(true)).count();
+        assert_eq!(shown, if crate::common::graphics::moving() { 0 } else { 40 / TURNS_A_SECOND as usize });
+    }
+
+    #[test]
+    fn only_a_new_step_asks_for_a_new_view() {
+        let mut d = Dial::default();
+        assert!(!d.hear(&within_line(0.5)));
+        assert!(d.hear(&step_line(2, 3, "Fetching")) && d.words() == "Fetching");
+        assert!(!d.hear("Get:1 https://deb.debian.org trixie InRelease"));
+    }
+
+    #[test]
+    fn with_less_movement_the_rings_stand_still() {
+        use crate::common::scratch_home;
+        if scratch_home::inside().is_none() {
+            return scratch_home::rerun(module_path!(), "with_less_movement_the_rings_stand_still");
+        }
+        crate::toolkit::motion::reduce(true);
+        let mut loading = counted(|| crate::toolkit::tiles::loading_state(SIZE as f32));
+        let first = loading.picture(1.0);
+        assert!(loading.ui().next_wake(Instant::now()).is_none(), "nothing wakes the window");
+        let dial = std::rc::Rc::new({
+            let mut d = Dial::default();
+            d.by_steps();
+            d
+        });
+        let d = dial.clone();
+        let mut held = counted(move || d.node());
+        let still = held.picture(1.0);
+        std::thread::sleep(Duration::from_millis(300));
+        assert!(!dial.turn(), "a dial waiting for its first step does not move");
+        assert_eq!(loading.picture(1.0).data(), first.data(), "the loading ring stands still");
+        assert_eq!(held.picture(1.0).data(), still.data(), "the dial's ring stands still");
     }
 
     #[test]

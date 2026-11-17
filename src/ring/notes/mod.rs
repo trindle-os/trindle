@@ -143,6 +143,18 @@ pub struct Notes {
     label: LabelWindow,
 
     saved: RefCell<String>,
+
+    kept_for: RefCell<Option<KeptFor>>,
+
+    corner_read: Cell<u64>,
+}
+
+type KeptFor = (Vec<(u32, Option<(f32, f32)>)>, Vec<(u32, u64)>);
+
+const CORNER_LOOK_MS: u64 = 1000;
+
+fn corner_due(read_at: u64, now: u64) -> bool {
+    now < read_at || now - read_at >= CORNER_LOOK_MS
 }
 
 pub fn start(ctx: &Rc<Ctx>) -> Rc<Notes> {
@@ -151,7 +163,7 @@ pub fn start(ctx: &Rc<Ctx>) -> Rc<Notes> {
         content: RefCell::new(HashMap::new()), wins: RefCell::new(HashMap::new()), corner: Cell::new(Corner::chosen()),
         wake: Cell::new(0), framing: Cell::new(false), fonts: RefCell::new(None),
         focused: Cell::new(None), turn: Cell::new(0), copied: Cell::new(None), label: LabelWindow::new(ctx),
-        saved: RefCell::new(String::new()),
+        saved: RefCell::new(String::new()), kept_for: RefCell::new(None), corner_read: Cell::new(0),
     })
 }
 
@@ -177,6 +189,7 @@ impl Notes {
             w.shown.announce(&said);
         }
         self.stack.borrow_mut().add_sized(note.id, notify::how_long(note.urgent), rest, now_ms());
+        self.kept_for.take();
         if fresh {
             crate::common::sounds::play("notification");
         }
@@ -225,9 +238,18 @@ impl Notes {
     }
 
     fn keep(&self) {
-        if self.stack.borrow().pinned_places().iter().any(|(id, _)| self.stack.borrow().holding(*id)) {
+        let kept_for = {
+            let s = self.stack.borrow();
+            let pinned = s.pinned_places();
+            if pinned.iter().any(|(id, _)| s.holding(*id)) {
+                return;
+            }
+            (pinned, s.sleepers())
+        };
+        if self.kept_for.borrow().as_ref() == Some(&kept_for) {
             return;
         }
+        *self.kept_for.borrow_mut() = Some(kept_for);
         let text = keeps::render(&self.to_keep());
         if *self.saved.borrow() != text {
             keeps::save(&text);
@@ -252,6 +274,7 @@ impl Notes {
     }
 
     pub fn restyle(&self) {
+        self.corner_read.set(0);
         self.stack.borrow_mut().restyle(Sizes::sheet(), slide(), now_ms());
         let all: Vec<(u32, Content)> = self.content.borrow().iter().map(|(id, c)| (*id, c.clone())).collect();
         for (id, c) in all {
@@ -366,7 +389,12 @@ impl Notes {
 
     fn sync(&self) {
         let now = now_ms();
-        let corner = Corner::chosen();
+        let corner = if corner_due(self.corner_read.get(), now) {
+            self.corner_read.set(now);
+            Corner::chosen()
+        } else {
+            self.corner.get()
+        };
 
         if corner != self.corner.get() {
             self.wins.borrow_mut().clear();

@@ -11,23 +11,20 @@ mod pointer;
 
 use smithay::backend::input::{Event, InputBackend, InputEvent};
 
-use crate::{state::Backend, AnvilState};
+use crate::{state::Backend, Compose};
 
 const BTN_LEFT: u32 = 0x110;
 
 const MOUSE_BUTTONS: std::ops::Range<u32> = BTN_LEFT..0x120;
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
     fn process_common_key_action(&mut self, action: KeyAction) {
         match action {
             KeyAction::None => (),
 
             KeyAction::Bound(bound) => self.do_action(bound),
             KeyAction::Expand(swap, time) => self.type_swap(swap, time),
-            _ => unreachable!(
-                "Common key action handler encountered backend specific action {:?}",
-                action
-            ),
+            _ => tracing::warn!(?action, "a key action this backend cannot do"),
         }
     }
 }

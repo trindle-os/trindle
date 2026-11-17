@@ -45,6 +45,12 @@ impl Rig {
         self.pump();
     }
 
+    pub fn button_by_hand_only(&mut self, button: u32, pressed: bool) {
+        let event = Button { time: self.next_time(), button, pressed };
+        self.state.process_input_event_windowed(InputEvent::<Virtual>::PointerButton { event }, SCREEN);
+        self.pump();
+    }
+
     pub fn button_by_hand(&mut self, button: u32) {
         for pressed in [true, false] {
             let event = Button { time: self.next_time(), button, pressed };

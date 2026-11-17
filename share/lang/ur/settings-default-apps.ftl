@@ -8,7 +8,7 @@ settings-default-apps-title = طے شدہ ایپس
 settings-default-apps-keywords = براؤزر میل ای میل فائلیں تصویریں موسیقی ویڈیو pdf کیلنڈر کے ساتھ کھولیں ٹرمینل browser mail email files pictures music video pdf calendar open with terminal
 
 # Introduction under the heading of the default apps page, and the words behind the page i.
-settings-default-apps-help = کون سا پروگرام ویب لنک، ای میل، تصویریں، کیلنڈر اور باقی چیزیں کھولے۔ ٹرمینل ~/.config/xdg-terminals.list میں چنا جاتا ہے؛ کوئی نہ چنا ہو تو Trindle انسٹال شدہ میں سے پہلا استعمال کرتا ہے۔
+settings-default-apps-help = چنیں کہ ویب لنک، ای میل، تصویریں، کیلنڈر اور باقی چیزیں کون سا پروگرام کھولے۔ ٹرمینل آپ ~/.config/xdg-terminals.list میں چنتے ہیں۔ اگر آپ نے کوئی نہ چنا ہو تو Trindle انسٹال شدہ میں سے پہلا استعمال کرتا ہے۔
 
 # Name of a kind of thing to open, as the heading of a line and the name of its list on the default apps page.
 settings-default-apps-kind-web = ویب
@@ -68,44 +68,37 @@ settings-default-apps-kind-calendar-in-sentence = کیلنڈر
 settings-default-apps-card-internet = انٹرنیٹ
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-internet-about = وہ پروگرام جو کہیں بھی کلک کیا گیا ویب لنک کھولتا ہے، وہ جو ای میل پتے پر کلک کرنے سے ای میل لکھتا ہے، اور وہ جو کیلنڈر کی دعوت کھولتا ہے۔
+settings-default-apps-card-internet-about = چنیں کہ ویب لنک، ای میل پتے اور کیلنڈر کی دعوتیں کون سے پروگرام کھولیں۔
 
 # Title of a card on the default apps page.
 settings-default-apps-card-files = فائلیں اور دستاویزات
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-files-about = وہ پروگرام جو فولڈرز، ڈیسک ٹاپ یا کسی اور ایپ سے کھولنے پر فولڈر، سادہ متن کی فائل اور PDF دستاویز کھولتا ہے۔
+settings-default-apps-card-files-about = چنیں کہ فولڈر، سادہ متن کی فائلیں اور PDF دستاویزات کون سے پروگرام کھولیں۔
 
 # Title of a card on the default apps page.
 settings-default-apps-card-media = تصویریں اور آواز
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-media-about = وہ پروگرام جو آپ کے کھولنے پر تصویر، موسیقی کا ٹکڑا یا ویڈیو کھولتا ہے۔
+settings-default-apps-card-media-about = چنیں کہ تصویریں، موسیقی اور ویڈیوز کون سے پروگرام کھولیں۔
 
 # Sentence at the top of the page when every kind has a program; { $web } is the program that opens web links.
-settings-default-apps-all-set-web = ہر چیز کھولنے کے لیے ایک پروگرام موجود ہے؛ ویب لنک { $web } کھولتا ہے۔
+settings-default-apps-all-set-web = ہر چیز کھولنے کے لیے ایک پروگرام موجود ہے، اور ویب لنک { $web } کھولتا ہے۔
 
 # Sentence at the top of the page when every kind has a program and the one for web links is not known.
 settings-default-apps-all-set = ہر چیز کھولنے کے لیے ایک پروگرام موجود ہے۔
 
 # Sentence at the top of the page when one kind has no program chosen; { $kind } is its name in lower case.
-settings-default-apps-one-missing = { $kind } کھولنے کے لیے ابھی کچھ نہیں چنا گیا۔
+settings-default-apps-one-missing = { $kind } کھولنے کے لیے ایک پروگرام چنیں۔
 
 # Sentence at the top of the page when several kinds have no program chosen; { $kinds } is their names as a list joined with "or".
-settings-default-apps-many-missing = { $kinds } کھولنے کے لیے ابھی کچھ نہیں چنا گیا۔
+settings-default-apps-many-missing = آپ نے ابھی { $kinds } کھولنے کے لیے کوئی پروگرام نہیں چنا۔
 
 # Small words under a kind that no installed program can open.
-settings-default-apps-none-installed = انسٹال شدہ کوئی بھی چیز ابھی انہیں کھول نہیں سکتی۔
+settings-default-apps-none-installed = کوئی انسٹال شدہ پروگرام ابھی انہیں نہیں کھولتا۔
 
 # First choice in a list when no program is chosen for that kind yet.
 settings-default-apps-not-chosen = ابھی نہیں چنا گیا
-
-# Small words under a kind with a program list; { $n } is how many programs can open it.
-settings-default-apps-can-open =
-    { $n ->
-        [one] واحد پروگرام جو کھول سکتا ہے۔
-       *[other] { $n } پروگرام انہیں کھول سکتے ہیں۔
-    }
 
 # Said in green under a kind's list after the choice was kept.
 settings-default-apps-saved = محفوظ ہو گیا

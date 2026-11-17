@@ -3,6 +3,7 @@
 //! Shared by the portal's app chooser and anything else that asks, such as
 //! a file manager's Open with.
 
+use crate::toolkit::t;
 use super::apps::{self, Entry};
 
 const KEEP: usize = 10;
@@ -15,10 +16,10 @@ pub fn recent(kind: &str) -> Vec<String> {
     recent_in(&read(&record()), kind)
 }
 
-pub const DAMAGED: &str = "Last-used apps";
+pub fn damaged() -> &'static str { t!("common-damaged-last-used") }
 
 pub fn read(file: &std::path::Path) -> String {
-    super::damaged::read(file, DAMAGED, |l| l.split_once('\t').is_some())
+    super::damaged::read(file, damaged(), |l| l.split_once('\t').is_some())
 }
 
 fn recent_in(text: &str, kind: &str) -> Vec<String> {
@@ -34,7 +35,7 @@ pub(crate) fn remember_in(path: &std::path::Path, kind: &str, id: &str) {
         return;
     }
     let was = read(path);
-    if super::damaged::may_write(path, DAMAGED).is_err() {
+    if super::damaged::may_write(path, damaged()).is_err() {
         return;
     }
     let text = remembered(&was, kind, id);

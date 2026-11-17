@@ -15,11 +15,11 @@ settings-tailscale-last-online = 上次在线：{ $day }
 
 # Shown beside the Use Tailscale switch while the password is asked for, when Tailscale is already installed.
 # SAFETY: needs a human review before it ships
-settings-tailscale-waiting = 正在等待输入密码...
+settings-tailscale-waiting = 正在等待你输入密码……
 
 # Shown beside the Use Tailscale switch while the password is asked for, before Tailscale is installed.
 # SAFETY: needs a human review before it ships
-settings-tailscale-waiting-install = 正在等待输入密码，然后安装 Tailscale...
+settings-tailscale-waiting-install = 正在等待你输入密码，然后安装 Tailscale……
 
 # Shown beside the switch after Tailscale is turned on.
 settings-tailscale-done-on = Tailscale 已开启
@@ -28,7 +28,7 @@ settings-tailscale-done-on = Tailscale 已开启
 settings-tailscale-done-off = Tailscale 已关闭
 
 # Shown under the Sign in line once the browser is being opened.
-settings-tailscale-opening = 正在浏览器中打开登录页面...
+settings-tailscale-opening = 正在浏览器中打开登录页面……
 
 # Red words under the Sign in line when Tailscale could not be started.
 settings-tailscale-not-started = 无法启动 Tailscale。
@@ -69,18 +69,12 @@ settings-tailscale-keywords = tailscale vpn 私人网络 设备 远程 tailnet
 # Help text at the top of the page.
 settings-tailscale-help = Tailscale 把你自己的电脑和手机连成一个私人网络，无论它们身在何处。打开开关之前不会安装其中任何内容，关闭时它也不占用内存。
 
-# Small line under the Use Tailscale switch before Tailscale is installed.
-settings-tailscale-switch-sub-first = 从 Tailscale 自己的软件源安装。
-
-# Small line under the Use Tailscale switch once Tailscale is installed.
-settings-tailscale-switch-sub = 关闭：已停止，不随电脑启动。
-
 # Text of the switch that turns Tailscale on or off, and heading of its line.
 settings-tailscale-switch = 使用 Tailscale
 
 # Help text (i button) of the Tailscale card when Tailscale is off or has not answered.
 # SAFETY: needs a human review before it ships
-settings-tailscale-about-plain = 第一次打开时，会从 Tailscale 自己的软件源安装 Tailscale，然后启动它。它的后台服务在开启时会占用内存，所以只有在此开关打开时才运行。此开关关闭时，Tailscale 会停止，也不会随电脑启动。防火墙会允许你自己的 Tailscale 设备进入，其他一切仍和以前一样被挡在外面。
+settings-tailscale-about-plain = 第一次打开时，Trindle 会从 Tailscale 自己的软件源安装 Tailscale，然后启动它。它的后台服务在运行时会占用内存，所以只有在此开关打开时才运行。此开关关闭时，Tailscale 会停止，也不会随电脑启动。防火墙会允许你自己的 Tailscale 设备进入，其他一切仍和以前一样被挡在外面。
 
 # Help text (i button) of the Tailscale card when Tailscale is on but not yet connected.
 settings-tailscale-about-sign-in = { settings-tailscale-about-plain } 登录会在浏览器中打开 Tailscale 的登录页面。请在你的每台设备上使用同一个账户。
@@ -90,9 +84,6 @@ settings-tailscale-about-connected = { settings-tailscale-about-plain } 退出�
 
 # Line in the devices card when there are no other devices.
 settings-tailscale-no-devices = 还没有其他设备
-
-# Small line under "No other devices yet".
-settings-tailscale-no-devices-sub = 在另一台设备上用同一个账户登录。
 
 # Shown on the devices card while Tailscale is off.
 settings-tailscale-waits-off = 打开 Tailscale 即可查看你的设备。
@@ -118,14 +109,8 @@ settings-tailscale-this-computer = 这台电脑
 # Heading of the line that signs in to Tailscale, and tip of its round button.
 settings-tailscale-sign-in = 登录
 
-# Small line under the Sign in line.
-settings-tailscale-sign-in-sub = 在浏览器中打开登录页面。
-
 # Heading of the line that joins the private network again, and tip of its round button.
 settings-tailscale-connect = 连接
-
-# Small line under the Connect line.
-settings-tailscale-connect-sub = 重新加入你的私人网络。
 
 # Heading of the line that says the firewall lets the person's own devices in.
 # SAFETY: needs a human review before it ships
@@ -133,14 +118,11 @@ settings-tailscale-firewall = 你自己的设备可以进入
 
 # Small line under that heading.
 # SAFETY: needs a human review before it ships
-settings-tailscale-firewall-sub = 其他一切仍和以前一样被挡在外面。
+settings-tailscale-firewall-sub = 防火墙仍会挡住其他一切。
 
 # Heading of the line that signs out, and tip of its button.
 # SAFETY: needs a human review before it ships
 settings-tailscale-sign-out = 退出登录
-
-# Small line under the Sign out line.
-settings-tailscale-sign-out-sub = 离开你的私人网络。
 
 # Heading of the card with the Tailscale switch.
 settings-tailscale-card = Tailscale
@@ -150,4 +132,3 @@ settings-tailscale-devices = 你的设备
 
 # Help text (i button) of the Your devices card.
 settings-tailscale-devices-about = 所有登录到你的私人网络的设备，包括它在网络中的地址、运行的系统以及上次在线的时间。要添加设备，请在你的手机或另一台电脑上安装 Tailscale，并用同一个账户登录。
-

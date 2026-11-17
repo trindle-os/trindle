@@ -260,7 +260,7 @@ impl Datetime {
         written(self.unix, self.offset(), pattern)
     }
 
-    fn head(&self, kit: &Kit) -> Node<Msg> {
+    fn head(&self) -> Node<Msg> {
 
         let time = self.show(&self.format.replace(":%S", ""));
         let date = self.show(trindle_toolkit::lang::format::Pattern::DayMonth.text());
@@ -273,7 +273,7 @@ impl Datetime {
                 (false, _) => t!("settings-datetime-it-is-hand", time = &time, date = &date),
             },
         };
-        headline(kit, words)
+        headline(words)
     }
 
     fn face(&self) -> Node<Msg> {
@@ -321,7 +321,7 @@ impl Datetime {
             }
             Some(Ok(c)) => c,
         };
-        let sub = if c.can_ntp { t!("settings-datetime-from-internet") } else { t!("settings-datetime-needs-timesyncd") };
+        let sub = if c.can_ntp { "" } else { t!("settings-datetime-needs-timesyncd") };
         let auto = line(t!("settings-datetime-set-auto")).sub(sub).key("ntp")
             .control(crate::toolkit::widget::switch(self.ntp, t!("settings-datetime-set-auto"),
                                                     |v| on::<Datetime>(move |me, k| me.set_ntp(k, v))));
@@ -333,7 +333,7 @@ impl Datetime {
         if !self.zones.is_empty() {
             let zones = self.zones.clone();
             let at = zones.iter().position(|z| *z == self.zone);
-            zone = zone.control(dropdown(kit, "zone", self.zones.clone(), at, t!("settings-datetime-time-zone"), move |i| {
+            zone = zone.control(dropdown("zone", self.zones.clone(), at, t!("settings-datetime-time-zone"), move |i| {
                 let z = zones[i].clone();
                 on::<Datetime>(move |me, k| me.set_zone(k, z.clone()))
             }));
@@ -346,7 +346,7 @@ impl Datetime {
                     .width(Length::Fixed(if i == 2 { 88.0 } else { 64.0 }))
             }).collect();
             parts.push(button(SAVE_ICON, t!("settings-datetime-set-date-time")).on_press(on::<Datetime>(|me, k| me.set_time(k))));
-            rows.push(line(t!("settings-datetime-by-hand")).sub(t!("settings-datetime-by-hand-sub")).key("hand")
+            rows.push(line(t!("settings-datetime-by-hand")).key("hand")
                 .below(row(parts).gap(8.0)).node(kit));
         }
         let about = if c.can_ntp { t!("settings-datetime-about") } else { t!("settings-datetime-about-no-ntp") };
@@ -357,7 +357,7 @@ impl Datetime {
     fn ring_line(&self, kit: &Kit) -> Node<Msg> {
         let options: Vec<String> = clocks().iter().map(|(fmt, what)| t!("settings-datetime-clock-option", time = self.show(fmt), what = *what)).collect();
         let at = clocks().iter().position(|(fmt, _)| *fmt == self.format);
-        let pick = dropdown(kit, "clock_format", options, at, t!("settings-datetime-show-as"), |i| {
+        let pick = dropdown("clock_format", options, at, t!("settings-datetime-show-as"), |i| {
             on::<Datetime>(move |me, k| {
                 let v = clocks()[i].0;
                 if k.settle("clock_format", set_setting("clock_format", v), not_saved()).is_some() {
@@ -365,7 +365,7 @@ impl Datetime {
                 }
             })
         });
-        line(t!("settings-datetime-rings-clock")).sub(t!("settings-datetime-rings-clock-sub")).key("clock_format").control(pick).node(kit)
+        line(t!("settings-datetime-rings-clock")).key("clock_format").control(pick).node(kit)
     }
 }
 
@@ -406,7 +406,7 @@ impl Page for Datetime {
     fn view(&self, kit: &Kit) -> Node<Msg> {
 
         page(kit, self.title(), self.help(), vec![
-            self.head(kit),
+            self.head(),
             picture(self.icon(), t!("settings-datetime-time-now"), self.face()),
             self.clock(kit),
         ])
@@ -457,8 +457,8 @@ mod tests {
         assert_eq!(s.red("zone").as_deref(), Some(no_system_bus()));
         assert_eq!(s.page::<Datetime, _>(|d, _| (d.ntp, d.zone.clone())), before, "neither looks changed");
         let automatic = Failed::new("org.freedesktop.timedate1.AutomaticTimeSyncEnabled", "Automatic time synchronization is enabled");
-        assert_eq!(time_refused(&automatic), "The clock keeps itself right just now. Turn that off above, then set the time by hand.");
-        assert_eq!(time_refused(&Failed::new("org.freedesktop.DBus.Error.Failed", "EINVAL")), "The time could not be set.");
+        assert_eq!(time_refused(&automatic), "The clock sets itself automatically. Switch that off above, then set the time by hand.");
+        assert_eq!(time_refused(&Failed::new("org.freedesktop.DBus.Error.Failed", "EINVAL")), "Couldn't set the time.");
     }
 
     #[test]

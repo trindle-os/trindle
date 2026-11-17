@@ -45,20 +45,15 @@ fn run_input(argv: &[&str], input: Option<&str>) -> Step {
 }
 
 fn run_with(argv: &[&str], input: Option<&str>, ok: &[i32]) -> Step {
-    let mut child = Command::new(argv[0]).args(&argv[1..])
-        .stdin(if input.is_some() { Stdio::piped() } else { Stdio::null() })
-        .stdout(Stdio::null()).stderr(Stdio::piped())
-        .spawn().map_err(|e| t!("installer-run-no-start", program = argv[0], why = e.to_string()))?;
-    if let Some(text) = input {
-        let _ = child.stdin.take().unwrap().write_all(text.as_bytes());
-    }
-    let out = child.wait_with_output().map_err(|e| e.to_string())?;
-    if out.status.success() || out.status.code().is_some_and(|c| ok.contains(&c)) {
-        return Ok(());
-    }
-    let err = String::from_utf8_lossy(&out.stderr);
-    let last = err.lines().rev().find(|l| !l.trim().is_empty()).unwrap_or("").trim();
-    Err(t!("installer-run-failed", program = argv[0], why = last))
+    use crate::admin::Fault;
+    crate::admin::tool(argv, input, ok).map_err(|fault| match fault {
+        Fault::NoStart(why) => t!("installer-run-no-start", program = argv[0], why = why),
+        Fault::Stopped(why) => t!("installer-run-stopped", program = argv[0], why = why),
+        Fault::Failed(err) => {
+            let last = err.lines().rev().find(|l| !l.trim().is_empty()).unwrap_or("").trim();
+            t!("installer-run-failed", program = argv[0], why = last)
+        }
+    })
 }
 
 fn chroot(argv: &[&str]) -> Step {
@@ -83,6 +78,11 @@ fn write(path: &str, body: &str) -> Step {
 
 fn uuid(dev: &str) -> String {
     text(&["blkid", "-s", "UUID", "-o", "value", dev])
+}
+
+fn uuid_of(dev: &str) -> Result<String, String> {
+    let id = uuid(dev);
+    if id.is_empty() { Err(t!("installer-uuid-missing", dev = dev)) } else { Ok(id) }
 }
 
 fn number_of(part: &str) -> String {
@@ -153,6 +153,19 @@ fn holds_something(mountpoints: &str) -> bool {
     mountpoints.lines().any(|m| !m.trim().is_empty())
 }
 
+fn table_kind(listing: &str) -> Option<&str> {
+    listing.lines().nth(1)?.split(':').nth(5)
+}
+
+const ESP_SHARE_LEAST: u64 = 50 * 1024 * 1024;
+
+fn beside_fault(disk: &str) -> Step {
+    if table_kind(&text(&["parted", "-sm", disk, "unit", "B", "print"])) != Some("gpt") {
+        return Err(t!("installer-no-gpt", dev = disk));
+    }
+    existing_esp(disk).map(|_| ())
+}
+
 fn check(plan: &Plan) -> Step {
     if super::plan::short_of_memory() {
         return Err(t!("installer-memory-short").into());
@@ -160,12 +173,18 @@ fn check(plan: &Plan) -> Step {
     if plan.lock != Lock::None && !super::plan::uefi() {
         return Err(t!("installer-lock-needs-uefi").into());
     }
+    if plan.lock != Lock::None && plan.disk_password.is_empty() {
+        return Err(t!("installer-disk-password-needed").into());
+    }
     match plan.target.as_ref().ok_or(t!("installer-no-disk-chosen"))? {
         Where::Erase { disk } => {
             block_device(disk)?;
             let listing = text(&["lsblk", "-rnpo", "PATH,TYPE,MOUNTPOINT", disk]);
             if let Some(fault) = erase_fault(disk, &listing, &super::plan::live_disk()) {
                 return Err(fault);
+            }
+            if holds_install_image(&text(&["lsblk", "-rno", "FSTYPE", disk])) {
+                return Err(t!("installer-disk-is-stick", dev = disk));
             }
         }
         Where::Beside { part, .. } => {
@@ -181,9 +200,25 @@ fn check(plan: &Plan) -> Step {
             if text(&["blkid", "-s", "TYPE", "-o", "value", part]) == "ntfs" && crate::common::otheros::windows_asleep(part) {
                 return Err(t!("installer-windows-asleep", part = part));
             }
+            beside_fault(&whole_disk(part))?;
         }
     }
+
+    let disk = plan.disk();
+    if plan.disk_id.is_empty() || super::plan::disk_id(&disk) != plan.disk_id {
+        DISK_CHANGED.store(true, Ordering::SeqCst);
+        return Err(t!("installer-disk-changed", dev = disk));
+    }
+    check_words(plan)
+}
+
+fn holds_install_image(fstypes: &str) -> bool {
+    fstypes.lines().any(|f| f.trim() == "iso9660")
+}
+
+fn check_words(plan: &Plan) -> Step {
     plain_word(t!("installer-bad-language"), &plan.locale, "_.-")?;
+    plain_word(t!("installer-bad-language"), &plan.trindle_language, "-")?;
     plain_word(t!("installer-bad-keyboard"), &plan.layout, "-")?;
     plain_word(t!("installer-bad-keyboard"), &plan.variant, "-_")?;
     plain_word(t!("installer-bad-timezone"), &plan.timezone, "/_+-")?;
@@ -215,7 +250,14 @@ fn check_answers(plan: &Plan) -> Step {
 pub const STOPPED: i32 = 4;
 
 pub const STUCK: i32 = 5;
+
+pub const CHANGED: i32 = 6;
 static STOP: AtomicBool = AtomicBool::new(false);
+static DISK_CHANGED: AtomicBool = AtomicBool::new(false);
+
+pub fn disk_changed() -> bool {
+    DISK_CHANGED.load(Ordering::SeqCst)
+}
 static COPYING: AtomicU32 = AtomicU32::new(0);
 
 pub fn stop() {
@@ -277,16 +319,18 @@ pub fn install(plan: &Plan, answers: &Receiver<String>) -> Step {
     format(&places)?;
     mount(&places)?;
     go_on()?;
-    let resume = if plan.swap { swap_file().ok() } else { None };
+    let resume = if plan.swap { swap_file().map_err(|why| problem(t!("installer-swap-failed", why = why))).ok() } else { None };
     say(10, t!("installer-step-copy"));
     copy_system()?;
     go_on()?;
     say(69, t!("installer-step-waiting"));
     let json = Zeroizing::new(answers.recv().map_err(|_| t!("installer-stopped").to_string())?);
     let full: Plan = serde_json::from_str(&json).map_err(|e| t!("installer-plan-unreadable-why", why = e.to_string()))?;
-    if full.target != plan.target || full.lock != plan.lock || full.swap != plan.swap {
+    if full.target != plan.target || full.lock != plan.lock || full.swap != plan.swap
+        || full.disk_id != plan.disk_id || full.disk_password != plan.disk_password {
         return Err(t!("installer-plan-unreadable").into());
     }
+    check_words(&full)?;
     check_answers(&full)?;
     fill(&full, &places, resume)?;
     unmount();
@@ -324,10 +368,11 @@ fn partition(plan: &Plan) -> Result<Places, String> {
         }
         Where::Beside { part, leave } => {
             let disk = whole_disk(&part);
+
+            let esp = existing_esp(&disk)?;
             shrink(&part, leave)?;
             settle();
             say(4, t!("installer-step-place"));
-            let esp = existing_esp(&disk).ok_or(t!("installer-no-boot-partition"))?;
             let mut made = Vec::new();
             let mut start = end_of(&part)? + 1;
 
@@ -388,10 +433,20 @@ fn end_of(part: &str) -> Result<u64, String> {
     edge_of(part, 2)
 }
 
-fn existing_esp(disk: &str) -> Option<String> {
-    text(&["lsblk", "-lno", "PATH,FSTYPE,PARTTYPENAME,SIZE", "-b", disk]).lines()
+fn existing_esp(disk: &str) -> Result<String, String> {
+    esp_in(&text(&["lsblk", "-lnbo", "PATH,SIZE,FSTYPE,PARTTYPENAME", disk]))
+}
+
+fn esp_in(listing: &str) -> Result<String, String> {
+    let found = listing.lines()
         .find(|l| l.contains("EFI System") || (l.contains("vfat") && l.to_lowercase().contains("efi")))
-        .and_then(|l| l.split_whitespace().next().map(String::from))
+        .ok_or(t!("installer-no-boot-partition"))?;
+    let mut words = found.split_whitespace();
+    let (dev, size) = (words.next().unwrap_or_default(), words.next().and_then(|n| n.parse::<u64>().ok()).unwrap_or(0));
+    if size < ESP_SHARE_LEAST {
+        return Err(t!("installer-boot-partition-small").into());
+    }
+    Ok(dev.to_string())
 }
 
 fn kept(leave: u64, size: u64) -> Result<u64, String> {
@@ -464,7 +519,7 @@ fn arrange_chip_binding(plan: &Plan, places: &Places) -> Step {
     }
     let Some(part) = &places.locked else { return Ok(()) };
 
-    let part = format!("/dev/disk/by-uuid/{}", uuid(part));
+    let part = format!("/dev/disk/by-uuid/{}", uuid_of(part)?);
     say(93, t!("installer-step-chip"));
 
     write_private("/etc/trindle/tpm-key", &plan.disk_password, 0o600)?;
@@ -627,7 +682,7 @@ fn swap_file() -> Result<Resume, String> {
 }
 
 fn resume_settings(places: &Places, resume: &Resume) -> Step {
-    let r = uuid(&places.fs());
+    let r = uuid_of(&places.fs())?;
     write("/etc/initramfs-tools/conf.d/resume", "RESUME=none\n")?;
     write("/etc/default/grub.d/trindle-resume.cfg",
           &format!("# Where a hibernated computer's memory is, on the swap file.\n\
@@ -687,7 +742,7 @@ fn fstab(places: &Places, swap: bool) -> Step {
         body.push_str("/swap/swapfile none swap defaults 0 0\n");
     }
     if let Some(boot) = &places.boot {
-        body.push_str(&format!("UUID={} /boot ext4 defaults 0 2\n", uuid(boot)));
+        body.push_str(&format!("UUID={} /boot ext4 defaults 0 2\n", uuid_of(boot)?));
     }
     body.push_str(&format!("UUID={e} /boot/efi vfat umask=0077 0 1\n"));
     write("/etc/fstab", &body)
@@ -695,7 +750,7 @@ fn fstab(places: &Places, swap: bool) -> Step {
 
 fn crypttab(places: &Places) -> Step {
     let Some(part) = &places.locked else { return Ok(()) };
-    write("/etc/crypttab", &format!("trindle UUID={} none luks,discard\n", uuid(part)))?;
+    write("/etc/crypttab", &format!("trindle UUID={} none luks,discard\n", uuid_of(part)?))?;
 
     write("/etc/default/grub.d/trindle-lock.cfg", "GRUB_ENABLE_CRYPTODISK=y\n")
 }
@@ -726,7 +781,16 @@ fn settings(plan: &Plan) -> Step {
         .map_err(|e| t!("installer-timezone-failed", why = e.to_string()))?;
 
     write("/etc/skel/.config/trindle/environment",
-          &format!("XKB_DEFAULT_LAYOUT={layout}\nXKB_DEFAULT_VARIANT={}\n", plan.variant))
+          &format!("XKB_DEFAULT_LAYOUT={layout}\nXKB_DEFAULT_VARIANT={}\n", plan.variant))?;
+
+    let conf = "/etc/skel/.config/trindle/trindle.conf";
+    let old = std::fs::read_to_string(format!("{TARGET}{conf}")).unwrap_or_default();
+    let mut lines: Vec<String> = old.lines().filter(|l| !l.trim_start().starts_with("language=")).map(str::to_string).collect();
+    lines.extend(plan.language_setting());
+    if lines.is_empty() && old.is_empty() {
+        return Ok(());
+    }
+    write(conf, &(lines.join("\n") + "\n"))
 }
 
 fn people(plan: &Plan) -> Step {
@@ -791,7 +855,9 @@ fn live_parts(brand: &super::brand::Brand, username: &str) -> Step {
         argv.extend(brand.remove.iter().map(String::as_str));
         let _ = chroot(&argv);
     }
-    let _ = chroot(&["apt-get", "autoremove", "-y", "--purge"]);
+    let mut tidy = crate::admin::protected::autoremove_argv(false);
+    tidy.insert(1, "--purge".into());
+    let _ = chroot(&tidy.iter().map(String::as_str).collect::<Vec<_>>());
 
     let _ = chroot(&["apt-mark", "unhold", "trindle"]);
     Ok(())
@@ -806,8 +872,10 @@ fn boot(disk: &str, places: &Places) -> Step {
         efi_ok = chroot(&["grub-install", "--target=x86_64-efi", "--efi-directory=/boot/efi",
                          "--bootloader-id=Trindle", "--no-nvram", "--recheck"]).is_ok();
 
-        let _ = chroot(&["grub-install", "--target=x86_64-efi", "--efi-directory=/boot/efi",
-                         "--removable", "--no-nvram", "--recheck"]);
+        if places.fresh_esp {
+            let _ = chroot(&["grub-install", "--target=x86_64-efi", "--efi-directory=/boot/efi",
+                             "--removable", "--no-nvram", "--recheck"]);
+        }
         name_in_firmware(disk, &places.esp);
     }
     if Path::new(&format!("{TARGET}/usr/lib/grub/i386-pc")).exists() {
@@ -912,6 +980,47 @@ mod tests {
         let listing = "BYT;\n/dev/sda:900B:scsi:512:512:gpt:Disk:;\n1:10B:99B:90B:fat32::;\n2:100B:499B:400B:ntfs::;\n3:600B:899B:300B:ext4::;\n";
         assert_eq!(next_start(listing, 500), Some(600));
         assert_eq!(next_start(listing, 900), None);
+    }
+
+    #[test]
+    fn sharing_a_disk_needs_a_gpt_table_and_a_boot_partition_big_enough() {
+        let gpt = "BYT;\n/dev/sda:900B:scsi:512:512:gpt:Disk:;\n";
+        let mbr = "BYT;\n/dev/sda:900B:scsi:512:512:msdos:Disk:;\n";
+        assert_eq!(table_kind(gpt), Some("gpt"));
+        assert_eq!(table_kind(mbr), Some("msdos"));
+        assert_eq!(table_kind(""), None);
+        let big = "/dev/sda1 104857600 vfat EFI System\n/dev/sda2 5000000000 ntfs Microsoft basic data\n";
+        assert_eq!(esp_in(big), Ok("/dev/sda1".to_string()));
+        assert_eq!(esp_in("/dev/sda1 1048576 vfat EFI System\n"), Err(t!("installer-boot-partition-small").to_string()));
+        assert_eq!(esp_in("/dev/sda2 5000000000 ntfs Microsoft basic data\n"), Err(t!("installer-no-boot-partition").to_string()));
+    }
+
+    #[test]
+    #[allow(clippy::field_reassign_with_default)]
+    fn answers_sent_after_the_copy_are_checked_like_the_first() {
+        let mut plan = Plan::default();
+        plan.locale = "en_GB.UTF-8".into();
+        plan.layout = "gb".into();
+        plan.timezone = "Europe/London".into();
+        assert!(check_words(&plan).is_ok());
+        plan.layout = "gb\"\nEVIL=1".into();
+        assert!(check_words(&plan).is_err());
+        plan.layout = "gb".into();
+        plan.timezone = "../../etc/passwd".into();
+        assert!(check_words(&plan).is_err());
+    }
+
+    #[test]
+    fn a_stick_is_known_by_the_install_image_on_it() {
+        assert!(holds_install_image("iso9660\nvfat\n"));
+        assert!(!holds_install_image("ntfs\nvfat\n"));
+    }
+
+    #[test]
+    fn a_tool_that_stops_before_it_has_its_input_is_not_called_done() {
+        let much = "x".repeat(1 << 20);
+        assert!(run_input(&["true"], Some(&much)).is_err());
+        assert!(run_input(&["sh", "-c", "cat >/dev/null"], Some(&much)).is_ok());
     }
 
     #[test]

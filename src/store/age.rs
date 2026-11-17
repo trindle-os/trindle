@@ -1,4 +1,4 @@
-//! How old an app is, as its page and each result say it: when it was last updated, in red past six months, and when it was made.
+//! How old an app is, as its page and each result say it: when it was last updated, with a warning past six months, and when it was made.
 
 use crate::toolkit::lang::format::{date, Pattern};
 use crate::toolkit::t;
@@ -27,9 +27,9 @@ pub fn updated_words(updated: Option<u64>, now: u64) -> (String, bool) {
 }
 
 pub fn updated<M>(updated: Option<u64>, now: u64) -> Node<M> {
-    let (words, red) = updated_words(updated, now);
+    let (words, old) = updated_words(updated, now);
     let line = note(words).cut();
-    if red { line.tone(Tone::Problem) } else { line }
+    if old { line.tone(Tone::Warn) } else { line }
 }
 
 pub fn created_words(created: Option<u64>) -> String {
@@ -45,11 +45,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn six_months_without_an_update_is_said_in_red() {
+    fn six_months_without_an_update_is_said_in_the_warning_tone() {
         let now = 1_800_000_000;
         assert!(!updated_words(Some(now - STALE), now).1);
-        let (words, red) = updated_words(Some(now - STALE - 1), now);
-        assert!(red && words.contains("security"), "{words}");
+        let (words, old) = updated_words(Some(now - STALE - 1), now);
+        assert!(old && words.contains("security"), "{words}");
         assert_eq!(updated_words(None, now), ("Last updated: not known".to_string(), false));
         assert_eq!(updated_words(Some(86_400 * 59), now).0.split('.').next(), Some("Last updated 1 March 1970"));
         assert_eq!(created_words(Some(0)), "Created 1 January 1970");

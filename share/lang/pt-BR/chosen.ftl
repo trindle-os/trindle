@@ -13,13 +13,13 @@ chosen-act-name-empty = Um nome não pode ficar vazio.
 chosen-act-name-slash = Um nome não pode conter uma barra.
 
 # Red words under a name being typed when it is . or ..
-chosen-act-name-kept = Esse nome é reservado para o sistema.
+chosen-act-name-kept = O sistema já usa esse nome.
 
 # Red words under a name being typed when it is too long.
 chosen-act-name-long = Esse nome é longo demais.
 
 # Red words under the name box, and at the foot of Folders, when a rename fails: the item's name, then the reason.
-chosen-inplace-not-renamed = Não foi possível renomear { $name }: { $why }.
+chosen-inplace-not-renamed = O Trindle não conseguiu renomear { $name }: { $why }.
 
 # Red words under the name box, and at the foot of Folders, when a name is already used in that place; the kind is the word folder or file.
 chosen-inplace-taken =

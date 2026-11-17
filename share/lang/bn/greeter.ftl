@@ -26,16 +26,16 @@ greeter-ready-name = আপনার নাম ও পাসওয়ার্�
 greeter-phone-failed = আপনার ফোন আপনাকে লগ ইন করাতে পারেনি। পাসওয়ার্ড লিখুন।
 
 # Under the password box for a few seconds, where a phone is paired.
-greeter-phone-hint = ফোনের বোতামটি আপনার ফোন দিয়ে লগ ইন করায়।
+greeter-phone-hint = ফোন দিয়ে লগ ইন করুন
 
 # At the foot of the screen, for when nothing else works.
 greeter-trouble = লগ ইনে সমস্যা? টেক্সট লগইনের জন্য Ctrl+Alt+F2 চাপুন।
 
 # Beside the light drawing switch, on a computer with no graphics chip.
-greeter-no-chip = কোনো গ্রাফিক্স চিপ পাওয়া যায়নি, তাই হালকা ড্রয়িং সবকিছু দ্রুত রাখে।
+greeter-no-chip = Trindle কোনো গ্রাফিক্স চিপ খুঁজে পায়নি, তাই ডেস্কটপ দ্রুত রাখতে সহজ গ্রাফিক্স ব্যবহার করছে।
 
 # The main button's name (a round button with an arrow) that logs in.
-greeter-sign-in = সাইন ইন
+greeter-sign-in = লগ ইন
 
 # Red line under the boxes when the name and password are wrong, or the account is unknown.
 # SAFETY: needs a human review before it ships
@@ -54,7 +54,7 @@ greeter-pam-account-expired = এই অ্যাকাউন্টের মে
 greeter-pam-password-expired = এই পাসওয়ার্ডের মেয়াদ শেষ হয়ে গেছে। বদলাতে টেক্সট কনসোলে (Ctrl+Alt+F2) লগ ইন করুন।
 
 # Red line under the boxes, or the sentence at the top, when the login failed and the system gave no reason.
-greeter-login-failed = লগ ইন হয়নি।
+greeter-login-failed = আপনাকে লগ ইন করানো যায়নি।
 
 # Red line under the name box when Enter is pressed with no name.
 greeter-name-first = আগে আপনার নাম লিখুন।
@@ -80,7 +80,7 @@ greeter-answer-box = উত্তর
 greeter-use-phone = ফোন ব্যবহার করুন
 
 # Name of the switch for light drawing on a computer with no graphics chip, and the word under it.
-greeter-light-drawing = হালকা ড্রয়িং
+greeter-light-drawing = কম গ্রাফিক্স
 
 # Tip of the round button that shows or hides the on-screen keyboard.
 greeter-keyboard-tip = পর্দার কীবোর্ড
@@ -112,7 +112,7 @@ greeter-shut-down = বন্ধ করুন
 greeter-shut-down-sure = বন্ধ করতে আবার চাপুন
 
 # Red line under the boxes when a power button is pressed and the system has no bus to ask.
-greeter-no-bus = সিস্টেম বাস পাওয়া যাচ্ছে না।
+greeter-no-bus = Trindle সিস্টেমের সঙ্গে যুক্ত হতে পারছে না।
 
 # Red line under the boxes when the system refused to restart; the reason follows, as the system worded it.
 greeter-restart-failed = রিস্টার্ট করা যায়নি: { $why }
@@ -121,19 +121,19 @@ greeter-restart-failed = রিস্টার্ট করা যায়ন�
 greeter-shut-down-failed = বন্ধ করা যায়নি: { $why }
 
 # Red line under the boxes when the login service could not be spoken to.
-greeter-service-no-talk = লগইন সেবার সাথে যোগাযোগ করা যায়নি।
+greeter-service-no-talk = লগইন সেবায় পৌঁছানো যায়নি।
 
 # Red line under the boxes when the login service was too slow.
-greeter-service-timeout = লগইন সেবা সময়মতো সাড়া দেয়নি।
+greeter-service-timeout = লগইন সেবা অনেক বেশি সময় নিয়েছে।
 
 # Red line under the boxes when the login service hung up.
 greeter-service-closed = greetd সংযোগ বন্ধ করে দিয়েছে।
 
 # Red line under the boxes when the login service's answer was far too large.
-greeter-service-too-big = লগইন সেবা পড়ার অযোগ্য বড় কিছু পাঠিয়েছে।
+greeter-service-too-big = লগইন সেবা এত বড় একটি উত্তর পাঠিয়েছে যা পড়া যায় না।
 
 # Red line under the boxes when the login screen was started by hand and not by the login service.
-greeter-service-not-started = GREETD_SOCK ঠিক করা নেই: লগইন পর্দা greetd চালু করেনি।
+greeter-service-not-started = GREETD_SOCK ঠিক করা নেই, তাই greetd এই লগইন পর্দা চালু করেনি।
 
 # Red line under the boxes when there is no connection to the login service.
 greeter-service-no-connection = সংযোগ নেই

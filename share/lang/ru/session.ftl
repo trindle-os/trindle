@@ -19,7 +19,7 @@ session-lock-use-pin = Ввести PIN-код
 session-lock-use-phone = Телефон
 
 # Shown while the typed password or PIN is being checked.
-session-lock-checking = Проверка...
+session-lock-checking = Проверка…
 
 # Shown when the PIN has run out of time and the password is asked for instead.
 session-lock-pin-timed-out = Время действия PIN-кода истекло, введите пароль.
@@ -37,13 +37,13 @@ session-lock-wrong-pin =
     }
 
 # Shown while the phone is asked to unlock the screen.
-session-lock-asking-phone = Запрос к телефону...
+session-lock-asking-phone = Запрос к телефону…
 
 # Shown when the phone did not unlock the screen and the PIN may be typed.
-session-lock-phone-no-pin = Телефон не разблокировал экран. Введите PIN-код.
+session-lock-phone-no-pin = Не удалось разблокировать экран с помощью телефона. Введите PIN-код.
 
 # Shown when the phone did not unlock the screen and the password must be typed.
-session-lock-phone-no-password = Телефон не разблокировал экран. Введите пароль.
+session-lock-phone-no-password = Не удалось разблокировать экран с помощью телефона. Введите пароль.
 
 # Shown when the password typed is not the person's password.
 session-lock-wrong-password = Неверный пароль.
@@ -64,7 +64,7 @@ session-wallpaper-larger-4k = больше 4K
 session-wallpaper-larger-screen = больше вашего экрана
 
 # A reason a wallpaper was left out: its file is over 20 MB, or over 200 MB if it moves.
-session-wallpaper-over-20-or-200 = больше 20 МБ (200 МБ для движущихся)
+session-wallpaper-over-20-or-200 = больше 20 МБ (200 МБ для анимированных)
 
 # A reason a wallpaper was left out: its file is over 20 MB.
 session-wallpaper-over-20 = больше 20 МБ
@@ -76,7 +76,13 @@ session-wallpaper-over-200 = больше 200 МБ
 session-wallpaper-reasons-or = { $first } или { $second }
 
 # The line that says how many wallpapers were left out and why; the count and the reasons come in.
-session-wallpaper-left-out = Пропущено: { $count }. Причина: { $why }.
+session-wallpaper-left-out =
+    { $count ->
+        [one] Trindle пропустил { $count } изображение, потому что оно { $why }.
+        [few] Trindle пропустил { $count } изображения, потому что они { $why }.
+        [many] Trindle пропустил { $count } изображений, потому что они { $why }.
+       *[other] Trindle пропустил { $count } изображения, потому что они { $why }.
+    }
 
 # Under the lock screen when a phone or password check was given up on.
 session-lock-check-abandoned = Это заняло слишком много времени. Повторите попытку.
@@ -87,7 +93,7 @@ session-lock-check-abandoned = Это заняло слишком много в�
 session-restart-question = Перезапустить весь рабочий стол?
 
 # Under the heading: what restarting everything does to the open windows.
-session-restart-windows = Все открытые окна закроются, а всё несохранённое в них будет потеряно.
+session-restart-windows = Все открытые окна закроются. Всё, что вы не сохранили, будет потеряно.
 
 # Tip of the round button that leaves everything as it is.
 session-restart-cancel = Отмена
@@ -95,3 +101,14 @@ session-restart-cancel = Отмена
 # Main button that restarts the whole desktop.
 session-restart-go = Перезапустить
 
+# Under the lock screen when Enter is pressed while the last try, given up on, is still being checked.
+session-lock-still-checking = Последняя попытка ещё проверяется. Повторите чуть позже.
+
+# Under the lock screen after several wrong tries, with how many seconds to wait (1 is one second).
+session-lock-wait =
+    { $n ->
+        [one] Слишком много неверных попыток. Повторите через { $n } секунду.
+        [few] Слишком много неверных попыток. Повторите через { $n } секунды.
+        [many] Слишком много неверных попыток. Повторите через { $n } секунд.
+       *[other] Слишком много неверных попыток. Повторите через { $n } секунды.
+    }

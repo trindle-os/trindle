@@ -184,7 +184,7 @@ mod tests {
     fn a_charge_limit_that_cannot_be_kept_for_the_next_start_is_not_called_on() {
         let s = StandIn::failing("charge-on", "systemctl enable", "Failed to enable unit.");
         let said = super::charge_limit_with(true, &|_| Ok(())).unwrap_err();
-        assert!(said.starts_with("The limit is on for now, but will be lost when the computer is switched off"), "{said}");
+        assert!(said.starts_with("The charging limit is on for now, but it will be lost when the computer is switched off"), "{said}");
         assert!(said.ends_with("Failed to enable unit."), "{said}");
         drop(s);
         let s = StandIn::all_well("charge-on");
@@ -198,7 +198,7 @@ mod tests {
         let s = StandIn::all_well("charge-off");
         s.stuck(charge::STATE);
         let said = super::charge_limit_with(false, &|_| Ok(())).unwrap_err();
-        assert!(said.starts_with("Charging is full for now, but the limit will come back at the next start"), "{said}");
+        assert!(said.starts_with("Charging to full is on for now, but the limit will come back the next time the computer starts"), "{said}");
 
         assert_eq!(super::charge_limit_with(false, &|_| Err("no".into())), Err("no".into()));
     }
@@ -209,7 +209,7 @@ mod tests {
         let was: &[u8] = b"127.0.0.1\tlocalhost\n10.0.0.9\tprinter\xff\n";
         s.write("/etc/hosts", was);
         let said = super::hostname(&["newname".to_string()]).unwrap_err();
-        assert!(said.starts_with("Nothing was changed, because the file that keeps it is not text"), "{said}");
+        assert!(said.starts_with("Nothing was changed, because Trindle couldn't read") && said.contains("isn't text"), "{said}");
         assert_eq!(std::fs::read(s.path("/etc/hosts")).unwrap(), was);
         assert!(s.ran().is_empty(), "the name was changed though its list could not be");
 

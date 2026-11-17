@@ -49,14 +49,11 @@ settings-help-read = Leer { $title }
 # Bold line in the Reading card of Help when no topic is open.
 settings-help-nothing-open = Nada abierto
 
-# Quiet line under "Nothing open" in Help.
-settings-help-nothing-open-sub = Pulsa la flecha junto a un tema para leerlo aquí.
-
 # Heading of the Help card that shows the open topics.
 settings-help-reading = Lectura
 
 # Placeholder and spoken name of the typing box that searches Help.
-settings-help-search-placeholder = Busca en la ayuda, por ejemplo «wifi», «impresora» o «apagar»
+settings-help-search-placeholder = Buscar en la ayuda
 
 # Heading of the Help card with the search box.
 settings-help-search = Buscar en la ayuda
@@ -72,4 +69,3 @@ settings-help-program-open = Abrir la Ayuda
 
 # Red words under the line "Help in its own window" when the Help program could not be started.
 settings-help-program-not-opened = No se pudo abrir la Ayuda.
-

@@ -16,7 +16,7 @@ installer-stop-privacy = 隐私
 installer-stop-password = 密码
 
 # Name of the fifth stop on that line, the page about the person.
-installer-stop-you = 您
+installer-stop-you = 你
 
 # Name of the sixth stop on that line, the page that says what is about to happen.
 installer-stop-ready = 就绪
@@ -31,7 +31,7 @@ installer-stop-done = 完成
 installer-getting-ready = 正在准备
 
 # Red line at the foot when the installer's helper could not be started.
-installer-no-start = 安装程序无法启动：{ $why }
+installer-no-start = 无法启动安装程序：{ $why }
 
 # Written to the error output when the plan sent to the helper could not be read.
 installer-plan-unreadable = 无法读取安装计划。
@@ -70,7 +70,9 @@ installer-arm = 再点一次即可安装
 installer-arm-erase = 再点一次即可清除整个磁盘并安装
 
 # Note beside Next on the first page while no language is chosen.
-installer-missing-language = 请选择语言
+installer-missing-language = 请选择你的语言
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = 请选择 Trindle 的语言
 
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = 请选择键盘
@@ -81,12 +83,15 @@ installer-missing-time = 请选择时区
 # Note beside Next on the disk page while no disk is chosen.
 installer-missing-disk = 请选择安装 Trindle 的位置
 
+# Note beside Next on the disk page while the disks are read again, after one turned out not to be the disk shown.
+installer-disks-rereading = 正在重新读取磁盘
+
 # SAFETY: needs a human review before it ships
 # Note beside Next on the disk password page while no password has been typed twice.
 installer-missing-disk-password = 请输入两次磁盘密码，两次必须相同
 
 # Note beside Next on the account page while the sign-in name is not good.
-installer-missing-username = 需要填写登录名
+installer-missing-username = 请填写登录名
 
 # Note beside Next on the account page while the computer's name is not good.
 installer-missing-hostname = 请给这台电脑起个名字
@@ -99,10 +104,12 @@ installer-missing-password = 请输入两次密码，两次必须相同
 installer-welcome-title = 欢迎使用 { $name }
 
 # Sentence under the title of the first page.
-installer-welcome-help = 请选择语言；键盘和时间会随之设置，您也可以分别修改。
+installer-welcome-help = 请选择你的语言，Trindle 会据此设置其余内容。
 
-# Head of the card for choosing the language, and the name of its search box.
-installer-language = 语言
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
+installer-language = 你的语言
+# Label beside the box at the right of the first page's sentence, for choosing the language of Trindle's own words (only those Trindle has).
+installer-trindle-language = Trindle 的语言
 
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = 键盘
@@ -118,7 +125,7 @@ installer-disks-title = { $name } 的安装位置
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title of the disk page.
-installer-disks-help = 您所选磁盘上的全部内容都会被替换，除非您在现有内容旁边腾出空间。
+installer-disks-help = 你所选磁盘上的全部内容都会被替换，除非你选择安装在现有内容旁边。
 
 # Shown on the disk page when no disk is big enough.
 installer-disks-none = 没有找到足够大的磁盘。Trindle 需要 20 GB。
@@ -165,10 +172,10 @@ installer-swap-title = { $gb } GB 的交换文件
 installer-swap-switch = 创建交换文件
 
 # Under the swap file's head when Secure Boot is on.
-installer-swap-secure-boot = 安全启动已开启，所以这台电脑无法休眠，但内存不足时交换文件仍然有用。只有磁盘空间充裕时才会创建。
+installer-swap-secure-boot = 安全启动已开启，所以这台电脑无法休眠，但内存不足时交换文件仍然有用。只有磁盘空间充裕时，Trindle 才会创建它。
 
 # Under the swap file's head when the computer can hibernate.
-installer-swap-note = 可以休眠，即断电后保持所有打开的内容，内存不足时也有地方可用。没有它，电脑就无法休眠。只有磁盘空间充裕时才会创建。
+installer-swap-note = 有了交换文件，电脑就能休眠，也就是断电后仍保留所有打开的内容。内存不足时，它还能给电脑多提供一些空间。没有它，电脑就无法休眠。只有磁盘空间充裕时，Trindle 才会创建交换文件。
 
 # Title of the page about encrypting the disk.
 installer-privacy-title = 加密磁盘
@@ -195,7 +202,7 @@ installer-privacy-chip-choice = 加密，并让这台电脑的 TPM 芯片来解�
 installer-privacy-about = 关于芯片
 
 # In the card about the chip, on a computer that has one.
-installer-privacy-chip = 这台电脑有 TPM 芯片。安装后的第一次启动会要求输入一次密码，让芯片认识这台电脑；之后芯片会自动解锁磁盘，无需输入。请保管好这个密码：如果更换芯片，或把磁盘装到另一台电脑上，就要靠它才能打开。
+installer-privacy-chip = 这台电脑有 TPM 芯片。安装后第一次启动时，会要求输入一次密码，同时设置芯片；之后由芯片解锁磁盘，你无需输入任何内容。请保管好这个密码，因为如果更换芯片，或把磁盘装到另一台电脑上，就需要用到它。
 
 # In the card about the chip, on a computer that has none Trindle can use.
 installer-privacy-no-chip = 这台电脑没有 Trindle 能使用的 TPM 芯片，所以每次启动都会要求输入密码。在有 TPM 芯片的电脑上，芯片可以自动解锁磁盘。
@@ -204,7 +211,7 @@ installer-privacy-no-chip = 这台电脑没有 Trindle 能使用的 TPM 芯片�
 installer-disk-title = 磁盘密码
 
 # Sentence under the title of the disk password page.
-installer-disk-help = 电脑启动时，它会最先被输入。
+installer-disk-help = 电脑启动时，最先要输入的就是它。
 
 # SAFETY: needs a human review before it ships
 # Head of the card with the disk password boxes, and the name of the first box.
@@ -225,19 +232,19 @@ installer-disk-write-down = 请记下来
 
 # SAFETY: needs a human review before it ships
 # Words in that card.
-installer-disk-write-down-text = 请把这个密码写在纸上，放在远离电脑的安全地方。没有它，磁盘就永远无法打开，无论是您还是其他任何人。没有任何办法可以重新进入。四个普通的词就能组成一个容易输入、又难以猜到的密码短语。
+installer-disk-write-down-text = 请把这个密码写在纸上，放在远离电脑的安全地方。没有它，任何人都无法打开磁盘，包括你自己。没有任何办法可以重新进入。由四个普通词语组成的密码短语，既容易输入，又难以猜到。
 
 # Title of the account page.
-installer-you-title = 关于您
+installer-you-title = 关于你
 
 # Sentence under the title of the account page.
-installer-you-help = 这是您用来登录的账户。
+installer-you-help = 这是你用来登录的账户。
 
 # Head of the card with the name boxes.
-installer-account = 您的账户
+installer-account = 你的账户
 
 # Label and name of the box for the person's name.
-installer-your-name = 您的姓名
+installer-your-name = 你的姓名
 
 # Label and name of the box for the sign-in name.
 installer-user-name = 登录名
@@ -247,7 +254,7 @@ installer-host-name = 这台电脑的名称
 
 # SAFETY: needs a human review before it ships
 # Head of the card with the password boxes.
-installer-your-password = 您的密码
+installer-your-password = 你的密码
 
 # SAFETY: needs a human review before it ships
 # Label and name of the first password box.
@@ -257,16 +264,16 @@ installer-password = 密码
 installer-strength = 猜中的难度
 
 # Red line under the account boxes: the sign-in name is empty.
-installer-user-needed = 需要填写登录名。
+installer-user-needed = 请填写登录名。
 
 # Red line under the account boxes: a name is too long.
 installer-name-too-long = 这个名称太长。
 
 # Red line under the account boxes: the sign-in name does not start with a small letter.
-installer-user-start = 请以小写字母开头。
+installer-user-start = 请以字母 a-z 开头。
 
 # Red line under the account boxes: the sign-in name uses letters it may not.
-installer-user-letters = 只能用小写字母、数字、- 和 _。
+installer-user-letters = 只能用 a-z、0-9、- 和 _。
 
 # Red line under the account boxes: the sign-in name belongs to the system.
 installer-user-taken = 系统已经在使用这个名称。
@@ -317,7 +324,7 @@ installer-ready-nothing-changed = 目前还没有更改任何内容
 installer-ready-security = 安全更新
 
 # In the card about security updates.
-installer-ready-security-text = { $name } 每天都会自动安装 Debian 的安全修复。此项无法关闭。
+installer-ready-security-text = { $name } 每天都会自动安装 Debian 的安全修复。你可以在“设置”的“关于这台电脑”中关闭。
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title when a whole disk will be replaced.
@@ -325,7 +332,7 @@ installer-ready-replaced = { $disk } 上的所有内容都将被替换。
 
 # SAFETY: needs a human review before it ships
 # Sentence under the title when the install goes beside what is there.
-installer-ready-kept = { $part } 上的所有内容都会保留，但请先备份：缩小过程中如果断电，可能会丢失文件。
+installer-ready-kept = { $part } 上的所有内容都会保留，但请先备份。缩小过程中如果断电，可能会丢失文件。
 
 # Sentence under the title when no disk has been chosen.
 installer-ready-none = 还没有选择磁盘。
@@ -350,7 +357,7 @@ installer-ready-beside-text = { $part } 会被缩小到 { $size }，{ $name } �
 installer-ready-no-disk = 没有磁盘
 
 # Words of that row.
-installer-ready-no-disk-text = 没有选择磁盘。
+installer-ready-no-disk-text = 请选择磁盘。
 
 # SAFETY: needs a human review before it ships
 # Name of a row in the list: the disk will not be encrypted.
@@ -364,13 +371,25 @@ installer-ready-plain-text = 任何人取下磁盘后都可以读取其中的内
 installer-ready-locked = 已加密
 
 # Words of that row when a password is typed at each start.
-installer-ready-locked-password = 每次电脑启动时，您都要输入它的密码。
+installer-ready-locked-password = 每次电脑启动时，你都要输入它的密码。
 
 # Words of that row when the TPM chip unlocks the disk.
-installer-ready-locked-chip = 先输入一次密码，之后由这台电脑的 TPM 芯片来解锁。
+installer-ready-locked-chip = 你输入一次密码，之后由这台电脑的 TPM 芯片解锁磁盘。
 
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = 键盘 { $keyboard }，时区 { $zone }。
+# Added to the end of the disk's row on the last page when a swap file is to be made, with its size in GB.
+installer-ready-swap = 另加一个 { $gb } GB 的交换文件。
+
+# Under the choice to let the TPM chip unlock the disk, on a computer with no usable chip.
+installer-privacy-chip-off = 需要 Trindle 能使用的 TPM 芯片。
+
+# In the card about the chip when the disk is not being encrypted, on a computer that has a chip.
+installer-privacy-chip-none = 这台电脑有 TPM 芯片，可以解锁加密的磁盘。
+
+# In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
+installer-privacy-no-chip-none = 这台电脑没有 Trindle 能使用的 TPM 芯片。
+
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle 使用{ $trindle }，{ $keyboard } 键盘，{ $zone } 时间。
 
 # Title of the page shown while the install runs.
 installer-installing-title = 正在安装 { $name }
@@ -390,23 +409,23 @@ installer-done-keep = 请妥善保管磁盘密码
 
 # SAFETY: needs a human review before it ships
 # In that card when the TPM chip unlocks the disk.
-installer-keep-chip = 磁盘已加密。第一次启动会要求输入一次磁盘密码，让芯片认识这台电脑；之后它会自行打开。请把这个密码写在纸上，放在远离这台电脑的安全地方。没有它，磁盘就永远无法打开，无论是您还是其他任何人。
+installer-keep-chip = 磁盘已加密。电脑第一次启动时，会要求输入一次磁盘密码，同时设置芯片；之后磁盘会自行打开。请把这个密码写在纸上，放在远离这台电脑的安全地方。没有它，任何人都无法打开磁盘，包括你自己。
 
 # SAFETY: needs a human review before it ships
 # In that card when the password is typed at each start.
-installer-keep-password = 磁盘已加密。如果还没有记下磁盘密码，请现在就把它写在纸上，放在远离这台电脑的安全地方。没有它，磁盘就永远无法打开，无论是您还是其他任何人。
+installer-keep-password = 磁盘已加密。如果还没有记下磁盘密码，请现在就把它写在纸上，放在远离这台电脑的安全地方。没有它，任何人都无法打开磁盘，包括你自己。
 
 # Title of the first slide.
 installer-slide-ring = 一切尽在一个圆环
 
 # Words of the first slide.
-installer-slide-ring-text = 把指针移到屏幕边缘并双击，圆环就会打开：您的程序在外圈，时间和各种开关在中间。
+installer-slide-ring-text = 把指针移到屏幕边缘并双击，圆环就会打开：你的程序在外圈，时间和各种开关在中间。
 
 # Title of the second slide.
-installer-slide-snapshots = 更新出问题，可以退回
+installer-slide-snapshots = 撤销出问题的更新
 
 # Words of the second slide.
-installer-slide-snapshots-text = 每次软件变更前后都会为系统拍一个快照。设置可以把整个系统恢复到其中任何一个；电脑无法启动时，也可以在启动菜单中恢复。
+installer-slide-snapshots-text = Trindle 会在每次软件变更前后为系统拍一个快照。你可以在“设置”中把整个系统恢复到其中任何一个；如果电脑无法启动，也可以在启动菜单中恢复。
 
 # Title of the third slide.
 installer-slide-apps = 不碍事的应用
@@ -415,10 +434,10 @@ installer-slide-apps = 不碍事的应用
 installer-slide-apps-text = Flathub 应用、Debian 自带的应用、AppImage 和软件源都在一处，备份还能带到另一台电脑上。
 
 # Title of the fourth slide.
-installer-slide-yours = 快速变成您的风格
+installer-slide-yours = 按你的喜好定制
 
 # Words of the fourth slide.
-installer-slide-yours-text = 浅色或深色、您自己的声音，以及记得您所复制内容的剪贴板。
+installer-slide-yours-text = 选择浅色或深色，挑选你自己的声音，还有一个记得你所复制内容的剪贴板。
 
 # Title of the fifth slide.
 installer-slide-small = 小巧安静
@@ -436,16 +455,16 @@ installer-tour-ring-corner = 把指针放到这个角上，圆环就会打开
 installer-tour-ring-time = 中间是时间和日期
 
 # Note on the ring picture, at the programs.
-installer-tour-ring-programs = 您的程序在外圈
+installer-tour-ring-programs = 你的程序在外圈
 
 # Note on the ring picture, at the switches.
-installer-tour-ring-switches = 声音、屏幕、所有应用、保持唤醒和关机
+installer-tour-ring-switches = 声音、屏幕、所有应用、保持唤醒和关机的开关
 
 # Title of the tour slide about Settings.
 installer-tour-settings = 设置，用平实的话说
 
 # Note on the Settings picture, at the search box.
-installer-tour-settings-search = 在此输入即可找到设置，不用到处翻找
+installer-tour-settings-search = 在此输入即可找到设置
 
 # Note on the Settings picture, at Network.
 installer-tour-settings-network = 在“网络”里连接 Wi-Fi
@@ -454,7 +473,7 @@ installer-tour-settings-network = 在“网络”里连接 Wi-Fi
 installer-tour-settings-dark = 浅色还是深色，随时可换
 
 # Note on the Settings picture, at the colours.
-installer-tour-settings-colours = 二十种颜色，也可以输入您自己的
+installer-tour-settings-colours = 二十种颜色，也可以输入你自己的
 
 # Title of the tour slide about Apps.
 installer-tour-apps = 应用，满足其他一切需要
@@ -469,34 +488,34 @@ installer-tour-apps-many = 来自 Flathub 和 Debian 的数千个免费程序
 installer-tour-apps-updates = 所有软件的更新，包括 Trindle 本身
 
 # Title of the tour slide about voice control.
-installer-tour-voice = 您也可以直接对它说话
+installer-tour-voice = 对电脑说话
 
 # Note on the voice picture, at where voice control lives.
-installer-tour-voice-where = 语音控制在这里：设置，然后是圆环
+installer-tour-voice-where = 语音控制在“设置”中的“圆环”里
 
 # Note on the voice picture, at the button that adds voice.
-installer-tour-voice-add = 点一次“添加语音”。大约 150 MB，需要几分钟
+installer-tour-voice-add = 点一次“添加语音控制”。下载大小约 150 MB，需要几分钟
 
 # Note on the voice picture, about what to say.
 installer-tour-voice-say = 然后点按圆环中间，说出应用的名称、“调大声音”或“Wi-Fi 设置”
 
 # Note on the voice picture, about where speech is understood.
-installer-tour-voice-private = 您说的话只在这台电脑上识别，不会发往别处
+installer-tour-voice-private = 你说的话只在这台电脑上识别，不会发往别处
 
 # Title of the tour slide about snapshots.
-installer-tour-snapshots = 在任何更改之前，先留好退路
+installer-tour-snapshots = 退回到更改之前
 
 # Note on the snapshots picture, about when a snapshot is taken.
-installer-tour-snapshots-before = 每次更新前，电脑都会拍一个快照
+installer-tour-snapshots-before = 每次更新前，Trindle 都会拍一个快照
 
 # Note on the snapshots picture, about going back.
 installer-tour-snapshots-back = 如果出了问题，可以在启动菜单中退回原来的样子
 
 # Name of the picture of the ring, and the head of its card.
-installer-live-caption = 圆环，一切所在之处
+installer-live-caption = 圆环，一切尽在其中
 
 # Sentence under the title of the welcome from a stick.
-installer-live-help = 您正在从 U 盘运行，所以这台电脑上的任何内容都没有被更改。
+installer-live-help = 你正在从 U 盘运行，所以这台电脑上的任何内容都没有被更改。
 
 # Head of the card with the three first things to do.
 installer-live-begin = 开始
@@ -508,13 +527,13 @@ installer-live-open = 打开圆环
 installer-live-open-line = 双击屏幕边缘，或按 Super 键。
 
 # Name of the second thing to do.
-installer-live-speak = 对它说话
+installer-live-speak = 用语音
 
 # Line under it when voice control is there.
-installer-live-speak-line = 点按圆环中间，说出您想要的。
+installer-live-speak-line = 点按圆环中间，说出你想要的。
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = 在“设置”的“圆环”中添加语音，然后点按中间并说话。
+installer-live-speak-add = 在“设置”的“圆环”中点“添加语音控制”，然后点按中间并说话。
 
 # Name of the third thing to do.
 installer-live-tab = 全都在圆环里
@@ -553,10 +572,10 @@ installer-step-check = 正在检查磁盘上已有的内容
 installer-step-smaller = 正在缩小另一个系统
 
 # Foot of the install page while the disk is encrypted.
-installer-step-lock = 正在锁定磁盘
+installer-step-lock = 正在加密磁盘
 
 # Foot of the install page while the TPM chip is set up.
-installer-step-chip = 正在设置电脑的芯片
+installer-step-chip = 正在设置 TPM 芯片
 
 # Foot of the install page while the system is copied.
 installer-step-copy = 正在把 Trindle 复制到磁盘
@@ -565,10 +584,10 @@ installer-step-copy = 正在把 Trindle 复制到磁盘
 installer-step-settings = 正在写入设置
 
 # Foot of the install page while the person's account is made.
-installer-step-account = 正在创建您的账户
+installer-step-account = 正在创建你的账户
 
 # Foot of the install page while the stick's own parts are taken out.
-installer-step-live-parts = 正在移除 U 盘专用的部分
+installer-step-live-parts = 正在移除 U 盘的附加部分
 
 # Foot of the install page while the start-up files are made.
 installer-step-startup = 正在生成启动文件
@@ -616,10 +635,10 @@ installer-bad-keyboard = Trindle 无法使用这个键盘。
 installer-bad-timezone = Trindle 无法使用这个时区。
 
 # Red line at the foot: the person's name has something that cannot be written.
-installer-bad-fullname = 这个姓名中含有 Trindle 无法写入的内容。
+installer-bad-fullname = 这个姓名中有 Trindle 无法使用的字符。
 
 # Red line at the foot: a password has a line break in it.
-installer-bad-password = 密码中不能包含换行。
+installer-bad-password = 密码不能包含换行。
 
 # Red line at the foot: the second half of the installer was not started as root.
 installer-needs-root = 安装程序的后半部分必须以 root 身份运行。
@@ -628,7 +647,7 @@ installer-needs-root = 安装程序的后半部分必须以 root 身份运行。
 installer-no-boot-partition = 这个磁盘没有可共用的启动分区，所以 Trindle 无法装在现有内容旁边。
 
 # Red line at the foot: the partition just made cannot be found.
-installer-new-part-missing = 找不到磁盘上新建的分区。
+installer-new-part-missing = Trindle 找不到新建的分区。
 
 # Red line at the foot: the size of a partition cannot be read.
 installer-size-unreadable = 无法读取 { $part } 的大小。
@@ -649,27 +668,26 @@ installer-copy-no-start = 无法复制系统：{ $why }
 installer-copy-failed = 无法复制系统。{ $why }
 
 # Red line at the foot: there is not enough room for a swap file.
-installer-swap-no-room = 没有空间创建交换文件。
+installer-swap-no-room = 没有空间放交换文件。
 
 # Red line at the foot: the swap file's place on the disk cannot be read.
-installer-swap-unreadable = 无法读取交换文件在磁盘上的位置。
+installer-swap-unreadable = Trindle 无法读取交换文件在磁盘上的位置。
 
 # Red line at the foot: the new partitions could not be named in the table of disks.
-installer-fstab-unidentified = 无法识别新建的分区。
+installer-fstab-unidentified = Trindle 无法识别新建的分区。
 
 # Red line at the foot: the time zone could not be set.
 installer-timezone-failed = 无法设置时区：{ $why }
 
 # Red line at the foot: the boot menu could not be installed.
-installer-boot-failed = 无法在这台电脑上安装启动菜单。
+installer-boot-failed = Trindle 无法在这台电脑上安装启动菜单。
 
 # Name of that button after one press, when a second press goes ahead.
 installer-sure = 确定吗？
 
 
-
 # Note on the ring picture, at the tab at the edge.
-installer-tour-ring-foot = 已打开的内容、剪贴板，以及一个清空屏幕的按钮
+installer-tour-ring-foot = 查看已打开的内容，使用剪贴板，还可以用一个按钮清空屏幕
 
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } 是 Trindle 正在运行的那个 U 盘。
@@ -678,7 +696,7 @@ installer-disk-is-stick = { $dev } 是 Trindle 正在运行的那个 U 盘。
 installer-disk-in-use = { $dev } 正在使用。请关闭正在使用它的程序，然后重试。
 
 # Said beside how far the install has got, once it has started.
-installer-started = 安装已开始
+installer-started = 正在安装
 
 # The button that ends an install under way.
 installer-halt = 停止
@@ -690,11 +708,10 @@ installer-halt-sure = 要停止安装吗？这块磁盘上原来的内容已经�
 installer-halting = 正在停止
 
 # When Stop could not let go of the disk.
-installer-halt-stuck = 无法释放这块磁盘。请重新启动电脑后再试。
+installer-halt-stuck = Trindle 无法释放这块磁盘。请重新启动电脑后再试。
 
 # The copy is done and the person is still answering.
 installer-step-waiting = 已复制。正在等待你的回答。
-
 
 
 installer-already-running = 这台计算机上已经有另一个安装程序在运行。
@@ -707,14 +724,40 @@ installer-memory-short = Trindle 至少需要 1 GB 内存，而这台电脑的�
 installer-lock-needs-uefi = 只有通过 UEFI 启动的电脑才能加密磁盘，而这台电脑不是。
 
 # Red words when the Windows partition chosen to share the disk was hibernated or left in Windows' fast start-up; { $part } is the partition.
-installer-windows-asleep = { $part } 上的 Windows 处于休眠状态或停留在快速启动状态，缩小它可能会丢失其中的文件。请启动 Windows，选择“重启”，然后再试一次。
+installer-windows-asleep = { $part } 上的 Windows 处于休眠状态，或是在启用快速启动的情况下关机的。现在缩小它可能会丢失其中的文件。请启动 Windows，选择“重启”，然后再试一次。
 
 # Red words on the last page when the snapshots could not be set up; { $why } is the reason.
 installer-snapshots-failed = Trindle 已安装，但无法设置快照：{ $why }
 
 # Red words on the last page when the boot menu could not be made after setting up snapshots; { $why } is the reason.
-installer-snapshots-menu-failed = Trindle 已安装，但无法让启动菜单列出快照：{ $why }
+installer-snapshots-menu-failed = Trindle 已安装，但未能把快照添加到启动菜单：{ $why }
 
 # Head of the card on the last page that lists what could not be done.
 installer-done-problems = 并非所有内容都已设置好
 
+# Red line under the disk password boxes: the computer gave no random numbers, so no passphrase could be made.
+installer-suggest-failed = Trindle 无法生成密码短语。请自己输入一个。
+
+# Red line at the foot: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev } 不是之前显示的那个磁盘。请返回并重新选择磁盘。
+
+# Red line at the foot: a disk with an old-style partition table cannot be shared with.
+installer-no-gpt = { $dev } 没有使用 GPT 分区表，所以 Trindle 无法装在其现有内容旁边。
+
+# Red line at the foot: the boot partition on the disk is too small to share.
+installer-boot-partition-small = 这个磁盘上的启动分区太小，无法共用，所以 Trindle 无法装在现有内容旁边。
+
+# Note on the last page: the swap file was not made, with why.
+installer-swap-failed = Trindle 已安装，但无法创建交换文件：{ $why }
+
+# Red line at the foot: a partition's identity could not be read after it was made.
+installer-uuid-missing = 设置完成后，Trindle 无法识别 { $dev }。
+
+# Words on the last page: the disk that will be replaced, with what it holds.
+installer-ready-replaced-known = { $disk } 上的所有内容都将被替换（{ $holds }）。
+
+# A disk named with its model and size, then its place such as /dev/sda.
+installer-disk-named = { $what }，{ $dev }
+
+# Red line at the foot: a program the installer runs stopped before it had all it was given.
+installer-run-stopped = { $program } 在拿到所需的全部信息前就停止了：{ $why }

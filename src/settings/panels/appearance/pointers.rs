@@ -62,21 +62,21 @@ impl Appearance {
         let theme = if shown.len() < 2 {
             note(shown.first().cloned().unwrap_or_else(|| t!("settings-appearance-cursor-standard").to_string()))
         } else {
-            dropdown(kit, CURSOR, shown, at, t!("settings-appearance-cursor"), move |i| {
+            dropdown(CURSOR, shown, at, t!("settings-appearance-cursor"), move |i| {
                 let t = themes[i].clone();
                 on::<Appearance>(move |me, k| me.cursor(k, CURSOR, Some(t.clone()), None))
             })
         };
         let size_at = CURSOR_SIZES.iter().position(|v| *v == self.cursor_size);
-        let size = dropdown(kit, CURSOR_SIZE, (0..CURSOR_SIZES.len()).map(|i| cursor_size_name(i).to_string()).collect(), size_at,
+        let size = dropdown(CURSOR_SIZE, (0..CURSOR_SIZES.len()).map(|i| cursor_size_name(i).to_string()).collect(), size_at,
                             t!("settings-appearance-cursor-size"), |i| {
             let v = CURSOR_SIZES[i].to_string();
             on::<Appearance>(move |me, k| me.cursor(k, CURSOR_SIZE, None, Some(v.clone())))
         });
         group(t!("settings-appearance-pointer-title")).icon("input-mouse-symbolic")
             .vis(pointers(&self.pointer_art, size_at))
-            .rows(vec![line(t!("settings-appearance-cursor")).sub(t!("settings-appearance-cursor-about")).key(CURSOR).control(theme).node(kit),
-                       line(t!("settings-appearance-cursor-size")).sub(t!("settings-appearance-cursor-size-about")).key(CURSOR_SIZE).control(size).node(kit)])
+            .rows(vec![line(t!("settings-appearance-cursor")).key(CURSOR).control(theme).node(kit),
+                       line(t!("settings-appearance-cursor-size")).key(CURSOR_SIZE).control(size).node(kit)])
             .node(kit)
     }
 }
@@ -113,17 +113,48 @@ pub(super) fn cursor_themes() -> Vec<String> {
     out
 }
 
-pub(super) type PointerArt = std::rc::Rc<Vec<xcursor::parser::Image>>;
+pub(super) type PointerArt = std::rc::Rc<Vec<Arrow>>;
+
+pub(super) struct Arrow {
+    size: u32,
+    pic: tiny_skia::Pixmap,
+}
+
+const MOST_FILE: u64 = 4 << 20;
+const MOST_SIDE: u32 = 512;
 
 pub(super) fn pointer_art(name: &str) -> PointerArt {
     let read = || {
         let path = xcursor::CursorTheme::load(name).load_icon("default")?;
-        xcursor::parser::parse_xcursor(&std::fs::read(path).ok()?)
+        let mut bytes = Vec::new();
+        std::io::Read::read_to_end(&mut std::io::Read::take(std::fs::File::open(path).ok()?, MOST_FILE + 1), &mut bytes).ok()?;
+        if bytes.len() as u64 > MOST_FILE {
+            return None;
+        }
+        xcursor::parser::parse_xcursor(&bytes)
     };
-    std::rc::Rc::new(read().unwrap_or_default())
+    std::rc::Rc::new(read().unwrap_or_default().iter().filter_map(arrow).collect())
 }
 
-fn nearest(art: &[xcursor::parser::Image], size: u32) -> Option<&xcursor::parser::Image> {
+fn arrow(img: &xcursor::parser::Image) -> Option<Arrow> {
+    if img.width == 0 || img.height == 0 || img.width > MOST_SIDE || img.height > MOST_SIDE {
+        return None;
+    }
+    let mut pic = tiny_skia::Pixmap::new(img.width, img.height)?;
+    if img.pixels_rgba.len() < pic.pixels().len() * 4 {
+        return None;
+    }
+    for (out, px) in pic.pixels_mut().iter_mut().zip(img.pixels_rgba.chunks_exact(4)) {
+
+        let a = px[3];
+        if let Some(c) = tiny_skia::PremultipliedColorU8::from_rgba(px[0].min(a), px[1].min(a), px[2].min(a), a) {
+            *out = c;
+        }
+    }
+    Some(Arrow { size: img.size.max(1), pic })
+}
+
+fn nearest(art: &[Arrow], size: u32) -> Option<&Arrow> {
     art.iter().min_by_key(|i| i.size.abs_diff(size))
 }
 
@@ -148,19 +179,11 @@ pub(super) fn pointers(art: &PointerArt, chosen: Option<usize>) -> Node<Msg> {
             }
             let want = (size as f32 * s).round().max(1.0);
             let Some(img) = nearest(&art, want as u32) else { return };
-            let Some(mut pic) = tiny_skia::Pixmap::new(img.width.max(1), img.height.max(1)) else { return };
-            for (out, px) in pic.pixels_mut().iter_mut().zip(img.pixels_rgba.chunks_exact(4)) {
-
-                let a = px[3];
-                if let Some(c) = tiny_skia::PremultipliedColorU8::from_rgba(px[0].min(a), px[1].min(a), px[2].min(a), a) {
-                    *out = c;
-                }
-            }
-            let k = want / img.size.max(1) as f32;
-            let (w, h) = (img.width as f32 * k, img.height as f32 * k);
+            let k = want / img.size as f32;
+            let (w, h) = (img.pic.width() as f32 * k, img.pic.height() as f32 * k);
             let at = Transform::from_scale(k, k).post_translate(((side - w) / 2.0).round(), ((side - h) / 2.0).round());
             let paint = tiny_skia::PixmapPaint { quality: tiny_skia::FilterQuality::Bilinear, ..Default::default() };
-            canvas.draw_pixmap(0, 0, pic.as_ref(), &paint, at, None);
+            canvas.draw_pixmap(0, 0, img.pic.as_ref(), &paint, at, None);
         })
         .pressable(press())
         .on_pointer(move |p| match p {

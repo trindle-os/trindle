@@ -5,10 +5,10 @@
 settings-keyboard-title = کی بورڈ اور ماؤس
 
 # Words a person might type into the Settings search to find the keyboard page; separate them with spaces.
-settings-keyboard-keywords = ترتیب زبان ٹائپنگ کیپس لاک سکرین کی بورڈ بٹن حلقہ ماؤس ٹچ پیڈ ٹریک پیڈ پوائنٹر رفتار ٹیپ کلک سکرول پہیہ آہستہ تیز قدرتی بائیں ہاتھ پلگ اِن شارٹ کٹ کلیدیں دوبارہ نقشہ بدلیں ادل بدل ctrl escape super alt mac سائیڈ بٹن ٹیپ پکڑا پروگراموں کے بنائے keyd
+settings-keyboard-keywords = ترتیب زبان ٹائپنگ کیپس لاک سکرین کی بورڈ بٹن حلقہ ماؤس ٹچ پیڈ ٹریک پیڈ پوائنٹر رفتار ٹیپ کلک سکرول پہیہ آہستہ تیز قدرتی بائیں ہاتھ پلگ ان شارٹ کٹ کلیدیں دوبارہ نقشہ بدلیں ادل بدل ctrl escape super alt mac سائیڈ بٹن ٹیپ پکڑا پروگراموں کے بنائے keyd
 
 # Introduction under the heading of the keyboard page, and the words behind the page i.
-settings-keyboard-help = یہاں سب کچھ فوراً بدل جاتا ہے۔ دوسری ترتیب Alt اور Shift اکٹھے دبانے سے بدلتی ہے۔
+settings-keyboard-help = یہاں سب کچھ فوراً بدل جاتا ہے۔ آپ Alt اور Shift اکٹھے دبا کر دوسری ترتیب پر جا سکتے ہیں۔
 
 # First sentence at the top of the page; { $layout } is the name of the layout in use.
 settings-keyboard-top-typing = { $layout } میں ٹائپنگ ہو رہی ہے۔
@@ -41,13 +41,13 @@ settings-keyboard-no-list-title = کی بورڈ
 settings-keyboard-no-list-heading = کی بورڈ ترتیبوں کی فہرست دستیاب نہیں
 
 # Small words under that line, telling what to install; the command is typed as it is.
-settings-keyboard-no-list-about = اسے یوں انسٹال کریں: sudo apt install xkb-data
+settings-keyboard-no-list-about = اسے انسٹال کرنے کے لیے یہ چلائیں: sudo apt install xkb-data
 
 # Sentence at the end of the top words when keys or buttons have been changed; { $n } is how many.
 settings-keyboard-top-changed =
     { $n ->
-        [one] ایک کلید بدلی ہوئی ہے۔
-       *[other] { $n } کلیدیں اور بٹن بدلے ہوئے ہیں۔
+        [one] آپ نے ایک کلید یا بٹن بدلا ہے۔
+       *[other] آپ نے { $n } کلیدیں اور بٹن بدلے ہیں۔
     }
 
 # Title of the card with the keyboard layout.
@@ -68,11 +68,8 @@ settings-keyboard-none = کوئی نہیں
 # Heading of the line, and the name of its list, for a second layout.
 settings-keyboard-switch-to = اس پر بدلیں
 
-# Small words under the second layout line.
-settings-keyboard-switch-to-about = Alt اور Shift اکٹھے دونوں کے درمیان بدلتے ہیں۔
-
 # Words behind the i of the layout card.
-settings-keyboard-layout-about = ہر کلید کیا لکھتی ہے: ترتیب، اور اس کی ایک قسم جیسے بغیر ڈیڈ کیز والی۔ دوسری ترتیب Alt اور Shift اکٹھے دبانے سے لگتی ہے، اور اسی طرح واپس بدلتی ہے۔ سب کچھ فوراً بدل جاتا ہے۔
+settings-keyboard-layout-about = یہ طے کرتا ہے کہ ہر کلید کیا لکھے۔ آپ ایک ترتیب اور اس کی ایک قسم چن سکتے ہیں۔ دوسری ترتیب پر جانے کے لیے Alt اور Shift اکٹھے دبائیں، اور واپس جانے کے لیے دوبارہ دبائیں۔ تبدیلیاں فوراً ہو جاتی ہیں۔
 
 # Green words under a layout line once the new layout is in use.
 settings-keyboard-in-use = ابھی استعمال میں
@@ -93,64 +90,55 @@ settings-keyboard-caps-backspace = Backspace
 settings-keyboard-caps-nothing = کچھ نہیں
 
 # Heading of the line, and the name of its list, for what Caps Lock acts as.
-settings-keyboard-caps-acts-as = Caps Lock کلید کا کام
-
-# Small words under that line.
-settings-keyboard-caps-acts-as-about = دوسرا Ctrl، Escape وغیرہ۔
+settings-keyboard-caps-acts-as = Caps Lock کو یہ بنائیں
 
 # Heading of the line, and name of its switch, for the keyboard button in the ring.
 settings-keyboard-ring-button = حلقہ میں کی بورڈ کا بٹن
-
-# Small words under that line.
-settings-keyboard-ring-button-about = سکرین پر کی بورڈ لاتا ہے۔
 
 # Title of the card with Caps Lock and the ring keyboard button.
 settings-keyboard-other-title = دوسری کلیدیں
 
 # Words behind the i of that card.
-settings-keyboard-other-about = Caps Lock اس کی جگہ کوئی اور کلید بن سکتا ہے، جیسے دوسرا Ctrl یا Escape۔ کی بورڈ بٹن حلقہ کے مرکز میں ایک کی بورڈ ہے جو سکرین پر کی بورڈ لاتا ہے، ماؤس یا ٹچ سکرین سے ٹائپ کرنے کے لیے۔ یہ اگلی بار حلقہ کھلنے پر نظر آتا ہے۔
+settings-keyboard-other-about = Caps Lock اس کی جگہ کوئی اور کلید بن سکتا ہے، جیسے دوسرا Ctrl یا Escape۔ کی بورڈ بٹن حلقہ کے بیچ میں ہوتا ہے اور سکرین پر کی بورڈ کھولتا ہے۔ آپ اسے ماؤس یا ٹچ سکرین سے ٹائپ کرنے کے لیے استعمال کر سکتے ہیں۔ یہ اگلی بار حلقہ کھلنے پر نظر آتا ہے۔
 
 # Words under a line when a press that was not the person's own changed nothing.
-settings-keyboard-only-yours = اسے صرف آپ کا اپنا دبانا بدل سکتا ہے۔
+settings-keyboard-only-yours = کوئی پروگرام اسے نہیں بدل سکتا۔
 
 # Words under the change a key line while it waits for a key or mouse button to be pressed.
 settings-keyboard-press-now = بدلنے کے لیے کلید یا ماؤس کا بٹن دبائیں۔
 
 # Words under the change a key line when nothing was pressed in time.
-settings-keyboard-nothing-pressed = کچھ دبایا نہیں گیا، اس لیے کچھ شامل نہیں ہوا۔
+settings-keyboard-nothing-pressed = آپ نے کچھ دبایا نہیں، اس لیے کچھ شامل نہیں ہوا۔
 
 # Words under a changed key's line asking for what it becomes; the examples are names a person types.
-settings-keyboard-type-it = جو یہ بنے وہ لکھیں، جیسے Escape، Ctrl+C یا Nothing۔
+settings-keyboard-type-it = وہ کلید لکھیں جو اس کی جگہ استعمال ہو، جیسے Escape یا Ctrl+C، یا Nothing لکھیں۔
 
 # Words under the change a key line when the press could not be told apart from another.
-settings-keyboard-not-told = اس دبانے کی پہچان نہیں ہو سکی۔ اس کی جگہ فہرست سے کلید چنیں۔
+settings-keyboard-not-told = Trindle پہچان نہیں سکا کہ وہ کون سی کلید تھی۔ اس کی جگہ فہرست سے کلید چنیں۔
 
 # Choice in the list of keyboards and mice: the change applies on every one.
 settings-keyboard-every-device = ہر کی بورڈ اور ماؤس
 
 # Small words under a ready-made swap that the person's own change overrides.
-settings-keyboard-swap-over = نیچے بھی بدلا گیا ہے؛ وہ تبدیلی استعمال ہوتی ہے۔
+settings-keyboard-swap-over = آپ نے یہ کلید نیچے خود بدلی ہے، اور وہ تبدیلی استعمال ہوتی ہے۔
 
 # Name of the list of keyboards for one changed key; { $key } is the key.
-settings-keyboard-which-device = { $key } کس کی بورڈ یا ماؤس پر بدلی جائے
+settings-keyboard-which-device = { $key } کو اس پر بدلیں
 
 # Name of the box for what a changed key becomes; { $key } is the key.
-settings-keyboard-becomes = { $key } کیا بنے
+settings-keyboard-becomes = { $key } کو یہ بنائیں
 
 # Name of the bin button that takes a change away.
 settings-keyboard-take-away = یہ تبدیلی ہٹا دیں
 
-# Small words under a changed key's line when it changes on every keyboard and mouse.
-settings-keyboard-every-device-about = ہر کی بورڈ اور ماؤس پر۔
-
 # Small words under a line of a file that was not understood; { $n } is its number and { $why } the reason.
-settings-keyboard-line-unused = سطر { $n } استعمال نہیں ہوئی: { $why }
+settings-keyboard-line-unused = سطر { $n } نظر انداز کی گئی: { $why }
 
 # Heading of the line shown when the file of changed keys could not be read.
 settings-keyboard-keys-unread = بدلی ہوئی کلیدیں پڑھی نہیں جا سکیں
 
 # Small words under that line; { $why } is the reason.
-settings-keyboard-keys-unread-about = جب تک پڑھی نہ جائیں ہر کلید ویسی ہی رہتی ہے جیسی چھپی ہے: { $why }۔
+settings-keyboard-keys-unread-about = جب تک Trindle تبدیلیاں پڑھ نہیں لیتا، آپ کی کلیدیں معمول کے مطابق کام کرتی ہیں۔ { $why }
 
 # Name of the list from which a key or button to change is chosen.
 settings-keyboard-keys-list = بدلنے کے لیے کلید یا بٹن چنیں
@@ -158,20 +146,17 @@ settings-keyboard-keys-list = بدلنے کے لیے کلید یا بٹن چنی
 # Name of the button that waits for a key or button to be pressed.
 settings-keyboard-keys-press = بدلنے کے لیے کلید یا بٹن دبائیں
 
-# Small words under the change a key line.
-settings-keyboard-keys-add-about = اسے دبائیں، یا فہرست سے چنیں۔
-
 # Heading of the line for changing a key or button.
 settings-keyboard-keys-add = کلید یا بٹن بدلیں
 
 # Words under the change a key line when the key chosen is already changed; { $key } is the key.
-settings-keyboard-already = { $key } پہلے ہی بدلی ہوئی ہے، نیچے دیکھیں۔
+settings-keyboard-already = آپ { $key } پہلے ہی بدل چکے ہیں۔
 
 # Title of the card with changed keys and buttons.
 settings-keyboard-keys-title = کلیدیں اور بٹن
 
 # Words behind the i of the keys and buttons card; the examples are names a person types.
-settings-keyboard-keys-about = کوئی بھی کلید یا ماؤس کا بٹن کچھ اور کر سکتا ہے: کوئی اور کلید یا بٹن، اکٹھی دبائی گئی کلیدیں جیسے Ctrl+C، یکے بعد دیگرے کلیدوں کا سلسلہ جیسے H، I، بالکل کچھ نہیں، یا ایک چیز ٹیپ پر اور دوسری پکڑنے پر، جیسے ٹیپ پر Escape، پکڑنے پر Ctrl۔ یہ لاگ ان سکرین سے ہر جگہ کام کرتا ہے۔ Ctrl، Alt اور F کلید ہمیشہ ٹیکسٹ کنسول تک پہنچتے ہیں، اور وہاں trindle-settings --keys default لکھنے سے ہر کلید واپس اپنی جگہ آ جاتی ہے۔
+settings-keyboard-keys-about = کوئی بھی کلید یا ماؤس کا بٹن کچھ اور کر سکتا ہے۔ وہ کوئی اور کلید یا بٹن بن سکتا ہے، یا اکٹھی دبائی گئی کلیدیں جیسے Ctrl+C، یا یکے بعد دیگرے دبائی گئی کلیدیں جیسے H، I۔ وہ کچھ بھی نہیں کر سکتا، یا ٹیپ کرنے پر ایک کام اور پکڑے رکھنے پر دوسرا کام کر سکتا ہے، جیسے ٹیپ پر Escape اور پکڑنے پر Ctrl۔ یہ لاگ ان سکرین سے ہر جگہ کام کرتا ہے۔ Ctrl، Alt اور F کلید ہمیشہ ٹیکسٹ کنسول کھولتے ہیں، اور وہاں trindle-settings --keys default لکھنے سے ہر کلید واپس اپنی جگہ آ جاتی ہے۔
 
 # Name of a ready-made swap of keys, as the heading and switch name of its line.
 settings-keyboard-swap-ctrl-caps = Ctrl اور Caps Lock آپس میں بدلیں
@@ -188,30 +173,19 @@ settings-keyboard-swap-alt-super = Alt اور Super آپس میں بدلیں، �
 # Name of a ready-made swap of keys, as the heading and switch name of its line.
 settings-keyboard-swap-side-copy = ماؤس کے سائیڈ بٹن کاپی اور پیسٹ کرتے ہیں
 
-# Small words under a keyboard or mouse a program made, when it counts as the person.
-# SAFETY: needs a human review before it ships
-settings-keyboard-made-yes = آپ کے برابر گنا جاتا ہے، جیسے لگایا ہوا کی بورڈ گنا جاتا ہے۔
-
-# Small words under a keyboard or mouse a program made, when it does not count as the person.
-# SAFETY: needs a human review before it ships
-settings-keyboard-made-no = ٹائپ کرتا اور کھیلتا ہے۔ محفوظ بٹن نہیں دبا سکتا۔
-
 # Name of the switch that lets a program's keyboard or mouse count as the person; { $name } is its name.
 # SAFETY: needs a human review before it ships
-settings-keyboard-made-switch = { $name } آپ کے برابر گنا جاتا ہے
+settings-keyboard-made-switch = { $name } پر بھروسا کریں
 
 # Heading of the line shown when no program has made a keyboard or mouse.
 settings-keyboard-made-none = ابھی تک کوئی نہیں
-
-# Small words under that line.
-settings-keyboard-made-none-about = جو بھی پروگرام بنائے وہ یہاں دکھائی دیتا ہے، تاکہ اسے آپ کے برابر گنا جا سکے۔
 
 # Title of the card about keyboards and mice made by programs.
 settings-keyboard-made-title = پروگراموں کے بنائے کی بورڈ اور ماؤس
 
 # Words behind the i of that card.
 # SAFETY: needs a human review before it ships
-settings-keyboard-made-about = کلیدیں دوبارہ بنانے والے اوزار اور گیم لانچر اپنا کی بورڈ یا ماؤس بنا سکتے ہیں۔ ان کی کلیدیں اور کلک پھر بھی ٹائپ کرتے اور کھیلتے ہیں، مگر محفوظ بٹن نہیں دبا سکتے، جیسے بند کریں یا اجازت دیں، اور نہ آپ کے لیے رکھے سوال میں ٹائپ کر سکتے ہیں۔ اسے آپ کے برابر گننے کے لیے یہاں چالو کریں۔
+settings-keyboard-made-about = کلیدیں دوبارہ بنانے والے اوزار اور گیم لانچر اپنا کی بورڈ یا ماؤس بنا سکتے ہیں۔ ان کی کلیدیں اور کلک پھر بھی ٹائپ کر سکتے اور کھیل سکتے ہیں، مگر وہ محفوظ بٹن نہیں دبا سکتے، جیسے بند کریں یا اجازت دیں، اور نہ آپ کے لیے رکھے سوال کا جواب دے سکتے ہیں۔ اسے آپ کے برابر گننے کے لیے یہاں چالو کریں۔
 
 # Name of a game controller that has no name; { $vendor } and { $product } are numbers that identify it.
 settings-keyboard-pad-unnamed = کنٹرولر { $vendor }:{ $product }
@@ -222,9 +196,6 @@ settings-keyboard-pad-swap-switch = { $title } پر { $name }
 # Name of the box for what a controller's button does; { $title } is the controller.
 settings-keyboard-pad-does = { $title } کیا کرتا ہے
 
-# Small words under a controller's changed button; the words Button and what it becomes stand for the two sides of the line typed.
-settings-keyboard-pad-type = اسے یوں لکھیں: بٹن = جو یہ بنے۔
-
 # Name of a ready-made swap of a game controller's buttons.
 settings-keyboard-pad-swap-a-b = A اور B آپس میں بدلیں
 
@@ -232,16 +203,13 @@ settings-keyboard-pad-swap-a-b = A اور B آپس میں بدلیں
 settings-keyboard-pad-swap-x-y = X اور Y آپس میں بدلیں
 
 # Name of a ready-made swap of a game controller's buttons.
-settings-keyboard-pad-swap-stick = دائیں سٹک کا اوپر اور نیچے الٹ دیں
+settings-keyboard-pad-swap-stick = دائیں سٹک پر اوپر اور نیچے الٹ دیں
 
 # Title of the card with the shortcuts plugins ask for.
-settings-keyboard-plugin-title = پلگ اِن شارٹ کٹ
+settings-keyboard-plugin-title = پلگ ان شارٹ کٹ
 
 # Small words under a plugin shortcut that is not in use; { $plugin } is the plugin and { $why } the reason.
-settings-keyboard-plugin-refused = { $plugin }۔ استعمال میں نہیں: { $why }
-
-# Small words under a plugin shortcut; { $plugin } is the plugin. The example is keys a person types.
-settings-keyboard-plugin-about = { $plugin }۔ کلیدیں لکھیں، جیسے Ctrl+Alt+S، یا کوئی نہیں کے لیے کچھ نہ لکھیں۔
+settings-keyboard-plugin-refused = { $plugin } استعمال نہیں ہو رہا: { $why }
 
 # Name of the box for a plugin shortcut's keys; { $label } is the shortcut.
 settings-keyboard-plugin-keys-name = { $label } کی کلیدیں
@@ -250,13 +218,13 @@ settings-keyboard-plugin-keys-name = { $label } کی کلیدیں
 settings-keyboard-plugin-saved = محفوظ ہو گیا
 
 # Small words under the pointer speed slider when there is a touchpad.
-settings-keyboard-both = ٹچ پیڈ پر بھی۔
+settings-keyboard-both = ٹچ پیڈ کے لیے بھی۔
 
 # Title of the mouse card.
 settings-keyboard-mouse-title = ماؤس
 
 # Words behind the i of the mouse card.
-settings-keyboard-mouse-about = پوائنٹر کی رفتار یہ ہے کہ ماؤس کی ایک حرکت پر پوائنٹر کتنا چلے، اور ٹچ پیڈ پر بھی۔ سکرول کی رفتار یہ ہے کہ پہیے کے ہر چکر پر صفحہ کتنا چلے: آہستہ، عام یا تیز، یا سلائیڈر پر کہیں بھی۔ قدرتی سکرولنگ میں صفحہ اسی طرف چلتا ہے جس طرف پہیہ گھومے، جیسے فون پر۔ بائیں ہاتھ والا موڈ بایاں اور دایاں بٹن آپس میں بدل دیتا ہے۔
+settings-keyboard-mouse-about = پوائنٹر کی رفتار یہ ہے کہ ماؤس ہلانے پر پوائنٹر کتنا چلتا ہے۔ یہ ٹچ پیڈ پر بھی لاگو ہوتی ہے۔ سکرول کی رفتار یہ ہے کہ پہیے کے ہر چکر پر صفحہ کتنا چلتا ہے۔ آہستہ، عام یا تیز چنیں، یا سلائیڈر پر کہیں بھی مقرر کریں۔ قدرتی سکرولنگ میں صفحہ اسی طرف چلتا ہے جس طرف پہیہ گھومے، جیسے فون پر۔ بائیں ہاتھ والا موڈ بایاں اور دایاں بٹن آپس میں بدل دیتا ہے۔
 
 # Heading and slider name for the pointer speed.
 settings-keyboard-pointer-speed = پوائنٹر کی رفتار
@@ -264,23 +232,14 @@ settings-keyboard-pointer-speed = پوائنٹر کی رفتار
 # Heading and slider name for the scroll speed of the wheel or the touchpad.
 settings-keyboard-scroll-speed = سکرول کی رفتار
 
-# Small words under the wheel's scroll speed.
-settings-keyboard-scroll-wheel-about = پہیے کے ہر چکر پر صفحہ کتنا چلے۔
-
 # Heading of the natural scrolling switch (the page follows the wheel or fingers).
 settings-keyboard-natural = قدرتی سکرولنگ
-
-# Small words under natural scrolling for the mouse wheel.
-settings-keyboard-natural-wheel-about = صفحہ پہیے کے ساتھ چلتا ہے، جیسے فون پر۔
 
 # Heading of the switch that swaps the left and right mouse buttons.
 settings-keyboard-left-handed = بائیں ہاتھ والا
 
-# Small words under that switch.
-settings-keyboard-left-handed-about = بایاں اور دایاں بٹن آپس میں بدلتا ہے۔
-
 # Heading and switch name for the clicking helper.
-settings-keyboard-clicker = کلک مددگار
+settings-keyboard-clicker = کلک کی مدد
 
 # Small words under the clicking helper line.
 settings-keyboard-clicker-about = ٹھہر کر یا سوئچ سے کلک کرنے والے کے کلک آپ کے اپنے گنے جاتے ہیں۔
@@ -289,25 +248,13 @@ settings-keyboard-clicker-about = ٹھہر کر یا سوئچ سے کلک کرن
 settings-keyboard-touchpad-title = ٹچ پیڈ
 
 # Words behind the i of the touchpad card.
-settings-keyboard-touchpad-about = سکرول کی رفتار یہ ہے کہ دو انگلیوں سے صفحہ کتنا چلے۔ ٹیپ سے کلک ہلکے ٹیپ کو کلک گنتا ہے۔ قدرتی سکرولنگ میں صفحہ اسی طرف چلتا ہے جس طرف آپ کی انگلیاں جائیں، جیسے فون پر۔ ٹائپ کرتے وقت بند ہتھیلی کے لگ جانے سے ٹائپ کے دوران پوائنٹر کو ہلنے سے روکتا ہے۔
-
-# Small words under the touchpad's scroll speed.
-settings-keyboard-scroll-touchpad-about = دو انگلیوں سے صفحہ کتنا چلے۔
+settings-keyboard-touchpad-about = سکرول کی رفتار یہ ہے کہ دو انگلیوں سے سکرول کرنے پر صفحہ کتنا چلتا ہے۔ ٹیپ سے کلک ہلکے ٹیپ کو کلک گنتا ہے۔ قدرتی سکرولنگ میں صفحہ اسی طرف چلتا ہے جس طرف آپ کی انگلیاں چلیں، جیسے فون پر۔ ٹائپ کرتے وقت بند ٹائپ کرنے کے دوران آپ کی ہتھیلی کو پوائنٹر ہلانے سے روکتا ہے۔
 
 # Heading of the switch that makes a light tap count as a click.
 settings-keyboard-tap = ٹیپ سے کلک
 
-# Small words under that switch.
-settings-keyboard-tap-about = ہلکا ٹیپ کلک گنا جاتا ہے۔
-
-# Small words under natural scrolling for the touchpad.
-settings-keyboard-natural-touchpad-about = صفحہ آپ کی انگلیوں کے ساتھ چلتا ہے، جیسے فون پر۔
-
 # Heading of the switch that stops the touchpad moving the pointer while typing.
 settings-keyboard-quiet = ٹائپ کرتے وقت بند
-
-# Small words under that switch.
-settings-keyboard-quiet-about = ہتھیلی لگنے پر پوائنٹر ساکن رہتا ہے۔
 
 # Choice above a scroll speed slider: slower than normal.
 settings-keyboard-pace-slower = آہستہ
@@ -322,25 +269,22 @@ settings-keyboard-pace-faster = تیز
 settings-keyboard-usb-title = USB پورٹس
 
 # Words behind the i of that card.
-settings-keyboard-usb-about = جب کوئی USB پورٹ شروع نہ ہو تو Trindle اسے دوبارہ کوشش کے لیے ایک بار بند اور چالو کرتا ہے، اور ایک پورٹ کے لیے ایک بار سے زیادہ کبھی نہیں۔
+settings-keyboard-usb-about = اگر کوئی USB پورٹ شروع نہ ہو تو Trindle اسے ایک بار بند اور چالو کر کے دوبارہ کوشش کرتا ہے۔ وہ ایک پورٹ کے لیے ایسا ایک بار سے زیادہ کبھی نہیں کرتا۔
 
 # Red words under the keyboard button switch when it could not be kept and its mark could not be taken away again; { $error } is the first problem and { $undo } the second.
-settings-keyboard-button-and-mark = { $error }؛ اور اس کا نشان دوبارہ ہٹایا نہیں جا سکا: { $undo }
+settings-keyboard-button-and-mark = { $error } Trindle تبدیلی کو واپس بھی نہیں کر سکا: { $undo }
 
 
 
 
 # Title of the card with the keys that take a screenshot and show the shortcut list.
-settings-keyboard-shortcuts-title = اسکرین شاٹ اور شارٹ کٹ کی فہرست
+settings-keyboard-shortcuts-title = اسکرین شاٹس، رپورٹیں اور شارٹ کٹس
 
 # Name of the shortcut and its line that starts the screenshot.
 settings-keyboard-shortcuts-screenshot = اسکرین شاٹ لیں
 
 # Name of the shortcut and its line that shows every shortcut in a list.
 settings-keyboard-shortcuts-list = شارٹ کٹ کی فہرست دکھائیں
-
-# Small words under each of the two shortcuts.
-settings-keyboard-shortcuts-about = کلیدیں لکھیں، یا کوئی نہ چاہیے تو کچھ نہ لکھیں۔
 
 # Tip of the round button that starts the screenshot now.
 settings-keyboard-shortcuts-screenshot-tip = ابھی اسکرین شاٹ لیں
@@ -352,22 +296,19 @@ settings-keyboard-shortcuts-list-tip = ابھی فہرست دکھائیں
 settings-keyboard-restart-title = ڈیسک ٹاپ دوبارہ شروع کریں
 
 # Name of the shortcut and its line that restarts the ring and the helper parts only.
-settings-keyboard-restart-parts = حلقہ اور مددگار حصے دوبارہ شروع کریں
+settings-keyboard-restart-parts = حلقہ اور مددگار دوبارہ شروع کریں
 
 # Name of the shortcut and its line that restarts everything, the compositor too.
 settings-keyboard-restart-all = سب کچھ دوبارہ شروع کریں
-
-# Small words under each of the two restart shortcuts. The example is keys a person types.
-settings-keyboard-restart-about = کلیدیں لکھیں، جیسے Ctrl+Alt+Escape، یا کوئی نہ چاہیے تو کچھ نہ لکھیں۔
 
 # Name of the box for a restart shortcut's keys; { $label } is the shortcut.
 settings-keyboard-restart-keys-name = { $label } کی کلیدیں
 
 # Tip of the round button that restarts the ring and the helper parts now; open windows are left as they are.
-settings-keyboard-restart-parts-tip = ابھی دوبارہ شروع کریں۔ کھلی ونڈوز جیسی ہیں ویسی رہیں گی۔
+settings-keyboard-restart-parts-tip = ابھی دوبارہ شروع کریں۔ کھلی ونڈوز ویسی ہی رہیں گی۔
 
 # Tip of the round button that asks whether to restart everything now.
-settings-keyboard-restart-all-tip = سب کچھ دوبارہ شروع کریں۔ پہلے پوچھتا ہے۔
+settings-keyboard-restart-all-tip = پوچھ کر سب کچھ دوبارہ شروع کریں
 
 # Said under the line after the parts were restarted.
 settings-keyboard-restart-parts-done = دوبارہ شروع ہو گیا
@@ -376,7 +317,7 @@ settings-keyboard-restart-parts-done = دوبارہ شروع ہو گیا
 settings-keyboard-restart-clash = { $keys } پہلے سے کسی اور شارٹ کٹ میں استعمال ہو رہی ہیں۔
 
 # Said in red under a restart shortcut that could not be kept; { $why } is the reason.
-settings-keyboard-restart-not-saved = محفوظ نہیں ہوا: { $why }
+settings-keyboard-restart-not-saved = محفوظ نہیں ہوا۔ { $why }
 
 
 # Name of the shortcut and its line that opens the window to report a problem.
@@ -385,3 +326,5 @@ settings-keyboard-shortcuts-report = مسئلے کی اطلاع دیں
 # Tip of the round button that opens the report window now.
 settings-keyboard-shortcuts-report-tip = ابھی مسئلے کی اطلاع دیں
 
+# Shown beside a change that was not saved because the file of changed keys could not be read.
+settings-keyboard-keys-not-saved-unread = محفوظ نہیں ہوا۔ بدلی ہوئی کلیدوں کی فائل پڑھی نہیں جا سکی، اس لیے اسے جوں کا توں چھوڑ دیا گیا۔

@@ -24,9 +24,6 @@ pub fn wait(frame: Duration, since_looked: Duration) -> Duration {
 fn word() -> &'static str {
     static WORD: std::sync::OnceLock<String> = std::sync::OnceLock::new();
     WORD.get_or_init(|| {
-        if once(&crate::files::config_path(ONCE)) {
-            return "on".to_string();
-        }
         let said = std::env::var("TRINDLE_REST")
             .ok()
             .or_else(|| std::fs::read_to_string(SWITCH).ok())
@@ -35,28 +32,16 @@ fn word() -> &'static str {
     })
 }
 
-pub const ONCE: &str = "rest-once";
-
-fn once(file: &std::path::Path) -> bool {
-    file.is_file() && std::fs::remove_file(file).is_ok()
-}
-
 pub const LOG: &str = "trindle_rest";
 
 pub const SWITCH: &str = "/etc/trindle/rest";
 
 pub fn allowed() -> bool {
-    allowed_with(word(), DRAWN_BY_PROCESSOR.load(std::sync::atomic::Ordering::Relaxed))
+    allowed_with(word())
 }
 
-fn allowed_with(said: &str, by_processor: bool) -> bool {
-    (said.is_empty() && by_processor) || !is_off(said)
-}
-
-static DRAWN_BY_PROCESSOR: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
-
-pub fn drawn_by_processor() {
-    DRAWN_BY_PROCESSOR.store(true, std::sync::atomic::Ordering::Relaxed);
+fn allowed_with(said: &str) -> bool {
+    !is_off(said)
 }
 
 pub fn told() -> bool {
@@ -64,7 +49,7 @@ pub fn told() -> bool {
 }
 
 fn is_off(word: &str) -> bool {
-    !matches!(word, "on" | "yes" | "1" | "true" | "tell")
+    matches!(word, "off" | "no" | "0" | "false")
 }
 
 pub const A_FRAME: Duration = Duration::from_millis(16);
@@ -76,22 +61,6 @@ pub fn sleep() -> Duration {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn the_one_session_file_counts_once_and_is_gone() {
-        let dir = std::env::temp_dir().join(format!("trindle-rest-once-{}", std::process::id()));
-        let _ = std::fs::remove_dir_all(&dir);
-        std::fs::create_dir_all(&dir).unwrap();
-        let file = dir.join(ONCE);
-        assert!(!once(&file), "no file, no trial");
-        std::fs::write(&file, "").unwrap();
-        assert!(once(&file), "there: resting for this session");
-        assert!(!file.exists() && !once(&file), "and gone, so the next start is as before");
-
-        std::fs::create_dir(&file).unwrap();
-        assert!(!once(&file));
-        let _ = std::fs::remove_dir_all(&dir);
-    }
 
     #[test]
     fn a_screen_rests_only_after_staying_the_same_a_while() {
@@ -109,21 +78,12 @@ mod tests {
     }
 
     #[test]
-    fn where_the_processor_draws_screens_rest_unless_told_not_to() {
-        assert!(allowed_with("", true));
-        assert!(!allowed_with("", false));
-        assert!(!allowed_with("off", true));
-        assert!(!allowed_with("maybe", true));
-        assert!(allowed_with("on", false));
-    }
-
-    #[test]
-    fn resting_is_off_until_it_is_switched_on_in_plain_words() {
-        for w in ["", "off", "no", "0", "false", "maybe"] {
-            assert!(is_off(w), "{w}");
+    fn screens_rest_unless_told_not_to() {
+        for w in ["", "on", "yes", "1", "true", "tell", "maybe"] {
+            assert!(allowed_with(w), "{w}");
         }
-        for w in ["tell", "on", "yes", "1", "true"] {
-            assert!(!is_off(w), "{w}");
+        for w in ["off", "no", "0", "false"] {
+            assert!(!allowed_with(w), "{w}");
         }
     }
 }

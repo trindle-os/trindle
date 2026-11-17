@@ -8,6 +8,7 @@ use std::ffi::CStr;
 use std::fs::File;
 use std::io::{ErrorKind, Read, Write};
 use std::os::fd::AsRawFd;
+use std::path::PathBuf;
 use std::process::{Command, Stdio};
 use std::rc::{Rc, Weak};
 use std::time::Duration;
@@ -21,7 +22,7 @@ use crate::common::pocketkey;
 use crate::common::refused::ADMIN_ACTION;
 use crate::common::run::{self, Proc};
 use crate::ring::ctx::Ctx;
-use crate::toolkit::bus::{Asked, Failed, Offer, Served};
+use crate::toolkit::bus::{Asked, Bus, Failed, Offer, Served};
 use crate::toolkit::event::{Flow, Loop, Post};
 use crate::toolkit::theme;
 use crate::toolkit::ui::{App, Shown};
@@ -57,12 +58,21 @@ fn said_for(action: &str, message: &str, details: &HashMap<String, String>) -> S
         let pid: u32 = details.get(CALLER)?.parse().ok()?;
         crate::common::run::admin_step(&std::fs::read(format!("/proc/{pid}/cmdline")).ok()?)
     };
-    let reason = if action == ADMIN_ACTION { step().and_then(|s| crate::common::updating::admin_reason(&s)) } else { None };
+    let reason = if action == ADMIN_ACTION { step().and_then(|s| crate::common::updating::admin_reason(&s).or_else(|| drives_reason(&s))) } else { None };
 
     if let Some(drive) = crate::common::drive_leave::said(action, message, details) {
         return drive;
     }
     reason.unwrap_or(message).to_string()
+}
+
+fn drives_reason(step: &str) -> Option<&'static str> {
+    match step {
+        "snapshot-create-drives" => Some(t!("polkit-reason-drives-snapshot")),
+        "swap-off" => Some(t!("polkit-reason-drives-swap-off")),
+        "swap-on" => Some(t!("polkit-reason-drives-swap-on")),
+        _ => None,
+    }
 }
 
 type Begin = (String, String, String, HashMap<String, String>, String, Vec<(String, HashMap<String, OwnedValue>)>);
@@ -249,7 +259,6 @@ struct Request {
     agent: Weak<Agent>,
     me: Weak<Request>,
     lp: Loop,
-    display: Rc<Display>,
     asked: RefCell<Option<Asked>>,
     cookie: String,
     user: String,
@@ -264,7 +273,7 @@ struct Request {
     helper: RefCell<Option<Proc>>,
 
     input: RefCell<Option<File>>,
-    shown: RefCell<Option<Rc<Shown<Prompt>>>>,
+    shown: RefCell<Option<Rc<dyn Asking>>>,
     out: Post<Out>,
 
     note: Option<String>,
@@ -272,32 +281,24 @@ struct Request {
     caller: Option<u32>,
 
     behind: Cell<usize>,
-
-    typed: RefCell<Option<Zeroizing<String>>>,
-
-    reuse: RefCell<Option<Zeroizing<String>>>,
 }
 
 impl Request {
     fn new(agent: &Rc<Agent>, asked: Asked, action: &str, message: &str, cookie: String, uid: u32, caller: Option<u32>) -> Rc<Request> {
         let user = name_of(uid);
-        let r = Rc::new_cyclic(|me: &Weak<Request>| {
+        Rc::new_cyclic(|me: &Weak<Request>| {
             let w = me.clone();
-            let out = agent.ctx.lp.post(move |o: Out| {
+            let out = agent.lp.post(move |o: Out| {
                 let Some(r) = w.upgrade() else { return };
                 match o {
-                    Out::Answer(password) => {
-                        r.respond(&password);
-                        *r.typed.borrow_mut() = Some(password);
-                    }
+                    Out::Answer(password) => r.respond(&password),
                     Out::Cancel => r.cancel(),
                 }
             });
             Request {
                 agent: Rc::downgrade(agent),
                 me: me.clone(),
-                lp: agent.ctx.lp.clone(),
-                display: agent.ctx.display.clone(),
+                lp: agent.lp.clone(),
                 asked: RefCell::new(Some(asked)),
                 said: RefCell::new(t!("polkit-password-for", user = &user)),
                 cookie, user,
@@ -314,15 +315,11 @@ impl Request {
                 note: (pocketkey::on() && !message.contains(char::is_control)).then(|| format!("polkit1 {action} {message}\n")),
                 caller,
                 behind: Cell::new(0),
-                typed: RefCell::new(None),
-                reuse: RefCell::new(None),
             }
-        });
-        r
+        })
     }
 
-    fn begin(self: &Rc<Self>, reuse: Option<Zeroizing<String>>) {
-        *self.reuse.borrow_mut() = reuse;
+    fn begin(self: &Rc<Self>) {
         self.start(None);
     }
 
@@ -341,7 +338,7 @@ impl Request {
     }
 
     fn launch(&self, run: u64) -> Option<()> {
-        let helper = HELPERS.iter().find(|p| std::path::Path::new(p).exists())?;
+        let helper = self.agent.upgrade()?.helpers.iter().find(|p| p.exists())?.clone();
         let (in_read, in_write) = crate::common::run::pipe()?;
         let (out_read, out_write) = crate::common::run::pipe()?;
         // SAFETY: a new descriptor of our own, given the flag that keeps a
@@ -440,12 +437,6 @@ impl Request {
 
     fn ask(self: &Rc<Self>, prompt: &str) {
 
-        if let Some(password) = self.reuse.borrow_mut().take() {
-            self.respond(&password);
-            *self.typed.borrow_mut() = Some(password);
-            return;
-        }
-
         let p = prompt.trim();
         if !p.is_empty() && !p.to_lowercase().starts_with("password") {
             *self.said.borrow_mut() = p.trim_end_matches(':').to_string();
@@ -454,9 +445,9 @@ impl Request {
         let said = self.said.borrow().clone();
         let shown = self.shown.borrow().clone();
         if let Some(shown) = shown {
-            shown.change(|a| {
-                a.note = said;
-                a.problem = problem;
+            shown.alter(&mut |a| {
+                a.note = said.clone();
+                a.problem = problem.clone();
                 a.password = Zeroizing::new(String::new());
                 a.waiting = false;
                 a.turn += 1;
@@ -467,31 +458,19 @@ impl Request {
             message: self.message.clone(), note: said, password: Zeroizing::new(String::new()), problem,
             waiting: false, turn: 0, behind: self.behind.get(), out: self.out.clone(),
         };
-        let kind = Kind::Panel(Panel {
-            layer: Layer::Overlay, edges: Edges::ALL, keep: -1, margins: [0; 4], keys: Keys::Always,
-            name: "trindle-polkit".into(), screen: None,
-        });
-        let Some(shown) = Shown::open(&self.lp, &self.display, kind, (0, 0), app) else {
+        let Some(shown) = self.agent.upgrade().and_then(|a| a.screen.open(app)) else {
             eprintln!("trindle-polkit: could not open the password window");
             self.cancel_with(Some("Authentication failed"), false);
             return;
         };
-
-        shown.set_look(look);
-        shown.see_through();
-        shown.spoken(t!("polkit-spoken"));
-        let out = self.out.clone();
-        shown.window.on_close(move || {
-            out.send(Out::Cancel);
-        });
-        *self.shown.borrow_mut() = Some(Rc::new(shown));
+        *self.shown.borrow_mut() = Some(shown);
     }
 
     fn show_behind(&self, n: usize) {
         self.behind.set(n);
         let shown = self.shown.borrow().clone();
         if let Some(shown) = shown {
-            shown.change(|a| a.behind = n);
+            shown.alter(&mut |a| a.behind = n);
         }
     }
 
@@ -550,16 +529,58 @@ impl Request {
                 }
             }
         }
-        let typed = self.typed.borrow_mut().take().filter(|_| error.is_none());
         if let Some(a) = self.agent.upgrade() {
             a.requests.borrow_mut().remove(&self.cookie);
-            a.left(&self.cookie, typed.map(|t| (self.user.clone(), t)));
+            a.left(&self.cookie);
         }
     }
 }
 
+trait Screen {
+
+    fn open(&self, app: Prompt) -> Option<Rc<dyn Asking>>;
+}
+
+trait Asking {
+    fn alter(&self, call: &mut dyn FnMut(&mut Prompt));
+}
+
+impl Asking for Shown<Prompt> {
+    fn alter(&self, call: &mut dyn FnMut(&mut Prompt)) {
+        self.change(call);
+    }
+}
+
+struct OnScreen {
+    lp: Loop,
+    display: Rc<Display>,
+}
+
+impl Screen for OnScreen {
+    fn open(&self, app: Prompt) -> Option<Rc<dyn Asking>> {
+        let out = app.out.clone();
+        let kind = Kind::Panel(Panel {
+            layer: Layer::Overlay, edges: Edges::ALL, keep: -1, margins: [0; 4], keys: Keys::Always,
+            name: "trindle-polkit".into(), screen: None,
+        });
+        let shown = Shown::open(&self.lp, &self.display, kind, (0, 0), app)?;
+
+        shown.set_look(look);
+        shown.see_through();
+        shown.spoken(t!("polkit-spoken"));
+        shown.window.on_close(move || {
+            out.send(Out::Cancel);
+        });
+        Some(Rc::new(shown))
+    }
+}
+
 struct Agent {
-    ctx: Rc<Ctx>,
+    lp: Loop,
+    system: Option<Bus>,
+    screen: Box<dyn Screen>,
+
+    helpers: Vec<PathBuf>,
     requests: RefCell<HashMap<String, Rc<Request>>>,
 
     turns: RefCell<Turns<String>>,
@@ -616,17 +637,21 @@ fn process_gone(pid: u32) -> bool {
 const SWEEP: Duration = Duration::from_secs(3);
 
 impl Agent {
+    fn new(lp: Loop, system: Option<Bus>, screen: Box<dyn Screen>, helpers: Vec<PathBuf>) -> Rc<Agent> {
+        Rc::new(Agent { lp, system, screen, helpers, requests: RefCell::new(HashMap::new()), turns: RefCell::default(),
+                        sweeping: Cell::new(false), served: RefCell::new(None) })
+    }
 
     fn enter(self: &Rc<Self>, r: Rc<Request>) {
         let first = self.turns.borrow_mut().enter(r.cookie.clone());
         if first {
-            r.begin(None);
+            r.begin();
         }
         self.tell_behind();
         self.sweep_soon();
     }
 
-    fn left(self: &Rc<Self>, cookie: &str, accepted: Option<(String, Zeroizing<String>)>) {
+    fn left(self: &Rc<Self>, cookie: &str) {
         let next = self.turns.borrow_mut().leave(&cookie.to_string());
         if let Some(c) = next {
             let found = self.requests.borrow().get(&c).cloned();
@@ -636,12 +661,9 @@ impl Agent {
                     next.cancel();
                     return;
                 }
-                Some(next) => {
-                    let reuse = accepted.as_ref().filter(|(user, _)| *user == next.user).map(|(_, p)| p.clone());
-                    next.begin(reuse);
-                }
+                Some(next) => next.begin(),
                 None => {
-                    self.left(&c, accepted);
+                    self.left(&c);
                     return;
                 }
             }
@@ -674,7 +696,7 @@ impl Agent {
             return;
         }
         let a = self.clone();
-        self.ctx.lp.after(SWEEP, move || {
+        self.lp.after(SWEEP, move || {
             a.sweeping.set(false);
             a.drop_dead();
             if !a.requests.borrow().is_empty() {
@@ -717,8 +739,7 @@ impl Agent {
     }
 }
 
-fn register(agent: &Rc<Agent>) -> Result<(), String> {
-    let bus = agent.ctx.system.clone().ok_or("the system bus is not available")?;
+fn offer(agent: &Rc<Agent>, bus: &Bus) -> Result<(), String> {
     let w = Rc::downgrade(agent);
     let served = bus.serve(AGENT_PATH, Offer {
         name: AGENT.into(),
@@ -731,8 +752,14 @@ fn register(agent: &Rc<Agent>) -> Result<(), String> {
         set: None,
     }).map_err(|e| e.to_string())?;
     *agent.served.borrow_mut() = Some(served);
-    let (b, lp) = (bus.clone(), agent.ctx.lp.clone());
-    crate::common::drive_leave::session_id(&bus, &agent.ctx.lp, move |sid| {
+    Ok(())
+}
+
+fn register(agent: &Rc<Agent>) -> Result<(), String> {
+    let bus = agent.system.clone().ok_or("the system bus is not available")?;
+    offer(agent, &bus)?;
+    let (b, lp) = (bus.clone(), agent.lp.clone());
+    crate::common::drive_leave::session_id(&bus, &agent.lp, move |sid| {
         let sid = match sid {
             Ok(s) => s,
             Err(e) => {
@@ -755,7 +782,8 @@ fn register(agent: &Rc<Agent>) -> Result<(), String> {
 }
 
 pub fn start(ctx: &Rc<Ctx>) {
-    let agent = Rc::new(Agent { ctx: ctx.clone(), requests: RefCell::new(HashMap::new()), turns: RefCell::default(), sweeping: Cell::new(false), served: RefCell::new(None) });
+    let screen = Box::new(OnScreen { lp: ctx.lp.clone(), display: ctx.display.clone() });
+    let agent = Agent::new(ctx.lp.clone(), ctx.system.clone(), screen, HELPERS.iter().map(PathBuf::from).collect());
     if let Err(e) = register(&agent) {
         eprintln!("trindle-polkit: {e}");
     }
@@ -765,7 +793,82 @@ pub fn start(ctx: &Rc<Ctx>) {
 
 #[cfg(test)]
 mod tests {
-    use super::{process_gone, unescape, Turns};
+    use super::*;
+    use crate::toolkit::bus::testing::{own_daemon, until};
+    use std::path::Path;
+
+    #[derive(Clone, Default)]
+    struct Person(Rc<RefCell<Vec<(String, Post<Out>)>>>);
+
+    struct Up;
+
+    impl Asking for Up {
+        fn alter(&self, _: &mut dyn FnMut(&mut Prompt)) {}
+    }
+
+    impl Screen for Person {
+        fn open(&self, app: Prompt) -> Option<Rc<dyn Asking>> {
+            self.0.borrow_mut().push((app.message.clone(), app.out.clone()));
+            Some(Rc::new(Up))
+        }
+    }
+
+    fn stand_in_helper(dir: &Path) -> PathBuf {
+        let helper = dir.join("helper");
+        let script = format!("#!/bin/sh\nread -r cookie || exit 1\necho 'PAM_PROMPT_ECHO_OFF Password:'\nread -r password || exit 1\n\
+                              echo \"$cookie $password\" >> '{}'\n[ \"$password\" = right ] && echo SUCCESS || echo FAILURE\n",
+                             dir.join("heard").display());
+        std::fs::write(&helper, script).unwrap();
+        std::fs::set_permissions(&helper, std::os::unix::fs::PermissionsExt::from_mode(0o755)).unwrap();
+
+        for _ in 0..100 {
+            match Command::new(&helper).stdin(Stdio::null()).stdout(Stdio::null()).status() {
+                Err(e) if e.raw_os_error() == Some(libc::ETXTBSY) => std::thread::sleep(Duration::from_millis(20)),
+                other => {
+                    other.unwrap();
+                    break;
+                }
+            }
+        }
+        helper
+    }
+
+    #[test]
+    fn a_password_given_for_one_request_is_never_used_for_the_next() {
+        let d = own_daemon();
+        let dir = crate::common::files::private_temp("polkit").unwrap();
+        let lp = Loop::new();
+        let (agent_bus, authority) = (Bus::at(&lp, &d.1).unwrap(), Bus::at(&lp, &d.1).unwrap());
+        let person = Person::default();
+        let agent = Agent::new(lp.clone(), None, Box::new(person.clone()), vec![stand_in_helper(&dir)]);
+        offer(&agent, &agent_bus).unwrap();
+        type Replies = Rc<RefCell<Vec<(&'static str, Result<(), String>)>>>;
+        let replies: Replies = Rc::default();
+        // SAFETY: asks the kernel for this process's own user id.
+        let me = unsafe { libc::getuid() };
+        for (cookie, message) in [("first", "Change the time."), ("second", "Format a drive.")] {
+            let identities = vec![("unix-user".to_string(), HashMap::from([("uid".to_string(), Value::from(me))]))];
+            let body = ("org.example.act".to_string(), message.to_string(), String::new(), HashMap::<String, String>::new(),
+                        cookie.to_string(), identities);
+            let r = replies.clone();
+            authority.call(&agent_bus.unique_name(), AGENT_PATH, AGENT).method("BeginAuthentication", &body, false,
+                Some(Duration::from_secs(30)), &lp, move |a| r.borrow_mut().push((cookie, a.map(|_| ()).map_err(|e| e.name))));
+        }
+        let p = person.0.clone();
+        assert!(until(&lp, move || p.borrow().len() == 1), "the first request asks");
+        person.0.borrow()[0].1.send(Out::Answer(Zeroizing::new("right".into())));
+        let (p, r) = (person.0.clone(), replies.clone());
+        assert!(until(&lp, move || (p.borrow().len() == 2 && !r.borrow().is_empty()) || r.borrow().len() == 2));
+        assert_eq!(*replies.borrow(), [("first", Ok(()))], "only the first is let in");
+        let asked: Vec<String> = person.0.borrow().iter().map(|(m, _)| m.clone()).collect();
+        assert_eq!(asked, ["Change the time.", "Format a drive."], "the second asks with its own words");
+        person.0.borrow()[1].1.send(Out::Cancel);
+        let r = replies.clone();
+        assert!(until(&lp, move || r.borrow().len() == 2));
+        assert_eq!(replies.borrow()[1], ("second", Err(format!("org.freedesktop.PolicyKit1.Error.{CANCELLED}"))));
+        assert_eq!(std::fs::read_to_string(dir.join("heard")).unwrap(), "first right\n", "the helper heard one password, once");
+        let _ = std::fs::remove_dir_all(&dir);
+    }
 
     #[test]
     fn the_first_request_asks_and_the_rest_wait_in_order() {
@@ -964,9 +1067,28 @@ mod tests {
 
         let drive = HashMap::from([("device".to_string(), "/dev/sdb".to_string())]);
         let words = super::said_for("org.freedesktop.udisks2.modify-device", "Authentication is required to format Example Disk (/dev/sdb)", &drive);
-        assert_eq!(words, format!("An administrator's password is needed to format Example Disk (/dev/sdb). {}", crate::common::drive_leave::EVERY_TIME));
+        assert_eq!(words, format!("An administrator's password is needed to format Example Disk (/dev/sdb). {}", crate::common::drive_leave::every_time()));
         let me = HashMap::from([(super::CALLER.to_string(), std::process::id().to_string())]);
         assert_eq!(super::said_for(super::ADMIN_ACTION, "Example words.", &me), "Example words.", "this test is not pkexec");
+    }
+
+    #[test]
+    fn the_box_names_drives_when_drives_asks_and_no_wrong_program() {
+        use crate::common::run::admin_step;
+        let helper = "pkexec\0/usr/lib/trindle/libexec/trindle-admin\0";
+        for (step, want) in [("snapshot-create-drives", crate::toolkit::t!("polkit-reason-drives-snapshot")), ("swap-off", crate::toolkit::t!("polkit-reason-drives-swap-off")), ("swap-on", crate::toolkit::t!("polkit-reason-drives-swap-on"))] {
+            let step_read = admin_step(format!("{helper}{step}\0x\0").as_bytes()).expect("a step");
+            let why = super::drives_reason(&step_read).unwrap_or_else(|| panic!("{step} says why"));
+            assert!(why.starts_with("Drives needs an administrator's password") && !why.contains("Settings") && !why.contains('\u{2014}'), "{why}");
+            assert_eq!(why, want);
+        }
+        assert_eq!(super::drives_reason("snapshot-create"), None, "Settings' own snapshot keeps polkit's words");
+        let policy = include_str!("../../system/polkit/org.trindle.admin.policy");
+        let generic = &policy[..policy.find("org.trindle.admin.delete-person").expect("the next action")];
+        assert!(!generic.contains("Trindle Settings needs"), "the generic action is asked for by Apps, Drives and more");
+        let drives = crate::common::source::code(include_str!("../disks/udisks.rs"));
+        assert!(drives.contains("\"snapshot-create-drives\""), "Drives asks under its own step");
+        assert!(include_str!("../admin/mod.rs").contains("\"snapshot-create\" | \"snapshot-create-drives\""));
     }
 
     #[test]

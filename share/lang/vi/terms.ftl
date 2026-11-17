@@ -5,5 +5,5 @@
 terms-accept = Tôi đồng ý với [EULA](eula)
 
 # In the foot, while the box is not ticked, saying why the button beside it is off.
-terms-needed = Hãy đánh dấu vào ô để tiếp tục
+terms-needed = Cần có sự đồng ý
 

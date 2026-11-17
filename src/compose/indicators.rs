@@ -35,7 +35,7 @@ use tracing::warn;
 use crate::in_use::{self, Kind, User};
 use crate::render::CustomRenderElements;
 use crate::shell::ssd::{self, Paint};
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub(crate) struct Metrics {
@@ -56,21 +56,22 @@ pub(crate) struct Metrics {
 
 impl Default for Metrics {
     fn default() -> Self {
-        Metrics { dot: 14, gap: 8, margin: 10, edge: 2.0, edge_strength: 0.55, reach: 10, pad: 8 }
+        Metrics { dot: 28, gap: 8, margin: 0, edge: 2.0, edge_strength: 0.55, reach: 10, pad: 8 }
     }
 }
 
 impl Metrics {
 
     pub fn now() -> Metrics {
-        Metrics::from_layers(&crate::common::sheet::layers(), crate::common::sheet::asked_light())
+        static KEPT: Mutex<Option<(u64, Metrics)>> = Mutex::new(None);
+        crate::config::kept_until_reread(&KEPT, || Metrics::from_layers(&crate::common::sheet::layers(), crate::common::sheet::asked_light()))
     }
 
     pub(crate) fn from_layers(layers: &crate::common::sheet::Layers, light: bool) -> Metrics {
         let d = Metrics::default();
         let n = |name: &str, was: f32, least: f32, most: f32| layers.number(name, light, least, most).unwrap_or(was);
         Metrics {
-            dot: n("trindle-dots-size", d.dot as f32, 8.0, 24.0).round() as i32,
+            dot: n("trindle-dots-size", d.dot as f32, 16.0, 48.0).round() as i32,
             gap: n("trindle-dots-gap", d.gap as f32, 2.0, 16.0).round() as i32,
             margin: n("trindle-dots-margin", d.margin as f32, 0.0, 24.0).round() as i32,
             edge: n("trindle-dots-edge", d.edge, 0.0, 3.0),
@@ -249,7 +250,7 @@ pub(crate) fn label(lines: Vec<String>, scale: f64) -> Overlay {
 
 pub(crate) fn label_at(screen_width: i32, logical: Size<i32, Logical>, scale: f64, m: &Metrics) -> (f64, f64) {
     let w = pixels(logical.w, scale) as f64;
-    (((screen_width as f64 - w) / 2.0).round().max(0.0), ((m.margin + m.dot + m.gap) as f64 * scale).round())
+    (((screen_width as f64 - w) / 2.0).round().max(0.0), ((m.margin + m.dot / 2 + m.gap) as f64 * scale).round())
 }
 
 fn kinds(mask: u8) -> Vec<Kind> {
@@ -264,7 +265,8 @@ fn paint(kinds: &[Kind], w: i32, h: i32, s: f32, m: &Metrics) -> Vec<u8> {
         let (cr, cg, cb) = kind.colour();
         let fill = [cr as f32, cg as f32, cb as f32, 1.0];
         let cx = w as f32 - (i as f32 * (m.dot + m.gap) as f32 * s + r);
-        let cy = h as f32 / 2.0;
+
+        let cy = 0.0;
         for y in 0..h {
             for x in 0..w {
                 let d = ((x as f32 + 0.5 - cx).powi(2) + (y as f32 + 0.5 - cy).powi(2)).sqrt();
@@ -306,7 +308,7 @@ pub(crate) fn placed(mask: u8, screen_width: i32, scale: f64, m: &Metrics) -> Op
         return None;
     }
     let n = kinds.len() as i32;
-    let logical: Size<i32, Logical> = (n * m.dot + (n - 1) * m.gap, m.dot).into();
+    let logical: Size<i32, Logical> = (n * m.dot + (n - 1) * m.gap, m.dot / 2).into();
     let (w, h) = pixel_size(logical, scale);
     let margin = (m.margin as f64 * scale).round();
     let x = ((screen_width as f64 - w as f64) / 2.0).round().max(0.0);
@@ -319,7 +321,7 @@ pub(crate) fn screen_width(mode_width: Option<i32>, place_width: Option<i32>, sc
 
 pub(crate) fn points_at_dots(px: f64, py: f64, screen_w: i32, dots_w: i32, m: &Metrics) -> bool {
     let left = (screen_w - dots_w) as f64 / 2.0;
-    px >= left - m.reach as f64 && px <= left + (dots_w + m.reach) as f64 && py <= (m.margin + m.dot + m.reach) as f64
+    px >= left - m.reach as f64 && px <= left + (dots_w + m.reach) as f64 && py <= (m.margin + m.dot / 2 + m.reach) as f64
 }
 
 pub fn elements<R>(renderer: &mut R, output: &Output, place: Option<Rectangle<i32, Logical>>) -> Vec<CustomRenderElements<R>>
@@ -345,7 +347,7 @@ where
     });
     let mut out: Vec<_> = dots.element(renderer, at).into_iter().collect();
 
-    let pointer = POINTER.lock().ok().and_then(|p| *p);
+    let pointer = pointer();
     let Some((place, pointer)) = place.zip(pointer) else { return out };
     if !place.to_f64().contains(pointer) {
         return out;
@@ -368,7 +370,7 @@ struct Found {
     microphones: Vec<in_use::Source>,
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     pub fn watch_in_use(&mut self) {
         if crate::session::launch().greeter {
@@ -378,31 +380,25 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         if let Err(e) = in_use::write(&file, &[]) {
             warn!("in use: cannot write {}: {e}", file.display());
         }
-        let fake = std::env::var("TRINDLE_FAKE_IN_USE").ok().filter(|s| !s.is_empty());
         let found = Arc::new(Mutex::new(Found::default()));
 
         MICROPHONE_OFF.store(in_use::microphone_off(), Ordering::Relaxed);
         let (wake, woken) = channel::<()>();
-        if fake.is_none() {
-            let (to, tell) = (found.clone(), wake.clone());
-            let _ = std::thread::Builder::new().name("in-use-pipewire".into()).spawn(move || pipewire(&to, &tell));
-            let to = found.clone();
-            let _ = std::thread::Builder::new().name("in-use-camera".into()).spawn(move || cameras(&to));
-            let to = found.clone();
-            let _ = std::thread::Builder::new().name("microphone-switch".into()).spawn(move || microphone_switch(&to, woken));
-        }
+        let (to, tell) = (found.clone(), wake.clone());
+        let _ = std::thread::Builder::new().name("in-use-pipewire".into()).spawn(move || pipewire(&to, &tell));
+        let to = found.clone();
+        let _ = std::thread::Builder::new().name("in-use-camera".into()).spawn(move || cameras(&to));
+        let to = found.clone();
+        let _ = std::thread::Builder::new().name("microphone-switch".into()).spawn(move || microphone_switch(&to, woken));
         let mut last: Vec<User> = Vec::new();
         let mut last_off = false;
-        let _ = self.handle.insert_source(Timer::from_duration(TICK), move |_, _, state| {
+        crate::session::watch(&self.handle, Timer::from_duration(TICK), move |_, _, state| {
             let off = in_use::microphone_off();
 
             if MICROPHONE_OFF.swap(off, Ordering::Relaxed) != off || off {
                 let _ = wake.send(());
             }
-            let mut users = match &fake {
-                Some(spec) => in_use::fake(spec),
-                None => state.gather(&found),
-            };
+            let mut users = state.gather(&found);
             if !users.is_empty() {
                 let owners = state.window_owners();
                 for u in users.iter_mut().filter(|u| u.app_ids.is_empty()) {
@@ -448,10 +444,6 @@ impl<BackendData: Backend> AnvilState<BackendData> {
     }
 }
 
-pub(crate) fn forget_after(produced: bool) -> bool {
-    !produced
-}
-
 fn pipewire(found: &Mutex<Found>, wake: &Sender<()>) {
     const FIRST: Duration = Duration::from_secs(2);
     const MOST: Duration = Duration::from_secs(60);
@@ -482,7 +474,7 @@ fn pipewire(found: &Mutex<Found>, wake: &Sender<()>) {
             let _ = child.wait();
         }
 
-        if forget_after(produced) {
+        if !produced {
             let mut f = found.lock().unwrap_or_else(|e| e.into_inner());
             f.pipewire.clear();
             f.microphones.clear();
@@ -633,15 +625,16 @@ mod tests {
 
         let Metrics { dot, gap, .. } = Metrics::default();
         let w = 2 * dot + gap;
-        let px = paint(&[Kind::Microphone, Kind::Screen], w, dot, 1.0, &Metrics::default());
-        let right = ((dot / 2 * w + w - dot / 2) * 4) as usize;
+        let h = dot / 2;
+        let px = paint(&[Kind::Microphone, Kind::Screen], w, h, 1.0, &Metrics::default());
+        let right = ((h / 2 * w + w - dot / 2) * 4) as usize;
         assert_eq!(px[right + 3], 255);
         assert!(px[right + 2] > 200 && px[right] < 40, "orange is mostly red and green, no blue");
-        let left = ((dot / 2 * w + dot / 2) * 4) as usize;
+        let left = ((h / 2 * w + dot / 2) * 4) as usize;
         assert!(px[left] > 200, "the screen dot is blue");
 
-        assert_eq!(alpha_at(&px, w, dot + gap / 2, dot / 2), 0);
-        assert_eq!(alpha_at(&px, w, 0, 0), 0);
+        assert_eq!(alpha_at(&px, w, dot + gap / 2, h / 2), 0);
+        assert_eq!(alpha_at(&px, w, 0, h - 1), 0);
     }
 
     #[test]
@@ -667,10 +660,10 @@ mod tests {
     fn the_dots_are_bigger_by_default_and_held_to_their_limits() {
         use crate::common::sheet::{Layers, CSS};
         let d = Metrics::default();
-        assert_eq!((d.dot, d.gap, d.margin, d.edge), (14, 8, 10, 2.0));
+        assert_eq!((d.dot, d.gap, d.margin, d.edge), (28, 8, 0, 2.0));
         let with = |css: &str| Metrics::from_layers(&Layers::new(CSS, css), false);
-        assert_eq!(with(":root { --trindle-dots-size: 2; }").dot, 8);
-        assert_eq!(with(":root { --trindle-dots-size: 99; }").dot, 24);
+        assert_eq!(with(":root { --trindle-dots-size: 2; }").dot, 16);
+        assert_eq!(with(":root { --trindle-dots-size: 99; }").dot, 48);
         assert_eq!(with(":root { --trindle-dots-size: 20; }").dot, 20);
     }
 
@@ -686,7 +679,7 @@ mod tests {
                         continue;
                     };
                     assert_eq!(p.kinds.len(), want);
-                    assert_eq!(p.h, pixels(m.dot, scale));
+                    assert_eq!(p.h, pixels(m.dot / 2, scale));
                     assert!(p.at.0 >= 0.0 && p.at.0 + p.w as f64 <= width as f64, "mask {mask} scale {scale} width {width}");
                     let margin = (m.margin as f64 * scale).round();
                     assert_eq!(p.at.1, margin);
@@ -747,25 +740,19 @@ mod tests {
     }
 
     #[test]
-    fn a_hiccup_in_the_pipewire_monitor_does_not_hide_a_dot() {
-        assert!(!forget_after(true));
-        assert!(forget_after(false));
-    }
-
-    #[test]
     fn pointing_at_the_dots_reaches_at_least_24_points() {
-        for dot in [8, 14, 24] {
+        for dot in [16, 28, 48] {
             let m = Metrics { dot, ..Metrics::default() };
             let screen = 1920;
             let one = placed(Kind::Microphone.bit(), screen, 1.0, &m).unwrap();
             let (left, right) = ((screen - one.logical.w) as f64 / 2.0, (screen + one.logical.w) as f64 / 2.0);
 
-            assert!(points_at_dots(screen as f64 / 2.0, (m.margin + dot / 2) as f64, screen, one.logical.w, &m));
+            assert!(points_at_dots(screen as f64 / 2.0, (m.margin + dot / 4) as f64, screen, one.logical.w, &m));
             let across = dot + 2 * m.reach;
-            assert!(across >= 24 || dot < 4, "{across}");
+            assert!(across >= 24, "{across}");
             assert!(!points_at_dots(left - m.reach as f64 - 1.0, 5.0, screen, one.logical.w, &m));
             assert!(!points_at_dots(right + m.reach as f64 + 1.0, 5.0, screen, one.logical.w, &m));
-            assert!(!points_at_dots(screen as f64 / 2.0, (m.margin + dot + m.reach) as f64 + 1.0, screen, one.logical.w, &m));
+            assert!(!points_at_dots(screen as f64 / 2.0, (m.margin + dot / 2 + m.reach) as f64 + 1.0, screen, one.logical.w, &m));
         }
 
         let m = Metrics::default();
@@ -787,65 +774,6 @@ mod tests {
 
             let gap_x = p.w - ((m.dot as f64 + m.gap as f64 / 2.0) * scale).round() as i32;
             assert_eq!(alpha_at(&px, p.w, gap_x, p.h / 2), 0, "scale {scale}");
-        }
-    }
-
-    #[test]
-    fn the_dots_are_in_front_of_the_lock_screen_a_full_screen_window_and_the_ring() {
-        let src = crate::source::code(include_str!("render.rs"));
-        let body = &src[src.find("pub fn output_elements").unwrap()..];
-
-        let overlays = body.find("with_overlays(custom_elements").unwrap();
-        let lock = body.find("locked_elements(custom_elements").unwrap();
-        let fullscreen = body.find("fullscreen_elements(custom_elements").unwrap();
-        let desktop = body.find("desktop_elements(output").unwrap();
-        assert!(overlays < lock && lock < fullscreen && fullscreen < desktop);
-        let made = &body[body.find("fn with_overlays").unwrap()..];
-        let dots = made.find("let dots = crate::indicators::elements").unwrap();
-        let chain = made.find(".chain(dots)").unwrap();
-        assert!(dots < chain);
-
-        assert!(body.matches("custom_elements").count() >= 4);
-
-        assert!(!body[..overlays].contains("return"));
-        assert!(!made[..dots].contains("return"));
-    }
-
-    #[test]
-    #[ignore]
-    fn pictures_of_the_dots() {
-        let Ok(dir) = std::env::var("TRINDLE_DOTS_PICTURES") else { return };
-        std::fs::create_dir_all(&dir).unwrap();
-        let old = Metrics { dot: 8, gap: 6, margin: 6, edge: 1.0, ..Metrics::default() };
-        let now = Metrics::default();
-        let grounds: [(&str, fn(i32, i32) -> [u8; 3]); 3] = [
-            ("dark", |_, _| [0x16, 0x18, 0x1c]),
-            ("light", |_, _| [0xf2, 0xf2, 0xf2]),
-            ("busy", |x, y| if (x / 9 + y / 9) % 2 == 0 { [0x6a, 0x8f, 0x4e] } else { [0xd8, 0xc0, 0x8a] }),
-        ];
-        for (ground, colour) in grounds {
-            for (which, m) in [("new", &now), ("old", &old)] {
-                let p = placed(7, 200, 1.0, m).unwrap();
-                let px = paint(&p.kinds, p.w, p.h, 1.0, m);
-                let (cw, ch) = (200, 2 * m.margin + p.h);
-                let mut img = image::RgbImage::new(cw as u32, ch as u32);
-                for y in 0..ch {
-                    for x in 0..cw {
-                        let mut c = colour(x, y);
-                        let (dx, dy) = (x - p.at.0 as i32, y - p.at.1 as i32);
-                        if dx >= 0 && dy >= 0 && dx < p.w && dy < p.h {
-                            let at = ((dy * p.w + dx) * 4) as usize;
-                            let a = px[at + 3] as f32 / 255.0;
-                            for (i, ch) in [2usize, 1, 0].into_iter().enumerate() {
-                                c[i] = (px[at + ch] as f32 + c[i] as f32 * (1.0 - a)).round().min(255.0) as u8;
-                            }
-                        }
-                        img.put_pixel(x as u32, y as u32, image::Rgb(c));
-                    }
-                }
-                let big = image::imageops::resize(&img, img.width() * 6, img.height() * 6, image::imageops::FilterType::Nearest);
-                big.save(format!("{dir}/dots-{which}-{ground}.png")).unwrap();
-            }
         }
     }
 
@@ -918,39 +846,11 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
-    fn pictures_of_the_label() {
-        let Ok(dir) = std::env::var("TRINDLE_LABEL_PICTURES") else { return };
-        std::fs::create_dir_all(&dir).unwrap();
-        let m = Metrics::now();
-        let lines: Vec<String> = TWO_LINES.iter().map(|l| l.to_string()).collect();
-        for scale in LAPTOP_SCALES {
-            let label = label(lines.clone(), scale);
-            let sw = pixels(label.logical.w, scale) + 40;
-            let at = label_at(sw, label.logical, scale, &m);
-            let sh = at.1 as i32 + pixels(label.logical.h, scale) + 20;
-            for which in ["old", "new"] {
-                let shot = on_screen((sw, sh), scale, |r| match which {
-                    "old" => MemoryRenderBufferRenderElement::from_buffer(r, at, &label.buffer, None, None, Some(label.logical), ElementKind::Unspecified).ok().map(CustomRenderElements::Dots).into_iter().collect(),
-                    _ => label.element(r, at).into_iter().collect(),
-                });
-                let mut img = image::RgbImage::new(sw as u32, sh as u32);
-                for (i, p) in shot.chunks(4).enumerate() {
-                    let a = 255 - p[3] as u32;
-                    let ground = |c: u8| (c as u32 + 0x30 * a / 255).min(255) as u8;
-                    img.put_pixel(i as u32 % sw as u32, i as u32 / sw as u32, image::Rgb([ground(p[2]), ground(p[1]), ground(p[0])]));
-                }
-                img.save(format!("{dir}/label-{which}-{}.png", (scale * 100.0) as i32)).unwrap();
-            }
-        }
-    }
-
-    #[test]
     fn overlays_are_painted_exactly_their_declared_size_at_every_scale() {
         let m = Metrics::default();
         for scale in every_scale() {
             for width in [1, 5, 10, 15, 20, 25, 60, 99, 100, 141] {
-                let logical: Size<i32, Logical> = (width, m.dot).into();
+                let logical: Size<i32, Logical> = (width, m.dot / 2).into();
                 let (w, h) = pixel_size(logical, scale);
                 let bytes = paint(&[Kind::Microphone], w, h, scale as f32, &m);
                 assert_eq!(bytes.len(), (w * h * 4) as usize, "dots x{scale} w{width}");

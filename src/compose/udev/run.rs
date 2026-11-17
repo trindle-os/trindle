@@ -32,12 +32,12 @@ use smithay::{
 use tracing::{error, info};
 
 use super::{
-    cards::choose_primary_gpu, configure_pointer, console_switch, dmabuf::get_surface_dmabuf_feedback, AnvilState,
+    cards::choose_primary_gpu, configure_pointer, console_switch, dmabuf::get_surface_dmabuf_feedback, Compose,
     DeviceAddError, UdevData,
 };
 use crate::drawing::PointerElement;
 
-type Loop = EventLoop<'static, AnvilState<UdevData>>;
+type Loop = EventLoop<'static, Compose<UdevData>>;
 
 pub fn run_udev() {
     let mut event_loop = EventLoop::try_new().unwrap();
@@ -87,11 +87,11 @@ pub fn run_udev() {
 }
 
 fn new_state(
-    display: Display<AnvilState<UdevData>>,
+    display: Display<Compose<UdevData>>,
     event_loop: &Loop,
     session: LibSeatSession,
     primary_gpu: DrmNode,
-) -> AnvilState<UdevData> {
+) -> Compose<UdevData> {
     let gpus = GpuManager::new(GbmGlesBackend::with_context_priority(ContextPriority::High)).unwrap();
 
     let data = UdevData {
@@ -110,10 +110,10 @@ fn new_state(
         pointers: Vec::new(),
         newcomers: crate::newcomers::Newcomers::load(),
     };
-    AnvilState::init(display, event_loop.handle(), data, true)
+    Compose::init(display, event_loop.handle(), data, true)
 }
 
-fn open_libinput(state: &AnvilState<UdevData>) -> (Libinput, LibinputInputBackend) {
+fn open_libinput(state: &Compose<UdevData>) -> (Libinput, LibinputInputBackend) {
     let mut libinput_context = Libinput::new_with_udev::<LibinputSessionInterface<LibSeatSession>>(
         state.backend_data.session.clone().into(),
     );
@@ -122,7 +122,7 @@ fn open_libinput(state: &AnvilState<UdevData>) -> (Libinput, LibinputInputBacken
     (libinput_context, libinput_backend)
 }
 
-fn watch_input(handle: &LoopHandle<'static, AnvilState<UdevData>>, libinput_backend: LibinputInputBackend) {
+fn watch_input(handle: &LoopHandle<'static, Compose<UdevData>>, libinput_backend: LibinputInputBackend) {
     handle
         .insert_source(libinput_backend, move |mut event, _, data| {
             let dh = data.backend_data.dh.clone();
@@ -137,7 +137,7 @@ fn watch_input(handle: &LoopHandle<'static, AnvilState<UdevData>>, libinput_back
         .unwrap();
 }
 
-fn device_plugged_in(data: &mut AnvilState<UdevData>, device: &mut Device) {
+fn device_plugged_in(data: &mut Compose<UdevData>, device: &mut Device) {
     if [DeviceCapability::Keyboard, DeviceCapability::Pointer, DeviceCapability::Touch]
         .into_iter()
         .any(|c| device.has_capability(c))
@@ -166,7 +166,7 @@ fn device_plugged_in(data: &mut AnvilState<UdevData>, device: &mut Device) {
     }
 }
 
-fn device_unplugged(data: &mut AnvilState<UdevData>, device: &Device) {
+fn device_unplugged(data: &mut Compose<UdevData>, device: &Device) {
     data.backend_data.newcomers.removed(device.sysname());
     if device.has_capability(DeviceCapability::Keyboard) {
         data.backend_data.keyboards.retain(|item| item != device);
@@ -175,7 +175,7 @@ fn device_unplugged(data: &mut AnvilState<UdevData>, device: &Device) {
 }
 
 fn watch_session(
-    handle: &LoopHandle<'static, AnvilState<UdevData>>,
+    handle: &LoopHandle<'static, Compose<UdevData>>,
     notifier: smithay::backend::session::libseat::LibSeatSessionNotifier,
     mut libinput_context: Libinput,
 ) {
@@ -187,7 +187,7 @@ fn watch_session(
         .unwrap();
 }
 
-fn open_cards(state: &mut AnvilState<UdevData>, udev_backend: &UdevBackend, primary_gpu: DrmNode) -> bool {
+fn open_cards(state: &mut Compose<UdevData>, udev_backend: &UdevBackend, primary_gpu: DrmNode) -> bool {
     let primary_node = primary_gpu
         .node_with_type(NodeType::Primary)
         .and_then(|node| node.ok());
@@ -227,7 +227,7 @@ fn open_cards(state: &mut AnvilState<UdevData>, udev_backend: &UdevBackend, prim
     true
 }
 
-fn share_graphics(state: &mut AnvilState<UdevData>, display_handle: &DisplayHandle, primary_gpu: DrmNode) {
+fn share_graphics(state: &mut Compose<UdevData>, display_handle: &DisplayHandle, primary_gpu: DrmNode) {
     state.shm_state.update_formats(
         state
             .backend_data
@@ -252,7 +252,7 @@ fn share_graphics(state: &mut AnvilState<UdevData>, display_handle: &DisplayHand
     let default_feedback = state.default_dmabuf_feedback().unwrap();
     let mut dmabuf_state = DmabufState::new();
     let global = dmabuf_state
-        .create_global_with_default_feedback::<AnvilState<UdevData>>(display_handle, &default_feedback);
+        .create_global_with_default_feedback::<Compose<UdevData>>(display_handle, &default_feedback);
     state.backend_data.dmabuf_state = Some((dmabuf_state, global));
 
     if let Ok(mut renderer) = state.backend_data.gpus.single_renderer(&primary_gpu) {
@@ -285,7 +285,7 @@ fn share_graphics(state: &mut AnvilState<UdevData>, display_handle: &DisplayHand
         });
 }
 
-fn watch_cards(handle: &LoopHandle<'static, AnvilState<UdevData>>, udev_backend: UdevBackend) {
+fn watch_cards(handle: &LoopHandle<'static, Compose<UdevData>>, udev_backend: UdevBackend) {
     handle
         .insert_source(udev_backend, move |event, _, data| match event {
 
@@ -312,9 +312,10 @@ fn watch_cards(handle: &LoopHandle<'static, AnvilState<UdevData>>, udev_backend:
         .unwrap();
 }
 
-fn start_services(state: &mut AnvilState<UdevData>, event_loop: &Loop) {
+fn start_services(state: &mut Compose<UdevData>, event_loop: &Loop) {
     state.watch_settings();
     state.watch_in_use();
+    super::woken::watch(&event_loop.handle());
     if crate::session::launch().greeter {
         state.session_ready();
     } else {
@@ -322,27 +323,22 @@ fn start_services(state: &mut AnvilState<UdevData>, event_loop: &Loop) {
     }
 
     let every = Duration::from_secs(crate::memory::TRIM_SECS as u64);
-    let _ = event_loop.handle().insert_source(Timer::from_duration(every), move |_, _, _| {
+    crate::session::watch(&event_loop.handle(), Timer::from_duration(every), move |_, _, _| {
         crate::memory::give_back();
         TimeoutAction::ToDuration(every)
     });
 }
 
-fn run_loop(event_loop: &mut Loop, state: &mut AnvilState<UdevData>, display_handle: &mut DisplayHandle) {
+fn run_loop(event_loop: &mut Loop, state: &mut Compose<UdevData>, display_handle: &mut DisplayHandle) {
     while state.running.load(Ordering::SeqCst) {
 
         let result = event_loop.dispatch(Some(crate::rest::sleep()), state);
         if result.is_err() {
             state.running.store(false, Ordering::SeqCst);
         } else {
-            state.space.refresh();
-            state.popups.cleanup();
-            state.refresh_panel();
-            state.refresh_session_lock();
-            state.refresh_idle_inhibit();
-            state.refresh_suspended();
+            state.tidy_after_a_turn();
             state.look_at_resting();
-            display_handle.flush_clients().unwrap();
+            crate::state::send_waiting(display_handle);
         }
     }
 }

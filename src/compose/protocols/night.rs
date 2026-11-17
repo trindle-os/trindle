@@ -4,6 +4,7 @@
 //! the rule that one program at a time holds a screen.
 
 use smithay::output::Output;
+use super::Filtered;
 use smithay::reexports::wayland_server::backend::ClientId;
 use smithay::reexports::wayland_server::{
     Client, DataInit, Dispatch, DisplayHandle, GlobalDispatch, New,
@@ -51,10 +52,6 @@ pub fn table(size: u32, shares: [u16; 3]) -> Vec<u16> {
         .collect()
 }
 
-pub struct NightGlobalData {
-    filter: Box<dyn for<'c> Fn(&'c Client) -> bool + Send + Sync>,
-}
-
 pub struct TintData;
 
 #[derive(Debug, Default)]
@@ -67,14 +64,14 @@ impl NightState {
 
     pub fn new<D, F>(display: &DisplayHandle, filter: F) -> NightState
     where
-        D: GlobalDispatch<TrindleNightManagerV1, NightGlobalData>
+        D: GlobalDispatch<TrindleNightManagerV1, Filtered>
             + Dispatch<TrindleNightManagerV1, ()>
             + Dispatch<TrindleNightV1, TintData>
             + NightHandler
             + 'static,
         F: for<'c> Fn(&'c Client) -> bool + Send + Sync + 'static,
     {
-        display.create_global::<D, TrindleNightManagerV1, _>(VERSION, NightGlobalData { filter: Box::new(filter) });
+        display.create_global::<D, TrindleNightManagerV1, _>(VERSION, Filtered::new(filter));
         NightState::default()
     }
 
@@ -87,9 +84,9 @@ impl NightState {
     }
 }
 
-impl<D> GlobalDispatch<TrindleNightManagerV1, NightGlobalData, D> for NightState
+impl<D> GlobalDispatch<TrindleNightManagerV1, Filtered, D> for NightState
 where
-    D: GlobalDispatch<TrindleNightManagerV1, NightGlobalData>
+    D: GlobalDispatch<TrindleNightManagerV1, Filtered>
         + Dispatch<TrindleNightManagerV1, ()>
         + Dispatch<TrindleNightV1, TintData>
         + NightHandler
@@ -100,14 +97,14 @@ where
         _: &DisplayHandle,
         _: &Client,
         resource: New<TrindleNightManagerV1>,
-        _: &NightGlobalData,
+        _: &Filtered,
         data_init: &mut DataInit<'_, D>,
     ) {
         data_init.init(resource, ());
     }
 
-    fn can_view(client: Client, data: &NightGlobalData) -> bool {
-        (data.filter)(&client)
+    fn can_view(client: Client, data: &Filtered) -> bool {
+        data.can_view(&client)
     }
 }
 
@@ -186,7 +183,7 @@ where
 macro_rules! delegate_night {
     ($(@<$( $lt:tt $( : $clt:tt $(+ $dlt:tt )* )? ),+>)? $ty: ty) => {
         smithay::reexports::wayland_server::delegate_global_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
-            $crate::protocols::night::TrindleNightManagerV1: $crate::protocols::night::NightGlobalData
+            $crate::protocols::night::TrindleNightManagerV1: $crate::protocols::Filtered
         ] => $crate::protocols::night::NightState);
         smithay::reexports::wayland_server::delegate_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
             $crate::protocols::night::TrindleNightManagerV1: ()

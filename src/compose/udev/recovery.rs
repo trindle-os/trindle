@@ -12,7 +12,7 @@ use smithay::{
 };
 use tracing::{debug, info, warn};
 
-use super::{paint::AfterFrame, AnvilState, SurfaceData, UdevData};
+use super::{paint::AfterFrame, Compose, SurfaceData, UdevData};
 use crate::{
     clean_start::{self, CleanStart},
     render::{frames_in, ASSUMED_REFRESH},
@@ -86,7 +86,14 @@ fn say_first_try_failed(
     );
 }
 
+fn waits_for_the_session(err: &SwapBuffersError) -> bool {
+    matches!(drm_error(err), Some(DrmError::DeviceInactive))
+}
+
 fn retry_after(surface: &mut SurfaceData, err: &SwapBuffersError, refused: bool) -> (bool, bool) {
+    if waits_for_the_session(err) {
+        return (false, false);
+    }
     match err {
         SwapBuffersError::AlreadySwapped => (true, false),
         SwapBuffersError::TemporaryFailure(err) => {
@@ -142,7 +149,7 @@ fn space_out_setup(surface: &mut SurfaceData, output: &Output, failed: &mut Afte
     }
 }
 
-impl AnvilState<UdevData> {
+impl Compose<UdevData> {
 
     pub(super) fn start_cleanly(&mut self, node: DrmNode) {
         let Some(device) = self.backend_data.backends.get_mut(&node) else { return };
@@ -246,6 +253,12 @@ mod tests {
         let drawing = SwapBuffersError::ContextLost(Box::new(io::Error::other("lost the drawing context")));
         assert!(drm_error(&drawing).is_none());
         assert!(drm_error(&SwapBuffersError::AlreadySwapped).is_none());
+    }
+
+    #[test]
+    fn a_card_another_console_holds_is_not_asked_again_every_frame() {
+        assert!(waits_for_the_session(&SwapBuffersError::from(DrmError::DeviceInactive)));
+        assert!(!waits_for_the_session(&SwapBuffersError::AlreadySwapped));
     }
 
     #[test]

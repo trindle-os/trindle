@@ -4,4 +4,4 @@
 terms-accept = I agree to the [EULA](eula)
 
 # In the foot, while the box is not ticked, saying why the button beside it is off.
-terms-needed = Tick the box to go on
+terms-needed = Agreement required

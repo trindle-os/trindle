@@ -38,7 +38,7 @@ cargo +1.85 test --release -j 4 --bin trindle --no-run >"$out/.log" 2>&1 || { ta
 
 for theme in $themes; do
     raw="$out/.raw-$theme"
-    rm -rf "$raw" "$out/$theme"
+    rm -rf "$raw" "${out:?}/$theme"
     mkdir -p "$raw" "$out/$theme"
     if [ "$theme" = trindle ]; then
         unset TRINDLE_TEST_THEME

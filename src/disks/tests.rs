@@ -22,7 +22,6 @@ use super::map::MAP_BAR;
 use super::map::MAP_GAP;
 use super::map::MAP_ROW;
 use super::map::SEG_LEAST;
-use super::map::map_caption;
 use super::map::map_spacing;
 use super::map::segments;
 use super::model::Caps;
@@ -247,7 +246,7 @@ const SIZE_OF_SYSTEM: u64 = 499 * G;
 fn made_up_world() -> room::World {
     room::World {
         mountinfo: "36 1 259:2 /@rootfs / rw,relatime shared:1 - btrfs /dev/nvme9n1p2 rw,ssd\n".into(),
-        swaps: "Filename\tType\tSize\tUsed\tPriority\n/dev/zram0 partition 100 0 100\n".into(),
+        swaps: Some("Filename\tType\tSize\tUsed\tPriority\n/dev/zram0 partition 100 0 100\n".into()),
         devices: |_| Some(1),
         used: |_| Some(100 * G),
         snapper: true,
@@ -449,8 +448,8 @@ impl Rig {
 
     fn said(&mut self, drive: &'static str, row: &str) -> Option<(String, bool)> {
         let key = spot(drive, row);
-        let at = row.to_string();
-        assert!(self.until(move |d| !d.working.contains_key(&key) && d.told(drive, &at).is_some()), "the row said how it ended");
+        let log = self.log.clone();
+        assert!(self.until(move |d| !d.working.contains_key(&key) && !log.borrow().is_empty()), "the row's change ended");
         self.d.told(drive, row).map(|(words, tone)| (words, matches!(tone, Tone::Problem)))
     }
 }
@@ -539,4 +538,13 @@ fn drives_code() -> String {
         include_str!("view.rs"),
     ];
     files.iter().map(|f| crate::common::source::code(f).replace("#[cfg(test)]\nmod tests;\n", "")).collect::<Vec<_>>().join("\n")
+}
+
+#[test]
+fn a_closed_password_box_says_nothing_on_the_row() {
+    let mut d = sample();
+    d.say("sda", "sda1", super::plan::no_password().to_string(), false);
+    assert!(d.told("sda", "sda1").is_none());
+    d.say("sda", "sda1", "Something else went wrong.".into(), false);
+    assert_eq!(d.told("sda", "sda1").map(|(_, t)| matches!(t, Tone::Problem)), Some(true));
 }

@@ -1,7 +1,6 @@
 //! A drive's card and the line for each of its parts.
 
 use super::plan::size_text;
-use crate::common::hidden_drives;
 use crate::toolkit::widget::{Length, Node, Tone, button, card, column, heading, icon_circle, label, note, row, space};
 use crate::toolkit::{t, theme};
 use super::{Act, Drives, Msg, help, plan, red};
@@ -52,9 +51,6 @@ impl Drives {
         let mut head = vec![dim(icon_circle(icon), hidden), dim(heading(d.name.clone()), hidden), space()];
         head.extend(self.drive_controls(d, kinds, hidden));
         let mut items = vec![row(head).gap(12.0).centred(), note(if d.removable { t!("disks-drive-removable", size = &size) } else { t!("disks-drive-internal", size = &size) })];
-        if hidden {
-            items.push(note(t!("disks-hidden-note", lock = hidden_drives::NOT_A_LOCK)));
-        }
         if d.system {
             items.push(note(t!("disks-system-note")));
         }

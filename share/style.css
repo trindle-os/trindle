@@ -39,8 +39,8 @@
    ignored, a value that cannot be read gives way to the one here, and
    every number is held within the limits written beside it, so no sheet
    can break a layout. A value marked (gap step) or (size step) takes only
-   the name of a step, never a number; docs/style-sheet-for-ai.md lists
-   every name, what it takes and what it changes.
+   the name of a step, never a number; the style sheet guide in Trindle Help
+   lists every name, what it takes and what it changes.
 
    Sizes are in points (px is fine, and ignored). Colours are #rrggbb,
    #rrggbbaa, rgb(), rgba() or transparent, or worked out from another:
@@ -136,7 +136,7 @@
   /* The gap scale: the fixed room the parts keep between and round their
      own pieces. Here each is a number of points; any other sheet names a
      step instead (none, tiny, small, medium, roomy, large, huge), which is
-     the number given here. See docs/style-sheet-for-ai.md. */
+     the number given here. See the style sheet guide in Trindle Help. */
   --trindle-gap-tiny: 2; /* (gap step) a name over the line under it */
   --trindle-gap-small: 4; /* (gap step) the pieces of one small part */
   --trindle-gap-medium: 8; /* (gap step) the buttons in a bar, the rows of a short list */
@@ -532,9 +532,9 @@
      the screen's corner, the thin dark edge round each (its width and how
      dark), how far round them the pointer still counts as on them, and the
      room round the label's words. */
-  --trindle-dots-size: 14; /* (8 to 24) */
+  --trindle-dots-size: 28; /* (16 to 48) */
   --trindle-dots-gap: 8; /* (2 to 16) */
-  --trindle-dots-margin: 10; /* (0 to 24) */
+  --trindle-dots-margin: 0; /* (0 to 24) */
   --trindle-dots-edge: 2; /* (0 to 3) */
   --trindle-dots-edge-strength: 0.55; /* (0 to 1) */
   --trindle-dots-reach: 10; /* (0 to 20) */

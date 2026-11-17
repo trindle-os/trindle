@@ -119,6 +119,11 @@ pub fn not_done(r: Refused) -> String {
     .to_string()
 }
 
+pub fn closed_box(words: &str) -> bool {
+    let c = Refused::Cancelled;
+    !words.is_empty() && [not_done(c), c.sentence(), c.why().to_string()].iter().any(|w| words.contains(w.as_str()))
+}
+
 pub fn of_words(words: &str) -> Option<Refused> {
     ALL.into_iter().find(|r| not_done(*r) == words)
 }
@@ -313,15 +318,15 @@ mod tests {
         let mut said: Vec<String> = ALL.iter().map(|r| not_done(*r)).collect();
         for (r, words) in ALL.iter().zip(&said) {
             assert_eq!(of_words(words), Some(*r));
-            assert!(words.starts_with("Not done: ") && words.ends_with('.') && !words.contains('\u{2014}'), "{words}");
+            assert!(words.starts_with("That wasn't done") && words.ends_with('.') && !words.contains('\u{2014}'), "{words}");
             assert!(r.sentence().starts_with(char::is_uppercase) && r.sentence()[1..] == r.why()[1..]);
         }
         said.sort();
         said.dedup();
         assert_eq!(said.len(), ALL.len(), "no two refusals share their words");
         assert_eq!(not_done(Refused::Cancelled), crate::common::run::NO_PASSWORD);
-        assert!(Refused::Wrong.why().contains("not accepted") && !Refused::Wrong.why().contains("allowed"));
-        assert!(Refused::NotAllowed.why().contains("not allowed") && !Refused::NotAllowed.why().contains("accepted"));
+        assert!(Refused::Wrong.why().contains("wasn't accepted") && !Refused::Wrong.why().contains("allowed"));
+        assert!(Refused::NotAllowed.why().contains("isn't allowed") && !Refused::NotAllowed.why().contains("accepted"));
         assert_eq!(of_words("apt-get failed."), None);
 
         assert_eq!(would_ask(&[ADMIN_ACTION]), None);

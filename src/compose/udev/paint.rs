@@ -23,19 +23,19 @@ use smithay::{
     },
     desktop::space::Space,
     input::pointer::{CursorIcon, CursorImageStatus},
-    output::Output,
+    output::{Output, OutputNoMode},
     reexports::{
         calloop::timer::{TimeoutAction, Timer},
         drm::control::crtc,
     },
     utils::{IsAlive, Logical, Monotonic, Point, Scale, Time, Transform},
 };
-use tracing::{error, info, trace};
+use tracing::{debug, info, trace, warn};
 
 use super::{
     frame::output_for,
     recovery::{failed_frame, quiet_planes},
-    AnvilState, BackendData, SurfaceData, UdevData, UdevOutputId, UdevRenderer,
+    Compose, BackendData, SurfaceData, UdevData, UdevOutputId, UdevRenderer,
 };
 use crate::{
     clean_start::CleanStart,
@@ -64,13 +64,13 @@ impl AfterFrame {
     }
 }
 
-impl AnvilState<UdevData> {
+impl Compose<UdevData> {
 
     pub(super) fn render(&mut self, node: DrmNode, crtc: Option<crtc::Handle>, frame_target: Time<Monotonic>) {
         let device_backend = match self.backend_data.backends.get_mut(&node) {
             Some(backend) => backend,
             None => {
-                error!("Trying to render on non-existent backend {}", node);
+                debug!("A frame was asked for after its card was unplugged: {}", node);
                 return;
             }
         };
@@ -132,13 +132,14 @@ impl AnvilState<UdevData> {
         );
 
         let primary_gpu = self.backend_data.primary_gpu;
-        let mut renderer = frame_renderer(&mut self.backend_data.gpus, primary_gpu, surface);
-
-        let result = render_surface(
-            surface, &mut renderer, &self.space, output, self.pointer.current_location(),
-            (&pointer_image, hotspot), &mut self.backend_data.pointer_element,
-            &self.dnd_icon, &mut self.cursor_status, &self.session_lock,
-        );
+        let result = match frame_renderer(&mut self.backend_data.gpus, primary_gpu, surface) {
+            Ok(mut renderer) => render_surface(
+                surface, &mut renderer, &self.space, output, self.pointer.current_location(),
+                (&pointer_image, hotspot), &mut self.backend_data.pointer_element,
+                &self.dnd_icon, &mut self.cursor_status, &self.session_lock,
+            ),
+            Err(err) => Err(err),
+        };
         let locked = self.session_lock.is_active();
         let after = match result {
             Ok((has_rendered, states)) => {
@@ -178,12 +179,13 @@ impl AnvilState<UdevData> {
     }
 
     pub(super) fn render_when(&mut self, timer: Timer, node: DrmNode, crtc: crtc::Handle, target: Time<Monotonic>) {
-        self.handle
-            .insert_source(timer, move |_, _, data| {
-                data.render(node, Some(crtc), target);
-                TimeoutAction::Drop
-            })
-            .expect("failed to schedule frame timer");
+        let scheduled = self.handle.insert_source(timer, move |_, _, data| {
+            data.render(node, Some(crtc), target);
+            TimeoutAction::Drop
+        });
+        if let Err(err) = scheduled {
+            warn!("could not schedule a frame: {err}");
+        }
     }
 
     fn take_frame_slot(&mut self, node: DrmNode, crtc: crtc::Handle) -> Option<bool> {
@@ -306,7 +308,7 @@ fn note_drawn(
 
 fn pointer_picture(
     cursor: &mut crate::cursor::Cursor,
-    cache: &mut Vec<(xcursor::parser::Image, u32, MemoryRenderBuffer)>,
+    cache: &mut Vec<(PointerKey, MemoryRenderBuffer)>,
     cursor_status: &CursorImageStatus,
     screen_scale: f64,
     now: Time<Monotonic>,
@@ -318,32 +320,25 @@ fn pointer_picture(
         CursorImageStatus::Named(icon) => *icon,
         _ => CursorIcon::Default,
     };
-    let frame = cursor.get_named(icon, picture_scale, now.into());
+    let (at, frame) = cursor.picture(icon, picture_scale, now.into());
     let hotspot = crate::cursor::hotspot_points(frame.xhot, frame.yhot, picture_scale);
-
-    let pointer_image = cache
-        .iter()
-        .find_map(|(image, scale, texture)| {
-            if image == &frame && *scale == picture_scale {
-                Some(texture.clone())
-            } else {
-                None
-            }
-        })
-        .unwrap_or_else(|| {
-            let buffer = MemoryRenderBuffer::from_slice(
-                &frame.pixels_rgba,
-                Fourcc::Argb8888,
-                (frame.width as i32, frame.height as i32),
-                picture_scale as i32,
-                Transform::Normal,
-                None,
-            );
-            cache.push((frame, picture_scale, buffer.clone()));
-            buffer
-        });
-    (pointer_image, hotspot)
+    let key = (icon, picture_scale, at);
+    if let Some((_, kept)) = cache.iter().find(|(k, _)| *k == key) {
+        return (kept.clone(), hotspot);
+    }
+    let buffer = MemoryRenderBuffer::from_slice(
+        &frame.pixels_rgba,
+        Fourcc::Argb8888,
+        (frame.width as i32, frame.height as i32),
+        picture_scale as i32,
+        Transform::Normal,
+        None,
+    );
+    cache.push((key, buffer.clone()));
+    (buffer, hotspot)
 }
+
+pub type PointerKey = (CursorIcon, u32, usize);
 
 fn screen_of(
     backends: &mut HashMap<DrmNode, BackendData>,
@@ -359,7 +354,7 @@ fn frame_renderer<'a>(
     gpus: &'a mut GpuManager<GbmGlesBackend<GlesRenderer, DrmDeviceFd>>,
     primary_gpu: DrmNode,
     surface: &SurfaceData,
-) -> UdevRenderer<'a> {
+) -> Result<UdevRenderer<'a>, SwapBuffersError> {
     let render_node = surface.render_node.unwrap_or(primary_gpu);
     if primary_gpu == render_node {
         gpus.single_renderer(&render_node)
@@ -367,7 +362,7 @@ fn frame_renderer<'a>(
         let format = surface.drm_output.format();
         gpus.renderer(&primary_gpu, &render_node, format)
     }
-    .unwrap()
+    .map_err(|err| SwapBuffersError::TemporaryFailure(Box::new(err)))
 }
 
 fn render_surface<'a>(
@@ -382,7 +377,9 @@ fn render_surface<'a>(
     cursor_status: &mut CursorImageStatus,
     session_lock: &SessionLock,
 ) -> Result<(bool, RenderElementStates), SwapBuffersError> {
-    let output_geometry = space.output_geometry(output).unwrap();
+    let output_geometry = space
+        .output_geometry(output)
+        .ok_or_else(|| SwapBuffersError::TemporaryFailure(Box::new(OutputNoMode)))?;
     let scale = Scale::from(output.current_scale().fractional_scale());
 
     set_pointer(pointer_element, cursor_status, pointer_image, hotspot, scale);
@@ -415,7 +412,9 @@ fn render_surface<'a>(
             smithay::backend::drm::compositor::RenderFrameError::RenderFrame(
                 OutputDamageTrackerError::Rendering(err),
             ) => SwapBuffersError::from(err),
-            _ => unreachable!(),
+            smithay::backend::drm::compositor::RenderFrameError::RenderFrame(
+                OutputDamageTrackerError::OutputNoMode(err),
+            ) => SwapBuffersError::TemporaryFailure(Box::new(err)),
         })?;
 
     update_primary_scanout_output(space, output, dnd_icon, cursor_status, &states);

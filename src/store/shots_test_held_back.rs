@@ -10,24 +10,24 @@ fn apps_reads_ahead_once_in_sight_again_on_a_change_and_never_out_of_sight() {
     s.hidden = true;
     assert!(!s.preload());
     s.apps_changed();
-    assert_eq!((s.preloaded, s.stale, s.read_aheads), (false, false, 0));
+    assert_eq!((s.ahead.done, s.ahead.stale, s.ahead.count), (false, false, 0));
 
     s.back_in_sight();
     s.preload();
     s.preload();
-    assert_eq!((s.preloaded, s.read_aheads), (true, 1));
+    assert_eq!((s.ahead.done, s.ahead.count), (true, 1));
 
     s.apps_changed();
-    assert_eq!(s.read_aheads, 2);
+    assert_eq!(s.ahead.count, 2);
 
     s.hidden = true;
     s.apps_changed();
     s.apps_changed();
-    assert_eq!((s.read_aheads, s.stale), (2, true));
+    assert_eq!((s.ahead.count, s.ahead.stale), (2, true));
     s.back_in_sight();
-    assert_eq!((s.read_aheads, s.stale, s.hidden), (3, false, false));
+    assert_eq!((s.ahead.count, s.ahead.stale, s.hidden), (3, false, false));
     s.back_in_sight();
-    assert_eq!(s.read_aheads, 3, "nothing changed, so nothing is read");
+    assert_eq!(s.ahead.count, 3, "nothing changed, so nothing is read");
 
     let watched = folders_that_change();
     for end in ["flatpak", "flatpak/app", "flatpak/overrides"] {
@@ -109,7 +109,7 @@ fn an_installed_row_held_back_has_release_where_its_update_was() {
         assert!(said.iter().any(|w| w.ends_with("held back; version 3.3 is waiting")), "{across}: {said:?}");
         assert!(said.iter().any(|w| w.ends_with("1 has an update waiting.")), "{across}: {said:?}");
         let buttons = s.whole(settings()).buttons();
-        assert!(buttons.contains(&("Release Notes".to_string(), true)) && !buttons.iter().any(|(tip, _)| tip == "Update Notes"), "{across}: {buttons:?}");
+        assert!(buttons.contains(&("Allow updates for Notes".to_string(), true)) && !buttons.iter().any(|(tip, _)| tip == "Update Notes"), "{across}: {buttons:?}");
 
         s.updatable.clear();
         s.upd = update_page::made_up(&[], 0, false, &[], &[], &[]);
@@ -117,7 +117,7 @@ fn an_installed_row_held_back_has_release_where_its_update_was() {
         assert!(words(&mut s).iter().any(|w| w.ends_with("version 46.1 \u{00b7} held back")), "{across}: {:?}", words(&mut s));
 
         s.other = Some(crate::common::updating::Who::Ring);
-        assert!(s.whole(settings()).buttons().contains(&("Release Notes".to_string(), false)));
+        assert!(s.whole(settings()).buttons().contains(&("Allow updates for Notes".to_string(), false)));
     }
 }
 
@@ -138,15 +138,15 @@ fn an_app_s_page_held_back_has_release_where_update_would_be() {
         let said = words(&mut s);
         assert!(said.iter().any(|w| w == "Held back at version 3.2.1; version 3.3 is waiting"), "{across}: {said:?}");
         let buttons = s.whole(settings()).buttons();
-        assert!(buttons.contains(&("Release".to_string(), true)) && buttons.contains(&("Open".to_string(), true)), "{across}: {buttons:?}");
+        assert!(buttons.contains(&("Allow updates".to_string(), true)) && buttons.contains(&("Open".to_string(), true)), "{across}: {buttons:?}");
         assert!(!buttons.iter().any(|(tip, _)| tip == "Update"), "{across}: {buttons:?}");
 
         s.updatable.clear();
         s.upd = update_page::made_up(&[], 0, false, &[], &[], &[]);
-        assert!(words(&mut s).iter().any(|w| w == "Installed, held back at version 3.2.1"), "{across}");
-        assert!(s.whole(settings()).buttons().contains(&("Release".to_string(), true)));
+        assert!(words(&mut s).iter().any(|w| w == "Installed, updates held back at version 3.2.1"), "{across}");
+        assert!(s.whole(settings()).buttons().contains(&("Allow updates".to_string(), true)));
         s.other = Some(crate::common::updating::Who::Ring);
-        assert!(s.whole(settings()).buttons().contains(&("Release".to_string(), false)), "{across}: off while updates go in elsewhere");
+        assert!(s.whole(settings()).buttons().contains(&("Allow updates".to_string(), false)), "{across}: off while updates go in elsewhere");
     }
 }
 
@@ -166,9 +166,9 @@ fn a_plugin_held_back_has_release_where_its_update_was() {
         assert_eq!(named(&after, &["hold:"]), [("hold:pl:org.example.Plugin0".to_string(), update)], "{across}");
         assert_eq!(named(&after, &["plugin:", "pl-remove:", screen::HEADLINE]), named(&before, &["plugin:", "pl-remove:", screen::HEADLINE]), "{across}: no card moved");
         let said = words(&mut s);
-        assert!(said.contains(&"2 plugins are installed; 1 update is held back.".to_string()), "{across}: {said:?}");
+        assert!(said.contains(&"2 plugins are installed. 1 update is held back.".to_string()), "{across}: {said:?}");
         assert!(said.contains(&"Held back at version 1.0; version 1.2 is waiting.".to_string()), "{across}: {said:?}");
         let buttons = s.whole(settings()).buttons();
-        assert!(buttons.contains(&("Release Weather".to_string(), true)) && !buttons.iter().any(|(tip, _)| tip.starts_with("Update to")), "{across}: {buttons:?}");
+        assert!(buttons.contains(&("Allow updates for Weather".to_string(), true)) && !buttons.iter().any(|(tip, _)| tip.starts_with("Update to")), "{across}: {buttons:?}");
     }
 }

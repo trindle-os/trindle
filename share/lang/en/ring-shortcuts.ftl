@@ -61,7 +61,7 @@ ring-shortcuts-console = Switch to a text console
 # The keys that switch to a text console.
 ring-shortcuts-console-keys = Ctrl+Alt+F1 to F12
 # Words for the keys the screen reader takes while it is on.
-ring-shortcuts-reader-keys = The screen reader's own keys, while it is on
+ring-shortcuts-reader-keys = Keys for the screen reader while it's on
 # The keys the screen reader takes while it is on.
 ring-shortcuts-reader-keys-keys = Caps Lock, Insert
 # Words for a shortcut of the person's own that has no action Trindle can name.

@@ -37,7 +37,7 @@ ring-snooze-for-1-hour = 1 घंटे के लिए स्नूज़ क�
 ring-snooze-for-6-hours = 6 घंटे के लिए स्नूज़ करें
 
 # Tip and screen reader name of the snooze choice for the next morning.
-ring-snooze-for-next-morning = अगली सुबह तक स्नूज़ करें
+ring-snooze-for-next-morning = सुबह तक स्नूज़ करें
 
 # Tip of the button on the snooze page that goes back to the notification's message.
 ring-act-back = संदेश पर वापस जाएँ
@@ -109,7 +109,7 @@ ring-lid-nothing = कुछ नहीं
 ring-lid-shut-down = बंद करें
 
 # Reason the system lists beside Trindle's hold on the lid switch (shown by tools that list what stops sleep).
-ring-lid-reason = ढक्कन बंद करने पर वही होता है जो सेटिंग्स, पावर में चुना गया है
+ring-lid-reason = ढक्कन बंद करने पर क्या हो, यह आप सेटिंग्स में पावर के अंतर्गत चुन सकते हैं।
 
 # Notice at the foot of the screen for a few seconds when the magnifier starts.
 ring-magnify-hint = बड़ा करने के लिए कहीं भी दबाए रखें
@@ -124,13 +124,13 @@ ring-magnify-stop = बड़ा करना बंद करें
 ring-mic-off-tip = हर प्रोग्राम के लिए माइक्रोफ़ोन बंद करें
 
 # Tip of the switch in the ring that turns the microphone back on.
-ring-mic-on-tip = माइक्रोफ़ोन फिर से चालू करें
+ring-mic-on-tip = माइक्रोफ़ोन चालू करें
 
 # Line in the ring when something other than the person pressed the microphone switch on.
-ring-mic-own-press = माइक्रोफ़ोन केवल आपके अपने दबाने से ही फिर चालू हो सकता है।
+ring-mic-own-press = माइक्रोफ़ोन को केवल आप ही फिर चालू कर सकते हैं।
 
 # Line in the ring when the microphone switch could not be changed; the reason follows.
-ring-mic-not-changed = माइक्रोफ़ोन का स्विच बदला नहीं जा सका: { $why }
+ring-mic-not-changed = Trindle माइक्रोफ़ोन का स्विच बदल नहीं सका: { $why }
 
 # Notice when a notification was clicked and no program could be found for it.
 ring-goes-no-program = कोई प्रोग्राम नहीं मिला
@@ -148,7 +148,7 @@ ring-notes-copied = आपके सहायक के लिए कॉपी �
 ring-notes-name = सूचना
 
 # Said when a pinned notification has been held long enough and now follows the pointer.
-ring-notes-moving = हिल रहा है। छोड़ने के लिए हाथ हटाएँ, वापस रखने के लिए Escape दबाएँ।
+ring-notes-moving = सूचना को हिलाया जा रहा है। छोड़ने के लिए हाथ हटाएँ, या वापस रखने के लिए Escape दबाएँ।
 
 # Said when a pinned notification has been dropped or moved by keys.
 ring-notes-moved = हटा दिया गया
@@ -190,11 +190,14 @@ ring-plugin-needs = { $name } को आपकी अनुमति चाह�
 
 # Line under the notice that a plugin needs permission: none of the permissions it asks for are given.
 # SAFETY: needs a human review before it ships
-ring-plugin-cannot-work = यह अभी काम नहीं कर सकता: { $asks } में से 0 की अनुमति दी गई है।
+ring-plugin-cannot-work =
+    { $asks ->
+        [one] यह अभी काम नहीं कर सकता। इसने जो एक अनुमति माँगी है, वह आपने नहीं दी है।
+       *[other] यह अभी काम नहीं कर सकता। इसकी माँगी हुई { $asks } अनुमतियों में से आपने कोई नहीं दी है।
+    }
 
 # Said to a screen reader when a notification was copied; $said is what the circle said.
 ring-copied-said = कॉपी हो गया। { $said }
-
 
 
 # Title of the notice for ordinary programs that have just reached the network; the program names are under it, and Allow means this is fine.
@@ -207,7 +210,9 @@ ring-outside-files = आपकी फ़ाइलें खोल रखी ह�
 ring-outside-body =
     { $more ->
         [0] { $names }
-        [one] { $names } और { $more } अन्य
+        [one] { $names } और 1 अन्य
        *[other] { $names } और { $more } अन्य
     }
 
+# Said under the magnifier when the screen picture it took has the wrong size.
+ring-magnify-wrong-size = तस्वीर का आकार गलत था।

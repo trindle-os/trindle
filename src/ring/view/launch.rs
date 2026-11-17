@@ -72,7 +72,6 @@ impl Face {
 
         if let (Some(ws), Some(w)) = (self.windows.clone(), self.windows_of(app).last().cloned()) {
             ws.activate(&w);
-            store::record_use(&app.id);
             self.close();
             return;
         }
@@ -84,7 +83,6 @@ impl Face {
             return self.open_path(&app.id);
         }
         if apps::launch(app, &[]) {
-            store::record_use(&app.id);
             self.close();
         } else {
             self.say(t!("ring-could-not-open"), REFUSED_SECONDS);

@@ -8,7 +8,6 @@ const ONE: &[(&[&str], &str)] = &[
     (&["trindle-activity"], "activity/mod.rs"),
     (&["trindle-drives", "trindle-disks"], "disks/mod.rs"),
     (&["trindle-text"], "text/mod.rs"),
-    (&["trindle-welcome"], "welcome/mod.rs"),
     (&["trindle-report"], "report/window.rs"),
     (&["trindle-eye-dropper"], "screenshot/colours.rs"),
 ];

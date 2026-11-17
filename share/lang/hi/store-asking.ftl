@@ -4,13 +4,13 @@
 store-ask-title = { $app } किसका उपयोग कर सकता है
 
 # Under the list of switches in the permission window when one or more is on already.
-store-ask-above-on = हर स्विच दिखाता है कि अभी क्या अनुमत है। आप इन्हें बाद में ऐप्स, अनुमतियाँ में बदल सकते हैं।
+store-ask-above-on = आप इन्हें बाद में सेटिंग, अनुमतियाँ पेज में बदल सकते हैं।
 
 # Under the list of switches in the permission window when all start off.
-store-ask-above-off = हर स्विच तब तक बंद रहता है जब तक आप उसे दबाते नहीं। आप इन्हें बाद में ऐप्स, अनुमतियाँ में बदल सकते हैं।
+store-ask-above-off = अभी किसी चीज़ की अनुमति नहीं है। आप इन्हें बाद में सेटिंग, अनुमतियाँ पेज में बदल सकते हैं।
 
 # Note under the list of switches, since a .deb names nothing it wants.
-store-ask-worked-out = ऐप से ही निकाला गया
+store-ask-worked-out = ऐप जो माँगता है उसके आधार पर
 
 # SAFETY: needs a human review before it ships
 # Tip of the button that turns every switch on.

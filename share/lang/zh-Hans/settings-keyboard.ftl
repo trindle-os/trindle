@@ -46,7 +46,7 @@ settings-keyboard-no-list-about = 请用以下命令安装：sudo apt install xk
 # Sentence at the end of the top words when keys or buttons have been changed; { $n } is how many.
 settings-keyboard-top-changed =
     { $n ->
-       *[other] 已更改 { $n } 个按键和按钮。
+       *[other] 你更改了 { $n } 个按键和按钮。
     }
 
 # Title of the card with the keyboard layout.
@@ -66,9 +66,6 @@ settings-keyboard-none = 无
 
 # Heading of the line, and the name of its list, for a second layout.
 settings-keyboard-switch-to = 切换到
-
-# Small words under the second layout line.
-settings-keyboard-switch-to-about = 同时按 Alt 和 Shift 可在两者之间切换。
 
 # Words behind the i of the layout card.
 settings-keyboard-layout-about = 每个键输入什么由布局决定，也可以选择它的变体，例如没有死键的变体。同时按 Alt 和 Shift 可切换到第二种布局，再按一次则切换回来。所有更改立即生效。
@@ -92,16 +89,10 @@ settings-keyboard-caps-backspace = Backspace
 settings-keyboard-caps-nothing = 无
 
 # Heading of the line, and the name of its list, for what Caps Lock acts as.
-settings-keyboard-caps-acts-as = Caps Lock 键的作用
-
-# Small words under that line.
-settings-keyboard-caps-acts-as-about = 另一个 Ctrl、Escape 等。
+settings-keyboard-caps-acts-as = 把 Caps Lock 用作
 
 # Heading of the line, and name of its switch, for the keyboard button in the ring.
 settings-keyboard-ring-button = 圆环中的键盘按钮
-
-# Small words under that line.
-settings-keyboard-ring-button-about = 在屏幕上显示键盘。
 
 # Title of the card with Caps Lock and the ring keyboard button.
 settings-keyboard-other-title = 其他按键
@@ -111,7 +102,7 @@ settings-keyboard-other-about = Caps Lock 可以改作其他按键，例如另�
 
 # Words under a line when a press that was not the person's own changed nothing.
 # SAFETY: needs a human review before it ships
-settings-keyboard-only-yours = 只有您本人的按键才能更改这一项。
+settings-keyboard-only-yours = 程序无法更改这一项。
 
 # Words under the change a key line while it waits for a key or mouse button to be pressed.
 settings-keyboard-press-now = 请按下要更改的按键或鼠标按钮。
@@ -120,38 +111,35 @@ settings-keyboard-press-now = 请按下要更改的按键或鼠标按钮。
 settings-keyboard-nothing-pressed = 没有按下任何键，因此没有添加任何内容。
 
 # Words under a changed key's line asking for what it becomes; the examples are names a person types.
-settings-keyboard-type-it = 输入它要变成什么，例如 Escape、Ctrl+C 或 Nothing。
+settings-keyboard-type-it = 输入要改用的按键，例如 Escape 或 Ctrl+C，或输入 Nothing。
 
 # Words under the change a key line when the press could not be told apart from another.
-settings-keyboard-not-told = 无法区分这次按键。请改为从列表中选择该键。
+settings-keyboard-not-told = Trindle 无法判断是哪个键。请改为从列表中选择该键。
 
 # Choice in the list of keyboards and mice: the change applies on every one.
 settings-keyboard-every-device = 所有键盘和鼠标
 
 # Small words under a ready-made swap that the person's own change overrides.
-settings-keyboard-swap-over = 下方也有更改，将采用下方的更改。
+settings-keyboard-swap-over = 你已在下方自行更改过这个键，将采用该更改。
 
 # Name of the list of keyboards for one changed key; { $key } is the key.
-settings-keyboard-which-device = { $key } 在哪个键盘或鼠标上更改
+settings-keyboard-which-device = 在以下设备上更改 { $key }
 
 # Name of the box for what a changed key becomes; { $key } is the key.
-settings-keyboard-becomes = { $key } 变成什么
+settings-keyboard-becomes = 将 { $key } 改为
 
 # Name of the bin button that takes a change away.
 # SAFETY: needs a human review before it ships
-settings-keyboard-take-away = 撤销这项更改
-
-# Small words under a changed key's line when it changes on every keyboard and mouse.
-settings-keyboard-every-device-about = 适用于所有键盘和鼠标。
+settings-keyboard-take-away = 移除这项更改
 
 # Small words under a line of a file that was not understood; { $n } is its number and { $why } the reason.
-settings-keyboard-line-unused = 第 { $n } 行未被使用：{ $why }
+settings-keyboard-line-unused = 第 { $n } 行已被忽略：{ $why }
 
 # Heading of the line shown when the file of changed keys could not be read.
 settings-keyboard-keys-unread = 无法读取已更改的按键
 
 # Small words under that line; { $why } is the reason.
-settings-keyboard-keys-unread-about = 在能读取之前，所有按键保持原样：{ $why }。
+settings-keyboard-keys-unread-about = 在 Trindle 能读取这些更改之前，你的按键都照常工作。{ $why }
 
 # Name of the list from which a key or button to change is chosen.
 settings-keyboard-keys-list = 选择要更改的按键或按钮
@@ -159,14 +147,11 @@ settings-keyboard-keys-list = 选择要更改的按键或按钮
 # Name of the button that waits for a key or button to be pressed.
 settings-keyboard-keys-press = 按下要更改的按键或按钮
 
-# Small words under the change a key line.
-settings-keyboard-keys-add-about = 直接按下它，或从列表中选择。
-
 # Heading of the line for changing a key or button.
 settings-keyboard-keys-add = 更改按键或按钮
 
 # Words under the change a key line when the key chosen is already changed; { $key } is the key.
-settings-keyboard-already = { $key } 已在下方更改过。
+settings-keyboard-already = 你已经更改过 { $key }。
 
 # Title of the card with changed keys and buttons.
 settings-keyboard-keys-title = 按键和按钮
@@ -189,30 +174,19 @@ settings-keyboard-swap-alt-super = 交换 Alt 和 Super（与 Mac 键盘一致�
 # Name of a ready-made swap of keys, as the heading and switch name of its line.
 settings-keyboard-swap-side-copy = 鼠标侧键用于复制和粘贴
 
-# Small words under a keyboard or mouse a program made, when it counts as the person.
-# SAFETY: needs a human review before it ships
-settings-keyboard-made-yes = 视同您本人，就像插上的实体键盘一样。
-
-# Small words under a keyboard or mouse a program made, when it does not count as the person.
-# SAFETY: needs a human review before it ships
-settings-keyboard-made-no = 可以输入和操作，但不能按受保护的按钮。
-
 # Name of the switch that lets a program's keyboard or mouse count as the person; { $name } is its name.
 # SAFETY: needs a human review before it ships
-settings-keyboard-made-switch = 将 { $name } 视同您本人
+settings-keyboard-made-switch = 信任 { $name }
 
 # Heading of the line shown when no program has made a keyboard or mouse.
 settings-keyboard-made-none = 目前没有
-
-# Small words under that line.
-settings-keyboard-made-none-about = 程序创建的键盘或鼠标会显示在这里，您可以选择是否将其视同您本人。
 
 # Title of the card about keyboards and mice made by programs.
 settings-keyboard-made-title = 程序创建的键盘和鼠标
 
 # Words behind the i of that card.
 # SAFETY: needs a human review before it ships
-settings-keyboard-made-about = 按键重映射工具和游戏启动器可以创建自己的键盘或鼠标。它们的按键和点击仍可输入和操作，但不能按受保护的按钮（如“关机”或“允许”），也不能在需要您本人回答的提问中输入。在这里打开某一项，即可将其视同您本人。
+settings-keyboard-made-about = 按键重映射工具和游戏启动器可以创建自己的键盘或鼠标。它们的按键和点击仍可输入和操作，但不能按受保护的按钮（如“关机”或“允许”），也不能在需要你本人回答的提问中输入。在这里打开某一项，即可将其视同你本人。
 
 # Name of a game controller that has no name; { $vendor } and { $product } are numbers that identify it.
 settings-keyboard-pad-unnamed = 手柄 { $vendor }:{ $product }
@@ -222,9 +196,6 @@ settings-keyboard-pad-swap-switch = { $title } 上的“{ $name }”
 
 # Name of the box for what a controller's button does; { $title } is the controller.
 settings-keyboard-pad-does = { $title } 的作用
-
-# Small words under a controller's changed button; the words Button and what it becomes stand for the two sides of the line typed.
-settings-keyboard-pad-type = 按“按钮 = 变成什么”的格式输入。
 
 # Name of a ready-made swap of a game controller's buttons.
 settings-keyboard-pad-swap-a-b = 交换 A 和 B
@@ -239,10 +210,7 @@ settings-keyboard-pad-swap-stick = 反转右摇杆的上下方向
 settings-keyboard-plugin-title = 插件快捷键
 
 # Small words under a plugin shortcut that is not in use; { $plugin } is the plugin and { $why } the reason.
-settings-keyboard-plugin-refused = { $plugin }。未使用：{ $why }
-
-# Small words under a plugin shortcut; { $plugin } is the plugin. The example is keys a person types.
-settings-keyboard-plugin-about = { $plugin }。请输入按键，例如 Ctrl+Alt+S；留空表示不设置。
+settings-keyboard-plugin-refused = { $plugin } 未被使用：{ $why }
 
 # Name of the box for a plugin shortcut's keys; { $label } is the shortcut.
 settings-keyboard-plugin-keys-name = { $label } 的按键
@@ -265,50 +233,29 @@ settings-keyboard-pointer-speed = 指针速度
 # Heading and slider name for the scroll speed of the wheel or the touchpad.
 settings-keyboard-scroll-speed = 滚动速度
 
-# Small words under the wheel's scroll speed.
-settings-keyboard-scroll-wheel-about = 滚轮每转一格页面移动多远。
-
 # Heading of the natural scrolling switch (the page follows the wheel or fingers).
 settings-keyboard-natural = 自然滚动
 
-# Small words under natural scrolling for the mouse wheel.
-settings-keyboard-natural-wheel-about = 页面随滚轮移动，就像在手机上一样。
-
 # Heading of the switch that swaps the left and right mouse buttons.
 settings-keyboard-left-handed = 左手模式
-
-# Small words under that switch.
-settings-keyboard-left-handed-about = 对调左右按钮。
 
 # Heading and switch name for the clicking helper.
 settings-keyboard-clicker = 点击辅助
 
 # Small words under the clicking helper line.
-settings-keyboard-clicker-about = 悬停点击器或开关点击器发出的点击视同您本人的点击。
+settings-keyboard-clicker-about = 悬停点击器或开关点击器发出的点击视同你本人的点击。
 
 # Title of the touchpad card.
 settings-keyboard-touchpad-title = 触摸板
 
 # Words behind the i of the touchpad card.
-settings-keyboard-touchpad-about = 滚动速度是双指滑动时页面移动多远。轻点即点击会把轻轻一点当作一次点击。开启自然滚动后，页面随手指的方向移动，就像在手机上一样。打字时关闭可避免手掌擦过触摸板时在您打字期间移动指针。
-
-# Small words under the touchpad's scroll speed.
-settings-keyboard-scroll-touchpad-about = 双指滑动时页面移动多远。
+settings-keyboard-touchpad-about = 滚动速度是双指滑动时页面移动多远。轻点即点击会把轻轻一点当作一次点击。开启自然滚动后，页面随手指的方向移动，就像在手机上一样。打字时关闭可避免手掌擦过触摸板时在你打字期间移动指针。
 
 # Heading of the switch that makes a light tap count as a click.
 settings-keyboard-tap = 轻点即点击
 
-# Small words under that switch.
-settings-keyboard-tap-about = 轻轻一点就算一次点击。
-
-# Small words under natural scrolling for the touchpad.
-settings-keyboard-natural-touchpad-about = 页面随手指移动，就像在手机上一样。
-
 # Heading of the switch that stops the touchpad moving the pointer while typing.
 settings-keyboard-quiet = 打字时关闭
-
-# Small words under that switch.
-settings-keyboard-quiet-about = 手掌擦过时指针保持不动。
 
 # Choice above a scroll speed slider: slower than normal.
 settings-keyboard-pace-slower = 较慢
@@ -326,21 +273,17 @@ settings-keyboard-usb-title = USB 端口
 settings-keyboard-usb-about = 当某个 USB 端口无法启动时，Trindle 会将其关闭再打开一次重试，每个端口最多重试一次。
 
 # Red words under the keyboard button switch when it could not be kept and its mark could not be taken away again; { $error } is the first problem and { $undo } the second.
-settings-keyboard-button-and-mark = { $error }；并且无法撤销它的标记：{ $undo }
-
+settings-keyboard-button-and-mark = { $error } Trindle 也无法撤销这项更改：{ $undo }
 
 
 # Title of the card with the keys that take a screenshot and show the shortcut list.
-settings-keyboard-shortcuts-title = 截图和快捷键列表
+settings-keyboard-shortcuts-title = 截图、报告和快捷键
 
 # Name of the shortcut and its line that starts the screenshot.
 settings-keyboard-shortcuts-screenshot = 截图
 
 # Name of the shortcut and its line that shows every shortcut in a list.
 settings-keyboard-shortcuts-list = 显示快捷键列表
-
-# Small words under each of the two shortcuts.
-settings-keyboard-shortcuts-about = 输入按键，留空则表示没有。
 
 # Tip of the round button that starts the screenshot now.
 settings-keyboard-shortcuts-screenshot-tip = 立即截图
@@ -352,13 +295,10 @@ settings-keyboard-shortcuts-list-tip = 立即显示列表
 settings-keyboard-restart-title = 重启桌面
 
 # Name of the shortcut and its line that restarts the ring and the helper parts only.
-settings-keyboard-restart-parts = 重启圆环和辅助部分
+settings-keyboard-restart-parts = 重启圆环和辅助程序
 
 # Name of the shortcut and its line that restarts everything, the compositor too.
 settings-keyboard-restart-all = 全部重启
-
-# Small words under each of the two restart shortcuts. The example is keys a person types.
-settings-keyboard-restart-about = 输入按键，例如 Ctrl+Alt+Escape，留空则表示没有。
 
 # Name of the box for a restart shortcut's keys; { $label } is the shortcut.
 settings-keyboard-restart-keys-name = { $label }的按键
@@ -367,7 +307,7 @@ settings-keyboard-restart-keys-name = { $label }的按键
 settings-keyboard-restart-parts-tip = 立即重启。已打开的窗口保持原样。
 
 # Tip of the round button that asks whether to restart everything now.
-settings-keyboard-restart-all-tip = 全部重启。会先询问。
+settings-keyboard-restart-all-tip = 先询问，然后全部重启
 
 # Said under the line after the parts were restarted.
 settings-keyboard-restart-parts-done = 已重启
@@ -385,3 +325,5 @@ settings-keyboard-shortcuts-report = 报告问题
 # Tip of the round button that opens the report window now.
 settings-keyboard-shortcuts-report-tip = 立即报告问题
 
+
+settings-keyboard-keys-not-saved-unread = 未保存。已更改按键的文件无法读取，所以保持原样。

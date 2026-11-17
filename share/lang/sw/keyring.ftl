@@ -29,15 +29,15 @@ keyring-checking = Inakagua…
 
 # Under the title when no keyring exists yet and a program wants to keep a password.
 # SAFETY: needs a human review before it ships
-keyring-why-none = Programu inataka kuhifadhi nenosiri salama. Andika nenosiri lako la kuingia ili kuanzisha kihifadhi funguo; kuanzia sasa hujifungua chenyewe unapoingia.
+keyring-why-none = Programu inataka kuhifadhi nenosiri salama. Andika nenosiri lako la kuingia ili kuanzisha kihifadhi funguo. Kuanzia sasa, kitajifungua chenyewe unapoingia.
 
 # Under the title when the keyring was made with a different password from the login one.
 # SAFETY: needs a human review before it ships
-keyring-why-old = Nenosiri lako la kuingia si lile ambalo kihifadhi funguo hiki kilitengenezwa nalo. Andika la zamani mara moja; baada ya hapo hujifungua chenyewe unapoingia.
+keyring-why-old = Nenosiri lako la kuingia si lile ambalo kihifadhi funguo hiki kilitengenezwa nalo. Andika la zamani mara moja. Baada ya hapo, kihifadhi funguo kitajifungua chenyewe unapoingia.
 
 # Under the title when no password was typed at log in, for example with a fingerprint or automatic log in.
 # SAFETY: needs a human review before it ships
-keyring-why-no-login = Hakuna nenosiri lililoandikwa wakati wa kuingia (alama ya kidole au kuingia kiotomatiki), kwa hiyo kihifadhi funguo hakikuweza kujifungua chenyewe. Andika nenosiri lako la kuingia.
+keyring-why-no-login = Hukuandika nenosiri ulipoingia (ulitumia alama ya kidole au kuingia kiotomatiki), kwa hiyo kihifadhi funguo hakikuweza kujifungua chenyewe. Andika nenosiri lako la kuingia.
 
 # Under the title when a program asks for a saved password and the keyring is shut.
 # SAFETY: needs a human review before it ships
@@ -51,7 +51,7 @@ keyring-stopped = Kihifadhi funguo kimesimama
 keyring-not-the-keyring-password = Hilo si nenosiri la kihifadhi funguo
 
 # Shown under the box when the keyring file is damaged and has been left as it is.
-keyring-damaged-left = Faili ya kihifadhi funguo imeharibika, kwa hiyo imeachwa kama ilivyo
+keyring-damaged-left = Faili ya kihifadhi funguo imeharibika, kwa hiyo Trindle haijaibadilisha
 
 # Shown under the box when the password is not the person's login password.
 # SAFETY: needs a human review before it ships
@@ -62,7 +62,7 @@ keyring-not-login-password = Hilo si nenosiri lako la kuingia
 keyring-not-your-password = Hilo si nenosiri lako.
 
 # Shown in Settings when the old keyring is still running after its time to stop has run out.
-keyring-would-not-stop = Kihifadhi funguo cha zamani hakikukubali kusimama.
+keyring-would-not-stop = Kihifadhi funguo cha zamani hakikusimama.
 
 # Said when the keyring is locked and cannot be used.
 # SAFETY: needs a human review before it ships
@@ -73,7 +73,7 @@ keyring-error-locked = Kihifadhi funguo kimefungwa
 keyring-error-wrong-password = Nenosiri hilo halifungui kihifadhi funguo
 
 # Said when the collection or item asked for is not there.
-keyring-error-no-such = Hakuna mkusanyiko au kipengee kama hicho
+keyring-error-no-such = Kipengee hicho hakipo
 
 # Said when the keyring file cannot be read as a keyring.
 keyring-error-damaged = Faili ya kihifadhi funguo imeharibika
@@ -83,8 +83,10 @@ keyring-error-damaged = Faili ya kihifadhi funguo imeharibika
 keyring-asked-by = Imeombwa na { $program }
 
 # Told to a program that asked while the keyring was taking over from the one before and many calls already waited.
-keyring-starting = Pete ya funguo inaanza. Omba tena.
+keyring-starting = Kihifadhi funguo kinaanza. Jaribu tena.
 
 # The program in "Asked for by", for a program on the bus: $name is the name it gives itself, which anything can claim.
 keyring-named-itself = programu inayojiita { $name }
 
+# Said to a program that gave a password with letters the keyring can't read, so no keyring is made with it.
+keyring-password-unreadable = Nenosiri hilo lina herufi ambazo kihifadhi funguo hakiwezi kusoma

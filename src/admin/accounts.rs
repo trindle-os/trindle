@@ -68,10 +68,11 @@ pub(super) fn regular_user(name: &str) -> Outcome {
     Ok(())
 }
 
-pub(super) fn read_password() -> Result<String, String> {
-    let mut line = String::new();
+pub(super) fn read_password() -> Result<zeroize::Zeroizing<String>, String> {
+    use zeroize::Zeroizing;
+    let mut line = Zeroizing::new(String::new());
     std::io::stdin().read_line(&mut line).map_err(|_| t!("admin-password-none"))?;
-    let pw = line.strip_suffix('\n').unwrap_or(&line).to_string();
+    let pw = Zeroizing::new(line.strip_suffix('\n').unwrap_or(&line).to_string());
     if line.is_empty() {
         return Err(t!("admin-password-none").into());
     }
@@ -85,7 +86,7 @@ pub(super) fn read_password() -> Result<String, String> {
 }
 
 fn set_password(name: &str, pw: &str) -> Outcome {
-    run(&["chpasswd"], Some(&format!("{name}:{pw}\n")))
+    run(&["chpasswd"], Some(&zeroize::Zeroizing::new(format!("{name}:{pw}\n"))))
 }
 
 pub(super) fn add(args: &[String]) -> Outcome {
@@ -200,11 +201,11 @@ mod tests {
         let s = StandIn::all_well("face");
         s.stuck(&format!("{}/john.png", super::FACES));
         let said = super::set_face("john", true, &mut std::io::empty()).unwrap_err();
-        assert!(said.contains("could not be removed"), "{said}");
+        assert!(said.contains(&crate::common::more::fixed_part("admin-file-not-removed", &["path", "why"])), "{said}");
 
         assert!(super::set_face("jane", true, &mut std::io::empty()).is_ok());
         let said = super::delete_checked("john").unwrap_err();
-        assert!(said.starts_with("john was deleted, but their picture is still kept for the login screen"), "{said}");
+        assert!(said.starts_with(&crate::common::more::fixed_part("admin-delete-picture-kept", &["name", "why"])) && said.contains("john"), "{said}");
         assert!(s.ran().contains(&"deluser --remove-home john".to_string()));
     }
 }

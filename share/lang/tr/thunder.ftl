@@ -11,13 +11,13 @@ thunder-let-connect = { $name } bağlansın mı?
 thunder-no-name = Bir Thunderbolt aygıtı
 
 # Under the device's name when its maker did not say who it is.
-thunder-no-maker = Üreticisi kim olduğunu söylemedi.
+thunder-no-maker = Üreticisi bilinmiyor.
 
 # Under the device's name: who made it. $maker is the maker's name.
 thunder-made-by = Üreticisi: { $maker }.
 
 # Warning under the question when the device gives the name of one allowed before, but cannot be proved to be it.
-thunder-doubt = Daha önce izin verdiğiniz bir aygıtın adını veriyor, ancak o aygıt olduğu kanıtlanamadı.
+thunder-doubt = Daha önce izin verdiğiniz bir aygıtla aynı ada sahip, ancak Trindle o aygıt olup olmadığını doğrulayamadı.
 
 # SAFETY: needs a human review before it ships
 # Button that refuses the device.
@@ -35,7 +35,7 @@ thunder-always = Her zaman izin ver
 thunder-not-connected = Bağlanamadı.
 
 # Red words under the question when it could not be connected after it was unplugged and plugged in again.
-thunder-unplug = Bağlanamadı. Bir kez daha denemek için çıkarıp yeniden takın.
+thunder-unplug = Trindle bağlayamadı. Bir kez daha denemek için çıkarıp yeniden takın.
 
 # Red words under the question when the part of Trindle that answers for the guard is not running.
-thunder-guard-silent = Trindle'ın Thunderbolt koruyucusu şu an yanıt vermiyor.
+thunder-guard-silent = Trindle'ın Thunderbolt koruması yanıt vermiyor.

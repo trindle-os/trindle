@@ -7,10 +7,10 @@ settings-plugins-title = إضافاتك
 settings-plugins-keywords = plugins add-ons extensions installed remove settings إضافات ملحقات امتدادات مثبتة إزالة إعدادات
 
 # Help line at the foot of the Your plugins page.
-settings-plugins-help = تضيف الإضافات إلى Trindle: أيقونة في الحلقة أو إعدادات هنا أو إشعارات أو شيئًا يعمل عند تسجيل الدخول. تعمل كل إضافة في عزلة ولا يُسمح لها بشيء حتى تسمح لها في الأذونات، وزر نهاية عنوان هذه الصفحة يفتحها. تحمل بطاقة كل إضافة هنا إعداداتها؛ وسلة المهملات في البطاقة، إذا ضُغطت مرتين، تزيل الإضافة.
+settings-plugins-help = تضيف الإضافات إلى Trindle. يمكن للإضافة أن تضيف أيقونة إلى الحلقة، أو إعدادات هنا، أو إشعارات، أو شيئًا يبدأ عند تسجيل الدخول. تعمل كل إضافة في صندوقها الخاص ولا تستطيع استخدام أي شيء حتى تسمح لها في الأذونات. الزر بجانب عنوان الصفحة يفتح الأذونات. لإزالة إضافة، اضغط على سلة المهملات في بطاقتها مرتين.
 
 # Red words when the window that asks what a plugin may use could not be opened.
-settings-plugins-window-failed = تعذّر فتح النافذة التي تسأل عمّا يجوز لها استخدامه.
+settings-plugins-window-failed = تعذّر على Trindle فتح النافذة التي تسأل عمّا يجوز للإضافة استخدامه.
 
 # Under About it: the plugin's version number is { $v }.
 settings-plugins-version = الإصدار { $v }.
@@ -20,26 +20,22 @@ settings-plugins-version-settled = الإصدار { $v }. { $settled }
 
 # Help text of a plugin's card when it asks for nothing: the plugin's name is { $name }.
 # SAFETY: needs a human review before it ships
-settings-plugins-asks-nothing = { $name } لا يطلب شيئًا، لذا يعمل في عزلة دون أي إذن.
+settings-plugins-asks-nothing = { $name } لا يطلب شيئًا، لذا يعمل في صندوقه الخاص دون أي إذن.
 
 # Help text of a plugin's card: its name is { $name }, { $list } is what it asks for, { $allowed } of { $asks } are allowed.
 # SAFETY: needs a human review before it ships
 settings-plugins-asks-for =
     { $asks ->
-        [zero] { $name } يطلب { $list }؛ المسموح { $allowed } من { $asks }. يعمل في عزلة، بما تسمح به فقط.
-        [one] { $name } يطلب { $list }؛ المسموح { $allowed } من { $asks }. يعمل في عزلة، بما تسمح به فقط.
-        [two] { $name } يطلب { $list }؛ المسموح { $allowed } من { $asks }. يعمل في عزلة، بما تسمح به فقط.
-        [few] { $name } يطلب { $list }؛ المسموح { $allowed } من { $asks }. يعمل في عزلة، بما تسمح به فقط.
-        [many] { $name } يطلب { $list }؛ المسموح { $allowed } من { $asks }. يعمل في عزلة، بما تسمح به فقط.
-       *[other] { $name } يطلب { $list }؛ المسموح { $allowed } من { $asks }. يعمل في عزلة، بما تسمح به فقط.
+        [zero] { $name } يطلب { $list }. سمحت بـ { $allowed } من { $asks }. يعمل في صندوقه الخاص بما تسمح به فقط.
+        [one] { $name } يطلب { $list }. سمحت بـ { $allowed } من { $asks }. يعمل في صندوقه الخاص بما تسمح به فقط.
+        [two] { $name } يطلب { $list }. سمحت بـ { $allowed } من { $asks }. يعمل في صندوقه الخاص بما تسمح به فقط.
+        [few] { $name } يطلب { $list }. سمحت بـ { $allowed } من { $asks }. يعمل في صندوقه الخاص بما تسمح به فقط.
+        [many] { $name } يطلب { $list }. سمحت بـ { $allowed } من { $asks }. يعمل في صندوقه الخاص بما تسمح به فقط.
+       *[other] { $name } يطلب { $list }. سمحت بـ { $allowed } من { $asks }. يعمل في صندوقه الخاص بما تسمح به فقط.
     }
 
-# Under the line that tells a plugin needs more allowed, beside its Allow button.
-# SAFETY: needs a human review before it ships
-settings-plugins-needs-more = يعرض زر السماح كل ما تطلبه الإضافة، مع مفتاح لكل منها.
-
 # Heading of the line about a plugin on its card.
-settings-plugins-about-it = نبذة عنها
+settings-plugins-about-it = نبذة
 
 # Tip of the button that changes what a plugin may use.
 # SAFETY: needs a human review before it ships
@@ -79,14 +75,11 @@ settings-plugins-group = الإضافات
 # Heading of the line shown when no plugin is installed.
 settings-plugins-none = لا شيء مثبت
 
-# Under the None installed heading.
-settings-plugins-none-sub = في التطبيقات إضافات يمكنك إضافتها.
-
 # Tip of the button at the end of the page's title that opens the Permissions page.
 settings-plugins-open-permissions = افتح الأذونات
 
 # Said at the top of a plugin's card while its service has not yet answered; the plugin's name is {$name}.
-settings-plugins-rows-asking = جارٍ سؤال { $name }.
+settings-plugins-rows-asking = جارٍ سؤال { $name }…
 
 # Said at the top of a plugin's card, and in red under a row, when its service does not answer; the plugin's name is {$name}.
 settings-plugins-rows-silent = { $name } لا يستجيب. ربما توقفت خدمته.
@@ -102,4 +95,3 @@ settings-plugins-rows-failed = تعذّر على { $name } فعل ذلك.
 
 # Red words under a row when the change failed; the plugin's name is {$name} and the reason it gave is {$why}.
 settings-plugins-rows-failed-why = تعذّر على { $name } فعل ذلك: { $why }.
-

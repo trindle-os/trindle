@@ -111,7 +111,7 @@ ring-lid-nothing = Nada
 ring-lid-shut-down = Desligar
 
 # Reason the system lists beside Trindle's hold on the lid switch (shown by tools that list what stops sleep).
-ring-lid-reason = Fechar a tampa faz o que Configurações, Energia define
+ring-lid-reason = Você pode escolher o que acontece ao fechar a tampa em Configurações, em Energia.
 
 # Notice at the foot of the screen for a few seconds when the magnifier starts.
 ring-magnify-hint = Segure em qualquer lugar para ampliar
@@ -128,14 +128,14 @@ ring-mic-off-tip = Desligar o microfone para todos os programas
 
 # SAFETY: needs a human review before it ships
 # Tip of the switch in the ring that turns the microphone back on.
-ring-mic-on-tip = Ligar o microfone novamente
+ring-mic-on-tip = Ligar o microfone
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when something other than the person pressed the microphone switch on.
-ring-mic-own-press = Só um toque seu pode ligar o microfone novamente.
+ring-mic-own-press = Só você pode ligar o microfone novamente.
 
 # Line in the ring when the microphone switch could not be changed; the reason follows.
-ring-mic-not-changed = Não foi possível mudar o interruptor do microfone: { $why }
+ring-mic-not-changed = O Trindle não conseguiu mudar o interruptor do microfone: { $why }
 
 # Notice when a notification was clicked and no program could be found for it.
 ring-goes-no-program = Nenhum programa encontrado
@@ -153,7 +153,7 @@ ring-notes-copied = Copiado para o seu assistente
 ring-notes-name = Notificação
 
 # Said when a pinned notification has been held long enough and now follows the pointer.
-ring-notes-moving = Movendo. Solte para largar, Escape para devolver.
+ring-notes-moving = Movendo a notificação. Solte para largá-la, ou aperte Escape para colocá-la de volta.
 
 # Said when a pinned notification has been dropped or moved by keys.
 ring-notes-moved = Movida
@@ -196,7 +196,11 @@ ring-plugin-needs = { $name } precisa da sua permissão
 
 # SAFETY: needs a human review before it ships
 # Line under the notice that a plugin needs permission: none of the permissions it asks for are given.
-ring-plugin-cannot-work = Ainda não pode funcionar: 0 de { $asks } permitidas.
+ring-plugin-cannot-work =
+    { $asks ->
+        [one] Ainda não pode funcionar. Você não permitiu a única permissão que ele pede.
+       *[other] Ainda não pode funcionar. Você não permitiu nenhuma das { $asks } permissões que ele pede.
+    }
 
 # Said to a screen reader when a notification was copied; $said is what the circle said.
 ring-copied-said = Copiado. { $said }
@@ -213,8 +217,9 @@ ring-outside-files = Está com seus arquivos abertos
 ring-outside-body =
     { $more ->
         [0] { $names }
-        [one] { $names } e mais { $more }
-        [many] { $names } e mais { $more }
+        [one] { $names } e mais 1
        *[other] { $names } e mais { $more }
     }
 
+# Said under the magnifier when the screen picture it took has the wrong size.
+ring-magnify-wrong-size = A imagem tinha o tamanho errado.

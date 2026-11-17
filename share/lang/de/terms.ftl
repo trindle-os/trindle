@@ -5,5 +5,5 @@
 terms-accept = Ich stimme der [EULA](eula) zu
 
 # In the foot, while the box is not ticked, saying why the button beside it is off.
-terms-needed = Setze den Haken, um fortzufahren
+terms-needed = Zustimmung erforderlich
 

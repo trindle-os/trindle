@@ -2,11 +2,11 @@
 
 use std::time::Duration;
 
-use crate::common::run::{admin_error, admin_helper, capture};
+use crate::common::run::{self, admin_error, capture};
 use crate::common::home_snapshots::{self, keep_words, Standing, KEEP_CHOICES};
 use crate::common::snapshot_title;
 use crate::common::snapshots::{self, Snapshot};
-use crate::settings::ui::{confirm, dropdown, group, headline, job, line, no_more, on, page, Kit, Msg, Page};
+use crate::settings::ui::{admin_run, admin_step, confirm, dropdown, group, headline, job, line, no_more, on, page, Kit, Msg, Page};
 use crate::toolkit::t;
 use crate::toolkit::widget::{button, switch, Node};
 
@@ -66,7 +66,7 @@ fn confirm_job(kit: &Kit, key: &str, icon: &str, name: &'static str, f: impl Fn(
     if kit.dials.contains_key(key) {
         job(kit, key, icon, name, on::<Snapshots>(|_, _| {}))
     } else {
-        confirm::<Snapshots>(kit, key, icon, name, f)
+        confirm::<Snapshots>(key, icon, name, f)
     }
 }
 
@@ -95,7 +95,7 @@ pub struct Snapshots {
 }
 
 impl Snapshots {
-    fn draw(&mut self, kit: &mut Kit) {
+    fn read(&mut self, kit: &mut Kit) {
         let back = kit.then::<Snapshots, (bool, String, String)>(|me, _, (ok, out, err)| {
             me.list = Some(if ok { Ok(snapshots::parse_list(&out)) } else { Err(admin_error(&err)) });
         });
@@ -104,55 +104,63 @@ impl Snapshots {
 
     fn take(&mut self, kit: &mut Kit) {
         kit.start("take", t!("settings-snap-taking")).expect(5.0);
-        let back = kit.then::<Snapshots, (bool, String)>(|me, k, (ok, err)| {
-            k.finish("take", ok, "");
-            if ok {
+        let back = kit.then::<Snapshots, Result<(), String>>(|me, k, done| {
+            k.finish("take", done.is_ok(), "");
+            match done {
 
-                me.draw(k);
-            } else {
-                k.say("take", &admin_error(&err), false, false);
+                Ok(()) => me.read(k),
+                Err(why) => k.say("take", &why, false, false),
             }
         });
-        capture(&["pkexec", &admin_helper(), "snapshot-create", "Taken in Settings"], None, move |ok, _, err| back((ok, err)));
+        admin_run(&["snapshot-create", ""], back);
     }
 
     fn free(&mut self, kit: &mut Kit) {
         kit.say("aside", t!("settings-snap-freeing"), true, true);
-        let back = kit.then::<Snapshots, (bool, String)>(|_, k, (ok, err)| {
-            if ok { k.say("aside", t!("settings-snap-freed"), true, true) } else { k.say("aside", &admin_error(&err), false, false) }
-        });
-        capture(&["pkexec", &admin_helper(), "snapshot-forget-set-aside"], None, move |ok, _, err| back((ok, err)));
+        let back = kit.then::<Snapshots, Result<(), String>>(|me, k, done| me.freed(k, done));
+        admin_run(&["snapshot-forget-set-aside"], back);
+    }
+
+    fn freed(&mut self, kit: &mut Kit, done: Result<(), String>) {
+        match done {
+            Ok(()) => {
+                self.aside = snapshots::set_aside();
+                kit.say("aside", t!("settings-snap-freed"), true, true);
+            }
+            Err(why) => kit.say("aside", &why, false, false),
+        }
     }
 
     fn restore(&mut self, kit: &mut Kit, n: u32) {
         let ring = format!("restore:{n}");
         kit.start(&ring, t!("settings-snap-restoring")).expect(10.0);
-        let back = kit.then::<Snapshots, (bool, String)>(move |me, k, (ok, err)| {
-            k.finish(&ring, ok, "");
+        let back = kit.then::<Snapshots, Result<(), String>>(move |me, k, done| {
+            k.finish(&ring, done.is_ok(), "");
             let row = format!("snap:{n}");
-            if !ok {
-                k.say(&row, &admin_error(&err), false, false);
+            if let Err(why) = done {
+                k.say(&row, &why, false, false);
                 return;
             }
             k.say(&row, &t!("settings-snap-restored", n = n), true, true);
             me.restored = Some(n);
         });
-        capture(&["pkexec", &admin_helper(), "snapshot-restore", &n.to_string()], None, move |ok, _, err| back((ok, err)));
+        admin_run(&["snapshot-restore", &n.to_string()], back);
     }
 
     fn delete(&mut self, kit: &mut Kit, n: u32) {
         let ring = format!("delete:{n}");
         kit.start(&ring, t!("settings-snap-deleting")).expect(5.0);
-        let back = kit.then::<Snapshots, (bool, String)>(move |_, k, (ok, err)| {
-            if ok {
+        let back = kit.then::<Snapshots, Result<(), String>>(move |_, k, done| match done {
+            Ok(()) => {
                 k.finish(&ring, true, t!("settings-snap-deleted"));
-                k.after::<Snapshots>(RING_STAYS, |me, k| me.draw(k));
-            } else {
+                k.after::<Snapshots>(RING_STAYS, |me, k| me.read(k));
+            }
+            Err(why) => {
                 k.finish(&ring, false, "");
-                k.say(&format!("snap:{n}"), &admin_error(&err), false, false);
+                k.say(&format!("snap:{n}"), &why, false, false);
             }
         });
-        capture(&["pkexec", &admin_helper(), "snapshot-delete", &n.to_string()], None, move |ok, _, err| back((ok, err)));
+        admin_run(&["snapshot-delete", &n.to_string()], back);
     }
 
     fn look_at_earlier(&mut self, kit: &mut Kit) {
@@ -168,24 +176,16 @@ impl Snapshots {
 
     fn earlier_switch(&mut self, kit: &mut Kit, on: bool) {
         self.earlier.setting.on = on;
-        kit.say(EARLIER, t!("settings-snap-waiting"), true, true);
-        let back = kit.then::<Snapshots, (bool, String)>(move |me, k, (ok, err)| {
-            let err = admin_error(&err);
-            k.done(EARLIER, if ok { None } else { Some(&err) }, if on { t!("settings-snap-copy-daily") } else { t!("settings-snap-no-more") });
+        let days = self.earlier.setting.days.to_string();
+        let args: &[&str] = if on { &["home-snapshots-on", &days] } else { &["home-snapshots-off"] };
+        let done = if on { t!("settings-snap-copy-daily") } else { t!("settings-snap-no-more") };
+        admin_step::<Snapshots>(kit, EARLIER, args, t!("settings-snap-waiting"), done, move |me, k, ok| {
             if ok {
                 me.look_at_earlier(k);
             } else {
                 me.earlier.setting.on = !on;
             }
         });
-        let days = self.earlier.setting.days.to_string();
-        let helper = admin_helper();
-        let argv: Vec<&str> = if on {
-            vec!["pkexec", &helper, "home-snapshots-on", &days]
-        } else {
-            vec!["pkexec", &helper, "home-snapshots-off"]
-        };
-        capture(&argv, None, move |ok, _, err| back((ok, err)));
     }
 
     fn earlier_keep(&mut self, kit: &mut Kit, days: u32) {
@@ -194,43 +194,36 @@ impl Snapshots {
             return;
         }
         self.earlier.setting.days = days;
-        kit.say(KEEP, t!("settings-snap-waiting"), true, true);
-        let back = kit.then::<Snapshots, (bool, String)>(move |me, k, (ok, err)| {
-            let err = admin_error(&err);
-            k.done(KEEP, if ok { None } else { Some(&err) }, t!("settings-snap-kept"));
+        admin_step::<Snapshots>(kit, KEEP, &["home-snapshots-keep", &days.to_string()], t!("settings-snap-waiting"), t!("settings-snap-kept"), move |me, k, ok| {
             if ok {
                 me.look_at_earlier(k);
             } else {
                 me.earlier.setting.days = was;
             }
         });
-        capture(&["pkexec", &admin_helper(), "home-snapshots-keep", &days.to_string()], None, move |ok, _, err| back((ok, err)));
     }
 
     fn earlier_clear(&mut self, kit: &mut Kit) {
         kit.start(CLEAR, t!("settings-snap-clearing")).expect(10.0);
-        let back = kit.then::<Snapshots, (bool, String)>(|me, k, (ok, err)| {
-            if ok {
+        let back = kit.then::<Snapshots, Result<(), String>>(|me, k, done| match done {
+            Ok(()) => {
                 k.finish(CLEAR, true, t!("settings-snap-cleared"));
                 me.look_at_earlier(k);
-            } else {
+            }
+            Err(why) => {
                 k.finish(CLEAR, false, "");
-                k.say(CLEAR, &admin_error(&err), false, false);
+                k.say(CLEAR, &why, false, false);
             }
         });
-        capture(&["pkexec", &admin_helper(), "home-snapshots-clear"], None, move |ok, _, err| back((ok, err)));
+        admin_run(&["home-snapshots-clear"], back);
     }
 
     fn locked_switch(&mut self, kit: &mut Kit, on: bool) {
         self.locked = on;
-        kit.say(LOCKED, t!("settings-snap-waiting"), true, true);
-        let back = kit.then::<Snapshots, (bool, String)>(move |me, k, (ok, err)| {
-            let err = admin_error(&err);
-            k.done(LOCKED, if ok { None } else { Some(&err) }, if on { t!("settings-snap-locked-now") } else { t!("settings-snap-unlocked-now") });
+        let done = if on { t!("settings-snap-locked-now") } else { t!("settings-snap-unlocked-now") };
+        admin_step::<Snapshots>(kit, LOCKED, &["system-read-only", if on { "on" } else { "off" }], t!("settings-snap-waiting"), done, |me, _, _| {
             me.locked = locked_now();
         });
-        let helper = admin_helper();
-        capture(&["pkexec", &helper, "system-read-only", if on { "on" } else { "off" }], None, move |ok, _, err| back((ok, err)));
     }
 
     fn locked_line(&self, kit: &Kit) -> Node<Msg> {
@@ -238,8 +231,7 @@ impl Snapshots {
         if self.fs != "btrfs" {
             return l.sub(t!("admin-system-needs-btrfs")).key(LOCKED).node(kit);
         }
-        l.sub(t!("settings-snap-locked-sub"))
-            .control(switch(self.locked, t!("settings-snap-locked"), |v| on::<Snapshots>(move |me, k| me.locked_switch(k, v))))
+        l.control(switch(self.locked, t!("settings-snap-locked"), |v| on::<Snapshots>(move |me, k| me.locked_switch(k, v))))
             .key(LOCKED).node(kit)
     }
 
@@ -273,7 +265,7 @@ impl Snapshots {
                                     |v| on::<Snapshots>(move |me, k| me.earlier_switch(k, v))))
                     .key(EARLIER).node(kit),
                 line(t!("settings-snap-keep-each"))
-                    .control(dropdown(kit, KEEP, KEEP_CHOICES.iter().map(|d| keep_choice(*d)).collect(), chosen,
+                    .control(dropdown(KEEP, KEEP_CHOICES.iter().map(|d| keep_choice(*d)).collect(), chosen,
                                       t!("settings-snap-how-long"),
                                       |i| on::<Snapshots>(move |me, k| me.earlier_keep(k, KEEP_CHOICES[i]))))
                     .key(KEEP).node(kit),
@@ -282,20 +274,20 @@ impl Snapshots {
             .node(kit)
     }
 
-    fn head(&self, kit: &Kit) -> Node<Msg> {
+    fn head(&self) -> Node<Msg> {
         let all = match &self.list {
-            None => return headline(kit, t!("settings-snap-looking")),
-            Some(Err(_)) => return headline(kit, t!("settings-snap-not-read")),
+            None => return headline(t!("settings-snap-looking")),
+            Some(Err(_)) => return headline(t!("settings-snap-not-read")),
             Some(Ok(all)) => all,
         };
         let newest = all.iter().max_by_key(|s| s.number);
         let n = all.len();
         if let Some(b) = self.booted {
-            headline(kit, t!("settings-snap-started-from", n = b))
+            headline(t!("settings-snap-started-from", n = b))
         } else if let Some(s) = newest {
-            headline(kit, t!("settings-snap-go-back", n = n, when = when(&s.date)))
+            headline(t!("settings-snap-go-back", n = n, when = when(&s.date)))
         } else {
-            headline(kit, t!("settings-snap-none-yet"))
+            headline(t!("settings-snap-none-yet"))
         }
     }
 
@@ -320,19 +312,16 @@ impl Snapshots {
     }
 
     fn unavailable(&self, kit: &Kit) -> Node<Msg> {
-        let (sub, how, why) = if self.fs == "btrfs" {
-            (t!("settings-snap-not-set-up-sub").to_string(), t!("settings-snap-reinstall"),
-             t!("settings-snap-not-set-up-about").to_string())
+        let (sub, why) = if self.fs == "btrfs" {
+            (t!("settings-snap-not-set-up-sub").to_string(), t!("settings-snap-not-set-up-about").to_string())
         } else {
             let fs = if self.fs.is_empty() { t!("settings-snap-another-kind").to_string() } else { self.fs.clone() };
-            (t!("settings-snap-need-btrfs", fs = &fs).to_string(), t!("settings-snap-choose-btrfs"),
-             t!("settings-snap-need-btrfs-about", fs = &fs))
+            (t!("settings-snap-need-btrfs", fs = &fs).to_string(), t!("settings-snap-need-btrfs-about", fs = &fs))
         };
         page(kit, self.title(), self.help(), vec![
-            headline(kit, t!("settings-snap-no-snapshots")),
+            headline(t!("settings-snap-no-snapshots")),
             group(t!("settings-snap-no-snapshots-title")).icon("dialog-information-symbolic").about(why)
-                .rows(vec![line(t!("settings-snap-no-snapshots-line")).sub(sub).node(kit), line(t!("settings-snap-to-have")).sub(how).node(kit),
-                           self.locked_line(kit)])
+                .rows(vec![line(t!("settings-snap-no-snapshots-line")).sub(sub).node(kit), self.locked_line(kit)])
                 .node(kit),
             self.earlier_card(kit),
         ])
@@ -342,9 +331,8 @@ impl Snapshots {
         let rows = match &self.list {
             None => vec![line(t!("settings-snap-looking-short")).node(kit)],
             Some(Err(err)) => vec![line(t!("settings-snap-not-read-line")).sub(err.clone()).node(kit)],
-            Some(Ok(all)) if all.is_empty() => vec![line(t!("settings-snap-none-line"))
-                .sub(t!("settings-snap-none-line-sub")).node(kit)],
-            Some(Ok(all)) => super::users::banded_rows(all.iter().map(|s| self.row(kit, s)).collect()),
+            Some(Ok(all)) if all.is_empty() => vec![line(t!("settings-snap-none-line")).node(kit)],
+            Some(Ok(all)) => crate::toolkit::widget::banded_list(all.iter().map(|s| self.row(kit, s)).collect()),
         };
         group(t!("settings-snap-title")).icon("document-revert-symbolic")
             .about(t!("settings-snap-list-about"))
@@ -359,18 +347,19 @@ impl Snapshots {
             Some(_) => button("camera-photo-symbolic", t!("settings-snap-take-now")),
             None => job(kit, "take", "camera-photo-symbolic", t!("settings-snap-take-now"), on::<Snapshots>(|me, k| me.take(k))),
         };
-        let mut now = vec![line(t!("settings-snap-take-now"))
-            .sub(if self.booted.is_some() { t!("settings-snap-not-while") } else { t!("settings-snap-kept-until-you") })
-            .control(take).key("take").node(kit), self.locked_line(kit)];
+        let mut take_line = line(t!("settings-snap-take-now")).control(take).key("take");
+        if self.booted.is_some() {
+            take_line = take_line.sub(t!("settings-snap-not-while"));
+        }
+        let mut now = vec![take_line.node(kit), self.locked_line(kit)];
 
         if !self.aside.is_empty() {
             now.push(line(t!("settings-snap-set-aside", n = self.aside.len()))
-                .sub(t!("settings-snap-free-space"))
-                .control(confirm::<Snapshots>(kit, "aside", "user-trash-symbolic", t!("settings-snap-free-them"), |me, k| me.free(k)))
+                .control(confirm::<Snapshots>("aside", "user-trash-symbolic", t!("settings-snap-free-them"), |me, k| me.free(k)))
                 .key("aside").node(kit));
         }
         group(t!("settings-snap-take-one")).icon("camera-photo-symbolic")
-            .about(t!("settings-snap-take-about"))
+            .about([t!("settings-snap-take-about"), t!("settings-snap-locked-sub")].join(" "))
             .rows(now)
             .node(kit)
     }
@@ -413,15 +402,16 @@ impl Page for Snapshots {
     fn shown(&mut self, kit: &mut Kit) {
         self.look_at_earlier(kit);
         self.available = snapshots::available();
-        self.fs = snapshots::root_fs();
         self.locked = locked_now();
+
+        let found = kit.then::<Snapshots, (String, bool)>(|me, _, (fs, home)| (me.fs, me.home_separate) = (fs, home));
+        run::on_thread(|| (snapshots::root_fs(), snapshots::home_separate()), found);
         if !self.available {
             return;
         }
-        self.home_separate = snapshots::home_separate();
         self.booted = snapshots::booted_snapshot();
         self.aside = snapshots::set_aside();
-        self.draw(kit);
+        self.read(kit);
     }
 
     fn second(&mut self, _kit: &mut Kit) -> bool {
@@ -436,7 +426,7 @@ impl Page for Snapshots {
             return self.unavailable(kit);
         }
 
-        let mut items = vec![self.head(kit)];
+        let mut items = vec![self.head()];
         items.push(self.list_card(kit));
         items.push(self.take_card(kit));
         items.push(self.earlier_card(kit));
@@ -483,6 +473,17 @@ mod tests {
     use super::when;
 
     #[test]
+    fn showing_the_page_asks_findmnt_off_the_drawing_thread() {
+        use crate::settings::ui::{Kit, Page};
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let mut kit = Kit::new(events, asks, None, None);
+        let mut page = super::Snapshots::default();
+        page.shown(&mut kit);
+        assert!(page.fs.is_empty() && !page.home_separate, "findmnt was run on the drawing thread");
+    }
+
+    #[test]
     fn an_old_snapshot_says_its_day() {
         assert_eq!(when("2020-03-05 10:00:00"), "on 5 Mar");
         assert_eq!(when("rubbish"), "on rubbish");
@@ -516,7 +517,7 @@ mod tests {
     fn earlier_versions_switched_on_says_what_it_costs_and_what_it_holds() {
         let (said, stand) = said_with(made_up_earlier(), |me, k| me.say_if_full(k));
         lines_stay(&said);
-        assert!(holds(&said, "Deleted files stay for a week before their room is freed."), "{said:?}");
+        assert!(holds(&said, "Deleted files are kept for a week, then freed."), "{said:?}");
         assert!(holds(&said, "7 copies"), "{said:?}");
         assert!(said.iter().any(|s| s.starts_with("They take 3.2 GB, measured on 9 Oct")), "{said:?}");
         assert!(holds(&said, "button: Clear them all now"));
@@ -524,7 +525,7 @@ mod tests {
 
         let month = Standing { setting: Setting { on: true, days: 30 }, ..made_up_earlier() };
         let (said, _) = said_with(month, |_, _| {});
-        assert!(holds(&said, "Deleted files stay for a month before their room is freed."), "{said:?}");
+        assert!(holds(&said, "Deleted files are kept for a month, then freed."), "{said:?}");
     }
 
     #[test]
@@ -563,7 +564,7 @@ mod tests {
         lines_stay(&said);
         assert_eq!(stand.red(EARLIER).as_deref(), Some(nearly_full()));
         assert!(holds(&said, nearly_full()), "{said:?}");
-        assert!(holds(&said, "Their room is measured once a day."), "{said:?}");
+        assert!(holds(&said, "Their space is measured daily."), "{said:?}");
 
         let off = Standing { setting: Setting { on: false, days: 7 },
                              state: State { skipped_full: Some(1), room: None }, ..made_up_earlier() };
@@ -589,10 +590,9 @@ mod tests {
     fn the_system_files_switch_is_offered_only_on_btrfs() {
         let (said, _) = said_with(made_up_earlier(), |_, _| {});
         assert!(holds(&said, "switch: System files locked"), "{said:?}");
-        assert!(holds(&said, "Only installs and updates unlock them."), "{said:?}");
         let mut stand = Stand::new(Box::new(Snapshots { available: false, fs: "ext4".into(), ..Snapshots::made_up() }));
         let said = stand.page::<Snapshots, _>(|me, k| me.view(k).said());
-        assert!(holds(&said, "System files locked") && holds(&said, "Needs Btrfs."), "{said:?}");
+        assert!(holds(&said, "System files locked") && holds(&said, "This needs Btrfs."), "{said:?}");
         assert!(!said.iter().any(|s| s.starts_with("switch: System files")), "{said:?}");
     }
 
@@ -613,5 +613,22 @@ mod tests {
         assert_eq!(kit.said("snap:3"), None, "Restart now was run for a press that was not the person's own");
         with_named(true, Some(7), || with_press(Some(7), || super::restart(&mut kit, "snap:3")));
         assert_eq!(kit.said("snap:3"), Some((crate::settings::ui::no_system_bus(), true)));
+    }
+}
+
+#[cfg(test)]
+mod aside_tests {
+    use super::*;
+
+    #[test]
+    fn the_set_aside_line_is_read_again_once_it_is_freed() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let mut kit = Kit::new(events, asks, None, None);
+        let mut page = Snapshots { aside: vec!["old".into()], ..Snapshots::default() };
+        page.freed(&mut kit, Err("no".into()));
+        assert_eq!(page.aside.len(), 1, "a refused free left the list as it was");
+        page.freed(&mut kit, Ok(()));
+        assert!(page.aside.is_empty(), "nothing is left to free, so the line goes");
     }
 }

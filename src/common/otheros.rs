@@ -6,13 +6,12 @@ use std::path::Path;
 
 use crate::common::run::text;
 
-fn esp() -> Option<(String, String)> {
+fn esp_uuid() -> Option<String> {
     let dev = text(&["findmnt", "-no", "SOURCE", "/boot/efi"]);
     if dev.is_empty() {
         return None;
     }
-    let uuid = text(&["blkid", "-s", "UUID", "-o", "value", &dev]);
-    (!uuid.is_empty()).then_some((dev, uuid))
+    Some(text(&["blkid", "-s", "UUID", "-o", "value", &dev])).filter(|uuid| !uuid.is_empty())
 }
 
 const HIBERNATED: i32 = 14;
@@ -26,7 +25,7 @@ pub fn grub_main() -> i32 {
     if !Path::new("/sys/firmware/efi").exists() {
         return 0;
     }
-    let Some((_, uuid)) = esp() else { return 0 };
+    let Some(uuid) = esp_uuid() else { return 0 };
     let loader = "/boot/efi/EFI/Microsoft/Boot/bootmgfw.efi";
     if !Path::new(loader).is_file() {
         return 0;

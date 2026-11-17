@@ -9,10 +9,10 @@ settings-plugins-keywords = প্লাগইন অ্যাড-অন এক�
 
 # Help line at the foot of the Your plugins page.
 # SAFETY: needs a human review before it ships
-settings-plugins-help = প্লাগইন Trindle-এ কিছু যোগ করে: রিংয়ে একটি আইকন, এখানে সেটিংস, বিজ্ঞপ্তি, বা লগইন থেকে চলা কিছু। প্রতিটি দেয়াল-ঘেরা অবস্থায় চলে, এবং Permissions-এ আপনি অনুমতি না দেওয়া পর্যন্ত কিছুরই অনুমতি পায় না; এই পাতার শিরোনামের শেষের বোতামটি তা খোলে। এখানে প্রতিটি প্লাগইনের কার্ডে তার নিজের সেটিংস থাকে; কার্ডের বিনে দুইবার চাপলে সেই প্লাগইন সরে যায়।
+settings-plugins-help = প্লাগইন Trindle-এ কিছু যোগ করে। একটি প্লাগইন রিংয়ে আইকন, এখানে সেটিংস, বিজ্ঞপ্তি, বা লগইনের সময় শুরু হওয়া কিছু যোগ করতে পারে। প্রতিটি প্লাগইন নিজের আলাদা বাক্সে চলে এবং Permissions-এ আপনি অনুমতি না দিলে কিছুই ব্যবহার করতে পারে না। পাতার শিরোনামের পাশের বোতামটি Permissions খোলে। কোনো প্লাগইন সরাতে তার কার্ডের বিনে দুইবার চাপুন।
 
 # Red words when the window that asks what a plugin may use could not be opened.
-settings-plugins-window-failed = প্লাগইনটি কী ব্যবহার করতে পারে তা জিজ্ঞেস করার জানালা খোলা যায়নি।
+settings-plugins-window-failed = Trindle প্লাগইনটি কী ব্যবহার করতে পারে তা জিজ্ঞেস করার জানালা খুলতে পারেনি।
 
 # Under About it: the plugin's version number is { $v }.
 settings-plugins-version = সংস্করণ { $v }।
@@ -21,22 +21,18 @@ settings-plugins-version = সংস্করণ { $v }।
 settings-plugins-version-settled = সংস্করণ { $v }। { $settled }
 
 # Help text of a plugin's card when it asks for nothing: the plugin's name is { $name }.
-settings-plugins-asks-nothing = { $name } কিছুই চায় না, তাই এটি কোনো অনুমতি ছাড়াই দেয়াল-ঘেরা অবস্থায় চলে।
+settings-plugins-asks-nothing = { $name } কিছুই চায় না, তাই এটি নিজের আলাদা বাক্সে চলে, কোনো অনুমতি ছাড়াই।
 
 # Help text of a plugin's card: its name is { $name }, { $list } is what it asks for, { $allowed } of { $asks } are allowed.
 # SAFETY: needs a human review before it ships
 settings-plugins-asks-for =
     { $asks ->
-        [one] { $name } চায় { $list }; { $asks }টির মধ্যে { $allowed }টি অনুমোদিত। এটি দেয়াল-ঘেরা অবস্থায় চলে, শুধু আপনার দেওয়া অনুমতি নিয়ে।
-       *[other] { $name } চায় { $list }; { $asks }টির মধ্যে { $allowed }টি অনুমোদিত। এটি দেয়াল-ঘেরা অবস্থায় চলে, শুধু আপনার দেওয়া অনুমতি নিয়ে।
+        [one] { $name } চায় { $list }। আপনি { $asks }টির মধ্যে { $allowed }টি অনুমোদন করেছেন। এটি নিজের আলাদা বাক্সে চলে, শুধু আপনার দেওয়া অনুমতি নিয়ে।
+       *[other] { $name } চায় { $list }। আপনি { $asks }টির মধ্যে { $allowed }টি অনুমোদন করেছেন। এটি নিজের আলাদা বাক্সে চলে, শুধু আপনার দেওয়া অনুমতি নিয়ে।
     }
 
-# Under the line that tells a plugin needs more allowed, beside its Allow button.
-# SAFETY: needs a human review before it ships
-settings-plugins-needs-more = অনুমতি দিন বোতামে চাপলে এটি যা যা চায় তার প্রতিটি একটি সুইচসহ দেখায়।
-
 # Heading of the line about a plugin on its card.
-settings-plugins-about-it = এটি সম্পর্কে
+settings-plugins-about-it = সম্পর্কে
 
 # Tip of the button that changes what a plugin may use.
 settings-plugins-change = এটি কী ব্যবহার করতে পারে তা বদলান
@@ -55,7 +51,7 @@ settings-plugins-type-here = এখানে লিখুন
 settings-plugins-no-settings = { $name }-এর নিজস্ব কোনো সেটিংস নেই।
 
 # Note on a plugin's card when none of its settings show now: its name is { $name }.
-settings-plugins-no-settings-now = বর্তমান অবস্থায় { $name }-এর দেখানোর মতো কোনো সেটিংস নেই।
+settings-plugins-no-settings-now = এই মুহূর্তে { $name }-এর দেখানোর মতো কোনো সেটিংস নেই।
 
 # Headline of the Your plugins page: how many plugins are installed and { $list } their names.
 settings-plugins-installed =
@@ -71,18 +67,15 @@ settings-plugins-group = প্লাগইন
 # Heading of the line shown when no plugin is installed.
 settings-plugins-none = কিছু ইনস্টল করা নেই
 
-# Under the None installed heading.
-settings-plugins-none-sub = Apps-এ যোগ করার মতো প্লাগইন আছে।
-
 # Tip of the button at the end of the page's title that opens the Permissions page.
 # SAFETY: needs a human review before it ships
 settings-plugins-open-permissions = Permissions খুলুন
 
 # Said at the top of a plugin's card while its service has not yet answered; the plugin's name is {$name}.
-settings-plugins-rows-asking = { $name }-কে জিজ্ঞাসা করা হচ্ছে।
+settings-plugins-rows-asking = { $name }-কে জিজ্ঞাসা করা হচ্ছে…
 
 # Said at the top of a plugin's card, and in red under a row, when its service does not answer; the plugin's name is {$name}.
-settings-plugins-rows-silent = { $name } উত্তর দিচ্ছে না। এর সেবা হয়তো বন্ধ আছে।
+settings-plugins-rows-silent = { $name } সাড়া দিচ্ছে না। এর সেবা হয়তো বন্ধ হয়ে গেছে।
 
 # Said beside a row after the plugin kept the change.
 settings-plugins-rows-saved = সংরক্ষিত।
@@ -95,4 +88,3 @@ settings-plugins-rows-failed = { $name } এটা করতে পারেন�
 
 # Red words under a row when the change failed; the plugin's name is {$name} and the reason it gave is {$why}.
 settings-plugins-rows-failed-why = { $name } এটা করতে পারেনি: { $why }।
-

@@ -38,7 +38,7 @@ ring-snooze-for-1-hour = Báo lại sau 1 giờ
 ring-snooze-for-6-hours = Báo lại sau 6 giờ
 
 # Tip and screen reader name of the snooze choice for the next morning.
-ring-snooze-for-next-morning = Báo lại vào sáng hôm sau
+ring-snooze-for-next-morning = Báo lại đến sáng
 
 # Tip of the button on the snooze page that goes back to the notification's message.
 ring-act-back = Quay lại tin nhắn
@@ -111,7 +111,7 @@ ring-lid-nothing = Không làm gì
 ring-lid-shut-down = Tắt máy
 
 # Reason the system lists beside Trindle's hold on the lid switch (shown by tools that list what stops sleep).
-ring-lid-reason = Đóng nắp sẽ làm theo mục Cài đặt, Nguồn
+ring-lid-reason = Bạn có thể chọn việc gì xảy ra khi đóng nắp trong Cài đặt, mục Nguồn.
 
 # Notice at the foot of the screen for a few seconds when the magnifier starts.
 ring-magnify-hint = Giữ ở bất kỳ đâu để phóng to
@@ -128,14 +128,14 @@ ring-mic-off-tip = Tắt micrô cho mọi chương trình
 
 # Tip of the switch in the ring that turns the microphone back on.
 # SAFETY: needs a human review before it ships
-ring-mic-on-tip = Bật lại micrô
+ring-mic-on-tip = Bật micrô
 
 # Line in the ring when something other than the person pressed the microphone switch on.
 # SAFETY: needs a human review before it ships
-ring-mic-own-press = Chỉ chính bạn nhấn mới bật lại được micrô.
+ring-mic-own-press = Chỉ bạn mới bật lại được micrô.
 
 # Line in the ring when the microphone switch could not be changed; the reason follows.
-ring-mic-not-changed = Không thể đổi công tắc micrô: { $why }
+ring-mic-not-changed = Trindle không đổi được công tắc micrô: { $why }
 
 # Notice when a notification was clicked and no program could be found for it.
 ring-goes-no-program = Không tìm thấy chương trình
@@ -153,7 +153,7 @@ ring-notes-copied = Đã sao chép cho trợ lý của bạn
 ring-notes-name = Thông báo
 
 # Said when a pinned notification has been held long enough and now follows the pointer.
-ring-notes-moving = Đang di chuyển. Thả ra để đặt xuống, Escape để trả về.
+ring-notes-moving = Đang di chuyển thông báo. Thả ra để đặt xuống, hoặc nhấn Escape để đặt lại chỗ cũ.
 
 # Said when a pinned notification has been dropped or moved by keys.
 ring-notes-moved = Đã di chuyển
@@ -194,7 +194,11 @@ ring-plugin-needs = { $name } cần quyền của bạn
 
 # Line under the notice that a plugin needs permission: none of the permissions it asks for are given.
 # SAFETY: needs a human review before it ships
-ring-plugin-cannot-work = Chưa thể hoạt động: được cho phép 0 trên { $asks }.
+ring-plugin-cannot-work =
+    { $asks ->
+        [1] Chưa hoạt động được. Bạn chưa cho phép quyền duy nhất nó xin.
+       *[other] Chưa hoạt động được. Bạn chưa cho phép quyền nào trong { $asks } quyền nó xin.
+    }
 
 # Said to a screen reader when a notification was copied; $said is what the circle said.
 ring-copied-said = Đã sao chép. { $said }
@@ -214,3 +218,5 @@ ring-outside-body =
        *[other] { $names } và { $more } mục khác
     }
 
+# Said under the magnifier when the screen picture it took has the wrong size.
+ring-magnify-wrong-size = Ảnh có kích thước sai.

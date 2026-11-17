@@ -7,7 +7,7 @@ settings-power-title = পাওয়ার
 settings-power-keywords = ব্যাটারি স্থগিত ঘুম বন্ধ পুনরায়-চালু লগআউট পর্দা অলস ম্লান তালা পাসওয়ার্ড পিন চার্জ চার্জিং সীমা battery suspend sleep shut down restart log out screen off idle dim lock password pin keypad caffeine keep awake charge charging limit 80 battery health
 
 # Introduction under the heading of the power page, and the words behind the page i.
-settings-power-help = ব্যাটারি, পাওয়ার মোড, এবং কখন পর্দা ম্লান হয়, তালাবদ্ধ হয় ও বন্ধ হয়; ল্যাপটপে ব্যাটারি ও চার্জারের জন্য আলাদাভাবে। ট্যাবের কাপটি পর্দা জাগিয়ে রাখে। তালা দেওয়া, পুনরায় চালু ও বন্ধ করাও এখানে আছে।
+settings-power-help = পাওয়ার মোড বেছে নিন, এবং কখন পর্দা ম্লান হয়, তালাবদ্ধ হয় ও বন্ধ হয় তা ঠিক করুন। ল্যাপটপে ব্যাটারি ও চার্জারের জন্য এগুলো আলাদাভাবে ঠিক করা হয়। রিংয়ের কাপটি পর্দা জাগিয়ে রাখে। তালা দেওয়া, রিস্টার্ট ও বন্ধ করাও আপনি এখান থেকে করতে পারেন।
 
 # Choice in a list of how long to wait.
 settings-power-time-never = কখনও না
@@ -47,7 +47,7 @@ settings-power-time-only-sleep = শুধু ঘুমানোর সময়
 
 # Heading of the line, and name of its round button, that suspends the computer.
 # SAFETY: needs a human review before it ships
-settings-power-suspend = স্থগিত করুন
+settings-power-suspend = ঘুম পাড়ান
 
 # Heading of the line, and name of its round button, that restarts the computer.
 # SAFETY: needs a human review before it ships
@@ -76,32 +76,20 @@ settings-power-lid-shut-down = বন্ধ করা
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-dim = এর পরে পর্দা ম্লান করুন
 
-# Small words under an idle timer line.
-settings-power-timer-dim-about = যেকোনো নড়াচড়ায় উজ্জ্বলতা ফিরে আসে।
-
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-clock = এর পরে চলমান ঘড়ি দেখান
 
-# Small words under an idle timer line.
-settings-power-timer-clock-about = শুধু সময়, ধীরে ধীরে ঘুরে বেড়ায়।
+# Heading of an idle timer line, and the name of its lists.
+settings-power-timer-off = এর পরে পর্দা বন্ধ
 
 # Heading of an idle timer line, and the name of its lists.
-settings-power-timer-off = এর পরে পর্দা বন্ধ করুন
-
-# Small words under an idle timer line.
-settings-power-timer-off-about = যেকোনো কী বা নড়াচড়ায় আবার চালু হয়।
-
-# Heading of an idle timer line, and the name of its lists.
-settings-power-timer-suspend = এর পরে স্থগিত করুন
-
-# Small words under an idle timer line.
-settings-power-timer-suspend-about = এত সময় একা ফেলে রাখলে এটি ঘুমিয়ে পড়ে।
+settings-power-timer-suspend = এর পরে ঘুম পাড়ান
 
 # Red words under the keep the screen awake switch when turning it on could not be saved.
-settings-power-no-awake = পর্দা জাগিয়ে রাখা যায়নি: পছন্দটি সংরক্ষণ করা যায়নি।
+settings-power-no-awake = Trindle পছন্দটি সংরক্ষণ করতে পারেনি, তাই পর্দা জাগিয়ে রাখতে পারেনি।
 
 # Red words under the keep the screen awake switch when turning it off could not be saved.
-settings-power-no-sleep = পর্দা জাগিয়ে রাখা বন্ধ করা যায়নি: পছন্দটি সংরক্ষণ করা যায়নি।
+settings-power-no-sleep = Trindle আপনার পছন্দ সংরক্ষণ করতে পারেনি, তাই পর্দা জেগেই থাকবে।
 
 # Name of the power mode that saves the battery.
 settings-power-profile-saver = ব্যাটারি সাশ্রয়
@@ -134,10 +122,10 @@ settings-power-hours-minutes = { $h } ঘণ্টা { $m } মিনিট
 settings-power-minutes = { $m } মিনিট
 
 # Sentence at the top of the page on a computer with no battery.
-settings-power-top-no-battery = প্লাগ লাগানো: এই কম্পিউটারে দেখাশোনা করার মতো ব্যাটারি নেই।
+settings-power-top-no-battery = প্লাগ লাগানো। এই কম্পিউটারে ব্যাটারি নেই।
 
 # Sentence at the top of the page on a computer with no battery; { $mode } is the power mode.
-settings-power-top-no-battery-mode = প্লাগ লাগানো, { $mode } মোডে: দেখাশোনা করার মতো ব্যাটারি নেই।
+settings-power-top-no-battery-mode = প্লাগ লাগানো, { $mode } মোডে। এই কম্পিউটারে ব্যাটারি নেই।
 
 # Sentence at the top of the page while charging; { $percent } is how full.
 settings-power-top-charging = চার্জ হচ্ছে, { $percent }%।
@@ -158,16 +146,13 @@ settings-power-top-battery = ব্যাটারি { $percent }%।
 settings-power-top-battery-left = ব্যাটারি { $percent }%, প্রায় { $left } বাকি।
 
 # Sentence at the top of the page while the battery is being read.
-settings-power-top-looking = ব্যাটারি দেখা হচ্ছে…
+settings-power-top-looking = ব্যাটারি পরীক্ষা করা হচ্ছে…
 
 # Red words under the power mode line when the mode could not be changed.
 settings-power-mode-failed = পাওয়ার মোড বদলানো যায়নি।
 
 # Heading of the power mode line, and the name of its list.
 settings-power-mode = পাওয়ার মোড
-
-# Small words under the power mode line.
-settings-power-mode-about = সাশ্রয় মোডে কম গরম হয়; কর্মক্ষমতা মোডে দ্রুত চলে।
 
 # Said in green under a line after its choice was kept.
 settings-power-saved = সংরক্ষিত
@@ -178,17 +163,11 @@ settings-power-warn-name = ব্যাটারি কমে এতে না�
 # Heading of the line for the battery warning.
 settings-power-warn = কমে এতে নামলে সতর্ক করুন
 
-# Small words under the battery warning line.
-settings-power-warn-about = একবার, পর্দার মাঝখানে।
-
 # Choice in the list of battery levels: never warn.
 settings-power-never = কখনও না
 
 # Heading of the line, and name of its switch, for stopping charging at 80%.
 settings-power-limit = ৮০%-এ চার্জ থামান
-
-# Small words under the charge limit line.
-settings-power-limit-about = যে ব্যাটারি বেশির ভাগ সময় প্লাগে থাকে তার জন্য ভালো।
 
 # Title of the battery card on a laptop.
 settings-power-card-battery = ব্যাটারি
@@ -197,11 +176,11 @@ settings-power-card-battery = ব্যাটারি
 settings-power-card-looking-after = ব্যাটারির যত্ন
 
 # Words behind the i of the battery card.
-settings-power-battery-about = ব্যাটারি সাশ্রয় মোডে কম গরম হয় ও ব্যাটারি বেশিক্ষণ চলে; কর্মক্ষমতা মোডে দ্রুত চলে; সমতুল্য মোড দুইয়ের মাঝামাঝি। ব্যাটারি কমতে থাকলে সতর্কবার্তা পর্দার মাঝখানে একবার আসে। যে ল্যাপটপ বেশির ভাগ সময় প্লাগে থাকে তার ব্যাটারির জন্য ৮০%-এ থামা ভালো: এটি ৮০% পর্যন্ত চার্জ হয়, তার বেশি নয়, এবং ব্যাটারি আরও বছর টেকে। সকেট থেকে দূরে একদিন কাটানোর আগে এটি বন্ধ করুন।
+settings-power-battery-about = ব্যাটারি সাশ্রয় মোডে কম গরম হয় ও ব্যাটারি বেশিক্ষণ চলে। কর্মক্ষমতা মোডে দ্রুত চলে। সমতুল্য মোড দুইয়ের মাঝামাঝি। ব্যাটারি কমতে থাকলে সতর্কবার্তা একবার, পর্দার মাঝখানে আসে। যে ল্যাপটপ বেশির ভাগ সময় প্লাগে থাকে তার জন্য ৮০%-এ থামা ভালো, এতে ব্যাটারি আরও বছর টেকে। সকেট থেকে দূরে একদিন কাটানোর আগে এটি বন্ধ করুন।
 
 # Words under the charge limit line while the password window is open.
 # SAFETY: needs a human review before it ships
-settings-power-limit-waiting = পাসওয়ার্ডের অপেক্ষায়...
+settings-power-limit-waiting = আপনার পাসওয়ার্ডের অপেক্ষায়…
 
 # Green words under the charge limit line after charging was limited to 80%.
 settings-power-limit-on = ৮০%-এ থামে
@@ -212,26 +191,20 @@ settings-power-limit-off = পূর্ণ পর্যন্ত চার্জ
 # Heading of the keep the screen awake line, and name of its switch.
 settings-power-awake = পর্দা জাগিয়ে রাখুন
 
-# Small words under the keep the screen awake line.
-settings-power-awake-about = ট্যাবের কাপও একই কাজ করে।
-
 # Title of the card about dimming and the moving clock.
 settings-power-screen-title = পর্দা
 
 # Words behind the i of the Screen card.
-settings-power-screen-about = "পর্দা জাগিয়ে রাখুন" চালু থাকলে এগুলোর কোনোটিই ঘটে না; ট্যাবের কাপও এটি চালু ও বন্ধ করে। ম্লান করা: যেকোনো নড়াচড়ায় উজ্জ্বলতা ফিরে আসে; শুধু নিজস্ব উজ্জ্বলতাযুক্ত পর্দা, যেমন ল্যাপটপের, ম্লান হয়। চলমান ঘড়ি: পর্দা অন্ধকার হয়ে শুধু সময় দেখায়, ধীরে ধীরে ঘুরে বেড়ায়, আর যেকোনো কী বা নড়াচড়ায় সবকিছু ফিরে আসে। ল্যাপটপে প্রতিটি সময় দুইবার ঠিক করা হয়, ব্যাটারির জন্য ও চার্জারের জন্য।
+settings-power-screen-about = "পর্দা জাগিয়ে রাখুন" চালু থাকলে এগুলোর কোনোটিই ঘটে না। রিংয়ের কাপও এটি চালু ও বন্ধ করে। শুধু নিজস্ব উজ্জ্বলতা নিয়ন্ত্রণ আছে এমন পর্দা, যেমন ল্যাপটপের, ম্লান হতে পারে। চলমান ঘড়ি পর্দা অন্ধকার করে শুধু সময় দেখায়, যা ধীরে ধীরে ঘুরে বেড়ায়। মাউস নাড়ালে বা কোনো কী চাপলে সবকিছু ফিরে আসে। ল্যাপটপে প্রতিটি সময় আপনি দুইবার ঠিক করেন: একবার ব্যাটারির জন্য, একবার চার্জারের জন্য।
 
 # Title of the card about turning the screen off and sleeping.
 settings-power-sleep-title = পর্দা বন্ধ ও ঘুম
 
 # Words behind the i of the Screen off and sleep card.
-settings-power-sleep-about = যেকোনো কী বা নড়াচড়ায় পর্দা আবার চালু হয়। স্থগিত করলে কম্পিউটার আপনি জাগানো পর্যন্ত ঘুমিয়ে থাকে। ল্যাপটপে প্রতিটি সময় দুইবার ঠিক করা হয়, ব্যাটারির জন্য ও চার্জারের জন্য। দ্বিতীয় পর্দা লাগানো থাকলে ঢাকনা বন্ধ করলে কিছু হয় না, যাতে আপনি বড় পর্দায় কাজ চালিয়ে যেতে পারেন।
+settings-power-sleep-about = কোনো কী চাপলে বা মাউস নাড়ালে পর্দা আবার চালু হয়। ঘুম পাড়ালে কম্পিউটার আপনি জাগানো পর্যন্ত থেমে থাকে। ল্যাপটপে প্রতিটি সময় আপনি দুইবার ঠিক করেন: একবার ব্যাটারির জন্য, একবার চার্জারের জন্য। দ্বিতীয় পর্দা লাগানো থাকলে ঢাকনা বন্ধ করলে কিছু হয় না, যাতে আপনি বড় পর্দায় কাজ চালিয়ে যেতে পারেন।
 
 # Heading of the line for what closing the lid does.
 settings-power-lid = ঢাকনা বন্ধ করলে
-
-# Small words under that line.
-settings-power-lid-about = দ্বিতীয় পর্দা লাগানো থাকলে কিছু হয় না।
 
 # Caption above a list that applies while the laptop runs on its battery.
 settings-power-when-battery = ব্যাটারিতে
@@ -249,33 +222,23 @@ settings-power-named-charger = { $title }: প্লাগ লাগানো
 # SAFETY: needs a human review before it ships
 settings-power-lock = পর্দা তালাবদ্ধ করুন
 
-# Small words under the lock the screen line.
-# SAFETY: needs a human review before it ships
-settings-power-lock-about = আপনার পাসওয়ার্ড বা একটি পিন দিয়ে আবার ঢোকা যায়।
-
 # Heading of the lock after line, and the name of its list.
 # SAFETY: needs a human review before it ships
 settings-power-lock-after-name = এর পরে তালাবদ্ধ করুন
 
-# Small words under the lock after line.
-settings-power-lock-after-about = এত সময় একা ফেলে রাখলে, অন্য যা-ই ঠিক করা থাকুক।
-
 # Heading of the line, and name of its switch, for locking when the computer sleeps.
 # SAFETY: needs a human review before it ships
 settings-power-lock-sleep = কম্পিউটার ঘুমালে তালাবদ্ধ করুন
-
-# Small words under that line.
-settings-power-lock-sleep-about = যাতে এটি সবসময় তালাবদ্ধ অবস্থায় জাগে।
 
 # Heading of the line, and name of its button, that locks the screen now.
 # SAFETY: needs a human review before it ships
 settings-power-lock-now = এখনই তালাবদ্ধ করুন
 
 # Small words under the lock now line.
-settings-power-lock-now-about = Super ও L একসঙ্গে চাপলেও হয়।
+settings-power-lock-now-about = অথবা Super ও L চাপুন।
 
 # Red words under the lock now line when the lock screen would not start.
-settings-power-lock-now-failed = পর্দা তালাবদ্ধ করা যায়নি: লক স্ক্রিন চালু হয়নি।
+settings-power-lock-now-failed = লক স্ক্রিন চালু হয়নি, তাই Trindle পর্দা তালাবদ্ধ করতে পারেনি।
 
 # Title of the locking card.
 # SAFETY: needs a human review before it ships
@@ -283,21 +246,15 @@ settings-power-lock-title = তালা দেওয়া
 
 # Words behind the i of the locking card.
 # SAFETY: needs a human review before it ships
-settings-power-lock-card-about = আপনি দূরে থাকলে পর্দা তালাবদ্ধ হয়, এবং আপনার পাসওয়ার্ড, বা আপনি চাইলে চার অঙ্কের একটি পিন, দিয়ে আবার ঢোকা যায়। তার আগে পর্দায় কিছুই দেখা যায় না। লগইনের জন্য সবসময় আপনার পাসওয়ার্ড লাগে। "এর পরে তালাবদ্ধ করুন" হলো পর্দা ও ঘুমের সময় যা-ই হোক, কম্পিউটার কতক্ষণ একা থাকলে তালাবদ্ধ হবে; তার আগে ফিরলে পিন লাগে না। তালা দেওয়া বন্ধ করলে পিনও ভুলে যাওয়া হয়। চার অঙ্ক আপনার পাসওয়ার্ডের চেয়ে দ্রুত লেখা যায়: পিনের জন্য বাছাই করা সময়ের পরে, অথবা পাঁচবার ভুল চেষ্টার পরে, এর বদলে আপনার পাসওয়ার্ড লাগে। ঝুড়ি পিন ব্যবহার বন্ধ করে।
+settings-power-lock-card-about = আপনি দূরে থাকলে পর্দা তালাবদ্ধ হয়। আপনার পাসওয়ার্ড দিয়ে, বা পিন ঠিক করা থাকলে চার অঙ্কের পিন দিয়ে না খোলা পর্যন্ত পর্দায় কিছুই দেখা যায় না। লগইনের জন্য সবসময় আপনার পাসওয়ার্ড লাগে। "এর পরে তালাবদ্ধ করুন" হলো পর্দা ও ঘুমের সময় যা-ই হোক, কম্পিউটার কতক্ষণ একা থাকলে তালাবদ্ধ হবে। তার আগে ফিরলে পিন লাগে না। তালা দেওয়া বন্ধ করলে পিনও মুছে যায়। "পিন কাজ করে"-তে ঠিক করা সময়ের পরে, অথবা পাঁচবার ভুল চেষ্টার পরে, এর বদলে আপনার পাসওয়ার্ড লাগে।
 
 # Heading of the line for adding a PIN.
 # SAFETY: needs a human review before it ships
 settings-power-pin-add = পিন দিয়েও খুলুন
 
-# Small words under that line.
-settings-power-pin-add-about = চার অঙ্ক, আপনার পাসওয়ার্ডের চেয়ে দ্রুত।
-
 # Heading of the line, and name of its list, for how long a PIN works after the screen locks.
 # SAFETY: needs a human review before it ships
 settings-power-pin-works-name = পিন কাজ করে
-
-# Small words under that line.
-settings-power-pin-works-about = তারপর এর বদলে আপনার পাসওয়ার্ড লাগে।
 
 # Name of the bin button that stops using a PIN.
 # SAFETY: needs a human review before it ships
@@ -305,10 +262,7 @@ settings-power-pin-stop = পিন ব্যবহার বন্ধ করু
 
 # Heading of the line shown when a PIN is kept.
 # SAFETY: needs a human review before it ships
-settings-power-pin-kept = একটি পিন রাখা আছে
-
-# Small words under that line.
-settings-power-pin-kept-about = বদলাতে চারটি নতুন অঙ্ক লিখুন।
+settings-power-pin-kept = একটি পিন ঠিক করা আছে
 
 # Placeholder of the box for typing a new PIN.
 # SAFETY: needs a human review before it ships
@@ -316,47 +270,53 @@ settings-power-pin-new = নতুন পিন
 
 # Name of the button that keeps the PIN typed.
 # SAFETY: needs a human review before it ships
-settings-power-pin-keep = এই পিন রাখুন
+settings-power-pin-keep = এই পিন সংরক্ষণ করুন
+
+# Placeholder of the box for typing your account password before a PIN is saved.
+settings-power-pin-password = আপনার পাসওয়ার্ড
+
+# Red words under the PIN box when no password was typed.
+settings-power-pin-need-password = আগে আপনার পাসওয়ার্ড লিখুন, তারপর PIN সংরক্ষণ করুন।
+
+# Red words under the PIN box when the password typed was wrong.
+settings-power-pin-wrong-password = ওই পাসওয়ার্ড ঠিক নয়, তাই Trindle PIN সংরক্ষণ করেনি।
 
 # Red words under the PIN line when the PIN could not be removed.
 # SAFETY: needs a human review before it ships
-settings-power-pin-not-removed = পিন সরানো যায়নি, তাই এটি এখনও পর্দা খোলে।
+settings-power-pin-not-removed = Trindle পিন সরাতে পারেনি, তাই এটি এখনও পর্দা খোলে।
 
 # Red words under the PIN box when it is not the right length; { $n } is how many digits a PIN has.
 settings-power-pin-digits =
     { $n ->
-        [one] পিন হলো { $n }টি অঙ্ক।
-       *[other] পিন হলো { $n }টি অঙ্ক।
+        [one] { $n }টি অঙ্ক দিন।
+       *[other] { $n }টি অঙ্ক দিন।
     }
 
 # Heading of the log out line, and name of its round button.
 # SAFETY: needs a human review before it ships
 settings-power-log-out = লগআউট করুন
 
-# Small words under the log out line.
-settings-power-log-out-about = লগইন পর্দায় ফিরে যায়।
-
 # Title of the card with log out, suspend, restart and shut down.
 settings-power-session-title = সেশন
 
 # Words behind the i of the session card.
 # SAFETY: needs a human review before it ships
-settings-power-session-about = লগআউট করলে প্রতিটি উইন্ডো বন্ধ হয় এবং লগইন পর্দায় ফেরা হয়। স্থগিত করলে কম্পিউটার আপনি জাগানো পর্যন্ত ঘুমিয়ে থাকে। প্রতিটি বোতাম দুইবার জিজ্ঞেস করে, রিংয়ের পাওয়ার পছন্দের মতোই, যাতে হাত ফসকালে কিছু না হয়।
+settings-power-session-about = লগআউট করলে প্রতিটি উইন্ডো বন্ধ হয় এবং লগইন পর্দায় ফেরা হয়। ঘুম পাড়ালে কম্পিউটার আপনি জাগানো পর্যন্ত থেমে থাকে। নিশ্চিত করতে প্রতিটি বোতাম দ্বিতীয়বার চাপতে হয়, রিংয়ের পাওয়ার পছন্দের মতোই, যাতে একবার হাত ফসকালে কিছু না হয়।
 
 # Red words under a session button when the system bus is not there.
-settings-power-no-bus = সিস্টেম বাস পাওয়া যাচ্ছে না।
+settings-power-no-bus = সিস্টেম সেবার সঙ্গে যুক্ত হওয়া যাচ্ছে না।
 
 # Red words under a session button when the computer would not do it.
-settings-power-would-not = কম্পিউটার তা করেনি।
+settings-power-would-not = কম্পিউটার তা করতে পারেনি।
 
 # Spoken description of the battery picture while the battery is being read.
-settings-power-art-looking-tip = ব্যাটারি দেখা হচ্ছে।
+settings-power-art-looking-tip = ব্যাটারি পরীক্ষা করা হচ্ছে।
 
 # Spoken description of the battery picture; { $percent } is how full and { $state } what it is doing, such as Charging.
 settings-power-art-tip = ব্যাটারি { $percent }%। { $state }
 
 # Word drawn in the empty battery picture while the battery is being read.
-settings-power-art-looking = দেখা হচ্ছে
+settings-power-art-looking = লোড হচ্ছে
 
 # Word drawn under the battery figure when its state is not known.
 settings-power-art-battery = ব্যাটারি
@@ -369,10 +329,10 @@ settings-power-art-left =
     }
 
 # Spoken description of the battery range bar when there is no warning; { $top } is the percent it charges to.
-settings-power-limits-tip = { $top }% পর্যন্ত চার্জ হয়; কোনো সতর্কবার্তা নেই।
+settings-power-limits-tip = { $top }% পর্যন্ত চার্জ হয়, কোনো সতর্কবার্তা নেই।
 
 # Spoken description of the battery range bar; { $top } is the percent it charges to and { $warn } where a warning comes.
-settings-power-limits-tip-warn = { $top }% পর্যন্ত চার্জ হয়; { $warn }%-এ সতর্কবার্তা।
+settings-power-limits-tip-warn = { $top }% পর্যন্ত চার্জ হয়, { $warn }%-এ সতর্কবার্তা সহ।
 
 # A length of time in the list of how long a PIN works, in minutes; { $n } is the number.
 settings-power-pin-minutes =

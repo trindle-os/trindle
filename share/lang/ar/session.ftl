@@ -23,15 +23,15 @@ session-lock-use-pin = استخدام PIN
 session-lock-use-phone = استخدام الهاتف
 
 # Shown while the typed password or PIN is being checked.
-session-lock-checking = جارٍ التحقق...
+session-lock-checking = جارٍ التحقق…
 
 # SAFETY: needs a human review before it ships
 # Shown when the PIN has run out of time and the password is asked for instead.
-session-lock-pin-timed-out = انتهت مهلة رمز PIN؛ اكتب كلمة المرور.
+session-lock-pin-timed-out = انتهت مهلة رمز PIN. اكتب كلمة المرور.
 
 # SAFETY: needs a human review before it ships
 # Shown after too many wrong PINs, and the password is asked for instead.
-session-lock-too-many-pins = رموز PIN خاطئة كثيرة؛ اكتب كلمة المرور.
+session-lock-too-many-pins = رموز PIN خاطئة كثيرة. استخدم كلمة المرور.
 
 # SAFETY: needs a human review before it ships
 # Shown after a wrong PIN, with how many tries are left (1 is one try left).
@@ -46,15 +46,15 @@ session-lock-wrong-pin =
     }
 
 # Shown while the phone is asked to unlock the screen.
-session-lock-asking-phone = جارٍ سؤال هاتفك...
+session-lock-asking-phone = جارٍ سؤال هاتفك…
 
 # SAFETY: needs a human review before it ships
 # Shown when the phone did not unlock the screen and the PIN may be typed.
-session-lock-phone-no-pin = لم يفتح هاتفك القفل. استخدم رمز PIN.
+session-lock-phone-no-pin = لم يتمكن Trindle من فتح القفل بهاتفك. استخدم رمز PIN.
 
 # SAFETY: needs a human review before it ships
 # Shown when the phone did not unlock the screen and the password must be typed.
-session-lock-phone-no-password = لم يفتح هاتفك القفل. اكتب كلمة المرور.
+session-lock-phone-no-password = لم يتمكن Trindle من فتح القفل بهاتفك. اكتب كلمة المرور.
 
 # SAFETY: needs a human review before it ships
 # Shown when the password typed is not the person's password.
@@ -76,7 +76,7 @@ session-wallpaper-larger-4k = أكبر من 4K
 session-wallpaper-larger-screen = أكبر من شاشتك
 
 # A reason a wallpaper was left out: its file is over 20 MB, or over 200 MB if it moves.
-session-wallpaper-over-20-or-200 = أكبر من 20 MB (200 MB إن كانت متحركة)
+session-wallpaper-over-20-or-200 = أكبر من 20 MB (200 MB للمتحركة)
 
 # A reason a wallpaper was left out: its file is over 20 MB.
 session-wallpaper-over-20 = أكبر من 20 MB
@@ -88,7 +88,15 @@ session-wallpaper-over-200 = أكبر من 200 MB
 session-wallpaper-reasons-or = { $first } أو { $second }
 
 # The line that says how many wallpapers were left out and why; the count and the reasons come in.
-session-wallpaper-left-out = استُبعدت { $count }: { $why }.
+session-wallpaper-left-out =
+    { $count ->
+        [zero] لم يستبعد Trindle أي صورة.
+        [one] استبعد Trindle صورة واحدة لأنها { $why }.
+        [two] استبعد Trindle صورتين لأنهما { $why }.
+        [few] استبعد Trindle { $count } صور لأنها { $why }.
+        [many] استبعد Trindle { $count } صورة لأنها { $why }.
+       *[other] استبعد Trindle { $count } صورة لأنها { $why }.
+    }
 
 # Under the lock screen when a phone or password check was given up on.
 session-lock-check-abandoned = استغرق ذلك وقتًا طويلًا. حاول مرة أخرى.
@@ -99,7 +107,7 @@ session-lock-check-abandoned = استغرق ذلك وقتًا طويلًا. حا
 session-restart-question = إعادة تشغيل سطح المكتب كله؟
 
 # Under the heading: what restarting everything does to the open windows.
-session-restart-windows = ستُغلق كل نافذة مفتوحة، وسيضيع كل ما لم يُحفظ فيها.
+session-restart-windows = ستُغلق كل نافذة مفتوحة. وسيضيع كل ما لم تحفظه.
 
 # Tip of the round button that leaves everything as it is.
 session-restart-cancel = إلغاء
@@ -107,3 +115,16 @@ session-restart-cancel = إلغاء
 # Main button that restarts the whole desktop.
 session-restart-go = إعادة التشغيل
 
+# Under the lock screen when Enter is pressed while the last try, given up on, is still being checked.
+session-lock-still-checking = ما زال Trindle يتحقق من محاولتك الأخيرة. حاول مرة أخرى بعد قليل.
+
+# Under the lock screen after several wrong tries, with how many seconds to wait (1 is one second).
+session-lock-wait =
+    { $n ->
+        [zero] محاولات خاطئة كثيرة جدًا. حاول مرة أخرى الآن.
+        [one] محاولات خاطئة كثيرة جدًا. حاول مرة أخرى بعد ثانية واحدة.
+        [two] محاولات خاطئة كثيرة جدًا. حاول مرة أخرى بعد ثانيتين.
+        [few] محاولات خاطئة كثيرة جدًا. حاول مرة أخرى بعد { $n } ثوانٍ.
+        [many] محاولات خاطئة كثيرة جدًا. حاول مرة أخرى بعد { $n } ثانية.
+       *[other] محاولات خاطئة كثيرة جدًا. حاول مرة أخرى بعد { $n } ثانية.
+    }

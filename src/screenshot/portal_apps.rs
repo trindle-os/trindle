@@ -78,7 +78,7 @@ impl Chooser {
     }
 
     fn replace(&mut self, offered: &[String]) {
-        self.apps = app_choice::ordered(&apps::entries(), offered, &self.kind, &self.first);
+        self.apps = apps::with_existing_icons(app_choice::ordered(&apps::entries(), offered, &self.kind, &self.first));
     }
 
     fn answer(&self) -> Option<Answer> {
@@ -118,14 +118,14 @@ impl App for Chooser {
         let shown = self.shown();
         let target = self.target().map(|a| a.id.clone());
         let chosen = target.as_ref().and_then(|id| shown.iter().position(|a| &a.id == id));
-        let rows = shown.iter().map(|a| item(a.name.clone()).icon(a.icon.clone().unwrap_or_else(|| crate::common::apps::generic_icon_for(&a.id, &a.name)))).collect();
+        let rows = shown.iter().map(|a| item(a.name.clone()).icon(a.icon.clone().unwrap_or_default())).collect();
         let mut all = vec![
             title(self.heading.clone()),
             entry(self.query.clone(), t!("screenshot-apps-search"), Msg::Search).width(Length::Fill).on_submit(Msg::Accept).first(),
         ];
         all.push(match shown.is_empty() {
             true => label(t!("screenshot-apps-none")).height(Length::Fixed(LIST)),
-            false => scroll(format!("apps:{}", self.query), list(rows, chosen, Msg::Pick).on_open(|_| Msg::Accept)).height(Length::Fixed(LIST)),
+            false => scroll(format!("apps:{}", self.query), list(rows, chosen, Msg::Pick).called(self.heading.clone()).on_open(|_| Msg::Accept)).height(Length::Fixed(LIST)),
         });
         if !self.reset.is_empty() {
             all.push(label(self.reset.clone()).tone(Tone::Problem));
@@ -166,7 +166,7 @@ fn choose(kit: &Kit, asked: Asked) {
     let kind = get::<String>(&options, "content_type").unwrap_or_default();
     let first: Vec<String> = get::<String>(&options, "last_choice").filter(|c| !c.is_empty()).into_iter().collect();
     let heading = heading_for(&options);
-    let apps = app_choice::ordered(&apps::entries(), &offered, &kind, &first);
+    let apps = apps::with_existing_icons(app_choice::ordered(&apps::entries(), &offered, &kind, &first));
     let reset = crate::common::damaged::take_notes().join(" ");
     let token = get::<String>(&options, "activation_token").filter(|t| !t.is_empty());
     let key = handle.as_str().to_string();

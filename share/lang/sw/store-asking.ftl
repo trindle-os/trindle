@@ -6,14 +6,14 @@ store-ask-title = Kile ambacho { $app } inaweza kutumia
 
 # Under the list of switches in the permission window when one or more is on already.
 # SAFETY: needs a human review before it ships
-store-ask-above-on = Kila swichi inaonyesha kinachoruhusiwa sasa. Unaweza kubadilisha haya baadaye katika Programu, Ruhusa.
+store-ask-above-on = Unaweza kubadilisha haya baadaye katika Mipangilio, Ruhusa.
 
 # Under the list of switches in the permission window when all start off.
 # SAFETY: needs a human review before it ships
-store-ask-above-off = Kila swichi inabaki imezimwa hadi uibonyeze. Unaweza kubadilisha haya baadaye katika Programu, Ruhusa.
+store-ask-above-off = Hakuna kinachoruhusiwa bado. Unaweza kubadilisha haya baadaye katika Mipangilio, Ruhusa.
 
 # Note under the list of switches, since a .deb names nothing it wants.
-store-ask-worked-out = Imebainishwa kutoka kwenye programu yenyewe
+store-ask-worked-out = Kulingana na kile ambacho programu inaomba
 
 # Tip of the button that turns every switch on.
 # SAFETY: needs a human review before it ships

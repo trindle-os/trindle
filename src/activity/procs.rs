@@ -657,7 +657,7 @@ mod tests {
             app("firefox-esr", "/usr/lib/firefox-esr/firefox-esr %u"),
             app("org.signal.Signal", "/usr/bin/flatpak run org.signal.Signal"),
             app("trindle-settings", "trindle-settings"),
-            app("org.gnome.Nautilus", "nautilus --new-window"),
+            app("org.example.Files", "examplefiles --new-window"),
         ])
     }
 
@@ -672,7 +672,7 @@ mod tests {
         let id = |name: &str, mine| Ident { name: name.into(), kernel: false, mine, flatpak: None };
 
         assert_eq!(owner(&id("trindle-settings", true), &n).app, Some(3));
-        assert_eq!(owner(&id("nautilus", true), &n).app, Some(4));
+        assert_eq!(owner(&id("examplefiles", true), &n).app, Some(4));
 
         assert_eq!(owner(&id("firefox-esr-bin", true), &n).app, Some(1));
         assert_eq!(owner(&id("trindle-ring", true), &n).kind, Kind::Trindle);

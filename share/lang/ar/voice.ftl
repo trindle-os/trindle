@@ -14,16 +14,16 @@ voice-brighter = أكثر سطوعًا
 voice-dimmer = أقل سطوعًا
 
 # Said under the ring when the request is to let the screen rest again.
-voice-keep-awake-off = يمكن للشاشة أن تهدأ من جديد
+voice-keep-awake-off = يمكن للشاشة أن تنام من جديد
 
 # Said under the ring when the screen is kept awake.
-voice-keep-awake-on = إبقاء الشاشة مضاءة
+voice-keep-awake-on = تبقى الشاشة مضاءة
 
 # Said under the ring when the request is to look for updates.
 voice-updates = جارٍ البحث عن تحديثات
 
 # Said under the ring when nothing was heard at all.
-voice-nothing-heard = لم يُسمع شيء. اضغط وسط الحلقة وتكلّم.
+voice-nothing-heard = لم يسمعك Trindle. اضغط وسط الحلقة وتكلّم.
 
 # Said under the ring when the volume goes up.
 voice-louder = أعلى صوتًا
@@ -86,7 +86,7 @@ voice-showing-app = جارٍ عرض { $name }
 voice-opening-app = جارٍ فتح { $name }
 
 # Said under the ring when the request was heard but not understood; what was heard comes in.
-voice-heard-unknown = سُمعت «{ $heard }» لكن لم أعرف ما المطلوب
+voice-heard-unknown = لم يتعرّف Trindle على الأمر «{ $heard }»
 
 # Said in the ring when voice has not been added yet.
 voice-optional = الأوامر الصوتية إضافة اختيارية. أضفها من الإعدادات، في صفحة الحلقة.
@@ -95,16 +95,16 @@ voice-optional = الأوامر الصوتية إضافة اختيارية. أض
 voice-switched-off = الأوامر الصوتية متوقفة. شغّلها من الإعدادات، في صفحة الحلقة.
 
 # Said in the ring when the microphone cannot be opened; the reason comes after it.
-voice-mic-failed = تعذّر فتح الميكروفون: { $why }
+voice-mic-failed = تعذّر على Trindle الوصول إلى الميكروفون: { $why }
 
 # Said in the ring when the microphone's recorder would not start.
-voice-mic-not-started = تعذّر فتح الميكروفون: لم يبدأ pw-record
+voice-mic-not-started = تعذّر على Trindle الوصول إلى الميكروفون لأن برنامج التسجيل لم يبدأ
 
 # Said in the ring when listening stopped and nothing was recorded.
 voice-nothing-recorded = لم يُسجَّل شيء.
 
 # Said in the ring when the recording had no speech in it.
-voice-nothing-heard-after = لم يُسمع شيء. اضغط وسط الحلقة وتكلّم.
+voice-nothing-heard-after = لم يسمعك Trindle. اضغط وسط الحلقة وتكلّم.
 
 # Said in the ring when the speech engine failed and gave no reason.
 voice-whisper-failed = فشل Whisper
@@ -113,13 +113,13 @@ voice-whisper-failed = فشل Whisper
 voice-installing-tools = جارٍ تثبيت أدوات البناء مؤقتًا: { $names }
 
 # Progress line while whisper.cpp is built; its version comes in.
-voice-building = جارٍ بناء whisper.cpp ‏{ $version } للأوامر الصوتية (دقيقة أو دقيقتان)
+voice-building = جارٍ بناء whisper.cpp ‏{ $version } للأوامر الصوتية. يستغرق هذا دقيقة أو دقيقتين.
 
 # Progress line while the speech model is downloaded (148 MB).
-voice-fetching-model = جارٍ جلب نموذج الكلام (148 ميغابايت)
+voice-fetching-model = جارٍ تنزيل نموذج الكلام (148 ميغابايت)
 
 # Progress line while the build tools are taken away again.
-voice-removing-tools = جارٍ إزالة أدوات البناء من جديد
+voice-removing-tools = جارٍ إزالة أدوات البناء الآن
 
 # Said once voice is added and ready to use.
 voice-ready = التحكم الصوتي جاهز. افتح الحلقة، واضغط في وسطها، وتكلّم.
@@ -133,3 +133,14 @@ voice-press-enter = اضغط Enter للإغلاق.
 # Shown when the command is run with neither install nor remove.
 voice-usage = الاستخدام: trindle-voice-setup install | remove
 
+# Said when a step of the voice set-up fails. { $program } is the program that was run, with its first word.
+voice-step-failed = لم يعمل { $program }.
+
+# Said when the whisper.cpp download isn't the one Trindle checks for, so nothing is built from it.
+voice-whisper-fingerprint = تنزيل whisper.cpp ليس الذي توقعه Trindle، لذلك لم يُبنَ.
+
+# Said when the speech model download isn't the one Trindle checks for, so it isn't installed.
+voice-model-fingerprint = تنزيل نموذج الكلام ليس الذي توقعه Trindle، لذلك لم يُثبَّت.
+
+# The reason after "Trindle couldn't access the microphone:" when the session has no private folder to keep a recording in.
+voice-no-private-folder = لا يوجد مجلد خاص متاح.

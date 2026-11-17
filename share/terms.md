@@ -18,7 +18,7 @@ Version 1, 6 November 2026.
 
 2.3 For Trindle's own code, sections 4 to 9 are additional terms under section 7(a) of GPL version 3. They apply alongside sections 15, 16 and 17 of the GPL.
 
-2.4 Source code. The source of Trindle's own programs is at github.com/trindle-os. The source of the Debian packages in Trindle is in Debian's source archive, and the deb-src lines for it are in Trindle's package sources. For three years after you receive Trindle you can also write to distro@trindle.org for a copy of the source of any part under the GPL on a physical medium, for no more than the cost of making it.
+2.4 Source code. The source of Trindle's own programs is at github.com/trindle-os. The source of the Debian packages in Trindle is in Debian's own source archive, at sources.debian.org and on Debian's mirrors. For three years after you receive Trindle you can also write to distro@trindle.org for a copy of the source of any part under the GPL on a physical medium, for no more than the cost of making it.
 
 2.5 Firmware. Trindle includes firmware and drivers from Debian's non-free-firmware section, and the NVIDIA detection tool from Debian's non-free section, so that more hardware works. They are under their makers' licences, listed in /usr/share/doc/*/copyright, and are not free software.
 

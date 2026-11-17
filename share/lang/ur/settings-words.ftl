@@ -5,22 +5,19 @@
 settings-words-heading = آپ کے اپنے الفاظ
 
 # Under the heading.
-settings-words-about = Trindle جو بھی لفظ دکھاتا ہے اسے کسی بھی زبان میں بدلیں، اور لفظوں کی فہرست کو فائل کی صورت میں شیئر کریں۔
+settings-words-about = Trindle جو بھی لفظ دکھاتا ہے اسے کسی بھی زبان میں بدلیں، اور اپنی تبدیلیاں شیئر کریں۔
 
 # The first line of the card: what is locked, in plain words.
-settings-words-rule = جو شیٹ آخری کالم کے سوا کہیں اور بدلی گئی ہو، یا Trindle کی اپنی نہ ہو، پوری رد کر دی جاتی ہے۔
+settings-words-rule = صرف آخری کالم بدلیں۔ اگر آپ کچھ اور بدلیں، یا شیٹ Trindle کی اپنی نہ ہو، تو Trindle اسے قبول نہیں کرے گا۔
 
 # The line that picks which language the boxes are for.
 settings-words-language = زبان
-
-# Under the language line.
-settings-words-language-sub = یہ فہرست اسی زبان کی ہے۔
 
 # The name of the language list for the screen reader.
 settings-words-language-tip = فہرست کی زبان
 
 # The line that exports the sheet, and its button's tip.
-settings-words-export = شیٹ ڈاؤن لوڈ کریں
+settings-words-export = شیٹ محفوظ کریں
 
 # Under the export line.
 settings-words-export-sub = بائیں طرف انگریزی، اس کے ساتھ آپ کی زبان۔ دائیں طرف کا حصہ بدلیں۔
@@ -29,10 +26,10 @@ settings-words-export-sub = بائیں طرف انگریزی، اس کے سات�
 settings-words-export-title = الفاظ کی فہرست محفوظ کریں
 
 # The line that imports a sheet, and its button's tip.
-settings-words-import = شیٹ اپ لوڈ کریں
+settings-words-import = شیٹ کھولیں
 
 # Under the import line.
-settings-words-import-sub = پہلے پوری جانچی جاتی ہے۔ کوئی بھی فرق ہو تو کچھ انسٹال نہیں ہوتا۔
+settings-words-import-sub = اگر اس میں کچھ بھی غلط ہو تو کچھ انسٹال نہیں ہوتا۔
 
 # Title of the window that asks which sheet to open.
 settings-words-import-title = الفاظ کی فہرست کھولیں
@@ -41,80 +38,80 @@ settings-words-import-title = الفاظ کی فہرست کھولیں
 settings-words-imported = انسٹال ہو گئی
 
 # Under a box or the export button when the words could not be kept.
-settings-words-not-saved = محفوظ نہیں ہو سکی
+settings-words-not-saved = اسے محفوظ نہیں کیا جا سکا۔
 
 # Under the import button: the file is bigger than any sheet.
-settings-words-too-big = مسترد: فائل بہت بڑی ہے
+settings-words-too-big = فائل بہت بڑی ہے۔
 
 # Under the import button: the file is not text.
-settings-words-not-text = مسترد: سادہ متن نہیں ہے
+settings-words-not-text = یہ سادہ متن نہیں ہے۔
 
 # Under the import button: the file holds control or hidden characters.
-settings-words-not-plain = مسترد: چھپے ہوئے یا کنٹرول حروف ہیں
+settings-words-not-plain = اس میں چھپے ہوئے یا کنٹرول حروف ہیں۔
 
 # Under the import button: a line is longer than any line of a sheet.
-settings-words-line-long = مسترد: ایک سطر بہت لمبی ہے
+settings-words-line-long = ایک سطر بہت لمبی ہے۔
 
 # Under the import button: the file is not a Trindle word sheet.
-settings-words-not-mine = مسترد: یہ Trindle کی الفاظ کی فہرست نہیں ہے
+settings-words-not-mine = یہ Trindle کی الفاظ کی فہرست نہیں ہے۔
 
 # Under the import button: the sheet is of another version.
-settings-words-version = مسترد: فہرست کا ورژن مختلف ہے
+settings-words-version = یہ Trindle کے کسی دوسرے ورژن کے لیے ہے۔
 
 # Under the import button: the language tag is not usable.
-settings-words-bad-language = مسترد: زبان درست نہیں ہے
+settings-words-bad-language = زبان درست نہیں ہے۔
 
 # Under the import button: the notes at the top were changed.
-settings-words-notes = مسترد: فہرست کا اوپر کا حصہ بدلا گیا
+settings-words-notes = شیٹ کا اوپر کا حصہ بدلا گیا ہے۔
 
 # Under the import button: lines are missing or extra.
-settings-words-count = مسترد: سطریں کم یا زیادہ ہیں
+settings-words-count = کچھ سطریں کم یا زیادہ ہیں۔
 
 # Under the import button: a key is not the one Trindle has. The key is { $key }.
-settings-words-key = مسترد: { $key } کی کلید بدلی گئی
+settings-words-key = کلید { $key } بدلی گئی ہے۔
 
 # Under the import button: an English line was changed. The key is { $key }.
-settings-words-english = مسترد: { $key } کی انگریزی عبارت بدلی گئی
+settings-words-english = { $key } کی انگریزی عبارت بدلی گئی ہے۔
 
 # Under the import button: a row is not in the right form. The key is { $key }.
-settings-words-shape = مسترد: { $key } کی قطار درست شکل میں نہیں ہے
+settings-words-shape = { $key } کی قطار درست ترتیب میں نہیں ہے۔
 
 # Under a box or the import button: the translation is too long. The key is { $key }.
-settings-words-long = مسترد: { $key } کے الفاظ بہت لمبے ہیں
+settings-words-long = { $key } کے الفاظ بہت لمبے ہیں۔
 
 # Under a box or the import button: the translation holds hidden or control characters. The key is { $key }.
-settings-words-characters = مسترد: { $key } کے الفاظ میں چھپے ہوئے حروف ہیں
+settings-words-characters = { $key } کے الفاظ میں چھپے ہوئے حروف ہیں۔
 
 # Under a box or the import button: the translation holds markup, a link or a path. The key is { $key }.
-settings-words-links = مسترد: { $key } کے الفاظ میں مارک اپ، لنک یا راستہ ہے
+settings-words-links = { $key } کے الفاظ میں فارمیٹنگ، لنک یا راستہ ہے۔
 
 # Under a box or the import button: the translation's placeholders differ from the English. The key is { $key }.
-settings-words-placeholders = مسترد: { $key } کے پلیس ہولڈر مختلف ہیں
+settings-words-placeholders = { $key } کے پلیس ہولڈر انگریزی سے میل نہیں کھاتے۔
 
 # Under the import button: the file cannot be read as a plain file.
-settings-words-not-sheet = مسترد: فائل پڑھی نہیں جا سکی
+settings-words-not-sheet = Trindle فائل نہیں پڑھ سکا۔
 
-# Under the rule on the card: when changed words appear.
-settings-words-next-start = آپ کے الفاظ پروگرام کے اگلی بار شروع ہونے پر نظر آئیں گے۔
+# Added to the card's i: when changed words appear.
+settings-words-next-start = سیٹنگز آپ کے الفاظ ابھی دکھاتی ہے، دوسرے پروگرام اگلی بار شروع ہونے پر۔
 
 # Under the import button: the check value does not match what Trindle wrote.
-settings-words-check-value = مسترد: جانچ کی قدر اس سے نہیں ملتی جو Trindle نے لکھی تھی
+settings-words-check-value = جانچ کوڈ مطابقت نہیں رکھتا۔
 
 settings-words-reset = Trindle کے الفاظ پر واپس
 
-settings-words-reset-sub = اس زبان کو ویسا ہی کر دیتا ہے جیسی آئی تھی۔ آپ کے الفاظ ایک بیک اپ فائل میں رکھے جاتے ہیں۔
+settings-words-reset-sub = Trindle کے الفاظ واپس لگا دیتا ہے۔ آپ کے الفاظ بیک اپ کے طور پر رکھے جاتے ہیں۔
 
 # The button that opens the page where a finished sheet is offered for the next version.
-settings-words-offer = اپنی شیٹ پیش کریں
+settings-words-offer = اپنی شیٹ شیئر کریں
 
 # Under the offer button: who can send and why.
-settings-words-offer-sub = ایک صفحہ کھلتا ہے جہاں آپ Buildmorphic میں سائن اِن کر کے اسے بھیجتے ہیں۔ Trindle اسے آپ کی طرف سے کبھی نہیں بھیجتا۔
+settings-words-offer-sub = ایک صفحہ کھلتا ہے جہاں سے آپ اسے خود بھیج سکتے ہیں۔ Trindle اسے کبھی نہیں بھیجتا۔
 
 # The line that starts a language of your own, and its button's tip.
-settings-words-start = اپنی ذاتی زبان شروع کریں
+settings-words-start = اپنی زبان شروع کریں
 
 # Under the start line.
-settings-words-start-sub = اسے نام دیں، اصلی یا گھڑا ہوا۔ یہ انگریزی کے طور پر شروع ہوتی ہے اور آپ کی اپنی کے طور پر درج ہوتی ہے۔
+settings-words-start-sub = اسے کوئی بھی نام دیں۔ یہ انگریزی کی کاپی کے طور پر شروع ہوتی ہے۔
 
 # Inside the empty name box, and its name for the screen reader.
 settings-words-name-tip = آپ کی زبان کا نام
@@ -126,14 +123,13 @@ settings-words-started = شروع کر دی گئی
 settings-words-name-length = 1 سے 30 حروف استعمال کریں
 
 # Under the start line: the name holds markup, a path or hidden characters.
-settings-words-name-plain = صرف حروف: کوئی مارک اپ، راستے یا چھپے ہوئے حروف نہیں
+settings-words-name-plain = صرف حروف استعمال کریں، کوئی فارمیٹنگ، راستے یا چھپے ہوئے حروف نہیں۔
 
 # Under the start line: another language of your own has this name.
-settings-words-name-taken = اس نام کی زبان آپ کے پاس پہلے سے ہے
+settings-words-name-taken = اس نام کی زبان آپ کے پاس پہلے سے ہے۔
 
 # A language of your own in the language lists. { $name } is the name the person gave it.
 settings-words-own-label = { $name } (آپ کی اپنی)
 
 # Under the reset line for a language of your own: the button asks twice. Never taken from a sheet.
-settings-words-reset-own-sub = آپ کی یہ اپنی زبان ہٹا دیتا ہے۔ اس کے الفاظ ایک بیک اپ فولڈر میں رکھے جاتے ہیں۔
-
+settings-words-reset-own-sub = آپ کی زبان ہٹا دیتا ہے اور اس کے الفاظ کا بیک اپ رکھتا ہے۔

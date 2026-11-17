@@ -3,9 +3,9 @@
 use smithay::reexports::wayland_server::protocol::wl_surface::WlSurface;
 
 use super::start_of;
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
 
-impl<BackendData: Backend + 'static> AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> Compose<BackendData> {
 
     pub fn own_press(&mut self, serial: u32, to: Option<&WlSurface>, placed: bool) {
         if let (Some(to), Some(real)) = (to, self.keys_changed.was) {
@@ -68,9 +68,9 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
     }
 }
 
-impl<BackendData: Backend + 'static> crate::protocols::own_press::OwnPressHandler for AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> crate::protocols::own_press::OwnPressHandler for Compose<BackendData> {
     fn own_press_state(&mut self) -> &mut crate::protocols::own_press::OwnPressState {
         &mut self.own_press_state
     }
 }
-crate::delegate_own_press!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+crate::delegate_own_press!(@<BackendData: Backend + 'static> Compose<BackendData>);

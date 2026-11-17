@@ -145,3 +145,36 @@ fn the_finished_look_wraps_and_keeps_links() {
     }
     assert!((laid.height - laid.rows.iter().map(|r| r.height).sum::<f32>()).abs() < 0.01);
 }
+
+#[test]
+fn a_file_of_open_marks_is_read_in_a_blink() {
+    let start = std::time::Instant::now();
+    for unit in ["[", "*", "_", "~~", "[a][", "http://x.com/(((()))))))*_~"] {
+        let _ = parse(&unit.repeat(150_000));
+    }
+    let blanks = format!("- item\n{}\n  more\n", "\n".repeat(100_000));
+    let _ = parse(&blanks);
+    assert!(start.elapsed() < std::time::Duration::from_secs(10), "took {:?}", start.elapsed());
+}
+
+#[test]
+fn the_fast_reading_gives_the_same_marks() {
+    assert_eq!(inline("[a [b] c](https://x.org) and [d]", &Refs::new()), vec![
+        Span::Link(vec![text("a [b] c")], "https://x.org".into()), text(" and [d]")]);
+    assert_eq!(inline("*a* *b", &Refs::new()), vec![Span::Italic(vec![text("a")]), text(" *b")]);
+    assert_eq!(inline("[ [a] *x* *y", &Refs::new()), vec![text("[ [a] "), Span::Italic(vec![text("x")]), text(" *y")]);
+}
+
+#[test]
+fn words_inside_marks_nested_too_deep_stay_as_plain_text() {
+    let deep = format!("{}word{}", "[".repeat(100), "]".repeat(100));
+    let all = plain(&inline(&deep, &Refs::new()));
+    assert!(all.contains("word"), "{all}");
+    let emphasis = format!("{}word{}", "*_".repeat(40), "_*".repeat(40));
+    assert!(plain(&inline(&emphasis, &Refs::new())).contains("word"));
+}
+
+#[test]
+fn the_exported_page_claims_no_language() {
+    assert!(!to_html(&md("hello"), "x").contains("lang="));
+}

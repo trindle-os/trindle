@@ -38,6 +38,11 @@ pub(super) fn short_names(names: &[String]) -> Vec<String> {
     }).collect()
 }
 
+pub(super) fn heard_level(level: Option<f32>) -> f32 {
+    let level = level.filter(|l| l.is_finite()).unwrap_or(0.0).clamp(0.0, 1.0);
+    (level * 64.0).round() / 64.0
+}
+
 impl Quick {
     pub(super) fn sound(&mut self) {
         self.body = Body::Sound(sound_levels().iter().map(|&(name, target, out)| Level {
@@ -49,7 +54,10 @@ impl Quick {
         self.repeat(SOUND_EVERY, |q| q.read_levels());
         self.heard = 0.0;
         self.meter = (!crate::common::in_use::microphone_off()).then(meter::Meter::start);
-        self.repeat(METER_EVERY, |q| q.heard = q.meter.as_ref().map_or(0.0, |m| m.level()));
+        self.repeat_if(METER_EVERY, |q| {
+            let now = heard_level(q.meter.as_ref().map(|m| m.level()));
+            std::mem::replace(&mut q.heard, now) != now
+        });
     }
 
     pub(super) fn sound_view(&self, levels: &[Level]) -> Vec<Node<Msg>> {

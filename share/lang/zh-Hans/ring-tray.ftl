@@ -12,14 +12,17 @@ ring-updates-none = 一切都是最新的
 # Answer to a spoken question about updates when the updates button installs them all; "it" for one, "them" for more.
 ring-updates-spoken-all =
     { $n ->
-       *[other] 有 { $n } 个等待安装：“应用”旁边的更新按钮可以全部装上
+       *[other] 有 { $n } 个更新在等待。使用“应用”旁边的更新按钮即可全部安装。
     }
 
 # Answer to a spoken question about updates when only plugin updates that need a look wait; the clause that follows says so.
-ring-updates-spoken-look = 有 { $n } 个等待安装：{ $look }
+ring-updates-spoken-look =
+    { $n ->
+       *[other] 有 { $n } 个更新在等待。{ $look }。
+    }
 
 # Answer to a spoken question about updates when some install and some need a look; the last clause says which need a look.
-ring-updates-spoken-mixed = 有 { $n } 个等待安装：“应用”旁边的更新按钮可以装上 { $put } 个，另外{ $look }
+ring-updates-spoken-mixed = 有 { $n } 个更新在等待。使用“应用”旁边的更新按钮可以安装其中的 { $put } 个。{ $look }。
 
 # Name and tip of the updates button when only firmware updates wait: the button takes the person to them.
 ring-updates-see-firmware =
@@ -30,7 +33,7 @@ ring-updates-see-firmware =
 # Name and tip of the updates button when firmware updates wait among others: the button takes the person to them.
 ring-updates-see-among =
     { $n ->
-       *[other] 查看 { $n } 个更新，其中有固件
+       *[other] 查看 { $n } 个更新，包括固件
     }
 
 # SAFETY: needs a human review before it ships
@@ -94,13 +97,13 @@ ring-tray-vpn = 通过 VPN 连接
 ring-tray-wired = 有线网络
 
 # Name of the network button when connected by cable but the internet is not reachable.
-ring-tray-wired-limited = 有线网络，连接受限
+ring-tray-wired-limited = 有线，但无法上网
 
 # Name of the network button on Wi-Fi: the network's name and its signal strength.
 ring-tray-wifi = { $name }，信号 { $strength }%
 
 # Name of the network button on Wi-Fi when the internet is not reachable.
-ring-tray-wifi-limited = { $name }，信号 { $strength }%，连接受限
+ring-tray-wifi-limited = { $name }，信号 { $strength }%，访问受限
 
 # Name of the Bluetooth button when Bluetooth is off.
 ring-tray-bt-off = 蓝牙已关闭
@@ -124,13 +127,11 @@ ring-tray-none = 没有托盘图标
 ring-tray-show = 显示在环中
 
 # Line of a tray icon's menu: take the icon out of the ring's row.
-ring-tray-take-out = 从环中取出
+ring-tray-take-out = 从环中移除
 
 # Quiet words in a tray icon's menu in place of Show in the ring, when the row is full.
-ring-tray-full = 环里已有四个。请先取出一个。
-
+ring-tray-full = 环里已经有四个图标。请先取出一个。
 
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = 检查已关闭
-

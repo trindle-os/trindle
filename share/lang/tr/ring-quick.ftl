@@ -2,7 +2,7 @@
 # machine translated (Turkish), not yet reviewed by a person.
 
 # Tip of the pin button on a clipboard or notification item that is not pinned: keeps it for good.
-ring-quick-pin = Sabitle: kalıcı olarak sakla
+ring-quick-pin = Saklamak için sabitle
 
 # Tip of the pin button on a clipboard or notification item that is pinned.
 ring-quick-unpin = Sabitlemeyi kaldır
@@ -13,7 +13,7 @@ ring-quick-forget-one = Bunu unut
 
 # Tip of the bin button that forgets everything on the page except what is pinned; it asks twice.
 # SAFETY: needs a human review before it ships
-ring-quick-forget-all = Sabitlenenler dışında her şeyi unut
+ring-quick-forget-all = Sabitlenenler dışında her şeyi temizle
 
 # Name of the volume slider for the speakers on the sound page.
 ring-quick-speakers = Hoparlörler
@@ -70,7 +70,7 @@ ring-quick-bt-switch = Bluetooth
 ring-quick-bt-off = Bluetooth kapalı.
 
 # Line on the Bluetooth page while it looks for devices and none is found yet.
-ring-quick-bt-searching = Aranıyor... aygıtı eşleştirme kipine alın.
+ring-quick-bt-searching = Aranıyor… Aygıtı eşleştirme kipine alın.
 
 # Tip of the button beside a connected Bluetooth device that disconnects it.
 ring-quick-bt-disconnect = Bağlantıyı kes
@@ -86,20 +86,20 @@ ring-quick-bt-pair = Eşleştir ve bağlan
 ring-quick-bt-device = Bluetooth aygıtı
 
 # Line under the Bluetooth page while pairing with a device.
-ring-quick-bt-pairing = { $name } ile eşleştiriliyor...
+ring-quick-bt-pairing = { $name } ile eşleştiriliyor…
 
 # Line under the Bluetooth page while connecting a device.
-ring-quick-bt-connecting = { $name } bağlanıyor...
+ring-quick-bt-connecting = { $name } bağlanıyor…
 
 # Line under the Bluetooth page while disconnecting a device.
-ring-quick-bt-disconnecting = { $name } bağlantısı kesiliyor...
+ring-quick-bt-disconnecting = { $name } bağlantısı kesiliyor…
 
 # Line under the Bluetooth page when connecting or disconnecting did not work.
 ring-quick-bt-failed = Bu işe yaramadı. Açık ve yakında mı?
 
 # Line under the Bluetooth page when pairing failed because the codes were not accepted.
 # SAFETY: needs a human review before it ships
-ring-quick-bt-codes = Eşleşmedi: kodlar kabul edilmedi.
+ring-quick-bt-codes = Eşleşilemedi. Kodlar kabul edilmedi.
 
 # Line under the Bluetooth page when pairing failed.
 ring-quick-bt-not-paired = Eşleşmedi. Eşleştirme kipinde ve yakında mı?
@@ -109,7 +109,7 @@ ring-quick-bt-paired-not-connected = Eşleşti, ama bağlanmadı. Biraz sonra ye
 
 # Question in the ring when a Bluetooth device wants a PIN typed.
 # SAFETY: needs a human review before it ships
-ring-quick-bt-ask-pin = Bu aygıtın PIN'ini yazın. Genellikle kullanım kılavuzundadır ya da 0000'dır.
+ring-quick-bt-ask-pin = Bu aygıtın PIN'ini yazın. Çoğu zaman aygıtın kullanım kılavuzunda bulabilirsiniz ya da 0000'ı deneyin.
 
 # Typing box for the PIN of a Bluetooth device, shown quietly while empty.
 ring-quick-bt-pin-box = PIN
@@ -148,7 +148,7 @@ ring-quick-wifi-switch = Wi-Fi
 ring-quick-wifi-off = Wi-Fi kapalı.
 
 # Line on the Wi-Fi page while it looks for networks.
-ring-quick-wifi-looking = Ağlar aranıyor...
+ring-quick-wifi-looking = Ağlar aranıyor…
 
 # Tip of the button beside the Wi-Fi network in use that leaves it.
 ring-quick-wifi-disconnect = Bağlantıyı kes
@@ -165,7 +165,7 @@ ring-quick-wifi-password-box = Parola
 ring-quick-wifi-join = Katıl
 
 # Line under the Wi-Fi page while joining a network.
-ring-quick-wifi-joining = { $ssid } ağına katılınıyor...
+ring-quick-wifi-joining = { $ssid } ağına katılınıyor…
 
 # Question text in the ring when the Wi-Fi password was not accepted.
 # SAFETY: needs a human review before it ships
@@ -181,7 +181,7 @@ ring-quick-battery-none = Bu bilgisayarda pil yok.
 ring-quick-brightness-fixed = Bu ekranın parlaklığı buradan değiştirilemez
 
 # Line on the clipboard page when nothing has been copied yet.
-ring-quick-clip-empty = Henüz bir şey kopyalanmadı. Kopyaladıklarınız burada tutulur.
+ring-quick-clip-empty = Henüz bir şey kopyalanmadı.
 
 # Line on the clipboard page for a copied picture.
 ring-quick-clip-picture = Bir resim
@@ -193,7 +193,7 @@ ring-quick-clip-again = Bunu yeniden kopyala
 ring-quick-clip-filter = Süz
 
 # Line on the notifications page when nothing has been said yet.
-ring-quick-notes-empty = Henüz bir şey söylenmedi.
+ring-quick-notes-empty = Henüz bildirim yok.
 
 # Tip of the button on one notification's page that goes back to the list.
 ring-quick-notes-back = Tüm bildirimlere dön
@@ -211,7 +211,7 @@ ring-quick-charging-full = Şarj oluyor: yaklaşık { $time } içinde dolacak
 ring-quick-charging = Şarj oluyor
 
 # Line on the battery page on battery, with the time left and the power in watts.
-ring-quick-on-battery-left = Pille çalışıyor: yaklaşık { $time } kaldı, { $rate } W kullanıyor
+ring-quick-on-battery-left = Pille çalışıyor. Yaklaşık { $time } kaldı, { $rate } W kullanılıyor.
 
 # Line on the battery page on battery, when the time is not known.
 ring-quick-on-battery = Pille çalışıyor
@@ -225,9 +225,9 @@ ring-quick-plugged = Takılı, şarj olmuyor
 # Line on the battery page about how much charge the battery still holds. The health is good, worn, or something else for worn out.
 ring-quick-health =
     { $how ->
-        [good] Sağlık: iyi. Yeni olduğu zamanın %{ $capacity } kapasitesini koruyor.
-        [worn] Sağlık: yıpranmış. Yeni olduğu zamanın %{ $capacity } kapasitesini koruyor.
-       *[old] Sağlık: bitmiş: yenisinin zamanı geldi. Yeni olduğu zamanın %{ $capacity } kapasitesini koruyor.
+        [good] Pilin durumu iyi. Şu an yeni olduğu zamanki şarj kapasitesinin %{ $capacity } kadarını depolayabiliyor.
+        [worn] Pil yıpranmış. Şu an yeni olduğu zamanki şarj kapasitesinin %{ $capacity } kadarını depolayabiliyor.
+       *[old] Pilin ömrü bitmiş, yenisinin zamanı geldi. Şu an yeni olduğu zamanki şarj kapasitesinin %{ $capacity } kadarını depolayabiliyor.
     }
 
 # Line on the battery page about how many times the battery has been charged.
@@ -238,10 +238,10 @@ ring-quick-cycles =
     }
 
 # Tip of the button that turns notification circles off.
-ring-quick-notes-on = Bildirimler açık: kapat
+ring-quick-notes-on = Bildirimler açık. Kapat
 
 # Tip of the button that turns notification circles back on.
-ring-quick-notes-off = Bildirimler kapalı: aç
+ring-quick-notes-off = Bildirimler kapalı. Aç
 
 # A time of under an hour on the battery page.
 ring-quick-minutes = { $m } dk
@@ -266,3 +266,5 @@ ring-quick-title-tray = Tepsi simgeleri
 # Heading of the shortcut list page, opened with Super and K.
 ring-quick-title-shortcuts = Kısayollar
 
+# Line under the Wi-Fi page when leaving the network did not work.
+ring-quick-wifi-leave-failed = Bağlantı kesilemedi.

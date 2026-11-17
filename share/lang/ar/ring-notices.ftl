@@ -37,7 +37,7 @@ ring-snooze-for-1-hour = أجّل ساعة واحدة
 ring-snooze-for-6-hours = أجّل 6 ساعات
 
 # Tip and screen reader name of the snooze choice for the next morning.
-ring-snooze-for-next-morning = أجّل إلى صباح الغد
+ring-snooze-for-next-morning = أجّل حتى الصباح
 
 # Tip of the button on the snooze page that goes back to the notification's message.
 ring-act-back = العودة إلى الرسالة
@@ -109,7 +109,7 @@ ring-lid-nothing = لا شيء
 ring-lid-shut-down = إيقاف التشغيل
 
 # Reason the system lists beside Trindle's hold on the lid switch (shown by tools that list what stops sleep).
-ring-lid-reason = إغلاق الغطاء يفعل ما تقوله الإعدادات، الطاقة
+ring-lid-reason = يمكنك اختيار ما يحدث عند إغلاق الغطاء من الإعدادات، ضمن الطاقة.
 
 # Notice at the foot of the screen for a few seconds when the magnifier starts.
 ring-magnify-hint = اضغط مطولًا في أي مكان للتكبير
@@ -126,14 +126,14 @@ ring-mic-off-tip = أطفئ الميكروفون لكل البرامج
 
 # Tip of the switch in the ring that turns the microphone back on.
 # SAFETY: needs a human review before it ships
-ring-mic-on-tip = أعد تشغيل الميكروفون
+ring-mic-on-tip = شغّل الميكروفون
 
 # Line in the ring when something other than the person pressed the microphone switch on.
 # SAFETY: needs a human review before it ships
-ring-mic-own-press = ضغطتك أنت وحدها تستطيع إعادة تشغيل الميكروفون.
+ring-mic-own-press = أنت وحدك تستطيع إعادة تشغيل الميكروفون.
 
 # Line in the ring when the microphone switch could not be changed; the reason follows.
-ring-mic-not-changed = تعذّر تغيير مفتاح الميكروفون: { $why }
+ring-mic-not-changed = تعذّر على Trindle تغيير مفتاح الميكروفون: { $why }
 
 # Notice when a notification was clicked and no program could be found for it.
 ring-goes-no-program = لم يُعثر على برنامج
@@ -151,7 +151,7 @@ ring-notes-copied = نُسخ لمساعدك
 ring-notes-name = إشعار
 
 # Said when a pinned notification has been held long enough and now follows the pointer.
-ring-notes-moving = جارٍ النقل. اترك للإسقاط، وEscape للإعادة.
+ring-notes-moving = جارٍ نقل الإشعار. اترك الزر لإسقاطه، أو اضغط Escape لإعادته.
 
 # Said when a pinned notification has been dropped or moved by keys.
 ring-notes-moved = نُقل
@@ -197,7 +197,15 @@ ring-plugin-needs = { $name } يحتاج إلى إذنك
 
 # Line under the notice that a plugin needs permission: none of the permissions it asks for are given.
 # SAFETY: needs a human review before it ships
-ring-plugin-cannot-work = لا يستطيع العمل بعد: المسموح 0 من { $asks }.
+ring-plugin-cannot-work =
+    { $asks ->
+        [one] لا يستطيع العمل بعد. لم تسمح بالإذن الوحيد الذي يطلبه.
+        [two] لا يستطيع العمل بعد. لم تسمح بأي من الإذنين اللذين يطلبهما.
+        [few] لا يستطيع العمل بعد. لم تسمح بأي إذن من الأذونات الـ { $asks } التي يطلبها.
+        [many] لا يستطيع العمل بعد. لم تسمح بأي إذن من الأذونات الـ { $asks } التي يطلبها.
+        [zero] لا يستطيع العمل بعد. لم تسمح بأي إذن من الأذونات الـ { $asks } التي يطلبها.
+       *[other] لا يستطيع العمل بعد. لم تسمح بأي إذن من الأذونات الـ { $asks } التي يطلبها.
+    }
 
 # Said to a screen reader when a notification was copied; $said is what the circle said.
 ring-copied-said = تم النسخ. { $said }
@@ -222,3 +230,5 @@ ring-outside-body =
        *[other] { $names } و{ $more } آخر
     }
 
+# Said under the magnifier when the screen picture it took has the wrong size.
+ring-magnify-wrong-size = كان حجم الصورة خاطئًا.

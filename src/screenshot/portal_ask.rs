@@ -83,7 +83,13 @@ pub(super) fn chosen(parts: &[Part]) -> Vec<(String, String)> {
     }).collect()
 }
 
-type Screen = Rc<RefCell<Option<Rc<Display>>>>;
+pub(super) type Screen = Rc<RefCell<Option<Rc<Display>>>>;
+
+#[cfg(test)]
+thread_local! {
+
+    pub(super) static NO_SCREEN: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+}
 
 #[derive(Clone)]
 pub(super) struct Kit {
@@ -93,21 +99,29 @@ pub(super) struct Kit {
     held: Screen,
 }
 
+pub(super) fn screen(events: &Loop, held: &Screen) -> Option<Rc<Display>> {
+    #[cfg(test)]
+    if NO_SCREEN.get() {
+        return None;
+    }
+    if let Some(d) = held.borrow().as_ref() {
+        return Some(d.clone());
+    }
+    let gone = held.clone();
+    let display = Display::connect(events, move || {
+        gone.borrow_mut().take();
+    })?;
+    *held.borrow_mut() = Some(display.clone());
+    Some(display)
+}
+
 impl Kit {
     pub fn new(bus: &Bus, events: &Loop, stay: &Rc<Stay>) -> Kit {
         Kit { bus: bus.clone(), events: events.clone(), stay: stay.clone(), held: Rc::new(RefCell::new(None)) }
     }
 
     pub(super) fn screen(&self) -> Option<Rc<Display>> {
-        if let Some(d) = self.held.borrow().as_ref() {
-            return Some(d.clone());
-        }
-        let gone = self.held.clone();
-        let display = Display::connect(&self.events, move || {
-            gone.borrow_mut().take();
-        })?;
-        *self.held.borrow_mut() = Some(display.clone());
-        Some(display)
+        screen(&self.events, &self.held)
     }
 
     pub fn hold(&self) {
@@ -451,7 +465,7 @@ pub(super) mod testkit {
 
         pub fn new() -> Rig {
             let daemon = testing::own_daemon();
-            std::env::remove_var("WAYLAND_DISPLAY");
+            super::NO_SCREEN.set(true);
             let lp = Loop::new();
             let a = Bus::at(&lp, &daemon.1).expect("the portal's connection to the test's own bus");
             let b = Bus::at(&lp, &daemon.1).expect("the asking program's connection to the test's own bus");

@@ -198,9 +198,24 @@ fn real_notes_are_new_once_cut_back_when_long_and_taken_away_when_huge() {
 fn a_headline_is_plain_words_cut_short() {
     assert_eq!(plain_words("  Connected \n\t to   desktop. ", 60), "Connected to desktop.");
     assert_eq!(plain_words("a\u{202E}b\u{0}c\u{200B}d", 60), "abcd");
+    assert_eq!(plain_words("a\u{AD}b\u{206A}c\u{E0041}d\u{E0100}e", 60), "abcde", "the same list as the assistant's");
 
     assert_eq!(plain_words("<b>Hi</b> &amp; bye", 60), "<b>Hi</b> &amp; bye");
     let long = plain_words(&"word ".repeat(40), HEADLINE_MAX);
     assert!(long.chars().count() <= HEADLINE_MAX && long.ends_with('\u{2026}'), "{long}");
     assert_eq!(plain_words(&"\u{e9}".repeat(100), 10).chars().count(), 10);
+}
+
+#[test]
+fn a_look_with_nothing_new_leaves_the_seen_count_alone() {
+    let home = home_with("seenquiet", None);
+    let (notes, seen) = (home.join(NOTES), home.join("notify.seen"));
+    std::fs::write(&notes, "a\nb\n").unwrap();
+    unread_notes(&notes, &seen, 1000, 5000, 5);
+    let long_ago = std::time::SystemTime::now() - std::time::Duration::from_secs(3600);
+    std::fs::File::options().write(true).open(&seen).unwrap().set_modified(long_ago).unwrap();
+    assert!(unread_notes(&notes, &seen, 1000, 5000, 5).is_empty());
+    let after = std::fs::metadata(&seen).unwrap().modified().unwrap();
+    assert!(after <= long_ago + std::time::Duration::from_secs(1), "not rewritten");
+    let _ = std::fs::remove_dir_all(&home);
 }

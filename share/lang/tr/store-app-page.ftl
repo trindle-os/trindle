@@ -26,7 +26,7 @@ store-app-state-updating = Güncelleniyor
 store-app-state-held = Kurulu, güncellemeler tutuluyor
 
 # The state beside the dot for an installed app whose updates are held back.
-store-app-state-held-version = Kurulu, { $version } sürümünde tutuluyor
+store-app-state-held-version = Kurulu, güncellemeler { $version } sürümünde tutuluyor
 
 # The state beside the dot for an installed app with an update waiting; the end says what waits.
 store-app-state-waiting = Kurulu, { $waits }
@@ -65,7 +65,7 @@ store-app-open-round = Aç
 
 # Main button that releases an app whose updates are held back.
 # SAFETY: needs a human review before it ships
-store-app-release = Serbest bırak
+store-app-release = Güncellemelere izin ver
 
 # Main button that updates the app.
 # SAFETY: needs a human review before it ships
@@ -85,13 +85,13 @@ store-app-website = Web sitesi
 store-app-no-pictures = Bu uygulamanın resmi yok.
 
 # In the picture frame when the picture could not be fetched.
-store-app-picture-missed = Bu resim alınamadı.
+store-app-picture-missed = Trindle bu resmi alamadı.
 
 # In the picture frame while the picture is being fetched.
 store-app-picture-fetching = Resim alınıyor…
 
 # In the picture frame when the computer has no internet.
-store-app-picture-offline = Bu bilgisayar internete bağlı değilken resimler alınamaz.
+store-app-picture-offline = Resimleri görmek için internete bağlanın.
 
 # Between the picture buttons: which picture, when it has no caption.
 store-app-picture-of = Resim { $at } / { $n }
@@ -166,13 +166,13 @@ store-app-review-no-title = Başlık yok
 store-app-people-none = Henüz kimse bu uygulama hakkında yazmadı.
 
 # Under What people say when there is no internet.
-store-app-people-offline = Bu bilgisayar internete bağlı değilken insanların söyledikleri alınamaz.
+store-app-people-offline = Yorumları okumak için internete bağlanın.
 
 # Under What people say while reviews are being fetched.
-store-app-people-looking = İnsanların söyledikleri aranıyor…
+store-app-people-looking = Yorumlar yükleniyor…
 
 # Name of the card of reviews.
-store-app-people = İnsanlar ne diyor
+store-app-people = Yorumlar
 
 # Facts line: when the app's project was made.
 store-app-fact-created = Oluşturuldu

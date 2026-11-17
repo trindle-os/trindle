@@ -8,7 +8,7 @@ settings-appearance-title = চেহারা
 settings-appearance-keywords = রং রঙ হাইলাইট থিম চেহারা স্কিন কাচ গাঢ় হালকা মোড রোদ উজ্জ্বল আইকন ফন্ট কার্সর পয়েন্টার স্ক্রিন রিডার অন্ধ জোরে পড়া অ্যাক্সেসিবিলিটি লেবেল টুলটিপ নাম colour colours color colors accent theme themes look skin glass dark light mode sunshine bright icons font cursor pointer screen reader blind read aloud accessibility labels tooltips names pointing
 
 # Introduction under the heading of the appearance page, and the words behind the page i.
-settings-appearance-help = হালকা বা গাঢ়, রং, আইকন, ফন্ট, পয়েন্টার এবং স্ক্রিন জোরে পড়া। কিছু প্রোগ্রাম আবার খুললে তবেই বদল টের পায়।
+settings-appearance-help = হালকা বা গাঢ় থিম, রং, আইকন, ফন্ট ও পয়েন্টার বেছে নিন, অথবা স্ক্রিন জোরে পড়া চালু করুন। কিছু প্রোগ্রাম আবার খুললে তবেই বদল দেখায়।
 
 # Question along the bottom of the page while a theme is on trial.
 settings-appearance-foot-keep = এই চেহারা রাখবেন?
@@ -38,7 +38,7 @@ settings-appearance-sample-spoken = { $name } দেখতে কেমন, { $l
 settings-appearance-aloud-look = { $look } চেহারা।
 
 # Sentence at the top of the page when a theme cannot be used; { $theme } is its name and { $why } the reason.
-settings-appearance-top-unusable = Trindle-এর নিজস্ব চেহারা, কারণ { $theme } থিম ব্যবহার করা যাচ্ছে না। { $why }
+settings-appearance-top-unusable = { $theme } থিম ব্যবহার করা যাচ্ছে না, তাই Trindle-এর নিজস্ব চেহারা ব্যবহার হচ্ছে। { $why }
 
 # Sentence at the top of the page for a theme that has dark and light looks; { $theme } is the theme, { $look } dark or light, { $accent } the highlight colour and { $shape } round or square.
 settings-appearance-top-theme-look = { $theme } থিম, { $look }, { $accent } হাইলাইট ও { $shape } আইকন সহ।
@@ -50,25 +50,28 @@ settings-appearance-top-theme = { $theme } থিম, { $accent } হাইল�
 settings-appearance-top-look = { $look }, { $accent } হাইলাইট ও { $shape } আইকন সহ।
 
 # Shape of the icons in the top sentence.
+settings-appearance-shape-square = চৌকো
+
+# Shape of the icons in the top sentence.
 settings-appearance-shape-round = গোল
 
 # Name of Trindle's own highlight colour, first in the list of colours.
 settings-appearance-trindle-yellow = Trindle হলুদ
 
 # Start of the words behind the i of the reading the screen card.
-settings-appearance-reading-says = পর্দায় কী আছে এবং আপনি কী লিখছেন তা বলে। Super, Alt ও S একসঙ্গে চাপলেও এটি চালু বা বন্ধ হয়।
+settings-appearance-reading-says = পর্দায় কী আছে এবং আপনি কী লিখছেন তা জোরে পড়ে শোনানো হয়। চালু বা বন্ধ করতে Super, Alt ও S একসঙ্গে চাপুন।
 
 # Red words under the icon shape line when the icons could not be remade.
-settings-appearance-no-icons = আইকনগুলো আবার তৈরি করা যায়নি, তাই কিছু আইকনের আগের আকার রয়ে গেছে। আবার চেষ্টা করতে সেটটি আবার বেছে নিন।
+settings-appearance-no-icons = Trindle সব আইকন আপডেট করতে পারেনি, তাই কিছু আইকনের আগের আকার রয়ে গেছে। আবার চেষ্টা করতে সেটটি আবার বেছে নিন।
 
 # Small words on a theme's tile when Trindle made some of its colours clearer.
-settings-appearance-corrected = পড়ার সুবিধার জন্য কিছু রং আরও স্পষ্ট করা হয়েছে।
+settings-appearance-corrected = Trindle কিছু লেখা পড়া আরও সহজ করেছে।
 
 # Said aloud when a theme is tried; { $theme } is its name and { $seconds } how long until the old look comes back.
 settings-appearance-aloud-trying =
     { $seconds ->
-        [one] { $theme } থিম পরখ করা হচ্ছে। Keep না চাপলে আপনার আগের চেহারা { $seconds } সেকেন্ডে ফিরে আসবে। Escape চাপলে এখনই ফিরবে।
-       *[other] { $theme } থিম পরখ করা হচ্ছে। Keep না চাপলে আপনার আগের চেহারা { $seconds } সেকেন্ডে ফিরে আসবে। Escape চাপলে এখনই ফিরবে।
+        [one] { $theme } থিম পরখ করা হচ্ছে। Keep না চাপলে আপনার আগের চেহারা { $seconds } সেকেন্ডে ফিরে আসবে। এখনই ফিরতে Escape চাপুন।
+       *[other] { $theme } থিম পরখ করা হচ্ছে। Keep না চাপলে আপনার আগের চেহারা { $seconds } সেকেন্ডে ফিরে আসবে। এখনই ফিরতে Escape চাপুন।
     }
 
 # Name of Trindle's own theme when none is named.
@@ -90,23 +93,13 @@ settings-appearance-chooser-title = একটি থিম বেছে নি�
 settings-appearance-chooser-filter = থিম
 
 # Green words under the Add a theme line after a theme was added; { $name } is its name.
-settings-appearance-added = { $name } ওপরের তালিকায় আছে। ব্যবহার করতে এতে চাপুন।
+settings-appearance-added = { $name } এখন ওপরের তালিকায় আছে।
 
 # Red words under the Theme line when a theme could not be removed.
 settings-appearance-not-removed = থিমটি সরানো যায়নি।
 
 # Red words under the theme tiles when a theme cannot be used; { $theme } is its name and { $why } the reason.
-settings-appearance-cannot-use = { $theme } থিম ব্যবহার করা যাচ্ছে না। { $why }
-
-# Heading of the line saying a theme is tried first.
-settings-appearance-tried-first = আগে থিম পরখ করা হয়
-
-# Small words under that line; { $seconds } is how long Keep is asked for.
-settings-appearance-tried-first-about =
-    { $seconds ->
-        [one] জানালার নিচে { $seconds } সেকেন্ড ধরে Keep জিজ্ঞেস করা হয়।
-       *[other] জানালার নিচে { $seconds } সেকেন্ড ধরে Keep জিজ্ঞেস করা হয়।
-    }
+settings-appearance-cannot-use = Trindle { $theme } থিম ব্যবহার করতে পারছে না। { $why }
 
 # Name of the bin button that removes one of the person's own themes.
 # SAFETY: needs a human review before it ships
@@ -128,25 +121,22 @@ settings-appearance-looking = থিম খোঁজা হচ্ছে
 settings-appearance-theme-card = থিম
 
 # Words behind the i of the Theme card.
-settings-appearance-theme-about = থিম হলো এক ফাইলে পুরো চেহারা: রং, কোণ, আকার ও ফাঁকা জায়গা। পরখ করতে একটিতে চাপুন: Trindle-এর সব জানালা একসঙ্গে বদলে যায়, এবং Keep না চাপলে ৩০ সেকেন্ডে আগের চেহারা নিজেই ফিরে আসে, তাই পড়া যায় না এমন থিম কখনো থেকে যায় না। যে থিমে গাঢ় ও হালকা দুটি চেহারা আছে, তার ছবির পাশে গাঢ় ও হালকা বোতাম থাকে; উজ্জ্বল রোদে হালকা সহজে দেখা যায়, এবং Apps-এর অ্যাপগুলো পরের বার খুললে তা নেয়। এক চেহারার থিমে এই বোতাম থাকে না। আপনার হাইলাইট রং সব থিমে আপনারই থাকে। আপনার যোগ করা থিম শুধু পড়া হয়, কখনো চালানো হয় না, এবং যে লেখা পড়া কঠিন করত তা আরও স্পষ্ট করা হয়। টার্মিনাল থেকে trindle-settings --theme default চালালে Trindle-এর নিজস্ব চেহারা সবসময় ফিরে আসে।
+settings-appearance-theme-about = থিম হলো এক ফাইলে পুরো চেহারা: রং, কোণ, আকার ও ফাঁকা জায়গা। পরখ করতে একটি থিমে চাপুন। Trindle-এর সব জানালা একসঙ্গে বদলে যায়। Keep না চাপলে ৩০ সেকেন্ড পরে আগের চেহারা নিজেই ফিরে আসে, তাই পড়া যায় না এমন থিমে আপনি আটকে যাবেন না। কোনো থিমে গাঢ় ও হালকা দুটি চেহারা থাকলে তার ছবির পাশে গাঢ় ও হালকা বোতাম দেখা যায়। উজ্জ্বল রোদে হালকা সহজে দেখা যায়, এবং Apps-এর অ্যাপগুলো পরের বার খুললে তা ব্যবহার করে। এক চেহারার থিমে এই বোতাম থাকে না। আপনার হাইলাইট রং সব থিমে আপনারই থাকে। আপনার যোগ করা থিম Trindle শুধু পড়ে, কখনো চালায় না, আর পড়তে কঠিন লেখা আরও স্পষ্ট করে দেয়। টার্মিনাল থেকে Trindle-এর নিজস্ব চেহারা ফিরিয়ে আনতে trindle-settings --theme default চালান।
 
 # Heading of the line holding the theme tiles.
 settings-appearance-theme-line = থিম
 
-# Small words under that line.
-settings-appearance-theme-line-about = পুরো চেহারা। দুটি চেহারা থাকলে থিমের পাশে গাঢ় বা হালকা পাওয়া যায়।
-
 # Small words under the Add a theme line.
-settings-appearance-add-theme-about = একটি .css ফাইল, যেমন কেউ ভাগ করেছেন।
+settings-appearance-add-theme-about = একটি .css ফাইল, যেমন কেউ আপনার সঙ্গে ভাগ করেছেন।
 
 # Words of the link that opens help about what a theme file holds.
-settings-appearance-theme-file-help = থিম ফাইলে কী থাকে
+settings-appearance-theme-file-help = থিম ফাইলে কী আছে
 
 # Red words under the colour box when what was typed is not a colour.
-settings-appearance-hex-bad = 0-9 ও a-f থেকে ছয়টি, যেমন #fbc711।
+settings-appearance-hex-bad = 0-9 ও a-f ব্যবহার করুন, যেমন #fbc711।
 
 # Spoken description of the small dot that shows the colour typed.
-settings-appearance-dot = লেখা রংটি
+settings-appearance-dot = আপনার লেখা রং
 
 # Placeholder of the box for typing a colour code.
 settings-appearance-hex-code = হেক্স কোড
@@ -164,16 +154,10 @@ settings-appearance-any-colour-about = ছয় বা আট অঙ্ক, য
 settings-appearance-colour-title = রং
 
 # Words behind the i of the Colour card.
-settings-appearance-colour-about = হাইলাইট বোতাম, সুইচ, ভরতে থাকা রিং এবং আপনি কোথায় আছেন তা চিহ্নিত করে। Trindle-এর নিজের জানালা সঙ্গে সঙ্গে বদলায়; রিং পরের বার খুললে। কার্ডে দেখা যায় না এমন গাঢ় রং পড়ার মতো হওয়া পর্যন্ত হালকা করা হয়, আর হালকা চেহারায় খুব ফ্যাকাশে রং গাঢ় করা হয়। গাঢ় বা হালকা বাছা হয় থিমের নিজের টাইলে, থিমের নিচে।
+settings-appearance-colour-about = হাইলাইট বোতাম, সুইচ, ভরতে থাকা রিং এবং আপনি কোথায় আছেন তা চিহ্নিত করে। Trindle-এর নিজের জানালা সঙ্গে সঙ্গে বদলায়, আর রিং বদলায় পরের বার খুললে। কার্ডে দেখা যায় না এমন গাঢ় রং হলে Trindle পড়ার মতো না হওয়া পর্যন্ত তা হালকা করে। হালকা চেহারায় খুব ফ্যাকাশে রং হলে Trindle তা গাঢ় করে। গাঢ় বা হালকা বেছে নিন থিমের নিজের টাইলে, থিমের নিচে।
 
 # Heading of the line with the highlight colour swatches.
 settings-appearance-highlight = হাইলাইট
-
-# Small words under that line.
-settings-appearance-highlight-about = বোতাম, সুইচ এবং আপনি কোথায় আছেন।
-
-# Small words under the read the screen aloud switch when a screen reader is installed.
-settings-appearance-reader-on = Super, Alt ও S-ও এটি চালু বা বন্ধ করে।
 
 # Heading of the line, and name of its switch, for reading the screen aloud.
 settings-appearance-reader = স্ক্রিন জোরে পড়ুন
@@ -181,17 +165,17 @@ settings-appearance-reader = স্ক্রিন জোরে পড়ুন
 # Heading of the line, and name of its switch, for keeping labels while pointing.
 settings-appearance-labels = পয়েন্ট করার সময় লেবেল রাখুন
 
-# Small words under that line.
-settings-appearance-labels-about = আপনি যতক্ষণ বোতামে পয়েন্ট করে থাকেন, তার নাম থাকে।
-
 # Title of the Reading the screen card.
 settings-appearance-reading-title = স্ক্রিন পড়া
 
 # Words behind the i of that card; { $says } is the first sentences, from the key reading-says.
-settings-appearance-reading-about = { $says } বোতামের নাম সাধারণত দেড় সেকেন্ড পরে চলে যায়; রাখা থাকলে পয়েন্টার যতক্ষণ এর ওপর থাকে ততক্ষণ থাকে। স্ক্রিন জোরে পড়ার সময় প্রতিটি বোতামের নিচে তার নাম দেখায়।
+settings-appearance-reading-about = { $says } বোতামের নাম সাধারণত দেড় সেকেন্ড পরে মিলিয়ে যায়। নাম রাখার বিকল্প চালু থাকলে পয়েন্টার যতক্ষণ বোতামের ওপর থাকে ততক্ষণ নাম থাকে। স্ক্রিন জোরে পড়ার সময় প্রতিটি বোতামের নিচে তার নাম দেখায়।
 
 # Name of the set of round icons.
 settings-appearance-icons-circles = গোল
+
+# Name of the set of square icons.
+settings-appearance-icons-squares = চৌকো
 
 # Words beside the turning ring while the icons are remade.
 settings-appearance-icons-working = আইকন বদলানো হচ্ছে
@@ -205,14 +189,11 @@ settings-appearance-icons-set = { $name } আইকন
 # Heading of the line for the shape of the icons.
 settings-appearance-shape = আকার
 
-# Small words under that line.
-settings-appearance-shape-about = Trindle আইকন, গোল বা চৌকো।
-
 # Title of the Icons card.
 settings-appearance-icons-title = আইকন
 
 # Words behind the i of the Icons card.
-settings-appearance-icons-about = Trindle আইকন গোল বা চৌকো হয়। যে অ্যাপ এতে নেই, তার জন্য মানানসই একটি তৈরি হয়, এবং রিং ও প্যানেল নতুন আকারে আবার আঁকা হয়।
+settings-appearance-icons-about = Trindle আইকন গোল বা চৌকো, দুই রকমেই পাওয়া যায়। কোনো অ্যাপের আইকন Trindle-এর না থাকলে মানানসই একটি তৈরি করা হয়। রিংও নতুন আকার ব্যবহার করে।
 
 # Name of the list of font families, and heading of the font line.
 settings-appearance-font = ফন্ট
@@ -223,14 +204,8 @@ settings-appearance-font-default = ডিফল্ট
 # Name of the list of font sizes.
 settings-appearance-font-size = ফন্টের আকার
 
-# Small words under the font line.
-settings-appearance-font-about = প্রোগ্রামের জানালার লেখা।
-
 # Name of the button that adds fonts, and heading of its line.
 settings-appearance-add-fonts = ফন্ট যোগ করুন
-
-# Small words under the Add fonts line.
-settings-appearance-add-fonts-about = একটি .ttf বা .otf ফাইল, বা সেগুলোর একটি zip।
 
 # Words of the link that opens help about what a font file must contain.
 settings-appearance-fonts-help = ফাইলে কী থাকতে হবে
@@ -239,7 +214,7 @@ settings-appearance-fonts-help = ফাইলে কী থাকতে হব�
 settings-appearance-text-title = লেখা
 
 # Words behind the i of the Text card.
-settings-appearance-text-about = প্রোগ্রাম যে ফন্টে লেখা দেখায় এবং তার আকার। এখানে যোগ করা ফন্ট, অর্থাৎ .ttf বা .otf ফাইল বা সেগুলোর zip, শুধু আপনার ফন্ট তালিকায় যুক্ত হয়; কিছু প্রোগ্রাম আবার খুললে তবেই তা টের পায়।
+settings-appearance-text-about = প্রোগ্রাম লেখার জন্য যে ফন্ট ও আকার ব্যবহার করে। এখানে যোগ করা ফন্ট, অর্থাৎ .ttf বা .otf ফাইল বা সেগুলোর zip, শুধু আপনার ফন্ট তালিকায় যুক্ত হয়। কিছু প্রোগ্রাম আবার খুললে তবেই তা দেখায়।
 
 # Title of the window for choosing font files.
 settings-appearance-chooser-fonts = ফন্ট বেছে নিন
@@ -248,16 +223,16 @@ settings-appearance-chooser-fonts = ফন্ট বেছে নিন
 settings-appearance-font-not-replaced = { $name } বদলানো যায়নি।
 
 # Green words after one font took the place of the one there; { $name } is the file name.
-settings-appearance-font-replaced-one = { $name } বদলানো হয়েছে। এখন থেকে চালু হওয়া প্রোগ্রাম এটি ব্যবহার করবে।
+settings-appearance-font-replaced-one = Trindle { $name } বদলে দিয়েছে। এখন থেকে আপনি যে প্রোগ্রাম চালু করবেন তা এটি ব্যবহার করবে।
 
 # Green words after several fonts took the place of the ones there; { $n } of { $total } were done.
-settings-appearance-font-replaced-some = { $total }টির মধ্যে { $n }টি বদলানো হয়েছে। এখন থেকে চালু হওয়া প্রোগ্রাম এগুলো ব্যবহার করবে।
+settings-appearance-font-replaced-some = Trindle { $total }টি ফন্টের মধ্যে { $n }টি বদলে দিয়েছে। এখন থেকে আপনি যে প্রোগ্রাম চালু করবেন তা এগুলো ব্যবহার করবে।
 
 # Green words after fonts were added; { $n } is how many.
 settings-appearance-fonts-added =
     { $n ->
-        [one] { $n }টি ফন্ট ওপরের তালিকায় আছে। ওপর থেকে বেছে নিন।
-       *[other] { $n }টি ফন্ট ওপরের তালিকায় আছে। ওপর থেকে বেছে নিন।
+        [one] এখন { $n }টি ফন্ট ওপরের তালিকায় আছে।
+       *[other] এখন { $n }টি ফন্ট ওপরের তালিকায় আছে।
     }
 
 # Green words after added fonts were already in the list.
@@ -279,17 +254,10 @@ settings-appearance-pointer-spoken = { $size } পয়েন্টার
 settings-appearance-cursor-standard = প্রমিত
 
 # Name of the list of cursor themes, and heading of its line.
-settings-appearance-cursor = কার্সর
+settings-appearance-cursor = পয়েন্টার
 
 # Name of the list of cursor sizes, and heading of its line.
-settings-appearance-cursor-size = কার্সরের আকার
-
-# Small words under the cursor line.
-settings-appearance-cursor-about = পয়েন্টার কেমন করে আঁকা হয়।
-
-# Small words under the cursor size line.
-settings-appearance-cursor-size-about = বড় হলে খুঁজে পাওয়া সহজ।
+settings-appearance-cursor-size = পয়েন্টারের আকার
 
 # Title of the Pointer card.
 settings-appearance-pointer-title = পয়েন্টার
-

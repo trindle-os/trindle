@@ -39,7 +39,7 @@ pub const KEYS: &[&str] = &["0586e5476f6b93a84f1cf01d58774e70ecb81719c74d6abe0bd
 #[cfg(feature = "test-catalogue")]
 pub const KEYS: &[&str] = &["838042661858272bf75de1596dc74f61d6b2223825ccf95d52318d1dd9992589"];
 
-const NUMBER_FLOOR: u64 = 1_791_763_200;
+const NUMBER_FLOOR: u64 = 1_794_324_682;
 
 pub const SIGNATURE_END: &str = ".sig";
 const SIGNATURE_BYTES: usize = 64;
@@ -204,7 +204,7 @@ pub fn unpack(archive: &Path, into: &Path) -> Result<PathBuf, String> {
 fn within(archive: &Path, bytes: u64, files: usize) -> Result<(), String> {
     use std::io::BufRead;
     let refused = || t!("plugins-unpack-failed", why = t!("plugins-unpack-tar-refused"));
-    let mut list = crate::common::gentle::program(&mut Command::new("tar")).arg("-tvf").arg(archive)
+    let mut list = crate::common::gentle::program(&mut Command::new("tar")).args(["--numeric-owner", "-tvf"]).arg(archive)
         .stdin(Stdio::null()).stdout(Stdio::piped()).stderr(Stdio::null()).spawn()
         .map_err(|e| t!("plugins-unpack-tar", why = e.to_string()))?;
     let (mut total, mut seen) = (0u64, 0usize);
@@ -526,13 +526,22 @@ fn read_address() -> (Vec<Offer>, Option<String>) {
     let (entries, said) = entries_at(Duration::ZERO, &fetch_file, &Trust::own());
     let icons = icons_home();
     let _ = std::fs::create_dir_all(&icons);
+    let fetch_icon = |url: &str, at: &Path| download(url, at, ICON_MOST, "15").is_ok();
     (entries.into_iter().map(|e| {
-        let icon = e.icon.as_ref().and_then(|i| {
-            let at = icons.join(format!("{}.{}", e.id, if i.ends_with(".png") { "png" } else { "svg" }));
-            download(&beside(PUBLISHED, i), &at, ICON_MOST, "15").ok().and_then(|_| icon_checked(&e, &at))
-        });
+        let icon = icon_of(&e, &icons, &fetch_icon);
         Offer { entry: e, icon }
     }).collect(), said)
+}
+
+fn icon_of(e: &Entry, icons: &Path, fetch: &dyn Fn(&str, &Path) -> bool) -> Option<PathBuf> {
+    let i = e.icon.as_ref()?;
+    let at = icons.join(format!("{}.{}", e.id, if i.ends_with(".png") { "png" } else { "svg" }));
+    if at.is_file() {
+        if let Some(kept) = icon_checked(e, &at) {
+            return Some(kept);
+        }
+    }
+    fetch(&beside(PUBLISHED, i), &at).then(|| icon_checked(e, &at)).flatten()
 }
 
 fn icon_checked(entry: &Entry, at: &Path) -> Option<PathBuf> {

@@ -11,7 +11,7 @@ settings-region-keywords = ভাষা অঞ্চল দেশ ফরম্�
 settings-region-help = ভাষা ও ফরম্যাট আপনি পরের বার লগ ইন করলে কার্যকর হয়।
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = দেখতে লগ আউট করে আবার ঢুকুন।
+settings-region-later = সব জায়গায় দেখতে আবার লগ ইন করুন।
 
 # Shown while the page reads the computer.
 settings-region-looking = খোঁজা হচ্ছে…
@@ -40,7 +40,7 @@ settings-region-installed-done = ইনস্টল হয়েছে
 settings-region-everything-in = সবকিছু { $lang } ভাষায়।
 
 # Headline when the formats differ from the language: the names are { $lang } and { $fmt }.
-settings-region-menus-in = মেনু { $lang } ভাষায়; তারিখ ও সংখ্যা { $fmt }-এর মতো করে লেখা হয়।
+settings-region-menus-in = মেনু { $lang } ভাষায়। তারিখ ও সংখ্যা { $fmt }-এর রীতিতে লেখা হয়।
 
 # Headline when a change is saved but waits for the next login: { $words } is the sentence so far.
 settings-region-with-wait = { $words } বদল দেখতে লগ আউট করে আবার ঢুকুন।
@@ -55,13 +55,10 @@ settings-region-language = ভাষা
 settings-region-formats = ফরম্যাট
 
 # Help text of the Language card (the information button).
-settings-region-language-about = ভাষা হলো মেনু ও বার্তা যে ভাষায় থাকে। ফরম্যাট হলো তারিখ, সময়, সংখ্যা, টাকা, মাপ ও কাগজের আকার যেভাবে লেখা হয়, যা অন্য দেশের রীতি মানতে পারে। দুটিই পরের বার লগ ইন করলে কার্যকর হয়।
+settings-region-language-about = ভাষা মেনু ও বার্তার জন্য ব্যবহার হয়। ফরম্যাট ঠিক করে তারিখ, সময়, সংখ্যা, টাকা ও মাপ কীভাবে লেখা হবে, এবং কাগজের আকার। এগুলো অন্য দেশের রীতি মানতে পারে। দুটিই পরের বার লগ ইন করলে কার্যকর হয়।
 
 # Under the Language heading.
-settings-region-language-sub = মেনু ও বার্তা, পরের লগইন থেকে।
-
-# Under the Formats heading.
-settings-region-formats-sub = তারিখ, সংখ্যা, টাকা ও কাগজের আকার।
+settings-region-language-sub = মেনু ও বার্তা পরের লগইনে বদলায়।
 
 # Heading of the line that shows a date and a number in the chosen formats.
 settings-region-date-number = একটি তারিখ ও একটি সংখ্যা
@@ -77,7 +74,7 @@ settings-region-add = ভাষা যোগ করুন
 
 # Help text of the Add a language card (the information button).
 # SAFETY: needs a human review before it ships
-settings-region-add-about = আরেকটি ভাষা ইনস্টল করে, যাতে মেনু বা ফরম্যাটের জন্য তা বাছা যায়। একটি তৈরি করতে একটু সময় লাগে এবং প্রশাসকের পাসওয়ার্ড লাগে।
+settings-region-add-about = আরেকটি ভাষা ইনস্টল করে, যাতে আপনি মেনু বা ফরম্যাটের জন্য তা বেছে নিতে পারেন। একটি ইনস্টল করতে একটু সময় লাগে এবং প্রশাসকের পাসওয়ার্ড লাগে।
 
 # Heading of the line shown when every language is already installed.
 settings-region-all-installed = প্রতিটি ভাষা আগে থেকেই ইনস্টল করা
@@ -97,11 +94,7 @@ settings-region-install-another = আরেকটি ইনস্টল কর�
 
 # Tip of the button that installs the chosen language.
 # SAFETY: needs a human review before it ships
-settings-region-install-this = এই ভাষা ইনস্টল করুন (আপনার পাসওয়ার্ড চাইবে)
-
-# Under the Install another heading.
-# SAFETY: needs a human review before it ships
-settings-region-needs-password = প্রশাসকের পাসওয়ার্ড লাগে।
+settings-region-install-this = এই ভাষা ইনস্টল করুন
 
 # Heading of the line saying how many more languages can be made.
 settings-region-ready = যোগ করার জন্য তৈরি
@@ -109,8 +102,8 @@ settings-region-ready = যোগ করার জন্য তৈরি
 # Under the Ready to add heading: how many more languages can be made.
 settings-region-more =
     { $n ->
-        [one] এই কম্পিউটার আরও { $n }টি ভাষা তৈরি করতে পারে।
-       *[other] এই কম্পিউটার আরও { $n }টি ভাষা তৈরি করতে পারে।
+        [one] আপনি আরও { $n }টি ভাষা ইনস্টল করতে পারেন।
+       *[other] আপনি আরও { $n }টি ভাষা ইনস্টল করতে পারেন।
     }
 
 settings-region-removing = সরানো হচ্ছে
@@ -121,7 +114,6 @@ settings-region-remove-language = এই ভাষা সরান
 
 settings-region-kept = এই কম্পিউটারের ভাষা
 
-settings-region-kept-about = এখানে ইনস্টল করা সব ভাষা। যেগুলো ব্যবহার করেন না সেগুলো সরান; যেটি ব্যবহার করছেন সেটি থাকবে। অ্যাডমিনিস্ট্রেটরের পাসওয়ার্ড চায়।
+settings-region-kept-about = এই কম্পিউটারে ইনস্টল করা সব ভাষা। যেটি ব্যবহার করছেন সেটি ছাড়া যেগুলো ব্যবহার করেন না সেগুলো সরিয়ে ফেলুন। একটি সরাতে প্রশাসকের পাসওয়ার্ড লাগে।
 
-settings-region-in-use-stays = ব্যবহার হচ্ছে, তাই থাকবে
-
+settings-region-in-use-stays = এটি ব্যবহার হচ্ছে।

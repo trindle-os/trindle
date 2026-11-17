@@ -4,33 +4,33 @@
 store-plugins-open-settings = Buka pengaturannya
 
 # Red words under the plugin catalogue when starting again did not work; the reason follows.
-store-plugins-not-done = Tidak berhasil: { $why }
+store-plugins-not-done = Gagal: { $why }
 
 # Said on a plugin's row when its update asks for a new permission and so waits for the person.
 # SAFETY: needs a human review before it ships
-store-plugins-waits-for-you = Pembaruan ini memerlukan izin baru. Menunggu Anda.
+store-plugins-waits-for-you = Pembaruan ini memerlukan izin baru, jadi menunggu Anda mengizinkannya.
 
 # On a plugin's row: the version it has and the one that is ready.
-store-plugins-waiting = Versi { $mine } sekarang, { $new } siap
+store-plugins-waiting = Versi { $new } siap. Anda memakai versi { $mine }.
 
 # On a plugin's row: the same, and what the new one asks for that the old one did not; the list and the note that it waits follow.
 # SAFETY: needs a human review before it ships
-store-plugins-waiting-more = Versi { $mine } sekarang, { $new } siap. Meminta lebih banyak dari sebelumnya: { $more }. { $waits }
+store-plugins-waiting-more = Anda memakai versi { $mine }. Versi { $new } memerlukan lebih banyak izin: { $more }. { $waits }
 
 # Said after who is putting updates in, on the Updates and Plugins pages.
-store-plugins-come-back = Tombol di sini kembali setelah selesai.
+store-plugins-come-back = Tombol akan kembali setelah selesai.
 
 # Line under the title of the Plugins page while the lists are read.
 store-plugins-looking = Mencari plugin…
 
 # Line under the title of the Plugins page when there are no plugins at all.
-store-plugins-none = Belum ada plugin yang terpasang, dan belum ada yang ditawarkan.
+store-plugins-none = Belum ada plugin yang terpasang, dan belum ada yang tersedia.
 
 # Line under the title of the Plugins page when none are installed and some are on offer.
 store-plugins-none-ready =
     { $n ->
-        [1] Belum ada plugin yang terpasang; 1 siap dipasang.
-       *[other] Belum ada plugin yang terpasang; { $n } siap dipasang.
+        [1] Belum ada plugin yang terpasang. 1 siap dipasang.
+       *[other] Belum ada plugin yang terpasang. { $n } siap dipasang.
     }
 
 # How many plugins are installed, as part of a line.
@@ -52,7 +52,7 @@ store-plugins-count-held =
     }
 
 # Line under the title of the Plugins page: how many are installed, with some updates held back.
-store-plugins-line-held = { $installed }; { $held }.
+store-plugins-line-held = { $installed }. { $held }.
 
 # Line under the title of the Plugins page: how many are installed.
 store-plugins-line-installed = { $installed }.
@@ -64,7 +64,7 @@ store-plugins-line-current = { $installed }, semuanya terbaru.
 store-plugins-line-updates = { $installed }, dan { $have }.
 
 # The same, with some updates held back.
-store-plugins-line-updates-held = { $installed }, dan { $have }; { $held }.
+store-plugins-line-updates-held = { $installed }, dan { $have }. { $held }.
 
 # On a plugin's card when it asks for nothing.
 store-plugins-asks-nothing = Tidak meminta apa pun.
@@ -77,10 +77,10 @@ store-plugins-asks = Yang diminta: { $list }.
 store-plugins-title = Plugin
 
 # On a plugin's card: the new version is ready and held back is not said.
-store-plugins-version-ready = Versi { $mine } terpasang; { $new } siap.
+store-plugins-version-ready = Versi { $mine } terpasang. Versi { $new } siap.
 
 # On a plugin's card: its installed version.
-store-plugins-version-installed = Versi { $version }, terpasang.
+store-plugins-version-installed = Versi { $version } terpasang.
 
 # On a plugin's card: the version on offer.
 store-plugins-version-offered = Versi { $version }.
@@ -94,7 +94,7 @@ store-plugins-install = Pasang { $name }
 
 # Tip of the round button that releases a plugin whose updates are held back.
 # SAFETY: needs a human review before it ships
-store-plugins-release = Lepaskan { $name }
+store-plugins-release = Izinkan pembaruan untuk { $name }
 
 # Tip of the round button that updates a plugin to a version.
 # SAFETY: needs a human review before it ships
@@ -104,10 +104,10 @@ store-plugins-update-to = Perbarui ke { $version }
 store-plugins-where = Asal plugin
 
 # Information on the card that says where plugins come from.
-store-plugins-come-from = Plugin hanya berasal dari daftar milik Trindle sendiri, yang dibaca dari trindle.org setiap kali halaman ini dibuka. Untuk menawarkan satu plugin, ajukan: setiap plugin diuji sebelum tayang.
+store-plugins-come-from = Plugin hanya berasal dari daftar milik Trindle sendiri, yang dibaca Trindle dari trindle.org setiap kali halaman ini dibuka. Anda dapat mengajukan plugin ke daftar itu. Setiap plugin diuji sebelum muncul.
 
 # Red words under a plugin that went in but whose background part is not running; the reason follows.
-store-plugins-not-running = Terpasang, tetapi bagian latar belakangnya tidak berjalan: { $why }
+store-plugins-not-running = Terpasang, tetapi bagian yang berjalan di latar belakang tidak berjalan: { $why }
 
 # Red words under a plugin that could not be removed; the reason follows.
 # SAFETY: needs a human review before it ships

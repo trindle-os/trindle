@@ -26,7 +26,7 @@ store-app-state-updating = Atualizando
 store-app-state-held = Instalado, atualizações retidas
 
 # The state beside the dot for an installed app whose updates are held back.
-store-app-state-held-version = Instalado, retido na versão { $version }
+store-app-state-held-version = Instalado, atualizações retidas na versão { $version }
 
 # The state beside the dot for an installed app with an update waiting; the end says what waits.
 store-app-state-waiting = Instalado, { $waits }
@@ -63,7 +63,7 @@ store-app-remove = Remover
 store-app-open-round = Abrir
 
 # Main button that releases an app whose updates are held back.
-store-app-release = Liberar
+store-app-release = Permitir atualizações
 
 # Main button that updates the app.
 store-app-update = Atualizar
@@ -81,13 +81,13 @@ store-app-website = Site
 store-app-no-pictures = Este aplicativo não tem imagens.
 
 # In the picture frame when the picture could not be fetched.
-store-app-picture-missed = Não foi possível baixar esta imagem.
+store-app-picture-missed = O Trindle não conseguiu obter esta imagem.
 
 # In the picture frame while the picture is being fetched.
 store-app-picture-fetching = Baixando a imagem…
 
 # In the picture frame when the computer has no internet.
-store-app-picture-offline = Não é possível baixar imagens enquanto este computador não estiver conectado à internet.
+store-app-picture-offline = Conecte-se à internet para ver imagens.
 
 # Between the picture buttons: which picture, when it has no caption.
 store-app-picture-of = Imagem { $at } de { $n }
@@ -163,13 +163,13 @@ store-app-review-no-title = Sem título
 store-app-people-none = Ninguém escreveu sobre este aplicativo ainda.
 
 # Under What people say when there is no internet.
-store-app-people-offline = Não é possível baixar o que as pessoas dizem enquanto este computador não estiver conectado à internet.
+store-app-people-offline = Conecte-se à internet para ler as avaliações.
 
 # Under What people say while reviews are being fetched.
-store-app-people-looking = Buscando o que as pessoas dizem…
+store-app-people-looking = Carregando avaliações…
 
 # Name of the card of reviews.
-store-app-people = O que as pessoas dizem
+store-app-people = Avaliações
 
 # Facts line: when the app's project was made.
 store-app-fact-created = Criado

@@ -440,20 +440,20 @@ fn a_password_box_opened_over_a_pointed_circle_is_typed_into() {
     });
 }
 
-struct StaleGrab(smithay::input::keyboard::GrabStartData<AnvilState<RigData>>);
+struct StaleGrab(smithay::input::keyboard::GrabStartData<Compose<RigData>>);
 
-impl smithay::input::keyboard::KeyboardGrab<AnvilState<RigData>> for StaleGrab {
-    fn input(&mut self, data: &mut AnvilState<RigData>, handle: &mut smithay::input::keyboard::KeyboardInnerHandle<'_, AnvilState<RigData>>,
+impl smithay::input::keyboard::KeyboardGrab<Compose<RigData>> for StaleGrab {
+    fn input(&mut self, data: &mut Compose<RigData>, handle: &mut smithay::input::keyboard::KeyboardInnerHandle<'_, Compose<RigData>>,
              keycode: smithay::input::keyboard::Keycode, state: smithay::backend::input::KeyState,
              modifiers: Option<smithay::input::keyboard::ModifiersState>, serial: smithay::utils::Serial, time: u32) {
         handle.input(data, keycode, state, modifiers, serial, time);
     }
-    fn set_focus(&mut self, _: &mut AnvilState<RigData>, _: &mut smithay::input::keyboard::KeyboardInnerHandle<'_, AnvilState<RigData>>,
+    fn set_focus(&mut self, _: &mut Compose<RigData>, _: &mut smithay::input::keyboard::KeyboardInnerHandle<'_, Compose<RigData>>,
                  _: Option<crate::focus::KeyboardFocusTarget>, _: smithay::utils::Serial) {}
-    fn start_data(&self) -> &smithay::input::keyboard::GrabStartData<AnvilState<RigData>> {
+    fn start_data(&self) -> &smithay::input::keyboard::GrabStartData<Compose<RigData>> {
         &self.0
     }
-    fn unset(&mut self, _: &mut AnvilState<RigData>) {}
+    fn unset(&mut self, _: &mut Compose<RigData>) {}
 }
 
 #[test]

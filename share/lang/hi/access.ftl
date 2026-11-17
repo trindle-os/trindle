@@ -1,0 +1,129 @@
+## What an app can be allowed to do, and what goes wrong without it. Each
+## permission has a name (said after "asks for", as in "Weather asks for
+## the internet and sound"), the line under its switch, and for some a warning.
+
+access-network-name = इंटरनेट
+access-network-without = यह इंटरनेट या आस-पास के दूसरे कंप्यूटरों तक नहीं पहुँच पाएगा।
+access-sound-name = आवाज़
+access-sound-without = इससे कोई आवाज़ नहीं आएगी।
+access-microphone-name = आपका माइक्रोफ़ोन
+access-microphone-without = यह आपको सुन नहीं पाएगा।
+access-sound-and-microphone-name = आवाज़ और आपका माइक्रोफ़ोन
+access-sound-and-microphone-without = इससे कोई आवाज़ नहीं आएगी और यह आपको सुन नहीं पाएगा।
+access-files-name = आपके दस्तावेज़, डाउनलोड, चित्र, संगीत, वीडियो और डेस्कटॉप फ़ोल्डर
+access-files-without = यह आपकी फ़ाइलें नहीं खोल पाएगा और आपके फ़ोल्डरों में कुछ सहेज नहीं पाएगा।
+access-home-name = आपके होम फ़ोल्डर की सब चीज़ें, छिपी हुई सेटिंग फ़ाइलों समेत
+access-home-without = यह आपकी फ़ाइलें नहीं खोल पाएगा और आपके फ़ोल्डरों में कुछ सहेज नहीं पाएगा।
+access-devices-name = आपका कैमरा और लगे हुए दूसरे उपकरण
+access-devices-without = यह आपको देख नहीं पाएगा और आपके लगाए उपकरणों का इस्तेमाल नहीं कर पाएगा।
+access-bluetooth-name = हेडफ़ोन जैसे Bluetooth उपकरण
+access-bluetooth-without = यह Bluetooth से किसी चीज़ से बात नहीं कर पाएगा।
+access-notifications-name = सूचनाएँ
+access-notifications-without = कुछ होने पर यह आपको बता नहीं पाएगा।
+access-background-name = आपके लॉग इन करने पर अपने-आप शुरू होना
+access-background-without = यह तभी चलेगा जब आपने इसे खोला हो।
+access-screen-name = आपकी स्क्रीन की तस्वीरें, आपकी कॉपी की चीज़ें, और आपके कीबोर्ड की तरह आपके लिए टाइप करना
+access-screen-without = यह दूसरी विंडो नहीं देख पाएगा और जब चाहे आपकी कॉपी की चीज़ें नहीं पढ़ पाएगा।
+access-x11-name = अपनी विंडो पुराने तरीके से बनाना, जिससे वह दूसरे पुराने ऐप और उनमें टाइप की गई चीज़ें देख सकता है
+access-x11-without = इसकी विंडो नहीं खुलेंगी।
+access-computer-name = अपने डिब्बे के बाहर काम करना, उन सब चीज़ों के साथ जिन तक आप खुद पहुँच सकते हैं
+access-computer-without = आप इसमें जो टाइप करेंगे वह इसके डिब्बे में ही रहेगा, इसलिए sudo और आपकी अपनी फ़ाइलें वहाँ काम नहीं करेंगी।
+access-control-name = आपके कीबोर्ड, माउस और क्लिपबोर्ड पर नियंत्रण
+access-control-without = यह पॉइंटर नहीं हिला पाएगा, टाइप नहीं कर पाएगा और आपकी कॉपी की चीज़ें साझा नहीं कर पाएगा।
+access-capture-name = आपका माउस और कीबोर्ड दूसरे कंप्यूटर के साथ साझा करना
+access-capture-without = पॉइंटर दूसरे कंप्यूटर पर नहीं जा पाएगा।
+access-copied-name = आपकी कॉपी की हुई फ़ाइलें
+access-copied-without = यह आपकी कॉपी की हुई फ़ाइलें नहीं पढ़ पाएगा, इसलिए उन्हें दूसरे कंप्यूटर तक नहीं ले जा सकेगा।
+access-summon-name = पूरी स्क्रीन वाली विंडो के ऊपर रिंग खोलना, जैसे आपने कुंजी दबाई हो
+access-summon-without = इसकी कुंजियाँ और क्लिक रिंग को सिर्फ़ डेस्कटॉप पर खोलेंगे, पूरी स्क्रीन वाली विंडो के ऊपर कभी नहीं।
+access-listen-name = आपके स्थानीय नेटवर्क के दूसरे कंप्यूटरों का इस तक पहुँच पाना
+access-listen-without = आपके स्थानीय नेटवर्क के दूसरे कंप्यूटर इसे ढूँढ नहीं पाएँगे और इससे जुड़ नहीं पाएँगे।
+access-home-network-name = सिर्फ़ आपके स्थानीय नेटवर्क के उपकरण
+access-home-network-without = यह स्थानीय नेटवर्क के प्रिंटर, स्कैनर या दूसरे उपकरण ढूँढ नहीं पाएगा और उनसे बात नहीं कर पाएगा।
+access-usb-devices-name = स्कैनर और USB उपकरण
+access-usb-devices-without = यह इस कंप्यूटर से लगा स्कैनर इस्तेमाल नहीं कर पाएगा।
+access-expand-name = टाइप करते समय छोटे कोड को पूरे शब्दों में बदलना
+access-expand-without = टाइप करते समय इसके छोटे कोड पूरे शब्दों में नहीं बदलेंगे।
+access-accessibility-name = हर विंडो को बोलकर सुनाना
+access-accessibility-without = यह आपकी विंडो को बोलकर नहीं सुना पाएगा।
+access-unnamed-name = कुछ ऐसा जिसका उसने नाम नहीं बताया
+
+access-control-warning = यह आपकी तरह टाइप कर सकता है, क्लिक कर सकता है और आपकी कॉपी की चीज़ें पढ़ सकता है। यह अनुमति सिर्फ़ ऐसे प्लगइन को दें जिस पर आपको भरोसा हो।
+access-capture-warning = जब तक पॉइंटर दूसरे कंप्यूटर पर है, आप जो भी टाइप करते हैं और क्लिक करते हैं वह इस प्लगइन को जाता है। यह अनुमति सिर्फ़ ऐसे प्लगइन को दें जिस पर आपको भरोसा हो।
+access-copied-warning = अनुमति मिलने तक यह ठीक वही फ़ाइलें पढ़ सकता है जो आप कॉपी करते हैं, और कुछ नहीं। यह अनुमति सिर्फ़ ऐसे प्लगइन को दें जिस पर आपको भरोसा हो।
+access-summon-warning = यह रिंग को, जो आपका टाइप किया सब कुछ ले लेती है, आपके कोई कुंजी दबाए बिना किसी गेम या फ़िल्म के ऊपर ला सकता है। यह अनुमति सिर्फ़ ऐसे प्लगइन को दें जिस पर आपको भरोसा हो।
+access-home-network-warning = यह आपके स्थानीय नेटवर्क के हर उपकरण से बात कर सकता है, आपके राउटर समेत, पर इंटरनेट से नहीं। यह अनुमति सिर्फ़ ऐसे प्लगइन को दें जिस पर आपको भरोसा हो।
+access-usb-devices-warning = शुरू होते समय जो स्कैनर और इमेज उपकरण लगे हों, यह उन्हें इस्तेमाल कर सकता है, किसी और USB उपकरण को नहीं। यह अनुमति सिर्फ़ ऐसे प्लगइन को दें जिस पर आपको भरोसा हो।
+access-expand-warning = Trindle आपके टाइप किए में इसके कोड देखता है और उनकी जगह इसके शब्द टाइप कर देता है। प्लगइन कभी नहीं देखता कि आप क्या टाइप करते हैं। यह अनुमति सिर्फ़ ऐसे प्लगइन को दें जिस पर आपको भरोसा हो।
+access-accessibility-warning = यह आपकी स्क्रीन पर दिखने वाली हर चीज़ पढ़ सकता है। हर स्क्रीन रीडर की तरह यह दूसरी विंडो में बटन दबा सकता है और टेक्स्ट टाइप कर सकता है, हालाँकि इसका अपना कीबोर्ड या माउस नहीं है। यह अनुमति सिर्फ़ ऐसे प्लगइन को दें जिस पर आपको भरोसा हो।
+
+## Titles (for a tooltip) and the line under a switch, which says what switching it off means.
+access-network-title = इंटरनेट
+access-network-off = बंद होने पर यह इंटरनेट या आस-पास के दूसरे कंप्यूटरों तक नहीं पहुँच सकता।
+access-sound-title = आवाज़ चलाना
+access-sound-off = बंद होने पर कोई आवाज़ नहीं आएगी।
+access-microphone-title = आपका माइक्रोफ़ोन
+access-microphone-off = बंद होने पर यह आपको सुन नहीं सकता।
+access-sound-and-microphone-title = आवाज़ चलाना और आपका माइक्रोफ़ोन इस्तेमाल करना
+access-sound-and-microphone-off = बंद होने पर यह कोई आवाज़ नहीं करता और आपको सुन नहीं सकता।
+access-files-title = आपके दस्तावेज़, डाउनलोड, चित्र, संगीत, वीडियो और डेस्कटॉप फ़ोल्डर
+access-files-off = बंद होने पर यह आपकी फ़ाइलें नहीं खोल सकता और आपके फ़ोल्डरों में कुछ सहेज नहीं सकता।
+access-home-title = आपके होम फ़ोल्डर की सब चीज़ें, छिपी हुई सेटिंग फ़ाइलों समेत
+access-home-off = बंद होने पर यह आपकी फ़ाइलें नहीं खोल सकता और आपके फ़ोल्डरों में कुछ सहेज नहीं सकता।
+access-devices-title = आपका कैमरा और लगे हुए दूसरे उपकरण
+access-devices-off = बंद होने पर यह आपका कैमरा या आपके लगाए किसी उपकरण का इस्तेमाल नहीं कर सकता।
+access-bluetooth-title = Bluetooth, हेडफ़ोन और आस-पास की दूसरी चीज़ों के लिए
+access-bluetooth-off = बंद होने पर यह Bluetooth से किसी चीज़ से नहीं जुड़ सकता।
+access-notifications-title = सूचनाएँ दिखाना
+access-notifications-off = बंद होने पर कुछ होने पर यह आपको बता नहीं सकता।
+access-background-title = आपके लॉग इन करने पर अपने-आप शुरू होना
+access-background-off = बंद होने पर यह तभी चलता है जब आपने इसे खोला हो।
+access-screen-title = आपकी स्क्रीन की तस्वीरें लेना, आपकी कॉपी की चीज़ें पढ़ना, और आपके कीबोर्ड की तरह टाइप करना
+access-screen-off = बंद होने पर यह दूसरी विंडो नहीं देख सकता, और जब चाहे आपकी कॉपी की चीज़ें नहीं पढ़ सकता।
+access-x11-title = अपनी विंडो पुराने तरीके से बनाना, जिससे वह दूसरे पुराने ऐप और उनमें टाइप की गई चीज़ें देख सकता है
+access-x11-off = बंद होने पर इसकी विंडो नहीं खुलेंगी।
+access-computer-title = अपने डिब्बे के बाहर काम करना, उन सब चीज़ों के साथ जिन तक आप खुद पहुँच सकते हैं
+access-computer-off = बंद होने पर आप इसमें जो टाइप करते हैं वह इसके डिब्बे में ही रहता है, इसलिए sudo और आपकी अपनी फ़ाइलें वहाँ काम नहीं करेंगी।
+access-control-title = आपके कीबोर्ड, माउस और क्लिपबोर्ड पर नियंत्रण
+access-control-off = बंद होने पर यह पॉइंटर नहीं हिला सकता, टाइप नहीं कर सकता और आपकी कॉपी की चीज़ें साझा नहीं कर सकता।
+access-capture-title = आपका माउस और कीबोर्ड दूसरे कंप्यूटर के साथ साझा करना
+access-capture-off = बंद होने पर पॉइंटर दूसरे कंप्यूटर पर नहीं जा सकता।
+access-copied-title = आपकी कॉपी की हुई फ़ाइलें पढ़ना
+access-copied-off = बंद होने पर यह आपकी कॉपी की हुई फ़ाइलें पढ़ या दूसरे कंप्यूटर पर भेज नहीं सकता।
+access-summon-title = पूरी स्क्रीन वाली विंडो के ऊपर रिंग खोलना, जैसे आपने कुंजी दबाई हो
+access-summon-off = बंद होने पर इसकी कुंजियाँ और क्लिक रिंग को सिर्फ़ डेस्कटॉप पर खोलते हैं, पूरी स्क्रीन वाली विंडो के ऊपर कभी नहीं।
+access-listen-title = आपके स्थानीय नेटवर्क के दूसरे कंप्यूटरों को इस तक पहुँचने देना
+access-listen-off = बंद होने पर आपके स्थानीय नेटवर्क के दूसरे कंप्यूटर इसे ढूँढ नहीं सकते और इससे जुड़ नहीं सकते।
+access-home-network-title = सिर्फ़ आपके स्थानीय नेटवर्क के उपकरणों तक पहुँचना
+access-home-network-off = बंद होने पर यह स्थानीय नेटवर्क के प्रिंटर, स्कैनर या दूसरे उपकरण ढूँढ या उनसे जुड़ नहीं सकता।
+access-usb-devices-title = स्कैनर और USB उपकरण इस्तेमाल करना
+access-usb-devices-off = बंद होने पर यह इस कंप्यूटर से लगा स्कैनर इस्तेमाल नहीं कर सकता।
+access-expand-title = टाइप करते समय आपके छोटे कोड को पूरे शब्दों में बदलना
+access-expand-off = बंद होने पर Trindle टाइप करते समय इसके छोटे कोड नहीं बदलेगा।
+access-accessibility-title = हर विंडो में जो दिखे उसे पढ़कर बोलना
+access-accessibility-off = बंद होने पर यह आपकी विंडो को बोलकर नहीं सुना सकता।
+access-unnamed-title = कुछ ऐसा जिसका उसने नाम नहीं बताया
+
+## The few words on a plugin's row of the Permissions page.
+access-note-acts-as-you = यह आपकी तरह काम कर सकता है
+access-note-home-network = यह आपके स्थानीय नेटवर्क के हर उपकरण तक पहुँच सकता है
+access-note-usb-devices = यह स्कैनर और इमेज उपकरण इस्तेमाल कर सकता है
+access-note-expand = यह आपकी विंडो में टाइप कर सकता है
+access-note-accessibility = यह आपकी स्क्रीन पर दिखने वाली हर चीज़ पढ़ सकता है
+
+access-listen-detail = { $ports }, सिर्फ़ आपके स्थानीय नेटवर्क के कंप्यूटरों से। इसके लिए इंटरनेट की अनुमति भी चाहिए।
+
+## A request that is unusual for the kind of app that makes it.
+access-unusual = { $kind } के लिए यह असामान्य है। इसकी अनुमति तभी दें जब आपको इस ऐप के स्रोत पर भरोसा हो।
+access-kind-terminal = टर्मिनल
+access-kind-calculator = कैलकुलेटर
+access-kind-photo = फ़ोटो ऐप
+access-kind-text-editor = टेक्स्ट एडिटर
+access-kind-browser = वेब ब्राउज़र
+access-kind-office = ऑफ़िस ऐप
+access-kind-graphics = ग्राफ़िक्स ऐप
+access-kind-game = गेम
+access-kind-sound-video = आवाज़ और वीडियो ऐप
+access-kind-programming = प्रोग्रामिंग टूल
+access-kind-utility = उपयोगी टूल
+access-kind-other = इस तरह का ऐप

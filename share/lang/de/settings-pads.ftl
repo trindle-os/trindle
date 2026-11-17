@@ -14,20 +14,17 @@ settings-pads-top-picked = Drücke jetzt die Taste für { $name }.
 # Heading of the line shown when no game controller is plugged in.
 settings-pads-none = Keiner angeschlossen
 
-# Small words under that line.
-settings-pads-none-about = Schließe einen an, dann werden seine Tasten hier gezeigt.
-
 # Name of the list that chooses which controller is shown; { $title } is the one shown now.
 settings-pads-which = Welcher Controller
 
 # What the picture is, for the screen reader.
-settings-pads-picture = Bild von { $title }, jede Taste leuchtet beim Drücken
+settings-pads-picture = Bild von { $title }. Jede Taste leuchtet auf, wenn du sie drückst.
 
 # Title of the card of the controller's buttons.
 settings-pads-buttons-title = Tasten
 
 # Words behind the i of that card.
-settings-pads-buttons-about = Jede Taste, jeder Trigger und jede Richtung der Sticks und des Steuerkreuzes. Die zuletzt gedrückte steht oben. Eine Taste, die in eine Tastaturtaste geändert wurde, tippt diese Taste in einem Spiel ohne Controller-Unterstützung.
+settings-pads-buttons-about = Jede Taste und jeder Trigger sowie jede Richtung der Sticks und des Steuerkreuzes. Die zuletzt gedrückte steht oben. Wenn du eine Taste in eine Tastaturtaste änderst, tippt sie diese Taste in einem Spiel ohne Controller-Unterstützung.
 
 # Name of the round button that starts changing a button; { $name } is the button.
 settings-pads-change = { $name } in eine Taste ändern
@@ -36,7 +33,7 @@ settings-pads-change = { $name } in eine Taste ändern
 settings-pads-stop = Änderung von { $name } beenden
 
 # Name of the list of what a button becomes; { $name } is the button.
-settings-pads-choose = Was { $name } wird
+settings-pads-choose = Was { $name } tut
 
 # What the list says while a button waits for its key: the clue, and a choice that does nothing.
 settings-pads-waiting = Drücke eine Taste oder wähle eine Controller-Taste
@@ -67,13 +64,13 @@ settings-pads-stick-left = Linker
 settings-pads-stick-right = Rechter
 
 # Title of the card of the ready-made changes.
-settings-pads-quick-title = Fertige Änderungen
+settings-pads-quick-title = Häufige Änderungen
 
 # Title of the card of changes that are not one button into another.
 settings-pads-other-title = Weitere Änderungen
 
 # Words behind the i of that card.
-settings-pads-other-about = Vertauschte Richtungen, getauschte Sticks und tote Zonen. Gib eine so ein: Left Stick dead zone = 10%, oder Right Stick Y = inverted.
+settings-pads-other-about = Kehre die Richtung der Sticks um, tausche sie oder lege eine tote Zone fest. Gib eine Änderung so ein: Left Stick dead zone = 10%, oder Right Stick Y = inverted.
 
 
 
@@ -97,12 +94,10 @@ settings-pads-middle-click = Mittelklick
 settings-pads-profiles-title = Profile
 
 # Words behind the i of that card.
-settings-pads-profiles-about = Ein Profil ist eine Reihe von Änderungen. Standard ändert nichts, sodass ein Spiel mit eigener Controller-Unterstützung den Controller so sieht, wie er ist. Jedes Steam-Spiel nutzt Standard, solange du hier kein Profil dafür wählst, und das Profil wechselt von selbst, wenn das Spiel startet. Jedes andere Spiel gilt für Spiele, die Steam nicht gestartet hat.
+settings-pads-profiles-about = Ein Profil ist eine Reihe von Änderungen. Standard ändert nichts, sodass Spiele mit eigener Controller-Unterstützung den Controller so sehen, wie er ist. Jedes Steam-Spiel nutzt Standard, solange du hier kein Profil dafür wählst. Trindle wechselt zu diesem Profil, wenn das Spiel startet. Jedes andere Spiel meint alle Spiele, die Steam nicht gestartet hat.
 
 # The one switch that turns every controller change off at once.
 settings-pads-changes = Controller-Änderungen
-
-settings-pads-changes-sub = Aus: Jeder Controller bleibt, wie er ist.
 
 # The game whose profile is shown.
 settings-pads-game = Spiel
@@ -118,8 +113,6 @@ settings-pads-profile = Profil
 
 settings-pads-standard = Standard
 
-settings-pads-standard-sub = Keine Änderungen.
-
 settings-pads-profile-add = Profil hinzufügen
 
 settings-pads-profile-remove = { $name } entfernen
@@ -129,7 +122,7 @@ settings-pads-profile-name = Profilname
 # The name a new profile is given.
 settings-pads-profile-new = Profil { $n }
 
-settings-pads-profile-empty = Ein Profil braucht einen Namen.
+settings-pads-profile-empty = Gib einen Profilnamen ein.
 
 settings-pads-profile-standard = Standard ist schon vergeben.
 
@@ -143,7 +136,16 @@ settings-pads-not-a-game = Keine Steam-App-Nummer.
 settings-pads-standard-why = Standard ändert nichts. Füge zuerst ein Profil hinzu.
 
 # The headline while the shown game uses Standard, and while all changes are off.
-settings-pads-top-standard = Standard: der Controller, wie er ist.
+settings-pads-top-standard = Standard verwenden, ohne Änderungen.
 
 settings-pads-top-off = Controller-Änderungen sind aus.
 
+
+# Heading of the line shown when the file of changed controller buttons could not be read.
+settings-pads-unread = Trindle konnte deine geänderten Tasten nicht lesen
+
+# Small words under that line; { $why } is the reason.
+settings-pads-unread-about = Bis dahin funktioniert jede Taste normal, und nichts wird gespeichert. { $why }
+
+# Shown beside a change that was not saved because the file of changed buttons could not be read.
+settings-pads-not-saved-unread = Nicht gespeichert. Die Datei mit den geänderten Tasten konnte nicht gelesen werden, deshalb blieb sie unverändert.

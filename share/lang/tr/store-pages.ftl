@@ -30,10 +30,10 @@ store-grid-none-found = “{ $text }” ile eşleşen uygulama yok.
 store-grid-none-here = Burada henüz uygulama yok.
 
 # Advice in the empty page of a search.
-store-grid-try-shorter = Daha kısa bir sözcük deneyin ya da soldaki bir türe göz atın.
+store-grid-try-shorter = Daha kısa bir sözcük deneyin ya da soldan bir kategori seçin.
 
 # Advice in the empty page of a kind of apps.
-store-grid-search-or-look = Yukarıdan ada göre arayın ya da soldaki başka bir türe göz atın.
+store-grid-search-or-look = Yukarıdan ada göre arayın ya da soldan başka bir kategori seçin.
 
 # Under a page of apps: how many are shown of how many there are.
 store-grid-showing = { $apps } içinden { $shown } gösteriliyor.
@@ -69,7 +69,7 @@ store-wait-try-again = Yeniden dene
 store-back-results = Sonuçlar
 
 # Red words under the search box when no web browser opens a link.
-store-no-browser = { $url } adresini açacak bir web tarayıcısı yok. Önce Uygulamalar'dan bir tane edinin.
+store-no-browser = { $url } adresini açacak bir web tarayıcısı yok. Önce Uygulamalar'dan bir tane kurun.
 
 # Said in the card or under the title while the lists are being read.
 store-looking = Bakılıyor…
@@ -81,13 +81,13 @@ store-done-installed-note = Artık Kurulu bölümünde ve halkada
 store-done-removed = Kaldırıldı
 
 # The word on an app's dial when installing or removing did not work.
-store-done-not = Yapılamadı
+store-done-not = Başarısız
 
 # The word on an app's dial when it was installed.
 store-done-installed = Kuruldu
 
 # Red words under an app when Flatpak gave no reason it would not work.
-store-flatpak-refused = Flatpak reddetti.
+store-flatpak-refused = Flatpak başarısız oldu.
 
 # Tab of the Installed page that shows everything.
 store-tab-all = Tümü
@@ -105,7 +105,7 @@ store-tab-deb-files = Deb dosyaları
 store-tab-plugins = Eklentiler
 
 # Line under the title of the Installed page when nothing is installed.
-store-installed-nothing = Henüz hiçbir şey kurulu değil. Keşfet, denenecek şeylerle dolu.
+store-installed-nothing = Henüz hiçbir şey kurulu değil. Denenecek uygulamaları Keşfet'te bulursunuz.
 
 # Line under the title of the Installed page when only plugins are installed.
 store-installed-only-plugins =
@@ -231,14 +231,10 @@ store-installed-search = Kurulu olanlarda ara
 store-installed-appimage-failed = AppImage eklenemedi.
 
 # In the card of the Installed page when nothing is installed.
-store-installed-empty = Keşfet'ten, GitHub'dan ya da AppImage olarak kurduğunuz uygulamalar, .deb dosyalarından gelen programlar ve eklentiler burada görünür.
+store-installed-empty = Kurduğunuz her şey burada görünür: Keşfet'ten ya da GitHub'dan uygulamalar, AppImage dosyaları, .deb dosyalarından gelen programlar ve eklentiler.
 
 # In the card of the Installed page when the search matches nothing.
 store-installed-no-match = Kurulu olanlardan hiçbiri “{ $find }” ile eşleşmiyor.
-
-# SAFETY: needs a human review before it ships
-# Note at the foot of the Installed list.
-store-installed-remove-twice = Kaldır iki kez sorar: üç saniye içinde yeniden basın.
 
 # On an installed thing's line: its version.
 store-installed-version = sürüm { $version }
@@ -259,10 +255,10 @@ store-installed-update = { $name } öğesini güncelle
 store-installed-about = Hakkında
 
 # Under an installed thing's row while it is being taken off.
-store-installed-removing = Kaldırılıyor...
+store-installed-removing = Kaldırılıyor…
 
 # Red words in the Installed card when the session bus cannot be asked for a file.
-store-add-no-bus = Hangi dosyanın seçileceğini soracak oturum veri yolu yok.
+store-add-no-bus = Trindle şu an dosya seçiciyi açamıyor.
 
 # Title of the window that asks which AppImage to add.
 store-add-choose-title = Bir AppImage seçin
@@ -271,13 +267,13 @@ store-add-choose-title = Bir AppImage seçin
 store-add-filter = AppImage'lar
 
 # Red words in the Installed card when the file chooser could not be asked.
-store-add-no-chooser = Dosya seçiciye sorulamadı.
+store-add-no-chooser = Trindle dosya seçiciyi açamıyor.
 
 # Words in the Installed card while an AppImage is being added.
-store-add-adding = Ekleniyor...
+store-add-adding = Ekleniyor…
 
 # Words under the search box when an AppImage let go on the window is already there.
-store-add-already = { $name } zaten var: Kurulu bölümüne bakın.
+store-add-already = { $name } zaten kurulu. Kurulu bölümünde bulursunuz.
 
 # Words once an AppImage is in the ring.
 store-add-in-ring = Eklendi. Artık listenizde.
@@ -285,34 +281,31 @@ store-add-in-ring = Eklendi. Artık listenizde.
 # Red words under the search box when a dropped file is not a Flatpak reference this computer can use.
 store-add-bad-ref = Bu, bu bilgisayarın kullanabileceği bir Flatpak başvurusu değil.
 
-# Words under the search box while a Flatpak reference is installed; the source is given.
-store-add-installing-ref = { $name }, { $host } kaynağından kuruluyor...
-
 # Words under the search box once a Flatpak reference is installed.
 store-add-installed-ref = { $name } kuruldu.
 
 # Red words when Flatpak gave no reason it would not install a reference.
-store-add-ref-refused = Flatpak bunu kurmadı.
+store-add-ref-refused = Flatpak bunu kuramadı.
 
 # Red words under the search box when a Flatpak reference could not be installed; the reason follows.
-store-add-ref-failed = { $name } kurulamadı. { $why }
+store-add-ref-failed = Trindle { $name } kurulumunu yapamadı. { $why }
 
 # Words in the Installed card while an AppImage replaces another.
-store-add-replacing = Değiştiriliyor...
+store-add-replacing = Değiştiriliyor…
 
 # SAFETY: needs a human review before it ships
 # Heading of the question when an AppImage has the name of one already there.
 store-replace-head = { $name } zaten var
 
 # Small heading over the AppImage being brought.
-store-replace-new = Getirilen
+store-replace-new = Yeni olan
 
 # Small heading over the AppImage already there.
 store-replace-old = Zaten olan
 
 # SAFETY: needs a human review before it ships
 # Tip of the round button that keeps the AppImage already there.
-store-replace-skip = Atla: zaten olanı koru
+store-replace-skip = Atla ve eskisini koru
 
 # SAFETY: needs a human review before it ships
 # Button that replaces the AppImage already there with the new one.
@@ -329,7 +322,7 @@ store-flatpak-ask-size = Kayıtlı verileri { $size } yer kaplıyor.
 store-flatpak-ask-none = Kayıtlı verisi yok.
 
 # Under that heading while the size of the saved data is being counted.
-store-flatpak-ask-measuring = Kayıtlı verileri hesaplanıyor...
+store-flatpak-ask-measuring = Kayıtlı verileri ölçülüyor…
 
 # SAFETY: needs a human review before it ships
 # Under the choices: the two that delete data cannot be undone.
@@ -337,7 +330,7 @@ store-flatpak-ask-undone = Silinen veriler geri getirilemez.
 
 # SAFETY: needs a human review before it ships
 # Button: remove the app and leave the data it saved.
-store-flatpak-keep = Kaldır, verilerini koru
+store-flatpak-keep = Kaldır ama verileri koru
 
 # SAFETY: needs a human review before it ships
 # Button (red): remove the app and delete its saved data.
@@ -352,34 +345,31 @@ store-flatpak-data-only-none = Silinecek kayıtlı verisi yok.
 
 # SAFETY: needs a human review before it ships
 # Tip of the round button that shuts the card with nothing done.
-store-flatpak-cancel = İptal: ikisini de koru
+store-flatpak-cancel = İptal
 
 # Said under the card or the row once only the data has been deleted.
 store-flatpak-data-gone = Kayıtlı verileri silindi.
 
 # Words while only the data is being deleted.
-store-flatpak-data-going = Kayıtlı verileri siliniyor...
+store-flatpak-data-going = Kayıtlı verileri siliniyor…
 
 # Red words under a button when a job ended and gave no reason.
-store-job-no-reason = Bitmedi ve neden vermedi.
+store-job-no-reason = Bitmedi. Neden bildirilmedi.
 
 # Tip of the round i button beside a refusal that shows what is behind it.
 store-show-behind = Sorunun nerede olduğunu göster
 
 # Placeholder of the box on the GitHub page.
-store-gh-search-placeholder = GitHub'da ara: yazın, sonra Enter'a basın
+store-gh-search-placeholder = Uygulama ara (GitHub'da da aramak için Enter'a basın)
 
 # Heading of the card of matches from AppImageHub.
 store-gh-hub = AppImageHub'da ({ $n })
 
-# Note on the GitHub page before GitHub has been asked.
-store-gh-press-enter = Tüm GitHub'da da aramak için Enter'a basın.
-
 # Note on the GitHub page when the computer has no internet.
-store-gh-offline-note = GitHub'a sorulmadı: sormak için internet yok.
+store-gh-offline-note = Bu bilgisayar internete bağlı olmadığı için Trindle GitHub'da arama yapamadı.
 
 # Note on the GitHub page while GitHub is being asked.
-store-gh-asking = GitHub'a soruluyor...
+store-gh-asking = GitHub denetleniyor…
 
 # Note on the GitHub page when GitHub knows nothing more.
 store-gh-nothing-more = GitHub'da başka bir şey yok.
@@ -387,8 +377,8 @@ store-gh-nothing-more = GitHub'da başka bir şey yok.
 # Note on the GitHub page while the projects found are looked through.
 store-gh-looking =
     { $n ->
-        [one] { $n } projede AppImage ve Flatpak dosyaları aranıyor...
-       *[other] { $n } projede AppImage ve Flatpak dosyaları aranıyor...
+        [one] { $n } projede AppImage ve Flatpak dosyaları aranıyor…
+       *[other] { $n } projede AppImage ve Flatpak dosyaları aranıyor…
     }
 
 # Note on the GitHub page when no match has a file for this computer.
@@ -402,7 +392,7 @@ store-gh-search-card = GitHub'da ara
 
 # SAFETY: needs a human review before it ships
 # Line under the title of the GitHub page.
-store-gh-line = GitHub'daki uygulamalar, AppImage ya da Flatpak dosyaları olarak. Bunları kimse denetlemez: yalnızca güvendiğiniz kişilerden kurun.
+store-gh-line = GitHub'daki uygulamalar, AppImage ya da Flatpak dosyaları olarak. Bunları kimse denetlemez, bu yüzden yalnızca güvendiğiniz kişilerden kurun.
 
 # Line under the title of the GitHub page when the computer has no internet.
 store-gh-offline = Bu bilgisayar internete bağlı değilken GitHub'da arama yapılamaz.
@@ -429,23 +419,23 @@ store-gh-key = GitHub anahtarı
 
 # SAFETY: needs a human review before it ships
 # Name of the GitHub key's button when a key is stored.
-store-gh-key-stored = GitHub anahtarı: biri kayıtlı
+store-gh-key-stored = Bir GitHub anahtarı kayıtlı
 
 # SAFETY: needs a human review before it ships
 # In the GitHub key's box: what the key is for.
-store-gh-key-words = Büyük olasılıkla ihtiyacınız yok. Anahtar olmadan GitHub bu bilgisayardan saatte 60 soruya yanıt verir; anahtarla 5.000'e. Anahtar yalnızca bu sınırı yükseltir. Yalnızca herkese açık dosyalara bakmak için kullanılır, başka bir şey için değil: Trindle'a hesabınıza giriş yolu vermez ve oluştururken hiçbir izin işaretlemezsiniz. Bu bilgisayarda, anahtarlığınızda saklanır ve yalnızca GitHub'a gönderilir.
+store-gh-key-words = Büyük olasılıkla birine ihtiyacınız yok. Anahtar olmadan GitHub bu bilgisayardan saatte 60 isteğe izin verir. Anahtarla 5.000'e izin verir. Anahtar yalnızca bu sınırı yükseltir. Yalnızca herkese açık dosyalara bakmak için kullanılır, başka bir şey için değil. Trindle'a hesabınıza giriş yolu vermez ve oluştururken hiçbir izin işaretlemezsiniz. Bu bilgisayarda, anahtarlığınızda saklanır ve yalnızca GitHub'a gönderilir.
 
 # SAFETY: needs a human review before it ships
 # In the GitHub key's box: how to make a key.
-store-gh-key-how = GitHub'da bir anahtar oluşturun, istediğiniz adı verin, hiçbir izne dokunmayın, Generate token düğmesine basın, sonra gösterdiğini buraya yapıştırın.
+store-gh-key-how = GitHub'da bir anahtar oluşturun, istediğiniz adı verin ve hiçbir izne dokunmayın. Generate token düğmesine basın, sonra gösterdiğini buraya yapıştırın.
 
 # SAFETY: needs a human review before it ships
 # Red words under the GitHub key's box when the key could not be removed.
-store-gh-key-not-removed = Kaldırılamadı: { $why }
+store-gh-key-not-removed = Kaldırılmadı: { $why }
 
 # SAFETY: needs a human review before it ships
 # Red words under the GitHub key's box when the key could not be kept.
-store-gh-key-not-kept = Kaydedilemedi: { $why }
+store-gh-key-not-kept = Kaydedilmedi: { $why }
 
 # SAFETY: needs a human review before it ships
 # Placeholder of the GitHub key's box when a key is stored already.
@@ -467,7 +457,7 @@ store-gh-key-make = GitHub'da anahtar oluştur
 store-gh-key-keep = Anahtarı kaydet
 
 # Red words when a project's newest release has nothing for this computer.
-store-gh-nothing-installs = En yeni sürümündeki hiçbir şey burada kurulmuyor.
+store-gh-nothing-installs = En yeni sürümündeki hiçbir şey bu bilgisayara kurulamaz.
 
 # Word on the file's dial and under a GitHub file when it was added.
 store-added = Eklendi
@@ -485,7 +475,7 @@ store-bk-making-tip = Yedek oluşturuluyor
 store-bk-make = Yedeği oluştur
 
 # Tip of the round button that shows the backup in Folders.
-store-bk-show = Klasörler'de göster
+store-bk-show = Folders'ta göster
 
 # Name of the switch for the list of apps in a backup.
 store-bk-apps = Uygulamalar
@@ -498,25 +488,16 @@ store-bk-apps-list =
     }
 
 # Under the Apps switch: the list, then why the file stays small.
-store-bk-apps-sub = { $list } Diğer bilgisayar bunları Flathub'dan yeniden kurar, böylece dosya küçük kalır.
+store-bk-apps-sub = { $list }
 
 # Name of the switch for the apps' own data in a backup.
 store-bk-data = Uygulamaların kendi verileri
 
-# Under the Apps' own data switch.
-store-bk-data-sub = Her uygulamanın ayarları ve kaydedilmiş işleri, önbellekleri hariç.
-
 # Name of the switch for AppImages in a backup.
 store-bk-appimages = AppImage'lar
 
-# Under the AppImages switch.
-store-bk-appimages-sub = Tek dosya oldukları için bütün olarak saklanır.
-
 # Name of the switch for Trindle's settings in a backup.
 store-bk-settings = Trindle ayarları
-
-# Under the Trindle settings switch.
-store-bk-settings-sub = Halka, duvar kâğıdı seçimi, renkler, klavye, güç, varsayılan uygulamalar ve resminiz.
 
 # Under a switch: what it holds, then how big it is now.
 store-bk-now = { $sub } Şu an { $size }.
@@ -533,21 +514,18 @@ store-bk-back-card = Yedeği geri yükle
 # Tip of the round button, and name of the row, that choose a backup file.
 store-bk-choose = Bir yedek dosyası seçin
 
-# Under the choose row: which backups can be used; the name of Flat's backups is given.
-store-bk-choose-sub = Bir Trindle yedeği ya da { $flat } ile yapılmış bir yedek.
-
 # SAFETY: needs a human review before it ships
 # Note in the card that puts a backup back.
-store-bk-back-note = Uygulamaları kurulur, verileri ve ayarları geri konur. Belgeleriniz ve resimleriniz içinde değildir: onları kendiniz kopyalayın.
+store-bk-back-note = Geri yükleme, yedekteki uygulamaları kurar, verilerini ve ayarlarını geri koyar. Belgeleriniz ve resimleriniz yedekte değildir, bu yüzden onları kendiniz kopyalayın.
 
 # Said while a backup is being made.
-store-bk-making = Yedekleniyor... bu birkaç dakika sürebilir.
+store-bk-making = Yedekleniyor. Bu birkaç dakika sürebilir.
 
 # Said when a backup is made: the file and its size.
-store-bk-made = Dosya: { $path } ({ $size }). Yanınızda götürmek için bir USB belleğe ya da bulut depolamaya kopyalayın.
+store-bk-made = Yedek şurada: { $path } ({ $size }). Yanınızda götürmek için bir USB belleğe ya da bulut depolamaya kopyalayın.
 
 # Red words when no connection to the file chooser exists.
-store-bk-no-bus = Yedek seçilmedi, çünkü Trindle'ın dosya seçiciyle bağlantısı yok.
+store-bk-no-bus = Yedek seçilmedi, çünkü Trindle dosya seçiciye bağlanamıyor.
 
 # Title of the window that asks which backup to use.
 store-bk-choose-title = Bir yedek seçin
@@ -559,10 +537,7 @@ store-bk-filter = Trindle ve Flat yedekleri
 store-bk-no-answer = Yedek seçilmedi, çünkü dosya seçici yanıt vermedi.
 
 # Said while a backup file is read.
-store-bk-reading = Yedek okunuyor...
-
-# Said when a backup was put back.
-store-bk-logout = Tüm ayarları görmek için oturumu kapatıp yeniden açın.
+store-bk-reading = Yedek okunuyor…
 
 # Said when a backup was put back, after what was done; the first part is given.
 store-bk-logout-after = { $last } Tüm ayarları görmek için oturumu kapatıp yeniden açın.
@@ -570,26 +545,26 @@ store-bk-logout-after = { $last } Tüm ayarları görmek için oturumu kapatıp 
 # Said once a Flat backup is read: how many apps and how many have settings.
 store-bk-found =
     { $apps ->
-        [one] 1 uygulama, { $with } tanesinin ayarları var. Başlatılıyor...
-       *[other] { $apps } uygulama, { $with } tanesinin ayarları var. Başlatılıyor...
+        [one] 1 uygulama bulundu, { $with } tanesinin ayarları var. Başlatılıyor…
+       *[other] { $apps } uygulama bulundu, { $with } tanesinin ayarları var. Başlatılıyor…
     }
 
 # Line under the title of the Software sources page: how many makers' sources are added.
 store-src-line =
     { $n ->
-        [0] Henüz üreticilerin kendi kaynaklarından eklenen yok.
-        [one] 1 üretici kaynağı eklendi, Debian güncellemeleriyle birlikte güncel tutuluyor.
-       *[other] { $n } üretici kaynağı eklendi, Debian güncellemeleriyle birlikte güncel tutuluyor.
+        [0] Henüz yazılım kaynağı eklenmedi.
+        [one] 1 yazılım kaynağı eklendi, Debian güncellemeleriyle birlikte güncel tutuluyor.
+       *[other] { $n } yazılım kaynağı eklendi, Debian güncellemeleriyle birlikte güncel tutuluyor.
     }
 
 # Under a maker's source that is added and installed.
-store-src-added = { $what }. Eklendi ve güncel tutuluyor.
+store-src-added = { $what } eklendi ve güncel tutuluyor.
 
 # Under a maker's source that is added but whose program is not installed.
 store-src-no-program = { $what }. Kaynak eklendi, ama program kurulu değil.
 
 # Under a maker's source whose program is installed another way.
-store-src-other-way = { $what }. Başka bir yolla kurulmuş.
+store-src-other-way = { $what } başka bir yolla kurulmuş.
 
 # SAFETY: needs a human review before it ships
 # Tip of the round button that removes a maker's source and its program.
@@ -611,34 +586,18 @@ store-src-ready = Eklenmeye hazır
 # Name of the field for the address of a source.
 store-src-address = Adres
 
-# Under the address field.
-store-src-address-sub = Deponun adresi, üreticisinin kurulum yönergelerinden.
-
 # Name of the field for the suite of a source.
 store-src-suite = Dağıtım
 
-# Under the suite field.
-store-src-suite-sub = Genellikle trixie ya da stable.
-
 # Name of the field for the components of a source.
 store-src-components = Bileşenler
-
-# Under the components field.
-store-src-components-sub = Genellikle main.
 
 # SAFETY: needs a human review before it ships
 # Name of the field for a source's signing key.
 store-src-key = İmza anahtarı
 
-# SAFETY: needs a human review before it ships
-# Under the signing key field.
-store-src-key-sub = İmza anahtarının adresi.
-
 # Name of the field for the program to install from a source.
 store-src-program = Kurulacak program
-
-# Under the program field.
-store-src-program-sub = Şimdi kurulmasını istiyorsanız paket adı.
 
 # Placeholder of the program field.
 store-src-program-hint = isteğe bağlı
@@ -674,10 +633,10 @@ store-src-bad-package = Bu bir paket adı değil.
 store-src-starting = Başlatılıyor
 
 # Said under Tailscale's row while its sign-in page is opened.
-store-src-opening = Tailscale'in oturum açma sayfası açılıyor...
+store-src-opening = Tailscale'in oturum açma sayfası açılıyor…
 
 # Said under Tailscale's row once its sign-in page has opened.
-store-src-opened = Açılan sayfada oturum açın; bu kendiliğinden biter.
+store-src-opened = Açılan sayfada oturum açın. Siz açınca Trindle kendiliğinden devam eder.
 
 # Said under Tailscale's row when it is connected.
 store-src-connected = Bağlı
@@ -692,7 +651,7 @@ store-bk-http-title = Şifreli değil
 
 # SAFETY: needs a human review before it ships
 # Words of that card.
-store-bk-http-card = Bu adres şifreli değil. Yoldaki biri gönderilenleri görebilir ve yedeği başka bir yedekle değiştirebilir.
+store-bk-http-card = Bu bağlantı şifreli değil. Biri yol boyunca gönderilenleri görebilir ya da yedeği başka bir yedekle değiştirebilir.
 
 # SAFETY: needs a human review before it ships
 # Label of the tick box on that card; the restore button works only once it is on.
@@ -707,12 +666,12 @@ store-bk-http-go = Geri yükle
 store-bk-http-cancel = İptal
 
 # Under that heading when the folder of the saved data cannot be read, so its size is not known.
-store-flatpak-ask-uncounted = Kayıtlı verileri sayılamadı.
+store-flatpak-ask-uncounted = Kayıtlı verilerinin boyutu ölçülemedi.
 
-store-hub-warning = AppImageHub yalnızca projeleri listeler: kimse onları incelemez ya da taramaz, imzalı olmaları da gerekmez. Trindle her AppImage'ı kendi özel ev klasörü olan bir kutuda çalıştırır: başta internet ve sesi kullanabilir, dosyalarının hiçbirini görmez.
+store-hub-warning = AppImageHub yalnızca projeleri listeler. Kimse onları incelemez ya da taramaz, imzalı olmaları da gerekmez. Trindle her AppImage'ı kendi özel ev klasörü olan bir kutuda çalıştırır. Başta internet ve sesi kullanabilir, ama dosyalarınızdan hiçbirini göremez.
 
 # Said once where AppImages are listed: the line saying where each comes from is not checked.
-store-from-hint = Bir AppImage'ın nereden geldiği bir ipucudur, denetim değildir.
+store-from-hint = Bir AppImage'ın nereden geldiğini söylemesi yalnızca bir ipucudur. Trindle bunu denetlemez.
 
 # Where an AppImage comes from: a project on GitHub, by its owner and name.
 store-from-github = GitHub'da: { $repo }
@@ -721,7 +680,7 @@ store-from-github = GitHub'da: { $repo }
 store-from-github-stars = GitHub'da: { $repo }, { $stars } yıldız
 
 # Where an AppImage comes from: a website, by its name.
-store-from-site = GitHub'da değil: bir web sitesinden, { $site }
+store-from-site = GitHub'da değil. Şuradan geliyor: { $site }
 
 # Where an AppImage comes from, for one added by hand.
 store-from-unknown = Kaynak bilinmiyor
@@ -733,7 +692,7 @@ store-from-site-open = Web sitesini aç
 store-age-updated = Son güncelleme: { $date }
 
 # The same, said in red, when that is more than six months ago.
-store-age-updated-old = Son güncelleme: { $date }. Altı aydan uzun süredir güncellenmedi, bu yüzden giderilmemiş güvenlik açıkları olabilir.
+store-age-updated-old = Son güncelleme: { $date }. Altı aydan uzun süredir güncellenmedi, bu yüzden giderilmemiş güvenlik sorunları olabilir.
 
 # When the source does not say when an app was last updated.
 store-age-updated-unknown = Son güncelleme: bilinmiyor
@@ -763,13 +722,13 @@ store-browse-line = { $n ->
 store-browse-fetching = AppImageHub listesi getiriliyor…
 
 # The same when the list could not be fetched.
-store-browse-failed = AppImageHub listesi getirilemedi.
+store-browse-failed = Trindle AppImageHub listesini alamadı.
 
 # The same with no internet and no copy kept.
 store-browse-offline = Bu bilgisayar internete bağlı olmadığı sürece AppImageHub listesi getirilemez.
 
 # In the list when the kind chosen has none.
-store-browse-none = AppImageHub bu türden hiçbirini listelemiyor.
+store-browse-none = AppImageHub'da bunlardan hiçbiri yok.
 
 # Under the rows: how many are shown of how many.
 store-browse-showing = { $n } içinden { $shown } gösteriliyor.
@@ -815,7 +774,7 @@ store-appimage-line-bare = AppImage
 store-appimage-warn-head = AppImage'lar denetlenmez. Kimse onları incelemez ya da taramaz.
 
 # Under it: how Trindle boxes an AppImage.
-store-appimage-warn-box = Trindle her AppImage'ı kendine ait bir ev klasörü olan bir kutuda çalıştırır: başta internet ve sesi kullanabilir, dosyalarınızdan hiçbirini göremez.
+store-appimage-warn-box = Trindle her AppImage'ı kendi özel ev klasörü olan bir kutuda çalıştırır. Başta internet ve sesi kullanabilir, ama dosyalarınızdan hiçbirini göremez.
 
 # Label of the small tick in that card's corner; once it is set the card never comes again.
 store-appimage-warn-hide = Bir daha gösterme
@@ -826,3 +785,18 @@ store-appimage-warn-ok = Tamam
 # Button on that card that gives the install up.
 store-appimage-warn-cancel = İptal
 
+# Printed by the command line after a backup. { $size } is how big the file is.
+store-cli-backed-up = yedeklendi ({ $size })
+
+# Printed by the command line after Trindle's own settings were put back.
+store-cli-settings-back = Trindle'ın ayarları geri yüklendi
+
+
+# Tick box under the Search page's box: look on Flathub, for Flatpaks.
+store-gh-place-flathub = Flathub (Flatpak'ler)
+
+# Tick box: look on AppImageHub, for AppImages.
+store-gh-place-hub = AppImageHub (AppImage'ler)
+
+# Tick box: look on GitHub, which needs Enter.
+store-gh-place-github = GitHub

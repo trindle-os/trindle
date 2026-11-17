@@ -12,22 +12,25 @@ use tiny_skia::{LineCap, PathBuilder, PixmapMut, Stroke, Transform};
 
 use crate::common::audio::{self as devices, Devices, Kind};
 use crate::common::run::{capture, have};
-use crate::settings::ui::{dropdown, group, headline, line, missing, no_more, on, page, ran, Kit, Msg, Page, Raw};
+use crate::settings::ui::{dropdown, group, headline, line, missing, no_more, on, own_or_why, page, ran, Kit, Msg, Page, Raw};
 use crate::toolkit::colour::Colour;
 use crate::toolkit::theme;
-use crate::toolkit::widget::{button, drawing, slider, switch, Length, Node, Tone};
+use crate::toolkit::widget::{button, drawing, slider, switch, Length, Node};
 use crate::toolkit::t;
 
 const PICK: &str = "audio-device";
 const TEST: &str = "audio-test";
 const ASKED: &str = "audio-pipewire";
 
-fn test_sound() -> PathBuf {
-    let dir = crate::common::files::scratch();
-    let _ = std::fs::create_dir_all(&dir);
+fn test_sound() -> std::io::Result<PathBuf> {
+    sound_in(&crate::common::files::scratch())
+}
+
+fn sound_in(dir: &std::path::Path) -> std::io::Result<PathBuf> {
+    std::fs::create_dir_all(dir)?;
     let path = dir.join("trindle-test-sound.wav");
-    if path.exists() {
-        return path;
+    if path.is_file() {
+        return Ok(path);
     }
     let rate: u32 = crate::common::sounds::RATE;
     let total = (rate as f64 * 0.9) as u32;
@@ -61,10 +64,8 @@ fn test_sound() -> PathBuf {
     wav.extend_from_slice(b"data");
     wav.extend_from_slice(&(frames.len() as u32).to_le_bytes());
     wav.extend_from_slice(&frames);
-    if let Err(e) = std::fs::write(&path, wav) {
-        eprintln!("trindle-settings: could not write the test sound: {e}");
-    }
-    path
+    crate::common::files::write_whole(&path, &wav)?;
+    Ok(path)
 }
 
 struct Meter {
@@ -112,12 +113,10 @@ impl Meter {
 }
 
 fn mute_note(output: bool) -> &'static str {
-    if output {
-        t!("settings-audio-mute-out-about")
-    } else if crate::common::in_use::microphone_off() {
+    if !output && crate::common::in_use::microphone_off() {
         crate::common::in_use::microphone_off_note()
     } else {
-        t!("settings-audio-mute-in-about")
+        ""
     }
 }
 
@@ -239,7 +238,7 @@ impl Audio {
         let found = match found {
             Ok(found) => found,
             Err(err) => {
-                kit.say(ASKED, &err, false, false);
+                kit.say(ASKED, &own_or_why(&err, &[t!("common-audio-no-answer")], t!("settings-audio-not-read")), false, false);
                 self.state = State::Failed;
                 return;
             }
@@ -353,27 +352,27 @@ impl Audio {
     }
 
     fn play(&mut self, kit: &mut Kit, device: i64) {
-        let sound = test_sound();
+        let Some(sound) = kit.settle_quietly(TEST, test_sound(), t!("settings-audio-test-failed")) else { return };
         let done = kit.settles::<Audio, (), Raw>(TEST, t!("settings-audio-test-failed"), no_more);
         capture(&["pw-play", "--media-role", crate::common::sounds::ROLE, "--target", &device.to_string(), &sound.to_string_lossy()], None, move |ok, _, e| done(ran(ok, &e)));
     }
 
-    fn said(&self) -> (String, Tone) {
+    fn said(&self) -> String {
         match self.state {
-            State::Missing => return (t!("settings-audio-top-missing").into(), Tone::Problem),
-            State::Failed => return (t!("settings-audio-top-failed").into(), Tone::Problem),
-            State::Found { no_output: true } => return (t!("settings-audio-top-no-output").into(), Tone::Problem),
+            State::Missing => return t!("settings-audio-top-missing").into(),
+            State::Failed => return t!("settings-audio-top-failed").into(),
+            State::Found { no_output: true } => return t!("settings-audio-top-no-output").into(),
             _ => {}
         }
         let output = self.sections.iter().find(|s| s.title == "Output" && s.current.is_some() && s.told);
-        let Some(s) = output else { return (t!("settings-audio-top-listening").into(), Tone::Plain) };
+        let Some(s) = output else { return t!("settings-audio-top-listening").into() };
         let pct = s.pct.round();
         if s.muted {
-            (t!("settings-audio-top-muted", device = &s.device), Tone::Warn)
+            t!("settings-audio-top-muted", device = &s.device)
         } else if pct == 0.0 {
-            (t!("settings-audio-top-down", device = &s.device), Tone::Warn)
+            t!("settings-audio-top-down", device = &s.device)
         } else {
-            (t!("settings-audio-top-playing", device = &s.device, percent = pct), Tone::Plain)
+            t!("settings-audio-top-playing", device = &s.device, percent = pct)
         }
     }
 
@@ -394,8 +393,8 @@ impl Audio {
         let chosen = s.nodes.iter().position(|n| n.0 == current);
         let key = format!("{PICK}-{at}");
         let mut rows = vec![
-            line(t!("settings-audio-device")).sub(if output { t!("settings-audio-out-device-about") } else { t!("settings-audio-in-device-about") }).key(key.clone())
-                .control(dropdown(kit, &key, labels, chosen, if output { t!("settings-audio-out-device-name") } else { t!("settings-audio-in-device-name") }, move |i| {
+            line(t!("settings-audio-device")).key(key.clone())
+                .control(dropdown(&key, labels, chosen, if output { t!("settings-audio-out-device-name") } else { t!("settings-audio-in-device-name") }, move |i| {
                     on::<Audio>(move |me, k| me.pick(k, at, i))
                 })).node(kit),
             line(t!("settings-audio-volume")).sub(format!("{}%", s.pct.round())).key(volume_key(at)).control(slider(s.pct, 0.0, 100.0, 1.0, if output { t!("settings-audio-out-volume-name") } else { t!("settings-audio-in-volume-name") }, move |v| {
@@ -407,7 +406,7 @@ impl Audio {
         ];
         if output {
             if let Some((id, label)) = s.speakers.clone() {
-                rows.insert(0, line(t!("settings-audio-bt-now")).sub(t!("settings-audio-bt-now-about")).icon(Kind::Bluetooth.icon())
+                rows.insert(0, line(t!("settings-audio-bt-now")).icon(Kind::Bluetooth.icon())
                     .control(button(Kind::Speakers.icon(), t!("settings-audio-use-speakers", device = &label))
                         .on_press(on::<Audio>(move |me, k| {
                             if let Some(i) = me.sections.get(at).and_then(|s| s.nodes.iter().position(|n| n.0 == id)) {
@@ -419,7 +418,7 @@ impl Audio {
                 rows.push(line(t!("settings-audio-bt-silent", names = &s.silent)).sub(t!("settings-audio-bt-silent-about"))
                     .icon(Kind::Bluetooth.icon()).node(kit));
             }
-            rows.push(line(t!("settings-audio-test")).sub(t!("settings-audio-test-about")).key(TEST)
+            rows.push(line(t!("settings-audio-test")).key(TEST)
                 .control(button("media-playback-start-symbolic", t!("settings-audio-test-button"))
                     .on_press(on::<Audio>(move |me, k| me.play(k, current))))
                 .node(kit));
@@ -427,7 +426,7 @@ impl Audio {
                 .rows(rows).node(kit)
         } else {
             let level = self.meter.as_ref().map(Meter::level).unwrap_or(0.0);
-            rows.push(line(t!("settings-audio-level")).sub(t!("settings-audio-level-about"))
+            rows.push(line(t!("settings-audio-level"))
                 .control(level_bar(level)).node(kit));
             card.about(t!("settings-audio-in-about"))
                 .rows(rows).node(kit)
@@ -486,8 +485,8 @@ impl Page for Audio {
     }
 
     fn view(&self, kit: &Kit) -> Node<Msg> {
-        let (words, _) = self.said();
-        let mut items = vec![headline(kit, words)];
+        let words = self.said();
+        let mut items = vec![headline(words)];
         match self.state {
             State::Missing => items.push(missing(kit, "PipeWire", "pipewire-audio")),
             State::Failed => items.push(group(t!("settings-audio-failed-title")).icon("audio-speakers-symbolic")
@@ -526,13 +525,37 @@ mod tests {
     use crate::toolkit::theme::Theme;
     use crate::toolkit::ui::{App as _, Ui};
 
+    #[test]
+    fn devices_that_cannot_be_read_are_said_in_plain_words() {
+        let events = Loop::new();
+        let asks = events.post(|_: Do| {});
+        let mut kit = Kit::new(events, asks, None, None);
+        let mut page = Audio::default();
+        page.got(&mut kit, Err("pw-dump: failed to connect: Host is down".into()));
+        assert_eq!(kit.said(ASKED).map(|(w, _)| w.to_string()).as_deref(), Some(t!("settings-audio-not-read")));
+        page.got(&mut kit, Err(t!("common-audio-no-answer").into()));
+        assert_eq!(kit.said(ASKED).map(|(w, _)| w.to_string()).as_deref(), Some(t!("common-audio-no-answer")));
+    }
+
+    #[test]
+    fn a_test_sound_that_cannot_be_written_is_an_error() {
+        let dir = std::env::temp_dir().join(format!("trindle-test-sound-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let blocked = dir.join("a-file");
+        std::fs::write(&blocked, "not a folder").unwrap();
+        assert!(sound_in(&blocked).is_err(), "a path was handed back with no sound written");
+        let made = sound_in(&dir).unwrap();
+        assert!(std::fs::read(&made).unwrap().starts_with(b"RIFF"));
+        std::fs::remove_dir_all(&dir).unwrap();
+    }
+
     fn section(title: &'static str, device: &str, pct: f32) -> Section {
         Section { title, target: "", nodes: vec![(1, device.to_string()), (2, "HDMI".to_string())], current: Some(1),
                   device: device.to_string(), pct, ready: true, told: true, real: (pct, false), ..Section::default() }
     }
 
     #[test]
-    #[ignore]
+    #[ignore = "writes pictures to TRINDLE_SHOTS and asserts nothing; run it by hand with --ignored"]
     fn shoot_with_made_up_devices() {
         let out = std::path::PathBuf::from(std::env::var("TRINDLE_SHOTS").unwrap_or_else(|_| "target/style-check".into()));
         let size = std::env::var("TRINDLE_SHOT_SIZE").unwrap_or_else(|_| "1280x800".into());
@@ -570,7 +593,7 @@ mod tests {
         assert_eq!(with_kind("Odd box", Kind::Other), "Odd box");
         let mut a = Audio::made_up();
         a.sections[0].device = with_kind(&current.label, current.kind);
-        assert_eq!(a.said().0, "Sound plays through Sony headphones (Bluetooth) at 62%.");
+        assert_eq!(a.said(), "Sound is playing through Sony headphones (Bluetooth) at 62%.");
     }
 
     #[test]

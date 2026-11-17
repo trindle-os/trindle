@@ -8,7 +8,7 @@ settings-about-title = Kuhusu kompyuta hii
 settings-about-keywords = jina la mwenyeji jina la kompyuta jina la mtandao kuhusu mfumo toleo debian trindle kumbukumbu ram kichakataji cpu diski michoro skrini modeli kernel shughuli programu zinazoendeshwa kidhibiti kazi kifuatilia mfumo diski usb nafasi hostname computer name network name about system version memory processor disk graphics screen model kernel activity running programs busy task manager system monitor disks drives space
 
 # Text behind the info button of the About page.
-settings-about-help = Jina la kompyuta hii jinsi kompyuta nyingine kwenye mtandao zinavyoliona, imetengenezwa kwa nini, na inachukua muda gani kuanza. Inachofanya sasa hivi, na programu zipi zinatumia kumbukumbu na kichakataji, vipo kwenye Shughuli, na diski pamoja na nafasi zake kwenye Diski, kila moja ikiwa dirisha lake: mishale ya Maelezo zaidi huzifungua.
+settings-about-help = Ukurasa huu unaonyesha jina la kompyuta hii jinsi kompyuta nyingine kwenye mtandao zinavyoliona, imetengenezwa kwa nini, na inachukua muda gani kuanza. Shughuli inaonyesha kompyuta inachofanya sasa hivi na programu zipi zinatumia kumbukumbu na kichakataji. Diski inaonyesha diski zako na nafasi zake. Kila moja hufunguka kwenye dirisha lake. Tumia mishale ya Maelezo zaidi kuzifungua.
 
 # What is shown when a fact about the computer cannot be found.
 settings-about-unknown = Haijulikani
@@ -81,17 +81,17 @@ settings-about-up-days =
     }
 
 # Red words under the computer name box when the name is not allowed.
-settings-about-name-bad = Herufi, nambari na vistariungio tu, bila kuanza wala kuishia na kistariungio.
+settings-about-name-bad = Tumia herufi, nambari na vistariungio tu. Usianze wala kuishia na kistariungio.
 
 # Words under the computer name box while the password window is open.
 # SAFETY: needs a human review before it ships
-settings-about-name-waiting = Inasubiri nenosiri...
+settings-about-name-waiting = Inasubiri nenosiri lako…
 
 # Red words under the computer name box when renaming failed.
-settings-about-name-failed = Kompyuta haikuweza kubadilishwa jina.
+settings-about-name-failed = Haikuweza kubadilisha jina la kompyuta.
 
 # Words under the computer name box after renaming worked.
-settings-about-name-done = Programu ambazo tayari ziko wazi zitaona jina jipya baada ya kuingia tena.
+settings-about-name-done = Programu ambazo tayari ziko wazi zitatumia jina jipya baada ya kuingia tena.
 
 # Placeholder and spoken name of the typing box for the computer's name.
 settings-about-name-entry = Jina la kompyuta
@@ -102,51 +102,27 @@ settings-about-rename = Badilisha jina la kompyuta hii
 # Bold line of the computer name setting.
 settings-about-name = Jina la kompyuta
 
-# Quiet line under the computer name setting.
-settings-about-name-sub = Herufi, nambari na vistariungio.
-
 # Heading of the card with the computer's name.
 settings-about-name-group = Jina
 
 # Text behind the info button of the Name card.
 # SAFETY: needs a human review before it ships
-settings-about-name-about = Jinsi kompyuta hii inavyoonekana kwenye mtandao, na kwenye kidokezo cha Terminal. Herufi, nambari na vistariungio, bila kuanza wala kuishia na kistariungio. Kulibadilisha huomba nenosiri lako.
+settings-about-name-about = Hili ni jina la kompyuta kwenye mtandao na kwenye kidokezo cha Terminal. Tumia herufi, nambari na vistariungio, lakini usianze wala kuishia na kistariungio. Unahitaji kuweka nenosiri lako ili kulibadilisha.
 
 # Heading of the card about the computer's hardware.
 settings-about-hardware = Kompyuta
 
 # Text behind the info button of the hardware card.
-settings-about-hardware-about = Mtengenezaji na modeli, kichakataji na nyuzi ngapi kinaendesha kwa wakati mmoja, michoro, na kila skrini inayotumika pamoja na ukubwa na kasi yake ya kuonyesha upya.
-
-# Quiet line under the maker and model.
-settings-about-hw-computer = Kompyuta
-
-# Quiet line under the processor.
-settings-about-hw-processor = Kichakataji
-
-# Quiet line under the graphics.
-settings-about-hw-graphics = Huchora picha
-
-# Quiet line under the screens.
-settings-about-hw-screen = Skrini
+settings-about-hardware-about = Hapa panaonyesha mtengenezaji na modeli ya kompyuta, kichakataji chake na michoro yake. Pia panaonyesha nyuzi ngapi kichakataji kinaweza kuendesha kwa wakati mmoja, na kila skrini inayotumika pamoja na ukubwa na kasi yake ya kuonyesha upya.
 
 # Heading of the card about the software.
 settings-about-software = Programu
 
 # Text behind the info button of the software card.
-settings-about-software-about = Trindle ni eneo-kazi juu ya Debian, ambayo hutunza programu zilizo chini. Kernel ni sehemu inayozungumza na vifaa, na kikusanyaji cha Trindle chenyewe huchora eneo-kazi, kwenye Wayland.
-
-# Quiet line under the Debian version.
-settings-about-sw-debian = Huendeshwa chini
-
-# Quiet line under the kernel version.
-settings-about-sw-kernel = Kernel
+settings-about-software-about = Trindle ni eneo-kazi linaloendeshwa juu ya Debian, ambayo hutunza programu zilizo chini. Kernel ni sehemu inayofanya kazi na vifaa. Kikusanyaji cha Trindle chenyewe huchora eneo-kazi, kwa kutumia Wayland.
 
 # Bold line naming Trindle's compositor.
 settings-about-sw-compositor = Kikusanyaji cha Trindle chenyewe
-
-# Quiet line under the compositor line.
-settings-about-sw-compositor-sub = Huchora eneo-kazi, kwenye Wayland
 
 # Bold line saying how many apps are installed; n is the count.
 settings-about-sw-apps =
@@ -155,20 +131,14 @@ settings-about-sw-apps =
        *[other] programu { $n }
     }
 
-# Quiet line under the number of apps.
-settings-about-sw-apps-sub = Zimesakinishwa, tayari kwenye duara
-
 # Heading of the card with the ways to Activity and Drives.
 settings-about-more = Maelezo zaidi
 
 # Text behind the info button of the More detail card.
-settings-about-more-about = Inachofanya sasa hivi, na programu zipi zinatumia kumbukumbu na kichakataji, vipo kwenye Shughuli. Kila diski, jinsi ilivyojaa na hali yake, na USB stick, vipo kwenye Diski.
+settings-about-more-about = Shughuli inaonyesha kompyuta inachofanya sasa hivi na programu zipi zinatumia kumbukumbu na kichakataji. Diski inaonyesha kila diski, jinsi ilivyojaa na hali yake, pamoja na USB stick zozote.
 
 # Bold line of the setting that opens Activity.
 settings-about-activity = Ona kinachoendeshwa
-
-# Quiet line under the setting that opens Activity.
-settings-about-activity-sub = Programu zinazotumia kumbukumbu na kichakataji.
 
 # Tip of the arrow that opens the Activity program.
 settings-about-activity-name = Shughuli
@@ -176,14 +146,17 @@ settings-about-activity-name = Shughuli
 # Bold line of the setting that opens Drives.
 settings-about-drives = Diski na nafasi
 
-# Quiet line under the setting that opens Drives.
-settings-about-drives-sub = Kila diski, jinsi ilivyojaa na hali yake.
-
 # Tip of the arrow that opens the Drives program.
 settings-about-drives-name = Diski
 
 # Red words under the start-up times line when the file could not be saved.
-settings-about-times-failed = Nyakati za kuanza hazikuweza kuhifadhiwa kwenye Downloads.
+settings-about-times-failed = Trindle haikuweza kuhifadhi nyakati za kuanza kwenye Downloads.
+
+# First line of the saved start-up times file: the two columns, separated by a comma.
+settings-about-times-heading = Tarehe na saa,Sekunde
+
+# File name of the saved start-up times, in Downloads.
+settings-about-times-file = Nyakati za kuanza za Trindle.csv
 
 # Words under the start-up times line after the file was saved; file is the file's name.
 settings-about-times-saved = Kwenye Downloads, kama { $file }
@@ -195,19 +168,19 @@ settings-about-times-save = Hifadhi
 settings-about-times-save-spoken = Hifadhi nyakati zote za kuanza kwenye Downloads
 
 # Bold line of the setting that saves the start-up times.
-settings-about-times-keep = Kila kuanza, kuhifadhi
+settings-about-times-keep = Hifadhi muda wa kila kuanza
 
 # Quiet line under that setting.
 settings-about-times-keep-sub = Huhifadhiwa kwenye Downloads kama lahajedwali.
 
 # The sentence over the chart of the last ten start-up times.
-settings-about-times-chart = Kila safu ni kuanza mara moja, ya karibuni zaidi iko kulia.
+settings-about-times-chart = Kila safu ni kuanza mara moja. Ya karibuni zaidi iko kulia.
 
 # Heading of the card with the last ten start-up times.
-settings-about-times = Kuanza kumi kwa mwisho
+settings-about-times = Mara kumi za mwisho za kuanza
 
 # Text behind the info button of the start-up times card.
-settings-about-times-about = Kila kuanza hupimwa kutoka kitufe cha kuwasha hadi skrini ya kuingia, bila kuhesabu muda wa kuandika nenosiri la diski. Ya karibuni zaidi iko juu.
+settings-about-times-about = Trindle hupima kila kuanza kutoka kitufe cha kuwasha hadi skrini ya kuingia. Muda wa kuandika nenosiri la diski haujahesabiwa. Ya karibuni zaidi iko juu.
 
 # Heading of the memory tile.
 settings-about-memory = Kumbukumbu
@@ -215,30 +188,58 @@ settings-about-memory = Kumbukumbu
 # Heading of the disk tile.
 settings-about-disk = Diski
 
+# Heading of the card on About that holds the switch and the optional names for problem reports.
+settings-about-reports = Ripoti za matatizo
+
+# Text behind the round i of that card. Buildmorphic is the community that helps build Trindle; keep its name.
+settings-about-reports-about = Ripoti huenda kwa Buildmorphic, jumuiya inayosaidia kujenga Trindle. Unaweza kujiunga kwa barua pepe tu. Unapata sifa na viwango kwa matatizo unayoripoti kwanza, hata kama huwezi kuyarekebisha. Ripoti ina orodha maalum tu ya maelezo, na hakuna kinachotumwa hadi ubonyeze Tuma. Jina la mtumiaji au jina la GitHub ni hiari, na jina lako la mtumiaji si anwani yako ya barua pepe kamwe.
+
+# Switch: whether Trindle asks about problems and about sharing reports. Name of the switch for the screen reader too.
+settings-about-reports-offer = Toa ofa ya kutuma ripoti kitu kikienda vibaya
+
+# Box for the optional Buildmorphic username, also its name for the screen reader. Buildmorphic is a name.
+settings-about-reports-name = Jina la mtumiaji la Buildmorphic
+
+# Box for the optional GitHub name, also its name for the screen reader. GitHub is a name.
+settings-about-reports-github = Jina la GitHub
+
+# Name of the round button that opens the Buildmorphic community website, and of its line.
+settings-about-reports-community = Kuhusu jumuiya
+
+# Said under the switch when it is turned off and reports that were waiting to be sent were deleted; n is how many.
+settings-about-reports-deleted =
+    { $n ->
+        [one] Imezimwa. Ripoti { $n } iliyokuwa ikisubiri imefutwa.
+       *[other] Imezimwa. Ripoti { $n } zilizokuwa zikisubiri zimefutwa.
+    }
+
+# Said in red under the switch when it is turned off but some waiting reports could not be deleted; n is how many.
+settings-about-reports-kept =
+    { $n ->
+        [one] Imezimwa. Ripoti { $n } iliyokuwa ikisubiri haikuweza kufutwa.
+       *[other] Imezimwa. Ripoti { $n } zilizokuwa zikisubiri hazikuweza kufutwa.
+    }
+
 
 # Heading of the card with the switch for looking for updates.
 settings-about-updates = Masasisho
 
 # Text behind the info button of the updates card.
-settings-about-updates-about = Trindle hutafuta matoleo mapya ya programu, programu jalizi, programu dhibiti na yenyewe muda mfupi baada ya kuingia na kila baada ya saa chache, na marekebisho ya usalama ya Debian huingia kila siku. Ikizimwa, Trindle hutafuta tu unapobonyeza Kagua masasisho kwenye Programu, au kitufe cha masasisho kwenye pete. Marekebisho ya usalama ya Debian yana swichi yao; ikizimwa, hayasakinishwi yenyewe tena na hitilafu zinazojulikana hubaki wazi hadi usasishe. Kubadilisha swichi yoyote kunaomba nenosiri la msimamizi wako, ili huduma za kompyuta yenyewe pia ziuone uchaguzi huo.
+settings-about-updates-about = Trindle hukagua matoleo mapya ya programu, programu jalizi, programu dhibiti na yenyewe muda mfupi baada ya kuingia, kisha kila baada ya saa chache. Ukizima hili, Trindle hukagua tu unapobonyeza Kagua masasisho kwenye Programu, au kitufe cha masasisho kwenye pete. Marekebisho ya usalama ya Debian husakinishwa kila siku na yana swichi yao. Ukizima hiyo, hayasakinishwi yenyewe tena, na mapengo ya usalama yanayojulikana hubaki bila kurekebishwa hadi usasishe. Kubadilisha swichi yoyote kunahitaji nenosiri la msimamizi wako, ili kompyuta nzima itumie uchaguzi wako.
 
 # Bold line of the switch for looking for updates by itself; also the switch's name for a screen reader.
 settings-about-updates-by-itself = Kagua masasisho
 
 # Words under the Check for updates switch while the password window is open.
-settings-about-updates-waiting = Inasubiri nenosiri...
-
-# Quiet line under that switch.
-settings-about-updates-by-itself-sub = Imezimwa, hakuna kinachotafuta usipoomba.
+settings-about-updates-waiting = Inasubiri nenosiri lako…
 
 
 
 # Bold line of the switch for Debian's security fixes; also the switch's name for a screen reader.
 settings-about-security = Masasisho ya usalama
 
-# Quiet line under the Security updates switch when it is on.
-settings-about-security-sub = Marekebisho ya usalama husakinishwa yenyewe kila siku.
-
 # Warning line under the Security updates switch when it is off.
 settings-about-security-off = Marekebisho ya usalama hayasakinishwi yenyewe tena.
 
+# Said in red under the switch when it is turned off but the Reporting add-on could not delete the reports it keeps; the reason follows.
+settings-about-reports-addon-kept = Imezimwa, lakini ripoti zinazosubiri za programu jalizi ya Reporting hazikufutwa.

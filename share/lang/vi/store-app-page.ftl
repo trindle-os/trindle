@@ -18,7 +18,7 @@ store-app-state-removing = Đang gỡ
 store-app-state-downloading = Đang tải xuống
 
 # The state beside the dot while Flatpak is putting the fetched app in.
-store-app-state-putting-in = Đang cài vào
+store-app-state-putting-in = Đang cài
 
 # The state beside the dot while the app's own update goes in.
 store-app-state-updating = Đang cập nhật
@@ -27,7 +27,7 @@ store-app-state-updating = Đang cập nhật
 store-app-state-held = Đã cài, giữ lại không cập nhật
 
 # The state beside the dot for an installed app whose updates are held back.
-store-app-state-held-version = Đã cài, giữ lại ở phiên bản { $version }
+store-app-state-held-version = Đã cài, các bản cập nhật bị giữ lại ở phiên bản { $version }
 
 # The state beside the dot for an installed app with an update waiting; the end says what waits.
 store-app-state-waiting = Đã cài, { $waits }
@@ -66,7 +66,7 @@ store-app-remove = Gỡ
 store-app-open-round = Mở
 
 # Main button that releases an app whose updates are held back.
-store-app-release = Bỏ giữ
+store-app-release = Cho phép cập nhật
 
 # Main button that updates the app.
 store-app-update = Cập nhật
@@ -84,13 +84,13 @@ store-app-website = Trang web
 store-app-no-pictures = Ứng dụng này không có ảnh.
 
 # In the picture frame when the picture could not be fetched.
-store-app-picture-missed = Không thể tải ảnh này.
+store-app-picture-missed = Trindle không tải được ảnh này.
 
 # In the picture frame while the picture is being fetched.
 store-app-picture-fetching = Đang tải ảnh…
 
 # In the picture frame when the computer has no internet.
-store-app-picture-offline = Không thể tải ảnh khi máy tính này chưa kết nối internet.
+store-app-picture-offline = Hãy kết nối internet để xem ảnh.
 
 # Between the picture buttons: which picture, when it has no caption.
 store-app-picture-of = Ảnh { $at } trên { $n }
@@ -102,7 +102,7 @@ store-app-picture-of-caption = Ảnh { $at } trên { $n }: { $caption }
 store-app-picture-earlier = Ảnh trước
 
 # Tip of the round button that shows the picture after.
-store-app-picture-later = Ảnh sau
+store-app-picture-later = Ảnh tiếp theo
 
 # Licence shown in Facts for an app that is not open source.
 store-app-proprietary = Độc quyền
@@ -164,13 +164,13 @@ store-app-review-no-title = Không có tiêu đề
 store-app-people-none = Chưa ai viết về ứng dụng này.
 
 # Under What people say when there is no internet.
-store-app-people-offline = Không thể tải ý kiến của mọi người khi máy tính này chưa kết nối internet.
+store-app-people-offline = Hãy kết nối internet để đọc đánh giá.
 
 # Under What people say while reviews are being fetched.
-store-app-people-looking = Đang tìm ý kiến của mọi người…
+store-app-people-looking = Đang tải đánh giá…
 
 # Name of the card of reviews.
-store-app-people = Mọi người nói gì
+store-app-people = Đánh giá
 
 # Facts line: when the app's project was made.
 store-app-fact-created = Đã tạo

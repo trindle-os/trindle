@@ -135,7 +135,7 @@ mod tests {
         assert!(s.owned.ask.as_ref().is_some_and(|a| !a.working && a.said.is_none()), "a made-up press began deleting data");
 
         with_named(true, Some(7), || with_press(Some(8), || answer(&mut s, false)));
-        assert_eq!(*noted.borrow(), [(Removal::Flatpak { system: false, delete_data: false }, item.id.clone())]);
+        assert_eq!(*noted.borrow(), [(Removal::Flatpak { system: false }, item.id.clone(), false)]);
 
         ask_removing(&mut s, None, Some(item.clone()));
         s.owned.ask.as_mut().unwrap().bytes = Some(10);
@@ -160,6 +160,6 @@ mod tests {
         for tip in ["Remove and delete its data", "Delete its data only"] {
             assert!(shut.iter().any(|(t, off, why)| t == tip && *off && why.as_deref() == Some("It has no saved data to delete.")), "{tip}: {shut:?}");
         }
-        assert!(shut.iter().any(|(t, off, _)| t.starts_with("Remove, keep") && !*off));
+        assert!(shut.iter().any(|(t, off, _)| t.starts_with("Remove but keep data") && !*off));
     }
 }

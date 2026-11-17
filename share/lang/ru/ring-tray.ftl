@@ -15,17 +15,23 @@ ring-updates-none = Всё обновлено
 # Answer to a spoken question about updates when the updates button installs them all; "it" for one, "them" for more.
 ring-updates-spoken-all =
     { $n ->
-        [one] Ожидает { $n } обновление: кнопка обновлений рядом с «Приложениями» установит его
-        [few] Ожидают { $n } обновления: кнопка обновлений рядом с «Приложениями» установит их
-        [many] Ожидают { $n } обновлений: кнопка обновлений рядом с «Приложениями» установит их
-       *[other] Ожидают { $n } обновления: кнопка обновлений рядом с «Приложениями» установит их
+        [one] Ожидает { $n } обновление. Чтобы установить его, нажмите кнопку обновлений рядом с «Приложениями».
+        [few] Ожидают { $n } обновления. Чтобы установить их, нажмите кнопку обновлений рядом с «Приложениями».
+        [many] Ожидают { $n } обновлений. Чтобы установить их, нажмите кнопку обновлений рядом с «Приложениями».
+       *[other] Ожидают { $n } обновления. Чтобы установить их, нажмите кнопку обновлений рядом с «Приложениями».
     }
 
 # Answer to a spoken question about updates when only plugin updates that need a look wait; the clause that follows says so.
-ring-updates-spoken-look = Ожидает обновлений: { $n }. { $look }
+ring-updates-spoken-look =
+    { $n ->
+        [one] Ожидает { $n } обновление. { $look }.
+        [few] Ожидают { $n } обновления. { $look }.
+        [many] Ожидают { $n } обновлений. { $look }.
+       *[other] Ожидают { $n } обновления. { $look }.
+    }
 
 # Answer to a spoken question about updates when some install and some need a look; the last clause says which need a look.
-ring-updates-spoken-mixed = Ожидает обновлений: { $n }. Кнопка обновлений рядом с «Приложениями» установит { $put }, а { $look }
+ring-updates-spoken-mixed = Ожидает обновлений: { $n }. Кнопка обновлений рядом с «Приложениями» установит { $put } из них. { $look }.
 
 # Name and tip of the updates button when only firmware updates wait: the button takes the person to them.
 ring-updates-see-firmware =
@@ -39,10 +45,10 @@ ring-updates-see-firmware =
 # Name and tip of the updates button when firmware updates wait among others: the button takes the person to them.
 ring-updates-see-among =
     { $n ->
-        [one] Открыть { $n } обновление, среди них прошивка
-        [few] Открыть { $n } обновления, среди них прошивка
-        [many] Открыть { $n } обновлений, среди них прошивка
-       *[other] Открыть { $n } обновления, среди них прошивка
+        [one] Открыть { $n } обновление, включая прошивку
+        [few] Открыть { $n } обновления, включая прошивку
+        [many] Открыть { $n } обновлений, включая прошивку
+       *[other] Открыть { $n } обновления, включая прошивку
     }
 
 # Name and tip of the updates button when updates wait that it will install.
@@ -113,7 +119,7 @@ ring-tray-vpn = Подключено через VPN
 ring-tray-wired = Проводное подключение
 
 # Name of the network button when connected by cable but the internet is not reachable.
-ring-tray-wired-limited = Проводное подключение, ограниченный доступ
+ring-tray-wired-limited = Кабель есть, интернета нет
 
 # Name of the network button on Wi-Fi: the network's name and its signal strength.
 ring-tray-wifi = { $name }, сигнал { $strength }%
@@ -146,10 +152,9 @@ ring-tray-show = Показать в кольце
 ring-tray-take-out = Убрать из кольца
 
 # Quiet words in a tray icon's menu in place of Show in the ring, when the row is full.
-ring-tray-full = В кольце уже четыре. Сначала уберите один.
+ring-tray-full = В кольце уже четыре значка. Сначала уберите один.
 
 
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = Проверка выключена
-

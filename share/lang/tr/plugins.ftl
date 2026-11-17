@@ -2,13 +2,13 @@
 # machine translated (Turkish), not yet reviewed by a person.
 
 # Red words when plugin.ini cannot be read at the top of a plugin's folder. { $file } is the file's name, plugin.ini, and { $why } is the reason it could not be read.
-plugins-check-no-manifest = Klasörün en üstünde okunabilen bir { $file } yok ({ $why }).
+plugins-check-no-manifest = Trindle, klasörün en üstündeki { $file } dosyasını okuyamıyor ({ $why }).
 
 # Red words when plugin.ini has no [Plugin] part. { $file } is the file's name, plugin.ini.
 plugins-check-no-plugin-part = { $file } içinde [Plugin] bölümü yok.
 
 # Red words when plugin.ini is for another interface number. { $n } is the number it names; { $known } is the one this Trindle knows.
-plugins-check-interface-other = Interface={ $n }, bu Trindle'ın bildiği biri değil: Interface={ $known } biliyor.
+plugins-check-interface-other = Bu Trindle sürümü Interface={ $known } değerini destekliyor, Interface={ $n } değerini değil.
 
 # Red words when plugin.ini names no interface number. { $known } is the one this Trindle knows.
 plugins-check-interface-missing = [Plugin] için Interface={ $known } gerekir.
@@ -28,24 +28,23 @@ plugins-check-summary-one-line = [Plugin] Summary tek satırdır.
 # Red words when a value of plugin.ini must be plain words on one line. { $group } is the part, { $key } the key and { $max } the most letters allowed.
 plugins-plain-line =
     { $max ->
-        [one] [{ $group }] { $key } tek satırda düz sözcüklerdir, en çok { $max } karakter.
-       *[other] [{ $group }] { $key } tek satırda düz sözcüklerdir, en çok { $max } karakter.
+        [one] [{ $group }] { $key } tek satırlık düz metin olmalı ve en fazla { $max } karakter içerebilir.
+       *[other] [{ $group }] { $key } tek satırlık düz metin olmalı ve en fazla { $max } karakter içerebilir.
     }
 
 # Red words when plugin.ini asks for a permission that does not exist. { $name } is what it asked for; { $list } is the permissions there are, with commas between.
-plugins-check-permission-unknown = { $name } diye bir izin yok; izinler şunlardır: { $list }.
+plugins-check-permission-unknown = { $name } diye bir izin yok. İzinler şunlardır: { $list }.
 
 # Red words when the [Ring] part has no usable Icon.
 plugins-ring-needs-icon = [Ring] için bir Icon gerekir: eklentinin klasöründe bir SVG veya PNG dosyası.
 
 # Red words when the [Ring] Icon is not a file in the plugin's folder. { $icon } is the file name it gave.
-plugins-ring-icon-missing = [Ring] Icon, eklentinin klasöründe olmayan { $icon } adını veriyor.
+plugins-ring-icon-missing = [Ring] Icon, { $icon } adını veriyor ama bu, eklentinin klasöründe yok.
 
 # Red words when the [Ring] part has no Label.
-plugins-ring-needs-label = [Ring] için bir Label gerekir; imleç üzerinde durunca söylenir.
+plugins-ring-needs-label = [Ring] için bir Label gerekir; imleç üzerinde durunca gösterilir.
 
 # Red words when the [Ring] part has no Run.
-plugins-ring-needs-run = [Ring] için Run gerekir; tıklayınca başlayan şey.
 
 # Red words when the [Settings] part names no fields.
 plugins-settings-needs-fields = [Settings] için Fields gerekir; alanlarının adları.
@@ -62,40 +61,40 @@ plugins-needs-label = [{ $group }] için bir Label gerekir.
 # Red words when a choice field has too many choices or choices that are too long. { $group } is the part, { $most } the most choices and { $chars } the most letters in one.
 plugins-choices-limits =
     { $chars ->
-        [one] [{ $group }] Choices en çok { $most } tanedir, her biri en çok { $chars } karakterlik düz sözcüklerdir.
-       *[other] [{ $group }] Choices en çok { $most } tanedir, her biri en çok { $chars } karakterlik düz sözcüklerdir.
+        [one] [{ $group }] en fazla { $most } Choices içerebilir. Her biri en fazla { $chars } karakterlik düz metin olmalı.
+       *[other] [{ $group }] en fazla { $most } Choices içerebilir. Her biri en fazla { $chars } karakterlik düz metin olmalı.
     }
 
 # Red words when ChoicesFrom is not a good file name. { $group } is the part.
-plugins-choices-from-name = [{ $group }] ChoicesFrom, eklentinin evinde bir dosya adıdır: harf, rakam, nokta, tire ve alt çizgi, nokta ile başlamaz, klasör yok.
+plugins-choices-from-name = [{ $group }] ChoicesFrom, eklentinin klasöründeki bir dosyanın adı olmalı. Yalnızca harf, rakam, nokta, tire ve alt çizgi kullanın. Adı nokta ile başlatmayın, klasör yolu da eklemeyin.
 
 # Red words when a choice field offers fewer than two choices. { $group } is the part.
-plugins-choice-needs-choices = [{ $group }] bir seçimdir, bu yüzden iki veya daha çok Choices ya da bir dosya olarak ChoicesFrom gerekir.
+plugins-choice-needs-choices = [{ $group }] bir seçimdir, bu yüzden iki veya daha fazla seçenek içeren Choices ya da dosya belirten ChoicesFrom gerekir.
 
 # Red words when the default of a choice field is not one of its choices. { $group } is the part.
 plugins-choice-default = [{ $group }] Default, Choices içindekilerden biri değil.
 
 # Red words when a note field names no good file to read. { $group } is the part.
-plugins-note-needs-textfrom = [{ $group }] bir nottur, bu yüzden TextFrom gerekir; eklentinin evinde bir dosya adı: harf, rakam, nokta, tire ve alt çizgi, nokta ile başlamaz, klasör yok.
+plugins-note-needs-textfrom = [{ $group }] bir nottur, bu yüzden TextFrom ile eklentinin klasöründeki bir dosya belirtilmelidir. Yalnızca harf, rakam, nokta, tire ve alt çizgi kullanın. Adı nokta ile başlatmayın, klasör yolu da eklemeyin.
 
 # Red words when a note field has a Default. { $group } is the part.
-plugins-note-default = [{ $group }] bir nottur, ayar içermez, bu yüzden Default olmaz.
+plugins-note-default = [{ $group }] bir nottur, bu yüzden ayar saklamaz ve Default alamaz.
 
 # Red words when a field's Kind is none of those there are. { $group } is the part; { $kind } is what it gave, in quotation marks.
-plugins-field-kind = [{ $group }] Kind { $kind }: switch, text, choice veya note olmalıdır.
+plugins-field-kind = [{ $group }] Kind değeri { $kind }, ama switch, text, choice veya note olmalıdır.
 
 # Red words when a switch field has a Default that is not true or false. { $group } is the part.
-plugins-switch-default = [{ $group }] bir anahtardır, bu yüzden Default değeri true veya false olur.
+plugins-switch-default = [{ $group }] bir anahtardır, bu yüzden Default değeri true veya false olmalıdır.
 
 # Red words when the [Background] part is given without the background permission.
 # SAFETY: needs a human review before it ships
 plugins-background-needs-permission = [Background] için [Plugin] Permissions içinde background izni gerekir.
 
 # Red words when a plugin has nothing that makes it do anything.
-plugins-hooks-nothing = Eklenti hiçbir şeye bağlanmıyor: ona [Ring], [Settings], [Background], [Shortcut] veya bildirim izni verin.
+plugins-hooks-nothing = Eklenti hiçbir şeye bağlanmıyor. Ona [Ring], [Settings], [Background], [Shortcut] veya bildirim izni verin.
 
 # Red words when a file inside a plugin is a link that leads out of its folder. { $path } is the link's place inside the folder.
-plugins-links-outside = { $path }, eklentinin klasörü dışına bağlanıyor.
+plugins-links-outside = { $path }, eklentinin klasörünün dışına giden bir bağlantıdır.
 
 # Red words when a Run line cannot be read as a command. { $group } is the part.
 plugins-run-unreadable = [{ $group }] Run bir komut olarak okunamıyor.
@@ -104,13 +103,13 @@ plugins-run-unreadable = [{ $group }] Run bir komut olarak okunamıyor.
 plugins-run-outside = [{ $group }] Run, eklentinin klasörü içindeki bir programı adlandırmalı, { $program } olmaz.
 
 # Red words when a Run line names a program that is not there or cannot run. { $group } is the part; { $program } is the program named.
-plugins-run-missing = [{ $group }] Run, eklentinin taşımadığı bir programı ({ $program }) adlandırıyor (eksik veya çalıştırılabilir değil).
+plugins-run-missing = [{ $group }] Run, { $program } adını veriyor ama eklenti bu programı içermiyor (eksik veya çalıştırılabilir değil).
 
 # Red words when the [Ring] Menu lists too many items. { $n } is how many it lists; { $max } is the most allowed.
 plugins-menu-too-many =
     { $n ->
-        [one] [Ring] Menu içinde { $n } öğe var: en çok { $max } öğeye izin verilir.
-       *[other] [Ring] Menu içinde { $n } öğe var: en çok { $max } öğeye izin verilir.
+        [one] [Ring] Menu içinde { $n } öğe var. En fazla { $max } öğeye izin verilir.
+       *[other] [Ring] Menu içinde { $n } öğe var. En fazla { $max } öğeye izin verilir.
     }
 
 # Red words when a menu item's id has marks that are not allowed. { $id } is the id.
@@ -125,12 +124,11 @@ plugins-menu-no-part = [Ring] Menu, [{ $group }] bölümü olmayan { $id } adın
 # Red words when a menu item or shortcut has a Label that is not one short plain line. { $group } is the part; { $max } is the most letters.
 plugins-label-short-line =
     { $max ->
-        [one] [{ $group }] Label en çok { $max } karakterlik tek kısa satırdır.
-       *[other] [{ $group }] Label en çok { $max } karakterlik tek kısa satırdır.
+        [one] [{ $group }] Label en fazla { $max } karakterlik tek bir kısa satır olmalı.
+       *[other] [{ $group }] Label en fazla { $max } karakterlik tek bir kısa satır olmalı.
     }
 
 # Red words when a menu item has no Run. { $group } is the part.
-plugins-menu-needs-run = [{ $group }] için Run gerekir; seçilince başlayan şey.
 
 # Red words when a plugin other than Flow has a PinUnlock part. { $group } is the part's name, PinUnlock.
 plugins-pin-group-only-flow = [{ $group }] yalnızca Trindle kataloğundaki, control izni isteyen Flow içindir.
@@ -141,46 +139,46 @@ plugins-pin-group-needs-run = [{ $group }] için Run gerekir; PIN'in verildiği 
 # Red words when a ShowWhen is too long. { $group } is the part; { $max } is the most letters.
 plugins-showwhen-long =
     { $max ->
-        [one] [{ $group }] ShowWhen en çok { $max } karakterdir.
-       *[other] [{ $group }] ShowWhen en çok { $max } karakterdir.
+        [one] [{ $group }] ShowWhen en fazla { $max } karakter olabilir.
+       *[other] [{ $group }] ShowWhen en fazla { $max } karakter olabilir.
     }
 
 # Red words when a ShowWhen is not written field=value. { $group } is the part.
-plugins-showwhen-form = [{ $group }] ShowWhen alan=değer biçiminde yazılır, örneğin ShowWhen=mode=home: başka bir alan ve onun taşıması gereken tek değer.
+plugins-showwhen-form = [{ $group }] ShowWhen alan=değer biçiminde olmalı, örneğin ShowWhen=mode=home. Başka bir alanı ve onun taşıması gereken değeri belirtin.
 
 # Red words when the field a ShowWhen names has marks in its name that are not allowed. { $group } is the part.
-plugins-showwhen-field-name = [{ $group }] ShowWhen alan=değer biçiminde yazılır ve alanın adı yalnızca harf, rakam, tire ve alt çizgi içerebilir.
+plugins-showwhen-field-name = [{ $group }] ShowWhen alan=değer biçiminde yazılmalı ve alanın adı yalnızca harf, rakam, tire ve alt çizgi içerebilir.
 
 # Red words when the value a ShowWhen needs is missing or not plain. { $group } is the part; { $max } is the most letters.
 plugins-showwhen-value =
     { $max ->
-        [one] [{ $group }] ShowWhen için tek satırda, en çok { $max } karakterlik düz sözcüklerden oluşan bir değer gerekir.
-       *[other] [{ $group }] ShowWhen için tek satırda, en çok { $max } karakterlik düz sözcüklerden oluşan bir değer gerekir.
+        [one] [{ $group }] ShowWhen için tek satırda, en fazla { $max } karakterlik düz metin bir değer gerekir.
+       *[other] [{ $group }] ShowWhen için tek satırda, en fazla { $max } karakterlik düz metin bir değer gerekir.
     }
 
 # Red words when a ShowWhen names the field it is in. { $group } is the part.
-plugins-showwhen-own = [{ $group }] ShowWhen kendi alanını adlandırıyor: başka, daha önceki bir alanı adlandırmalı.
+plugins-showwhen-own = [{ $group }] ShowWhen kendi alanını adlandırıyor. Başka, daha önceki bir alanı adlandırmalı.
 
 # Red words when a ShowWhen names a field that is not there. { $group } is the part; { $other } is the field named.
 plugins-showwhen-unknown = [{ $group }] ShowWhen, bu eklentinin Fields listesinde olmayan { $other } alanını adlandırıyor.
 
 # Red words when a ShowWhen names a field that comes later. { $group } is the part; { $other } is the field named.
-plugins-showwhen-later = [{ $group }] ShowWhen, Fields içinde kendinden sonra gelen { $other } alanını adlandırıyor: daha önceki bir alan olmalı.
+plugins-showwhen-later = [{ $group }] ShowWhen, Fields içinde kendinden sonra gelen { $other } alanını adlandırıyor. Daha önceki bir alan olmalı.
 
 # Red words when a ShowWhen names a field that has a ShowWhen too. { $group } is the part; { $other } is the field named.
-plugins-showwhen-chained = [{ $group }] ShowWhen, kendi ShowWhen değeri olan { $other } alanını adlandırıyor: bir alan yalnızca ShowWhen değeri olmayan bir alana bağlı olabilir.
+plugins-showwhen-chained = [{ $group }] ShowWhen, kendi ShowWhen değeri olan { $other } alanını adlandırıyor. Bir alan yalnızca ShowWhen değeri olmayan bir alana bağlı olabilir.
 
 # Red words when a ShowWhen names a switch and a value that is not true or false. { $group } is the part; { $other } is the switch.
-plugins-showwhen-switch = [{ $group }] ShowWhen, { $other } anahtarını adlandırıyor, bu yüzden değeri true veya false olur.
+plugins-showwhen-switch = [{ $group }] ShowWhen, { $other } anahtarını adlandırıyor, bu yüzden değeri true veya false olmalıdır.
 
 # Red words when a ShowWhen gives a value that the choice field it names does not offer. { $group } is the part; { $value } is the value, in quotation marks; { $other } is the field.
 plugins-showwhen-not-choice = [{ $group }] ShowWhen değeri { $value }, { $other } alanının Choices değerlerinden biri değil.
 
 # Red words when a ShowWhen names a note field. { $group } is the part; { $other } is the note.
-plugins-showwhen-note = [{ $group }] ShowWhen, ayar içermeyen { $other } notunu adlandırıyor: bir alan yalnızca bir anahtara, seçime veya metne bağlı olabilir.
+plugins-showwhen-note = [{ $group }] ShowWhen, ayar saklamayan { $other } notuna başvuruyor. Bunun yerine bir anahtar, seçim veya metin alanı kullanın.
 
 # Red words when the ports a plugin asks to listen on are not good. { $why } says what is wrong with them.
-plugins-listen-fault = [Ağ] Dinleme: { $why }
+plugins-listen-fault = [Network] Listen: { $why }
 
 # Red words when a plugin names ports to listen on without the network permission.
 # SAFETY: needs a human review before it ships
@@ -192,16 +190,16 @@ plugins-listen-needs-listen = [Network] Listen için [Plugin] Permissions içind
 
 # Red words when a plugin has the listen permission and names no ports.
 # SAFETY: needs a human review before it ships
-plugins-listen-needs-ports = listen izni için [Network] Listen gerekir; izin verilecek bağlantı noktaları.
+plugins-listen-needs-ports = listen izni için, eklentinin bağlantı alabileceği bağlantı noktalarını listeleyen [Network] Listen gerekir.
 
 # Red words when the ports to open for a plugin are asked of a plugin.ini for another interface.
-plugins-ports-interface = plugin.ini dosyası, bu Trindle'ın bildiği bir arayüz için değil.
+plugins-ports-interface = plugin.ini dosyası, bu Trindle sürümünün desteklemediği bir arayüzü kullanıyor.
 
 # Red words when the ports to open for a plugin are asked and it names none.
-plugins-ports-none = Dinlenecek hiçbir bağlantı noktası belirtmiyor.
+plugins-ports-none = Dinlenecek hiçbir bağlantı noktası listelemiyor.
 
 # Red words when the ports to open for a plugin are asked and its plugin.ini cannot be read.
-plugins-ports-unreadable = plugin.ini dosyası okunamadı.
+plugins-ports-unreadable = plugin.ini dosyası okunamıyor.
 
 # Red words when the ports to open for a plugin are asked and it has not been allowed to listen.
 # SAFETY: needs a human review before it ships
@@ -209,23 +207,27 @@ plugins-ports-not-allowed = Dinlemesine izin verilmedi.
 
 # Red words when the ports a plugin names are not the ones the person was shown when allowing it to listen.
 # SAFETY: needs a human review before it ships
-plugins-ports-changed = Belirttiği bağlantı noktaları izin verilenler değil. Yeniden izin verilmeleri gerekir.
+plugins-ports-changed = Listelenen bağlantı noktaları değişti. Bu noktalardaki bağlantılara yeniden izin vermeniz gerekir.
 
 # Headline on a plugin that has been allowed none of what it asks for. { $name } is the plugin; { $n } is how many things it asks for.
 # SAFETY: needs a human review before it ships
-plugins-needs-none = { $name } çalışmak için izninize gerek duyuyor: { $n } izinden 0 tanesi verildi.
+plugins-needs-none =
+    { $n ->
+        [one] { $name } çalışabilmek için izninize ihtiyaç duyuyor. İstediği tek izne izin vermediniz.
+       *[other] { $name } çalışabilmek için izninize ihtiyaç duyuyor. İstediği { $n } izinden hiçbirine izin vermediniz.
+    }
 
 # Headline on a plugin that has been allowed some of what it asks for. { $name } is the plugin; { $a } is how many are allowed; { $n } is how many it asks for.
 # SAFETY: needs a human review before it ships
-plugins-needs-some = { $name } istediği iznin yalnızca bir kısmına sahip: { $n } izinden { $a } tanesi verildi.
+plugins-needs-some = { $name } için istenen { $n } izinden yalnızca { $a } tanesine izin verdiniz.
 
 # Quiet line on a plugin that has been allowed all it asks for. { $n } is how many things it asks for.
 # SAFETY: needs a human review before it ships
 plugins-settled =
     { $n ->
         [0] Hiçbir şey istemiyor.
-        [one] İstediği tek şeye izin verildi.
-       *[other] İstediği { $n } şeyin hepsine izin verildi.
+        [one] İstediği izne izin verildi.
+       *[other] İstediği { $n } iznin hepsine izin verildi.
     }
 
 # Button that opens the window where a plugin's permissions are allowed.
@@ -234,7 +236,7 @@ plugins-allow = İzin ver
 
 # Said among what a newer version of a plugin asks for that the old one did not: other ports to be reached on. It follows words such as "It asks for more than before:".
 # SAFETY: needs a human review before it ships
-plugins-other-ports = önceki bağlantı noktalarından farklı noktalardan erişilebilir olmak
+plugins-other-ports = farklı bağlantı noktalarından erişilmek
 
 # Red words when the ports of a plugin cannot be opened because another plugin that holds them is no longer installed.
 plugins-not-installed = Kurulu değil.
@@ -252,10 +254,10 @@ plugins-not-saved = Kaydedilemedi: { $why }
 plugins-copy-failed = Eklentinin dosyaları kopyalanamadı.
 
 # Red words when an update was not put in and the plugin's background part is not running either. { $why } is the first reason; { $not } is why the background part is not running.
-plugins-swap-not-running = { $why } Arka plan bölümü çalışmıyor: { $not }
+plugins-swap-not-running = { $why } Eklenti arka planda çalışmıyor: { $not }
 
 # Words after a colon: a plugin's background part cannot be started because trindle-plugin cannot be found.
-plugins-bg-no-program = trindle-plugin başlatmak için bulunamadı.
+plugins-bg-no-program = Trindle, başlatmak için trindle-plugin'i bulamadı.
 
 # Words after a colon: a plugin's background part did not start in time. { $n } is how many seconds it was given.
 plugins-bg-slow =
@@ -274,13 +276,13 @@ plugins-bg-which-session = hangi masaüstü oturumuna katılacağını belirleye
 plugins-folder-in-the-way = dosyanın olması gereken yerde bir klasör var
 
 # Error text when a plugin's id is not an id.
-plugins-not-an-id = bir eklenti kimliği değil
+plugins-not-an-id = geçerli bir kimlik değil
 
 # Red words when a plugin asks for more shortcuts than are allowed. { $n } is how many it asks for; { $max } is the most allowed.
 plugins-shortcut-too-many =
     { $n ->
-        [one] [Plugin] Shortcuts içinde { $n } kısayol var: en çok { $max } kısayola izin verilir.
-       *[other] [Plugin] Shortcuts içinde { $n } kısayol var: en çok { $max } kısayola izin verilir.
+        [one] [Plugin] Shortcuts içinde { $n } kısayol var. En fazla { $max } kısayola izin verilir.
+       *[other] [Plugin] Shortcuts içinde { $n } kısayol var. En fazla { $max } kısayola izin verilir.
     }
 
 # Red words when a shortcut's id has marks that are not allowed. { $id } is the id.
@@ -293,22 +295,21 @@ plugins-shortcut-twice = [Plugin] Shortcuts, { $id } adını iki kez veriyor.
 plugins-shortcut-no-part = [Plugin] Shortcuts, [{ $group }] bölümü olmayan { $id } adını veriyor.
 
 # Red words when the keys a plugin asks for are already one of Trindle's shortcuts. { $group } is the part; { $keys } are the keys.
-plugins-shortcut-keys-trindle = [{ $group }] Keys { $keys }, zaten Trindle'ın bir kısayolu; başka tuşlar seçin.
+plugins-shortcut-keys-trindle = [{ $group }] Keys { $keys }, zaten Trindle'ın kısayollarından biri. Başka tuşlar seçin.
 
 # Red words when the keys a plugin asks for are used by another shortcut of the same plugin. { $group } is the part; { $keys } are the keys.
-plugins-shortcut-keys-twice = [{ $group }] Keys { $keys }, eklentinin başka bir kısayolu tarafından kullanılıyor.
+plugins-shortcut-keys-twice = [{ $group }] Keys { $keys }, bu eklentideki başka bir kısayol tarafından zaten kullanılıyor.
 
 # Red words when the keys a plugin asks for cannot be read as keys. { $group } is the part; { $why } says what is wrong with them.
 plugins-shortcut-keys-needed = [{ $group }] için Keys gerekir, örneğin Ctrl+Alt+S. { $why }
 
 # Red words when a shortcut has no Run. { $group } is the part.
-plugins-shortcut-needs-run = [{ $group }] için Run gerekir; tuşların başlattığı şey.
 
 # Red words beside a shortcut in Settings when the keys the person typed are not a shortcut. { $why } says what is wrong with them.
-plugins-shortcut-typed-bad = Bunun için yazılan tuşlar bir kısayol değil. { $why }
+plugins-shortcut-typed-bad = Bu tuş birleşimi geçerli bir kısayol değil. { $why }
 
 # Red words in Settings when the keys typed are already one of Trindle's shortcuts. { $keys } are the keys.
-plugins-shortcut-trindle = { $keys } zaten Trindle'ın bir kısayolu.
+plugins-shortcut-trindle = { $keys } zaten Trindle'ın kısayollarından biri.
 
 # Red words in Settings when the keys typed are already one of the person's own shortcuts. { $keys } are the keys.
 plugins-shortcut-yours = { $keys } zaten kendi kısayollarınızdan biri.
@@ -320,16 +321,36 @@ plugins-shortcut-used = { $keys } zaten { $holder } tarafından kullanılıyor.
 plugins-shortcut-unknown = Bu, kurulu bir eklentinin kısayolu değil.
 
 # Red words in Settings when a shortcut was kept but could not be put to use. { $why } is the reason.
-plugins-shortcut-not-in-use = Kullanıma alınamadı ({ $why }).
+plugins-shortcut-not-in-use = Trindle bunu kullanamadı ({ $why }).
 
 # Red words in Settings when the file of shortcut choices cannot be read, so nothing was changed. { $why } is the reason.
-plugins-shortcut-not-saved-unchanged = Kaydedilemedi: hiçbir şey değişmedi, çünkü { $why }.
+plugins-shortcut-not-saved-unchanged = Trindle bunu kaydedemedi, çünkü { $why }. Hiçbir şey değişmedi.
 
 # Red words in Settings when the file of shortcut choices could not be written. { $why } is the reason.
-plugins-shortcut-not-saved = Kaydedilemedi ({ $why }).
+plugins-shortcut-not-saved = Kaydedilemedi: { $why }.
+
+# Said when a plugin's ports can't be closed. { $why } is the reason.
+plugins-ports-not-closed = Bağlantı noktaları kapatılamadı: { $why }.
+
+# Said when a plugin's ports can't be opened and listening is off again. { $why } is the reason.
+plugins-ports-not-opened = Trindle bağlantı noktalarını açamadı, bu yüzden dinleme yeniden kapatıldı: { $why }.
+
+# Said when a plugin's ports can't be opened and listening couldn't be switched off again. { $why } and { $kept } are the reasons.
+plugins-ports-not-opened-kept = Bağlantı noktaları açılmadı ({ $why }) ve dinleme de yeniden kapatılamadı ({ $kept }). Hiçbir şey açık değil. Ayarlar, İzinler bölümünden kapatın.
 
 
 
 # Red words when a plugin other than Trindle's screen reader asks for the accessibility permission.
-plugins-accessibility-only-reader = Erişilebilirlik izni yalnızca katalogdaki Trindle ekran okuyucusu içindir.
+plugins-accessibility-only-reader = Erişilebilirlik iznini yalnızca katalogdaki Trindle ekran okuyucusu kullanabilir.
 
+# Red words when plugin.ini asks for the same permission twice. { $name } is the permission.
+plugins-permission-twice = { $name } izni iki kez yazılmış.
+
+# Red words when plugin.ini asks for the local network and the whole network together. { $home } is the local network permission name.
+plugins-home-network-or-network = { $home } ya da network izni isteyin, ikisini birden değil: network izni, internetin yanı sıra yerel ağa da erişir.
+
+# Red words when a part (the Ring, a menu item, a shortcut or the background part) has no Run. { $group } is the part.
+plugins-needs-run = [{ $group }] için Run, yani çalıştırılacak komut gerekir.
+
+# Red words when an update could not be put in and the old version could not be put back either. { $why } is why the update failed; { $back } is why the old version could not be put back.
+plugins-swap-not-back = { $why } Eski sürüm de geri konamadı: { $back } İkisi de eklentinin klasöründe duruyor.

@@ -17,10 +17,10 @@ key-enrol-why-addon = Ein Zusatztreiber wird auf diesem Computer gebaut. Secure 
 
 # Step 1: the password, made before the restart.
 # SAFETY: needs a human review before it ships
-key-enrol-step1 = Denke dir ein Passwort aus, das nur aus Buchstaben und Ziffern besteht. Der blaue Bildschirm hat eine amerikanische Tastatur, Sonderzeichen liegen dort daher auf anderen Tasten. Schreib es auf; du brauchst es nur einmal.
+key-enrol-step1 = Denke dir ein Passwort aus, das nur Buchstaben und Ziffern enthält. Der blaue Bildschirm verwendet ein amerikanisches Tastaturlayout, daher können Sonderzeichen auf anderen Tasten liegen. Schreibe das Passwort auf. Du brauchst es nur einmal.
 
 # Step 2: the restart and how long the blue screen waits.
-key-enrol-step2 = Starte neu. Vor dem Start von Trindle erscheint ein blauer Bildschirm mit der Überschrift Enroll MOK. Er gibt nach etwa 10 Sekunden auf, sei also bereit, eine Taste zu drücken.
+key-enrol-step2 = Starte neu. Vor dem Start von Trindle erscheint ein blauer Bildschirm namens Enroll MOK. Du hast etwa 10 Sekunden, um eine Taste zu drücken, sei also bereit.
 
 # Step 3: the first two screens.
 key-enrol-step3 = Wähle Enroll MOK, dann Continue.
@@ -30,7 +30,7 @@ key-enrol-step3 = Wähle Enroll MOK, dann Continue.
 key-enrol-step4 = Wähle Yes und gib das Passwort ein, das du dir ausgedacht hast.
 
 # Step 5: the last screen.
-key-enrol-step5 = Wähle Reboot. Der Treiber wird geladen, sobald der Computer wieder läuft.
+key-enrol-step5 = Wähle Reboot. Der Treiber wird geladen, wenn der Computer neu startet.
 
 # Tip after the steps: what happens when the blue screen is missed and how to be asked again.
-key-enrol-missed = Wenn du den blauen Bildschirm verpasst, startet der Computer wie bisher ohne den Treiber. Nichts ist kaputt; führe sudo mokutil --import /var/lib/dkms/mok.pub aus und starte neu, um erneut gefragt zu werden.
+key-enrol-missed = Wenn du den blauen Bildschirm verpasst, startet der Computer wie bisher ohne den Treiber. Nichts ist kaputt. Um erneut gefragt zu werden, führe sudo mokutil --import /var/lib/dkms/mok.pub aus und starte neu.

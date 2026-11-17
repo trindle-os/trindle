@@ -90,9 +90,13 @@ fn unique_all(into: &Path, names: &[String]) -> Vec<PathBuf> {
     }).collect()
 }
 
+fn exists(p: &Path) -> bool {
+    std::fs::symlink_metadata(p).is_ok()
+}
+
 fn unique(folder: &Path, name: &str, given: &HashSet<PathBuf>) -> PathBuf {
     let first = folder.join(name);
-    if !first.exists() && !given.contains(&first) {
+    if !exists(&first) && !given.contains(&first) {
         return first;
     }
     let (stem, ext) = match name.rfind('.') {
@@ -100,7 +104,7 @@ fn unique(folder: &Path, name: &str, given: &HashSet<PathBuf>) -> PathBuf {
         _ => (name, ""),
     };
     (2..).map(|n| folder.join(format!("{stem} ({n}){ext}")))
-        .find(|p| !p.exists() && !given.contains(p))
+        .find(|p| !exists(p) && !given.contains(p))
         .unwrap_or(first)
 }
 
@@ -109,17 +113,37 @@ fn last_folder(file: &Path, app_id: &str) -> Option<PathBuf> {
     text.lines().find_map(|l| l.split_once('\t').filter(|(a, _)| *a == app_id).map(|(_, p)| PathBuf::from(p)))
 }
 
+#[cfg(test)]
+pub(super) mod ran_on {
+    use std::sync::Mutex;
+    static IDS: Mutex<Vec<std::thread::ThreadId>> = Mutex::new(Vec::new());
+    pub(super) fn note() {
+        IDS.lock().unwrap().push(std::thread::current().id());
+    }
+    pub(in crate::screenshot::file_chooser) fn count() -> usize {
+        IDS.lock().unwrap().len()
+    }
+    pub(in crate::screenshot::file_chooser) fn since(n: usize) -> Vec<std::thread::ThreadId> {
+        IDS.lock().unwrap()[n..].to_vec()
+    }
+}
+
 impl Chooser {
 
     pub(super) fn aside(&mut self, look: impl FnOnce() -> Msg + Send + 'static) {
         match self.post.clone() {
             Some(post) => {
                 let _ = std::thread::Builder::new().name("chooser-look".into()).spawn(move || {
-                    post.send(look());
+                    let msg = look();
+                    #[cfg(test)]
+                    ran_on::note();
+                    post.send(msg);
                 });
             }
             None => {
                 let found = look();
+                #[cfg(test)]
+                ran_on::note();
                 self.update(found);
             }
         }
@@ -304,6 +328,16 @@ mod tests {
         assert_eq!(unique(&dir, "notes", &given), dir.join("notes"));
         std::fs::write(dir.join(".bashrc"), b"").unwrap();
         assert_eq!(unique(&dir, ".bashrc", &given), dir.join(".bashrc (2)"));
+        std::fs::remove_dir_all(&dir).unwrap();
+    }
+
+    #[test]
+    fn a_dangling_link_counts_as_a_taken_name() {
+        let dir = std::env::temp_dir().join(format!("trindle-chooser-link-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        std::os::unix::fs::symlink("/nowhere/at/all", dir.join("a.txt")).unwrap();
+        assert_eq!(unique(&dir, "a.txt", &HashSet::new()), dir.join("a (2).txt"));
         std::fs::remove_dir_all(&dir).unwrap();
     }
 }

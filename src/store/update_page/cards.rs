@@ -1,6 +1,7 @@
 //! The Apps, Plugins and Held back cards.
 
 use crate::toolkit::t;
+use crate::toolkit::tiles::RingShare;
 use crate::store::listing;
 use crate::store::look::{self, dot_line, Dot};
 use crate::store::plugin_page;
@@ -14,7 +15,7 @@ use super::install::{update_app, update_part, update_plugin};
 use super::rows::{Own, app_name, held_row_key, hold_button, red_words, update_line};
 use super::view::checking;
 use super::words::{from_words, held_with_nothing_newer, held_words, hold_why, nothing_held, release_why, released, size_words, status, with_held};
-use super::{APPS, APPS_ROW, Flat, HOLD_ICON, PART_ICON, app_key, app_share, flat_held, going_under, newer_version, part_name, unchecked};
+use super::{APPS, APPS_ROW, Flat, HOLD_ICON, PART_ICON, app_key, app_ring, flat_held, going_under, job_ring, newer_version, part_name, unchecked};
 
 pub(super) fn apps_card(s: &Store) -> Node<Msg> {
     let parts: Vec<&Flat> = s.upd.flats.iter().filter(|f| !f.app).collect();
@@ -60,7 +61,7 @@ fn app_line(s: &Store, id: &String, all: bool, size: f32) -> Node<Msg> {
         Some(change) => t!("store-upd-from-change", from = from, change = change),
         None => t!("store-upd-from", from = from),
     };
-    let share = if s.held.app(id) { None } else { app_share(s, id).or(all.then_some(0.0)) };
+    let share = if s.held.app(id) { None } else { app_ring(s, id).or_else(|| all.then(|| RingShare::new(Some(0.0)))) };
     let picture = s.apps.get(id).map_or_else(|| crate::store::pages::pictures::own_icon(id.clone(), size), |a| crate::store::pages::pictures::app_icon(a, size));
     let app = id.clone();
     update_line(s, Some(picture), name, detail, held_words(have.as_deref(), to), size_words(s.upd.sizes.get(id).copied()),
@@ -72,8 +73,7 @@ fn part_line(s: &Store, f: &Flat, all: bool, size: f32) -> Node<Msg> {
     let share = if flat_held(s, f) {
         None
     } else {
-        s.dials.get(&key).filter(|d| d.running()).map(|d| d.share())
-            .or_else(|| all.then(|| s.upd.app_rows.get(&f.id).copied().unwrap_or(0.0)))
+        job_ring(s, &key).or_else(|| all.then(|| s.upd.app_rows.get(&f.id).cloned().unwrap_or_else(|| RingShare::new(Some(0.0)))))
     };
     let detail = t!("store-upd-shared-part", from = from_words(&f.origin));
     let part = key.clone();
@@ -99,7 +99,7 @@ pub(super) fn plugins_card(s: &Store) -> Node<Msg> {
         let key = format!("pl:{}", mine.id);
         let detail = plugin_page::waiting_detail(&mine, &offer);
         let kept = held_words(Some(&mine.version), Some(&offer.entry.version));
-        let going = s.dials.get(&key).filter(|d| d.running()).map(|d| d.share());
+        let going = job_ring(s, &key);
         let own = Own::Button { key, problem: plugin_page::problem(s, &mine.id), going, press: Box::new(move |s| update_plugin(s, &offer)),
                                 hold: Thing::plugin(&mine.id), called: None };
         items.push(update_line(s, None, mine.name.clone(), detail, kept, String::new(), own));

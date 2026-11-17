@@ -1,6 +1,8 @@
 //! trindle-screenshot: a picture of the screen, or of part of it, to draw on
 //! before it is kept.
 
+/// # Safety
+/// `p` must be the address of a function whose signature is `F`.
 pub(crate) unsafe fn function<F: Copy>(p: *mut std::ffi::c_void) -> F {
     assert_eq!(std::mem::size_of::<F>(), std::mem::size_of::<*mut std::ffi::c_void>(), "a function pointer is as big as an address");
     // SAFETY: F is as big as the address, and the caller says the address is a function of that type.
@@ -94,6 +96,7 @@ pub fn main(args: Vec<String>) -> i32 {
     }
 
     crate::ring::kept::take();
+    let for_report = args.iter().position(|a| a == "--for-report").and_then(|i| args.get(i + 1)).map(PathBuf::from);
     let events = Loop::new();
     let gone = events.clone();
     let Some(display) = Display::connect(&events, move || gone.quit()) else {
@@ -104,16 +107,23 @@ pub fn main(args: Vec<String>) -> i32 {
     crate::ring::kept::pulse_while_keys_held(&events, &display);
     let bus = Bus::session(&events).ok();
     let life = Life::new(&events, display, bus.clone());
+    let handing = for_report.is_some();
+    if handing {
+        life.code.set(1);
+    }
+    *life.hand_to.borrow_mut() = for_report;
 
     let served: Rc<RefCell<Option<Served>>> = Rc::new(RefCell::new(None));
+
     match &bus {
-        Some(bus) => be_the_one(&events, bus, &life, &served),
-        None => life.show(),
+        Some(bus) if !handing => be_the_one(&events, bus, &life, &served),
+        _ => life.show(),
     }
     events.run();
     drop(served);
+    let code = life.code.get();
     drop(life);
-    0
+    code
 }
 
 fn keep_whole_screen() -> i32 {
@@ -171,14 +181,34 @@ fn now() -> Local {
     Local::now()
 }
 
-fn next_file() -> Result<PathBuf, String> {
-    let folder = home().join(FOLDER);
-    std::fs::create_dir_all(&folder).map_err(|e| e.to_string())?;
+fn next_in(folder: &Path) -> Result<PathBuf, String> {
+    std::fs::create_dir_all(folder).map_err(|e| e.to_string())?;
     let when = now();
 
-    (1..1000).map(|n| folder.join(file_name(&when, n)))
-        .find(|p| std::fs::OpenOptions::new().write(true).create_new(true).open(p).is_ok())
-        .ok_or_else(|| t!("screenshot-no-free-name").to_string())
+    let mut first_error = None;
+    for n in 1..1000 {
+        let p = folder.join(file_name(&when, n));
+        match std::fs::OpenOptions::new().write(true).create_new(true).open(&p) {
+            Ok(_) => return Ok(p),
+            Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists => {}
+            Err(e) => {
+                first_error.get_or_insert(e.to_string());
+                break;
+            }
+        }
+    }
+    Err(first_error.unwrap_or_else(|| t!("screenshot-no-free-name").to_string()))
+}
+
+fn save_new(fill: impl FnOnce(&Path) -> Result<(), String>) -> Result<(), String> {
+    save_in(&home().join(FOLDER), fill)
+}
+
+fn save_in(folder: &Path, fill: impl FnOnce(&Path) -> Result<(), String>) -> Result<(), String> {
+    let p = next_in(folder)?;
+    fill(&p).inspect_err(|_| {
+        let _ = std::fs::remove_file(&p);
+    })
 }
 
 fn to_clipboard(png: &[u8]) -> bool {
@@ -196,11 +226,10 @@ fn to_clipboard(png: &[u8]) -> bool {
 }
 
 fn keep_whole(shot: &Path, say: &Say) -> bool {
-    match next_file().and_then(|p| std::fs::copy(shot, &p).map(|_| p).map_err(|e| e.to_string())) {
-        Ok(_) => {
+    match save_new(|p| std::fs::copy(shot, p).map(|_| ()).map_err(|e| e.to_string())) {
+        Ok(()) => {
 
             let _ = std::fs::read(shot).is_ok_and(|b| to_clipboard(&b));
-            say.done();
             true
         }
         Err(e) => {
@@ -223,12 +252,6 @@ impl Say {
     fn not_saved(&self, why: &str) {
         eprintln!("trindle-screenshot: {why}");
         self.tell(t!("screenshot-not-saved"), why, "dialog-warning-symbolic");
-    }
-
-    fn done(&self) {
-        if let Some(bus) = &self.bus {
-            crate::ring::tick_at_edge(bus, &self.events);
-        }
     }
 
     fn tell(&self, summary: &str, body: &str, icon: &str) {
@@ -373,6 +396,8 @@ struct Screen {
     out: Post<Out>,
 
     start: Pt,
+
+    handing: bool,
 }
 
 impl Screen {
@@ -405,8 +430,8 @@ impl Screen {
             Doing::Moving(was) => st.part = Some(area::moved(was, d.0, d.1, view.size)),
             Doing::Drawing => {
                 if let Some(m) = st.drawing.as_mut() {
+
                     m.drag(view.in_picture(p));
-                    m.make_blur(&self.core.still);
                 }
             }
         }
@@ -493,23 +518,25 @@ impl Screen {
             self.out.send(Out::Then(Box::new(|l: &Rc<Life>| l.say.not_saved(t!("screenshot-no-picture")))));
             return;
         };
+        if self.handing {
+            self.out.send(Out::Then(Box::new(move |l: &Rc<Life>| l.hand_over(&png))));
+            return;
+        }
         let view = self.core.view().size;
         let then: Box<dyn FnOnce(&Rc<Life>)> = match how {
-            Finish::Keep => Box::new(move |l| match next_file().and_then(|p| write_png(&p, &png)) {
-                Ok(()) => {
-                    let _ = to_clipboard(&png);
-                    l.say.done();
-                }
-                Err(e) => l.say.not_saved(&e),
-            }),
-            Finish::Save => Box::new(move |l| match next_file().and_then(|p| write_png(&p, &png)) {
-                Ok(()) => l.say.done(),
-                Err(e) => l.say.not_saved(&e),
-            }),
+            Finish::Keep | Finish::Save => {
+                let copy = matches!(how, Finish::Keep);
+                Box::new(move |l| match save_new(|p| write_png(p, &png)) {
+                    Ok(()) => {
+                        if copy {
+                            let _ = to_clipboard(&png);
+                        }
+                    }
+                    Err(e) => l.say.not_saved(&e),
+                })
+            }
             Finish::Copy => Box::new(move |l| {
-                if to_clipboard(&png) {
-                    l.say.done();
-                } else {
+                if !to_clipboard(&png) {
                     l.say.tell(t!("screenshot-not-copied"), t!("screenshot-clipboard-refused"), "dialog-warning-symbolic");
                 }
             }),
@@ -699,6 +726,10 @@ struct Life {
     out: Post<Out>,
     unpin: Post<u64>,
     shows: Post<()>,
+
+    hand_to: RefCell<Option<PathBuf>>,
+
+    code: Cell<i32>,
 }
 
 impl Life {
@@ -732,6 +763,7 @@ impl Life {
                 events: events.clone(), display, say: Say { bus, events: events.clone() },
                 overlay: RefCell::new(None), pins: RefCell::new(Vec::new()), next: Cell::new(0),
                 asking: RefCell::new(None), out, unpin, shows,
+                hand_to: RefCell::new(None), code: Cell::new(0),
             }
         })
     }
@@ -766,7 +798,7 @@ impl Life {
             layer: Layer::Overlay, edges: Edges::ALL, keep: -1, margins: [0; 4], keys: Keys::Always,
             name: "trindle-screenshot".into(), screen: None,
         });
-        let app = Screen { core: core.clone(), out: self.out.clone(), start: (0.0, 0.0) };
+        let app = Screen { core: core.clone(), out: self.out.clone(), start: (0.0, 0.0), handing: self.hand_to.borrow().is_some() };
         let Some(shown) = Shown::open(&self.events, &self.display, kind, (0, 0), app) else {
             eprintln!("trindle-screenshot: this compositor does not offer the layer-shell protocol; run it inside a Trindle session");
             self.maybe_quit();
@@ -791,9 +823,10 @@ impl Life {
             Out::Saved(path, png) => {
                 self.asking.borrow_mut().take();
                 match (path, png) {
-                    (Some(path), Some(png)) => self.close_then(Box::new(move |l| match write_png(&path, &png) {
-                        Ok(()) => l.say.done(),
-                        Err(e) => l.say.not_saved(&e),
+                    (Some(path), Some(png)) => self.close_then(Box::new(move |l| {
+                        if let Err(e) = write_png(&path, &png) {
+                            l.say.not_saved(&e);
+                        }
                     })),
                     _ => match self.overlay.borrow().as_ref() {
                         Some(o) => o.window.set_visible(true),
@@ -815,6 +848,14 @@ impl Life {
             }
             drop(hold);
         });
+    }
+
+    fn hand_over(&self, png: &[u8]) {
+        let Some(path) = self.hand_to.borrow().clone() else { return };
+        match write_png(&path, png) {
+            Ok(()) => self.code.set(0),
+            Err(e) => eprintln!("trindle-screenshot: {e}"),
+        }
     }
 
     fn pin(&self, picture: Pixmap, size: Pt, view: Pt) {
@@ -859,6 +900,65 @@ mod tests {
     use super::*;
 
     #[test]
+    fn a_blur_is_made_once_on_release_not_at_every_pointer_move() {
+        let (w, h) = (400u32, 300u32);
+        let size = (f64::from(w), f64::from(h));
+        let core = Rc::new(Core {
+            shot: RefCell::new(Shot { part: Some(Rect { x: 0.0, y: 0.0, w: size.0, h: size.1 }), doing: Doing::Idle, tool: Some(Tool::Blur),
+                                      colour: COLOURS[0].0, thick: THICKNESS[1].0, marks: History::default(), drawing: None, typing: None }),
+            still: Pixmap::new(w, h).unwrap(), size, shown: Cell::new(Rect { x: 0.0, y: 0.0, w: size.0, h: size.1 }),
+            win: RefCell::new(Weak::new()), display: None, fonts: Fonts::new(),
+        });
+        let mut screen = Screen { core: core.clone(), out: Loop::new().post(|_: Out| {}), start: (0.0, 0.0), handing: false };
+        screen.begin((10.0, 10.0));
+        for x in [50.0, 120.0, 200.0] {
+            screen.drag((x, 100.0));
+            let st = core.shot.borrow();
+            assert!(matches!(st.drawing.as_ref().map(|m| &m.shape), Some(Shape::Blur(_, _, None))), "nothing is pixelated while dragging");
+        }
+        let mut blur = Mark::begin(Tool::Blur, (10.0, 10.0), COLOURS[0].0, THICKNESS[1].0, 1.0, 0);
+        blur.drag((200.0, 100.0));
+        assert!(matches!(blur.shape, Shape::Blur(_, _, None)));
+        blur.make_blur(&core.still);
+        assert!(matches!(blur.shape, Shape::Blur(_, _, Some(_))), "the blocks are made when asked, as on release");
+    }
+
+    #[test]
+    fn a_failed_save_leaves_no_empty_picture_behind() {
+        let dir = std::env::temp_dir().join(format!("trindle-shot-fail-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        assert!(save_in(&dir, |_| Err("no room".into())).is_err());
+        assert_eq!(std::fs::read_dir(&dir).unwrap().count(), 0);
+        assert!(save_in(&dir, |p| std::fs::write(p, b"x").map_err(|e| e.to_string())).is_ok());
+        assert_eq!(std::fs::read_dir(&dir).unwrap().count(), 1);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn a_folder_that_cannot_be_written_gives_its_own_reason() {
+        use std::os::unix::fs::PermissionsExt;
+        let dir = std::env::temp_dir().join(format!("trindle-shot-ro-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::set_permissions(&dir, std::fs::Permissions::from_mode(0o500)).unwrap();
+        let why = next_in(&dir).unwrap_err();
+        std::fs::set_permissions(&dir, std::fs::Permissions::from_mode(0o700)).unwrap();
+        let _ = std::fs::remove_dir_all(&dir);
+
+        // SAFETY: geteuid takes no arguments and cannot fail.
+        if unsafe { libc::geteuid() } != 0 {
+            assert_ne!(why, t!("screenshot-no-free-name"));
+        }
+    }
+
+    #[test]
+    fn a_save_or_copy_that_works_shows_nothing() {
+        let notice = [["tick_", "at_edge"].concat(), ["say", ".done()"].concat()];
+        assert!(notice.iter().all(|w| !include_str!("mod.rs").contains(w)), "the screenshot tool asks the ring for no notice");
+        assert!(!crate::ring::XML.contains("Tick"), "the ring offers no Done notice to other programs");
+    }
+
+    #[test]
     fn the_screenshot_overlay_draws_only_pairs_the_table_holds() {
         use crate::toolkit::theme::{drawn, Theme};
         let (w, h) = (1280u32, 800u32);
@@ -875,7 +975,7 @@ mod tests {
             still, size, shown: Cell::new(Rect { x: 0.0, y: 0.0, w: size.0, h: size.1 }),
             win: RefCell::new(Weak::new()), display: None, fonts: Fonts::new(),
         });
-        let screen = Screen { core: core.clone(), out: events.post(|_: Out| {}), start: (0.0, 0.0) };
+        let screen = Screen { core: core.clone(), out: events.post(|_: Out| {}), start: (0.0, 0.0), handing: false };
         drawn::none(drawn::in_every_look("the screenshot overlay", 3, || {
             let part = Rect { x: 200.0, y: 150.0, w: 700.0, h: 420.0 };
             *core.shot.borrow_mut() = Shot { part: None, doing: Doing::Idle, tool: None, colour: COLOURS[0].0, thick: THICKNESS[1].0,

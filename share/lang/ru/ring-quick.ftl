@@ -1,7 +1,7 @@
 # machine translated (Russian), not yet reviewed by a person.
 
 # Tip of the pin button on a clipboard or notification item that is not pinned: keeps it for good.
-ring-quick-pin = Закрепить: хранить всегда
+ring-quick-pin = Закрепите, чтобы сохранить
 
 # Tip of the pin button on a clipboard or notification item that is pinned.
 ring-quick-unpin = Открепить
@@ -12,7 +12,7 @@ ring-quick-forget-one = Забыть это
 
 # Tip of the bin button that forgets everything on the page except what is pinned; it asks twice.
 # SAFETY: needs a human review before it ships
-ring-quick-forget-all = Забыть всё, кроме закреплённого
+ring-quick-forget-all = Очистить всё, кроме закреплённого
 
 # Name of the volume slider for the speakers on the sound page.
 ring-quick-speakers = Колонки
@@ -69,7 +69,7 @@ ring-quick-bt-switch = Bluetooth
 ring-quick-bt-off = Bluetooth выключен.
 
 # Line on the Bluetooth page while it looks for devices and none is found yet.
-ring-quick-bt-searching = Поиск... переведите устройство в режим сопряжения.
+ring-quick-bt-searching = Поиск… Переведите устройство в режим сопряжения.
 
 # Tip of the button beside a connected Bluetooth device that disconnects it.
 ring-quick-bt-disconnect = Отключить
@@ -85,31 +85,31 @@ ring-quick-bt-pair = Сопрячь и подключить
 ring-quick-bt-device = Устройство Bluetooth
 
 # Line under the Bluetooth page while pairing with a device.
-ring-quick-bt-pairing = Сопряжение с { $name }...
+ring-quick-bt-pairing = Сопряжение с { $name }…
 
 # Line under the Bluetooth page while connecting a device.
-ring-quick-bt-connecting = Подключение { $name }...
+ring-quick-bt-connecting = Подключение { $name }…
 
 # Line under the Bluetooth page while disconnecting a device.
-ring-quick-bt-disconnecting = Отключение { $name }...
+ring-quick-bt-disconnecting = Отключение { $name }…
 
 # Line under the Bluetooth page when connecting or disconnecting did not work.
 ring-quick-bt-failed = Не получилось. Устройство включено и находится рядом?
 
 # Line under the Bluetooth page when pairing failed because the codes were not accepted.
 # SAFETY: needs a human review before it ships
-ring-quick-bt-codes = Не сопряжено: коды не приняты.
+ring-quick-bt-codes = Не удалось соединиться: коды не подошли.
 
 # Line under the Bluetooth page when pairing failed.
 # SAFETY: needs a human review before it ships
-ring-quick-bt-not-paired = Не сопряжено. Устройство в режиме сопряжения и находится рядом?
+ring-quick-bt-not-paired = Не удалось выполнить сопряжение. Устройство в режиме сопряжения и находится рядом?
 
 # Line under the Bluetooth page when pairing worked but connecting did not.
 ring-quick-bt-paired-not-connected = Сопряжено, но не подключилось. Попробуйте ещё раз через минуту.
 
 # Question in the ring when a Bluetooth device wants a PIN typed.
 # SAFETY: needs a human review before it ships
-ring-quick-bt-ask-pin = Введите PIN-код этого устройства. Его часто указывают в инструкции, или это 0000.
+ring-quick-bt-ask-pin = Введите PIN-код этого устройства. Его часто можно найти в инструкции к устройству, или попробуйте 0000.
 
 # Typing box for the PIN of a Bluetooth device, shown quietly while empty.
 # SAFETY: needs a human review before it ships
@@ -149,7 +149,7 @@ ring-quick-wifi-switch = Wi-Fi
 ring-quick-wifi-off = Wi-Fi выключен.
 
 # Line on the Wi-Fi page while it looks for networks.
-ring-quick-wifi-looking = Поиск сетей...
+ring-quick-wifi-looking = Поиск сетей…
 
 # Tip of the button beside the Wi-Fi network in use that leaves it.
 ring-quick-wifi-disconnect = Отключить
@@ -166,7 +166,7 @@ ring-quick-wifi-password-box = Пароль
 ring-quick-wifi-join = Присоединиться
 
 # Line under the Wi-Fi page while joining a network.
-ring-quick-wifi-joining = Присоединение к { $ssid }...
+ring-quick-wifi-joining = Присоединение к { $ssid }…
 
 # Question text in the ring when the Wi-Fi password was not accepted.
 # SAFETY: needs a human review before it ships
@@ -182,7 +182,7 @@ ring-quick-battery-none = В этом компьютере нет батареи
 ring-quick-brightness-fixed = Яркость этого экрана отсюда изменить нельзя
 
 # Line on the clipboard page when nothing has been copied yet.
-ring-quick-clip-empty = Пока ничего не скопировано. Всё, что вы копируете, хранится здесь.
+ring-quick-clip-empty = Пока ничего не скопировано.
 
 # Line on the clipboard page for a copied picture.
 ring-quick-clip-picture = Картинка
@@ -212,7 +212,7 @@ ring-quick-charging-full = Идёт зарядка: полный заряд пр
 ring-quick-charging = Идёт зарядка
 
 # Line on the battery page on battery, with the time left and the power in watts.
-ring-quick-on-battery-left = От батареи: осталось примерно { $time }, расход { $rate } Вт
+ring-quick-on-battery-left = Работает от батареи. Осталось примерно { $time }, расход { $rate } Вт.
 
 # Line on the battery page on battery, when the time is not known.
 ring-quick-on-battery = От батареи
@@ -226,9 +226,9 @@ ring-quick-plugged = Подключена к сети, не заряжается
 # Line on the battery page about how much charge the battery still holds. The health is good, worn, or something else for worn out.
 ring-quick-health =
     { $how ->
-        [good] Состояние: хорошее. Держит { $capacity }% того, что держала новой.
-        [worn] Состояние: изношена. Держит { $capacity }% того, что держала новой.
-       *[old] Состояние: полностью изношена, пора менять. Держит { $capacity }% того, что держала новой.
+        [good] Батарея в хорошем состоянии. Её ёмкость сейчас составляет { $capacity }% от ёмкости новой.
+        [worn] Батарея изношена. Её ёмкость сейчас составляет { $capacity }% от ёмкости новой.
+       *[old] Батарея полностью изношена, пора менять. Её ёмкость сейчас составляет { $capacity }% от ёмкости новой.
     }
 
 # Line on the battery page about how many times the battery has been charged.
@@ -241,10 +241,10 @@ ring-quick-cycles =
     }
 
 # Tip of the button that turns notification circles off.
-ring-quick-notes-on = Уведомления включены: выключить
+ring-quick-notes-on = Уведомления включены. Выключить
 
 # Tip of the button that turns notification circles back on.
-ring-quick-notes-off = Уведомления выключены: включить
+ring-quick-notes-off = Уведомления выключены. Включить
 
 # A time of under an hour on the battery page.
 ring-quick-minutes = { $m } мин
@@ -269,3 +269,5 @@ ring-quick-title-tray = Значки в трее
 # Heading of the shortcut list page, opened with Super and K.
 ring-quick-title-shortcuts = Быстрые клавиши
 
+# Line under the Wi-Fi page when leaving the network did not work.
+ring-quick-wifi-leave-failed = Не удалось отключиться.

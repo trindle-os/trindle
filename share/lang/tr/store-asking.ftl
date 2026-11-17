@@ -7,14 +7,14 @@ store-ask-title = { $app } neleri kullanabilir
 
 # Under the list of switches in the permission window when one or more is on already.
 # SAFETY: needs a human review before it ships
-store-ask-above-on = Her anahtar şu an nelere izin verildiğini gösterir. Bunları sonra Uygulamalar, İzinler bölümünden değiştirebilirsiniz.
+store-ask-above-on = Bunları sonra Ayarlar, İzinler bölümünden değiştirebilirsiniz.
 
 # Under the list of switches in the permission window when all start off.
 # SAFETY: needs a human review before it ships
-store-ask-above-off = Her anahtar, siz basana kadar kapalı kalır. Bunları sonra Uygulamalar, İzinler bölümünden değiştirebilirsiniz.
+store-ask-above-off = Henüz hiçbir şeye izin verilmedi. Bunları sonra Ayarlar, İzinler bölümünden değiştirebilirsiniz.
 
 # Note under the list of switches, since a .deb names nothing it wants.
-store-ask-worked-out = Uygulamanın kendisinden çıkarıldı
+store-ask-worked-out = Uygulamanın istediklerine göre
 
 # Tip of the button that turns every switch on.
 # SAFETY: needs a human review before it ships

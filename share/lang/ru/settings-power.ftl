@@ -7,7 +7,7 @@ settings-power-title = Питание
 settings-power-keywords = батарея аккумулятор ожидание сон спящий режим выключение перезагрузка выход экран выключить простой затемнение блокировка пароль пин-код pin цифры кофе не засыпать зарядка заряд ограничение 80 состояние батареи
 
 # Introduction under the heading of the power page, and the words behind the page i.
-settings-power-help = Батарея, режим питания и то, когда экран тускнеет, блокируется и выключается; на ноутбуке отдельно для работы от батареи и от зарядки. Чашка на вкладке не даёт экрану погаснуть. Здесь же блокировка, перезагрузка и выключение.
+settings-power-help = Выберите режим питания и то, когда экран тускнеет, блокируется и выключается. На ноутбуке это настраивается отдельно для батареи и для зарядки. Чашка в кольце не даёт экрану погаснуть. Отсюда же можно заблокировать компьютер, перезагрузить его и выключить.
 
 # Choice in a list of how long to wait.
 settings-power-time-never = Никогда
@@ -47,7 +47,7 @@ settings-power-time-only-sleep = Только при переходе в сон
 
 # Heading of the line, and name of its round button, that suspends the computer.
 # SAFETY: needs a human review before it ships
-settings-power-suspend = Ждущий режим
+settings-power-suspend = Спящий режим
 
 # Heading of the line, and name of its round button, that restarts the computer.
 # SAFETY: needs a human review before it ships
@@ -76,32 +76,20 @@ settings-power-lid-shut-down = Выключить
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-dim = Затемнять экран через
 
-# Small words under an idle timer line.
-settings-power-timer-dim-about = Любое движение возвращает яркость.
-
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-clock = Показывать движущиеся часы через
 
-# Small words under an idle timer line.
-settings-power-timer-clock-about = Только время, медленно перемещающееся по экрану.
+# Heading of an idle timer line, and the name of its lists.
+settings-power-timer-off = Экран выключается через
 
 # Heading of an idle timer line, and the name of its lists.
-settings-power-timer-off = Выключать экран через
-
-# Small words under an idle timer line.
-settings-power-timer-off-about = Любая клавиша или движение включает его снова.
-
-# Heading of an idle timer line, and the name of its lists.
-settings-power-timer-suspend = Переходить в ждущий режим через
-
-# Small words under an idle timer line.
-settings-power-timer-suspend-about = Если оставить без дела на это время, компьютер уснёт.
+settings-power-timer-suspend = Переходить в спящий режим через
 
 # Red words under the keep the screen awake switch when turning it on could not be saved.
-settings-power-no-awake = Не удалось не дать экрану погаснуть: выбор не удалось сохранить.
+settings-power-no-awake = Trindle не смог оставить экран включённым, потому что не удалось сохранить ваш выбор.
 
 # Red words under the keep the screen awake switch when turning it off could not be saved.
-settings-power-no-sleep = Не удалось отключить удержание экрана: выбор не удалось сохранить.
+settings-power-no-sleep = Trindle не смог сохранить ваш выбор, поэтому экран останется включённым.
 
 # Name of the power mode that saves the battery.
 settings-power-profile-saver = Экономия батареи
@@ -134,10 +122,10 @@ settings-power-hours-minutes = { $h } ч { $m } мин
 settings-power-minutes = { $m } мин
 
 # Sentence at the top of the page on a computer with no battery.
-settings-power-top-no-battery = Питание от сети: у этого компьютера нет батареи.
+settings-power-top-no-battery = Питание от сети. В этом компьютере нет батареи.
 
 # Sentence at the top of the page on a computer with no battery; { $mode } is the power mode.
-settings-power-top-no-battery-mode = Питание от сети, режим «{ $mode }»: батареи нет.
+settings-power-top-no-battery-mode = Питание от сети, режим «{ $mode }». В этом компьютере нет батареи.
 
 # Sentence at the top of the page while charging; { $percent } is how full.
 settings-power-top-charging = Заряжается, { $percent }%.
@@ -166,9 +154,6 @@ settings-power-mode-failed = Не удалось сменить режим пи�
 # Heading of the power mode line, and the name of its list.
 settings-power-mode = Режим питания
 
-# Small words under the power mode line.
-settings-power-mode-about = Экономия: меньше нагрев; производительность: быстрее работа.
-
 # Said in green under a line after its choice was kept.
 settings-power-saved = Сохранено
 
@@ -178,17 +163,11 @@ settings-power-warn-name = Предупредить, когда заряд уп�
 # Heading of the line for the battery warning.
 settings-power-warn = Предупредить, когда заряд упадёт до
 
-# Small words under the battery warning line.
-settings-power-warn-about = Один раз, в середине экрана.
-
 # Choice in the list of battery levels: never warn.
 settings-power-never = Никогда
 
 # Heading of the line, and name of its switch, for stopping charging at 80%.
 settings-power-limit = Прекращать зарядку на 80%
-
-# Small words under the charge limit line.
-settings-power-limit-about = Бережнее для батареи, которая в основном подключена к сети.
 
 # Title of the battery card on a laptop.
 settings-power-card-battery = Батарея
@@ -197,11 +176,11 @@ settings-power-card-battery = Батарея
 settings-power-card-looking-after = Забота о батарее
 
 # Words behind the i of the battery card.
-settings-power-battery-about = Экономия батареи снижает нагрев и продлевает время работы; производительность работает быстрее; сбалансированный режим находится между ними. Предупреждение появляется в середине экрана один раз, пока батарея разряжается. Остановка на 80% бережнее для батареи ноутбука, который в основном подключён к сети: она заряжается до 80% и не больше, и служит больше лет. Выключите это перед днём вдали от розетки.
+settings-power-battery-about = Экономия батареи снижает нагрев и продлевает время работы. Производительность работает быстрее. Сбалансированный режим находится между ними. Предупреждение появляется один раз в середине экрана, когда батарея разряжается. Остановка на 80% лучше для ноутбука, который почти всё время подключён к сети, и помогает батарее прослужить больше лет. Выключите это перед днём вдали от розетки.
 
 # Words under the charge limit line while the password window is open.
 # SAFETY: needs a human review before it ships
-settings-power-limit-waiting = Ожидание пароля...
+settings-power-limit-waiting = Ожидание вашего пароля…
 
 # Green words under the charge limit line after charging was limited to 80%.
 settings-power-limit-on = Остановка на 80%
@@ -212,26 +191,20 @@ settings-power-limit-off = Заряжается до полной
 # Heading of the keep the screen awake line, and name of its switch.
 settings-power-awake = Не давать экрану гаснуть
 
-# Small words under the keep the screen awake line.
-settings-power-awake-about = То же делает чашка на вкладке.
-
 # Title of the card about dimming and the moving clock.
 settings-power-screen-title = Экран
 
 # Words behind the i of the Screen card.
-settings-power-screen-about = Пока включено «Не давать экрану гаснуть», ничего из этого не происходит; чашка на вкладке включает и выключает это тоже. Затемнение: любое движение возвращает яркость; тускнеют только экраны с собственной яркостью, например у ноутбука. Движущиеся часы: экран темнеет, остаётся только время, медленно перемещающееся по экрану, и любая клавиша или движение всё возвращает. На ноутбуке каждое время задаётся дважды: для батареи и для зарядки.
+settings-power-screen-about = Пока включено «Не давать экрану гаснуть», ничего из этого не происходит. Чашка в кольце тоже включает и выключает это. Затемняться могут только экраны с собственной регулировкой яркости, например у ноутбука. Движущиеся часы затемняют экран и показывают только время, которое медленно плывёт по экрану. Движение мыши или нажатие клавиши всё возвращает. На ноутбуке каждое время задаётся дважды: отдельно для батареи и отдельно для зарядки.
 
 # Title of the card about turning the screen off and sleeping.
 settings-power-sleep-title = Выключение экрана и сон
 
 # Words behind the i of the Screen off and sleep card.
-settings-power-sleep-about = Любая клавиша или движение снова включает экран. Ждущий режим усыпляет компьютер, пока вы его не разбудите. На ноутбуке каждое время задаётся дважды: для батареи и для зарядки. Если подключён второй экран, закрытие крышки ничего не делает, и вы можете продолжать работать на большом экране.
+settings-power-sleep-about = Нажатие клавиши или движение мыши снова включает экран. Спящий режим приостанавливает работу компьютера, пока вы его не разбудите. На ноутбуке каждое время задаётся дважды: отдельно для батареи и отдельно для зарядки. Если подключён второй экран, закрытие крышки ничего не делает, и вы можете продолжать работать на большом экране.
 
 # Heading of the line for what closing the lid does.
 settings-power-lid = Когда крышка закрыта
-
-# Small words under that line.
-settings-power-lid-about = Ничего не происходит, если подключён второй экран.
 
 # Caption above a list that applies while the laptop runs on its battery.
 settings-power-when-battery = От батареи
@@ -249,54 +222,38 @@ settings-power-named-charger = { $title }: от сети
 # SAFETY: needs a human review before it ships
 settings-power-lock = Блокировать экран
 
-# Small words under the lock the screen line.
-# SAFETY: needs a human review before it ships
-settings-power-lock-about = Вернуться можно по паролю или PIN-коду.
-
 # Heading of the lock after line, and the name of its list.
 # SAFETY: needs a human review before it ships
 settings-power-lock-after-name = Блокировать через
 
-# Small words under the lock after line.
-settings-power-lock-after-about = Если оставить без дела на это время, независимо от остальных настроек.
-
 # Heading of the line, and name of its switch, for locking when the computer sleeps.
 # SAFETY: needs a human review before it ships
 settings-power-lock-sleep = Блокировать при переходе в сон
-
-# Small words under that line.
-settings-power-lock-sleep-about = Чтобы он всегда просыпался заблокированным.
 
 # Heading of the line, and name of its button, that locks the screen now.
 # SAFETY: needs a human review before it ships
 settings-power-lock-now = Заблокировать сейчас
 
 # Small words under the lock now line.
-settings-power-lock-now-about = Также клавиши Super и L вместе.
+settings-power-lock-now-about = Или нажмите Super и L.
 
 # Red words under the lock now line when the lock screen would not start.
-settings-power-lock-now-failed = Не удалось заблокировать экран: экран блокировки не запустился.
+settings-power-lock-now-failed = Trindle не смог заблокировать экран, потому что экран блокировки не запустился.
 
 # Title of the locking card.
 settings-power-lock-title = Блокировка
 
 # Words behind the i of the locking card.
 # SAFETY: needs a human review before it ships
-settings-power-lock-card-about = Когда вы отходите, экран блокируется, и вернуться можно по паролю или по четырёхзначному PIN-коду, если вы его задали. До этого момента ничего на экране не видно. Для входа в систему всегда нужен ваш пароль. «Блокировать через» - это время, которое компьютер остаётся без дела до блокировки, независимо от времени экрана и сна; до этого момента для возвращения PIN-код не нужен. Выключение блокировки также удаляет PIN-код. Четыре цифры вводить быстрее, чем пароль: по истечении времени, выбранного для PIN-кода, или после пяти неверных попыток потребуется пароль. Корзина отключает PIN-код.
+settings-power-lock-card-about = Когда вы отходите, экран блокируется. На нём ничего не видно, пока вы не разблокируете его паролем или четырёхзначным PIN-кодом, если вы его задали. Для входа в систему всегда нужен пароль. «Блокировать через» - это время, которое компьютер можно оставить без дела до блокировки, независимо от времени экрана и сна. До этого момента PIN-код при возвращении не нужен. Если отключить блокировку, PIN-код тоже удаляется. По истечении времени, заданного в пункте «PIN-код действует», или после пяти неверных попыток потребуется пароль.
 
 # Heading of the line for adding a PIN.
 # SAFETY: needs a human review before it ships
 settings-power-pin-add = Разблокировать ещё и по PIN-коду
 
-# Small words under that line.
-settings-power-pin-add-about = Четыре цифры, быстрее пароля.
-
 # Heading of the line, and name of its list, for how long a PIN works after the screen locks.
 # SAFETY: needs a human review before it ships
 settings-power-pin-works-name = PIN-код действует
-
-# Small words under that line.
-settings-power-pin-works-about = Затем потребуется пароль.
 
 # Name of the bin button that stops using a PIN.
 # SAFETY: needs a human review before it ships
@@ -304,10 +261,7 @@ settings-power-pin-stop = Больше не использовать PIN-код
 
 # Heading of the line shown when a PIN is kept.
 # SAFETY: needs a human review before it ships
-settings-power-pin-kept = PIN-код сохранён
-
-# Small words under that line.
-settings-power-pin-kept-about = Введите четыре новые цифры, чтобы изменить его.
+settings-power-pin-kept = PIN-код задан
 
 # Placeholder of the box for typing a new PIN.
 # SAFETY: needs a human review before it ships
@@ -317,38 +271,44 @@ settings-power-pin-new = Новый PIN-код
 # SAFETY: needs a human review before it ships
 settings-power-pin-keep = Сохранить этот PIN-код
 
+# Placeholder of the box for typing your account password before a PIN is saved.
+settings-power-pin-password = Ваш пароль
+
+# Red words under the PIN box when no password was typed.
+settings-power-pin-need-password = Сначала введите пароль, потом сохраните PIN-код.
+
+# Red words under the PIN box when the password typed was wrong.
+settings-power-pin-wrong-password = Пароль неверный, поэтому Trindle не сохранил PIN-код.
+
 # Red words under the PIN line when the PIN could not be removed.
 # SAFETY: needs a human review before it ships
-settings-power-pin-not-removed = Не удалось удалить PIN-код, поэтому он по-прежнему разблокирует экран.
+settings-power-pin-not-removed = Trindle не смог удалить PIN-код, поэтому он по-прежнему разблокирует экран.
 
 # Red words under the PIN box when it is not the right length; { $n } is how many digits a PIN has.
 settings-power-pin-digits =
     { $n ->
-        [one] PIN-код состоит из { $n } цифры.
-        [few] PIN-код состоит из { $n } цифр.
-        [many] PIN-код состоит из { $n } цифр.
-       *[other] PIN-код состоит из { $n } цифры.
+        [one] Введите { $n } цифру.
+        [few] Введите { $n } цифры.
+        [many] Введите { $n } цифр.
+       *[other] Введите { $n } цифры.
     }
 
 # Heading of the log out line, and name of its round button.
 # SAFETY: needs a human review before it ships
 settings-power-log-out = Выйти
 
-# Small words under the log out line.
-settings-power-log-out-about = Назад на экран входа.
-
 # Title of the card with log out, suspend, restart and shut down.
 settings-power-session-title = Сеанс
 
 # Words behind the i of the session card.
 # SAFETY: needs a human review before it ships
-settings-power-session-about = При выходе закрываются все окна, и вы возвращаетесь на экран входа. Ждущий режим усыпляет компьютер, пока вы его не разбудите. Каждая кнопка спрашивает дважды, так же как выбор питания в кольце, поэтому случайное нажатие ничего не сделает.
+settings-power-session-about = При выходе закрываются все окна, и вы возвращаетесь на экран входа. Спящий режим приостанавливает работу компьютера, пока вы его не разбудите. Каждой кнопке нужно второе нажатие для подтверждения, как и выбору питания в кольце, поэтому случайное нажатие ничего не сделает.
 
 # Red words under a session button when the system bus is not there.
-settings-power-no-bus = Системная шина недоступна.
+settings-power-no-bus = Не удаётся связаться с системной службой.
 
 # Red words under a session button when the computer would not do it.
-settings-power-would-not = Компьютер не выполнил это действие.
+settings-power-would-not = Компьютер не смог этого сделать.
 
 # Spoken description of the battery picture while the battery is being read.
 settings-power-art-looking-tip = Проверка батареи.
@@ -357,7 +317,7 @@ settings-power-art-looking-tip = Проверка батареи.
 settings-power-art-tip = Заряд батареи { $percent }%. { $state }
 
 # Word drawn in the empty battery picture while the battery is being read.
-settings-power-art-looking = Проверка
+settings-power-art-looking = Загрузка
 
 # Word drawn under the battery figure when its state is not known.
 settings-power-art-battery = Батарея
@@ -370,10 +330,10 @@ settings-power-art-left =
     }
 
 # Spoken description of the battery range bar when there is no warning; { $top } is the percent it charges to.
-settings-power-limits-tip = Заряжается до { $top }%; без предупреждения.
+settings-power-limits-tip = Заряжается до { $top }%, без предупреждения.
 
 # Spoken description of the battery range bar; { $top } is the percent it charges to and { $warn } where a warning comes.
-settings-power-limits-tip-warn = Заряжается до { $top }%; предупреждение при { $warn }%.
+settings-power-limits-tip-warn = Заряжается до { $top }%, с предупреждением при { $warn }%.
 
 # A length of time in the list of how long a PIN works, in minutes; { $n } is the number.
 settings-power-pin-minutes =

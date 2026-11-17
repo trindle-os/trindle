@@ -6,7 +6,7 @@ store-refusal-nothing = Ничего не восстановлено, потом
 
 # A refusal of a restore that went part of the way; the reason follows "because".
 # SAFETY: needs a human review before it ships
-store-refusal-part = Часть резервной копии не восстановлена, потому что { $why }.
+store-refusal-part = Trindle восстановил только часть резервной копии, потому что { $why }.
 
 # The reason when the backup holds a link or something else that would reach outside the folder it goes into.
 # SAFETY: needs a human review before it ships
@@ -18,9 +18,6 @@ store-because-in-the-way = на этом компьютере уже есть ч
 
 # The reason when there is nowhere to unpack the backup.
 store-because-no-unpack = негде распаковать резервную копию
-
-# The reason when the backup file cannot be read.
-store-because-unreadable = не удалось прочитать файл резервной копии
 
 # The reason when the file is not a Trindle backup.
 store-because-not-trindle = этот файл не является резервной копией Trindle
@@ -35,7 +32,7 @@ store-because-not-flat = этот файл не похож на резервну
 store-because-no-flat-list = в этом файле нет списка приложений Flat
 
 # The reason when the backup was made by a newer Flat than Trindle can read.
-store-because-newer-flat = она создана более новым Flat, чем Trindle может прочитать
+store-because-newer-flat = она создана более новой версией Flat, чем может прочитать Trindle
 
 # The reason when the file holds no apps.
 store-because-no-apps = в этом файле нет приложений
@@ -48,7 +45,7 @@ store-because-none = причина не указана
 
 # The reason when the system said permission was denied.
 # SAFETY: needs a human review before it ships
-store-because-permission = этот компьютер не позволил Trindle записать туда
+store-because-permission = Trindle не разрешено записывать туда
 
 # The reason when the disk is full.
 store-because-space = на этом компьютере не осталось места
@@ -63,7 +60,7 @@ store-because-quota = место, выделенное для этой учёт�
 store-because-missing = не хватает нужного ему файла или программы
 
 # The reason when no reason could be read from the program's last line.
-store-because-failed = сбой
+store-because-failed = произошёл сбой
 
 # The reason when the backup has no name to be written under.
 store-because-no-name = у неё нет имени
@@ -73,20 +70,20 @@ store-because-no-name = у неё нет имени
 store-because-outside-own = её настройки в резервной копии выходят за пределы её собственной папки
 
 # The reason when something is too big to be read whole.
-store-because-too-big = она слишком велика, чтобы прочитать целиком
+store-because-too-big = она слишком велика, чтобы её прочитать
 
 # The reason when an app's settings in the backup do not match their checksum.
 # SAFETY: needs a human review before it ships
-store-because-checksum = её настройки в резервной копии не совпадают с контрольной суммой
+store-because-checksum = её настройки в резервной копии повреждены или изменены
 
 # Said when the person's account picture was not put back; the reason follows.
-store-refusal-picture-only = Восстановлено, кроме картинки вашей учётной записи. { $why }
+store-refusal-picture-only = Всё восстановлено, кроме картинки вашей учётной записи. { $why }
 
 # Said when something else failed and the account picture was not put back either.
 store-refusal-picture-too = { $words } Картинка вашей учётной записи тоже не восстановлена. { $why }
 
 # Said when the pkexec program could not be started.
-store-refusal-pkexec = Не удалось запустить pkexec: { $why }
+store-refusal-pkexec = Не удалось запросить пароль: { $why }
 
 # Said when the backup could not be read at all.
 store-refusal-not-read-from = Не удалось прочитать из резервной копии: { $why }.
@@ -101,28 +98,13 @@ store-backup-nothing-yet = пока ничего
 store-backup-about = около { $size }
 
 # Step shown while Trindle's own settings and AppImages are put back.
-store-backup-step-trindle = Восстановление настроек Trindle и AppImage...
-
-# Step shown while the settings and data are put back.
-store-backup-step-data = Восстановление настроек и данных...
-
-# Step shown while apps are installed from Flathub.
-store-backup-step-installing =
-    { $count ->
-        [one] Установка приложений из Flathub: { $count }... это может занять время.
-        [few] Установка приложений из Flathub: { $count }... это может занять время.
-        [many] Установка приложений из Flathub: { $count }... это может занять время.
-       *[other] Установка приложений из Flathub: { $count }... это может занять время.
-    }
+store-backup-step-trindle = Восстановление настроек Trindle и AppImage…
 
 # Said after a restore when some apps could not be installed because Flatpak refused them.
-store-not-installed-failed = Настройки и данные восстановлены, но эти приложения не установлены, потому что Flatpak отказал: { $failed }.
-
-# The same, when other apps were also left out for another reason.
-store-not-installed-both = Настройки и данные восстановлены, но эти приложения не установлены, потому что Flatpak отказал: { $failed }. Также не установлены: { $refused }.
+store-not-installed-failed = Trindle восстановил ваши настройки и данные, но Flatpak не смог установить эти приложения: { $failed }.
 
 # Said after a restore when some apps were left out before Flatpak was asked.
-store-not-installed-refused = Настройки и данные восстановлены, но эти приложения не установлены: { $refused }.
+store-not-installed-refused = Trindle восстановил ваши настройки и данные, но не установил эти приложения: { $refused }.
 
 # Said among what could not be done, when some apps were skipped because their names were not valid.
 store-flat-skipped =
@@ -135,7 +117,7 @@ store-flat-skipped =
 
 # Said beside an app whose source is not secure: the source's name is given.
 # SAFETY: needs a human review before it ships
-store-flat-not-secure = источник { $name } не зашифрован и не был принят, поэтому не использовался
+store-flat-not-secure = источник { $name } не зашифрован, поэтому Trindle его не использовал
 
 # Said when a source is not on this computer and the backup does not say where it is.
 store-flat-no-address = источника { $name } нет на этом компьютере, а резервная копия не говорит, где он
@@ -150,13 +132,13 @@ store-flat-source-name = { $name } (потому что имя его источ
 store-flat-failed-because = { $what } (потому что { $why })
 
 # Said among what could not be done: the app Flatpak refused.
-store-flat-flatpak-refused = { $name } (потому что Flatpak отказал: { $why })
+store-flat-flatpak-refused = { $name } (Flatpak не смог установить: { $why })
 
 # Said among what could not be done when there was nowhere to unpack the backup.
 store-flat-nowhere = всё (потому что негде распаковать резервную копию)
 
 # Said among what could not be done: the settings that apply to every app.
-store-flat-every-app = то, что разрешено каждому приложению
+store-flat-every-app = разрешения для каждого приложения
 
 # Said among what could not be done: one app's settings.
 store-flat-app-settings = настройки { $name }
@@ -166,10 +148,10 @@ store-flat-app-settings = настройки { $name }
 store-flat-kept-as = { $why }. То, что было там раньше, сохранено как { $path }: { $error }
 
 # Step shown for each app being installed, with its place in the list.
-store-flat-step-installing = Установка { $name } ({ $at } из { $total })...
+store-flat-step-installing = Установка { $name } ({ $at } из { $total })…
 
 # Step shown for each app's settings being put back, with its place in the list.
-store-flat-step-settings = Восстановление настроек { $name } ({ $at } из { $total })...
+store-flat-step-settings = Восстановление настроек { $name } ({ $at } из { $total })…
 
 # Summary of a restore from a Flat backup: how many apps were installed.
 store-flat-summary-installed =
@@ -181,23 +163,25 @@ store-flat-summary-installed =
     }
 
 # Summary of a restore: how many apps had their settings put back.
-store-flat-summary-settings = Настройки восстановлены для: { $n }.
+store-flat-summary-settings =
+    { $n ->
+        [one] Возвращены настройки одного приложения.
+        [few] Возвращены настройки { $n } приложений.
+        [many] Возвращены настройки { $n } приложений.
+       *[other] Возвращены настройки { $n } приложений.
+    }
 
 # Summary of a restore: how many apps were already installed and left alone.
 store-flat-summary-already =
     { $n ->
-        [one] Уже были установлены и оставлены как есть: { $n }.
-        [few] Уже были установлены и оставлены как есть: { $n }.
-        [many] Уже были установлены и оставлены как есть: { $n }.
-       *[other] Уже были установлены и оставлены как есть: { $n }.
+        [one] { $n } приложение уже было установлено.
+        [few] { $n } приложения уже были установлены.
+        [many] { $n } приложений уже были установлены.
+       *[other] { $n } приложения уже были установлены.
     }
 
 # Summary of a restore: what could not be put back, as a list.
-store-flat-summary-failed = Не восстановлено: { $list }
+store-flat-summary-failed = Пропущено: { $list }
 
-# Name of Flat's backup program, which Trindle reads backups from.
-store-flat-name = Trindle Flat
-
-# Said among the apps that were not installed: the app and why.
-store-backup-app-why = { $id } ({ $why })
-
+# Said among what could not be done when a backup's permissions asked for more than the app had: only ones that take access away are put back.
+store-flat-grants-left-out = { $what }: Trindle восстановил только разрешения, которые отбирают доступ.

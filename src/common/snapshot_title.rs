@@ -3,6 +3,7 @@
 //! Snapshots page in Settings both call this, so they cannot differ. The
 //! rules are tested against system/grub/snapshot-title-samples.txt.
 
+use crate::toolkit::t;
 use crate::common::clock::{civil, Local};
 use crate::common::home_snapshots::unix_of;
 
@@ -21,14 +22,14 @@ pub fn what_it_is(kind: &str, description: &str) -> String {
 }
 
 pub fn what_alone(kind: &str, description: &str) -> String {
-    let d = description.trim();
-    let known = matches!((kind, d), ("pre" | "post", "apt") | (_, "boot" | "timeline" | ""));
-    let text = what_it_is(kind, d);
-    if !known {
-        return text;
+    match (kind, description.trim()) {
+        ("pre", "apt") => t!("common-snap-before-change").to_string(),
+        ("post", "apt") => t!("common-snap-after-change").to_string(),
+        (_, "boot") => t!("common-snap-boot").to_string(),
+        (_, "timeline") => t!("common-snap-regular").to_string(),
+        (_, "") => t!("common-snap-plain").to_string(),
+        (_, d) => d.to_string(),
     }
-    let mut letters = text.chars();
-    letters.next().map(|f| f.to_uppercase().chain(letters).collect()).unwrap_or(text)
 }
 
 pub fn clock_label(unix: i64, offset: i64) -> String {

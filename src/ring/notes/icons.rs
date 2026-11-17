@@ -10,7 +10,10 @@ pub(super) const ICON_PX: u32 = 16;
 
 pub fn note_icon(all: &[Program], note: &Note) -> String {
     match note_app(all, note) {
-        Some(app) => app.icon.clone().unwrap_or_else(|| apps::generic_icon_for(app.key(), &app.name)),
+        Some(app) => {
+            let icons = apps::shared_icons();
+            app.icon_that_exists(|n| icons.find(n, ICON_PX, 1).is_some())
+        }
         None => named_icon(note),
     }
 }

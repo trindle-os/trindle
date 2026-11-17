@@ -111,7 +111,7 @@ fn site_ring((w, h): (f32, f32), scale: f32, all: bool, wins: &[(&'static str, &
     let (cx, cy) = (w / 2.0, h / 2.0);
     let back = lay.clone();
     let dim = crate::common::style::palette().dim as f32;
-    let mut layer: Vec<Node<Msg>> = vec![drawing((w, h), "", move |pm, pen| paint_ring(pm, pen, &back, &Scene { seg: false, top: Some(false), bare: false, listening: false, pulse: 0.0, empty: false, all, dim }))];
+    let mut layer: Vec<Node<Msg>> = vec![drawing((w, h), "", move |pm, pen| paint_ring(pm, pen, &back, &Scene { seg: false, top: Some(false), bare: false, empty: false, all, dim }))];
     let wins = open_windows::grouped(wins.to_vec(), |w| w.0.to_string());
     if !all {
         push_site_windows(&mut layer, &wins, &lay, (w, h));

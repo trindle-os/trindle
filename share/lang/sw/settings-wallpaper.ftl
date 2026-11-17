@@ -8,7 +8,7 @@ settings-wallpaper-title = Mandharinyuma
 settings-wallpaper-keywords = mandharinyuma picha onyesho la picha ukuta wallpaper background picture slideshow photo
 
 # Introduction under the heading of the wallpaper page, and the words behind the page i.
-settings-wallpaper-help = Rangi moja, au picha moja, au folda ili picha ibadilike yenyewe kwa wakati unaoweka.
+settings-wallpaper-help = Tumia rangi moja, picha moja, au folda ya picha zinazobadilika mara kwa mara kadiri unavyochagua.
 
 # Choice in the list of how long each picture stays.
 settings-wallpaper-every-10s = sekunde 10
@@ -56,7 +56,7 @@ settings-wallpaper-order-shuffle = Kwa mpangilio holela
 settings-wallpaper-order-name = Kwa jina la faili
 
 # Red words when the program that draws the wallpaper would not start.
-settings-wallpaper-no-changer = Mandharinyuma haikuweza kubadilishwa: programu yake haikuanza.
+settings-wallpaper-no-changer = Trindle haikuweza kuanzisha programu inayobadilisha mandharinyuma.
 
 # Under the large picture, when counting; { $used } of { $all } pictures are used.
 settings-wallpaper-count =
@@ -89,10 +89,10 @@ settings-wallpaper-file-own = { $name }, moja ya picha zinazokuja na Trindle
 settings-wallpaper-plain-below = Rangi moja, iliyowekwa hapa chini.
 
 # Under the large picture when the picture or folder has gone.
-settings-wallpaper-gone-below = Hakuna kitu hapo tena. Chagua picha au folda.
+settings-wallpaper-gone-below = Picha au folda haipo tena. Chagua nyingine.
 
 # Sentence about the wallpaper when it is a plain colour.
-settings-wallpaper-plain = Rangi moja, bila picha.
+settings-wallpaper-plain = Rangi moja tu.
 
 # Sentence about the wallpaper when Trindle's own pictures change; { $every } is how often, { $used } of { $all } pictures are used and { $extra } is any added sentences, each after a space.
 settings-wallpaper-changing-own =
@@ -112,16 +112,16 @@ settings-wallpaper-changing-folder =
 settings-wallpaper-empty-folder-choose = Folda { $folder } haina picha. Chagua nyingine.
 
 # Added to the sentence about the wallpaper when a folder holds more than Trindle looks through.
-settings-wallpaper-more-than-looked-at = Folda ina zaidi ya kile Trindle inachokagua, kwa hiyo baadhi ya picha zake huenda zimeachwa.
+settings-wallpaper-more-than-looked-at = Folda ina picha nyingi kuliko Trindle inavyoweza kukagua, kwa hiyo baadhi huenda zimeachwa.
 
 # Sentence about the wallpaper for one of Trindle's own pictures; { $name } is its name.
 settings-wallpaper-file-own-said = { $name }, moja ya picha zinazokuja na Trindle.
 
 # Sentence about the wallpaper for one chosen picture; { $name } is its name, written to read in the middle of a sentence.
-settings-wallpaper-file-one = Picha moja, { $name }, wakati wote.
+settings-wallpaper-file-one = { $name } huonyeshwa kila wakati.
 
 # Sentence about the wallpaper when the chosen picture cannot be used; { $why } is the reason.
-settings-wallpaper-file-refused = Picha haitumiki. { $why } Ya Trindle yenyewe inaonyeshwa.
+settings-wallpaper-file-refused = Trindle haitumii picha hiyo. { $why } Picha ya Trindle yenyewe inaonyeshwa badala yake.
 
 # Sentence about the wallpaper when the picture has gone.
 settings-wallpaper-file-gone = Picha haipo tena. Chagua picha au folda.
@@ -156,14 +156,8 @@ settings-wallpaper-card-title = Mandharinyuma
 # Heading of the wallpaper line, and name of its switch.
 settings-wallpaper-wallpaper = Mandharinyuma
 
-# Small words under the wallpaper line.
-settings-wallpaper-wallpaper-about = Ikizimwa, skrini huwa rangi moja.
-
 # Heading of the line for choosing where the picture comes from.
 settings-wallpaper-picture = Picha
-
-# Small words under that line.
-settings-wallpaper-picture-about = Picha moja, folda, au za Trindle yenyewe.
 
 # Name of the round button that chooses one picture.
 settings-wallpaper-choose-picture-button = Chagua picha
@@ -177,26 +171,20 @@ settings-wallpaper-own-pictures = Picha za Trindle yenyewe
 # Heading of the fit line.
 settings-wallpaper-fit = Mkao
 
-# Small words under that line.
-settings-wallpaper-fit-about = Jinsi inavyokaa kwenye skrini.
-
 # Name of the list of how the picture fits the screen.
 settings-wallpaper-fit-name = Jinsi inavyokaa kwenye skrini
 
 # Heading of the colour line.
 settings-wallpaper-colour = Rangi
 
-# Small words under the colour line when the colour can be seen.
-settings-wallpaper-colour-shown = Huonekana peke yake, au kuzunguka picha.
-
 # Small words under the colour line when a picture covers it.
-settings-wallpaper-colour-hidden = Imefichwa: picha inafunika skrini.
+settings-wallpaper-colour-hidden = Imefichwa na picha.
 
 # Placeholder and name of the box for typing the colour as a hex code; the example is a code.
-settings-wallpaper-colour-hex = Rangi kama msimbo wa hex, mfano #09090b
+settings-wallpaper-colour-hex = Msimbo wa hex, mfano #09090b
 
 # Words behind the i of the Wallpaper card.
-settings-wallpaper-card-about = Rangi moja, au picha moja, au folda ili picha ibadilike yenyewe kwa wakati unaoweka. Rangi huonekana peke yake bila picha, na kuzunguka picha isiyofunika skrini; iandike kama msimbo wa hex, mfano #09090b.
+settings-wallpaper-card-about = Tumia rangi moja, picha moja, au folda ya picha zinazobadilika mara kwa mara kadiri unavyochagua. Rangi huonekana peke yake wakati hakuna picha, na kuzunguka picha isiyofunika skrini. Iandike kama msimbo wa hex, mfano #09090b.
 
 # Small words on the cards that are greyed while the wallpaper is off.
 settings-wallpaper-waits = Washa Mandharinyuma ili kutumia hizi.
@@ -204,38 +192,26 @@ settings-wallpaper-waits = Washa Mandharinyuma ili kutumia hizi.
 # Heading of the line, and name of its switch, for changing the picture now and then.
 settings-wallpaper-rotate = Badilisha picha mara kwa mara
 
-# Small words under that line.
-settings-wallpaper-rotate-about = Kila picha kwenye folda, kwa zamu.
-
 # Heading of the line, and name of its list, for how long each picture stays.
 settings-wallpaper-every = Badilisha kila
-
-# Small words under that line.
-settings-wallpaper-every-about = Muda ambao kila picha hukaa.
 
 # Heading of the line, and name of its list, for the order pictures change in.
 settings-wallpaper-order = Mpangilio
 
-# Small words under the order line.
-settings-wallpaper-order-about = Holela, au kwa jina la faili.
-
 # Heading of the line, and name of its button, for moving to the next picture.
-settings-wallpaper-next = Picha inayofuata sasa
-
-# Small words under that line.
-settings-wallpaper-next-about = Huruka hadi inayofuata mara moja.
+settings-wallpaper-next = Picha inayofuata
 
 # Title of the Changing pictures card.
 settings-wallpaper-changing-title = Picha zinazobadilika
 
 # Words behind the i of that card.
-settings-wallpaper-changing-about = Hutumia kila picha kwenye folda, moja baada ya nyingine, ikibadilika kwa wakati uliochaguliwa hapa, kwa mpangilio holela au kwa jina la faili.
+settings-wallpaper-changing-about = Huonyesha kila picha kwenye folda, moja baada ya nyingine, kila baada ya muda unaochagua hapa, kwa mpangilio holela au kwa jina la faili.
 
 # Words behind the i of the Pictures card when pictures change by themselves.
-settings-wallpaper-pictures-rotating = Ni picha zilizowaka tu zinazotumika. Bonyeza moja ili kuififisha nayo itarukwa kuanzia hapo; ibonyeze tena ili kuirudisha. Hakuna kinachofutwa kamwe, kwa hiyo unaweza kubadili mawazo. Picha iliyo kwenye skrini sasa ndiyo ile iliyo kwenye picha kubwa.
+settings-wallpaper-pictures-rotating = Trindle hutumia kila picha ambayo haijafifishwa. Bonyeza picha ili kuirukia, na ibonyeze tena ili kuirudisha. Hakuna kinachofutwa. Picha kubwa ndiyo iliyo kwenye skrini sasa.
 
 # Words behind the i of the Pictures card when one picture is on.
-settings-wallpaper-pictures-one = Bonyeza picha ili kuiweka kwenye skrini. Hakuna kinachofutwa kamwe.
+settings-wallpaper-pictures-one = Bonyeza picha ili kuitumia.
 
 # Title of the Pictures card.
 settings-wallpaper-pictures-title = Picha
@@ -245,6 +221,3 @@ settings-wallpaper-no-pictures-name = Bado hakuna picha
 
 # Heading of the line shown when there are no pictures to choose from.
 settings-wallpaper-no-pictures = Hakuna picha za kuchagua
-
-# Small words under that line.
-settings-wallpaper-no-pictures-about = Chagua folda ya picha hapo juu.

@@ -2,7 +2,8 @@
 
 use std::collections::HashMap;
 
-use super::{CAPS_KEY, Keyboard, clicker_on, keyboard_button_on};
+use super::{CAPS_KEY, Keyboard, clicker_on};
+use crate::ring::tray::keyboard_button_on;
 use crate::common::pointer::{self, Pointer};
 use crate::plugins::shortcuts::{self};
 use crate::settings::session_env;
@@ -18,7 +19,8 @@ impl Keyboard {
             all.sort_by_key(|(_, v)| v.to_lowercase());
             self.names = layouts;
             self.variants = variants;
-            self.all = all;
+            self.seconds = Options::seconds(&all);
+            self.layouts = Options::of(all);
             self.read = true;
         }
         self.chosen = Chosen::load();
@@ -92,13 +94,7 @@ impl Keyboard {
             layouts.push(&c.second);
             variants.push(&c.second_var);
         }
-        let mut options = Vec::new();
-        if !c.second.is_empty() {
-            options.push(SWITCH);
-        }
-        if !c.caps.is_empty() {
-            options.push(&c.caps);
-        }
+        let options = c.options();
         let layout = layouts.join(",");
         let variant = variants.iter().any(|v| !v.is_empty()).then(|| variants.join(","));
         let option = (!options.is_empty()).then(|| options.join(","));
@@ -118,34 +114,52 @@ impl Keyboard {
         }
     }
 
-    pub(super) fn pick(kit: &Kit, key: &str, options: &[(String, String)], chosen: &str, tip: &str,
+    pub(super) fn pick(key: &str, options: &Options, chosen: &str, tip: &str,
             change: fn(String) -> Change) -> Node<Msg> {
-        let words: Vec<String> = options.iter().map(|o| o.1.clone()).collect();
-        let values: Vec<String> = options.iter().map(|o| o.0.clone()).collect();
+        let values = options.values.clone();
         let at = values.iter().position(|v| v == chosen);
-        dropdown(kit, key, words, at, tip, move |i| {
-            let v = values[i].clone();
+        dropdown(key, options.words.clone(), at, tip, move |i| {
+            let Some(v) = values.get(i).cloned() else { return on::<Keyboard>(|_, _| {}) };
             on::<Keyboard>(move |me, k| me.set(k, change(v.clone())))
         })
     }
 
     pub(super) fn keyboard_cards(&self, kit: &Kit) -> Vec<Node<Msg>> {
         let c = &self.chosen;
-        let mut variants = vec![(String::new(), t!("settings-keyboard-standard").to_string())];
-        variants.extend(self.variants.get(&c.first).cloned().unwrap_or_default());
-        let mut seconds = vec![(String::new(), t!("settings-keyboard-none").to_string())];
-        seconds.extend(self.all.iter().cloned());
+        let variants = Options::of(std::iter::once((String::new(), t!("settings-keyboard-standard").to_string()))
+            .chain(self.variants.get(&c.first).cloned().unwrap_or_default()));
         vec![group(t!("settings-keyboard-layout-title")).icon("input-keyboard-symbolic")
             .about(t!("settings-keyboard-layout-about"))
             .rows(vec![
-                line(t!("settings-keyboard-layout")).key(FIRST).control(Self::pick(kit, FIRST, &self.all, &c.first, t!("settings-keyboard-layout"), Change::First)).node(kit),
-                line(t!("settings-keyboard-variant")).key(VARIANT).control(Self::pick(kit, VARIANT, &variants, &c.first_var, t!("settings-keyboard-variant"), Change::FirstVar)).node(kit),
-                line(t!("settings-keyboard-switch-to")).sub(t!("settings-keyboard-switch-to-about")).key(SECOND)
-                    .control(Self::pick(kit, SECOND, &seconds, &c.second, t!("settings-keyboard-switch-to"), Change::Second)).node(kit),
+                line(t!("settings-keyboard-layout")).key(FIRST).control(Self::pick(FIRST, &self.layouts, &c.first, t!("settings-keyboard-layout"), Change::First)).node(kit),
+                line(t!("settings-keyboard-variant")).key(VARIANT).control(Self::pick(VARIANT, &variants, &c.first_var, t!("settings-keyboard-variant"), Change::FirstVar)).node(kit),
+                line(t!("settings-keyboard-switch-to")).key(SECOND)
+                    .control(Self::pick(SECOND, &self.seconds, &c.second, t!("settings-keyboard-switch-to"), Change::Second)).node(kit),
             ])
             .node(kit)]
     }
+}
 
+#[derive(Default)]
+pub(super) struct Options {
+    words: Vec<String>,
+    values: std::rc::Rc<[String]>,
+}
+
+impl Options {
+    pub(super) fn of(pairs: impl IntoIterator<Item = (String, String)>) -> Options {
+        let (values, words): (Vec<String>, Vec<String>) = pairs.into_iter().unzip();
+        Options { words, values: values.into() }
+    }
+
+    #[cfg(test)]
+    pub(super) fn strong(&self) -> usize {
+        std::rc::Rc::strong_count(&self.values)
+    }
+
+    pub(super) fn seconds(all: &[(String, String)]) -> Options {
+        Options::of(std::iter::once((String::new(), t!("settings-keyboard-none").to_string())).chain(all.iter().cloned()))
+    }
 }
 
 const RULES: &str = "/usr/share/X11/xkb/rules/evdev.lst";
@@ -200,9 +214,27 @@ pub(super) struct Chosen {
     pub(super) second: String,
     pub(super) second_var: String,
     pub(super) caps: String,
+
+    pub(super) others: Vec<String>,
+}
+
+fn is_ours(option: &str) -> bool {
+    option == SWITCH || option.starts_with("ctrl:nocaps") || option.starts_with("caps:")
 }
 
 impl Chosen {
+
+    pub(super) fn options(&self) -> Vec<&str> {
+        let mut options = Vec::new();
+        if !self.second.is_empty() {
+            options.push(SWITCH);
+        }
+        if !self.caps.is_empty() {
+            options.push(self.caps.as_str());
+        }
+        options.extend(self.others.iter().map(String::as_str));
+        options
+    }
 
     pub(super) fn load() -> Chosen {
         let installed = crate::common::files::read_env(std::path::Path::new("/etc/default/keyboard"));
@@ -228,6 +260,7 @@ impl Chosen {
                 .find(|o| o.starts_with("ctrl:nocaps") || o.starts_with("caps:"))
                 .unwrap_or("")
                 .to_string(),
+            others: options.split(',').filter(|o| !o.is_empty() && !is_ours(o)).map(str::to_string).collect(),
         }
     }
 }
@@ -237,4 +270,18 @@ pub(super) enum Change {
     FirstVar(String),
     Second(String),
     Caps(String),
+}
+
+#[cfg(test)]
+mod options_tests {
+    use super::Chosen;
+
+    #[test]
+    fn options_this_page_does_not_own_are_kept_when_it_writes_its_own() {
+        let mut c = Chosen { first: "gb".into(), second: "fr".into(), caps: "ctrl:nocaps".into(), others: vec!["compose:ralt".into(), "ctrl:swap_lalt_lctl".into()], ..Chosen::default() };
+        assert_eq!(c.options(), ["grp:alt_shift_toggle", "ctrl:nocaps", "compose:ralt", "ctrl:swap_lalt_lctl"]);
+        c.second.clear();
+        c.caps.clear();
+        assert_eq!(c.options(), ["compose:ralt", "ctrl:swap_lalt_lctl"], "one layout and no Caps Lock choice still keeps the others");
+    }
 }

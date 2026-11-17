@@ -1,0 +1,129 @@
+## What an app can be allowed to do, and what goes wrong without it. Each
+## permission has a name (said after "asks for", as in "Weather asks for
+## the internet and sound"), the line under its switch, and for some a warning.
+
+access-network-name = الإنترنت
+access-network-without = لن يستطيع الوصول إلى الإنترنت أو الحواسيب القريبة.
+access-sound-name = الصوت
+access-sound-without = لن يُصدر أي صوت.
+access-microphone-name = الميكروفون
+access-microphone-without = لن يستطيع سماعك.
+access-sound-and-microphone-name = الصوت والميكروفون
+access-sound-and-microphone-without = لن يُصدر أي صوت ولن يستطيع سماعك.
+access-files-name = مجلدات المستندات والتنزيلات والصور والموسيقى والفيديو وسطح المكتب
+access-files-without = لن يستطيع فتح ملفاتك أو الحفظ في مجلداتك.
+access-home-name = كل ما في مجلدك الرئيسي، بما فيه ملفات الإعدادات المخفية
+access-home-without = لن يستطيع فتح ملفاتك أو الحفظ في مجلداتك.
+access-devices-name = الكاميرا وغيرها من الأجهزة الموصولة
+access-devices-without = لن يستطيع رؤيتك أو استخدام ما توصله.
+access-bluetooth-name = أجهزة Bluetooth مثل سماعات الرأس
+access-bluetooth-without = لن يستطيع الاتصال بأي شيء عبر Bluetooth.
+access-notifications-name = الإشعارات
+access-notifications-without = لن يستطيع إخبارك عندما يحدث شيء.
+access-background-name = البدء عند تسجيل دخولك
+access-background-without = لن يعمل إلا ما دمت تبقيه مفتوحًا.
+access-screen-name = صور لشاشتك، وما تنسخه، والكتابة نيابةً عنك كأنها لوحة مفاتيحك
+access-screen-without = لن يستطيع رؤية النوافذ الأخرى أو قراءة ما تنسخه متى شاء.
+access-x11-name = رسم نوافذه بالطريقة الأقدم، مما يتيح له مراقبة التطبيقات الأقدم الأخرى وما يُكتب فيها
+access-x11-without = لن تُفتح نوافذه.
+access-computer-name = العمل خارج صندوقه، مع كل ما تصل إليه أنت بنفسك
+access-computer-without = ما تكتبه فيه يبقى محبوسًا في صندوقه، ولن يعمل sudo ولا ملفاتك الخاصة هناك.
+access-control-name = التحكم في لوحة مفاتيحك وفأرتك والحافظة
+access-control-without = لن يستطيع تحريك المؤشر أو الكتابة أو مشاركة ما تنسخه.
+access-capture-name = مشاركة فأرتك ولوحة مفاتيحك مع حاسوب آخر
+access-capture-without = لن يستطيع المؤشر الانتقال إلى حاسوب آخر.
+access-copied-name = الملفات التي تنسخها
+access-copied-without = لن يستطيع قراءة الملفات التي تنسخها، فلا يمكنه نقلها إلى حاسوب آخر.
+access-summon-name = فتح الحلقة فوق نافذة ملء الشاشة، كأنك ضغطت المفتاح
+access-summon-without = ستفتح مفاتيحه ونقراته الحلقة على سطح المكتب فقط، ولا تفتحها أبدًا فوق نافذة ملء الشاشة.
+access-listen-name = وصول الحواسيب الأخرى على شبكتك المحلية إليه
+access-listen-without = لن تستطيع الحواسيب الأخرى على شبكتك المحلية العثور عليه ولا الاتصال به.
+access-home-network-name = الأجهزة على شبكتك المحلية فقط
+access-home-network-without = لن يستطيع العثور على الطابعات والماسحات والأجهزة الأخرى على الشبكة المحلية ولا التحدث معها.
+access-usb-devices-name = الماسحات وأجهزة USB
+access-usb-devices-without = لن يستطيع استخدام ماسح موصول بهذا الحاسوب.
+access-expand-name = توسيع الرموز المختصرة أثناء الكتابة
+access-expand-without = لن تُوسَّع رموزه المختصرة أثناء الكتابة.
+access-accessibility-name = قراءة كل نافذة بصوت عالٍ
+access-accessibility-without = لن يستطيع قراءة نوافذك بصوت عالٍ.
+access-unnamed-name = شيء لم يسمّه
+
+access-control-warning = يستطيع الكتابة والنقر وقراءة ما تنسخه كأنه أنت. اسمح بهذا لإضافة تثق بها فقط.
+access-capture-warning = ما دام المؤشر على الحاسوب الآخر، فكل ما تكتبه وتنقر عليه يذهب إلى هذه الإضافة. اسمح بهذا لإضافة تثق بها فقط.
+access-copied-warning = يستطيع قراءة الملفات التي تنسخها بالضبط ما دام مسموحًا له، ولا شيء غيرها. اسمح بهذا لإضافة تثق بها فقط.
+access-summon-warning = يستطيع وضع الحلقة، التي تستقبل كل ما تكتبه، فوق لعبة أو فيلم دون أن تلمس أي مفتاح. اسمح بهذا لإضافة تثق بها فقط.
+access-home-network-warning = يستطيع التحدث مع كل جهاز على شبكتك المحلية، بما فيه الراوتر، لكن ليس مع الإنترنت. اسمح بهذا لإضافة تثق بها فقط.
+access-usb-devices-warning = يستطيع استخدام الماسحات وأجهزة الصور الموصولة عند بدء تشغيله، ولا يستخدم أي جهاز USB آخر. اسمح بهذا لإضافة تثق بها فقط.
+access-expand-warning = يراقب Trindle ما تكتبه بحثًا عن رموزه ويكتب كلماته عنك. لا ترى الإضافة ما تكتبه أبدًا. اسمح بهذا لإضافة تثق بها فقط.
+access-accessibility-warning = يستطيع قراءة كل ما على شاشتك. وكأي قارئ شاشة، يستطيع أيضًا الضغط على الأزرار وكتابة النص في النوافذ الأخرى، مع أنه لا يملك لوحة مفاتيح ولا فأرة خاصة به. اسمح بهذا لإضافة تثق بها فقط.
+
+## Titles (for a tooltip) and the line under a switch, which says what switching it off means.
+access-network-title = الإنترنت
+access-network-off = إذا كان متوقفًا، فلا يستطيع الوصول إلى الإنترنت أو الحواسيب القريبة.
+access-sound-title = تشغيل الصوت
+access-sound-off = إذا كان متوقفًا، فلا صوت.
+access-microphone-title = الميكروفون
+access-microphone-off = إذا كان متوقفًا، فلا يستطيع سماعك.
+access-sound-and-microphone-title = تشغيل الصوت واستخدام الميكروفون
+access-sound-and-microphone-off = إذا كان متوقفًا، فلا يُصدر صوتًا ولا يستطيع سماعك.
+access-files-title = مجلدات المستندات والتنزيلات والصور والموسيقى والفيديو وسطح المكتب
+access-files-off = إذا كان متوقفًا، فلا يستطيع فتح ملفاتك أو الحفظ في مجلداتك.
+access-home-title = كل ما في مجلدك الرئيسي، بما فيه ملفات الإعدادات المخفية
+access-home-off = إذا كان متوقفًا، فلا يستطيع فتح ملفاتك أو الحفظ في مجلداتك.
+access-devices-title = الكاميرا وغيرها من الأجهزة الموصولة
+access-devices-off = إذا كان متوقفًا، فلا يستطيع استخدام الكاميرا أو أي شيء توصله.
+access-bluetooth-title = Bluetooth، لسماعات الرأس وغيرها من الأشياء القريبة
+access-bluetooth-off = إذا كان متوقفًا، فلا يستطيع الاتصال بأي شيء عبر Bluetooth.
+access-notifications-title = عرض الإشعارات
+access-notifications-off = إذا كان متوقفًا، فلا يستطيع إخبارك عندما يحدث شيء.
+access-background-title = البدء من تلقاء نفسه عند تسجيل دخولك
+access-background-off = إذا كان متوقفًا، فلا يعمل إلا ما دمت تبقيه مفتوحًا.
+access-screen-title = التقاط صور لشاشتك وقراءة ما تنسخه والكتابة كأنه لوحة مفاتيحك
+access-screen-off = إذا كان متوقفًا، فلا يستطيع رؤية النوافذ الأخرى أو قراءة ما تنسخه متى شاء.
+access-x11-title = رسم نوافذه بالطريقة الأقدم، مما يتيح له مراقبة التطبيقات الأقدم الأخرى وما يُكتب فيها
+access-x11-off = إذا كان متوقفًا، فلن تُفتح نوافذه.
+access-computer-title = العمل خارج صندوقه، مع كل ما تصل إليه أنت بنفسك
+access-computer-off = إذا كان متوقفًا، فما تكتبه فيه يبقى محبوسًا في صندوقه، ولن يعمل sudo ولا ملفاتك الخاصة هناك.
+access-control-title = التحكم في لوحة مفاتيحك وفأرتك والحافظة
+access-control-off = إذا كان متوقفًا، فلا يستطيع تحريك المؤشر أو الكتابة أو مشاركة ما تنسخه.
+access-capture-title = مشاركة فأرتك ولوحة مفاتيحك مع حاسوب آخر
+access-capture-off = إذا كان متوقفًا، فلا يستطيع المؤشر الانتقال إلى حاسوب آخر.
+access-copied-title = قراءة الملفات التي تنسخها
+access-copied-off = إذا كان متوقفًا، فلا يستطيع قراءة الملفات التي تنسخها ولا إرسالها إلى حاسوب آخر.
+access-summon-title = فتح الحلقة فوق نافذة ملء الشاشة، كأنك ضغطت المفتاح
+access-summon-off = إذا كان متوقفًا، فتفتح مفاتيحه ونقراته الحلقة على سطح المكتب فقط، ولا تفتحها أبدًا فوق نافذة ملء الشاشة.
+access-listen-title = السماح للحواسيب الأخرى على شبكتك المحلية بالوصول إليه
+access-listen-off = إذا كان متوقفًا، فلا تستطيع الحواسيب الأخرى على شبكتك المحلية العثور عليه ولا الاتصال به.
+access-home-network-title = الوصول إلى الأجهزة على شبكتك المحلية فقط
+access-home-network-off = إذا كان متوقفًا، فلا يستطيع العثور على الطابعات والماسحات والأجهزة الأخرى على الشبكة المحلية ولا الاتصال بها.
+access-usb-devices-title = استخدام الماسحات وأجهزة USB
+access-usb-devices-off = إذا كان متوقفًا، فلا يستطيع استخدام ماسح موصول بهذا الحاسوب.
+access-expand-title = توسيع رموزك المختصرة أثناء الكتابة
+access-expand-off = إذا كان متوقفًا، فلن يوسّع Trindle رموزه المختصرة أثناء الكتابة.
+access-accessibility-title = قراءة ما تعرضه كل نافذة وقوله بصوت عالٍ
+access-accessibility-off = إذا كان متوقفًا، فلا يستطيع قراءة نوافذك بصوت عالٍ.
+access-unnamed-title = شيء لم يسمّه
+
+## The few words on a plugin's row of the Permissions page.
+access-note-acts-as-you = يستطيع التصرف كأنه أنت
+access-note-home-network = يستطيع الوصول إلى كل جهاز على شبكتك المحلية
+access-note-usb-devices = يستطيع استخدام الماسحات وأجهزة الصور
+access-note-expand = يستطيع الكتابة في نوافذك
+access-note-accessibility = يستطيع قراءة كل ما على شاشتك
+
+access-listen-detail = { $ports }، من الحواسيب على شبكتك المحلية فقط. ويحتاج أيضًا إلى السماح بالإنترنت.
+
+## A request that is unusual for the kind of app that makes it.
+access-unusual = هذا غير معتاد في { $kind }. اسمح به فقط إذا كنت تثق بمصدر هذا التطبيق.
+access-kind-terminal = برنامج طرفية
+access-kind-calculator = آلة حاسبة
+access-kind-photo = برنامج صور
+access-kind-text-editor = محرر نصوص
+access-kind-browser = متصفح ويب
+access-kind-office = برنامج مكتبي
+access-kind-graphics = برنامج رسوميات
+access-kind-game = لعبة
+access-kind-sound-video = برنامج صوت وفيديو
+access-kind-programming = أداة برمجة
+access-kind-utility = أداة مساعدة
+access-kind-other = تطبيق مثل هذا

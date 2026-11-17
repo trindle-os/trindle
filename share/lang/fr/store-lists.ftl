@@ -8,7 +8,7 @@ store-from-flatpak-file = Un fichier Flatpak
 store-from-deb = Un fichier .deb
 
 # On an installed thing's line: it is a plugin.
-store-from-plugin = Extension
+store-from-plugin = Module
 
 # A pre-release version as people read it: the main number, the kind and its number.
 store-version-pre = { $main } { $kind } { $number }
@@ -38,30 +38,17 @@ store-tab-count = { $name } { $n }
 # Spoken name of a strip of tabs on the Installed page.
 store-tabs-show = Afficher
 
-# How long is left when it is a minute or less.
-store-left-minute = environ une minute restante
-
-# How long is left, in minutes.
-store-left-minutes = environ { $n } minutes restantes
-
-# How long is left, in hours.
-store-left-hours =
-    { $n ->
-        [one] environ 1 heure restante
-       *[other] environ { $n } heures restantes
-    }
-
 # Credit under a package's page for the list its site was checked against.
 store-origin-credit = Vérifié avec la liste Threat Intelligence de HaGeZi
 
 # Where a download came from: the site and the page that led to it.
-store-origin-both = Téléchargé depuis { $site }, atteint depuis { $referrer }.
+store-origin-both = Vous avez téléchargé ceci depuis { $site }, en venant de { $referrer }.
 
 # Where a download came from: the site.
 store-origin-site = Téléchargé depuis { $site }.
 
 # Where a download came from: the page that led to it.
-store-origin-referrer = Atteint depuis { $referrer }.
+store-origin-referrer = Lien depuis { $referrer }.
 
 # Said when nothing tells where a download came from.
 store-origin-unknown = Trindle ne peut pas dire d'où cela vient.
@@ -72,19 +59,19 @@ store-origin-listed = { $from } { $name } figure sur la liste Threat Intelligenc
 
 # SAFETY: needs a human review before it ships
 # Said when the site is not on the list; the first part says where the download came from.
-store-origin-clear = { $from } Le site ne figure pas sur la liste Threat Intelligence de HaGeZi, mais cette liste n'est pas complète, donc cela ne prouve pas qu'il est sûr.
+store-origin-clear = { $from } Le site ne figure pas sur la liste Threat Intelligence de HaGeZi. Cette liste n'est pas complète, donc cela ne prouve pas qu'il est sûr.
 
 # Said when the list could not be fetched; the first part says where the download came from.
-store-origin-not-checked = { $from } Le site n'a pas pu être vérifié, car la liste Threat Intelligence de HaGeZi n'a pas pu être récupérée.
+store-origin-not-checked = { $from } Trindle n'a pas pu vérifier le site, car il n'a pas pu récupérer la liste Threat Intelligence de HaGeZi.
 
 # Name shown for a review whose writer gave none.
 store-review-someone = Quelqu'un
 
 # Red words when the keyring could not be reached.
-store-key-unreached = Le trousseau n'a pas pu être joint : { $why }.
+store-key-unreached = Trindle n'a pas pu joindre le trousseau : { $why }.
 
 # Red words when the key kept in the keyring is not text.
-store-key-not-text = La clé gardée n'est pas du texte.
+store-key-not-text = La clé enregistrée n'est pas du texte.
 
 # SAFETY: needs a human review before it ships
 # Red words when a file that held the key could not be removed.

@@ -3,6 +3,7 @@
 use std::path::{Path, PathBuf};
 
 use super::files;
+use crate::toolkit::t;
 
 pub const STEAM: &str = "com.valvesoftware.Steam";
 
@@ -210,12 +211,15 @@ pub fn local_configs(root: &Path) -> Vec<PathBuf> {
 
 const APPS: [&str; 4] = ["Software", "Valve", "Steam", "apps"];
 
-fn store(file: &Path, top: &str) -> Option<Vec<(String, Vdf)>> {
-    let text = files::read_text(file);
+const MOST_BYTES: u64 = 16 << 20;
+
+fn store(file: &Path, top: &str) -> Result<Vec<(String, Vdf)>, String> {
+    let unreadable = || t!("common-steam-unreadable").to_string();
+    let text = files::read_within(file, MOST_BYTES).map_err(|_| unreadable())?;
     if text.trim().is_empty() {
-        return Some(vec![(top.to_string(), Vdf::Keys(Vec::new()))]);
+        return Ok(vec![(top.to_string(), Vdf::Keys(Vec::new()))]);
     }
-    parse(&text)
+    parse(&text).ok_or_else(unreadable)
 }
 
 fn save(file: &Path, keys: &[(String, Vdf)]) -> Result<(), String> {
@@ -223,16 +227,16 @@ fn save(file: &Path, keys: &[(String, Vdf)]) -> Result<(), String> {
 }
 
 pub fn launch_options(file: &Path, id: u32) -> String {
-    let Some(mut all) = store(file, "UserLocalConfigStore") else { return String::new() };
+    let Ok(mut all) = store(file, "UserLocalConfigStore") else { return String::new() };
     let Some((_, Vdf::Keys(root))) = all.iter_mut().find(|(k, _)| k.eq_ignore_ascii_case("UserLocalConfigStore")) else { return String::new() };
     let game = inside(root, &[APPS[0], APPS[1], APPS[2], APPS[3], &id.to_string()]);
     word(game, "LaunchOptions").unwrap_or("").to_string()
 }
 
 pub fn set_launch_options(file: &Path, id: u32, opts: &str) -> Result<(), String> {
-    let mut all = store(file, "UserLocalConfigStore").ok_or("The Steam file could not be read.")?;
+    let mut all = store(file, "UserLocalConfigStore")?;
     let Some((_, Vdf::Keys(root))) = all.iter_mut().find(|(k, _)| k.eq_ignore_ascii_case("UserLocalConfigStore")) else {
-        return Err("The Steam file could not be read.".into());
+        return Err(t!("common-steam-unreadable").to_string());
     };
     let game = inside(root, &[APPS[0], APPS[1], APPS[2], APPS[3], &id.to_string()]);
     set_word(game, "LaunchOptions", (!opts.is_empty()).then_some(opts));
@@ -262,10 +266,13 @@ pub fn compat_tool(root: &Path, id: u32) -> Option<String> {
 }
 
 pub fn set_compat_tool(root: &Path, id: u32, tool: Option<&str>) -> Result<(), String> {
-    let file = root.join("config/config.vdf");
-    let mut all = store(&file, "InstallConfigStore").ok_or("The Steam file could not be read.")?;
+    set_compat_tool_in(&root.join("config/config.vdf"), id, tool)
+}
+
+pub(crate) fn set_compat_tool_in(file: &Path, id: u32, tool: Option<&str>) -> Result<(), String> {
+    let mut all = store(file, "InstallConfigStore")?;
     let Some((_, Vdf::Keys(top))) = all.iter_mut().find(|(k, _)| k.eq_ignore_ascii_case("InstallConfigStore")) else {
-        return Err("The Steam file could not be read.".into());
+        return Err(t!("common-steam-unreadable").to_string());
     };
     let map = inside(top, &["Software", "Valve", "Steam", "CompatToolMapping"]);
     map.retain(|(k, _)| *k != id.to_string());
@@ -276,7 +283,7 @@ pub fn set_compat_tool(root: &Path, id: u32, tool: Option<&str>) -> Result<(), S
             ("priority".into(), Vdf::Word("250".into())),
         ])));
     }
-    save(&file, &all)
+    save(file, &all)
 }
 
 pub fn ge_name(location: &Path) -> Option<String> {
@@ -308,6 +315,7 @@ pub fn setup_folder(library: &Path, id: u32) -> PathBuf {
     library.join("compatdata").join(id.to_string())
 }
 
+#[cfg(test)]
 pub fn game_running(proc: &Path, id: u32) -> bool {
     crate::common::pads::steam_games_now(proc).contains(&id)
 }

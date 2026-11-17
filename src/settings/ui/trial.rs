@@ -106,6 +106,10 @@ impl Trial {
         Some(if escape { foot.on_escape(on::<P>(back)) } else { foot })
     }
 
+    fn next(left: i32) -> Option<i32> {
+        (left > 1).then_some(left - 1)
+    }
+
     fn count<P: Page + 'static>(kit: &Kit, round: u32, mine: fn(&mut P) -> &mut Trial, over: fn(&mut P, &mut Kit)) {
         kit.after::<P>(Duration::from_secs(1), move |me, k| {
             let t = mine(me);
@@ -113,11 +117,11 @@ impl Trial {
                 return;
             }
             let Some(left) = t.left else { return };
-            if left - 1 < 0 {
+            let Some(next) = Trial::next(left) else {
                 over(me, k);
                 return;
-            }
-            t.left = Some(left - 1);
+            };
+            t.left = Some(next);
             Trial::count(k, round, mine, over);
         });
     }
@@ -158,4 +162,22 @@ fn trial_part(size: (f32, f32), tip: String, words: String, under: String, centr
             pen.fonts.draw(canvas, &second, x, y + first.height, quiet);
         }
     })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Trial;
+
+    #[test]
+    fn a_trial_lasts_exactly_the_seconds_it_started_with() {
+        for secs in [1, 15, 30] {
+            let (mut left, mut passed) = (secs, 0);
+            while let Some(next) = Trial::next(left) {
+                left = next;
+                passed += 1;
+            }
+            assert_eq!((passed + 1, left), (secs, 1), "a trial of {secs} seconds ran {} seconds", passed + 1);
+        }
+        assert_eq!(Trial::next(0), None, "a trial with nothing left ends at once");
+    }
 }

@@ -14,11 +14,11 @@ settings-tailscale-last-online = последний раз в сети: { $day }
 
 # Shown beside the Use Tailscale switch while the password is asked for, when Tailscale is already installed.
 # SAFETY: needs a human review before it ships
-settings-tailscale-waiting = Ожидание пароля...
+settings-tailscale-waiting = Ожидание вашего пароля…
 
 # Shown beside the Use Tailscale switch while the password is asked for, before Tailscale is installed.
 # SAFETY: needs a human review before it ships
-settings-tailscale-waiting-install = Ожидание пароля, затем установка Tailscale...
+settings-tailscale-waiting-install = Ожидание вашего пароля перед установкой Tailscale…
 
 # Shown beside the switch after Tailscale is turned on.
 settings-tailscale-done-on = Tailscale включён
@@ -68,18 +68,12 @@ settings-tailscale-keywords = tailscale vpn частная сеть устрой
 # Help text at the top of the page.
 settings-tailscale-help = Tailscale объединяет ваши компьютеры и телефоны в одну частную сеть, где бы они ни находились. Пока вы его не включите, ничего не устанавливается, а пока он выключен, он не занимает память.
 
-# Small line under the Use Tailscale switch before Tailscale is installed.
-settings-tailscale-switch-sub-first = Устанавливает его из собственного источника Tailscale.
-
-# Small line under the Use Tailscale switch once Tailscale is installed.
-settings-tailscale-switch-sub = Выкл.: остановлен, не запускается вместе с компьютером.
-
 # Text of the switch that turns Tailscale on or off, and heading of its line.
 settings-tailscale-switch = Использовать Tailscale
 
 # Help text (i button) of the Tailscale card when Tailscale is off or has not answered.
 # SAFETY: needs a human review before it ships
-settings-tailscale-about-plain = При первом включении Tailscale устанавливается из собственного источника программ Tailscale и запускается. Его фоновая служба занимает память, пока он включён, поэтому работает только при включённом переключателе. Пока он выключен, Tailscale остановлен и не запускается вместе с компьютером. Брандмауэр пропускает ваши собственные устройства Tailscale и, как и раньше, не пускает всех остальных.
+settings-tailscale-about-plain = При первом включении Trindle устанавливает Tailscale из собственного источника программ Tailscale и запускает его. Фоновая служба Tailscale занимает память, пока работает, поэтому она запускается только при включённом переключателе. Пока он выключен, Tailscale остановлен и не запускается вместе с компьютером. Брандмауэр пропускает ваши собственные устройства Tailscale и, как и раньше, не пускает всех остальных.
 
 # Help text (i button) of the Tailscale card when Tailscale is on but not yet connected.
 settings-tailscale-about-sign-in = { settings-tailscale-about-plain } При входе в браузере откроется страница входа Tailscale. Используйте одну и ту же учётную запись на всех своих устройствах.
@@ -89,9 +83,6 @@ settings-tailscale-about-connected = { settings-tailscale-about-plain } Посл
 
 # Line in the devices card when there are no other devices.
 settings-tailscale-no-devices = Других устройств пока нет
-
-# Small line under "No other devices yet".
-settings-tailscale-no-devices-sub = Войдите на другом устройстве с той же учётной записью.
 
 # Shown on the devices card while Tailscale is off.
 settings-tailscale-waits-off = Включите Tailscale, чтобы увидеть свои устройства.
@@ -117,14 +108,8 @@ settings-tailscale-this-computer = Этот компьютер
 # Heading of the line that signs in to Tailscale, and tip of its round button.
 settings-tailscale-sign-in = Войти
 
-# Small line under the Sign in line.
-settings-tailscale-sign-in-sub = Открывает страницу входа в браузере.
-
 # Heading of the line that joins the private network again, and tip of its round button.
 settings-tailscale-connect = Подключиться
-
-# Small line under the Connect line.
-settings-tailscale-connect-sub = Снова присоединяет к вашей частной сети.
 
 # Heading of the line that says the firewall lets the person's own devices in.
 # SAFETY: needs a human review before it ships
@@ -132,13 +117,10 @@ settings-tailscale-firewall = Ваши устройства могут подк�
 
 # Small line under that heading.
 # SAFETY: needs a human review before it ships
-settings-tailscale-firewall-sub = Всех остальных, как и раньше, не пускают.
+settings-tailscale-firewall-sub = Брандмауэр по-прежнему блокирует остальных.
 
 # Heading of the line that signs out, and tip of its button.
 settings-tailscale-sign-out = Выйти
-
-# Small line under the Sign out line.
-settings-tailscale-sign-out-sub = Покидает вашу частную сеть.
 
 # Heading of the card with the Tailscale switch.
 settings-tailscale-card = Tailscale

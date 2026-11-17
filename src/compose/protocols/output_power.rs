@@ -7,6 +7,7 @@ use smithay::reexports::wayland_protocols_wlr::output_power_management::v1::serv
     zwlr_output_power_manager_v1::{self, ZwlrOutputPowerManagerV1},
     zwlr_output_power_v1::{self, Mode, ZwlrOutputPowerV1},
 };
+use super::Filtered;
 use smithay::reexports::wayland_server::{
     backend::ClientId, Client, DataInit, Dispatch, DisplayHandle, GlobalDispatch, New, Resource, WEnum,
 };
@@ -17,10 +18,6 @@ const VERSION: u32 = 1;
 pub struct OutputPowerState {
 
     controls: Vec<(ZwlrOutputPowerV1, Output)>,
-}
-
-pub struct OutputPowerGlobalData {
-    filter: Box<dyn for<'c> Fn(&'c Client) -> bool + Send + Sync>,
 }
 
 pub trait OutputPowerHandler {
@@ -42,12 +39,10 @@ fn mode(on: bool) -> Mode {
 impl OutputPowerState {
     pub fn new<D, F>(display: &DisplayHandle, filter: F) -> Self
     where
-        D: GlobalDispatch<ZwlrOutputPowerManagerV1, OutputPowerGlobalData> + 'static,
+        D: GlobalDispatch<ZwlrOutputPowerManagerV1, Filtered> + 'static,
         F: for<'c> Fn(&'c Client) -> bool + Send + Sync + 'static,
     {
-        let global_data = OutputPowerGlobalData {
-            filter: Box::new(filter),
-        };
+        let global_data = Filtered::new(filter);
         display.create_global::<D, ZwlrOutputPowerManagerV1, _>(VERSION, global_data);
         Self { controls: Vec::new() }
     }
@@ -68,9 +63,9 @@ impl OutputPowerState {
     }
 }
 
-impl<D> GlobalDispatch<ZwlrOutputPowerManagerV1, OutputPowerGlobalData, D> for OutputPowerState
+impl<D> GlobalDispatch<ZwlrOutputPowerManagerV1, Filtered, D> for OutputPowerState
 where
-    D: GlobalDispatch<ZwlrOutputPowerManagerV1, OutputPowerGlobalData>
+    D: GlobalDispatch<ZwlrOutputPowerManagerV1, Filtered>
         + Dispatch<ZwlrOutputPowerManagerV1, ()>
         + 'static,
 {
@@ -79,14 +74,14 @@ where
         _dh: &DisplayHandle,
         _client: &Client,
         resource: New<ZwlrOutputPowerManagerV1>,
-        _global_data: &OutputPowerGlobalData,
+        _global_data: &Filtered,
         data_init: &mut DataInit<'_, D>,
     ) {
         data_init.init(resource, ());
     }
 
-    fn can_view(client: Client, global_data: &OutputPowerGlobalData) -> bool {
-        (global_data.filter)(&client)
+    fn can_view(client: Client, global_data: &Filtered) -> bool {
+        global_data.can_view(&client)
     }
 }
 
@@ -173,7 +168,7 @@ where
 macro_rules! delegate_output_power {
     ($(@<$( $lt:tt $( : $clt:tt $(+ $dlt:tt )* )? ),+>)? $ty: ty) => {
         smithay::reexports::wayland_server::delegate_global_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
-            smithay::reexports::wayland_protocols_wlr::output_power_management::v1::server::zwlr_output_power_manager_v1::ZwlrOutputPowerManagerV1: $crate::protocols::output_power::OutputPowerGlobalData
+            smithay::reexports::wayland_protocols_wlr::output_power_management::v1::server::zwlr_output_power_manager_v1::ZwlrOutputPowerManagerV1: $crate::protocols::Filtered
         ] => $crate::protocols::output_power::OutputPowerState);
         smithay::reexports::wayland_server::delegate_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
             smithay::reexports::wayland_protocols_wlr::output_power_management::v1::server::zwlr_output_power_manager_v1::ZwlrOutputPowerManagerV1: ()

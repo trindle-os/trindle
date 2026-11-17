@@ -66,7 +66,7 @@ fn the_real_ssh_reaches_a_listed_computer_with_the_programs_own_key_only() {
     assert_eq!(*asked.lock().unwrap(), 0, "ssh to a listed computer asks nothing");
     assert!(root.join("ssh/known_hosts").exists(), "the programs' own list of known computers was used");
     let (code, out, err) = request("ssh", &["-4", "-p", &p, "127.0.0.1", "echo", "x"], &root, &approver, &dir);
-    assert!(code == 255 && out.is_empty() && err.contains("not a computer name"), "{code} {err}");
+    assert!(code == 255 && out.is_empty() && err.contains("can't reach that computer with ssh"), "{code} {err}");
     let (code, out, err) = request("ssh", &["-p", &p, "elsewhere.example.com", "echo", "x"], &root, &approver, &dir);
     assert!(code == 255 && out.is_empty() && err.contains("is not on the list"), "{code} {err}");
     let _ = std::fs::remove_dir_all(&dir);
@@ -142,6 +142,13 @@ fn sudo_takes_a_command_and_nothing_stranger() {
         assert!(parse_sudo("sudo", &bad).is_err(), "{bad:?}");
     }
     assert_eq!(approval_text(&v(&["rm", "-rf", "a b", "it's"])), "rm -rf 'a b' 'it'\\''s'");
+}
+
+#[test]
+fn the_approval_text_writes_out_what_would_hide_or_move_words() {
+    let shown = approval_text(&v(&["echo", "a\nrm -rf ~", "x\u{202e}y", "z\u{200b}", "ok"]));
+    assert_eq!(shown, "echo 'a\\u{a}rm -rf ~' 'x\\u{202e}y' 'z\\u{200b}' ok");
+    assert!(shown.chars().all(|c| !super::hidden(c)));
 }
 
 #[test]

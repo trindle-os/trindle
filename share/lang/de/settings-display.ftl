@@ -8,16 +8,16 @@ settings-display-title = Anzeige
 settings-display-keywords = Bildschirm Monitor Auflösung Größe Skalierung Zoom größer kleiner drehen Bildwiederholrate Nachtlicht warm Blaulicht Abend Augen screen monitor resolution scale night light
 
 # Introduction under the heading of the display page, and the words behind the page i.
-settings-display-help = Änderungen gelten sofort. Wenn der Bildschirm nicht mehr stimmt, tu nichts: Nach 15 Sekunden geht er von selbst zurück, es sei denn, du drückst auf „Beibehalten“. Das Nachtlicht macht den Bildschirm am Abend wärmer.
+settings-display-help = Änderungen gelten sofort. Wenn der Bildschirm nicht mehr stimmt, tu nichts. Nach 15 Sekunden geht er von selbst zurück, es sei denn, du drückst auf „Beibehalten“. Das Nachtlicht macht den Bildschirm am Abend wärmer.
 
 # Question along the bottom of the page while a change of displays waits to be kept.
 settings-display-foot-keep = Diese Anordnung beibehalten?
 
 # Sentence at the top of the page while the displays are being found.
-settings-display-looking = Die Anzeigen werden angesehen …
+settings-display-looking = Die Anzeigen werden geprüft …
 
 # Sentence at the top of the page when no display was found.
-settings-display-none-found = Es wurden keine Anzeigen gefunden.
+settings-display-none-found = Keine Anzeige gefunden.
 
 # First half of the sentence at the top of the page: no display is in use.
 settings-display-used-none = Keine Anzeige in Benutzung
@@ -95,32 +95,20 @@ settings-display-rotation-of = Drehung von { $display }
 # Heading of the resolution line.
 settings-display-resolution = Auflösung
 
-# Small words under that line.
-settings-display-resolution-about = Wie viele Punkte gezeigt werden, und wie oft.
-
 # Heading of the size line.
 settings-display-size = Größe
 
-# Small words under that line.
-settings-display-size-about = Wie groß alles auf diesem Bildschirm aussieht.
-
 # Heading of the rotation line.
 settings-display-rotation = Drehung
-
-# Small words under that line.
-settings-display-rotation-about = Für einen Bildschirm, der hochkant steht.
 
 # Heading of the line, and name of its switch, that turns a display on or off.
 settings-display-use = Diese Anzeige verwenden
 
 # Small words under that line for the only display in use.
-settings-display-use-only = Die einzige benutzte Anzeige kann nicht ausgeschaltet werden.
-
-# Small words under that line otherwise.
-settings-display-use-off = Aus, es wird nichts darauf gezeigt.
+settings-display-use-only = Du kannst die einzige benutzte Anzeige nicht ausschalten.
 
 # Words behind the i of a display's card.
-settings-display-card-about = Änderungen gelten sofort. Wenn der Bildschirm nicht mehr stimmt, tu nichts: Nach 15 Sekunden geht er von selbst zurück, es sei denn, du drückst auf „Beibehalten“. Die empfohlene Auflösung ist die eigene des Bildschirms; die Standardgröße hat Trindle für diesen Bildschirm gewählt.
+settings-display-card-about = Änderungen gelten sofort. Wenn der Bildschirm nicht mehr stimmt, tu nichts. Nach 15 Sekunden geht er von selbst zurück, es sei denn, du drückst auf „Beibehalten“. Die empfohlene Auflösung ist die, für die der Bildschirm gemacht ist. Die Standardgröße hat Trindle für diesen Bildschirm gewählt.
 
 # Name of the list of where a display sits, and heading of its line when there are more than two displays; { $display } is the display.
 settings-display-place-name = { $display } platzieren
@@ -135,13 +123,13 @@ settings-display-relative = { $display } im Verhältnis zu { $other }
 settings-display-arrangement-title = Anordnung
 
 # Words behind the i of that card.
-settings-display-arrangement-about = Wo die Anzeigen nebeneinander liegen, damit der Zeiger über die gemeinsame Kante von einer zur nächsten wandert.
+settings-display-arrangement-about = Lege fest, wo die Anzeigen nebeneinander liegen, damit der Zeiger über die gemeinsame Kante wandern kann.
 
 # Small words on that card while fewer than two displays are in use.
-settings-display-arrangement-waits = Benutze zwei Anzeigen, um eine neben die andere zu setzen.
+settings-display-arrangement-waits = Du brauchst zwei Anzeigen, um eine neben die andere zu setzen.
 
 # Red words when the desktop refused a change of displays and gave no reason.
-settings-display-refused = Der Desktop hat es abgelehnt.
+settings-display-refused = Das ließ sich nicht ändern.
 
 # Said aloud after the displays changed; { $seconds } is how long until they go back.
 settings-display-aloud-changed =
@@ -151,44 +139,34 @@ settings-display-aloud-changed =
     }
 
 # Red words when a change of displays could not be undone; { $why } is the desktop's reason.
-settings-display-not-undone = Die Änderung konnte nicht rückgängig gemacht werden. { $why }
+settings-display-not-undone = Die Änderung ließ sich nicht rückgängig machen. { $why }
 
 # Red words when the arrangement could not be kept for the next login.
-settings-display-not-kept = Die Anordnung wird jetzt benutzt, konnte aber nicht für die nächste Anmeldung gespeichert werden.
+settings-display-not-kept = Die Anordnung wird jetzt benutzt, aber Trindle konnte sie nicht für die nächste Anmeldung speichern.
 
 # Heading of the line under the picture of the displays when the desktop refused a change.
 settings-display-nothing-changed = Nichts wurde geändert
 
 # Small words under that line.
-settings-display-refused-change = Der Desktop hat die Änderung abgelehnt.
+settings-display-refused-change = Diese Änderung ließ sich nicht durchführen.
 
 # Heading of the line under the picture of the displays.
 settings-display-apply-at-once = Änderungen gelten sofort
-
-# Small words under that line; { $seconds } is how long Keep is asked for.
-settings-display-keep-asked =
-    { $seconds ->
-        [one] Am Fuß des Fensters wird { $seconds } Sekunde lang nach „Beibehalten“ gefragt.
-       *[other] Am Fuß des Fensters wird { $seconds } Sekunden lang nach „Beibehalten“ gefragt.
-    }
 
 # Title of the night light card.
 settings-display-night-title = Nachtlicht
 
 # Words behind the i of that card.
-settings-display-night-about = Der Bildschirm wird am Abend wärmer, das ist angenehmer für die Augen. Es folgt Sonnenuntergang und Sonnenaufgang, aus der Zeitzone berechnet, oder eigenen festen Zeiten; wenn die Zeitzone nicht sagt, wo dieser Computer steht, werden die festen Zeiten benutzt.
+settings-display-night-about = Der Bildschirm wird am Abend wärmer, das ist angenehmer für die Augen. Er richtet sich nach Sonnenuntergang und Sonnenaufgang, aus deiner Zeitzone berechnet, oder nach Zeiten, die du selbst festlegst. Wenn Trindle an deiner Zeitzone nicht erkennen kann, wo du bist, werden die Zeiten benutzt, die du festgelegt hast.
 
 # Heading of the night light line, and name of its switch.
 settings-display-night = Nachtlicht
-
-# Small words under that line.
-settings-display-night-about-line = Wärmere Farben am Abend.
 
 # Small words under the When line; { $zone } is the time zone.
 settings-display-when-zone = Sonnenuntergang und Sonnenaufgang in { $zone }.
 
 # Small words under the When line when the time zone gives no place.
-settings-display-when-no-place = Die Zeitzone nennt keinen Ort: feste Zeiten.
+settings-display-when-no-place = Trindle nutzt feste Zeiten, weil es den Sonnenuntergang nicht kennt.
 
 # Choice in the When list: from sunset to sunrise.
 settings-display-when-sun = Sonnenuntergang bis Sonnenaufgang
@@ -208,9 +186,6 @@ settings-display-to = Bis
 # Heading of the warmth line, and name of its slider.
 settings-display-warmth = Wärme
 
-# Small words under the warmth line.
-settings-display-warmth-about = Wie warm der Bildschirm nachts wird.
-
 # Small word under the left end of the warmth slider.
 settings-display-little = Etwas
 
@@ -229,8 +204,8 @@ settings-display-one-display-tip = { $name }, { $res }
 # Spoken description of the picture of the displays when several are in use; { $n } is how many.
 settings-display-many-displays-tip =
     { $n ->
-        [one] { $n } Anzeige, nebeneinander wie angeordnet
-       *[other] { $n } Anzeigen, nebeneinander wie angeordnet
+        [one] { $n } Anzeige
+       *[other] { $n } Anzeigen, wie angeordnet
     }
 
 # Word drawn in the picture of the displays when none is in use.
@@ -240,26 +215,25 @@ settings-display-no-display = Keine Anzeige
 settings-display-your-displays = Deine Anzeigen
 
 # Small words under Nothing to show on when the desktop listed no displays.
-settings-display-listed-none = Der Desktop hat keine Anzeigen aufgelistet.
+settings-display-listed-none = Trindle hat keine Anzeigen gefunden.
 
 # Title of the card shown when no display was found.
 settings-display-none-title = Keine Anzeigen gefunden
 
 # Heading of the line in that card.
-settings-display-none-heading = Nichts zum Anzeigen
+settings-display-none-heading = Keine Anzeigen gefunden
 
 # Title of the card about the graphics card.
 settings-display-graphics-title = Grafik
 
 # Words behind the i of that card.
-settings-display-graphics-about = Dieser Computer hat eine NVIDIA-Karte mit dem offenen Treiber. Alles funktioniert. Bei einer Karte von etwa 2022 an fühlt es sich langsam an, weil der offene Treiber die Geschwindigkeit der Karte nicht anheben kann. Der eigene Treiber von NVIDIA kann installiert werden.
+settings-display-graphics-about = Dieser Computer hat eine NVIDIA-Grafikkarte, die den offenen Treiber nutzt. Sie funktioniert, aber eine Karte von etwa 2022 an fühlt sich langsam an, weil der offene Treiber die Geschwindigkeit der Karte nicht anheben kann. Du kannst stattdessen den eigenen Treiber von NVIDIA installieren.
 
 # Heading of the line about an NVIDIA card on the open driver.
-settings-display-nvidia = Eine NVIDIA-Karte mit dem offenen Treiber
+settings-display-nvidia = NVIDIA-Karte mit dem offenen Treiber
 
 # Small words under that line.
-settings-display-nvidia-about = Funktioniert; eine Karte von 2022 an fühlt sich langsam an.
+settings-display-nvidia-about = Auf Karten ab 2022 kann es langsam laufen.
 
 # Words of the link that opens help about the NVIDIA driver.
 settings-display-nvidia-help = Was man dagegen tun kann
-

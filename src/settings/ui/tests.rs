@@ -241,7 +241,7 @@ fn an_action_that_worked_glows_and_one_that_failed_says_why_in_red_and_puts_its_
     answer(Err(Failed::new("org.freedesktop.DBus.Error.ServiceUnknown", "The name is not activatable")));
     s.turn();
     assert_eq!(s.red("lamp").as_deref(),
-               Some("The lamp could not be switched. The part of the system that does this is not running."));
+               Some("The lamp could not be switched. The part of the system that does this isn't running."));
 }
 
 #[test]
@@ -272,9 +272,9 @@ fn a_failure_is_never_an_error_code_alone() {
     assert_eq!(().words(could_not), could_not);
     assert!(ran(true, "noise").is_ok());
     assert_eq!(ran(false, "Permission denied").err().map(|e| e.words(could_not)).as_deref(),
-               Some("It could not be saved. This account is not allowed to."));
+               Some("It could not be saved. This account can't do that."));
 
-    assert_eq!(asked(false, "Request dismissed").err().as_deref(), Some("Not done: no administrator's password was given."));
+    assert_eq!(asked(false, "Request dismissed").err().as_deref(), Some("That wasn't done, because no administrator's password was given."));
     assert!(kept(true).is_ok() && kept(false).is_err());
 }
 
@@ -305,4 +305,59 @@ fn a_press_never_does_nothing_when_what_it_needs_is_not_there() {
     for words in [no_system_bus(), no_session_bus(), no_browser(), no_chooser(), not_saved()] {
         assert!(!words.contains('\u{2014}') && words.ends_with('.'), "{words}");
     }
+}
+
+#[test]
+fn words_that_only_say_it_worked_come_from_the_word_files() {
+    use super::failures::is_just_saved;
+    for quiet in ["Saved.", " done ", "Stops at 80%", "Up to date"] {
+        assert!(is_just_saved(quiet), "{quiet}");
+    }
+    for loud in ["", "Not saved", "Couldn't save the name."] {
+        assert!(!is_just_saved(loud), "{loud}");
+    }
+    assert!(!include_str!("failures.rs").contains("\"stops at 80%\""), "the list is not written in the code");
+}
+
+fn settings_code() -> Vec<(String, String)> {
+    let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("src/settings");
+    let mut stack = vec![dir.clone()];
+    let mut files = Vec::new();
+    while let Some(d) = stack.pop() {
+        for e in std::fs::read_dir(d).unwrap().flatten() {
+            let p = e.path();
+            if p.is_dir() {
+                stack.push(p);
+            } else if p.extension().is_some_and(|x| x == "rs") && !p.ends_with("ui/tests.rs") {
+                let text = std::fs::read_to_string(&p).unwrap();
+                let code = text.split("\n#[cfg(test)]").next().unwrap_or_default().to_string();
+                files.push((p.strip_prefix(&dir).unwrap().display().to_string(), code));
+            }
+        }
+    }
+    files
+}
+
+#[test]
+fn trindle_admin_is_run_from_the_one_shared_step() {
+    let own: Vec<String> = settings_code().into_iter().filter(|(path, code)| {
+        let runs = code.lines().filter(|l| !l.trim_start().starts_with("//") && l.contains("admin_helper()")).count();
+        path != "ui/admin.rs" && runs > usize::from(path == "panels/users.rs")
+    }).map(|(path, _)| path).collect();
+    assert!(own.is_empty(), "these run trindle-admin themselves instead of admin_step or admin_run: {own:?}");
+}
+
+#[test]
+fn lists_are_banded_by_the_toolkits_one_way() {
+    let own: Vec<String> = settings_code().into_iter().filter(|(_, code)| code.contains("fn banded")).map(|(path, _)| path).collect();
+    assert!(own.is_empty(), "these band lists their own way: {own:?}");
+}
+
+#[test]
+fn a_cards_name_goes_into_its_tip_as_it_is_written() {
+    let events = Loop::new();
+    let asks = events.post(|_: Do| {});
+    let kit = Kit::new(events, asks, None, None);
+    let said = group("Bluetooth").about("Pairs headphones.").node(&kit).said().join("|");
+    assert!(said.contains(&t!("settings-common-about-card", name = "Bluetooth")), "{said}");
 }

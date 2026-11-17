@@ -16,7 +16,7 @@ component=main
 
 icons=${TRINDLE_ICON_DEBS:-$here/../trindle-icons/dist/apt/pool/main}
 if [ -z "$empty" ]; then
-    for name in trindle-circle-icon-theme; do
+    for name in trindle-circle-icon-theme trindle-square-icon-theme; do
         deb=$(ls -1 "$icons/${name}_"*_all.deb 2>/dev/null | sort -V | tail -1)
         [ -n "$deb" ] || { echo "no $name package in $icons: build trindle-icons, or set TRINDLE_ICON_DEBS" >&2; exit 1; }
         set -- "$@" "$deb"
@@ -28,26 +28,33 @@ for deb in "$@"; do
     cp "$deb" "$repo/pool/$component/"
 done
 
-for arch in amd64 arm64; do
-    dir="$repo/dists/$suite/$component/binary-$arch"
-    mkdir -p "$dir"
-    (cd "$repo" && apt-ftparchive --arch "$arch" packages "pool/$component") > "$dir/Packages"
-    gzip -9fkn "$dir/Packages"
-    {
-        echo "Archive: $suite"
-        echo "Component: $component"
-        echo "Origin: Trindle"
-        echo "Label: Trindle"
-        echo "Architecture: $arch"
-    } > "$dir/Release"
-done
+arch=amd64
+dir="$repo/dists/$suite/$component/binary-$arch"
+mkdir -p "$dir"
+(cd "$repo" && apt-ftparchive --arch "$arch" packages "pool/$component") > "$dir/Packages"
+awk '/^Package: /{p=$2} p=="trindle" && /^Depends: /{sub(/^Depends: /,""); print}' "$dir/Packages" \
+    | tr ',' '\n' | sed -n 's/^ *\(trindle-[a-z0-9.+-]*\) *\((>= *\([^)]*\))\)\{0,1\}.*/\1 \3/p' \
+    | while read -r name least; do
+        have=$(awk -v n="$name" '/^Package: /{p=$2} p==n && /^Version: /{print $2}' "$dir/Packages" | sort -V | tail -1)
+        [ -n "$have" ] || { echo "trindle needs $name, which is not in the repository: add its package" >&2; exit 1; }
+        [ -z "$least" ] || dpkg --compare-versions "$have" ge "$least" \
+            || { echo "trindle needs $name $least or newer; the repository has $have" >&2; exit 1; }
+    done
+gzip -9fkn "$dir/Packages"
+{
+    echo "Archive: $suite"
+    echo "Component: $component"
+    echo "Origin: Trindle"
+    echo "Label: Trindle"
+    echo "Architecture: $arch"
+} > "$dir/Release"
 
 (cd "$repo" && apt-ftparchive \
     -o "APT::FTPArchive::Release::Origin=Trindle" \
     -o "APT::FTPArchive::Release::Label=Trindle" \
     -o "APT::FTPArchive::Release::Suite=$suite" \
     -o "APT::FTPArchive::Release::Codename=$suite" \
-    -o "APT::FTPArchive::Release::Architectures=amd64 arm64" \
+    -o "APT::FTPArchive::Release::Architectures=amd64" \
     -o "APT::FTPArchive::Release::Components=$component" \
     -o "APT::FTPArchive::Release::Description=Trindle" \
     release "dists/$suite") > "$repo/dists/$suite/Release"

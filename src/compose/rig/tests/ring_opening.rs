@@ -47,6 +47,7 @@ fn a_made_up_double_click_on_the_desktop_never_counts_as_the_person_asking_for_t
         let mut rig = Rig::new(dir);
         rig.bind_the_ring();
         rig.state.config.desktop_double_click = Some("trindle-ring".into());
+        rig.state.config.edge_clicks = 2;
         rig.kept_ring();
         rig.made_up_move(0.5, 0.0);
         rig.made_up_click();
@@ -79,6 +80,7 @@ fn only_a_double_click_opens_the_ring() {
         let mut rig = Rig::new(dir);
         rig.bind_the_ring();
         rig.state.config.desktop_double_click = Some("trindle-ring".into());
+        rig.state.config.edge_clicks = 2;
         rig.kept_ring();
         let spots = [(0.5, 0.5), (0.2, 0.5), (0.5, 0.0), (0.5, 0.004), (0.5, 0.9999), (0.9999, 0.5), (0.0, 0.5), (0.0, 0.0)];
         for (x, y) in spots {
@@ -137,6 +139,7 @@ fn no_window_hides_the_edge_and_a_double_click_there_works() {
         let mut rig = Rig::new(dir);
         rig.bind_the_ring();
         rig.state.config.desktop_double_click = Some("trindle-ring".into());
+        rig.state.config.edge_clicks = 2;
         rig.kept_ring();
         let who = rig.join(ClientState::default());
         let surface = rig.window(who, false);
@@ -223,6 +226,7 @@ fn a_double_click_or_tap_works_at_every_edge_and_corner_of_one_and_of_two_screen
         let mut rig = Rig::new(dir);
         rig.bind_the_ring();
         rig.state.config.desktop_double_click = Some("trindle-ring".into());
+        rig.state.config.edge_clicks = 2;
         rig.kept_ring();
         let mut names = vec![SCREEN.to_string()];
         for two in [false, true] {
@@ -514,5 +518,34 @@ fn opening_and_closing_the_ring_leaves_the_windows_and_the_keyboard_as_they_were
         rig.put_away(&panel);
         assert!(order(&rig) == stacking, "opening the ring changed which window is in front");
         assert!(rig.has_keyboard(a) && !rig.has_keyboard(b), "the keyboard did not go back to the window that had it");
+    });
+}
+
+#[test]
+fn one_click_at_the_very_edge_opens_the_ring_by_default() {
+    alone("rig::tests::ring_opening::one_click_at_the_very_edge_opens_the_ring_by_default", |dir| {
+        let mut rig = Rig::new(dir);
+        rig.bind_the_ring();
+        rig.state.config.desktop_double_click = Some("trindle-ring".into());
+        rig.kept_ring();
+        assert_eq!(rig.state.config.edge_clicks, crate::config::DEFAULT_EDGE_CLICKS);
+        for (x, y) in [(0.5, 0.0), (0.5, 0.9999), (0.9999, 0.5), (0.0, 0.5)] {
+            rig.time += 1000;
+            rig.move_by_hand(0.5, 0.5);
+            rig.move_by_hand(x, y);
+            rig.state.ring.wished = None;
+            let before = rig.ran();
+            rig.click_by_hand();
+            assert_eq!(rig.ran(), before + 1, "one click at {x},{y} did not run the ring's command");
+            assert!(rig.state.ring.wished.is_some(), "the person's one click at {x},{y} did not count");
+        }
+        for (x, y) in [(0.5, 0.5), (0.2, 0.5)] {
+            rig.time += 1000;
+            rig.move_by_hand(0.5, 0.5);
+            rig.move_by_hand(x, y);
+            let before = rig.ran();
+            rig.click_by_hand();
+            assert_eq!(rig.ran(), before, "one click at {x},{y}, away from the edge, ran the ring's command");
+        }
     });
 }

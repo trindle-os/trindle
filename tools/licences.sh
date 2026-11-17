@@ -8,7 +8,8 @@ meta=$(mktemp)
 seen=$(mktemp)
 rows=$(mktemp)
 trap 'rm -f "$meta" "$seen" "$rows"' EXIT
-cargo +1.85 metadata --format-version 1 --offline $("$here/tools/locked.sh") > "$meta"
+locked=$("$here/tools/locked.sh")
+cargo +1.85 metadata --format-version 1 --offline ${locked:+"$locked"} > "$meta"
 jq -r '.packages | sort_by(.name, .version)[]
        | [.name, .version, (.license // "unknown"), (.source // "local"), (.manifest_path | rtrimstr("/Cargo.toml")),
           ((.authors | join(", ")) as $a | if $a == "" then "the " + .name + " authors" else $a end)]
@@ -71,5 +72,14 @@ while IFS='	' read -r name version licence source dir authors; do
     fi
     echo
 done < "$rows"
+echo "================================================================"
+echo "wlsunset (code followed in src/session/nightlight.rs)"
+echo "Licence: MIT"
+echo
+echo "--- LICENSE"
+echo "Copyright 2020 Kenny Levinsen"
+echo
+cat "$here/tools/licence-texts/MIT"
+echo
 } > "$out"
 echo "$out"

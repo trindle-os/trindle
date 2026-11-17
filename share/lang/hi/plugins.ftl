@@ -2,13 +2,13 @@
 # machine translated (Hindi), not yet reviewed by a person.
 
 # Red words when plugin.ini cannot be read at the top of a plugin's folder. { $file } is the file's name, plugin.ini, and { $why } is the reason it could not be read.
-plugins-check-no-manifest = फ़ोल्डर के शीर्ष पर कोई पढ़ने योग्य { $file } नहीं है ({ $why })।
+plugins-check-no-manifest = Trindle फ़ोल्डर के शीर्ष पर मौजूद { $file } नहीं पढ़ सकता ({ $why })।
 
 # Red words when plugin.ini has no [Plugin] part. { $file } is the file's name, plugin.ini.
 plugins-check-no-plugin-part = { $file } में कोई [Plugin] भाग नहीं है।
 
 # Red words when plugin.ini is for another interface number. { $n } is the number it names; { $known } is the one this Trindle knows.
-plugins-check-interface-other = Interface={ $n } ऐसा नहीं है जिसे यह Trindle जानता हो: यह Interface={ $known } जानता है।
+plugins-check-interface-other = Trindle का यह संस्करण Interface={ $known } को समर्थन देता है, Interface={ $n } को नहीं।
 
 # Red words when plugin.ini names no interface number. { $known } is the one this Trindle knows.
 plugins-check-interface-missing = [Plugin] को Interface={ $known } चाहिए।
@@ -28,30 +28,29 @@ plugins-check-summary-one-line = [Plugin] का Summary एक पंक्त�
 # Red words when a value of plugin.ini must be plain words on one line. { $group } is the part, { $key } the key and { $max } the most letters allowed.
 plugins-plain-line =
     { $max ->
-        [one] [{ $group }] { $key } एक पंक्ति के सादे शब्द हैं, ज़्यादा से ज़्यादा { $max } अक्षर।
-       *[other] [{ $group }] { $key } एक पंक्ति के सादे शब्द हैं, ज़्यादा से ज़्यादा { $max } अक्षर।
+        [one] [{ $group }] { $key } एक पंक्ति का सादा टेक्स्ट होना चाहिए, जो { $max } अक्षर से ज़्यादा लंबा न हो।
+       *[other] [{ $group }] { $key } एक पंक्ति का सादा टेक्स्ट होना चाहिए, जो { $max } अक्षर से ज़्यादा लंबा न हो।
     }
 
 # Red words when plugin.ini asks for a permission that does not exist. { $name } is what it asked for; { $list } is the permissions there are, with commas between.
-plugins-check-permission-unknown = अनुमति { $name } ऐसी कोई अनुमति नहीं है: उपलब्ध अनुमतियाँ ये हैं { $list }।
+plugins-check-permission-unknown = अनुमति { $name } मौजूद नहीं है। उपलब्ध अनुमतियाँ ये हैं: { $list }।
 
 # Red words when the [Ring] part has no usable Icon.
 plugins-ring-needs-icon = [Ring] को एक Icon चाहिए: प्लगइन के फ़ोल्डर में एक SVG या PNG फ़ाइल।
 
 # Red words when the [Ring] Icon is not a file in the plugin's folder. { $icon } is the file name it gave.
-plugins-ring-icon-missing = [Ring] का Icon { $icon } को नाम देता है, जो प्लगइन के फ़ोल्डर में नहीं है।
+plugins-ring-icon-missing = [Ring] का Icon { $icon } को नाम देता है, पर वह प्लगइन के फ़ोल्डर में नहीं है।
 
 # Red words when the [Ring] part has no Label.
-plugins-ring-needs-label = [Ring] को एक Label चाहिए, जो पॉइंटर के ठहरने पर बोला जाता है।
+plugins-ring-needs-label = [Ring] को एक Label चाहिए, जो पॉइंटर के ठहरने पर दिखाया जाता है।
 
 # Red words when the [Ring] part has no Run.
-plugins-ring-needs-run = [Ring] को Run चाहिए, यानी क्लिक से क्या शुरू होता है।
 
 # Red words when the [Settings] part names no fields.
 plugins-settings-needs-fields = [Settings] को Fields चाहिए, यानी उसके फ़ील्ड के नाम।
 
 # Red words when the name of a settings field has marks that are not allowed. { $name } is the name.
-plugins-field-bad-name = फ़ील्ड का नाम { $name } सिर्फ़ अक्षरों, अंकों, डैश और अंडरस्कोर का हो सकता है।
+plugins-field-bad-name = फ़ील्ड के नाम { $name } में केवल अक्षर, अंक, डैश और अंडरस्कोर हो सकते हैं।
 
 # Red words when a settings field is named and has no part of its own. { $name } is the field; { $group } is the part it should have.
 plugins-field-no-part = फ़ील्ड { $name } का कोई [{ $group }] भाग नहीं है।
@@ -62,39 +61,39 @@ plugins-needs-label = [{ $group }] को एक Label चाहिए।
 # Red words when a choice field has too many choices or choices that are too long. { $group } is the part, { $most } the most choices and { $chars } the most letters in one.
 plugins-choices-limits =
     { $chars ->
-        [one] [{ $group }] Choices ज़्यादा से ज़्यादा { $most } हैं, हर एक सादे शब्दों का, ज़्यादा से ज़्यादा { $chars } अक्षर।
-       *[other] [{ $group }] Choices ज़्यादा से ज़्यादा { $most } हैं, हर एक सादे शब्दों का, ज़्यादा से ज़्यादा { $chars } अक्षर।
+        [one] [{ $group }] में ज़्यादा से ज़्यादा { $most } Choices हो सकते हैं। हर एक सादा टेक्स्ट होना चाहिए, जो { $chars } अक्षर से ज़्यादा लंबा न हो।
+       *[other] [{ $group }] में ज़्यादा से ज़्यादा { $most } Choices हो सकते हैं। हर एक सादा टेक्स्ट होना चाहिए, जो { $chars } अक्षर से ज़्यादा लंबा न हो।
     }
 
 # Red words when ChoicesFrom is not a good file name. { $group } is the part.
-plugins-choices-from-name = [{ $group }] ChoicesFrom प्लगइन के होम में एक फ़ाइल का नाम है: अक्षर, अंक, बिंदु, डैश और अंडरस्कोर, बिंदु से शुरू नहीं, कोई फ़ोल्डर नहीं।
+plugins-choices-from-name = [{ $group }] ChoicesFrom को प्लगइन के फ़ोल्डर की किसी फ़ाइल का नाम देना होगा। केवल अक्षर, अंक, बिंदु, डैश और अंडरस्कोर इस्तेमाल करें। नाम बिंदु से शुरू न करें और उसमें फ़ोल्डर का पाथ न रखें।
 
 # Red words when a choice field offers fewer than two choices. { $group } is the part.
-plugins-choice-needs-choices = [{ $group }] एक विकल्प है, इसलिए इसे दो या अधिक Choices चाहिए, या ChoicesFrom में एक फ़ाइल।
+plugins-choice-needs-choices = [{ $group }] एक विकल्प है, इसलिए इसे दो या अधिक विकल्पों के साथ Choices चाहिए, या ChoicesFrom, यानी एक फ़ाइल।
 
 # Red words when the default of a choice field is not one of its choices. { $group } is the part.
 plugins-choice-default = [{ $group }] का Default उसके Choices में से एक नहीं है।
 
 # Red words when a note field names no good file to read. { $group } is the part.
-plugins-note-needs-textfrom = [{ $group }] एक टिप्पणी है, इसलिए इसे TextFrom चाहिए, यानी प्लगइन के होम में एक फ़ाइल का नाम: अक्षर, अंक, बिंदु, डैश और अंडरस्कोर, बिंदु से शुरू नहीं, कोई फ़ोल्डर नहीं।
+plugins-note-needs-textfrom = [{ $group }] एक टिप्पणी है, इसलिए TextFrom में प्लगइन के फ़ोल्डर की किसी फ़ाइल का नाम देना होगा। केवल अक्षर, अंक, बिंदु, डैश और अंडरस्कोर इस्तेमाल करें। नाम बिंदु से शुरू न करें और उसमें फ़ोल्डर का पाथ न रखें।
 
 # Red words when a note field has a Default. { $group } is the part.
-plugins-note-default = [{ $group }] एक टिप्पणी है, जिसमें कोई सेटिंग नहीं होती, इसलिए इसका कोई Default नहीं है।
+plugins-note-default = [{ $group }] एक टिप्पणी है, इसलिए यह कोई सेटिंग नहीं सहेजती और इसका Default नहीं हो सकता।
 
 # Red words when a field's Kind is none of those there are. { $group } is the part; { $kind } is what it gave, in quotation marks.
-plugins-field-kind = [{ $group }] का Kind { $kind } है: यह switch, text, choice या note होना चाहिए।
+plugins-field-kind = [{ $group }] का Kind { $kind } है, पर यह switch, text, choice या note होना चाहिए।
 
 # Red words when a switch field has a Default that is not true or false. { $group } is the part.
-plugins-switch-default = [{ $group }] एक स्विच है, इसलिए इसका Default true या false होता है।
+plugins-switch-default = [{ $group }] एक स्विच है, इसलिए इसका Default true या false होना चाहिए।
 
 # Red words when the [Background] part is given without the background permission.
 plugins-background-needs-permission = [Background] को [Plugin] Permissions में background अनुमति चाहिए।
 
 # Red words when a plugin has nothing that makes it do anything.
-plugins-hooks-nothing = प्लगइन किसी चीज़ से नहीं जुड़ता: उसे [Ring], [Settings], [Background], [Shortcut] या सूचनाओं की अनुमति दें।
+plugins-hooks-nothing = प्लगइन किसी चीज़ से नहीं जुड़ता। उसे [Ring], [Settings], [Background], [Shortcut] या सूचनाओं की अनुमति दें।
 
 # Red words when a file inside a plugin is a link that leads out of its folder. { $path } is the link's place inside the folder.
-plugins-links-outside = { $path } प्लगइन के फ़ोल्डर के बाहर कड़ी बनाता है।
+plugins-links-outside = { $path } एक लिंक है जो प्लगइन के फ़ोल्डर के बाहर ले जाता है।
 
 # Red words when a Run line cannot be read as a command. { $group } is the part.
 plugins-run-unreadable = [{ $group }] का Run आदेश के रूप में पढ़ा नहीं जा सकता।
@@ -103,17 +102,17 @@ plugins-run-unreadable = [{ $group }] का Run आदेश के रूप �
 plugins-run-outside = [{ $group }] का Run प्लगइन के फ़ोल्डर के अंदर के प्रोग्राम का नाम होना चाहिए, { $program } नहीं।
 
 # Red words when a Run line names a program that is not there or cannot run. { $group } is the part; { $program } is the program named.
-plugins-run-missing = [{ $group }] का Run { $program } को नाम देता है, जो प्लगइन के साथ आने वाला प्रोग्राम नहीं है (गुम है, या चलाने योग्य नहीं)।
+plugins-run-missing = [{ $group }] का Run { $program } को नाम देता है, पर प्लगइन में वह प्रोग्राम नहीं है (वह गुम है या चलाने योग्य नहीं)।
 
 # Red words when the [Ring] Menu lists too many items. { $n } is how many it lists; { $max } is the most allowed.
 plugins-menu-too-many =
     { $n ->
-        [one] [Ring] के Menu में { $n } चीज़ है: ज़्यादा से ज़्यादा { $max } की अनुमति है।
-       *[other] [Ring] के Menu में { $n } चीज़ें हैं: ज़्यादा से ज़्यादा { $max } की अनुमति है।
+        [one] [Ring] के Menu में { $n } चीज़ है। ज़्यादा से ज़्यादा { $max } की अनुमति है।
+       *[other] [Ring] के Menu में { $n } चीज़ें हैं। ज़्यादा से ज़्यादा { $max } की अनुमति है।
     }
 
 # Red words when a menu item's id has marks that are not allowed. { $id } is the id.
-plugins-menu-bad-id = Menu की आईडी { $id } सिर्फ़ अक्षरों, अंकों, डैश और अंडरस्कोर की हो सकती है।
+plugins-menu-bad-id = Menu की आईडी { $id } में केवल अक्षर, अंक, डैश और अंडरस्कोर हो सकते हैं।
 
 # Red words when the same menu item is named twice. { $id } is the id.
 plugins-menu-twice = [Ring] का Menu { $id } को दो बार नाम देता है।
@@ -124,12 +123,11 @@ plugins-menu-no-part = [Ring] का Menu { $id } को नाम देता 
 # Red words when a menu item or shortcut has a Label that is not one short plain line. { $group } is the part; { $max } is the most letters.
 plugins-label-short-line =
     { $max ->
-        [one] [{ $group }] का Label एक छोटी पंक्ति है, ज़्यादा से ज़्यादा { $max } अक्षर।
-       *[other] [{ $group }] का Label एक छोटी पंक्ति है, ज़्यादा से ज़्यादा { $max } अक्षर।
+        [one] [{ $group }] का Label एक छोटी पंक्ति होना चाहिए, ज़्यादा से ज़्यादा { $max } अक्षर की।
+       *[other] [{ $group }] का Label एक छोटी पंक्ति होना चाहिए, ज़्यादा से ज़्यादा { $max } अक्षर की।
     }
 
 # Red words when a menu item has no Run. { $group } is the part.
-plugins-menu-needs-run = [{ $group }] को Run चाहिए, यानी इसे चुनने से क्या शुरू होता है।
 
 # Red words when a plugin other than Flow has a PinUnlock part. { $group } is the part's name, PinUnlock.
 plugins-pin-group-only-flow = [{ $group }] सिर्फ़ Trindle की सूची के Flow के लिए है, जो control अनुमति माँगता है।
@@ -140,46 +138,46 @@ plugins-pin-group-needs-run = [{ $group }] को Run चाहिए, वह �
 # Red words when a ShowWhen is too long. { $group } is the part; { $max } is the most letters.
 plugins-showwhen-long =
     { $max ->
-        [one] [{ $group }] का ShowWhen ज़्यादा से ज़्यादा { $max } अक्षर का है।
-       *[other] [{ $group }] का ShowWhen ज़्यादा से ज़्यादा { $max } अक्षर का है।
+        [one] [{ $group }] का ShowWhen ज़्यादा से ज़्यादा { $max } अक्षर का हो सकता है।
+       *[other] [{ $group }] का ShowWhen ज़्यादा से ज़्यादा { $max } अक्षर का हो सकता है।
     }
 
 # Red words when a ShowWhen is not written field=value. { $group } is the part.
-plugins-showwhen-form = [{ $group }] का ShowWhen field=value के रूप में लिखा जाता है, जैसे ShowWhen=mode=home: एक दूसरा फ़ील्ड और वह एक मान जो उसमें होना चाहिए।
+plugins-showwhen-form = [{ $group }] के ShowWhen में field=value लिखना होगा, जैसे ShowWhen=mode=home। कोई दूसरा फ़ील्ड और वह मान बताएँ जो उसमें होना चाहिए।
 
 # Red words when the field a ShowWhen names has marks in its name that are not allowed. { $group } is the part.
-plugins-showwhen-field-name = [{ $group }] का ShowWhen field=value के रूप में लिखा जाता है, और फ़ील्ड का नाम सिर्फ़ अक्षरों, अंकों, डैश और अंडरस्कोर का हो सकता है।
+plugins-showwhen-field-name = [{ $group }] का ShowWhen field=value के रूप में लिखना होगा, और फ़ील्ड के नाम में केवल अक्षर, अंक, डैश और अंडरस्कोर हो सकते हैं।
 
 # Red words when the value a ShowWhen needs is missing or not plain. { $group } is the part; { $max } is the most letters.
 plugins-showwhen-value =
     { $max ->
-        [one] [{ $group }] के ShowWhen को एक पंक्ति के सादे शब्दों का मान चाहिए, ज़्यादा से ज़्यादा { $max } अक्षर।
-       *[other] [{ $group }] के ShowWhen को एक पंक्ति के सादे शब्दों का मान चाहिए, ज़्यादा से ज़्यादा { $max } अक्षर।
+        [one] [{ $group }] के ShowWhen को एक पंक्ति का सादा टेक्स्ट मान चाहिए, जो { $max } अक्षर से ज़्यादा लंबा न हो।
+       *[other] [{ $group }] के ShowWhen को एक पंक्ति का सादा टेक्स्ट मान चाहिए, जो { $max } अक्षर से ज़्यादा लंबा न हो।
     }
 
 # Red words when a ShowWhen names the field it is in. { $group } is the part.
-plugins-showwhen-own = [{ $group }] का ShowWhen अपने ही फ़ील्ड को नाम देता है: उसे कोई दूसरा, पहले वाला फ़ील्ड नाम देना होगा।
+plugins-showwhen-own = [{ $group }] का ShowWhen अपने ही फ़ील्ड को नाम देता है। उसे कोई दूसरा, पहले वाला फ़ील्ड नाम देना होगा।
 
 # Red words when a ShowWhen names a field that is not there. { $group } is the part; { $other } is the field named.
 plugins-showwhen-unknown = [{ $group }] का ShowWhen फ़ील्ड { $other } को नाम देता है, जो इस प्लगइन के Fields में नहीं है।
 
 # Red words when a ShowWhen names a field that comes later. { $group } is the part; { $other } is the field named.
-plugins-showwhen-later = [{ $group }] का ShowWhen फ़ील्ड { $other } को नाम देता है, जो Fields में इसके बाद आता है: यह पहले वाला फ़ील्ड होना चाहिए।
+plugins-showwhen-later = [{ $group }] का ShowWhen फ़ील्ड { $other } को नाम देता है, जो Fields में इसके बाद आता है। यह पहले वाला फ़ील्ड होना चाहिए।
 
 # Red words when a ShowWhen names a field that has a ShowWhen too. { $group } is the part; { $other } is the field named.
-plugins-showwhen-chained = [{ $group }] का ShowWhen फ़ील्ड { $other } को नाम देता है, जिसका अपना ShowWhen है: कोई फ़ील्ड सिर्फ़ ऐसे फ़ील्ड पर निर्भर हो सकता है जिसका कोई ShowWhen न हो।
+plugins-showwhen-chained = [{ $group }] का ShowWhen फ़ील्ड { $other } को नाम देता है, जिसका अपना ShowWhen है। कोई फ़ील्ड सिर्फ़ ऐसे फ़ील्ड पर निर्भर हो सकता है जिसका कोई ShowWhen न हो।
 
 # Red words when a ShowWhen names a switch and a value that is not true or false. { $group } is the part; { $other } is the switch.
-plugins-showwhen-switch = [{ $group }] का ShowWhen स्विच { $other } को नाम देता है, इसलिए उसका मान true या false है।
+plugins-showwhen-switch = [{ $group }] का ShowWhen स्विच { $other } को नाम देता है, इसलिए उसका मान true या false होना चाहिए।
 
 # Red words when a ShowWhen gives a value that the choice field it names does not offer. { $group } is the part; { $value } is the value, in quotation marks; { $other } is the field.
 plugins-showwhen-not-choice = [{ $group }] के ShowWhen का मान { $value } है, जो { $other } के Choices में से एक नहीं है।
 
 # Red words when a ShowWhen names a note field. { $group } is the part; { $other } is the note.
-plugins-showwhen-note = [{ $group }] का ShowWhen टिप्पणी { $other } को नाम देता है, जिसमें कोई सेटिंग नहीं होती: कोई फ़ील्ड सिर्फ़ स्विच, विकल्प या टेक्स्ट पर निर्भर हो सकता है।
+plugins-showwhen-note = [{ $group }] का ShowWhen टिप्पणी { $other } का हवाला देता है, जो कोई सेटिंग नहीं सहेजती। इसकी जगह स्विच, विकल्प या टेक्स्ट फ़ील्ड इस्तेमाल करें।
 
 # Red words when the ports a plugin asks to listen on are not good. { $why } says what is wrong with them.
-plugins-listen-fault = [नेटवर्क] सुनना: { $why }
+plugins-listen-fault = [Network] Listen: { $why }
 
 # Red words when a plugin names ports to listen on without the network permission.
 # SAFETY: needs a human review before it ships
@@ -191,16 +189,16 @@ plugins-listen-needs-listen = [Network] Listen को [Plugin] Permissions म�
 
 # Red words when a plugin has the listen permission and names no ports.
 # SAFETY: needs a human review before it ships
-plugins-listen-needs-ports = listen अनुमति को [Network] Listen चाहिए, यानी अंदर आने देने वाले पोर्ट।
+plugins-listen-needs-ports = listen अनुमति को [Network] Listen चाहिए, जिसमें उन पोर्ट की सूची हो जिन पर प्लगइन कनेक्शन स्वीकार कर सकता है।
 
 # Red words when the ports to open for a plugin are asked of a plugin.ini for another interface.
-plugins-ports-interface = इसकी plugin.ini ऐसे इंटरफ़ेस की नहीं है जिसे यह Trindle जानता हो।
+plugins-ports-interface = इसकी plugin.ini ऐसा इंटरफ़ेस इस्तेमाल करती है जिसे Trindle का यह संस्करण समर्थन नहीं देता।
 
 # Red words when the ports to open for a plugin are asked and it names none.
-plugins-ports-none = यह सुनने के लिए कोई पोर्ट नाम नहीं देता।
+plugins-ports-none = इसकी सूची में सुनने के लिए कोई पोर्ट नहीं है।
 
 # Red words when the ports to open for a plugin are asked and its plugin.ini cannot be read.
-plugins-ports-unreadable = इसकी plugin.ini पढ़ी नहीं जा सकी।
+plugins-ports-unreadable = इसकी plugin.ini पढ़ी नहीं जा सकती।
 
 # Red words when the ports to open for a plugin are asked and it has not been allowed to listen.
 # SAFETY: needs a human review before it ships
@@ -208,23 +206,27 @@ plugins-ports-not-allowed = इसे सुनने की अनुमति 
 
 # Red words when the ports a plugin names are not the ones the person was shown when allowing it to listen.
 # SAFETY: needs a human review before it ships
-plugins-ports-changed = जो पोर्ट यह नाम देता है वे वे नहीं हैं जिनकी अनुमति दी गई थी। उनकी अनुमति फिर देनी होगी।
+plugins-ports-changed = सूची के पोर्ट बदल गए हैं। आपको उन पर कनेक्शन की अनुमति फिर देनी होगी।
 
 # Headline on a plugin that has been allowed none of what it asks for. { $name } is the plugin; { $n } is how many things it asks for.
 # SAFETY: needs a human review before it ships
-plugins-needs-none = { $name } को काम करने के लिए आपकी अनुमति चाहिए: { $n } में से 0 की अनुमति है।
+plugins-needs-none =
+    { $n ->
+        [one] { $name } को काम करने से पहले आपकी अनुमति चाहिए। उसकी माँगी हुई एक अनुमति आपने नहीं दी है।
+       *[other] { $name } को काम करने से पहले आपकी अनुमति चाहिए। उसकी माँगी हुई { $n } अनुमतियों में से आपने कोई नहीं दी है।
+    }
 
 # Headline on a plugin that has been allowed some of what it asks for. { $name } is the plugin; { $a } is how many are allowed; { $n } is how many it asks for.
 # SAFETY: needs a human review before it ships
-plugins-needs-some = { $name } के पास जो अनुमति वह माँगता है उसका सिर्फ़ कुछ हिस्सा है: { $n } में से { $a } की अनुमति है।
+plugins-needs-some = { $name } की माँगी हुई { $n } अनुमतियों में से आपने केवल { $a } दी हैं।
 
 # Quiet line on a plugin that has been allowed all it asks for. { $n } is how many things it asks for.
 # SAFETY: needs a human review before it ships
 plugins-settled =
     { $n ->
         [0] यह कुछ नहीं माँगता।
-        [one] जो एक चीज़ यह माँगता है उसकी अनुमति है।
-       *[other] जो सभी { $n } चीज़ें यह माँगता है उनकी अनुमति है।
+        [one] जो अनुमति इसे चाहिए, वह दी गई है।
+       *[other] जो सभी { $n } अनुमतियाँ यह माँगता है, वे दी गई हैं।
     }
 
 # Button that opens the window where a plugin's permissions are allowed.
@@ -232,7 +234,7 @@ plugins-settled =
 plugins-allow = अनुमति दें
 
 # Said among what a newer version of a plugin asks for that the old one did not: other ports to be reached on. It follows words such as "It asks for more than before:".
-plugins-other-ports = पहले से अलग पोर्ट पर पहुँचा जा सकेगा
+plugins-other-ports = अलग पोर्ट पर पहुँचा जाना
 
 # Red words when the ports of a plugin cannot be opened because another plugin that holds them is no longer installed.
 plugins-not-installed = इंस्टॉल नहीं है।
@@ -244,16 +246,16 @@ plugins-another-plugin = कोई और प्लगइन
 plugins-that-not-installed = वह प्लगइन इंस्टॉल नहीं है।
 
 # Red words when a permission could not be kept. { $why } is the reason.
-plugins-not-saved = इसे सहेजा नहीं जा सका: { $why }
+plugins-not-saved = यह सहेजा नहीं जा सका: { $why }
 
 # Red words when a plugin's files could not be copied for an install.
-plugins-copy-failed = प्लगइन की फ़ाइलें कॉपी नहीं की जा सकीं।
+plugins-copy-failed = प्लगइन की फ़ाइलें कॉपी नहीं हो सकीं।
 
 # Red words when an update was not put in and the plugin's background part is not running either. { $why } is the first reason; { $not } is why the background part is not running.
-plugins-swap-not-running = { $why } इसका पृष्ठभूमि वाला हिस्सा चल नहीं रहा: { $not }
+plugins-swap-not-running = { $why } प्लगइन पृष्ठभूमि में नहीं चल रहा: { $not }
 
 # Words after a colon: a plugin's background part cannot be started because trindle-plugin cannot be found.
-plugins-bg-no-program = इसे शुरू करने के लिए trindle-plugin नहीं मिला।
+plugins-bg-no-program = Trindle को इसे शुरू करने के लिए trindle-plugin नहीं मिला।
 
 # Words after a colon: a plugin's background part did not start in time. { $n } is how many seconds it was given.
 plugins-bg-slow =
@@ -272,17 +274,17 @@ plugins-bg-which-session = यह तय नहीं कर सकता कि
 plugins-folder-in-the-way = फ़ाइल की जगह पर एक फ़ोल्डर है
 
 # Error text when a plugin's id is not an id.
-plugins-not-an-id = किसी प्लगइन की आईडी नहीं
+plugins-not-an-id = मान्य आईडी नहीं
 
 # Red words when a plugin asks for more shortcuts than are allowed. { $n } is how many it asks for; { $max } is the most allowed.
 plugins-shortcut-too-many =
     { $n ->
-        [one] [Plugin] के Shortcuts में { $n } शॉर्टकट है: ज़्यादा से ज़्यादा { $max } की अनुमति है।
-       *[other] [Plugin] के Shortcuts में { $n } शॉर्टकट हैं: ज़्यादा से ज़्यादा { $max } की अनुमति है।
+        [one] [Plugin] के Shortcuts में { $n } शॉर्टकट है। ज़्यादा से ज़्यादा { $max } की अनुमति है।
+       *[other] [Plugin] के Shortcuts में { $n } शॉर्टकट हैं। ज़्यादा से ज़्यादा { $max } की अनुमति है।
     }
 
 # Red words when a shortcut's id has marks that are not allowed. { $id } is the id.
-plugins-shortcut-bad-id = शॉर्टकट की आईडी { $id } सिर्फ़ अक्षरों, अंकों, डैश और अंडरस्कोर की हो सकती है।
+plugins-shortcut-bad-id = शॉर्टकट की आईडी { $id } में केवल अक्षर, अंक, डैश और अंडरस्कोर हो सकते हैं।
 
 # Red words when the same shortcut is named twice. { $id } is the id.
 plugins-shortcut-twice = [Plugin] के Shortcuts में { $id } दो बार नाम आया है।
@@ -291,22 +293,21 @@ plugins-shortcut-twice = [Plugin] के Shortcuts में { $id } दो ब�
 plugins-shortcut-no-part = [Plugin] के Shortcuts में { $id } का नाम है, जिसका कोई [{ $group }] भाग नहीं है।
 
 # Red words when the keys a plugin asks for are already one of Trindle's shortcuts. { $group } is the part; { $keys } are the keys.
-plugins-shortcut-keys-trindle = [{ $group }] की Keys { $keys } पहले से Trindle का शॉर्टकट है; दूसरी कुंजियाँ चुनें।
+plugins-shortcut-keys-trindle = [{ $group }] की Keys { $keys } पहले से Trindle के शॉर्टकट में से एक है। दूसरी कुंजियाँ चुनें।
 
 # Red words when the keys a plugin asks for are used by another shortcut of the same plugin. { $group } is the part; { $keys } are the keys.
-plugins-shortcut-keys-twice = [{ $group }] की Keys { $keys } प्लगइन के किसी दूसरे शॉर्टकट में इस्तेमाल हो रही हैं।
+plugins-shortcut-keys-twice = [{ $group }] की Keys { $keys } इस प्लगइन के किसी दूसरे शॉर्टकट में पहले से इस्तेमाल हो रही हैं।
 
 # Red words when the keys a plugin asks for cannot be read as keys. { $group } is the part; { $why } says what is wrong with them.
 plugins-shortcut-keys-needed = [{ $group }] को Keys चाहिए, जैसे Ctrl+Alt+S। { $why }
 
 # Red words when a shortcut has no Run. { $group } is the part.
-plugins-shortcut-needs-run = [{ $group }] को Run चाहिए, यानी कुंजियाँ क्या शुरू करती हैं।
 
 # Red words beside a shortcut in Settings when the keys the person typed are not a shortcut. { $why } says what is wrong with them.
-plugins-shortcut-typed-bad = इसके लिए लिखी कुंजियाँ शॉर्टकट नहीं हैं। { $why }
+plugins-shortcut-typed-bad = यह कुंजी संयोजन मान्य शॉर्टकट नहीं है। { $why }
 
 # Red words in Settings when the keys typed are already one of Trindle's shortcuts. { $keys } are the keys.
-plugins-shortcut-trindle = { $keys } पहले से Trindle का शॉर्टकट है।
+plugins-shortcut-trindle = { $keys } पहले से Trindle के शॉर्टकट में से एक है।
 
 # Red words in Settings when the keys typed are already one of the person's own shortcuts. { $keys } are the keys.
 plugins-shortcut-yours = { $keys } पहले से आपका अपना एक शॉर्टकट है।
@@ -318,16 +319,32 @@ plugins-shortcut-used = { $keys } पहले से { $holder } द्वा�
 plugins-shortcut-unknown = यह किसी इंस्टॉल किए प्लगइन का शॉर्टकट नहीं है।
 
 # Red words in Settings when a shortcut was kept but could not be put to use. { $why } is the reason.
-plugins-shortcut-not-in-use = इसे इस्तेमाल में नहीं लाया जा सका ({ $why })।
+plugins-shortcut-not-in-use = Trindle इसे इस्तेमाल नहीं कर सका ({ $why })।
 
 # Red words in Settings when the file of shortcut choices cannot be read, so nothing was changed. { $why } is the reason.
-plugins-shortcut-not-saved-unchanged = इसे सहेजा नहीं जा सका: कुछ नहीं बदला गया, क्योंकि { $why }।
+plugins-shortcut-not-saved-unchanged = Trindle इसे सहेज नहीं सका, क्योंकि { $why }। कुछ नहीं बदला है।
 
 # Red words in Settings when the file of shortcut choices could not be written. { $why } is the reason.
-plugins-shortcut-not-saved = इसे सहेजा नहीं जा सका ({ $why })।
+plugins-shortcut-not-saved = यह सहेजा नहीं जा सका: { $why }।
 
+# Said when a plugin's ports can't be closed. { $why } is the reason.
+plugins-ports-not-closed = इसके पोर्ट बंद नहीं किए जा सके: { $why }।
+
+# Said when a plugin's ports can't be opened and listening is off again. { $why } is the reason.
+plugins-ports-not-opened = Trindle इसके पोर्ट नहीं खोल सका, इसलिए सुनना फिर बंद कर दिया गया: { $why }।
+
+# Said when a plugin's ports can't be opened and listening couldn't be switched off again. { $why } and { $kept } are the reasons.
+plugins-ports-not-opened-kept = इसके पोर्ट खोले नहीं गए ({ $why }), और सुनना फिर बंद भी नहीं किया जा सका ({ $kept })। कुछ भी खुला नहीं है। इसे Settings, अनुमतियाँ में बंद करें।
 
 
 # Red words when a plugin other than Trindle's screen reader asks for the accessibility permission.
-plugins-accessibility-only-reader = सुलभता की अनुमति केवल सूची में मौजूद Trindle के स्क्रीन रीडर के लिए है।
+plugins-accessibility-only-reader = सुलभता की अनुमति का इस्तेमाल केवल सूची में मौजूद Trindle का स्क्रीन रीडर कर सकता है।
 
+plugins-permission-twice = अनुमति { $name } का नाम दो बार लिखा गया है।
+
+# Red words when plugin.ini asks for the local network and the whole network together. { $home } is the local network permission name.
+plugins-home-network-or-network = { $home } या network में से एक माँगें, दोनों नहीं: network स्थानीय नेटवर्क के साथ इंटरनेट तक भी पहुँचता है।
+
+plugins-needs-run = [{ $group }] को Run चाहिए, यानी चलाने का आदेश।
+
+plugins-swap-not-back = { $why } पुराना संस्करण भी वापस नहीं रखा जा सका: { $back } दोनों प्लगइन के फ़ोल्डर में रखे हैं।

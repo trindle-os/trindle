@@ -8,7 +8,7 @@ settings-datetime-keywords = time zone clock date المنطقة الزمنية 
 
 # Help line at the foot of the Date and time page.
 # SAFETY: needs a human review before it ships
-settings-datetime-help = المنطقة الزمنية والوقت التلقائي يحتاجان إلى كلمة مرور المسؤول.
+settings-datetime-help = تغيير المنطقة الزمنية أو الوقت التلقائي يحتاج إلى كلمة مرور المسؤول.
 
 # Spoken name of the picture of the clock at the top of the page.
 settings-datetime-time-now = الوقت الآن
@@ -41,7 +41,7 @@ settings-datetime-minute = الدقيقة
 settings-datetime-no-time = تعذّر ضبط الوقت.
 
 # Red words when the time was set by hand while automatic time is on.
-settings-datetime-keeps-right = الساعة تضبط نفسها الآن. أوقف ذلك أعلاه، ثم اضبط الوقت يدويًا.
+settings-datetime-keeps-right = الساعة تضبط نفسها تلقائيًا. أوقف ذلك أعلاه، ثم اضبط الوقت يدويًا.
 
 # Red words when the system's message bus could not be reached.
 settings-datetime-no-bus = تعذّر الوصول إلى ناقل النظام.
@@ -50,7 +50,7 @@ settings-datetime-no-bus = تعذّر الوصول إلى ناقل النظام.
 settings-datetime-not-answering = خدمة الوقت لا تردّ.
 
 # Red words when automatic time could not be turned on.
-settings-datetime-ntp-on-failed = تعذّر جعل الساعة تضبط نفسها.
+settings-datetime-ntp-on-failed = تعذّر تشغيل الوقت التلقائي.
 
 # Red words when automatic time could not be turned off.
 settings-datetime-ntp-off-failed = تعذّر إيقاف الوقت التلقائي.
@@ -65,13 +65,13 @@ settings-datetime-not-real = هذا ليس تاريخًا صحيحًا.
 settings-datetime-it-is = الوقت { $time }، التاريخ { $date }.
 
 # Headline of the page when the time service is not answering.
-settings-datetime-service-down = خدمة الوقت لا تردّ، لذا لا يمكن تغيير الساعة هنا.
+settings-datetime-service-down = خدمة الوقت لا تستجيب، لذا لا يمكنك تغيير الوقت هنا.
 
 # Headline of the page when the clock is automatic and in step: { $time } is the time and { $date } the date.
-settings-datetime-it-is-right = الوقت { $time }، التاريخ { $date }، والساعة تضبط نفسها.
+settings-datetime-it-is-right = الوقت { $time }، التاريخ { $date }. الساعة تضبط نفسها تلقائيًا.
 
 # Headline of the page when the clock is automatic but not yet in step: { $time } is the time and { $date } the date.
-settings-datetime-it-is-checks = الوقت { $time }، التاريخ { $date }. تتحقق الساعة من نفسها عندما تصل إلى الإنترنت.
+settings-datetime-it-is-checks = الوقت { $time }، التاريخ { $date }. ستضبط الساعة نفسها عندما يتصل الحاسوب بالإنترنت.
 
 # Headline of the page when the clock is set by hand: { $time } is the time and { $date } the date.
 settings-datetime-it-is-hand = الوقت { $time }، التاريخ { $date }. الساعة مضبوطة يدويًا.
@@ -86,19 +86,16 @@ settings-datetime-city-region-offset = { $city }، { $region }، { $offset }
 settings-datetime-tip = الوقت { $time }، التاريخ { $date }، { $zone }.
 
 # Help text of the clock card when the time service is not answering or not yet read.
-settings-datetime-ring-about = تُكتب الساعة في وسط الحلقة بنظام 24 أو 12 ساعة، مع الثواني أو بدونها. ساعة الحلقة وحدها تتبع هذا؛ أما التواريخ والأوقات في البرامج فتتبع الصيغ المختارة في المنطقة واللغة.
+settings-datetime-ring-about = يمكن أن تعرض الساعة في وسط الحلقة نظام 24 أو 12 ساعة، مع الثواني أو بدونها. هذا يغيّر ساعة الحلقة فقط. أما التواريخ والأوقات في البرامج فتتبع الصيغ التي تختارها في المنطقة واللغة.
 
 # Heading of the card with the clock settings.
 settings-datetime-the-clock = الساعة
 
 # Heading of the line shown when the time service is not answering.
-settings-datetime-service-down-line = خدمة الوقت لا تردّ
-
-# Under Set the time automatically when the internet can be used.
-settings-datetime-from-internet = من الإنترنت، عند الاتصال.
+settings-datetime-service-down-line = خدمة الوقت لا تستجيب
 
 # Under Set the time automatically when the time service is not installed.
-settings-datetime-needs-timesyncd = يحتاج إلى تثبيت systemd-timesyncd.
+settings-datetime-needs-timesyncd = ثبّت systemd-timesyncd أولًا.
 
 # Label of the switch for automatic time, and heading of its line.
 settings-datetime-set-auto = اضبط الوقت تلقائيًا
@@ -112,16 +109,13 @@ settings-datetime-set-date-time = اضبط التاريخ والوقت
 # Heading of the line for setting the time by hand.
 settings-datetime-by-hand = اضبط الوقت يدويًا
 
-# Under the Set the time by hand heading.
-settings-datetime-by-hand-sub = أوقف الوقت التلقائي أولًا، فهو يعمل الآن.
-
 # Help text of the clock card (the information button) when the time service can keep the time from the internet.
 # SAFETY: needs a human review before it ships
-settings-datetime-about = عند الضبط التلقائي، تُقارَن الساعة بخوادم الوقت على الإنترنت كلما اتصل الحاسوب، وتضبط نفسها. وعند إيقافه، يُكتب التاريخ والوقت يدويًا. والمنطقة الزمنية تخبر الإضاءة الليلية أيضًا بوقت غروب الشمس. كلاهما يحتاج إلى كلمة مرور المسؤول. تُكتب الساعة في وسط الحلقة بنظام 24 أو 12 ساعة، مع الثواني أو بدونها. ساعة الحلقة وحدها تتبع هذا؛ أما التواريخ والأوقات في البرامج فتتبع الصيغ المختارة في المنطقة واللغة.
+settings-datetime-about = عندما يكون الوقت التلقائي مفعّلًا، تتحقق الساعة من نفسها بمقارنتها بخوادم الوقت على الإنترنت كلما اتصل الحاسوب. وعندما يكون متوقفًا، تكتب التاريخ والوقت يدويًا. والمنطقة الزمنية تخبر الإضاءة الليلية أيضًا بوقت غروب الشمس. كلاهما يحتاج إلى كلمة مرور المسؤول. يمكن أن تعرض الساعة في وسط الحلقة نظام 24 أو 12 ساعة، مع الثواني أو بدونها. هذا يغيّر ساعة الحلقة فقط. أما التواريخ والأوقات في البرامج فتتبع الصيغ التي تختارها في المنطقة واللغة.
 
 # Help text of the clock card (the information button) when the time service is not installed.
 # SAFETY: needs a human review before it ships
-settings-datetime-about-no-ntp = عند الضبط التلقائي، تُقارَن الساعة بخوادم الوقت على الإنترنت كلما اتصل الحاسوب، وتضبط نفسها. وعند إيقافه، يُكتب التاريخ والوقت يدويًا. والمنطقة الزمنية تخبر الإضاءة الليلية أيضًا بوقت غروب الشمس. كلاهما يحتاج إلى كلمة مرور المسؤول. إبقاء الوقت مضبوطًا من الإنترنت يحتاج إلى systemd-timesyncd: sudo apt install systemd-timesyncd تُكتب الساعة في وسط الحلقة بنظام 24 أو 12 ساعة، مع الثواني أو بدونها. ساعة الحلقة وحدها تتبع هذا؛ أما التواريخ والأوقات في البرامج فتتبع الصيغ المختارة في المنطقة واللغة.
+settings-datetime-about-no-ntp = عندما يكون الوقت التلقائي مفعّلًا، تتحقق الساعة من نفسها بمقارنتها بخوادم الوقت على الإنترنت كلما اتصل الحاسوب. وعندما يكون متوقفًا، تكتب التاريخ والوقت يدويًا. والمنطقة الزمنية تخبر الإضاءة الليلية أيضًا بوقت غروب الشمس. كلاهما يحتاج إلى كلمة مرور المسؤول. لضبط الوقت من الإنترنت، تحتاج إلى systemd-timesyncd: sudo apt install systemd-timesyncd. يمكن أن تعرض الساعة في وسط الحلقة نظام 24 أو 12 ساعة، مع الثواني أو بدونها. هذا يغيّر ساعة الحلقة فقط. أما التواريخ والأوقات في البرامج فتتبع الصيغ التي تختارها في المنطقة واللغة.
 
 # An item in the list of ways to write the ring's clock: { $time } is the time written that way and { $what } its name.
 settings-datetime-clock-option = { $time }  ({ $what })
@@ -131,7 +125,3 @@ settings-datetime-show-as = اعرضها بصيغة
 
 # Heading of the line for the ring's clock.
 settings-datetime-rings-clock = ساعة الحلقة
-
-# Under The ring's clock heading.
-settings-datetime-rings-clock-sub = كيف تكتب الحلقة الوقت.
-

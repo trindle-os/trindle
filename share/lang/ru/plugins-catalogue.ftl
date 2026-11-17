@@ -1,7 +1,7 @@
 # machine translated (Russian), not yet reviewed by a person.
 
 # Red words on the Plugins page in Apps when updates are paused because the record of the highest catalogue number accepted is damaged. The Start again button goes beside it.
-plugins-catalogue-paused = Обновления плагинов приостановлены: список плагинов повреждён.
+plugins-catalogue-paused = Обновления плагинов приостановлены, потому что список плагинов повреждён.
 
 # Button beside the pause words in Apps that clears the damaged record. It asks for the administrator's password.
 # SAFETY: needs a human review before it ships
@@ -11,14 +11,14 @@ plugins-catalogue-start-again = Начать заново
 plugins-start-not-taken = Не удалось удалить запись: { $why }
 
 # Error text when a name given to take the record away had a nul in it.
-plugins-start-nul = В имени оказался нулевой символ (nul).
+plugins-start-nul = В имени есть нулевой байт (null).
 
 # Error text when there is no record name to take away.
 plugins-start-no-note = Нет записи, которую можно удалить.
 
 # Red line under Trindle's own plugins when this Trindle has no key to check the catalogue with.
 # SAFETY: needs a human review before it ships
-plugins-refused-no-key = В этой Trindle нет ключа для проверки каталога плагинов, поэтому она не принимает никакой каталог.
+plugins-refused-no-key = Проверить каталог плагинов невозможно: в этой Trindle нет ключа проверки.
 
 # Red line under Trindle's own plugins when the catalogue came with no signature.
 # SAFETY: needs a human review before it ships
@@ -33,10 +33,10 @@ plugins-refused-wrong-size = Подпись каталога плагинов Tr
 plugins-refused-not-signed = Каталог плагинов Trindle не подписан ключом Trindle, поэтому он не использован.
 
 # Red line under Trindle's own plugins when the catalogue does not say which number it is.
-plugins-refused-no-number = В каталоге плагинов Trindle не указан его номер, поэтому он не использован.
+plugins-refused-no-number = В каталоге плагинов Trindle нет номера версии, поэтому он не использован.
 
 # Red line under Trindle's own plugins when the catalogue is older than one accepted before. { $is } is its number; { $after } is the number accepted before.
-plugins-refused-older = Каталог плагинов Trindle старше того, что был принят раньше (номер { $is }, а принят был { $after }), поэтому он не использован.
+plugins-refused-older = Каталог плагинов Trindle не использован: его номер версии { $is } старше принятого ранее, { $after }.
 
 # Red line under Trindle's own plugins when the catalogue is signed but cannot be read. { $why } says what is wrong with it.
 plugins-refused-unreadable = Каталог плагинов Trindle подписан, но его нельзя прочитать, поэтому он не использован: { $why }
@@ -54,7 +54,7 @@ plugins-catalogue-too-big = Каталог слишком велик.
 plugins-catalogue-not-one = Это не каталог плагинов: в { $file } нет раздела [Catalogue] с Format.
 
 # Why a catalogue cannot be read: it is of a newer kind. { $format } is the number of the kind this Trindle reads.
-plugins-catalogue-newer = Каталог новее, чем может прочитать эта Trindle (Format={ $format }).
+plugins-catalogue-newer = Этот каталог использует более новый формат, чем может прочитать эта версия Trindle. Поддерживается Format={ $format }.
 
 # Why one plugin of the catalogue is left out. { $id } is the plugin; { $why } says which part is wrong: id, needs, archive, hash, permission or icon.
 plugins-catalogue-left-out =
@@ -63,7 +63,7 @@ plugins-catalogue-left-out =
         [needs] ему нужны Name и Version
         [archive] его Archive - не имя файла .tar.zst рядом с каталогом
         [hash] его SHA256 - не 64 шестнадцатеричные цифры
-        [permission] он просит несуществующее разрешение
+        [permission] он запрашивает несуществующее разрешение
        *[icon] его Icon - не имя файла SVG или PNG рядом с каталогом
     }.
 
@@ -74,7 +74,7 @@ plugins-unpack-tar = Не удалось запустить tar: { $why }
 plugins-unpack-failed = Не удалось распаковать архив: { $why }
 
 # Said in place of the unpacking program's own line when it said nothing.
-plugins-unpack-tar-refused = tar отказался
+plugins-unpack-tar-refused = причина неизвестна
 
 # Red words when an archive holds no plugin.ini. { $file } is the file's name, plugin.ini.
 plugins-unpack-no-manifest = В архиве нет файла { $file } ни на верхнем уровне, ни в единственной папке на верхнем уровне.
@@ -90,7 +90,7 @@ plugins-download-failed = Не удалось скачать: { $why }
 
 # Red words when a downloaded plugin is not the file the catalogue lists.
 # SAFETY: needs a human review before it ships
-plugins-install-hash = Файл не тот, что указан в каталоге (SHA-256 отличается), поэтому ничего не установлено.
+plugins-install-hash = Скачанный файл не совпадает с контрольной суммой из каталога (SHA-256), поэтому ничего не установлено.
 
 # Red words when a downloaded plugin fails the check of its plugin.ini. { $why } is the first thing wrong.
 # SAFETY: needs a human review before it ships

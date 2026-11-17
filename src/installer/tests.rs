@@ -2,6 +2,7 @@
 
 use super::pages::{keep_words, matching, ready_sentence};
 use super::*;
+use crate::common::shipped_languages::in_language;
 use crate::toolkit::theme::Theme;
 use crate::toolkit::ui::Ui;
 use crate::toolkit::widget::Tone;
@@ -9,15 +10,24 @@ use crate::toolkit::widget::Tone;
 #[test]
 fn warns_before_a_disk_is_replaced() {
     let erase = Some(Where::Erase { disk: "/dev/sda".into() });
-    assert_eq!(ready_sentence(&erase), ("Everything on /dev/sda will be replaced.".to_string(), Tone::Warn));
-    assert_eq!(ready_sentence(&Some(Where::Beside { part: "/dev/sda3".into(), leave: 1 })).1, Tone::Warn);
-    assert_eq!(ready_sentence(&None).1, Tone::Problem);
+    assert_eq!(ready_sentence(&erase, None), ("Everything on /dev/sda will be replaced.".to_string(), Tone::Warn));
+    assert_eq!(ready_sentence(&Some(Where::Beside { part: "/dev/sda3".into(), leave: 1 }), None).1, Tone::Warn);
+    assert_eq!(ready_sentence(&None, None).1, Tone::Problem);
+}
+
+#[test]
+fn the_last_page_names_the_disk_by_model_size_and_what_is_on_it() {
+    let part = plan::Part { dev: "/dev/sda1".into(), size: 100 * plan::GIB, fstype: "ntfs".into(), ..plan::Part::default() };
+    let disk = Disk { dev: "/dev/sda".into(), model: "Example disk".into(), size: 500 * plan::GIB, parts: vec![part], ..Disk::default() };
+    let (words, tone) = ready_sentence(&Some(Where::Erase { disk: "/dev/sda".into() }), Some(&disk));
+    assert_eq!(tone, Tone::Warn);
+    assert!(words.contains("Example disk") && words.contains("/dev/sda") && words.contains("Windows"), "{words}");
 }
 
 #[test]
 fn reminds_about_the_disk_password_only_when_there_is_one() {
     assert_eq!(keep_words(Lock::None), None);
-    assert!(keep_words(Lock::Password).is_some_and(|w| w.contains("Write the disk password down")));
+    assert!(keep_words(Lock::Password).is_some_and(|w| w.contains("write the disk password down")));
     assert!(keep_words(Lock::Chip).is_some_and(|w| w.contains("chip")));
 }
 
@@ -29,6 +39,7 @@ fn installer(events: &Loop) -> Installer {
     let machine = Machine {
         locales: vec![("en_GB.UTF-8".into(), "English (United Kingdom)".into()),
                       ("fr_FR.UTF-8".into(), "French (France)".into())],
+        tongues: vec![("en".into(), "English".into()), ("fr".into(), "Français".into())],
         keyboards: vec![("gb\t".into(), "English (UK)".into())],
         zones: vec![("Europe/London".into(), "Europe/London".into())],
         disks: vec![disk],
@@ -207,9 +218,9 @@ fn the_disk_password_counts_only_when_typed_twice_the_same() {
     let mut app = installer(&events);
     app.update(Msg::Lock(Lock::Password));
     app.page = DISK_PASSWORD;
-    app.update(Msg::DiskOne("river stone".into()));
+    app.update(Msg::DiskOne("river stone".to_string().into()));
     assert!(app.missing().is_some());
-    app.update(Msg::DiskTwo("river stone".into()));
+    app.update(Msg::DiskTwo("river stone".to_string().into()));
     assert_eq!(app.plan.disk_password, "river stone");
     assert!(app.missing().is_none());
 }
@@ -256,7 +267,7 @@ fn the_wipe_comes_first_and_past_it_there_is_stop_and_no_back() {
     app.doing = "Copying the system".into();
     app.page = ABOUT_YOU;
     let said = app.foot().said();
-    for word in ["Install started", "40%", "Copying the system", "button: Stop"] {
+    for word in ["Installing", "40%", "Copying the system", "button: Stop"] {
         assert!(said.contains(&word.to_string()), "{word}: {said:?}");
     }
     assert!(!said.contains(&"button: Back".to_string()), "{said:?}");
@@ -272,8 +283,8 @@ fn stop_asks_once_then_forgets_what_was_typed() {
     let (helper, lines) = std::sync::mpsc::channel::<zeroize::Zeroizing<String>>();
     app.helper = Some(helper);
     app.page = ABOUT_YOU;
-    app.update(Msg::One("river stone".into()));
-    app.update(Msg::DiskOne("river stone".into()));
+    app.update(Msg::One("river stone".to_string().into()));
+    app.update(Msg::DiskOne("river stone".to_string().into()));
     app.update(Msg::Stop);
     assert!(app.armed && app.helper.is_some());
     app.update(Msg::Stop);
@@ -313,12 +324,12 @@ fn install_stays_off_until_the_terms_are_ticked_and_stop_forgets_the_tick() {
     app.page = READY;
     let install = |app: &Installer| app.foot().buttons().into_iter().find(|(tip, _)| tip == "Install").map(|(_, on)| on);
     assert_eq!(install(&app), Some(false));
-    assert!(app.foot().said().contains(&"Tick the box to go on".to_string()));
+    assert!(app.foot().said().contains(&"Agreement required".to_string()));
     app.update(Msg::Install);
     assert!(!app.armed && !app.plan.terms);
     app.update(Msg::Terms(true));
     assert_eq!(install(&app), Some(true));
-    assert!(app.plan.terms && !app.foot().said().contains(&"Tick the box to go on".to_string()));
+    assert!(app.plan.terms && !app.foot().said().contains(&"Agreement required".to_string()));
     app.update(Msg::Install);
     assert!(app.armed);
     app.update(Msg::Terms(false));
@@ -385,13 +396,6 @@ fn enter_twice_on_install_confirms_without_a_shift_tab() {
     assert_eq!(ui.keyboard_on().as_deref(), Some("installer:install"), "and when it disarms again");
 }
 
-fn in_language<R>(tag: &str, during: impl FnOnce() -> R) -> R {
-    use crate::toolkit::lang::{english, folder_files, with_catalogue, Bundle, Catalogue};
-    let files = folder_files(&std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("share/lang").join(tag));
-    let files: Vec<(&str, &str)> = files.iter().map(|(a, b)| (a.as_str(), b.as_str())).collect();
-    with_catalogue(Catalogue::new(Bundle::from_files(tag, &files), english()), during)
-}
-
 #[test]
 fn every_page_fits_the_window_and_reads_from_the_right_in_arabic_and_urdu() {
     for tag in ["ar", "ur"] {
@@ -428,6 +432,7 @@ fn a_computer_with_too_little_memory_cannot_go_past_the_first_page_and_says_why(
     let events = Loop::new();
     let mut app = installer(&events);
     app.plan.locale = "en_GB.UTF-8".into();
+    app.plan.trindle_language = "en".into();
     app.plan.layout = "gb".into();
     app.plan.timezone = "Europe/London".into();
     assert_eq!(app.missing(), None);
@@ -467,7 +472,183 @@ fn sharing_a_disk_says_to_back_up_first_before_it_is_confirmed() {
     let mut app = installer(&events);
     app.page = READY;
     app.plan.target = Some(Where::Beside { part: "/dev/sda2".into(), leave: 100 * plan::GIB });
-    let (words, tone) = ready_sentence(&app.plan.target);
+    let (words, tone) = ready_sentence(&app.plan.target, None);
     assert!(words.contains("back it up first") && tone == Tone::Warn, "{words}");
     assert!(app.body().said().iter().any(|w| w == &words), "{:?}", app.body().said());
+}
+
+#[test]
+fn a_changed_disk_reads_the_disks_again_and_only_then() {
+    use std::os::unix::process::ExitStatusExt;
+    use std::sync::atomic::{AtomicUsize, Ordering};
+    static READS: AtomicUsize = AtomicUsize::new(0);
+    let exit = |code: i32| Ok(std::process::ExitStatus::from_raw(code << 8));
+    assert!(matches!(actions::ended(exit(steps::CHANGED), "changed".into()), Msg::DiskChanged(w) if w == "changed"));
+    assert!(matches!(actions::ended(exit(1), "no room left".into()), Msg::Finished(Err(w)) if w == "no room left"));
+    assert!(matches!(actions::ended(exit(steps::STOPPED), String::new()), Msg::Stopped(true)));
+
+    let events = Loop::new();
+    let mut app = installer(&events);
+    let got: Rc<RefCell<Vec<Msg>>> = Rc::default();
+    let (kept, ev) = (got.clone(), events.clone());
+    app.asks = events.post(move |m: Msg| {
+        kept.borrow_mut().push(m);
+        ev.quit();
+    });
+    app.read_disks = || {
+        READS.fetch_add(1, Ordering::SeqCst);
+        let part = plan::Part { dev: "/dev/sdb2".into(), size: 400 * plan::GIB, used: 60 * plan::GIB, fstype: "ntfs".into(), ..plan::Part::default() };
+        vec![Disk { dev: "/dev/sdb".into(), model: "Example disk two".into(), size: 500 * plan::GIB, parts: vec![part], ..Disk::default() }]
+    };
+    app.update(Msg::Erase("/dev/sda".into()));
+    app.page = ABOUT_YOU;
+    app.update(Msg::Finished(Err("no room left".into())));
+    assert!(!app.rereading && READS.load(Ordering::SeqCst) == 0, "no other failure reads the disks again");
+    let words = t!("installer-disk-changed", dev = "/dev/sda");
+    app.update(Msg::DiskChanged(words.clone()));
+    assert!(app.failed && app.rereading && app.plan.target.is_none() && app.plan.disk_id.is_empty());
+    assert!(app.foot().said().contains(&words), "{:?}", app.foot().said());
+    app.page = 1;
+    assert_eq!(app.missing(), Some(t!("installer-disks-rereading")));
+    app.update(Msg::DiskChanged(words));
+    let ev = events.clone();
+    events.after(Duration::from_secs(30), move || ev.quit());
+    events.run();
+    let read = got.borrow_mut().pop().expect("the disks were read again");
+    app.update(read);
+    assert_eq!(READS.load(Ordering::SeqCst), 1, "read once, however often it was refused meanwhile");
+    assert!(!app.rereading && app.machine.disks.len() == 1 && app.machine.disks[0].dev == "/dev/sdb");
+    assert!(app.leave.contains_key("/dev/sdb2") && !app.leave.contains_key("/dev/sda2"));
+    assert_eq!(app.missing(), Some(t!("installer-missing-disk")));
+    app.update(Msg::Erase("/dev/sdb".into()));
+    assert!(app.plan.target.is_some() && app.missing().is_none());
+}
+
+fn names_shown(app: &Installer) -> Vec<String> {
+    let mut ui = Ui::new(app.view(), Theme::chosen());
+    ui.lay_at(SIZE.0, SIZE.1);
+    ui.access("Installer").nodes.iter().filter_map(|(_, n)| n.label().map(str::to_string)).collect()
+}
+
+#[test]
+fn picking_a_language_shows_the_installer_in_it_at_once() {
+    use crate::common::live_language::switched;
+    let events = Loop::new();
+    let mut app = installer(&events);
+    app.machine.tongues = plan::trindle_languages();
+    app.machine.locales.extend([("ar_EG.UTF-8".into(), "Arabic (Egypt)".into()), ("tlh.UTF-8".into(), "Klingon".into())]);
+    let at = |app: &Installer, code: &str| matching(&app.machine.locales, "").iter().position(|(k, _)| k == code).unwrap();
+    assert_eq!(app.window_title(), None, "nothing to tell before a language is picked");
+    for (code, tag, next) in [("fr_FR.UTF-8", "fr", "Suivant"), ("ar_EG.UTF-8", "ar", "التالي")] {
+        app.update(Msg::Pick(0, at(&app, code)));
+        assert_eq!(app.plan.locale, code);
+        let tags = switched().unwrap_or_else(|| panic!("{code}: the words were not switched"));
+        assert_eq!(tags, [tag], "{code}");
+        in_language(tag, || {
+            assert_eq!(app.window_title(), Some(t!("installer-window-title", name = "Trindle")), "{code}");
+            assert_eq!(app.window_title(), None, "the title is told once");
+            assert!(names_shown(&app).iter().any(|n| n == next), "{code}: {:?}", names_shown(&app));
+        });
+        if tag == "ar" {
+            assert!(crate::toolkit::edit::right_to_left(next), "Arabic is laid right to left");
+        }
+    }
+    app.update(Msg::Pick(0, at(&app, "en_GB.UTF-8")));
+    assert_eq!(switched(), None, "built-in English is in use in tests, so nothing changes");
+    app.update(Msg::Pick(0, at(&app, "tlh.UTF-8")));
+    assert_eq!(switched(), None, "no words for it: English stays");
+}
+
+#[test]
+fn trindle_s_language_is_its_own_choice_from_the_languages_it_has() {
+    use crate::common::live_language::switched;
+    use super::{LANGUAGE, TONGUE};
+    let events = Loop::new();
+    let mut app = installer(&events);
+    app.machine.tongues = plan::trindle_languages();
+    let codes: Vec<&str> = app.machine.tongues.iter().map(|(c, _)| c.as_str()).collect();
+    for has in ["en", "en-US", "fr", "de", "ar", "zh-Hans"] {
+        assert!(codes.contains(&has), "{has}: {codes:?}");
+    }
+    assert!(!codes.contains(&"af"), "no words for Afrikaans, so it is not offered");
+    app.machine.locales.push(("af_ZA.UTF-8".into(), "Afrikaans (South Africa)".into()));
+    let at = |items: &[(String, String)], code: &str| matching(items, "").iter().position(|(k, _)| k == code).unwrap();
+    assert_eq!(app.missing(), Some(t!("installer-missing-language")));
+    app.update(Msg::Pick(LANGUAGE, at(&app.machine.locales, "af_ZA.UTF-8")));
+    assert_eq!((app.plan.locale.as_str(), app.plan.trindle_language.as_str()), ("af_ZA.UTF-8", "en"));
+    assert_eq!(app.plan.language_setting(), None, "English is what Afrikaans gives anyway");
+    app.update(Msg::Pick(TONGUE, at(&app.machine.tongues, "fr")));
+    assert_eq!(app.plan.locale, "af_ZA.UTF-8", "the computer's language stays");
+    assert_eq!(switched().as_deref(), Some(&["fr".to_string()][..]), "the installer is shown in French");
+    assert_eq!(app.plan.language_setting().as_deref(), Some("language=fr"));
+    assert_eq!(app.plan.words_in(), "fr", "the helper speaks French too");
+    app.update(Msg::Pick(LANGUAGE, at(&app.machine.locales, "fr_FR.UTF-8")));
+    assert_eq!(app.plan.trindle_language, "fr");
+    assert_eq!(app.plan.language_setting(), None, "French follows from French, so Trindle keeps following the system");
+    app.plan.trindle_language.clear();
+    assert_eq!(app.missing(), Some(t!("installer-missing-trindle-language")));
+}
+
+#[test]
+fn a_short_window_keeps_room_for_the_lists() {
+    let events = Loop::new();
+    let mut app = installer(&events);
+    let lists = |app: &Installer| Ui::new(app.view(), Theme::chosen()).natural_height(SIZE.0 as f32);
+    let tall = lists(&app);
+    assert!(app.resized(SIZE.0 as f32, 600.0), "going short lays the page out again");
+    assert!(lists(&app) > tall, "the lists keep their room, so the page grows and scrolls");
+    assert!(!app.resized(SIZE.0 as f32, 620.0), "still short: nothing to lay out again");
+    assert!(app.resized(SIZE.0 as f32, 1000.0));
+}
+
+#[test]
+fn the_armed_pill_reads_sure_in_the_laid_out_window() {
+    let events = Loop::new();
+    let mut app = installer(&events);
+    app.update(Msg::Erase("/dev/sda".into()));
+    app.page = READY;
+    app.update(Msg::Terms(true));
+    let mut ui = Ui::new(app.view(), Theme::chosen());
+    ui.lay_at(SIZE.0, SIZE.1);
+    app.update(Msg::Install);
+    ui.set_view(app.view());
+    ui.lay_at(SIZE.0, SIZE.1);
+    let words: Vec<String> = ui.worded_buttons().into_iter().map(|b| b.0).collect();
+    assert!(words.contains(&"Sure?".to_string()) && !words.contains(&"Install".to_string()), "{words:?}");
+}
+
+#[test]
+fn a_disk_with_no_model_name_is_named_once() {
+    let disk = Disk { dev: "/dev/vda".into(), size: 40 * plan::GIB, ..Disk::default() };
+    assert_eq!(disk.named().matches("/dev/vda").count(), 1, "{}", disk.named());
+    let (words, _) = ready_sentence(&Some(Where::Erase { disk: "/dev/vda".into() }), Some(&disk));
+    assert_eq!(words.matches("/dev/vda").count(), 1, "{words}");
+}
+
+#[test]
+fn the_ready_page_lists_the_swap_file_only_when_it_is_on() {
+    let events = Loop::new();
+    let mut app = installer(&events);
+    app.update(Msg::Erase("/dev/sda".into()));
+    app.page = READY;
+    for on in [false, true] {
+        app.update(Msg::Swap(on));
+        assert_eq!(app.view().said().iter().any(|w| w.contains("swap file")), on, "swap {on}");
+    }
+}
+
+#[test]
+fn without_a_tpm_chip_the_chip_choice_is_off_with_its_reason() {
+    let events = Loop::new();
+    let mut app = installer(&events);
+    app.machine.chip = false;
+    app.page = 2;
+    app.update(Msg::Lock(Lock::None));
+    let view = app.privacy();
+    assert!(view.said().iter().any(|w| w.starts_with("Needs a TPM chip")), "{:?}", view.said());
+    let on = view.buttons().into_iter().find(|(tip, _)| tip.contains("TPM chip unlock")).map(|(_, on)| on);
+    assert_eq!(on, Some(false), "the chip choice must be off");
+    assert!(!view.said().iter().any(|w| w.starts_with("This computer has") && w.contains("password")), "{:?}", view.said());
+    app.update(Msg::Lock(Lock::Password));
+    assert!(app.privacy().said().iter().any(|w| w.contains("ask for the password every time")), "{:?}", app.privacy().said());
 }

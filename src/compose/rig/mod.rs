@@ -16,12 +16,13 @@ use smithay::reexports::wayland_server::backend::ClientId;
 use smithay::reexports::wayland_server::protocol::wl_surface::WlSurface as ServerSurface;
 use smithay::reexports::wayland_server::Display;
 use wayland_client::protocol::wl_surface;
+pub use wayland_client::QueueHandle;
 use wayland_client::{Connection, EventQueue};
 use wayland_protocols_wlr::layer_shell::v1::client::zwlr_layer_shell_v1::Layer as On;
 use wayland_protocols_wlr::layer_shell::v1::client::zwlr_layer_surface_v1::KeyboardInteractivity;
 
 use crate::protocols::screens::{ScreenFacts, ScreenPlan};
-use crate::state::{AnvilState, Backend, ClientState};
+use crate::state::{Compose, Backend, ClientState};
 use crate::virtual_input::{Absolute, Maker, Virtual};
 
 const INNER: &str = "TRINDLE_RIG";
@@ -101,7 +102,10 @@ pub fn alone(name: &str, test: impl FnOnce(&Path)) {
     assert!(said.contains("test result: ok. 1 passed"), "{name} was not run in its own program:\n{said}");
 }
 
-pub struct RigData;
+pub struct RigData {
+
+    pub lit: bool,
+}
 
 impl Backend for RigData {
 
@@ -112,11 +116,18 @@ impl Backend for RigData {
     fn reset_buffers(&mut self, _output: &Output) {}
     fn early_import(&mut self, _surface: &ServerSurface) {}
     fn update_led_state(&mut self, _led_state: LedState) {}
-    fn output_heads(_state: &AnvilState<Self>) -> Vec<ScreenFacts> {
+    fn output_heads(_state: &Compose<Self>) -> Vec<ScreenFacts> {
         Vec::new()
     }
-    fn apply_output_config(_state: &mut AnvilState<Self>, _targets: &[ScreenPlan], _test_only: bool) -> Result<(), String> {
+    fn apply_output_config(_state: &mut Compose<Self>, _targets: &[ScreenPlan], _test_only: bool) -> Result<(), String> {
         Err("the rig has no screens to arrange".into())
+    }
+    fn output_power(&self, _output: &Output) -> Option<bool> {
+        Some(self.lit)
+    }
+    fn set_output_power(state: &mut Compose<Self>, _output: &Output, on: bool) -> bool {
+        state.backend_data.lit = on;
+        true
     }
 }
 
@@ -128,7 +139,7 @@ mod panels;
 mod program;
 mod tests;
 
-use program::Program;
+pub use program::Program;
 
 struct Joined {
     id: ClientId,
@@ -139,8 +150,8 @@ struct Joined {
 }
 
 pub struct Rig {
-    events: EventLoop<'static, AnvilState<RigData>>,
-    pub state: AnvilState<RigData>,
+    events: EventLoop<'static, Compose<RigData>>,
+    pub state: Compose<RigData>,
     pub output: Output,
     programs: Vec<Joined>,
     dir: PathBuf,
@@ -156,7 +167,7 @@ impl Rig {
         let _ = crate::session::LAUNCH.set(crate::session::Launch { ring: Some(dir.join("trindle")), ..Default::default() });
         let events = EventLoop::try_new().unwrap();
         let display = Display::new().unwrap();
-        let mut state = AnvilState::init(display, events.handle(), RigData, false);
+        let mut state = Compose::init(display, events.handle(), RigData { lit: true }, false);
         let output = Output::new(
             SCREEN.into(),
             PhysicalProperties { size: (300, 200).into(), subpixel: Subpixel::Unknown, make: "test".into(), model: "test".into() },
@@ -164,7 +175,7 @@ impl Rig {
         let mode = Mode { size: (1280, 800).into(), refresh: 60_000 };
         output.change_current_state(Some(mode), None, None, Some((0, 0).into()));
         output.set_preferred(mode);
-        output.create_global::<AnvilState<RigData>>(&state.display_handle);
+        output.create_global::<Compose<RigData>>(&state.display_handle);
         state.space.map_output(&output, (0, 0));
         Rig { events, state, output, programs: Vec::new(), dir: dir.to_path_buf(), time: 1000, middle: (0.5, 0.5) }
     }
@@ -179,6 +190,15 @@ impl Rig {
         self.programs.push(Joined { id, client, conn, queue, program: Program::default() });
         self.pump();
         self.programs.len() - 1
+    }
+
+    pub fn cut_off(&self, who: usize) -> bool {
+        self.programs[who].conn.protocol_error().is_some()
+    }
+
+    pub fn program(&self, who: usize) -> (&Program, QueueHandle<Program>) {
+        let p = &self.programs[who];
+        (&p.program, p.queue.handle())
     }
 
     pub fn pump(&mut self) {

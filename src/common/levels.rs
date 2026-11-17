@@ -3,6 +3,7 @@
 //! brightness keys' command (session/brightness.rs) both come here.
 //! Nothing in this file uses the rest of the program.
 
+use std::path::Path;
 use std::process::{Command, Stdio};
 
 pub const SPEAKERS: &str = "@DEFAULT_AUDIO_SINK@";
@@ -35,8 +36,20 @@ pub fn bar_share(share: f32) -> f32 {
 }
 
 pub fn backlight() -> Option<(String, u32, u32)> {
-    let name = std::fs::read_dir("/sys/class/backlight").ok()?.flatten().next()?.file_name().to_string_lossy().to_string();
-    let read = |f: &str| std::fs::read_to_string(format!("/sys/class/backlight/{name}/{f}")).ok()?.trim().parse::<u32>().ok();
+    backlight_in(Path::new("/sys/class/backlight"))
+}
+
+fn backlight_in(folder: &Path) -> Option<(String, u32, u32)> {
+    let rank = |name: &str| match std::fs::read_to_string(folder.join(name).join("type")).unwrap_or_default().trim() {
+        "firmware" => 0,
+        "platform" => 1,
+        "raw" => 2,
+        _ => 3,
+    };
+    let mut names: Vec<String> = std::fs::read_dir(folder).ok()?.flatten().map(|e| e.file_name().to_string_lossy().to_string()).collect();
+    names.sort_by_key(|n| (rank(n), n.clone()));
+    let name = names.into_iter().next()?;
+    let read = |f: &str| std::fs::read_to_string(folder.join(&name).join(f)).ok()?.trim().parse::<u32>().ok();
     Some((name.clone(), read("brightness")?, read("max_brightness")?))
 }
 
@@ -57,6 +70,24 @@ mod tests {
         assert_eq!(parse_volume("Could not find node"), None);
         assert_eq!(parse_volume("Volume: loud"), None);
         assert_eq!(parse_volume(""), None);
+    }
+
+    #[test]
+    fn with_two_backlights_the_firmware_one_is_used_whatever_order_they_are_listed_in() {
+        let dir = std::env::temp_dir().join(format!("trindle-backlights-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        for (name, kind, now) in [("amdgpu_bl1", "raw", "5"), ("acpi_video0", "firmware", "7"), ("intel_backlight", "raw", "9")] {
+            let at = dir.join(name);
+            std::fs::create_dir_all(&at).unwrap();
+            for (file, text) in [("type", kind), ("brightness", now), ("max_brightness", "10")] {
+                std::fs::write(at.join(file), text).unwrap();
+            }
+        }
+        assert_eq!(backlight_in(&dir), Some(("acpi_video0".to_string(), 7, 10)));
+        std::fs::remove_dir_all(dir.join("acpi_video0")).unwrap();
+        assert_eq!(backlight_in(&dir).map(|b| b.0), Some("amdgpu_bl1".to_string()), "else by name, the same each time");
+        let _ = std::fs::remove_dir_all(&dir);
+        assert_eq!(backlight_in(&dir), None);
     }
 
     #[test]

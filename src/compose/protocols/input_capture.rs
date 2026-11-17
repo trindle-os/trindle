@@ -4,6 +4,7 @@
 //! input capture is handed out by the InputCapture portal over the session
 //! bus, which no box has.
 
+use super::Filtered;
 use smithay::reexports::wayland_server::{Client, DataInit, Dispatch, DisplayHandle, GlobalDispatch, New, Resource, WEnum};
 
 #[allow(dead_code, non_camel_case_types, unused_unsafe, unused_variables, non_upper_case_globals, non_snake_case,
@@ -45,15 +46,11 @@ pub trait InputCaptureHandler {
 #[derive(Debug)]
 pub struct InputCaptureState;
 
-pub struct InputCaptureGlobalData {
-    filter: Box<dyn for<'c> Fn(&'c Client) -> bool + Send + Sync>,
-}
-
 impl InputCaptureState {
 
     pub fn new<D, F>(display: &DisplayHandle, filter: F) -> InputCaptureState
     where
-        D: GlobalDispatch<TrindleInputCaptureManagerV1, InputCaptureGlobalData>
+        D: GlobalDispatch<TrindleInputCaptureManagerV1, Filtered>
             + Dispatch<TrindleInputCaptureManagerV1, ()>
             + Dispatch<TrindleInputCaptureV1, ()>
             + InputCaptureHandler
@@ -62,7 +59,7 @@ impl InputCaptureState {
     {
         display.create_global::<D, TrindleInputCaptureManagerV1, _>(
             VERSION,
-            InputCaptureGlobalData { filter: Box::new(filter) },
+            Filtered::new(filter),
         );
         InputCaptureState
     }
@@ -78,9 +75,9 @@ pub fn side_of(raw: u32) -> Option<Side> {
     }
 }
 
-impl<D> GlobalDispatch<TrindleInputCaptureManagerV1, InputCaptureGlobalData, D> for InputCaptureState
+impl<D> GlobalDispatch<TrindleInputCaptureManagerV1, Filtered, D> for InputCaptureState
 where
-    D: GlobalDispatch<TrindleInputCaptureManagerV1, InputCaptureGlobalData>
+    D: GlobalDispatch<TrindleInputCaptureManagerV1, Filtered>
         + Dispatch<TrindleInputCaptureManagerV1, ()>
         + Dispatch<TrindleInputCaptureV1, ()>
         + InputCaptureHandler
@@ -91,14 +88,14 @@ where
         _: &DisplayHandle,
         _: &Client,
         resource: New<TrindleInputCaptureManagerV1>,
-        _: &InputCaptureGlobalData,
+        _: &Filtered,
         data_init: &mut DataInit<'_, D>,
     ) {
         data_init.init(resource, ());
     }
 
-    fn can_view(client: Client, global_data: &InputCaptureGlobalData) -> bool {
-        (global_data.filter)(&client)
+    fn can_view(client: Client, global_data: &Filtered) -> bool {
+        global_data.can_view(&client)
     }
 }
 
@@ -169,7 +166,7 @@ where
 macro_rules! delegate_input_capture {
     ($(@<$( $lt:tt $( : $clt:tt $(+ $dlt:tt )* )? ),+>)? $ty: ty) => {
         smithay::reexports::wayland_server::delegate_global_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
-            $crate::protocols::input_capture::TrindleInputCaptureManagerV1: $crate::protocols::input_capture::InputCaptureGlobalData
+            $crate::protocols::input_capture::TrindleInputCaptureManagerV1: $crate::protocols::Filtered
         ] => $crate::protocols::input_capture::InputCaptureState);
         smithay::reexports::wayland_server::delegate_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
             $crate::protocols::input_capture::TrindleInputCaptureManagerV1: ()

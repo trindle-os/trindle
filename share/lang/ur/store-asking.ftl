@@ -7,14 +7,14 @@ store-ask-title = { $app } کیا استعمال کر سکتی ہے
 
 # Under the list of switches in the permission window when one or more is on already.
 # SAFETY: needs a human review before it ships
-store-ask-above-on = ہر سوئچ دکھاتا ہے کہ ابھی کیا اجازت ہے۔ آپ اسے بعد میں ایپس، اجازتیں میں بدل سکتے ہیں۔
+store-ask-above-on = آپ انہیں بعد میں سیٹنگز، اجازتیں میں بدل سکتے ہیں۔
 
 # Under the list of switches in the permission window when all start off.
 # SAFETY: needs a human review before it ships
-store-ask-above-off = ہر سوئچ بند رہتا ہے جب تک آپ اسے دبا نہ دیں۔ آپ اسے بعد میں ایپس، اجازتیں میں بدل سکتے ہیں۔
+store-ask-above-off = ابھی کچھ بھی اجازت یافتہ نہیں۔ آپ انہیں بعد میں سیٹنگز، اجازتیں میں بدل سکتے ہیں۔
 
 # Note under the list of switches, since a .deb names nothing it wants.
-store-ask-worked-out = خود ایپ سے معلوم کیا گیا
+store-ask-worked-out = ایپ جو مانگتی ہے اس کی بنیاد پر
 
 # Tip of the button that turns every switch on.
 # SAFETY: needs a human review before it ships

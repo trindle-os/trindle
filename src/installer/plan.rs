@@ -65,6 +65,8 @@ pub struct Disk {
     pub dev: String,
     pub model: String,
     pub size: u64,
+
+    pub id: String,
     pub live: bool,
     pub parts: Vec<Part>,
 }
@@ -73,6 +75,13 @@ impl Disk {
     pub fn what(&self) -> String {
         let model = if self.model.is_empty() { self.dev.clone() } else { self.model.clone() };
         t!("installer-named-size", name = &model, size = size(self.size))
+    }
+
+    pub fn named(&self) -> String {
+        if self.model.is_empty() {
+            return self.what();
+        }
+        t!("installer-disk-named", what = self.what(), dev = &self.dev)
     }
 
     pub fn holds(&self) -> String {
@@ -142,9 +151,12 @@ pub enum Lock {
     Chip,
 }
 
-#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[derive(Clone, Default, Serialize, Deserialize)]
 pub struct Plan {
     pub locale: String,
+
+    #[serde(default)]
+    pub trindle_language: String,
     pub layout: String,
     pub variant: String,
     pub timezone: String,
@@ -155,6 +167,9 @@ pub struct Plan {
     pub lock: Lock,
     pub disk_password: String,
     pub target: Option<Where>,
+
+    #[serde(default)]
+    pub disk_id: String,
 
     #[serde(default)]
     pub swap: bool,
@@ -189,6 +204,35 @@ fn short_of(kib: Option<u64>) -> bool {
 
 pub fn uefi() -> bool {
     Path::new("/sys/firmware/efi").exists()
+}
+
+impl Plan {
+
+    pub fn words_in(&self) -> &str {
+        if self.trindle_language.is_empty() { &self.locale } else { &self.trindle_language }
+    }
+
+    pub fn language_setting(&self) -> Option<String> {
+        let own = self.trindle_language.trim();
+        (!own.is_empty() && own != nearest_tongue(&self.locale)).then(|| format!("language={own}"))
+    }
+}
+
+pub fn trindle_languages() -> Vec<(String, String)> {
+    crate::common::language_names::codes_in(&crate::common::live_language::folders()).into_iter()
+        .map(|c| { let name = crate::common::language_names::own_name(&c); (c, name) }).collect()
+}
+
+pub fn nearest_tongue(locale: &str) -> String {
+    crate::common::live_language::for_locale(locale).into_iter().next().unwrap_or_else(|| "en".to_string())
+}
+
+impl std::fmt::Debug for Plan {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Plan").field("locale", &self.locale).field("trindle_language", &self.trindle_language).field("hostname", &self.hostname)
+            .field("username", &self.username).field("lock", &self.lock).field("target", &self.target)
+            .field("swap", &self.swap).finish_non_exhaustive()
+    }
 }
 
 impl Drop for Plan {
@@ -260,15 +304,19 @@ pub fn parse_os_prober(out: &str) -> Vec<(String, String)> {
 }
 
 pub fn disks() -> Vec<Disk> {
-    let json = text(&["lsblk", "-J", "-b", "-o", "PATH,TYPE,SIZE,MODEL,RM,FSTYPE,LABEL,FSUSED,MOUNTPOINT"]);
+    let json = text(&["lsblk", "-J", "-b", "-o", "PATH,TYPE,SIZE,MODEL,SERIAL,WWN,RM,FSTYPE,LABEL,FSUSED,MOUNTPOINT"]);
     let live = live_disk();
     let mut out = parse_disks(&json);
-    for d in &mut out {
-        d.live = d.dev == live;
-    }
+    mark_live(&mut out, &live);
     name_systems(&mut out, &other_systems());
     out.retain(|d| d.size >= LEAST && !d.live);
     out
+}
+
+fn mark_live(disks: &mut [Disk], live: &str) {
+    for d in disks {
+        d.live = d.dev == live || d.parts.iter().any(|p| p.fstype == "iso9660");
+    }
 }
 
 pub fn live_disk() -> String {
@@ -294,6 +342,22 @@ pub fn name_systems(disks: &mut [Disk], systems: &[(String, String)]) {
     }
 }
 
+fn identity(d: &serde_json::Value) -> String {
+    let field = |k: &str| d[k].as_str().unwrap_or_default().trim().to_string();
+    format!("{}|{}|{}|{}", d["size"].as_u64().unwrap_or(0), field("model"), field("serial"), field("wwn"))
+}
+
+pub fn disk_id(dev: &str) -> String {
+    id_in(&text(&["lsblk", "-J", "-b", "-d", "-o", "PATH,TYPE,SIZE,MODEL,SERIAL,WWN", dev]), dev)
+}
+
+fn id_in(json: &str, dev: &str) -> String {
+    serde_json::from_str::<serde_json::Value>(json).ok()
+        .and_then(|v| v["blockdevices"].as_array()?.first().cloned())
+        .filter(|d| d["type"].as_str() == Some("disk") && d["path"].as_str() == Some(dev))
+        .map(|d| identity(&d)).unwrap_or_default()
+}
+
 pub fn parse_disks(json: &str) -> Vec<Disk> {
     let v: serde_json::Value = serde_json::from_str(json).unwrap_or(serde_json::Value::Null);
 
@@ -314,6 +378,7 @@ pub fn parse_disks(json: &str) -> Vec<Disk> {
             dev,
             model: d["model"].as_str().unwrap_or_default().trim().to_string(),
             size: d["size"].as_u64().unwrap_or(0),
+            id: identity(d),
             live: false,
             parts: Vec::new(),
         })
@@ -447,14 +512,25 @@ const KEYBOARD_BY_COUNTRY: &[(&str, &str, &str)] = &[
     ("EE", "ee", ""), ("LV", "lv", ""), ("LT", "lt", ""), ("GE", "ge", ""), ("KZ", "kz", ""),
 ];
 
-pub fn suggest_passphrase() -> String {
-    let mut bytes = [0u8; 8];
-    if let Ok(mut f) = std::fs::File::open("/dev/urandom") {
-        use std::io::Read;
-        let _ = f.read_exact(&mut bytes);
+pub fn suggest_passphrase() -> Option<String> {
+    let mut words = Vec::with_capacity(PASSPHRASE_WORDS);
+    for _ in 0..PASSPHRASE_WORDS {
+        words.push(WORDS[fair(WORDS.len())?]);
     }
-    let pick = |n: usize| WORDS[bytes[n] as usize % WORDS.len()];
-    format!("{}-{}-{}-{}{}", pick(0), pick(1), pick(2), pick(3), bytes[4] % 10)
+    Some(format!("{}{}", words.join("-"), fair(10)?))
+}
+
+const PASSPHRASE_WORDS: usize = 6;
+
+fn fair(n: usize) -> Option<usize> {
+    let limit = 256 - 256 % n;
+    loop {
+        let mut b = [0u8; 1];
+        getrandom::fill(&mut b).ok()?;
+        if (b[0] as usize) < limit {
+            return Some(b[0] as usize % n);
+        }
+    }
 }
 
 const WORDS: &[&str] = &[
@@ -677,6 +753,18 @@ mod tests {
     }
 
     #[test]
+    fn a_disk_is_known_by_size_model_serial_and_wwn_not_its_name() {
+        let entry = |size: u64, serial: &str| format!(r#"{{"blockdevices":[{{"path":"/dev/sdb","type":"disk","size":{size},"model":"Stick ","serial":"{serial}","wwn":null}}]}}"#);
+        let listed = parse_disks(&entry(64_000_000_000, "AA11"));
+        assert_eq!(id_in(&entry(64_000_000_000, "AA11"), "/dev/sdb"), listed[0].id, "the same disk read twice is the same");
+        assert_ne!(id_in(&entry(64_000_000_000, "BB22"), "/dev/sdb"), listed[0].id, "another disk of the same make");
+        assert_ne!(id_in(&entry(32_000_000_000, "AA11"), "/dev/sdb"), listed[0].id, "another size");
+        assert_eq!(id_in(&entry(64_000_000_000, "AA11"), "/dev/sdc"), "", "a listing for another name");
+        assert_eq!(id_in(r#"{"blockdevices":[{"path":"/dev/sdb","type":"part","size":1}]}"#, "/dev/sdb"), "", "not a whole disk");
+        assert_eq!(id_in("", "/dev/sdb"), "");
+    }
+
+    #[test]
     fn flat_listings_are_read_too() {
         let json = r#"{"blockdevices":[
             {"path":"/dev/nvme0n1","type":"disk","size":2000398934016,"model":"CT2000","rm":false},
@@ -763,9 +851,34 @@ mod tests {
         assert_eq!(layout_for("fr_FR.UTF-8"), ("fr".to_string(), String::new()));
         assert_eq!(layout_for("nl_NL.UTF-8"), ("us".to_string(), String::new()));
         assert_eq!(layout_for("hy_AM.UTF-8"), ("hy".to_string(), String::new()));
-        let one = suggest_passphrase();
-        assert_eq!(one.split('-').count(), 4);
-        assert!(one.len() >= 16);
+        let one = suggest_passphrase().unwrap();
+        assert_eq!(one.split('-').count(), PASSPHRASE_WORDS);
+        assert!(one.len() >= 24);
+        assert!(one.ends_with(|c: char| c.is_ascii_digit()));
+        assert_ne!(one, suggest_passphrase().unwrap());
+    }
+
+    #[test]
+    fn a_stick_is_found_by_its_image_when_its_mount_is_not() {
+        let json = r#"{"blockdevices":[
+            {"path":"/dev/sdb","type":"disk","size":8000000000,"model":"Stick","serial":"S1","wwn":null,
+             "children":[{"path":"/dev/sdb1","type":"part","size":4000000000,"fstype":"iso9660"}]},
+            {"path":"/dev/sda","type":"disk","size":500000000000,"model":"Main","serial":"S2","wwn":"0x1","children":[]}]}"#;
+        let mut disks = parse_disks(json);
+        mark_live(&mut disks, "");
+        assert!(disks[0].live && !disks[1].live);
+        assert_eq!(disks[1].id, "500000000000|Main|S2|0x1");
+        assert_ne!(disks[0].id, disks[1].id);
+    }
+
+    #[test]
+    #[allow(clippy::field_reassign_with_default)]
+    fn a_plan_never_prints_its_passwords() {
+        let mut plan = Plan::default();
+        plan.password = "hunter2-user".into();
+        plan.disk_password = "hunter2-disk".into();
+        let said = format!("{plan:?}");
+        assert!(!said.contains("hunter2"), "{said}");
     }
 
     #[test]

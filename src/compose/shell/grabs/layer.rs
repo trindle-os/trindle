@@ -11,10 +11,10 @@ use smithay::{
     utils::{Logical, Point},
 };
 
-use crate::{focus::PointerFocusTarget, state::{AnvilState, Backend}};
+use crate::{focus::PointerFocusTarget, state::{Compose, Backend}};
 
 pub struct LayerClickGrab<BackendData: Backend + 'static> {
-    pub start_data: PointerGrabStartData<AnvilState<BackendData>>,
+    pub start_data: PointerGrabStartData<Compose<BackendData>>,
     pub layer: smithay::desktop::LayerSurface,
     pub output: smithay::output::Output,
 
@@ -32,11 +32,11 @@ impl<BackendData: Backend> LayerClickGrab<BackendData> {
     }
 }
 
-impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for LayerClickGrab<BackendData> {
+impl<BackendData: Backend> PointerGrab<Compose<BackendData>> for LayerClickGrab<BackendData> {
     fn motion(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         _focus: Option<(PointerFocusTarget, Point<f64, Logical>)>,
         event: &MotionEvent,
     ) {
@@ -46,8 +46,8 @@ impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for LayerClickGr
 
     fn relative_motion(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         _focus: Option<(PointerFocusTarget, Point<f64, Logical>)>,
         event: &RelativeMotionEvent,
     ) {
@@ -57,8 +57,8 @@ impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for LayerClickGr
 
     fn button(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         event: &ButtonEvent,
     ) {
         handle.button(data, event);
@@ -69,52 +69,52 @@ impl<BackendData: Backend> PointerGrab<AnvilState<BackendData>> for LayerClickGr
 
     fn axis(
         &mut self,
-        data: &mut AnvilState<BackendData>,
-        handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>,
+        data: &mut Compose<BackendData>,
+        handle: &mut PointerInnerHandle<'_, Compose<BackendData>>,
         details: AxisFrame,
     ) {
         handle.axis(data, details)
     }
 
-    fn frame(&mut self, data: &mut AnvilState<BackendData>, handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>) {
+    fn frame(&mut self, data: &mut Compose<BackendData>, handle: &mut PointerInnerHandle<'_, Compose<BackendData>>) {
         handle.frame(data);
     }
 
-    fn gesture_swipe_begin(&mut self, data: &mut AnvilState<BackendData>, handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>, event: &GestureSwipeBeginEvent) {
+    fn gesture_swipe_begin(&mut self, data: &mut Compose<BackendData>, handle: &mut PointerInnerHandle<'_, Compose<BackendData>>, event: &GestureSwipeBeginEvent) {
         handle.gesture_swipe_begin(data, event);
     }
 
-    fn gesture_swipe_update(&mut self, data: &mut AnvilState<BackendData>, handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>, event: &GestureSwipeUpdateEvent) {
+    fn gesture_swipe_update(&mut self, data: &mut Compose<BackendData>, handle: &mut PointerInnerHandle<'_, Compose<BackendData>>, event: &GestureSwipeUpdateEvent) {
         handle.gesture_swipe_update(data, event);
     }
 
-    fn gesture_swipe_end(&mut self, data: &mut AnvilState<BackendData>, handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>, event: &GestureSwipeEndEvent) {
+    fn gesture_swipe_end(&mut self, data: &mut Compose<BackendData>, handle: &mut PointerInnerHandle<'_, Compose<BackendData>>, event: &GestureSwipeEndEvent) {
         handle.gesture_swipe_end(data, event);
     }
 
-    fn gesture_pinch_begin(&mut self, data: &mut AnvilState<BackendData>, handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>, event: &GesturePinchBeginEvent) {
+    fn gesture_pinch_begin(&mut self, data: &mut Compose<BackendData>, handle: &mut PointerInnerHandle<'_, Compose<BackendData>>, event: &GesturePinchBeginEvent) {
         handle.gesture_pinch_begin(data, event);
     }
 
-    fn gesture_pinch_update(&mut self, data: &mut AnvilState<BackendData>, handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>, event: &GesturePinchUpdateEvent) {
+    fn gesture_pinch_update(&mut self, data: &mut Compose<BackendData>, handle: &mut PointerInnerHandle<'_, Compose<BackendData>>, event: &GesturePinchUpdateEvent) {
         handle.gesture_pinch_update(data, event);
     }
 
-    fn gesture_pinch_end(&mut self, data: &mut AnvilState<BackendData>, handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>, event: &GesturePinchEndEvent) {
+    fn gesture_pinch_end(&mut self, data: &mut Compose<BackendData>, handle: &mut PointerInnerHandle<'_, Compose<BackendData>>, event: &GesturePinchEndEvent) {
         handle.gesture_pinch_end(data, event);
     }
 
-    fn gesture_hold_begin(&mut self, data: &mut AnvilState<BackendData>, handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>, event: &GestureHoldBeginEvent) {
+    fn gesture_hold_begin(&mut self, data: &mut Compose<BackendData>, handle: &mut PointerInnerHandle<'_, Compose<BackendData>>, event: &GestureHoldBeginEvent) {
         handle.gesture_hold_begin(data, event);
     }
 
-    fn gesture_hold_end(&mut self, data: &mut AnvilState<BackendData>, handle: &mut PointerInnerHandle<'_, AnvilState<BackendData>>, event: &GestureHoldEndEvent) {
+    fn gesture_hold_end(&mut self, data: &mut Compose<BackendData>, handle: &mut PointerInnerHandle<'_, Compose<BackendData>>, event: &GestureHoldEndEvent) {
         handle.gesture_hold_end(data, event);
     }
 
-    fn start_data(&self) -> &PointerGrabStartData<AnvilState<BackendData>> {
+    fn start_data(&self) -> &PointerGrabStartData<Compose<BackendData>> {
         &self.start_data
     }
 
-    fn unset(&mut self, _data: &mut AnvilState<BackendData>) {}
+    fn unset(&mut self, _data: &mut Compose<BackendData>) {}
 }

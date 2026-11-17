@@ -7,7 +7,7 @@ settings-default-apps-title = Default apps
 # Words a person might type into the Settings search to find the default apps page; separate them with spaces.
 settings-default-apps-keywords = browser mail email files pictures music video pdf calendar open with terminal
 # Introduction under the heading of the default apps page, and the words behind the page i.
-settings-default-apps-help = Which program opens web links, emails, pictures, the calendar and the rest. The terminal is chosen in ~/.config/xdg-terminals.list; with none chosen, Trindle uses the first one installed.
+settings-default-apps-help = Choose which program opens web links, emails, pictures, the calendar and so on. You choose the terminal in ~/.config/xdg-terminals.list. If you haven't chosen one, Trindle uses the first one that is installed.
 
 ## Kinds of file
 
@@ -53,35 +53,29 @@ settings-default-apps-kind-calendar-in-sentence = calendar
 # Title of a card on the default apps page.
 settings-default-apps-card-internet = Internet
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-internet-about = The program that opens a web link clicked anywhere, the one that writes an email when an address is clicked, and the one that opens a calendar invitation.
+settings-default-apps-card-internet-about = Choose which programs open web links, email addresses and calendar invitations.
 # Title of a card on the default apps page.
 settings-default-apps-card-files = Files and documents
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-files-about = The program that opens a folder, a plain text file and a PDF document when you open one from Folders, the desktop or another app.
+settings-default-apps-card-files-about = Choose which programs open folders, plain text files and PDF documents.
 # Title of a card on the default apps page.
 settings-default-apps-card-media = Pictures and sound
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-media-about = The program that opens a picture, a piece of music or a video when you open one.
+settings-default-apps-card-media-about = Choose which programs open pictures, music and videos.
 
 ## Page
 
 # Sentence at the top of the page when every kind has a program; { $web } is the program that opens web links.
-settings-default-apps-all-set-web = Everything has a program to open it; { $web } opens web links.
+settings-default-apps-all-set-web = Everything has a program to open it, and { $web } opens web links.
 # Sentence at the top of the page when every kind has a program and the one for web links is not known.
 settings-default-apps-all-set = Everything has a program to open it.
 # Sentence at the top of the page when one kind has no program chosen; { $kind } is its name in lower case.
-settings-default-apps-one-missing = Nothing is chosen yet to open { $kind }.
+settings-default-apps-one-missing = Choose a program to open { $kind }.
 # Sentence at the top of the page when several kinds have no program chosen; { $kinds } is their names as a list joined with "or".
-settings-default-apps-many-missing = Nothing is chosen yet to open { $kinds }.
+settings-default-apps-many-missing = You haven't chosen a program to open { $kinds } yet.
 # Small words under a kind that no installed program can open.
-settings-default-apps-none-installed = Nothing installed can open these yet.
+settings-default-apps-none-installed = No installed program opens these yet.
 # First choice in a list when no program is chosen for that kind yet.
 settings-default-apps-not-chosen = Not chosen yet
-# Small words under a kind with a program list; { $n } is how many programs can open it.
-settings-default-apps-can-open =
-    { $n ->
-        [one] The one program that can.
-       *[other] { $n } programs can open these.
-    }
 # Said in green under a kind's list after the choice was kept.
 settings-default-apps-saved = Saved

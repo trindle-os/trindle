@@ -8,7 +8,7 @@ settings-power-title = Energia
 settings-power-keywords = bateria suspender suspensão dormir desligar reiniciar sair sessão tela apagar inativo escurecer bloquear senha pin teclado cafeína manter acordado carga carregando limite 80 saúde da bateria
 
 # Introduction under the heading of the power page, and the words behind the page i.
-settings-power-help = Bateria, modo de energia e quando a tela escurece, bloqueia e apaga; em um notebook, separadamente para a bateria e para o carregador. A xícara na aba mantém a tela acesa. Bloquear, reiniciar e desligar também estão aqui.
+settings-power-help = Escolha o modo de energia e quando a tela escurece, bloqueia e apaga. Em um notebook, você define isso separadamente para a bateria e para o carregador. A xícara no anel mantém a tela acesa. Você também pode bloquear, reiniciar e desligar por aqui.
 
 # Choice in a list of how long to wait.
 settings-power-time-never = Nunca
@@ -77,32 +77,20 @@ settings-power-lid-shut-down = Desligar
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-dim = Escurecer a tela após
 
-# Small words under an idle timer line.
-settings-power-timer-dim-about = Qualquer movimento traz o brilho de volta.
-
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-clock = Mostrar o relógio em movimento após
-
-# Small words under an idle timer line.
-settings-power-timer-clock-about = Só a hora, passeando devagar pela tela.
 
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-off = Apagar a tela após
 
-# Small words under an idle timer line.
-settings-power-timer-off-about = Qualquer tecla ou movimento a acende de novo.
-
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-suspend = Suspender após
 
-# Small words under an idle timer line.
-settings-power-timer-suspend-about = Deixado sozinho por este tempo, ele entra em suspensão.
-
 # Red words under the keep the screen awake switch when turning it on could not be saved.
-settings-power-no-awake = Não foi possível manter a tela acesa: a escolha não pôde ser salva.
+settings-power-no-awake = O Trindle não conseguiu manter a tela acesa porque não conseguiu salvar sua escolha.
 
 # Red words under the keep the screen awake switch when turning it off could not be saved.
-settings-power-no-sleep = Não foi possível desligar a opção de manter a tela acesa: a escolha não pôde ser salva.
+settings-power-no-sleep = O Trindle não conseguiu salvar sua escolha, então a tela vai continuar acesa.
 
 # Name of the power mode that saves the battery.
 settings-power-profile-saver = Economia de bateria
@@ -135,10 +123,10 @@ settings-power-hours-minutes = { $h } h { $m } min
 settings-power-minutes = { $m } min
 
 # Sentence at the top of the page on a computer with no battery.
-settings-power-top-no-battery = Conectado à tomada: este computador não tem bateria para cuidar.
+settings-power-top-no-battery = Conectado à tomada. Este computador não tem bateria.
 
 # Sentence at the top of the page on a computer with no battery; { $mode } is the power mode.
-settings-power-top-no-battery-mode = Conectado à tomada, no modo { $mode }: sem bateria para cuidar.
+settings-power-top-no-battery-mode = Conectado à tomada, no modo { $mode }. Este computador não tem bateria.
 
 # Sentence at the top of the page while charging; { $percent } is how full.
 settings-power-top-charging = Carregando, { $percent }%.
@@ -167,9 +155,6 @@ settings-power-mode-failed = Não foi possível mudar o modo de energia.
 # Heading of the power mode line, and the name of its list.
 settings-power-mode = Modo de energia
 
-# Small words under the power mode line.
-settings-power-mode-about = Economia fica mais fria; desempenho, mais rápido.
-
 # Said in green under a line after its choice was kept.
 settings-power-saved = Salvo
 
@@ -179,17 +164,11 @@ settings-power-warn-name = Avisar quando a bateria chegar a
 # Heading of the line for the battery warning.
 settings-power-warn = Avisar quando chegar a
 
-# Small words under the battery warning line.
-settings-power-warn-about = Uma vez, no meio da tela.
-
 # Choice in the list of battery levels: never warn.
 settings-power-never = Nunca
 
 # Heading of the line, and name of its switch, for stopping charging at 80%.
 settings-power-limit = Parar de carregar em 80%
-
-# Small words under the charge limit line.
-settings-power-limit-about = Mais gentil com uma bateria que fica quase sempre na tomada.
 
 # Title of the battery card on a laptop.
 settings-power-card-battery = Bateria
@@ -198,11 +177,11 @@ settings-power-card-battery = Bateria
 settings-power-card-looking-after = Cuidando da bateria
 
 # Words behind the i of the battery card.
-settings-power-battery-about = A economia de bateria fica mais fria e faz a bateria durar mais; o desempenho é mais rápido; o equilibrado fica entre os dois. O aviso aparece uma vez no meio da tela, enquanto a bateria vai acabando. Parar em 80% é mais gentil com a bateria de um notebook que fica quase sempre na tomada: ela carrega até 80% e não mais, e dura mais anos. Desligue antes de um dia longe da tomada.
+settings-power-battery-about = A economia de bateria fica mais fria e faz a bateria durar mais. O desempenho é mais rápido. O equilibrado fica entre os dois. O aviso aparece uma vez, no meio da tela, enquanto a bateria vai acabando. Parar em 80% é melhor para um notebook que fica na tomada quase o tempo todo, e ajuda a bateria a durar mais anos. Desligue antes de passar um dia longe da tomada.
 
 # SAFETY: needs a human review before it ships
 # Words under the charge limit line while the password window is open.
-settings-power-limit-waiting = Aguardando a senha...
+settings-power-limit-waiting = Aguardando a sua senha…
 
 # Green words under the charge limit line after charging was limited to 80%.
 settings-power-limit-on = Para em 80%
@@ -213,26 +192,20 @@ settings-power-limit-off = Carrega até o fim
 # Heading of the keep the screen awake line, and name of its switch.
 settings-power-awake = Manter a tela acesa
 
-# Small words under the keep the screen awake line.
-settings-power-awake-about = A xícara na aba faz o mesmo.
-
 # Title of the card about dimming and the moving clock.
 settings-power-screen-title = Tela
 
 # Words behind the i of the Screen card.
-settings-power-screen-about = Enquanto Manter a tela acesa estiver ligado, nada disso acontece; a xícara na aba também liga e desliga. Escurecer: qualquer movimento traz o brilho de volta; só telas com brilho próprio, como a de um notebook, escurecem. O relógio em movimento: a tela fica escura só com a hora, passeando devagar, e qualquer tecla ou movimento traz tudo de volta. Em um notebook cada tempo é definido duas vezes, para a bateria e para o carregador.
+settings-power-screen-about = Enquanto Manter a tela acesa estiver ligado, nada disso acontece. A xícara no anel também liga e desliga essa opção. Só telas com controle de brilho próprio, como a de um notebook, podem escurecer. O relógio em movimento escurece a tela e mostra só a hora, passeando devagar. Mexer o mouse ou apertar uma tecla traz tudo de volta. Em um notebook, você define cada tempo duas vezes: uma para a bateria e outra para o carregador.
 
 # Title of the card about turning the screen off and sleeping.
 settings-power-sleep-title = Tela apagada e suspensão
 
 # Words behind the i of the Screen off and sleep card.
-settings-power-sleep-about = Qualquer tecla ou movimento acende a tela de novo. Suspender põe o computador para dormir até você acordá-lo. Em um notebook cada tempo é definido duas vezes, para a bateria e para o carregador. Com uma segunda tela conectada, fechar a tampa não faz nada, para você continuar com a tela maior.
+settings-power-sleep-about = Apertar uma tecla ou mexer o mouse acende a tela de novo. Suspender pausa o computador até você acordá-lo. Em um notebook, você define cada tempo duas vezes: uma para a bateria e outra para o carregador. Se uma segunda tela estiver conectada, fechar a tampa não faz nada, para você continuar com a tela maior.
 
 # Heading of the line for what closing the lid does.
 settings-power-lid = Quando a tampa é fechada
-
-# Small words under that line.
-settings-power-lid-about = Nada acontece com uma segunda tela conectada.
 
 # Caption above a list that applies while the laptop runs on its battery.
 settings-power-when-battery = Na bateria
@@ -251,32 +224,22 @@ settings-power-named-charger = { $title }: na tomada
 settings-power-lock = Bloquear a tela
 
 # SAFETY: needs a human review before it ships
-# Small words under the lock the screen line.
-settings-power-lock-about = Sua senha ou um PIN faz você voltar.
-
-# SAFETY: needs a human review before it ships
 # Heading of the lock after line, and the name of its list.
 settings-power-lock-after-name = Bloquear após
-
-# Small words under the lock after line.
-settings-power-lock-after-about = Deixado sozinho por este tempo, não importa o que mais esteja definido.
 
 # SAFETY: needs a human review before it ships
 # Heading of the line, and name of its switch, for locking when the computer sleeps.
 settings-power-lock-sleep = Bloquear quando o computador suspender
-
-# Small words under that line.
-settings-power-lock-sleep-about = Para que ele sempre acorde bloqueado.
 
 # SAFETY: needs a human review before it ships
 # Heading of the line, and name of its button, that locks the screen now.
 settings-power-lock-now = Bloquear agora
 
 # Small words under the lock now line.
-settings-power-lock-now-about = Também Super e L juntas.
+settings-power-lock-now-about = Ou aperte Super e L.
 
 # Red words under the lock now line when the lock screen would not start.
-settings-power-lock-now-failed = Não foi possível bloquear a tela: a tela de bloqueio não iniciou.
+settings-power-lock-now-failed = O Trindle não conseguiu bloquear a tela porque a tela de bloqueio não iniciou.
 
 # SAFETY: needs a human review before it ships
 # Title of the locking card.
@@ -284,21 +247,15 @@ settings-power-lock-title = Bloqueio
 
 # SAFETY: needs a human review before it ships
 # Words behind the i of the locking card.
-settings-power-lock-card-about = Quando você se ausenta, a tela bloqueia, e sua senha, ou um PIN de quatro dígitos, se você escolher um, faz você voltar. Nada na tela aparece até lá. Entrar no sistema sempre exige a sua senha. Bloquear após é quanto tempo o computador fica sozinho antes de bloquear, não importa os tempos de tela e suspensão; até lá, voltar não exige PIN. Desligar o bloqueio também esquece o PIN. Quatro dígitos são mais rápidos de digitar que a sua senha: depois do tempo escolhido para o PIN, ou após cinco tentativas erradas, a senha passa a ser exigida. A lixeira deixa de usar um PIN.
+settings-power-lock-card-about = Quando você se ausenta, a tela bloqueia. Nada aparece nela até você desbloquear com a sua senha, ou com um PIN de quatro dígitos, se você definiu um. Entrar no sistema sempre exige a sua senha. Bloquear após é quanto tempo o computador pode ficar sozinho antes de bloquear, não importa os tempos de tela e suspensão. Até lá, você não precisa de PIN ao voltar. Desligar o bloqueio também remove o PIN. Depois do tempo definido em O PIN funciona por, ou após cinco tentativas erradas, você precisa da senha.
 
 # SAFETY: needs a human review before it ships
 # Heading of the line for adding a PIN.
 settings-power-pin-add = Desbloquear também com um PIN
 
-# Small words under that line.
-settings-power-pin-add-about = Quatro dígitos, mais rápido que a senha.
-
 # SAFETY: needs a human review before it ships
 # Heading of the line, and name of its list, for how long a PIN works after the screen locks.
 settings-power-pin-works-name = O PIN funciona por
-
-# Small words under that line.
-settings-power-pin-works-about = Depois disso, a senha é exigida.
 
 # SAFETY: needs a human review before it ships
 # Name of the bin button that stops using a PIN.
@@ -306,10 +263,7 @@ settings-power-pin-stop = Deixar de usar um PIN
 
 # SAFETY: needs a human review before it ships
 # Heading of the line shown when a PIN is kept.
-settings-power-pin-kept = Um PIN está guardado
-
-# Small words under that line.
-settings-power-pin-kept-about = Digite quatro novos dígitos para mudá-lo.
+settings-power-pin-kept = Um PIN está definido
 
 # SAFETY: needs a human review before it ships
 # Placeholder of the box for typing a new PIN.
@@ -317,40 +271,45 @@ settings-power-pin-new = Novo PIN
 
 # SAFETY: needs a human review before it ships
 # Name of the button that keeps the PIN typed.
-settings-power-pin-keep = Guardar este PIN
+settings-power-pin-keep = Salvar este PIN
+
+# Placeholder of the box for typing your account password before a PIN is saved.
+settings-power-pin-password = Sua senha
+
+# Red words under the PIN box when no password was typed.
+settings-power-pin-need-password = Digite primeiro a sua senha e depois salve o PIN.
+
+# Red words under the PIN box when the password typed was wrong.
+settings-power-pin-wrong-password = Essa senha não está certa, então o Trindle não salvou o PIN.
 
 # SAFETY: needs a human review before it ships
 # Red words under the PIN line when the PIN could not be removed.
-settings-power-pin-not-removed = Não foi possível remover o PIN, por isso ele ainda desbloqueia a tela.
+settings-power-pin-not-removed = O Trindle não conseguiu remover o PIN, por isso ele ainda desbloqueia a tela.
 
-# SAFETY: needs a human review before it ships
 # Red words under the PIN box when it is not the right length; { $n } is how many digits a PIN has.
+# SAFETY: needs a human review before it ships
 settings-power-pin-digits =
     { $n ->
-        [one] Um PIN tem { $n } dígito.
-        [many] Um PIN tem { $n } dígitos.
-       *[other] Um PIN tem { $n } dígitos.
+        [one] Use { $n } dígito.
+       *[other] Use { $n } dígitos.
     }
 
 # SAFETY: needs a human review before it ships
 # Heading of the log out line, and name of its round button.
 settings-power-log-out = Sair da sessão
 
-# Small words under the log out line.
-settings-power-log-out-about = Volta para a tela de login.
-
 # Title of the card with log out, suspend, restart and shut down.
 settings-power-session-title = Sessão
 
 # SAFETY: needs a human review before it ships
 # Words behind the i of the session card.
-settings-power-session-about = Sair da sessão fecha todas as janelas e volta para a tela de login. Suspender põe o computador para dormir até você acordá-lo. Cada botão pergunta duas vezes, como a escolha de energia no anel, então um deslize não faz nada.
+settings-power-session-about = Sair da sessão fecha todas as janelas e leva você de volta para a tela de login. Suspender pausa o computador até você acordá-lo. Cada botão precisa de um segundo toque para confirmar, como as opções de energia no anel, então um deslize não faz nada.
 
 # Red words under a session button when the system bus is not there.
-settings-power-no-bus = O barramento do sistema não está disponível.
+settings-power-no-bus = Não foi possível acessar o serviço do sistema.
 
 # Red words under a session button when the computer would not do it.
-settings-power-would-not = O computador não quis fazer isso.
+settings-power-would-not = O computador não conseguiu fazer isso.
 
 # Spoken description of the battery picture while the battery is being read.
 settings-power-art-looking-tip = Verificando a bateria.
@@ -359,7 +318,7 @@ settings-power-art-looking-tip = Verificando a bateria.
 settings-power-art-tip = Bateria em { $percent }%. { $state }
 
 # Word drawn in the empty battery picture while the battery is being read.
-settings-power-art-looking = Verificando
+settings-power-art-looking = Carregando
 
 # Word drawn under the battery figure when its state is not known.
 settings-power-art-battery = Bateria
@@ -372,10 +331,10 @@ settings-power-art-left =
     }
 
 # Spoken description of the battery range bar when there is no warning; { $top } is the percent it charges to.
-settings-power-limits-tip = Carrega até { $top }%; sem aviso.
+settings-power-limits-tip = Carrega até { $top }%, sem aviso.
 
 # Spoken description of the battery range bar; { $top } is the percent it charges to and { $warn } where a warning comes.
-settings-power-limits-tip-warn = Carrega até { $top }%; aviso em { $warn }%.
+settings-power-limits-tip-warn = Carrega até { $top }%, com aviso em { $warn }%.
 
 # A length of time in the list of how long a PIN works, in minutes; { $n } is the number.
 settings-power-pin-minutes =
@@ -395,4 +354,3 @@ settings-power-pin-hours =
 
 # A length of time in the list of how long a PIN works, in hours and minutes; { $hours } and { $minutes } are the two parts already written out, such as 1 hour and 15 minutes.
 settings-power-pin-hours-minutes = { $hours } e { $minutes }
-

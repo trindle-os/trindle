@@ -42,11 +42,18 @@ pub fn moving_for() -> Option<f64> {
     (now >= began).then_some(now - began)
 }
 
+pub(super) fn is_named(pid: i32, name: &str) -> bool {
+    std::fs::read_to_string(format!("/proc/{pid}/comm")).is_ok_and(|c| comm_is(c.trim_end_matches('\n'), name))
+}
+
+fn comm_is(comm: &str, name: &str) -> bool {
+    comm == &name[..name.len().min(15)]
+}
+
 fn stop() -> i32 {
     let pid: Option<i32> = std::fs::read_to_string(pid_file()).ok().and_then(|p| p.trim().parse().ok());
     if let Some(pid) = pid.filter(|p| *p > 1) {
-        let mine = std::fs::read_to_string(format!("/proc/{pid}/cmdline")).is_ok_and(|c| c.contains("screensaver"));
-        if mine {
+        if is_named(pid, "trindle-screensaver") {
             // SAFETY: a signal to a process number just checked to be a
 
             unsafe { libc::kill(pid, libc::SIGTERM) };
@@ -272,6 +279,30 @@ impl Clock {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn only_the_exact_name_is_ours() {
+        assert!(comm_is("trindle-screens", "trindle-screensaver"));
+        assert!(comm_is("trindle-wallpap", "trindle-wallpaper"));
+        assert!(!comm_is("vim", "trindle-screensaver"));
+        assert!(!comm_is("trindle-screensaver-x", "trindle-screensaver"));
+        assert!(!comm_is("trindle-screen", "trindle-screensaver"));
+    }
+
+    #[test]
+    fn a_running_program_is_known_by_its_comm() {
+        let mut child = std::process::Command::new("sleep").arg("5").spawn().unwrap();
+        let pid = child.id() as i32;
+        let start = Instant::now();
+        while !is_named(pid, "sleep") && start.elapsed() < Duration::from_secs(5) {
+            std::thread::sleep(Duration::from_millis(10));
+        }
+        assert!(is_named(pid, "sleep"));
+        assert!(!is_named(pid, "trindle-screensaver"));
+        child.kill().unwrap();
+        child.wait().unwrap();
+        assert!(!is_named(pid, "sleep"));
+    }
 
     #[test]
     fn the_screensavers_clock_draws_only_pairs_the_table_holds() {

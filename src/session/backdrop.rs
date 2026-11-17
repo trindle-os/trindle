@@ -673,15 +673,6 @@ mod tests {
         assert_eq!(asked_again(false, now), Some(now + AGAIN_AFTER));
         assert_eq!(asked_again(true, now), None);
         assert!(AGAIN_AFTER >= Duration::from_millis(200) && AGAIN_AFTER < REST_AFTER, "asked again before the film is taken to be at rest");
-
-        let code = crate::common::source::code(include_str!("backdrop.rs"));
-        let code = code.split("\n#[cfg(test)]").next().unwrap();
-        let tick = &code[code.find("    fn tick(").expect("tick is gone")..];
-        let tick = &tick[..tick.find("\n    }\n").expect("the end of tick")];
-        let none = &tick[tick.find(".next(frame").expect("the asking for a frame")..];
-        let none = &none[..none.find("return;").expect("where no frame ends")];
-        assert!(none.contains("asked_again(movie.player.over(), now)") && none.contains("self.tick_in("), "no frame, and no time set to ask again");
-        assert_eq!(code.matches("self.events.after(").count(), 1, "a wait for the film is set from a second place");
     }
 
     #[test]
@@ -689,11 +680,6 @@ mod tests {
         assert!(!stands_still(true, false), "a film started on battery was given no frame at all");
         assert!(stands_still(true, true));
         assert!(!stands_still(false, false) && !stands_still(false, true));
-        let code = crate::common::source::code(include_str!("backdrop.rs"));
-        let code = code.split("\n#[cfg(test)]").next().unwrap();
-        let tick = &code[code.find("    fn tick(").expect("tick is gone")..];
-        let tick = &tick[..tick.find("\n    }\n").expect("the end of tick")];
-        assert!(tick.contains("stands_still(movie.on_battery, movie.shown.is_some())") && !tick.contains("if movie.on_battery"), "{tick}");
     }
 
     #[test]

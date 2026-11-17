@@ -13,10 +13,10 @@ settings-tailscale-not-seen = jamais vu
 settings-tailscale-last-online = dernière connexion : { $day }
 
 # Shown beside the Use Tailscale switch while the password is asked for, when Tailscale is already installed.
-settings-tailscale-waiting = En attente du mot de passe...
+settings-tailscale-waiting = En attente de votre mot de passe…
 
 # Shown beside the Use Tailscale switch while the password is asked for, before Tailscale is installed.
-settings-tailscale-waiting-install = En attente du mot de passe, puis installation de Tailscale...
+settings-tailscale-waiting-install = En attente de votre mot de passe avant d'installer Tailscale…
 
 # Shown beside the switch after Tailscale is turned on.
 settings-tailscale-done-on = Tailscale activé
@@ -25,13 +25,13 @@ settings-tailscale-done-on = Tailscale activé
 settings-tailscale-done-off = Tailscale désactivé
 
 # Shown under the Sign in line once the browser is being opened.
-settings-tailscale-opening = Ouverture de la page de connexion dans votre navigateur...
+settings-tailscale-opening = Ouverture de la page de connexion dans votre navigateur…
 
 # Red words under the Sign in line when Tailscale could not be started.
-settings-tailscale-not-started = Tailscale n'a pas pu démarrer.
+settings-tailscale-not-started = Impossible de démarrer Tailscale.
 
 # Red words under the Sign out line when signing out did not work.
-settings-tailscale-sign-out-failed = Tailscale n'a pas voulu se déconnecter.
+settings-tailscale-sign-out-failed = Tailscale n'a pas pu se déconnecter.
 
 # Headline of the page while Tailscale is being asked how it is.
 settings-tailscale-top-asking = Interrogation de Tailscale…
@@ -64,31 +64,22 @@ settings-tailscale-title = Tailscale
 settings-tailscale-keywords = tailscale vpn réseau privé appareils distance tailnet
 
 # Help text at the top of the page.
-settings-tailscale-help = Tailscale réunit vos propres ordinateurs et téléphones en un seul réseau privé, où que chacun se trouve. Rien n'en est installé tant que vous ne l'activez pas, et tant qu'il est désactivé il n'utilise aucune mémoire.
-
-# Small line under the Use Tailscale switch before Tailscale is installed.
-settings-tailscale-switch-sub-first = L'installe depuis la source propre à Tailscale.
-
-# Small line under the Use Tailscale switch once Tailscale is installed.
-settings-tailscale-switch-sub = Désactivé : arrêté, pas lancé avec l'ordinateur.
+settings-tailscale-help = Tailscale réunit vos propres ordinateurs et téléphones en un seul réseau privé, où qu'ils soient. Rien n'est installé tant que vous ne l'activez pas, et tant qu'il est désactivé il n'utilise aucune mémoire.
 
 # Text of the switch that turns Tailscale on or off, and heading of its line.
 settings-tailscale-switch = Utiliser Tailscale
 
 # Help text (i button) of the Tailscale card when Tailscale is off or has not answered.
-settings-tailscale-about-plain = La première fois que vous l'activez, Tailscale est installé depuis la source de logiciels propre à Tailscale, puis lancé. Son service en arrière-plan utilise de la mémoire tant qu'il est actif, il ne tourne donc que lorsque ce réglage est activé. Quand il est désactivé, Tailscale est arrêté et ne démarre pas avec l'ordinateur. Le pare-feu laisse entrer vos propres appareils Tailscale et garde tout le reste dehors, comme avant.
+settings-tailscale-about-plain = La première fois que vous l'activez, Trindle installe Tailscale depuis la source de logiciels propre à Tailscale, puis le lance. Le service en arrière-plan de Tailscale utilise de la mémoire tant qu'il tourne, il ne tourne donc que lorsque ce réglage est activé. Quand il est désactivé, Tailscale est arrêté et ne démarre pas avec l'ordinateur. Le pare-feu laisse entrer vos propres appareils Tailscale et garde tout le reste dehors, comme avant.
 
 # Help text (i button) of the Tailscale card when Tailscale is on but not yet connected.
 settings-tailscale-about-sign-in = { settings-tailscale-about-plain } La connexion ouvre la page de connexion de Tailscale dans votre navigateur. Utilisez le même compte sur chacun de vos appareils.
 
 # Help text (i button) of the Tailscale card when connected.
-settings-tailscale-about-connected = { settings-tailscale-about-plain } La déconnexion retire cet ordinateur de votre réseau privé jusqu'à ce que vous vous reconnectiez.
+settings-tailscale-about-connected = { settings-tailscale-about-plain } Si vous vous déconnectez, cet ordinateur quitte votre réseau privé jusqu'à ce que vous vous reconnectiez.
 
 # Line in the devices card when there are no other devices.
 settings-tailscale-no-devices = Aucun autre appareil pour l'instant
-
-# Small line under "No other devices yet".
-settings-tailscale-no-devices-sub = Connectez-vous sur un autre avec le même compte.
 
 # Shown on the devices card while Tailscale is off.
 settings-tailscale-waits-off = Activez Tailscale pour voir vos appareils.
@@ -114,26 +105,17 @@ settings-tailscale-this-computer = Cet ordinateur
 # Heading of the line that signs in to Tailscale, and tip of its round button.
 settings-tailscale-sign-in = Se connecter
 
-# Small line under the Sign in line.
-settings-tailscale-sign-in-sub = Ouvre la page de connexion dans votre navigateur.
-
 # Heading of the line that joins the private network again, and tip of its round button.
 settings-tailscale-connect = Rejoindre
 
-# Small line under the Connect line.
-settings-tailscale-connect-sub = Rejoint de nouveau votre réseau privé.
-
 # Heading of the line that says the firewall lets the person's own devices in.
-settings-tailscale-firewall = Vos propres appareils entrent
+settings-tailscale-firewall = Vos appareils peuvent entrer
 
 # Small line under that heading.
-settings-tailscale-firewall-sub = Tout le reste est gardé dehors, comme avant.
+settings-tailscale-firewall-sub = Le pare-feu bloque toujours le reste.
 
 # Heading of the line that signs out, and tip of its button.
 settings-tailscale-sign-out = Se déconnecter
-
-# Small line under the Sign out line.
-settings-tailscale-sign-out-sub = Quitte votre réseau privé.
 
 # Heading of the card with the Tailscale switch.
 settings-tailscale-card = Tailscale
@@ -142,4 +124,4 @@ settings-tailscale-card = Tailscale
 settings-tailscale-devices = Vos appareils
 
 # Help text (i button) of the Your devices card.
-settings-tailscale-devices-about = Chaque appareil connecté à votre réseau privé, avec son adresse sur celui-ci, ce qu'il exécute et sa dernière connexion. Pour en ajouter un, installez Tailscale sur votre téléphone ou un autre ordinateur et connectez-vous avec le même compte.
+settings-tailscale-devices-about = Chaque appareil connecté à votre réseau privé, avec son adresse sur ce réseau, ce qu'il exécute et sa dernière connexion. Pour ajouter un appareil, installez Tailscale sur votre téléphone ou un autre ordinateur et connectez-vous avec le même compte.

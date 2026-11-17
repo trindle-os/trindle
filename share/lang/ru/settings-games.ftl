@@ -7,13 +7,13 @@ settings-games-title = Игры
 settings-games-keywords = игры steam proton треск заикание звук буфер накопитель библиотека split lock игровой контроллер геймпад джойстик кнопки клавиши изменить переназначить поменять стик триггер d-pad xbox playstation nintendo
 
 # What the page is for, in the help.
-settings-games-help = Настройки, помогающие играм работать хорошо. Steam хранит свои настройки у себя. Нажмите кнопку на контроллере, и она поднимется в начало списка и подсветится на картинке. Затем нажмите клавишу на клавиатуре, в которую она должна превратиться. Кнопку также можно превратить в другую кнопку или в ничто через её список. Каждый контроллер хранит свои изменения по производителю и модели, и игры видят изменённый контроллер. Клавиша Escape отменяет начатое изменение.
+settings-games-help = Настройки, помогающие играм работать хорошо. Настройки самого Steam меняйте в Steam. Чтобы изменить кнопку контроллера, нажмите её: она поднимется в начало списка и подсветится на картинке. Затем нажмите клавишу на клавиатуре, которой она должна стать. Кнопку также можно превратить в другую кнопку или отключить: это делается в её списке. Trindle хранит изменения для каждого производителя и модели контроллера, и игры используют изменённый контроллер. Чтобы отменить начатое изменение, нажмите Escape.
 
 # The sentence at the top of the page.
-settings-games-top = Помощь для игр, которые трещат, заикаются или нуждаются в большем запасе.
+settings-games-top = Помощь для игр, которые трещат, заикаются или которым не хватает места.
 
 # Shown beside a switch while the person is asked for the password.
-settings-games-waiting = Ожидание пароля...
+settings-games-waiting = Ожидание вашего пароля…
 
 # The card holding the sound and split-lock switches.
 settings-games-smooth = Более плавные игры
@@ -25,7 +25,7 @@ settings-games-smooth-about = Исправления для игр, в кото�
 settings-games-sound = Увеличенный звуковой буфер
 
 # Under the sound switch.
-settings-games-sound-sub = Для игр, в которых звук трещит. Звук приходит чуть позже.
+settings-games-sound-sub = Для игр, в которых звук трещит. Звук воспроизводится чуть позже.
 
 # After the sound switch is turned on.
 settings-games-sound-done-on = Увеличенный буфер включён
@@ -60,14 +60,11 @@ settings-games-drive-unnamed = Накопитель
 # One drive in the list: its name, size and kind of filesystem.
 settings-games-drive-name = { $name }, { $size }, { $fs }
 
-# Under a drive that can be used for games.
-settings-games-drive-ready = Готов для игр
-
 # The button that makes a drive the games drive.
 settings-games-drive-use = Использовать для игр
 
 # Under the drive in use for games.
-settings-games-drive-in-use = Накопитель для игр, в { $place }
+settings-games-drive-in-use = Накопитель для игр в { $place }
 
 # The button that stops using a drive for games.
 settings-games-drive-stop = Больше не использовать для игр
@@ -80,9 +77,6 @@ settings-games-drive-forgotten = Больше не используется дл
 
 # When there is no second drive.
 settings-games-drive-none = Второго накопителя нет
-
-# Under that.
-settings-games-drive-none-sub = Установите или подключите второй накопитель, чтобы хранить на нём игры.
 
 # When the drives could not be listed.
 settings-games-drive-unread = Не удалось получить список накопителей
@@ -97,16 +91,16 @@ settings-games-drive-steam = Добавьте его в Steam
 settings-games-drive-steam-sub = В Steam: «Настройки», «Хранилище», «Добавить накопитель».
 
 # Why a Windows-formatted drive cannot be used.
-settings-games-drive-windows = Формат Windows: игры на нём ломаются. Отформатируйте его для Linux.
+settings-games-drive-windows = Этот накопитель отформатирован для Windows, и игры на нём работают неправильно. Отформатируйте его для Linux.
 
 # Why a locked drive cannot be used.
-settings-games-drive-locked = Заблокирован: сначала разблокируйте его в «Дисках».
+settings-games-drive-locked = Сначала разблокируйте его в «Дисках».
 
 # Why a part that holds no files cannot be used.
-settings-games-drive-not-files = Файлов нет
+settings-games-drive-not-files = Не для файлов
 
 # Why an unknown kind of drive cannot be used.
-settings-games-drive-unknown = Формат, с которого игры не запускаются
+settings-games-drive-unknown = Игры не могут запускаться с этого накопителя
 
 
 
@@ -114,7 +108,7 @@ settings-games-drive-unknown = Формат, с которого игры не �
 settings-games-steam-title = Игры Steam
 
 # What that card is for.
-settings-games-steam-about = Исправления для отдельных игр. Чтобы их менять, Steam должен быть закрыт.
+settings-games-steam-about = Исправления для отдельных игр. Закройте Steam, прежде чем их менять.
 
 # Shown, and beside every control, while Steam is open.
 settings-games-steam-open = Steam открыт
@@ -126,16 +120,16 @@ settings-games-steam-open-sub = Закройте Steam, чтобы это изм
 settings-games-game-running = Игра запущена
 
 # Under a game's name.
-settings-games-game-sub = Более мощная графика, Proton от сообщества, начало с нуля. При начале с нуля Windows-окружение игры уходит в корзину, а сохранения внутри него тоже, если их нет в Steam Cloud.
+settings-games-game-sub = Начало с нуля переносит настройку и локальные сохранения в корзину.
 
 # The switch for a game: use the stronger graphics chip.
-settings-games-stronger = Использовать более мощную графику
+settings-games-stronger = Использовать более быструю графику
 
 # After that switch is turned on.
-settings-games-stronger-on = Более мощная графика включена
+settings-games-stronger-on = Более быстрая графика включена
 
 # After that switch is turned off.
-settings-games-stronger-off = Более мощная графика выключена
+settings-games-stronger-off = Более быстрая графика выключена
 
 # The switch for a game: use the community Proton build.
 settings-games-proton-one = Использовать Proton от сообщества
@@ -144,25 +138,25 @@ settings-games-proton-one = Использовать Proton от сообщес�
 settings-games-proton-all = Proton от сообщества для всех игр
 
 # Under that.
-settings-games-proton-all-sub = Устанавливается при первом использовании. Каждая игра может выбрать сама.
+settings-games-proton-all-sub = Устанавливается, когда игре впервые понадобится.
 
 # While the community Proton build is being installed.
-settings-games-proton-installing = Установка Proton от сообщества...
+settings-games-proton-installing = Установка Proton от сообщества…
 
 # After a game or all games are given community Proton.
 settings-games-proton-on = Выбран Proton от сообщества
 
 # After the choice is given back to Steam.
-settings-games-proton-off = Steam снова выбирает сам
+settings-games-proton-off = Использовать выбор Steam
 
 # When community Proton was not found after installing.
-settings-games-proton-missing = Proton от сообщества не найден.
+settings-games-proton-missing = Не удалось найти Proton от сообщества.
 
 # The button that gives a game a fresh start.
 settings-games-fresh = Начать с нуля
 
 # After a fresh start.
-settings-games-fresh-done = Перемещено в корзину. Steam создаст новое при следующем запуске.
+settings-games-fresh-done = Настройка в корзине. Steam создаст новую при следующем запуске игры.
 
 # When the game had no Windows setup to move.
 settings-games-fresh-none = Нечего перемещать
@@ -170,6 +164,8 @@ settings-games-fresh-none = Нечего перемещать
 # When no Steam games are installed.
 settings-games-none = Игры Steam не найдены
 
-# Under that.
-settings-games-none-sub = Игры, которые вы устанавливаете в Steam, показаны здесь.
+# Red words when community Proton could not be installed.
+settings-games-proton-not-installed = Trindle не смог установить Proton от сообщества.
 
+# Red words when Steam's settings could not be changed for a game.
+settings-games-proton-not-changed = Trindle не смог изменить настройки Steam.

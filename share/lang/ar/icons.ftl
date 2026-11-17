@@ -1,4 +1,4 @@
 # machine translated (Arabic), not yet reviewed by a person.
 
 # Shown when the program is asked to remove a file that is not an AppImage kept in the AppImages folder.
-icons-only-appimages = تُزال هنا فقط ملفات AppImage المحفوظة في .appimage.
+icons-only-appimages = لا يمكنك هنا إلا إزالة ملفات AppImage المحفوظة في مجلد .appimage.

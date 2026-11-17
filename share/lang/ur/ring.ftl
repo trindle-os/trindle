@@ -23,34 +23,34 @@ ring-cli-command = { $program } [OPTION…]
 ring-cli-options = اختیارات:
 
 # Help for the ring's --say option, printed in a terminal.
-ring-cli-say = یہ الفاظ جو کہتے ہیں وہ کریں، گویا حلقے سے بولا گیا ہو (مائیکروفون کے بغیر آواز کے احکام آزمانے کے لیے)
+ring-cli-say = مائیکروفون کے بغیر متن سے آواز کا حکم چلائیں
 
 # Help for the ring's --background option, printed in a terminal.
-ring-cli-background = دکھائے بغیر شروع کریں، تاکہ پہلی بار کھلنا فوری ہو
+ring-cli-background = نظر سے اوجھل شروع کریں، تاکہ پہلی بار حلقہ فوراً کھلے
 
 # Help for the ring's --show-desktop option, printed in a terminal.
-ring-cli-show-desktop = ڈیسک ٹاپ دکھانے کے لیے ہر ونڈو ہٹا دیں، یا انہیں واپس لے آئیں (Super اور D یہی مانگتے ہیں)
+ring-cli-show-desktop = ڈیسک ٹاپ دکھانے کے لیے ہر ونڈو چھپا دیں، یا انہیں واپس لے آئیں (Super اور D کلیدیں یہی کرتی ہیں)
 
 # Help for the ring's --listen option, printed in a terminal.
-ring-cli-listen = حلقہ پہلے سے سنتا ہوا کھولیں، جیسا کی بورڈ شارٹ کٹ کر سکتا ہے
+ring-cli-listen = حلقہ اس طرح کھولیں کہ وہ آواز کے حکم کے لیے پہلے سے سن رہا ہو، جیسا کی بورڈ شارٹ کٹ کرتا ہے
 
 # Help for the ring's --all option, printed in a terminal.
 ring-cli-all = حلقہ اس طرح کھولیں کہ ہر ایپ اس کے گرد دکھائی دے
 
 # Help for the ring's --power option, printed in a terminal.
-ring-cli-power = حلقہ لاگ آؤٹ، ری اسٹارٹ اور بند کرنے کے صفحے پر کھولیں
+ring-cli-power = حلقے کے پاور آپشنز کھولیں: لاگ آؤٹ، ری اسٹارٹ اور بند کرنا
 
 # Help for the ring's --favourites option, printed in a terminal.
 ring-cli-favourites = ترتیبات میں پسندیدہ کا صفحہ کھولیں
 
 # Help for the ring's --restyle option, printed in a terminal.
-ring-cli-restyle = ترتیبات سے نیا انداز (ہلکا یا گہرا، یا نیا نمایاں رنگ) فوراً اپنائیں
+ring-cli-restyle = ترتیبات سے نیا انداز فوراً لاگو کریں (ہلکا یا گہرا، یا نیا نمایاں رنگ)
 
 # Help for the ring's --corners option, printed in a terminal.
-ring-cli-corners = اوپر کے کونوں میں چھونے کی جگہیں دوبارہ بنائیں
+ring-cli-corners = اوپر کے کونوں میں چھونے کی جگہیں دوبارہ ترتیب دیں
 
 # Help for the ring's --notes option, printed in a terminal.
-ring-cli-notes = کی بورڈ کو اسکرین پر اطلاعات کے دائروں میں لے جائیں (Super اور N یہی مانگتے ہیں)
+ring-cli-notes = کی بورڈ کا کنٹرول اسکرین پر اطلاعات کے دائروں میں لے جائیں (Super اور N کلیدیں یہی کرتی ہیں)
 
 # Error printed in a terminal when the ring is given an option it does not know.
 ring-cli-unknown = نامعلوم اختیار { $option }
@@ -113,13 +113,13 @@ ring-tool-report = مسئلے کی اطلاع دیں
 ring-gone = وہ اب موجود نہیں۔
 
 # Line in the ring when nothing could open the item that was pressed.
-ring-could-not-open = اسے کوئی کھول نہیں سکا۔
+ring-could-not-open = Trindle اسے کھول نہیں سکتا۔
 
 # Line in the ring while it listens to a spoken command.
-ring-listening = سن رہا ہے... بولیں، آپ کے رکتے ہی یہ رک جائے گا
+ring-listening = سن رہا ہے… اپنا حکم بولیں۔ جب آپ بولنا بند کریں گے تو سننا رک جائے گا
 
 # Line in the ring while it works out what was said.
-ring-working-out = سمجھا جا رہا ہے...
+ring-working-out = سمجھا جا رہا ہے…
 
 # Answer to the spoken command to close windows when none are open.
 ring-nothing-to-close = بند کرنے کے لیے کچھ نہیں
@@ -188,7 +188,7 @@ ring-star-remove = پسندیدہ سے ہٹائیں
 ring-star-add = پسندیدہ میں شامل کریں
 
 # Screen reader name of the red button that shows why an uninstall failed.
-ring-not-done = نہیں ہوا
+ring-not-done = کیوں نہیں؟
 
 # Note on an app's menu when the middle of the ring has no room for another favourite; the number is how many it holds.
 ring-middle-full =
@@ -202,7 +202,7 @@ ring-power-lock = مقفل کریں
 ring-power-screensaver = اسکرین سیور
 
 # Choice on the ring's power page: put the computer to sleep.
-ring-power-suspend = معطل کریں
+ring-power-suspend = سلیپ
 
 # Choice on the ring's power page: hibernate.
 ring-power-hibernate = ہائبرنیٹ
@@ -224,7 +224,7 @@ ring-empty-hint = تمام ایپس پر کلک کریں، پھر کسی ایپ 
 
 # Line in the ring when a spoken or typed power choice needs a click to confirm.
 # SAFETY: needs a human review before it ships
-ring-power-only-click = اس کی تصدیق صرف کلک سے ہوتی ہے۔
+ring-power-only-click = تصدیق کے لیے کلک کریں۔
 
 # Line in the ring when something other than the person tried to shut the computer down.
 # SAFETY: needs a human review before it ships
@@ -232,7 +232,7 @@ ring-power-only-own = یہ کمپیوٹر صرف آپ بند کر سکتے ہی�
 
 # Line in the ring when the power page closed because a program pressed a key.
 # SAFETY: needs a human review before it ships
-ring-power-closed = پاور کا صفحہ بند ہو گیا: کلید کسی پروگرام نے دبائی، آپ نے نہیں۔
+ring-power-closed = پاور کا صفحہ بند ہو گیا کیونکہ کسی پروگرام نے کلید دبانے کا اشارہ بھیجا۔
 
 ring-startup-add = لاگ اِن پر شروع کریں
 
@@ -241,7 +241,7 @@ ring-startup-remove = لاگ اِن پر شروع کرنا بند کریں
 
 
 # Help for the option that opens the shortcut list, or closes it when it is showing.
-ring-cli-shortcuts = ہر کی بورڈ شارٹ کٹ کو فہرست میں دکھائیں، یا فہرست ہٹا دیں (Super اور K، جب تک سیٹنگز میں بدلا نہ جائے)
+ring-cli-shortcuts = ہر کی بورڈ شارٹ کٹ کی فہرست دکھائیں، یا فہرست چھپا دیں (Super اور K، جب تک آپ ترتیبات میں نہ بدلیں)
 
 # Notice from the new ring after the parts were restarted from the keyboard.
 ring-restarted = دوبارہ شروع ہو گیا
@@ -249,3 +249,11 @@ ring-restarted = دوبارہ شروع ہو گیا
 # Under the notice above.
 ring-restarted-why = حلقہ اور مددگار حصے دوبارہ شروع ہو گئے۔
 
+# Tip on the app menu's red button when removing the app did not work.
+ring-uninstall-failed = اسے ہٹایا نہیں جا سکا۔
+
+# Shorter name of the Sound and video piece of All apps, for when the full name does not fit along it.
+ring-category-media-short = آواز
+
+# Line in the ring when a spoken command, such as turning the sound down, did not work.
+ring-voice-failed = یہ کام نہیں ہوا۔

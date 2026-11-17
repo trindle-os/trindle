@@ -128,14 +128,21 @@ fn cannot_exchange(e: &std::io::Error) -> bool {
 }
 
 fn swap(top: &Path, sub: &str, n: u32) -> Outcome {
+    swap_stamped(top, sub, n, &chrono_stamp())
+}
+
+fn swap_stamped(top: &Path, sub: &str, n: u32, stamp: &str) -> Outcome {
     let current = top.join(sub);
     let snap = current.join(format!(".snapshots/{n}/snapshot"));
     if !snap.is_dir() {
         return Err(t!("admin-snapshot-missing", n = n));
     }
-    let stamp = chrono_stamp();
     let fresh = top.join(format!("{sub}-restoring"));
     let aside = top.join(format!("{sub}-before-restore-{stamp}"));
+
+    if aside.symlink_metadata().is_ok() {
+        return Err(t!("admin-restore-name-taken").into());
+    }
     copy_snapshot(&snap, &fresh)?;
     Swap { sub, current: &current, fresh: &fresh, aside: &aside }.put_in_place()
 }
@@ -304,9 +311,10 @@ fn forget_in(top: &Path, list: &Path, sub: &str) -> Outcome {
 }
 
 fn chrono_stamp() -> String {
-    std::process::Command::new("date").arg("+%Y-%m-%d-%H%M").output().ok()
+    std::process::Command::new("date").arg("+%Y-%m-%d-%H%M%S").env("LC_ALL", "C").output().ok()
         .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string())
-        .filter(|s| !s.is_empty()).unwrap_or_else(|| "earlier".into())
+        .filter(|s| !s.is_empty() && s.chars().all(|c| c.is_ascii_digit() || c == '-'))
+        .unwrap_or_else(|| std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map_or(0, |d| d.as_secs()).to_string())
 }
 
 #[cfg(test)]
@@ -343,7 +351,7 @@ mod tests {
         let s = copying("restore-blocked", true);
         let top = a_system(&s);
         let said = swap(&top, "@", 3).unwrap_err();
-        assert!(said.starts_with("Nothing was changed: the snapshot could not be made ready."), "{said}");
+        assert!(said.starts_with("Nothing was changed, because Trindle couldn't get the snapshot ready."), "{said}");
         assert_eq!(std::fs::read(top.join("@/mark")).unwrap(), b"present");
         assert!(set_aside(&top).is_empty());
     }
@@ -358,6 +366,17 @@ mod tests {
         assert_eq!(std::fs::read_to_string(top.join("@").join(SET_ASIDE_REL)).unwrap(), format!("{}\n", aside[0]));
         assert!(top.join("@").join(GRUB_REFRESH_REL).is_file());
         assert!(top.join("@/.snapshots/3/snapshot").is_dir() && top.join(&aside[0]).join("mark").is_file());
+    }
+
+    #[test]
+    fn a_second_restore_in_the_same_second_is_refused_and_strands_nothing() {
+        let s = copying("restore-twice", false);
+        let top = a_system(&s);
+        assert_eq!(swap_stamped(&top, "@", 3, "2026-11-12-101500"), Ok(()));
+        let said = swap_stamped(&top, "@", 3, "2026-11-12-101500").unwrap_err();
+        assert_eq!(said, t!("admin-restore-name-taken").to_string());
+        assert!(top.join("@/.snapshots/3/snapshot").is_dir(), "the system in place keeps its snapshots");
+        assert!(!top.join("@-restoring").exists(), "no half-made copy is left");
     }
 
     struct Refusing;
@@ -380,7 +399,7 @@ mod tests {
         let no = refusing(&["exchange"]);
         let said = swap(&top, "@", 3).unwrap_err();
         drop(no);
-        assert_eq!(said, "Could not put the snapshot in place: the disk would not");
+        assert_eq!(said, "Trindle couldn't put the snapshot in place: the disk would not");
         assert_eq!(std::fs::read(top.join("@/mark")).unwrap(), b"present", "the present system is under its own name");
         assert!(top.join("@/.snapshots/3/snapshot").is_dir(), "and has its snapshots again");
         assert!(set_aside(&top).is_empty(), "nothing is left set aside");
@@ -400,9 +419,9 @@ mod tests {
         drop(no);
         let aside = set_aside(&top);
         assert_eq!(aside.len(), 1);
-        assert!(said.starts_with("Could not put the snapshot in place: the disk would not Putting things back as they were did not work either: \
-                                  the present system is now named @-before-restore-"), "{said}");
-        assert!(said.contains(&format!("named {} and not @, and the computer will not start until it is named @ again", aside[0])), "{said}");
+        assert!(said.starts_with("Trindle couldn't put the snapshot in place: the disk would not Trindle also couldn't put things back as they were: \
+                                  The current system is now called @-before-restore-"), "{said}");
+        assert!(said.contains(&format!("called {} instead of @, and the computer won't start until it is called @ again", aside[0])), "{said}");
         assert!(top.join(&aside[0]).join(".snapshots/3/snapshot").is_dir(), "its snapshots went back into it all the same");
 
         let s = copying("restore-snapshots-left", false);
@@ -411,7 +430,7 @@ mod tests {
         let said = swap(&top, "@", 3).unwrap_err();
         drop(no);
 
-        assert_eq!(said, format!("Could not put the snapshot in place: the disk would not Putting things back as they were did not work either: \
+        assert_eq!(said, format!("Trindle couldn't put the snapshot in place: the disk would not Trindle also couldn't put things back as they were: \
                                   {}: the disk would not", top.join("@-restoring/.snapshots").display()));
         assert_eq!(std::fs::read(top.join("@/mark")).unwrap(), b"present");
         assert!(set_aside(&top).is_empty() && top.join("@-restoring/.snapshots/3/snapshot").is_dir());
@@ -477,6 +496,6 @@ mod tests {
         crate::common::files::FULL.set(false);
         let said = said.unwrap_err();
         assert_eq!(std::fs::read(s.path("/full")).unwrap(), b"@-before-restore-2026-10-01-0900\n");
-        assert!(said.starts_with("The list of what was set aside could not be brought up to date"), "{said}");
+        assert!(said.starts_with("Trindle couldn't update the list of systems that were set aside"), "{said}");
     }
 }

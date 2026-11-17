@@ -4,7 +4,7 @@
 //! panel's `App`; `Ring` opens, fades and closes it.
 
 mod pinned;
-mod arrange;
+pub(in crate::ring) mod arrange;
 mod launch;
 mod power;
 mod menu;
@@ -79,7 +79,10 @@ pub struct Face {
     first_len: usize,
 
     best_match: Option<usize>,
-    menu: Option<(usize, [f32; 4])>,
+
+    typed_turn: u32,
+
+    menu: Option<(usize, String, [f32; 4])>,
     beside: Option<(String, [f32; 4], Rc<dyn Fn() -> Node<Msg>>)>,
     pressed_at: [f32; 4],
     press: Option<(usize, f32, f32, bool)>,
@@ -118,18 +121,19 @@ pub struct Face {
 
     using_hold: using::Hold,
     listening: bool,
-    pulse: f32,
+
+    listening_since: std::time::Instant,
     listener: Option<Rc<crate::voice::Listener>>,
     listen_turn: u32,
-    gone: Option<(usize, Gone)>,
+    gone: Option<(String, Gone)>,
 
-    gone_turn: u32,
+    removing: Vec<String>,
 
     wipe: bool,
 
     flat_ask: Option<FlatAsk>,
 
-    how: Option<(usize, Option<How>)>,
+    how: Option<(String, Option<How>)>,
 }
 
 impl Face {
@@ -205,7 +209,7 @@ impl Face {
         let ids = self.pinned_ids();
         self.look_aside(&ids);
         self.updates.notice();
-        self.updates.look();
+        self.updates.look_if_due();
         self.tray.set_open(true);
         self.level = FAVOURITES;
         self.level_k = 1.0;
@@ -248,7 +252,7 @@ impl Face {
             typed: String::new(),
             favourites: store::favourites(), fav_stamp: store::favourites_changed_at(),
             pinned: RefCell::default(), image_stamps: None, images_there: Vec::new(), looking: Rc::default(), opening: Rc::default(),
-            lay: Rc::new(layout::<usize>(&[], &[], 1280.0, 800.0)), first_len: 0, best_match: None,
+            lay: Rc::new(layout::<usize>(&[], &[], 1280.0, 800.0)), first_len: 0, best_match: None, typed_turn: 0,
             menu: None, beside: None, pressed_at: [0.0; 4], press: None,
             power: false, armed: None, offered: false, arm_turn: 0, can_hibernate: false,
             words: None, words_turn: 0, said: None,
@@ -259,8 +263,8 @@ impl Face {
             segment_hover: false, top_hover: false,
             clock: time_and_date(),
             using: crate::common::in_use::read_all(), using_hold: Default::default(),
-            listening: false, pulse: 0.0, listener: None, listen_turn: 0,
-            gone: None, gone_turn: 0, wipe: false, flat_ask: None, how: None,
+            listening: false, listening_since: std::time::Instant::now(), listener: None, listen_turn: 0,
+            gone: None, removing: Vec::new(), wipe: false, flat_ask: None, how: None,
         }
     }
 }

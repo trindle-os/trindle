@@ -36,16 +36,16 @@ fn of_kind<'a>(listed: &'a [github::Found], code: &str) -> Vec<&'a github::Found
 }
 
 pub fn want_hub(s: &mut Store) {
-    if s.hub_asked && s.hub.as_ref().is_none_or(|l| !l.is_empty()) {
+    if s.appimagehub.asked && s.appimagehub.list.as_ref().is_none_or(|l| !l.is_empty()) {
         return;
     }
-    s.hub_asked = true;
+    s.appimagehub.asked = true;
     hub::fetch(s.then(hub_here));
 }
 
 pub fn hub_here(s: &mut Store, found: Vec<github::Found>) {
-    s.hub = Some(Rc::new(found));
-    s.hub_asked = true;
+    s.appimagehub.list = Some(Rc::new(found));
+    s.appimagehub.asked = true;
     fetch_icons(s);
 }
 
@@ -56,7 +56,7 @@ pub fn opened(s: &mut Store) {
 }
 
 pub fn fetch_icons(s: &mut Store) {
-    let Some(listed) = s.hub.clone() else { return };
+    let Some(listed) = s.appimagehub.list.clone() else { return };
     let (urls, size): (Vec<String>, f32) = match &s.view {
         View::Browse => (of_kind(&listed, kinds()[s.browse.kind.min(kinds().len() - 1)].0).into_iter().take(s.browse.shown)
             .map(|f| f.icon.clone()).collect(), theme::apps_list().row_icon),
@@ -77,7 +77,7 @@ fn pick(s: &mut Store, kind: usize) {
 }
 
 pub fn page(s: &Store) -> Node<Msg> {
-    let listed = s.hub.as_deref().map(|l| &l[..]);
+    let listed = s.appimagehub.list.as_deref().map(|l| &l[..]);
     let words = match listed {
         None => t!("store-browse-fetching").to_string(),
         Some([]) if !s.online => t!("store-browse-offline").to_string(),
@@ -92,7 +92,7 @@ pub fn page(s: &Store) -> Node<Msg> {
         let all = kinds();
         let kind = s.browse.kind.min(all.len() - 1);
         let named: Vec<(&str, usize)> = all.iter().map(|(code, name)| (*name, of_kind(l, code).len())).collect();
-        let tabs = look::tabs(&named, kind, pages::installed::list_room(s.across), |i| go(move |s| pick(s, i)));
+        let tabs = look::tabs(&named, kind, pages::installed::list_room(s.size.across), |i| go(move |s| pick(s, i)));
         let these = of_kind(l, all[kind].0);
         let mut rows = vec![row(vec![tabs, space()]).centred()];
         if these.is_empty() {

@@ -29,15 +29,15 @@ keyring-checking = Đang kiểm tra…
 
 # Under the title when no keyring exists yet and a program wants to keep a password.
 # SAFETY: needs a human review before it ships
-keyring-why-none = Một chương trình muốn lưu giữ an toàn một mật khẩu. Hãy nhập mật khẩu đăng nhập của bạn để khởi tạo chùm khóa; từ giờ nó sẽ tự mở khi bạn đăng nhập.
+keyring-why-none = Một chương trình muốn lưu giữ an toàn một mật khẩu. Hãy nhập mật khẩu đăng nhập của bạn để khởi tạo chùm khóa. Từ giờ, chùm khóa sẽ tự mở khi bạn đăng nhập.
 
 # Under the title when the keyring was made with a different password from the login one.
 # SAFETY: needs a human review before it ships
-keyring-why-old = Mật khẩu đăng nhập của bạn không phải mật khẩu đã dùng để tạo chùm khóa này. Hãy nhập mật khẩu cũ một lần; sau đó chùm khóa sẽ tự mở khi bạn đăng nhập.
+keyring-why-old = Mật khẩu đăng nhập của bạn không phải mật khẩu đã dùng để tạo chùm khóa này. Hãy nhập mật khẩu cũ một lần. Sau đó, chùm khóa sẽ tự mở khi bạn đăng nhập.
 
 # Under the title when no password was typed at log in, for example with a fingerprint or automatic log in.
 # SAFETY: needs a human review before it ships
-keyring-why-no-login = Không có mật khẩu nào được nhập khi đăng nhập (dùng vân tay hoặc tự động đăng nhập), nên chùm khóa không thể tự mở. Hãy nhập mật khẩu đăng nhập của bạn.
+keyring-why-no-login = Bạn đã không nhập mật khẩu khi đăng nhập (bạn dùng vân tay hoặc đăng nhập tự động), nên chùm khóa không thể tự mở. Hãy nhập mật khẩu đăng nhập của bạn.
 
 # Under the title when a program asks for a saved password and the keyring is shut.
 # SAFETY: needs a human review before it ships
@@ -51,7 +51,7 @@ keyring-stopped = Chùm khóa đã dừng
 keyring-not-the-keyring-password = Đó không phải mật khẩu của chùm khóa
 
 # Shown under the box when the keyring file is damaged and has been left as it is.
-keyring-damaged-left = Tệp chùm khóa bị hỏng, nên đã được để nguyên
+keyring-damaged-left = Tệp chùm khóa bị hỏng, nên Trindle đã không thay đổi gì
 
 # Shown under the box when the password is not the person's login password.
 # SAFETY: needs a human review before it ships
@@ -62,7 +62,7 @@ keyring-not-login-password = Đó không phải mật khẩu đăng nhập của
 keyring-not-your-password = Đó không phải mật khẩu của bạn.
 
 # Shown in Settings when the old keyring is still running after its time to stop has run out.
-keyring-would-not-stop = Chùm khóa cũ không chịu dừng.
+keyring-would-not-stop = Chùm khóa cũ đã không dừng lại.
 
 # Said when the keyring is locked and cannot be used.
 keyring-error-locked = Chùm khóa đang bị khóa
@@ -72,7 +72,7 @@ keyring-error-locked = Chùm khóa đang bị khóa
 keyring-error-wrong-password = Mật khẩu đó không mở được chùm khóa
 
 # Said when the collection or item asked for is not there.
-keyring-error-no-such = Không có bộ sưu tập hoặc mục như vậy
+keyring-error-no-such = Mục đó không tồn tại
 
 # Said when the keyring file cannot be read as a keyring.
 keyring-error-damaged = Tệp chùm khóa bị hỏng
@@ -83,8 +83,10 @@ keyring-error-damaged = Tệp chùm khóa bị hỏng
 keyring-asked-by = Do { $program } yêu cầu
 
 # Told to a program that asked while the keyring was taking over from the one before and many calls already waited.
-keyring-starting = Vòng khoá đang khởi động. Hãy hỏi lại.
+keyring-starting = Chùm khóa đang khởi động. Hãy thử lại.
 
 # The program in "Asked for by", for a program on the bus: $name is the name it gives itself, which anything can claim.
 keyring-named-itself = một chương trình tự gọi mình là { $name }
 
+# Said to a program that gave a password with letters the keyring can't read, so no keyring is made with it.
+keyring-password-unreadable = Mật khẩu đó có ký tự mà chùm khóa không đọc được

@@ -9,7 +9,7 @@ settings-datetime-keywords = 时区 时钟 日期 时间 time zone clock date
 
 # Help line at the foot of the Date and time page.
 # SAFETY: needs a human review before it ships
-settings-datetime-help = 时区和自动时间需要管理员密码。
+settings-datetime-help = 更改时区或自动时间需要管理员密码。
 
 # Spoken name of the picture of the clock at the top of the page.
 settings-datetime-time-now = 当前时间
@@ -42,7 +42,7 @@ settings-datetime-minute = 分
 settings-datetime-no-time = 无法设置时间。
 
 # Red words when the time was set by hand while automatic time is on.
-settings-datetime-keeps-right = 时钟目前会自动校准。请先在上方关闭自动时间，再手动设置时间。
+settings-datetime-keeps-right = 时钟会自动校准。请先在上方关闭自动时间，再手动设置时间。
 
 # Red words when the system's message bus could not be reached.
 settings-datetime-no-bus = 无法连接系统总线。
@@ -51,7 +51,7 @@ settings-datetime-no-bus = 无法连接系统总线。
 settings-datetime-not-answering = 时间服务没有响应。
 
 # Red words when automatic time could not be turned on.
-settings-datetime-ntp-on-failed = 无法让时钟自动校准。
+settings-datetime-ntp-on-failed = 无法开启自动时间。
 
 # Red words when automatic time could not be turned off.
 settings-datetime-ntp-off-failed = 无法关闭自动时间。
@@ -69,10 +69,10 @@ settings-datetime-it-is = 现在是 { $date } { $time }。
 settings-datetime-service-down = 时间服务没有响应，因此无法在这里更改时钟。
 
 # Headline of the page when the clock is automatic and in step: { $time } is the time and { $date } the date.
-settings-datetime-it-is-right = 现在是 { $date } { $time }，时钟会自动校准。
+settings-datetime-it-is-right = 现在是 { $date } { $time }。时钟会自动校准。
 
 # Headline of the page when the clock is automatic but not yet in step: { $time } is the time and { $date } the date.
-settings-datetime-it-is-checks = 现在是 { $date } { $time }。连接到互联网后，时钟会自行校准。
+settings-datetime-it-is-checks = 现在是 { $date } { $time }。电脑连接到互联网后，时钟会自动校准。
 
 # Headline of the page when the clock is set by hand: { $time } is the time and { $date } the date.
 settings-datetime-it-is-hand = 现在是 { $date } { $time }。时钟为手动设置。
@@ -95,11 +95,8 @@ settings-datetime-the-clock = 时钟
 # Heading of the line shown when the time service is not answering.
 settings-datetime-service-down-line = 时间服务没有响应
 
-# Under Set the time automatically when the internet can be used.
-settings-datetime-from-internet = 联网时从互联网获取。
-
 # Under Set the time automatically when the time service is not installed.
-settings-datetime-needs-timesyncd = 需要安装 systemd-timesyncd。
+settings-datetime-needs-timesyncd = 请先安装 systemd-timesyncd。
 
 # Label of the switch for automatic time, and heading of its line.
 settings-datetime-set-auto = 自动设置时间
@@ -113,16 +110,13 @@ settings-datetime-set-date-time = 设置日期和时间
 # Heading of the line for setting the time by hand.
 settings-datetime-by-hand = 手动设置时间
 
-# Under the Set the time by hand heading.
-settings-datetime-by-hand-sub = 请先关闭自动时间，目前它是开启的。
-
 # Help text of the clock card (the information button) when the time service can keep the time from the internet.
 # SAFETY: needs a human review before it ships
 settings-datetime-about = 设为自动后，只要电脑联网，时钟就会与互联网上的时间服务器核对并自动校准。关闭后，日期和时间需要手动输入。时区还会告诉夜间模式太阳何时落山。两者都需要管理员密码。圆环中间的时钟可以用 24 或 12 小时制显示，可带秒或不带秒。只有圆环的时钟遵循此设置；程序中的日期和时间遵循“地区和语言”中选择的格式。
 
 # Help text of the clock card (the information button) when the time service is not installed.
 # SAFETY: needs a human review before it ships
-settings-datetime-about-no-ntp = 设为自动后，只要电脑联网，时钟就会与互联网上的时间服务器核对并自动校准。关闭后，日期和时间需要手动输入。时区还会告诉夜间模式太阳何时落山。两者都需要管理员密码。通过互联网校准时间需要 systemd-timesyncd：sudo apt install systemd-timesyncd 圆环中间的时钟可以用 24 或 12 小时制显示，可带秒或不带秒。只有圆环的时钟遵循此设置；程序中的日期和时间遵循“地区和语言”中选择的格式。
+settings-datetime-about-no-ntp = 设为自动后，只要电脑联网，时钟就会与互联网上的时间服务器核对并自动校准。关闭后，日期和时间需要手动输入。时区还会告诉夜间模式太阳何时落山。两者都需要管理员密码。通过互联网校准时间需要 systemd-timesyncd：sudo apt install systemd-timesyncd。圆环中间的时钟可以用 24 或 12 小时制显示，可带秒或不带秒。只有圆环的时钟遵循此设置；程序中的日期和时间遵循“地区和语言”中选择的格式。
 
 # An item in the list of ways to write the ring's clock: { $time } is the time written that way and { $what } its name.
 settings-datetime-clock-option = { $time }  （{ $what }）
@@ -132,7 +126,3 @@ settings-datetime-show-as = 显示为
 
 # Heading of the line for the ring's clock.
 settings-datetime-rings-clock = 圆环的时钟
-
-# Under The ring's clock heading.
-settings-datetime-rings-clock-sub = 圆环显示时间的方式。
-

@@ -5,18 +5,18 @@
 store-plugins-open-settings = Mở cài đặt của nó
 
 # Red words under the plugin catalogue when starting again did not work; the reason follows.
-store-plugins-not-done = Chưa xong: { $why }
+store-plugins-not-done = Thất bại: { $why }
 
 # Said on a plugin's row when its update asks for a new permission and so waits for the person.
 # SAFETY: needs a human review before it ships
-store-plugins-waits-for-you = Bản cập nhật này cần một quyền mới. Nó đang chờ bạn.
+store-plugins-waits-for-you = Bản cập nhật này cần một quyền mới, nên nó đang chờ bạn cho phép.
 
 # On a plugin's row: the version it has and the one that is ready.
-store-plugins-waiting = Hiện là phiên bản { $mine }, bản { $new } đã sẵn sàng
+store-plugins-waiting = Bản { $new } đã sẵn sàng. Bạn đang dùng bản { $mine }.
 
 # On a plugin's row: the same, and what the new one asks for that the old one did not; the list and the note that it waits follow.
 # SAFETY: needs a human review before it ships
-store-plugins-waiting-more = Hiện là phiên bản { $mine }, bản { $new } đã sẵn sàng. Nó yêu cầu nhiều hơn trước: { $more }. { $waits }
+store-plugins-waiting-more = Bạn đang dùng phiên bản { $mine }. Phiên bản { $new } cần thêm quyền: { $more }. { $waits }
 
 # Said after who is putting updates in, on the Updates and Plugins pages.
 store-plugins-come-back = Các nút ở đây sẽ trở lại khi nó làm xong.
@@ -30,8 +30,8 @@ store-plugins-none = Chưa cài plugin nào, và cũng chưa có plugin nào đ�
 # Line under the title of the Plugins page when none are installed and some are on offer.
 store-plugins-none-ready =
     { $n ->
-        [1] Chưa cài plugin nào; có 1 plugin sẵn sàng để cài.
-       *[other] Chưa cài plugin nào; có { $n } plugin sẵn sàng để cài.
+        [1] Chưa cài plugin nào. Có 1 plugin sẵn sàng để cài.
+       *[other] Chưa cài plugin nào. Có { $n } plugin sẵn sàng để cài.
     }
 
 # How many plugins are installed, as part of a line.
@@ -56,7 +56,7 @@ store-plugins-count-held =
     }
 
 # Line under the title of the Plugins page: how many are installed, with some updates held back.
-store-plugins-line-held = { $installed }; { $held }.
+store-plugins-line-held = { $installed }. { $held }.
 
 # Line under the title of the Plugins page: how many are installed.
 store-plugins-line-installed = { $installed }.
@@ -68,23 +68,23 @@ store-plugins-line-current = { $installed }, tất cả đều mới nhất.
 store-plugins-line-updates = { $installed }, và { $have }.
 
 # The same, with some updates held back.
-store-plugins-line-updates-held = { $installed }, và { $have }; { $held }.
+store-plugins-line-updates-held = { $installed }, và { $have }. { $held }.
 
 # On a plugin's card when it asks for nothing.
-store-plugins-asks-nothing = Nó không yêu cầu gì.
+store-plugins-asks-nothing = Nó không xin gì.
 
 # On a plugin's card: what it asks for.
 # SAFETY: needs a human review before it ships
-store-plugins-asks = Nó yêu cầu: { $list }.
+store-plugins-asks = Nó xin: { $list }.
 
 # Title of the Plugins page.
 store-plugins-title = Plugin
 
 # On a plugin's card: the new version is ready and held back is not said.
-store-plugins-version-ready = Đã cài phiên bản { $mine }; bản { $new } đã sẵn sàng.
+store-plugins-version-ready = Đã cài phiên bản { $mine }. Phiên bản { $new } đã sẵn sàng.
 
 # On a plugin's card: its installed version.
-store-plugins-version-installed = Phiên bản { $version }, đã cài.
+store-plugins-version-installed = Phiên bản { $version } đã cài.
 
 # On a plugin's card: the version on offer.
 store-plugins-version-offered = Phiên bản { $version }.
@@ -98,7 +98,7 @@ store-plugins-install = Cài đặt { $name }
 
 # Tip of the round button that releases a plugin whose updates are held back.
 # SAFETY: needs a human review before it ships
-store-plugins-release = Bỏ giữ { $name }
+store-plugins-release = Cho phép cập nhật { $name }
 
 # Tip of the round button that updates a plugin to a version.
 # SAFETY: needs a human review before it ships
@@ -108,7 +108,7 @@ store-plugins-update-to = Cập nhật lên { $version }
 store-plugins-where = Plugin đến từ đâu
 
 # Information on the card that says where plugins come from.
-store-plugins-come-from = Plugin chỉ đến từ danh sách riêng của Trindle, được đọc từ trindle.org mỗi khi trang này mở. Để đề xuất một plugin, hãy gửi nó: mỗi plugin được kiểm tra trước khi chính thức xuất hiện.
+store-plugins-come-from = Plugin chỉ đến từ danh sách riêng của Trindle, mà Trindle đọc từ trindle.org mỗi khi trang này mở. Bạn có thể gửi một plugin lên danh sách. Mỗi plugin được kiểm tra trước khi xuất hiện.
 
 # Red words under a plugin that went in but whose background part is not running; the reason follows.
 store-plugins-not-running = Đã cài, nhưng phần chạy nền của nó không hoạt động: { $why }

@@ -6,6 +6,7 @@ use crate::store::{go, listing, plugin_page, update_page, updates, Msg, Store};
 use crate::settings::ui::UPDATE_ICON;
 use crate::common::apps::generic_icon_for;
 use crate::toolkit::t;
+use crate::toolkit::tiles::RingShare;
 use crate::toolkit::widget::{button, note, row, space, Length, Node, Tone};
 use crate::toolkit::theme;
 use crate::store::look::{self, Dot};
@@ -34,11 +35,24 @@ pub(super) fn installed_row(s: &Store, item: &updates::Installed) -> Node<Msg> {
     };
     let row_key = item.key();
     let under = said_under(s, item, &up.key);
-    let remove = remove_button(s, item, up.going);
+    let remove = remove_button(s, item, up.going.is_some());
     let about = about_button(&row_key, known);
     let open = open_button(item).key(format!("open:{row_key}"));
     let update = update_button(s, item, up);
     listing::row_of(Some(picture), item.name.clone(), facts, under, vec![remove, about, open, update])
+}
+
+pub(in crate::store) fn longest_lines(across: f32) -> (f32, Vec<String>) {
+    let (k, list) = (theme::sheet(), theme::apps_list());
+    let room = super::installed::list_room(across) - 2.0 * k.line_padding - list.row_icon - 5.0 * k.gap - 4.0 * theme::icon_button()
+        - look::dot_size() - listing::DOT_GAP;
+    let waits = crate::common::updating::waiting_words(Some("46.1"), Some("47.1"));
+    let size = crate::store::github::size_text(999_900_000);
+    let version = t!("store-installed-version", version = "2026.10.1");
+    let all = ["Flathub", t!("store-from-flatpak-file"), t!("store-from-deb"), t!("store-from-plugin")].iter().flat_map(|from| {
+        [t!("store-installed-held-waits", waits = &waits), waits.clone()].map(|end| [*from, size.as_str(), version.as_str(), end.as_str()].join(" \u{00b7} "))
+    }).collect();
+    (room, all)
 }
 
 struct OwnUpdate {
@@ -47,7 +61,7 @@ struct OwnUpdate {
     has_update: bool,
     newer: Option<String>,
     thing: Option<crate::common::held::Thing>,
-    going: Option<f32>,
+    going: Option<RingShare>,
 }
 
 impl OwnUpdate {
@@ -64,8 +78,8 @@ impl OwnUpdate {
         let thing = if plugin { crate::common::held::Thing::plugin(&item.id) } else { crate::common::held::Thing::app(&item.id).filter(|_| flatpak) };
         let thing = thing.filter(|t| s.held.has(t));
         let going = match &item.source {
-            Source::Flatpak { .. } => update_page::app_share(s, &item.id),
-            Source::Plugin { .. } => s.dials.get(&key).filter(|d| d.running()).map(|d| d.share()),
+            Source::Flatpak { .. } => update_page::app_ring(s, &item.id),
+            Source::Plugin { .. } => update_page::job_ring(s, &key),
             Source::AppImage(_) | Source::Deb { .. } => None,
         };
         OwnUpdate { key, offer, has_update, newer, thing, going }
@@ -77,9 +91,10 @@ fn row_picture(item: &updates::Installed, known: Option<&App>, size: f32) -> Nod
         (_, Some(a)) => app_icon(a, size),
         (Source::Flatpak { .. }, None) => own_icon(item.id.clone(), size),
         (Source::AppImage(path), None) => {
-            let launcher = crate::icons::appimages::launcher_for(path);
-            let named = crate::icons::read_entry(&launcher).get("Icon").cloned().unwrap_or_default();
-            if std::path::Path::new(&named).is_file() { file_icon(named.into(), size) } else { icon(generic_icon_for(&item.id, &item.name), size) }
+            match super::pictures::appimage_icon(path) {
+                Some(named) => file_icon(named, size),
+                None => icon(generic_icon_for(&item.id, &item.name), size),
+            }
         }
         (Source::Deb { icon, .. }, None) => icon_or(icon.clone().unwrap_or_default(), generic_icon_for(&item.id, &item.name), size),
         (Source::Plugin { icon }, None) => icon_or(icon.clone().unwrap_or_default(), plugin_page::PLAIN_ICON, size),
@@ -87,7 +102,6 @@ fn row_picture(item: &updates::Installed, known: Option<&App>, size: f32) -> Nod
 }
 
 fn row_facts(s: &Store, item: &updates::Installed, up: &OwnUpdate, from: Option<&CameFrom>) -> Node<Msg> {
-    let flatpak = matches!(item.source, Source::Flatpak { .. });
     let plugin = matches!(item.source, Source::Plugin { .. });
     let mut bits = vec![item.came_from()];
     bits.extend(from.map(|f| f.words(None)));
@@ -99,8 +113,8 @@ fn row_facts(s: &Store, item: &updates::Installed, up: &OwnUpdate, from: Option<
     }
 
     let waits = crate::common::updating::waiting_words(Some(item.version.as_str()), up.newer.as_deref());
-    let dot = match (up.going, up.thing.is_some(), up.has_update) {
-        (Some(share), _, _) => Dot::Filling(share),
+    let dot = match (&up.going, up.thing.is_some(), up.has_update) {
+        (Some(share), _, _) => Dot::Filling(share.get().unwrap_or(0.0)),
         (None, true, _) => {
             bits.push(if up.has_update { t!("store-installed-held-waits", waits = &waits) } else { t!("store-installed-held").into() });
             Dot::Quiet
@@ -109,7 +123,7 @@ fn row_facts(s: &Store, item: &updates::Installed, up: &OwnUpdate, from: Option<
             bits.push(waits);
             Dot::Waiting
         }
-        (None, false, false) if flatpak || (plugin && plugin_page::offered(&s.plugins, &item.id)) => Dot::UpToDate,
+        (None, false, false) if matches!(item.source, Source::Flatpak { .. }) || (plugin && plugin_page::offered(&s.plugins, &item.id)) => Dot::UpToDate,
         (None, false, false) => Dot::Quiet,
     };
     listing::dotted_row_line(s, dot, bits.join(" \u{00b7} "))
@@ -121,15 +135,15 @@ fn said_under(s: &Store, item: &updates::Installed, key: &str) -> Vec<Node<Msg>>
     let failed = if plugin {
         plugin_page::problem(s, &item.id).map(|w| (w, Tone::Problem))
     } else {
-        s.said.get(key).filter(|(w, t)| !w.is_empty() && *t == Tone::Problem).cloned()
+        s.words.said.get(key).filter(|(w, t)| !w.is_empty() && *t == Tone::Problem).cloned()
     };
     let own_said = s.owned.said.get(&row_key).cloned();
     let page = if own_said.is_some() {
-        s.said_on.get(&row_key).copied().unwrap_or_else(|| crate::store::help::of_key(&row_key))
+        s.words.on.get(&row_key).copied().unwrap_or_else(|| crate::store::help::of_key(&row_key))
     } else if plugin {
         failed.as_ref().map_or(crate::store::help::PLUGIN, |(w, _)| plugin_page::page_of(w))
     } else {
-        s.said_on.get(key).copied().unwrap_or_else(|| crate::store::help::of_key(key))
+        s.words.on.get(key).copied().unwrap_or_else(|| crate::store::help::of_key(key))
     };
     own_said.or(failed).map(|(w, t)| if t == Tone::Problem { red_about(w, page) } else { note(w).tone(t) }).into_iter().collect()
 }
@@ -138,7 +152,7 @@ fn update_button(s: &Store, item: &updates::Installed, up: OwnUpdate) -> Node<Ms
     let OwnUpdate { key, offer, has_update, thing, going, .. } = up;
     let room = || space().width(Length::Fixed(theme::icon_button()));
     match (going, thing, &item.source) {
-        (Some(share), _, Source::Flatpak { .. }) => button(UPDATE_ICON, t!("store-installed-updating", name = &item.name)).key(key).working(share, Tone::Accent),
+        (Some(share), _, Source::Flatpak { .. }) => button(UPDATE_ICON, t!("store-installed-updating", name = &item.name)).key(key).working_following(&share, Tone::Accent),
         (_, Some(thing), _) => update_page::rows::hold_button(s, &thing, &item.name, &key),
         (None, None, Source::Flatpak { .. }) if has_update => {
             let id = item.id.clone();
@@ -154,7 +168,7 @@ fn update_button(s: &Store, item: &updates::Installed, up: OwnUpdate) -> Node<Ms
     }
 }
 
-fn remove_button(s: &Store, item: &updates::Installed, going: Option<f32>) -> Node<Msg> {
+fn remove_button(s: &Store, item: &updates::Installed, going: bool) -> Node<Msg> {
     let row_key = item.key();
     let gone = item.clone();
     if matches!(item.source, Source::Flatpak { .. }) {
@@ -162,7 +176,7 @@ fn remove_button(s: &Store, item: &updates::Installed, going: Option<f32>) -> No
             .on_press(go(move |s| ask_removing(s, None, Some(gone.clone()))))
     } else {
         look::remove(s, &format!("remove:{row_key}"), t!("store-app-remove"), move |s| remove_installed(s, &gone, false))
-            .off_because(crate::common::ui::wait_while(matches!(item.source, Source::Plugin { .. }) && going.is_some()))
+            .off_because(crate::common::ui::wait_while(matches!(item.source, Source::Plugin { .. }) && going))
     }
 }
 

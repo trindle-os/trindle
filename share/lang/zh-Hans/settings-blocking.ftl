@@ -81,7 +81,7 @@ settings-blocking-tile-today-note = 今日已拦截的查询
 settings-blocking-tile-lists = 列表
 
 # Number of the lists tile while the lists are being fetched.
-settings-blocking-tile-fetching = 获取中
+settings-blocking-tile-fetching = 更新中
 
 # Number of the lists tile when no list has been fetched yet.
 settings-blocking-tile-none = 暂无
@@ -90,13 +90,10 @@ settings-blocking-tile-none = 暂无
 settings-blocking-tile-lists-note = 网站列表
 
 # Line under the lists tile: how many sites are listed and how long ago they were fetched.
-settings-blocking-tile-listed-note = 个网站在列表中，{ $ago }获取
+settings-blocking-tile-listed-note = 个网站在列表中，{ $ago }更新
 
 # Line in the Recently blocked card when nothing has been blocked.
 settings-blocking-nothing = 尚未拦截任何网站
-
-# Small line under "Nothing blocked yet".
-settings-blocking-nothing-sub = 网站会显示在这里，最新的在最前。
 
 # Tip of the plus button on a blocked site, and beside the Add a site box: lets the site through.
 # SAFETY: needs a human review before it ships
@@ -106,21 +103,17 @@ settings-blocking-let-through = 始终放行此网站
 settings-blocking-recent = 最近拦截
 
 # Help text (i button) of the Recently blocked card.
-settings-blocking-recent-about = 网站被拦截时会显示在这里，最新的在最前。点击加号可从现在起放行该网站。这里只显示被拦截的网站，被放行的网站不会被记录。
+settings-blocking-recent-about = 网站被拦截时会显示在这里，最新的在最前。点按加号可从现在起放行该网站。Trindle 不会记录它放行的网站。
 
 # Shown on the Recently blocked card while blocking is off.
 settings-blocking-recent-waits = 开启拦截后，可在这里查看被拦截的内容。
 
 # Placeholder of the box where a site name is typed.
-settings-blocking-site-placeholder = 例如 example.com
+settings-blocking-site-placeholder = example.com
 
 # Heading of the line with the box for adding a site.
 # SAFETY: needs a human review before it ships
 settings-blocking-add = 添加网站
-
-# Small line under "Add a site".
-# SAFETY: needs a human review before it ships
-settings-blocking-add-sub = 该网站及其所有子域名都不会被拦截。
 
 # Tip of the minus button on a site that is let through: blocks it again.
 # SAFETY: needs a human review before it ships
@@ -152,15 +145,35 @@ settings-blocking-where = 域名查询发往何处
 # Help text (i button) of the Blocking card.
 settings-blocking-card-about = 使用 HaGeZi 的广告、追踪器和已知恶意网站列表，每天获取一次。关闭时不会运行任何程序。域名查询通过加密连接发送到此处选择的私密服务器。Quad9 不记录是谁发出的查询。“你的网络”仍然会拦截，但不私密：你所在网络自己的服务器能看到每一次查询。
 
-# Small line under the Block adverts and bad sites switch.
-settings-blocking-switch-sub = HaGeZi 的列表，每天获取一次。
-
 # Heading of the line with the private server dropdown.
 settings-blocking-private = 私密服务器
-
-# Small line under Private server.
-settings-blocking-private-sub = Quad9 不记录是谁发出的查询。
 
 # Name of the choice in Private server that uses the network's own servers.
 settings-blocking-provider-network = 你的网络
 
+
+# Heading of the Firewall card, first on the Firewall and blocking page.
+settings-firewall = 防火墙
+
+# Help text (i button) of the Firewall card.
+settings-firewall-about = 开启时，防火墙会拦住其他电脑发来的、本机没有请求过的所有连接，所以同一 Wi-Fi 上的人无法随意尝试。上网、更新和打印机照常可用。等待别人连接的程序，例如游戏服务器，需要在下面开放它的端口。关闭时，任何电脑都能连上每个在监听的程序。切换时会要求输入管理员密码。
+
+# Name of the firewall's on and off switch.
+settings-firewall-switch = 防火墙
+
+# Small line under the switch while the firewall is off.
+settings-firewall-off-sub = 其他电脑可以连上等待连接的程序。
+
+# Said beside the switch once the firewall is on.
+settings-firewall-done-on = 防火墙已开启
+
+# Said beside the switch once the firewall is off.
+settings-firewall-done-off = 防火墙已关闭
+
+# Heading of the card that blocks adverts and bad sites, on the Firewall and blocking page.
+settings-blocking-card = 拦截
+
+
+
+# Small line under the firewall switch when it is on but its rules are not loaded.
+settings-firewall-not-in-force = 防火墙已开启，但没有起作用，因为电脑启动时它的规则没有加载。请先关闭再重新开启。

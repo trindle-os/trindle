@@ -47,7 +47,7 @@ text-find-replace-key = Buscar y reemplazar (Ctrl+H)
 text-go-to-line-key = Ir a la línea (Ctrl+G)
 
 # Button in the menu for a Markdown file that shows it as it will look finished, with its shortcut.
-text-finished-key = Vista final (Ctrl+E)
+text-finished-key = Vista previa (Ctrl+E)
 
 # Button in the menu for a Markdown file that exports it as a web page. Also the title of the chooser for that.
 text-export-html = Exportar como página web
@@ -71,7 +71,7 @@ text-close-tab = Cerrar { $name }
 text-close-bar = Cerrar la barra
 
 # Words the screen reader gives the button that shows the finished look of the text, with its shortcut.
-text-finished-look = Vista final
+text-finished-look = Vista previa
 
 # Menu item that copies everything in the text.
 text-copy-all = Copiar todo el texto
@@ -185,10 +185,10 @@ text-go-to-line = Ir a la línea
 text-back = Volver al texto
 
 # Words on the spelling bar, after the word: the word was added to the person's own words.
-text-spell-added = ya es una de tus palabras
+text-spell-added = se añadió a tus palabras
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are no suggestions.
-text-spell-none = no está en el diccionario, que no tiene nada parecido
+text-spell-none = no está en el diccionario y no hay sugerencias
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are suggestions.
 text-spell-offers = no está en el diccionario. ¿Querías decir alguna de estas?
@@ -218,16 +218,16 @@ text-starting = Inicio
 text-when-opens = Al abrir Texto
 
 # First choice: Text opens the files it had open last time.
-text-reopen = Reabrir los archivos de la última vez
+text-reopen = Reabrir archivos anteriores
 
 # Second choice: Text opens with an empty page.
-text-start-blank = Empezar en blanco
+text-start-blank = Empezar de cero
 
 # Note under the start choice: work not saved to a file is kept whichever choice is made.
-text-keep-note = El trabajo no guardado en un archivo siempre se conserva y vuelve en ambos casos.
+text-keep-note = Tu trabajo sin guardar se conserva y se restaura elijas la opción que elijas.
 
 # Heading of the group on the settings page for how the text looks.
-text-showing = Cómo se ve el texto
+text-showing = Aspecto del texto
 
 # Label of the size slider: how big the text is.
 text-size = Tamaño
@@ -263,19 +263,23 @@ text-read-as = Leer el archivo como
 text-save-in = Guardar en
 
 # Note under the save encoding: the next save writes the file in this encoding.
-text-next-save = El próximo guardado escribirá el archivo con esta codificación.
+text-next-save = El archivo usará esta codificación la próxima vez que lo guardes.
 
 # Words saying the text has changes that are not saved to its file. $path is the file.
-text-changes-not-saved = { $name } tiene cambios sin guardar en su archivo.
+text-changes-not-saved = { $name } tiene cambios sin guardar.
 
 # Words saying the text has changes and no file yet.
-text-not-saved = Este texto no se ha guardado en un archivo.
+text-not-saved = Este texto no está guardado en un archivo.
 
 # Heading of the question shown before closing a tab with changes. $name is the tab's file name.
 text-save-named = ¿Guardar { $name }?
 
 # Words in the question before closing: how many other tabs with changes are left after this one. $left is the number.
-text-more-after = { $left } más después de este.
+text-more-after =
+    { $left ->
+        [one] Queda { $left } pestaña más por guardar.
+       *[other] Quedan { $left } pestañas más por guardar.
+    }
 
 # Button in the question before closing that closes the tab without saving it.
 # SAFETY: needs a human review before it ships
@@ -294,55 +298,55 @@ text-is-folder = { $name } es una carpeta.
 text-too-big = { $name } es demasiado grande para abrirlo aquí.
 
 # Shown when a file could not be opened. $name is the file's path and $reason why.
-text-cannot-open = No se pudo abrir { $name }: { $reason }
+text-cannot-open = Trindle no pudo abrir { $name }: { $reason }
 
 # Shown when a file could not be written. $name is the file's path and $reason why.
-text-cannot-write = No se pudo escribir { $name }: { $reason }
+text-cannot-write = Trindle no pudo escribir { $name }: { $reason }
 
 # Shown when a file could not be saved. $name is the file's path and $reason why.
-text-cannot-save = No se pudo guardar { $name }: { $reason }
+text-cannot-save = Trindle no pudo guardar { $name }: { $reason }
 
 # Shown when a file could not be read again. $name is the file's path and $reason why.
 text-cannot-read = No se pudo leer { $name }: { $reason }
 
 # Shown when the list of open work could not be written. $folder is the folder and $reason why.
-text-work-not-kept = No se pudo conservar el trabajo en { $folder }: { $reason }
+text-work-not-kept = Trindle no pudo guardar tu trabajo en { $folder }: { $reason }
 
 # Shown when the settings could not be saved. $reason says why.
 text-settings-not-saved = No se pudieron guardar los ajustes: { $reason }
 
 # Shown when a word could not be added to the person's own words. $word is the word and $reason why.
-text-word-not-added = No se pudo añadir { $word } a tus palabras: { $reason }
+text-word-not-added = Trindle no pudo añadir { $word } a tu diccionario: { $reason }
 
 # Shown when the list of recent files could not be cleared. $reason says why.
-text-list-not-cleared = No se pudo vaciar la lista: { $reason }
+text-list-not-cleared = Trindle no pudo vaciar la lista: { $reason }
 
 # Shown when the file chooser could not be opened.
 text-chooser-failed = No se pudo abrir el selector de archivos.
 
 # Shown when the file chooser cannot be used because there is no session bus.
-text-no-bus = No se pueden elegir archivos sin un bus de sesión.
+text-no-bus = Trindle no puede abrir el selector de archivos ahora mismo.
 
 # Shown when the spelling language asked for is not on the computer. $lang is its name.
 text-no-dictionary = No hay ningún diccionario llamado { $lang }.
 
 # Shown when a spelling dictionary could not be read. $lang is its name and $reason why.
-text-dictionary-unreadable = No se pudo leer el diccionario { $lang }: { $reason }
+text-dictionary-unreadable = Trindle no pudo leer el diccionario { $lang }: { $reason }
 
 # Shown when a save was stopped and the text it held before was kept in a folder. $reason says what went wrong and $path is where the old text is kept.
-text-kept-before = { $reason }. Lo que contenía antes se conserva en { $path }.
+text-kept-before = { $reason }. El texto anterior se guardó en { $path }.
 
 # Shown when a save was stopped part way and the old text is kept. $why says why, and $path is where the old text is kept.
-text-kept-before-that = { $why } Lo que contenía antes de ese guardado se conserva en { $path }.
+text-kept-before-that = { $why } El texto anterior a ese guardado está en { $path }.
 
 # Shown when a save was stopped and what was kept of it cannot be read. $name is the file's path.
-text-saved-unreadable = { $name } se estaba guardando cuando Texto se detuvo, y no se puede leer lo que se conservó del guardado.
+text-saved-unreadable = Texto se cerró mientras guardaba { $name }, y Trindle no puede leer la parte que se guardó.
 
 # Shown when a save was stopped and the file has changed since. $name is the file's path.
-text-saved-changed = { $name } se estaba guardando cuando Texto se detuvo, y ha cambiado desde entonces, así que se deja como está.
+text-saved-changed = Texto se cerró mientras guardaba { $name }. El archivo ha cambiado desde entonces, así que Trindle lo ha dejado como está.
 
 # Shown when a save was stopped and the old text could not be put back. $name is the file's path, $reason why, and $path where the old text is kept.
-text-saved-not-put-back = { $name } se estaba guardando cuando Texto se detuvo, y no se pudo devolver a como estaba: { $reason }. Lo que contenía antes de ese guardado se conserva en { $path }.
+text-saved-not-put-back = Texto se cerró mientras guardaba { $name }, y Trindle no pudo devolver el archivo a como estaba: { $reason }. El texto anterior a ese guardado está en { $path }.
 
 # Quiet word beside what was just saved, exported or changed.
 text-done = Hecho
@@ -350,10 +354,13 @@ text-done = Hecho
 # Suggested file name in the Save as chooser for text never saved before.
 text-untitled-file = Sin título.txt
 
+# The misspelt word, shown in quotation marks on the spelling bar. { $word } is the word.
+text-spell-word = ‘{ $word }’
+
 
 
 # Line under the Save button when the file was changed by something else after Text opened, saved or reloaded it. Nothing has been saved.
-text-changed-elsewhere = Ha cambiado en otro lugar desde que lo abriste.
+text-changed-elsewhere = Este archivo ha cambiado desde que lo abriste.
 
 # Button beside that line: save the words here over the changed file.
 text-save-anyway = Guardar de todos modos
@@ -361,3 +368,5 @@ text-save-anyway = Guardar de todos modos
 # Button beside that line: read the file again from disk and drop the unsaved changes here.
 text-reload = Volver a cargar
 
+# Shown when a link in the finished look is pressed and is not a web address, or no browser started.
+text-link-not-opened = Desde aquí solo se abren direcciones web.

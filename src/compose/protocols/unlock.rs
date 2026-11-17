@@ -3,6 +3,7 @@
 //! may see the global and whether the PIN is right are decided by the
 //! compositor (lock.rs) with common/flow_unlock.rs.
 
+use super::Filtered;
 use smithay::reexports::wayland_server::{Client, DataInit, Dispatch, DisplayHandle, GlobalDispatch, New};
 
 #[allow(dead_code, non_camel_case_types, unused_unsafe, unused_variables, non_upper_case_globals, non_snake_case,
@@ -28,34 +29,30 @@ pub trait UnlockHandler {
     fn unlock_with_pin(&mut self, client: &Client, pin: &str) -> Result<(), String>;
 }
 
-pub struct UnlockGlobalData {
-    filter: Box<dyn for<'c> Fn(&'c Client) -> bool + Send + Sync>,
-}
-
 pub struct UnlockState;
 
 impl UnlockState {
 
     pub fn new<D, F>(display: &DisplayHandle, filter: F) -> UnlockState
     where
-        D: GlobalDispatch<TrindleUnlockV1, UnlockGlobalData> + Dispatch<TrindleUnlockV1, ()> + UnlockHandler + 'static,
+        D: GlobalDispatch<TrindleUnlockV1, Filtered> + Dispatch<TrindleUnlockV1, ()> + UnlockHandler + 'static,
         F: for<'c> Fn(&'c Client) -> bool + Send + Sync + 'static,
     {
-        display.create_global::<D, TrindleUnlockV1, _>(1, UnlockGlobalData { filter: Box::new(filter) });
+        display.create_global::<D, TrindleUnlockV1, _>(1, Filtered::new(filter));
         UnlockState
     }
 }
 
-impl<D> GlobalDispatch<TrindleUnlockV1, UnlockGlobalData, D> for UnlockState
+impl<D> GlobalDispatch<TrindleUnlockV1, Filtered, D> for UnlockState
 where
-    D: GlobalDispatch<TrindleUnlockV1, UnlockGlobalData> + Dispatch<TrindleUnlockV1, ()> + UnlockHandler + 'static,
+    D: GlobalDispatch<TrindleUnlockV1, Filtered> + Dispatch<TrindleUnlockV1, ()> + UnlockHandler + 'static,
 {
-    fn bind(_: &mut D, _: &DisplayHandle, _: &Client, resource: New<TrindleUnlockV1>, _: &UnlockGlobalData, data_init: &mut DataInit<'_, D>) {
+    fn bind(_: &mut D, _: &DisplayHandle, _: &Client, resource: New<TrindleUnlockV1>, _: &Filtered, data_init: &mut DataInit<'_, D>) {
         data_init.init(resource, ());
     }
 
-    fn can_view(client: Client, global_data: &UnlockGlobalData) -> bool {
-        (global_data.filter)(&client)
+    fn can_view(client: Client, global_data: &Filtered) -> bool {
+        global_data.can_view(&client)
     }
 }
 
@@ -78,7 +75,7 @@ where
 macro_rules! delegate_unlock {
     ($(@<$( $lt:tt $( : $clt:tt $(+ $dlt:tt )* )? ),+>)? $ty: ty) => {
         smithay::reexports::wayland_server::delegate_global_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
-            $crate::protocols::unlock::TrindleUnlockV1: $crate::protocols::unlock::UnlockGlobalData
+            $crate::protocols::unlock::TrindleUnlockV1: $crate::protocols::Filtered
         ] => $crate::protocols::unlock::UnlockState);
         smithay::reexports::wayland_server::delegate_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
             $crate::protocols::unlock::TrindleUnlockV1: ()

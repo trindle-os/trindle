@@ -53,14 +53,11 @@ settings-help-read = اقرأ { $title }
 # Bold line in the Reading card of Help when no topic is open.
 settings-help-nothing-open = لا شيء مفتوح
 
-# Quiet line under "Nothing open" in Help.
-settings-help-nothing-open-sub = اضغط على السهم بجانب موضوع لقراءته هنا.
-
 # Heading of the Help card that shows the open topics.
 settings-help-reading = القراءة
 
 # Placeholder and spoken name of the typing box that searches Help.
-settings-help-search-placeholder = ابحث في المساعدة، مثل «wifi» أو «طابعة» أو «إيقاف التشغيل»
+settings-help-search-placeholder = ابحث في المساعدة
 
 # Heading of the Help card with the search box.
 settings-help-search = ابحث في المساعدة

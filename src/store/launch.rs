@@ -168,10 +168,16 @@ fn answer_asks(events: &Loop, slot: Rc<RefCell<Weak<Shown<Store>>>>) -> Post<Do>
                 shown.change(Store::back_in_sight);
                 shown.window.raise();
             }
-            Do::Tick if !shown.with(Store::moving) => {}
+            Do::ThenIf(f) => shown.change_if(f),
+            Do::Tick => {
+                if shown.with(|s| s.moving() && s.turn()) {
+                    shown.change(|_| {});
+                    bring_into_view(&shown);
+                }
+            }
 
             Do::Pulse => {
-                if shown.with(|s| s.pulsing.get() && !s.hidden) && shown.window.seen() {
+                if shown.with(|s| s.pulse.on.get() && !s.hidden) && shown.window.seen() {
                     shown.window.patch();
                 }
             }

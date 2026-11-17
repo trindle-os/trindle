@@ -5,13 +5,13 @@
 store-ask-title = Was { $app } nutzen darf
 
 # Under the list of switches in the permission window when one or more is on already.
-store-ask-above-on = Jeder Schalter zeigt, was jetzt erlaubt ist. Du kannst das später unter Apps, Berechtigungen ändern.
+store-ask-above-on = Du kannst das später unter Einstellungen, Berechtigungen ändern.
 
 # Under the list of switches in the permission window when all start off.
-store-ask-above-off = Jeder Schalter bleibt aus, bis du ihn drückst. Du kannst das später unter Apps, Berechtigungen ändern.
+store-ask-above-off = Noch ist nichts erlaubt. Du kannst das später unter Einstellungen, Berechtigungen ändern.
 
 # Note under the list of switches, since a .deb names nothing it wants.
-store-ask-worked-out = Aus der App selbst ermittelt
+store-ask-worked-out = Nach dem, was die App anfordert
 
 # Tip of the button that turns every switch on.
 # SAFETY: needs a human review before it ships

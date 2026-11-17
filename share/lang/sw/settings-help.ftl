@@ -49,14 +49,11 @@ settings-help-read = Soma { $title }
 # Bold line in the Reading card of Help when no topic is open.
 settings-help-nothing-open = Hakuna kilichofunguliwa
 
-# Quiet line under "Nothing open" in Help.
-settings-help-nothing-open-sub = Bonyeza mshale kando ya mada ili kuisoma hapa.
-
 # Heading of the Help card that shows the open topics.
 settings-help-reading = Kusoma
 
 # Placeholder and spoken name of the typing box that searches Help.
-settings-help-search-placeholder = Tafuta msaada, kama “wifi”, “printa” au “zima”
+settings-help-search-placeholder = Tafuta msaada
 
 # Heading of the Help card with the search box.
 settings-help-search = Tafuta msaada
@@ -71,5 +68,4 @@ settings-help-program = Msaada kwenye dirisha lake lenyewe
 settings-help-program-open = Fungua Msaada
 
 # Red words under the line "Help in its own window" when the Help program could not be started.
-settings-help-program-not-opened = Msaada haukuweza kufunguliwa.
-
+settings-help-program-not-opened = Haikuweza kufungua Msaada.

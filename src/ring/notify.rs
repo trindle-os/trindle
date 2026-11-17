@@ -116,6 +116,8 @@ struct State {
     actions: HashMap<u32, Vec<String>>,
 
     processes: HashMap<u32, String>,
+
+    owners: HashMap<u32, String>,
     lp: Option<crate::toolkit::event::Loop>,
 }
 
@@ -227,11 +229,15 @@ pub fn set_how_long(value: &str) -> std::io::Result<()> {
     set_setting("notification_seconds", value)
 }
 
+const ACCESS_DENIED: &str = "org.freedesktop.DBus.Error.AccessDenied";
+const NOT_YOURS: &str = "not-the-senders-notification";
+
 fn closed(id: u32, why: u32) {
     let bus = STATE.with(|s| {
         let mut st = s.borrow_mut();
         st.actions.remove(&id);
         st.processes.remove(&id);
+        st.owners.remove(&id);
         st.bus.clone()
     });
     if let Some(bus) = bus {
@@ -279,9 +285,9 @@ fn arrived(fields: &[Value]) -> Note {
     }
     Note {
         id: 0,
-        app: text(fields, 0),
-        icon,
-        desktop: hint_string("desktop-entry"),
+        app: clipped(text(fields, 0), SUMMARY_MOST),
+        icon: clipped(icon, SUMMARY_MOST),
+        desktop: clipped(hint_string("desktop-entry"), SUMMARY_MOST),
         summary: clipped(text(fields, 3), SUMMARY_MOST),
         body: clipped(text(fields, 4), BODY_MOST),
         at: crate::common::clock::Local::now(),
@@ -293,14 +299,29 @@ fn arrived(fields: &[Value]) -> Note {
     }
 }
 
-fn keep(mut note: Note, replaces: u32) -> Note {
+fn next_id(st: &mut State) -> u32 {
+    loop {
+        let id = st.next;
+        st.next = id.checked_add(1).unwrap_or(1);
+        if id != 0 && !st.notes.iter().any(|n| n.id == id) {
+            return id;
+        }
+    }
+}
+
+fn owns(st: &State, id: u32, owner: Option<&str>) -> bool {
+    owner != Some("") && st.notes.iter().any(|n| n.id == id) && st.owners.get(&id).map(String::as_str) == owner
+}
+
+fn keep(mut note: Note, replaces: u32, owner: Option<&str>) -> Note {
     let dropped = STATE.with(|s| {
         let mut st = s.borrow_mut();
 
-        note.id = if replaces > 0 { replaces } else { st.next };
-        if note.id >= st.next {
-            st.next = note.id + 1;
-        }
+        note.id = if owns(&st, replaces, owner) { replaces } else { next_id(&mut st) };
+        match owner {
+            Some(o) => st.owners.insert(note.id, o.to_string()),
+            None => st.owners.remove(&note.id),
+        };
 
         note.pinned = st.notes.iter().any(|n| n.id == note.id && n.pinned);
         st.notes.retain(|n| n.id != note.id);
@@ -323,12 +344,12 @@ fn keep(mut note: Note, replaces: u32) -> Note {
 
 pub fn restore(app: &str, icon: &str, desktop: &str, summary: &str, body: &str, pinned: bool) -> Note {
     let note = Note {
-        id: 0, app: clipped(app.into(), SUMMARY_MOST), icon: icon.into(), desktop: desktop.into(),
+        id: 0, app: clipped(app.into(), SUMMARY_MOST), icon: clipped(icon.into(), SUMMARY_MOST), desktop: clipped(desktop.into(), SUMMARY_MOST),
         summary: clipped(summary.into(), SUMMARY_MOST), body: clipped(body.into(), BODY_MOST),
         at: crate::common::clock::Local::now(), urgent: false, pinned: false,
         handoff: String::new(), drive: String::new(), allow: String::new(),
     };
-    let mut note = keep(note, 0);
+    let mut note = keep(note, 0, None);
     if pinned {
         set_pinned(note.id, true);
         note.pinned = true;
@@ -367,7 +388,7 @@ fn say_from(app: &str, summary: &str, body: &str, icon: &str, handoff: String) {
         drive: String::new(),
         allow: String::new(),
     };
-    let note = keep(note, 0);
+    let note = keep(note, 0, None);
     tell_everyone(&note);
 }
 
@@ -386,7 +407,7 @@ pub fn say_allow(app: &str, icon: &str, summary: &str, body: &str, plugin: &str,
         drive: String::new(),
         allow: plugin.into(),
     };
-    let note = keep(note, replaces);
+    let note = keep(note, replaces, None);
     tell_everyone(&note);
     note.id
 }
@@ -406,7 +427,7 @@ pub fn say_drive(summary: &str, drive: &str) -> u32 {
         drive: drive.into(),
         allow: String::new(),
     };
-    let note = keep(note, 0);
+    let note = keep(note, 0, None);
     tell_everyone(&note);
     note.id
 }
@@ -509,6 +530,23 @@ pub fn start(ctx: &Rc<Ctx>) {
         });
 }
 
+fn close_asked(id: u32, sender: &str) -> bool {
+    let gone = STATE.with(|s| {
+        let mut st = s.borrow_mut();
+        if !owns(&st, id, Some(sender)) {
+            return None;
+        }
+        st.notes.retain(|n| n.id != id);
+        Some(st.gone.clone())
+    });
+    let Some(gone) = gone else { return false };
+    closed(id, CLOSED_BY_CALL);
+    for g in gone {
+        g(id);
+    }
+    true
+}
+
 fn answer(asked: Asked) {
     match asked.member().as_str() {
         "Notify" => {
@@ -519,7 +557,7 @@ fn answer(asked: Asked) {
                     Some(Value::U32(n)) => *n,
                     _ => 0,
                 };
-                let note = keep(arrived(&fields), replaces);
+                let note = keep(arrived(&fields), replaces, Some(&asked.sender()));
 
                 let keys: Vec<String> = match fields.get(5) {
                     Some(Value::Array(a)) => a.iter().step_by(2).filter_map(|v| match v {
@@ -544,12 +582,10 @@ fn answer(asked: Asked) {
         }
         "CloseNotification" => {
             let id = asked.message().body().deserialize::<u32>().unwrap_or(0);
-            STATE.with(|s| s.borrow_mut().notes.retain(|n| n.id != id));
-            asked.reply(&());
-            closed(id, CLOSED_BY_CALL);
-            let gone = STATE.with(|s| s.borrow().gone.clone());
-            for g in gone {
-                g(id);
+            if close_asked(id, &asked.sender()) {
+                asked.reply(&());
+            } else {
+                asked.fail(ACCESS_DENIED, NOT_YOURS);
             }
         }
         "GetCapabilities" => {
@@ -588,6 +624,64 @@ mod tests {
         assert_eq!(signals(7, Some("abc".into())), [Signal::Token(7, "abc".into()), Signal::Action(7)]);
 
         assert_eq!(signals(7, None), [Signal::Action(7)]);
+    }
+
+    #[test]
+    fn a_made_up_replaces_id_never_wraps_the_numbers_or_replaces_another() {
+        let first = keep(arrived(&sent(-1, 1)), 0, None);
+
+        let odd = keep(arrived(&sent(-1, 1)), u32::MAX, None);
+        assert_ne!(odd.id, u32::MAX);
+        assert_ne!(odd.id, first.id);
+        assert_eq!(list().len(), 2);
+
+        let again = keep(arrived(&sent(-1, 1)), first.id, None);
+        assert_eq!(again.id, first.id);
+        assert_eq!(list().len(), 2);
+
+        STATE.with(|s| s.borrow_mut().next = u32::MAX);
+        let (top, wrapped) = (keep(arrived(&sent(-1, 1)), 0, None).id, keep(arrived(&sent(-1, 1)), 0, None).id);
+        assert_eq!(top, u32::MAX);
+        assert!(wrapped != 0 && ![first.id, odd.id, top].contains(&wrapped));
+        clear();
+    }
+
+    #[test]
+    fn a_note_is_replaced_or_closed_only_by_the_connection_that_sent_it() {
+        let note = || arrived(&sent(-1, 1));
+        let (one, two) = (Some(":1.10"), Some(":1.11"));
+        let mine = keep(note(), 0, one);
+        let taken = keep(note(), mine.id, two);
+        assert_ne!(taken.id, mine.id, "another sender's replaces_id makes a new note");
+        assert_eq!(list().len(), 2);
+        assert_eq!(keep(note(), mine.id, one).id, mine.id, "its own sender still replaces it");
+        let ring = keep(note(), 0, None);
+        assert_ne!(keep(note(), ring.id, one).id, ring.id, "no program replaces the ring's own");
+        assert_ne!(keep(note(), mine.id, None).id, mine.id, "nor does the ring replace a program's");
+        let before = list().len();
+        for (id, sender) in [(mine.id, ":1.11"), (ring.id, ":1.10"), (u32::MAX, ":1.10"), (0, ":1.10")] {
+            assert!(!close_asked(id, sender), "{sender} may not close {id}");
+        }
+        assert_eq!(list().len(), before, "a refused close takes nothing away");
+        let nameless = keep(note(), 0, Some(""));
+        assert_ne!(keep(note(), nameless.id, Some("")).id, nameless.id, "a sender with no name owns nothing");
+        assert!(!close_asked(nameless.id, ""));
+        assert!(close_asked(mine.id, ":1.10") && close_asked(taken.id, ":1.11"), "each closes its own");
+        assert!(!list().iter().any(|n| n.id == mine.id || n.id == taken.id));
+        assert!(!close_asked(mine.id, ":1.10"), "and only once");
+        clear();
+    }
+
+    #[test]
+    fn a_huge_name_icon_and_desktop_id_are_clipped_when_they_arrive() {
+        let big = "w".repeat(1_000_000);
+        let mut fields = sent(-1, 1);
+        fields[0] = Value::new(big.clone());
+        fields[2] = Value::new(big.clone());
+        let n = arrived(&fields);
+        assert_eq!((n.app.chars().count(), n.icon.chars().count()), (SUMMARY_MOST + 1, SUMMARY_MOST + 1));
+        assert_eq!(restore(&big, &big, &big, "", "", false).desktop.chars().count(), SUMMARY_MOST + 1);
+        clear();
     }
 
     #[test]
@@ -635,10 +729,10 @@ mod tests {
 
     #[test]
     fn a_pinned_one_is_never_cleared_and_never_falls_off_the_end() {
-        let first = keep(arrived(&sent(-1, 1)), 0);
+        let first = keep(arrived(&sent(-1, 1)), 0, None);
         set_pinned(first.id, true);
         for _ in 0..(KEEP + 20) {
-            keep(arrived(&sent(-1, 1)), 0);
+            keep(arrived(&sent(-1, 1)), 0, None);
         }
         let held = list();
         assert_eq!(held.len(), KEEP);

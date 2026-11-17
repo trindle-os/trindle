@@ -27,8 +27,10 @@ fn home_of(f: &Path) -> PathBuf {
 }
 
 const PLACES: &[Place] = &[
-    Place { what: "the ring's launch counts", name: "usage", set_aside: true,
-            change: |f| crate::ring::store::record_use_in(f, "org.example.One.desktop") },
+    Place { what: "a game's launch options in Steam", name: "localconfig.vdf", set_aside: false,
+            change: |f| { let _ = crate::common::steam_files::set_launch_options(f, 220, "-windowed"); } },
+    Place { what: "the Windows layer chosen for a game in Steam", name: "config.vdf", set_aside: false,
+            change: |f| { let _ = crate::common::steam_files::set_compat_tool_in(f, 220, Some("GE-Proton")); } },
     Place { what: "the apps used last for each kind of file", name: "app-choices", set_aside: true,
             change: |f| crate::common::app_choice::remember_in(f, "text/plain", "org.example.One.desktop") },
     Place { what: "the clipboard history", name: "index.json", set_aside: true,

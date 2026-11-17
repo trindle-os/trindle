@@ -7,10 +7,10 @@ settings-plugins-title = Ваши плагины
 settings-plugins-keywords = плагины дополнения расширения установленные удалить настройки
 
 # Help line at the foot of the Your plugins page.
-settings-plugins-help = Плагины расширяют Trindle: значок в кольце, настройки здесь, уведомления или то, что запускается при входе. Каждый работает в изоляции и ничего не может, пока вы не разрешите это в разделе «Разрешения», который открывает кнопка в конце заголовка этой страницы. В карточке каждого плагина здесь его собственные настройки; корзина на карточке, нажатая дважды, удаляет плагин.
+settings-plugins-help = Плагины расширяют Trindle. Плагин может добавить значок в кольцо, настройки сюда, уведомления или что-то, что запускается при входе. Каждый плагин работает в изоляции и ничего не может использовать, пока вы не разрешите это в разделе «Разрешения». Его открывает кнопка рядом с заголовком этой страницы. Чтобы удалить плагин, дважды нажмите на корзину на его карточке.
 
 # Red words when the window that asks what a plugin may use could not be opened.
-settings-plugins-window-failed = Не удалось открыть окно, где спрашивается, что плагину разрешено.
+settings-plugins-window-failed = Trindle не удалось открыть окно, где спрашивается, что плагину разрешено.
 
 # Under About it: the plugin's version number is { $v }.
 settings-plugins-version = Версия { $v }.
@@ -25,15 +25,11 @@ settings-plugins-asks-nothing = «{ $name }» ничего не запрашив
 # SAFETY: needs a human review before it ships
 settings-plugins-asks-for =
     { $asks ->
-        [one] «{ $name }» запрашивает: { $list }; разрешено { $allowed } из { $asks }. Он работает в изоляции и только с тем, что вы разрешили.
-        [few] «{ $name }» запрашивает: { $list }; разрешено { $allowed } из { $asks }. Он работает в изоляции и только с тем, что вы разрешили.
-        [many] «{ $name }» запрашивает: { $list }; разрешено { $allowed } из { $asks }. Он работает в изоляции и только с тем, что вы разрешили.
-       *[other] «{ $name }» запрашивает: { $list }; разрешено { $allowed } из { $asks }. Он работает в изоляции и только с тем, что вы разрешили.
+        [one] «{ $name }» запрашивает: { $list }. Вы разрешили { $allowed } из { $asks }. Он работает в изоляции и только с тем, что вы разрешили.
+        [few] «{ $name }» запрашивает: { $list }. Вы разрешили { $allowed } из { $asks }. Он работает в изоляции и только с тем, что вы разрешили.
+        [many] «{ $name }» запрашивает: { $list }. Вы разрешили { $allowed } из { $asks }. Он работает в изоляции и только с тем, что вы разрешили.
+       *[other] «{ $name }» запрашивает: { $list }. Вы разрешили { $allowed } из { $asks }. Он работает в изоляции и только с тем, что вы разрешили.
     }
-
-# Under the line that tells a plugin needs more allowed, beside its Allow button.
-# SAFETY: needs a human review before it ships
-settings-plugins-needs-more = Кнопка «Разрешить» показывает каждый запрос с переключателем.
 
 # Heading of the line about a plugin on its card.
 settings-plugins-about-it = О плагине
@@ -74,15 +70,12 @@ settings-plugins-group = Плагины
 # Heading of the line shown when no plugin is installed.
 settings-plugins-none = Ничего не установлено
 
-# Under the None installed heading.
-settings-plugins-none-sub = Плагины можно добавить в разделе «Приложения».
-
 # Tip of the button at the end of the page's title that opens the Permissions page.
 # SAFETY: needs a human review before it ships
 settings-plugins-open-permissions = Открыть «Разрешения»
 
 # Said at the top of a plugin's card while its service has not yet answered; the plugin's name is {$name}.
-settings-plugins-rows-asking = Спрашиваем { $name }.
+settings-plugins-rows-asking = Спрашиваем { $name }…
 
 # Said at the top of a plugin's card, and in red under a row, when its service does not answer; the plugin's name is {$name}.
 settings-plugins-rows-silent = { $name } не отвечает. Возможно, его служба остановлена.
@@ -98,4 +91,3 @@ settings-plugins-rows-failed = { $name } не смог это сделать.
 
 # Red words under a row when the change failed; the plugin's name is {$name} and the reason it gave is {$why}.
 settings-plugins-rows-failed-why = { $name } не смог это сделать: { $why }.
-

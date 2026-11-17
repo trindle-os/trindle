@@ -13,26 +13,8 @@ use crate::toolkit::t;
 use crate::toolkit::widget::Tone;
 use super::{Do, Drives, help, plan, spot};
 use super::udisks::unknown;
-use super::model::Vol;
-use super::model::Drive;
-use super::steps::Said;
-use super::steps::Step;
-use super::steps::told_of;
-use super::steps::part_name;
-use super::steps::Noted;
-use super::steps::in_the_making;
-use super::steps::NOTES_MOST;
-use super::steps::NOTE_MOST;
-use super::steps::changes;
-use super::steps::Ended;
-use super::steps::Done;
-use super::steps::TAKE_BACK_TRIES;
-use super::steps::STANDING_GAP;
-use super::steps::take_back;
-use super::steps::take_back_firmly;
-use super::steps::take_back_between;
-use super::steps::chain;
-use super::steps::put_back;
+use super::model::{Drive, Vol};
+use super::steps::{Done, Ended, NOTES_MOST, NOTE_MOST, Noted, STANDING_GAP, Said, Step, TAKE_BACK_TRIES, chain, changes, in_the_making, part_name, put_back, take_back, take_back_between, take_back_firmly, told_of};
 
 impl Drives {
     pub(super) fn drive(&self, path: &str) -> Option<&Drive> {
@@ -66,6 +48,10 @@ impl Drives {
 
     pub(super) fn say_on(&mut self, drive: &str, row: &str, words: String, ok: bool, page: &'static str) {
         self.said.retain(|s| !(s.drive == drive && s.row == row));
+
+        if !ok && words == plan::no_password() {
+            return;
+        }
         self.said.push(Said { drive: drive.into(), row: row.into(), words, ok, page, at: Instant::now() });
         let asks = self.asks.clone();
         self.events.after(Duration::from_secs(if ok { 3 } else { 60 }) + Duration::from_millis(100), move || {

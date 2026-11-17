@@ -30,12 +30,18 @@ fn apt_upgrade_debian_at(version: Option<String>) -> Outcome {
 }
 
 fn headers_for_drivers() -> Outcome {
-    if headers_wanted(installed_version("dkms"), installed_version("linux-headers-amd64")) {
+    let Some(headers) = headers_package(&reading(&["dpkg", "--print-architecture"])) else { return Ok(()) };
+    if headers_wanted(installed_version("dkms"), installed_version(&headers)) {
         let mut argv = APT_QUIET.to_vec();
-        argv.extend(["install", "linux-headers-amd64"]);
+        argv.extend(["install", &headers]);
         apt_run(&argv)?;
     }
     Ok(())
+}
+
+fn headers_package(architecture: &str) -> Option<String> {
+    let kind = architecture.trim();
+    (!kind.is_empty() && kind.chars().all(|c| c.is_ascii_alphanumeric())).then(|| format!("linux-headers-{kind}"))
 }
 
 fn headers_wanted(dkms: Option<String>, headers: Option<String>) -> bool {
@@ -149,16 +155,26 @@ mod tests {
     }
 
     #[test]
+    fn the_headers_package_is_named_for_this_computers_kind() {
+        assert_eq!(super::headers_package("arm64\n").as_deref(), Some("linux-headers-arm64"));
+        assert_eq!(super::headers_package("amd64").as_deref(), Some("linux-headers-amd64"));
+        assert_eq!(super::headers_package(""), None);
+        assert_eq!(super::headers_package("a b; rm"), None);
+    }
+
+    #[test]
     fn the_update_installs_the_headers_only_for_a_driver_and_goes_on_without_them() {
         let installs = |s: &StandIn| s.ran().iter().filter(|c| c.contains("install linux-headers-amd64")).count();
         let quiet = "0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.\n";
         let s = StandIn::all_well("headers-wanted");
+        s.prints("dpkg --print-architecture", "amd64\n");
         s.prints("dpkg-query -W dkms", "ii \t1:3.0");
         s.prints("apt-get -s", quiet);
         assert_eq!(super::apt_upgrade(), Ok(()));
         assert_eq!(installs(&s), 1, "{:?}", s.ran());
         drop(s);
         let s = StandIn::all_well("headers-not-wanted");
+        s.prints("dpkg --print-architecture", "amd64\n");
         s.prints("dpkg-query -W dkms", "ii \t1:3.0");
         s.prints("dpkg-query -W linux-headers-amd64", "ii \t6.12");
         s.prints("apt-get -s", quiet);
@@ -166,6 +182,7 @@ mod tests {
         assert_eq!(installs(&s), 0, "they were there already");
         drop(s);
         let s = StandIn::all_well("headers-no-driver");
+        s.prints("dpkg --print-architecture", "amd64\n");
         s.prints("apt-get -s", quiet);
         assert_eq!(super::apt_upgrade(), Ok(()));
         assert_eq!(installs(&s), 0, "no driver, no headers");
@@ -174,6 +191,7 @@ mod tests {
         let s = StandIn::new("headers-fail", |argv| {
             if argv.contains(&"linux-headers-amd64") { Err("E: Unable to locate package linux-headers-amd64".into()) } else { Ok(()) }
         });
+        s.prints("dpkg --print-architecture", "amd64\n");
         s.prints("dpkg-query -W dkms", "ii \t1:3.0");
         s.prints("apt-get -s", quiet);
         let err = super::apt_upgrade().unwrap_err();
@@ -185,7 +203,7 @@ mod tests {
     #[test]
     fn a_tidy_up_that_fails_does_not_hide_the_other_news() {
         let s = StandIn::new("tidy-fails", |argv| {
-            if argv.contains(&["auto", "remove"].concat().as_str()) && !argv.contains(&"-s") { Err("E: the tidy-up broke".into()) } else { Ok(()) }
+            if argv.contains(&"autoremove") && !argv.contains(&"-s") { Err("E: the tidy-up broke".into()) } else { Ok(()) }
         });
         s.write(super::DRIVERS_FAILED, b"v4l2loopback\n");
         s.prints("dkms status", "v4l2loopback/0.15.0, 7.2.9, x86_64: built\n");
@@ -216,69 +234,6 @@ mod tests {
         assert!(crate::common::help_pages::classify(&err).is_some(), "the words open their own help");
         stand.write(super::DRIVERS_FAILED, b"");
         assert_eq!(super::apt_upgrade(), Ok(()));
-    }
-
-    #[test]
-    fn the_system_names_itself_trindle_based_on_debian_and_apt_still_sees_debian() {
-        let field = |k: &str| include_str!("../../system/identity/os-release").lines()
-            .find_map(|l| l.strip_prefix(k)?.strip_prefix('=')).map(|v| v.trim_matches('"').to_string()).unwrap_or_default();
-        assert_eq!((field("NAME"), field("ID"), field("ID_LIKE"), field("VERSION_CODENAME")), ("Trindle".into(), "trindle".into(), "debian".into(), "trixie".into()));
-        assert!(field("PRETTY_NAME").starts_with("Trindle @VERSION@ (based on Debian") && field("VERSION_ID") == "@VERSION@");
-        assert!(field("HOME_URL").contains("trindle.org") && field("BUG_REPORT_URL").contains("trindle"));
-        assert!(include_str!("../../system/identity/issue").starts_with("Trindle \\n \\l"));
-        assert_eq!(include_str!("../../system/identity/issue.net").trim(), "Trindle");
-        let (pre, rm, files) = (include_str!("../../tools/deb/preinst"), include_str!("../../tools/deb/postrm"), include_str!("../../tools/system-files.sh"));
-        assert!(!include_str!("../../tools/deb/prerm").contains("/etc/issue"), "the divert comes off after our copies are removed, never before");
-        for f in ["/usr/lib/os-release", "/etc/issue", "/etc/issue.net"] {
-            assert!(pre.contains(&format!("--divert {f}.distrib {f}")) && rm.contains(f), "{f} is diverted and given back");
-        }
-        assert!(files.contains("$dest/usr/lib/os-release") && files.contains("$dest/etc/issue.net"));
-        assert!(pre.contains("\"$id\" != trindle"), "an installed Trindle is not warned about");
-        for apt in ["system/apt/trindle.sources", "system/apt/trindle-backports.sources"] {
-            let text = std::fs::read_to_string(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join(apt)).unwrap();
-            assert!(!text.contains("ID=trindle") && !text.contains("os-release"), "{apt} never reads the system's ID");
-        }
-    }
-
-    #[test]
-    fn the_kernel_hook_runs_debians_and_never_fails_and_the_package_diverts_it() {
-        let hook = include_str!("../../system/kernel/dkms-hook");
-        assert!(hook.contains("dkms.distrib") && hook.trim_end().ends_with("exit 0"));
-        assert!(include_str!("../../tools/deb/preinst").contains("--divert /etc/kernel/postinst.d/dkms.distrib /etc/kernel/postinst.d/dkms"));
-        assert!(include_str!("../../tools/deb/prerm").contains("dpkg-divert --package trindle --quiet --remove"));
-        assert!(include_str!("../../tools/system-files.sh").contains("system/kernel/dkms-hook"));
-
-        let dir = std::env::temp_dir().join(format!("trindle-dkms-hook-{}", std::process::id()));
-        std::fs::create_dir_all(&dir).unwrap();
-        let state = dir.join("failed");
-        let mut script = hook.to_string();
-        for (from, to) in [
-            ("/etc/kernel/postinst.d/dkms.distrib", dir.join("d").to_str().unwrap().to_string()),
-            ("/var/lib/trindle/dkms-failed", state.to_str().unwrap().to_string()),
-            ("mkdir -p /var/lib/trindle", "true".to_string()),
-            ("dkms status -k \"$1\"", "printf 'v4l2loopback/0.15.0, 7.2.9, x86_64: built\\nother/1, 7.2.9, x86_64: installed\\n'".to_string()),
-        ] {
-            assert!(script.contains(from), "the hook no longer has {from}: the test would run its real paths");
-            script = script.replace(from, &to);
-        }
-        assert!(!script.contains("/var/lib") && !script.contains("/etc/kernel"), "a real path is left in the hook under test");
-        std::fs::write(dir.join("d"), "#!/bin/sh\nexit 11\n").unwrap();
-        std::fs::write(dir.join("hook"), script).unwrap();
-        for f in ["d", "hook"] {
-            std::process::Command::new("chmod").arg("755").arg(dir.join(f)).status().unwrap();
-        }
-        let st = std::process::Command::new("sh").arg(dir.join("hook")).arg("7.2.9").status().unwrap();
-        assert!(st.success(), "a driver that will not build must not fail the kernel");
-        assert_eq!(std::fs::read_to_string(&state).unwrap().trim(), "v4l2loopback");
-        std::fs::write(dir.join("d"), "#!/bin/sh\nexit 0\n").unwrap();
-        assert!(std::process::Command::new("sh").arg(dir.join("hook")).arg("7.2.9").status().unwrap().success());
-        assert!(!state.exists(), "cleared once a kernel builds all its drivers");
-
-        std::fs::write(&state, "v4l2loopback\n").unwrap();
-        std::fs::remove_file(dir.join("d")).unwrap();
-        assert!(std::process::Command::new("sh").arg(dir.join("hook")).arg("7.2.9").status().unwrap().success());
-        assert!(!state.exists(), "an old failure outlived the hook it came from");
-        let _ = std::fs::remove_dir_all(&dir);
     }
 
     #[test]

@@ -61,9 +61,9 @@ const LEFT_STICK: [u16; 2] = [0, 1];
 const RIGHT_STICK: [u16; 2] = [3, 4];
 const TRIGGERS: [u16; 2] = [2, 5];
 
-pub const NOT_A_BUTTON: &str = "Not a button Trindle knows. Try South, Left Trigger or Escape.";
-pub const NO_EQUALS: &str = "A change needs what is pressed, an equals sign, and what it becomes.";
-pub const NOT_A_ZONE: &str = "A dead zone is from 0% to 50%.";
+pub fn not_a_button() -> &'static str { t!("common-pads-not-a-button") }
+pub fn no_equals() -> &'static str { t!("common-no-equals") }
+pub fn not_a_zone() -> &'static str { t!("common-pads-not-a-zone") }
 
 fn find(list: &[(u16, &str, &[&str])], word: &str) -> Option<u16> {
     let word = word.trim();
@@ -119,7 +119,7 @@ impl To {
         if let Some(key) = words.split_once(' ').filter(|(w, _)| w.eq_ignore_ascii_case(KEY)).map(|(_, rest)| rest.trim()) {
             return match remap::To::parse(key) {
                 Ok(remap::To::Held(keys)) => Ok(To::Keys(keys)),
-                _ => Err(NOT_A_BUTTON),
+                _ => Err(not_a_button()),
             };
         }
         if let Some(b) = find(BUTTONS, words) {
@@ -130,7 +130,7 @@ impl To {
         }
         match remap::To::parse(words) {
             Ok(remap::To::Held(keys)) => Ok(To::Keys(keys)),
-            _ => Err(NOT_A_BUTTON),
+            _ => Err(not_a_button()),
         }
     }
 }
@@ -187,16 +187,16 @@ impl Change {
     }
 
     pub fn parse(line: &str) -> Result<Change, &'static str> {
-        let (left, right) = line.split_once('=').ok_or(NO_EQUALS)?;
+        let (left, right) = line.split_once('=').ok_or(no_equals())?;
         let (left, right) = (left.trim(), right.trim());
         if left.eq_ignore_ascii_case("sticks") && right.eq_ignore_ascii_case("swapped") {
             return Ok(Change::SticksSwapped);
         }
         for (side, stick) in [("left", LEFT_STICK[0]), ("right", RIGHT_STICK[0])] {
             if left.eq_ignore_ascii_case(&format!("{side} stick dead zone")) {
-                let share: u8 = right.trim_end_matches('%').trim().parse().map_err(|_| NOT_A_ZONE)?;
+                let share: u8 = right.trim_end_matches('%').trim().parse().map_err(|_| not_a_zone())?;
                 if share > MOST_DEAD {
-                    return Err(NOT_A_ZONE);
+                    return Err(not_a_zone());
                 }
                 return Ok(Change::DeadZone { stick, share });
             }
@@ -211,9 +211,9 @@ impl Change {
             if TRIGGERS.contains(&axis) {
                 return Ok(Change::Into { from: From::Trigger(axis), to: To::parse(right)? });
             }
-            return Err(NOT_A_BUTTON);
+            return Err(not_a_button());
         }
-        let from = find(BUTTONS, left).ok_or(NOT_A_BUTTON)?;
+        let from = find(BUTTONS, left).ok_or(not_a_button())?;
         Ok(Change::Into { from: From::Button(from), to: To::parse(right)? })
     }
 }
@@ -264,6 +264,15 @@ pub struct Profiles {
     pub other: Option<String>,
     pub off: bool,
     pub unread: Vec<(usize, String, &'static str)>,
+
+    pub kept: Vec<LineKept>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct LineKept {
+    pub pads: usize,
+    pub games: bool,
+    pub line: String,
 }
 
 pub fn profile_name(name: &str) -> Result<String, &'static str> {
@@ -281,9 +290,13 @@ impl Profiles {
     pub fn read(text: &str) -> Profiles {
         let mut out = Profiles::default();
         let (mut in_games, mut games_seen) = (false, false);
-        for (i, line) in text.lines().enumerate().take(MOST_LINES) {
-            let line = line.trim();
-            if line.is_empty() || line.starts_with('#') {
+        for (i, raw) in text.lines().enumerate() {
+            let line = raw.trim();
+            if line.is_empty() {
+                continue;
+            }
+            if i >= MOST_LINES || line.starts_with('#') {
+                out.keep(raw, in_games);
                 continue;
             }
             if line.eq_ignore_ascii_case(GAMES) {
@@ -294,24 +307,24 @@ impl Profiles {
                 in_games = false;
                 match Pad::parse(line) {
                     Some(pad) => out.pads.push(Profile { pad, name: FIRST.into(), changes: Vec::new() }),
-                    None => out.unread.push((i + 1, line.to_string(), "Not a controller's heading.")),
+                    None => out.unread(i, raw, t!("common-pads-not-a-heading"), in_games),
                 }
                 continue;
             }
             if in_games {
                 if let Err(why) = out.game_line(line) {
-                    out.unread.push((i + 1, line.to_string(), why));
+                    out.unread(i, raw, why, in_games);
                 }
                 continue;
             }
             let named = line.split_once('=').filter(|(l, _)| l.trim().eq_ignore_ascii_case(PROFILE)).map(|(_, r)| profile_name(r));
             match (out.pads.last_mut(), named) {
-                (None, _) => out.unread.push((i + 1, line.to_string(), "It is under no controller's heading.")),
+                (None, _) => out.unread(i, raw, t!("common-pads-no-heading"), in_games),
                 (Some(p), Some(Ok(name))) => p.name = name,
-                (Some(_), Some(Err(why))) => out.unread.push((i + 1, line.to_string(), why)),
+                (Some(_), Some(Err(why))) => out.unread(i, raw, why, in_games),
                 (Some(p), None) => match Change::parse(line) {
                     Ok(change) => p.changes.push(change),
-                    Err(why) => out.unread.push((i + 1, line.to_string(), why)),
+                    Err(why) => out.unread(i, raw, why, in_games),
                 },
             }
         }
@@ -322,8 +335,17 @@ impl Profiles {
         out
     }
 
+    fn keep(&mut self, raw: &str, games: bool) {
+        self.kept.push(LineKept { pads: self.pads.len(), games, line: raw.to_string() });
+    }
+
+    fn unread(&mut self, i: usize, raw: &str, why: &'static str, games: bool) {
+        self.unread.push((i + 1, raw.trim().to_string(), why));
+        self.keep(raw, games);
+    }
+
     fn game_line(&mut self, line: &str) -> Result<(), &'static str> {
-        let (left, right) = line.split_once('=').ok_or(NO_EQUALS)?;
+        let (left, right) = line.split_once('=').ok_or(no_equals())?;
         let (left, right) = (left.trim(), right.trim());
         let named = profile_name(right).ok();
         if left.eq_ignore_ascii_case(CHANGES) {
@@ -339,14 +361,22 @@ impl Profiles {
 
     pub fn text(&self) -> String {
         let mut text = String::new();
-        for p in &self.pads {
+        let keep = |text: &mut String, pads: usize, games: bool| {
+            for k in self.kept.iter().filter(|k| k.pads == pads && k.games == games) {
+                text.push_str(&k.line);
+                text.push('\n');
+            }
+        };
+        keep(&mut text, 0, false);
+        for (i, p) in self.pads.iter().enumerate() {
             text.push_str(&format!("{}\n{PROFILE} = {}\n", p.pad.heading(), p.name));
             for c in &p.changes {
                 text.push_str(&c.line());
                 text.push('\n');
             }
+            keep(&mut text, i + 1, false);
         }
-        if !self.pads.is_empty() || self.off || self.other.is_some() || !self.games.is_empty() {
+        if !self.pads.is_empty() || self.off || self.other.is_some() || !self.games.is_empty() || self.kept.iter().any(|k| k.games) {
             text.push_str(&format!("{GAMES}\n"));
             if self.off {
                 text.push_str(&format!("{CHANGES} = off\n"));
@@ -354,6 +384,10 @@ impl Profiles {
             text.push_str(&format!("{OTHER_GAME} = {}\n", self.other.as_deref().unwrap_or(STANDARD)));
             for (id, name) in &self.games {
                 text.push_str(&format!("{id} = {name}\n"));
+            }
+            for k in self.kept.iter().filter(|k| k.games) {
+                text.push_str(&k.line);
+                text.push('\n');
             }
         }
         text
@@ -469,7 +503,12 @@ pub fn load() -> std::io::Result<Profiles> {
 }
 
 pub fn save(profiles: &Profiles) -> std::io::Result<()> {
-    files::write_whole(&file(), profiles.text().as_bytes())
+    save_in(&file(), profiles)
+}
+
+pub fn save_in(path: &std::path::Path, profiles: &Profiles) -> std::io::Result<()> {
+    files::read_within(path, MOST_BYTES)?;
+    files::write_whole(path, profiles.text().as_bytes())
 }
 
 pub const SWAPS: &[&[&str]] = &[
@@ -818,8 +857,8 @@ mod tests {
     fn what_cannot_be_read_says_why() {
         let p = Profiles::read("South = East\n[zz:09cc]\n[054c:09cc Pad]\nFlux = East\nSouth\nLeft Stick dead zone = 90%\nLeft Stick X = South\n");
         let whys: Vec<_> = p.unread.iter().map(|u| (u.0, u.2)).collect();
-        assert_eq!(whys, [(1, "It is under no controller's heading."), (2, "Not a controller's heading."), (4, NOT_A_BUTTON),
-                          (5, NO_EQUALS), (6, NOT_A_ZONE), (7, NOT_A_BUTTON)]);
+        assert_eq!(whys, [(1, t!("common-pads-no-heading")), (2, t!("common-pads-not-a-heading")), (4, not_a_button()),
+                          (5, no_equals()), (6, not_a_zone()), (7, not_a_button())]);
         for line in ["[", "[]", "[:]", "[ffff:ffff \u{0}]", "= =", "Left Stick dead zone = -1", "South = ++"] {
             let _ = Profiles::read(&format!("[0001:0002]\n{line}\n"));
         }
@@ -1018,5 +1057,21 @@ mod tests {
                     I: Bus=0003 Vendor=054c Product=09cc Version=8111\nN: Name=\"Other\"\nH: Handlers=js1 event7 \n";
         let nodes: Vec<Option<String>> = listed_in(text).into_iter().map(|(_, n)| n).collect();
         assert_eq!(nodes, [Some("event2".to_string()), Some("event7".to_string())]);
+    }
+
+    #[test]
+    fn lines_that_are_not_changes_are_written_back_where_they_were() {
+        let text = "# top\n[054c:09cc Pad]\nProfile = My keys\nSouth = East\nFlux = East\n# under the pad\n[Games]\nAny other game = Standard\n# in games\nnot a game\n";
+        let p = Profiles::read(text);
+        assert_eq!(p.unread.len(), 2);
+        let saved = p.text();
+        for kept in ["# top", "Flux = East", "# under the pad", "# in games", "not a game"] {
+            assert!(saved.contains(kept), "{kept} was thrown away: {saved}");
+        }
+        let at = |w: &str| saved.find(w).unwrap();
+        assert!(at("# top") < at("[054c:09cc Pad]") && at("Flux = East") < at("[Games]") && at("[Games]") < at("# in games"), "{saved}");
+        assert_eq!(Profiles::read(&saved).kept, p.kept);
+        let beyond = format!("[0001:0002]\n{}# far\n", "South = East\n".repeat(MOST_LINES));
+        assert!(Profiles::read(&beyond).text().contains("# far"));
     }
 }

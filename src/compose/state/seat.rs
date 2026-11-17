@@ -1,6 +1,6 @@
 // Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
-use super::{remember_num_lock, AnvilState, Backend};
+use super::{remember_num_lock, Compose, Backend};
 
 use tracing::warn;
 
@@ -33,12 +33,12 @@ use smithay::{
 
 use crate::focus::{KeyboardFocusTarget, PointerFocusTarget};
 
-impl<BackendData: Backend> SeatHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> SeatHandler for Compose<BackendData> {
     type KeyboardFocus = KeyboardFocusTarget;
     type PointerFocus = PointerFocusTarget;
     type TouchFocus = PointerFocusTarget;
 
-    fn seat_state(&mut self) -> &mut SeatState<AnvilState<BackendData>> {
+    fn seat_state(&mut self) -> &mut SeatState<Compose<BackendData>> {
         &mut self.seat_state
     }
 
@@ -59,7 +59,7 @@ impl<BackendData: Backend> SeatHandler for AnvilState<BackendData> {
     }
     fn cursor_image(&mut self, _seat: &Seat<Self>, image: CursorImageStatus) {
 
-        if self.capture.away() {
+        if self.capture.is_active() {
             return;
         }
         self.cursor_status = image;
@@ -76,9 +76,9 @@ impl<BackendData: Backend> SeatHandler for AnvilState<BackendData> {
         }
     }
 }
-delegate_seat!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_seat!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend + 'static> AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> Compose<BackendData> {
 
     pub fn give_keyboard(&mut self, target: Option<KeyboardFocusTarget>, serial: smithay::utils::Serial) {
         let Some(keyboard) = self.seat.get_keyboard() else { return };
@@ -91,22 +91,22 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
     }
 }
 
-impl<BackendData: Backend> TabletSeatHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> TabletSeatHandler for Compose<BackendData> {
     fn tablet_tool_image(&mut self, _tool: &TabletToolDescriptor, image: CursorImageStatus) {
 
-        if self.capture.away() {
+        if self.capture.is_active() {
             return;
         }
         self.cursor_status = image;
     }
 }
-delegate_tablet_manager!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_tablet_manager!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-delegate_cursor_shape!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_cursor_shape!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-delegate_text_input_manager!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_text_input_manager!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend> InputMethodHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> InputMethodHandler for Compose<BackendData> {
     fn new_popup(&mut self, surface: PopupSurface) {
         if let Err(err) = self.popups.track_popup(PopupKind::from(surface)) {
             warn!("Failed to track popup: {}", err);
@@ -129,26 +129,28 @@ impl<BackendData: Backend> InputMethodHandler for AnvilState<BackendData> {
     }
 }
 
-delegate_input_method_manager!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_input_method_manager!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend> KeyboardShortcutsInhibitHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> KeyboardShortcutsInhibitHandler for Compose<BackendData> {
     fn keyboard_shortcuts_inhibit_state(&mut self) -> &mut KeyboardShortcutsInhibitState {
         &mut self.keyboard_shortcuts_inhibit_state
     }
 
     fn new_inhibitor(&mut self, inhibitor: KeyboardShortcutsInhibitor) {
 
-        inhibitor.activate();
+        if !inhibitor.wl_surface().client().is_some_and(|c| crate::virtual_input::from_box(&c)) {
+            inhibitor.activate();
+        }
     }
 }
 
-delegate_keyboard_shortcuts_inhibit!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_keyboard_shortcuts_inhibit!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-delegate_pointer_gestures!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_pointer_gestures!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-delegate_relative_pointer!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_relative_pointer!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend> PointerConstraintsHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> PointerConstraintsHandler for Compose<BackendData> {
     fn new_constraint(&mut self, surface: &WlSurface, pointer: &PointerHandle<Self>) {
 
         let Some(current_focus) = pointer.current_focus() else {
@@ -156,7 +158,9 @@ impl<BackendData: Backend> PointerConstraintsHandler for AnvilState<BackendData>
         };
         if current_focus.wl_surface().as_deref() == Some(surface) && self.may_hold_pointer(surface) {
             with_pointer_constraint(surface, pointer, |constraint| {
-                constraint.unwrap().activate();
+                if let Some(constraint) = constraint {
+                    constraint.activate();
+                }
             });
         }
     }
@@ -187,7 +191,7 @@ fn root_of(surface: &WlSurface) -> WlSurface {
     root
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     pub(crate) fn may_hold_pointer(&self, surface: &WlSurface) -> bool {
         self.seat
@@ -240,6 +244,6 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         }
     }
 }
-delegate_pointer_constraints!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_pointer_constraints!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-delegate_viewporter!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_viewporter!(@<BackendData: Backend + 'static> Compose<BackendData>);

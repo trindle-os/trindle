@@ -1,11 +1,7 @@
-//! The page Apps shows for one app, with Install in the same place whatever
-//! the app. It is one fixed layout, not a puzzle of cards: every part has
-//! its place, worked out from the window's width and the style sheet alone,
-//! never from what the app has to show. A part with nothing to show keeps
-//! its place and says so, and everything whose length is the app's own (its
-//! name, its line, a failure) is kept to one line, so nothing moves from
-//! one app to the next, as an icon, a picture, a rating or a size arrives,
-//! or when Install is pressed.
+//! The page Apps shows for one app. It is one fixed layout: every part keeps
+//! its place whatever the app has to show, and what is the app's own in
+//! length is kept to one line, so nothing moves as a picture, a rating or a
+//! size arrives, or when Install is pressed.
 
 use std::cell::Cell;
 use std::rc::Rc;
@@ -22,7 +18,7 @@ use super::{go, reviews, update_page, Msg, Store};
 use crate::toolkit::picture;
 use crate::toolkit::t;
 use crate::toolkit::theme::{self, alpha};
-use crate::toolkit::tiles::{standard_ring_with, tile_head};
+use crate::toolkit::tiles::{standard_ring_with, tile_head, RingShare};
 use crate::toolkit::widget::{button, card, column, drawing, headline, label, layers, main_action, note, page_title, placed, row, scroll,
                              space, spinner, title, Length, Node, Tone};
 
@@ -45,12 +41,12 @@ pub enum State {
 
     Absent,
 
-    Fetching(f32),
+    Fetching(RingShare),
 
     PuttingIn(f32),
     Removing,
 
-    Updating(f32),
+    Updating(RingShare),
 
     Here { version: String, waiting: bool, newer: String, kept: bool },
 }
@@ -140,12 +136,12 @@ pub fn gather(s: &Store, a: &App) -> Shown {
         if s.busy.get(id) == Some(&"uninstall") {
             State::Removing
         } else if d.share() < ALMOST {
-            State::Fetching(d.share())
+            State::Fetching(d.ring())
         } else {
             State::PuttingIn(d.share())
         }
-    } else if let Some(share) = update_page::app_share(s, id) {
-        State::Updating(share)
+    } else if let Some(ring) = update_page::app_ring(s, id) {
+        State::Updating(ring)
     } else if let Some((_, version)) = s.installed.get(id) {
         let newer = update_page::newer_version(s, id).unwrap_or_default().to_string();
         State::Here { version: version.clone(), waiting: s.updatable.contains(id), newer, kept: s.held.app(id) }
@@ -154,27 +150,19 @@ pub fn gather(s: &Store, a: &App) -> Shown {
     };
 
     let problem_at = [id.clone(), update_page::app_key(id)].into_iter()
-        .find(|k| s.said.get(k).is_some_and(|(words, tone)| matches!(tone, Tone::Problem) && !words.is_empty()));
+        .find(|k| s.words.said.get(k).is_some_and(|(words, tone)| matches!(tone, Tone::Problem) && !words.is_empty()));
     let problem_page = problem_at.as_deref().map_or(super::help::INSTALL, |k| s.page_of(k));
-    let problem = problem_at.and_then(|k| s.said.get(&k).map(|(words, _)| words.clone()));
-    let facts = match s.facts.get(id) {
-        Some(Some(f)) => Asked::Here(f.clone()),
-        Some(None) if s.facts_heard.contains(id) => Asked::Nothing,
-        _ => Asked::Waiting,
-    };
-    let ratings = match s.reviews.get(id) {
-        Some(Some(r)) => Asked::Here(r.clone()),
-        Some(None) if s.reviews_heard.contains(id) => Asked::Nothing,
-        _ => Asked::Waiting,
-    };
-    let said = match s.said_about.get(id) {
+    let problem = problem_at.and_then(|k| s.words.said.get(&k).map(|(words, _)| words.clone()));
+    let facts = s.heard.facts.asked(id);
+    let ratings = s.heard.ratings.asked(id);
+    let said = match s.heard.reviews.get(id) {
         Some(list) if !list.is_empty() => Asked::Here(list.clone()),
         Some(_) => Asked::Nothing,
         None => Asked::Waiting,
     };
-    let shots = a.screenshots.iter().map(|(url, _)| match s.shots.get(url) {
+    let shots = a.screenshots.iter().map(|(url, _)| match s.heard.shots.get(url) {
         Some(Some(img)) => Shot::Here(img.clone()),
-        _ if s.shots_missed.contains(url) => Shot::Missed,
+        _ if s.heard.missed.contains(url) => Shot::Missed,
         _ => Shot::Waiting,
     }).collect();
     let created = match super::pages::github_search::project(s, &a.repo).and_then(|p| p.created) {
@@ -186,7 +174,7 @@ pub fn gather(s: &Store, a: &App) -> Shown {
         created, now: super::age::now(),
         app: a.clone(), back: pages::links::back_name(&s.view), state, problem, problem_page, facts, ratings, said, shots, shot: s.shot,
         held: s.other.map(|who| who.sentence().to_string()), busy: update_page::busy(s),
-        online: s.online, ask: s.owned.ask.clone().filter(|k| k.id == a.id), across: s.across, pulsing: s.pulsing.clone(),
+        online: s.online, ask: s.owned.ask.clone().filter(|k| k.id == a.id), across: s.size.across, pulsing: s.pulse.on.clone(),
     }
 }
 
@@ -248,9 +236,9 @@ pub(super) fn head_of(icon: Node<Msg>, names: Vec<Node<Msg>>, actions: impl Fn(b
 fn state_words(v: &Shown) -> (Dot, String) {
     match &v.state {
         State::Removing => (Dot::Checking, t!("store-app-state-removing").into()),
-        State::Fetching(share) => (Dot::Filling(*share), t!("store-app-state-downloading").into()),
+        State::Fetching(share) => (Dot::Filling(share.get().unwrap_or(0.0)), t!("store-app-state-downloading").into()),
         State::PuttingIn(share) => (Dot::Filling(*share), t!("store-app-state-putting-in").into()),
-        State::Updating(share) => (Dot::Filling(*share), t!("store-app-state-updating").into()),
+        State::Updating(share) => (Dot::Filling(share.get().unwrap_or(0.0)), t!("store-app-state-updating").into()),
 
         State::Here { version, waiting: true, newer, kept: true } => (Dot::Quiet, update_page::words::held_words(Some(version), Some(newer))),
         State::Here { version, waiting: false, kept: true, .. } if version.is_empty() => (Dot::Quiet, t!("store-app-state-held").into()),
@@ -279,18 +267,17 @@ fn state_words(v: &Shown) -> (Dot, String) {
 fn actions(v: &Shown, first: bool) -> Node<Msg> {
     let a = &v.app;
     let id = a.id.clone();
-    let k = theme::app_page();
     let site = if a.homepage.is_empty() { format!("https://flathub.org/apps/{}", a.id) } else { a.homepage.clone() };
-    let pill = |icon: &str, words: &str| main_action(icon, words).width(Length::Fixed(k.action)).key(MAIN_ACTION);
-    let busy = |words: &str| row(vec![spinner(), label(words.to_string()).cut()]).gap(8.0);
+    let pill = |icon: &str, words: &str| main_action(icon, words).width(Length::Fixed(look::action_room())).key(MAIN_ACTION);
+    let busy = |words: &str| row(vec![spinner(), label(words.to_string()).cut()]).gap(look::busy_gap());
     let mut open = None;
     let (second, main) = match &v.state {
         State::Removing => (None, busy(t!("store-app-busy-removing"))),
-        State::Updating(share) => (None, row(vec![look::ring_with_figure(*share, theme::sheet().action_height)])),
+        State::Updating(share) => (None, row(vec![look::ring_with_figure(share, theme::sheet().action_height)])),
         State::Fetching(share) => {
             let i = id.clone();
             (Some(button("process-stop-symbolic", t!("store-app-stop")).on_press(go(move |s| pages::install::give_up(s, &i)))),
-             row(vec![look::ring_with_figure(*share, theme::sheet().action_height)]))
+             row(vec![look::ring_with_figure(share, theme::sheet().action_height)]))
         }
         State::PuttingIn(_) => (None, busy(t!("store-app-busy-installing"))),
         State::Here { waiting, kept, .. } => {
@@ -322,15 +309,15 @@ fn actions(v: &Shown, first: bool) -> Node<Msg> {
 }
 
 pub(super) fn action_places(open: Option<Node<Msg>>, second: Option<Node<Msg>>, website: Node<Msg>, main: Node<Msg>, first: bool) -> Node<Msg> {
-    let k = theme::app_page();
     let round = Length::Fixed(theme::icon_button());
     let in_place = |b: Option<Node<Msg>>| match b {
         Some(b) => row(vec![b]).width(round),
         None => space().width(round),
     };
 
-    let place = drawing((k.action, theme::sheet().action_height), "", |_, _| {}).key(ACTION_PLACE);
-    let main = layers(vec![place, main]).width(Length::Fixed(k.action)).height(Length::Fixed(theme::sheet().action_height));
+    let wide = look::action_room();
+    let place = drawing((wide, theme::sheet().action_height), "", |_, _| {}).key(ACTION_PLACE);
+    let main = layers(vec![place, main]).width(Length::Fixed(wide)).height(Length::Fixed(theme::sheet().action_height));
     let mut all = vec![in_place(open), in_place(second), website, main];
     if first {
         all.reverse();
@@ -555,14 +542,14 @@ mod tests {
     fn state(n: usize) -> State {
         match n % 10 {
             0 => State::Absent,
-            1 => State::Fetching(0.0),
-            2 => State::Fetching(0.42),
+            1 => State::Fetching(RingShare::new(Some(0.0))),
+            2 => State::Fetching(RingShare::new(Some(0.42))),
             3 => State::PuttingIn(0.98),
             4 => State::Removing,
             5 => State::Here { version: "3.2.1".into(), waiting: false, newer: String::new(), kept: false },
             6 => State::Here { version: "2026.10.1-beta.3+build.20261001".into(), waiting: true, newer: "2026.11.1-beta.1+build.20261101".into(), kept: false },
             7 => State::Here { version: "3.2.1".into(), waiting: true, newer: String::new(), kept: false },
-            8 => State::Updating(0.42),
+            8 => State::Updating(RingShare::new(Some(0.42))),
             _ => State::Here { version: String::new(), waiting: false, newer: String::new(), kept: false },
         }
     }
@@ -760,17 +747,19 @@ mod tests {
         v.app = made_up(1, 1, 0);
         v.shots = vec![Shot::Waiting];
         let said = words(&v);
-        assert!(said.iter().filter(|w| w.contains("not connected to the internet")).count() == 3, "{said:?}");
+        for want in ["Connect to the internet to see pictures.", "This computer is not connected to the internet.", "Connect to the internet to read reviews."] {
+            assert!(said.iter().any(|w| w == want), "{want}: {said:?}");
+        }
         assert!(said.iter().any(|w| w == "No ratings to show."));
         v.shots = vec![Shot::Missed];
-        assert!(words(&v).iter().any(|w| w == "This picture could not be fetched."));
+        assert!(words(&v).iter().any(|w| w == "Trindle couldn't get this picture."));
 
         v.online = true;
         v.shots = vec![Shot::Waiting];
         v.ratings = Asked::Waiting;
         v.said = Asked::Waiting;
         let said = words(&v);
-        for want in ["Fetching the picture\u{2026}", "Looking for ratings\u{2026}", "Looking for what people say\u{2026}"] {
+        for want in ["Getting the picture\u{2026}", "Looking for ratings\u{2026}", "Loading reviews\u{2026}"] {
             assert!(said.iter().any(|w| w == want), "{want}: {said:?}");
         }
     }
@@ -806,7 +795,7 @@ mod tests {
         offline.facts = Asked::Nothing;
         let cases: Vec<(&str, f32, f32, Shown)> = vec![
             ("not-installed", 1100.0, 760.0, with(case(0, 1100.0), 0, three(), 12, State::Absent, Asked::Here(stars()))),
-            ("installing", 1100.0, 760.0, with(case(0, 1100.0), 0, three(), 12, State::Fetching(0.42), Asked::Here(stars()))),
+            ("installing", 1100.0, 760.0, with(case(0, 1100.0), 0, three(), 12, State::Fetching(RingShare::new(Some(0.42))), Asked::Here(stars()))),
             ("installed", 1100.0, 760.0, with(case(0, 1100.0), 0, three(), 12, State::Here { version: "3.2.1".into(), waiting: false, newer: String::new(), kept: false }, Asked::Here(stars()))),
             ("failed", 1100.0, 760.0, failed),
             ("installed-tall-picture", 1100.0, 760.0, with(case(0, 1100.0), 1, vec![Shot::Here(painted(300, 640))], 2, State::Here { version: "3.2.1".into(), waiting: true, newer: "3.3".into(), kept: false }, Asked::Nothing)),

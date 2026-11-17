@@ -5,7 +5,7 @@ use std::os::unix::io::OwnedFd;
 use smithay::{
     desktop::Window,
     input::pointer::Focus,
-    utils::{Logical, Rectangle, SERIAL_COUNTER},
+    utils::{Logical, Point, Rectangle, SERIAL_COUNTER},
     wayland::{
         selection::{
             data_device::{
@@ -27,27 +27,27 @@ use smithay::{
 };
 use tracing::{error, trace, warn};
 
-use crate::{focus::KeyboardFocusTarget, state::Backend, AnvilState};
+use crate::{focus::KeyboardFocusTarget, state::Backend, Compose};
 
 use super::placement::place_new_window;
 use super::{
     FullscreenSurface, PointerMoveSurfaceGrab, TouchMoveSurfaceGrab, WindowElement,
 };
 
-impl<BackendData: Backend> XWaylandShellHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> XWaylandShellHandler for Compose<BackendData> {
     fn xwayland_shell_state(&mut self) -> &mut XWaylandShellState {
         &mut self.xwayland_shell_state
     }
 }
 
-impl<BackendData: Backend> XwmHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> XwmHandler for Compose<BackendData> {
     fn xwm_state(&mut self, xwm: XwmId) -> &mut X11Wm {
 
         self.rooms.wm(xwm).expect("an Xwayland window manager Trindle knows")
     }
 
     fn xdnd_event(&mut self, xwm: XwmId, event: smithay::xwayland::xwm::XdndEvent) {
-        AnvilState::xdnd_event(self, xwm, event);
+        Compose::xdnd_event(self, xwm, event);
     }
 
     fn send_xdnd(&mut self, xwm: XwmId, mime_type: String, fd: OwnedFd) {
@@ -71,9 +71,7 @@ impl<BackendData: Backend> XwmHandler for AnvilState<BackendData> {
         window.set_ssd(!decorated);
         place_new_window(&mut self.space, self.pointer.current_location(), &window, true);
         self.place_on_active_workspace(&window);
-        let Some(xsurface) = window.0.x11_surface() else {
-            unreachable!()
-        };
+        let Some(xsurface) = window.0.x11_surface() else { return };
 
         let Some(loc) = self.space.element_location(&window) else {
             let _ = xsurface.configure(None);
@@ -179,11 +177,8 @@ impl<BackendData: Backend> XwmHandler for AnvilState<BackendData> {
     }
 
     fn fullscreen_request(&mut self, _xwm: XwmId, window: X11Surface) {
-        if let Some(elem) = self
-            .space
-            .elements()
-            .find(|e| matches!(e.0.x11_surface(), Some(w) if w == &window))
-        {
+        if let Some(elem) = self.x11_element(&window) {
+            let elem = &elem;
             let outputs_for_window = self.space.outputs_for_element(elem);
 
             let Some(output) = outputs_for_window.first().or_else(|| self.space.outputs().next()) else {
@@ -193,44 +188,57 @@ impl<BackendData: Backend> XwmHandler for AnvilState<BackendData> {
                 return;
             };
             let geometry = full_screen_size(&window, area);
+            let output = &output.clone();
+            if !window.is_fullscreen() {
+                if let Some(loc) = self.space.element_location(elem) {
+                    *elem.0.user_data().get_or_insert(BeforeFullScreen::default).0.borrow_mut() = Some((loc, elem.client_size()));
+                }
+            }
+            self.leave_fullscreen_slots(elem, Some(output));
 
             let _ = window.set_fullscreen(true);
+            self.panel_stale = true;
             elem.set_ssd(false);
             let _ = window.configure(geometry);
-            output.user_data().insert_if_missing(FullscreenSurface::default);
-            output
-                .user_data()
-                .get::<FullscreenSurface>()
-                .unwrap()
-                .set(elem.clone());
-            trace!("Fullscreening: {:?}", elem);
+            output.user_data().get_or_insert(FullscreenSurface::default).set(elem.clone());
+            tracing::info!(target: super::FULL_SCREEN_LOG, "an X11 window goes full screen");
         }
     }
 
     fn unfullscreen_request(&mut self, _xwm: XwmId, window: X11Surface) {
-        if let Some(elem) = self
-            .space
-            .elements()
-            .find(|e| matches!(e.0.x11_surface(), Some(w) if w == &window))
-        {
+        if let Some(elem) = self.x11_element(&window) {
+            let elem = &elem;
             let _ = window.set_fullscreen(false);
+            self.panel_stale = true;
             elem.set_ssd(!window.is_decorated());
-            if let Some(output) = self.space.outputs().find(|o| {
+            let held_on = self.space.outputs().find(|o| {
                 o.user_data()
                     .get::<FullscreenSurface>()
                     .and_then(|f| f.get())
                     .map(|w| &w == elem)
                     .unwrap_or(false)
-            }) {
-                trace!("Unfullscreening: {:?}", elem);
+            }).cloned();
+            if let Some(output) = held_on {
+                let output = &output;
+                tracing::info!(target: super::FULL_SCREEN_LOG, "an X11 window leaves full screen");
                 output.user_data().get::<FullscreenSurface>().unwrap().clear();
-                let _ = window.configure(self.space.element_bbox(elem));
+                let was = elem.0.user_data().get::<BeforeFullScreen>().and_then(|b| b.0.take());
+                match was {
+                    Some((loc, size)) => {
+                        let _ = window.configure(Rectangle::new(loc + elem.deco_offset(), size));
+                        super::place_keeping_order(&mut self.space, elem.clone(), loc);
+                    }
+                    None => {
+                        let _ = window.configure(self.space.element_bbox(elem));
+                    }
+                }
                 self.backend_data.reset_buffers(output);
             }
         }
     }
 
     fn property_notify(&mut self, _xwm: XwmId, window: X11Surface, property: WmWindowProperty) {
+        self.panel_stale = true;
         if property != WmWindowProperty::EmulatedScreens || !window.is_fullscreen() {
             return;
         }
@@ -270,8 +278,10 @@ impl<BackendData: Backend> XwmHandler for AnvilState<BackendData> {
     }
 
     fn resize_request(&mut self, _xwm: XwmId, window: X11Surface, _button: u32, edges: X11ResizeEdge) {
-
         let Some(start_data) = self.pointer.grab_start_data() else { return };
+        if !press_began_on(start_data.focus.as_ref(), &window) {
+            return;
+        }
         let Some(element) = self.x11_element(&window) else { return };
         self.start_pointer_resize(element, edges.into(), start_data, SERIAL_COUNTER.next_serial());
     }
@@ -340,7 +350,7 @@ impl<BackendData: Backend> XwmHandler for AnvilState<BackendData> {
     }
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     pub fn selection_cleared(&mut self, xwm: XwmId, selection: SelectionTarget) {
         let slot = crate::state::selection_slot(selection);
@@ -380,7 +390,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
 
     pub fn move_request_x11(&mut self, window: &X11Surface) {
         if let Some(touch) = self.seat.get_touch() {
-            if let Some(start_data) = touch.grab_start_data() {
+            if let Some(start_data) = touch.grab_start_data().filter(|s| press_began_on(s.focus.as_ref(), window)) {
                 if let Some(element) = self.x11_element(window) {
                     let Some(initial_window_location) = self.space.element_location(&element) else {
                         return;
@@ -402,6 +412,9 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         let Some(start_data) = self.pointer.grab_start_data() else {
             return;
         };
+        if !press_began_on(start_data.focus.as_ref(), window) {
+            return;
+        }
 
         let Some(element) = self.x11_element(window) else { return };
         let Some(initial_window_location) = self.space.element_location(&element) else { return };
@@ -416,6 +429,13 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         let pointer = self.pointer.clone();
         pointer.set_grab(self, grab, SERIAL_COUNTER.next_serial(), Focus::Clear);
     }
+}
+
+#[derive(Default)]
+struct BeforeFullScreen(std::cell::RefCell<Option<(Point<i32, Logical>, smithay::utils::Size<i32, Logical>)>>);
+
+fn press_began_on<F: smithay::wayland::seat::WaylandFocus>(focus: Option<&(F, Point<f64, Logical>)>, window: &X11Surface) -> bool {
+    super::press_began_on(focus, window.wl_surface().as_ref())
 }
 
 pub fn full_screen_size(window: &X11Surface, screen: Rectangle<i32, Logical>) -> Rectangle<i32, Logical> {

@@ -2519,8 +2519,7 @@ where
 
                         if let Some(wl_surface) =
                             xwayland_shell::XWaylandShellHandler::xwayland_shell_state(state)
-                                .surface_for_serial(serial)
-                                .clone()
+                                .take_surface_for_serial(xwm_id, serial)
                         {
                             debug!(
                                 window = ?xsurface.window_id(),

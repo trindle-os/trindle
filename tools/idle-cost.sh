@@ -135,11 +135,11 @@ run() {
 shot() {
   [ -n "${SHOTS:-}" ] && [ -x "${GRIM:-}" ] || return 0
   mkdir -p "$SHOTS"
-  WAYLAND_DISPLAY=$INNER LD_LIBRARY_PATH= timeout 10 "$GRIM" "$SHOTS/$1.png" 2>/dev/null
+  WAYLAND_DISPLAY=$INNER LD_LIBRARY_PATH='' timeout 10 "$GRIM" "$SHOTS/$1.png" 2>/dev/null
 }
 
 key() {
-  [ -x "$WTYPE" ] && WAYLAND_DISPLAY=$INNER LD_LIBRARY_PATH= timeout 10 "$WTYPE" "$@"
+  [ -x "$WTYPE" ] && WAYLAND_DISPLAY=$INNER LD_LIBRARY_PATH='' timeout 10 "$WTYPE" "$@"
 }
 
 snap() {
@@ -170,7 +170,9 @@ measure() {
       verdict = (cpu > cpu_limit || wk > wake_limit) ? "OVER" : "ok"
       if (short ~ /^trindle-compose/) verdict = (cpu > compose_limit) ? "OVER" : "ok"
       printf "%-9s %-34s cpu %6.2f%%  wakes %7.1f/s  mem %6.1f MB  %s\n", part, short, cpu, wk, $4 / 1024, verdict
-    }' "$R/before" "$R/after" | sort -k2 | tee -a "$OUT"
+    }' "$R/before" "$R/after" | sort -k2 > "$R/rows"
+  [ -s "$R/rows" ] || echo "$1 nothing was measured: no Trindle program was running OVER" > "$R/rows"
+  tee -a "$OUT" < "$R/rows"
 }
 
 for part in $PARTS; do

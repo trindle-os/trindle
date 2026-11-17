@@ -9,13 +9,13 @@ settings-users-keywords = cuentas personas contraseña imagen foto administrador
 
 # Help line at the foot of the Users page.
 # SAFETY: needs a human review before it ships
-settings-users-help = Añadir personas, cambiar contraseñas y eliminar cuentas necesita la contraseña de un administrador.
+settings-users-help = Se necesita la contraseña de un administrador para añadir personas, cambiar contraseñas o eliminar cuentas.
 
 # Beside a change that is waiting for the administrator's password to be typed.
-settings-users-waiting = Esperando la contraseña...
+settings-users-waiting = Esperando tu contraseña…
 
 # Headline of the Users page when nobody on the computer is an administrator.
-settings-users-sum-nobody-admin = Aquí nadie es administrador, así que no se puede instalar ni cambiar nada para todos.
+settings-users-sum-nobody-admin = Aquí nadie es administrador, así que nadie puede instalar ni cambiar nada para todos.
 
 # Headline of the Users page when you are the only person and an administrator.
 settings-users-sum-only-you = Solo tú usas este equipo, y eres su administrador.
@@ -51,7 +51,7 @@ settings-users-sum-admins =
 settings-users-this-is-you = Eres tú.
 
 # Under a person's name on their card when the card is someone else's: the name shown is their login name.
-settings-users-login-name = Su nombre de inicio de sesión.
+settings-users-login-name = Nombre de inicio de sesión
 
 # Tip of the round button on a person's card that picks their picture, and title of the window that opens.
 settings-users-choose-picture = Elegir una imagen
@@ -65,7 +65,7 @@ settings-users-change-password = Cambiar la contraseña
 
 # Tip of the round button on a person's card that deletes them and their files.
 # SAFETY: needs a human review before it ships
-settings-users-delete = Eliminar, con sus archivos
+settings-users-delete = Eliminar cuenta y archivos
 
 # Said beside a person once they are deleted.
 # SAFETY: needs a human review before it ships
@@ -75,12 +75,8 @@ settings-users-deleted = Eliminado
 # SAFETY: needs a human review before it ships
 settings-users-administrator = Administrador
 
-# Under the Administrator line: what an administrator can do.
-# SAFETY: needs a human review before it ships
-settings-users-admin-can = Puede instalar y cambiar cosas para todos.
-
 # Tip of the administrator switch on your own card, and said when you press it: you cannot remove your own administrator rights.
-settings-users-cannot-take-away = No puedes quitarte esto a ti mismo.
+settings-users-cannot-take-away = No puedes quitarte tus propios derechos de administrador.
 
 # Said beside a person after they are made an administrator.
 # SAFETY: needs a human review before it ships
@@ -92,7 +88,7 @@ settings-users-admin-no-longer = Ya no es administrador
 
 # Help text for a person's card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-person-about = Su imagen, su contraseña y, para cualquiera que no seas tú, eliminarlo con sus archivos son los botones redondos junto a su nombre. Un administrador puede instalar programas y cambiar cosas para todos; no puedes quitarte esto a ti mismo. Cada cambio pide la contraseña de un administrador.
+settings-users-person-about = Un administrador puede instalar programas y cambiar cosas para todos. No puedes quitarte tus propios derechos de administrador. Cada cambio necesita la contraseña de un administrador.
 
 # Typing box in the change password form, for your own current password.
 # SAFETY: needs a human review before it ships
@@ -103,7 +99,7 @@ settings-users-current-password = Contraseña actual
 settings-users-new-password = Contraseña nueva
 
 # Typing box in the change password form where the new password is typed again.
-settings-users-again = Repetir
+settings-users-again = Escríbela otra vez
 
 # Button in the change password form that saves the new password.
 settings-users-save = Guardar
@@ -116,10 +112,10 @@ settings-users-save-new = Guardar la contraseña nueva
 settings-users-cancel = Cancelar
 
 # Red words in the change password form when your current password was left empty.
-settings-users-need-current = También tu contraseña actual, para que tus inicios de sesión guardados sigan funcionando.
+settings-users-need-current = Escribe también tu contraseña actual, para que tus inicios de sesión guardados sigan funcionando.
 
 # Red words in the change password form when the new password is too short.
-settings-users-at-least-8 = Al menos 8 caracteres, por favor.
+settings-users-at-least-8 = Usa al menos 8 caracteres.
 
 # Red words in the change password form when the two new passwords differ.
 settings-users-no-match = Las dos no coinciden.
@@ -128,7 +124,7 @@ settings-users-no-match = Las dos no coinciden.
 settings-users-password-changed = Contraseña cambiada
 
 # Red words after a password change when the saved logins could not take the new password.
-settings-users-not-rekeyed = Contraseña cambiada, pero los inicios de sesión guardados siguen abriéndose con la anterior.
+settings-users-not-rekeyed = Contraseña cambiada, pero tus inicios de sesión guardados siguen usando la contraseña anterior.
 
 # Red words when the chosen file is not a picture the page can use.
 settings-users-png-please = PNG, JPG o WebP, por favor.
@@ -140,19 +136,16 @@ settings-users-picture-not-changed = No se pudo cambiar la imagen.
 settings-users-saved = Guardado
 
 # Red words when your new picture works at login but could not be copied to your home folder.
-settings-users-picture-not-shared = La imagen se muestra al iniciar sesión, pero no se pudo dar a tus otros programas.
+settings-users-picture-not-shared = Tu imagen aparece en la pantalla de inicio de sesión, pero Trindle no pudo compartirla con tus otros programas.
 
 # Heading of the form for adding a person.
 settings-users-add-someone = Añadir a alguien
 
 # Help text for the Add someone form (the information button).
-settings-users-add-about = Una cuenta nueva para otra persona: su nombre completo, un nombre de inicio de sesión con letras minúsculas y números, que empiece por una letra, y una contraseña de al menos 8 caracteres. Puede iniciar sesión enseguida. Un administrador puede instalar programas y cambiar cosas para todos.
+settings-users-add-about = Escribe su nombre completo, un nombre de inicio de sesión y una contraseña de al menos 8 caracteres. El nombre de inicio de sesión solo puede tener letras minúsculas y números, y debe empezar por una letra. Puede iniciar sesión enseguida. Un administrador puede instalar programas y cambiar cosas para todos.
 
 # Heading of the line in the Add someone form that holds the button.
 settings-users-new-account = Cuenta nueva
-
-# Under the New account heading.
-settings-users-new-account-sub = Puede iniciar sesión enseguida con esta contraseña.
 
 # Typing box in the Add someone form for the person's full name.
 settings-users-full-name = Nombre completo
@@ -169,7 +162,7 @@ settings-users-password = Contraseña
 settings-users-add-this = Añadir a esta persona
 
 # Red words when the login name typed is not allowed.
-settings-users-login-rules = Los nombres de inicio de sesión son letras minúsculas y números, y empiezan por una letra.
+settings-users-login-rules = Un nombre de inicio de sesión usa letras minúsculas y números, y empieza por una letra.
 
 # Red words when the new person's password is too short.
 settings-users-password-8 = La contraseña necesita al menos 8 caracteres.
@@ -185,19 +178,16 @@ settings-users-saved-logins = Inicios de sesión guardados
 
 # Help text for the Saved logins card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-keyring-about = Las contraseñas que los programas guardan por ti, por ejemplo para el correo o el Wi-Fi, se guardan en un llavero que se abre con tu inicio de sesión. Todos pasan solos al llavero de Trindle al iniciar sesión. Si el tuyo no se pudo mover, mover copia cada inicio de sesión guardado, pidiendo la contraseña de cualquier llavero que el tuyo no abra, y los archivos de GNOME se dejan como están.
+settings-users-keyring-about = Los programas guardan por ti contraseñas, por ejemplo para el correo o el Wi-Fi, en un llavero que se abre cuando inicias sesión. Al iniciar sesión, Trindle pasa tu llavero al suyo. Si eso no funcionó, puedes moverlo aquí. Se copia cada inicio de sesión guardado. Puede que se te pida la contraseña de un llavero que tu inicio de sesión no abre. Los archivos de GNOME se dejan como están.
 
 # Heading of the line on the Saved logins card when the logins are kept by Trindle's keyring.
-settings-users-kept-trindle = Guardado en el llavero de Trindle
+settings-users-kept-trindle = En el llavero de Trindle
 
 # Heading of the line on the Saved logins card when the logins are kept by GNOME's keyring.
-settings-users-kept-gnome = Guardado en el llavero de GNOME
-
-# Under the heading when the logins are kept by Trindle's keyring.
-settings-users-opens-login = Se abre con tu inicio de sesión.
+settings-users-kept-gnome = En el llavero de GNOME
 
 # Under the heading when the logins are still kept by GNOME's keyring.
-settings-users-could-not-move = Tu inicio de sesión no pudo pasarlos.
+settings-users-could-not-move = Trindle no pudo pasarlos al iniciar sesión.
 
 # Tip of the button that moves saved logins to Trindle's keyring.
 # SAFETY: needs a human review before it ships
@@ -208,7 +198,7 @@ settings-users-move-keyring = Mover al llavero de Trindle
 settings-users-your-password = Tu contraseña
 
 # Tip of the button that starts moving the saved logins.
-settings-users-go-ahead = Continuar
+settings-users-go-ahead = Mover ahora
 
 # Typing box for the password of one GNOME keyring that stayed shut: the keyring's name is { $name }.
 # SAFETY: needs a human review before it ships
@@ -216,10 +206,10 @@ settings-users-password-for = Contraseña de { $name }
 
 # Red words when the move of saved logins was started without a password.
 # SAFETY: needs a human review before it ships
-settings-users-your-password-please = Tu contraseña, por favor.
+settings-users-your-password-please = Escribe tu contraseña.
 
 # Said beside the Saved logins line while they are copied.
-settings-users-copying = Copiando tus inicios de sesión guardados...
+settings-users-copying = Copiando tus inicios de sesión guardados…
 
 # Said beside the Saved logins line when the copy is done: how many logins were copied.
 settings-users-copied = { $n } copiados
@@ -227,20 +217,18 @@ settings-users-copied = { $n } copiados
 # Red words when keyrings stayed shut: the keyrings' names are { $names } and there are { $n } of them.
 settings-users-nothing-moved =
     { $n ->
-        [one] Todavía no se movió nada: { $names } necesita su propia contraseña.
-        [many] Todavía no se movió nada: { $names } necesitan sus propias contraseñas.
-       *[other] Todavía no se movió nada: { $names } necesitan sus propias contraseñas.
+        [one] Todavía no se ha movido nada. Escribe la contraseña de { $names }.
+       *[other] Todavía no se ha movido nada. Escribe las contraseñas de { $names }.
     }
 
 # Red words when the move of saved logins stopped unexpectedly.
-settings-users-stopped = Se detuvo a medias.
+settings-users-stopped = No terminó.
 
 # Words in place of the people while the accounts are still being read.
-settings-users-looking-accounts = Revisando las cuentas…
+settings-users-looking-accounts = Comprobando las cuentas…
 
 # Heading of the placeholder card shown while the accounts are being read.
 settings-users-people = Personas
 
 # Under the Administrator line of the placeholder card.
-settings-users-looking = Buscando…
-
+settings-users-looking = Cargando…

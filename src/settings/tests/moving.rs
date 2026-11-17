@@ -54,7 +54,6 @@ fn dropdown_key(sym: crate::toolkit::input::Keysym) -> crate::toolkit::input::In
 fn pages_with_dropdowns() -> Vec<Box<dyn Page>> {
     let mut pages = panels::all();
     for p in [
-        Box::new(panels::crash_reports::CrashReports::default()) as Box<dyn Page>,
         Box::new(panels::plugins::Plugins::default()),
     ] {
         if !pages.iter().any(|q| q.id() == p.id()) {
@@ -295,7 +294,7 @@ fn cards_after_a_press(id: &str, w: u32, at: usize, was: &Cards, now: &Cards, wr
 }
 
 #[test]
-#[ignore]
+#[ignore = "writes pictures to TRINDLE_SHOTS and asserts nothing; run it by hand with --ignored"]
 fn shoot_every_flipped_state() {
     let out = std::path::PathBuf::from(std::env::var("TRINDLE_SHOTS").unwrap_or_else(|_| "target/style-check".into()));
     let prefix = std::env::var("TRINDLE_SHOT_PREFIX").unwrap_or_else(|_| "settings-".into());

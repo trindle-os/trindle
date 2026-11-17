@@ -17,11 +17,14 @@ use crate::toolkit::bus::{get_bool, get_f64, get_path, get_paths, get_str, get_u
 use crate::toolkit::event::Flow;
 use crate::toolkit::widget::{button, Node};
 
+use super::attention::{self, Need};
 use super::ctx::{msg, Ctx, Msg};
+use super::ticker::{Burst, Ticker};
 use crate::toolkit::t;
 
 const VOLUME_EVERY: Duration = Duration::from_secs(2);
-const NETWORK_EVERY: Duration = Duration::from_secs(15);
+
+const BURST_WAIT: Duration = Duration::from_millis(500);
 
 const UPOWER: &str = "org.freedesktop.UPower";
 const BATTERY: &str = "/org/freedesktop/UPower/devices/DisplayDevice";
@@ -62,6 +65,9 @@ pub struct TrayRow {
     battery: Slot,
 
     active: Rc<Cell<bool>>,
+    volume_tick: Ticker,
+
+    looks: Vec<Rc<dyn Fn()>>,
     busy: Rc<Cell<bool>>,
     keyboard: bool,
     brightness: bool,
@@ -79,6 +85,8 @@ impl TrayRow {
             network: slot(),
             battery: slot(),
             active: Rc::new(Cell::new(false)),
+            volume_tick: Ticker::default(),
+            looks: Vec::new(),
             busy: Rc::new(Cell::new(false)),
             keyboard: keyboard_button_on() && find(KEYBOARD).is_some(),
             brightness: crate::session::brightness::backlight().is_some(),
@@ -86,17 +94,6 @@ impl TrayRow {
             _listens: Vec::new(),
         };
 
-        let weak = Rc::downgrade(ctx);
-        let (active, busy, slot) = (me.active.clone(), me.busy.clone(), me.volume.clone());
-        ctx.lp.every(VOLUME_EVERY, move || {
-            if weak.strong_count() == 0 {
-                return Flow::Stop;
-            }
-            if active.get() {
-                poll_volume(&weak, &busy, &slot);
-            }
-            Flow::Continue
-        });
         poll_volume(&Rc::downgrade(ctx), &me.busy, &me.volume);
 
         if let Some(bus) = ctx.system.clone() {
@@ -109,9 +106,20 @@ impl TrayRow {
 
     pub fn set_open(&mut self, open: bool) {
         self.active.set(open);
-        if open {
-            poll_volume(&Rc::downgrade(&self.ctx), &self.busy, &self.volume);
+        if !open {
+            self.volume_tick.stop();
+            return;
         }
+        let (weak, busy, slot) = (Rc::downgrade(&self.ctx), self.busy.clone(), self.volume.clone());
+        poll_volume(&weak, &busy, &slot);
+        self.volume_tick.start(&self.ctx.lp, VOLUME_EVERY, move || {
+            if weak.strong_count() == 0 {
+                return Flow::Stop;
+            }
+            poll_volume(&weak, &busy, &slot);
+            Flow::Continue
+        });
+        self.looks.iter().for_each(|look| look());
     }
 
     fn battery_watch(&mut self, bus: &Bus) {
@@ -131,7 +139,7 @@ impl TrayRow {
             let (weak, bus, slot) = (Rc::downgrade(&self.ctx), bus.clone(), self.network.clone());
             Rc::new(move || network(&weak, &bus, &slot))
         };
-        let r = refresh.clone();
+        let r = self.gathered(refresh.clone());
         if let Ok(l) = bus.listen(Some(NM), PROPS, Some("PropertiesChanged"), None, move |_| r()) {
             self._listens.push(l);
         }
@@ -140,14 +148,17 @@ impl TrayRow {
         if let Ok(l) = bus.watch(NM, &self.ctx.lp, move |_| r(), move || put(&weak, &slot, None)) {
             self._listens.push(l);
         }
-        let weak = Rc::downgrade(&self.ctx);
-        self.ctx.lp.every(NETWORK_EVERY, move || {
-            if weak.strong_count() == 0 {
-                return Flow::Stop;
+        self.looks.push(refresh);
+    }
+
+    fn gathered(&self, refresh: Rc<dyn Fn()>) -> impl Fn() + 'static {
+        let (lp, active, burst) = (self.ctx.lp.clone(), self.active.clone(), Burst::default());
+        move || {
+            if active.get() {
+                let refresh = refresh.clone();
+                burst.poke(&lp, BURST_WAIT, move || refresh());
             }
-            refresh();
-            Flow::Continue
-        });
+        }
     }
 
     fn bluetooth_watch(&mut self, bus: &Bus) {
@@ -156,20 +167,21 @@ impl TrayRow {
             Rc::new(move || bluetooth(&weak, &bus, &slot))
         };
         for member in ["InterfacesAdded", "InterfacesRemoved"] {
-            let r = refresh.clone();
+            let r = self.gathered(refresh.clone());
             if let Ok(l) = bus.listen(Some(BLUEZ), OBJECT_MANAGER, Some(member), None, move |_| r()) {
                 self._listens.push(l);
             }
         }
-        let r = refresh.clone();
+        let r = self.gathered(refresh.clone());
         if let Ok(l) = bus.listen(Some(BLUEZ), PROPS, Some("PropertiesChanged"), None, move |_| r()) {
             self._listens.push(l);
         }
         self.sound_watch(bus);
-        let (weak, slot) = (Rc::downgrade(&self.ctx), self.bluetooth.clone());
-        if let Ok(l) = bus.watch(BLUEZ, &self.ctx.lp, move |_| refresh(), move || put(&weak, &slot, None)) {
+        let (weak, slot, r) = (Rc::downgrade(&self.ctx), self.bluetooth.clone(), refresh.clone());
+        if let Ok(l) = bus.watch(BLUEZ, &self.ctx.lp, move |_| r(), move || put(&weak, &slot, None)) {
             self._listens.push(l);
         }
+        self.looks.push(refresh);
     }
 
     fn sound_watch(&mut self, bus: &Bus) {
@@ -206,7 +218,8 @@ impl TrayRow {
         let mut items: Vec<Node<Msg>> = Vec::new();
         let mut add = |slot: &Slot, panel: &'static str| {
             if let Some(s) = slot.borrow().as_ref() {
-                items.push(button(s.icon.clone(), s.tip.clone()).size(size).on_press(msg(move |f| f.open_quick(panel))));
+                let node = button(s.icon.clone(), s.tip.clone()).size(size).on_press(msg(move |f| f.open_quick(panel)));
+                items.push(attention::filled(node, &s.icon, attention::net_need(&s.icon).filter(|_| panel == "network"), size));
             }
         };
         add(&self.volume, "audio");
@@ -225,10 +238,12 @@ impl TrayRow {
     }
 
     fn keep_awake(&self, size: f32) -> Node<Msg> {
-        button(self.cup.clone(), t!("ring-tray-keep-awake"))
+        let on = crate::session::idle::keep_awake();
+        let node = button(self.cup.clone(), t!("ring-tray-keep-awake"))
             .size(size)
-            .on(crate::session::idle::keep_awake())
-            .on_press(msg(|_| crate::session::idle::set_keep_awake(!crate::session::idle::keep_awake())))
+            .on(on)
+            .on_press(msg(|_| crate::session::idle::set_keep_awake(!crate::session::idle::keep_awake())));
+        attention::filled(node, &self.cup, attention::when(on, Need::KeepAwake), size)
     }
 
     pub fn keyboard_button(&self, size: f32) -> Option<Node<Msg>> {
@@ -387,15 +402,16 @@ const CUP: &str = include_str!("../../share/icons/trindle-keep-awake-symbolic.sv
 pub const CUP_ICON: &str = "trindle-keep-awake-symbolic";
 
 pub fn install_cup_icon() -> Option<PathBuf> {
-    let runtime = std::env::var_os("XDG_RUNTIME_DIR").map(PathBuf::from)?;
+    cup_icon_in(&std::env::var_os("XDG_RUNTIME_DIR").map(PathBuf::from)?)
+}
+
+fn cup_icon_in(runtime: &std::path::Path) -> Option<PathBuf> {
     let root = runtime.join("trindle-icons");
     let dir = root.join("hicolor/scalable/status");
     let file = dir.join(format!("{CUP_ICON}.svg"));
     if std::fs::read_to_string(&file).ok().as_deref() != Some(CUP) {
         let _ = std::fs::create_dir_all(&dir);
         let _ = std::fs::write(&file, CUP);
-        let _ = std::fs::write(root.join("hicolor/index.theme"),
-                               "[Icon Theme]\nName=Trindle\nDirectories=scalable/status\n\n                                [scalable/status]\nSize=16\nMinSize=8\nMaxSize=512\n                                Type=Scalable\nContext=Status\n");
     }
     file.is_file().then_some(file)
 }
@@ -439,5 +455,18 @@ pub fn keyboard() {
 
         // SAFETY: the descriptor is a process checked above; no signal info is given.
         unsafe { libc::syscall(libc::SYS_pidfd_send_signal, fd.as_raw_fd(), libc::SIGRTMIN(), std::ptr::null::<libc::siginfo_t>(), 0) };
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn the_cup_icon_is_laid_out_alone_with_no_theme_file_beside_it() {
+        let runtime = std::env::temp_dir().join(format!("trindle-cup-{}-{:?}", std::process::id(), std::thread::current().id()));
+        std::fs::create_dir_all(&runtime).unwrap();
+        let file = super::cup_icon_in(&runtime).expect("the icon is put there");
+        assert_eq!(std::fs::read_to_string(&file).unwrap(), super::CUP);
+        assert!(!runtime.join("trindle-icons/hicolor/index.theme").exists());
+        std::fs::remove_dir_all(&runtime).unwrap();
     }
 }

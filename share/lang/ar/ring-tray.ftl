@@ -18,18 +18,26 @@ ring-updates-none = كل شيء محدَّث
 ring-updates-spoken-all =
     { $n ->
         [zero] لا شيء بالانتظار
-        [one] { $n } بالانتظار: زر التحديثات بجانب التطبيقات يثبّته
-        [two] { $n } بالانتظار: زر التحديثات بجانب التطبيقات يثبّتهما
-        [few] { $n } بالانتظار: زر التحديثات بجانب التطبيقات يثبّتها
-        [many] { $n } بالانتظار: زر التحديثات بجانب التطبيقات يثبّتها
-       *[other] { $n } بالانتظار: زر التحديثات بجانب التطبيقات يثبّتها
+        [one] يوجد تحديث واحد بالانتظار. استخدم زر التحديثات بجانب التطبيقات لتثبيته.
+        [two] يوجد تحديثان بالانتظار. استخدم زر التحديثات بجانب التطبيقات لتثبيتهما.
+        [few] توجد { $n } تحديثات بالانتظار. استخدم زر التحديثات بجانب التطبيقات لتثبيتها.
+        [many] يوجد { $n } تحديثاً بالانتظار. استخدم زر التحديثات بجانب التطبيقات لتثبيتها.
+       *[other] يوجد { $n } تحديث بالانتظار. استخدم زر التحديثات بجانب التطبيقات لتثبيتها.
     }
 
 # Answer to a spoken question about updates when only plugin updates that need a look wait; the clause that follows says so.
-ring-updates-spoken-look = { $n } بالانتظار: { $look }
+ring-updates-spoken-look =
+    { $n ->
+        [zero] لا توجد تحديثات بالانتظار. { $look }.
+        [one] يوجد تحديث واحد بالانتظار. { $look }.
+        [two] يوجد تحديثان بالانتظار. { $look }.
+        [few] { $n } تحديثات بالانتظار. { $look }.
+        [many] { $n } تحديثًا بالانتظار. { $look }.
+       *[other] { $n } تحديث بالانتظار. { $look }.
+    }
 
 # Answer to a spoken question about updates when some install and some need a look; the last clause says which need a look.
-ring-updates-spoken-mixed = { $n } بالانتظار: زر التحديثات بجانب التطبيقات يثبّت { $put }، و{ $look }
+ring-updates-spoken-mixed = عدد التحديثات بالانتظار: { $n }. استخدم زر التحديثات بجانب التطبيقات لتثبيت { $put } منها. { $look }.
 
 # Name and tip of the updates button when only firmware updates wait: the button takes the person to them.
 ring-updates-see-firmware =
@@ -46,11 +54,11 @@ ring-updates-see-firmware =
 ring-updates-see-among =
     { $n ->
         [zero] لا توجد تحديثات
-        [one] اعرض { $n } تحديثًا، ومنه تحديث للبرنامج الثابت
-        [two] اعرض { $n } تحديثين، ومنها تحديث للبرنامج الثابت
-        [few] اعرض { $n } تحديثات، ومنها تحديث للبرنامج الثابت
-        [many] اعرض { $n } تحديثًا، ومنها تحديث للبرنامج الثابت
-       *[other] اعرض { $n } تحديث، ومنها تحديث للبرنامج الثابت
+        [one] اعرض { $n } تحديثًا، بما فيه تحديث للبرنامج الثابت
+        [two] اعرض { $n } تحديثين، بما فيها تحديث للبرنامج الثابت
+        [few] اعرض { $n } تحديثات، بما فيها تحديث للبرنامج الثابت
+        [many] اعرض { $n } تحديثًا، بما فيها تحديث للبرنامج الثابت
+       *[other] اعرض { $n } تحديث، بما فيها تحديث للبرنامج الثابت
     }
 
 # Name and tip of the updates button when updates wait that it will install.
@@ -68,11 +76,11 @@ ring-updates-install =
 ring-updates-see-plugin =
     { $n ->
         [zero] لا توجد تحديثات إضافات
-        [one] اعرض تحديث الإضافة، وهو يطلب أكثر من قبل
-        [two] اعرض تحديثي الإضافتين، وهما يطلبان أكثر من قبل
-        [few] اعرض { $n } تحديثات إضافات، وهي تطلب أكثر من قبل
-        [many] اعرض { $n } تحديث إضافة، وهي تطلب أكثر من قبل
-       *[other] اعرض { $n } تحديث إضافة، وهي تطلب أكثر من قبل
+        [one] اعرض تحديث الإضافة، وهو يطلب أذونات أكثر من قبل
+        [two] اعرض تحديثي الإضافتين، وهما يطلبان أذونات أكثر من قبل
+        [few] اعرض { $n } تحديثات إضافات، وهي تطلب أذونات أكثر من قبل
+        [many] اعرض { $n } تحديث إضافة، وهي تطلب أذونات أكثر من قبل
+       *[other] اعرض { $n } تحديث إضافة، وهي تطلب أذونات أكثر من قبل
     }
 
 # Name and tip of the updates button when some updates install and some plugin updates need a look; the clause after the semicolon says which.
@@ -127,13 +135,13 @@ ring-tray-vpn = متصل عبر VPN
 ring-tray-wired = سلكي
 
 # Name of the network button when connected by cable but the internet is not reachable.
-ring-tray-wired-limited = سلكي، اتصال محدود
+ring-tray-wired-limited = سلكي، بلا إنترنت
 
 # Name of the network button on Wi-Fi: the network's name and its signal strength.
 ring-tray-wifi = { $name }، الإشارة { $strength }%
 
 # Name of the network button on Wi-Fi when the internet is not reachable.
-ring-tray-wifi-limited = { $name }، الإشارة { $strength }%، اتصال محدود
+ring-tray-wifi-limited = { $name }، الإشارة { $strength }%، وصول محدود
 
 # Name of the Bluetooth button when Bluetooth is off.
 ring-tray-bt-off = Bluetooth متوقف
@@ -157,7 +165,7 @@ ring-tray-none = لا توجد أيقونات صينية
 ring-tray-show = أظهر في الحلقة
 
 # Line of a tray icon's menu: take the icon out of the ring's row.
-ring-tray-take-out = أخرج من الحلقة
+ring-tray-take-out = أزل من الحلقة
 
 # Quiet words in a tray icon's menu in place of Show in the ring, when the row is full.
 ring-tray-full = في الحلقة أربع أيقونات بالفعل. أخرج واحدة أولاً.
@@ -166,4 +174,3 @@ ring-tray-full = في الحلقة أربع أيقونات بالفعل. أخر�
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = الفحص متوقف
-

@@ -4,8 +4,8 @@
 # Said after what the updates button will do or what waits: plugin updates that ask for more permission than before and need a look in Apps.
 ring-updates-look =
     { $n ->
-        [one] 1 پلگ اِن اپ ڈیٹ کو ایپس میں دیکھنے کی ضرورت ہے
-       *[other] { $n } پلگ اِن اپ ڈیٹس کو ایپس میں دیکھنے کی ضرورت ہے
+        [one] 1 پلگ ان اپ ڈیٹ کو ایپس میں دیکھنے کی ضرورت ہے
+       *[other] { $n } پلگ ان اپ ڈیٹس کو ایپس میں دیکھنے کی ضرورت ہے
     }
 
 # Answer to a spoken question about updates when none wait.
@@ -14,15 +14,19 @@ ring-updates-none = سب کچھ تازہ ترین ہے
 # Answer to a spoken question about updates when the updates button installs them all; "it" for one, "them" for more.
 ring-updates-spoken-all =
     { $n ->
-        [one] { $n } منتظر ہے: ایپس کے ساتھ والا اپ ڈیٹ بٹن اسے انسٹال کر دے گا
-       *[other] { $n } منتظر ہیں: ایپس کے ساتھ والا اپ ڈیٹ بٹن انہیں انسٹال کر دے گا
+        [one] { $n } اپ ڈیٹ منتظر ہے۔ اسے انسٹال کرنے کے لیے ایپس کے ساتھ والا اپ ڈیٹ بٹن استعمال کریں۔
+       *[other] { $n } اپ ڈیٹس منتظر ہیں۔ انہیں انسٹال کرنے کے لیے ایپس کے ساتھ والا اپ ڈیٹ بٹن استعمال کریں۔
     }
 
 # Answer to a spoken question about updates when only plugin updates that need a look wait; the clause that follows says so.
-ring-updates-spoken-look = { $n } منتظر ہیں: { $look }
+ring-updates-spoken-look =
+    { $n ->
+        [one] { $n } اپ ڈیٹ منتظر ہے۔ { $look }۔
+       *[other] { $n } اپ ڈیٹس منتظر ہیں۔ { $look }۔
+    }
 
 # Answer to a spoken question about updates when some install and some need a look; the last clause says which need a look.
-ring-updates-spoken-mixed = { $n } منتظر ہیں: ایپس کے ساتھ والا اپ ڈیٹ بٹن { $put } انسٹال کر دے گا، اور { $look }
+ring-updates-spoken-mixed = { $n } اپ ڈیٹس منتظر ہیں۔ ان میں سے { $put } کو انسٹال کرنے کے لیے ایپس کے ساتھ والا اپ ڈیٹ بٹن استعمال کریں۔ { $look }۔
 
 # Name and tip of the updates button when only firmware updates wait: the button takes the person to them.
 ring-updates-see-firmware =
@@ -34,8 +38,8 @@ ring-updates-see-firmware =
 # Name and tip of the updates button when firmware updates wait among others: the button takes the person to them.
 ring-updates-see-among =
     { $n ->
-        [one] { $n } اپ ڈیٹ دیکھیں، جن میں فرم ویئر شامل ہے
-       *[other] { $n } اپ ڈیٹس دیکھیں، جن میں فرم ویئر شامل ہے
+        [one] { $n } اپ ڈیٹ دیکھیں، بشمول فرم ویئر
+       *[other] { $n } اپ ڈیٹس دیکھیں، بشمول فرم ویئر
     }
 
 # Name and tip of the updates button when updates wait that it will install.
@@ -48,8 +52,8 @@ ring-updates-install =
 # Name and tip of the updates button when only plugin updates that ask for more than before wait.
 ring-updates-see-plugin =
     { $n ->
-        [one] پلگ اِن اپ ڈیٹ دیکھیں، جو پہلے سے زیادہ اجازتیں مانگتی ہے
-       *[other] { $n } پلگ اِن اپ ڈیٹس دیکھیں، جو پہلے سے زیادہ اجازتیں مانگتی ہیں
+        [one] پلگ ان اپ ڈیٹ دیکھیں، جو پہلے سے زیادہ اجازتیں مانگتی ہے
+       *[other] { $n } پلگ ان اپ ڈیٹس دیکھیں، جو پہلے سے زیادہ اجازتیں مانگتی ہیں
     }
 
 # Name and tip of the updates button when some updates install and some plugin updates need a look; the clause after the semicolon says which.
@@ -100,13 +104,13 @@ ring-tray-vpn = VPN کے ذریعے منسلک
 ring-tray-wired = تار والا
 
 # Name of the network button when connected by cable but the internet is not reachable.
-ring-tray-wired-limited = تار والا، محدود رابطہ
+ring-tray-wired-limited = تار سے جڑا، مگر انٹرنیٹ نہیں
 
 # Name of the network button on Wi-Fi: the network's name and its signal strength.
 ring-tray-wifi = { $name }، سگنل { $strength }%
 
 # Name of the network button on Wi-Fi when the internet is not reachable.
-ring-tray-wifi-limited = { $name }، سگنل { $strength }%، محدود رابطہ
+ring-tray-wifi-limited = { $name }، سگنل { $strength }%، محدود رسائی
 
 # Name of the Bluetooth button when Bluetooth is off.
 ring-tray-bt-off = Bluetooth بند ہے
@@ -130,13 +134,12 @@ ring-tray-none = کوئی ٹرے آئیکن نہیں
 ring-tray-show = رِنگ میں دکھائیں
 
 # Line of a tray icon's menu: take the icon out of the ring's row.
-ring-tray-take-out = رِنگ سے نکالیں
+ring-tray-take-out = رِنگ سے ہٹائیں
 
 # Quiet words in a tray icon's menu in place of Show in the ring, when the row is full.
-ring-tray-full = رِنگ میں پہلے ہی چار ہیں۔ پہلے ایک نکالیں۔
+ring-tray-full = حلقے میں پہلے ہی چار آئیکنز ہیں۔ پہلے ایک نکالیں۔
 
 
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = جانچ بند ہے
-

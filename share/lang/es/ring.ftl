@@ -20,34 +20,34 @@ ring-cli-command = { $program } [OPCIÓN…]
 ring-cli-options = Opciones:
 
 # Help for the ring's --say option, printed in a terminal.
-ring-cli-say = Hacer lo que piden estas palabras, como si se le hablara al anillo (para probar los comandos de voz sin micrófono)
+ring-cli-say = Ejecutar un comando de voz desde texto, sin usar micrófono
 
 # Help for the ring's --background option, printed in a terminal.
-ring-cli-background = Iniciar sin mostrarse, para que la primera apertura sea instantánea
+ring-cli-background = Iniciar sin mostrarse, para que el anillo se abra al instante la primera vez
 
 # Help for the ring's --show-desktop option, printed in a terminal.
-ring-cli-show-desktop = Guardar todas las ventanas para mostrar el escritorio, o volver a traerlas (Super y D lo piden)
+ring-cli-show-desktop = Ocultar todas las ventanas para mostrar el escritorio, o volver a traerlas (las teclas Super y D lo hacen)
 
 # Help for the ring's --listen option, printed in a terminal.
-ring-cli-listen = Abrir el anillo ya escuchando, como puede hacerlo un atajo de teclado
+ring-cli-listen = Abrir el anillo ya escuchando un comando de voz, como hace un atajo de teclado
 
 # Help for the ring's --all option, printed in a terminal.
 ring-cli-all = Abrir el anillo con todas las aplicaciones mostradas alrededor
 
 # Help for the ring's --power option, printed in a terminal.
-ring-cli-power = Abrir el anillo al cerrar sesión, reiniciar y apagar
+ring-cli-power = Abrir las opciones de energía del anillo: cerrar sesión, reiniciar y apagar
 
 # Help for the ring's --favourites option, printed in a terminal.
 ring-cli-favourites = Abrir la página de favoritos en Ajustes
 
 # Help for the ring's --restyle option, printed in a terminal.
-ring-cli-restyle = Adoptar de inmediato un aspecto nuevo (claro u oscuro, o un acento nuevo) desde Ajustes
+ring-cli-restyle = Aplicar de inmediato un aspecto nuevo desde Ajustes (claro u oscuro, o un color de acento nuevo)
 
 # Help for the ring's --corners option, printed in a terminal.
-ring-cli-corners = Volver a crear los puntos táctiles de las esquinas superiores
+ring-cli-corners = Volver a configurar los puntos táctiles de las esquinas superiores
 
 # Help for the ring's --notes option, printed in a terminal.
-ring-cli-notes = Mover el teclado a los círculos de notificaciones de la pantalla (Super y N lo piden)
+ring-cli-notes = Pasar el control del teclado a los círculos de notificaciones de la pantalla (las teclas Super y N lo hacen)
 
 # Error printed in a terminal when the ring is given an option it does not know.
 ring-cli-unknown = opción desconocida { $option }
@@ -113,13 +113,13 @@ ring-tool-report = Informar de un problema
 ring-gone = Eso ya no está.
 
 # Line in the ring when nothing could open the item that was pressed.
-ring-could-not-open = Nada pudo abrir eso.
+ring-could-not-open = Trindle no puede abrir eso.
 
 # Line in the ring while it listens to a spoken command.
-ring-listening = Escuchando... habla, y se detiene cuando tú lo haces
+ring-listening = Escuchando… Di tu comando. La escucha se detiene cuando dejas de hablar
 
 # Line in the ring while it works out what was said.
-ring-working-out = Pensándolo...
+ring-working-out = Pensándolo…
 
 # Answer to the spoken command to close windows when none are open.
 ring-nothing-to-close = Nada que cerrar
@@ -189,7 +189,7 @@ ring-star-remove = Quitar de favoritos
 ring-star-add = Añadir a favoritos
 
 # Screen reader name of the red button that shows why an uninstall failed.
-ring-not-done = No se hizo
+ring-not-done = ¿Por qué no?
 
 # Note on an app's menu when the middle of the ring has no room for another favourite; the number is how many it holds.
 ring-middle-full =
@@ -228,7 +228,7 @@ ring-empty-hint = Haz clic en Todas las aplicaciones y luego clic derecho en una
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when a spoken or typed power choice needs a click to confirm.
-ring-power-only-click = Esto solo lo confirma un clic.
+ring-power-only-click = Haz clic para confirmar.
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when something other than the person tried to shut the computer down.
@@ -236,7 +236,7 @@ ring-power-only-own = Solo tú puedes apagar este equipo.
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when the power page closed because a program pressed a key.
-ring-power-closed = La página de energía se cerró: un programa pulsó una tecla, no tú.
+ring-power-closed = La página de energía se cerró porque un programa envió una pulsación de tecla.
 
 # Said in the middle of the ring when Close is chosen on a plugin's icon and none of its windows are open.
 ring-plugin-not-open = Nada abierto que cerrar
@@ -248,11 +248,19 @@ ring-startup-remove = Dejar de iniciar al arrancar la sesión
 
 
 # Help for the option that opens the shortcut list, or closes it when it is showing.
-ring-cli-shortcuts = Mostrar todos los atajos de teclado en una lista, o guardar la lista (Super y K, salvo que se cambie en Ajustes)
+ring-cli-shortcuts = Mostrar una lista de todos los atajos de teclado, o esconder la lista (Super y K, salvo que lo cambies en Ajustes)
 
 # Notice from the new ring after the parts were restarted from the keyboard.
 ring-restarted = Reiniciado
 
 # Under the notice above.
-ring-restarted-why = El anillo y las partes auxiliares se han iniciado de nuevo.
+ring-restarted-why = El anillo y sus partes auxiliares se han reiniciado.
 
+# Tip on the app menu's red button when removing the app did not work.
+ring-uninstall-failed = No se pudo quitar.
+
+# Shorter name of the Sound and video piece of All apps, for when the full name does not fit along it.
+ring-category-media-short = Sonido
+
+# Line in the ring when a spoken command, such as turning the sound down, did not work.
+ring-voice-failed = Eso no funcionó.

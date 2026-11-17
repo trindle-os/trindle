@@ -10,19 +10,13 @@ activity-about-page = Bu sayfa hakkında
 activity-try-again = Yeniden dene
 
 # Red words in place of the room when the computer could not be read at the first look.
-activity-cannot-read = Bilgisayarın ne yaptığı okunamadı.
+activity-cannot-read = Trindle bilgisayarın etkinliğini kontrol edemedi.
 
 # In place of the room when no program is running.
 activity-no-programs = Henüz çalışan program yok.
 
 # In place of the list when the room could not be read, so there is nothing to list.
-activity-nothing-to-list = Bilgisayar okunana kadar listelenecek bir şey yok.
-
-# The one sentence above the room, saying what it shows.
-activity-caption = Her balon bir programdır; boyutu tuttuğu bellek kadardır.
-
-# The one sentence above the list of programs.
-activity-list-caption = Odada görmek için bir programa basın.
+activity-nothing-to-list = Trindle bilgisayarın etkinliğini kontrol edene kadar program gösteremez.
 
 # Heading of the card that lists the programs.
 activity-programs = Programlar
@@ -37,19 +31,19 @@ activity-memory = Bellek
 activity-processor = İşlemci
 
 # Words the screen reader gives the room when no bubble is picked.
-activity-room-spoken = Programlar; her biri tuttuğu bellek kadar büyük
+activity-room-spoken = Bellek kullanımına göre boyutlanan program balonları
 
 # First paragraph of the words behind the i: what the computer is doing.
-activity-help-1 = Bu bilgisayarın şu an ne yaptığı. Her program büyük dairenin içinde bir balondur ve boyutu tuttuğu bellek kadardır; daire ne kadar doluysa bellek de o kadar doludur.
+activity-help-1 = Burada bilgisayarınızın şu an ne yaptığını görürsünüz. Her program dairenin içinde bir balon olarak görünür. Balon büyüdükçe bellek kullanımı artar. Daire ne kadar doluysa o kadar çok bellek kullanılıyordur.
 
 # Second paragraph of the words behind the i: how the colours and bars show the work.
-activity-help-2 = Çalışan bir program parlar ve atar; ne kadar çok çalışırsa o kadar hızlı ve parlak olur: serin bir renk az iş, turuncu yoğun iş, kırmızı ise son sürat demektir. Kenar boyunca işlemcinin her iş parçacığı için bir çubuk vardır; meşgul oldukça uzar ve ısınır. Hepsi uzun ve kırmızıysa bilgisayar son sürattedir ve nedeni en parlak balondur.
+activity-help-2 = Bir programın balonu çalışırken parlar ve atar. Daha hızlı ve parlak atışlar daha çok iş demektir. Serin renkler az iş, turuncu yoğun kullanım, kırmızı ise tam kullanım demektir. Kenardaki her çubuk bir iş parçacığını gösterir; iş parçacığı, işlemcinin işi yürüten bir parçasıdır. Çubuklar uzadıkça ve renkler ısındıkça iş artar. Tüm çubuklar uzun ve kırmızı olduğunda bilgisayar tüm gücüyle çalışıyordur. En parlak balon, en çok işi hangi programın yaptığını gösterir.
 
 # Third paragraph of the words behind the i: how to look at a program and stop it, and what the two grey bubbles are.
-activity-help-3 = Ne yaptığını düz rakamlarla görmek için bir balona ya da listedeki bir programa tıklayın; yanıt vermeyi bırakmışsa durdurabilirsiniz: durdur düğmesine iki kez basmak programdan kapanmasını ister ve içinde kaydedilmemiş her şey kaybolabilir. İki sessiz gri balon geri kalanı tutar: Trindle masaüstü (ekranı, halkayı, sekmeyi ve duvar kâğıdını çizen birleştirici) ve Linux ile diğer programlar (Linux'un kendisi ve bilgisayara bakan programlar).
+activity-help-3 = Ne yaptığını düz rakamlarla görmek için bir balona ya da listedeki bir programa tıklayın. Yanıt vermeyi bırakmış bir programı da durdurabilirsiniz. Durdur düğmesine iki kez basarsanız Trindle programdan kapanmasını ister. İçinde kaydetmediğiniz her şey kaybolabilir. İki gri balon geri kalan her şeyi gösterir. Trindle masaüstü; ekranı, halkayı, sekmeyi ve duvar kâğıdını çizen bölümdür. Linux ve diğer programlar ise Linux'un kendisi ile bilgisayara bakan programlardır.
 
 # Fourth paragraph of the words behind the i: how memory, the processor, the disk and the swap file are counted.
-activity-help-4 = Bellek adil biçimde, smem gibi araçların saydığı gibi sayılır: iki programın paylaştığı bellek aralarında bölünür ve takas dosyasına taşınan bellek de dahildir, böylece hiçbir şey iki kez sayılmaz ya da dışarıda kalmaz. Resmin yanındaki kartlar belleğin, işlemcinin, diskin ve takas dosyasının ne kadar dolu olduğunu gösterir; bir halka yalnızca neredeyse dolduğunda turuncuya, sonra kırmızıya döner.
+activity-help-4 = Trindle belleği, smem gibi araçlarla aynı şekilde dikkatle sayar. İki programın paylaştığı bellek aralarında bölünür ve takas dosyasına taşınan bellek de dahildir, böylece hiçbir şey iki kez sayılmaz ya da dışarıda kalmaz. Resmin yanındaki kartlar belleğin, işlemcinin, diskin ve takas dosyasının ne kadar dolu olduğunu gösterir. Bir halka yalnızca neredeyse dolduğunda turuncuya, sonra kırmızıya döner.
 
 # Heading of the card that shows the room and its sentence, at the top of the room.
 activity-right-now = Şu an
@@ -58,34 +52,34 @@ activity-right-now = Şu an
 activity-looking = Bakılıyor…
 
 # The sentence at the top when the computer could not be read at all.
-activity-unread = Bilgisayar şu an okunamadı.
+activity-unread = Trindle bilgisayarı kontrol edemedi.
 
 # The sentence at the top when the whole processor is flat out, and one program is using most of it. $a is its name.
-activity-flat-out-one = Bilgisayarınız son sürat çalışıyor: { $a } işlemcinin büyük bölümünü kullanıyor ({ $threads }).
+activity-flat-out-one = Bilgisayarınız tüm gücüyle çalışıyor: { $a } işlemcinin büyük bölümünü kullanıyor ({ $threads }).
 
 # The sentence at the top when the whole processor is flat out, and two programs are using most of it. $a and $b are their names.
-activity-flat-out-two = Bilgisayarınız son sürat çalışıyor: { $a } ve { $b } işlemcinin büyük bölümünü kullanıyor ({ $threads }).
+activity-flat-out-two = Bilgisayarınız tüm gücüyle çalışıyor: { $a } ve { $b } işlemcinin büyük bölümünü kullanıyor ({ $threads }).
 
 # The sentence at the top when the whole processor is flat out, and one program is the busiest. $a is its name.
-activity-flat-out-busiest = Bilgisayarınız son sürat çalışıyor ({ $threads }); en yoğun olan { $a }.
+activity-flat-out-busiest = Bilgisayarınız tüm gücüyle çalışıyor ({ $threads }). En yoğun olan { $a }.
 
 # The sentence at the top when the whole processor is flat out and no one program stands out.
-activity-flat-out = Bilgisayarınız son sürat çalışıyor ({ $threads }).
+activity-flat-out = Bilgisayarınız tüm gücüyle çalışıyor ({ $threads }).
 
 # The sentence at the top when memory is nearly full, and one program holds the most. $b is its name.
-activity-memory-full-named = Bellek neredeyse dolu; en çok tutan { $b }.
+activity-memory-full-named = Bellek neredeyse dolu. En çok belleği { $b } kullanıyor.
 
 # The sentence at the top when memory is nearly full, and no program is named.
 activity-memory-full = Bellek neredeyse dolu.
 
 # The sentence at the top when the computer is busy and one program is the busiest. $a is its name.
-activity-ticking-busiest = Bilgisayar sakin çalışıyor; en yoğun olan { $a }.
+activity-ticking-busiest = Bilgisayar meşgul değil. En çok işi { $a } yapıyor.
 
 # The sentence at the top when the computer is busy and nothing is named.
 activity-busy = Bilgisayar meşgul.
 
 # The sentence at the top when the computer is only lightly busy and nothing is named.
-activity-ticking-over = Bilgisayar sakin çalışıyor.
+activity-ticking-over = Bilgisayar meşgul değil.
 
 # The sentence at the top when one program is doing most of the work. $a is its name.
 activity-doing-most = Şu an işin çoğunu { $a } yapıyor.
@@ -97,10 +91,10 @@ activity-two-keeping-busy = Bilgisayarı { $a } ve { $b } meşgul ediyor.
 activity-plenty-to-spare = { $a } yoğun çalışıyor, ama bilgisayarın bol bol boş gücü var.
 
 # The sentence at the top when all is calm but memory is filling up. $b is the program holding the most.
-activity-calm-memory-filling = Her şey sakin, ama bellek doluyor; en çok tutan { $b }.
+activity-calm-memory-filling = Bilgisayar fazla iş yapmıyor, ama bellek kullanımı artıyor. En çok belleği { $b } kullanıyor.
 
 # The sentence at the top when all is calm and nothing is working hard.
-activity-all-calm = Her şey sakin: hiçbir şey yoğun çalışmıyor.
+activity-all-calm = Hiçbir program yoğun çalışmıyor.
 
 # How many threads, as a phrase inside a sentence: all of them. $n is the number of threads.
 activity-all-threads = tüm { $n ->
@@ -148,7 +142,7 @@ activity-effort-resting = Boşta
 activity-effort-little = Biraz çalışıyor
 
 # How hard a program is working, when it is working flat out.
-activity-effort-flat-out = Son sürat çalışıyor
+activity-effort-flat-out = Tam güçle çalışıyor
 
 # How hard a program is working, when it is working hard.
 activity-effort-hard = Yoğun çalışıyor
@@ -184,16 +178,16 @@ activity-note-working-hardest = En çok çalışan
 activity-working-hardest = { $effort }: { $work }
 
 # The words under that heading when it also holds the most memory. $effort is how hard, $work is its share.
-activity-working-hardest-most = { $effort }: { $work } ve en çok belleği tutuyor
+activity-working-hardest-most = { $effort }: { $work } ve en çok belleği kullanıyor
 
 # Heading of the card beside the room for the program holding the most memory.
-activity-note-most-memory = En çok belleği tutan
+activity-note-most-memory = En çok belleği kullanan
 
 # Heading of the card beside the room for the program holding the next most memory.
 activity-note-next-memory = Sonraki en çok bellek
 
 # The words under a heading for memory. $amount is the memory, $how is its share of the whole.
-activity-holding = Tuttuğu: { $amount }, { $how }
+activity-holding = Kullandığı: { $amount }, { $how }
 
 # The words under the memory figure of a card: how much a program holds, as a share of the whole.
 activity-share-of-memory = belleğin { $share } kadarı
@@ -249,19 +243,19 @@ activity-separate-parts = { $n } ayrı parça
 activity-running-for = Çalışma süresi
 
 # A card's fact: the name of the facts' heading for what a program is made of.
-activity-made-of = Yapısı
+activity-made-of = Parçalar
 
 # Words under a memory card when it could not be read at the first look.
-activity-ring-not-read = Henüz okunamadı.
+activity-ring-not-read = Bu henüz okunamıyor.
 
 # Sentence under the memory figure: how much memory is in use, and how much of it Trindle itself holds. $used and $ours are sizes.
-activity-memory-sentence = { $used } kullanımda; Trindle'ın kendisi { $ours } tutuyor.
+activity-memory-sentence = { $used } kullanımda. Trindle'ın kendisi { $ours } kullanıyor.
 
 # Sentence under the processor figure: how busy all the threads have been. $threads is "all 16 threads" or similar.
-activity-processor-sentence = Son iki dakikada ne kadar meşgul olunduğu: { $threads }.
+activity-processor-sentence = Son iki dakikada { $threads } ne kadar meşguldü.
 
 # Sentence under the disk figure: how much is used and how much is still free. $used and $free are sizes.
-activity-disk-sentence = { $used } kullanıldı; { $free } hâlâ boş.
+activity-disk-sentence = { $used } kullanıldı, { $free } boş.
 
 # Limit under a memory, disk or swap figure. $amount is the whole.
 activity-of-size = / { $amount }
@@ -273,13 +267,13 @@ activity-disk = Disk
 activity-swap-file = Takas dosyası
 
 # Sentence under the swap file figure: how much is in use, and the rest is room to hibernate. $used is a size.
-activity-swap-sentence = { $used } kullanımda; geri kalanı hazırda bekletme için ayrılmış yer.
+activity-swap-sentence = { $used } kullanımda.
 
 # Name of the temperature card, shown when the computer has a temperature to read.
 activity-temperature = Sıcaklık
 
 # Sentence under the temperature figure.
-activity-temperature-sentence = İşlemcinin şu an ne kadar sıcak olduğu.
+activity-temperature-sentence = İşlemci sıcaklığı
 
 # Limit under the temperature figure. The degree sign is written as it is.
 activity-of-hundred-degrees = / 100°C
@@ -289,5 +283,4 @@ activity-no-swap = Bu bilgisayarda takas dosyası yok, bu yüzden bellekten hiç
 
 
 # Short line in the Activity window after a program that did not answer Stop within five seconds was ended by force. $title is the program.
-activity-forced = Zorla kapatıldı: { $title } yanıt vermedi
-
+activity-forced = { $title } yanıt vermedi, bu yüzden Trindle onu zorla kapattı

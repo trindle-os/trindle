@@ -322,14 +322,14 @@ fn detach_all(at: Vec<PathBuf>, limit: std::time::Duration, close: fn(&Path) -> 
             Ok((path, r)) => {
                 done += 1;
                 if let Err(e) = r {
-                    last = Err(format!("{} could not be closed: {e}", path.display()));
+                    last = Err(t!("admin-share-not-closed", path = path.display().to_string(), error = e.to_string()).to_string());
                 }
             }
             Err(_) => break,
         }
     }
     if done < n {
-        last = Err(format!("{} shared folders did not answer and were left; they are dropped when the computer stops.", n - done));
+        last = Err(t!("admin-shares-left", n = n - done).to_string());
     }
     last
 }
@@ -385,7 +385,7 @@ mod tests {
     #[test]
     fn a_list_of_mounts_that_cannot_be_read_is_not_taken_for_empty() {
         let said = mounts_in(Path::new("/no/such/folder/mounts")).unwrap_err();
-        assert!(said.starts_with("What is mounted on this computer could not be read"), "{said}");
+        assert!(said.starts_with("Trindle couldn't read what is mounted on this computer"), "{said}");
         assert!(mounts_in(Path::new(MOUNTS)).is_ok());
     }
 
@@ -438,7 +438,7 @@ mod tests {
         let started = std::time::Instant::now();
         let r = detach_all(vec!["/nonexistent/a".into(), "/nonexistent/b".into()], std::time::Duration::from_millis(300), stuck);
         assert!(started.elapsed() < std::time::Duration::from_secs(2), "{:?}", started.elapsed());
-        assert!(r.unwrap_err().contains("2 shared folders did not answer"));
+        assert!(r.unwrap_err().contains("2 shared folders didn't respond"));
         assert!(detach_all(vec!["/nonexistent/a".into()], std::time::Duration::from_secs(5), fine).is_ok());
         assert!(detach_all(vec![], std::time::Duration::from_millis(10), stuck).is_ok());
         assert!(STOP_LIMIT < std::time::Duration::from_secs(10));

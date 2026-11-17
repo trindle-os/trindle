@@ -13,13 +13,13 @@ chosen-act-name-empty = Tên không được để trống.
 chosen-act-name-slash = Tên không được chứa dấu gạch chéo.
 
 # Red words under a name being typed when it is . or ..
-chosen-act-name-kept = Tên đó được dành cho hệ thống.
+chosen-act-name-kept = Hệ thống đang dùng tên đó.
 
 # Red words under a name being typed when it is too long.
 chosen-act-name-long = Tên này quá dài.
 
 # Red words under the name box, and at the foot of Folders, when a rename fails: the item's name, then the reason.
-chosen-inplace-not-renamed = Không thể đổi tên { $name }: { $why }.
+chosen-inplace-not-renamed = Trindle không đổi tên được { $name }: { $why }.
 
 # Red words under the name box, and at the foot of Folders, when a name is already used in that place; the kind is the word folder or file.
 chosen-inplace-taken =

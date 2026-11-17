@@ -7,6 +7,8 @@
 
   <core>
     <gap>6</gap>
+    <!-- Clicks at the very edge of a screen that open the ring: 1 or 2. -->
+    <edgeClicks>1</edgeClicks>
   </core>
 
   <theme>

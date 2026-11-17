@@ -8,7 +8,7 @@ settings-power-title = पावर
 settings-power-keywords = बैटरी सस्पेंड नींद शट डाउन रीस्टार्ट लॉग आउट स्क्रीन बंद निष्क्रिय मंद लॉक पासवर्ड पिन चार्ज चार्जिंग सीमा 80 battery suspend sleep shut down restart log out screen off idle dim lock password pin keypad caffeine keep awake charge charging limit battery health
 
 # Introduction under the heading of the power page, and the words behind the page i.
-settings-power-help = बैटरी, पावर मोड, और स्क्रीन कब मंद, लॉक और बंद होती है, लैपटॉप पर बैटरी और चार्जर के लिए अलग-अलग। टैब पर बना कप स्क्रीन को जगाए रखता है। लॉक, रीस्टार्ट और शट डाउन भी यहीं हैं।
+settings-power-help = पावर मोड चुनें, और यह भी कि स्क्रीन कब मंद, लॉक और बंद हो। लैपटॉप पर ये बैटरी और चार्जर के लिए अलग-अलग तय होते हैं। रिंग में बना कप स्क्रीन को जगाए रखता है। लॉक, रीस्टार्ट और शट डाउन भी यहीं से कर सकते हैं।
 
 # Choice in a list of how long to wait.
 settings-power-time-never = कभी नहीं
@@ -47,7 +47,7 @@ settings-power-time-2h = 2 घंटे
 settings-power-time-only-sleep = सिर्फ़ जब यह सोए
 
 # Heading of the line, and name of its round button, that suspends the computer.
-settings-power-suspend = सस्पेंड
+settings-power-suspend = स्लीप
 
 # Heading of the line, and name of its round button, that restarts the computer.
 # SAFETY: needs a human review before it ships
@@ -76,32 +76,20 @@ settings-power-lid-shut-down = शट डाउन
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-dim = इसके बाद स्क्रीन मंद करें
 
-# Small words under an idle timer line.
-settings-power-timer-dim-about = कोई भी हलचल चमक को वापस ले आती है।
-
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-clock = इसके बाद चलती घड़ी दिखाएँ
-
-# Small words under an idle timer line.
-settings-power-timer-clock-about = सिर्फ़ समय, धीरे-धीरे इधर-उधर घूमता हुआ।
 
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-off = इसके बाद स्क्रीन बंद करें
 
-# Small words under an idle timer line.
-settings-power-timer-off-about = कोई भी कुंजी या हलचल इसे फिर चालू कर देती है।
-
 # Heading of an idle timer line, and the name of its lists.
-settings-power-timer-suspend = इसके बाद सस्पेंड करें
-
-# Small words under an idle timer line.
-settings-power-timer-suspend-about = इतनी देर अकेला छोड़ देने पर यह सो जाता है।
+settings-power-timer-suspend = इसके बाद स्लीप में जाएँ
 
 # Red words under the keep the screen awake switch when turning it on could not be saved.
-settings-power-no-awake = स्क्रीन को जगाए नहीं रखा जा सका: चुनाव सहेजा नहीं जा सका।
+settings-power-no-awake = Trindle स्क्रीन को जगाए नहीं रख सका क्योंकि वह आपका चुनाव सहेज नहीं सका।
 
 # Red words under the keep the screen awake switch when turning it off could not be saved.
-settings-power-no-sleep = स्क्रीन को जगाए रखना बंद नहीं किया जा सका: चुनाव सहेजा नहीं जा सका।
+settings-power-no-sleep = Trindle आपका चुनाव सहेज नहीं सका, इसलिए स्क्रीन जगी रहेगी।
 
 # Name of the power mode that saves the battery.
 settings-power-profile-saver = बैटरी बचत
@@ -134,10 +122,10 @@ settings-power-hours-minutes = { $h } घंटे { $m } मिनट
 settings-power-minutes = { $m } मिनट
 
 # Sentence at the top of the page on a computer with no battery.
-settings-power-top-no-battery = बिजली से जुड़ा है: इस कंप्यूटर में संभालने के लिए कोई बैटरी नहीं है।
+settings-power-top-no-battery = बिजली से जुड़ा है। इस कंप्यूटर में बैटरी नहीं है।
 
 # Sentence at the top of the page on a computer with no battery; { $mode } is the power mode.
-settings-power-top-no-battery-mode = बिजली से जुड़ा है, { $mode } मोड में: संभालने के लिए कोई बैटरी नहीं है।
+settings-power-top-no-battery-mode = बिजली से जुड़ा है, { $mode } मोड में। इस कंप्यूटर में बैटरी नहीं है।
 
 # Sentence at the top of the page while charging; { $percent } is how full.
 settings-power-top-charging = चार्ज हो रही है, { $percent }%।
@@ -158,16 +146,13 @@ settings-power-top-battery = बैटरी { $percent }% पर है।
 settings-power-top-battery-left = बैटरी { $percent }% पर है, लगभग { $left } बाकी।
 
 # Sentence at the top of the page while the battery is being read.
-settings-power-top-looking = बैटरी देखी जा रही है…
+settings-power-top-looking = बैटरी जाँची जा रही है…
 
 # Red words under the power mode line when the mode could not be changed.
 settings-power-mode-failed = पावर मोड बदला नहीं जा सका।
 
 # Heading of the power mode line, and the name of its list.
 settings-power-mode = पावर मोड
-
-# Small words under the power mode line.
-settings-power-mode-about = बचत मोड कम गर्म चलता है; प्रदर्शन मोड तेज़।
 
 # Said in green under a line after its choice was kept.
 settings-power-saved = सहेजा गया
@@ -178,17 +163,11 @@ settings-power-warn-name = बैटरी इतनी रह जाने प�
 # Heading of the line for the battery warning.
 settings-power-warn = इतनी रह जाने पर चेतावनी दें
 
-# Small words under the battery warning line.
-settings-power-warn-about = एक बार, स्क्रीन के बीच में।
-
 # Choice in the list of battery levels: never warn.
 settings-power-never = कभी नहीं
 
 # Heading of the line, and name of its switch, for stopping charging at 80%.
 settings-power-limit = 80% पर चार्ज करना रोकें
-
-# Small words under the charge limit line.
-settings-power-limit-about = ज़्यादातर बिजली से जुड़ी रहने वाली बैटरी के लिए बेहतर।
 
 # Title of the battery card on a laptop.
 settings-power-card-battery = बैटरी
@@ -197,11 +176,11 @@ settings-power-card-battery = बैटरी
 settings-power-card-looking-after = बैटरी की देखभाल
 
 # Words behind the i of the battery card.
-settings-power-battery-about = बैटरी बचत मोड कम गर्म चलता है और बैटरी को ज़्यादा चलाता है; प्रदर्शन मोड तेज़ चलता है; संतुलित दोनों के बीच है। बैटरी घटते समय चेतावनी एक बार स्क्रीन के बीच में आती है। 80% पर रुकना उस लैपटॉप की बैटरी के लिए बेहतर है जो ज़्यादातर बिजली से जुड़ा रहता है: वह 80% तक ही चार्ज होती है और ज़्यादा साल चलती है। सॉकेट से दूर पूरा दिन बिताने से पहले इसे बंद कर दें।
+settings-power-battery-about = बैटरी बचत मोड कम गर्म चलता है और बैटरी को ज़्यादा चलाता है। प्रदर्शन मोड तेज़ चलता है। संतुलित दोनों के बीच है। बैटरी घटते समय चेतावनी एक बार स्क्रीन के बीच में आती है। 80% पर रुकना उस लैपटॉप के लिए बेहतर है जो ज़्यादातर बिजली से जुड़ा रहता है, और इससे बैटरी ज़्यादा साल चलती है। सॉकेट से दूर पूरा दिन बिताने से पहले इसे बंद कर दें।
 
 # Words under the charge limit line while the password window is open.
 # SAFETY: needs a human review before it ships
-settings-power-limit-waiting = पासवर्ड की प्रतीक्षा है...
+settings-power-limit-waiting = आपके पासवर्ड की प्रतीक्षा है…
 
 # Green words under the charge limit line after charging was limited to 80%.
 settings-power-limit-on = 80% पर रुकता है
@@ -212,26 +191,20 @@ settings-power-limit-off = पूरी चार्ज होती है
 # Heading of the keep the screen awake line, and name of its switch.
 settings-power-awake = स्क्रीन को जगाए रखें
 
-# Small words under the keep the screen awake line.
-settings-power-awake-about = टैब पर बना कप भी यही करता है।
-
 # Title of the card about dimming and the moving clock.
 settings-power-screen-title = स्क्रीन
 
 # Words behind the i of the Screen card.
-settings-power-screen-about = जब तक स्क्रीन को जगाए रखना चालू है, इनमें से कुछ नहीं होता; टैब का कप भी इसे चालू और बंद करता है। मंद करना: कोई भी हलचल चमक वापस ले आती है; सिर्फ़ वही स्क्रीन मंद होती हैं जिनकी अपनी चमक होती है, जैसे लैपटॉप की। चलती घड़ी: स्क्रीन अँधेरी हो जाती है और उस पर बस समय धीरे-धीरे घूमता है, और कोई भी कुंजी या हलचल सब वापस ले आती है। लैपटॉप पर हर समय दो बार तय होता है, बैटरी के लिए और चार्जर के लिए।
+settings-power-screen-about = जब तक स्क्रीन को जगाए रखना चालू है, इनमें से कुछ नहीं होता। रिंग का कप भी इसे चालू और बंद करता है। सिर्फ़ वही स्क्रीन मंद हो सकती हैं जिनकी चमक की अपनी सेटिंग हो, जैसे लैपटॉप की। चलती घड़ी स्क्रीन को अँधेरा कर देती है और बस समय दिखाती है, जो धीरे-धीरे इधर-उधर घूमता है। माउस हिलाने या कोई कुंजी दबाने से सब वापस आ जाता है। लैपटॉप पर हर समय दो बार तय होता है: एक बार बैटरी के लिए और एक बार चार्जर के लिए।
 
 # Title of the card about turning the screen off and sleeping.
 settings-power-sleep-title = स्क्रीन बंद और नींद
 
 # Words behind the i of the Screen off and sleep card.
-settings-power-sleep-about = कोई भी कुंजी या हलचल स्क्रीन को फिर चालू कर देती है। सस्पेंड कंप्यूटर को तब तक सुला देता है जब तक आप उसे जगाएँ नहीं। लैपटॉप पर हर समय दो बार तय होता है, बैटरी के लिए और चार्जर के लिए। दूसरी स्क्रीन लगी होने पर ढक्कन बंद करने से कुछ नहीं होता, ताकि आप बड़ी स्क्रीन पर काम करते रहें।
+settings-power-sleep-about = कोई कुंजी दबाने या माउस हिलाने से स्क्रीन फिर चालू हो जाती है। स्लीप कंप्यूटर को तब तक सुला देता है जब तक आप उसे जगाएँ नहीं। लैपटॉप पर हर समय दो बार तय होता है: एक बार बैटरी के लिए और एक बार चार्जर के लिए। दूसरी स्क्रीन लगी होने पर ढक्कन बंद करने से कुछ नहीं होता, ताकि आप बड़ी स्क्रीन पर काम करते रहें।
 
 # Heading of the line for what closing the lid does.
 settings-power-lid = ढक्कन बंद होने पर
-
-# Small words under that line.
-settings-power-lid-about = दूसरी स्क्रीन लगी होने पर कुछ नहीं होता।
 
 # Caption above a list that applies while the laptop runs on its battery.
 settings-power-when-battery = बैटरी पर
@@ -248,52 +221,35 @@ settings-power-named-charger = { $title }: बिजली से जुड़�
 # Heading of the lock the screen line, and name of its switch.
 settings-power-lock = स्क्रीन लॉक करें
 
-# Small words under the lock the screen line.
-settings-power-lock-about = आपका पासवर्ड या PIN आपको वापस अंदर ले आता है।
-
 # Heading of the lock after line, and the name of its list.
 settings-power-lock-after-name = इसके बाद लॉक करें
 
-# Small words under the lock after line.
-settings-power-lock-after-about = इतनी देर अकेला छोड़ने पर, बाकी जो भी तय हो।
-
 # Heading of the line, and name of its switch, for locking when the computer sleeps.
 settings-power-lock-sleep = कंप्यूटर के सोने पर लॉक करें
-
-# Small words under that line.
-settings-power-lock-sleep-about = ताकि वह हमेशा लॉक होकर जागे।
 
 # Heading of the line, and name of its button, that locks the screen now.
 settings-power-lock-now = अभी लॉक करें
 
 # Small words under the lock now line.
-settings-power-lock-now-about = Super और L साथ दबाने से भी।
+settings-power-lock-now-about = या Super और L दबाएँ।
 
 # Red words under the lock now line when the lock screen would not start.
-settings-power-lock-now-failed = स्क्रीन लॉक नहीं की जा सकी: लॉक स्क्रीन शुरू नहीं हुई।
+settings-power-lock-now-failed = Trindle स्क्रीन लॉक नहीं कर सका क्योंकि लॉक स्क्रीन शुरू नहीं हुई।
 
 # Title of the locking card.
 settings-power-lock-title = लॉक करना
 
 # Words behind the i of the locking card.
 # SAFETY: needs a human review before it ships
-settings-power-lock-card-about = जब आप दूर होते हैं, स्क्रीन लॉक हो जाती है, और आपका पासवर्ड, या चार अंकों का PIN अगर आप चुनें, आपको वापस अंदर ले आता है। तब तक स्क्रीन पर कुछ नहीं दिखता। लॉग इन करने के लिए हमेशा पासवर्ड चाहिए। "इसके बाद लॉक करें" वह समय है जितनी देर कंप्यूटर अकेला रहे तो लॉक हो जाता है, स्क्रीन और नींद के समय चाहे जो हों; तब तक लौटने पर PIN नहीं चाहिए। लॉक करना बंद करने से PIN भी भुला दिया जाता है। चार अंक आपके पासवर्ड से तेज़ टाइप होते हैं: PIN के लिए चुने समय के बाद, या पाँच गलत कोशिशों के बाद, इसके बजाय आपका पासवर्ड चाहिए। कूड़ेदान PIN का इस्तेमाल बंद कर देता है।
+settings-power-lock-card-about = जब आप दूर होते हैं, स्क्रीन लॉक हो जाती है। जब तक आप अपने पासवर्ड से, या चार अंकों के PIN से (अगर आपने सेट किया हो), उसे खोलते नहीं, स्क्रीन पर कुछ नहीं दिखता। लॉग इन करने के लिए हमेशा पासवर्ड चाहिए। "इसके बाद लॉक करें" वह समय है जितनी देर कंप्यूटर अकेला छोड़ा जा सकता है, उसके बाद वह लॉक हो जाता है, स्क्रीन और स्लीप के समय चाहे जो हों। तब तक लौटने पर PIN नहीं चाहिए। लॉक करना बंद करने से PIN भी हट जाता है। "PIN इतनी देर काम करता है" में तय समय के बाद, या पाँच गलत कोशिशों के बाद, आपका पासवर्ड चाहिए।
 
 # Heading of the line for adding a PIN.
 # SAFETY: needs a human review before it ships
 settings-power-pin-add = PIN से भी खोलें
 
-# Small words under that line.
-# SAFETY: needs a human review before it ships
-settings-power-pin-add-about = चार अंक, आपके पासवर्ड से तेज़।
-
 # Heading of the line, and name of its list, for how long a PIN works after the screen locks.
 # SAFETY: needs a human review before it ships
 settings-power-pin-works-name = PIN इतनी देर काम करता है
-
-# Small words under that line.
-# SAFETY: needs a human review before it ships
-settings-power-pin-works-about = उसके बाद इसके बजाय आपका पासवर्ड चाहिए।
 
 # Name of the bin button that stops using a PIN.
 # SAFETY: needs a human review before it ships
@@ -301,11 +257,7 @@ settings-power-pin-stop = PIN का इस्तेमाल बंद कर�
 
 # Heading of the line shown when a PIN is kept.
 # SAFETY: needs a human review before it ships
-settings-power-pin-kept = एक PIN रखा गया है
-
-# Small words under that line.
-# SAFETY: needs a human review before it ships
-settings-power-pin-kept-about = बदलने के लिए चार नए अंक लिखें।
+settings-power-pin-kept = PIN सेट है
 
 # Placeholder of the box for typing a new PIN.
 # SAFETY: needs a human review before it ships
@@ -313,46 +265,52 @@ settings-power-pin-new = नया PIN
 
 # Name of the button that keeps the PIN typed.
 # SAFETY: needs a human review before it ships
-settings-power-pin-keep = यह PIN रखें
+settings-power-pin-keep = यह PIN सहेजें
+
+# Placeholder of the box for typing your account password before a PIN is saved.
+settings-power-pin-password = आपका पासवर्ड
+
+# Red words under the PIN box when no password was typed.
+settings-power-pin-need-password = पहले अपना पासवर्ड टाइप करें, फिर PIN सहेजें।
+
+# Red words under the PIN box when the password typed was wrong.
+settings-power-pin-wrong-password = वह पासवर्ड सही नहीं है, इसलिए Trindle ने PIN सहेजा नहीं।
 
 # Red words under the PIN line when the PIN could not be removed.
 # SAFETY: needs a human review before it ships
-settings-power-pin-not-removed = PIN हटाया नहीं जा सका, इसलिए वह अब भी स्क्रीन खोलता है।
+settings-power-pin-not-removed = Trindle PIN हटा नहीं सका, इसलिए वह अब भी स्क्रीन खोलता है।
 
 # Red words under the PIN box when it is not the right length; { $n } is how many digits a PIN has.
 settings-power-pin-digits =
     { $n ->
-        [one] PIN { $n } अंक का होता है।
-       *[other] PIN { $n } अंकों का होता है।
+        [one] { $n } अंक इस्तेमाल करें।
+       *[other] { $n } अंक इस्तेमाल करें।
     }
 
 # Heading of the log out line, and name of its round button.
 # SAFETY: needs a human review before it ships
 settings-power-log-out = लॉग आउट
 
-# Small words under the log out line.
-settings-power-log-out-about = वापस लॉगिन स्क्रीन पर।
-
 # Title of the card with log out, suspend, restart and shut down.
 settings-power-session-title = सेशन
 
 # Words behind the i of the session card.
-settings-power-session-about = लॉग आउट करने से हर विंडो बंद हो जाती है और लॉगिन स्क्रीन पर वापस जाते हैं। सस्पेंड कंप्यूटर को तब तक सुला देता है जब तक आप उसे जगाएँ नहीं। हर बटन दो बार पूछता है, रिंग के पावर विकल्प की तरह, ताकि चूक से कुछ न हो।
+settings-power-session-about = लॉग आउट करने से हर विंडो बंद हो जाती है और आप लॉगिन स्क्रीन पर लौट जाते हैं। स्लीप कंप्यूटर को तब तक सुला देता है जब तक आप उसे जगाएँ नहीं। हर बटन को पक्का करने के लिए दूसरी बार दबाना पड़ता है, रिंग के पावर विकल्पों की तरह, ताकि एक चूक से कुछ न हो।
 
 # Red words under a session button when the system bus is not there.
-settings-power-no-bus = सिस्टम बस उपलब्ध नहीं है।
+settings-power-no-bus = सिस्टम सेवा तक नहीं पहुँचा जा सकता।
 
 # Red words under a session button when the computer would not do it.
-settings-power-would-not = कंप्यूटर ने यह नहीं किया।
+settings-power-would-not = कंप्यूटर यह नहीं कर सका।
 
 # Spoken description of the battery picture while the battery is being read.
-settings-power-art-looking-tip = बैटरी देखी जा रही है।
+settings-power-art-looking-tip = बैटरी जाँची जा रही है।
 
 # Spoken description of the battery picture; { $percent } is how full and { $state } what it is doing, such as Charging.
 settings-power-art-tip = बैटरी { $percent }% पर है। { $state }
 
 # Word drawn in the empty battery picture while the battery is being read.
-settings-power-art-looking = खोज रहा है
+settings-power-art-looking = लोड हो रहा है
 
 # Word drawn under the battery figure when its state is not known.
 settings-power-art-battery = बैटरी
@@ -386,4 +344,3 @@ settings-power-pin-hours =
 
 # A length of time in the list of how long a PIN works, in hours and minutes; { $hours } and { $minutes } are the two parts already written out, such as 1 hour and 15 minutes.
 settings-power-pin-hours-minutes = { $hours } { $minutes }
-

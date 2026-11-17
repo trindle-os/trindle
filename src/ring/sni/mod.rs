@@ -15,14 +15,13 @@ use std::time::Duration;
 
 use look::{Look, SIZE};
 use menu::{kids, menu_card, part, text, truth};
-use outside::{largest, Seen, Step, wanted_outside};
+use outside::{largest, Step, wanted_outside};
 use zbus::zvariant::{OwnedValue, Structure, Value};
 
 use crate::ring::{chosen, Job, plugins};
 use crate::ring::ctx::{Ctx, Do, Msg, msg};
 use crate::toolkit::t;
 use crate::toolkit::bus::{Asked, Bus, Listen, Offer, Props, Served};
-use crate::toolkit::icon::Icons;
 use crate::toolkit::input::{Input, Keysym};
 use crate::toolkit::widget::{self, Length, Node, Pointer};
 
@@ -73,6 +72,8 @@ struct Shown {
 struct Item {
     service: String,
     path: String,
+
+    pid: u32,
 
     anchor: String,
     st: RefCell<Shown>,
@@ -127,6 +128,15 @@ struct Target {
     path: String,
 
     pid: Rc<Cell<u32>>,
+}
+
+const ITEMS_MOST: usize = 64;
+
+const ITEMS_PER_PROCESS: usize = 4;
+const _: () = assert!(ITEMS_PER_PROCESS * 2 <= ITEMS_MOST);
+
+fn room_for_another(count: usize, from_process: usize) -> bool {
+    count < ITEMS_MOST && from_process < ITEMS_PER_PROCESS
 }
 
 fn key(service: &str, path: &str) -> String {
@@ -249,9 +259,10 @@ impl Tray {
                 } else {
                     (arg, "/StatusNotifierItem".to_string())
                 };
+                let sender = asked.sender();
                 asked.reply(&());
                 if !service.is_empty() {
-                    t.add(&service, &path);
+                    t.register(sender, service, path);
                 }
             }),
             props: Box::new(move || {
@@ -298,13 +309,46 @@ impl Tray {
         *self.owner.borrow_mut() = watching.ok();
     }
 
-    fn add(&self, service: &str, path: &str) {
-        if self.items.borrow().iter().any(|i| i.service == service && i.path == path) {
+    fn register(&self, sender: String, service: String, path: String) {
+        let (w, named) = (self.me.clone(), service.clone());
+        let then = move |owner: Option<String>| {
+            let Some(t) = w.upgrade() else { return };
+            if owner.as_deref() == Some(sender.as_str()) {
+                t.ask_bus("GetConnectionUnixProcessID", sender, move |t, m| {
+                    if let Some(pid) = m.and_then(|m| m.body().deserialize::<u32>().ok()) {
+                        t.add(pid, &service, &path);
+                    }
+                });
+            }
+        };
+        if named.starts_with(':') {
+            then(Some(named));
+        } else {
+            self.ask_bus("GetNameOwner", named, move |_, m| then(m.and_then(|m| m.body().deserialize::<String>().ok())));
+        }
+    }
+
+    fn ask_bus(&self, method: &'static str, name: String, done: impl FnOnce(&Tray, Option<zbus::Message>) + 'static) {
+        let w = self.me.clone();
+        self.bus.call("org.freedesktop.DBus", "/org/freedesktop/DBus", "org.freedesktop.DBus")
+            .method(method, &(name,), false, None, &self.ctx.lp, move |r| {
+                if let Some(t) = w.upgrade() {
+                    done(&t, r.ok());
+                }
+            });
+    }
+
+    fn add(&self, pid: u32, service: &str, path: &str) {
+        let items = self.items.borrow();
+        let from_process = items.iter().filter(|i| i.pid == pid).count();
+        if items.iter().any(|i| i.service == service && i.path == path) || !room_for_another(items.len(), from_process) {
             return;
         }
+        drop(items);
         let item = Rc::new(Item {
             service: service.into(),
             path: path.into(),
+            pid,
             anchor: format!("sni:{}", key(service, path)),
             st: RefCell::new(Shown::default()),
             hearing: RefCell::new(Vec::new()),
@@ -329,8 +373,10 @@ impl Tray {
                 t.remove(&i);
             }
         });
-        if let Ok(l) = gone {
-            item.hearing.borrow_mut().push(l);
+        match gone {
+            Ok(l) => item.hearing.borrow_mut().push(l),
+
+            Err(_) => return self.remove(&item),
         }
         self.refresh(&item);
     }
@@ -363,7 +409,7 @@ impl Tray {
         let want = wanted_outside(&name, &field("IconThemePath"), in_set.is_some(), pixmap.is_some());
         let look = in_set
             .or_else(|| pixmap.map(|px| Look::Pixels { px, cache: RefCell::new(None) }))
-            .unwrap_or_else(|| Look::shape(Rc::new(Icons::new()), crate::common::apps::generic_icon_for(&item.service, &field("Title"))));
+            .unwrap_or_else(|| Look::shape(self.ctx.icons.clone(), crate::common::apps::generic_icon_for(&item.service, &field("Title"))));
 
         let tip = props.get("ToolTip").and_then(|v| part(v, 2)).and_then(text).filter(|s| !s.is_empty())
             .or_else(|| Some(field("Title")).filter(|s| !s.is_empty()))
@@ -395,7 +441,7 @@ impl Tray {
         outside::look_aside(want, move |seen| {
             let (Some(t), Some(item)) = (w.upgrade(), it.upgrade()) else { return };
             let (ours, next) = item.outside.borrow_mut().back();
-            let shows = if ours { item.outside.borrow_mut().shows(seen.map(Seen::look)) } else { None };
+            let shows = if ours { item.outside.borrow_mut().shows(seen.map(|s| s.look(&t.ctx.icons))) } else { None };
             if let Some(look) = shows {
                 item.st.borrow_mut().look = Some(look);
                 t.ctx.tell(Do::Redraw);

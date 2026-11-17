@@ -62,8 +62,8 @@ fn only_the_pages_of_apps_to_choose_from_wait_for_the_catalogue() {
             s.view = view.clone();
             assert_eq!(s.awaiting(), needs, "{how}: {}", view.nav_key());
             let said = words(&mut s);
-            let stands_in = said.iter().any(|w| w.starts_with("Fetching the list of apps") || w == "Apps could not reach Flathub."
-                                            || w.starts_with("This computer is not connected to the internet. Apps tries again"));
+            let stands_in = said.iter().any(|w| w.starts_with("Fetching the list of apps") || w == "Apps couldn't reach Flathub."
+                                            || w.starts_with("This computer isn't connected to the internet. Apps will try again"));
             assert_eq!(stands_in, needs, "{how}: {}", view.nav_key());
             if !needs {
                 assert_eq!(s.page_key(), view.nav_key(), "{how}: the page is itself");
@@ -139,8 +139,8 @@ fn updates_shows_what_is_known_without_the_catalogue() {
             assert!(said.contains(&"Notes".to_string()) && said.contains(&"Clock".to_string()), "{how}: each app by its own name");
             assert!(said.contains(&"Trindle".to_string()) && said.contains(&"Example keyboard".to_string()) && said.contains(&"example-package-0".to_string()), "{how}");
             let headline = said.iter().find(|w| w.starts_with("16 updates are ready")).unwrap_or_else(|| panic!("{how}: {said:?}"));
-            assert_eq!(headline.contains("not connected to the internet"), !s.online, "{how}: {headline}");
-            assert!(!said.iter().any(|w| w.starts_with("Could not check")), "{how}");
+            assert_eq!(headline.contains("isn't connected to the internet"), !s.online, "{how}: {headline}");
+            assert!(!said.iter().any(|w| w.starts_with("Couldn't check")), "{how}");
             let got = named(&places(&mut s, across), &OWN);
             let by = got[0].1.y - want[0].1.y;
             assert_eq!(by, 0.0, "{across}, {how}: the page is not where it is with the catalogue");
@@ -155,6 +155,32 @@ fn updates_shows_what_is_known_without_the_catalogue() {
 }
 
 #[test]
+fn the_headline_is_whole_in_every_language_at_every_width() {
+    use crate::common::shipped_languages::{in_language, tags};
+    let mut wrong = Vec::new();
+    for tag in tags() {
+        in_language(&tag, || {
+            let mut nothing = store();
+            (nothing.failed, nothing.online, nothing.view) = (Some("Flathub did not answer.".into()), false, View::Updates);
+            nothing.upd = update_page::made_up(&[], 0, false, &[], &[], &[]);
+            let mut known = without_catalogue(false);
+            known.view = View::Updates;
+            for (how, s) in [("known", &mut known), ("nothing known", &mut nothing)] {
+                for across in [820, 1278, 1720] {
+                    s.size.across = across as f32;
+                    let mut ui = Ui::new(s.whole(settings()), Theme::new(false, "#fbc711"));
+                    ui.lay_at(across, 692);
+                    if let Some(whole) = ui.label_at(screen::HEADLINE) {
+                        wrong.push(format!("{tag} {how} at {across}: {whole}"));
+                    }
+                }
+            }
+        });
+    }
+    assert!(wrong.is_empty(), "{} headlines are cut:\n{}", wrong.len(), wrong.join("\n"));
+}
+
+#[test]
 fn the_spec_says_what_every_page_does_without_the_internet() {
 
     let Ok(spec) = std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/spec/trindle.md")) else { return };
@@ -163,9 +189,9 @@ fn the_spec_says_what_every_page_does_without_the_internet() {
     let s = store();
     let side = s.whole(settings()).said();
     let pages: Vec<&String> = side.iter().take_while(|w| *w != "Settings for apps")
-        .chain(side.iter().skip_while(|w| *w != "Categories").take(categories().len() + 6))
-        .filter(|w| !["", "Apps", "Categories", "More ways to get apps"].contains(&w.as_str())).collect();
-    assert_eq!(pages.len(), 8 + categories().len(), "{pages:?}");
+        .chain(side.iter().skip_while(|w| *w != "Categories").take(categories().len() + 1))
+        .filter(|w| !["", "Apps", "Categories"].contains(&w.as_str())).collect();
+    assert_eq!(pages.len(), 7 + categories().len(), "{pages:?}");
     for page in pages {
 
         let name = if categories().iter().any(|(_, n, _)| n == page) { "a category" } else { page.as_str() };

@@ -44,7 +44,6 @@ impl Canvas {
         elements: &[E],
         backdrop: Color32F,
         scale: f64,
-        transform: Transform,
         keep_alpha: bool,
     ) -> Result<Option<SyncPoint>, String>
     where
@@ -54,7 +53,7 @@ impl Canvas {
     {
         let backdrop = if backdrop.a() < 1.0 && !keep_alpha { Color32F::BLACK } else { backdrop };
 
-        let mut tracker = OutputDamageTracker::new(size, scale, transform);
+        let mut tracker = OutputDamageTracker::new(size, scale, Transform::Normal);
         match self {
             Canvas::Card(card) => {
                 let mut card = card.clone();
@@ -144,6 +143,9 @@ impl Rows {
         (end <= pool_len).then_some(Rows { start, stride, length, count })
     }
 
+    /// # Safety
+    /// `pool` must be valid for writes up to the end `within` checked, and
+    /// `from` for reads of `count * length` bytes.
     unsafe fn write(&self, pool: *mut u8, from: *const u8) {
         for n in 0..self.count {
             // SAFETY: the caller's promise covers every row.
@@ -152,13 +154,8 @@ impl Rows {
     }
 }
 
-pub(super) fn damage_in_buffer(
-    drawn: &[Rectangle<i32, Physical>],
-    buffer_size: Size<i32, Physical>,
-    transform: Transform,
-) -> Vec<Rectangle<i32, BufferCoords>> {
-    let whole = transform.transform_size(buffer_size).to_logical(1);
-    drawn.iter().map(|r| r.to_logical(1).to_buffer(1, transform.invert(), &whole)).collect()
+pub(super) fn damage_in_buffer(drawn: &[Rectangle<i32, Physical>]) -> Vec<Rectangle<i32, BufferCoords>> {
+    drawn.iter().map(|r| Rectangle::new((r.loc.x, r.loc.y).into(), (r.size.w, r.size.h).into())).collect()
 }
 
 #[cfg(test)]
@@ -170,24 +167,8 @@ mod tests {
     }
 
     #[test]
-    fn whole_picture_damage_fills_the_buffer_however_it_is_turned() {
-        for turn in [Transform::Normal, Transform::_90, Transform::_180, Transform::_270, Transform::Flipped180] {
-            let buffer = (200, 100).into();
-            let drawn = turn.transform_size(buffer);
-            let got = damage_in_buffer(&[Rectangle::from_size(drawn)], buffer, turn);
-            assert_eq!(got, vec![at(0, 0, 200, 100)], "{turn:?}");
-        }
-    }
-
-    #[test]
-    fn untouched_damage_stays_where_it_was() {
-        assert_eq!(damage_in_buffer(&[at(5, 6, 7, 8)], (100, 100).into(), Transform::Normal), vec![at(5, 6, 7, 8)]);
-    }
-
-    #[test]
-    fn a_flipped_picture_mirrors_its_damage() {
-
-        assert_eq!(damage_in_buffer(&[at(0, 0, 100, 10)], (100, 50).into(), Transform::Flipped180), vec![at(0, 40, 100, 10)]);
+    fn damage_stays_where_it_was_drawn() {
+        assert_eq!(damage_in_buffer(&[at(5, 6, 7, 8), at(0, 0, 200, 100)]), vec![at(5, 6, 7, 8), at(0, 0, 200, 100)]);
     }
 
     #[test]

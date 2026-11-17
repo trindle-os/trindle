@@ -4,11 +4,11 @@ use crate::store::came_from::CameFrom;
 use crate::store::{age, github, go, Msg, Store};
 use crate::toolkit::picture;
 use crate::toolkit::t;
-use crate::toolkit::widget::{button, column, drawing, entry, note, Node};
+use crate::toolkit::widget::{button, column, drawing, entry, note, row, tick, Node};
 use crate::toolkit::theme;
 use crate::store::screen::{list_card, list_card_with, screen, title_row};
 use super::github_key::{key_button};
-use super::github_search::{ask_github, github_typed, install_file, install_repo, see_files};
+use super::github_search::{ask_github, github_typed, install_file, install_repo, see_files, tick_place, Place};
 use super::grid::{GITHUB_HUB};
 use super::install::pressed_install;
 use super::job_rows::{banded, job_button, pictured_row_with, update_row};
@@ -39,21 +39,43 @@ impl GitHubPage {
     }
 }
 
+const FLATHUB_MOST: usize = 8;
+
 pub fn github(s: &Store) -> Node<Msg> {
     let g = &s.github;
     let mut items = vec![
         entry(g.text.clone(), t!("store-gh-search-placeholder"), |t| go(move |s| github_typed(s, t.clone())))
             .on_submit(go(ask_github)),
+
+        row(vec![
+            tick(!g.no_flathub, t!("store-gh-place-flathub"), |on| go(move |s| tick_place(s, Place::Flathub, on))),
+            note(t!("store-gh-place-flathub")),
+            tick(g.with_hub, t!("store-gh-place-hub"), |on| go(move |s| tick_place(s, Place::Hub, on))),
+            note(t!("store-gh-place-hub")),
+            tick(g.with_github, t!("store-gh-place-github"), |on| go(move |s| tick_place(s, Place::GitHub, on))),
+            note(t!("store-gh-place-github")),
+        ]).gap(10.0).centred(),
     ];
     let mut tiles = Vec::new();
     if !g.text.trim().is_empty() {
+        let words = super::mixed::words_of(&g.text);
+        let mut flat: Vec<&crate::store::catalogue::App> = s.apps.values().filter(|a| a.matches(&words)).collect();
+        flat.sort_by(|a, b| a.name.cmp(&b.name));
+        if !g.no_flathub && !flat.is_empty() {
+            let rows = banded(flat.iter().take(FLATHUB_MOST).map(|a| {
+                let app = (*a).clone();
+                let open = button("view-reveal-symbolic", t!("store-browse-details")).on_press(go(move |s| s.open_detail(app.clone())));
+                column(vec![pictured_row_with(s, Some(super::pictures::app_icon(a, theme::apps_list().row_icon)), &format!("flat:{}", a.id), a.name.clone(), a.summary.clone(), Vec::new(), vec![open])]).gap(8.0)
+            }).collect());
+            tiles.push(list_card("system-software-install-symbolic", &t!("store-gh-flathub", n = flat.len()), rows));
+        }
         if !g.hub_found.is_empty() {
             let mut rows = vec![note(t!("store-hub-warning")), note(t!("store-from-hint"))];
-            rows.extend(banded(g.hub_found.iter().take(GITHUB_HUB).map(|f| column(github_row(s, f)).gap(8.0)).collect()));
+            let mut once = std::collections::HashSet::new();
+            rows.extend(banded(g.hub_found.iter().filter(|f| f.repo.is_empty() || once.insert(f.repo.as_str())).take(GITHUB_HUB).map(|f| column(github_row(s, f)).gap(8.0)).collect()));
             tiles.push(list_card("system-software-install-symbolic", &t!("store-gh-hub", n = g.hub_found.len()), rows));
         }
-        if !g.asked {
-            items.push(note(t!("store-gh-press-enter")));
+        if !g.with_github || !g.asked {
         } else if g.error.is_some() && !s.online {
 
             items.push(crate::store::help::beside(note(t!("store-gh-offline-note")), more_about(crate::store::help::OFFLINE)));
@@ -73,9 +95,13 @@ pub fn github(s: &Store) -> Node<Msg> {
             } else {
                 items.extend(problems.into_iter().map(|p| { let page = github_page(&p); red_about(p, page) }));
             }
-            if !g.found.is_empty() {
+
+            let shown: std::collections::HashSet<&str> = g.hub_found.iter().take(GITHUB_HUB).map(|f| f.repo.as_str()).collect();
+            let mut seen = std::collections::HashSet::new();
+            let more: Vec<&github::Found> = g.found.iter().filter(|f| f.repo.is_empty() || (!shown.contains(f.repo.as_str()) && seen.insert(f.repo.as_str()))).collect();
+            if !more.is_empty() {
                 tiles.push(list_card("github-symbolic", t!("store-gh-on"),
-                                banded(g.found.iter().map(|f| column(github_row(s, f)).gap(8.0)).collect())));
+                                banded(more.into_iter().map(|f| column(github_row(s, f)).gap(8.0)).collect())));
             }
         }
     }
@@ -84,7 +110,7 @@ pub fn github(s: &Store) -> Node<Msg> {
         items.extend(g.key_is.trouble().map(|why| red_about(why, crate::store::help::GITHUB_KEY)));
     }
 
-    if github::says_unchecked(tiles.len()) {
+    if !tiles.is_empty() {
         items.push(note(github::unchecked()));
     }
     let mut first = vec![list_card_with("system-search-symbolic", t!("store-gh-search-card"), key_button(s), items)];
@@ -156,7 +182,7 @@ pub(crate) fn github_row(s: &Store, f: &github::Found) -> Vec<Node<Msg>> {
 }
 
 pub(crate) fn hub_icon(s: &Store, url: &str, size: f32) -> Node<Msg> {
-    fetched_icon(s.shots.get(url).cloned().flatten(), size)
+    fetched_icon(s.heard.shots.get(url).cloned().flatten(), size)
 }
 
 pub(crate) fn fetched_icon(img: Option<std::rc::Rc<image::DynamicImage>>, size: f32) -> Node<Msg> {

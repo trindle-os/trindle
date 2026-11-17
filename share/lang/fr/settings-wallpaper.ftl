@@ -8,7 +8,7 @@ settings-wallpaper-title = Fond d'écran
 settings-wallpaper-keywords = image d'arrière-plan diaporama photo papier peint
 
 # Introduction under the heading of the wallpaper page, and the words behind the page i.
-settings-wallpaper-help = Une couleur unie, ou une seule image, ou un dossier pour que l'image change toute seule à l'heure que vous réglez.
+settings-wallpaper-help = Utilisez une couleur unie, une seule image, ou un dossier d'images qui changent aussi souvent que vous le choisissez.
 
 # Choice in the list of how long each picture stays.
 settings-wallpaper-every-10s = 10 secondes
@@ -38,7 +38,7 @@ settings-wallpaper-every-1d = 1 jour
 settings-wallpaper-fit-fill = Remplir l'écran
 
 # Choice in the list of how the picture fits the screen.
-settings-wallpaper-fit-fit = Ajuster, image entière visible
+settings-wallpaper-fit-fit = Ajuster l'image entière
 
 # Choice in the list of how the picture fits the screen.
 settings-wallpaper-fit-center = Centrer, taille réelle
@@ -56,7 +56,7 @@ settings-wallpaper-order-shuffle = Aléatoire
 settings-wallpaper-order-name = Par nom de fichier
 
 # Red words when the program that draws the wallpaper would not start.
-settings-wallpaper-no-changer = Le fond d'écran n'a pas pu être changé : son programme n'a pas démarré.
+settings-wallpaper-no-changer = Trindle n'a pas pu démarrer le programme qui change le fond d'écran.
 
 # Under the large picture, when counting; { $used } of { $all } pictures are used.
 settings-wallpaper-count =
@@ -89,10 +89,10 @@ settings-wallpaper-file-own = { $name }, l'une des images fournies avec Trindle
 settings-wallpaper-plain-below = Une couleur unie, réglée ci-dessous.
 
 # Under the large picture when the picture or folder has gone.
-settings-wallpaper-gone-below = Il n'y a plus rien ici. Choisissez une image ou un dossier.
+settings-wallpaper-gone-below = L'image ou le dossier n'est plus là. Choisissez autre chose.
 
 # Sentence about the wallpaper when it is a plain colour.
-settings-wallpaper-plain = Une couleur unie, sans image.
+settings-wallpaper-plain = Simplement une couleur unie.
 
 # Sentence about the wallpaper when Trindle's own pictures change; { $every } is how often, { $used } of { $all } pictures are used and { $extra } is any added sentences, each after a space.
 settings-wallpaper-changing-own =
@@ -112,19 +112,19 @@ settings-wallpaper-changing-folder =
 settings-wallpaper-empty-folder-choose = Le dossier { $folder } ne contient aucune image. Choisissez-en un autre.
 
 # Added to the sentence about the wallpaper when a folder holds more than Trindle looks through.
-settings-wallpaper-more-than-looked-at = Le dossier contient plus d'images que Trindle n'en parcourt, donc certaines peuvent être laissées de côté.
+settings-wallpaper-more-than-looked-at = Le dossier contient plus d'images que Trindle ne peut en vérifier, donc certaines peuvent être laissées de côté.
 
 # Sentence about the wallpaper for one of Trindle's own pictures; { $name } is its name.
 settings-wallpaper-file-own-said = { $name }, l'une des images fournies avec Trindle.
 
 # Sentence about the wallpaper for one chosen picture; { $name } is its name, written to read in the middle of a sentence.
-settings-wallpaper-file-one = Une seule image, { $name }, en permanence.
+settings-wallpaper-file-one = L'image { $name } est toujours affichée.
 
 # Sentence about the wallpaper when the chosen picture cannot be used; { $why } is the reason.
-settings-wallpaper-file-refused = L'image n'est pas utilisée. { $why } L'image de Trindle est affichée.
+settings-wallpaper-file-refused = Trindle n'utilise pas cette image. { $why } L'image de Trindle est affichée à la place.
 
 # Sentence about the wallpaper when the picture has gone.
-settings-wallpaper-file-gone = L'image n'existe plus. Choisissez une image ou un dossier.
+settings-wallpaper-file-gone = L'image n'est plus là. Choisissez une image ou un dossier.
 
 # Said in green under a line after its choice was kept.
 settings-wallpaper-saved = Enregistré
@@ -156,14 +156,8 @@ settings-wallpaper-card-title = Fond d'écran
 # Heading of the wallpaper line, and name of its switch.
 settings-wallpaper-wallpaper = Fond d'écran
 
-# Small words under the wallpaper line.
-settings-wallpaper-wallpaper-about = Désactivé, l'écran est d'une couleur unie.
-
 # Heading of the line for choosing where the picture comes from.
 settings-wallpaper-picture = Image
-
-# Small words under that line.
-settings-wallpaper-picture-about = Une image, un dossier, ou celles de Trindle.
 
 # Name of the round button that chooses one picture.
 settings-wallpaper-choose-picture-button = Choisir une image
@@ -177,26 +171,20 @@ settings-wallpaper-own-pictures = Les images de Trindle
 # Heading of the fit line.
 settings-wallpaper-fit = Ajustement
 
-# Small words under that line.
-settings-wallpaper-fit-about = Comment elle s'adapte à l'écran.
-
 # Name of the list of how the picture fits the screen.
 settings-wallpaper-fit-name = Comment elle s'adapte à l'écran
 
 # Heading of the colour line.
 settings-wallpaper-colour = Couleur
 
-# Small words under the colour line when the colour can be seen.
-settings-wallpaper-colour-shown = Visible seule, ou autour d'une image.
-
 # Small words under the colour line when a picture covers it.
-settings-wallpaper-colour-hidden = Cachée : l'image couvre l'écran.
+settings-wallpaper-colour-hidden = Cachée par l'image.
 
 # Placeholder and name of the box for typing the colour as a hex code; the example is a code.
-settings-wallpaper-colour-hex = La couleur en code hexadécimal, comme #09090b
+settings-wallpaper-colour-hex = Un code hexadécimal, comme #09090b
 
 # Words behind the i of the Wallpaper card.
-settings-wallpaper-card-about = Une couleur unie, ou une seule image, ou un dossier pour que l'image change toute seule à l'heure que vous réglez. La couleur se voit seule quand il n'y a pas d'image, et autour d'une image qui ne couvre pas l'écran ; tapez-la en code hexadécimal, comme #09090b.
+settings-wallpaper-card-about = Utilisez une couleur unie, une seule image, ou un dossier d'images qui changent aussi souvent que vous le choisissez. La couleur s'affiche seule quand il n'y a pas d'image, et autour d'une image qui ne couvre pas l'écran. Saisissez-la sous forme de code hexadécimal, comme #09090b.
 
 # Small words on the cards that are greyed while the wallpaper is off.
 settings-wallpaper-waits = Activez le fond d'écran pour les utiliser.
@@ -204,38 +192,26 @@ settings-wallpaper-waits = Activez le fond d'écran pour les utiliser.
 # Heading of the line, and name of its switch, for changing the picture now and then.
 settings-wallpaper-rotate = Changer l'image de temps en temps
 
-# Small words under that line.
-settings-wallpaper-rotate-about = Toutes les images d'un dossier, tour à tour.
-
 # Heading of the line, and name of its list, for how long each picture stays.
 settings-wallpaper-every = Changer après
-
-# Small words under that line.
-settings-wallpaper-every-about = Combien de temps chaque image reste.
 
 # Heading of the line, and name of its list, for the order pictures change in.
 settings-wallpaper-order = Ordre
 
-# Small words under the order line.
-settings-wallpaper-order-about = Aléatoire, ou par nom de fichier.
-
 # Heading of the line, and name of its button, for moving to the next picture.
-settings-wallpaper-next = Image suivante maintenant
-
-# Small words under that line.
-settings-wallpaper-next-about = Passe tout de suite à la suivante.
+settings-wallpaper-next = Image suivante
 
 # Title of the Changing pictures card.
 settings-wallpaper-changing-title = Images qui changent
 
 # Words behind the i of that card.
-settings-wallpaper-changing-about = Utilise toutes les images d'un dossier, l'une après l'autre, en changeant à l'heure choisie ici, au hasard ou par nom de fichier.
+settings-wallpaper-changing-about = Affiche toutes les images d'un dossier, l'une après l'autre, aussi souvent que vous le choisissez ici, au hasard ou par nom de fichier.
 
 # Words behind the i of the Pictures card when pictures change by themselves.
-settings-wallpaper-pictures-rotating = Seules les images allumées sont utilisées. Appuyez sur une image pour l'assombrir et elle est ignorée à partir de là ; appuyez de nouveau pour la remettre. Rien n'est jamais supprimé, vous pouvez donc changer d'avis. L'image à l'écran en ce moment est la grande image.
+settings-wallpaper-pictures-rotating = Trindle utilise toutes les images qui ne sont pas assombries. Appuyez sur une image pour l'ignorer, et appuyez de nouveau pour la remettre. Rien n'est supprimé. La grande image est celle qui est à l'écran en ce moment.
 
 # Words behind the i of the Pictures card when one picture is on.
-settings-wallpaper-pictures-one = Appuyez sur une image pour la mettre à l'écran. Rien n'est jamais supprimé.
+settings-wallpaper-pictures-one = Appuyez sur une image pour l'utiliser.
 
 # Title of the Pictures card.
 settings-wallpaper-pictures-title = Images
@@ -245,7 +221,3 @@ settings-wallpaper-no-pictures-name = Pas encore d'images
 
 # Heading of the line shown when there are no pictures to choose from.
 settings-wallpaper-no-pictures = Aucune image à choisir
-
-# Small words under that line.
-settings-wallpaper-no-pictures-about = Choisissez un dossier d'images ci-dessus.
-

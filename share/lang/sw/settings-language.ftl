@@ -4,7 +4,7 @@
 settings-language-heading = Lugha ya Trindle
 
 # Words under the heading of that card.
-settings-language-about = Chagua lugha ambayo programu za Trindle zimeandikwa. Kisichotafsiriwa bado huonekana kwa Kiingereza.
+settings-language-about = Chagua lugha ya programu za Trindle zenyewe. Kisichotafsiriwa bado huonekana kwa Kiingereza.
 
 # Title of the line with the list of languages.
 settings-language-pick = Lugha ya Trindle
@@ -12,17 +12,14 @@ settings-language-pick = Lugha ya Trindle
 # Tip of the list of languages, and its screen reader name.
 settings-language-pick-tip = Chagua lugha ya programu za Trindle
 
-# Words under the list of languages: when a new choice is taken up.
-settings-language-next-start = Hutumiwa na kila programu inapoanza tena.
+# Added to the language card's i: when a new choice is taken up.
+settings-language-next-start = Mipangilio inaitumia sasa, programu nyingine wakati zitakapoanza tena.
 
 # Entry in the list of languages: use the language the computer is set to.
-settings-language-auto = Fuata mfumo
+settings-language-auto = Lugha ya mfumo
 
 # Title of the group of bars showing how much of each language is translated.
 settings-language-how-complete = Kiasi kilichotafsiriwa
-
-# Words under that title.
-settings-language-how-complete-sub = Upau mzima unamaanisha kila neno limetafsiriwa.
 
 # Tip and screen reader name of a bar under a language: how many of the English words it has (done and all are counts).
 settings-language-share =

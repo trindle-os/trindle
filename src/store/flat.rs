@@ -56,11 +56,6 @@ impl FlatFile {
     }
 }
 
-pub fn is_flat(path: &Path) -> bool {
-    let name = path.file_name().map(|n| n.to_string_lossy().to_lowercase()).unwrap_or_default();
-    name.ends_with(".fmpack") || name.ends_with(".json")
-}
-
 pub(super) fn valid_id(id: &str) -> bool {
 
     let parts: Vec<&str> = id.split('.').collect();
@@ -252,11 +247,11 @@ impl Outcome {
 }
 
 fn run(args: &[&str]) -> Result<String, String> {
-    ended(Command::new(args[0]).args(&args[1..]))
+    ended(crate::common::run::parsed(&mut Command::new(args[0])).args(&args[1..]))
 }
 
 fn run_gently(args: &[&str]) -> Result<String, String> {
-    ended(crate::common::gentle::program(&mut Command::new(args[0])).args(&args[1..]))
+    ended(crate::common::run::parsed(crate::common::gentle::program(&mut Command::new(args[0]))).args(&args[1..]))
 }
 
 fn ended(program: &mut Command) -> Result<String, String> {
@@ -332,7 +327,7 @@ pub(super) fn install_argv(remote: &str, what: &[String]) -> Vec<String> {
 }
 
 fn installed(id: &str) -> bool {
-    Command::new("flatpak").args(["info", id]).stdout(Stdio::null()).stderr(Stdio::null())
+    crate::common::run::parsed(&mut Command::new("flatpak")).args(["info", id]).stdout(Stdio::null()).stderr(Stdio::null())
         .status().is_ok_and(|s| s.success())
 }
 
@@ -360,12 +355,12 @@ fn stays_inside(listing: &str, id: &str) -> bool {
     })
 }
 
-fn put_settings_back(file: &FlatFile, app: &FlatApp, s: &Settings, work: &Path) -> Result<(), String> {
+fn put_settings_back(file: &FlatFile, app: &FlatApp, s: &Settings, work: &Path) -> Result<bool, String> {
     settings_into(file, app, s, work, &home().join(".var/app"))?;
     if s.has_overrides {
-        overrides_back(&file.path, &format!("overrides/app/{}", app.id), &overrides_home().join(&app.id))?;
+        return overrides_back(&file.path, &format!("overrides/app/{}", app.id), &overrides_home().join(&app.id));
     }
-    Ok(())
+    Ok(false)
 }
 
 pub(super) fn settings_into(file: &FlatFile, app: &FlatApp, s: &Settings, work: &Path, var_app: &Path) -> Result<(), String> {
@@ -413,13 +408,46 @@ fn overrides_home() -> PathBuf {
     home().join(".local/share/flatpak/overrides")
 }
 
-fn overrides_back(pack: &Path, member: &str, to: &Path) -> Result<(), String> {
+fn narrowing(text: &str) -> (String, usize) {
+    let (mut out, mut left, mut section) = (String::new(), 0, String::new());
+    let mut head_written = false;
+    for line in text.lines().map(str::trim).filter(|l| !l.is_empty() && !l.starts_with('#')) {
+        if let Some(name) = line.strip_prefix('[').and_then(|l| l.strip_suffix(']')) {
+            section = name.to_string();
+            head_written = false;
+            continue;
+        }
+        let Some((key, value)) = line.split_once('=') else {
+            left += 1;
+            continue;
+        };
+        let (key, value) = (key.trim(), value.trim());
+        let bus = section == "Session Bus Policy" || section == "System Bus Policy";
+        let items: Vec<&str> = if bus { vec![value] } else { value.split(';').filter(|v| !v.is_empty()).collect() };
+        let takes_away = |v: &&str| if bus { *v == "none" } else { v.starts_with('!') };
+        let listed = bus || (section == "Context" && ["shared", "sockets", "devices", "features", "filesystems"].contains(&key));
+        let kept: Vec<&str> = if listed { items.iter().copied().filter(takes_away).collect() } else { Vec::new() };
+        left += items.len() - kept.len();
+        if kept.is_empty() || key.contains(['[', ']']) {
+            continue;
+        }
+        if !head_written {
+            out.push_str(&format!("[{section}]\n"));
+            head_written = true;
+        }
+        out.push_str(&if bus { format!("{key}=none\n") } else { format!("{key}={};\n", kept.join(";")) });
+    }
+    (out, left)
+}
+
+fn overrides_back(pack: &Path, member: &str, to: &Path) -> Result<bool, String> {
     let text = put_back::read_out(pack, None, member, LIST_MOST)?;
-    let text = String::from_utf8_lossy(&text);
+    let (text, left) = narrowing(&String::from_utf8_lossy(&text));
     if let Some(dir) = to.parent() {
         std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
     }
-    crate::common::files::write_text(to, &text).map_err(|e| e.to_string())
+    crate::common::files::write_text(to, &text).map_err(|e| e.to_string())?;
+    Ok(left > 0)
 }
 
 pub fn restore(file: &FlatFile, ticked: bool, say: impl Fn(String, Option<(usize, usize)>)) -> Outcome {
@@ -431,8 +459,10 @@ pub fn restore(file: &FlatFile, ticked: bool, say: impl Fn(String, Option<(usize
     };
 
     if file.global_override {
-        if let Err(e) = overrides_back(&file.path, "overrides/global", &overrides_home().join("global")) {
-            out.fail(t!("store-flat-every-app"), &e);
+        match overrides_back(&file.path, "overrides/global", &overrides_home().join("global")) {
+            Ok(true) => out.failed.push(t!("store-flat-grants-left-out", what = t!("store-flat-every-app"))),
+            Ok(false) => {}
+            Err(e) => out.fail(t!("store-flat-every-app"), &e),
         }
     }
 
@@ -466,16 +496,17 @@ pub fn restore(file: &FlatFile, ticked: bool, say: impl Fn(String, Option<(usize
         }
         say(t!("store-flat-step-settings", name = &app.name, at = at, total = total), Some((at, total)));
         match put_settings_back(file, app, s, &work) {
-            Ok(()) => out.settings += 1,
+            Ok(left) => {
+                out.settings += 1;
+                if left {
+                    out.failed.push(t!("store-flat-grants-left-out", what = t!("store-flat-app-settings", name = &app.name)));
+                }
+            }
             Err(e) => out.fail(&t!("store-flat-app-settings", name = &app.name), &e),
         }
     }
     let _ = std::fs::remove_dir_all(&work);
     out
-}
-
-pub fn name() -> &'static str {
-    t!("store-flat-name")
 }
 
 pub fn summary(out: &Outcome) -> String {
@@ -551,7 +582,7 @@ mod tests {
         assert!(Command::new(&tar).arg("-cf").arg(&pack).arg("-C").arg(top.join("stage")).arg("overrides").status().unwrap().success());
 
         let to = top.join("home/overrides/global");
-        assert_eq!(overrides_back(&pack, "overrides/global", &to), Ok(()));
+        assert_eq!(overrides_back(&pack, "overrides/global", &to), Ok(false));
         assert_eq!(std::fs::read_to_string(&to).unwrap(), "[Context]\nfilesystems=!home;\n");
 
         assert!(overrides_back(&pack, "overrides/app/org.example.One", &top.join("home/overrides/org.example.One")).is_err());
@@ -559,11 +590,24 @@ mod tests {
 
         std::fs::write(top.join("blocked"), "").unwrap();
         assert!(overrides_back(&pack, "overrides/global", &top.join("blocked/overrides/global")).is_err());
-
-        let code = crate::common::source::code(include_str!("flat.rs")).split_once("#[cfg(test)]").unwrap().0;
-        let restore = code.split_once("pub fn restore(").unwrap().1.split_once("\n}\n").unwrap().0;
-        assert!(restore.contains("if let Err(e) = overrides_back(") && restore.contains("out.failed.push("));
         let _ = std::fs::remove_dir_all(&top);
+    }
+
+    #[test]
+    fn what_flatpak_is_asked_is_asked_in_the_c_locale() {
+        assert_eq!(run(&["sh", "-c", "echo $LC_ALL"]).unwrap().trim(), "C");
+        assert_eq!(run_gently(&["sh", "-c", "echo $LC_ALL"]).unwrap().trim(), "C");
+    }
+
+    #[test]
+    fn a_backups_permissions_are_put_back_only_where_they_take_access_away() {
+        let evil = "[Context]\nfilesystems=host;!home;~/.secret:rw;\ndevices=all;\nsockets=!x11;\n\
+                    [Environment]\nLD_PRELOAD=/tmp/x.so\n[Session Bus Policy]\norg.a.B=talk\norg.c.D=none\n[Other]\nx=y\n";
+        let (text, left) = narrowing(evil);
+        assert_eq!(text, "[Context]\nfilesystems=!home;\nsockets=!x11;\n[Session Bus Policy]\norg.c.D=none\n");
+        assert_eq!(left, 6);
+        assert!(!text.contains("LD_PRELOAD") && !text.contains("host") && !text.contains("devices"));
+        assert_eq!(narrowing("[Context]\nfilesystems=!home;\n"), ("[Context]\nfilesystems=!home;\n".to_string(), 0));
     }
 
     #[test]
@@ -640,9 +684,9 @@ mod tests {
         let _ = std::fs::remove_dir_all(&dir);
         assert_eq!(read.apps.iter().map(|a| a.id.as_str()).collect::<Vec<_>>(), ["com.brave.Browser"], "no app falls back to Flathub");
 
-        let two = ["2 apps skip", "ped: their names were not valid."].concat();
+        let two = ["Trindle skip", "ped 2 apps, because their names weren't valid."].concat();
         assert_eq!(read.left_out, [two.as_str(), "Notes (because the name of its source is not valid)"]);
-        assert_eq!(names_not_valid(1), ["1 app skip", "ped: its name was not valid."].concat());
+        assert_eq!(names_not_valid(1), ["Trindle skip", "ped 1 app, because its name wasn't valid."].concat());
 
         let source = crate::common::source::code(include_str!("flat.rs"));
         let restore = source.split_once("pub fn restore(").unwrap().1.split_once("\n}\n").unwrap().0;
@@ -651,10 +695,15 @@ mod tests {
 
     #[test]
     fn a_restore_summary_is_whole_sentences() {
-        let two = ["2 apps skip", "ped: their names were not valid."].concat();
+        let two = ["Trindle skip", "ped 2 apps, because their names weren't valid."].concat();
         let out = Outcome { installed: 3, settings: 2, already: 1, failed: vec![two.clone()], behind: Vec::new() };
         let said = super::summary(&out);
-        assert_eq!(said, format!("Installed 3 apps. Settings put back for 2. 1 already here, left as it was. Not put back: {two}"));
+        let parts = [
+            t!("store-flat-summary-installed", n = 3), t!("store-flat-summary-settings", n = 2),
+            t!("store-flat-summary-already", n = 1), t!("store-flat-summary-failed", list = two.as_str()),
+        ];
+        assert_eq!(said, parts.join(" "), "each fact once, in order, as its own sentence");
+        assert!(parts.iter().all(|p| p.ends_with('.')) && ["3", "2", "1"].iter().all(|n| said.contains(n)));
         assert!(!said.contains("; "));
     }
 
@@ -669,9 +718,9 @@ mod tests {
         }
 
         assert_eq!(address_for("home", Some("http://192.168.1.4/repo"), &system, false).as_deref(), Ok("http://192.168.1.4/repo"));
-        assert_eq!(not_secure("example"), "the example remote is not encrypted and was not accepted, so it was not used");
+        assert_eq!(not_secure("example"), "the example source isn't encrypted, so Trindle didn't use it");
 
-        assert!(address_for("nowhere", None, &system, false).unwrap_err().contains("does not say where it is"));
-        assert!(address_for("odd", Some("ftp://example.com/repo"), &system, false).unwrap_err().contains("does not say where it is"));
+        assert!(address_for("nowhere", None, &system, false).unwrap_err().contains("doesn't say where it is"));
+        assert!(address_for("odd", Some("ftp://example.com/repo"), &system, false).unwrap_err().contains("doesn't say where it is"));
     }
 }

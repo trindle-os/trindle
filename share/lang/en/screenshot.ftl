@@ -5,7 +5,7 @@
 # Name of the screenshot overlay that covers the screen (what a screen reader calls it).
 screenshot-name = Screenshot
 # Note on the overlay before any part is chosen.
-screenshot-drag = Drag across the part to keep
+screenshot-drag = Drag over the part to keep
 # Name of the round button that keeps the whole screen.
 screenshot-whole = Whole screen
 # Name of the round button that closes the overlay or a pinned picture.
@@ -39,7 +39,7 @@ screenshot-tool-circle = Circle
 # Name of the drawing tool that highlights.
 screenshot-tool-highlighter = Highlighter
 # Name of the drawing tool that writes words.
-screenshot-tool-words = Words
+screenshot-tool-words = Text
 # Name of the drawing tool that puts numbered spots.
 screenshot-tool-numbers = Numbers
 # Name of the drawing tool that blurs a patch.
@@ -73,15 +73,15 @@ screenshot-not-saved = Screenshot not saved
 # Title of the notice that says the screenshot could not be copied.
 screenshot-not-copied = Screenshot not copied
 # Words of that notice.
-screenshot-clipboard-refused = The clipboard could not take it.
+screenshot-clipboard-refused = Trindle couldn't copy it.
 # Words of the notice that the screenshot could not be saved: the picture was not made.
-screenshot-no-picture = the picture could not be made
+screenshot-no-picture = Couldn't take the screenshot.
 # Words of the notice that the screenshot could not be saved: no bus to ask on.
-screenshot-no-bus = there is no session bus to ask where
+screenshot-no-bus = Trindle can't ask where to save.
 # Words of the notice that the screenshot could not be saved: the file chooser could not be asked.
-screenshot-no-chooser = the file chooser could not be asked
+screenshot-no-chooser = Couldn't open the file chooser.
 # Words of the notice that the screenshot could not be saved: every file name was taken.
-screenshot-no-free-name = no free name
+screenshot-no-free-name = No free name
 # Words of the notice that the screenshot could not be saved: the path and why it failed.
 screenshot-write-failed = { $path }: { $why }
 
@@ -90,29 +90,29 @@ screenshot-write-failed = { $path }: { $why }
 # Name of the eye dropper's window, and its title.
 screenshot-eye-title = Eye dropper
 # Words that float beside the i of the eye dropper's window.
-screenshot-eye-help = Press the eye dropper, then click anywhere on the screen to take the colour under the pointer. Escape gives up. Each colour is copied as a hex code straight away and kept in the list below, newest first, so it can be copied again later.
+screenshot-eye-help = Press the eye dropper, then click anywhere on the screen to pick up the colour under the pointer. Press Escape to cancel. Each colour is copied as a hex code straight away and added to the list below, newest first, so you can copy it again later.
 # Name of the i button beside the title.
 screenshot-eye-about = About the eye dropper
 # Name of the main button that takes a colour.
-screenshot-eye-take = Take a colour
+screenshot-eye-take = Pick a colour
 # Sentence under the title while no colour has been taken.
-screenshot-eye-none = Take a colour from anywhere on the screen.
+screenshot-eye-none = Pick a colour from the screen.
 # Sentence under the title once colours have been taken.
 screenshot-eye-taken =
     { $n ->
-        [one] One colour taken: { $newest }.
-       *[other] { $n } colours taken; the newest is { $newest }.
+        [one] One colour picked: { $newest }.
+       *[other] { $n } colours picked. The newest is { $newest }.
     }
 # Shown in the big card while no colour has been taken.
-screenshot-eye-latest-empty = The colour you take shows here, large, ready to copy.
+screenshot-eye-latest-empty = No colour picked yet.
 # Name of the card that holds the latest colour.
 screenshot-eye-latest = Latest colour
 # Name of the round button that clears the list of colours.
 screenshot-eye-clear = Clear the list
 # Head of the card with the list of colours taken.
-screenshot-eye-list = Colours taken
+screenshot-eye-list = Your colours
 # Shown in the list card while no colour has been taken.
-screenshot-eye-list-empty = Colours taken with the eye dropper are kept here, newest first.
+screenshot-eye-list-empty = No colours picked yet.
 # Name of the round button that takes a colour out of the list.
 screenshot-eye-remove = Remove
 # What the saved list of colours is called when it is found damaged and set aside.
@@ -123,9 +123,9 @@ screenshot-eye-damaged = Eye dropper colours
 # Title of the window that asks what an app may share.
 screenshot-pick-title = Share your screen with { $app }?
 # Sentence under the title when several things can be picked.
-screenshot-pick-many = Pick one or more. Only what you pick is shared, until the app stops or closes.
+screenshot-pick-many = Choose one or more. Only what you choose is shared, until the app stops sharing or closes.
 # Sentence under the title when one thing can be picked.
-screenshot-pick-one = Pick one. Only what you pick is shared, until the app stops or closes.
+screenshot-pick-one = Choose one. Only what you choose is shared, until the app stops sharing or closes.
 # Heading over the screens that can be shared.
 screenshot-pick-screens = Screens
 # Heading over the windows that can be shared.
@@ -135,7 +135,7 @@ screenshot-pick-nothing = There is nothing to share.
 # Name of the choice that shares every screen at once.
 screenshot-pick-desktop = The whole desktop
 # Words under that choice.
-screenshot-pick-desktop-detail = Every screen, as they sit
+screenshot-pick-desktop-detail = All screens, as arranged
 # Words under a screen's choice: its size in pixels.
 screenshot-pick-size = { $width } by { $height }
 # What the screen reader says for a choice that is picked.
@@ -160,17 +160,17 @@ screenshot-portal-save = Save
 # Name of the box where a name is typed.
 screenshot-portal-name = Name
 # Heading when an unknown program asks who the person is.
-screenshot-account-asks-unknown = A program asks who you are
+screenshot-account-asks-unknown = A program wants your info
 # Heading when a program asks who the person is.
-screenshot-account-asks = { $who } asks who you are
+screenshot-account-asks = { $who } wants your info
 # Name the screen reader gives to the person's picture.
 screenshot-account-picture = Your picture
 # Words under the person's name.
-screenshot-account-signed-in = Signed in as { $id }
+screenshot-account-signed-in = Logged in as { $id }
 # Name of the search box in the window that asks which app should open a file.
 screenshot-apps-search = Search apps
 # Shown when no app can open the file.
-screenshot-apps-none = No app here can open it
+screenshot-apps-none = No app can open it
 # Name of the switch that remembers the choice.
 screenshot-apps-always = Always use this app for this kind of file
 # Title of the window that asks which app should open a file.
@@ -206,7 +206,7 @@ screenshot-launcher-add = Add
 # Heading when a program that cannot be named offers a wallpaper.
 screenshot-wallpaper-ask = Set this picture as your wallpaper?
 # Heading when a program offers a wallpaper.
-screenshot-wallpaper-asks = { $who } offers a new wallpaper
+screenshot-wallpaper-asks = { $who } wants to set wallpaper
 # Name the screen reader gives to the picture offered.
 screenshot-wallpaper-picture = The new wallpaper
 # Name of the main button that sets the wallpaper.
@@ -215,11 +215,11 @@ screenshot-wallpaper-set = Set as wallpaper
 ## Printing (src/screenshot/portal_print.rs)
 
 # Red line under the printer box when no printer is set up.
-screenshot-print-no-printer = No printer set up. Add one in Settings, Printers.
+screenshot-print-no-printer = No printer is set up. Add one in Settings, under Printers.
 # Red line under the printer box when the printing system does not answer.
-screenshot-print-not-answering = Printing is not answering.
+screenshot-print-not-answering = Printing isn't responding.
 # Red line under the printer box when printing is not installed.
-screenshot-print-not-installed = Printing is not installed on this computer.
+screenshot-print-not-installed = Printing isn't installed on this computer.
 # Red line under the printer box when the chosen printer is paused.
 screenshot-print-paused = { $name } is paused.
 # Label and name of the box where the printer is chosen.
@@ -249,9 +249,9 @@ screenshot-print-doc = Print { $doc }
 # Title of the print window when the program has no document name.
 screenshot-print-from = Print from { $who }
 # Title of the notice that says a print did not go.
-screenshot-print-failed = Could not print
+screenshot-print-failed = Couldn't print
 # Words of that notice when the choices made were not kept.
-screenshot-print-lost = Its choices were not kept. Print again.
+screenshot-print-lost = Couldn't save settings. Print again.
 
 ## The file chooser (src/screenshot/file_chooser.rs)
 
@@ -276,13 +276,17 @@ screenshot-chooser-pin = Pin to the sidebar
 # Line in the menu on a folder pinned already.
 screenshot-chooser-unpin = Unpin
 # Red line after a pin could not be kept.
-screenshot-chooser-pin-not-kept = The pin could not be saved.
+screenshot-chooser-pin-not-kept = Couldn't save the pin.
 # Red line after some items could not be deleted.
 screenshot-chooser-not-deleted =
     { $n ->
-        [one] One item could not be deleted: { $names }.
-       *[other] { $n } items could not be deleted: { $names }.
+        [one] Trindle couldn't delete one item: { $names }.
+       *[other] Trindle couldn't delete { $n } items: { $names }.
     }
+# What the screen reader says for the list of places down the left of the file chooser.
+screenshot-chooser-places = Places
+# What the screen reader says for the list of files and folders in the file chooser.
+screenshot-chooser-files = Files
 # Name of the first place in the side bar, and of the only part of the path when Recent is shown.
 screenshot-chooser-recent = Recent
 # Name of the person's home folder in the side bar.
@@ -292,21 +296,21 @@ screenshot-chooser-folder = Folder
 # Shown when a folder has nothing in it.
 screenshot-chooser-empty = Nothing here
 # Name of the choice of which kind of file is shown.
-screenshot-chooser-kind = Kind of file
+screenshot-chooser-kind = File type
 # Said where a place on another computer is not answering.
-screenshot-chooser-not-answering = The other computer is not answering.
+screenshot-chooser-not-answering = The other computer isn't responding.
 # What the saved list of last folders is called when it is found damaged and set aside.
 screenshot-chooser-damaged = Chooser folders
 # Words under the box when the folder a name points into is not there.
-screenshot-chooser-no-folder = That folder is not there.
+screenshot-chooser-no-folder = That folder isn't there.
 # Words under the box when saving would replace a file.
-screenshot-chooser-replace-ask = { $name } is already there. Press Replace, or Enter again, to put this in its place.
+screenshot-chooser-replace-ask = { $name } already exists. To replace it, press Replace or press Enter again.
 # Words under the box when a key is pressed on Recent, which is not a folder.
-screenshot-chooser-recent-not-folder = Recent is not a folder. Open one first.
+screenshot-chooser-recent-not-folder = Recent isn't a folder. Open one first.
 # Words under the box when a key is pressed with nothing picked.
-screenshot-chooser-nothing-picked = Nothing is picked.
+screenshot-chooser-nothing-picked = Nothing is chosen.
 # Words under the box while a file by that name is already there.
-screenshot-chooser-there = { $name } is already there.
+screenshot-chooser-there = { $name } already exists.
 # Name of the round button that hides the hidden files.
 screenshot-chooser-hide-hidden = Hide hidden files
 # Name of the round button that shows the hidden files.
@@ -314,9 +318,9 @@ screenshot-chooser-show-hidden = Show hidden files
 # Words of the main button when the program gave none, to choose a folder.
 screenshot-chooser-choose-folder = Choose folder
 # Head of the question when a folder of that name is already there.
-screenshot-chooser-clash-folder = A folder called { $name } is already there
+screenshot-chooser-clash-folder = A folder called { $name } already exists
 # Head of the question when a file of that name is already there.
-screenshot-chooser-clash-file = { $name } is already there
+screenshot-chooser-clash-file = { $name } already exists
 # Name of the round button that leaves a pasted thing out.
 screenshot-chooser-skip = Skip
 # Name of the round button that keeps both under different names.
@@ -324,40 +328,40 @@ screenshot-chooser-both = Keep both
 # Word on the button that replaces what is there.
 screenshot-chooser-replace = Replace
 # What the screen reader says for the button that replaces a folder.
-screenshot-chooser-replace-spoken = Replace: the folder already there goes to the Trash
+screenshot-chooser-replace-spoken = Replace. The existing folder is moved to the Trash.
 # Name of the main button that merges two folders.
 screenshot-chooser-merge = Merge
 # Words in the question when folders are being pasted.
-screenshot-chooser-rest-folders = The same answer for every folder already there.
+screenshot-chooser-rest-folders = Do this for every existing folder.
 # Words in the question when files are being pasted.
-screenshot-chooser-rest-files = The same answer for every file already there.
+screenshot-chooser-rest-files = Do this for every existing file.
 # Name of the switch that gives the same answer to the rest.
 screenshot-chooser-same = Do the same for the rest
 # Words under the box after Cut.
-screenshot-chooser-was-cut = Cut { $what }. Paste it into a folder.
+screenshot-chooser-was-cut = Ready to move: { $what }
 # Words under the box after Copy.
-screenshot-chooser-was-copied = Copied { $what }. Paste it into a folder.
+screenshot-chooser-was-copied = Ready to copy: { $what }
 # Words under the box when Paste is pressed and there is nothing to paste.
-screenshot-chooser-nothing-cut = Nothing has been cut or copied.
+screenshot-chooser-nothing-cut = Nothing is cut or copied.
 # Words under the box when Paste is pressed while a paste is still going.
-screenshot-chooser-paste-busy = A paste is still under way.
+screenshot-chooser-paste-busy = Trindle is still pasting.
 # Red line after some items could not be moved.
 screenshot-chooser-not-moved =
     { $n ->
-        [one] One item could not be moved: { $names }.
-       *[other] { $n } items could not be moved: { $names }.
+        [one] Trindle couldn't move one item: { $names }.
+       *[other] Trindle couldn't move { $n } items: { $names }.
     }
 # Red line after some items could not be copied.
 screenshot-chooser-not-copied =
     { $n ->
-        [one] One item could not be copied: { $names }.
-       *[other] { $n } items could not be copied: { $names }.
+        [one] Trindle couldn't copy one item: { $names }.
+       *[other] Trindle couldn't copy { $n } items: { $names }.
     }
 # Red line after some items could not be put in the Trash.
 screenshot-chooser-not-trashed =
     { $n ->
-        [one] One item could not be put in the Trash: { $names }.
-       *[other] { $n } items could not be put in the Trash: { $names }.
+        [one] Trindle couldn't move one item to the Trash: { $names }.
+       *[other] Trindle couldn't move { $n } items to the Trash: { $names }.
     }
 # Name of the box where a file or folder is renamed.
 screenshot-chooser-new-name = New name for { $old }
@@ -371,22 +375,22 @@ screenshot-chooser-items =
 ## Email (src/screenshot/portal_email.rs)
 
 # Title of the notice when an email could not be started.
-screenshot-mail-failed = Could not start the email
+screenshot-mail-failed = Couldn't create the email
 # Why: no mail program is chosen or installed.
-screenshot-mail-no-app = No mail program is set. Choose one in Settings, Default apps.
+screenshot-mail-no-app = You haven't chosen a mail program. Choose one in Settings, Default apps.
 # Why: a program asked to attach more files than allowed.
 screenshot-mail-too-many = Too many files to attach.
 # Why: a file, or all the files together, are too big.
 screenshot-mail-too-big = The files are too big to attach.
 # Why: a file could not be read as a plain file.
-screenshot-mail-bad-file = A file could not be attached.
+screenshot-mail-bad-file = Couldn't attach a file.
 # Why: an address was not a plain address.
-screenshot-mail-bad-address = An address was not valid.
+screenshot-mail-bad-address = An address isn't valid.
 # Why: the subject was too long or had odd characters.
-screenshot-mail-bad-subject = The subject was not valid.
+screenshot-mail-bad-subject = The subject isn't valid.
 # Why: the words were too long or had odd characters.
-screenshot-mail-bad-words = The words were not valid.
+screenshot-mail-bad-words = The text isn't valid.
 # Why: no private place to keep the files.
-screenshot-mail-no-place = The files could not be kept safely.
+screenshot-mail-no-place = Couldn't store the files safely.
 # Why: the mail program did not start.
-screenshot-mail-not-started = The mail program did not start.
+screenshot-mail-not-started = The mail program didn't start.

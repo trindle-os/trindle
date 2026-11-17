@@ -360,7 +360,8 @@ impl Keyring {
 
     fn change<T>(&self, work: impl FnOnce(&mut Store) -> Result<T, Error>) -> Result<T, Fault> {
         let mut guard = self.store.borrow_mut();
-        let s = guard.as_mut().ok_or_else(|| fault(IS_LOCKED, "The keyring is locked"))?;
+
+        let s = guard.as_mut().filter(|s| !s.is_locked()).ok_or_else(|| fault(IS_LOCKED, "The keyring is locked"))?;
         let out = work(s)?;
         s.save()?;
         Ok(out)
@@ -607,6 +608,21 @@ mod tests {
     }
 
     #[test]
+    fn a_change_asked_of_a_locked_keyring_alters_nothing() {
+        let (_d, dir, _lp, keyring) = a_locked_keyring("locked-change");
+        let before = keyring.store.borrow().as_ref().unwrap().index.aliases.clone();
+        let asked = keyring.change(|s| {
+            s.index.aliases.remove("default");
+            s.index.aliases.insert("evil".into(), "/org/freedesktop/secrets/collection/login".into());
+            Ok(())
+        });
+        assert!(asked.is_err());
+        assert_eq!(keyring.store.borrow().as_ref().unwrap().index.aliases, before);
+        drop(keyring);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
     fn a_keyring_taken_over_after_an_update_never_says_no_password_was_typed() {
         let (_d, dir, _lp, keyring) = a_locked_keyring("taken-why");
         keyring.key_left.set(false);
@@ -675,7 +691,6 @@ mod tests {
     }
 
     fn unlocks_with_the_master_password(c: &Client, s: &OwnedObjectPath, login: &str) {
-
         assert!(c.locked(login));
         assert!(c.call(ROOT, GNOME, "UnlockWithMasterPassword", &(op(login), secret(s, b"no"))).is_err());
         c.call(ROOT, GNOME, "UnlockWithMasterPassword", &(op(login), secret(s, b"test"))).unwrap();
@@ -713,7 +728,6 @@ mod tests {
     }
 
     fn a_locked_collection_keeps_its_items(c: &Client, s: &OwnedObjectPath, login: &str, item: &OwnedObjectPath) {
-
         c.call(ROOT, SERVICE, "Lock", &(vec![op(login)],)).unwrap();
         let (open, shut): (Vec<OwnedObjectPath>, Vec<OwnedObjectPath>) = c.call(ROOT, SERVICE, "SearchItems",
             &(HashMap::from([("service", "demo")]),)).unwrap().body().deserialize().unwrap();

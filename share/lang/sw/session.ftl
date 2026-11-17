@@ -24,15 +24,15 @@ session-lock-use-pin = Tumia PIN
 session-lock-use-phone = Tumia simu
 
 # Shown while the typed password or PIN is being checked.
-session-lock-checking = Inakagua...
+session-lock-checking = Inakagua…
 
 # Shown when the PIN has run out of time and the password is asked for instead.
 # SAFETY: needs a human review before it ships
-session-lock-pin-timed-out = Muda wa PIN umeisha; andika nenosiri lako.
+session-lock-pin-timed-out = Muda wa PIN umeisha. Andika nenosiri lako.
 
 # Shown after too many wrong PINs, and the password is asked for instead.
 # SAFETY: needs a human review before it ships
-session-lock-too-many-pins = PIN nyingi mno zisizo sahihi; andika nenosiri lako.
+session-lock-too-many-pins = PIN nyingi mno zisizo sahihi. Tumia nenosiri lako.
 
 # Shown after a wrong PIN, with how many tries are left (1 is one try left).
 # SAFETY: needs a human review before it ships
@@ -43,15 +43,15 @@ session-lock-wrong-pin =
     }
 
 # Shown while the phone is asked to unlock the screen.
-session-lock-asking-phone = Inauliza simu yako...
+session-lock-asking-phone = Inauliza simu yako…
 
 # Shown when the phone did not unlock the screen and the PIN may be typed.
 # SAFETY: needs a human review before it ships
-session-lock-phone-no-pin = Simu yako haikufungua. Tumia PIN yako.
+session-lock-phone-no-pin = Trindle haikuweza kufungua kwa simu yako. Tumia PIN yako.
 
 # Shown when the phone did not unlock the screen and the password must be typed.
 # SAFETY: needs a human review before it ships
-session-lock-phone-no-password = Simu yako haikufungua. Andika nenosiri lako.
+session-lock-phone-no-password = Trindle haikuweza kufungua kwa simu yako. Andika nenosiri lako.
 
 # Shown when the password typed is not the person's password.
 # SAFETY: needs a human review before it ships
@@ -73,7 +73,7 @@ session-wallpaper-larger-4k = kubwa kuliko 4K
 session-wallpaper-larger-screen = kubwa kuliko skrini yako
 
 # A reason a wallpaper was left out: its file is over 20 MB, or over 200 MB if it moves.
-session-wallpaper-over-20-or-200 = zaidi ya MB 20 (MB 200 ikisogea)
+session-wallpaper-over-20-or-200 = zaidi ya MB 20 (MB 200 ikiwa ni ya mwendo)
 
 # A reason a wallpaper was left out: its file is over 20 MB.
 session-wallpaper-over-20 = zaidi ya MB 20
@@ -85,7 +85,11 @@ session-wallpaper-over-200 = zaidi ya MB 200
 session-wallpaper-reasons-or = { $first } au { $second }
 
 # The line that says how many wallpapers were left out and why; the count and the reasons come in.
-session-wallpaper-left-out = { $count } zimeachwa: { $why }.
+session-wallpaper-left-out =
+    { $count ->
+        [one] Trindle iliacha picha { $count } kwa sababu ni { $why }.
+       *[other] Trindle iliacha picha { $count } kwa sababu ni { $why }.
+    }
 
 # Under the lock screen when a phone or password check was given up on.
 session-lock-check-abandoned = Hilo lilichukua muda mrefu sana. Jaribu tena.
@@ -96,7 +100,7 @@ session-lock-check-abandoned = Hilo lilichukua muda mrefu sana. Jaribu tena.
 session-restart-question = Kuanzisha upya eneo-kazi lote?
 
 # Under the heading: what restarting everything does to the open windows.
-session-restart-windows = Kila dirisha lililo wazi litafungwa, na kilichokuwa ndani yake kisichohifadhiwa kitapotea.
+session-restart-windows = Kila dirisha lililo wazi litafungwa. Chochote ambacho hujahifadhi kitapotea.
 
 # Tip of the round button that leaves everything as it is.
 session-restart-cancel = Ghairi
@@ -104,3 +108,12 @@ session-restart-cancel = Ghairi
 # Main button that restarts the whole desktop.
 session-restart-go = Anzisha upya
 
+# Under the lock screen when Enter is pressed while the last try, given up on, is still being checked.
+session-lock-still-checking = Bado inakagua jaribio lako la mwisho. Jaribu tena baada ya muda mfupi.
+
+# Under the lock screen after several wrong tries, with how many seconds to wait (1 is one second).
+session-lock-wait =
+    { $n ->
+        [one] Majaribio mengi mno yasiyo sahihi. Jaribu tena baada ya sekunde { $n }.
+       *[other] Majaribio mengi mno yasiyo sahihi. Jaribu tena baada ya sekunde { $n }.
+    }

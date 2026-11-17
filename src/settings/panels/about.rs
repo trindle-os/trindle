@@ -1,11 +1,11 @@
-//! About: hostname (changed via trindle-admin) and hardware facts.
+//! About: the computer's name (changed through trindle-admin), its hardware, the update switches, start-up times and problem reports.
 
 use std::path::PathBuf;
 
 use crate::common::{boot, security_updates, update_checks};
 use crate::common::files::{config_home, home, read_text as read};
-use crate::common::run::{self, capture};
-use crate::settings::ui::{asked, group, headline, line, not_saved, on, opens, page, Kit, Msg, Page, SAVE_ICON};
+use crate::common::run;
+use crate::settings::ui::{admin_run, group, headline, line, not_saved, on, opens, page, Kit, Msg, Page, SAVE_ICON};
 use crate::toolkit::t;
 use crate::toolkit::theme::Palette;
 use crate::toolkit::tiles::bars;
@@ -110,8 +110,43 @@ struct Room {
     words: String,
 }
 
+struct Facts {
+    model: String,
+    processor: String,
+    graphics: String,
+    screens: String,
+    debian: String,
+    kernel: String,
+    apps: usize,
+    starts: Vec<boot::Start>,
+}
+
+impl Default for Facts {
+    fn default() -> Self {
+        let waiting = || "\u{2026}".to_string();
+        Facts { model: waiting(), processor: waiting(), graphics: waiting(), screens: waiting(), debian: waiting(), kernel: waiting(),
+                apps: 0, starts: Vec::new() }
+    }
+}
+
+#[cfg(test)]
+thread_local! {
+
+    static READ_HERE: std::cell::Cell<u32> = const { std::cell::Cell::new(0) };
+}
+
+impl Facts {
+    fn read() -> Facts {
+        #[cfg(test)]
+        READ_HERE.with(|n| n.set(n.get() + 1));
+        Facts { model: model(), processor: processor(), graphics: graphics(), screens: screens(), debian: debian(), kernel: kernel(),
+                apps: crate::common::apps::entries().len(), starts: boot::history() }
+    }
+}
+
 #[derive(Default)]
 pub struct About {
+    facts: Facts,
     said: String,
     memory: Option<Room>,
     disk: Option<Room>,
@@ -123,6 +158,7 @@ pub struct About {
     updates_by_itself: bool,
 
     security: bool,
+    pub(super) reports: super::report_card::Reports,
 }
 
 impl About {
@@ -137,6 +173,7 @@ impl About {
         self.on = switched_on_for();
         self.updates_by_itself = update_checks::on();
         self.security = security_updates::switch_on();
+        self.reports = super::report_card::Reports::read();
         let version = crate::store::updates::shown(env!("CARGO_PKG_VERSION"));
         self.said = if self.disk.as_ref().is_some_and(|d| d.share >= 0.95) {
             t!("settings-about-said-full", version = version, on = &self.on)
@@ -160,14 +197,13 @@ impl About {
             return;
         }
         kit.say("name", t!("settings-about-name-waiting"), true, true);
-        let helper = run::admin_helper();
         let back = kit.settles::<About, (), String>("name", t!("settings-about-name-failed"), |_, k, done| {
 
             if done.is_some() {
                 k.say("name", t!("settings-about-name-done"), true, false);
             }
         });
-        capture(&["pkexec", &helper, "hostname", &name], None, move |ok, _, err| back(asked(ok, &err)));
+        admin_run(&["hostname", &name], back);
     }
 
     fn name_card(&self, kit: &Kit) -> Node<Msg> {
@@ -175,8 +211,7 @@ impl About {
             on::<About>(move |me, _| me.name = text.chars().take(63).collect())
         }).on_submit(on::<About>(|me, k| me.rename(k))).width(Length::Fixed(200.0));
         let rename = button(SAVE_ICON, t!("settings-about-rename")).on_press(on::<About>(|me, k| me.rename(k)));
-        let name = line(t!("settings-about-name")).sub(t!("settings-about-name-sub"))
-            .key("name").controls(vec![typed, rename]).node(kit);
+        let name = line(t!("settings-about-name")).key("name").controls(vec![typed, rename]).node(kit);
         group(t!("settings-about-name-group")).icon("network-workgroup-symbolic")
             .about(t!("settings-about-name-about"))
             .rows(vec![name])
@@ -187,10 +222,10 @@ impl About {
         group(t!("settings-about-hardware")).icon("computer-symbolic")
             .about(t!("settings-about-hardware-about"))
             .rows(vec![
-                line(model()).sub(t!("settings-about-hw-computer")).node(kit),
-                line(processor()).sub(t!("settings-about-hw-processor")).node(kit),
-                line(graphics()).sub(t!("settings-about-hw-graphics")).node(kit),
-                line(screens()).sub(t!("settings-about-hw-screen")).node(kit),
+                line(self.facts.model.clone()).node(kit),
+                line(self.facts.processor.clone()).node(kit),
+                line(self.facts.graphics.clone()).node(kit),
+                line(self.facts.screens.clone()).node(kit),
             ])
             .node(kit)
     }
@@ -199,10 +234,10 @@ impl About {
         group(t!("settings-about-software")).icon("applications-system-symbolic")
             .about(t!("settings-about-software-about"))
             .rows(vec![
-                line(debian()).sub(t!("settings-about-sw-debian")).node(kit),
-                line(kernel()).sub(t!("settings-about-sw-kernel")).node(kit),
-                line(t!("settings-about-sw-compositor")).sub(t!("settings-about-sw-compositor-sub")).node(kit),
-                line(t!("settings-about-sw-apps", n = crate::common::apps::entries().len())).sub(t!("settings-about-sw-apps-sub")).node(kit),
+                line(self.facts.debian.clone()).node(kit),
+                line(self.facts.kernel.clone()).node(kit),
+                line(t!("settings-about-sw-compositor")).node(kit),
+                line(t!("settings-about-sw-apps", n = self.facts.apps)).node(kit),
             ])
             .node(kit)
     }
@@ -220,36 +255,33 @@ impl About {
     fn set_switch(kit: &mut Kit, key: &'static str, command: &'static str, keep: fn(bool) -> std::io::Result<()>, now: bool,
                   put: fn(&mut About, bool)) {
         kit.say(key, t!("settings-about-updates-waiting"), true, true);
-        let back = kit.then::<About, (bool, String)>(move |me, k, (ok, err)| {
-            if ok && k.settle(key, keep(now), not_saved()).is_some() {
-                return;
-            }
-            if !ok {
-                k.say(key, &crate::common::run::admin_error(&err), false, false);
-            } else {
+        let back = kit.then::<About, Result<(), String>>(move |me, k, done| {
+            match done {
+                Ok(()) if k.settle(key, keep(now), not_saved()).is_some() => return,
+                Err(why) => k.say(key, &why, false, false),
 
-                let helper = crate::common::run::admin_helper();
-                let undone = k.then::<About, (bool, String)>(move |_, k, (ok, err)| {
-                    if !ok {
-                        k.say(key, &crate::common::run::admin_error(&err), false, false);
-                    }
-                });
-                capture(&["pkexec", &helper, command, if now { "off" } else { "on" }], None, move |ok, _, err| undone((ok, err)));
+                Ok(()) => {
+                    let undone = k.then::<About, Result<(), String>>(move |_, k, done| {
+                        if let Err(why) = done {
+                            k.say(key, &why, false, false);
+                        }
+                    });
+                    admin_run(&[command, if now { "off" } else { "on" }], undone);
+                }
             }
             put(me, !now);
         });
-        let helper = crate::common::run::admin_helper();
-        capture(&["pkexec", &helper, command, if now { "on" } else { "off" }], None, move |ok, _, err| back((ok, err)));
+        admin_run(&[command, if now { "on" } else { "off" }], back);
     }
 
     fn updates(&self, kit: &Kit) -> Node<Msg> {
         let key = update_checks::KEY;
-        let by_itself = line(t!("settings-about-updates-by-itself")).sub(t!("settings-about-updates-by-itself-sub")).key(key)
+        let by_itself = line(t!("settings-about-updates-by-itself")).key(key)
             .control(switch(self.updates_by_itself, t!("settings-about-updates-by-itself"), move |now| on::<About>(move |me, k| me.set_updates(k, now))))
             .node(kit);
-        let security = line(t!("settings-about-security")).sub(if self.security { t!("settings-about-security-sub") } else { t!("settings-about-security-off") })
+        let security = line(t!("settings-about-security")).sub(if self.security { String::new() } else { t!("settings-about-security-off").to_string() })
             .key(security_updates::KEY)
-            .control(switch(self.security, t!("settings-about-security"), move |now| on::<About>(move |me, k| me.set_security(k, now))))
+            .control(switch(self.security, security_updates::tip(self.security), move |now| on::<About>(move |me, k| me.set_security(k, now))))
             .node(kit);
         group(t!("settings-about-updates")).icon("software-update-available-symbolic")
             .about(t!("settings-about-updates-about"))
@@ -258,18 +290,18 @@ impl About {
     }
 
     fn more(&self, kit: &Kit) -> Node<Msg> {
-        let open = |icon: &str, heading: &str, words: &str, name: &'static str, program: &'static str| {
+        let open = |icon: &str, heading: &str, name: &'static str, program: &'static str| {
             let key = format!("about:open:{program}");
-            line(heading).sub(words).key(key.clone())
+            line(heading).key(key.clone())
                 .control(button(icon.to_string(), name).on_press(opens(key, program, name)))
                 .node(kit)
         };
         group(t!("settings-about-more")).icon("utilities-system-monitor-symbolic")
             .about(t!("settings-about-more-about"))
             .rows(vec![
-                open("go-next-symbolic", t!("settings-about-activity"), t!("settings-about-activity-sub"), t!("settings-about-activity-name"),
+                open("go-next-symbolic", t!("settings-about-activity"), t!("settings-about-activity-name"),
                      "trindle-activity"),
-                open("go-next-symbolic", t!("settings-about-drives"), t!("settings-about-drives-sub"), t!("settings-about-drives-name"),
+                open("go-next-symbolic", t!("settings-about-drives"), t!("settings-about-drives-name"),
                      "trindle-drives"),
             ])
             .node(kit)
@@ -298,25 +330,25 @@ fn downloads() -> PathBuf {
 }
 
 fn save_times(kit: &mut Kit) {
-    let body: String = std::iter::once("Date and time,Seconds\n".to_string())
+    let body: String = std::iter::once(format!("{}\n", t!("settings-about-times-heading")))
         .chain(boot::history().iter().map(|s| format!("{},{:.1}\n", when(s.at, "%Y-%m-%d %H:%M:%S"), s.took)))
         .collect();
     let dir = downloads();
-    let path = dir.join("Trindle start-up times.csv");
+    let file = t!("settings-about-times-file");
+    let path = dir.join(file);
     let saved = crate::common::files::write_text(&path, &body);
     if kit.settle("start-times", saved, t!("settings-about-times-failed")).is_some() {
-        kit.say("start-times", &t!("settings-about-times-saved", file = "Trindle start-up times.csv"), true, false);
+        kit.say("start-times", &t!("settings-about-times-saved", file = file), true, false);
     }
 }
 
-fn start_times(kit: &Kit) -> Option<Node<Msg>> {
-    let all = boot::history();
+fn start_times(kit: &Kit, all: &[boot::Start]) -> Option<Node<Msg>> {
     if all.is_empty() {
         return None;
     }
 
     let save = word_button(t!("settings-about-times-save")).spoken(t!("settings-about-times-save-spoken")).on_press(on::<About>(|_, k| save_times(k)));
-    let head = line(t!("settings-about-times-keep")).sub(t!("settings-about-times-keep-sub")).key("start-times").control(save).node(kit);
+    let head = line(t!("settings-about-times-keep")).key("start-times").control(save).node(kit);
 
     let list: Vec<Node<Msg>> = all.iter().rev().take(10).enumerate().map(|(i, s)| {
         let r = row(vec![label(boot::words(s.took)).width(Length::Fixed(110.0)), note(crate::common::clock::Local::at(s.at).line(trindle_toolkit::lang::format::Pattern::Stamp))]).gap(12.0);
@@ -326,7 +358,7 @@ fn start_times(kit: &Kit) -> Option<Node<Msg>> {
     let last = t!("settings-about-times-chart");
     let chart_sentence = note(last);
     Some(group(t!("settings-about-times")).icon("document-open-recent-symbolic")
-        .about(t!("settings-about-times-about"))
+        .about(format!("{} {}", t!("settings-about-times-about"), t!("settings-about-times-keep-sub")))
         .vis(column(vec![chart_sentence, starts_art(times), column(list).gap(0.0)]).gap(12.0))
         .rows(vec![head])
         .span(6, 12)
@@ -349,20 +381,22 @@ impl Page for About {
     fn help(&self) -> &'static str {
         t!("settings-about-help")
     }
-    fn shown(&mut self, _kit: &mut Kit) {
+    fn shown(&mut self, kit: &mut Kit) {
         self.look();
         self.name = current_name();
+        run::on_thread(Facts::read, kit.then::<About, Facts>(|me, _, facts| me.facts = facts));
     }
     fn view(&self, kit: &Kit) -> Node<Msg> {
 
-        let mut items = vec![headline(kit, self.said.clone()), self.hardware(kit)];
+        let mut items = vec![headline(self.said.clone()), self.hardware(kit)];
         items.extend(room(kit, "media-removable-symbolic", t!("settings-about-memory"), &self.memory));
         items.extend(room(kit, "drive-harddisk-symbolic", t!("settings-about-disk"), &self.disk));
         items.push(self.software(kit));
         items.push(self.updates(kit));
         items.push(self.name_card(kit));
+        items.push(self.reports.card(kit));
         items.push(self.more(kit));
-        items.extend(start_times(kit));
+        items.extend(start_times(kit, &self.facts.starts));
         page(kit, self.title(), self.help(), items)
     }
 }
@@ -389,10 +423,13 @@ fn when(at: i64, format: &str) -> String {
 impl About {
 
     pub(crate) fn made_up() -> About {
-        About { said: "Trindle 2026.10, switched on for 3 hours.".into(),
+        let facts = Facts { model: "Example Laptop 14".into(), processor: "Example Processor, 8 cores".into(), graphics: "Intel".into(),
+                            screens: "1920 x 1080 at 60 Hz".into(), debian: "Debian GNU/Linux 13 (trixie)".into(), kernel: "Linux 6.12.0".into(),
+                            apps: 42, starts: vec![boot::Start { at: 1_760_000_000, took: 21.5 }, boot::Start { at: 1_760_100_000, took: 19.0 }] };
+        About { facts, said: "Trindle 2026.10, switched on for 3 hours.".into(),
                 memory: Some(Room { share: 0.31, figure: "5.0 GB in use".into(), words: "of 16 GB".into() }),
                 disk: Some(Room { share: 0.42, figure: "290 GB free".into(), words: "of 500 GB".into() }),
-                on: "3 hours".into(), name: "johns-laptop".into(), updates_by_itself: true, security: true }
+                on: "3 hours".into(), name: "johns-laptop".into(), updates_by_itself: true, security: true, reports: Default::default() }
     }
 
     pub(crate) fn made_up_not_looking() -> About {
@@ -407,6 +444,20 @@ impl About {
 #[cfg(test)]
 mod tests {
     use super::uptime;
+
+    #[test]
+    fn drawing_the_page_reads_nothing_from_the_computer() {
+        use crate::settings::ui::{Kit, Page};
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let kit = Kit::new(events, asks, None, None);
+        let page = super::About::made_up();
+        super::READ_HERE.with(|n| n.set(0));
+        for _ in 0..20 {
+            page.view(&kit);
+        }
+        assert_eq!(super::READ_HERE.with(|n| n.get()), 0, "twenty draws read the hardware again");
+    }
 
     #[test]
     fn uptime_reads_the_way_people_say_it() {

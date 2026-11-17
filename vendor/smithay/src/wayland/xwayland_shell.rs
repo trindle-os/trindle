@@ -86,7 +86,10 @@ const VERSION: u32 = 1;
 #[derive(Debug, Clone)]
 pub struct XWaylandShellState {
     global: GlobalId,
-    by_serial: HashMap<u64, WlSurface>,
+    // Trindle: each Xwayland counts its serials from 1, so they are kept per
+    // window manager; one shared map handed a new server's window the dead
+    // surface of a stopped one's.
+    by_serial: HashMap<(XwmId, u64), WlSurface>,
 }
 
 impl XWaylandShellState {
@@ -111,9 +114,18 @@ impl XWaylandShellState {
         self.global.clone()
     }
 
-    /// Retrieves the surface for a given serial.
-    pub fn surface_for_serial(&self, serial: u64) -> Option<WlSurface> {
-        self.by_serial.get(&serial).cloned()
+    /// Takes the live surface Xwayland `xwm` committed with `serial`, if any.
+    pub fn take_surface_for_serial(&mut self, xwm: XwmId, serial: u64) -> Option<WlSurface> {
+        self.by_serial.remove(&(xwm, serial)).filter(|s| s.is_alive())
+    }
+
+    // Called on every commit of a surface with a serial, so only a new one
+    // pays for dropping the surfaces of windows and servers that are gone.
+    fn remember(&mut self, xwm: XwmId, serial: u64, surface: WlSurface) {
+        if !self.by_serial.contains_key(&(xwm, serial)) {
+            self.by_serial.retain(|_, s| s.is_alive());
+        }
+        self.by_serial.insert((xwm, serial), surface);
     }
 }
 
@@ -298,9 +310,11 @@ fn serial_commit_hook<D: XWaylandShellHandler + XwmHandler + 'static>(
                     }
                 } else {
                     // this is necessary for the atom-handler to look up the matching surface
-                    XWaylandShellHandler::xwayland_shell_state(state)
-                        .by_serial
-                        .insert(serial, surface.clone());
+                    XWaylandShellHandler::xwayland_shell_state(state).remember(
+                        *xwm_id,
+                        serial,
+                        surface.clone(),
+                    );
                 }
             }
         }

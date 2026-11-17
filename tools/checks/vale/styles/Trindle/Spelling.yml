@@ -1,0 +1,15 @@
+extends: substitution
+message: "UK spelling: '%s', not '%s'."
+level: error
+ignorecase: true
+swap:
+  # CSS names (prefers-color-scheme) and the font Noto Color Emoji keep their own spelling.
+  (?<!-|\bNoto )color(?!-): colour
+  (?<!-)colors(?!-): colours
+  favorite: favourite
+  organize: organise
+  organized: organised
+  center: centre
+  behavior: behaviour
+  gray: grey
+  canceled: cancelled

@@ -2,8 +2,8 @@
 //! The level is read only while the page is open and is kept nowhere.
 
 use std::io::{Read, Write};
-use std::process::{Command, Stdio};
-use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
+use std::process::{Child, Command, Stdio};
+use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::Arc;
 
 const RATE: u32 = 8000;
@@ -14,15 +14,22 @@ const LOUD: f32 = 0.35;
 
 pub struct Meter {
     peak: Arc<AtomicU32>,
-    stop: Arc<AtomicBool>,
+    child: Option<Child>,
 }
 
 impl Meter {
     pub fn start() -> Self {
-        let (peak, stop) = (Arc::new(AtomicU32::new(0)), Arc::new(AtomicBool::new(false)));
-        let (p, s) = (peak.clone(), stop.clone());
-        std::thread::spawn(move || listen(&p, &s));
-        Meter { peak, stop }
+        Self::start_with(&["pw-record", "--rate", &RATE.to_string(), "--channels", "1", "--format", "s16", "-"])
+    }
+
+    fn start_with(argv: &[&str]) -> Self {
+        let peak = Arc::new(AtomicU32::new(0));
+        let mut child = Command::new(argv[0]).args(&argv[1..]).stdin(Stdio::null()).stdout(Stdio::piped()).stderr(Stdio::null()).spawn().ok();
+        if let Some(out) = child.as_mut().and_then(|c| c.stdout.take()) {
+            let p = peak.clone();
+            std::thread::spawn(move || listen(&p, out));
+        }
+        Meter { peak, child }
     }
 
     pub fn level(&self) -> f32 {
@@ -32,21 +39,19 @@ impl Meter {
 
 impl Drop for Meter {
     fn drop(&mut self) {
-        self.stop.store(true, Ordering::Relaxed);
+        if let Some(child) = &mut self.child {
+            let _ = child.kill();
+            let _ = child.wait();
+        }
     }
 }
 
-fn listen(peak: &AtomicU32, stop: &AtomicBool) {
-    let Ok(mut child) = Command::new("pw-record").args(["--rate", &RATE.to_string(), "--channels", "1", "--format", "s16", "-"])
-        .stdin(Stdio::null()).stdout(Stdio::piped()).stderr(Stdio::null()).spawn() else { return };
-    let Some(mut out) = child.stdout.take() else { return };
+fn listen(peak: &AtomicU32, mut out: impl Read) {
     let mut chunk = [0u8; CHUNK];
-    while !stop.load(Ordering::Relaxed) && out.read_exact(&mut chunk).is_ok() {
+    while out.read_exact(&mut chunk).is_ok() {
         let top = chunk.chunks_exact(2).map(|b| i16::from_le_bytes([b[0], b[1]]).unsigned_abs()).max().unwrap_or(0);
         peak.store(shown(top).to_bits(), Ordering::Relaxed);
     }
-    let _ = child.kill();
-    let _ = child.wait();
 }
 
 fn shown(top: u16) -> f32 {
@@ -95,6 +100,17 @@ fn tones() -> Vec<u8> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_meter_that_hears_nothing_still_ends_its_program_when_dropped() {
+        let meter = Meter::start_with(&["sleep", "30"]);
+        let pid = meter.child.as_ref().expect("started").id() as libc::pid_t;
+        assert_eq!(meter.level(), 0.0);
+        drop(meter);
+        // SAFETY: signal 0 only checks whether the number is still a process.
+        let alive = unsafe { libc::kill(pid, 0) } == 0;
+        assert!(!alive, "the program was left running");
+    }
 
     #[test]
     fn silence_is_empty_and_a_loud_voice_fills_the_bar() {

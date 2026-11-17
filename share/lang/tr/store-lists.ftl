@@ -37,30 +37,17 @@ store-tab-count = { $name } { $n }
 # Spoken name of a strip of tabs on the Installed page.
 store-tabs-show = Göster
 
-# How long is left when it is a minute or less.
-store-left-minute = yaklaşık bir dakika kaldı
-
-# How long is left, in minutes.
-store-left-minutes = yaklaşık { $n } dakika kaldı
-
-# How long is left, in hours.
-store-left-hours =
-    { $n ->
-        [one] yaklaşık 1 saat kaldı
-       *[other] yaklaşık { $n } saat kaldı
-    }
-
 # Credit under a package's page for the list its site was checked against.
 store-origin-credit = HaGeZi'nin Threat Intelligence listesine göre denetlendi
 
 # Where a download came from: the site and the page that led to it.
-store-origin-both = { $site } sitesinden indirildi, { $referrer } sayfasından gelinerek.
+store-origin-both = Bunu { $referrer } sayfasından geldikten sonra { $site } sitesinden indirdiniz.
 
 # Where a download came from: the site.
 store-origin-site = { $site } sitesinden indirildi.
 
 # Where a download came from: the page that led to it.
-store-origin-referrer = { $referrer } sayfasından gelinerek ulaşıldı.
+store-origin-referrer = { $referrer } sayfasından bağlantıyla gelindi.
 
 # Said when nothing tells where a download came from.
 store-origin-unknown = Trindle bunun nereden geldiğini söyleyemiyor.
@@ -71,19 +58,19 @@ store-origin-listed = { $from } { $name }, zararlı indirmeler ve dolandırıcı
 
 # SAFETY: needs a human review before it ships
 # Said when the site is not on the list; the first part says where the download came from.
-store-origin-clear = { $from } Site HaGeZi'nin Threat Intelligence listesinde yok, ancak liste eksiksiz değildir; bu nedenle bu, güvenli olduğunu kanıtlamaz.
+store-origin-clear = { $from } Site HaGeZi'nin Threat Intelligence listesinde yok. Bu liste eksiksiz değildir, bu yüzden bu, sitenin güvenli olduğunu kanıtlamaz.
 
 # Said when the list could not be fetched; the first part says where the download came from.
-store-origin-not-checked = { $from } HaGeZi'nin Threat Intelligence listesi alınamadığı için site denetlenemedi.
+store-origin-not-checked = { $from } Trindle siteyi denetleyemedi, çünkü HaGeZi'nin Threat Intelligence listesini alamadı.
 
 # Name shown for a review whose writer gave none.
 store-review-someone = Biri
 
 # Red words when the keyring could not be reached.
-store-key-unreached = Anahtar halkasına ulaşılamadı: { $why }.
+store-key-unreached = Trindle anahtar halkasına ulaşamadı: { $why }.
 
 # Red words when the key kept in the keyring is not text.
-store-key-not-text = Saklanan anahtar metin değil.
+store-key-not-text = Kaydedilen anahtar metin değil.
 
 # Red words when a file that held the key could not be removed.
 store-key-not-removed = { $path } kaldırılamadı: { $why }

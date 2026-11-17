@@ -17,13 +17,13 @@ const LOCKS: [&str; 7] = [
     "disable-sound-output",
 ];
 const XML: &str = r#"<interface name="org.freedesktop.impl.portal.Lockdown">
-    <property name="disable-printing" type="b" access="readwrite"/>
-    <property name="disable-save-to-disk" type="b" access="readwrite"/>
-    <property name="disable-application-handlers" type="b" access="readwrite"/>
-    <property name="disable-location" type="b" access="readwrite"/>
-    <property name="disable-camera" type="b" access="readwrite"/>
-    <property name="disable-microphone" type="b" access="readwrite"/>
-    <property name="disable-sound-output" type="b" access="readwrite"/>
+    <property name="disable-printing" type="b" access="read"/>
+    <property name="disable-save-to-disk" type="b" access="read"/>
+    <property name="disable-application-handlers" type="b" access="read"/>
+    <property name="disable-location" type="b" access="read"/>
+    <property name="disable-camera" type="b" access="read"/>
+    <property name="disable-microphone" type="b" access="read"/>
+    <property name="disable-sound-output" type="b" access="read"/>
   </interface>"#;
 
 pub fn offer() -> Offer {
@@ -41,6 +41,12 @@ mod tests {
     use super::*;
     use crate::toolkit::bus::get_bool;
     use super::super::portal_ask::testkit::{props, Rig};
+
+    #[test]
+    fn the_properties_are_declared_read_only_as_nothing_can_set_them() {
+        assert!(!XML.contains("readwrite"));
+        assert_eq!(XML.matches("access=\"read\"").count(), LOCKS.len());
+    }
 
     #[test]
     fn nothing_is_locked_down() {

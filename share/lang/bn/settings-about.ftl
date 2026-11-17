@@ -7,7 +7,7 @@ settings-about-title = এই কম্পিউটার সম্পর্ক�
 settings-about-keywords = কম্পিউটারের নাম নেটওয়ার্কের নাম পরিচিতি সিস্টেম সংস্করণ মেমরি প্রসেসর ডিস্ক গ্রাফিক্স পর্দা মডেল কার্নেল চলমান প্রোগ্রাম ব্যস্ত টাস্ক ম্যানেজার ড্রাইভ জায়গা hostname computer name network name about system version debian trindle memory ram processor cpu disk graphics screen model kernel rolling release activity running programs busy task manager system monitor disks drives usb space
 
 # Text behind the info button of the About page.
-settings-about-help = নেটওয়ার্কের অন্য কম্পিউটার এই কম্পিউটারকে যে নামে দেখে, এটি কী দিয়ে তৈরি এবং চালু হতে কতক্ষণ লাগে, তা এখানে আছে। এটি এখন কী করছে এবং কোন প্রোগ্রাম কতটা মেমরি ও প্রসেসর ব্যবহার করছে তা "কাজকর্ম"-এ, আর ড্রাইভ ও তাদের জায়গা "ড্রাইভ"-এ আছে; প্রতিটি আলাদা উইন্ডো, "আরও বিস্তারিত"-এর তীর দিয়ে খোলে।
+settings-about-help = এই পাতায় আছে নেটওয়ার্কের অন্য কম্পিউটার এই কম্পিউটারকে যে নামে দেখে, এটি কী দিয়ে তৈরি এবং চালু হতে কতক্ষণ লাগে। "কাজকর্ম" দেখায় কম্পিউটার এখন কী করছে এবং কোন প্রোগ্রাম কতটা মেমরি ও প্রসেসর ব্যবহার করছে। "ড্রাইভ" দেখায় আপনার ড্রাইভ আর তাদের জায়গা। প্রতিটি আলাদা উইন্ডোতে খোলে। খুলতে "আরও বিস্তারিত"-এর তীর ব্যবহার করুন।
 
 # What is shown when a fact about the computer cannot be found.
 settings-about-unknown = অজানা
@@ -80,17 +80,17 @@ settings-about-up-days =
     }
 
 # Red words under the computer name box when the name is not allowed.
-settings-about-name-bad = শুধু অক্ষর, সংখ্যা ও হাইফেন চলবে; হাইফেন দিয়ে শুরু বা শেষ করা যাবে না।
+settings-about-name-bad = শুধু অক্ষর, সংখ্যা ও হাইফেন ব্যবহার করুন। হাইফেন দিয়ে শুরু বা শেষ করবেন না।
 
 # Words under the computer name box while the password window is open.
 # SAFETY: needs a human review before it ships
-settings-about-name-waiting = পাসওয়ার্ডের অপেক্ষায়...
+settings-about-name-waiting = আপনার পাসওয়ার্ডের অপেক্ষায়…
 
 # Red words under the computer name box when renaming failed.
 settings-about-name-failed = কম্পিউটারের নাম বদলানো যায়নি।
 
 # Words under the computer name box after renaming worked.
-settings-about-name-done = ইতিমধ্যে খোলা প্রোগ্রামগুলো পরের লগইনের পরে নতুন নাম দেখবে।
+settings-about-name-done = ইতিমধ্যে খোলা প্রোগ্রামগুলো আপনি পরের বার লগ ইন করার পর নতুন নাম ব্যবহার করবে।
 
 # Placeholder and spoken name of the typing box for the computer's name.
 settings-about-name-entry = কম্পিউটারের নাম
@@ -101,51 +101,27 @@ settings-about-rename = এই কম্পিউটারের নাম ব�
 # Bold line of the computer name setting.
 settings-about-name = কম্পিউটারের নাম
 
-# Quiet line under the computer name setting.
-settings-about-name-sub = অক্ষর, সংখ্যা ও হাইফেন।
-
 # Heading of the card with the computer's name.
 settings-about-name-group = নাম
 
 # Text behind the info button of the Name card.
 # SAFETY: needs a human review before it ships
-settings-about-name-about = নেটওয়ার্কে এবং টার্মিনালের প্রম্পটে এই কম্পিউটার যেভাবে দেখা যায়। অক্ষর, সংখ্যা ও হাইফেন চলবে; হাইফেন দিয়ে শুরু বা শেষ করা যাবে না। বদলাতে আপনার পাসওয়ার্ড চাওয়া হবে।
+settings-about-name-about = নেটওয়ার্কে এবং টার্মিনালের প্রম্পটে এটিই এই কম্পিউটারের নাম। অক্ষর, সংখ্যা ও হাইফেন ব্যবহার করুন, তবে হাইফেন দিয়ে শুরু বা শেষ করবেন না। বদলাতে আপনাকে পাসওয়ার্ড দিতে হবে।
 
 # Heading of the card about the computer's hardware.
 settings-about-hardware = কম্পিউটার
 
 # Text behind the info button of the hardware card.
-settings-about-hardware-about = নির্মাতা ও মডেল, প্রসেসর ও এটি একসঙ্গে কয়টি থ্রেড চালায়, গ্রাফিক্স, এবং ব্যবহৃত প্রতিটি পর্দার আকার ও রিফ্রেশ হার।
-
-# Quiet line under the maker and model.
-settings-about-hw-computer = কম্পিউটার
-
-# Quiet line under the processor.
-settings-about-hw-processor = প্রসেসর
-
-# Quiet line under the graphics.
-settings-about-hw-graphics = ছবি আঁকে
-
-# Quiet line under the screens.
-settings-about-hw-screen = পর্দা
+settings-about-hardware-about = এখানে কম্পিউটারের নির্মাতা ও মডেল, প্রসেসর এবং গ্রাফিক্স দেখা যায়। আরও দেখা যায় প্রসেসর একসঙ্গে কয়টি থ্রেড চালাতে পারে, এবং ব্যবহৃত প্রতিটি পর্দার আকার ও রিফ্রেশ হার।
 
 # Heading of the card about the software.
 settings-about-software = সফটওয়্যার
 
 # Text behind the info button of the software card.
-settings-about-software-about = Trindle হলো Debian-এর ওপরে বসানো একটি ডেস্কটপ, যা নিচের প্রোগ্রামগুলো দেখাশোনা করে। কার্নেল হলো যে অংশ হার্ডওয়্যারের সঙ্গে কথা বলে, আর Trindle-এর নিজস্ব কম্পোজিটর Wayland-এ ডেস্কটপ আঁকে।
-
-# Quiet line under the Debian version.
-settings-about-sw-debian = নিচে চলে
-
-# Quiet line under the kernel version.
-settings-about-sw-kernel = কার্নেল
+settings-about-software-about = Trindle হলো Debian-এর ওপরে চলা একটি ডেস্কটপ, যা নিচের প্রোগ্রামগুলো দেখাশোনা করে। কার্নেল হলো যে অংশ হার্ডওয়্যারের সঙ্গে কাজ করে। Trindle-এর নিজস্ব কম্পোজিটর Wayland ব্যবহার করে ডেস্কটপ আঁকে।
 
 # Bold line naming Trindle's compositor.
 settings-about-sw-compositor = Trindle-এর নিজস্ব কম্পোজিটর
-
-# Quiet line under the compositor line.
-settings-about-sw-compositor-sub = Wayland-এ ডেস্কটপ আঁকে
 
 # Bold line saying how many apps are installed; n is the count.
 settings-about-sw-apps =
@@ -154,20 +130,14 @@ settings-about-sw-apps =
        *[other] { $n }টি অ্যাপ
     }
 
-# Quiet line under the number of apps.
-settings-about-sw-apps-sub = ইনস্টল করা, রিংয়ে তৈরি
-
 # Heading of the card with the ways to Activity and Drives.
 settings-about-more = আরও বিস্তারিত
 
 # Text behind the info button of the More detail card.
-settings-about-more-about = এটি এখন কী করছে এবং কোন প্রোগ্রাম কতটা মেমরি ও প্রসেসর ব্যবহার করছে তা কাজকর্মে আছে। প্রতিটি ড্রাইভ, তা কতটা ভরা ও কেমন আছে, এবং ইউএসবি স্টিক ড্রাইভে আছে।
+settings-about-more-about = "কাজকর্ম" দেখায় কম্পিউটার এখন কী করছে এবং কোন প্রোগ্রাম কতটা মেমরি ও প্রসেসর ব্যবহার করছে। "ড্রাইভ" দেখায় প্রতিটি ড্রাইভ, তা কতটা ভরা ও কেমন আছে, এবং ইউএসবি স্টিক।
 
 # Bold line of the setting that opens Activity.
 settings-about-activity = কী চলছে দেখুন
-
-# Quiet line under the setting that opens Activity.
-settings-about-activity-sub = যেসব প্রোগ্রাম মেমরি ও প্রসেসর ব্যবহার করছে।
 
 # Tip of the arrow that opens the Activity program.
 settings-about-activity-name = কাজকর্ম
@@ -175,14 +145,17 @@ settings-about-activity-name = কাজকর্ম
 # Bold line of the setting that opens Drives.
 settings-about-drives = ড্রাইভ ও জায়গা
 
-# Quiet line under the setting that opens Drives.
-settings-about-drives-sub = প্রতিটি ড্রাইভ, কতটা ভরা ও কেমন আছে।
-
 # Tip of the arrow that opens the Drives program.
 settings-about-drives-name = ড্রাইভ
 
 # Red words under the start-up times line when the file could not be saved.
-settings-about-times-failed = চালু হওয়ার সময়গুলো ডাউনলোডসে সংরক্ষণ করা যায়নি।
+settings-about-times-failed = Trindle চালু হওয়ার সময়গুলো ডাউনলোডসে সংরক্ষণ করতে পারেনি।
+
+# First line of the saved start-up times file: the two columns, separated by a comma.
+settings-about-times-heading = তারিখ ও সময়,সেকেন্ড
+
+# File name of the saved start-up times, in Downloads.
+settings-about-times-file = Trindle চালু হওয়ার সময়.csv
 
 # Words under the start-up times line after the file was saved; file is the file's name.
 settings-about-times-saved = ডাউনলোডসে, { $file } নামে
@@ -194,19 +167,19 @@ settings-about-times-save = সংরক্ষণ করুন
 settings-about-times-save-spoken = চালু হওয়ার সব সময় ডাউনলোডসে সংরক্ষণ করুন
 
 # Bold line of the setting that saves the start-up times.
-settings-about-times-keep = প্রতিটি চালু হওয়া, রেখে দিতে
+settings-about-times-keep = প্রতিবার চালু হওয়ার সময় সংরক্ষণ করুন
 
 # Quiet line under that setting.
 settings-about-times-keep-sub = স্প্রেডশিট হিসেবে ডাউনলোডসে সংরক্ষিত।
 
 # The sentence over the chart of the last ten start-up times.
-settings-about-times-chart = প্রতিটি স্তম্ভ একটি চালু হওয়া, নতুনটি ডানদিকে।
+settings-about-times-chart = প্রতিটি স্তম্ভ একবার চালু হওয়া। নতুনটি ডানদিকে।
 
 # Heading of the card with the last ten start-up times.
 settings-about-times = শেষ দশবার চালু হওয়া
 
 # Text behind the info button of the start-up times card.
-settings-about-times-about = পাওয়ার বোতাম থেকে লগইন পর্দা পর্যন্ত প্রতিবারের সময় মাপা হয়, ডিস্কের পাসওয়ার্ড লিখতে যে সময় গেছে তা বাদ দিয়ে। নতুনটি ওপরে।
+settings-about-times-about = Trindle পাওয়ার বোতাম থেকে লগইন পর্দা পর্যন্ত প্রতিবার চালু হওয়ার সময় মাপে। ডিস্কের পাসওয়ার্ড লিখতে যে সময় গেছে তা ধরা হয় না। নতুনটি ওপরে।
 
 # Heading of the memory tile.
 settings-about-memory = মেমরি
@@ -214,30 +187,58 @@ settings-about-memory = মেমরি
 # Heading of the disk tile.
 settings-about-disk = ডিস্ক
 
+# Heading of the card on About that holds the switch and the optional names for problem reports.
+settings-about-reports = সমস্যার রিপোর্ট
+
+# Text behind the round i of that card. Buildmorphic is the community that helps build Trindle; keep its name.
+settings-about-reports-about = রিপোর্ট Buildmorphic-এ যায়, যে কমিউনিটি Trindle বানাতে সাহায্য করে। শুধু একটি ইমেল ঠিকানা দিয়েই যোগ দিতে পারেন। যে সমস্যা আপনি প্রথম জানান, নিজে ঠিক করতে না পারলেও, তার জন্য ক্রেডিট ও লেভেল পাবেন। একটি রিপোর্টে শুধু একটি নির্দিষ্ট তালিকার তথ্য থাকে, আর পাঠান চাপার আগে কিছুই পাঠানো হয় না। ব্যবহারকারীর নাম বা GitHub নাম ঐচ্ছিক, এবং আপনার ব্যবহারকারীর নাম কখনো ইমেল ঠিকানা হয় না।
+
+# Switch: whether Trindle asks about problems and about sharing reports. Name of the switch for the screen reader too.
+settings-about-reports-offer = কিছু ভুল হলে রিপোর্ট পাঠানোর প্রস্তাব দিন
+
+# Box for the optional Buildmorphic username, also its name for the screen reader. Buildmorphic is a name.
+settings-about-reports-name = Buildmorphic ব্যবহারকারীর নাম
+
+# Box for the optional GitHub name, also its name for the screen reader. GitHub is a name.
+settings-about-reports-github = GitHub নাম
+
+# Name of the round button that opens the Buildmorphic community website, and of its line.
+settings-about-reports-community = কমিউনিটি সম্পর্কে
+
+# Said under the switch when it is turned off and reports that were waiting to be sent were deleted; n is how many.
+settings-about-reports-deleted =
+    { $n ->
+        [one] বন্ধ। অপেক্ষায় থাকা { $n }টি রিপোর্ট মুছে ফেলা হয়েছে।
+       *[other] বন্ধ। অপেক্ষায় থাকা { $n }টি রিপোর্ট মুছে ফেলা হয়েছে।
+    }
+
+# Said in red under the switch when it is turned off but some waiting reports could not be deleted; n is how many.
+settings-about-reports-kept =
+    { $n ->
+        [one] বন্ধ। অপেক্ষায় থাকা { $n }টি রিপোর্ট মোছা যায়নি।
+       *[other] বন্ধ। অপেক্ষায় থাকা { $n }টি রিপোর্ট মোছা যায়নি।
+    }
+
 
 # Heading of the card with the switch for looking for updates.
 settings-about-updates = হালনাগাদ
 
 # Text behind the info button of the updates card.
-settings-about-updates-about = Trindle লগ ইনের কিছু পরে এবং প্রতি কয়েক ঘণ্টায় অ্যাপ, প্লাগইন, ফার্মওয়্যার ও নিজের নতুন সংস্করণ খোঁজে, আর Debian-এর নিরাপত্তা সংশোধন প্রতিদিন আসে। বন্ধ করলে Trindle শুধু অ্যাপসে "হালনাগাদ খুঁজুন" চাপলে, বা রিংয়ের হালনাগাদ বোতাম চাপলে খোঁজে। Debian-এর নিরাপত্তা সংশোধনের নিজস্ব সুইচ আছে; বন্ধ থাকলে সেগুলো আর নিজে থেকে বসে না এবং জানা ত্রুটি আপনি হালনাগাদ না করা পর্যন্ত খোলা থাকে। যেকোনো সুইচ বদলালে প্রশাসকের পাসওয়ার্ড চাওয়া হয়, যাতে কম্পিউটারের নিজের সেবাগুলোও এই পছন্দ দেখতে পায়।
+settings-about-updates-about = Trindle লগ ইনের কিছু পরে, তারপর প্রতি কয়েক ঘণ্টায় অ্যাপ, প্লাগইন, ফার্মওয়্যার ও নিজের নতুন সংস্করণ আছে কি না দেখে। এটি বন্ধ করলে Trindle শুধু তখনই দেখে যখন আপনি অ্যাপসে "হালনাগাদ খুঁজুন" চাপেন, বা রিংয়ের হালনাগাদ বোতাম চাপেন। Debian-এর নিরাপত্তা সংশোধন প্রতিদিন ইনস্টল হয় এবং এর নিজস্ব সুইচ আছে। সেটি বন্ধ করলে সংশোধনগুলো আর নিজে থেকে ইনস্টল হয় না, আর জানা নিরাপত্তা ত্রুটি আপনি হালনাগাদ না করা পর্যন্ত সারানো হয় না। যেকোনো সুইচ বদলাতে প্রশাসকের পাসওয়ার্ড লাগে, যাতে পুরো কম্পিউটার আপনার পছন্দ মেনে চলে।
 
 # Bold line of the switch for looking for updates by itself; also the switch's name for a screen reader.
 settings-about-updates-by-itself = হালনাগাদ খুঁজুন
 
 # Words under the Check for updates switch while the password window is open.
-settings-about-updates-waiting = পাসওয়ার্ডের অপেক্ষায়...
-
-# Quiet line under that switch.
-settings-about-updates-by-itself-sub = বন্ধ থাকলে আপনি না বললে কিছুই খোঁজা হয় না।
+settings-about-updates-waiting = আপনার পাসওয়ার্ডের অপেক্ষায়…
 
 
 
 # Bold line of the switch for Debian's security fixes; also the switch's name for a screen reader.
 settings-about-security = নিরাপত্তা হালনাগাদ
 
-# Quiet line under the Security updates switch when it is on.
-settings-about-security-sub = নিরাপত্তা সংশোধন প্রতিদিন নিজে থেকে বসে।
-
 # Warning line under the Security updates switch when it is off.
 settings-about-security-off = নিরাপত্তা সংশোধন আর নিজে থেকে বসে না।
 
+# Said in red under the switch when it is turned off but the Reporting add-on could not delete the reports it keeps; the reason follows.
+settings-about-reports-addon-kept = বন্ধ, কিন্তু Reporting অ্যাড-অনের অপেক্ষায় থাকা রিপোর্ট মোছা হয়নি।

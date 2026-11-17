@@ -34,8 +34,7 @@ fn no_page_uses_more_than_two_colours() {
     let asks = events.post(|_: Do| {});
     let mut pages = panels::all();
     pages.extend([
-        Box::new(panels::crash_reports::CrashReports::default()) as Box<dyn Page>,
-        Box::new(panels::plugins::Plugins::default()),
+        Box::new(panels::plugins::Plugins::default()) as Box<dyn Page>,
     ]);
     let mut s = Settings { kit: Kit::new(events.clone(), asks, None, None), pages, current: 0, search: String::new(), tall: 800.0 };
     let accent = Colour::parse("#fbc711").unwrap();
@@ -74,7 +73,7 @@ fn only_the_pickers_own_colours_are_let_through_the_colour_count() {
 }
 
 #[test]
-#[ignore]
+#[ignore = "writes pictures to TRINDLE_SHOTS and asserts nothing; run it by hand with --ignored"]
 fn shoot_every_page() {
     let out = std::path::PathBuf::from(std::env::var("TRINDLE_SHOTS").unwrap_or_else(|_| "target/style-check".into()));
     let size = std::env::var("TRINDLE_SHOT_SIZE").unwrap_or_else(|_| "1280x800".into());
@@ -91,8 +90,7 @@ fn shoot_every_page() {
     let system = std::env::var_os("TRINDLE_SHOT_SYSTEM").and_then(|_| crate::toolkit::bus::Bus::system(&events).ok());
     let mut pages = panels::all();
     pages.extend([
-        Box::new(panels::crash_reports::CrashReports::default()) as Box<dyn Page>,
-        Box::new(panels::plugins::Plugins::default()),
+        Box::new(panels::plugins::Plugins::default()) as Box<dyn Page>,
     ]);
     let mut s = Settings { kit: Kit::new(events.clone(), asks, None, system), pages, current: 0, search: String::new(), tall: h };
     for i in 0..s.pages.len() {

@@ -1,5 +1,5 @@
 # Firmware and driver packages for hardware Debian stable alone leaves out
-# (20 October 2026: compatibility first). One per line. The
+# so that as much hardware as possible works. One per line. The
 # image installs every one, and the trindle package recommends every one.
 # Only Debian stable and trixie-backports (see trindle-backports.pref); the
 # names marked backports come from there, the rest from stable.
@@ -51,7 +51,7 @@ firmware-ivtv
 nvidia-detect
 mokutil
 
-# Scanners (20 October 2026: as many drivers as possible). libsane1
+# Scanners, with as many drivers as possible. libsane1
 # carries all of SANE's backends; airscan covers network scanners that need
 # no driver; libsane-hpaio is hplip's scanner part.
 libsane1

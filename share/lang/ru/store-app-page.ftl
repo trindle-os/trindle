@@ -65,7 +65,7 @@ store-app-remove = Удалить
 store-app-open-round = Открыть
 
 # Main button that releases an app whose updates are held back.
-store-app-release = Возобновить
+store-app-release = Разрешить обновления
 
 # Main button that updates the app.
 store-app-update = Обновить
@@ -89,7 +89,7 @@ store-app-picture-missed = Не удалось загрузить это изо�
 store-app-picture-fetching = Загрузка изображения…
 
 # In the picture frame when the computer has no internet.
-store-app-picture-offline = Изображения нельзя загрузить, пока компьютер не подключён к интернету.
+store-app-picture-offline = Подключитесь к интернету, чтобы увидеть изображения.
 
 # Between the picture buttons: which picture, when it has no caption.
 store-app-picture-of = Изображение { $at } из { $n }
@@ -166,13 +166,13 @@ store-app-review-no-title = Без заголовка
 store-app-people-none = Об этом приложении пока никто не писал.
 
 # Under What people say when there is no internet.
-store-app-people-offline = Отзывы нельзя загрузить, пока компьютер не подключён к интернету.
+store-app-people-offline = Подключитесь к интернету, чтобы читать отзывы.
 
 # Under What people say while reviews are being fetched.
-store-app-people-looking = Поиск отзывов…
+store-app-people-looking = Загрузка отзывов…
 
 # Name of the card of reviews.
-store-app-people = Что говорят люди
+store-app-people = Отзывы
 
 # Facts line: when the app's project was made.
 store-app-fact-created = Создано

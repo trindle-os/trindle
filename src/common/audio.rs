@@ -151,7 +151,7 @@ pub fn list(done: impl FnOnce(Result<Devices, String>) + 'static) {
     capture(&["pw-dump"], None, move |ok, out, err| {
         match parse_dump(&out).filter(|_| ok) {
             Some(dump) => done(Ok(parse_nodes(&dump))),
-            None => done(Err(if err.trim().is_empty() { "pw-dump gave no answer.".to_string() } else { err.trim().to_string() })),
+            None => done(Err(if err.trim().is_empty() { crate::toolkit::t!("common-audio-no-answer").to_string() } else { err.trim().to_string() })),
         }
     });
 }

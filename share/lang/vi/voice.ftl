@@ -14,7 +14,7 @@ voice-brighter = Sáng hơn
 voice-dimmer = Tối hơn
 
 # Said under the ring when the request is to let the screen rest again.
-voice-keep-awake-off = Màn hình có thể nghỉ trở lại
+voice-keep-awake-off = Màn hình lại có thể ngủ
 
 # Said under the ring when the screen is kept awake.
 voice-keep-awake-on = Đang giữ màn hình sáng
@@ -23,7 +23,7 @@ voice-keep-awake-on = Đang giữ màn hình sáng
 voice-updates = Đang tìm bản cập nhật
 
 # Said under the ring when nothing was heard at all.
-voice-nothing-heard = Không nghe thấy gì. Hãy chạm vào giữa vòng tròn và nói.
+voice-nothing-heard = Trindle không nghe thấy bạn. Hãy chạm vào giữa vòng tròn và nói.
 
 # Said under the ring when the volume goes up.
 voice-louder = To hơn
@@ -86,7 +86,7 @@ voice-showing-app = Đang hiển thị { $name }
 voice-opening-app = Đang mở { $name }
 
 # Said under the ring when the request was heard but not understood; what was heard comes in.
-voice-heard-unknown = Nghe thấy “{ $heard }”, nhưng chưa biết phải làm gì
+voice-heard-unknown = Trindle không nhận ra lệnh “{ $heard }”
 
 # Said in the ring when voice has not been added yet.
 voice-optional = Giọng nói là phần bổ sung tùy chọn. Hãy thêm nó trong Cài đặt, ở trang Vòng tròn.
@@ -95,31 +95,31 @@ voice-optional = Giọng nói là phần bổ sung tùy chọn. Hãy thêm nó t
 voice-switched-off = Giọng nói đang tắt. Hãy bật nó trong Cài đặt, ở trang Vòng tròn.
 
 # Said in the ring when the microphone cannot be opened; the reason comes after it.
-voice-mic-failed = Không mở được micrô: { $why }
+voice-mic-failed = Trindle không truy cập được micrô: { $why }
 
 # Said in the ring when the microphone's recorder would not start.
-voice-mic-not-started = Không mở được micrô: pw-record không khởi động
+voice-mic-not-started = Trindle không truy cập được micrô vì chương trình ghi âm không khởi động
 
 # Said in the ring when listening stopped and nothing was recorded.
 voice-nothing-recorded = Chưa ghi âm được gì.
 
 # Said in the ring when the recording had no speech in it.
-voice-nothing-heard-after = Không nghe thấy gì. Hãy chạm vào giữa vòng tròn và nói.
+voice-nothing-heard-after = Trindle không nghe thấy bạn. Hãy chạm vào giữa vòng tròn và nói.
 
 # Said in the ring when the speech engine failed and gave no reason.
 voice-whisper-failed = Whisper bị lỗi
 
 # Progress line while the build tools are added for the build; the names of the packages come in.
-voice-installing-tools = Đang cài tạm các công cụ biên dịch: { $names }
+voice-installing-tools = Đang cài tạm thời các công cụ biên dịch: { $names }
 
 # Progress line while whisper.cpp is built; its version comes in.
-voice-building = Đang biên dịch whisper.cpp { $version } cho giọng nói (một hai phút)
+voice-building = Đang biên dịch whisper.cpp { $version } cho điều khiển bằng giọng nói. Việc này mất một hai phút.
 
 # Progress line while the speech model is downloaded (148 MB).
 voice-fetching-model = Đang tải mô hình giọng nói (148 MB)
 
 # Progress line while the build tools are taken away again.
-voice-removing-tools = Đang gỡ lại các công cụ biên dịch
+voice-removing-tools = Đang gỡ các công cụ biên dịch
 
 # Said once voice is added and ready to use.
 voice-ready = Điều khiển bằng giọng nói đã sẵn sàng. Hãy mở vòng tròn, chạm vào giữa và nói.
@@ -132,3 +132,15 @@ voice-press-enter = Nhấn Enter để đóng.
 
 # Shown when the command is run with neither install nor remove.
 voice-usage = cách dùng: trindle-voice-setup install | remove
+
+# Said when a step of the voice set-up fails. { $program } is the program that was run, with its first word.
+voice-step-failed = { $program } không chạy được.
+
+# Said when the whisper.cpp download isn't the one Trindle checks for, so nothing is built from it.
+voice-whisper-fingerprint = Bản tải whisper.cpp không phải bản Trindle mong đợi, nên chưa được dựng.
+
+# Said when the speech model download isn't the one Trindle checks for, so it isn't installed.
+voice-model-fingerprint = Bản tải mô hình giọng nói không phải bản Trindle mong đợi, nên chưa được cài.
+
+# The reason after "Trindle couldn't access the microphone:" when the session has no private folder to keep a recording in.
+voice-no-private-folder = không có thư mục riêng nào để dùng.

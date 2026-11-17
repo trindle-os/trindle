@@ -8,17 +8,17 @@ settings-display-title = ڈسپلے
 settings-display-keywords = اسکرین مانیٹر ریزولوشن سائز زوم بڑا چھوٹا گھمائیں رات کی روشنی گرم نیلی روشنی شام آنکھیں screen monitor resolution size scale zoom bigger smaller rotate refresh night light warm blue light evening eyes
 
 # Introduction under the heading of the display page, and the words behind the page i.
-settings-display-help = تبدیلیاں فوراً لاگو ہوتی ہیں۔ اگر اسکرین خراب ہو جائے تو کچھ نہ کریں: رکھیں نہ دبانے پر وہ 15 سیکنڈ بعد خود واپس ہو جاتی ہے۔ رات کی روشنی شام کو اسکرین کو گرم کر دیتی ہے۔
+settings-display-help = تبدیلیاں فوراً لاگو ہوتی ہیں۔ اگر اسکرین خراب ہو جائے تو کچھ نہ کریں۔ رکھیں نہ دبانے پر وہ 15 سیکنڈ بعد خود واپس ہو جاتی ہے۔ رات کی روشنی شام کو اسکرین کو گرم کر دیتی ہے۔
 
 # SAFETY: needs a human review before it ships
 # Question along the bottom of the page while a change of displays waits to be kept.
 settings-display-foot-keep = کیا یہ ترتیب رکھنی ہے؟
 
 # Sentence at the top of the page while the displays are being found.
-settings-display-looking = ڈسپلے دیکھے جا رہے ہیں…
+settings-display-looking = ڈسپلے چیک کیے جا رہے ہیں…
 
 # Sentence at the top of the page when no display was found.
-settings-display-none-found = کوئی ڈسپلے نہیں ملا۔
+settings-display-none-found = کوئی ڈسپلے نہیں مل رہا۔
 
 # First half of the sentence at the top of the page: no display is in use.
 settings-display-used-none = کوئی ڈسپلے استعمال میں نہیں
@@ -96,32 +96,20 @@ settings-display-rotation-of = { $display } کا گھماؤ
 # Heading of the resolution line.
 settings-display-resolution = ریزولوشن
 
-# Small words under that line.
-settings-display-resolution-about = یہ کتنے نقطے دکھاتا ہے، اور کتنی بار۔
-
 # Heading of the size line.
 settings-display-size = سائز
 
-# Small words under that line.
-settings-display-size-about = اس اسکرین پر ہر چیز کتنی بڑی دکھائی دیتی ہے۔
-
 # Heading of the rotation line.
 settings-display-rotation = گھماؤ
-
-# Small words under that line.
-settings-display-rotation-about = ایسی اسکرین کے لیے جو پہلو پر کھڑی ہو۔
 
 # Heading of the line, and name of its switch, that turns a display on or off.
 settings-display-use = یہ ڈسپلے استعمال کریں
 
 # Small words under that line for the only display in use.
-settings-display-use-only = واحد استعمال ہونے والا ڈسپلے بند نہیں کیا جا سکتا۔
-
-# Small words under that line otherwise.
-settings-display-use-off = بند ہے، اس پر کچھ نہیں دکھایا جاتا۔
+settings-display-use-only = جو اکلوتا ڈسپلے چل رہا ہے اسے بند نہیں کیا جا سکتا۔
 
 # Words behind the i of a display's card.
-settings-display-card-about = تبدیلیاں فوراً لاگو ہوتی ہیں۔ اگر اسکرین خراب ہو جائے تو کچھ نہ کریں: رکھیں نہ دبانے پر وہ 15 سیکنڈ بعد خود واپس ہو جاتی ہے۔ تجویز کردہ ریزولوشن اسکرین کی اپنی ہے؛ معیاری سائز وہ ہے جو Trindle نے اس اسکرین کے لیے چنا۔
+settings-display-card-about = تبدیلیاں فوراً لاگو ہوتی ہیں۔ اگر اسکرین خراب ہو جائے تو کچھ نہ کریں۔ رکھیں نہ دبانے پر وہ 15 سیکنڈ بعد خود واپس ہو جاتی ہے۔ تجویز کردہ ریزولوشن وہ ہے جس کے لیے اسکرین بنی ہے۔ معیاری سائز وہ ہے جو Trindle نے اس اسکرین کے لیے چنا۔
 
 # Name of the list of where a display sits, and heading of its line when there are more than two displays; { $display } is the display.
 settings-display-place-name = { $display } کو رکھیں
@@ -136,13 +124,13 @@ settings-display-relative = { $display } بنسبت { $other }
 settings-display-arrangement-title = ترتیب
 
 # Words behind the i of that card.
-settings-display-arrangement-about = ڈسپلے ایک دوسرے کے پاس کہاں رکھے ہیں، تاکہ پوائنٹر مشترکہ کنارے سے ایک سے دوسرے میں جائے۔
+settings-display-arrangement-about = طے کریں کہ ڈسپلے ایک دوسرے کے ساتھ کہاں رکھے ہیں، تاکہ پوائنٹر ان کے مشترکہ کنارے سے ایک سے دوسرے میں جا سکے۔
 
 # Small words on that card while fewer than two displays are in use.
-settings-display-arrangement-waits = ایک کو دوسرے کے پاس رکھنے کے لیے دو ڈسپلے استعمال کریں۔
+settings-display-arrangement-waits = ایک ڈسپلے کو دوسرے کے ساتھ رکھنے کے لیے دو ڈسپلے چاہییں۔
 
 # Red words when the desktop refused a change of displays and gave no reason.
-settings-display-refused = ڈیسک ٹاپ نے اسے قبول نہیں کیا۔
+settings-display-refused = یہ تبدیلی نہیں ہو سکی۔
 
 # Said aloud after the displays changed; { $seconds } is how long until they go back.
 settings-display-aloud-changed =
@@ -161,35 +149,25 @@ settings-display-not-kept = ترتیب ابھی استعمال میں ہے، م�
 settings-display-nothing-changed = کچھ نہیں بدلا
 
 # Small words under that line.
-settings-display-refused-change = ڈیسک ٹاپ نے تبدیلی قبول نہیں کی۔
+settings-display-refused-change = یہ تبدیلی نہیں کی جا سکی۔
 
 # Heading of the line under the picture of the displays.
 settings-display-apply-at-once = تبدیلیاں فوراً لاگو ہوتی ہیں
-
-# Small words under that line; { $seconds } is how long Keep is asked for.
-settings-display-keep-asked =
-    { $seconds ->
-        [one] رکھیں کا سوال ونڈو کے نیچے { $seconds } سیکنڈ تک پوچھا جاتا ہے۔
-       *[other] رکھیں کا سوال ونڈو کے نیچے { $seconds } سیکنڈ تک پوچھا جاتا ہے۔
-    }
 
 # Title of the night light card.
 settings-display-night-title = رات کی روشنی
 
 # Words behind the i of that card.
-settings-display-night-about = شام کو اسکرین گرم ہو جاتی ہے، جو آنکھوں کے لیے آسان ہے۔ یہ غروب اور طلوع آفتاب کی پیروی کرتی ہے، جو ٹائم زون سے نکالے جاتے ہیں، یا آپ کے اپنے مقرر کردہ اوقات کی؛ جب ٹائم زون نہ بتائے کہ کمپیوٹر کہاں ہے تو مقرر اوقات استعمال ہوتے ہیں۔
+settings-display-night-about = شام کو اسکرین گرم ہو جاتی ہے، جو آنکھوں کے لیے آسان ہے۔ یہ آپ کے ٹائم زون سے نکالے گئے غروب اور طلوع آفتاب کے مطابق چلتی ہے، یا آپ کے اپنے مقرر کردہ اوقات کے مطابق۔ اگر Trindle ٹائم زون سے نہ جان سکے کہ آپ کہاں ہیں تو وہ آپ کے مقرر کردہ اوقات استعمال کرتا ہے۔
 
 # Heading of the night light line, and name of its switch.
 settings-display-night = رات کی روشنی
-
-# Small words under that line.
-settings-display-night-about-line = شام کو گرم رنگ۔
 
 # Small words under the When line; { $zone } is the time zone.
 settings-display-when-zone = { $zone } میں غروب اور طلوع آفتاب۔
 
 # Small words under the When line when the time zone gives no place.
-settings-display-when-no-place = ٹائم زون کوئی جگہ نہیں بتاتا: مقرر اوقات۔
+settings-display-when-no-place = Trindle مقرر اوقات استعمال کر رہا ہے کیونکہ اسے غروب آفتاب کا وقت معلوم نہیں۔
 
 # Choice in the When list: from sunset to sunrise.
 settings-display-when-sun = غروب سے طلوع آفتاب تک
@@ -209,9 +187,6 @@ settings-display-to = تک
 # Heading of the warmth line, and name of its slider.
 settings-display-warmth = گرمی
 
-# Small words under the warmth line.
-settings-display-warmth-about = رات کو اسکرین کتنی گرم ہوتی ہے۔
-
 # Small word under the left end of the warmth slider.
 settings-display-little = تھوڑی
 
@@ -230,8 +205,8 @@ settings-display-one-display-tip = { $name }، { $res }
 # Spoken description of the picture of the displays when several are in use; { $n } is how many.
 settings-display-many-displays-tip =
     { $n ->
-        [one] { $n } ڈسپلے، جیسے ترتیب دیے گئے ہیں ساتھ ساتھ
-       *[other] { $n } ڈسپلے، جیسے ترتیب دیے گئے ہیں ساتھ ساتھ
+        [one] { $n } ڈسپلے
+       *[other] { $n } ڈسپلے، جیسے ترتیب دیے گئے ہیں
     }
 
 # Word drawn in the picture of the displays when none is in use.
@@ -241,25 +216,25 @@ settings-display-no-display = کوئی ڈسپلے نہیں
 settings-display-your-displays = آپ کے ڈسپلے
 
 # Small words under Nothing to show on when the desktop listed no displays.
-settings-display-listed-none = ڈیسک ٹاپ نے کوئی ڈسپلے نہیں بتایا۔
+settings-display-listed-none = Trindle کو کوئی ڈسپلے نہیں ملا۔
 
 # Title of the card shown when no display was found.
 settings-display-none-title = کوئی ڈسپلے نہیں ملا
 
 # Heading of the line in that card.
-settings-display-none-heading = دکھانے کے لیے کچھ نہیں
+settings-display-none-heading = کوئی ڈسپلے نہیں ملا
 
 # Title of the card about the graphics card.
 settings-display-graphics-title = گرافکس
 
 # Words behind the i of that card.
-settings-display-graphics-about = اس کمپیوٹر میں NVIDIA کارڈ ہے جو اوپن ڈرائیور استعمال کر رہا ہے۔ سب کچھ کام کرتا ہے۔ تقریباً 2022 کے بعد کے کارڈ پر یہ سست محسوس ہو گا، کیونکہ اوپن ڈرائیور کارڈ کی رفتار بڑھا نہیں سکتا۔ NVIDIA کا اپنا ڈرائیور انسٹال کیا جا سکتا ہے۔
+settings-display-graphics-about = اس کمپیوٹر میں NVIDIA گرافکس کارڈ ہے جو اوپن ڈرائیور استعمال کر رہا ہے۔ یہ کام کرتا ہے، مگر تقریباً 2022 کے بعد کا کارڈ سست محسوس ہو گا، کیونکہ اوپن ڈرائیور کارڈ کی رفتار بڑھا نہیں سکتا۔ اس کی جگہ NVIDIA کا اپنا ڈرائیور انسٹال کیا جا سکتا ہے۔
 
 # Heading of the line about an NVIDIA card on the open driver.
-settings-display-nvidia = NVIDIA کارڈ، اوپن ڈرائیور پر
+settings-display-nvidia = اوپن ڈرائیور والا NVIDIA کارڈ
 
 # Small words under that line.
-settings-display-nvidia-about = کام کرتا ہے؛ 2022 کے بعد کا کارڈ سست لگتا ہے۔
+settings-display-nvidia-about = 2022 اور اس کے بعد کے کارڈ سست چل سکتے ہیں۔
 
 # Words of the link that opens help about the NVIDIA driver.
 settings-display-nvidia-help = اس کا کیا کرنا ہے

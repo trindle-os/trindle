@@ -7,18 +7,15 @@ disks-title = Диски
 disks-about-tip = Об этой странице
 
 # First paragraph of the longer words that open from the i beside the title.
-disks-help-1 = Все диски, установленные в этот компьютер или подключённые к нему, нарисованы полосой из разделов. Ширина каждого раздела соответствует его размеру, а заполнен он настолько, насколько занят, поэтому полный раздел сразу заметен.
+disks-help-1 = Здесь показаны все диски, установленные в этот компьютер или подключённые к нему, в виде полосы из разделов. Ширина раздела показывает его размер, а заливка показывает, насколько он заполнен, поэтому полный раздел сразу заметен.
 
 # Second paragraph of the longer words that open from the i beside the title.
 # SAFETY: needs a human review before it ships
-disks-help-2 = Под рисунком у каждого диска есть карточка. Откройте раздел, смонтируйте или размонтируйте его, безопасно извлеките диск или выключите его питание. Карандаш на разделе открывает его изменения: имя, собственная папка и готовность при запуске, размер, проверка и исправление, форматирование или удаление. Плюс в свободном месте создаёт новый раздел.
+disks-help-2 = Под рисунком у каждого диска есть карточка. Раздел можно открыть, смонтировать или размонтировать, а диск можно безопасно извлечь или выключить. Карандаш на разделе позволяет переименовать его, выбрать для него папку, монтировать его при запуске, изменить размер, проверить, исправить, отформатировать или удалить. Плюс в свободном месте создаёт новый раздел.
 
 # Third paragraph of the longer words that open from the i beside the title.
 # SAFETY: needs a human review before it ships
-disks-help-3 = Диск, с которого работает система, показан, но для него никогда не предлагаются изменения, которые стирают или перемещают данные. Для любого изменения любого диска каждый раз запрашивается пароль администратора. Глаз скрывает диск или раздел от «Папок» и кольца: он остаётся здесь, затенённый, и не заблокирован.
-
-# Sentence under the title of the main card, saying what the picture of the drives shows.
-disks-map-caption = Каждый раздел каждого диска, заполненный настолько, насколько занят.
+disks-help-3 = Диск, с которого работает система, виден, но никаких изменений, которые стирают или перемещают данные, для него сделать нельзя. Для любого изменения любого диска каждый раз запрашивается пароль администратора. Глаз скрывает диск или раздел от Folders и кольца. Он остаётся здесь, затенённый, и не заблокирован.
 
 # Title of the main card, which draws every drive as a bar of its parts.
 disks-your-drives = Ваши диски
@@ -42,13 +39,13 @@ disks-missing-service = Служба дисков
 disks-missing-bus = Системная шина
 
 # Red words on the card shown when what Drives needs is not there. { $what } is the name of the missing program; { $package } is the package to install.
-disks-missing = { $what }: недоступно. Установите командой: sudo apt install { $package }
+disks-missing = { $what }: недоступно. Чтобы установить, выполните: sudo apt install { $package }
 
 # Sentence at the top of the page while the first look at the drives is being taken.
 disks-headline-loading = Смотрим на диски…
 
 # Red sentence at the top of the page when a drive says it is failing. { $name } is the drive's name.
-disks-headline-failing = { $name } выходит из строя. Скопируйте с него всё нужное прямо сейчас.
+disks-headline-failing = { $name } выходит из строя. Скопируйте нужные файлы на другой диск прямо сейчас.
 
 # Sentence at the top of the page when a drive has worn-out or damaged spots. { $name } is the drive's name; { $troubles } lists what is wrong.
 disks-headline-look = { $name } требует внимания: { $troubles }.
@@ -56,41 +53,41 @@ disks-headline-look = { $name } требует внимания: { $troubles }.
 # Sentence at the top of the page when nothing is wrong. { $plugged } is how many drives are plugged in from outside.
 disks-headline-calm =
     { $plugged ->
-        [0] Диски и место на них.
-        [one] Диски и место на них, а также подключённый диск.
-        [few] Диски и место на них, а также подключённые диски: { $plugged }.
-        [many] Диски и место на них, а также подключённые диски: { $plugged }.
-       *[other] Диски и место на них, а также подключённые диски: { $plugged }.
+        [0] Ваши диски и место на них.
+        [one] Ваши диски и место на них. Подключён один диск.
+        [few] Ваши диски и место на них. Подключённых дисков: { $plugged }.
+        [many] Ваши диски и место на них. Подключённых дисков: { $plugged }.
+       *[other] Ваши диски и место на них. Подключённых дисков: { $plugged }.
     }
 
 # Red sentence at the top of the page when the computer's own disk is almost full. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-full =
     { $plugged ->
-        [0] Почти заполнен: на этом компьютере свободно всего { $free }. Скоро удалите или перенесите часть файлов.
-        [one] Почти заполнен: на этом компьютере свободно всего { $free }, и подключён диск. Скоро удалите или перенесите часть файлов.
-        [few] Почти заполнен: на этом компьютере свободно всего { $free }, подключённых дисков: { $plugged }. Скоро удалите или перенесите часть файлов.
-        [many] Почти заполнен: на этом компьютере свободно всего { $free }, подключённых дисков: { $plugged }. Скоро удалите или перенесите часть файлов.
-       *[other] Почти заполнен: на этом компьютере свободно всего { $free }, подключённых дисков: { $plugged }. Скоро удалите или перенесите часть файлов.
+        [0] Компьютер почти заполнен: свободно всего { $free }. Скоро удалите или перенесите часть файлов.
+        [one] Компьютер почти заполнен: свободно всего { $free }. Подключён один диск. Скоро удалите или перенесите часть файлов.
+        [few] Компьютер почти заполнен: свободно всего { $free }. Подключённых дисков: { $plugged }. Скоро удалите или перенесите часть файлов.
+        [many] Компьютер почти заполнен: свободно всего { $free }. Подключённых дисков: { $plugged }. Скоро удалите или перенесите часть файлов.
+       *[other] Компьютер почти заполнен: свободно всего { $free }. Подключённых дисков: { $plugged }. Скоро удалите или перенесите часть файлов.
     }
 
 # Sentence at the top of the page when the computer's own disk is filling up. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-getting-full =
     { $plugged ->
-        [0] Заполняется: на этом компьютере свободно { $free }.
-        [one] Заполняется: на этом компьютере свободно { $free }, и подключён диск.
-        [few] Заполняется: на этом компьютере свободно { $free }, подключённых дисков: { $plugged }.
-        [many] Заполняется: на этом компьютере свободно { $free }, подключённых дисков: { $plugged }.
-       *[other] Заполняется: на этом компьютере свободно { $free }, подключённых дисков: { $plugged }.
+        [0] Компьютер заполняется: свободно { $free }.
+        [one] Компьютер заполняется: свободно { $free }. Подключён один диск.
+        [few] Компьютер заполняется: свободно { $free }. Подключённых дисков: { $plugged }.
+        [many] Компьютер заполняется: свободно { $free }. Подключённых дисков: { $plugged }.
+       *[other] Компьютер заполняется: свободно { $free }. Подключённых дисков: { $plugged }.
     }
 
 # Sentence at the top of the page when the computer's own disk has plenty of room. { $free } is the free space; { $plugged } is how many drives are plugged in from outside.
 disks-headline-plenty =
     { $plugged ->
-        [0] Места достаточно: на этом компьютере свободно { $free }.
-        [one] Места достаточно: на этом компьютере свободно { $free }, и подключён диск.
-        [few] Места достаточно: на этом компьютере свободно { $free }, подключённых дисков: { $plugged }.
-        [many] Места достаточно: на этом компьютере свободно { $free }, подключённых дисков: { $plugged }.
-       *[other] Места достаточно: на этом компьютере свободно { $free }, подключённых дисков: { $plugged }.
+        [0] На компьютере достаточно места: свободно { $free }.
+        [one] На компьютере достаточно места: свободно { $free }. Подключён один диск.
+        [few] На компьютере достаточно места: свободно { $free }. Подключённых дисков: { $plugged }.
+        [many] На компьютере достаточно места: свободно { $free }. Подключённых дисков: { $plugged }.
+       *[other] На компьютере достаточно места: свободно { $free }. Подключённых дисков: { $plugged }.
     }
 
 # Title of the card with the ring for the disk the system is on.
@@ -102,7 +99,7 @@ disks-ring-files = Ваши файлы
 # Sentence on a ring's card. { $free } is the free space; { $place } is system for the disk the system is on, or files for the place that holds your own files.
 disks-ring-still-free =
     { $place ->
-        [system] Ещё свободно { $free } там, где находится система.
+        [system] Ещё свободно { $free } на диске, где находится система.
        *[files] Ещё свободно { $free } для ваших файлов.
     }
 
@@ -113,18 +110,18 @@ disks-ring-tip = { $name }: заполнено { $full }, свободно { $fr
 disks-ring-of = из { $whole }
 
 # Health reading in the line under the picture when no drive has taken a reading yet.
-disks-health-none = Показаний нет, диски не сообщают о своём состоянии
+disks-health-none = Диски пока не передали данных о своём состоянии
 
 # Health reading in the line under the picture when the one drive that has taken a reading is fine.
-disks-health-one = Исправен, как сообщает сам диск
+disks-health-one = Исправен, по проверке самого диска
 
 # Health reading in the line under the picture when every drive is fine. { $n } is how many drives say so.
 disks-health-all =
     { $n ->
-        [few] Исправны, как сообщают все { $n } диска
-        [many] Исправны, как сообщают все { $n } дисков
-        [one] Исправны, как сообщают все { $n } дисков
-       *[other] Исправны, как сообщают все { $n } дисков
+        [one] Исправен, по проверке самого диска
+        [few] Все { $n } диска прошли собственные проверки
+        [many] Все { $n } дисков прошли собственные проверки
+       *[other] Все { $n } диска прошли собственные проверки
     }
 
 # Health reading in the line under the picture when some drives need a look. { $n } is how many.
@@ -200,7 +197,7 @@ disks-kind-crypto-open = Зашифрован, разблокирован
 disks-kind-crypto-locked = Зашифрован, заблокирован
 
 # Kind of a part that holds other parts.
-disks-kind-container = Содержит другие разделы
+disks-kind-container = Содержит разделы
 
 # Kind of a part that has no filesystem on it.
 disks-kind-none = Нет файловой системы
@@ -247,7 +244,7 @@ disks-trouble-volatile = отказала резервная память
 disks-trouble-pmr = часть его перешла в режим только для чтения
 
 # Trouble a drive reports when it has been used past what its maker expects.
-disks-trouble-worn = изношен сверх ожидаемого производителем
+disks-trouble-worn = изношен сверх ожидаемого срока службы
 
 # Trouble a drive reports about damaged spots. { $n } is how many.
 disks-health-damaged =
@@ -271,7 +268,7 @@ disks-health-hours =
     }
 
 # How a drive says it is when it is failing, on its card.
-disks-health-failing = Выходит из строя: скопируйте с него всё нужное прямо сейчас
+disks-health-failing = Выходит из строя. Скопируйте с него всё нужное прямо сейчас
 
 # How a drive says it is when something is wrong, on its card. { $troubles } lists what is wrong.
 disks-health-attention = Требует внимания: { $troubles }
@@ -283,10 +280,10 @@ disks-health-ok = Исправен
 disks-health-line = { $state }, { $readings }
 
 # Line under a drive's name when its case answers but the drive inside it does not.
-disks-no-answer = Диск не отвечает
+disks-no-answer = Не отвечает
 
 # Red words on a drive's card when its case answers but the drive inside it does not.
-disks-no-answer-help = Корпус отвечает, а диск внутри него нет. Отключите его, подождите десять секунд и подключите в синий порт или порт USB-C его собственным кабелем; если ничего не изменится, диск внутри мог отсоединиться или выйти из строя.
+disks-no-answer-help = Корпус подключён, но диск внутри него не отвечает. Отключите его, подождите десять секунд, затем подключите в синий порт или порт USB-C его собственным кабелем. Если ничего не изменится, диск внутри мог отсоединиться или выйти из строя.
 
 # Tip of the round button on a drive's card that takes the drive out safely.
 # SAFETY: needs a human review before it ships
@@ -294,7 +291,7 @@ disks-remove-safely = Безопасно извлечь
 
 # Tip of the round button on a drive's card that powers the drive off.
 # SAFETY: needs a human review before it ships
-disks-power-off-tip = Выключить питание
+disks-power-off-tip = Выключить
 
 # Tip of the round button on a drive's card that opens the box for erasing the whole drive, and the name of that box's row and its button.
 # SAFETY: needs a human review before it ships
@@ -304,25 +301,25 @@ disks-erase-whole = Стереть весь диск
 disks-eye-show =
     { $what ->
         [drive] Показать этот диск
-       *[part] Показать этот раздел
+       *[partition] Показать этот раздел
     }
 
 # Tip of the eye that hides a drive or part. { $what } is drive or part; { $lock } is the note that hiding does not protect it.
 disks-eye-hide =
     { $what ->
         [drive] Скрыть этот диск. { $lock }
-       *[part] Скрыть этот раздел. { $lock }
+       *[partition] Скрыть этот раздел. { $lock }
     }
 
 # Note on the card of a hidden drive. { $lock } is the note that hiding does not protect it.
-disks-hidden-note = Скрыт от «Папок» и кольца. { $lock }
+disks-hidden-note = Скрыт от Folders и кольца. { $lock }
 
 # Note on the card of the drive the system runs from.
 # SAFETY: needs a human review before it ships
-disks-system-note = С него работает система: здесь ничего нельзя стереть.
+disks-system-note = С него работает система, поэтому здесь ничего нельзя стереть.
 
 # Note on the card of a drive that has no partition table.
-disks-no-table = Нет таблицы разделов: весь диск свободен.
+disks-no-table = У этого диска нет таблицы разделов, поэтому весь он свободен.
 
 # Part of the line under a part's name, when it holds files but is not mounted.
 disks-part-not-mounted = не смонтирован
@@ -346,7 +343,7 @@ disks-mount = Смонтировать
 disks-unmount = Размонтировать
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = Изменить
+disks-change-it = Внести изменения
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = Имя
@@ -376,7 +373,7 @@ disks-folder-note = Где появляются его файлы. Оставь�
 disks-mount-startup = Монтировать при запуске
 
 # Note under the row with the switch for mounting a part at start-up.
-disks-startup-note = Готов при каждом запуске компьютера. Если его нет, компьютер всё равно запустится.
+disks-startup-note = Монтируется при каждом запуске компьютера. Если его нет, компьютер всё равно запустится.
 
 # Spoken name of the sliders that choose a size in gigabytes, for resizing a part and for making a new one.
 disks-size-gb = Размер в ГБ
@@ -399,10 +396,10 @@ disks-format-erases = Это сотрёт всё на { $words }. Отменит
 
 # Warning shown after the first press of the resize button. { $name } is the part; { $drive } is the drive; { $from } is its size now; { $to } is the size asked for.
 # SAFETY: needs a human review before it ships
-disks-resize-warning = Нажмите ещё раз: { $name } на { $drive } изменится с { $from } до { $to }
+disks-resize-warning = Нажмите ещё раз, чтобы изменить размер раздела { $name } на { $drive } с { $from } до { $to }
 
 # Label of the row where room is made for a new part under a part that is in use.
-disks-room-label = Освободить место для нового раздела
+disks-room-label = Место для нового раздела
 
 # Spoken name of the slider that chooses how much room to make.
 disks-room-gb = Место в ГБ
@@ -412,10 +409,10 @@ disks-room-tip = Освободить место
 
 # Warning shown after the first press of the make room button. { $name } is the part; { $drive } is the drive; { $size } is the room asked for.
 # SAFETY: needs a human review before it ships
-disks-room-warning = Нажмите ещё раз: { $name } на { $drive } уменьшится на { $size } после создания снимка
+disks-room-warning = Нажмите ещё раз, чтобы забрать { $size } у раздела { $name } на { $drive }. Сначала Trindle создаст снимок.
 
 # Note under the row that makes room.
-disks-room-note = Уменьшается во время работы, после создания снимка, с освобождением места.
+disks-room-note = Trindle создаёт снимок, а затем уменьшает раздел, пока он используется. Освободившееся место остаётся пустым.
 
 # Tip of the button that checks a part for faults.
 disks-check-tip = Проверить на ошибки
@@ -425,9 +422,6 @@ disks-repair-tip = Исправить
 
 # Label of the row where a part is checked and repaired.
 disks-faults = Ошибки
-
-# Note under the Faults row.
-disks-faults-note = Ищет ошибки в том, как хранятся его файлы, и исправляет их. На время работы он размонтируется.
 
 # Warning shown after the first press of the repair button. { $name } is the part; { $drive } is the drive.
 # SAFETY: needs a human review before it ships
@@ -444,17 +438,9 @@ disks-format = Форматирование
 # SAFETY: needs a human review before it ships
 disks-format-tip = Форматировать
 
-# Note under the row that erases the whole drive.
-# SAFETY: needs a human review before it ships
-disks-format-whole = Начинает заново как один раздел, занимающий весь диск.
-
-# Note under the row that formats one part.
-# SAFETY: needs a human review before it ships
-disks-format-part = Стирает всё только на этом разделе.
-
 # Warning shown after the first press of the format or erase button. { $words } names what is erased.
 # SAFETY: needs a human review before it ships
-disks-format-warning = Нажмите ещё раз: всё на { $words } будет стёрто
+disks-format-warning = Нажмите ещё раз, чтобы стереть всё на { $words }
 
 # Names a part in the warning before it is formatted. { $name } is the part; { $size } is its size; { $drive } is the drive.
 disks-part-where = { $name }, { $size }, на { $drive }
@@ -465,11 +451,7 @@ disks-delete-name = Удалить { $name }, { $size }, на { $drive }
 
 # Label of the row where a part is deleted.
 # SAFETY: needs a human review before it ships
-disks-delete-label = Удалить этот раздел
-
-# Note under the row that deletes a part.
-# SAFETY: needs a human review before it ships
-disks-delete-note = Его место становится свободным, готовым для нового раздела или для роста предыдущего.
+disks-delete-label = Удалить раздел
 
 # Tip of the round button on free space that opens the box for making a new part.
 disks-new-part-tip = Создать здесь новый раздел
@@ -477,14 +459,11 @@ disks-new-part-tip = Создать здесь новый раздел
 # Label of the row where a new part is made.
 disks-new-part = Новый раздел
 
-# Note under the row where a new part is made.
-disks-new-part-note = Создаётся в этом свободном месте и форматируется для использования.
-
 # Tip of the button that makes a new part.
 disks-make-tip = Создать
 
 # Warning shown after the first press of the button that makes a new part. { $size } is the size asked for; { $drive } is the drive.
-disks-make-warning = Нажмите ещё раз, чтобы создать раздел { $size } на { $drive }
+disks-make-warning = Нажмите ещё раз, чтобы создать новый раздел размером { $size } на { $drive }
 
 # Title of the box for erasing a whole drive. { $name } is the drive.
 # SAFETY: needs a human review before it ships
@@ -524,7 +503,7 @@ disks-safe-remove = Можно безопасно извлекать
 disks-powering-off = Выключаем питание
 
 # Words on a drive's row when it has been powered off.
-disks-off-safe = Выключен: можно отключать
+disks-off-safe = Можно отключать
 
 # Words on a row while a part is being renamed.
 disks-renaming = Переименование
@@ -533,7 +512,7 @@ disks-renaming = Переименование
 disks-renamed = Переименован
 
 # Words on a row when the person emptied the folder box, so the computer chooses the folder.
-disks-folder-auto = Компьютер снова сам выбирает папку
+disks-folder-auto = Папка теперь выбирается автоматически
 
 # Words on a row when a part has been given a folder. { $dir } is the folder.
 disks-folder-appears = Появляется в { $dir }
@@ -542,7 +521,7 @@ disks-folder-appears = Появляется в { $dir }
 disks-startup-on = Монтируется при запуске в { $dir }
 
 # Words on a row when a part is set not to mount at start-up.
-disks-startup-off = При запуске не трогается
+disks-startup-off = Не монтируется при запуске
 
 # Words on a row while a folder or start-up choice is being saved.
 disks-saving = Сохранение
@@ -554,22 +533,31 @@ disks-resizing = Изменение размера
 disks-resized = Размер изменён до { $size }
 
 # Red words on the row that makes room, when the files to make smaller cannot be found.
-disks-room-files-missing = Не удалось найти файлы, поэтому освободить место нельзя.
+disks-room-files-missing = Trindle не смог найти файлы, поэтому не может освободить место.
 
 # Words on a row while the snapshot is taken before room is made.
 disks-snapshot-taking = Создаём снимок
 
 # Red words when the snapshot taken before making room could not be found afterwards.
-disks-snapshot-missing = Потом не удалось найти снимок.
+disks-snapshot-missing = Trindle потом не смог найти снимок.
 
-# Red words when the snapshot before making room failed. { $why } is why, as a sentence.
+# Red words when the snapshot, or switching off the swap file, before making room failed. { $why } is why, as a sentence.
 disks-snapshot-failed = { $why } Размер не изменялся.
 
 # Red words when things changed while the snapshot was being taken.
-disks-snapshot-changed = Пока создавался снимок, всё изменилось, поэтому размер не изменялся.
+disks-snapshot-changed = Пока Trindle создавал снимок, что-то изменилось, поэтому размер не изменялся.
 
 # Words on a row while room is being made.
 disks-making-room = Освобождаем место
+
+# Words on a row while the swap file is switched off before room is made.
+disks-swap-off-doing = Отключаем файл подкачки
+
+# Words on a row while the swap file is switched back on after room is made.
+disks-swap-on-doing = Снова включаем файл подкачки
+
+# Red words when the swap file couldn't be switched back on after making room. { $done } is how making room went, { $why } why the swap file is still off, both as sentences.
+disks-swap-still-off = { $done } Файл подкачки останется выключенным до перезагрузки. { $why }
 
 # Words on a row when room has been made. { $size } is how much.
 disks-room-made = Освобождено места: { $size }
@@ -581,7 +569,7 @@ disks-repairing = Исправление
 disks-repaired = Исправлен
 
 # Red words when some faults could not be put right.
-disks-repair-failed = Некоторые ошибки исправить не удалось. Скопируйте всё, что хотите сохранить.
+disks-repair-failed = Trindle не смог исправить некоторые ошибки. Скопируйте нужные файлы на другой диск.
 
 # Words on a row while a part is being checked.
 disks-checking = Проверка
@@ -590,7 +578,7 @@ disks-checking = Проверка
 disks-no-faults = Ошибок не найдено
 
 # Red words when the check found faults.
-disks-faults-found = Найдены ошибки: нажмите гаечный ключ, чтобы исправить их.
+disks-faults-found = Найдены ошибки. Нажмите гаечный ключ, чтобы исправить их.
 
 # Words on a row while a part or drive is being formatted.
 # SAFETY: needs a human review before it ships
@@ -605,13 +593,13 @@ disks-formatted = Отформатирован
 disks-erasing-whole = стирание всего диска
 
 # Red words when a freshly formatted part could not be found to give it its folder again.
-disks-new-part-missing = Не удалось найти новый раздел.
+disks-new-part-missing = Новый раздел не найден.
 
 # Red words when the drive service could not be reached to give a formatted part its folder again.
-disks-service-unreachable = Не удалось связаться со службой дисков.
+disks-service-unreachable = Нет связи со службой дисков.
 
 # Red words when the identifier of a freshly formatted part could not be read.
-disks-uuid-unread = Не удалось прочитать идентификатор нового раздела.
+disks-uuid-unread = Trindle не смог прочитать идентификатор нового раздела.
 
 # Words on a row while a part is being deleted.
 # SAFETY: needs a human review before it ships
@@ -645,10 +633,10 @@ disks-name-empty = Сначала укажите имя.
 # Red words under the folder name box when it is too long. { $max } is the most letters allowed.
 disks-name-too-long =
     { $max ->
-        [one] Слишком длинное имя: не больше { $max } символа.
-        [few] Слишком длинное имя: не больше { $max } символов.
-        [many] Слишком длинное имя: не больше { $max } символов.
-       *[other] Слишком длинное имя: не больше { $max } символов.
+        [one] Слишком длинное имя. Не больше { $max } символа.
+        [few] Слишком длинное имя. Не больше { $max } символов.
+        [many] Слишком длинное имя. Не больше { $max } символов.
+       *[other] Слишком длинное имя. Не больше { $max } символов.
     }
 
 # Red words under the folder name box when it has letters that are not allowed.
@@ -663,10 +651,10 @@ disks-name-taken = { $dir } уже используется.
 # Red words under a part's name box when the name is too long for its kind of file system. { $max } is the most letters allowed.
 disks-label-too-long =
     { $max ->
-        [one] Слишком длинное имя для этого типа: не больше { $max } символа.
-        [few] Слишком длинное имя для этого типа: не больше { $max } символов.
-        [many] Слишком длинное имя для этого типа: не больше { $max } символов.
-       *[other] Слишком длинное имя для этого типа: не больше { $max } символов.
+        [one] Слишком длинное имя для этого раздела. Не больше { $max } символа.
+        [few] Слишком длинное имя для этого раздела. Не больше { $max } символов.
+        [many] Слишком длинное имя для этого раздела. Не больше { $max } символов.
+       *[other] Слишком длинное имя для этого раздела. Не больше { $max } символов.
     }
 
 # Red words under a part's name box when a FAT name has marks that are not allowed.
@@ -675,8 +663,8 @@ disks-label-fat-marks = Имена FAT не могут содержать * ? . 
 # Red words under the Size row when the kind of part must be mounted before it can be resized. { $way } is larger or smaller.
 disks-resize-mount-first =
     { $way ->
-        [larger] Сначала смонтируйте его: этот тип можно увеличить только в смонтированном виде.
-       *[smaller] Сначала смонтируйте его: этот тип можно уменьшить только в смонтированном виде.
+        [larger] Сначала смонтируйте его. Раздел этого типа можно увеличить только в смонтированном виде.
+       *[smaller] Сначала смонтируйте его. Раздел этого типа можно уменьшить только в смонтированном виде.
     }
 
 # Red words under the Size row when the kind of part cannot be resized. { $way } is larger or smaller.
@@ -688,11 +676,11 @@ disks-resize-cannot =
 
 # Red words when the password box was closed with no password. Said whole, as a sentence.
 # SAFETY: needs a human review before it ships
-disks-no-password = Пароль не введён, поэтому ничего не изменилось.
+disks-no-password = Вы не ввели пароль, поэтому ничего не изменилось.
 
 # Red words when the password box was closed with no password, after some steps of a change were already done.
 # SAFETY: needs a human review before it ships
-disks-no-password-part-way = Пароль не введён, поэтому работа остановилась на середине.
+disks-no-password-part-way = Вы не ввели пароль, поэтому работа остановилась на середине.
 
 # Red words when another change is pressed while one is still being made.
 disks-change-going = Изменение уже выполняется.
@@ -701,24 +689,24 @@ disks-one-at-a-time = Другое изменение ещё выполняет�
 
 # Red words when it could not be made sure that the password would be asked for.
 # SAFETY: needs a human review before it ships
-disks-not-sure = Не удалось убедиться, что будет запрошен пароль, поэтому ничего не изменилось.
+disks-not-sure = Trindle не смог убедиться, что запросит ваш пароль, поэтому ничего не изменилось.
 
 # Red words after how a change ended, when the password just given could not be taken back.
 # SAFETY: needs a human review before it ships
-disks-standing = Только что введённый пароль не удалось отозвать, поэтому в течение нескольких минут другое изменение диска может не запросить его. Попытка повторяется.
+disks-standing = Trindle не смог отозвать только что введённый вами пароль. В течение нескольких минут другое изменение диска может не запросить пароль. Trindle пробует снова.
 
 # Words after how a change ended, when the password just given has been taken back after all.
 # SAFETY: needs a human review before it ships
-disks-taken-back = Введённый пароль теперь отозван: следующее изменение запросит его.
+disks-taken-back = Введённый вами пароль теперь отозван, поэтому следующее изменение запросит его.
 
 # Red words when a change could not be started because there is no drive service to ask.
-disks-no-service = Не удалось связаться со службой дисков, поэтому ничего не изменилось.
+disks-no-service = Trindle не смог связаться со службой дисков, поэтому ничего не изменилось.
 
 # Red words said the next time Drives opens, about a change it was closed or ended in the middle of.
 disks-closed = «Диски» были закрыты, пока выполнялось это изменение.
 
 # Words on the row of a change still being made when the window is asked to close.
-disks-stays-open = «Диски» остаются открытыми, пока это не закончится, чтобы сообщить, чем всё кончилось.
+disks-stays-open = «Диски» останутся открытыми, пока это не закончится, чтобы вы увидели, чем всё кончилось.
 
 # Red words for a refusal. { $reason } says why, without a full stop.
 disks-nothing-changed = { $reason }, поэтому ничего не изменилось.
@@ -727,7 +715,7 @@ disks-nothing-changed = { $reason }, поэтому ничего не измен
 disks-part-way = { $reason }, поэтому работа остановилась на середине.
 
 # Reason given when the drive service could not be asked, without a full stop.
-disks-service-not-asked = Не удалось обратиться к службе дисков
+disks-service-not-asked = Нет связи со службой дисков
 
 # Red words when a change stopped part-way for a reason that was not a refusal. { $why } is the reason, as a sentence.
 disks-failed-part-way = { $why } Работа остановилась на середине.
@@ -751,25 +739,25 @@ disks-list-not-known = Неизвестно: { $steps }.
 disks-left-unmounted = { $dev } был размонтирован для этого и сейчас не смонтирован.
 
 # Red words about a part that was unmounted for a change that did nothing to the drive. { $dev } is the part.
-disks-still-unmounted = { $dev } был размонтирован для этого и по-прежнему не смонтирован: смонтируйте его в его строке.
+disks-still-unmounted = { $dev } был размонтирован для этого и по-прежнему не смонтирован. Смонтируйте его в его строке.
 
 # Red words about a part that the step that stopped may have unmounted. { $dev } is the part.
-disks-may-be-unmounted = { $dev } мог быть размонтирован: посмотрите его строку.
+disks-may-be-unmounted = { $dev } мог быть размонтирован. Посмотрите его строку.
 
 # Red words about a part that could not be mounted again because that needs a password. { $dev } is the part.
-disks-put-back-password = { $dev } был размонтирован для этого, а для повторного монтирования нужен отдельный пароль: смонтируйте его в его строке.
+disks-put-back-password = { $dev } был размонтирован для этого. Смонтируйте его снова в его строке и введите пароль, когда появится запрос.
 
 # Red words about a part that could not be mounted again. { $dev } is the part; { $why } is why.
-disks-put-back-failed = { $dev } был размонтирован для этого и не смонтировался снова ({ $why }): смонтируйте его в его строке.
+disks-put-back-failed = { $dev } был размонтирован для этого и не смонтировался снова ({ $why }). Смонтируйте его в его строке.
 
 # Red words under a freshly formatted part whose folder could not be kept. { $dir } is the folder; { $why } is why, as a sentence.
-disks-folder-not-kept = Отформатирован, но папка { $dir } ему снова не назначена. { $why } Выберите папку снова в его строке.
+disks-folder-not-kept = Форматирование завершено, но Trindle не смог снова назначить папку { $dir }. { $why } Выберите папку снова в его строке.
 
 # Red words when a drive is in use and cannot be unmounted.
 disks-busy = Что-то ещё использует его. Закройте окна и программы, показывающие его файлы, и повторите.
 
 # Red words when there is not enough room for what is on a part at the size asked for.
-disks-no-room = Для того, что на нём есть, не хватит места при таком размере.
+disks-no-room = Такой размер слишком мал для файлов, которые уже на нём.
 
 # Step of a change. { $dev } is the part.
 disks-step-unmount = размонтирование { $dev }
@@ -778,7 +766,7 @@ disks-step-unmount = размонтирование { $dev }
 disks-step-mount = повторное монтирование { $dev }
 
 # Step of a change.
-disks-step-eject = закрытие диска для извлечения
+disks-step-eject = подготовка диска к извлечению
 
 # Step of a change.
 disks-step-power-off = выключение питания диска
@@ -788,14 +776,14 @@ disks-step-power-off = выключение питания диска
 disks-step-format = форматирование { $dev }
 
 # Step of a change.
-disks-step-create = создание нового раздела
+disks-step-create = создание раздела
 
 # Step of a change. { $dev } is the part.
 # SAFETY: needs a human review before it ships
 disks-step-delete = удаление { $dev }
 
 # Step of a change. { $dev } is the part.
-disks-step-resize-part = изменение размера раздела { $dev }
+disks-step-resize-part = изменение размера { $dev }
 
 # Step of a change. { $dev } is the part.
 disks-step-resize = изменение размера того, что на { $dev }
@@ -810,85 +798,82 @@ disks-step-check = проверка { $dev }
 disks-step-rename = переименование { $dev }
 
 # Step of a change. { $dev } is the part.
-disks-step-fstab = сохранение выбора папки и запуска для { $dev }
+disks-step-fstab = сохранение настроек папки и запуска для { $dev }
 
 # Step of a change that has no words of its own. { $method } is what the drive service was asked; { $dev } is the part.
 disks-step-other = шаг { $method } для { $dev }
 
 # Red words under the Make room row for a part of a kind that cannot be made smaller in use, and that can when it is not in use. { $kind } is the kind of file system.
-disks-room-ext-offline = Этот раздел { $kind } можно уменьшить, только когда он не используется, поэтому освободить место здесь нельзя.
+disks-room-ext-offline = Этот раздел { $kind } можно уменьшить, только когда он не используется, поэтому Trindle не может освободить здесь место.
 
 # Red words under the Make room row for an xfs part.
-disks-room-xfs-fixed = Этот раздел xfs нельзя уменьшить.
+disks-room-xfs-fixed = Разделы xfs нельзя уменьшить.
 
 # Red words under the Make room row for any other kind of part in use. { $kind } is the kind of file system.
 disks-room-other-kind = Этот раздел { $kind } нельзя уменьшить, пока он используется.
 
 # Red words under the Make room row when a snapshot cannot be taken of the part.
-disks-room-no-snapshot = Снимок можно создать только для собственного диска системы, поэтому освободить место здесь нельзя.
+disks-room-no-snapshot = Trindle может создать снимок только для собственного диска системы, поэтому не может освободить здесь место.
 
 # Red words under the Make room row.
-disks-room-not-in-table = Это не раздел из таблицы диска, поэтому освободить место из него нельзя.
+disks-room-not-in-table = Это не раздел в таблице разделов диска, поэтому Trindle не может освободить из него место.
 
 # Red words under the Make room row.
-disks-room-no-online-shrink = Служба дисков не может уменьшить Btrfs, пока он здесь используется, поэтому освободить место нельзя.
+disks-room-no-online-shrink = Служба дисков не может уменьшить Btrfs, пока он здесь используется, поэтому Trindle не может освободить место.
 
 # Red words under the Make room row.
-disks-room-holds-parts = Он содержит другие разделы, поэтому освободить место из него нельзя.
+disks-room-holds-parts = Внутри него есть другие разделы, поэтому Trindle не может освободить из него место.
 
 # Red words under the Make room row.
-disks-room-not-gpt = У его диска нет таблицы GPT, поэтому освободить место из него нельзя.
+disks-room-not-gpt = У его диска нет таблицы разделов GPT, поэтому Trindle не может освободить из него место.
 
 # Red words under the Make room row.
 disks-room-mount-first = Сначала смонтируйте его: Btrfs уменьшается в смонтированном виде.
 
 # Red words under the Make room row.
-disks-room-mounts-not-one = Он смонтирован не ровно в одном месте, поэтому освободить место нельзя.
+disks-room-mounts-not-one = Он не смонтирован, поэтому Trindle не может освободить место.
 
 # Red words under the Make room row.
-disks-room-read-only = Он смонтирован только для чтения, поэтому освободить место нельзя.
+disks-room-read-only = Он смонтирован только для чтения, поэтому Trindle не может освободить место.
 
 # Red words under the Make room row.
-disks-room-read-only-unknown = Не удалось определить, только ли для чтения он смонтирован, поэтому освободить место нельзя.
+disks-room-read-only-unknown = Trindle не смог определить, смонтирован ли он только для чтения, поэтому не может освободить место.
 
 # Red words under the Make room row.
-disks-room-many-drives = Файлы распределены по нескольким дискам, поэтому освободить место нельзя.
+disks-room-many-drives = Файлы распределены по нескольким дискам, поэтому Trindle не может освободить место.
 
 # Red words under the Make room row.
-disks-room-drives-unknown = Не удалось определить, по скольким дискам распределены файлы, поэтому освободить место нельзя.
+disks-room-drives-unknown = Trindle не смог определить, по скольким дискам распределены файлы, поэтому не может освободить место.
 
 # Red words under the Make room row.
-disks-room-swap-file = На нём лежит файл подкачки, поэтому освободить место нельзя.
+disks-room-swap-unknown = Trindle не смог определить, есть ли на нём файл подкачки, поэтому не может освободить место.
 
 # Red words under the Make room row.
-disks-room-swap-unknown = Не удалось определить, лежит ли на нём файл подкачки, поэтому освободить место нельзя.
+disks-room-used-unknown = Trindle не смог прочитать, сколько на нём занято, поэтому не может освободить место.
 
 # Red words under the Make room row.
-disks-room-used-unknown = Не удалось прочитать, сколько из него используется, поэтому освободить место нельзя.
+disks-room-area-unknown = Служба дисков не сообщает размер файловой системы, поэтому Trindle не может проверить её и освободить место.
 
 # Red words under the Make room row.
-disks-room-area-unknown = Служба дисков не сообщает размер области файлов, поэтому проверить не удалось и освободить место нельзя.
+disks-room-open-missing = Trindle не смог найти его разблокированную копию, поэтому не может освободить место.
 
 # Red words under the Make room row.
-disks-room-open-missing = Не удалось найти его открытую копию, поэтому освободить место нельзя.
+disks-room-encryption-sizes = Размеры, указанные для шифрования, не совпадают, поэтому Trindle не может освободить место.
 
 # Red words under the Make room row.
-disks-room-encryption-sizes = Размеры, указанные для шифрования, не совпадают, поэтому освободить место нельзя.
-
-# Red words under the Make room row.
-disks-room-sizes = Указанные для него размеры не совпадают, поэтому освободить место нельзя.
+disks-room-sizes = Указанные для него размеры не совпадают, поэтому Trindle не может освободить место.
 
 # Red words under the Make room row. { $used } is how much the files use.
-disks-room-too-little = Он содержит { $used }, и нужно сохранить больше, поэтому освободить можно слишком мало.
+disks-room-too-little = На нём занято { $used }, и нужно сохранить больше, поэтому освободить можно слишком мало места.
 
 # Red words under the Make room row.
-disks-room-sizes-unread = Не удалось прочитать его размеры.
+disks-room-sizes-unread = Не удалось прочитать размеры.
 
 # Red words under the Make room row when the room asked for is out of range. { $least } and { $most } are the smallest and largest room.
-disks-room-range = Можно освободить место от { $least } до { $most }.
+disks-room-range = Можно освободить от { $least } до { $most }.
 
 # Red words when making room was stopped. { $what } says what was found wrong, without a full stop.
-disks-room-stopped = { $what }, поэтому работа остановлена.
+disks-room-stopped = { $what }, поэтому Trindle остановился.
 
 # What was found wrong while making room.
 disks-room-check-unmounted = Файлы больше не смонтированы
@@ -897,30 +882,30 @@ disks-room-check-unmounted = Файлы больше не смонтирован
 disks-room-check-part = Раздел имеет размер { $is }, а должен { $should }
 
 # What was found wrong while making room.
-disks-room-check-open = Открытая копия шифрования не того размера, какой должен быть
+disks-room-check-open = Разблокированная копия шифрования не того размера, какой должен быть
 
 # What was found wrong while making room. { $is } is the size the files' area has; { $should } is the size it should have.
-disks-room-check-area = Область файлов имеет размер { $is }, а должна { $should }
+disks-room-check-area = Файловая система имеет размер { $is }, а должна { $should }
 
 # What was found wrong while making room.
-disks-room-check-area-small = Область файлов меньше, чем используется
+disks-room-check-area-small = Файловая система меньше, чем используется
 
 # What was found wrong while making room.
-disks-room-check-fit = То, что содержит, больше не помещается
+disks-room-check-fit = Файловая система больше не помещается
 
 # Red words when making room was stopped because the drive service no longer lists something. { $what } is part, copy or files.
 disks-room-gone =
     { $what ->
-        [part] Служба дисков больше не показывает раздел, поэтому работа остановлена.
-        [copy] Служба дисков больше не показывает открытую копию, поэтому работа остановлена.
+        [partition] Служба дисков больше не показывает раздел, поэтому работа остановлена.
+        [copy] Служба дисков больше не показывает разблокированную копию, поэтому работа остановлена.
        *[files] Служба дисков больше не показывает файловую систему, поэтому работа остановлена.
     }
 
 # Step of making room, in the account of one that stopped part-way.
-disks-room-step-files = уменьшение области файлов
+disks-room-step-files = уменьшение файловой системы
 
 # Step of making room, in the account of one that stopped part-way.
-disks-room-step-open = уменьшение открытой копии шифрования
+disks-room-step-open = уменьшение разблокированной копии шифрования
 
 # Step of making room, in the account of one that stopped part-way.
 disks-room-step-part = уменьшение раздела
@@ -929,11 +914,13 @@ disks-room-step-part = уменьшение раздела
 disks-room-step-check = проверка размеров
 
 # Description the snapshot taken before making room is saved under, which Settings lists. { $dev } is the part; { $at } is a number that tells it from another.
-disks-room-snapshot-note = Перед освобождением места под { $dev } ({ $at })
+disks-room-snapshot-note = Перед освобождением места на { $dev } ({ $at })
+
+# Red words when the swap file is back on after making room, but Trindle met a problem doing it. { $done } is how making room went, { $why } the problem, both as sentences.
+disks-swap-on-but = { $done } { $why }
 
 # Warning shown after the first press of the resize button when the part gets smaller. { $name } is the part; { $drive } is the drive; { $from } is its size now; { $to } is the size asked for.
-disks-resize-warning-shrink = Нажмите ещё раз: раздел { $name } на { $drive } уменьшится с { $from } до { $to }. Сначала сделайте резервную копию его файлов: при отключении питания во время уменьшения их можно потерять.
+disks-resize-warning-shrink = Нажмите ещё раз, чтобы изменить размер раздела { $name } на { $drive } с { $from } до { $to }. Сначала сделайте резервную копию его файлов, потому что при отключении питания во время уменьшения их можно потерять.
 
 # Red words under the size when a Windows part was hibernated or left in fast start-up and so is not made smaller. { $name } is the part.
 disks-windows-asleep = Windows на { $name } была переведена в режим гибернации или оставлена в режиме быстрого запуска, поэтому при уменьшении раздела можно потерять её файлы. Запустите Windows, выберите «Перезагрузка» и повторите попытку.
-

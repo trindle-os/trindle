@@ -3,13 +3,24 @@
 //! Network. Answers to what this computer asked for always get through, so
 //! browsing, updates and finding printers work with it on.
 
+use crate::toolkit::t;
 use std::fmt::Write as _;
 use std::fmt;
 use std::path::Path;
 
+pub const ON: &str = "/etc/trindle/firewall-on";
+
+pub const CHOSEN: &str = "/etc/trindle/firewall-chosen";
+
+pub const OFF: &str = "table inet trindle {}\ndelete table inet trindle\n";
+
 pub const SHARING: &str = "/etc/trindle/firewall-sharing";
 
 pub const PLUGINS: &str = "/etc/trindle/firewall-plugins";
+
+pub const PORTS: &str = "/etc/trindle/firewall-ports";
+
+pub const MAX_OWN: usize = 32;
 
 pub const MAX_LISTEN: usize = 4;
 pub const MAX_OPEN: usize = 16;
@@ -60,18 +71,18 @@ impl Door {
 
     pub fn parse(text: &str) -> Result<Door, String> {
         let Some((proto, port)) = text.split_once(':') else {
-            return Err(format!("{:?} is not written as protocol:port, such as tcp:24810.", text.chars().take(24).collect::<String>()));
+            return Err(t!("common-firewall-not-protocol-port", text = text.chars().take(24).collect::<String>()).to_string());
         };
         let proto = match proto {
             "tcp" => Proto::Tcp,
             "udp" => Proto::Udp,
-            other => return Err(format!("{:?} is not a protocol there is here: use tcp or udp, in small letters.", other.chars().take(12).collect::<String>())),
+            other => return Err(t!("common-firewall-bad-protocol", text = other.chars().take(12).collect::<String>()).to_string()),
         };
 
         let plain = !port.is_empty() && port.len() <= 5 && port.bytes().all(|b| b.is_ascii_digit()) && !port.starts_with('0');
         let port = match port.parse::<u32>() {
             Ok(n) if plain && n >= u32::from(LOWEST_PORT) && n <= 65535 => n as u16,
-            _ => return Err(format!("{:?} is not a port from {LOWEST_PORT} to 65535.", port.chars().take(12).collect::<String>())),
+            _ => return Err(t!("common-firewall-bad-port", text = port.chars().take(12).collect::<String>(), lowest = LOWEST_PORT.to_string()).to_string()),
         };
         Ok(Door { proto, port })
     }
@@ -81,29 +92,64 @@ impl Door {
     }
 }
 
+pub fn parse_own(text: &str) -> Result<Door, String> {
+    let (proto, port) = text.split_once(':').ok_or_else(|| t!("common-firewall-own-form").to_string())?;
+    let proto = match proto {
+        "tcp" => Proto::Tcp,
+        "udp" => Proto::Udp,
+        _ => return Err(t!("common-firewall-own-protocol").to_string()),
+    };
+    Ok(Door { proto, port: own_port(port).ok_or_else(|| t!("common-firewall-own-port").to_string())? })
+}
+
+pub fn own_port(typed: &str) -> Option<u16> {
+    let t = typed.trim();
+    (!t.is_empty() && t.len() <= 5 && t.bytes().all(|b| b.is_ascii_digit())).then(|| t.parse::<u32>().ok()).flatten()
+        .filter(|n| (1..=65535).contains(n)).map(|n| n as u16)
+}
+
+pub fn parse_own_list(text: &str) -> Vec<Door> {
+    let mut doors: Vec<Door> = text.lines().filter_map(|l| parse_own(l.trim()).ok()).collect();
+    doors.sort();
+    doors.dedup();
+    doors.truncate(MAX_OWN);
+    doors
+}
+
+pub fn own_list_text(doors: &[Door]) -> String {
+    doors.iter().fold(String::new(), |mut t, d| {
+        let _ = writeln!(t, "{d}");
+        t
+    })
+}
+
+pub fn own_ports() -> Vec<Door> {
+    parse_own_list(&std::fs::read_to_string(PORTS).unwrap_or_default())
+}
+
 pub fn ports_words(doors: &[Door]) -> String {
     let each: Vec<String> = doors.iter().map(Door::words).collect();
     let list = match each.split_last() {
         None => return String::new(),
         Some((last, [])) => last.clone(),
-        Some((last, first)) => format!("{} and {last}", first.join(", ")),
+        Some((last, first)) => t!("common-firewall-and", first = first.join(", "), last = last.clone()).to_string(),
     };
-    format!("{} {list}", if doors.len() == 1 { "Port" } else { "Ports" })
+    t!("common-firewall-ports", count = doors.len(), list = list).to_string()
 }
 
 pub fn vet(doors: &[Door]) -> Result<(), String> {
     if doors.len() > MAX_LISTEN {
-        return Err(format!("A plugin may name at most {MAX_LISTEN} ports."));
+        return Err(t!("common-firewall-too-many", max = MAX_LISTEN).to_string());
     }
     for (i, d) in doors.iter().enumerate() {
         if doors[..i].contains(d) {
-            return Err(format!("{} is named twice.", d.words()));
+            return Err(t!("common-firewall-twice", port = d.words()).to_string());
         }
         if d.port < LOWEST_PORT {
-            return Err(format!("{} is below {LOWEST_PORT}, which the system keeps.", d.words()));
+            return Err(t!("common-firewall-too-low", port = d.words(), lowest = LOWEST_PORT.to_string()).to_string());
         }
         if reserved(d.port) {
-            return Err(format!("Port {} is one Trindle or a common service uses, so a plugin cannot ask for it.", d.port));
+            return Err(t!("common-firewall-reserved", port = d.port.to_string()).to_string());
         }
     }
     Ok(())
@@ -157,8 +203,8 @@ impl Refusal {
     pub fn words(&self, name: &dyn Fn(&str) -> String) -> String {
         match self {
             Refusal::Bad(why) => why.clone(),
-            Refusal::Taken(d, id) => format!("{} is already used by {}, so it cannot be opened for this plugin too.", d.words(), name(id)),
-            Refusal::Full => format!("The most ports that may be open for plugins, {MAX_OPEN}, are open already."),
+            Refusal::Taken(d, id) => t!("common-firewall-taken", port = d.words(), plugin = name(id)).to_string(),
+            Refusal::Full => t!("common-firewall-full", max = MAX_OPEN).to_string(),
         }
     }
 }
@@ -204,6 +250,10 @@ pub fn without(all: &[Entitled], uid: u32, id: &str) -> Vec<Entitled> {
     all.iter().filter(|e| !(e.uid == uid && e.id == id)).cloned().collect()
 }
 
+pub fn on() -> bool {
+    Path::new(ON).exists()
+}
+
 pub fn sharing() -> bool {
     Path::new(SHARING).exists()
 }
@@ -214,7 +264,12 @@ pub fn ssh_wanted() -> bool {
         .iter().any(|p| Path::new(p).exists())
 }
 
+#[cfg(test)]
 pub fn rules(sharing: bool, shared: bool, ssh: bool, plugins: &[Held]) -> String {
+    rules_with(sharing, shared, ssh, plugins, &[])
+}
+
+pub fn rules_with(sharing: bool, shared: bool, ssh: bool, plugins: &[Held], own: &[Door]) -> String {
     let mut accept = always_let_in();
     if ssh {
         accept.push("tcp dport 22 accept".into());
@@ -234,6 +289,11 @@ pub fn rules(sharing: bool, shared: bool, ssh: bool, plugins: &[Held]) -> String
         }
     }
     accept.extend(plugin_rules(plugins));
+    let mut own = own.to_vec();
+    own.sort();
+    own.dedup();
+    own.truncate(MAX_OWN);
+    accept.extend(local_rules(&own));
     let body = accept.iter().fold(String::new(), |b, r| b + "\t\t" + r + "\n");
     format!("table inet trindle {{}}\ndelete table inet trindle\ntable inet trindle {{\n\
              \tchain input {{\n\t\ttype filter hook input priority filter; policy drop;\n{body}\t}}\n}}\n")
@@ -252,7 +312,8 @@ fn always_let_in() -> Vec<String> {
         "udp sport 67 udp dport 68 accept".into(),
         format!("ip6 saddr {LOCAL6} udp dport 546 accept"),
 
-        "udp dport 5353 accept".into(),
+        format!("ip saddr {LOCAL4} udp dport 5353 accept"),
+        format!("ip6 saddr {LOCAL6} udp dport 5353 accept"),
         format!("ip saddr {LOCAL4} udp sport {{ 1900, 3702 }} accept"),
         format!("ip6 saddr {LOCAL6} udp sport {{ 1900, 3702 }} accept"),
 
@@ -265,13 +326,17 @@ fn always_let_in() -> Vec<String> {
 }
 
 fn plugin_rules(plugins: &[Held]) -> Vec<String> {
-    let mut accept = Vec::new();
 
     let mut doors: Vec<Door> = plugins.iter().flat_map(|h| h.doors.iter().copied())
         .filter(|d| d.port >= LOWEST_PORT && !reserved(d.port)).collect();
     doors.sort();
     doors.dedup();
     doors.truncate(MAX_OPEN);
+    local_rules(&doors)
+}
+
+fn local_rules(doors: &[Door]) -> Vec<String> {
+    let mut accept = Vec::new();
     for (family, local) in [("ip", LOCAL4), ("ip6", LOCAL6)] {
         for proto in [Proto::Tcp, Proto::Udp] {
             let ports: Vec<String> = doors.iter().filter(|d| d.proto == proto).map(|d| d.port.to_string()).collect();
@@ -287,6 +352,27 @@ fn plugin_rules(plugins: &[Held]) -> Vec<String> {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn a_port_opened_by_hand_is_let_in_from_the_home_network_only() {
+        let own = parse_own_list("tcp:37666\nudp:37666\nnonsense\ntcp:37666\ntcp:0\ntcp:70000\nudp:80\n");
+        assert_eq!(own, vec![parse_own("tcp:37666").unwrap(), parse_own("udp:80").unwrap(), parse_own("udp:37666").unwrap()]);
+        assert_eq!(parse_own_list(&own_list_text(&own)), own, "kept and read back the same");
+        let r = rules_with(false, false, false, &[], &own);
+        assert!(r.contains(&format!("ip saddr {LOCAL4} tcp dport 37666 accept")), "{r}");
+        assert!(r.contains(&format!("ip6 saddr {LOCAL6} udp dport {{ 80, 37666 }} accept")), "{r}");
+        assert!(!r.lines().any(|l| l.contains("37666") && !l.contains("saddr")), "never from anywhere: {r}");
+        assert_eq!(rules_with(false, false, false, &[], &[]), rules(false, false, false, &[]));
+        let many: String = (2000..2100).fold(String::new(), |mut t, p| {
+            let _ = writeln!(t, "tcp:{p}");
+            t
+        });
+        assert_eq!(parse_own_list(&many).len(), MAX_OWN);
+        for typed in ["", "0", "65536", "-1", "+5", " 37666 ", "37 666", "٣٧"] {
+            assert_eq!(own_port(typed).is_some(), typed.trim() == "37666", "{typed:?}");
+        }
+    }
+
     use super::*;
 
     fn d(text: &str) -> Door {
@@ -497,7 +583,9 @@ mod tests {
             Door { proto: Proto::Udp, port: 5353 }, Door { proto: Proto::Tcp, port: 41641 }, Door { proto: Proto::Tcp, port: 5900 }] }]);
         assert!(!r.contains("dport 22 ") && !r.contains("tcp dport 41641") && !r.contains("5900"), "{r}");
         assert_eq!(lines_for(&r, "tcp dport 2000").len(), 2);
-        assert_eq!(lines_for(&r, "udp dport 5353").len(), 1, "only Trindle's own");
+        let names = lines_for(&r, "udp dport 5353");
+        assert_eq!(names.len(), 2, "only Trindle's own, one for each kind of address");
+        assert!(names.iter().all(|l| l.starts_with("ip saddr") || l.starts_with("ip6 saddr")), "{names:?}: no address may send names in");
 
         let many = Held { doors: (0..100u16).map(|n| Door { proto: Proto::Tcp, port: 20000 + n }).collect() };
         let r = rules(false, false, false, &[many]);
@@ -516,7 +604,7 @@ mod tests {
         let refused = got[1].1.clone().unwrap_err();
         assert_eq!(refused, Refusal::Taken(d("tcp:24810"), "org.example.Sync".into()));
         let says = refused.words(&|id| if id == "org.example.Sync" { "Sync".to_string() } else { id.to_string() });
-        assert_eq!(says, "TCP 24810 is already used by Sync, so it cannot be opened for this plugin too.");
+        assert_eq!(says, "TCP 24810 is already used by Sync, so it can't be opened for this plugin too.");
 
         assert_eq!(held_of(&got), vec![held(&["tcp:24810"]), held(&["udp:24810"])]);
 
@@ -569,6 +657,25 @@ mod tests {
         }
         let none = in_a_private_namespace(&rules(false, false, false, &[]));
         assert!(!none.contains("24810"));
+    }
+
+    #[test]
+    fn nft_accepts_ports_opened_by_hand_and_the_firewall_off() {
+        let own = parse_own_list("tcp:37666\nudp:37666\ntcp:80\n");
+        let listed = in_a_private_namespace(&rules_with(false, false, false, &[], &own));
+        assert!(listed.contains("tcp dport { 80, 37666 } accept") && listed.contains("udp dport 37666 accept"), "{listed}");
+        for l in listed.lines().filter(|l| l.contains("37666")) {
+            assert!(l.contains("saddr {"), "{l}");
+        }
+        use std::io::Write;
+        use std::process::{Command, Stdio};
+        let both = format!("{}{OFF}", rules_with(false, false, false, &[], &own));
+        let mut child = Command::new("unshare").args(["-rn", "sh", "-c", "nft -f - && nft list tables"])
+            .stdin(Stdio::piped()).stdout(Stdio::piped()).stderr(Stdio::piped()).spawn().expect("unshare could not be started");
+        child.stdin.take().expect("unshare's input").write_all(both.as_bytes()).expect("the rules could not be handed to nft");
+        let out = child.wait_with_output().expect("unshare could not be waited for");
+        assert!(out.status.success(), "{}", String::from_utf8_lossy(&out.stderr));
+        assert!(!String::from_utf8_lossy(&out.stdout).contains("trindle"), "off leaves no table of Trindle's");
     }
 
     #[test]

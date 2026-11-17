@@ -12,14 +12,14 @@ thunder-let-connect = 允许 { $name } 连接吗？
 thunder-no-name = 一台雷电设备
 
 # Under the device's name when its maker did not say who it is.
-thunder-no-maker = 它的制造商没有说明自己是谁。
+thunder-no-maker = 制造商未知。
 
 # Under the device's name: who made it. $maker is the maker's name.
 thunder-made-by = 制造商：{ $maker }。
 
 # Warning under the question when the device gives the name of one allowed before, but cannot be proved to be it.
 # SAFETY: needs a human review before it ships
-thunder-doubt = 它报出的名称与你之前允许过的某台设备相同，但无法证明它就是那台设备。
+thunder-doubt = 它的名称与你之前允许过的某台设备相同，但 Trindle 无法确认它就是那台设备。
 
 # Button that refuses the device.
 # SAFETY: needs a human review before it ships
@@ -37,8 +37,8 @@ thunder-always = 始终允许
 thunder-not-connected = 无法连接。
 
 # Red words under the question when it could not be connected after it was unplugged and plugged in again.
-thunder-unplug = 无法连接。请拔下后重新插上，再试一次。
+thunder-unplug = Trindle 无法连接它。请拔下后重新插上，再试一次。
 
 # Red words under the question when the part of Trindle that answers for the guard is not running.
-thunder-guard-silent = Trindle 的雷电防护程序暂时没有响应。
+thunder-guard-silent = Trindle 的雷电防护没有响应。
 

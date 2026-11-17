@@ -44,11 +44,11 @@ fn ticks_end(c: &[char], from: usize, n: usize) -> Option<usize> {
     None
 }
 
+fn opens(c: &[char], i: usize, n: usize, ch: char) -> bool {
+    c.get(i + n).is_some_and(|next| !next.is_whitespace()) && !(ch == '_' && i > 0 && c[i - 1].is_alphanumeric())
+}
+
 fn closer(c: &[char], i: usize, n: usize, ch: char) -> Option<usize> {
-    let next = c.get(i + n)?;
-    if next.is_whitespace() || (ch == '_' && i > 0 && c[i - 1].is_alphanumeric()) {
-        return None;
-    }
     let mut j = i + n;
     while j < c.len() {
         match c[j] {
@@ -71,13 +71,15 @@ fn closer(c: &[char], i: usize, n: usize, ch: char) -> Option<usize> {
     None
 }
 
-fn link_at(c: &[char], i: usize, refs: &Refs) -> Option<(usize, String, usize)> {
-    let close = bracket_end(c, i)?;
+const NAME_MOST: usize = 1000;
+
+fn link_at(c: &[char], i: usize, refs: &Refs, seen: &Seen) -> Option<(usize, String, usize)> {
+    let close = seen.pairs.get(i).copied().filter(|&e| e != NONE)?;
     let words: String = c[i + 1..close].iter().collect();
     match c.get(close + 1) {
         Some('(') => inline_target(c, close + 2).map(|(url, next)| (close, url, next)),
         Some('[') => {
-            let end = (close + 2..c.len()).find(|&k| c[k] == ']')?;
+            let end = (close + 2..c.len().min(close + 2 + NAME_MOST)).find(|&k| c[k] == ']')?;
             let name: String = c[close + 2..end].iter().collect();
             let name = if name.trim().is_empty() { &words } else { &name };
             refs.get(&label(name)).map(|u| (close, u.clone(), end + 1))
@@ -86,27 +88,36 @@ fn link_at(c: &[char], i: usize, refs: &Refs) -> Option<(usize, String, usize)> 
     }
 }
 
-fn bracket_end(c: &[char], i: usize) -> Option<usize> {
-    let mut depth = 0;
-    let mut j = i;
-    loop {
-        match c.get(j)? {
+fn bracket_pairs(c: &[char]) -> Vec<usize> {
+    let mut pairs = vec![NONE; c.len()];
+    let mut open = Vec::new();
+    let mut j = 0;
+    while j < c.len() {
+        match c[j] {
             '\\' => j += 1,
             '`' => {
                 let m = run(c, j, '`');
                 j = ticks_end(c, j + m, m).map(|e| e + m - 1).unwrap_or(j + m - 1);
             }
-            '[' => depth += 1,
+            '[' => open.push(j),
             ']' => {
-                depth -= 1;
-                if depth == 0 {
-                    return Some(j);
+                if let Some(o) = open.pop() {
+                    pairs[o] = j;
                 }
             }
             _ => {}
         }
         j += 1;
     }
+    pairs
+}
+
+const NONE: usize = usize::MAX;
+
+struct Seen {
+    pairs: Vec<usize>,
+
+    shut: Vec<(char, usize)>,
 }
 
 fn inline_target(c: &[char], k: usize) -> Option<(String, usize)> {
@@ -214,11 +225,14 @@ fn spans(c: &[char], refs: &Refs, out: &mut Vec<Span>) {
             d.set(d.get() + 1);
             spans_in(c, refs, out);
             d.set(d.get() - 1);
+        } else {
+            push_text(out, &c.iter().collect::<String>());
         }
     });
 }
 
 fn spans_in(c: &[char], refs: &Refs, out: &mut Vec<Span>) {
+    let mut seen = Seen { pairs: if c.contains(&'[') { bracket_pairs(c) } else { Vec::new() }, shut: Vec::new() };
     let mut i = 0;
     while i < c.len() {
         let ch = c[i];
@@ -233,10 +247,10 @@ fn spans_in(c: &[char], refs: &Refs, out: &mut Vec<Span>) {
             }
             '\n' => line_end(out, i),
             '`' => code_span(c, i, out),
-            '!' if c.get(i + 1) == Some(&'[') => image(c, i, refs, out),
-            '[' => link(c, i, refs, out),
+            '!' if c.get(i + 1) == Some(&'[') => image(c, i, refs, &seen, out),
+            '[' => link(c, i, refs, &seen, out),
             '<' => angle_link(c, i, out),
-            '*' | '_' | '~' => emphasis(c, i, refs, out),
+            '*' | '_' | '~' => emphasis(c, i, refs, &mut seen, out),
             '&' => match entity(c, i) {
                 Some((s, next)) => {
                     push_text(out, &s);
@@ -247,17 +261,18 @@ fn spans_in(c: &[char], refs: &Refs, out: &mut Vec<Span>) {
                     i + 1
                 }
             },
-            'h' if (i == 0 || c[i - 1].is_whitespace() || c[i - 1] == '(') && bare_link(&c[i..]) > 0 => {
-                let n = bare_link(&c[i..]);
-                let url: String = c[i..i + n].iter().collect();
-                out.push(Span::Link(vec![Span::Text(url.clone())], url));
-                i + n
-            }
-            _ => {
-                let mut buf = [0; 4];
-                push_text(out, ch.encode_utf8(&mut buf));
-                i + 1
-            }
+            _ => match Some(ch).filter(|&h| h == 'h' && (i == 0 || c[i - 1].is_whitespace() || c[i - 1] == '(')).map(|_| bare_link(&c[i..])) {
+                Some(n) if n > 0 => {
+                    let url: String = c[i..i + n].iter().collect();
+                    out.push(Span::Link(vec![Span::Text(url.clone())], url));
+                    i + n
+                }
+                _ => {
+                    let mut buf = [0; 4];
+                    push_text(out, ch.encode_utf8(&mut buf));
+                    i + 1
+                }
+            },
         };
     }
 }
@@ -289,8 +304,8 @@ fn code_span(c: &[char], i: usize, out: &mut Vec<Span>) -> usize {
     }
 }
 
-fn image(c: &[char], i: usize, refs: &Refs, out: &mut Vec<Span>) -> usize {
-    match link_at(c, i + 1, refs) {
+fn image(c: &[char], i: usize, refs: &Refs, seen: &Seen, out: &mut Vec<Span>) -> usize {
+    match link_at(c, i + 1, refs, seen) {
         Some((close, url, next)) => {
             let mut alt = Vec::new();
             spans(&c[i + 2..close], refs, &mut alt);
@@ -304,8 +319,8 @@ fn image(c: &[char], i: usize, refs: &Refs, out: &mut Vec<Span>) -> usize {
     }
 }
 
-fn link(c: &[char], i: usize, refs: &Refs, out: &mut Vec<Span>) -> usize {
-    match link_at(c, i, refs) {
+fn link(c: &[char], i: usize, refs: &Refs, seen: &Seen, out: &mut Vec<Span>) -> usize {
+    match link_at(c, i, refs, seen) {
         Some((close, url, next)) => {
             let mut words = Vec::new();
             spans(&c[i + 1..close], refs, &mut words);
@@ -338,11 +353,21 @@ fn angle_link(c: &[char], i: usize, out: &mut Vec<Span>) -> usize {
     }
 }
 
-fn emphasis(c: &[char], i: usize, refs: &Refs, out: &mut Vec<Span>) -> usize {
+fn emphasis(c: &[char], i: usize, refs: &Refs, seen: &mut Seen, out: &mut Vec<Span>) -> usize {
     let ch = c[i];
     let n = run(c, i, ch);
     let fits = if ch == '~' { n == 2 } else { n <= 3 };
-    match closer(c, i, n, ch).filter(|_| fits) {
+
+    let found = if fits && opens(c, i, n, ch) && !seen.shut.contains(&(ch, n)) {
+        let found = closer(c, i, n, ch);
+        if found.is_none() {
+            seen.shut.push((ch, n));
+        }
+        found
+    } else {
+        None
+    };
+    match found {
         Some(end) => {
             let mut inner = Vec::new();
             spans(&c[i + n..end], refs, &mut inner);
@@ -367,11 +392,14 @@ fn bare_link(c: &[char]) -> usize {
         return 0;
     }
     let mut n = c.iter().take_while(|x| !x.is_whitespace() && **x != '<').count();
+    let open = c[..n].iter().filter(|&&x| x == '(').count();
+    let mut shut = c[..n].iter().filter(|&&x| x == ')').count();
     loop {
         let Some(&last) = c[..n].last() else { return 0 };
-        let open = c[..n].iter().filter(|&&x| x == '(').count();
-        let shut = c[..n].iter().filter(|&&x| x == ')').count();
         if matches!(last, '.' | ',' | ':' | ';' | '!' | '?' | '"' | '\'' | '*' | '_' | '~') || (last == ')' && shut > open) {
+            if last == ')' {
+                shut -= 1;
+            }
             n -= 1;
         } else {
             break;

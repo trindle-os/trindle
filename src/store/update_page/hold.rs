@@ -18,7 +18,7 @@ pub(super) fn keep_held(s: &mut Store, thing: &Thing, hold: bool, key: &str) -> 
     let plugin = key.strip_prefix("pl:").map(String::from);
     match done {
         Ok(()) => {
-            s.said.remove(key);
+            s.words.said.remove(key);
             held_rows_follow(s);
             true
         }
@@ -52,7 +52,7 @@ pub(crate) fn set_held(s: &mut Store, thing: &Thing, hold: bool, key: &str) {
         }
         s.say_on(&row, not_told(hold, &err), crate::store::help::HELD);
     });
-    run::capture(&argv, None, move |ok, _, err| back((ok, err)));
+    run::capture(&crate::store::progress::english(&argv), None, move |ok, _, err| back((ok, err)));
 }
 
 pub(super) fn remind_flatpak(s: &Store) {
@@ -62,7 +62,7 @@ pub(super) fn remind_flatpak(s: &Store) {
     }
     let mut argv = vec!["flatpak", "mask", "--user"];
     argv.extend(masks.iter().map(String::as_str));
-    run::capture(&argv, None, |_, _, _| {});
+    run::capture(&crate::store::progress::english(&argv), None, |_, _, _| {});
 }
 
 pub(crate) fn removed(s: &mut Store, id: &str) {

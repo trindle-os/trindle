@@ -47,7 +47,7 @@ text-find-replace-key = Tìm và thay thế (Ctrl+H)
 text-go-to-line-key = Đi tới dòng (Ctrl+G)
 
 # Button in the menu for a Markdown file that shows it as it will look finished, with its shortcut.
-text-finished-key = Xem bản hoàn chỉnh (Ctrl+E)
+text-finished-key = Xem trước (Ctrl+E)
 
 # Button in the menu for a Markdown file that exports it as a web page. Also the title of the chooser for that.
 text-export-html = Xuất thành trang web
@@ -71,7 +71,7 @@ text-close-tab = Đóng { $name }
 text-close-bar = Đóng thanh
 
 # Words the screen reader gives the button that shows the finished look of the text, with its shortcut.
-text-finished-look = Bản hoàn chỉnh
+text-finished-look = Xem trước
 
 # Menu item that copies everything in the text.
 text-copy-all = Sao chép toàn bộ văn bản
@@ -150,7 +150,7 @@ text-replace-all = Thay thế tất cả
 text-replace-all-spoken = Thay mọi từ đã tìm thấy
 
 # Words on the find bar when a find has been asked for and has no match.
-text-none-found = Không tìm thấy
+text-none-found = Không có kết quả
 
 # Words on the find bar when a find has matches. $at is which one is shown, $n how many there are.
 text-of-found = { $at } / { $n }
@@ -182,10 +182,10 @@ text-go-to-line = Đi tới dòng
 text-back = Quay lại văn bản
 
 # Words on the spelling bar, after the word: the word was added to the person's own words.
-text-spell-added = giờ là một trong các từ của bạn
+text-spell-added = đã được thêm vào các từ của bạn
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are no suggestions.
-text-spell-none = không có trong từ điển, và từ điển không có từ nào giống
+text-spell-none = không có trong từ điển, và không có gợi ý nào
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are suggestions.
 text-spell-offers = không có trong từ điển. Có phải bạn muốn viết một trong các từ này?
@@ -216,16 +216,16 @@ text-starting = Khởi động
 text-when-opens = Khi Văn bản mở
 
 # First choice: Text opens the files it had open last time.
-text-reopen = Mở lại các tệp của lần trước
+text-reopen = Mở lại các tệp trước đó
 
 # Second choice: Text opens with an empty page.
-text-start-blank = Bắt đầu với trang trống
+text-start-blank = Bắt đầu mới
 
 # Note under the start choice: work not saved to a file is kept whichever choice is made.
-text-keep-note = Phần việc chưa lưu vào tệp luôn được giữ và quay lại dù chọn cách nào.
+text-keep-note = Phần việc chưa lưu của bạn luôn được giữ và khôi phục dù bạn chọn cách nào.
 
 # Heading of the group on the settings page for how the text looks.
-text-showing = Cách hiện văn bản
+text-showing = Giao diện văn bản
 
 # Label of the size slider: how big the text is.
 text-size = Cỡ
@@ -261,11 +261,11 @@ text-read-as = Đọc tệp dưới dạng
 text-save-in = Lưu bằng
 
 # Note under the save encoding: the next save writes the file in this encoding.
-text-next-save = Lần lưu tiếp theo sẽ ghi tệp bằng bảng mã này.
+text-next-save = Tệp sẽ dùng bảng mã này vào lần lưu tiếp theo.
 
 # Words saying the text has changes that are not saved to its file. $path is the file.
 # SAFETY: needs a human review before it ships
-text-changes-not-saved = { $name } có thay đổi chưa được lưu vào tệp.
+text-changes-not-saved = { $name } có thay đổi chưa được lưu.
 
 # Words saying the text has changes and no file yet.
 # SAFETY: needs a human review before it ships
@@ -276,7 +276,10 @@ text-not-saved = Văn bản này chưa được lưu vào tệp.
 text-save-named = Lưu { $name }?
 
 # Words in the question before closing: how many other tabs with changes are left after this one. $left is the number.
-text-more-after = Còn { $left } thẻ nữa sau thẻ này.
+text-more-after =
+    { $left ->
+       *[other] Còn { $left } thẻ nữa cần lưu.
+    }
 
 # Button in the question before closing that closes the tab without saving it.
 # SAFETY: needs a human review before it ships
@@ -296,55 +299,55 @@ text-is-folder = { $name } là một thư mục.
 text-too-big = { $name } quá lớn để mở ở đây.
 
 # Shown when a file could not be opened. $name is the file's path and $reason why.
-text-cannot-open = Không thể mở { $name }: { $reason }
+text-cannot-open = Trindle không mở được { $name }: { $reason }
 
 # Shown when a file could not be written. $name is the file's path and $reason why.
-text-cannot-write = Không thể ghi { $name }: { $reason }
+text-cannot-write = Trindle không ghi được { $name }: { $reason }
 
 # Shown when a file could not be saved. $name is the file's path and $reason why.
-text-cannot-save = Không thể lưu { $name }: { $reason }
+text-cannot-save = Trindle không lưu được { $name }: { $reason }
 
 # Shown when a file could not be read again. $name is the file's path and $reason why.
 text-cannot-read = Không thể đọc { $name }: { $reason }
 
 # Shown when the list of open work could not be written. $folder is the folder and $reason why.
-text-work-not-kept = Không thể giữ phần việc trong { $folder }: { $reason }
+text-work-not-kept = Trindle không lưu được phần việc của bạn trong { $folder }: { $reason }
 
 # Shown when the settings could not be saved. $reason says why.
 text-settings-not-saved = Không thể lưu cài đặt: { $reason }
 
 # Shown when a word could not be added to the person's own words. $word is the word and $reason why.
-text-word-not-added = Không thể thêm { $word } vào từ của bạn: { $reason }
+text-word-not-added = Trindle không thêm được { $word } vào từ điển của bạn: { $reason }
 
 # Shown when the list of recent files could not be cleared. $reason says why.
-text-list-not-cleared = Không thể xoá danh sách: { $reason }
+text-list-not-cleared = Trindle không xoá được danh sách: { $reason }
 
 # Shown when the file chooser could not be opened.
 text-chooser-failed = Không thể mở bộ chọn tệp.
 
 # Shown when the file chooser cannot be used because there is no session bus.
-text-no-bus = Không thể chọn tệp khi không có session bus.
+text-no-bus = Trindle không mở được bộ chọn tệp lúc này.
 
 # Shown when the spelling language asked for is not on the computer. $lang is its name.
 text-no-dictionary = Không có từ điển nào tên là { $lang }.
 
 # Shown when a spelling dictionary could not be read. $lang is its name and $reason why.
-text-dictionary-unreadable = Không thể đọc từ điển { $lang }: { $reason }
+text-dictionary-unreadable = Trindle không đọc được từ điển { $lang }: { $reason }
 
 # Shown when a save was stopped and the text it held before was kept in a folder. $reason says what went wrong and $path is where the old text is kept.
-text-kept-before = { $reason }. Nội dung trước đó được giữ trong { $path }.
+text-kept-before = { $reason }. Văn bản cũ được lưu trong { $path }.
 
 # Shown when a save was stopped part way and the old text is kept. $why says why, and $path is where the old text is kept.
-text-kept-before-that = { $why } Nội dung trước lần lưu đó được giữ trong { $path }.
+text-kept-before-that = { $why } Văn bản từ trước lần lưu đó nằm trong { $path }.
 
 # Shown when a save was stopped and what was kept of it cannot be read. $name is the file's path.
-text-saved-unreadable = { $name } đang được lưu thì Văn bản bị dừng, và phần đã giữ lại của lần lưu không đọc được.
+text-saved-unreadable = Văn bản đã đóng khi đang lưu { $name }, và Trindle không đọc được phần đã lưu.
 
 # Shown when a save was stopped and the file has changed since. $name is the file's path.
-text-saved-changed = { $name } đang được lưu thì Văn bản bị dừng, và từ đó tệp đã bị thay đổi, nên để nguyên như cũ.
+text-saved-changed = Văn bản đã đóng khi đang lưu { $name }. Tệp đã thay đổi từ đó, nên Trindle để nguyên như cũ.
 
 # Shown when a save was stopped and the old text could not be put back. $name is the file's path, $reason why, and $path where the old text is kept.
-text-saved-not-put-back = { $name } đang được lưu thì Văn bản bị dừng, và không thể trả về như cũ: { $reason }. Nội dung trước lần lưu đó được giữ trong { $path }.
+text-saved-not-put-back = Văn bản đã đóng khi đang lưu { $name }, và Trindle không thể trả tệp về như cũ: { $reason }. Văn bản từ trước lần lưu đó nằm trong { $path }.
 
 # Quiet word beside what was just saved, exported or changed.
 text-done = Xong
@@ -352,10 +355,13 @@ text-done = Xong
 # Suggested file name in the Save as chooser for text never saved before.
 text-untitled-file = Chưa đặt tên.txt
 
+# The misspelt word, shown in quotation marks on the spelling bar. { $word } is the word.
+text-spell-word = ‘{ $word }’
+
 
 
 # Line under the Save button when the file was changed by something else after Text opened, saved or reloaded it. Nothing has been saved.
-text-changed-elsewhere = Đã bị thay đổi ở nơi khác kể từ khi bạn mở nó.
+text-changed-elsewhere = Tệp này đã thay đổi kể từ khi bạn mở nó.
 
 # Button beside that line: save the words here over the changed file.
 text-save-anyway = Cứ lưu
@@ -363,3 +369,5 @@ text-save-anyway = Cứ lưu
 # Button beside that line: read the file again from disk and drop the unsaved changes here.
 text-reload = Tải lại
 
+# Shown when a link in the finished look is pressed and is not a web address, or no browser started.
+text-link-not-opened = Ở đây chỉ mở được địa chỉ web.

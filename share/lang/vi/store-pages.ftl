@@ -29,10 +29,10 @@ store-grid-none-found = Không có ứng dụng nào khớp “{ $text }”.
 store-grid-none-here = Chưa có ứng dụng nào ở đây.
 
 # Advice in the empty page of a search.
-store-grid-try-shorter = Hãy thử từ ngắn hơn, hoặc xem qua một loại ở bên trái.
+store-grid-try-shorter = Hãy thử từ ngắn hơn, hoặc chọn một danh mục ở bên trái.
 
 # Advice in the empty page of a kind of apps.
-store-grid-search-or-look = Tìm theo tên ở trên, hoặc xem qua một loại khác ở bên trái.
+store-grid-search-or-look = Tìm theo tên ở trên, hoặc chọn danh mục khác ở bên trái.
 
 # Under a page of apps: how many are shown of how many there are.
 store-grid-showing = Đang hiện { $shown } trên { $apps }.
@@ -47,7 +47,7 @@ store-wait-fetching = Đang tải danh sách ứng dụng từ Flathub. Lần đ
 store-wait-no-reach = Ứng dụng không kết nối được với Flathub.
 
 # Under the title of the waiting page when the computer is not connected.
-store-wait-offline = Máy tính này chưa kết nối internet. Ứng dụng sẽ tự thử lại ngay khi có kết nối.
+store-wait-offline = Máy tính này chưa kết nối internet. Ứng dụng sẽ thử lại khi có kết nối.
 
 # In the waiting page when the computer is not connected.
 store-wait-comes-from = Các ứng dụng để chọn đến từ Flathub, qua internet.
@@ -68,7 +68,7 @@ store-wait-try-again = Thử lại
 store-back-results = Kết quả
 
 # Red words under the search box when no web browser opens a link.
-store-no-browser = Không có trình duyệt web nào để mở { $url }. Hãy cài một trình duyệt trong Ứng dụng trước.
+store-no-browser = Không có trình duyệt web nào để mở { $url }. Hãy cài một trình duyệt từ Ứng dụng trước.
 
 # Said in the card or under the title while the lists are being read.
 store-looking = Đang tìm…
@@ -80,13 +80,13 @@ store-done-installed-note = Giờ nó đã nằm trong mục Đã cài, và tron
 store-done-removed = Đã gỡ
 
 # The word on an app's dial when installing or removing did not work.
-store-done-not = Chưa xong
+store-done-not = Thất bại
 
 # The word on an app's dial when it was installed.
 store-done-installed = Đã cài
 
 # Red words under an app when Flatpak gave no reason it would not work.
-store-flatpak-refused = Flatpak từ chối.
+store-flatpak-refused = Flatpak thất bại.
 
 # Tab of the Installed page that shows everything.
 store-tab-all = Tất cả
@@ -104,7 +104,7 @@ store-tab-deb-files = Tệp deb
 store-tab-plugins = Plugin
 
 # Line under the title of the Installed page when nothing is installed.
-store-installed-nothing = Chưa cài gì cả. Mục Khám phá có rất nhiều thứ để thử.
+store-installed-nothing = Chưa cài gì cả. Bạn sẽ tìm thấy ứng dụng để thử trong mục Khám phá.
 
 # Line under the title of the Installed page when only plugins are installed.
 store-installed-only-plugins =
@@ -230,14 +230,10 @@ store-installed-search = Tìm trong những gì đã cài
 store-installed-appimage-failed = Không thể thêm AppImage.
 
 # In the card of the Installed page when nothing is installed.
-store-installed-empty = Ứng dụng bạn cài từ Khám phá, từ GitHub hoặc dưới dạng AppImage, các chương trình từ tệp .deb và plugin sẽ hiện ở đây.
+store-installed-empty = Mọi thứ bạn cài đều hiện ở đây: ứng dụng từ Khám phá hoặc GitHub, AppImage, chương trình từ tệp .deb và plugin.
 
 # In the card of the Installed page when the search matches nothing.
 store-installed-no-match = Không có mục nào đã cài khớp “{ $find }”.
-
-# Note at the foot of the Installed list.
-# SAFETY: needs a human review before it ships
-store-installed-remove-twice = Gỡ cài đặt hỏi hai lần: hãy bấm lại trong vòng ba giây.
 
 # On an installed thing's line: its version.
 store-installed-version = phiên bản { $version }
@@ -259,10 +255,10 @@ store-installed-about = Giới thiệu
 
 # Under an installed thing's row while it is being taken off.
 # SAFETY: needs a human review before it ships
-store-installed-removing = Đang gỡ...
+store-installed-removing = Đang gỡ…
 
 # Red words in the Installed card when the session bus cannot be asked for a file.
-store-add-no-bus = Không có session bus để hỏi chọn tệp nào.
+store-add-no-bus = Trindle không mở được trình chọn tệp lúc này.
 
 # Title of the window that asks which AppImage to add.
 store-add-choose-title = Chọn một AppImage
@@ -271,13 +267,13 @@ store-add-choose-title = Chọn một AppImage
 store-add-filter = AppImage
 
 # Red words in the Installed card when the file chooser could not be asked.
-store-add-no-chooser = Không thể mở trình chọn tệp.
+store-add-no-chooser = Trindle không mở được trình chọn tệp.
 
 # Words in the Installed card while an AppImage is being added.
-store-add-adding = Đang thêm...
+store-add-adding = Đang thêm…
 
 # Words under the search box when an AppImage let go on the window is already there.
-store-add-already = { $name } đã có sẵn: xem mục Đã cài.
+store-add-already = { $name } đã được cài. Bạn sẽ thấy nó trong mục Đã cài.
 
 # Words once an AppImage is in the ring.
 store-add-in-ring = Đã thêm. Giờ nó đã có trong danh sách của bạn.
@@ -285,35 +281,32 @@ store-add-in-ring = Đã thêm. Giờ nó đã có trong danh sách của bạn.
 # Red words under the search box when a dropped file is not a Flatpak reference this computer can use.
 store-add-bad-ref = Đây không phải tham chiếu Flatpak mà máy tính này dùng được.
 
-# Words under the search box while a Flatpak reference is installed; the source is given.
-store-add-installing-ref = Đang cài { $name } từ { $host }...
-
 # Words under the search box once a Flatpak reference is installed.
 store-add-installed-ref = Đã cài { $name }.
 
 # Red words when Flatpak gave no reason it would not install a reference.
-store-add-ref-refused = Flatpak không chịu cài.
+store-add-ref-refused = Flatpak không cài được.
 
 # Red words under the search box when a Flatpak reference could not be installed; the reason follows.
-store-add-ref-failed = Không thể cài { $name }. { $why }
+store-add-ref-failed = Trindle không cài được { $name }. { $why }
 
 # Words in the Installed card while an AppImage replaces another.
 # SAFETY: needs a human review before it ships
-store-add-replacing = Đang thay thế...
+store-add-replacing = Đang thay thế…
 
 # Heading of the question when an AppImage has the name of one already there.
 # SAFETY: needs a human review before it ships
 store-replace-head = { $name } đã có sẵn
 
 # Small heading over the AppImage being brought.
-store-replace-new = Bản đang được đưa vào
+store-replace-new = Bản mới
 
 # Small heading over the AppImage already there.
 store-replace-old = Bản đã có sẵn
 
 # Tip of the round button that keeps the AppImage already there.
 # SAFETY: needs a human review before it ships
-store-replace-skip = Bỏ qua: giữ bản đã có sẵn
+store-replace-skip = Bỏ qua và giữ bản cũ
 
 # Button that replaces the AppImage already there with the new one.
 # SAFETY: needs a human review before it ships
@@ -331,7 +324,7 @@ store-flatpak-ask-size = Dữ liệu đã lưu của nó chiếm { $size }.
 store-flatpak-ask-none = Nó không có dữ liệu đã lưu.
 
 # Under that heading while the size of the saved data is being counted.
-store-flatpak-ask-measuring = Đang tính dữ liệu đã lưu của nó...
+store-flatpak-ask-measuring = Đang đo dữ liệu đã lưu của nó…
 
 # Under the choices: the two that delete data cannot be undone.
 # SAFETY: needs a human review before it ships
@@ -339,7 +332,7 @@ store-flatpak-ask-undone = Dữ liệu đã xóa không thể khôi phục.
 
 # Button: remove the app and leave the data it saved.
 # SAFETY: needs a human review before it ships
-store-flatpak-keep = Gỡ, giữ lại dữ liệu
+store-flatpak-keep = Gỡ nhưng giữ dữ liệu
 
 # Button (red): remove the app and delete its saved data.
 # SAFETY: needs a human review before it ships
@@ -354,36 +347,33 @@ store-flatpak-data-only-none = Nó không có dữ liệu đã lưu để xóa.
 
 # Tip of the round button that shuts the card with nothing done.
 # SAFETY: needs a human review before it ships
-store-flatpak-cancel = Hủy: giữ cả hai
+store-flatpak-cancel = Hủy
 
 # Said under the card or the row once only the data has been deleted.
 # SAFETY: needs a human review before it ships
-store-flatpak-data-gone = Dữ liệu đã lưu của nó đã bị xóa.
+store-flatpak-data-gone = Dữ liệu đã lưu của nó không còn nữa.
 
 # Words while only the data is being deleted.
 # SAFETY: needs a human review before it ships
-store-flatpak-data-going = Đang xóa dữ liệu đã lưu của nó...
+store-flatpak-data-going = Đang xóa dữ liệu đã lưu của nó…
 
 # Red words under a button when a job ended and gave no reason.
-store-job-no-reason = Việc này chưa hoàn tất và không nêu lý do.
+store-job-no-reason = Việc này chưa hoàn tất. Không có lý do nào được nêu.
 
 # Tip of the round i button beside a refusal that shows what is behind it.
 store-show-behind = Cho xem vấn đề nằm ở đâu
 
 # Placeholder of the box on the GitHub page.
-store-gh-search-placeholder = Tìm trên GitHub: nhập rồi nhấn Enter
+store-gh-search-placeholder = Tìm ứng dụng (nhấn Enter để tìm cả trên GitHub)
 
 # Heading of the card of matches from AppImageHub.
 store-gh-hub = Trên AppImageHub ({ $n })
 
-# Note on the GitHub page before GitHub has been asked.
-store-gh-press-enter = Nhấn Enter để tìm cả trên toàn bộ GitHub.
-
 # Note on the GitHub page when the computer has no internet.
-store-gh-offline-note = Chưa hỏi GitHub: không có internet để hỏi.
+store-gh-offline-note = Trindle không tìm được trên GitHub, vì máy tính này chưa kết nối internet.
 
 # Note on the GitHub page while GitHub is being asked.
-store-gh-asking = Đang hỏi GitHub...
+store-gh-asking = Đang kiểm tra GitHub…
 
 # Note on the GitHub page when GitHub knows nothing more.
 store-gh-nothing-more = GitHub không còn gì thêm.
@@ -391,8 +381,8 @@ store-gh-nothing-more = GitHub không còn gì thêm.
 # Note on the GitHub page while the projects found are looked through.
 store-gh-looking =
     { $n ->
-        [1] Đang tìm tệp AppImage và Flatpak trong 1 dự án...
-       *[other] Đang tìm tệp AppImage và Flatpak trong { $n } dự án...
+        [1] Đang tìm tệp AppImage và Flatpak trong 1 dự án…
+       *[other] Đang tìm tệp AppImage và Flatpak trong { $n } dự án…
     }
 
 # Note on the GitHub page when no match has a file for this computer.
@@ -406,7 +396,7 @@ store-gh-search-card = Tìm trên GitHub
 
 # Line under the title of the GitHub page.
 # SAFETY: needs a human review before it ships
-store-gh-line = Ứng dụng trên GitHub dưới dạng tệp AppImage hoặc Flatpak. Không ai kiểm tra các tệp này: chỉ cài từ những người bạn tin tưởng.
+store-gh-line = Ứng dụng trên GitHub, dưới dạng tệp AppImage hoặc Flatpak. Không ai kiểm tra các tệp này, nên chỉ cài từ những người bạn tin tưởng.
 
 # Line under the title of the GitHub page when the computer has no internet.
 store-gh-offline = Không thể tìm trên GitHub khi máy tính này chưa kết nối internet.
@@ -433,23 +423,23 @@ store-gh-key = Khóa GitHub
 
 # Name of the GitHub key's button when a key is stored.
 # SAFETY: needs a human review before it ships
-store-gh-key-stored = Khóa GitHub: đã lưu một khóa
+store-gh-key-stored = Đã lưu một khóa GitHub
 
 # In the GitHub key's box: what the key is for.
 # SAFETY: needs a human review before it ships
-store-gh-key-words = Gần như chắc chắn bạn không cần khóa này. Khi không có khóa, GitHub trả lời 60 yêu cầu mỗi giờ từ máy tính này; khi có khóa, là 5.000. Khóa chỉ nâng giới hạn đó. Nó chỉ dùng để xem các tệp công khai và không làm gì khác: nó không cho Trindle đường vào tài khoản của bạn, và bạn không đánh dấu quyền nào khi tạo nó. Khóa được giữ trên máy tính này, trong chùm khóa của bạn, và chỉ gửi cho GitHub.
+store-gh-key-words = Gần như chắc chắn bạn không cần khóa này. Khi không có khóa, GitHub cho phép 60 yêu cầu mỗi giờ từ máy tính này. Khi có khóa, là 5.000. Khóa chỉ nâng giới hạn đó. Nó chỉ dùng để xem các tệp công khai và không làm gì khác. Nó không cho Trindle đường vào tài khoản của bạn, và bạn không đánh dấu quyền nào khi tạo nó. Khóa được lưu trên máy tính này, trong chùm khóa của bạn, và chỉ gửi cho GitHub.
 
 # In the GitHub key's box: how to make a key.
 # SAFETY: needs a human review before it ships
-store-gh-key-how = Hãy tạo khóa trên GitHub, đặt tên bất kỳ, không đụng đến quyền nào, bấm Generate token, rồi dán những gì nó hiện ra vào đây.
+store-gh-key-how = Hãy tạo khóa trên GitHub, đặt tên bất kỳ và để nguyên mọi quyền. Bấm Generate token, rồi dán những gì nó hiện ra vào đây.
 
 # Red words under the GitHub key's box when the key could not be removed.
 # SAFETY: needs a human review before it ships
-store-gh-key-not-removed = Không thể xóa khóa: { $why }
+store-gh-key-not-removed = Khóa chưa được xóa: { $why }
 
 # Red words under the GitHub key's box when the key could not be kept.
 # SAFETY: needs a human review before it ships
-store-gh-key-not-kept = Không thể lưu khóa: { $why }
+store-gh-key-not-kept = Khóa chưa được lưu: { $why }
 
 # Placeholder of the GitHub key's box when a key is stored already.
 # SAFETY: needs a human review before it ships
@@ -472,7 +462,7 @@ store-gh-key-make = Tạo khóa trên GitHub
 store-gh-key-keep = Lưu khóa
 
 # Red words when a project's newest release has nothing for this computer.
-store-gh-nothing-installs = Không có gì trong bản phát hành mới nhất của nó cài được ở đây.
+store-gh-nothing-installs = Không có gì trong bản phát hành mới nhất của nó cài được trên máy tính này.
 
 # Word on the file's dial and under a GitHub file when it was added.
 store-added = Đã thêm
@@ -490,7 +480,7 @@ store-bk-making-tip = Đang tạo bản sao lưu
 store-bk-make = Tạo bản sao lưu
 
 # Tip of the round button that shows the backup in Folders.
-store-bk-show = Hiện nó trong Thư mục
+store-bk-show = Hiện nó trong Folders
 
 # Name of the switch for the list of apps in a backup.
 store-bk-apps = Ứng dụng
@@ -503,25 +493,16 @@ store-bk-apps-list =
     }
 
 # Under the Apps switch: the list, then why the file stays small.
-store-bk-apps-sub = { $list } Máy tính kia sẽ cài chúng mới từ Flathub, nên tệp vẫn nhỏ.
+store-bk-apps-sub = { $list }
 
 # Name of the switch for the apps' own data in a backup.
 store-bk-data = Dữ liệu riêng của ứng dụng
 
-# Under the Apps' own data switch.
-store-bk-data-sub = Cài đặt và công việc đã lưu của từng ứng dụng, không kèm bộ nhớ đệm.
-
 # Name of the switch for AppImages in a backup.
 store-bk-appimages = AppImage
 
-# Under the AppImages switch.
-store-bk-appimages-sub = Được giữ nguyên vẹn vì mỗi cái là một tệp đơn.
-
 # Name of the switch for Trindle's settings in a backup.
 store-bk-settings = Cài đặt Trindle
-
-# Under the Trindle settings switch.
-store-bk-settings-sub = Vòng tròn, hình nền đã chọn, màu sắc, bàn phím, nguồn điện, ứng dụng mặc định và ảnh của bạn.
 
 # Under a switch: what it holds, then how big it is now.
 store-bk-now = { $sub } Hiện là { $size }.
@@ -538,20 +519,17 @@ store-bk-back-card = Khôi phục bản sao lưu
 # Tip of the round button, and name of the row, that choose a backup file.
 store-bk-choose = Chọn tệp sao lưu
 
-# Under the choose row: which backups can be used; the name of Flat's backups is given.
-store-bk-choose-sub = Bản sao lưu của Trindle, hoặc bản do { $flat } tạo.
-
 # Note in the card that puts a backup back.
-store-bk-back-note = Ứng dụng của nó được cài đặt, còn dữ liệu và cài đặt được khôi phục. Tài liệu và ảnh của bạn không có trong đó: hãy tự sao chép chúng sang.
+store-bk-back-note = Khôi phục sẽ cài các ứng dụng của nó và đặt lại dữ liệu và cài đặt. Tài liệu và ảnh của bạn không có trong bản sao lưu, nên hãy tự sao chép chúng sang.
 
 # Said while a backup is being made.
-store-bk-making = Đang sao lưu... việc này có thể mất vài phút.
+store-bk-making = Đang sao lưu. Việc này có thể mất vài phút.
 
 # Said when a backup is made: the file and its size.
-store-bk-made = Đó là { $path } ({ $size }). Hãy sao chép nó vào USB hoặc kho lưu trữ đám mây để mang theo.
+store-bk-made = Bản sao lưu là { $path } ({ $size }). Hãy sao chép nó vào USB hoặc kho lưu trữ đám mây để mang theo.
 
 # Red words when no connection to the file chooser exists.
-store-bk-no-bus = Chưa chọn bản sao lưu nào, vì Trindle không có kết nối tới trình chọn tệp.
+store-bk-no-bus = Chưa chọn bản sao lưu nào, vì Trindle không kết nối được với trình chọn tệp.
 
 # Title of the window that asks which backup to use.
 store-bk-choose-title = Chọn một bản sao lưu
@@ -563,10 +541,7 @@ store-bk-filter = Bản sao lưu của Trindle và Flat
 store-bk-no-answer = Chưa chọn bản sao lưu nào, vì trình chọn tệp không phản hồi.
 
 # Said while a backup file is read.
-store-bk-reading = Đang đọc bản sao lưu...
-
-# Said when a backup was put back.
-store-bk-logout = Hãy đăng xuất rồi đăng nhập lại để thấy mọi cài đặt.
+store-bk-reading = Đang đọc bản sao lưu…
 
 # Said when a backup was put back, after what was done; the first part is given.
 store-bk-logout-after = { $last } Hãy đăng xuất rồi đăng nhập lại để thấy mọi cài đặt.
@@ -574,26 +549,26 @@ store-bk-logout-after = { $last } Hãy đăng xuất rồi đăng nhập lại �
 # Said once a Flat backup is read: how many apps and how many have settings.
 store-bk-found =
     { $apps ->
-        [1] 1 ứng dụng, { $with } có cài đặt. Đang bắt đầu...
-       *[other] { $apps } ứng dụng, { $with } có cài đặt. Đang bắt đầu...
+        [1] Tìm thấy 1 ứng dụng, { $with } có cài đặt. Đang bắt đầu…
+       *[other] Tìm thấy { $apps } ứng dụng, { $with } có cài đặt. Đang bắt đầu…
     }
 
 # Line under the title of the Software sources page: how many makers' sources are added.
 store-src-line =
     { $n ->
-        [0] Chưa thêm nguồn riêng nào của nhà sản xuất.
-        [1] Đã thêm 1 nguồn của nhà sản xuất, được cập nhật cùng các bản cập nhật của Debian.
-       *[other] Đã thêm { $n } nguồn của nhà sản xuất, được cập nhật cùng các bản cập nhật của Debian.
+        [0] Chưa thêm nguồn phần mềm nào.
+        [1] Đã thêm 1 nguồn phần mềm, được cập nhật cùng các bản cập nhật của Debian.
+       *[other] Đã thêm { $n } nguồn phần mềm, được cập nhật cùng các bản cập nhật của Debian.
     }
 
 # Under a maker's source that is added and installed.
-store-src-added = { $what }. Đã thêm, và luôn được cập nhật.
+store-src-added = { $what } đã được thêm và luôn được cập nhật.
 
 # Under a maker's source that is added but whose program is not installed.
 store-src-no-program = { $what }. Nguồn đã được thêm, nhưng chương trình chưa được cài.
 
 # Under a maker's source whose program is installed another way.
-store-src-other-way = { $what }. Đã cài bằng cách khác.
+store-src-other-way = { $what } đã được cài bằng cách khác.
 
 # Tip of the round button that removes a maker's source and its program.
 # SAFETY: needs a human review before it ships
@@ -615,34 +590,18 @@ store-src-ready = Sẵn sàng để thêm
 # Name of the field for the address of a source.
 store-src-address = Địa chỉ
 
-# Under the address field.
-store-src-address-sub = Địa chỉ của kho, lấy từ hướng dẫn cài đặt của nhà sản xuất.
-
 # Name of the field for the suite of a source.
 store-src-suite = Suite
 
-# Under the suite field.
-store-src-suite-sub = Thường là trixie hoặc stable.
-
 # Name of the field for the components of a source.
 store-src-components = Thành phần
-
-# Under the components field.
-store-src-components-sub = Thường là main.
 
 # Name of the field for a source's signing key.
 # SAFETY: needs a human review before it ships
 store-src-key = Khóa ký
 
-# Under the signing key field.
-# SAFETY: needs a human review before it ships
-store-src-key-sub = Địa chỉ của khóa ký của nó.
-
 # Name of the field for the program to install from a source.
 store-src-program = Chương trình cần cài
-
-# Under the program field.
-store-src-program-sub = Tên gói của nó, nếu bạn muốn cài ngay bây giờ.
 
 # Placeholder of the program field.
 store-src-program-hint = không bắt buộc
@@ -678,10 +637,10 @@ store-src-bad-package = Đây không phải tên gói.
 store-src-starting = Đang bắt đầu
 
 # Said under Tailscale's row while its sign-in page is opened.
-store-src-opening = Đang mở trang đăng nhập của Tailscale...
+store-src-opening = Đang mở trang đăng nhập của Tailscale…
 
 # Said under Tailscale's row once its sign-in page has opened.
-store-src-opened = Hãy đăng nhập trên trang vừa mở; việc này sẽ tự hoàn tất.
+store-src-opened = Hãy đăng nhập trên trang vừa mở. Trindle sẽ tự tiếp tục khi bạn đăng nhập xong.
 
 # Said under Tailscale's row when it is connected.
 store-src-connected = Đã kết nối
@@ -696,7 +655,7 @@ store-bk-http-title = Không được mã hóa
 
 # Words of that card.
 # SAFETY: needs a human review before it ships
-store-bk-http-card = Địa chỉ này không được mã hóa. Người nào đó trên đường truyền có thể thấy những gì được gửi, và có thể đánh tráo bản sao lưu bằng một bản khác.
+store-bk-http-card = Kết nối này không được mã hóa. Người khác có thể thấy những gì được gửi trên đường truyền, hoặc đánh tráo bản sao lưu bằng một bản khác.
 
 # Label of the tick box on that card; the restore button works only once it is on.
 # SAFETY: needs a human review before it ships
@@ -712,12 +671,12 @@ store-bk-http-cancel = Hủy
 
 # Under that heading when the folder of the saved data cannot be read, so its size is not known.
 # SAFETY: needs a human review before it ships
-store-flatpak-ask-uncounted = Không thể đếm được dữ liệu đã lưu của ứng dụng.
+store-flatpak-ask-uncounted = Không thể đo được dữ liệu đã lưu của ứng dụng.
 
-store-hub-warning = AppImageHub chỉ liệt kê các dự án: không ai xem xét hay quét chúng, và chúng không nhất thiết được ký. Trindle chạy mỗi AppImage trong một hộp có thư mục chính riêng: lúc đầu nó có thể dùng internet và âm thanh, và không thấy tệp nào của bạn.
+store-hub-warning = AppImageHub chỉ liệt kê các dự án. Không ai xem xét hay quét chúng, và chúng không nhất thiết được ký. Trindle chạy mỗi AppImage trong một hộp có thư mục chính riêng. Lúc đầu nó có thể dùng internet và âm thanh, nhưng không thấy tệp nào của bạn.
 
 # Said once where AppImages are listed: the line saying where each comes from is not checked.
-store-from-hint = Nguồn gốc của một AppImage chỉ là gợi ý, không phải đã kiểm tra.
+store-from-hint = Nguồn gốc mà một AppImage tự nhận chỉ là gợi ý. Trindle không kiểm tra điều đó.
 
 # Where an AppImage comes from: a project on GitHub, by its owner and name.
 store-from-github = Trên GitHub: { $repo }
@@ -726,7 +685,7 @@ store-from-github = Trên GitHub: { $repo }
 store-from-github-stars = Trên GitHub: { $repo }, { $stars } sao
 
 # Where an AppImage comes from: a website, by its name.
-store-from-site = Không ở GitHub: từ một trang web, { $site }
+store-from-site = Không ở GitHub. Nó đến từ { $site }
 
 # Where an AppImage comes from, for one added by hand.
 store-from-unknown = Không rõ nguồn
@@ -738,7 +697,7 @@ store-from-site-open = Mở trang web của nó
 store-age-updated = Cập nhật lần cuối: { $date }
 
 # The same, said in red, when that is more than six months ago.
-store-age-updated-old = Cập nhật lần cuối: { $date }. Hơn sáu tháng chưa cập nhật, nên có thể còn lỗi bảo mật chưa sửa.
+store-age-updated-old = Cập nhật lần cuối: { $date }. Đã hơn sáu tháng chưa được cập nhật, nên có thể còn lỗi bảo mật chưa được sửa.
 
 # When the source does not say when an app was last updated.
 store-age-updated-unknown = Cập nhật lần cuối: không rõ
@@ -767,13 +726,13 @@ store-browse-line = { $n ->
 store-browse-fetching = Đang lấy danh sách của AppImageHub…
 
 # The same when the list could not be fetched.
-store-browse-failed = Không lấy được danh sách của AppImageHub.
+store-browse-failed = Trindle không lấy được danh sách của AppImageHub.
 
 # The same with no internet and no copy kept.
 store-browse-offline = Không thể lấy danh sách của AppImageHub khi máy tính này chưa kết nối internet.
 
 # In the list when the kind chosen has none.
-store-browse-none = AppImageHub không liệt kê cái nào thuộc loại này.
+store-browse-none = AppImageHub không có cái nào trong số này.
 
 # Under the rows: how many are shown of how many.
 store-browse-showing = Đang hiện { $shown } trên { $n }.
@@ -819,7 +778,7 @@ store-appimage-line-bare = AppImage
 store-appimage-warn-head = AppImage không được kiểm tra. Không ai xem xét hay quét chúng.
 
 # Under it: how Trindle boxes an AppImage.
-store-appimage-warn-box = Trindle chạy mỗi AppImage trong một hộp có thư mục chính riêng: lúc đầu nó có thể dùng internet và âm thanh, và không thấy tệp nào của bạn.
+store-appimage-warn-box = Trindle chạy mỗi AppImage trong một hộp có thư mục chính riêng. Lúc đầu nó có thể dùng internet và âm thanh, nhưng không thấy tệp nào của bạn.
 
 # Label of the small tick in that card's corner; once it is set the card never comes again.
 store-appimage-warn-hide = Không hiện lại
@@ -830,3 +789,18 @@ store-appimage-warn-ok = OK
 # Button on that card that gives the install up.
 store-appimage-warn-cancel = Hủy
 
+# Printed by the command line after a backup. { $size } is how big the file is.
+store-cli-backed-up = đã sao lưu ({ $size })
+
+# Printed by the command line after Trindle's own settings were put back.
+store-cli-settings-back = Đã khôi phục cài đặt của Trindle
+
+
+# Tick box under the Search page's box: look on Flathub, for Flatpaks.
+store-gh-place-flathub = Flathub (Flatpak)
+
+# Tick box: look on AppImageHub, for AppImages.
+store-gh-place-hub = AppImageHub (AppImage)
+
+# Tick box: look on GitHub, which needs Enter.
+store-gh-place-github = GitHub

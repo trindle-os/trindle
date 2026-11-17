@@ -107,19 +107,19 @@ screenshot-not-saved = Снимок экрана не сохранён
 screenshot-not-copied = Снимок экрана не скопирован
 
 # Words of that notice.
-screenshot-clipboard-refused = Буфер обмена его не принял.
+screenshot-clipboard-refused = Trindle не смогла скопировать это.
 
 # Words of the notice that the screenshot could not be saved: the picture was not made.
-screenshot-no-picture = не удалось создать изображение
+screenshot-no-picture = Не удалось сделать снимок экрана.
 
 # Words of the notice that the screenshot could not be saved: no bus to ask on.
-screenshot-no-bus = нет шины сеанса, чтобы спросить, куда
+screenshot-no-bus = Trindle не может спросить, куда сохранить.
 
 # Words of the notice that the screenshot could not be saved: the file chooser could not be asked.
-screenshot-no-chooser = не удалось обратиться к выбору файла
+screenshot-no-chooser = Не удалось открыть окно выбора файла.
 
 # Words of the notice that the screenshot could not be saved: every file name was taken.
-screenshot-no-free-name = нет свободного имени
+screenshot-no-free-name = Нет свободного имени
 
 # Words of the notice that the screenshot could not be saved: the path and why it failed.
 screenshot-write-failed = { $path }: { $why }
@@ -128,28 +128,28 @@ screenshot-write-failed = { $path }: { $why }
 screenshot-eye-title = Пипетка
 
 # Words that float beside the i of the eye dropper's window.
-screenshot-eye-help = Нажмите на пипетку, затем щёлкните в любом месте экрана, чтобы взять цвет под указателем. Escape отменяет. Каждый цвет сразу копируется как шестнадцатеричный код и хранится в списке ниже, новые сверху, чтобы его можно было скопировать снова.
+screenshot-eye-help = Нажмите на пипетку, затем щёлкните в любом месте экрана, чтобы выбрать цвет под указателем. Чтобы отменить, нажмите Escape. Каждый цвет сразу копируется как шестнадцатеричный код и добавляется в список ниже, новые сверху, так что его можно скопировать снова позже.
 
 # Name of the i button beside the title.
 screenshot-eye-about = О пипетке
 
 # Name of the main button that takes a colour.
-screenshot-eye-take = Взять цвет
+screenshot-eye-take = Выбрать цвет
 
 # Sentence under the title while no colour has been taken.
-screenshot-eye-none = Возьмите цвет из любого места на экране.
+screenshot-eye-none = Выберите цвет на экране.
 
 # Sentence under the title once colours have been taken.
 screenshot-eye-taken =
     { $n ->
-        [one] Цветов взято: { $n }; последний: { $newest }.
-        [few] Цветов взято: { $n }; последний: { $newest }.
-        [many] Цветов взято: { $n }; последний: { $newest }.
-       *[other] Цветов взято: { $n }; последний: { $newest }.
+        [one] Выбрано цветов: { $n }. Последний: { $newest }.
+        [few] Выбрано цветов: { $n }. Последний: { $newest }.
+        [many] Выбрано цветов: { $n }. Последний: { $newest }.
+       *[other] Выбрано цветов: { $n }. Последний: { $newest }.
     }
 
 # Shown in the big card while no colour has been taken.
-screenshot-eye-latest-empty = Взятый цвет показывается здесь крупно, готовый к копированию.
+screenshot-eye-latest-empty = Цвет ещё не выбран.
 
 # Name of the card that holds the latest colour.
 screenshot-eye-latest = Последний цвет
@@ -159,10 +159,10 @@ screenshot-eye-latest = Последний цвет
 screenshot-eye-clear = Очистить список
 
 # Head of the card with the list of colours taken.
-screenshot-eye-list = Взятые цвета
+screenshot-eye-list = Ваши цвета
 
 # Shown in the list card while no colour has been taken.
-screenshot-eye-list-empty = Цвета, взятые пипеткой, хранятся здесь, новые сверху.
+screenshot-eye-list-empty = Цвета ещё не выбраны.
 
 # Name of the round button that takes a colour out of the list.
 # SAFETY: needs a human review before it ships
@@ -177,11 +177,11 @@ screenshot-pick-title = Показать ваш экран в { $app }?
 
 # Sentence under the title when several things can be picked.
 # SAFETY: needs a human review before it ships
-screenshot-pick-many = Выберите один или несколько. Показывается только выбранное, пока приложение не остановится или не закроется.
+screenshot-pick-many = Выберите один или несколько. Приложению будет доступно только выбранное, пока оно не остановит показ или не закроется.
 
 # Sentence under the title when one thing can be picked.
 # SAFETY: needs a human review before it ships
-screenshot-pick-one = Выберите один. Показывается только выбранное, пока приложение не остановится или не закроется.
+screenshot-pick-one = Выберите один. Приложению будет доступно только выбранное, пока оно не остановит показ или не закроется.
 
 # Heading over the screens that can be shared.
 screenshot-pick-screens = Экраны
@@ -236,11 +236,11 @@ screenshot-portal-name = Имя
 
 # Heading when an unknown program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks-unknown = Программа спрашивает, кто вы
+screenshot-account-asks-unknown = Программа запрашивает ваши данные
 
 # Heading when a program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks = { $who } спрашивает, кто вы
+screenshot-account-asks = { $who } запрашивает ваши данные
 
 # Name the screen reader gives to the person's picture.
 screenshot-account-picture = Ваша картинка
@@ -252,7 +252,7 @@ screenshot-account-signed-in = Вход выполнен как { $id }
 screenshot-apps-search = Поиск приложений
 
 # Shown when no app can open the file.
-screenshot-apps-none = Здесь нет приложения, которое может его открыть
+screenshot-apps-none = Нет приложения, которое может его открыть
 
 # Name of the switch that remembers the choice.
 # SAFETY: needs a human review before it ships
@@ -313,7 +313,7 @@ screenshot-wallpaper-ask = Установить эту картинку как �
 
 # Heading when a program offers a wallpaper.
 # SAFETY: needs a human review before it ships
-screenshot-wallpaper-asks = { $who } предлагает новые обои
+screenshot-wallpaper-asks = { $who } хочет сменить обои
 
 # Name the screen reader gives to the picture offered.
 screenshot-wallpaper-picture = Новые обои
@@ -323,7 +323,7 @@ screenshot-wallpaper-picture = Новые обои
 screenshot-wallpaper-set = Установить как обои
 
 # Red line under the printer box when no printer is set up.
-screenshot-print-no-printer = Принтер не настроен. Добавьте его в Настройки, Принтеры.
+screenshot-print-no-printer = Принтер не настроен. Добавьте его в «Настройки», в разделе «Принтеры».
 
 # Red line under the printer box when the printing system does not answer.
 screenshot-print-not-answering = Печать не отвечает.
@@ -377,7 +377,7 @@ screenshot-print-from = Печать из { $who }
 screenshot-print-failed = Не удалось напечатать
 
 # Words of that notice when the choices made were not kept.
-screenshot-print-lost = Выбранные параметры не сохранились. Напечатайте ещё раз.
+screenshot-print-lost = Не удалось сохранить параметры. Напечатайте ещё раз.
 
 # Line in the menu on a file or folder: change its name.
 screenshot-chooser-rename = Переименовать
@@ -408,7 +408,7 @@ screenshot-chooser-folder = Папка
 screenshot-chooser-empty = Здесь пусто
 
 # Name of the choice of which kind of file is shown.
-screenshot-chooser-kind = Вид файла
+screenshot-chooser-kind = Тип файла
 
 # Said where a place on another computer is not answering.
 screenshot-chooser-not-answering = Другой компьютер не отвечает.
@@ -421,7 +421,7 @@ screenshot-chooser-no-folder = Такой папки нет.
 
 # Words under the box when saving would replace a file.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-ask = { $name } уже существует. Нажмите «Заменить» или Enter ещё раз, чтобы поставить это на его место.
+screenshot-chooser-replace-ask = { $name } уже существует. Чтобы заменить его, нажмите «Заменить» или ещё раз Enter.
 
 # Words under the box when a key is pressed on Recent, which is not a folder.
 screenshot-chooser-recent-not-folder = «Недавние» не папка. Сначала откройте папку.
@@ -463,27 +463,27 @@ screenshot-chooser-replace = Заменить
 
 # What the screen reader says for the button that replaces a folder.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-spoken = Заменить: папка, которая там лежит, уйдёт в корзину
+screenshot-chooser-replace-spoken = Заменить. Существующая папка будет перемещена в корзину.
 
 # Name of the main button that merges two folders.
 # SAFETY: needs a human review before it ships
 screenshot-chooser-merge = Объединить
 
 # Words in the question when folders are being pasted.
-screenshot-chooser-rest-folders = Один и тот же ответ для каждой уже существующей папки.
+screenshot-chooser-rest-folders = Сделать так для каждой существующей папки.
 
 # Words in the question when files are being pasted.
-screenshot-chooser-rest-files = Один и тот же ответ для каждого уже существующего файла.
+screenshot-chooser-rest-files = Сделать так для каждого существующего файла.
 
 # Name of the switch that gives the same answer to the rest.
 # SAFETY: needs a human review before it ships
 screenshot-chooser-same = Сделать то же для остальных
 
 # Words under the box after Cut.
-screenshot-chooser-was-cut = Вырезано: { $what }. Вставьте это в папку.
+screenshot-chooser-was-cut = Готово к перемещению: { $what }
 
 # Words under the box after Copy.
-screenshot-chooser-was-copied = Скопировано: { $what }. Вставьте это в папку.
+screenshot-chooser-was-copied = Готово к копированию: { $what }
 
 # Words under the box when Paste is pressed and there is nothing to paste.
 screenshot-chooser-nothing-cut = Ничего не вырезано и не скопировано.
@@ -494,28 +494,28 @@ screenshot-chooser-paste-busy = Вставка ещё идёт.
 # Red line after some items could not be moved.
 screenshot-chooser-not-moved =
     { $n ->
-        [one] Не удалось 0: { $n } объект: { $names }.
-        [few] Не удалось 0: { $n } объекта: { $names }.
-        [many] Не удалось 0: { $n } объектов: { $names }.
-       *[other] Не удалось 0: { $n } объекта: { $names }.
+        [one] Не удалось переместить { $n } элемент: { $names }.
+        [few] Не удалось переместить { $n } элемента: { $names }.
+        [many] Не удалось переместить { $n } элементов: { $names }.
+       *[other] Не удалось переместить { $n } элемента: { $names }.
     }
 
 # Red line after some items could not be copied.
 screenshot-chooser-not-copied =
     { $n ->
-        [one] Не удалось 0: { $n } объект: { $names }.
-        [few] Не удалось 0: { $n } объекта: { $names }.
-        [many] Не удалось 0: { $n } объектов: { $names }.
-       *[other] Не удалось 0: { $n } объекта: { $names }.
+        [one] Не удалось скопировать { $n } элемент: { $names }.
+        [few] Не удалось скопировать { $n } элемента: { $names }.
+        [many] Не удалось скопировать { $n } элементов: { $names }.
+       *[other] Не удалось скопировать { $n } элемента: { $names }.
     }
 
 # Red line after some items could not be put in the Trash.
 screenshot-chooser-not-trashed =
     { $n ->
-        [one] Не удалось 0: { $n } объект: { $names }.
-        [few] Не удалось 0: { $n } объекта: { $names }.
-        [many] Не удалось 0: { $n } объектов: { $names }.
-       *[other] Не удалось 0: { $n } объекта: { $names }.
+        [one] Не удалось переместить в корзину { $n } элемент: { $names }.
+        [few] Не удалось переместить в корзину { $n } элемента: { $names }.
+        [many] Не удалось переместить в корзину { $n } элементов: { $names }.
+       *[other] Не удалось переместить в корзину { $n } элемента: { $names }.
     }
 
 # Name of the box where a file or folder is renamed.
@@ -531,10 +531,10 @@ screenshot-chooser-items =
     }
 
 # Title of the notice when an email could not be started.
-screenshot-mail-failed = Не удалось начать письмо
+screenshot-mail-failed = Не удалось создать письмо
 
 # Why: no mail program is chosen or installed.
-screenshot-mail-no-app = Почтовая программа не выбрана. Выберите её в Настройки, Приложения по умолчанию.
+screenshot-mail-no-app = Вы не выбрали почтовую программу. Выберите её в «Настройки», в разделе «Приложения по умолчанию».
 
 # Why: a program asked to attach more files than allowed.
 screenshot-mail-too-many = Слишком много файлов для вложения.
@@ -587,3 +587,8 @@ screenshot-chooser-not-deleted =
        *[other] Не удалось удалить { $n } элемента: { $names }.
     }
 
+# What the screen reader says for the list of places down the left of the file chooser.
+screenshot-chooser-places = Места
+
+# What the screen reader says for the list of files and folders in the file chooser.
+screenshot-chooser-files = Файлы

@@ -6,7 +6,7 @@
 
 use std::cell::RefCell;
 use std::collections::HashMap;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::rc::Rc;
 use std::time::{Duration, Instant};
 
@@ -14,11 +14,12 @@ use zbus::zvariant::{OwnedObjectPath, OwnedValue, Value};
 
 use super::file_chooser::{Ask, Chooser, Filter, Mode, Outcome, Pick, SIZE};
 use super::portal::{answer, Stay, CANCELLED, DONE, FAILED};
+use super::portal_ask::{screen, Screen};
 use crate::toolkit::bus::{Asked, Bus, Offer, Props, Served};
 use crate::toolkit::event::Loop;
 use crate::toolkit::t;
 use crate::toolkit::ui::Shown;
-use crate::toolkit::window::{Display, Kind};
+use crate::toolkit::window::Kind;
 
 pub const INTERFACE: &str = "org.freedesktop.impl.portal.FileChooser";
 const VERSION: u32 = 4;
@@ -74,10 +75,14 @@ fn bytes_path(mut b: Vec<u8>) -> Option<PathBuf> {
     (!b.is_empty()).then(|| PathBuf::from(std::ffi::OsString::from_vec(b)))
 }
 
+fn bare(name: &str) -> String {
+    Path::new(name).file_name().map(|n| n.to_string_lossy().into_owned()).unwrap_or_default()
+}
+
 pub fn ask_from(member: &str, app_id: &str, title: &str, options: &Options) -> Ask {
     let flag = |k: &str| get::<bool>(options, k).unwrap_or(false);
     let mut folder = get::<Vec<u8>>(options, "current_folder").and_then(bytes_path);
-    let mut name = get::<String>(options, "current_name").unwrap_or_default();
+    let mut name = bare(&get::<String>(options, "current_name").unwrap_or_default());
     let mode = match member {
         "SaveFile" => {
             if let Some(file) = get::<Vec<u8>>(options, "current_file").and_then(bytes_path) {
@@ -165,20 +170,6 @@ fn finish(request: &Rc<RefCell<Request>>, events: &Loop, stay: &Rc<Stay>, outcom
         r.shown = None;
         r.close = None;
     });
-}
-
-type Screen = Rc<RefCell<Option<Rc<Display>>>>;
-
-fn screen(events: &Loop, held: &Screen) -> Option<Rc<Display>> {
-    if let Some(d) = held.borrow().as_ref() {
-        return Some(d.clone());
-    }
-    let gone = held.clone();
-    let display = Display::connect(events, move || {
-        gone.borrow_mut().take();
-    })?;
-    *held.borrow_mut() = Some(display.clone());
-    Some(display)
 }
 
 fn open(asked: Asked, bus: &Bus, events: &Loop, stay: &Rc<Stay>, held: &Screen) {
@@ -395,6 +386,14 @@ mod tests {
     }
 
     #[test]
+    fn a_suggested_name_cannot_point_outside_the_folder() {
+        for (sent, kept) in [("../.config/autostart/x.desktop", "x.desktop"), ("/etc/passwd", "passwd"), ("~/a.txt", "a.txt"), ("..", ""), ("fine.txt", "fine.txt")] {
+            let options: Options = HashMap::from([("current_name".to_string(), owned(sent))]);
+            assert_eq!(ask_from("SaveFile", "x", "", &options).name, kept, "{sent}");
+        }
+    }
+
+    #[test]
     fn outcomes_become_results() {
         let (code, out) = results(Outcome::Chosen { uris: vec!["file:///tmp/a".into()], choices: vec![], filter: None });
         assert_eq!(code, DONE);
@@ -409,7 +408,7 @@ mod tests {
 
         let d = own_daemon();
 
-        std::env::remove_var("WAYLAND_DISPLAY");
+        super::super::portal_ask::NO_SCREEN.set(true);
         let lp = Loop::new();
         let (a, b) = (Bus::at(&lp, &d.1).expect("bus a"), Bus::at(&lp, &d.1).expect("bus b"));
         let stay = Rc::new(Stay { last: Cell::new(Instant::now()), busy: Cell::new(0), settled: Cell::new(false) });

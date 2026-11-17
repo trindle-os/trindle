@@ -7,13 +7,16 @@ settings-common-saved = Enregistré
 # Said beside a button that worked, when nothing more is known.
 settings-common-done = Terminé
 
+# Words that only say "that worked", in lower case and separated by bars. A line saying one of them under a control that has already moved is left out, as the glow says it. Translate each word, and keep the bars.
+settings-common-quiet-words = enregistré|terminé|utilisé maintenant|modifié|défini|pris|ajouté|libéré|supprimé|stocké|installé|mis à jour|rejoint|copié|par défaut maintenant|lu|envoyé|connecté|connexion|activé|désactivé|oublié|s'arrête à 80 %|charge à fond|démarre à l'ouverture de session|conservé, mais ne démarre pas|à jour
+
 # Said beside a button that failed, when nothing more is known.
 settings-common-not-done = Non effectué
 
 # Tip of the information button at the top of every Settings page.
 settings-common-about-page = À propos de cette page
 
-# Tip of the information button on a card: { $name } is the card's heading in lower case.
+# Tip of the information button on a card: { $name } is the card's heading as it is written.
 settings-common-about-card = À propos de { $name }
 
 # Heading of the question when a name is already taken: { $name } is the name.
@@ -31,7 +34,7 @@ settings-common-same-for-rest-more =
 settings-common-same-for-rest = Faire de même pour le reste
 
 # Tip of the button that keeps the one already there.
-settings-common-skip = Ignorer : garder celui qui existe déjà
+settings-common-skip = Ignorer et garder celui qui existe déjà
 
 # SAFETY: needs a human review before it ships
 # Button that replaces the one already there.
@@ -39,10 +42,10 @@ settings-common-replace = Remplacer
 
 # SAFETY: needs a human review before it ships
 # Spoken name of the Replace button.
-settings-common-replace-spoken = Remplacer celui qui existe déjà par celui qui arrive
+settings-common-replace-spoken = Remplacer celui qui existe déjà par le nouveau
 
 # Heading of the line that shows the new one, in the question about a name already taken.
-settings-common-being-brought = Celui qui arrive
+settings-common-being-brought = Le nouveau
 
 # Heading of the line that shows the one already there.
 settings-common-already-line = Celui qui existe déjà
@@ -54,17 +57,15 @@ settings-common-replace-question = Remplacer celui qui existe déjà ?
 # At the foot of the window while a change is on trial: how many seconds are left.
 settings-common-goes-back =
     { $left ->
-        [one] Retour en arrière dans { $left } seconde.
-        [many] Retour en arrière dans { $left } secondes.
-       *[other] Retour en arrière dans { $left } secondes.
+        [one] Annulation dans { $left } seconde.
+       *[other] Annulation dans { $left } secondes.
     }
 
 # At the foot of the window while a change is on trial: the seconds left, then { $more } such as what Escape does.
 settings-common-goes-back-more =
     { $left ->
-        [one] Retour en arrière dans { $left } seconde. { $more }
-        [many] Retour en arrière dans { $left } secondes. { $more }
-       *[other] Retour en arrière dans { $left } secondes. { $more }
+        [one] Annulation dans { $left } seconde. { $more }
+       *[other] Annulation dans { $left } secondes. { $more }
     }
 
 # Button at the foot of the window that undoes the change on trial.
@@ -78,31 +79,31 @@ settings-common-keep = Garder
 settings-common-not-available = { $what } n'est pas disponible
 
 # Under that heading: { $package } is the name of the package to install.
-settings-common-install-with = Installez-le avec : sudo apt install { $package }
+settings-common-install-with = Pour l'installer, lancez : sudo apt install { $package }
 
 # Red words when a web page could not be opened.
-settings-common-no-browser = La page web n'a pas pu être ouverte : aucun navigateur web n'a pu être lancé.
+settings-common-no-browser = Trindle n'a pas pu ouvrir la page web, car il n'a pas pu lancer de navigateur web.
 
 # Red words when one of Trindle's programs could not be opened: { $name } is its name.
-settings-common-could-not-open = { $name } n'a pas pu être ouvert.
+settings-common-could-not-open = Impossible d'ouvrir { $name }.
 
 # Red words when a change could not be kept and nothing more is known.
-settings-common-not-saved = L'enregistrement a échoué.
+settings-common-not-saved = Impossible de l'enregistrer.
 
 # Red words when an action needs the system's message bus and there is none.
-settings-common-no-system-bus = Non effectué : le bus de messages du système est inaccessible. Redémarrez l'ordinateur, puis réessayez.
+settings-common-no-system-bus = Trindle n'a pas pu le faire, car une partie du système ne répond pas. Redémarrez l'ordinateur, puis réessayez.
 
 # Red words when an action needs this login's message bus and there is none.
-settings-common-no-session-bus = Non effectué : le bus de messages de cette session est inaccessible. Fermez la session puis rouvrez-la, et réessayez.
+settings-common-no-session-bus = Trindle n'a pas pu le faire, car une partie de votre session ne répond pas. Fermez la session puis rouvrez-la, et réessayez.
 
 # Red words when the window for choosing a file or folder could not be opened.
-settings-common-no-chooser = La fenêtre de sélection n'a pas pu être ouverte. Fermez la session puis rouvrez-la, et réessayez.
+settings-common-no-chooser = Trindle n'a pas pu ouvrir la fenêtre de choix d'un fichier ou d'un dossier. Fermez la session puis rouvrez-la, et réessayez.
 
 # Cause given in red words after an action failed: the disk is full.
 settings-common-why-full = Le disque est plein.
 
 # Cause given in red words after an action failed: the disk is read only.
-settings-common-why-read-only = Il est impossible d'écrire sur le disque pour le moment.
+settings-common-why-read-only = Trindle ne peut pas écrire sur le disque pour le moment.
 
 # Cause given in red words after an action failed: the part of the system that does it is not running.
 settings-common-why-not-running = La partie du système qui s'en occupe n'est pas en cours d'exécution.
@@ -111,10 +112,10 @@ settings-common-why-not-running = La partie du système qui s'en occupe n'est pa
 settings-common-why-slow = La réponse a pris trop de temps. Réessayez.
 
 # Cause given in red words after an action failed: the password was not given.
-settings-common-why-password = Le mot de passe n'a pas été fourni.
+settings-common-why-password = Aucun mot de passe n'a été fourni.
 
 # Cause given in red words after an action failed: the account is not allowed.
-settings-common-why-not-allowed = Ce compte n'y est pas autorisé.
+settings-common-why-not-allowed = Ce compte ne peut pas le faire.
 
 # Cause given in red words after an action failed: something needed is missing.
 settings-common-why-missing = Un élément nécessaire est absent de cet ordinateur.
@@ -129,19 +130,19 @@ settings-common-and = { $rest } et { $last }
 settings-common-list-comma = { ", " }
 
 # Spoken name of the picture of the ring opening on a small screen.
-settings-common-ring-picture = L'anneau s'ouvre d'un clic au bord de l'écran.
+settings-common-ring-picture = Vous ouvrez l'anneau en double-cliquant au bord de l'écran.
 
 # Word drawn in the middle of that picture.
 settings-common-ring-name = L'anneau
 
 # Red words under the charge limit switch when the laptop's firmware door could not be opened; { $error } is the system's reason.
-charge-no-firmware-door = Impossible d'accéder au micrologiciel de l'ordinateur portable : { $error }
+charge-no-firmware-door = Trindle n'a pas pu accéder aux réglages de charge de l'ordinateur portable : { $error }
 
 # Red words under the charge limit switch when the laptop's firmware refused the limit.
-charge-firmware-refused = Le micrologiciel de l'ordinateur portable n'a pas accepté la limite de charge.
+charge-firmware-refused = L'ordinateur portable n'a pas accepté la limite de charge.
 
 # Red words under the charge limit switch on a computer that cannot stop charging early.
-charge-not-allowed = Cet ordinateur ne permet pas d'arrêter la charge avant la fin.
+charge-not-allowed = Cet ordinateur ne permet pas d'arrêter la charge plus tôt.
 
 # Red words under the charge limit switch when a battery setting file could not be written; { $path } is the file and { $error } the system's reason.
 charge-could-not-set = Impossible de définir { $path } : { $error }
@@ -150,7 +151,10 @@ charge-could-not-set = Impossible de définir { $path } : { $error }
 graphics-vm-title = Essayer Trindle dans une machine virtuelle
 
 # Note to someone in a virtual machine that has 3D graphics; { $machine } is the machine's name.
-graphics-vm-body-fast = Trindle fonctionne dans { $machine }. Cela marche bien, mais une machine virtuelle n'est jamais tout à fait aussi rapide ni aussi fluide qu'un vrai ordinateur : jugez donc sa vitesse sur du matériel réel.
+graphics-vm-body-fast = Trindle fonctionne dans { $machine }. Cela marche bien, mais une machine virtuelle n'est jamais tout à fait aussi rapide ni aussi fluide qu'un vrai ordinateur. Jugez sa vitesse sur du matériel réel.
 
 # Note to someone in a virtual machine without 3D graphics; { $machine } is the machine's name.
-graphics-vm-body-slow = Trindle fonctionne dans { $machine } sans graphisme 3D : le processeur doit donc dessiner tout ce qu'une puce graphique dessine normalement. Les fenêtres, les vidéos et les pages web seront plus lentes que sur un vrai ordinateur, et Trindle supprime ses animations pour aider. Si l'ordinateur qui l'héberge le permet, activer l'accélération 3D dans les réglages d'affichage de la machine virtuelle change beaucoup de choses. Installé sur un vrai ordinateur, rien de tout cela ne s'applique.
+graphics-vm-body-slow = Trindle fonctionne dans { $machine } sans graphisme 3D. Le processeur doit dessiner tout ce qu'une puce graphique dessine d'habitude. Les fenêtres, les vidéos et les pages web seront plus lentes que sur un vrai ordinateur, donc Trindle supprime ses animations. Si l'ordinateur qui l'héberge le permet, activez l'accélération 3D dans les réglages d'affichage de la machine virtuelle. Cela change beaucoup de choses. Rien de tout cela ne s'applique si vous installez Trindle sur un vrai ordinateur.
+
+# A list of choices ends with this: { $rest } is the names before the last, { $last } the last.
+settings-common-or = { $rest } ou { $last }

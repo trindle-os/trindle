@@ -5,8 +5,7 @@
 //! everything, says each thing the app wants in plain words with what goes
 //! wrong without it, and gives each its own switch, off until pressed.
 
-use std::cell::RefCell;
-use std::rc::{Rc, Weak};
+use std::rc::Rc;
 
 use super::boxed;
 use crate::common::access;
@@ -41,7 +40,7 @@ pub fn lines_of(known: &[&str], wants: &[String], asked: &[String], allowed: &[S
         let a = access::ask(k);
         Line {
             key: k.clone(),
-            name: access::title(k),
+            name: access::title(k).to_string(),
             without: a.without.to_string(),
             warning: access::warning(k).map(String::from).or_else(|| access::unusual(categories, k)),
             detail: None,
@@ -145,7 +144,7 @@ pub fn view_of(app: &str, lines: &[Line], worked_out: bool) -> Node<Msg> {
 
     let mut rows = Vec::new();
     for (i, l) in lines.iter().enumerate() {
-        let mut words = vec![form_label(l.name.clone()), note(access::off_line(&l.without))];
+        let mut words = vec![form_label(l.name.clone()), note(access::off_line(&l.key).to_string())];
         if let Some(d) = &l.detail {
             words.push(note(d.clone()));
         }
@@ -245,11 +244,9 @@ fn show(app: &str, name: &str, whose: Whose, lines: Vec<Line>) -> i32 {
         layer: Layer::Overlay, edges: Edges::NONE, keep: -1, margins: [0; 4], keys: Keys::Always,
         name: "trindle-permissions".into(), screen: None,
     });
-    let me: Rc<RefCell<Weak<Shown<Asking>>>> = Rc::new(RefCell::new(Weak::new()));
     let asking = Asking { app: app.to_string(), name: name.to_string(), whose, lines, events: events.clone() };
     let Some(shown) = Shown::open(&events, &display, kind, (WIDTH, 1), asking) else { return 1 };
     let shown = Rc::new(shown);
-    *me.borrow_mut() = Rc::downgrade(&shown);
     shown.fit();
     let quit = events.clone();
     shown.window.on_close(move || quit.quit());
@@ -344,20 +341,20 @@ mod tests {
 
     #[test]
     fn the_line_under_a_switch_says_it_is_for_off() {
-        assert_eq!(access::off_line("It will not be able to hear you."), "Off: it will not be able to hear you.");
-        assert_eq!(access::off_line("Its windows will not open."), "Off: its windows will not open.");
-        assert_eq!(access::off_line(""), "");
+        assert_eq!(access::off_line("microphone"), "Off means it can't hear you.");
+        assert_eq!(access::off_line("x11"), "Off stops its windows opening.");
+        assert_eq!(access::off_line("nothing"), "");
         for on in [false, true] {
             let allowed = if on { v(&["control", "network"]) } else { vec![] };
             let l = lines_of(&["control", "network"], &v(&["control", "network"]), &[], &allowed, "");
             for l in &l {
                 assert_eq!(l.on, on);
-                assert!(access::off_line(&l.without).starts_with("Off: "), "{}", l.key);
+                assert!(access::off_line(&l.key).starts_with("Off "), "{}", l.key);
             }
         }
         let code = crate::common::source::code(include_str!("asking.rs"));
         let code = &code[..code.find("#[cfg(test)]").unwrap()];
-        assert!(code.contains("note(access::off_line(&l.without))") && !code.contains("note(l.without"), "the window shows the line some other way");
+        assert!(code.contains("note(access::off_line(&l.key).to_string())") && !code.contains("note(l.without"), "the window shows the line some other way");
     }
 
     #[test]
@@ -400,7 +397,7 @@ mod tests {
 
         for k in boxed::ALLOWED {
             let a = access::ask(k);
-            assert_eq!(a.key, *k, "{k} has no words in common::access");
+            assert_ne!(a.title, access::ask("nothing").title, "{k} has no words in common::access");
             assert!(!a.without.is_empty() && a.without.ends_with('.'), "{k}");
         }
     }
@@ -434,8 +431,8 @@ mod tests {
 
         assert_eq!(plugin_lines(&p, &v(&["network"]), &[], None).len(), 1);
         assert_eq!(plugin_lines(&p, &[], &[], None).len(), 2);
-        assert!(said_above(&again).starts_with("Each switch shows what is allowed now"));
-        assert!(said_above(&plugin_lines(&p, &[], &[], None)).starts_with("Each switch stays off"));
+        assert!(said_above(&again).starts_with("You can change these later in Settings, Permissions."));
+        assert!(said_above(&plugin_lines(&p, &[], &[], None)).starts_with("Nothing is allowed yet."));
     }
 
     #[test]
@@ -462,7 +459,7 @@ mod tests {
         let l = plugin_lines(&p, &[], &[], None);
         assert_eq!(l.iter().map(|l| l.key.as_str()).collect::<Vec<_>>(), ["network", "listen"]);
         let listen = &l[1];
-        assert_eq!(listen.name, "Let other computers on your home network reach it");
+        assert_eq!(listen.name, "Let other computers on your local network reach it");
         assert!(listen.detail.as_deref().is_some_and(|d| d.starts_with("Ports TCP 24810 and UDP 24811")));
         assert!(!listen.on && listen.refused.is_none());
 

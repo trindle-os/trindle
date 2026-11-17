@@ -15,11 +15,11 @@ settings-tailscale-last-online = zuletzt online { $day }
 
 # Shown beside the Use Tailscale switch while the password is asked for, when Tailscale is already installed.
 # SAFETY: needs a human review before it ships
-settings-tailscale-waiting = Warte auf das Passwort...
+settings-tailscale-waiting = Warte auf dein Passwort …
 
 # Shown beside the Use Tailscale switch while the password is asked for, before Tailscale is installed.
 # SAFETY: needs a human review before it ships
-settings-tailscale-waiting-install = Warte auf das Passwort, dann wird Tailscale installiert...
+settings-tailscale-waiting-install = Warte auf dein Passwort, bevor Tailscale installiert wird …
 
 # Shown beside the switch after Tailscale is turned on.
 settings-tailscale-done-on = Tailscale an
@@ -28,7 +28,7 @@ settings-tailscale-done-on = Tailscale an
 settings-tailscale-done-off = Tailscale aus
 
 # Shown under the Sign in line once the browser is being opened.
-settings-tailscale-opening = Die Anmeldeseite wird in deinem Browser geöffnet...
+settings-tailscale-opening = Die Anmeldeseite wird in deinem Browser geöffnet …
 
 # Red words under the Sign in line when Tailscale could not be started.
 settings-tailscale-not-started = Tailscale konnte nicht gestartet werden.
@@ -67,31 +67,22 @@ settings-tailscale-title = Tailscale
 settings-tailscale-keywords = tailscale vpn privates netzwerk geräte fern tailnet
 
 # Help text at the top of the page.
-settings-tailscale-help = Tailscale verbindet deine eigenen Computer und Telefone zu einem privaten Netzwerk, wo auch immer sie sind. Bis du es einschaltest, ist nichts davon installiert, und solange es aus ist, braucht es keinen Speicher.
-
-# Small line under the Use Tailscale switch before Tailscale is installed.
-settings-tailscale-switch-sub-first = Installiert es aus der eigenen Quelle von Tailscale.
-
-# Small line under the Use Tailscale switch once Tailscale is installed.
-settings-tailscale-switch-sub = Aus: angehalten, nicht mit dem Computer gestartet.
+settings-tailscale-help = Tailscale verbindet deine eigenen Computer und Telefone zu einem privaten Netzwerk, wo auch immer sie sind. Bis du es einschaltest, wird nichts installiert, und solange es aus ist, braucht es keinen Speicher.
 
 # Text of the switch that turns Tailscale on or off, and heading of its line.
 settings-tailscale-switch = Tailscale verwenden
 
 # Help text (i button) of the Tailscale card when Tailscale is off or has not answered.
-settings-tailscale-about-plain = Beim ersten Einschalten wird Tailscale aus der eigenen Softwarequelle von Tailscale installiert und dann gestartet. Sein Hintergrunddienst braucht im Betrieb Speicher und läuft deshalb nur, wenn dies eingeschaltet ist. Solange es aus ist, ist Tailscale angehalten und startet nicht mit dem Computer. Die Firewall lässt deine eigenen Tailscale-Geräte herein und hält alles andere wie bisher draußen.
+settings-tailscale-about-plain = Beim ersten Einschalten installiert Trindle Tailscale aus der eigenen Softwarequelle von Tailscale und startet es dann. Der Hintergrunddienst von Tailscale braucht beim Laufen Speicher und läuft deshalb nur, wenn dies eingeschaltet ist. Solange es aus ist, ist Tailscale angehalten und startet nicht mit dem Computer. Die Firewall lässt deine eigenen Tailscale-Geräte herein und hält alles andere wie bisher draußen.
 
 # Help text (i button) of the Tailscale card when Tailscale is on but not yet connected.
 settings-tailscale-about-sign-in = { settings-tailscale-about-plain } Beim Anmelden öffnet sich die Anmeldeseite von Tailscale in deinem Browser. Verwende auf jedem deiner Geräte dasselbe Konto.
 
 # Help text (i button) of the Tailscale card when connected.
-settings-tailscale-about-connected = { settings-tailscale-about-plain } Beim Abmelden ist dieser Computer nicht mehr in deinem privaten Netzwerk, bis du dich wieder anmeldest.
+settings-tailscale-about-connected = { settings-tailscale-about-plain } Wenn du dich abmeldest, verlässt dieser Computer dein privates Netzwerk, bis du dich wieder anmeldest.
 
 # Line in the devices card when there are no other devices.
 settings-tailscale-no-devices = Noch keine anderen Geräte
-
-# Small line under "No other devices yet".
-settings-tailscale-no-devices-sub = Melde dich auf einem anderen mit demselben Konto an.
 
 # Shown on the devices card while Tailscale is off.
 settings-tailscale-waits-off = Schalte Tailscale ein, um deine Geräte zu sehen.
@@ -117,26 +108,17 @@ settings-tailscale-this-computer = Dieser Computer
 # Heading of the line that signs in to Tailscale, and tip of its round button.
 settings-tailscale-sign-in = Anmelden
 
-# Small line under the Sign in line.
-settings-tailscale-sign-in-sub = Öffnet die Anmeldeseite in deinem Browser.
-
 # Heading of the line that joins the private network again, and tip of its round button.
 settings-tailscale-connect = Verbinden
 
-# Small line under the Connect line.
-settings-tailscale-connect-sub = Tritt deinem privaten Netzwerk wieder bei.
-
 # Heading of the line that says the firewall lets the person's own devices in.
-settings-tailscale-firewall = Deine eigenen Geräte kommen herein
+settings-tailscale-firewall = Deine Geräte können herein
 
 # Small line under that heading.
-settings-tailscale-firewall-sub = Alles andere bleibt draußen, wie bisher.
+settings-tailscale-firewall-sub = Die Firewall blockiert alles andere weiterhin.
 
 # Heading of the line that signs out, and tip of its button.
 settings-tailscale-sign-out = Abmelden
-
-# Small line under the Sign out line.
-settings-tailscale-sign-out-sub = Verlässt dein privates Netzwerk.
 
 # Heading of the card with the Tailscale switch.
 settings-tailscale-card = Tailscale
@@ -145,4 +127,4 @@ settings-tailscale-card = Tailscale
 settings-tailscale-devices = Deine Geräte
 
 # Help text (i button) of the Your devices card.
-settings-tailscale-devices-about = Jedes in deinem privaten Netzwerk angemeldete Gerät, mit seiner Adresse darin, dem, was es ausführt, und wann es zuletzt online war. Um eines hinzuzufügen, installiere Tailscale auf deinem Telefon oder einem anderen Computer und melde dich mit demselben Konto an.
+settings-tailscale-devices-about = Jedes Gerät, das in deinem privaten Netzwerk angemeldet ist, mit seiner Adresse in diesem Netzwerk, dem, was es ausführt, und wann es zuletzt online war. Um ein Gerät hinzuzufügen, installiere Tailscale auf deinem Telefon oder einem anderen Computer und melde dich mit demselben Konto an.

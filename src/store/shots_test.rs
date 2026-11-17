@@ -13,7 +13,7 @@ use super::catalogue::{categories, App, Catalogue, POPULAR};
 use super::updates::{Installed, Source};
 use super::*;
 use super::launch::folders_that_change;
-use super::side::{Place, SIDE};
+use super::side::Place;
 use crate::plugins::catalogue::{Entry, Offer, Refused};
 use crate::plugins::Plugin;
 use crate::toolkit::theme::Theme;
@@ -180,8 +180,8 @@ fn paint<M: Clone + 'static>(name: &str, tree: impl Fn() -> crate::toolkit::widg
     }
 }
 
-const LIMIT_SAID: &str = "GitHub has stopped answering for now: it answers 60 questions an hour from one address without a key. \
-                          It will answer again in about 23 minutes. A GitHub key raises that to 5,000: press the key at the top right of Search GitHub.";
+const LIMIT_SAID: &str = "GitHub has stopped answering for now, because it allows 60 requests an hour from one address without a key. \
+                          It will answer again in about 23 minutes. A GitHub key raises that to 5,000. Press the key button at the top right of Search.";
 
 fn key_button_at(s: &mut Store, w: u32, h: u32) -> crate::toolkit::widget::Rect {
     let mut ui = Ui::new(s.whole(settings()), Theme::new(false, "#fbc711"));
@@ -189,7 +189,7 @@ fn key_button_at(s: &mut Store, w: u32, h: u32) -> crate::toolkit::widget::Rect 
 }
 
 fn settings() -> Vec<Place> {
-    ["Default apps", "Startup apps", "More settings", "Permissions", "Your plugins", "Crash reports"].iter().enumerate()
+    ["Default apps", "Startup apps", "More settings", "Permissions", "Your plugins", "Reporting"].iter().enumerate()
         .map(|(i, name)| (format!("set:made-up-{i}"), name.to_string(), "preferences-system-symbolic")).collect()
 }
 
@@ -197,8 +197,8 @@ fn shoot(name: &str, s: &mut Store) {
 
     let sizes = if crate::toolkit::theme::drawn::noting() { &SIZES[..1] } else { &SIZES[..] };
     for (end, w, h) in sizes.iter().copied() {
-        s.across = w as f32;
-        s.tall = h as f32;
+        s.size.across = w as f32;
+        s.size.tall = h as f32;
         paint(&format!("{name}{end}"), || s.whole(settings()), w, h);
     }
 }
@@ -349,9 +349,9 @@ fn installed_update_states(s: &mut Store) {
     s.held = held_one_of_each();
     shoot("installed-held-back", s);
     s.held = Default::default();
-    s.said.insert(update_page::app_key("org.example.App1"), ("Not updated. Flatpak said: error: the remote could not be reached".into(), Tone::Problem));
+    s.words.said.insert(update_page::app_key("org.example.App1"), ("Not updated. Flatpak said: error: the remote could not be reached".into(), Tone::Problem));
     shoot("installed-update-failed", s);
-    s.said.clear();
+    s.words.said.clear();
     s.dials.insert(update_page::app_key("org.example.App1"), going(0.42));
     s.upd = update_page::made_up(&[], 0, false, &SIZES_KNOWN, &[], &[]).with_flats(&FLATS).with_one("Notes");
     shoot("installed-one-updating", s);
@@ -427,7 +427,7 @@ fn updates_going_in(s: &mut Store) {
     s.dials.insert(update_page::app_key("org.example.App1"), going(0.42));
     shoot("updates-one-app-going-in", s);
     s.dials.clear();
-    s.upd = update_page::made_up(&[], 0, false, &SIZES_KNOWN, &[], &[]).with_flats(&FLATS).with_one("Debian's packages");
+    s.upd = update_page::made_up(&[], 0, false, &SIZES_KNOWN, &[], &[]).with_flats(&FLATS).with_one("Debian packages");
     s.dials.insert("up:debian".into(), going(0.42));
     shoot("updates-debian-going-in", s);
     s.dials.clear();
@@ -438,11 +438,11 @@ fn updates_going_in(s: &mut Store) {
 
     s.updatable.remove(0);
     s.upd = update_page::made_up(&[], 0, false, &SIZES_KNOWN, &[], &[]).with_flats(&FLATS[1..]);
-    s.said.insert(update_page::app_key("org.example.App4"), ("Not updated. Flatpak said: error: the remote could not be reached".into(), Tone::Problem));
-    s.said.insert(DEVICE.into(), ("The device must be plugged in to the charger.".into(), Tone::Problem));
-    s.said.insert("up:trindle".into(), ("Trindle's own source could not be reached.".into(), Tone::Problem));
+    s.words.said.insert(update_page::app_key("org.example.App4"), ("Not updated. Flatpak said: error: the remote could not be reached".into(), Tone::Problem));
+    s.words.said.insert(DEVICE.into(), ("The device must be plugged in to the charger.".into(), Tone::Problem));
+    s.words.said.insert("up:trindle".into(), ("Trindle's own source could not be reached.".into(), Tone::Problem));
     shoot("updates-after-one-and-failures", s);
-    s.said.clear();
+    s.words.said.clear();
 }
 
 fn updates_installing_and_restart() {
@@ -460,7 +460,7 @@ fn updates_installing_and_restart() {
     let mut s = stocked();
     s.view = View::Updates;
     s.upd = update_page::made_up(&[], 0, true, &[], &[], &[]);
-    s.said.insert("up:system".into(), ("example-package-3 could not be set up.".into(), Tone::Problem));
+    s.words.said.insert("up:system".into(), ("example-package-3 could not be set up.".into(), Tone::Problem));
     shoot("updates-restart-and-a-failure", &mut s);
 }
 
@@ -499,9 +499,9 @@ fn app_detail_pages() {
     let mut s = with_updates(stocked());
     let a = app(1);
     s.detail = Some(a.clone());
-    s.facts.insert(a.id.clone(), Some(pages::install::AppFacts { download: "45 MB".into(), version: "3.2.1".into() }));
-    s.reviews.insert(a.id.clone(), Some(reviews::Ratings { stars: [3, 5, 12, 40, 90], total: 150 }));
-    s.said_about.insert(a.id.clone(), Vec::new());
+    s.heard.facts.answer(a.id.clone(), Some(pages::install::AppFacts { download: "45 MB".into(), version: "3.2.1".into() }));
+    s.heard.ratings.answer(a.id.clone(), Some(reviews::Ratings { stars: [3, 5, 12, 40, 90], total: 150 }));
+    s.heard.reviews.insert(a.id.clone(), Vec::new());
     s.upd = update_page::made_up(&[], 0, false, &SIZES_KNOWN, &[], &[]).with_flats(&FLATS);
     shoot("app-installed-update-waiting", &mut s);
     s.other = Some(crate::common::updating::Who::Ring);
@@ -510,9 +510,9 @@ fn app_detail_pages() {
     s.held = held_one_of_each();
     shoot("app-held-back", &mut s);
     s.held = Default::default();
-    s.said.insert(update_page::app_key(&a.id), ("Not updated. Flatpak said: error: the remote could not be reached".into(), Tone::Problem));
+    s.words.said.insert(update_page::app_key(&a.id), ("Not updated. Flatpak said: error: the remote could not be reached".into(), Tone::Problem));
     shoot("app-update-failed", &mut s);
-    s.said.clear();
+    s.words.said.clear();
     s.dials.insert(update_page::app_key(&a.id), going(0.42));
     shoot("app-updating", &mut s);
     s.dials.clear();
@@ -521,9 +521,9 @@ fn app_detail_pages() {
     shoot("app-installed-up-to-date", &mut s);
     let mut s = with_updates(stocked());
     s.detail = Some(a.clone());
-    s.facts.insert(a.id.clone(), Some(pages::install::AppFacts { download: "45 MB".into(), version: "3.2.1".into() }));
-    s.reviews.insert(a.id.clone(), Some(reviews::Ratings { stars: [3, 5, 12, 40, 90], total: 150 }));
-    s.said_about.insert(a.id.clone(), Vec::new());
+    s.heard.facts.answer(a.id.clone(), Some(pages::install::AppFacts { download: "45 MB".into(), version: "3.2.1".into() }));
+    s.heard.ratings.answer(a.id.clone(), Some(reviews::Ratings { stars: [3, 5, 12, 40, 90], total: 150 }));
+    s.heard.reviews.insert(a.id.clone(), Vec::new());
     let b = app(2);
     s.detail = Some(b.clone());
     shoot("app-not-installed-still-asking", &mut s);
@@ -544,8 +544,8 @@ fn other_ways_to_get_apps() {
     shoot("github-results", &mut s);
 
     for (end, w, h) in SIZES {
-        s.across = w as f32;
-        s.tall = h as f32;
+        s.size.across = w as f32;
+        s.size.tall = h as f32;
         let at = key_button_at(&mut s, w, h);
         for (name, stored) in [("github-key-open", false), ("github-key-stored-open", true)] {
             s.github = pages::made_up::github_key(std::mem::take(&mut s.github), Some(at), stored, None);
@@ -592,7 +592,7 @@ fn package_windows() {
 type Spot = crate::toolkit::widget::Rect;
 
 fn places(s: &mut Store, across: u32) -> Vec<(String, Spot)> {
-    s.across = across as f32;
+    s.size.across = across as f32;
     let mut ui = Ui::new(s.whole(settings()), Theme::new(false, "#fbc711"));
     ui.places_at((across, 4000))
 }
@@ -668,7 +668,7 @@ fn rows_shown(s: &mut Store, across: u32) -> Vec<String> {
             super::pages::remove_ask::ask_removing(&mut s, None, Some(item.clone()));
             assert!(noted.borrow().is_empty(), "asking deletes nothing");
             super::pages::remove_ask::answer(&mut s, wipe);
-            assert_eq!(*noted.borrow(), [(Removal::Flatpak { system: false, delete_data: wipe }, item.id.clone())]);
+            assert_eq!(*noted.borrow(), [(Removal::Flatpak { system: false }, item.id.clone(), wipe)]);
             assert!(s.owned.ask.is_none(), "the question is for one removal only");
         }
     }
@@ -681,7 +681,7 @@ fn rows_shown(s: &mut Store, across: u32) -> Vec<String> {
         let mut s = stocked();
         s.view = View::Installed;
         s.owned = pages::made_up::installed(Some(vec![item.clone()]), 0, "");
-        for (bytes, want) in [(None, "Counting its saved data..."), (Some(0), "It has no saved data."), (Some(5_000_000), "Its saved data takes")] {
+        for (bytes, want) in [(None, "Measuring its saved data…"), (Some(0), "It has no saved data."), (Some(5_000_000), "Its saved data uses")] {
             super::pages::remove_ask::ask_removing(&mut s, None, Some(item.clone()));
             s.owned.ask.as_mut().unwrap().bytes = bytes;
             let card = super::pages::remove_ask::remove_card(s.owned.ask.as_ref().unwrap());

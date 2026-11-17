@@ -1,6 +1,6 @@
 // Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
-use crate::{focus::PointerFocusTarget, shell::FullscreenSurface, state::Backend, AnvilState};
+use crate::{focus::PointerFocusTarget, shell::FullscreenSurface, state::Backend, Compose};
 
 use smithay::{
     desktop::{layer_map_for_output, LayerMap, LayerSurface, WindowSurfaceType},
@@ -14,7 +14,7 @@ const BELOW: [WlrLayer; 2] = [WlrLayer::Bottom, WlrLayer::Background];
 
 type Under = (PointerFocusTarget, Point<i32, Logical>);
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
     pub(super) fn update_keyboard_focus(&mut self, location: Point<f64, Logical>, serial: Serial) {
         if self.is_locked() {
             self.focus_lock_at(location);
@@ -52,7 +52,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
     }
 
     fn focus_above_windows(&mut self, keyboard: &KeyboardHandle<Self>, output: &Output, location: Point<f64, Logical>, serial: Serial) -> bool {
-        let output_geo = self.space.output_geometry(output).unwrap();
+        let Some(output_geo) = self.space.output_geometry(output) else { return false };
 
         let full = output.user_data().get::<FullscreenSurface>().and_then(|f| f.get()).is_some();
         let trusted = {
@@ -61,8 +61,9 @@ impl<BackendData: Backend> AnvilState<BackendData> {
             crate::trusted::over_full_screen_under(&layers, at, full)
                 .filter(|l| {
                     l.can_receive_keyboard_focus()
-                        && l.surface_under(at - layers.layer_geometry(l).unwrap().loc.to_f64(), WindowSurfaceType::ALL)
-                            .is_some()
+                        && layers.layer_geometry(l).is_some_and(|geo| {
+                            l.surface_under(at - geo.loc.to_f64(), WindowSurfaceType::ALL).is_some()
+                        })
                 })
                 .cloned()
         };
@@ -89,13 +90,14 @@ impl<BackendData: Backend> AnvilState<BackendData> {
     }
 
     fn focus_layer_at(&mut self, keyboard: &KeyboardHandle<Self>, output: &Output, which: &[WlrLayer], location: Point<f64, Logical>, serial: Serial) -> bool {
-        let output_geo = self.space.output_geometry(output).unwrap();
+        let Some(output_geo) = self.space.output_geometry(output) else { return false };
         let layers = layer_map_for_output(output);
         let Some(layer) = crate::shell::layer_taking_input(&layers, which, location - output_geo.loc.to_f64(), |_| true) else { return false };
         if !layer.can_receive_keyboard_focus() {
             return false;
         }
-        let at = location - output_geo.loc.to_f64() - layers.layer_geometry(layer).unwrap().loc.to_f64();
+        let Some(layer_geo) = layers.layer_geometry(layer) else { return false };
+        let at = location - output_geo.loc.to_f64() - layer_geo.loc.to_f64();
         if layer.surface_under(at, WindowSurfaceType::ALL).is_none() {
             return false;
         }
@@ -119,14 +121,13 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         }
 
         let output = self.space.outputs().find(|o| {
-            let geometry = self.space.output_geometry(o).unwrap();
-            geometry.contains(pos.to_i32_floor())
+            self.space.output_geometry(o).is_some_and(|geometry| geometry.contains(pos.to_i32_floor()))
         })?;
         self.surface_under_output(output, pos).map(|(s, l)| (s, l.to_f64()))
     }
 
     fn surface_under_output(&self, output: &Output, pos: Point<f64, Logical>) -> Option<Under> {
-        let output_geo = self.space.output_geometry(output).unwrap();
+        let output_geo = self.space.output_geometry(output)?;
         let layers = layer_map_for_output(output);
 
         let full = output.user_data().get::<FullscreenSurface>().and_then(|f| f.get()).is_some();
@@ -164,7 +165,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
 }
 
 fn layer_focus(layers: &LayerMap, output_geo: Rectangle<i32, Logical>, pos: Point<f64, Logical>, layer: &LayerSurface) -> Option<Under> {
-    let layer_loc = layers.layer_geometry(layer).unwrap().loc;
+    let layer_loc = layers.layer_geometry(layer)?.loc;
     layer
         .surface_under(pos - output_geo.loc.to_f64() - layer_loc.to_f64(), WindowSurfaceType::ALL)
         .map(|(surface, loc)| (PointerFocusTarget::from(surface), loc + layer_loc + output_geo.loc))

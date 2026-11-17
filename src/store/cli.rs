@@ -6,6 +6,7 @@ use std::rc::Rc;
 
 use crate::common::run;
 use crate::toolkit::event::Loop;
+use crate::toolkit::t;
 use super::opts::Opts;
 use super::{backup, flat, refusal};
 
@@ -15,7 +16,7 @@ pub(super) fn command_line_work(opts: &Opts, events: &Loop) -> Option<i32> {
             let parts = backup::Parts { apps: true, data: true, appimages: true, settings: true };
             backup::backup(parts, PathBuf::from(file), move |res| {
                 match &res {
-                    Ok(size) => println!("trindle-apps: backed up ({size})"),
+                    Ok(size) => println!("trindle-apps: {}", t!("store-cli-backed-up", size = size)),
                     Err(e) => eprintln!("trindle-apps: {}", refusal::plain(e)),
                 }
                 done(res.is_ok());
@@ -48,44 +49,25 @@ fn until_done(events: &Loop, work: impl FnOnce(Done)) -> i32 {
 type Done = Box<dyn FnOnce(bool)>;
 
 fn restore(path: PathBuf, done: Done) {
-    if flat::is_flat(&path) {
-        match flat::read(&path) {
-            Ok(f) => {
-                let out = flat::restore(&f, false, |line, _| println!("trindle-apps: {line}"));
-                println!("trindle-apps: {}", refusal::plain(&flat::summary(&out)));
-                let whole = out.failed.is_empty();
-                if f.trindle {
-                    backup::restore_trindle_part(path, |step| println!("trindle-apps: {step}"), move |res| {
-                        match &res {
-                            Ok(()) => println!("trindle-apps: Trindle's settings put back"),
-                            Err(e) => eprintln!("trindle-apps: {}", refusal::plain(e)),
-                        }
-                        done(whole && res.is_ok());
-                    });
-                    return;
-                }
-                done(whole);
-            }
-            Err(e) => {
-                eprintln!("trindle-apps: {}", refusal::plain(&e));
-                done(false);
-            }
-        }
-        return;
-    }
-    let reading = path.clone();
-    backup::read_manifest(&reading, move |m| match m {
+    let f = match flat::read(&path) {
+        Ok(f) => f,
         Err(e) => {
             eprintln!("trindle-apps: {}", refusal::plain(&e));
-            done(false);
+            return done(false);
         }
-        Ok(manifest) => backup::restore(path, manifest, false, |step| println!("trindle-apps: {step}"), move |res| {
-            match &res {
-                Ok(()) => println!("trindle-apps: put back"),
-                Err(e) => eprintln!("trindle-apps: {}", refusal::plain(e)),
-            }
-            done(res.is_ok());
-        }),
+    };
+    let out = flat::restore(&f, false, |line, _| println!("trindle-apps: {line}"));
+    println!("trindle-apps: {}", refusal::plain(&flat::summary(&out)));
+    let whole = out.failed.is_empty();
+    if !f.trindle {
+        return done(whole);
+    }
+    backup::restore_trindle_part(path, |step| println!("trindle-apps: {step}"), move |res| {
+        match &res {
+            Ok(()) => println!("trindle-apps: {}", t!("store-cli-settings-back")),
+            Err(e) => eprintln!("trindle-apps: {}", refusal::plain(e)),
+        }
+        done(whole && res.is_ok());
     });
 }
 
@@ -104,12 +86,16 @@ mod tests {
             let later = lp.clone();
             assert_eq!(super::until_done(&lp, move |done| later.after(Duration::from_millis(5), move || done(ok))), code);
         }
+    }
 
-        let code = crate::common::source::code(include_str!("cli.rs"));
-        let restore = code.split_once("\nfn restore(").unwrap().1.split_once("\n}\n").unwrap().0;
-        assert_eq!(restore.matches("eprintln!").count(), 4);
-        assert_eq!(restore.matches("done(false)").count() + restore.matches("is_ok())").count() + restore.matches("done(whole)").count(), 5);
-        assert!(!restore.contains("done()"));
+    #[test]
+    fn a_restore_of_a_file_that_is_no_backup_ends_with_a_failing_code() {
+        let dir = std::env::temp_dir().join(format!("trindle-cli-restore-{}", std::process::id()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let file = dir.join("not-a-backup.fmpack");
+        std::fs::write(&file, b"no backup here").unwrap();
+        assert_eq!(super::until_done(&crate::toolkit::event::Loop::new(), |done| super::restore(file, done)), 1);
+        let _ = std::fs::remove_dir_all(&dir);
     }
 
     #[test]

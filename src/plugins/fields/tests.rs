@@ -87,12 +87,12 @@ fn a_note_shows_one_plain_line_from_the_plugins_file_and_holds_no_setting() {
     let _ = std::fs::remove_dir_all(&dir);
 
     for (bad, why) in [
-        (noted.replace("TextFrom=status.txt", ""), "[Field state] is a note, so needs TextFrom"),
-        (noted.replace("TextFrom=status.txt", "TextFrom=../status.txt"), "[Field state] is a note, so needs TextFrom"),
-        (noted.replace("TextFrom=status.txt", "TextFrom=status.txt\nDefault=hello"), "has no Default"),
+        (noted.replace("TextFrom=status.txt", ""), "[Field state] is a note, so it needs TextFrom"),
+        (noted.replace("TextFrom=status.txt", "TextFrom=../status.txt"), "[Field state] is a note, so it needs TextFrom"),
+        (noted.replace("TextFrom=status.txt", "TextFrom=status.txt\nDefault=hello"), "cannot have a Default"),
         (noted.replace("Fields=role;on;town;side;speed;desk;state", "Fields=state;role;on;town;side;speed;desk")
             .replace("TextFrom=status.txt\nShowWhen=role=controls", "TextFrom=status.txt")
-            .replace("Label=Faster\nShowWhen=on=true", "Label=Faster\nShowWhen=state=x"), "names the note state"),
+            .replace("Label=Faster\nShowWhen=on=true", "Label=Faster\nShowWhen=state=x"), "refers to the note state"),
     ] {
         let dir = folder_with("noted-bad", &bad);
         let said = check(&dir).unwrap_err().join("\n");

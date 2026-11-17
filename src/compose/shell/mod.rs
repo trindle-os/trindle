@@ -9,11 +9,14 @@ use smithay::{
     reexports::wayland_server::protocol::{
         wl_buffer::WlBuffer, wl_output, wl_surface::WlSurface,
     },
-    utils::{IsAlive, Logical, Rectangle},
-    wayland::buffer::BufferHandler,
+    reexports::wayland_server::Resource,
+    utils::{IsAlive, Logical, Point, Rectangle},
+    wayland::{buffer::BufferHandler, seat::WaylandFocus},
 };
 
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
+
+pub const FULL_SCREEN_LOG: &str = "trindle_compose::full_screen";
 
 mod compositor;
 mod element;
@@ -103,11 +106,20 @@ mod slot_tests {
     }
 }
 
-impl<BackendData: Backend> BufferHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> BufferHandler for Compose<BackendData> {
     fn buffer_destroyed(&mut self, _buffer: &WlBuffer) {}
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+pub(crate) fn press_of_its_own<F: WaylandFocus>(focus: Option<&(F, Point<f64, Logical>)>, surface: &WlSurface) -> bool {
+    focus.is_some_and(|(f, _)| f.same_client_as(&surface.id()))
+}
+
+pub(crate) fn press_began_on<F: WaylandFocus>(focus: Option<&(F, Point<f64, Logical>)>, surface: Option<&WlSurface>) -> bool {
+    let under = focus.and_then(|(f, _)| f.wl_surface());
+    under.is_some_and(|u| Some(&*u) == surface)
+}
+
+impl<BackendData: Backend> Compose<BackendData> {
     pub fn window_for_surface(&self, surface: &WlSurface) -> Option<WindowElement> {
         self.space
             .elements()

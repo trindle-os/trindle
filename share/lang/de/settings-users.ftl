@@ -9,14 +9,14 @@ settings-users-keywords = konten benutzer personen passwort bild foto administra
 
 # Help line at the foot of the Users page.
 # SAFETY: needs a human review before it ships
-settings-users-help = Zum Hinzufügen von Personen, Ändern von Passwörtern und Löschen von Konten wird das Passwort eines Administrators benötigt.
+settings-users-help = Zum Hinzufügen von Personen, Ändern von Passwörtern oder Löschen von Konten brauchst du das Passwort eines Administrators.
 
 # Beside a change that is waiting for the administrator's password to be typed.
 # SAFETY: needs a human review before it ships
-settings-users-waiting = Warte auf das Passwort...
+settings-users-waiting = Warte auf dein Passwort …
 
 # Headline of the Users page when nobody on the computer is an administrator.
-settings-users-sum-nobody-admin = Niemand hier ist Administrator, daher kann nichts für alle installiert oder geändert werden.
+settings-users-sum-nobody-admin = Niemand hier ist Administrator, daher kann niemand etwas für alle installieren oder ändern.
 
 # Headline of the Users page when you are the only person and an administrator.
 settings-users-sum-only-you = Nur du nutzt diesen Computer, und du bist sein Administrator.
@@ -49,7 +49,7 @@ settings-users-sum-admins =
 settings-users-this-is-you = Das bist du.
 
 # Under a person's name on their card when the card is someone else's: the name shown is their login name.
-settings-users-login-name = Ihr Anmeldename.
+settings-users-login-name = Anmeldename
 
 # Tip of the round button on a person's card that picks their picture, and title of the window that opens.
 settings-users-choose-picture = Ein Bild auswählen
@@ -63,7 +63,7 @@ settings-users-change-password = Das Passwort ändern
 
 # Tip of the round button on a person's card that deletes them and their files.
 # SAFETY: needs a human review before it ships
-settings-users-delete = Löschen, samt ihren Dateien
+settings-users-delete = Konto und Dateien löschen
 
 # Said beside a person once they are deleted.
 # SAFETY: needs a human review before it ships
@@ -73,17 +73,13 @@ settings-users-deleted = Gelöscht
 # SAFETY: needs a human review before it ships
 settings-users-administrator = Administrator
 
-# Under the Administrator line: what an administrator can do.
-# SAFETY: needs a human review before it ships
-settings-users-admin-can = Kann für alle Dinge installieren und ändern.
-
 # Tip of the administrator switch on your own card, and said when you press it: you cannot remove your own administrator rights.
 # SAFETY: needs a human review before it ships
-settings-users-cannot-take-away = Du kannst dir das nicht selbst wegnehmen.
+settings-users-cannot-take-away = Du kannst dir die Administratorrechte nicht selbst entziehen.
 
 # Said beside a person after they are made an administrator.
 # SAFETY: needs a human review before it ships
-settings-users-admin-now = Jetzt Administrator
+settings-users-admin-now = Jetzt Admin
 
 # Said beside a person after they stop being an administrator.
 # SAFETY: needs a human review before it ships
@@ -91,7 +87,7 @@ settings-users-admin-no-longer = Kein Administrator mehr
 
 # Help text for a person's card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-person-about = Bild, Passwort und, für alle außer dir, das Löschen samt Dateien sind die runden Schaltflächen neben dem Namen. Ein Administrator kann Programme installieren und Dinge für alle ändern; du kannst dir das nicht selbst wegnehmen. Jede Änderung verlangt das Passwort eines Administrators.
+settings-users-person-about = Ein Administrator kann Programme installieren und Dinge für alle ändern. Du kannst dir die Administratorrechte nicht selbst entziehen. Jede Änderung braucht das Passwort eines Administrators.
 
 # Typing box in the change password form, for your own current password.
 # SAFETY: needs a human review before it ships
@@ -103,7 +99,7 @@ settings-users-new-password = Neues Passwort
 
 # Typing box in the change password form where the new password is typed again.
 # SAFETY: needs a human review before it ships
-settings-users-again = Noch einmal
+settings-users-again = Noch einmal eingeben
 
 # Button in the change password form that saves the new password.
 settings-users-save = Speichern
@@ -118,11 +114,11 @@ settings-users-cancel = Abbrechen
 
 # Red words in the change password form when your current password was left empty.
 # SAFETY: needs a human review before it ships
-settings-users-need-current = Bitte auch dein aktuelles Passwort, damit deine gespeicherten Anmeldungen weiter funktionieren.
+settings-users-need-current = Gib auch dein aktuelles Passwort ein, damit deine gespeicherten Anmeldungen weiter funktionieren.
 
 # Red words in the change password form when the new password is too short.
 # SAFETY: needs a human review before it ships
-settings-users-at-least-8 = Bitte mindestens 8 Zeichen.
+settings-users-at-least-8 = Verwende mindestens 8 Zeichen.
 
 # Red words in the change password form when the two new passwords differ.
 # SAFETY: needs a human review before it ships
@@ -134,7 +130,7 @@ settings-users-password-changed = Passwort geändert
 
 # Red words after a password change when the saved logins could not take the new password.
 # SAFETY: needs a human review before it ships
-settings-users-not-rekeyed = Passwort geändert, aber gespeicherte Anmeldungen lassen sich noch mit dem alten öffnen.
+settings-users-not-rekeyed = Passwort geändert, aber deine gespeicherten Anmeldungen verwenden noch das alte Passwort.
 
 # Red words when the chosen file is not a picture the page can use.
 settings-users-png-please = Bitte PNG, JPG oder WebP.
@@ -146,20 +142,17 @@ settings-users-picture-not-changed = Das Bild konnte nicht geändert werden.
 settings-users-saved = Gespeichert
 
 # Red words when your new picture works at login but could not be copied to your home folder.
-settings-users-picture-not-shared = Das Bild erscheint bei der Anmeldung, konnte aber deinen anderen Programmen nicht zur Verfügung gestellt werden.
+settings-users-picture-not-shared = Dein Bild erscheint auf dem Anmeldebildschirm, aber Trindle konnte es nicht mit deinen anderen Programmen teilen.
 
 # Heading of the form for adding a person.
 settings-users-add-someone = Jemanden hinzufügen
 
 # Help text for the Add someone form (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-add-about = Ein neues Konto für jemand anderen: der vollständige Name, ein Anmeldename aus Kleinbuchstaben und Ziffern, beginnend mit einem Buchstaben, und ein Passwort mit mindestens 8 Zeichen. Die Person kann sich sofort anmelden. Ein Administrator kann Programme installieren und Dinge für alle ändern.
+settings-users-add-about = Gib den vollständigen Namen, einen Anmeldenamen und ein Passwort mit mindestens 8 Zeichen ein. Der Anmeldename darf nur Kleinbuchstaben und Ziffern enthalten und muss mit einem Buchstaben beginnen. Die Person kann sich sofort anmelden. Ein Administrator kann Programme installieren und Dinge für alle ändern.
 
 # Heading of the line in the Add someone form that holds the button.
 settings-users-new-account = Neues Konto
-
-# Under the New account heading.
-settings-users-new-account-sub = Die Person kann sich sofort mit diesem Passwort anmelden.
 
 # Typing box in the Add someone form for the person's full name.
 settings-users-full-name = Vollständiger Name
@@ -193,19 +186,16 @@ settings-users-saved-logins = Gespeicherte Anmeldungen
 
 # Help text for the Saved logins card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-keyring-about = Die Passwörter, die Programme für dich aufbewahren, etwa für E-Mail oder WLAN, liegen in einem Schlüsselbund, der sich mit deiner Anmeldung öffnet. Alle wechseln bei der Anmeldung von selbst zum Schlüsselbund von Trindle. Falls deiner nicht verschoben werden konnte, kopiert das Verschieben jede gespeicherte Anmeldung, fragt nach dem Passwort jedes Schlüsselbunds, den deiner nicht öffnet, und die Dateien von GNOME bleiben unverändert.
+settings-users-keyring-about = Programme speichern Passwörter für dich, etwa für E-Mail oder WLAN, in einem Schlüsselbund, der sich bei deiner Anmeldung öffnet. Bei der Anmeldung verschiebt Trindle deinen Schlüsselbund in seinen eigenen. Falls das nicht geklappt hat, kannst du ihn hier verschieben. Dabei wird jede gespeicherte Anmeldung kopiert. Möglicherweise wirst du nach dem Passwort eines Schlüsselbunds gefragt, den deine Anmeldung nicht öffnet. Die Dateien von GNOME bleiben unverändert.
 
 # Heading of the line on the Saved logins card when the logins are kept by Trindle's keyring.
-settings-users-kept-trindle = Verwahrt vom Schlüsselbund von Trindle
+settings-users-kept-trindle = Im Schlüsselbund von Trindle
 
 # Heading of the line on the Saved logins card when the logins are kept by GNOME's keyring.
-settings-users-kept-gnome = Verwahrt vom Schlüsselbund von GNOME
-
-# Under the heading when the logins are kept by Trindle's keyring.
-settings-users-opens-login = Öffnet sich mit deiner Anmeldung.
+settings-users-kept-gnome = Im Schlüsselbund von GNOME
 
 # Under the heading when the logins are still kept by GNOME's keyring.
-settings-users-could-not-move = Deine Anmeldung konnte sie nicht herüberbringen.
+settings-users-could-not-move = Trindle konnte sie bei der Anmeldung nicht verschieben.
 
 # Tip of the button that moves saved logins to Trindle's keyring.
 settings-users-move-keyring = Zum Schlüsselbund von Trindle verschieben
@@ -215,7 +205,7 @@ settings-users-move-keyring = Zum Schlüsselbund von Trindle verschieben
 settings-users-your-password = Dein Passwort
 
 # Tip of the button that starts moving the saved logins.
-settings-users-go-ahead = Los
+settings-users-go-ahead = Jetzt verschieben
 
 # Typing box for the password of one GNOME keyring that stayed shut: the keyring's name is { $name }.
 # SAFETY: needs a human review before it ships
@@ -223,10 +213,10 @@ settings-users-password-for = Passwort für { $name }
 
 # Red words when the move of saved logins was started without a password.
 # SAFETY: needs a human review before it ships
-settings-users-your-password-please = Bitte dein Passwort.
+settings-users-your-password-please = Gib dein Passwort ein.
 
 # Said beside the Saved logins line while they are copied.
-settings-users-copying = Deine gespeicherten Anmeldungen werden kopiert...
+settings-users-copying = Deine gespeicherten Anmeldungen werden kopiert …
 
 # Said beside the Saved logins line when the copy is done: how many logins were copied.
 settings-users-copied = { $n } kopiert
@@ -235,18 +225,18 @@ settings-users-copied = { $n } kopiert
 # SAFETY: needs a human review before it ships
 settings-users-nothing-moved =
     { $n ->
-        [one] Noch nichts verschoben: { $names } braucht ein eigenes Passwort.
-       *[other] Noch nichts verschoben: { $names } brauchen eigene Passwörter.
+        [one] Noch nichts verschoben. Gib das Passwort für { $names } ein.
+       *[other] Noch nichts verschoben. Gib die Passwörter für { $names } ein.
     }
 
 # Red words when the move of saved logins stopped unexpectedly.
-settings-users-stopped = Es wurde auf halbem Weg abgebrochen.
+settings-users-stopped = Es wurde nicht abgeschlossen.
 
 # Words in place of the people while the accounts are still being read.
-settings-users-looking-accounts = Konten werden angesehen…
+settings-users-looking-accounts = Konten werden geprüft …
 
 # Heading of the placeholder card shown while the accounts are being read.
 settings-users-people = Personen
 
 # Under the Administrator line of the placeholder card.
-settings-users-looking = Wird gesucht…
+settings-users-looking = Wird geladen …

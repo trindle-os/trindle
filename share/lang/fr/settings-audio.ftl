@@ -8,25 +8,25 @@ settings-audio-title = Audio
 settings-audio-keywords = sound volume speakers headphones microphone mic mute test son haut-parleurs casque muet
 
 # Introduction under the heading of the audio page, and the words behind the page i.
-settings-audio-help = Choisissez les haut-parleurs ou le casque qui jouent le son, et le microphone qui écoute.
+settings-audio-help = Choisissez les haut-parleurs ou le casque qui jouent le son, et le microphone à utiliser.
 
 # Red sentence at the top of the page when PipeWire, the sound system, is not installed.
-settings-audio-top-missing = Il n'y a pas de son : PipeWire n'est pas installé.
+settings-audio-top-missing = Il n'y a pas de son, car PipeWire n'est pas installé.
 
 # Red sentence at the top of the page when PipeWire is installed but not answering.
-settings-audio-top-failed = Il n'y a pas de son : PipeWire ne répond pas.
+settings-audio-top-failed = Il n'y a pas de son, car PipeWire, le service audio, ne répond pas.
 
 # Red sentence at the top of the page when there are no speakers or headphones.
-settings-audio-top-no-output = Aucun haut-parleur ni casque n'a été trouvé.
+settings-audio-top-no-output = Il n'y a ni haut-parleurs ni casque.
 
 # Plain sentence at the top of the page while the page is still finding out about sound.
-settings-audio-top-listening = Écoute du son…
+settings-audio-top-listening = Vérification du son…
 
 # Warning at the top of the page when sound is muted; { $device } is the speakers or headphones.
-settings-audio-top-muted = Le son est coupé, donc { $device } est silencieux.
+settings-audio-top-muted = Le son de { $device } est coupé.
 
 # Warning at the top of the page when the volume is at nothing; { $device } is the speakers or headphones.
-settings-audio-top-down = Le volume est au minimum, donc { $device } est silencieux.
+settings-audio-top-down = Le volume de { $device } est au minimum.
 
 # Sentence at the top of the page when all is well; { $device } is the speakers or headphones and { $percent } the volume.
 settings-audio-top-playing = Le son passe par { $device } à { $percent } %.
@@ -38,10 +38,10 @@ settings-audio-out-title = Haut-parleurs et casque
 settings-audio-in-title = Microphone
 
 # Heading of the line shown when no speakers or headphones are found.
-settings-audio-out-none = Aucun périphérique de sortie
+settings-audio-out-none = Aucun haut-parleur trouvé
 
 # Heading of the line shown when no microphone is found.
-settings-audio-in-none = Aucun périphérique d'entrée
+settings-audio-in-none = Aucun microphone
 
 # Small words under that line for speakers.
 settings-audio-out-plug = Branchez des haut-parleurs ou un casque.
@@ -52,17 +52,11 @@ settings-audio-in-plug = Branchez un microphone ou un casque-micro.
 # Heading of the line with the list of devices.
 settings-audio-device = Périphérique
 
-# Small words under the device line for speakers.
-settings-audio-out-device-about = Où le son est joué.
-
-# Small words under the device line for microphones.
-settings-audio-in-device-about = Ce qui écoute.
-
 # Name of the list of speakers and headphones.
 settings-audio-out-device-name = Où le son est joué
 
 # Name of the list of microphones.
-settings-audio-in-device-name = Ce qui écoute
+settings-audio-in-device-name = Microphone
 
 # Heading of the volume line.
 settings-audio-volume = Volume
@@ -82,32 +76,20 @@ settings-audio-out-mute-name = Couper le son
 # Name of the switch that mutes the microphone.
 settings-audio-in-mute-name = Couper le microphone
 
-# Small words under the mute line for the speakers.
-settings-audio-mute-out-about = Silencieux, en gardant le volume.
-
-# Small words under the mute line for the microphone.
-settings-audio-mute-in-about = Rien n'est entendu tant que c'est activé.
-
 # Heading of the line that plays a test sound.
 settings-audio-test = Test
-
-# Small words under the test line.
-settings-audio-test-about = Joue un court carillon sur ce périphérique.
 
 # Name of the button that plays a test sound.
 settings-audio-test-button = Jouer un son de test
 
 # Words behind the i of the speakers card.
-settings-audio-out-about = Choisissez les haut-parleurs ou le casque qui jouent le son. Le volume et le mode muet ici sont les mêmes que les touches du clavier et le cercle du son dans l'anneau.
+settings-audio-out-about = Choisissez les haut-parleurs ou le casque qui jouent le son. Le volume et le mode muet ici fonctionnent comme les touches de votre clavier et le cercle du son dans l'anneau.
 
 # Heading of the line with the microphone level bar.
 settings-audio-level = Niveau
 
-# Small words under the level line.
-settings-audio-level-about = Parlez : la barre bouge quand il vous entend.
-
 # Words behind the i of the microphone card.
-settings-audio-in-about = Choisissez le microphone qui écoute. La barre de niveau suit ce qu'il entend tant que cette page est ouverte ; rien n'est enregistré ni conservé.
+settings-audio-in-about = Choisissez le microphone à utiliser. Tant que cette page est ouverte, la barre montre le son qu'il capte. Trindle n'enregistre ni ne conserve rien.
 
 # Title of the card shown when PipeWire is not answering.
 settings-audio-failed-title = Son
@@ -116,22 +98,22 @@ settings-audio-failed-title = Son
 settings-audio-failed-heading = PipeWire ne répond pas
 
 # Small words under that line.
-settings-audio-failed-about = Le son n'a peut-être pas démarré pour cette session.
+settings-audio-failed-about = Le son n'a peut-être pas démarré à l'ouverture de votre session.
 
 # Red words under the volume line when the volume could not be changed.
-settings-audio-no-volume = Le volume n'a pas pu être modifié. Le son n'a peut-être pas démarré ; fermez la session puis rouvrez-la, et réessayez.
+settings-audio-no-volume = Trindle n'a pas pu modifier le volume. Le son n'a peut-être pas démarré. Fermez la session puis rouvrez-la, et réessayez.
 
 # Red words under the mute line when the sound could not be muted.
-settings-audio-no-mute = Le son n'a pas pu être coupé. Le son n'a peut-être pas démarré ; fermez la session puis rouvrez-la, et réessayez.
+settings-audio-no-mute = Trindle n'a pas pu couper le son. Le son n'a peut-être pas démarré. Fermez la session puis rouvrez-la, et réessayez.
 
 # Red words under the mute line when the sound could not be turned back on.
-settings-audio-no-unmute = Le son n'a pas pu être rétabli. Le son n'a peut-être pas démarré ; fermez la session puis rouvrez-la, et réessayez.
+settings-audio-no-unmute = Trindle n'a pas pu rétablir le son. Le son n'a peut-être pas démarré. Fermez la session puis rouvrez-la, et réessayez.
 
 # Red words under the device line when the device could not be chosen.
-settings-audio-not-chosen = Ce périphérique n'a pas pu être choisi.
+settings-audio-not-chosen = Impossible de passer à ce périphérique.
 
 # Red words under the test line when the test sound would not play.
-settings-audio-test-failed = Le son de test n'a pas pu être joué sur ce périphérique.
+settings-audio-test-failed = Le son de test n'a pas été joué sur ce périphérique.
 
 
 # A device's name with what kind it is; { $name } is the device and { $kind } one of the kind words below.
@@ -155,15 +137,14 @@ settings-audio-kind-speakers = haut-parleurs
 # Heading of the line shown while Bluetooth plays the sound.
 settings-audio-bt-now = Le son va vers le Bluetooth
 
-# Words under that heading.
-settings-audio-bt-now-about = Passez aux haut-parleurs ; le Bluetooth reste connecté.
-
 # Tooltip of the button that moves the sound to the speakers; { $device } is the speakers, kind included.
 settings-audio-use-speakers = Jouer par { $device }
 
 # Heading of the line when Bluetooth devices are connected but have no sound output; { $names } lists them.
-settings-audio-bt-silent = { $names } : connecté, mais sans sortie son.
+settings-audio-bt-silent = { $names } est connecté, mais le son ne peut pas y passer.
 
 # Words under that heading.
-settings-audio-bt-silent-about = Son profil audio est peut-être désactivé. Déconnectez-le puis reconnectez-le.
+settings-audio-bt-silent-about = Le son n'est peut-être pas configuré sur cet appareil. Déconnectez-le, puis reconnectez-le.
 
+# Red words when the sound devices could not be read.
+settings-audio-not-read = Trindle n'a pas trouvé les périphériques audio.

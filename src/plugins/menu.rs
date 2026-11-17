@@ -43,15 +43,13 @@ pub(super) fn menu_items(at: &Path, kf: &KeyFile, problems: &mut Vec<String>) ->
         let label = text(kf, &group, "Label");
         if label.is_empty() {
             problems.push(t!("plugins-needs-label", group = &group));
-        } else if label.chars().count() > MENU_LABEL_MAX || !is_plain(&label, MENU_LABEL_MAX) {
+        } else if !is_plain(&label, MENU_LABEL_MAX) {
             problems.push(t!("plugins-label-short-line", group = &group, max = MENU_LABEL_MAX));
         }
         let run = text(kf, &group, "Run");
         match command(at, &group, &run, problems) {
             Some(argv) if !label.is_empty() => items.push(MenuItem { id, label, run: argv }),
-            Some(_) => {}
-            None if run.is_empty() => problems.push(t!("plugins-menu-needs-run", group = &group)),
-            None => {}
+            _ => {}
         }
     }
     items

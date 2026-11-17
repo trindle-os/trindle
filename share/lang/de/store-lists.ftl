@@ -37,30 +37,17 @@ store-tab-count = { $name } { $n }
 # Spoken name of a strip of tabs on the Installed page.
 store-tabs-show = Anzeigen
 
-# How long is left when it is a minute or less.
-store-left-minute = noch etwa eine Minute
-
-# How long is left, in minutes.
-store-left-minutes = noch etwa { $n } Minuten
-
-# How long is left, in hours.
-store-left-hours =
-    { $n ->
-        [one] noch etwa 1 Stunde
-       *[other] noch etwa { $n } Stunden
-    }
-
 # Credit under a package's page for the list its site was checked against.
 store-origin-credit = Geprüft anhand der Threat-Intelligence-Liste von HaGeZi
 
 # Where a download came from: the site and the page that led to it.
-store-origin-both = Heruntergeladen von { $site }, erreicht über { $referrer }.
+store-origin-both = Du hast dies von { $site } heruntergeladen, nachdem du von { $referrer } gekommen bist.
 
 # Where a download came from: the site.
 store-origin-site = Heruntergeladen von { $site }.
 
 # Where a download came from: the page that led to it.
-store-origin-referrer = Erreicht über { $referrer }.
+store-origin-referrer = Verlinkt von { $referrer }.
 
 # Said when nothing tells where a download came from.
 store-origin-unknown = Trindle kann nicht sagen, woher dies stammt.
@@ -71,17 +58,17 @@ store-origin-listed = { $from } { $name } steht auf der Threat-Intelligence-List
 
 # Said when the site is not on the list; the first part says where the download came from.
 # SAFETY: needs a human review before it ships
-store-origin-clear = { $from } Die Seite steht nicht auf der Threat-Intelligence-Liste von HaGeZi, aber die Liste ist nicht vollständig. Das beweist also nicht, dass sie sicher ist.
+store-origin-clear = { $from } Die Seite steht nicht auf der Threat-Intelligence-Liste von HaGeZi. Diese Liste ist nicht vollständig, das beweist also nicht, dass sie sicher ist.
 
 # Said when the list could not be fetched; the first part says where the download came from.
 # SAFETY: needs a human review before it ships
-store-origin-not-checked = { $from } Die Seite konnte nicht geprüft werden, weil die Threat-Intelligence-Liste von HaGeZi nicht geladen werden konnte.
+store-origin-not-checked = { $from } Trindle konnte die Seite nicht prüfen, weil es die Threat-Intelligence-Liste von HaGeZi nicht laden konnte.
 
 # Name shown for a review whose writer gave none.
 store-review-someone = Jemand
 
 # Red words when the keyring could not be reached.
-store-key-unreached = Der Schlüsselbund war nicht erreichbar: { $why }.
+store-key-unreached = Trindle konnte den Schlüsselbund nicht erreichen: { $why }.
 
 # Red words when the key kept in the keyring is not text.
 store-key-not-text = Der gespeicherte Schlüssel ist kein Text.

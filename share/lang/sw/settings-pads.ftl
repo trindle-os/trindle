@@ -14,20 +14,17 @@ settings-pads-top-picked = Sasa bonyeza kitufe cha { $name }.
 # Heading of the line shown when no game controller is plugged in.
 settings-pads-none = Hakuna kilichochomekwa
 
-# Small words under that line.
-settings-pads-none-about = Chomeka kimoja na vitufe vyake vitaonyeshwa hapa.
-
 # Name of the list that chooses which controller is shown; { $title } is the one shown now.
 settings-pads-which = Kidhibiti kipi
 
 # What the picture is, for the screen reader.
-settings-pads-picture = Picha ya { $title }, kila kitufe kikiwaka kinapobonyezwa
+settings-pads-picture = Picha ya { $title }. Kila kitufe kinawaka unapokibonyeza.
 
 # Title of the card of the controller's buttons.
 settings-pads-buttons-title = Vitufe
 
 # Words behind the i of that card.
-settings-pads-buttons-about = Kila kitufe, kichocheo na mwelekeo wa vijiti na d-pad. Ulichobonyeza mwisho kiko juu. Kitufe kilichobadilishwa kuwa kibonye huandika kibonye hicho kwenye mchezo usio na usaidizi wa kidhibiti.
+settings-pads-buttons-about = Kila kitufe na kichocheo, na kila mwelekeo wa vijiti na d-pad. Ulichobonyeza mwisho kiko juu. Ukibadilisha kitufe kuwa kibonye, huandika kibonye hicho kwenye mchezo usio na usaidizi wa kidhibiti.
 
 # Name of the round button that starts changing a button; { $name } is the button.
 settings-pads-change = Badilisha { $name } kuwa kibonye
@@ -36,7 +33,7 @@ settings-pads-change = Badilisha { $name } kuwa kibonye
 settings-pads-stop = Acha kubadilisha { $name }
 
 # Name of the list of what a button becomes; { $name } is the button.
-settings-pads-choose = { $name } inakuwa nini
+settings-pads-choose = { $name } hufanya nini
 
 # What the list says while a button waits for its key: the clue, and a choice that does nothing.
 settings-pads-waiting = Bonyeza kibonye au chagua kitufe
@@ -67,13 +64,13 @@ settings-pads-stick-left = Kushoto
 settings-pads-stick-right = Kulia
 
 # Title of the card of the ready-made changes.
-settings-pads-quick-title = Mabadiliko tayari
+settings-pads-quick-title = Mabadiliko ya kawaida
 
 # Title of the card of changes that are not one button into another.
 settings-pads-other-title = Mabadiliko mengine
 
 # Words behind the i of that card.
-settings-pads-other-about = Vijiti vilivyogeuzwa, vijiti vilivyobadilishana na maeneo yasiyojibu. Andika moja kama Left Stick dead zone = 10%, au Right Stick Y = inverted.
+settings-pads-other-about = Geuza au badilishana vijiti, au weka eneo lisilojibu. Andika badiliko kama hili: Left Stick dead zone = 10%, au Right Stick Y = inverted.
 
 
 
@@ -97,12 +94,10 @@ settings-pads-middle-click = Kubofya kati
 settings-pads-profiles-title = Wasifu
 
 # Words behind the i of that card.
-settings-pads-profiles-about = Wasifu ni seti ya mabadiliko. Kawaida haibadilishi chochote, hivyo mchezo wenye usaidizi wake wa kidhibiti huona kidhibiti kama kilivyo. Kila mchezo wa Steam hutumia Kawaida isipokuwa uchague wasifu wake hapa, na wasifu hubadilika wenyewe mchezo huo unapoanza. Mchezo mwingine wowote ni wa michezo ambayo Steam haikuianzisha.
+settings-pads-profiles-about = Wasifu ni seti ya mabadiliko. Kawaida haibadilishi chochote, hivyo michezo yenye usaidizi wake wa kidhibiti huona kidhibiti kama kilivyo. Kila mchezo wa Steam hutumia Kawaida isipokuwa uchague wasifu wake hapa. Trindle hubadilisha hadi wasifu huo mchezo unapoanza. Mchezo mwingine wowote humaanisha mchezo wowote ambao Steam haikuuanzisha.
 
 # The one switch that turns every controller change off at once.
 settings-pads-changes = Mabadiliko ya vidhibiti
-
-settings-pads-changes-sub = Yakizimwa, kila kidhibiti kiko kama kilivyo.
 
 # The game whose profile is shown.
 settings-pads-game = Mchezo
@@ -118,8 +113,6 @@ settings-pads-profile = Wasifu
 
 settings-pads-standard = Kawaida
 
-settings-pads-standard-sub = Hakuna mabadiliko.
-
 settings-pads-profile-add = Ongeza wasifu
 
 settings-pads-profile-remove = Ondoa { $name }
@@ -129,7 +122,7 @@ settings-pads-profile-name = Jina la wasifu
 # The name a new profile is given.
 settings-pads-profile-new = Wasifu { $n }
 
-settings-pads-profile-empty = Wasifu unahitaji jina.
+settings-pads-profile-empty = Andika jina la wasifu.
 
 settings-pads-profile-standard = Kawaida limeshatumika.
 
@@ -143,7 +136,14 @@ settings-pads-not-a-game = Si nambari ya programu ya Steam.
 settings-pads-standard-why = Kawaida haibadilishi chochote. Ongeza wasifu kwanza.
 
 # The headline while the shown game uses Standard, and while all changes are off.
-settings-pads-top-standard = Kawaida: kidhibiti kama kilivyo.
+settings-pads-top-standard = Inatumia Kawaida, bila mabadiliko.
 
 settings-pads-top-off = Mabadiliko ya vidhibiti yamezimwa.
 
+# Heading of the line shown when the file of changed controller buttons could not be read.
+settings-pads-unread = Trindle haikuweza kusoma vitufe vyako vilivyobadilishwa
+
+# Small words under that line; { $why } is the reason.
+settings-pads-unread-about = Hadi hapo, kila kitufe hufanya kazi kama kawaida na hakuna kinachohifadhiwa. { $why }
+
+settings-pads-not-saved-unread = Haikuhifadhiwa. Faili ya vitufe vilivyobadilishwa haikuweza kusomwa, kwa hiyo iliachwa kama ilivyo.

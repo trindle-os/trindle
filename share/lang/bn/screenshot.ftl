@@ -4,7 +4,7 @@
 screenshot-name = স্ক্রিনশট
 
 # Note on the overlay before any part is chosen.
-screenshot-drag = রাখার অংশের উপর দিয়ে টানুন
+screenshot-drag = রাখার অংশের ওপর দিয়ে টানুন
 
 # Name of the round button that keeps the whole screen.
 screenshot-whole = পুরো পর্দা
@@ -107,16 +107,16 @@ screenshot-not-saved = স্ক্রিনশট সংরক্ষণ হয�
 screenshot-not-copied = স্ক্রিনশট কপি হয়নি
 
 # Words of that notice.
-screenshot-clipboard-refused = ক্লিপবোর্ড এটি নিতে পারেনি।
+screenshot-clipboard-refused = Trindle এটি কপি করতে পারেনি।
 
 # Words of the notice that the screenshot could not be saved: the picture was not made.
-screenshot-no-picture = ছবিটি বানানো যায়নি
+screenshot-no-picture = স্ক্রিনশট নেওয়া যায়নি।
 
 # Words of the notice that the screenshot could not be saved: no bus to ask on.
-screenshot-no-bus = জিজ্ঞাসা করার মতো কোনো সেশন বাস নেই
+screenshot-no-bus = Trindle কোথায় রাখতে হবে তা জিজ্ঞেস করতে পারছে না।
 
 # Words of the notice that the screenshot could not be saved: the file chooser could not be asked.
-screenshot-no-chooser = ফাইল বাছাইকারীকে জিজ্ঞাসা করা যায়নি
+screenshot-no-chooser = ফাইল বাছাইকারী খোলা যায়নি।
 
 # Words of the notice that the screenshot could not be saved: every file name was taken.
 screenshot-no-free-name = কোনো ফাঁকা নাম নেই
@@ -128,26 +128,26 @@ screenshot-write-failed = { $path }: { $why }
 screenshot-eye-title = আইড্রপার
 
 # Words that float beside the i of the eye dropper's window.
-screenshot-eye-help = আইড্রপার চাপুন, তারপর পর্দার যেকোনো জায়গায় ক্লিক করলে পয়েন্টারের নিচের রং নেওয়া হবে। Escape চাপলে ছেড়ে দেওয়া হয়। প্রতিটি রং সঙ্গে সঙ্গে হেক্স কোড হিসেবে কপি হয় এবং নিচের তালিকায় নতুনটি আগে রেখে রাখা হয়, যাতে পরে আবার কপি করা যায়।
+screenshot-eye-help = আইড্রপার চাপুন, তারপর পর্দার যেকোনো জায়গায় ক্লিক করলে পয়েন্টারের নিচের রংটি তোলা হবে। বাতিল করতে Escape চাপুন। প্রতিটি রং সঙ্গে সঙ্গে হেক্স কোড হিসেবে কপি হয় এবং নিচের তালিকায় যোগ হয়, সবচেয়ে নতুনটি আগে, যাতে পরে আবার কপি করতে পারেন।
 
 # Name of the i button beside the title.
 screenshot-eye-about = আইড্রপার সম্পর্কে
 
 # Name of the main button that takes a colour.
-screenshot-eye-take = রং নিন
+screenshot-eye-take = রং তুলুন
 
 # Sentence under the title while no colour has been taken.
-screenshot-eye-none = পর্দার যেকোনো জায়গা থেকে রং নিন।
+screenshot-eye-none = পর্দা থেকে একটি রং তুলুন।
 
 # Sentence under the title once colours have been taken.
 screenshot-eye-taken =
     { $n ->
-        [one] একটি রং নেওয়া হয়েছে: { $newest }।
-       *[other] { $n }টি রং নেওয়া হয়েছে; সবচেয়ে নতুনটি { $newest }।
+        [one] একটি রং তোলা হয়েছে: { $newest }।
+       *[other] { $n }টি রং তোলা হয়েছে। সবচেয়ে নতুনটি { $newest }।
     }
 
 # Shown in the big card while no colour has been taken.
-screenshot-eye-latest-empty = আপনার নেওয়া রং এখানে বড় করে দেখাবে, কপি করার জন্য তৈরি।
+screenshot-eye-latest-empty = এখনও কোনো রং তোলা হয়নি।
 
 # Name of the card that holds the latest colour.
 screenshot-eye-latest = সবশেষ রং
@@ -156,10 +156,10 @@ screenshot-eye-latest = সবশেষ রং
 screenshot-eye-clear = তালিকা মুছুন
 
 # Head of the card with the list of colours taken.
-screenshot-eye-list = নেওয়া রং
+screenshot-eye-list = আপনার রংগুলো
 
 # Shown in the list card while no colour has been taken.
-screenshot-eye-list-empty = আইড্রপার দিয়ে নেওয়া রং এখানে রাখা হয়, নতুনটি আগে।
+screenshot-eye-list-empty = এখনও কোনো রং তোলা হয়নি।
 
 # Name of the round button that takes a colour out of the list.
 # SAFETY: needs a human review before it ships
@@ -174,11 +174,11 @@ screenshot-pick-title = { $app }-এর সঙ্গে আপনার পর�
 
 # Sentence under the title when several things can be picked.
 # SAFETY: needs a human review before it ships
-screenshot-pick-many = এক বা একাধিক বেছে নিন। অ্যাপটি বন্ধ বা বিরত না হওয়া পর্যন্ত শুধু আপনার বাছাই করাটুকু শেয়ার হবে।
+screenshot-pick-many = এক বা একাধিক বেছে নিন। অ্যাপটি শেয়ার করা বন্ধ করা বা বন্ধ হওয়া পর্যন্ত শুধু আপনার বাছাই করাটুকু শেয়ার হবে।
 
 # Sentence under the title when one thing can be picked.
 # SAFETY: needs a human review before it ships
-screenshot-pick-one = একটি বেছে নিন। অ্যাপটি বন্ধ বা বিরত না হওয়া পর্যন্ত শুধু আপনার বাছাই করাটুকু শেয়ার হবে।
+screenshot-pick-one = একটি বেছে নিন। অ্যাপটি শেয়ার করা বন্ধ করা বা বন্ধ হওয়া পর্যন্ত শুধু আপনার বাছাই করাটুকু শেয়ার হবে।
 
 # Heading over the screens that can be shared.
 screenshot-pick-screens = পর্দা
@@ -193,7 +193,7 @@ screenshot-pick-nothing = শেয়ার করার মতো কিছু
 screenshot-pick-desktop = পুরো ডেস্কটপ
 
 # Words under that choice.
-screenshot-pick-desktop-detail = প্রতিটি পর্দা, যেভাবে বসানো আছে
+screenshot-pick-desktop-detail = সব পর্দা, যেভাবে সাজানো আছে
 
 # Words under a screen's choice: its size in pixels.
 screenshot-pick-size = { $width } গুণ { $height }
@@ -232,23 +232,23 @@ screenshot-portal-name = নাম
 
 # Heading when an unknown program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks-unknown = একটি প্রোগ্রাম জানতে চাইছে আপনি কে
+screenshot-account-asks-unknown = একটি প্রোগ্রাম আপনার তথ্য চাইছে
 
 # Heading when a program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks = { $who } জানতে চাইছে আপনি কে
+screenshot-account-asks = { $who } আপনার তথ্য চাইছে
 
 # Name the screen reader gives to the person's picture.
 screenshot-account-picture = আপনার ছবি
 
 # Words under the person's name.
-screenshot-account-signed-in = { $id } হিসেবে লগইন করা
+screenshot-account-signed-in = { $id } হিসেবে লগ ইন করা আছে
 
 # Name of the search box in the window that asks which app should open a file.
 screenshot-apps-search = অ্যাপ খুঁজুন
 
 # Shown when no app can open the file.
-screenshot-apps-none = এখানে কোনো অ্যাপ এটি খুলতে পারে না
+screenshot-apps-none = কোনো অ্যাপ এটি খুলতে পারে না
 
 # Name of the switch that remembers the choice.
 screenshot-apps-always = এই ধরনের ফাইলের জন্য সবসময় এই অ্যাপ ব্যবহার করুন
@@ -307,7 +307,7 @@ screenshot-wallpaper-ask = এই ছবিটি আপনার ওয়া�
 
 # Heading when a program offers a wallpaper.
 # SAFETY: needs a human review before it ships
-screenshot-wallpaper-asks = { $who } একটি নতুন ওয়ালপেপার দিতে চায়
+screenshot-wallpaper-asks = { $who } ওয়ালপেপার বদলাতে চায়
 
 # Name the screen reader gives to the picture offered.
 screenshot-wallpaper-picture = নতুন ওয়ালপেপার
@@ -316,7 +316,7 @@ screenshot-wallpaper-picture = নতুন ওয়ালপেপার
 screenshot-wallpaper-set = ওয়ালপেপার করুন
 
 # Red line under the printer box when no printer is set up.
-screenshot-print-no-printer = কোনো প্রিন্টার ঠিক করা নেই। সেটিংস, প্রিন্টারে একটি যোগ করুন।
+screenshot-print-no-printer = কোনো প্রিন্টার সেট করা নেই। সেটিংসে প্রিন্টারের অধীনে একটি যোগ করুন।
 
 # Red line under the printer box when the printing system does not answer.
 screenshot-print-not-answering = ছাপার ব্যবস্থা সাড়া দিচ্ছে না।
@@ -370,7 +370,7 @@ screenshot-print-from = { $who } থেকে ছাপুন
 screenshot-print-failed = ছাপা যায়নি
 
 # Words of that notice when the choices made were not kept.
-screenshot-print-lost = এর বাছাই করা বিষয়গুলো রাখা হয়নি। আবার ছাপুন।
+screenshot-print-lost = সেটিংস সংরক্ষণ করা যায়নি। আবার ছাপুন।
 
 # Line in the menu on a file or folder: change its name.
 screenshot-chooser-rename = নাম বদলান
@@ -414,13 +414,13 @@ screenshot-chooser-no-folder = ওই ফোল্ডারটি নেই।
 
 # Words under the box when saving would replace a file.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-ask = { $name } আগে থেকেই আছে। এটি তার জায়গায় রাখতে বদলান চাপুন, অথবা আবার Enter চাপুন।
+screenshot-chooser-replace-ask = { $name } আগে থেকেই আছে। এটি বদলাতে বদলান চাপুন, অথবা আবার Enter চাপুন।
 
 # Words under the box when a key is pressed on Recent, which is not a folder.
 screenshot-chooser-recent-not-folder = সাম্প্রতিক কোনো ফোল্ডার নয়। আগে একটি খুলুন।
 
 # Words under the box when a key is pressed with nothing picked.
-screenshot-chooser-nothing-picked = কিছু বাছাই করা নেই।
+screenshot-chooser-nothing-picked = কিছু বাছাই করা হয়নি।
 
 # Words under the box while a file by that name is already there.
 screenshot-chooser-there = { $name } আগে থেকেই আছে।
@@ -452,52 +452,52 @@ screenshot-chooser-replace = বদলান
 
 # What the screen reader says for the button that replaces a folder.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-spoken = বদলান: আগে থেকে থাকা ফোল্ডারটি ট্র্যাশে যাবে
+screenshot-chooser-replace-spoken = বদলান। আগে থেকে থাকা ফোল্ডারটি ট্র্যাশে সরানো হবে।
 
 # Name of the main button that merges two folders.
 # SAFETY: needs a human review before it ships
 screenshot-chooser-merge = একত্র করুন
 
 # Words in the question when folders are being pasted.
-screenshot-chooser-rest-folders = আগে থেকে থাকা প্রতিটি ফোল্ডারের জন্য একই উত্তর।
+screenshot-chooser-rest-folders = আগে থেকে থাকা প্রতিটি ফোল্ডারের জন্য এটি করুন।
 
 # Words in the question when files are being pasted.
-screenshot-chooser-rest-files = আগে থেকে থাকা প্রতিটি ফাইলের জন্য একই উত্তর।
+screenshot-chooser-rest-files = আগে থেকে থাকা প্রতিটি ফাইলের জন্য এটি করুন।
 
 # Name of the switch that gives the same answer to the rest.
 screenshot-chooser-same = বাকিগুলোর জন্যও একই করুন
 
 # Words under the box after Cut.
-screenshot-chooser-was-cut = { $what } কাটা হয়েছে। এটি একটি ফোল্ডারে পেস্ট করুন।
+screenshot-chooser-was-cut = সরানোর জন্য তৈরি: { $what }
 
 # Words under the box after Copy.
-screenshot-chooser-was-copied = { $what } কপি করা হয়েছে। এটি একটি ফোল্ডারে পেস্ট করুন।
+screenshot-chooser-was-copied = কপির জন্য তৈরি: { $what }
 
 # Words under the box when Paste is pressed and there is nothing to paste.
-screenshot-chooser-nothing-cut = কিছু কাটা বা কপি করা হয়নি।
+screenshot-chooser-nothing-cut = কিছু কাটা বা কপি করা নেই।
 
 # Words under the box when Paste is pressed while a paste is still going.
-screenshot-chooser-paste-busy = একটি পেস্ট এখনও চলছে।
+screenshot-chooser-paste-busy = Trindle এখনও পেস্ট করছে।
 
 # Red line after some items could not be moved.
 screenshot-chooser-not-moved =
     { $n ->
-        [one] একটি জিনিস সরানো যায়নি: { $names }।
-       *[other] { $n }টি জিনিস সরানো যায়নি: { $names }।
+        [one] Trindle একটি আইটেম সরাতে পারেনি: { $names }।
+       *[other] Trindle { $n }টি আইটেম সরাতে পারেনি: { $names }।
     }
 
 # Red line after some items could not be copied.
 screenshot-chooser-not-copied =
     { $n ->
-        [one] একটি জিনিস কপি করা যায়নি: { $names }।
-       *[other] { $n }টি জিনিস কপি করা যায়নি: { $names }।
+        [one] Trindle একটি আইটেম কপি করতে পারেনি: { $names }।
+       *[other] Trindle { $n }টি আইটেম কপি করতে পারেনি: { $names }।
     }
 
 # Red line after some items could not be put in the Trash.
 screenshot-chooser-not-trashed =
     { $n ->
-        [one] একটি জিনিস ট্র্যাশে রাখা যায়নি: { $names }।
-       *[other] { $n }টি জিনিস ট্র্যাশে রাখা যায়নি: { $names }।
+        [one] Trindle একটি আইটেম ট্র্যাশে সরাতে পারেনি: { $names }।
+       *[other] Trindle { $n }টি আইটেম ট্র্যাশে সরাতে পারেনি: { $names }।
     }
 
 # Name of the box where a file or folder is renamed.
@@ -511,10 +511,10 @@ screenshot-chooser-items =
     }
 
 # Title of the notice when an email could not be started.
-screenshot-mail-failed = ইমেইল শুরু করা যায়নি
+screenshot-mail-failed = ইমেইল তৈরি করা যায়নি
 
 # Why: no mail program is chosen or installed.
-screenshot-mail-no-app = কোনো মেইল প্রোগ্রাম ঠিক করা নেই। সেটিংস, ডিফল্ট অ্যাপে একটি বেছে নিন।
+screenshot-mail-no-app = আপনি কোনো মেইল প্রোগ্রাম বেছে নেননি। সেটিংসে ডিফল্ট অ্যাপে একটি বেছে নিন।
 
 # Why: a program asked to attach more files than allowed.
 screenshot-mail-too-many = সংযুক্ত করার জন্য অনেক বেশি ফাইল।
@@ -526,13 +526,13 @@ screenshot-mail-too-big = সংযুক্ত করার জন্য ফা
 screenshot-mail-bad-file = একটি ফাইল সংযুক্ত করা যায়নি।
 
 # Why: an address was not a plain address.
-screenshot-mail-bad-address = একটি ঠিকানা সঠিক ছিল না।
+screenshot-mail-bad-address = একটি ঠিকানা সঠিক নয়।
 
 # Why: the subject was too long or had odd characters.
-screenshot-mail-bad-subject = বিষয়টি সঠিক ছিল না।
+screenshot-mail-bad-subject = বিষয়টি সঠিক নয়।
 
 # Why: the words were too long or had odd characters.
-screenshot-mail-bad-words = লেখাগুলো সঠিক ছিল না।
+screenshot-mail-bad-words = লেখাটি সঠিক নয়।
 
 # Why: no private place to keep the files.
 screenshot-mail-no-place = ফাইলগুলো নিরাপদে রাখা যায়নি।
@@ -561,7 +561,12 @@ screenshot-chooser-pin-not-kept = পিন সংরক্ষণ করা য�
 # Red line after some items could not be deleted.
 screenshot-chooser-not-deleted =
     { $n ->
-        [one] { $n }টি আইটেম মোছা যায়নি: { $names }।
-       *[other] { $n }টি আইটেম মোছা যায়নি: { $names }।
+        [one] Trindle একটি আইটেম মুছতে পারেনি: { $names }।
+       *[other] Trindle { $n }টি আইটেম মুছতে পারেনি: { $names }।
     }
 
+# What the screen reader says for the list of places down the left of the file chooser.
+screenshot-chooser-places = জায়গা
+
+# What the screen reader says for the list of files and folders in the file chooser.
+screenshot-chooser-files = ফাইল

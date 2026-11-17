@@ -37,7 +37,7 @@ ring-snooze-for-1-hour = ১ ঘণ্টার জন্য স্থগিত 
 ring-snooze-for-6-hours = ৬ ঘণ্টার জন্য স্থগিত করুন
 
 # Tip and screen reader name of the snooze choice for the next morning.
-ring-snooze-for-next-morning = পরের সকাল পর্যন্ত স্থগিত করুন
+ring-snooze-for-next-morning = সকাল পর্যন্ত স্থগিত করুন
 
 # Tip of the button on the snooze page that goes back to the notification's message.
 ring-act-back = বার্তায় ফিরুন
@@ -109,7 +109,7 @@ ring-lid-nothing = কিছুই না
 ring-lid-shut-down = বন্ধ করুন
 
 # Reason the system lists beside Trindle's hold on the lid switch (shown by tools that list what stops sleep).
-ring-lid-reason = ঢাকনা বন্ধ করলে সেটিংস, পাওয়ার-এ যা বলা আছে তাই হয়
+ring-lid-reason = ঢাকনা বন্ধ করলে কী হবে, তা আপনি সেটিংসে পাওয়ার-এর অধীনে বেছে নিতে পারেন।
 
 # Notice at the foot of the screen for a few seconds when the magnifier starts.
 ring-magnify-hint = বড় করে দেখতে যেকোনো জায়গায় চেপে ধরুন
@@ -126,15 +126,15 @@ ring-mic-off-tip = সব প্রোগ্রামের জন্য মা�
 
 # Tip of the switch in the ring that turns the microphone back on.
 # SAFETY: needs a human review before it ships
-ring-mic-on-tip = মাইক্রোফোন আবার চালু করুন
+ring-mic-on-tip = মাইক্রোফোন চালু করুন
 
 # Line in the ring when something other than the person pressed the microphone switch on.
 # SAFETY: needs a human review before it ships
-ring-mic-own-press = শুধু আপনার নিজের চাপ মাইক্রোফোন আবার চালু করতে পারে।
+ring-mic-own-press = শুধু আপনিই মাইক্রোফোন আবার চালু করতে পারেন।
 
 # Line in the ring when the microphone switch could not be changed; the reason follows.
 # SAFETY: needs a human review before it ships
-ring-mic-not-changed = মাইক্রোফোনের সুইচ বদলানো যায়নি: { $why }
+ring-mic-not-changed = Trindle মাইক্রোফোনের সুইচ বদলাতে পারেনি: { $why }
 
 # Notice when a notification was clicked and no program could be found for it.
 ring-goes-no-program = কোনো প্রোগ্রাম পাওয়া যায়নি
@@ -152,7 +152,7 @@ ring-notes-copied = আপনার সহকারীর জন্য কপি
 ring-notes-name = বিজ্ঞপ্তি
 
 # Said when a pinned notification has been held long enough and now follows the pointer.
-ring-notes-moving = সরানো হচ্ছে। রাখতে ছেড়ে দিন, ফিরিয়ে দিতে Escape চাপুন।
+ring-notes-moving = বিজ্ঞপ্তিটি সরানো হচ্ছে। রাখতে ছেড়ে দিন, অথবা ফিরিয়ে দিতে Escape চাপুন।
 
 # Said when a pinned notification has been dropped or moved by keys.
 ring-notes-moved = সরানো হয়েছে
@@ -194,7 +194,11 @@ ring-plugin-needs = { $name }-এর আপনার অনুমতি দর�
 
 # Line under the notice that a plugin needs permission: none of the permissions it asks for are given.
 # SAFETY: needs a human review before it ships
-ring-plugin-cannot-work = এটি এখনও কাজ করতে পারে না: { $asks }টির মধ্যে ০টি অনুমোদিত।
+ring-plugin-cannot-work =
+    { $asks ->
+        [one] এটি এখনও কাজ করতে পারে না। এটি যে একটি অনুমতি চায়, তা আপনি দেননি।
+       *[other] এটি এখনও কাজ করতে পারে না। এটি যে { $asks }টি অনুমতি চায়, তার একটিও আপনি দেননি।
+    }
 
 # Said to a screen reader when a notification was copied; $said is what the circle said.
 ring-copied-said = কপি হয়েছে। { $said }
@@ -211,7 +215,9 @@ ring-outside-files = আপনার ফাইল খুলে রেখেছ�
 ring-outside-body =
     { $more ->
         [0] { $names }
-        [one] { $names } এবং আরও { $more }টি
+        [one] { $names } এবং আরও ১টি
        *[other] { $names } এবং আরও { $more }টি
     }
 
+# Said under the magnifier when the screen picture it took has the wrong size.
+ring-magnify-wrong-size = ছবির মাপ ঠিক ছিল না।

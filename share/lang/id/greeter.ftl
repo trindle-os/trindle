@@ -23,16 +23,16 @@ greeter-ready-name = Ketik nama dan kata sandi Anda, lalu tekan Enter.
 
 # Red line under the boxes after the phone did not log the person in.
 # SAFETY: needs a human review before it ships
-greeter-phone-failed = Ponsel Anda tidak memasukkan Anda. Ketik kata sandi Anda.
+greeter-phone-failed = Gagal masuk dengan ponsel Anda. Ketik kata sandi Anda.
 
 # Under the password box for a few seconds, where a phone is paired.
-greeter-phone-hint = Tombol ponsel memasukkan Anda dengan ponsel Anda.
+greeter-phone-hint = Masuk dengan ponsel Anda
 
 # At the foot of the screen, for when nothing else works.
 greeter-trouble = Kesulitan masuk? Tekan Ctrl+Alt+F2 untuk masuk lewat teks.
 
 # Beside the light drawing switch, on a computer with no graphics chip.
-greeter-no-chip = Chip grafis tidak ditemukan, jadi penggambaran ringan menjaga semuanya tetap cepat.
+greeter-no-chip = Trindle tidak menemukan chip grafis, jadi memakai grafis yang lebih sederhana agar desktop tetap responsif.
 
 # The main button's name (a round button with an arrow) that logs in.
 greeter-sign-in = Masuk
@@ -53,7 +53,7 @@ greeter-pam-account-expired = Akun ini sudah kedaluwarsa.
 greeter-pam-password-expired = Kata sandi ini sudah kedaluwarsa. Masuk di konsol teks (Ctrl+Alt+F2) untuk mengubahnya.
 
 # Red line under the boxes, or the sentence at the top, when the login failed and the system gave no reason.
-greeter-login-failed = Masuk tidak berhasil.
+greeter-login-failed = Gagal masuk.
 
 # Red line under the name box when Enter is pressed with no name.
 greeter-name-first = Ketik nama Anda dahulu.
@@ -80,7 +80,7 @@ greeter-answer-box = Jawaban
 greeter-use-phone = Pakai ponsel
 
 # Name of the switch for light drawing on a computer with no graphics chip, and the word under it.
-greeter-light-drawing = Penggambaran ringan
+greeter-light-drawing = Grafis rendah
 
 # Tip of the round button that shows or hides the on-screen keyboard.
 greeter-keyboard-tip = Papan ketik di layar
@@ -112,7 +112,7 @@ greeter-shut-down = Matikan
 greeter-shut-down-sure = Tekan lagi untuk mematikan
 
 # Red line under the boxes when a power button is pressed and the system has no bus to ask.
-greeter-no-bus = Bus sistem tidak tersedia.
+greeter-no-bus = Trindle tidak dapat menjangkau sistem.
 
 # Red line under the boxes when the system refused to restart; the reason follows, as the system worded it.
 greeter-restart-failed = Tidak dapat memulai ulang: { $why }
@@ -121,19 +121,19 @@ greeter-restart-failed = Tidak dapat memulai ulang: { $why }
 greeter-shut-down-failed = Tidak dapat mematikan: { $why }
 
 # Red line under the boxes when the login service could not be spoken to.
-greeter-service-no-talk = Tidak dapat berbicara dengan layanan masuk.
+greeter-service-no-talk = Tidak dapat menghubungi layanan masuk.
 
 # Red line under the boxes when the login service was too slow.
-greeter-service-timeout = Layanan masuk tidak menjawab tepat waktu.
+greeter-service-timeout = Layanan masuk terlalu lama menjawab.
 
 # Red line under the boxes when the login service hung up.
 greeter-service-closed = greetd menutup sambungan.
 
 # Red line under the boxes when the login service's answer was far too large.
-greeter-service-too-big = Layanan masuk menjawab dengan sesuatu yang terlalu besar untuk dibaca.
+greeter-service-too-big = Layanan masuk mengirim balasan yang terlalu besar untuk dibaca.
 
 # Red line under the boxes when the login screen was started by hand and not by the login service.
-greeter-service-not-started = GREETD_SOCK belum diatur: layar masuk tidak dijalankan oleh greetd.
+greeter-service-not-started = GREETD_SOCK belum diatur, jadi greetd tidak menjalankan layar masuk ini.
 
 # Red line under the boxes when there is no connection to the login service.
 greeter-service-no-connection = tidak ada sambungan

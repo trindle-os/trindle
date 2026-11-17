@@ -8,4 +8,13 @@ if [ "$1" = remove ]; then
     done
 fi
 
+# What Trindle kept for itself goes on purge; the boot menu is then made again
+# without Trindle's look (on remove its theme is gone, so it is made again too).
+if [ "$1" = purge ]; then
+    rm -rf /var/lib/trindle /etc/trindle
+fi
+case "$1" in
+    remove|purge) [ -x /usr/sbin/update-grub ] && [ -d /boot/grub ] && { update-grub >/dev/null 2>&1 || echo "trindle: update-grub failed; run it again before restarting" >&2; } ;;
+esac
+
 exit 0

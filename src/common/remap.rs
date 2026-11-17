@@ -27,8 +27,6 @@ const LONGEST_NAME: usize = 64;
 
 pub const LOGIN_FOLDER: &str = "/var/lib/trindle/login-remaps";
 
-const LOGIN_FOLDER_ENV: &str = "TRINDLE_LOGIN_REMAPS";
-
 const NAMES: &[(u32, &str, &[&str])] = &[
     (1, "Escape", &["Esc"]),
     (2, "1", &[]), (3, "2", &[]), (4, "3", &[]), (5, "4", &[]), (6, "5", &[]),
@@ -78,10 +76,10 @@ const NAMES: &[(u32, &str, &[&str])] = &[
     (0x115, "Button 6", &[]), (0x116, "Button 7", &[]), (0x117, "Button 8", &[]),
 ];
 
-pub const NOT_A_KEY: &str = "Not a key Trindle knows. Try Escape, Ctrl+C or Left Click.";
-pub const TOO_LONG: &str = "That is more keys than one change can hold.";
-pub const NO_EQUALS: &str = "A change needs what is pressed, an equals sign, and what it becomes.";
-pub const TAPPED_AND_HELD: &str = "Say what it is tapped and what it is held, such as Escape tapped, Ctrl held.";
+pub fn not_a_key() -> &'static str { t!("common-remap-not-a-key") }
+pub fn too_long() -> &'static str { t!("common-remap-too-long") }
+pub fn no_equals() -> &'static str { t!("common-no-equals") }
+pub fn tapped_and_held() -> &'static str { t!("common-remap-tapped-held") }
 
 pub fn name(code: u32) -> String {
     NAMES.iter().find(|n| n.0 == code).map(|n| n.1.to_string()).unwrap_or_else(|| format!("Code {code}"))
@@ -129,12 +127,12 @@ fn parse_combo(words: &str) -> Result<Vec<u32>, &'static str> {
         return Ok(vec![one]);
     }
     let codes: Option<Vec<u32>> = words.split('+').map(code).collect();
-    let codes = codes.ok_or(NOT_A_KEY)?;
+    let codes = codes.ok_or(not_a_key())?;
     if codes.is_empty() {
-        return Err(NOT_A_KEY);
+        return Err(not_a_key());
     }
     if codes.len() > MOST_HELD {
-        return Err(TOO_LONG);
+        return Err(too_long());
     }
     Ok(codes)
 }
@@ -159,15 +157,15 @@ impl To {
         let tapped = parts.iter().any(|p| ends_with_word(p, "tapped"));
         let held = parts.iter().any(|p| ends_with_word(p, "held"));
         if tapped || held {
-            let [a, b] = parts.as_slice() else { return Err(TAPPED_AND_HELD) };
+            let [a, b] = parts.as_slice() else { return Err(tapped_and_held()) };
             let (tap, hold) = match (strip_word(a, "tapped"), strip_word(b, "held"), strip_word(a, "held"), strip_word(b, "tapped")) {
                 (Some(t), Some(h), _, _) | (_, _, Some(h), Some(t)) => (t, h),
-                _ => return Err(TAPPED_AND_HELD),
+                _ => return Err(tapped_and_held()),
             };
             return Ok(To::TapHold { tap: parse_combo(tap)?, hold: parse_combo(hold)? });
         }
         if parts.len() > MOST_IN_A_RUN {
-            return Err(TOO_LONG);
+            return Err(too_long());
         }
         let mut run = parts.iter().map(|p| parse_combo(p)).collect::<Result<Vec<_>, _>>()?;
         Ok(if run.len() == 1 { To::Held(run.remove(0)) } else { To::Run(run) })
@@ -210,16 +208,16 @@ impl Change {
         let mut rest = line.trim();
         let mut swap = None;
         if let Some(after) = rest.strip_prefix('[') {
-            let (mark, after) = after.split_once(']').ok_or(NO_EQUALS)?;
+            let (mark, after) = after.split_once(']').ok_or(no_equals())?;
             swap = Some(mark.trim().to_string()).filter(|m| !m.is_empty());
             rest = after.trim_start();
         }
-        let (left, right) = rest.split_once(" = ").or_else(|| rest.split_once('=')).ok_or(NO_EQUALS)?;
+        let (left, right) = rest.split_once(" = ").or_else(|| rest.split_once('=')).ok_or(no_equals())?;
         let (key, device) = match left.split_once(" on \"") {
             Some((key, device)) => (key, Some(clean_name(device.trim_end().trim_end_matches('"')))),
             None => (left, None),
         };
-        let from = code(key).ok_or(NOT_A_KEY)?;
+        let from = code(key).ok_or(not_a_key())?;
         Ok(Change { swap, from, device: device.filter(|d| !d.is_empty()), to: To::parse(right)? })
     }
 }
@@ -228,29 +226,51 @@ impl Change {
 pub struct Table {
     pub changes: Vec<Change>,
     pub unread: Vec<(usize, String, &'static str)>,
+
+    pub kept: Vec<(usize, String)>,
 }
 
 impl Table {
     pub fn read(text: &str) -> Table {
         let mut table = Table::default();
-        for (i, line) in text.lines().enumerate().take(MOST_LINES) {
-            let line = line.trim();
-            if line.is_empty() || line.starts_with('#') {
+        for (i, raw) in text.lines().enumerate() {
+            let line = raw.trim();
+            if line.is_empty() {
+                continue;
+            }
+            if i >= MOST_LINES || line.starts_with('#') {
+                table.kept.push((table.changes.len(), raw.to_string()));
                 continue;
             }
             match Change::parse(line) {
                 Ok(change) => table.changes.push(change),
-                Err(why) => table.unread.push((i + 1, line.to_string(), why)),
+                Err(why) => {
+                    table.unread.push((i + 1, line.to_string(), why));
+                    table.kept.push((table.changes.len(), raw.to_string()));
+                }
             }
         }
         table
     }
 
     pub fn text(&self) -> String {
-        self.changes.iter().fold(String::new(), |mut out, c| {
+        let mut out = String::new();
+        let mut kept = self.kept.iter().peekable();
+        for (i, c) in self.changes.iter().enumerate() {
+            while let Some((_, line)) = kept.next_if(|k| k.0 <= i) {
+                let _ = writeln!(out, "{line}");
+            }
             let _ = writeln!(out, "{}", c.line());
-            out
-        })
+        }
+        kept.for_each(|(_, line)| {
+            let _ = writeln!(out, "{line}");
+        });
+        out
+    }
+
+    fn swaps_only(&self) -> Table {
+        let allowed = |c: &Change| SWAPS.iter().any(|s| s.mark.eq_ignore_ascii_case(c.swap.as_deref().unwrap_or("")) && s.changes().contains(c));
+        Table { changes: self.changes.iter().filter(|c| allowed(c)).cloned().collect(), ..Table::default() }
     }
 
     pub fn find(&self, device: &str, from: u32) -> Option<&Change> {
@@ -323,10 +343,21 @@ pub fn load() -> Result<Table, std::io::Error> {
 }
 
 pub fn save(table: &Table) -> std::io::Result<()> {
-    let text = table.text();
+    save_in(&file(), table)?;
+    remember_for_login(&table.text());
+    Ok(())
+}
+
+pub fn reset() -> std::io::Result<()> {
+    let text = Table::default().text();
     files::write_whole(&file(), text.as_bytes())?;
     remember_for_login(&text);
     Ok(())
+}
+
+pub fn save_in(path: &std::path::Path, table: &Table) -> std::io::Result<()> {
+    files::read_within(path, MOST_BYTES)?;
+    files::write_whole(path, table.text().as_bytes())
 }
 
 pub fn devices_file() -> PathBuf {
@@ -338,22 +369,19 @@ pub fn read_devices() -> Vec<(bool, String)> {
     text.lines().filter_map(|l| l.split_once('\t')).map(|(made, name)| (made == "1", clean_name(name))).filter(|d| !d.1.is_empty()).collect()
 }
 
-fn login_folder() -> PathBuf {
-    std::env::var_os(LOGIN_FOLDER_ENV).filter(|f| !f.is_empty()).map(PathBuf::from).unwrap_or_else(|| PathBuf::from(LOGIN_FOLDER))
-}
-
 pub fn remember_for_login(text: &str) {
-    if let Err(e) = super::screen_scale::write_login_file(&login_folder(), text, MOST_BYTES) {
+    let text = Table::read(text).swaps_only().text();
+    if let Err(e) = super::screen_scale::write_login_file(Path::new(LOGIN_FOLDER), &text, MOST_BYTES) {
         eprintln!("trindle: could not keep the changed keys for the login screen: {e}");
     }
 }
 
 pub fn for_login() -> Table {
-    for_login_in(&login_folder())
+    for_login_in(Path::new(LOGIN_FOLDER))
 }
 
 fn for_login_in(folder: &Path) -> Table {
-    super::screen_scale::login_files(folder, MOST_BYTES).into_iter().next().map(|(_, text)| Table::read(&text)).unwrap_or_default()
+    super::screen_scale::login_files(folder, MOST_BYTES).into_iter().next().map(|(_, text)| Table::read(&text).swaps_only()).unwrap_or_default()
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -513,8 +541,7 @@ impl Changer {
     }
 
     fn went_up(&mut self, device: &str, code: u32, time: u32) -> Vec<Out> {
-        if self.waiting.as_ref().is_some_and(|w| w.device == device && w.code == code) {
-            let w = self.waiting.take().expect("just looked at");
+        if let Some(w) = self.waiting.take_if(|w| w.device == device && w.code == code) {
             if time.wrapping_sub(w.since) <= TAP_MS {
                 let mut outs = down_all(&w.tap);
                 outs.extend(up_all(&w.tap));
@@ -632,14 +659,14 @@ mod tests {
 
     #[test]
     fn what_cannot_be_read_says_why_and_the_rest_is_kept() {
-        assert_eq!(Change::parse("Caps Lock"), Err(NO_EQUALS));
-        assert_eq!(Change::parse("Shift Lock = A"), Err(NOT_A_KEY));
-        assert_eq!(Change::parse("A = Hyper"), Err(NOT_A_KEY));
-        assert_eq!(Change::parse("A = Escape tapped"), Err(TAPPED_AND_HELD));
-        assert_eq!(Change::parse("A = Escape tapped, Ctrl tapped"), Err(TAPPED_AND_HELD));
-        assert_eq!(Change::parse("A = A+B+C+D+E+F+G+H+I"), Err(TOO_LONG));
+        assert_eq!(Change::parse("Caps Lock"), Err(no_equals()));
+        assert_eq!(Change::parse("Shift Lock = A"), Err(not_a_key()));
+        assert_eq!(Change::parse("A = Hyper"), Err(not_a_key()));
+        assert_eq!(Change::parse("A = Escape tapped"), Err(tapped_and_held()));
+        assert_eq!(Change::parse("A = Escape tapped, Ctrl tapped"), Err(tapped_and_held()));
+        assert_eq!(Change::parse("A = A+B+C+D+E+F+G+H+I"), Err(too_long()));
         let long = vec!["A"; MOST_IN_A_RUN + 1].join(", ");
-        assert_eq!(Change::parse(&format!("B = {long}")), Err(TOO_LONG));
+        assert_eq!(Change::parse(&format!("B = {long}")), Err(too_long()));
         assert_eq!(Change::parse("[] A = B").unwrap().swap, None);
         let t = Table::read("# mine\nA = B\nnonsense\n\nC = Nothing\nA = \n");
         assert_eq!(t.changes.len(), 2);
@@ -795,10 +822,10 @@ mod tests {
         let _ = std::fs::remove_dir_all(&d);
         std::fs::create_dir_all(&d).unwrap();
         assert_eq!(for_login_in(&d), Table::default());
-        super::super::screen_scale::write_login_file(&d, "Caps Lock = Escape\n", MOST_BYTES).unwrap();
+        super::super::screen_scale::write_login_file(&d, "[esc-caps] Caps Lock = Escape\n", MOST_BYTES).unwrap();
         assert_eq!(for_login_in(&d).changes.len(), 1);
 
-        std::fs::write(d.join("not-a-number"), "A = B\n").unwrap();
+        std::fs::write(d.join("not-a-number"), "[esc-caps] A = B\n").unwrap();
         std::os::unix::fs::symlink(d.join("not-a-number"), d.join("4000")).unwrap();
         assert_eq!(for_login_in(&d).changes[0].from, CAPS);
 
@@ -806,6 +833,33 @@ mod tests {
         // SAFETY: makes a pipe at a path of the test's own.
         unsafe { libc::mkfifo(pipe.as_ptr(), 0o644) };
         assert_eq!(for_login_in(&d).changes[0].from, CAPS);
+        let _ = std::fs::remove_dir_all(&d);
+    }
+
+    #[test]
+    fn lines_that_are_not_changes_are_written_back_where_they_were() {
+        let text = "# mine\nA = B\nnonsense\nC = Nothing\n# last\n";
+        let mut t = Table::read(text);
+        assert_eq!(t.text(), text);
+        t.set_swap("ctrl-caps", true);
+        let saved = t.text();
+        let at = |w: &str| saved.find(w).unwrap();
+        assert!(at("# mine") < at("A = B") && at("A = B") < at("nonsense") && at("nonsense") < at("C = Nothing"), "{saved}");
+        assert!(saved.ends_with("# last\n") || saved.contains("# last"), "{saved}");
+        let beyond = format!("{}x = y\n# far\n", "A = B\n".repeat(MOST_LINES));
+        assert!(Table::read(&beyond).text().contains("# far"), "lines past the limit are not thrown away");
+    }
+
+    #[test]
+    fn the_login_screen_takes_only_the_swaps_as_they_are_made() {
+        let d = std::env::temp_dir().join(format!("trindle-remaps-swaps-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&d);
+        std::fs::create_dir_all(&d).unwrap();
+        let hostile = "Enter = Nothing\n[esc-caps] Enter = Nothing\n[no-such] A = B\n[esc-caps] Caps Lock = Escape\n[esc-caps] A on \"Pad\" = B\n";
+        super::super::screen_scale::write_login_file(&d, hostile, MOST_BYTES).unwrap();
+        let t = for_login_in(&d);
+        assert_eq!(t.changes.len(), 1, "{:?}", t.changes);
+        assert_eq!(t.changes[0].from, CAPS);
         let _ = std::fs::remove_dir_all(&d);
     }
 }

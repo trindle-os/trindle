@@ -13,7 +13,7 @@ chosen-act-name-empty = El nombre no puede estar vacío.
 chosen-act-name-slash = El nombre no puede contener una barra.
 
 # Red words under a name being typed when it is . or ..
-chosen-act-name-kept = Ese nombre está reservado para el sistema.
+chosen-act-name-kept = Ese nombre lo usa el sistema.
 
 # Red words under a name being typed when it is too long.
 chosen-act-name-long = Ese nombre es demasiado largo.

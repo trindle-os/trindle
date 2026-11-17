@@ -126,7 +126,7 @@ mod tests {
         let instead = super::icon_theme_instead;
 
         assert_eq!(instead("Numix-Circle", true, "Trindle-Circle").as_deref(), Some("Trindle"));
-        assert_eq!(instead("Numix-Circle-Light", false, "Trindle-Circle").as_deref(), Some("Trindle-Circle"));
+        assert_eq!(instead("Numix-Circle-Light", false, "Trindle-Square").as_deref(), Some("Trindle-Square"));
 
         assert_eq!(instead("Trindle", true, "Trindle-Circle"), None);
         assert_eq!(instead("Trindle", false, "Trindle-Circle").as_deref(), Some("Trindle-Circle"));
@@ -141,7 +141,7 @@ mod tests {
         assert_eq!(instead(Some("Papirus")), Some(None));
         assert_eq!(instead(Some("Numix-Circle")), Some(None));
         assert_eq!(instead(Some("")), Some(None));
-        assert_eq!(instead(Some("Trindle-Square")), Some(None));
+        assert_eq!(instead(Some("Trindle-Square")), None);
         assert_eq!(instead(Some("Trindle-Circle")), None);
         assert_eq!(instead(None), None);
     }

@@ -6,14 +6,14 @@ store-ask-title = ما يجوز لـ{ $app } استخدامه
 
 # Under the list of switches in the permission window when one or more is on already.
 # SAFETY: needs a human review before it ships
-store-ask-above-on = يُظهر كل مفتاح ما هو مسموح الآن. يمكنك تغيير هذه لاحقًا في التطبيقات، الأذونات.
+store-ask-above-on = يمكنك تغيير هذه لاحقًا في الإعدادات، الأذونات.
 
 # Under the list of switches in the permission window when all start off.
 # SAFETY: needs a human review before it ships
-store-ask-above-off = يبقى كل مفتاح مطفأ حتى تضغط عليه. يمكنك تغيير هذه لاحقًا في التطبيقات، الأذونات.
+store-ask-above-off = لم يُسمح بشيء بعد. يمكنك تغيير هذه لاحقًا في الإعدادات، الأذونات.
 
 # Note under the list of switches, since a .deb names nothing it wants.
-store-ask-worked-out = مستنتج من التطبيق نفسه
+store-ask-worked-out = بناءً على ما يطلبه التطبيق
 
 # Tip of the button that turns every switch on.
 # SAFETY: needs a human review before it ships

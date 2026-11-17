@@ -9,7 +9,7 @@ settings-datetime-keywords = zona waktu jam tanggal
 
 # Help line at the foot of the Date and time page.
 # SAFETY: needs a human review before it ships
-settings-datetime-help = Zona waktu dan waktu otomatis memerlukan kata sandi administrator.
+settings-datetime-help = Mengubah zona waktu atau waktu otomatis memerlukan kata sandi administrator.
 
 # Spoken name of the picture of the clock at the top of the page.
 settings-datetime-time-now = Waktu sekarang
@@ -42,7 +42,7 @@ settings-datetime-minute = Menit
 settings-datetime-no-time = Waktu tidak bisa diatur.
 
 # Red words when the time was set by hand while automatic time is on.
-settings-datetime-keeps-right = Jam sedang menyesuaikan diri sendiri. Matikan itu di atas, lalu atur waktu secara manual.
+settings-datetime-keeps-right = Jam menyesuaikan diri secara otomatis. Matikan itu di atas, lalu atur waktu secara manual.
 
 # Red words when the system's message bus could not be reached.
 settings-datetime-no-bus = Tidak bisa menjangkau bus sistem.
@@ -51,7 +51,7 @@ settings-datetime-no-bus = Tidak bisa menjangkau bus sistem.
 settings-datetime-not-answering = Layanan waktu tidak menjawab.
 
 # Red words when automatic time could not be turned on.
-settings-datetime-ntp-on-failed = Jam tidak bisa diatur untuk menyesuaikan diri sendiri.
+settings-datetime-ntp-on-failed = Tidak dapat menyalakan waktu otomatis.
 
 # Red words when automatic time could not be turned off.
 settings-datetime-ntp-off-failed = Waktu otomatis tidak bisa dimatikan.
@@ -66,13 +66,13 @@ settings-datetime-not-real = Itu bukan tanggal yang sebenarnya.
 settings-datetime-it-is = Sekarang pukul { $time } pada { $date }.
 
 # Headline of the page when the time service is not answering.
-settings-datetime-service-down = Layanan waktu tidak menjawab, jadi jam tidak bisa diubah di sini.
+settings-datetime-service-down = Layanan waktu tidak merespons, jadi Anda tidak bisa mengubah waktu di sini.
 
 # Headline of the page when the clock is automatic and in step: { $time } is the time and { $date } the date.
-settings-datetime-it-is-right = Sekarang pukul { $time } pada { $date }, dan jam menyesuaikan diri sendiri.
+settings-datetime-it-is-right = Sekarang pukul { $time } pada { $date }. Jam menyesuaikan diri secara otomatis.
 
 # Headline of the page when the clock is automatic but not yet in step: { $time } is the time and { $date } the date.
-settings-datetime-it-is-checks = Sekarang pukul { $time } pada { $date }. Jam akan memeriksa dirinya sendiri setelah terhubung ke internet.
+settings-datetime-it-is-checks = Sekarang pukul { $time } pada { $date }. Jam akan menyesuaikan diri setelah komputer terhubung ke internet.
 
 # Headline of the page when the clock is set by hand: { $time } is the time and { $date } the date.
 settings-datetime-it-is-hand = Sekarang pukul { $time } pada { $date }. Jam diatur secara manual.
@@ -87,19 +87,16 @@ settings-datetime-city-region-offset = { $city }, { $region }, { $offset }
 settings-datetime-tip = Sekarang pukul { $time } pada { $date }, { $zone }.
 
 # Help text of the clock card when the time service is not answering or not yet read.
-settings-datetime-ring-about = Jam di tengah cincin ditulis dalam 24 atau 12 jam, dengan atau tanpa detik. Hanya jam cincin yang mengikuti ini; tanggal dan waktu di program mengikuti format yang dipilih di Wilayah dan bahasa.
+settings-datetime-ring-about = Jam di tengah cincin dapat menampilkan 24 atau 12 jam, dengan atau tanpa detik. Ini hanya mengubah jam cincin. Tanggal dan waktu di program mengikuti format yang Anda pilih di Wilayah dan bahasa.
 
 # Heading of the card with the clock settings.
 settings-datetime-the-clock = Jam
 
 # Heading of the line shown when the time service is not answering.
-settings-datetime-service-down-line = Layanan waktu tidak menjawab
-
-# Under Set the time automatically when the internet can be used.
-settings-datetime-from-internet = Dari internet, saat terhubung.
+settings-datetime-service-down-line = Layanan waktu tidak merespons
 
 # Under Set the time automatically when the time service is not installed.
-settings-datetime-needs-timesyncd = Memerlukan systemd-timesyncd terpasang.
+settings-datetime-needs-timesyncd = Pasang systemd-timesyncd dulu.
 
 # Label of the switch for automatic time, and heading of its line.
 settings-datetime-set-auto = Atur waktu secara otomatis
@@ -113,16 +110,13 @@ settings-datetime-set-date-time = Atur tanggal dan waktu
 # Heading of the line for setting the time by hand.
 settings-datetime-by-hand = Atur waktu secara manual
 
-# Under the Set the time by hand heading.
-settings-datetime-by-hand-sub = Matikan waktu otomatis dulu, seperti sekarang.
-
 # Help text of the clock card (the information button) when the time service can keep the time from the internet.
 # SAFETY: needs a human review before it ships
-settings-datetime-about = Jika diatur otomatis, jam dicocokkan dengan server waktu di internet setiap kali komputer terhubung, dan menyesuaikan diri sendiri. Jika dimatikan, tanggal dan waktu diketik secara manual. Zona waktu juga memberi tahu cahaya malam kapan matahari terbenam. Keduanya memerlukan kata sandi administrator. Jam di tengah cincin ditulis dalam 24 atau 12 jam, dengan atau tanpa detik. Hanya jam cincin yang mengikuti ini; tanggal dan waktu di program mengikuti format yang dipilih di Wilayah dan bahasa.
+settings-datetime-about = Jika waktu otomatis menyala, jam mencocokkan diri dengan server waktu di internet setiap kali komputer terhubung. Jika dimatikan, Anda mengetik tanggal dan waktu secara manual. Zona waktu juga memberi tahu cahaya malam kapan matahari terbenam. Keduanya memerlukan kata sandi administrator. Jam di tengah cincin dapat menampilkan 24 atau 12 jam, dengan atau tanpa detik. Ini hanya mengubah jam cincin. Tanggal dan waktu di program mengikuti format yang Anda pilih di Wilayah dan bahasa.
 
 # Help text of the clock card (the information button) when the time service is not installed.
 # SAFETY: needs a human review before it ships
-settings-datetime-about-no-ntp = Jika diatur otomatis, jam dicocokkan dengan server waktu di internet setiap kali komputer terhubung, dan menyesuaikan diri sendiri. Jika dimatikan, tanggal dan waktu diketik secara manual. Zona waktu juga memberi tahu cahaya malam kapan matahari terbenam. Keduanya memerlukan kata sandi administrator. Menjaga waktu dari internet memerlukan systemd-timesyncd: sudo apt install systemd-timesyncd Jam di tengah cincin ditulis dalam 24 atau 12 jam, dengan atau tanpa detik. Hanya jam cincin yang mengikuti ini; tanggal dan waktu di program mengikuti format yang dipilih di Wilayah dan bahasa.
+settings-datetime-about-no-ntp = Jika waktu otomatis menyala, jam mencocokkan diri dengan server waktu di internet setiap kali komputer terhubung. Jika dimatikan, Anda mengetik tanggal dan waktu secara manual. Zona waktu juga memberi tahu cahaya malam kapan matahari terbenam. Keduanya memerlukan kata sandi administrator. Untuk mengatur waktu dari internet, Anda memerlukan systemd-timesyncd: sudo apt install systemd-timesyncd. Jam di tengah cincin dapat menampilkan 24 atau 12 jam, dengan atau tanpa detik. Ini hanya mengubah jam cincin. Tanggal dan waktu di program mengikuti format yang Anda pilih di Wilayah dan bahasa.
 
 # An item in the list of ways to write the ring's clock: { $time } is the time written that way and { $what } its name.
 settings-datetime-clock-option = { $time }  ({ $what })
@@ -132,7 +126,3 @@ settings-datetime-show-as = Tampilkan sebagai
 
 # Heading of the line for the ring's clock.
 settings-datetime-rings-clock = Jam cincin
-
-# Under The ring's clock heading.
-settings-datetime-rings-clock-sub = Cara cincin menulis waktu.
-

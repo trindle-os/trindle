@@ -2,7 +2,6 @@
 //! Restore swaps the root subvolume for a writable copy; see admin/snapshots.rs.
 
 use std::path::{Path, PathBuf};
-use std::process::Command;
 
 use serde_json::Value;
 
@@ -28,18 +27,15 @@ impl Snapshot {
 }
 
 pub fn root_fs() -> String {
-    Command::new("findmnt").args(["-no", "FSTYPE", "/"]).output().ok()
-        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string()).unwrap_or_default()
+    text(&["findmnt", "-no", "FSTYPE", "/"])
 }
 
 pub fn root_subvolume() -> String {
-    Command::new("findmnt").args(["-no", "FSROOT", "/"]).output().ok()
-        .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string()).unwrap_or_default()
+    text(&["findmnt", "-no", "FSROOT", "/"])
 }
 
 pub fn home_separate() -> bool {
-    Command::new("findmnt").args(["-no", "TARGET", "/home"]).output().ok()
-        .is_some_and(|o| String::from_utf8_lossy(&o.stdout).trim() == "/home")
+    text(&["findmnt", "-no", "TARGET", "/home"]) == "/home"
 }
 
 pub fn available() -> bool {
@@ -84,15 +80,18 @@ fn grub_quote(s: &str) -> String {
     format!("'{}'", s.replace('\'', "'\\''"))
 }
 
-fn kernel_in(boot: &Path) -> Option<(String, String)> {
+fn kernel_in(boot: &Path, snapshot: &Path) -> Option<(String, String)> {
     let mut kernels: Vec<String> = std::fs::read_dir(boot).ok()?.flatten()
         .map(|e| e.file_name().to_string_lossy().to_string())
         .filter(|n| n.starts_with("vmlinuz-"))
         .collect();
-    kernels.sort_by(|a, b| version_order(a, b));
-    let k = kernels.pop()?;
-    let initrd = format!("initrd.img-{}", k.trim_start_matches("vmlinuz-"));
-    boot.join(&initrd).exists().then_some((k, initrd))
+    kernels.sort_by(|a, b| version_order(b, a));
+    kernels.into_iter().find_map(|k| {
+        let version = k.trim_start_matches("vmlinuz-");
+        let initrd = format!("initrd.img-{version}");
+        let modules = ["usr/lib/modules", "lib/modules"].iter().any(|m| snapshot.join(m).join(version).is_dir());
+        (boot.join(&initrd).exists() && modules).then_some((k, initrd))
+    })
 }
 
 fn version_order(a: &str, b: &str) -> std::cmp::Ordering {
@@ -132,7 +131,7 @@ pub fn grub_main() -> i32 {
             continue;
         }
         let boot_dir = if boot_separate { PathBuf::from("/boot") } else { base.join("snapshot/boot") };
-        let Some((kernel, initrd)) = kernel_in(&boot_dir) else { continue };
+        let Some((kernel, initrd)) = kernel_in(&boot_dir, &base.join("snapshot")) else { continue };
         let snap_sub = format!("{}/.snapshots/{n}/snapshot", sub.trim_end_matches('/'));
         let prefix = if boot_separate { String::new() } else { format!("{snap_sub}/boot") };
         let desc = xml_field(&info, "description");
@@ -159,9 +158,34 @@ pub fn grub_main() -> i32 {
     0
 }
 
+pub fn list_argv() -> [&'static str; 6] {
+    ["snapper", "--utc", "--jsonout", "-c", CONFIG, "list"]
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_snapshot_is_booted_with_the_newest_kernel_it_has_modules_for() {
+        let dir = std::env::temp_dir().join(format!("trindle-snapshot-kernels-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        let (boot, snapshot) = (dir.join("boot"), dir.join("snapshot"));
+        std::fs::create_dir_all(&boot).unwrap();
+        for v in ["6.12.9-amd64", "6.12.10-amd64", "6.12.11-amd64"] {
+            std::fs::write(boot.join(format!("vmlinuz-{v}")), "").unwrap();
+            std::fs::write(boot.join(format!("initrd.img-{v}")), "").unwrap();
+        }
+        std::fs::remove_file(boot.join("initrd.img-6.12.11-amd64")).unwrap();
+        std::fs::create_dir_all(snapshot.join("usr/lib/modules/6.12.9-amd64")).unwrap();
+        std::fs::create_dir_all(snapshot.join("lib/modules/6.12.10-amd64")).unwrap();
+        assert_eq!(kernel_in(&boot, &snapshot), Some(("vmlinuz-6.12.10-amd64".into(), "initrd.img-6.12.10-amd64".into())));
+        std::fs::remove_dir_all(snapshot.join("lib")).unwrap();
+        assert_eq!(kernel_in(&boot, &snapshot).map(|k| k.0), Some("vmlinuz-6.12.9-amd64".to_string()));
+        std::fs::remove_dir_all(snapshot.join("usr")).unwrap();
+        assert_eq!(kernel_in(&boot, &snapshot), None);
+        let _ = std::fs::remove_dir_all(&dir);
+    }
 
     #[test]
     fn snapshots_are_named_by_the_clock_and_what_they_are() {
@@ -190,10 +214,6 @@ mod tests {
         assert_eq!(xml_field(xml, "type"), "pre");
         assert_eq!(grub_quote("it's"), "'it'\\''s'");
     }
-}
-
-pub fn list_argv() -> [&'static str; 6] {
-    ["snapper", "--utc", "--jsonout", "-c", CONFIG, "list"]
 }
 
 #[cfg(test)]

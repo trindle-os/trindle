@@ -1,8 +1,7 @@
 //! The desktop's settings for programs that ask the portal for them: dark or
 //! light, fonts, icons, the cursor and the rest that GTK and libadwaita
-//! programs read as they start. GTK's portal answered these before, which
-//! woke a 36 MB program for every app opened and kept it running for days;
-//! the answers come from Trindle's own files here, and each change to them
+//! programs read as they start. The answers come from Trindle's own files,
+//! so no separate portal program is woken for them, and each change to them
 //! is told to every program.
 
 use std::cell::RefCell;

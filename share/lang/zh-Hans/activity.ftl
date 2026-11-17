@@ -11,19 +11,13 @@ activity-about-page = 关于此页面
 activity-try-again = 重试
 
 # Red words in place of the room when the computer could not be read at the first look.
-activity-cannot-read = 无法读取电脑正在做什么。
+activity-cannot-read = Trindle 无法查看电脑的运行情况。
 
 # In place of the room when no program is running.
 activity-no-programs = 目前没有程序在运行。
 
 # In place of the list when the room could not be read, so there is nothing to list.
-activity-nothing-to-list = 在能读取电脑之前，没有可列出的内容。
-
-# The one sentence above the room, saying what it shows.
-activity-caption = 每个气泡代表一个程序，气泡越大，占用的内存越多。
-
-# The one sentence above the list of programs.
-activity-list-caption = 点按一个程序，即可在圆形区域中查看它。
+activity-nothing-to-list = 在 Trindle 能查看电脑的运行情况之前，无法显示任何程序。
 
 # Heading of the card that lists the programs.
 activity-programs = 程序
@@ -38,19 +32,19 @@ activity-memory = 内存
 activity-processor = 处理器
 
 # Words the screen reader gives the room when no bubble is picked.
-activity-room-spoken = 各个程序，每个的大小对应它占用的内存
+activity-room-spoken = 按内存占用大小显示的程序气泡
 
 # First paragraph of the words behind the i: what the computer is doing.
-activity-help-1 = 这台电脑此刻在做什么。每个程序是大圆里的一个气泡，气泡越大，占用的内存越多，所以圆越满，内存就越满。
+activity-help-1 = 这里显示你的电脑此刻在做什么。每个程序是圆圈里的一个气泡。气泡越大，占用的内存越多。圆圈越满，占用的内存就越多。
 
 # Second paragraph of the words behind the i: how the colours and bars show the work.
-activity-help-2 = 正在工作的程序会发光并跳动，工作越吃力，跳得越快、越亮：冷色表示工作量小，橙色表示工作量大，红色表示已满负荷。圆的边缘上，处理器的每个线程对应一根条，越忙就越长、越暖，所以当所有条都又长又红时，说明电脑已满负荷，而最亮的气泡就是原因。
+activity-help-2 = 程序工作时，它的气泡会发光并跳动。跳得越快、越亮，说明工作量越大。冷色表示工作量小，橙色表示用量较大，红色表示已全力运行。边缘的每根条代表一个线程，也就是处理器中负责处理任务的一部分。条越长、颜色越暖，说明工作量越大。当所有条都又长又红时，说明电脑已在全力运行。最亮的气泡就是工作量最大的程序。
 
 # Third paragraph of the words behind the i: how to look at a program and stop it, and what the two grey bubbles are.
-activity-help-3 = 点按一个气泡或列表中的程序，即可用简单的数字查看它在做什么；如果它不再响应，也可以在这里停止它：连按两次停止按钮会请它关闭，其中未保存的内容可能会丢失。两个安静的灰色气泡包含其余部分：Trindle 桌面，即负责绘制屏幕、圆环、标签页和壁纸的合成器；以及 Linux 和其他程序，即 Linux 本身和照看电脑的各个程序。
+activity-help-3 = 点击一个气泡或列表中的程序，即可用简单的数字查看它在做什么。如果某个程序不再响应，你也可以停止它。连按两次停止按钮，Trindle 就会请该程序关闭。其中未保存的内容可能会丢失。两个灰色气泡显示其余所有内容。Trindle 桌面负责绘制屏幕、圆环、标签页和壁纸。Linux 和其他程序指 Linux 本身以及照看电脑的各个程序。
 
 # Fourth paragraph of the words behind the i: how memory, the processor, the disk and the swap file are counted.
-activity-help-4 = 内存按公平的方式计算，与 smem 等工具相同：两个程序共用的内存由它们平分，换出到交换文件的内存也计算在内，所以不会重复计算，也不会遗漏。图旁的卡片显示内存、处理器、磁盘和交换文件有多满；只有接近已满时，圆环才会变成橙色，然后变成红色。
+activity-help-4 = Trindle 会仔细计算内存，方法与 smem 等工具相同。两个程序共用的内存由它们平分，换出到交换文件的内存也计算在内，所以不会重复计算，也不会遗漏。图旁的卡片显示内存、处理器、磁盘和交换文件有多满。只有接近已满时，圆环才会变成橙色，然后变成红色。
 
 # Heading of the card that shows the room and its sentence, at the top of the room.
 activity-right-now = 此刻
@@ -59,34 +53,34 @@ activity-right-now = 此刻
 activity-looking = 正在查看…
 
 # The sentence at the top when the computer could not be read at all.
-activity-unread = 暂时无法读取电脑的情况。
+activity-unread = Trindle 无法查看电脑的情况。
 
 # The sentence at the top when the whole processor is flat out, and one program is using most of it. $a is its name.
-activity-flat-out-one = 你的电脑已满负荷：{ $a } 占用了 { $threads }。
+activity-flat-out-one = 你的电脑已全力运行：{ $a } 占用了 { $threads }。
 
 # The sentence at the top when the whole processor is flat out, and two programs are using most of it. $a and $b are their names.
-activity-flat-out-two = 你的电脑已满负荷：{ $a } 和 { $b } 占用了 { $threads }。
+activity-flat-out-two = 你的电脑已全力运行：{ $a } 和 { $b } 占用了 { $threads }。
 
 # The sentence at the top when the whole processor is flat out, and one program is the busiest. $a is its name.
-activity-flat-out-busiest = 你的电脑在 { $threads } 上已满负荷；{ $a } 最忙。
+activity-flat-out-busiest = 你的电脑在 { $threads } 上已全力运行。{ $a } 最忙。
 
 # The sentence at the top when the whole processor is flat out and no one program stands out.
-activity-flat-out = 你的电脑在 { $threads } 上已满负荷。
+activity-flat-out = 你的电脑在 { $threads } 上已全力运行。
 
 # The sentence at the top when memory is nearly full, and one program holds the most. $b is its name.
-activity-memory-full-named = 内存快满了；{ $b } 占用最多。
+activity-memory-full-named = 内存快满了。{ $b } 占用最多。
 
 # The sentence at the top when memory is nearly full, and no program is named.
 activity-memory-full = 内存快满了。
 
 # The sentence at the top when the computer is busy and one program is the busiest. $a is its name.
-activity-ticking-busiest = 电脑运行平稳；{ $a } 最忙。
+activity-ticking-busiest = 电脑不忙。{ $a } 做的事最多。
 
 # The sentence at the top when the computer is busy and nothing is named.
 activity-busy = 电脑很忙。
 
 # The sentence at the top when the computer is only lightly busy and nothing is named.
-activity-ticking-over = 电脑运行平稳。
+activity-ticking-over = 电脑不忙。
 
 # The sentence at the top when one program is doing most of the work. $a is its name.
 activity-doing-most = 此刻大部分工作由 { $a } 完成。
@@ -98,10 +92,10 @@ activity-two-keeping-busy = { $a } 和 { $b } 让电脑忙个不停。
 activity-plenty-to-spare = { $a } 在努力工作，但电脑还有很多余力。
 
 # The sentence at the top when all is calm but memory is filling up. $b is the program holding the most.
-activity-calm-memory-filling = 一切平静，但内存正在变满；{ $b } 占用最多。
+activity-calm-memory-filling = 电脑没怎么工作，但内存占用在上升。{ $b } 占用最多。
 
 # The sentence at the top when all is calm and nothing is working hard.
-activity-all-calm = 一切平静：没有程序在吃力地工作。
+activity-all-calm = 没有程序在吃力地工作。
 
 # How many threads, as a phrase inside a sentence: all of them. $n is the number of threads.
 activity-all-threads = 全部 { $n ->
@@ -145,7 +139,7 @@ activity-effort-resting = 空闲
 activity-effort-little = 略有工作
 
 # How hard a program is working, when it is working flat out.
-activity-effort-flat-out = 满负荷工作
+activity-effort-flat-out = 全力运行
 
 # How hard a program is working, when it is working hard.
 activity-effort-hard = 努力工作
@@ -243,19 +237,19 @@ activity-separate-parts = { $n } 个独立部分
 activity-running-for = 已运行
 
 # A card's fact: the name of the facts' heading for what a program is made of.
-activity-made-of = 组成
+activity-made-of = 组成部分
 
 # Words under a memory card when it could not be read at the first look.
 activity-ring-not-read = 暂时无法读取。
 
 # Sentence under the memory figure: how much memory is in use, and how much of it Trindle itself holds. $used and $ours are sizes.
-activity-memory-sentence = 已用 { $used }；其中 Trindle 本身占用 { $ours }。
+activity-memory-sentence = 已用 { $used }。其中 Trindle 本身占用 { $ours }。
 
 # Sentence under the processor figure: how busy all the threads have been. $threads is "all 16 threads" or similar.
-activity-processor-sentence = 过去两分钟里 { $threads } 的忙碌程度。
+activity-processor-sentence = 过去两分钟里{ $threads } 的忙碌程度。
 
 # Sentence under the disk figure: how much is used and how much is still free. $used and $free are sizes.
-activity-disk-sentence = 已用 { $used }；仍有 { $free } 可用。
+activity-disk-sentence = 已用 { $used }，可用 { $free }。
 
 # Limit under a memory, disk or swap figure. $amount is the whole.
 activity-of-size = 共 { $amount }
@@ -267,13 +261,13 @@ activity-disk = 磁盘
 activity-swap-file = 交换文件
 
 # Sentence under the swap file figure: how much is in use, and the rest is room to hibernate. $used is a size.
-activity-swap-sentence = 已用 { $used }；其余空间用于休眠。
+activity-swap-sentence = 已用 { $used }。
 
 # Name of the temperature card, shown when the computer has a temperature to read.
 activity-temperature = 温度
 
 # Sentence under the temperature figure.
-activity-temperature-sentence = 处理器此刻的温度。
+activity-temperature-sentence = 处理器温度
 
 # Limit under the temperature figure. The degree sign is written as it is.
 activity-of-hundred-degrees = 满刻度 100°C
@@ -283,5 +277,4 @@ activity-no-swap = 这台电脑没有交换文件，所以不会把内存中的�
 
 
 # Short line in the Activity window after a program that did not answer Stop within five seconds was ended by force. $title is the program.
-activity-forced = 被迫退出：{ $title } 没有响应
-
+activity-forced = { $title } 没有响应，所以 Trindle 强制将其退出

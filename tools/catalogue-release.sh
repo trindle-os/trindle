@@ -5,6 +5,7 @@ umask 077
 
 here=$(cd "$(dirname "$0")" && pwd)
 sums_file=$here/catalogue-release.sums
+plugin_src=${TRINDLE_PLUGIN_SRC:-$(cd "$here/../.." && pwd)}
 tmp=$(mktemp -d "${TMPDIR:-/tmp}/trindle-catalogue.XXXXXX")
 trap 'rm -rf "$tmp"' EXIT
 
@@ -52,12 +53,14 @@ check_sums() {
 }
 
 gather() {
-    local to=$1 sum file from
+    local to=$1 sum file rel from
     [ ! -e "$to" ] || [ -d "$to" ] || stop "$to is not a folder."
     mkdir -p "$to"
     : > "$tmp/gathered"
-    while read -r sum file from; do
+    while read -r sum file rel; do
         case $sum in ''|'#'*) continue ;; esac
+        case $rel in /*|../*|*/../*|*/..) stop "$rel must be a path inside $plugin_src." ;; esac
+        from=$plugin_src/$rel
         if [ ! -f "$from" ]; then
             say "skipped (not built): $file"
             continue
@@ -100,7 +103,7 @@ make() {
         publisher verify "$out" "$public" || stop "the finished folder does not check."
     fi
     say "Upload these files together to the release, catalogue.ini and catalogue.ini.sig last:"
-    (cd "$out" && ls -1 | grep -v '^catalogue.ini' ; ls -1 catalogue.ini catalogue.ini.sig)
+    (cd "$out" && for f in *; do case $f in catalogue.ini*) ;; *) echo "$f" ;; esac; done; ls -1 catalogue.ini catalogue.ini.sig)
 }
 
 test_mode() {

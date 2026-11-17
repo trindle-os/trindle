@@ -1,61 +1,63 @@
 //! The helper's steps for private DNS: the name servers Tailscale and blocking set, and the sites never blocked.
 
-use std::path::Path;
-
 use super::{Outcome, and_undone, at, gone, kept, replace, run};
 use super::tailscale::mark_tailscale;
 use crate::toolkit::t;
 
 pub(super) fn dns_on() -> Outcome {
-    use crate::common::{dns, tailscale};
-    if dns::on() {
+    if crate::common::dns::on() {
         return Ok(());
     }
-    std::fs::create_dir_all("/etc/trindle").map_err(|e| e.to_string())?;
 
-    let check = !dns::nm_check_chosen(Path::new("/"));
+    turn_on().map_err(|e| and_undone(e, dns_off()))
+}
+
+fn turn_on() -> Outcome {
+    use crate::common::{dns, tailscale};
+    std::fs::create_dir_all(at("/etc/trindle")).map_err(|e| e.to_string())?;
+
+    let check = !dns::nm_check_chosen(&at("/"));
+    let drop_in = at(dns::NM_DROP_IN);
     if dns::behind_resolved() {
-        replace(Path::new(dns::RESOLVED_MARK), b"", 0o644)?;
-        if Path::new("/etc/NetworkManager").is_dir() {
+        replace(&at(dns::RESOLVED_MARK), b"", 0o644)?;
+        if at("/etc/NetworkManager").is_dir() {
             if let Some(text) = dns::nm_drop_in(false, check) {
-                std::fs::create_dir_all("/etc/NetworkManager/conf.d").map_err(|e| e.to_string())?;
-                replace(Path::new(dns::NM_DROP_IN), text.as_bytes(), 0o644)?;
+                std::fs::create_dir_all(at("/etc/NetworkManager/conf.d")).map_err(|e| e.to_string())?;
+                replace(&drop_in, text.as_bytes(), 0o644)?;
 
                 // reads the file when it starts.
                 let _ = run(&["nmcli", "general", "reload", "conf"], None);
             }
         }
-        if let Err(e) = start_dns() {
-            return Err(and_undone(e, dns_off()));
-        }
-        return Ok(());
+        return start_dns();
     }
 
     if tailscale::installed() && run(&["systemctl", "is-active", "--quiet", tailscale::SERVICE], None).is_ok() {
         run(&["tailscale", "set", "--accept-dns=false"], None)?;
         mark_tailscale()?;
     }
-    std::fs::create_dir_all("/etc/NetworkManager/conf.d").map_err(|e| e.to_string())?;
+    std::fs::create_dir_all(at("/etc/NetworkManager/conf.d")).map_err(|e| e.to_string())?;
     let text = dns::nm_drop_in(true, check).unwrap_or_default();
-    replace(Path::new(dns::NM_DROP_IN), text.as_bytes(), 0o644)?;
+    replace(&drop_in, text.as_bytes(), 0o644)?;
     // As above.
     let _ = run(&["nmcli", "general", "reload", "conf"], None);
-    if let Err(e) = start_dns() {
-        return Err(and_undone(e, dns_off()));
-    }
-    let before = Path::new(dns::RESOLV_BEFORE);
-    let etc = Path::new(dns::ETC_RESOLV);
+    start_dns()?;
+    point_resolv()
+}
 
-    // Were it still there, the link made next fails.
-    let _ = std::fs::remove_file(before);
+fn point_resolv() -> Outcome {
+    use crate::common::dns;
+    let before = at(dns::RESOLV_BEFORE);
+    let etc = at(dns::ETC_RESOLV);
+
+    gone(&before)?;
     if etc.symlink_metadata().is_ok() {
-        std::fs::hard_link(etc, before).map_err(|e| e.to_string())?;
+        std::fs::hard_link(&etc, &before).map_err(|e| e.to_string())?;
     }
     let tmp = etc.with_extension("trindle-new");
-    // Were it still there, the link made next fails.
-    let _ = std::fs::remove_file(&tmp);
+    gone(&tmp)?;
     std::os::unix::fs::symlink(dns::RESOLV, &tmp)
-        .and_then(|()| std::fs::rename(&tmp, etc))
+        .and_then(|()| std::fs::rename(&tmp, &etc))
         .map_err(|e| e.to_string())
 }
 
@@ -63,7 +65,7 @@ fn start_dns() -> Outcome {
     use crate::common::dns;
     run(&["systemctl", "enable", "--now", dns::SERVICE], None)?;
     for _ in 0..50 {
-        if Path::new(dns::RESOLV).exists() {
+        if at(dns::RESOLV).exists() {
             return Ok(());
         }
         std::thread::sleep(std::time::Duration::from_millis(100));
@@ -142,8 +144,8 @@ pub(super) fn dns_provider(args: &[String]) -> Outcome {
     use crate::common::dns;
     let [key] = args else { return Err("usage: trindle-admin dns-provider quad9|mullvad|cloudflare|network".into()) };
     let p = dns::Provider::from_key(key).ok_or(t!("admin-server-unknown"))?;
-    std::fs::create_dir_all("/etc/trindle").map_err(|e| e.to_string())?;
-    replace(Path::new(dns::PROVIDER), format!("{}\n", p.key()).as_bytes(), 0o644)?;
+    std::fs::create_dir_all(at("/etc/trindle")).map_err(|e| e.to_string())?;
+    replace(&at(dns::PROVIDER), format!("{}\n", p.key()).as_bytes(), 0o644)?;
     run(&["systemctl", "try-reload-or-restart", dns::SERVICE], None)
 }
 
@@ -157,8 +159,8 @@ mod tests {
         let s = StandIn::failing("dns-off", "systemctl disable", "Failed to disable unit.");
         s.stuck(dns::NM_DROP_IN);
         let said = super::dns_off().unwrap_err();
-        assert!(said.starts_with("Blocking is not fully off: "), "{said}");
-        assert!(said.contains("could not be removed") && said.contains("Failed to disable unit."), "{said}");
+        assert!(said.starts_with("Blocking isn't fully off: "), "{said}");
+        assert!(said.contains(&crate::common::more::fixed_part("admin-file-not-removed", &["path", "why"])) && said.contains("Failed to disable unit."), "{said}");
 
         assert!(s.ran().iter().any(|c| c.starts_with("systemctl disable --now")), "{:?}", s.ran());
     }
@@ -170,7 +172,7 @@ mod tests {
         s.write(dns::RESOLVED_MARK, b"");
         s.stuck(dns::ETC_RESOLV);
         let said = super::dns_off().unwrap_err();
-        assert!(said.starts_with("Blocking is not fully off: "), "{said}");
+        assert!(said.starts_with("Blocking isn't fully off: "), "{said}");
         assert!(s.ran().iter().any(|c| c.starts_with("systemctl disable --now")), "{:?}", s.ran());
         assert!(!s.path(dns::RESOLVED_MARK).exists(), "the parts after the first were undone");
     }
@@ -187,9 +189,25 @@ mod tests {
     }
 
     #[test]
+    fn a_resolv_conf_that_cannot_be_replaced_is_said_and_the_old_one_stays() {
+        let s = StandIn::all_well("dns-point");
+        s.write(dns::ETC_RESOLV, b"nameserver 192.0.2.1\n");
+        std::fs::create_dir_all(s.path("/etc/trindle")).unwrap();
+        s.stuck("/etc/resolv.trindle-new");
+        assert!(super::point_resolv().is_err());
+        assert_eq!(std::fs::read(s.path(dns::ETC_RESOLV)).unwrap(), b"nameserver 192.0.2.1\n");
+        let s = StandIn::all_well("dns-point-ok");
+        s.write(dns::ETC_RESOLV, b"nameserver 192.0.2.1\n");
+        std::fs::create_dir_all(s.path("/etc/trindle")).unwrap();
+        super::point_resolv().unwrap();
+        assert_eq!(std::fs::read_link(s.path(dns::ETC_RESOLV)).unwrap(), std::path::Path::new(dns::RESOLV));
+        assert_eq!(std::fs::read(s.path(dns::RESOLV_BEFORE)).unwrap(), b"nameserver 192.0.2.1\n");
+    }
+
+    #[test]
     fn a_failure_is_said_with_how_the_putting_back_went() {
         assert_eq!(super::and_undone("It failed.".into(), Ok(())), "It failed.");
         assert_eq!(super::and_undone("It failed.".into(), Err("no".into())),
-                   "It failed. Putting things back as they were did not work either: no");
+                   "It failed. Trindle also couldn't put things back as they were: no");
     }
 }

@@ -17,7 +17,7 @@ store-upd-held-version = Retido na versão { $have }
 store-upd-held = Retido
 
 # On the Held back card: the version a thing is held at, and nothing newer waits.
-store-upd-held-version-nothing = Retido na versão { $have }; nada mais novo ainda
+store-upd-held-version-nothing = Retido na versão { $have }. Ainda não há nada mais novo.
 
 # On the Held back card: nothing newer waits.
 store-upd-held-nothing = Retido; nada mais novo ainda
@@ -59,7 +59,7 @@ store-upd-sentence = { $text }.
 store-upd-and-then = { $first } { $second }
 
 # Added to the headline when firmware is among the updates.
-store-upd-firmware-restart = O firmware precisa de uma reinicialização para terminar.
+store-upd-firmware-restart = Reinicie para terminar a atualização do firmware.
 
 # Headline while the check runs.
 store-upd-checking = Verificando atualizações.
@@ -72,19 +72,19 @@ store-upd-installing-all = Instalando as atualizações. Você pode continuar tr
 
 # SAFETY: needs a human review before it ships
 # Headline when the updates are in and the computer must start again.
-store-upd-restart = Reinicie para terminar: as atualizações foram instaladas e passam a valer quando o computador iniciar de novo.
+store-upd-restart = Reinicie o computador para terminar de instalar as atualizações.
 
 # Added to the headline when what went in needs a restart.
-store-upd-gone-in-restart = O que foi instalado precisa de uma reinicialização para terminar.
+store-upd-gone-in-restart = Reinicie para terminar a instalação.
 
 # Added to the headline with no internet.
-store-upd-no-more = Este computador não está conectado à internet, então não é possível procurar mais.
+store-upd-no-more = Este computador não está conectado à internet, então o Trindle não pode procurar mais atualizações.
 
 # Headline when nothing is ready (updates held back are added after it).
 store-upd-none-ready = Nenhuma atualização está pronta
 
 # Headline with nothing waiting and no internet to look with.
-store-upd-nothing-known = Nenhuma atualização está esperando, até onde este computador sabe. Ele não pode procurar mais enquanto não estiver conectado à internet.
+store-upd-nothing-known = O Trindle não conhece nenhuma atualização em espera. Ele não pode procurar mais enquanto este computador não estiver conectado à internet.
 
 # Name of the apps in the headline's list of what could not be checked.
 store-upd-name-apps = os aplicativos
@@ -96,7 +96,7 @@ store-upd-name-system = o Trindle e o Debian
 store-upd-name-firmware = o firmware
 
 # Headline when some checks failed; the list of what was not checked is given.
-store-upd-check-failed = Não foi possível verificar atualizações para { $names }.
+store-upd-check-failed = O Trindle não conseguiu verificar atualizações para { $names }.
 
 # Headline when everything is up to date.
 store-upd-current = Tudo está atualizado.
@@ -108,7 +108,7 @@ store-upd-last-checked = Última verificação às { $time }.
 store-upd-not-checked = Não pode ser verificado sem a internet
 
 # Red words under a card when a check took too long.
-store-upd-too-long = A resposta demorou demais.
+store-upd-too-long = A verificação demorou demais.
 
 # Tip of the round button that checks again.
 store-upd-check-again = Verificar de novo
@@ -135,7 +135,7 @@ store-upd-restart-now = Reiniciar agora
 store-upd-check-for = Verificar atualizações
 
 # Tip of the round button that releases a thing held back.
-store-upd-release = Liberar { $name }
+store-upd-release = Permitir atualizações de { $name }
 
 # Tip of the round button that holds a thing's updates back.
 store-upd-hold = Reter { $name }
@@ -171,10 +171,10 @@ store-upd-from = De { $from }
 store-upd-shared-part = Uma parte compartilhada, de { $from }
 
 # Note under the Apps card.
-store-upd-yours-alone = Só seus, então são atualizados sem senha. Um aplicativo traz as partes compartilhadas de que a nova versão precisa.
+store-upd-yours-alone = Estes aplicativos são só seus, então são atualizados sem senha. A atualização de um aplicativo também instala as partes compartilhadas de que ele precisa.
 
 # Note under the Apps card: what holding back does.
-store-upd-hold-why = Uma atualização retida fica na versão que tem, e fora de Instalar tudo aqui e no anel, até você liberá-la.
+store-upd-hold-why = Uma atualização retida fica na versão atual. Ela fica de fora quando você instala todas as atualizações, aqui e no anel, até você permitir atualizações de novo.
 
 # Heading of the Apps card.
 store-upd-card-apps = Aplicativos
@@ -205,10 +205,10 @@ store-upd-card-plugins = Plugins
 store-upd-nothing-held = Nada está retido.
 
 # On a row of the Held back card for a thing released while the page is open.
-store-upd-released = Liberado
+store-upd-released = Não retido
 
 # Note under the Held back card: what releasing does.
-store-upd-release-why = O que for liberado volta a ser instalado com o resto, por Instalar tudo aqui e no anel.
+store-upd-release-why = Quando você permitir atualizações de novo, ela será instalada com as outras, aqui e no anel.
 
 # Name on the Held back card of a device whose firmware is not named now.
 store-upd-device-firmware = O firmware de um dispositivo
@@ -225,9 +225,9 @@ store-upd-version-to = { $from } para { $to }
 # On a row: Debian's updates, how many, which go in by themselves or together.
 store-upd-debian-count =
     { $n ->
-        [one] 1 atualização, que é instalada sozinha
-        [many] { $n } atualizações, que são instaladas juntas
-       *[other] { $n } atualizações, que são instaladas juntas
+        [one] 1 atualização, instalada sozinha
+        [many] { $n } atualizações, instaladas juntas
+       *[other] { $n } atualizações, instaladas juntas
     }
 
 # On a row of Debian's updates: where it comes from.
@@ -243,7 +243,7 @@ store-upd-has-trindle = Este computador tem o Trindle { $version }.
 store-upd-card-system = Trindle e Debian
 
 # Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Os pacotes do Debian são feitos para combinar entre si, e um instalado sozinho pode trazer outros junto ou deixá-los fora de compasso. Por isso são instalados juntos, por um só botão.
+store-upd-debian-why = Os pacotes do Debian são feitos para funcionar juntos. Instalar só um pode instalar outros ou deixá-los fora de sincronia, por isso todos são instalados juntos.
 
 # Note on the Trindle and Debian card: why no row has a Hold back button.
 store-upd-not-held = As atualizações do Trindle e do Debian trazem correções de segurança para o computador inteiro, por isso não podem ser retidas.
@@ -254,14 +254,8 @@ store-upd-card-security = Atualizações de segurança
 # On the security card: its state.
 store-upd-security-on = Ligado, todo dia
 
-# On the security card.
-store-upd-security-note = As correções do Debian são instaladas todo dia, sem perguntar.
-
-# On the security card.
-store-upd-security-part = Parte do Trindle; não pode ser desligado.
-
 # On the security card: that holding back never stops these.
-store-upd-never-held = Reter uma atualização nunca impede estas.
+store-upd-never-held = Reter uma atualização nunca impede as atualizações de segurança.
 
 # Firmware card: the computer has no updater.
 store-upd-fw-none = Este computador não tem atualizador de firmware.
@@ -288,22 +282,22 @@ store-upd-fw-no-list = O fwupd não conseguiu baixar a lista mais recente.
 store-upd-no-flathub = Não foi possível acessar o Flathub.
 
 # Red words when Debian's lists could not be fetched.
-store-upd-no-lists = Não foi possível baixar as listas do Debian.
+store-upd-no-lists = O Trindle não conseguiu baixar as listas do Debian.
 
 # Red words when Debian's lists could not be fetched; the reason follows.
-store-upd-no-lists-why = Não foi possível baixar as listas do Debian. { $why }
+store-upd-no-lists-why = O Trindle não conseguiu baixar as listas do Debian. { $why }
 
 # Red words under a row when its updates could not be held back or released: the list of what is held could not be kept.
-store-upd-not-held-list = Não retido. A lista do que está retido não pôde ser guardada: { $why }.
+store-upd-not-held-list = O Trindle não conseguiu reter a atualização, porque não conseguiu salvar a lista de atualizações retidas: { $why }.
 
 # The same, for a release.
-store-upd-not-released-list = Não liberado. A lista do que está retido não pôde ser guardada: { $why }.
+store-upd-not-released-list = O Trindle não conseguiu permitir atualizações de novo, porque não conseguiu salvar a lista de atualizações retidas: { $why }.
 
 # Red words when Flatpak could not be told a thing is held back.
-store-upd-held-not-told = Retido em Aplicativos, mas o próprio Flatpak não pôde ser avisado, então outra coisa que atualiza aplicativos ainda poderia instalá-lo.
+store-upd-held-not-told = Está retido em Aplicativos, mas o Trindle não conseguiu mudar isso no Flatpak. Outro programa que atualiza aplicativos ainda poderia instalá-lo.
 
 # Red words when Flatpak could not be told a thing is released.
-store-upd-released-not-told = Liberado em Aplicativos, mas o próprio Flatpak não pôde ser avisado e pode continuar deixando-o de fora. Retenha-o e libere-o de novo.
+store-upd-released-not-told = As atualizações estão permitidas de novo em Aplicativos, mas o Trindle não conseguiu mudar isso no Flatpak, então o Flatpak ainda pode deixá-lo de fora. Retenha-o e depois permita as atualizações de novo.
 
 # Red words: the above, then what Flatpak itself said.
 store-upd-flatpak-said = { $words } O Flatpak disse: { $why }
@@ -311,10 +305,16 @@ store-upd-flatpak-said = { $words } O Flatpak disse: { $why }
 # Name of Trindle itself on its row of updates.
 store-upd-trindle = Trindle
 
+# Said when a security fix for a boxed app can't be downloaded. { $package } is the package, { $version } the fixed version.
+store-patch-not-fetched = O Trindle não conseguiu baixar { $package } { $version }.
+
+# Said when a security fix for a boxed app was downloaded but isn't there to use.
+store-patch-not-found = O Trindle não encontrou o pacote que baixou.
+
 
 
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
-store-upd-off = A verificação automática de atualizações está desligada. Aperte Verificar atualizações para procurar.
+store-upd-off = A verificação automática de atualizações está desligada.
 
 # How a card stands with nothing known to wait, looking by itself switched off and no check pressed yet.
 store-upd-not-looked = Não verificado
@@ -329,8 +329,7 @@ store-upd-stopping = Parando
 store-upd-stopped = Parado. Aperte Atualizar para continuar.
 
 # Under the Apps card when Install all was stopped.
-store-upd-stopped-all = Parado. Aperte Instalar para continuar.
+store-upd-stopped-all = Parado. Instale de novo para continuar.
 
 # Note under the Apps card.
 store-upd-steam-restarts = A Steam reinicia quando nenhum jogo estiver rodando.
-

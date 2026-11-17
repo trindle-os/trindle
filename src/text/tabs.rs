@@ -163,7 +163,10 @@ impl Text {
                 match store::keep_text(&self.dir, t.id, pane.doc.text()) {
                     Ok(()) => t.kept = pane.doc.version,
                     Err(e) => {
-                        unkept.push(t.id);
+
+                        if !self.written.iter().any(|w| w.id == t.id && w.unsaved) {
+                            unkept.push(t.id);
+                        }
                         failed = Some(t!("text-work-not-kept", folder = self.dir.display().to_string(), reason = e.to_string()));
                     }
                 }

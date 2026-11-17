@@ -57,7 +57,8 @@ pub fn take() {
     let handed = std::env::var_os("WAYLAND_SOCKET").is_some();
 
     HAND.with(|h| *h.borrow_mut() = hand_from(hand.as_deref(), handed));
-    let Some(pulse) = named.as_deref().and_then(pulse_numbered).filter(|_| handed) else { return };
+
+    let Some(pulse) = named.as_deref().filter(|n| !same_number(Some(n), hand.as_deref())).and_then(pulse_numbered).filter(|_| handed) else { return };
     KEPT.store(true, Ordering::Relaxed);
     PULSE.with(|p| *p.borrow_mut() = Some(pulse));
 }
@@ -104,6 +105,13 @@ fn hear_presses() {
 
 pub fn kept() -> bool {
     KEPT.load(Ordering::Relaxed)
+}
+
+fn same_number(a: Option<&str>, b: Option<&str>) -> bool {
+    match (a.and_then(|a| a.parse::<i32>().ok()), b.and_then(|b| b.parse::<i32>().ok())) {
+        (Some(a), Some(b)) => a == b,
+        _ => false,
+    }
 }
 
 fn pulse_numbered(named: &str) -> Option<std::fs::File> {
@@ -206,6 +214,13 @@ mod tests {
     use std::rc::Rc;
 
     use super::*;
+
+    #[test]
+    fn two_names_for_one_descriptor_are_one_number() {
+        assert!(same_number(Some("7"), Some("7")) && same_number(Some("07"), Some("7")));
+        assert!(!same_number(Some("7"), Some("8")) && !same_number(Some("7"), None) && !same_number(None, None));
+        assert!(!same_number(Some("x"), Some("x")));
+    }
     use crate::toolkit::bus::testing::{own_daemon, until};
 
     const NAME: &str = super::super::BUS_NAME;

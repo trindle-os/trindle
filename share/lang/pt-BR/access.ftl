@@ -1,0 +1,129 @@
+## What an app can be allowed to do, and what goes wrong without it. Each
+## permission has a name (said after "asks for", as in "Weather asks for
+## the internet and sound"), the line under its switch, and for some a warning.
+
+access-network-name = a internet
+access-network-without = Ele não vai conseguir acessar a internet nem outros computadores próximos.
+access-sound-name = som
+access-sound-without = Ele não vai emitir som.
+access-microphone-name = o seu microfone
+access-microphone-without = Ele não vai conseguir ouvir você.
+access-sound-and-microphone-name = som e o seu microfone
+access-sound-and-microphone-without = Ele não vai emitir som nem conseguir ouvir você.
+access-files-name = as suas pastas Documentos, Downloads, Imagens, Música, Vídeos e Área de trabalho
+access-files-without = Ele não vai conseguir abrir seus arquivos nem salvar nas suas pastas.
+access-home-name = tudo na sua pasta pessoal, inclusive os arquivos ocultos de configuração
+access-home-without = Ele não vai conseguir abrir seus arquivos nem salvar nas suas pastas.
+access-devices-name = a sua câmera e outros dispositivos conectados
+access-devices-without = Ele não vai conseguir ver você nem usar o que você conecta.
+access-bluetooth-name = dispositivos Bluetooth, como fones de ouvido
+access-bluetooth-without = Ele não vai conseguir se conectar a nada por Bluetooth.
+access-notifications-name = notificações
+access-notifications-without = Ele não vai conseguir avisar você quando algo acontecer.
+access-background-name = iniciar quando você entrar
+access-background-without = Ele só vai funcionar enquanto você o mantiver aberto.
+access-screen-name = imagens da sua tela, o que você copia e digitação por você, como se fosse o seu teclado
+access-screen-without = Ele não vai conseguir ver outras janelas nem ler o que você copia quando quiser.
+access-x11-name = desenhar as janelas dele do jeito antigo, o que o deixa observar outros programas antigos e o que é digitado neles
+access-x11-without = As janelas dele não vão abrir.
+access-computer-name = trabalhar fora da caixa dele, com tudo o que você mesmo pode acessar
+access-computer-without = O que você digita nele fica preso na caixa dele, então o sudo e os seus arquivos não funcionam lá.
+access-control-name = controle do seu teclado, mouse e área de transferência
+access-control-without = Ele não vai conseguir mover o ponteiro, digitar nem compartilhar o que você copia.
+access-capture-name = compartilhar seu mouse e teclado com outro computador
+access-capture-without = O ponteiro não vai conseguir passar para outro computador.
+access-copied-name = os arquivos que você copia
+access-copied-without = Ele não vai conseguir ler os arquivos que você copia, então não pode levá-los a outro computador.
+access-summon-name = abrir o anel sobre uma janela em tela cheia, como se você apertasse a tecla
+access-summon-without = As teclas e os cliques dele vão abrir o anel só na área de trabalho, nunca sobre uma janela em tela cheia.
+access-listen-name = ser acessado por outros computadores da sua rede local
+access-listen-without = Outros computadores da sua rede local não vão conseguir encontrá-lo nem se conectar a ele.
+access-home-network-name = só dispositivos da sua rede local
+access-home-network-without = Ele não vai conseguir encontrar impressoras, scanners ou outros dispositivos da rede local, nem se conectar a eles.
+access-usb-devices-name = scanners e dispositivos USB
+access-usb-devices-without = Ele não vai conseguir usar um scanner conectado a este computador.
+access-expand-name = expandir códigos curtos enquanto você digita
+access-expand-without = Os códigos curtos dele não vão ser expandidos enquanto você digita.
+access-accessibility-name = ler todas as janelas em voz alta
+access-accessibility-without = Ele não vai conseguir ler suas janelas em voz alta.
+access-unnamed-name = algo que ele não especificou
+
+access-control-warning = Ele pode digitar, clicar e ler o que você copia como se fosse você. Permita isso só para um plugin em que você confia.
+access-capture-warning = Enquanto o ponteiro está no outro computador, tudo o que você digita e clica vai para este plugin. Permita isso só para um plugin em que você confia.
+access-copied-warning = Ele pode ler exatamente os arquivos que você copia enquanto está permitido, e mais nada. Permita isso só para um plugin em que você confia.
+access-summon-warning = Ele pode colocar o anel, que recebe tudo o que você digita, sobre um jogo ou um filme sem você apertar uma tecla. Permita isso só para um plugin em que você confia.
+access-home-network-warning = Ele pode se comunicar com todos os dispositivos da sua rede local, inclusive o roteador, mas não com a internet. Permita isso só para um plugin em que você confia.
+access-usb-devices-warning = Ele pode usar os scanners e dispositivos de imagem que estão conectados quando ele inicia, e nenhum outro dispositivo USB. Permita isso só para um plugin em que você confia.
+access-expand-warning = O Trindle observa o que você digita para encontrar os códigos dele e digita as palavras por você. O plugin nunca vê o que você digita. Permita isso só para um plugin em que você confia.
+access-accessibility-warning = Ele pode ler tudo o que está na sua tela. Como qualquer leitor de tela, também pode apertar botões e digitar texto em outras janelas, embora não tenha teclado nem mouse próprios. Permita isso só para um plugin em que você confia.
+
+## Titles (for a tooltip) and the line under a switch, which says what switching it off means.
+access-network-title = A internet
+access-network-off = Desligado significa que ele não consegue acessar a internet nem outros computadores próximos.
+access-sound-title = Reproduzir som
+access-sound-off = Desligado significa sem som.
+access-microphone-title = O seu microfone
+access-microphone-off = Desligado significa que ele não consegue ouvir você.
+access-sound-and-microphone-title = Reproduzir som e usar o seu microfone
+access-sound-and-microphone-off = Desligado significa que ele não emite som e não consegue ouvir você.
+access-files-title = Suas pastas Documentos, Downloads, Imagens, Música, Vídeos e Área de trabalho
+access-files-off = Desligado significa que ele não consegue abrir seus arquivos nem salvar nas suas pastas.
+access-home-title = Tudo na sua pasta pessoal, inclusive os arquivos ocultos de configuração
+access-home-off = Desligado significa que ele não consegue abrir seus arquivos nem salvar nas suas pastas.
+access-devices-title = Sua câmera e outros dispositivos conectados
+access-devices-off = Desligado significa que ele não consegue usar sua câmera nem nada que você conecte.
+access-bluetooth-title = Bluetooth, para fones de ouvido e outras coisas por perto
+access-bluetooth-off = Desligado significa que ele não consegue se conectar a nada por Bluetooth.
+access-notifications-title = Mostrar notificações
+access-notifications-off = Desligado significa que ele não consegue avisar você quando algo acontece.
+access-background-title = Iniciar sozinho quando você entrar
+access-background-off = Desligado significa que ele só funciona enquanto você o mantém aberto.
+access-screen-title = Tirar capturas da sua tela, ler o que você copia e digitar como se fosse o seu teclado
+access-screen-off = Desligado significa que ele não consegue ver outras janelas nem ler o que você copia quando quiser.
+access-x11-title = Desenhar as janelas dele do jeito antigo, o que o deixa observar outros aplicativos antigos e o que é digitado neles
+access-x11-off = Desligado impede que as janelas dele abram.
+access-computer-title = Trabalhar fora da caixa dele, com tudo o que você mesmo pode acessar
+access-computer-off = Desligado significa que o que você digita nele fica preso na caixa dele, então o sudo e os seus arquivos não funcionam lá.
+access-control-title = Controlar seu teclado, mouse e área de transferência
+access-control-off = Desligado significa que ele não consegue mover o ponteiro, digitar nem compartilhar o que você copia.
+access-capture-title = Compartilhar seu mouse e teclado com outro computador
+access-capture-off = Desligado significa que o ponteiro não consegue passar para outro computador.
+access-copied-title = Ler os arquivos que você copia
+access-copied-off = Desligado significa que ele não consegue ler os arquivos que você copia nem enviá-los a outro computador.
+access-summon-title = Abrir o anel sobre uma janela em tela cheia, como se você apertasse a tecla
+access-summon-off = Desligado significa que as teclas e os cliques dele abrem o anel só na área de trabalho, nunca sobre uma janela em tela cheia.
+access-listen-title = Deixar outros computadores da sua rede local se conectarem a ele
+access-listen-off = Desligado significa que outros computadores da sua rede local não conseguem encontrá-lo nem se conectar a ele.
+access-home-network-title = Acessar só dispositivos da sua rede local
+access-home-network-off = Desligado significa que ele não consegue encontrar impressoras, scanners ou outros dispositivos da rede local, nem se conectar a eles.
+access-usb-devices-title = Usar scanners e dispositivos USB
+access-usb-devices-off = Desligado significa que ele não consegue usar um scanner conectado a este computador.
+access-expand-title = Expandir seus códigos curtos enquanto você digita
+access-expand-off = Desligado significa que o Trindle não vai expandir os códigos curtos dele enquanto você digita.
+access-accessibility-title = Ler o que cada janela mostra e dizer em voz alta
+access-accessibility-off = Desligado significa que ele não consegue ler suas janelas em voz alta.
+access-unnamed-title = Algo que ele não especificou
+
+## The few words on a plugin's row of the Permissions page.
+access-note-acts-as-you = pode agir como você
+access-note-home-network = pode acessar todos os dispositivos da sua rede local
+access-note-usb-devices = pode usar scanners e dispositivos de imagem
+access-note-expand = pode digitar nas suas janelas
+access-note-accessibility = pode ler tudo o que está na sua tela
+
+access-listen-detail = { $ports }, só de computadores da sua rede local. Também é preciso permitir a internet.
+
+## A request that is unusual for the kind of app that makes it.
+access-unusual = Isso é incomum para { $kind }. Permita só se você confia na origem deste aplicativo.
+access-kind-terminal = um terminal
+access-kind-calculator = uma calculadora
+access-kind-photo = um aplicativo de fotos
+access-kind-text-editor = um editor de texto
+access-kind-browser = um navegador
+access-kind-office = um aplicativo de escritório
+access-kind-graphics = um aplicativo de gráficos
+access-kind-game = um jogo
+access-kind-sound-video = um aplicativo de som e vídeo
+access-kind-programming = uma ferramenta de programação
+access-kind-utility = um utilitário
+access-kind-other = um aplicativo como este

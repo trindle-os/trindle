@@ -7,26 +7,26 @@ settings-sounds-title = الأصوات
 settings-sounds-keywords = sound sounds chime startup start up login log in logout shut down shutdown charger plugged unplugged battery alert beep off quiet own custom add file wav ogg mp3 صوت أصوات نغمة بدء تسجيل الدخول تسجيل الخروج إيقاف التشغيل الشاحن البطارية تنبيه صامت ملف
 
 # Introduction under the heading of the sounds page, and the words behind the page i.
-settings-sounds-help = الصوت لكل لحظة. اختيار صوت يشغّله، وخيار إيقاف يُبقي تلك اللحظة صامتة. يمكن إضافة أصوات خاصة بك ثم اختيارها كغيرها.
+settings-sounds-help = اختر صوتًا لكل لحظة، مثل تسجيل الدخول. ويمكنك أيضًا إضافة أصواتك الخاصة.
 
 # First choice in each moment's list of sounds: that moment makes no sound.
 settings-sounds-off = إيقاف
 
 # Sentence at the top of the page when no moment makes a sound.
-settings-sounds-top-none = كل شيء صامت: لا توجد لحظة لها صوت.
+settings-sounds-top-none = كل شيء صامت.
 
 # Sentence at the top of the page when every moment makes a sound.
-settings-sounds-top-all = لكل لحظة صوتها.
+settings-sounds-top-all = كل الأصوات مفعّلة.
 
 # Sentence at the top of the page when some moments make a sound; { $n } is how many of the { $total } do.
 settings-sounds-top-some =
     { $n ->
-        [zero] لا توجد لحظة لها صوت من أصل { $total }؛ والبقية صامتة.
-        [one] لحظة واحدة من أصل { $total } لها صوت؛ والبقية صامتة.
-        [two] لحظتان من أصل { $total } لهما صوت؛ والبقية صامتة.
-        [few] { $n } لحظات من أصل { $total } لها صوت؛ والبقية صامتة.
-        [many] { $n } لحظة من أصل { $total } لها صوت؛ والبقية صامتة.
-       *[other] { $n } لحظة من أصل { $total } لها صوت؛ والبقية صامتة.
+        [zero] لا صوت مفعّل من أصل { $total } من الأصوات. والبقية متوقفة.
+        [one] صوت واحد مفعّل من أصل { $total } من الأصوات. والبقية متوقفة.
+        [two] صوتان مفعّلان من أصل { $total } من الأصوات. والبقية متوقفة.
+        [few] { $n } أصوات مفعّلة من أصل { $total } من الأصوات. والبقية متوقفة.
+        [many] { $n } صوتًا مفعّلًا من أصل { $total } من الأصوات. والبقية متوقفة.
+       *[other] { $n } صوت مفعّل من أصل { $total } من الأصوات. والبقية متوقفة.
     }
 
 # Name of a sound that comes with Trindle, in the lists of sounds.
@@ -83,26 +83,11 @@ settings-sounds-moment-logout-short = تسجيل الخروج
 # Heading of the notifications line.
 settings-sounds-moment-notification-short = الإشعارات
 
-# Small words under the logging in line.
-settings-sounds-moment-login-about = عند ظهور سطح المكتب.
-
 # Small words under the logging out line.
 settings-sounds-moment-logout-about = وعند إعادة التشغيل وإيقاف التشغيل أيضًا.
 
-# Small words under the charger plugged in line.
-settings-sounds-moment-plug-about = عند توصيل الشاحن.
-
-# Small words under the charger unplugged line.
-settings-sounds-moment-unplug-about = عند فصل الشاحن.
-
-# Small words under the battery low line.
-settings-sounds-moment-battery-about = عندما يحين وقت الشحن.
-
-# Small words under the notifications line.
-settings-sounds-moment-notification-about = عند ظهور إشعار.
-
 # Heading and slider name for the volume of the logging in and out sounds.
-settings-sounds-volume-coming = مستوى صوت الدخول والخروج
+settings-sounds-volume-coming = مستوى صوت تسجيل الدخول والخروج
 
 # Heading and slider name for the volume of notification sounds.
 settings-sounds-volume-notifications = مستوى صوت الإشعارات
@@ -111,31 +96,28 @@ settings-sounds-volume-notifications = مستوى صوت الإشعارات
 settings-sounds-volume-power = مستوى صوت الطاقة
 
 # Name of the round button that plays the sound chosen for a moment, or an added sound.
-settings-sounds-hear = استمع إليه
+settings-sounds-hear = شغّله
 
 # Name of the button that opens a window to add sound files.
 settings-sounds-add = أضف ملفات صوتية
 
 # Name of the button that opens the folder where added sounds are kept.
-settings-sounds-open-folder = افتح المجلد الذي تُحفظ فيه
+settings-sounds-open-folder = افتح مجلد الأصوات المضافة
 
 # Red words under the add sounds line when the folder could not be opened.
 settings-sounds-folder-not-opened = تعذّر فتح المجلد.
 
 # Red words under the add sounds line when the folder for added sounds could not be made.
-settings-sounds-folder-not-made = تعذّر إنشاء مجلد أصواتك.
+settings-sounds-folder-not-made = لم يتمكن Trindle من إنشاء مجلد أصواتك.
 
 # Name of the button that plays the sound being added, when one of the same name is already there.
-settings-sounds-hear-new = استمع إلى الصوت الجديد
+settings-sounds-hear-new = شغّل الصوت الجديد
 
 # Name of the button that plays the sound already there, when one of the same name is being added.
-settings-sounds-hear-old = استمع إلى الصوت الموجود
+settings-sounds-hear-old = شغّل الصوت الموجود
 
 # Heading of the line for adding sounds.
 settings-sounds-add-heading = أضف أصواتًا
-
-# Small words under the add sounds line, listing the kinds of file that can be added.
-settings-sounds-add-formats = WAV أو OGG أو Opus أو FLAC أو MP3.
 
 # Name of the bin button that removes a sound added by the person.
 # SAFETY: needs a human review before it ships
@@ -143,9 +125,6 @@ settings-sounds-remove = أزل هذا الصوت
 
 # Heading of the line shown when no sounds have been added.
 settings-sounds-none-yet = لم يُضف أي صوت بعد
-
-# Small words under that line.
-settings-sounds-none-yet-about = أضف صوتًا لتختاره لأي لحظة.
 
 # Red words under a moment's line when its chosen sound file is gone.
 settings-sounds-gone = هذا الصوت لم يعد موجودًا على هذا الحاسوب. اختر غيره.
@@ -160,13 +139,21 @@ settings-sounds-chooser-title = اختر ملفات صوتية
 settings-sounds-chooser-filter = الأصوات
 
 # Red words under the add sounds line when a chosen file is not a sound; { $name } is the file name.
-settings-sounds-not-playable = { $name } ليس نوع صوت يستطيع Trindle تشغيله.
+settings-sounds-not-playable = لا يستطيع Trindle تشغيل { $name } لأنه لا يتعرف على نوع الملف.
 
 # Red words under the add sounds line when a file could not be copied in; { $name } is the file name.
 settings-sounds-not-copied = تعذّر نسخ { $name }.
 
 # Green words under the add sounds line after sounds were added; { $n } is how many.
-settings-sounds-added = أُضيف { $n }. اخترْه بجانب لحظة أعلاه.
+settings-sounds-added =
+    { $n ->
+        [one] أُضيف صوت واحد. يمكنك الآن اختياره لأي لحظة أعلاه.
+        [two] أُضيف صوتان. يمكنك الآن اختيارهما لأي لحظة أعلاه.
+        [few] أُضيفت { $n } أصوات. يمكنك الآن اختيارها لأي لحظة أعلاه.
+        [many] أُضيف { $n } صوتًا. يمكنك الآن اختيارها لأي لحظة أعلاه.
+        [zero] أُضيف { $n } صوت. يمكنك الآن اختيارها لأي لحظة أعلاه.
+       *[other] أُضيف { $n } صوت. يمكنك الآن اختيارها لأي لحظة أعلاه.
+    }
 
 # Red words under the question about a sound of the same name when it could not be replaced; { $name } is the file name.
 settings-sounds-not-replaced = تعذّر استبدال { $name }.
@@ -175,29 +162,28 @@ settings-sounds-not-replaced = تعذّر استبدال { $name }.
 settings-sounds-replaced-one = تم استبدال { $name }.
 
 # Green words after several sounds took the place of the ones there; { $n } of { $total } were done.
-settings-sounds-replaced-some = تم استبدال { $n } من { $total }.
+settings-sounds-replaced-some = استُبدل { $n } من { $total }.
 
 # Red words under a sound's line when it could not be removed.
 settings-sounds-not-removed = تعذّرت إزالته.
 
 # Red words under a moment's line when its sound was removed and the moment could not be set back to its own sound.
-settings-sounds-not-set-back = أُزيل صوتها، وتعذّرت إعادتها إلى صوتها الأصلي.
+settings-sounds-not-set-back = أزال Trindle الصوت، لكنه لم يتمكن من إعادة الصوت المعتاد لتلك اللحظة.
 
 # Title of the card with the sounds for logging in and out and notifications.
-settings-sounds-coming-title = الدخول والخروج
+settings-sounds-coming-title = تسجيل الدخول والخروج
 
 # Words behind the i of that card.
-settings-sounds-coming-about = اختيار صوت يشغّله، وخيار إيقاف يُبقي تلك اللحظة صامتة. الزر المستدير بجانب كل لحظة يشغّل الصوت المختار حاليًا. يتدرج كل مستوى صوت من 0 إلى 100 بعشرات، ويُشغَّل الصوت مرة عند رفع إصبعك.
+settings-sounds-coming-about = يتدرج كل مستوى صوت من 0 إلى 100 بخطوات من عشرة. وتسمع الصوت مرة واحدة عندما تتركه.
 
 # Title of the card with the charger and battery sounds.
 settings-sounds-power-title = الطاقة
 
 # Words behind the i of that card.
-settings-sounds-power-about = أصوات توصيل الشاحن وفصله، ونفاد البطارية. يتدرج مستوى الصوت من 0 إلى 100 بعشرات، ويُشغَّل الصوت مرة عند رفع إصبعك.
+settings-sounds-power-about = أصوات توصيل الشاحن وفصله، وانخفاض شحن البطارية. يتدرج مستوى الصوت من 0 إلى 100 بخطوات من عشرة. وتسمع الصوت مرة واحدة عندما تتركه.
 
 # Title of the card with the sounds the person added.
 settings-sounds-own-title = أصواتك الخاصة
 
 # Words behind the i of that card.
-settings-sounds-own-about = WAV أو OGG أو Opus أو FLAC أو MP3. تُنسخ إلى مجلدك الخاص، فيمكن نقل الأصول أو حذفها، ثم تُختار بجانب أي لحظة كغيرها. إزالة صوت تُعيد أي لحظة كانت تستخدمه إلى صوتها الأصلي.
-
+settings-sounds-own-about = WAV أو OGG أو Opus أو FLAC أو MP3. ينسخها Trindle إلى مجلدك الخاص، فيمكنك نقل الأصول أو حذفها. ثم يمكنك اختيارها لأي لحظة كغيرها. وإذا أزلت صوتًا، تعود أي لحظة كانت تستخدمه إلى صوتها المعتاد.

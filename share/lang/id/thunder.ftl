@@ -1,7 +1,7 @@
 # machine translated (Indonesian), not yet reviewed by a person.
 
 # Why it asks, in one plain sentence, under the device's name.
-thunder-why = Perangkat Thunderbolt dan USB4 dapat mengakses memori komputer ini secara langsung, jadi izinkan hanya yang Anda kenal dan percaya.
+thunder-why = Perangkat Thunderbolt dan USB4 dapat mengakses memori komputer ini secara langsung, jadi izinkan hanya perangkat yang Anda kenal dan percaya.
 
 # Title of the question. $name is the device's name.
 # SAFETY: needs a human review before it ships
@@ -11,13 +11,13 @@ thunder-let-connect = Izinkan { $name } terhubung?
 thunder-no-name = Perangkat Thunderbolt
 
 # Under the device's name when its maker did not say who it is.
-thunder-no-maker = Pembuatnya tidak menyebutkan siapa dirinya.
+thunder-no-maker = Pembuatnya tidak diketahui.
 
 # Under the device's name: who made it. $maker is the maker's name.
 thunder-made-by = Dibuat oleh { $maker }.
 
 # Warning under the question when the device gives the name of one allowed before, but cannot be proved to be it.
-thunder-doubt = Perangkat ini memakai nama perangkat yang pernah Anda izinkan, tetapi tidak dapat dibuktikan bahwa itu perangkat yang sama.
+thunder-doubt = Perangkat ini memiliki nama yang sama dengan perangkat yang pernah Anda izinkan, tetapi Trindle tidak dapat memastikan bahwa itu perangkat yang sama.
 
 # Button that refuses the device.
 # SAFETY: needs a human review before it ships
@@ -35,8 +35,8 @@ thunder-always = Selalu izinkan
 thunder-not-connected = Perangkat tidak dapat dihubungkan.
 
 # Red words under the question when it could not be connected after it was unplugged and plugged in again.
-thunder-unplug = Perangkat tidak dapat dihubungkan. Cabut lalu colokkan kembali untuk mencoba sekali lagi.
+thunder-unplug = Trindle tidak dapat menghubungkannya. Cabut lalu colokkan kembali untuk mencoba sekali lagi.
 
 # Red words under the question when the part of Trindle that answers for the guard is not running.
-thunder-guard-silent = Penjaga Thunderbolt Trindle tidak menjawab saat ini.
+thunder-guard-silent = Perlindungan Thunderbolt Trindle tidak merespons.
 

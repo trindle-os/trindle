@@ -88,8 +88,8 @@ fn each_tab_of_installed_shows_its_kind_and_the_search_finds_every_kind() {
 #[test]
 fn remove_on_installed_asks_a_flatpak_by_card_and_the_others_twice_and_takes_each_its_own_way() {
     use updates::Removal;
-    let kinds = [("org.example.App0", Removal::Flatpak { system: false, delete_data: false }, "org.example.App0"),
-                 ("org.example.App3", Removal::Flatpak { system: false, delete_data: false }, "org.example.App3"),
+    let kinds = [("org.example.App0", Removal::Flatpak { system: false }, "org.example.App0"),
+                 ("org.example.App3", Removal::Flatpak { system: false }, "org.example.App3"),
                  ("org.example.App4", Removal::AppImage(PathBuf::from("/nonexistent/4.AppImage")), "org.example.App4"),
                  ("deb:example-editor", Removal::Deb, "example-editor"),
                  ("plugin:org.example.Plugin1", Removal::Plugin, "org.example.Plugin1")];
@@ -106,7 +106,7 @@ fn removal_by_its_own_way(across: u32, key: &str, way: &updates::Removal, id: &s
     let mut s = with_every_kind(with_updates(stocked()));
     let noted = Rc::new(std::cell::RefCell::new(Vec::new()));
     s.owned.removals = Some(noted.clone());
-    s.across = across as f32;
+    s.size.across = across as f32;
     let mut ui = Ui::new(s.whole(settings()), Theme::new(false, "#fbc711"));
     let before = ui.places_at((across, 4000));
     let button = format!("remove:{key}");
@@ -138,7 +138,7 @@ fn removal_by_its_own_way(across: u32, key: &str, way: &updates::Removal, id: &s
     for msg in sent {
         s.update(msg);
     }
-    assert_eq!(*noted.borrow(), [(way.clone(), id.to_string())], "{across}, {key}: its own removal, once");
+    assert_eq!(*noted.borrow(), [(way.clone(), id.to_string(), false)], "{across}, {key}: its own removal, once");
 
     let after = places(&mut s, across);
     let rows = named(&before, &["remove:"]);
@@ -214,11 +214,11 @@ fn the_tabs_of_installed_are_a_strip_only_where_they_fit() {
         }
     }
     assert!(strips > 0 && drops > 0, "a strip where there is room ({strips}) and a dropdown where there is not ({drops})");
-    assert!({ s.across = 820.0; !strip(&mut s) }, "at 820 six tabs do not fit, so they are a dropdown");
-    assert!({ s.across = 1278.0; strip(&mut s) }, "at 1278 they are a strip");
+    assert!({ s.size.across = 820.0; !strip(&mut s) }, "at 820 six tabs do not fit, so they are a dropdown");
+    assert!({ s.size.across = 1278.0; strip(&mut s) }, "at 1278 they are a strip");
 
-    s.across = 1278.0;
-    let tall = s.tall;
+    s.size.across = 1278.0;
+    let tall = s.size.tall;
     assert!(Shows::resized(&mut s, 820.0, tall), "Installed is drawn again when the window's width changes");
 }
 
@@ -235,8 +235,8 @@ fn shoot_ten_programs_with_no_icon() {
             source: Source::Flatpak { origin: "flathub".into(), installation: "user".into() },
         }).collect();
         s.owned = pages::made_up::installed(Some(some), 0, "");
-        s.across = 1278.0;
-        s.tall = 692.0;
+        s.size.across = 1278.0;
+        s.size.tall = 692.0;
         let mut ui = Ui::new(s.whole(settings()), Theme::new(light, "#fbc711"));
         let h = (ui.natural_height(1278.0).ceil() as u32).clamp(692, 4000);
         let mut pix = tiny_skia::Pixmap::new(1278, h).unwrap();
@@ -247,7 +247,7 @@ fn shoot_ten_programs_with_no_icon() {
 
 #[test]
 fn every_button_apps_refuses_during_a_job_is_greyed_out_and_says_why() {
-    let refused = |tip: &str, plugins: bool| ["Update", "Hold back", "Release", "Check", "Restart now"].iter().any(|w| tip.starts_with(w)) || (tip.starts_with("Install") && tip.contains("update"))
+    let refused = |tip: &str, plugins: bool| ["Update", "Hold back", "Allow updates", "Check", "Restart now"].iter().any(|w| tip.starts_with(w)) || (tip.starts_with("Install") && tip.contains("update"))
         || (plugins && tip.starts_with("Install"));
     let mut seen = 0;
     for state in ["idle", "one-update", "ring", "plugin-going", "checking"] {
@@ -275,7 +275,7 @@ fn every_button_apps_refuses_during_a_job_is_greyed_out_and_says_why() {
                 }
                 seen += 1;
                 let waiting = update_page::busy(&s);
-                assert_eq!((off, why.as_deref()), if waiting { (true, Some("Wait for the job to finish.")) } else { (false, None) },
+                assert_eq!((off, why.as_deref()), if waiting { (true, Some("Wait for the task to finish.")) } else { (false, None) },
                            "{state} / {}{}: {tip}", view.nav_key(), if detail { " detail" } else { "" });
             }
         }
@@ -286,18 +286,18 @@ fn every_button_apps_refuses_during_a_job_is_greyed_out_and_says_why() {
 #[test]
 fn browse_appimages_warns_before_add_and_says_where_each_comes_from() {
     let mut s = stocked();
-    (s.view, s.hub, s.hub_asked) = (View::Browse, Some(Rc::new(listed())), true);
+    (s.view, s.appimagehub.list, s.appimagehub.asked) = (View::Browse, Some(Rc::new(listed())), true);
     let said = s.whole(settings()).said();
     let at = |w: &str| said.iter().position(|x| x.contains(w)).unwrap_or_else(|| panic!("{w} not in {said:?}"));
-    assert!(at("nobody reviews or scans them") < at("button: Add to Trindle's apps"));
-    let warning = "AppImageHub only lists projects: nobody reviews or scans them, and they need not be signed. \
-                   Trindle runs each AppImage in a box with a private home folder: at first it may use the internet and sound, \
-                   and sees none of your files.";
+    assert!(at("Nobody reviews or scans them") < at("button: Add to Trindle's apps"));
+    let warning = "AppImageHub only lists projects. Nobody reviews or scans them, and they don't have to be signed. \
+                   Trindle runs each AppImage in a box with its own private home folder. At first it can use the internet and sound, \
+                   but it can't see any of your files.";
     assert!(said.iter().any(|w| w == warning), "the whole warning, in plain ink, before any Add: {said:?}");
     assert!(said.iter().any(|w| w == "2 AppImages are listed on AppImageHub."), "{said:?}");
     assert!(said.iter().any(|w| w.starts_with("On GitHub: john-smith/example")), "{said:?}");
-    assert!(said.iter().any(|w| w.starts_with("Not on GitHub: from a website, example.org")), "{said:?}");
-    at("Where an AppImage comes from is a hint, not a check.");
+    assert!(said.iter().any(|w| w.starts_with("Not on GitHub. It comes from example.org")), "{said:?}");
+    at("Where an AppImage says it comes from is only a guide. Trindle doesn't check it.");
     assert_eq!(said.iter().filter(|w| *w == "button: Add to Trindle's apps").count(), 1, "a website's row has no Add");
     at("button: Open its website");
     assert!(!said.iter().any(|w| w.starts_with("Last updated")), "nothing is asked of GitHub before See details");
@@ -313,7 +313,7 @@ fn browse_appimages_warns_before_add_and_says_where_each_comes_from() {
     s.github = pages::made_up::looked_at(std::mem::take(&mut s.github), "john-smith/example", project, Some(release));
     let said = s.whole(settings()).said();
     assert!(said.iter().any(|w| w.starts_with("On GitHub: john-smith/example, 1,200 stars")), "{said:?}");
-    assert!(said.iter().any(|w| w.starts_with("Last updated 2 January 1970. Not updated for more than six months")), "{said:?}");
+    assert!(said.iter().any(|w| w.starts_with("Last updated 2 January 1970. It hasn't been updated for more than six months")), "{said:?}");
     assert!(said.iter().any(|w| w == "Created 1 January 1970"), "{said:?}");
 }
 
@@ -329,8 +329,43 @@ fn an_installed_appimage_says_where_it_came_from() {
         (PathBuf::from("/nonexistent/two.AppImage"), came_from::CameFrom::Site("https://example.org/two".into())),
     ]);
     let said = s.whole(settings()).said();
-    for w in ["On GitHub: john-smith/one", "Not on GitHub: from a website, example.org", "Source not known",
-              "button: Open on GitHub", "button: Open its website", "Where an AppImage comes from is a hint, not a check."] {
+    for w in ["On GitHub: john-smith/one", "Not on GitHub. It comes from example.org", "Source not known",
+              "button: Open on GitHub", "button: Open its website", "Where an AppImage says it comes from is only a guide. Trindle doesn't check it."] {
         assert!(said.iter().any(|x| x.contains(w)), "{w} not in {said:?}");
     }
+}
+
+#[test]
+fn every_rows_line_is_whole_in_every_language_at_every_width() {
+    use crate::common::shipped_languages::{in_language, tags};
+    let mut wrong = Vec::new();
+    for tag in tags() {
+        in_language(&tag, || {
+            let mut held = with_every_kind(with_updates(stocked()));
+            held.held = held_one_of_each();
+            let mut waiting = with_every_kind(with_updates(stocked()));
+            waiting.view = View::Installed;
+            let mut updates = without_catalogue(true);
+            updates.view = View::Updates;
+            updates.upd = update_page::made_up(&[], 0, false, &SIZES_KNOWN, &[("apps", "Flathub could not be reached.")], &[]).with_flats(&FLATS);
+            let mut offline = without_catalogue(false);
+            offline.view = View::Updates;
+            for (how, s) in [("installed, held back", &mut held), ("installed", &mut waiting), ("updates", &mut updates), ("updates, offline", &mut offline)] {
+                for across in [820, 1278, 1720] {
+                    s.size.across = across as f32;
+                    let lines: Vec<String> = words(s).into_iter().filter(|w| w.contains('\u{b7}') || w.contains("3.2.1") || w.contains("1.2")).collect();
+                    let mut ui = Ui::new(s.whole(settings()), Theme::new(false, "#fbc711"));
+                    ui.lay_at(across, 4000);
+                    let ids: Vec<String> = ui.boxes().into_iter().map(|b| b.0).collect();
+                    for id in ids {
+                        if let Some(whole) = ui.label_at(&id).filter(|w| lines.contains(w)) {
+                            wrong.push(format!("{tag} {how} at {across}: {whole}"));
+                        }
+                    }
+                }
+            }
+        });
+    }
+    wrong.dedup();
+    assert!(wrong.is_empty(), "{} lines are cut:\n{}", wrong.len(), wrong.join("\n"));
 }

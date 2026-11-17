@@ -7,7 +7,7 @@ use crate::common::pads::{self, Change, Family, From, Live, Pad, Profiles, To};
 use crate::common::steam_files;
 use super::games::Games;
 use crate::settings::pad_picture::{self, Shot};
-use crate::settings::ui::{dropdown, group, line, not_saved, on, Kit, Msg};
+use crate::settings::ui::{dropdown, dropdown_beside, group, line, not_saved, on, Kit, Msg, Rounds};
 use crate::toolkit::t;
 use crate::toolkit::widget::{button, card, drawing, entry, label, remove, row as row_of, switch, Length, Node};
 
@@ -20,8 +20,13 @@ const MOUSE_MIDDLE: u32 = 0x112;
 const LOOK: Duration = Duration::from_millis(40);
 
 const MOST_RECENT: usize = 8;
+const UNREAD_KEY: &str = "pad-unread";
 
 const KEY_WIDTH: f32 = 72.0;
+
+fn profile_buttons() -> f32 {
+    2.0 * (crate::toolkit::theme::icon_button() + crate::settings::ui::CONTROL_GAP)
+}
 
 fn row_key(from: From) -> String {
     format!("pad-row:{}", from.name())
@@ -57,21 +62,30 @@ pub struct Pads {
     recent: Vec<From>,
 
     typed: HashMap<usize, String>,
-    type_round: u32,
+    typing: Rounds,
 
     game: Option<u32>,
 
     steam: Vec<(u32, String)>,
 
-    running: Vec<u32>,
+    pub(super) running: Vec<u32>,
+
+    unread: Option<String>,
 
     naming: Option<String>,
     name_round: u32,
 }
 
 impl Pads {
+    fn load_profiles(&mut self) {
+        (self.profiles, self.unread) = match pads::load() {
+            Ok(p) => (p, None),
+            Err(e) => (Profiles::default(), Some(e.to_string())),
+        };
+    }
+
     fn load(&mut self) {
-        self.profiles = pads::load().unwrap_or_default();
+        self.load_profiles();
         let here = pads::plugged_in();
         let mut all = here.clone();
 
@@ -112,27 +126,46 @@ impl Pads {
     }
 
     fn keep(&mut self, kit: &mut Kit, key: &str) {
+        if self.unread.is_some() {
+            kit.done(key, Some(t!("settings-pads-not-saved-unread")), "");
+            return;
+        }
         if kit.settle(key, pads::save(&self.profiles), not_saved()).is_none() {
-            self.profiles = pads::load().unwrap_or_default();
+            self.load_profiles();
         }
     }
 
+    fn unread_row(&self, kit: &Kit) -> Option<Node<Msg>> {
+        let why = self.unread.as_ref()?;
+        Some(line(t!("settings-pads-unread")).sub(t!("settings-pads-unread-about", why = why.as_str())).key(UNREAD_KEY).node(kit))
+    }
+
     fn watch(&mut self, kit: &mut Kit) {
+        self.round = self.round.wrapping_add(1);
+        if self.live.as_ref().is_some_and(Live::is_open) {
+            self.look(kit);
+        }
+    }
+
+    fn look(&self, kit: &Kit) {
         let mine = self.round;
-        after(kit, LOOK, move |me, k| {
+        kit.look_after::<Games>(LOOK, move |g, k| {
+            let me = &mut g.pads;
             if me.round != mine {
-                return;
+                return false;
             }
-            me.step();
-            me.watch(k);
+            let news = me.step();
+            me.look(k);
+            news
         });
     }
 
-    fn step(&mut self) {
+    fn step(&mut self) -> bool {
         let profile = self.profile();
-        let Some(live) = self.live.as_mut() else { return };
-        let Some(pad) = self.pads.get(self.chosen) else { return };
-        for from in live.poll() {
+        let Some(live) = self.live.as_mut() else { return false };
+        let Some(pad) = self.pads.get(self.chosen) else { return false };
+        let (pressed, moved) = live.poll();
+        for from in pressed {
 
             let Some(name) = profile.as_deref() else { continue };
             if self.profiles.changed_to(pad, name, from).is_some() {
@@ -143,6 +176,7 @@ impl Pads {
             self.recent.truncate(MOST_RECENT);
             self.picked = Some(from);
         }
+        moved
     }
 
     fn pick(&mut self, from: From) {
@@ -185,10 +219,9 @@ impl Pads {
 
     fn typed(&mut self, kit: &mut Kit, i: usize, text: String) {
         self.typed.insert(i, text);
-        self.type_round = self.type_round.wrapping_add(1);
-        let mine = self.type_round;
+        let mine = self.typing.next(&other_key(i));
         after(kit, Duration::from_millis(600), move |me, k| {
-            if me.type_round != mine {
+            if !me.typing.latest(&other_key(i), mine) {
                 return;
             }
             let (Some(text), Some(p), Some(name)) = (me.typed.get(&i).cloned(), me.current().cloned(), me.profile()) else { return };
@@ -288,7 +321,7 @@ impl Pads {
         let mut rows = Vec::new();
         if self.pads.len() > 1 {
             let words: Vec<String> = self.pads.iter().map(|p| if p.name.is_empty() { format!("{:04x}:{:04x}", p.vendor, p.product) } else { p.name.clone() }).collect();
-            rows.push(line(t!("settings-pads-which")).control(dropdown(kit, "pad-which", words, Some(self.chosen), t!("settings-pads-which"),
+            rows.push(line(t!("settings-pads-which")).control(dropdown("pad-which", words, Some(self.chosen), t!("settings-pads-which"),
                 |c| on_pads(move |me, _| {
                     me.chosen = c;
                     me.picked = None;
@@ -324,7 +357,7 @@ impl Pads {
             let mut row = line(name.clone()).key(row_key(from));
             if waits {
                 let all = names.clone();
-                row = row.control(dropdown(kit, &format!("pad-to:{}", from.name()), targets.clone(), Some(0), &t!("settings-pads-choose", name = &name), move |c| {
+                row = row.control(dropdown(&format!("pad-to:{}", from.name()), targets.clone(), Some(0), &t!("settings-pads-choose", name = &name), move |c| {
                     let all = all.clone();
                     on_pads(move |me, k| match c {
                         0 => {}
@@ -385,7 +418,7 @@ impl Pads {
             let typed = self.typed.get(&i).cloned().unwrap_or_else(|| change.line());
             let box_ = entry(typed, t!("settings-keyboard-pad-does", title = self.pad_name()), move |text| on_pads(move |me, k| me.typed(k, i, text.clone())));
             let gone = button("user-trash-symbolic", t!("settings-keyboard-take-away")).on_press(on_pads(move |me, k| me.take_other(k, i)));
-            rows.push(line(self.pad_name()).sub(t!("settings-keyboard-pad-type")).key(other_key(i)).control(box_).control(gone).node(kit));
+            rows.push(line(self.pad_name()).key(other_key(i)).control(box_).control(gone).node(kit));
         }
         if let Some((n, text, why)) = self.profiles.unread.first() {
             rows.push(line(text.clone()).sub(t!("settings-keyboard-line-unused", n = *n, why = *why)).node(kit));
@@ -460,7 +493,7 @@ impl Pads {
     pub(super) fn profiles_card(&self, kit: &Kit) -> Node<Msg> {
         let Some(pad) = self.current() else { return group(t!("settings-pads-profiles-title")).node(kit) };
         let on_now = !self.profiles.off;
-        let mut rows = vec![line(t!("settings-pads-changes")).sub(t!("settings-pads-changes-sub")).key(OFF_KEY)
+        let mut rows = vec![line(t!("settings-pads-changes")).key(OFF_KEY)
             .control(switch(on_now, t!("settings-pads-changes"), |b| on_pads(move |me, k| me.set_off(k, !b))))
             .node(kit)];
         let mut games: Vec<(Option<u32>, String)> = vec![(None, t!("settings-pads-other-game").to_string())];
@@ -474,7 +507,7 @@ impl Pads {
         let at = games.iter().position(|g| g.0 == self.game);
         let ids: Vec<Option<u32>> = games.iter().map(|g| g.0).collect();
         rows.push(line(t!("settings-pads-game")).key(GAME_KEY)
-            .control(dropdown(kit, GAME_KEY, games.into_iter().map(|g| g.1).collect(), at, t!("settings-pads-game"),
+            .control(dropdown(GAME_KEY, games.into_iter().map(|g| g.1).collect(), at, t!("settings-pads-game"),
                 move |c| { let game = ids.get(c).copied().flatten(); on_pads(move |me, _| me.show_game(game)) }))
             .node(kit));
         let names = self.profiles.names_of(pad);
@@ -482,17 +515,15 @@ impl Pads {
         let mut words = vec![t!("settings-pads-standard").to_string()];
         words.extend(names.iter().cloned());
         let at = profile.as_ref().and_then(|p| names.iter().position(|n| n == p)).map_or(0, |i| i + 1);
-        let mut which = line(t!("settings-pads-profile")).key(WHICH_KEY);
-        if profile.is_none() {
-            which = which.sub(t!("settings-pads-standard-sub"));
-        }
-        which = which.control(dropdown(kit, WHICH_KEY, words, Some(at), t!("settings-pads-profile"),
+        let mut which = line(t!("settings-pads-profile")).key(WHICH_KEY)
+            .control(dropdown_beside(WHICH_KEY, words, Some(at), t!("settings-pads-profile"), profile_buttons(),
                 move |c| { let name = c.checked_sub(1).and_then(|i| names.get(i).cloned()); on_pads(move |me, k| me.choose(k, name.clone())) }))
             .control(button("list-add-symbolic", t!("settings-pads-profile-add")).on_press(on_pads(|me, k| me.add(k))));
         if let Some(name) = &profile {
             which = which.control(remove("user-trash-symbolic", t!("settings-pads-profile-remove", name = name.as_str())).on_press(on_pads(|me, k| me.remove(k))));
         }
         rows.push(which.node(kit));
+        rows.extend(self.unread_row(kit));
         if let Some(name) = profile {
             let typed = self.naming.clone().unwrap_or(name);
             rows.push(line(t!("settings-pads-profile-name")).key(NAME_KEY)
@@ -507,23 +538,41 @@ fn button_of(name: &str) -> From {
     To::named(name).and_then(|to| if let To::Button(b) = to { Some(From::Button(b)) } else if let To::Trigger(a) = to { Some(From::Trigger(a)) } else { None }).unwrap_or(From::Button(0))
 }
 
+fn same_pads(listed: &[Pad], profiles: &Profiles, here: &[Pad]) -> bool {
+    let known: Vec<&Pad> = listed.iter().filter(|p| here.contains(p) || profiles.names_of(p).is_empty()).collect();
+    known.len() == here.len() && here.iter().all(|p| known.contains(&p))
+}
+
 impl Pads {
 
     pub(super) fn none_card(&self, kit: &Kit) -> Node<Msg> {
         group(t!("settings-pads-title")).icon("input-gaming-symbolic")
-            .rows(vec![line(t!("settings-pads-none")).sub(t!("settings-pads-none-about")).node(kit)])
+            .rows(std::iter::once(line(t!("settings-pads-none")).node(kit)).chain(self.unread_row(kit)).collect())
+            .grows()
             .node(kit)
     }
 
     pub(super) fn shown(&mut self, kit: &mut Kit) {
-        self.round = self.round.wrapping_add(1);
         self.picked = None;
         self.load();
         self.steam = steam_files::games(&steam_files::libraries(&steam_files::root())).into_iter().map(|g| (g.id, g.name)).collect();
-        self.running = pads::steam_games_now(std::path::Path::new("/proc"));
+        self.running = if self.steam.is_empty() { Vec::new() } else { pads::steam_games_now(std::path::Path::new("/proc")) };
         self.game = self.profiles.game_now(&self.running);
         self.open();
         self.watch(kit);
+    }
+
+    pub(super) fn has_steam_games(&self) -> bool {
+        !self.steam.is_empty()
+    }
+
+    pub(super) fn look_running(&mut self) -> bool {
+        let now = pads::steam_games_now(std::path::Path::new("/proc"));
+        let changed = now != self.running;
+        if changed {
+            self.running = now;
+        }
+        changed
     }
 
     pub(super) fn hidden(&mut self, _kit: &mut Kit) {
@@ -532,14 +581,14 @@ impl Pads {
         self.picked = None;
     }
 
-    pub(super) fn second(&mut self, _kit: &mut Kit) -> bool {
+    pub(super) fn second(&mut self, kit: &mut Kit) -> bool {
         let here = pads::plugged_in();
-        let known: Vec<&Pad> = self.pads.iter().filter(|p| here.contains(p) || self.profiles.names_of(p).is_empty()).collect();
-        if known.len() == here.len() && here.iter().all(|p| known.contains(&p)) && self.live.as_ref().is_some_and(Live::is_open) != here.is_empty() {
+        if same_pads(&self.pads, &self.profiles, &here) {
             return false;
         }
         self.load();
         self.open();
+        self.watch(kit);
         true
     }
 
@@ -565,5 +614,66 @@ impl Pads {
         profiles.set_into(&pad, pads::FIRST, From::Button(0x130), To::Keys(vec![17]));
         profiles.choose(None, Some(pads::FIRST.into()));
         Pads { profiles, pads: vec![pad], steam: vec![(1593500, "God of War".into())], live: Some(Live::made_up(pads::Layout::STANDARD)), recent: vec![From::Button(0x131)], picked: Some(From::Button(0x131)), ..Pads::default() }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn no_line_under_a_controller_control_explains_it() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let kit = Kit::new(events, asks, None, None);
+        let said = { let p = Pads::made_up(); let mut s = p.profiles_card(&kit).said(); s.extend(p.none_card(&kit).said()); s }.join("|");
+        for old in [
+            "When off, nothing is changed.",
+            "No changes.",
+            "Type it as Button = what it becomes.",
+            "Plug one in and its buttons appear here.",
+        ] {
+            assert!(!said.contains(old), "{old} is still on the page");
+        }
+    }
+    use super::*;
+    use crate::settings::ui::Do;
+    use crate::toolkit::event::Loop;
+
+    #[test]
+    fn a_page_with_no_controller_open_starts_no_timer_and_shows_nothing_new() {
+        let events = Loop::new();
+        let seen = std::rc::Rc::new(std::cell::Cell::new(0u32));
+        let counted = seen.clone();
+        let asks = events.post(move |_: Do| counted.set(counted.get() + 1));
+        let mut kit = Kit::new(events.clone(), asks, None, None);
+        let mut pads = Pads::made_up();
+        pads.watch(&mut kit);
+        let stop = events.clone();
+        events.after(LOOK * 8, move || stop.quit());
+        events.run();
+        assert_eq!(seen.get(), 0, "a timer ran with nothing open");
+        assert!(!pads.step(), "a controller that is not open had news");
+    }
+
+    #[test]
+    fn the_listed_controllers_are_the_same_when_only_a_remembered_one_is_missing() {
+        let pad = |n: u16| Pad { vendor: 0x11c0, product: n, name: "Test pad".into() };
+        let mut profiles = Profiles::default();
+        profiles.set_into(&pad(2), pads::FIRST, From::Button(0x130), To::Keys(vec![17]));
+        let listed = vec![pad(1), pad(2)];
+        assert!(same_pads(&listed, &profiles, &[pad(1)]), "a remembered controller is not plugged in, and that is no change");
+        assert!(!same_pads(&listed, &profiles, &[pad(1), pad(3)]), "a new one was plugged in");
+        assert!(!same_pads(&listed, &profiles, &[]), "the one listed was unplugged");
+    }
+
+    #[test]
+    fn a_change_is_not_saved_over_a_file_that_could_not_be_read() {
+        let events = Loop::new();
+        let asks = events.post(|_: Do| {});
+        let mut kit = Kit::new(events, asks, None, None);
+        let mut pads = Pads::made_up();
+        pads.unread = Some("not text".into());
+        pads.keep(&mut kit, "pad-test");
+        assert_eq!(kit.said("pad-test").map(|(w, red)| (w.to_string(), red)), Some((t!("settings-pads-not-saved-unread").to_string(), true)));
     }
 }

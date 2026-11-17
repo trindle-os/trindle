@@ -18,12 +18,16 @@ pub(crate) fn folders_read(file: &Path) -> String {
 }
 
 pub(crate) fn keep_folder(file: &Path, app_id: &str, folder: &Path) {
+    let shown = folder.display().to_string();
+    if [app_id, shown.as_str()].iter().any(|s| s.contains(['\n', '\r', '\t'])) {
+        return;
+    }
     let text = folders_read(file);
     if crate::common::damaged::may_write(file, folders_damaged()).is_err() {
         return;
     }
     let mut lines: Vec<String> = text.lines().filter(|l| l.split_once('\t').is_none_or(|(a, _)| a != app_id)).map(String::from).collect();
-    lines.insert(0, format!("{app_id}\t{}", folder.display()));
+    lines.insert(0, format!("{app_id}\t{shown}"));
     lines.truncate(100);
     let _ = crate::common::files::write_text(file, &(lines.join("\n") + "\n"));
 }

@@ -154,14 +154,29 @@ fn write_notes(canvas: &mut PixmapMut, pen: &Pen, slide: &Slide, (w, h, margin):
     let s = pen.scale;
 
     let (words, line) = (pen.theme.fg, pen.theme.accent);
-    let style = Style::new(13.0 * s);
     let stroke = Stroke { width: 2.0 * s, line_cap: tiny_skia::LineCap::Round, ..Stroke::default() };
+    let room = margin - 26.0 * s;
 
     for side in [false, true] {
         let mine: Vec<&Note> = slide.notes.iter().filter(|n| n.right == side).collect();
+        let (style, wrapped, tops) = SIZES.iter().map(|size| {
+            let style = Style::new(size * s);
+            let wrapped: Vec<Vec<String>> = mine.iter().map(|n| wrap(n.text, |l| pen.fonts.layout(l, &style, None).width <= room)).collect();
+            let heights: Vec<f32> = wrapped.iter().map(|l| l.len() as f32 * LINE * s).collect();
+            let (tops, fits) = stack(&heights, h, GAP * s);
+            (style, wrapped, tops, fits)
+        }).find_map(|(style, wrapped, tops, fits)| fits.then_some((style, wrapped, tops)))
+            .unwrap_or_else(|| {
+                let style = Style::new(SIZES[SIZES.len() - 1] * s);
+                let wrapped: Vec<Vec<String>> = mine.iter().map(|n| wrap(n.text, |l| pen.fonts.layout(l, &style, None).width <= room)).collect();
+                let heights: Vec<f32> = wrapped.iter().map(|l| l.len() as f32 * LINE * s).collect();
+                let tops = stack(&heights, h, GAP * s).0;
+                (style, wrapped, tops)
+            });
         for (i, note) in mine.iter().enumerate() {
             let spot = (dx + note.x * dw, dy + note.y * dh);
-            let ly = h * (i as f32 + 1.0) / (mine.len() as f32 + 1.0);
+            let lines = &wrapped[i];
+            let ly = tops[i] + lines.len() as f32 * LINE * s / 2.0;
             let lx = if side { w - margin + 10.0 * s } else { margin - 10.0 * s };
 
             if let Some(dot) = PathBuilder::from_circle(spot.0, spot.1, 3.0 * s) {
@@ -176,13 +191,10 @@ fn write_notes(canvas: &mut PixmapMut, pen: &Pen, slide: &Slide, (w, h, margin):
                 canvas.stroke_path(&path, &ink(line), &stroke, Transform::identity(), None);
             }
 
-            let room = margin - 26.0 * s;
-            let lines = wrap(note.text, |l| pen.fonts.layout(l, &style, None).width <= room);
-            let start = ly - (lines.len() as f32 - 1.0) * 8.0 * s;
-            for (n, line) in lines.iter().enumerate() {
-                let layout = pen.fonts.layout(line, &style, None);
+            for (n, text) in lines.iter().enumerate() {
+                let layout = pen.fonts.layout(text, &style, None);
                 let base = layout.lines.first().map_or(layout.height, |l| l.baseline);
-                let y = start + n as f32 * 16.0 * s - base;
+                let y = tops[i] + (n as f32 + 0.5) * LINE * s - base;
                 let x = if side { lx + 8.0 * s } else { lx - 8.0 * s - layout.width };
                 pen.fonts.draw(canvas, &layout, x.round(), y.round(), words);
             }
@@ -190,9 +202,42 @@ fn write_notes(canvas: &mut PixmapMut, pen: &Pen, slide: &Slide, (w, h, margin):
     }
 }
 
+const SIZES: [f32; 4] = [13.0, 12.0, 11.0, 10.0];
+
+const LINE: f32 = 16.0;
+const GAP: f32 = 12.0;
+
+fn stack(heights: &[f32], room: f32, gap: f32) -> (Vec<f32>, bool) {
+    let n = heights.len();
+    let mut tops: Vec<f32> = heights.iter().enumerate().map(|(i, h)| room * (i as f32 + 1.0) / (n as f32 + 1.0) - h / 2.0).collect();
+    for i in 0..n {
+        let least = if i == 0 { 0.0 } else { tops[i - 1] + heights[i - 1] + gap };
+        tops[i] = tops[i].max(least);
+    }
+    for i in (0..n).rev() {
+        let most = if i + 1 == n { room } else { tops[i + 1] - gap } - heights[i];
+        tops[i] = tops[i].min(most);
+    }
+    let fits = tops.first().is_none_or(|t| *t >= 0.0)
+        && tops.windows(2).enumerate().all(|(i, t)| t[0] + heights[i] + gap <= t[1] + 0.5);
+    (tops, fits)
+}
+
 #[cfg(test)]
 mod tests {
-    use super::wrap;
+    use super::{stack, wrap};
+
+    #[test]
+    fn notes_down_a_side_keep_a_clear_gap() {
+        let (tops, fits) = stack(&[48.0, 32.0, 48.0], 140.0, 12.0);
+        assert!(!fits, "{tops:?}");
+        let (tops, fits) = stack(&[48.0, 32.0, 48.0], 200.0, 12.0);
+        assert!(fits && tops[0] >= 0.0, "{tops:?}");
+        for (i, h) in [48.0, 32.0].iter().enumerate() {
+            assert!(tops[i] + h + 12.0 <= tops[i + 1] + 0.5, "{tops:?}");
+        }
+        assert!(tops[2] + 48.0 <= 200.0);
+    }
 
     #[test]
     fn lines_as_long_as_they_fit() {

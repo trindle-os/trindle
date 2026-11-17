@@ -53,7 +53,8 @@ pub struct Facts {
     pub fs_size: Option<u64>,
     pub devices: Option<usize>,
     pub read_only: Option<bool>,
-    pub swap_file: Option<bool>,
+
+    pub swap_files: Option<Vec<String>>,
     pub online_shrink: bool,
     pub snapshot: bool,
     pub busy: bool,
@@ -94,7 +95,7 @@ fn fit_to_shrink(f: &Facts, container: bool) -> Result<(), String> {
     if !f.in_use {
         return Err(t!("disks-room-mount-first").into());
     }
-    if f.mounts.len() != 1 {
+    if f.mounts.is_empty() {
         return Err(t!("disks-room-mounts-not-one").into());
     }
     match f.read_only {
@@ -107,10 +108,8 @@ fn fit_to_shrink(f: &Facts, container: bool) -> Result<(), String> {
         Some(_) => return Err(t!("disks-room-many-drives").into()),
         None => return Err(t!("disks-room-drives-unknown").into()),
     }
-    match f.swap_file {
-        Some(false) => {}
-        Some(true) => return Err(t!("disks-room-swap-file").into()),
-        None => return Err(t!("disks-room-swap-unknown").into()),
+    if f.swap_files.is_none() {
+        return Err(t!("disks-room-swap-unknown").into());
     }
     Ok(())
 }
@@ -277,7 +276,8 @@ pub fn judge(objects: &Objects, ids: &Ids, plan: &Plan, done: usize) -> Result<(
 
 pub struct World {
     pub mountinfo: String,
-    pub swaps: String,
+
+    pub swaps: Option<String>,
     pub devices: fn(&str) -> Option<usize>,
     pub used: fn(&str) -> Option<u64>,
     pub snapper: bool,
@@ -286,13 +286,13 @@ pub struct World {
 impl World {
 
     pub fn none() -> World {
-        World { mountinfo: String::new(), swaps: String::new(), devices: |_| None, used: |_| None, snapper: false }
+        World { mountinfo: String::new(), swaps: None, devices: |_| None, used: |_| None, snapper: false }
     }
 
     pub fn read() -> World {
         World {
             mountinfo: std::fs::read_to_string("/proc/self/mountinfo").unwrap_or_default(),
-            swaps: std::fs::read_to_string("/proc/swaps").unwrap_or_default(),
+            swaps: std::fs::read_to_string("/proc/swaps").ok(),
             devices: btrfs_devices,
             used: |dir| used_space(dir),
             snapper: crate::common::snapshots::available(),
@@ -327,13 +327,18 @@ pub fn read_only(mountinfo: &str, dir: &str) -> Option<bool> {
     })
 }
 
-pub fn swap_file_under(swaps: &str, dir: &str) -> bool {
-    let under = if dir == "/" { "/".to_string() } else { format!("{}/", dir.trim_end_matches('/')) };
-    swaps.lines().skip(1).any(|l| {
+fn all_read_only(mountinfo: &str, mounts: &[String]) -> Option<bool> {
+    let seen: Vec<bool> = mounts.iter().filter_map(|m| read_only(mountinfo, m)).collect();
+    (!seen.is_empty()).then(|| seen.contains(&true))
+}
+
+pub fn swap_files_under(swaps: &str, dirs: &[String]) -> Vec<String> {
+    let unders: Vec<String> = dirs.iter().map(|d| if d == "/" { "/".to_string() } else { format!("{}/", d.trim_end_matches('/')) }).collect();
+    swaps.lines().skip(1).filter_map(|l| {
         let mut f = l.split_whitespace();
-        let (name, kind) = (f.next().unwrap_or(""), f.next().unwrap_or(""));
-        kind == "file" && name.starts_with(&under)
-    })
+        let (name, kind) = (plan::unescape(f.next().unwrap_or("")), f.next().unwrap_or(""));
+        (kind == "file" && unders.iter().any(|u| name.starts_with(u.as_str()))).then_some(name)
+    }).collect()
 }
 
 pub fn facts(objects: &Objects, v: &Vol, online_shrink: bool, busy: bool, world: &World) -> (Facts, Option<Ids>) {
@@ -347,7 +352,7 @@ pub fn facts(objects: &Objects, v: &Vol, online_shrink: bool, busy: bool, world:
     let block = objects.get(&fs_path).and_then(|o| o.get(BLOCK));
     let fs = objects.get(&fs_path).and_then(|o| o.get(FILESYSTEM));
     let mounts = fs.map(mount_points).unwrap_or_default();
-    let dir = mounts.first().cloned().unwrap_or_default();
+    let dir = mounts.iter().find(|m| *m == "/").or(mounts.first()).cloned().unwrap_or_default();
     let uuid = block.map(|b| dbus::get_str(b, "IdUUID")).unwrap_or_default();
     let kind = block.map(|b| dbus::get_str(b, "IdType")).unwrap_or_default();
     let ids = fs.is_some().then(|| Ids { part: v.path.clone(), open: open_path.clone(), fs: fs_path.clone() });
@@ -361,10 +366,10 @@ pub fn facts(objects: &Objects, v: &Vol, online_shrink: bool, busy: bool, world:
         used: (!dir.is_empty()).then(|| (world.used)(&dir)).flatten(),
         fs_size: fs.map(|f| num(f, "Size")),
         devices: (world.devices)(&uuid),
-        read_only: read_only(&world.mountinfo, &dir),
-        swap_file: (!dir.is_empty()).then(|| swap_file_under(&world.swaps, &dir)),
+        read_only: all_read_only(&world.mountinfo, &mounts),
+        swap_files: world.swaps.as_deref().filter(|_| !mounts.is_empty()).map(|s| swap_files_under(s, &mounts)),
         online_shrink,
-        snapshot: world.snapper && mounts == ["/"],
+        snapshot: world.snapper && mounts.iter().any(|m| m == "/"),
         busy,
         mounts,
     };
@@ -418,7 +423,7 @@ mod tests {
         Facts {
             kind: KIND.into(), in_use: true, mounts: vec!["/".into()], encrypted: false, opened: None,
             part: Some((MIB, 400 * G / MIB * MIB, false)), part_type: GPT.into(), used: Some(100 * G), fs_size: Some(400 * G / MIB * MIB),
-            devices: Some(1), read_only: Some(false), swap_file: Some(false), online_shrink: true, snapshot: true, busy: false,
+            devices: Some(1), read_only: Some(false), swap_files: Some(Vec::new()), online_shrink: true, snapshot: true, busy: false,
         }
     }
 
@@ -465,24 +470,22 @@ mod tests {
     #[test]
     fn every_doubt_is_refused_with_its_reason() {
         let cases: Vec<(&str, Box<dyn Fn(&mut Facts)>)> = vec![
-            ("not a part", Box::new(|f| f.part = None)),
-            ("cannot make Btrfs smaller", Box::new(|f| f.online_shrink = false)),
-            ("holds other parts", Box::new(|f| f.part = Some((MIB, 400 * G, true)))),
+            ("isn't a partition", Box::new(|f| f.part = None)),
+            ("can't make Btrfs smaller", Box::new(|f| f.online_shrink = false)),
+            ("has other partitions inside it", Box::new(|f| f.part = Some((MIB, 400 * G, true)))),
             ("GPT", Box::new(|f| f.part_type = "0x83".into())),
             ("Mount it first", Box::new(|f| f.in_use = false)),
-            ("exactly one place", Box::new(|f| f.mounts = vec!["/".into(), "/mnt/x".into()])),
-            ("exactly one place", Box::new(|f| f.mounts = Vec::new())),
+            ("isn't mounted", Box::new(|f| f.mounts = Vec::new())),
             ("read-only", Box::new(|f| f.read_only = Some(true))),
-            ("whether it is read-only", Box::new(|f| f.read_only = None)),
+            ("whether it's read-only", Box::new(|f| f.read_only = None)),
             ("more than one drive", Box::new(|f| f.devices = Some(2))),
             ("how many drives", Box::new(|f| f.devices = None)),
-            ("swap file", Box::new(|f| f.swap_file = Some(true))),
-            ("whether a swap file", Box::new(|f| f.swap_file = None)),
-            ("in use could not be read", Box::new(|f| f.used = None)),
+            ("whether there's a swap file", Box::new(|f| f.swap_files = None)),
+            ("couldn't read how much of it is in use", Box::new(|f| f.used = None)),
             ("how big the files", Box::new(|f| f.fs_size = None)),
             ("how big the files", Box::new(|f| f.fs_size = Some(0))),
-            ("do not agree", Box::new(|f| f.fs_size = Some(500 * G))),
-            ("do not agree", Box::new(|f| f.used = Some(f.fs_size.unwrap() + 1))),
+            ("don't match", Box::new(|f| f.fs_size = Some(500 * G))),
+            ("don't match", Box::new(|f| f.used = Some(f.fs_size.unwrap() + 1))),
             ("Another change", Box::new(|f| f.busy = true)),
             ("snapshot", Box::new(|f| f.snapshot = false)),
             ("too little", Box::new(|f| f.used = Some(399 * G))),
@@ -496,10 +499,10 @@ mod tests {
             assert!(matches!(offer(&f), Offer::Not(_) | Offer::Nothing), "{words}");
         }
         let encrypted_cases: Vec<(&str, Box<dyn Fn(&mut Facts)>)> = vec![
-            ("open copy of it could not be found", Box::new(|f| f.opened = None)),
-            ("encryption do not agree", Box::new(|f| f.opened = Some(f.part.unwrap().1))),
-            ("encryption do not agree", Box::new(|f| f.opened = Some(f.part.unwrap().1 - 100 * MIB))),
-            ("encryption do not agree", Box::new(|f| f.opened = Some(f.part.unwrap().1 - 100))),
+            ("couldn't find the unlocked copy of it", Box::new(|f| f.opened = None)),
+            ("encryption don't match", Box::new(|f| f.opened = Some(f.part.unwrap().1))),
+            ("encryption don't match", Box::new(|f| f.opened = Some(f.part.unwrap().1 - 100 * MIB))),
+            ("encryption don't match", Box::new(|f| f.opened = Some(f.part.unwrap().1 - 100))),
         ];
         for (words, change) in &encrypted_cases {
             let mut f = encrypted();
@@ -515,9 +518,9 @@ mod tests {
         let mut f = plain();
         f.kind = "ext4".into();
         let Offer::Not(why) = offer(&f) else { panic!("a label") };
-        assert!(why.contains("ext4") && why.contains("not in use"), "{why}");
+        assert!(why.contains("ext4") && why.contains("isn't in use"), "{why}");
         f.kind = "xfs".into();
-        assert_eq!(offer(&f), Offer::Not("This xfs part cannot be made smaller.".into()));
+        assert_eq!(offer(&f), Offer::Not(t!("disks-room-xfs-fixed").into()));
         f.kind = "ntfs".into();
         assert!(matches!(offer(&f), Offer::Not(w) if w.contains("ntfs")));
 
@@ -636,7 +639,7 @@ mod tests {
 
         f.opened = Some(target);
         let why = plan(&f, 100 * G).expect_err("refused");
-        assert!(why.contains("encryption do not agree"), "{why}");
+        assert!(why.contains("encryption don't match"), "{why}");
 
         let mut g = plain();
         let first = plan(&g, 100 * G).unwrap();
@@ -658,10 +661,11 @@ mod tests {
         assert_eq!(read_only(info, "/mnt/a b"), Some(true));
         assert_eq!(read_only(info, "/nowhere"), None);
         let swaps = "Filename\tType\tSize\tUsed\tPriority\n/dev/zram0 partition 100 0 100\n/swapfile file 100 0 -2\n";
-        assert!(swap_file_under(swaps, "/"));
-        assert!(!swap_file_under(swaps, "/mnt/x"));
-        assert!(!swap_file_under("Filename\tType\tSize\tUsed\tPriority\n/dev/sda2 partition 100 0 -2\n", "/"));
-        assert!(swap_file_under("Filename Type\n/mnt/x/swapfile file 1 0 -2\n", "/mnt/x"));
-        assert!(!swap_file_under("Filename Type\n/mnt/xy/swapfile file 1 0 -2\n", "/mnt/x"));
+        let dirs = |d: &[&str]| d.iter().map(|s| s.to_string()).collect::<Vec<_>>();
+        assert_eq!(swap_files_under(swaps, &dirs(&["/"])), ["/swapfile"]);
+        assert!(swap_files_under(swaps, &dirs(&["/mnt/x"])).is_empty());
+        assert!(swap_files_under("Filename\tType\tSize\tUsed\tPriority\n/dev/sda2 partition 100 0 -2\n", &dirs(&["/"])).is_empty());
+        assert_eq!(swap_files_under("Filename Type\n/mnt/x/swap\\040file file 1 0 -2\n", &dirs(&["/home", "/mnt/x"])), ["/mnt/x/swap file"]);
+        assert!(swap_files_under("Filename Type\n/mnt/xy/swapfile file 1 0 -2\n", &dirs(&["/mnt/x"])).is_empty());
     }
 }

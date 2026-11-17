@@ -229,17 +229,17 @@ fn windows_find_their_app() {
     };
     let apps = vec![
         app("firefox-esr", "/usr/lib/firefox-esr/firefox-esr %u", None, ""),
-        app("com.synology.SynologyDrive", "/usr/bin/flatpak run com.synology.SynologyDrive", Some("com.synology.SynologyDrive"), ""),
-        app("claude-desktop", "env FOO=1 /opt/Claude/claude %U", None, ""),
-        app("google-chrome", "/usr/bin/google-chrome-stable %U", None, "Google-chrome"),
+        app("com.example.CloudDrive", "/usr/bin/flatpak run com.example.CloudDrive", Some("com.example.CloudDrive"), ""),
+        app("nova-desktop", "env FOO=1 /opt/Nova/nova %U", None, ""),
+        app("example-browser", "/usr/bin/example-browser-stable %U", None, "Example-browser"),
     ];
     let found = |w: &str| find_for_window(&apps, w).map(|a| a.key().to_string());
     assert_eq!(found("firefox-esr").as_deref(), Some("firefox-esr"));
-    assert_eq!(found("Google-chrome").as_deref(), Some("google-chrome"));
-    assert_eq!(found("google-chrome-stable").as_deref(), Some("google-chrome"));
-    assert_eq!(found("Claude").as_deref(), Some("claude-desktop"));
-    assert_eq!(found("SynologyDrive").as_deref(), Some("com.synology.SynologyDrive"));
-    assert_eq!(found("com.synology.SynologyDrive.desktop").as_deref(), Some("com.synology.SynologyDrive"));
+    assert_eq!(found("Example-browser").as_deref(), Some("example-browser"));
+    assert_eq!(found("example-browser-stable").as_deref(), Some("example-browser"));
+    assert_eq!(found("Nova").as_deref(), Some("nova-desktop"));
+    assert_eq!(found("CloudDrive").as_deref(), Some("com.example.CloudDrive"));
+    assert_eq!(found("com.example.CloudDrive.desktop").as_deref(), Some("com.example.CloudDrive"));
     assert_eq!(found(""), None);
     assert_eq!(found("gimp"), None);
 }
@@ -271,7 +271,7 @@ fn made_up_apps() -> Vec<Entry> {
         app("trindle-appimage-krita-5-2-3-x86-64-appimage",
             "\"/home/john/Applications/krita-5.2.3-x86_64.appimage\" %U", None, "org.kde.krita"),
 
-        app("google-chrome", "/usr/bin/google-chrome-stable %U", None, "Google-chrome"),
+        app("example-browser", "/usr/bin/example-browser-stable %U", None, "Example-browser"),
         app("steam", "/usr/games/steam %U", None, "steam"),
 
         app("code", "/usr/share/code/code %F", None, "Code"),
@@ -279,7 +279,7 @@ fn made_up_apps() -> Vec<Entry> {
         app("brave-browser", "/usr/bin/brave-browser-stable %U", None, "brave-browser"),
         app("vivaldi-stable", "/usr/bin/vivaldi-stable %U", None, "vivaldi-stable"),
         app("microsoft-edge", "/usr/bin/microsoft-edge-stable %U", None, "microsoft-edge"),
-        app("chrome-abcdefghijklmnop-Default", "/opt/google/chrome/google-chrome --app-id=abcdefghijklmnop", None,
+        app("chrome-abcdefghijklmnop-Default", "/opt/google/chrome/example-browser --app-id=abcdefghijklmnop", None,
             "crx_abcdefghijklmnop"),
 
         app("foo-launcher", "/opt/foo/foo.sh %U", None, ""),
@@ -300,8 +300,8 @@ fn window_cases() -> &'static [(&'static str, &'static [&'static str])] {
         ("Gimp", &["gimp"]),
         ("obsidian", &["trindle-appimage-obsidian-1-6-7-x86-64-appimage"]),
         ("org.kde.krita", &["trindle-appimage-krita-5-2-3-x86-64-appimage"]),
-        ("Google-chrome", &["google-chrome"]),
-        ("google-chrome", &["google-chrome"]),
+        ("Example-browser", &["example-browser"]),
+        ("example-browser", &["example-browser"]),
         ("steam", &["steam"]),
         ("Code", &["code"]),
         ("code", &["code"]),
@@ -334,7 +334,7 @@ fn trindle_launchers_own_their_windows() {
     let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("share/applications");
     let desk = vec!["Trindle".to_string()];
     let ids = ["trindle-activity", "trindle-apps", "trindle-drives", "trindle-settings",
-               "trindle-text", "trindle-welcome"];
+               "trindle-text"];
     let all: Vec<Entry> = ids.iter().map(|id| {
         let path = dir.join(format!("{id}.desktop"));
         let file = crate::common::keyfile::KeyFile::load(&path).unwrap();
@@ -342,8 +342,7 @@ fn trindle_launchers_own_their_windows() {
     }).collect();
     for (id, window) in [("trindle-activity", "org.trindle.Activity"), ("trindle-apps", "org.trindle.Apps"),
                          ("trindle-apps", "org.trindle.Store"), ("trindle-drives", "org.trindle.Drives"),
-                         ("trindle-settings", "org.trindle.Settings"), ("trindle-text", "org.trindle.Text"),
-                         ("trindle-welcome", "org.trindle.Welcome")] {
+                         ("trindle-settings", "org.trindle.Settings"), ("trindle-text", "org.trindle.Text")] {
         let app = all.iter().find(|a| a.key() == id).unwrap();
         assert!(owns(&all, app, window), "{id} owns {window}");
     }
@@ -376,4 +375,77 @@ fn a_launcher_file_starts_its_program_in_its_folder() {
     }
     assert!(started.exists());
     std::fs::remove_dir_all(&dir).unwrap();
+}
+
+#[test]
+fn a_launcher_started_over_dbus_gets_the_object_path_the_spec_gives() {
+    assert_eq!(dbus_path("org.example.Some-App"), "/org/example/Some_App");
+    assert_eq!(dbus_path("plain"), "/plain");
+}
+
+#[cfg(test)]
+fn draws_any(icons: &[String]) -> bool {
+    let set = crate::toolkit::icon::Icons::new();
+    let mut pm = tiny_skia::Pixmap::new(32, 32).unwrap();
+    icons.iter().any(|n| set.draw(&mut pm.as_mut(), n, 0, 0, 32, 1, crate::toolkit::colour::Colour::rgb(1.0, 1.0, 1.0)).is_some())
+}
+
+#[test]
+fn an_appimage_launcher_without_an_icon_still_draws_a_generic_one() {
+    use crate::common::keyfile::KeyFile;
+    let langs = Vec::new();
+    let desk = vec!["Trindle".to_string()];
+    let read = |id: &str, extra: &str| {
+        let text = format!("[Desktop Entry]\nType=Application\nName=Foo App\nExec=trindle-boxed --appimage \"/h/Foo-1.0.AppImage\" %U\n{extra}");
+        entry_from(id, Path::new("/x"), &KeyFile::parse(&text), &langs, &desk, |p| p != "/gone/foo.png").unwrap()
+    };
+    assert_eq!(read("trindle-appimage-foo-1-0-appimage.desktop", "Icon=/gone/foo.png\n").icon, None, "a path that is not there is dropped");
+    let cases = [
+        ("no Icon=, no class", read("trindle-appimage-foo-1-0-appimage.desktop", ""), "Foo-1.0.AppImage"),
+        ("no Icon=, with class", read("trindle-appimage-foo-1-0-appimage.desktop", "StartupWMClass=Foo\n"), "Foo"),
+        ("no Icon=, window unmatched", read("trindle-appimage-foo-1-0-appimage.desktop", ""), "chrome-unrelated"),
+        ("Icon= path gone", read("trindle-appimage-foo-1-0-appimage.desktop", "Icon=/gone/foo.png\n"), "Foo-1.0.AppImage"),
+        ("Icon= empty", read("trindle-appimage-foo-1-0-appimage.desktop", "Icon=\n"), "Foo-1.0.AppImage"),
+    ];
+    for (what, entry, app_id) in cases {
+        let all = vec![entry.clone()];
+        let icons = window_icons(find_for_window(&all, app_id), app_id);
+        assert!(draws_any(&icons), "{what}: {icons:?}");
+        assert!(icons.last().is_some_and(|l| l.starts_with("trindle-generic-")), "{what}: ends in a generic icon: {icons:?}");
+    }
+    let all = vec![read("trindle-appimage-foo-1-0-appimage.desktop", "")];
+    let first = window_icons(find_for_window(&all, "Foo-1.0.AppImage"), "Foo-1.0.AppImage");
+    assert_eq!(first, window_icons(find_for_window(&all, "Foo-1.0.AppImage"), "Foo-1.0.AppImage"), "always the same one");
+}
+
+#[test]
+fn a_window_with_no_app_gets_the_generic_icon_name() {
+    let one = window_icon(None, "chrome-unrelated");
+    assert_eq!(one, generic_icon_for("chrome-unrelated", "chrome-unrelated"));
+    assert!(one.starts_with("trindle-generic-"));
+}
+
+#[test]
+fn the_shared_icon_lookup_is_one_instance_while_the_theme_is_unchanged() {
+    assert!(std::rc::Rc::ptr_eq(&shared_icons(), &shared_icons()));
+}
+
+#[test]
+fn every_entry_in_a_single_icon_list_has_an_icon_that_exists_or_the_generic() {
+    let e = Entry { id: "org.x.Nowhere.desktop".into(), name: "Nowhere".into(), icon: Some("no-such-icon-anywhere-xyz".into()), exec: "b".into(),
+        try_exec: None, wm_class: String::new(), program: "b".into(), kinds: Vec::new(), path: PathBuf::new(), category: "", keywords: Vec::new(),
+        flatpak: None, appimage: None, terminal: false };
+    let out = with_existing_icons(vec![e]);
+    assert_eq!(out[0].icon.as_deref(), Some(generic_icon_for("org.x.Nowhere", "Nowhere").as_str()));
+}
+
+#[test]
+fn a_single_icon_name_is_one_that_exists_or_the_generic() {
+    let mut e = Entry { id: "org.x.Bitty.desktop".into(), name: "Bitty".into(), icon: Some("bitty".into()), exec: "b".into(), try_exec: None,
+        wm_class: String::new(), program: "b".into(), kinds: Vec::new(), path: PathBuf::new(), category: "", keywords: Vec::new(),
+        flatpak: None, appimage: None, terminal: false };
+    assert_eq!(e.icon_that_exists(|n| n == "bitty"), "bitty");
+    assert_eq!(e.icon_that_exists(|_| false), generic_icon_for("org.x.Bitty", "Bitty"));
+    e.icon = None;
+    assert_eq!(e.icon_that_exists(|_| false), generic_icon_for("org.x.Bitty", "Bitty"));
 }

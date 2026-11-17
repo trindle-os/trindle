@@ -55,7 +55,7 @@ fn wifi_names() -> Vec<String> {
     all
 }
 
-fn unescape(s: &str) -> String {
+pub fn unescape(s: &str) -> String {
     s.replace("\\:", ":").replace("\\\\", "\\")
 }
 

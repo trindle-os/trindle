@@ -11,7 +11,7 @@ use tracing::warn;
 use super::{
     configure_pointer,
     gamma::{apply_gamma, gamma_length, linear_ramp, read_gamma},
-    output_config, AnvilState, UdevData, UdevOutputId,
+    output_config, Compose, UdevData, UdevOutputId,
 };
 use crate::{
     protocols::screens::{ScreenFacts, ScreenPlan},
@@ -66,7 +66,7 @@ impl Backend for UdevData {
         }
     }
 
-    fn output_heads(state: &AnvilState<Self>) -> Vec<ScreenFacts> {
+    fn output_heads(state: &Compose<Self>) -> Vec<ScreenFacts> {
         let mut heads = Vec::new();
         for device in state.backend_data.backends.values() {
             for surface in device.surfaces.values() {
@@ -101,7 +101,7 @@ impl Backend for UdevData {
     }
 
     fn apply_output_config(
-        state: &mut AnvilState<Self>,
+        state: &mut Compose<Self>,
         targets: &[ScreenPlan],
         test_only: bool,
     ) -> Result<(), String> {
@@ -113,7 +113,7 @@ impl Backend for UdevData {
         surface.enabled.then_some(surface.powered)
     }
 
-    fn set_output_power(state: &mut AnvilState<Self>, output: &Output, on: bool) -> bool {
+    fn set_output_power(state: &mut Compose<Self>, output: &Output, on: bool) -> bool {
         let Some(&UdevOutputId { device_id: node, crtc }) = output.user_data().get::<UdevOutputId>() else {
             return false;
         };

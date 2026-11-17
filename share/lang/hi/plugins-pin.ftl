@@ -7,10 +7,10 @@ plugins-pin-four = PIN 4 अंकों का होता है।
 plugins-pin-not-saved = PIN सहेजा नहीं गया
 
 # Red words on the PIN card when the unlocking command gave no answer of its own.
-plugins-pin-no-answer = दूसरे कंप्यूटर से कोई जवाब नहीं मिला।
+plugins-pin-no-answer = दूसरे कंप्यूटर ने जवाब नहीं दिया।
 
 # Red words on the PIN card when the unlocking command refused without saying why.
-plugins-pin-not-unlocked = अनलॉक नहीं हुआ।
+plugins-pin-not-unlocked = अभी भी लॉक है।
 
 # Name the screen reader gives to the four dots on the PIN card.
 plugins-pin-dots = PIN

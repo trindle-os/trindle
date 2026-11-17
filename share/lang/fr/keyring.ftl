@@ -31,7 +31,7 @@ keyring-why-none = Un programme souhaite conserver un mot de passe en lieu sûr.
 keyring-why-old = Votre mot de passe de session n'est pas celui avec lequel ce trousseau a été créé. Saisissez l'ancien une seule fois ; ensuite, il s'ouvrira tout seul à l'ouverture de session.
 
 # Under the title when no password was typed at log in, for example with a fingerprint or automatic log in.
-keyring-why-no-login = Aucun mot de passe n'a été saisi à l'ouverture de session (empreinte digitale ou connexion automatique), donc le trousseau n'a pas pu s'ouvrir tout seul. Saisissez votre mot de passe de session.
+keyring-why-no-login = Vous n'avez pas saisi de mot de passe à l'ouverture de session (empreinte digitale ou connexion automatique), donc le trousseau n'a pas pu s'ouvrir tout seul. Saisissez votre mot de passe de session.
 
 # Under the title when a program asks for a saved password and the keyring is shut.
 keyring-why-wanted = Un programme demande un mot de passe enregistré. Saisissez votre mot de passe de session pour déverrouiller le trousseau.
@@ -43,7 +43,7 @@ keyring-stopped = Le trousseau s'est arrêté
 keyring-not-the-keyring-password = Ce n'est pas le mot de passe du trousseau
 
 # Shown under the box when the keyring file is damaged and has been left as it is.
-keyring-damaged-left = Le fichier du trousseau est endommagé ; il a été laissé tel quel
+keyring-damaged-left = Le fichier du trousseau est endommagé, donc Trindle ne l'a pas modifié
 
 # Shown under the box when the password is not the person's login password.
 keyring-not-login-password = Ce n'est pas votre mot de passe de session
@@ -52,7 +52,7 @@ keyring-not-login-password = Ce n'est pas votre mot de passe de session
 keyring-not-your-password = Ce n'est pas votre mot de passe.
 
 # Shown in Settings when the old keyring is still running after its time to stop has run out.
-keyring-would-not-stop = L'ancien trousseau n'a pas voulu s'arrêter.
+keyring-would-not-stop = L'ancien trousseau ne s'est pas arrêté.
 
 # Said when the keyring is locked and cannot be used.
 keyring-error-locked = Le trousseau est verrouillé
@@ -61,7 +61,7 @@ keyring-error-locked = Le trousseau est verrouillé
 keyring-error-wrong-password = Ce mot de passe n'ouvre pas le trousseau
 
 # Said when the collection or item asked for is not there.
-keyring-error-no-such = Collection ou élément introuvable
+keyring-error-no-such = Cet élément n'existe pas
 
 # Said when the keyring file cannot be read as a keyring.
 keyring-error-damaged = Le fichier du trousseau est endommagé
@@ -71,8 +71,10 @@ keyring-error-damaged = Le fichier du trousseau est endommagé
 keyring-asked-by = Demandé par { $program }
 
 # Told to a program that asked while the keyring was taking over from the one before and many calls already waited.
-keyring-starting = Le trousseau démarre. Demandez à nouveau.
+keyring-starting = Le trousseau démarre. Réessayez.
 
 # The program in "Asked for by", for a program on the bus: $name is the name it gives itself, which anything can claim.
 keyring-named-itself = un programme qui se fait appeler { $name }
 
+# Said to a program that gave a password with letters the keyring can't read, so no keyring is made with it.
+keyring-password-unreadable = Ce mot de passe contient des caractères que le trousseau ne peut pas lire

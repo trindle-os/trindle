@@ -1,0 +1,15 @@
+extends: existence
+message: "'%s' reads like AI writing; say it plainly."
+level: error
+ignorecase: true
+tokens:
+  - seamless(?:ly)?
+  - robust
+  - leverag(?:e|es|ing)
+  - delv(?:e|es|ing)
+  - journey
+  - empower(?:s|ing)?
+  - effortless(?:ly)?
+  - not just .{1,40}, (?:it's|it is)
+  - in order to
+  - utili[sz]e

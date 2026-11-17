@@ -27,7 +27,7 @@ store-app-state-updating = اپ ڈیٹ ہو رہی ہے
 store-app-state-held = انسٹال شدہ، اپ ڈیٹس روکی گئی ہیں
 
 # The state beside the dot for an installed app whose updates are held back.
-store-app-state-held-version = انسٹال شدہ، ورژن { $version } پر روکی گئی
+store-app-state-held-version = انسٹال شدہ، ورژن { $version } پر اپ ڈیٹس روکی گئی ہیں
 
 # The state beside the dot for an installed app with an update waiting; the end says what waits.
 store-app-state-waiting = انسٹال شدہ، { $waits }
@@ -66,7 +66,7 @@ store-app-remove = ہٹائیں
 store-app-open-round = کھولیں
 
 # Main button that releases an app whose updates are held back.
-store-app-release = روک ہٹائیں
+store-app-release = اپ ڈیٹس کی اجازت دیں
 
 # Main button that updates the app.
 store-app-update = اپ ڈیٹ کریں
@@ -84,13 +84,13 @@ store-app-website = ویب سائٹ
 store-app-no-pictures = اس ایپ کی کوئی تصویر نہیں ہے۔
 
 # In the picture frame when the picture could not be fetched.
-store-app-picture-missed = یہ تصویر حاصل نہیں ہو سکی۔
+store-app-picture-missed = Trindle یہ تصویر حاصل نہیں کر سکا۔
 
 # In the picture frame while the picture is being fetched.
 store-app-picture-fetching = تصویر حاصل کی جا رہی ہے…
 
 # In the picture frame when the computer has no internet.
-store-app-picture-offline = جب تک یہ کمپیوٹر انٹرنیٹ سے منسلک نہیں، تصاویر حاصل نہیں ہو سکتیں۔
+store-app-picture-offline = تصاویر دیکھنے کے لیے انٹرنیٹ سے جڑیں۔
 
 # Between the picture buttons: which picture, when it has no caption.
 store-app-picture-of = تصویر { $at } از { $n }
@@ -165,13 +165,13 @@ store-app-review-no-title = بغیر عنوان
 store-app-people-none = ابھی تک کسی نے اس ایپ کے بارے میں نہیں لکھا۔
 
 # Under What people say when there is no internet.
-store-app-people-offline = جب تک یہ کمپیوٹر انٹرنیٹ سے منسلک نہیں، لوگوں کی رائے حاصل نہیں ہو سکتی۔
+store-app-people-offline = جائزے پڑھنے کے لیے انٹرنیٹ سے جڑیں۔
 
 # Under What people say while reviews are being fetched.
-store-app-people-looking = لوگوں کی رائے تلاش کی جا رہی ہے…
+store-app-people-looking = جائزے لوڈ ہو رہے ہیں…
 
 # Name of the card of reviews.
-store-app-people = لوگ کیا کہتے ہیں
+store-app-people = جائزے
 
 # Facts line: when the app's project was made.
 store-app-fact-created = بنایا گیا

@@ -144,6 +144,7 @@ fn no_panel_asks_for_the_pulse_and_the_ring_asks_once_for_them_all() {
         assert_eq!(code.iter().filter(|l| l.contains(&pulse)).count(), allowed, "{name} writes the ring's pulse itself");
     }
 
+    asks.sort_unstable();
     assert_eq!(asks, ["ring/mod.rs", "screenshot/mod.rs"], "the ring asks for its pulse once, as it starts, for every panel it will ever have, and the screenshot tool once, as it starts");
 
     assert!(PANELS.iter().any(|p| p.2 == RING && p.0 == "polkit/mod.rs"));

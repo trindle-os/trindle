@@ -97,6 +97,9 @@ impl App for Face {
         let pointed = self.middle_picture(open.as_ref().map(|o| o.1.as_slice()));
         let hiding = pointed.is_some();
         let mut all_layers = vec![self.backdrop(hiding)];
+        if self.listening {
+            all_layers.push(in_middle(super::paint::listening_rings(self.listening_since)));
+        }
         if let Some((ring, wins)) = &open {
             all_layers.extend(self.windows_ring(ring, wins));
         }
@@ -131,6 +134,10 @@ fn in_middle(n: Node<Msg>) -> Node<Msg> {
 
 fn beside(n: Node<Msg>, r: [f32; 4]) -> Node<Msg> {
     placed(n, move |(mw, mh), (aw, ah)| ((r[0] + r[2] + 8.0).min(aw - mw - 8.0), r[1].min(ah - mh - 8.0)))
+}
+
+pub(super) fn first_match<M>(tile: Node<M>, best: bool, turn: u32) -> Node<M> {
+    if best { tile.grab(turn) } else { tile }
 }
 
 impl Face {
@@ -187,6 +194,7 @@ impl Face {
             let at = [p.x as f32 - bw as f32 / 2.0, p.y as f32 - bh as f32 / 2.0, bw as f32, bh as f32];
             let Some(app) = names.get(p.item) else { continue };
             let node = app_button(app, p.item, lay.icon, lay.names, Some(p.item) == best, Some(p.item) == self.hover_app, at, self.ink_of(&app.id));
+            let node = first_match(node, Some(p.item) == best && self.searching(), self.typed_turn);
             out.push(((p.x as f32, p.y as f32), placed(node, move |_, _| (at[0], at[1]))));
         }
     }
@@ -222,7 +230,7 @@ impl Face {
         if let Some((h, r)) = self.win_menu.clone() {
             out.push(beside(self.window_menu_card(&h).floats(), r));
         }
-        if let Some((i, r)) = self.menu {
+        if let Some((i, _, r)) = self.menu {
             out.push(beside(self.menu_card(i).floats(), r));
         }
     }

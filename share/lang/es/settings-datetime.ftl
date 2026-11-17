@@ -8,7 +8,7 @@ settings-datetime-title = Fecha y hora
 settings-datetime-keywords = time zone clock date zona horaria reloj fecha hora
 
 # Help line at the foot of the Date and time page.
-settings-datetime-help = La zona horaria y la hora automática necesitan la contraseña de un administrador.
+settings-datetime-help = Cambiar la zona horaria o la hora automática necesita la contraseña de un administrador.
 
 # Spoken name of the picture of the clock at the top of the page.
 settings-datetime-time-now = La hora ahora
@@ -41,7 +41,7 @@ settings-datetime-minute = Minuto
 settings-datetime-no-time = No se pudo establecer la hora.
 
 # Red words when the time was set by hand while automatic time is on.
-settings-datetime-keeps-right = Ahora mismo el reloj se ajusta solo. Desactiva eso arriba y luego pon la hora a mano.
+settings-datetime-keeps-right = El reloj se ajusta automáticamente. Desactiva eso arriba y luego pon la hora a mano.
 
 # Red words when the system's message bus could not be reached.
 settings-datetime-no-bus = No se pudo acceder al bus del sistema.
@@ -50,7 +50,7 @@ settings-datetime-no-bus = No se pudo acceder al bus del sistema.
 settings-datetime-not-answering = El servicio de hora no responde.
 
 # Red words when automatic time could not be turned on.
-settings-datetime-ntp-on-failed = No se pudo indicar al reloj que se ajuste solo.
+settings-datetime-ntp-on-failed = No se pudo activar la hora automática.
 
 # Red words when automatic time could not be turned off.
 settings-datetime-ntp-off-failed = No se pudo desactivar la hora automática.
@@ -65,13 +65,13 @@ settings-datetime-not-real = Esa fecha no existe.
 settings-datetime-it-is = Son las { $time } del { $date }.
 
 # Headline of the page when the time service is not answering.
-settings-datetime-service-down = El servicio de hora no responde, así que el reloj no se puede cambiar aquí.
+settings-datetime-service-down = El servicio de hora no responde, así que no puedes cambiar la hora aquí.
 
 # Headline of the page when the clock is automatic and in step: { $time } is the time and { $date } the date.
-settings-datetime-it-is-right = Son las { $time } del { $date }, y el reloj se ajusta solo.
+settings-datetime-it-is-right = Son las { $time } del { $date }. El reloj se ajusta automáticamente.
 
 # Headline of the page when the clock is automatic but not yet in step: { $time } is the time and { $date } the date.
-settings-datetime-it-is-checks = Son las { $time } del { $date }. El reloj se comprueba solo cuando llega a internet.
+settings-datetime-it-is-checks = Son las { $time } del { $date }. El reloj se ajustará cuando el equipo se conecte a internet.
 
 # Headline of the page when the clock is set by hand: { $time } is the time and { $date } the date.
 settings-datetime-it-is-hand = Son las { $time } del { $date }. El reloj está puesto a mano.
@@ -86,7 +86,7 @@ settings-datetime-city-region-offset = { $city }, { $region }, { $offset }
 settings-datetime-tip = Son las { $time } del { $date }, { $zone }.
 
 # Help text of the clock card when the time service is not answering or not yet read.
-settings-datetime-ring-about = El reloj del centro del anillo se escribe en 24 o 12 horas, con o sin segundos. Solo el reloj del anillo sigue esto; las fechas y horas de los programas siguen los formatos elegidos en Región e idioma.
+settings-datetime-ring-about = El reloj del centro del anillo puede mostrar 24 o 12 horas, con o sin segundos. Esto solo cambia el reloj del anillo. Las fechas y horas de los programas siguen los formatos que elijas en Región e idioma.
 
 # Heading of the card with the clock settings.
 settings-datetime-the-clock = El reloj
@@ -94,11 +94,8 @@ settings-datetime-the-clock = El reloj
 # Heading of the line shown when the time service is not answering.
 settings-datetime-service-down-line = El servicio de hora no responde
 
-# Under Set the time automatically when the internet can be used.
-settings-datetime-from-internet = Desde internet, cuando hay conexión.
-
 # Under Set the time automatically when the time service is not installed.
-settings-datetime-needs-timesyncd = Necesita tener instalado systemd-timesyncd.
+settings-datetime-needs-timesyncd = Instala primero systemd-timesyncd.
 
 # Label of the switch for automatic time, and heading of its line.
 settings-datetime-set-auto = Ajustar la hora automáticamente
@@ -112,14 +109,11 @@ settings-datetime-set-date-time = Establecer la fecha y la hora
 # Heading of the line for setting the time by hand.
 settings-datetime-by-hand = Poner la hora a mano
 
-# Under the Set the time by hand heading.
-settings-datetime-by-hand-sub = Desactiva primero la hora automática, como está ahora.
-
 # Help text of the clock card (the information button) when the time service can keep the time from the internet.
-settings-datetime-about = Con el ajuste automático, el reloj se comprueba con servidores de hora de internet siempre que el equipo está conectado, y se mantiene en hora. Desactivado, la fecha y la hora se escriben a mano. La zona horaria también le indica a la luz nocturna cuándo se pone el sol. Ambas cosas necesitan la contraseña de un administrador. El reloj del centro del anillo se escribe en 24 o 12 horas, con o sin segundos. Solo el reloj del anillo sigue esto; las fechas y horas de los programas siguen los formatos elegidos en Región e idioma.
+settings-datetime-about = Con la hora automática activada, el reloj se comprueba con servidores de hora de internet siempre que el equipo está conectado. Si está desactivada, escribes la fecha y la hora a mano. La zona horaria también le indica a la luz nocturna cuándo se pone el sol. Ambas cosas necesitan la contraseña de un administrador. El reloj del centro del anillo puede mostrar 24 o 12 horas, con o sin segundos. Esto solo cambia el reloj del anillo. Las fechas y horas de los programas siguen los formatos que elijas en Región e idioma.
 
 # Help text of the clock card (the information button) when the time service is not installed.
-settings-datetime-about-no-ntp = Con el ajuste automático, el reloj se comprueba con servidores de hora de internet siempre que el equipo está conectado, y se mantiene en hora. Desactivado, la fecha y la hora se escriben a mano. La zona horaria también le indica a la luz nocturna cuándo se pone el sol. Ambas cosas necesitan la contraseña de un administrador. Mantener la hora desde internet necesita systemd-timesyncd: sudo apt install systemd-timesyncd El reloj del centro del anillo se escribe en 24 o 12 horas, con o sin segundos. Solo el reloj del anillo sigue esto; las fechas y horas de los programas siguen los formatos elegidos en Región e idioma.
+settings-datetime-about-no-ntp = Con la hora automática activada, el reloj se comprueba con servidores de hora de internet siempre que el equipo está conectado. Si está desactivada, escribes la fecha y la hora a mano. La zona horaria también le indica a la luz nocturna cuándo se pone el sol. Ambas cosas necesitan la contraseña de un administrador. Para ajustar la hora desde internet, necesitas systemd-timesyncd: sudo apt install systemd-timesyncd. El reloj del centro del anillo puede mostrar 24 o 12 horas, con o sin segundos. Esto solo cambia el reloj del anillo. Las fechas y horas de los programas siguen los formatos que elijas en Región e idioma.
 
 # An item in the list of ways to write the ring's clock: { $time } is the time written that way and { $what } its name.
 settings-datetime-clock-option = { $time }  ({ $what })
@@ -129,7 +123,3 @@ settings-datetime-show-as = Mostrar como
 
 # Heading of the line for the ring's clock.
 settings-datetime-rings-clock = El reloj del anillo
-
-# Under The ring's clock heading.
-settings-datetime-rings-clock-sub = Cómo escribe la hora el anillo.
-

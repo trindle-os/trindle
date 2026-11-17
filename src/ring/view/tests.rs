@@ -19,7 +19,7 @@ use super::Face;
 use super::app::look;
 use super::app_tile::{app_button, paint_app};
 use super::arrange::{found, less_word, rank_found};
-use super::middle::{ALL_ICON, BATTERY_TEXT, centre_of, core, SEGMENT, strip_of, time_and_date_drawn, tool_rows};
+use super::middle::{FINDING, ALL_ICON, BATTERY_TEXT, centre_of, core, SEGMENT, strip_of, time_and_date_drawn, tool_rows};
 use super::paint::{paint_ring, Scene};
 use super::pinned::Ink;
 use super::power::{Ends, ends_session, escape_ends, OFFER_SECONDS, only_a_click_confirms, Power, power_step, spoken_step};
@@ -229,24 +229,32 @@ fn start_at_login_asks_twice_to_add_and_once_to_take_off() {
     assert!(code.contains("tools.push(startup_button(&app.path).size(size))"), "an open window's menu");
 }
 
-fn names(found: Vec<usize>, apps: &[&str]) -> Vec<String> {
-    found.into_iter().map(|i| apps[i].to_string()).collect()
+fn names(found: Vec<usize>, apps: &[(&str, &[String])]) -> Vec<String> {
+    found.into_iter().map(|i| apps[i].0.to_string()).collect()
 }
 
 #[test]
-fn typed_letters_find_only_apps_whose_names_start_with_them() {
-    let apps = ["Firefox", "LibreOffice", "Calibre", "Lantern", "Lollypop", "Slim Editor", "Audacity"];
-    assert_eq!(names(rank_found("L", &apps), &apps), ["Lantern", "LibreOffice", "Lollypop"]);
+fn typed_letters_find_apps_by_the_start_of_any_word_of_the_name_or_a_keyword() {
+    let browser = ["web".to_string(), "internet".to_string()];
+    let apps: [(&str, &[String]); 8] = [("Firefox", &browser), ("LibreOffice", &[]), ("Calibre", &[]), ("Lantern", &[]), ("Lollypop", &[]),
+                                        ("Slim Editor", &[]), ("Audacity", &[]), ("Text Editor", &[])];
+    assert_eq!(names(rank_found("L", &apps), &apps), ["Lantern", "LibreOffice", "Lollypop"], "Calibre has no word starting with L");
     assert_eq!(names(rank_found("li", &apps), &apps), ["LibreOffice"]);
     assert_eq!(names(rank_found("  fire ", &apps), &apps), ["Firefox"]);
-    assert!(rank_found("editor", &apps).is_empty(), "a word later in a name is not a match");
+    assert_eq!(names(rank_found("editor", &apps), &apps), ["Slim Editor", "Text Editor"], "a word later in a name matches");
+    assert_eq!(names(rank_found("ed", &apps), &apps), ["Slim Editor", "Text Editor"]);
+    assert_eq!(names(rank_found("slim ed", &apps), &apps), ["Slim Editor"], "every typed word must start a word");
+    assert_eq!(names(rank_found("inter", &apps), &apps), ["Firefox"], "a keyword matches");
+    assert!(rank_found("brary", &apps).is_empty(), "the middle of a word is not a match");
     assert!(rank_found("zzz", &apps).is_empty());
     assert!(rank_found("   ", &apps).is_empty());
+    let apps: [(&str, &[String]); 3] = [("Zed", &browser), ("Web Wonder", &[]), ("Webcam", &[])];
+    assert_eq!(names(rank_found("web", &apps), &apps), ["Webcam", "Web Wonder", "Zed"], "name start, then fewer words, then keywords last");
 }
 
 #[test]
 fn the_report_button_is_always_in_the_lower_row_in_the_beta() {
-    let lower: Vec<_> = super::middle::lower_tools().iter().map(|t| t.0).collect();
+    let lower: Vec<_> = super::middle::tool_rows()[1].iter().map(|t| t.0).collect();
     assert_eq!(lower.last(), Some(&"report"), "{lower:?}");
 }
 
@@ -317,7 +325,7 @@ fn ring_tree_found((w, h): (f32, f32), apps: &[&'static str], names: &[&'static 
     let (cx, cy) = (w / 2.0, h / 2.0);
     let back = lay.clone();
     let dim = crate::common::style::palette().dim as f32;
-    let mut all: Vec<Node<Msg>> = vec![drawing((w, h), "", move |pm, pen| paint_ring(pm, pen, &back, &Scene { seg: searching, top: Some(false), bare: POINTED.with(|p| p.borrow().is_some()), listening: false, pulse: 0.0, empty: false, all: searching, dim }))];
+    let mut all: Vec<Node<Msg>> = vec![drawing((w, h), "", move |pm, pen| paint_ring(pm, pen, &back, &Scene { seg: searching, top: Some(false), bare: POINTED.with(|p| p.borrow().is_some()), empty: false, all: searching, dim }))];
     push_windows_ring(&mut all, wins, &lay, (w, h));
     let (upper, status, lower, foot) = tool_columns(status, tray);
     let clock = time_and_date_drawn("14:32".into(), "Wed 14 Oct".into()).key("clock");
@@ -834,6 +842,16 @@ fn an_app(id: &str, name: &str, category: &'static str) -> Program {
 }
 
 #[test]
+fn an_apps_menu_lets_go_once_another_app_takes_its_place() {
+    let kind = crate::common::apps::CATEGORIES[0];
+    let before: Vec<Program> = ["a", "b", "c"].iter().map(|n| an_app(&format!("{n}.desktop"), n, kind)).collect();
+    assert_eq!(super::menu::still_at(&before, 1, "b.desktop").map(|a| a.name.as_str()), Some("b"));
+    let after: Vec<Program> = ["a", "c"].iter().map(|n| an_app(&format!("{n}.desktop"), n, kind)).collect();
+    assert!(super::menu::still_at(&after, 1, "b.desktop").is_none(), "c took b's place and was taken for it");
+    assert!(super::menu::still_at(&after, 2, "b.desktop").is_none());
+}
+
+#[test]
 fn a_windows_menu_offers_make_or_remove_favourite_for_every_program_with_a_launcher() {
     let kind = crate::common::apps::CATEGORIES[0];
     let all: Vec<Program> = ["a", "b", "c", "d"].iter().map(|n| an_app(&format!("{n}.desktop"), n, kind)).collect();
@@ -973,6 +991,62 @@ fn a_long_name_under_an_app_is_cut_at_its_end_only() {
 }
 
 #[test]
+fn the_listening_rings_are_drawn_on_a_small_layer_of_their_own() {
+    use crate::toolkit::theme::Theme;
+    use crate::toolkit::ui::Ui;
+    let side = crate::ring::layout::CENTRE as u32 + 40;
+    let paint = |node| {
+        let mut ui = Ui::new(node, Theme::new(true, "#fbc711"));
+        let mut pix = tiny_skia::Pixmap::new(side, side).unwrap();
+        ui.paint(&mut pix.as_mut(), 1.0);
+        pix
+    };
+    let (rings, bare) = (paint(super::paint::listening_rings(std::time::Instant::now() - std::time::Duration::from_millis(500))), paint(crate::toolkit::widget::drawing((side as f32, side as f32), "", |_, _| {})));
+    let mid = side / 2;
+    let steady = mid + crate::ring::layout::CENTRE as u32 / 2 + 2;
+    assert_ne!(rings.pixel(steady, mid), bare.pixel(steady, mid), "the steady ring is drawn");
+    assert_eq!(rings.pixel(mid, mid), bare.pixel(mid, mid), "nothing is painted over the middle");
+    assert_eq!(rings.pixel(0, 0), bare.pixel(0, 0), "nothing is painted out in the corner");
+}
+
+#[test]
+fn the_listening_pulse_moves_with_no_rebuild_of_the_view() {
+    use std::time::{Duration, Instant};
+    use crate::toolkit::testing::Harness;
+    use crate::toolkit::ui::App;
+    struct Listening { since: Instant, built: Cell<u32> }
+    impl App for Listening {
+        type Msg = Msg;
+        fn update(&mut self, _: Msg) {}
+        fn view(&self) -> crate::toolkit::widget::Node<Msg> {
+            self.built.set(self.built.get() + 1);
+            super::paint::listening_rings(self.since)
+        }
+    }
+    let side = CENTRE as u32 + 40;
+    let mut h = Harness::new(Listening { since: Instant::now(), built: Cell::new(0) }, (side, side));
+    let first = h.picture(1.0);
+    if !crate::common::graphics::moving() || crate::toolkit::motion::reduced() {
+        assert!(h.ui().next_wake(Instant::now()).is_none(), "with no movement the pulse stands still");
+        return;
+    }
+    let mut moved = false;
+    for _ in 0..40 {
+        std::thread::sleep(Duration::from_millis(50));
+        let now = Instant::now();
+        assert!(h.ui().next_wake(now).is_some(), "the window wakes for the pulse");
+        assert!(h.ui().only_turns(), "each frame paints the pulse alone, with no rebuild of the view");
+        assert!(h.ui().tick(now), "each frame says the pulse moved");
+        if h.picture(1.0).data() != first.data() {
+            moved = true;
+            break;
+        }
+    }
+    assert!(moved, "the pulse swells as time goes by");
+    assert_eq!(h.app().built.get(), 1, "the view was built once, when listening began");
+}
+
+#[test]
 fn a_disc_has_room_for_its_whole_float_shadow() {
     for light in [true, false] {
         let theme = crate::toolkit::theme::Theme::new(light, "#fbc711");
@@ -980,4 +1054,109 @@ fn a_disc_has_room_for_its_whole_float_shadow() {
             assert!(f.y + f.blur + f.spread <= super::paint::DISC_ROOM, "{f:?}");
         }
     }
+}
+
+#[test]
+fn a_spoken_command_that_could_not_be_done_says_so() {
+    assert_eq!(super::voice::failed_words(true), None);
+    assert_eq!(super::voice::failed_words(false), Some("That didn't work."));
+}
+
+#[test]
+fn names_with_marks_sort_among_their_letters() {
+    use super::arrange::sort_key;
+    let mut names = vec!["Zoom", "\u{c9}diteur", "Eclipse", "Fenster", "\u{c5}ngstr\u{f6}m", "Aardvark", "Stra\u{df}e"];
+    names.sort_by_key(|n| sort_key(n));
+    assert_eq!(names, ["Aardvark", "\u{c5}ngstr\u{f6}m", "Eclipse", "\u{c9}diteur", "Fenster", "Stra\u{df}e", "Zoom"]);
+}
+
+#[test]
+fn a_title_too_long_for_its_piece_has_a_short_form_from_the_word_files() {
+    assert_eq!(super::paint::short_title("media"), Some("Sound"));
+    assert_eq!(super::paint::short_title("games"), None);
+}
+
+#[test]
+fn the_time_and_date_fit_in_every_language_day_and_text_size() {
+    use crate::toolkit::lang::format::{date, Pattern};
+    use crate::toolkit::theme::Theme;
+    use crate::toolkit::ui::Ui;
+
+    let days: Vec<i64> = (0..365).step_by(3).map(|d| 1_767_225_600 + d * 86_400).collect();
+    for tag in crate::common::shipped_languages::tags() {
+        crate::common::shipped_languages::in_language(&tag, || {
+            for scale in [1.0_f32, 1.5, 2.0] {
+                let (w, h) = ((FINDING.0 * scale).round() as u32, (FINDING.1 * scale).round() as u32);
+                let paint = |time: &str, said: &str| {
+                    let mut ui = Ui::new(time_and_date_drawn(time.into(), said.into()), Theme::new(true, "#fbc711"));
+                    let mut pix = tiny_skia::Pixmap::new(w, h).unwrap();
+                    ui.paint(&mut pix.as_mut(), scale);
+                    pix
+                };
+                let blank = paint("", "");
+                let margin = (3.0 * scale) as u32;
+                for &unix in &days {
+                    let said = date(&crate::common::clock::moment_at(unix, 0), Pattern::ShortDay);
+                    for time in ["23:59", "12:59 pm", "11:59:59 PM"] {
+                        let pix = paint(time, &said);
+                        let inked = |x: u32| (0..h).any(|y| pix.pixel(x, y) != blank.pixel(x, y));
+                        let edge = (0..margin).chain(w - margin..w).find(|&x| inked(x));
+                        assert!(edge.is_none(), "{tag} at {scale}: {time} {said:?} reaches the edge at column {edge:?} of {w}");
+                        assert!((margin..w - margin).any(inked), "{tag} at {scale}: {time} {said:?} was not drawn");
+                    }
+                }
+            }
+        });
+    }
+}
+
+#[test]
+fn the_pieces_are_cut_at_the_margin_without_a_mask_the_size_of_the_screen() {
+    let mut pix = tiny_skia::Pixmap::new(200, 100).unwrap();
+    pix.fill(tiny_skia::Color::from_rgba8(255, 0, 0, 255));
+    let dim = tiny_skia::Color::from_rgba8(0, 0, 0, 128);
+    super::paint::cut_to(&mut pix.as_mut(), (10.0, 10.0, 80.0, 30.0), 2.0, dim);
+    let red = tiny_skia::Color::from_rgba8(255, 0, 0, 255).premultiply().to_color_u8();
+    let dimmed = dim.premultiply().to_color_u8();
+    for (x, y) in [(0, 0), (19, 50), (100, 10), (181, 50), (100, 81), (199, 99)] {
+        assert_eq!(pix.pixel(x, y).unwrap(), dimmed, "({x}, {y}) is outside the clip");
+    }
+    for (x, y) in [(20, 20), (100, 50), (179, 79)] {
+        assert_eq!(pix.pixel(x, y).unwrap(), red, "({x}, {y}) is inside the clip");
+    }
+}
+
+#[test]
+fn shipped_launchers_ask_for_pictures_the_icon_sets_draw() {
+    let lacking = ["trindle-apps", "dialog-warning-symbolic"];
+    let mut seen = 0;
+    for entry in std::fs::read_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/share/applications")).expect("the launchers").flatten() {
+        let text = std::fs::read_to_string(entry.path()).expect("a launcher");
+        let Some(icon) = text.lines().find_map(|l| l.strip_prefix("Icon=")) else { continue };
+        seen += 1;
+        assert!(!lacking.contains(&icon) && !icon.ends_with("-symbolic"), "{:?} asks for {icon}, which the icon sets do not draw", entry.file_name());
+    }
+    assert!(seen >= 10, "the launchers were read: {seen}");
+}
+
+#[test]
+fn typing_a_search_moves_the_keyboard_to_the_best_match_and_enter_opens_it() {
+    use crate::toolkit::input::{Input, Keysym, Mods};
+    use crate::toolkit::theme::Theme;
+    use crate::toolkit::ui::Ui;
+    use crate::toolkit::widget::layers;
+    let tree = |best: bool, turn: u32| layers(vec![
+        button("", "Folders").on_press(1u8).key("win-0"),
+        super::app::first_match(button("", "Drives").on_press(2u8).key("app-0"), best, turn),
+    ]).width(Length::Fixed(200.0)).height(Length::Fixed(100.0));
+    let enter = Input::Key { sym: Keysym::Return, text: None, mods: Mods::default(), repeat: false };
+    let mut ui = Ui::new(tree(false, 0), Theme::new(false, "#fbc711"));
+    ui.lay_at(200, 100);
+    ui.keyboard_to("win-0");
+    ui.set_view(tree(true, 1));
+    ui.lay_at(200, 100);
+    assert_eq!(ui.keyboard_on().as_deref(), Some("app-0"), "the keyboard ring moves to the best match");
+    assert_eq!(ui.input(&enter, std::time::Instant::now()).messages, [2u8], "Enter opens the match, not the open window");
+    let src = std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/src/ring/view/app.rs")).unwrap();
+    assert!(src.contains("first_match(node, Some(p.item) == best && self.searching(), self.typed_turn)"), "the results use it");
 }

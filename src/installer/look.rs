@@ -56,8 +56,8 @@ fn careful_options(fstype: &str) -> Option<&'static str> {
     match fstype {
         "ext4" | "ext3" | "ext2" => Some(",noload"),
         "btrfs" => Some(",nologreplay"),
-        "xfs" => Some(",norecovery"),
-        "ntfs" | "vfat" | "f2fs" => Some(""),
+        "xfs" | "f2fs" => Some(",norecovery"),
+        "ntfs" | "vfat" => Some(""),
         _ => None,
     }
 }

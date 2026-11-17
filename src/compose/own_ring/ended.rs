@@ -40,15 +40,6 @@ pub(super) fn left_for_update(status: std::process::ExitStatus, was: Option<Stam
     status.code() == Some(0) && was.is_some() && is.is_some() && was != is
 }
 
-pub(super) fn still_running(pid: u32) -> bool {
-    // SAFETY: waitid only writes into the siginfo it is handed, which is
-
-    unsafe {
-        let mut info: libc::siginfo_t = std::mem::zeroed();
-        libc::waitid(libc::P_PID, pid, &mut info, libc::WEXITED | libc::WNOHANG | libc::WNOWAIT) == 0 && info.si_pid() == 0
-    }
-}
-
 pub(super) fn ended(pid: u32) -> bool {
     // SAFETY: waitid only writes into the siginfo it is handed, which is
 

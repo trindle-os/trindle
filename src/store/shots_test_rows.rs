@@ -124,8 +124,8 @@ fn holding_back_moves_nothing(s: &mut Store, all: &[(String, Spot)], across: u32
     assert!(page.said().contains(&"13 updates are ready, 153 MB in all; 4 are held back. ".trim().to_string()), "{across}: {:?}", page.said());
     assert!(page.said().iter().any(|w| w == "Updates (13)"), "{across}: the side bar counts what can go in");
     let buttons = page.buttons();
-    for (tip, can) in [("Update Notes", false), ("Update Clock", true), ("Release Notes", true), ("Hold back Clock", true), ("Install 13 updates", true),
-                       ("Update Example Platform 25.08 (org.example.Platform)", false), ("Release Example keyboard", true), ("Update Weather", false)] {
+    for (tip, can) in [("Update Notes", false), ("Update Clock", true), ("Allow updates for Notes", true), ("Hold back Clock", true), ("Install 13 updates", true),
+                       ("Update Example Platform 25.08 (org.example.Platform)", false), ("Allow updates for Example keyboard", true), ("Update Weather", false)] {
         assert!(buttons.contains(&(tip.to_string(), can)), "{across}: {tip} {can}: {buttons:?}");
     }
     s.held = Default::default();
@@ -187,7 +187,7 @@ fn every_update_button_is_the_one_design(all: &[(String, Spot)], found: &[(Strin
 
 fn one_going_in_moves_nothing(s: &mut Store, found: &[(String, Spot)], plugins: &[(String, Spot)], first: Spot, across: u32) {
 
-    for (key, name) in [(found[0].0.clone(), "Notes"), ("up:debian".to_string(), "Debian's packages"), (DEVICE.to_string(), "Example keyboard")] {
+    for (key, name) in [(found[0].0.clone(), "Notes"), ("up:debian".to_string(), "Debian packages"), (DEVICE.to_string(), "Example keyboard")] {
         s.dials.insert(key.clone(), going(0.42));
         s.upd = update_page::made_up(&[], 0, false, &SIZES_KNOWN, &[], &[]).with_flats(&FLATS).with_one(name);
         let during = places(s, across);
@@ -233,12 +233,12 @@ fn the_github_key_is_a_button_whose_box_floats_over_the_page() {
         let mut s = stocked();
         s.view = View::GitHub;
         s.github = pages::made_up::github("photos", (1..4).map(found).collect(), (4..7).map(found).collect(), true);
-        s.tall = 692.0;
+        s.size.tall = 692.0;
         let closed = places(&mut s, across);
         let said = words(&mut s);
 
         assert!(said.contains(&"button: GitHub key".to_string()), "{across}: {said:?}");
-        for gone in ["GitHub key", "A key is stored", "No key is stored", "Only if GitHub stops answering", "button: Keep the key"] {
+        for gone in ["GitHub key", "A key is stored", "No key is stored", "Only if GitHub stops answering", "button: Save the key"] {
             assert!(!said.iter().any(|w| w == gone), "{across}: {gone:?} is on the page with the box shut");
         }
         assert!(!said.iter().any(|w| w.starts_with("You almost certainly")), "{across}");
@@ -260,15 +260,15 @@ fn the_github_key_is_a_button_whose_box_floats_over_the_page() {
         let typed = open.iter().find(|(id, _)| id == "gh:key-box").expect("the box to paste the key in").1;
         assert!(typed.y > key.y + key.h && typed.x >= 8.0 && typed.x + typed.w <= across as f32 - 8.0, "{across}: {typed:?} under {key:?}");
         let said = words(&mut s);
-        for there in ["GitHub key", "No key is stored", "button: Keep the key", "button: Make a key on GitHub", "secret: Paste the key"] {
+        for there in ["GitHub key", "No key is stored", "button: Save the key", "button: Make a key on GitHub", "secret: Paste the key"] {
             assert!(said.iter().any(|w| w == there), "{across}: {there:?} is in the box: {said:?}");
         }
-        assert!(said.iter().any(|w| w.starts_with("You almost certainly do not need one.") && w.contains("kept on this computer")), "{across}");
+        assert!(said.iter().any(|w| w.starts_with("You almost certainly don't need one.") && w.contains("stored on this computer")), "{across}");
         assert!(!said.iter().any(|w| w == "button: Remove the key"), "{across}: there is none to remove");
 
         s.github = pages::made_up::github_key(std::mem::take(&mut s.github), Some(key), true, None);
         let said = words(&mut s);
-        for there in ["A key is stored", "button: Remove the key", "button: GitHub key: one is stored"] {
+        for there in ["A key is stored", "button: Remove the key", "button: A GitHub key is saved"] {
             assert!(said.iter().any(|w| w == there), "{across}: {there:?}: {said:?}");
         }
 
@@ -287,5 +287,5 @@ fn the_github_key_is_a_button_whose_box_floats_over_the_page() {
     }
 
     let source = crate::common::source::code(include_str!("github/tests.rs"));
-    assert!(source.contains("press the key at the top right of Search GitHub") && !source.contains(&["GitHub key ", "below"].concat()));
+    assert!(source.contains("Press the key button at the top right of Search") && !source.contains(&["GitHub key ", "below"].concat()));
 }

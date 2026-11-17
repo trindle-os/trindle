@@ -75,28 +75,18 @@ const fn part(name: &'static str, rule: Rule, why: &'static str) -> Part {
     }
 }
 
-const fn renews(name: &'static str, rule: Rule, why: &'static str) -> Part {
-    let _ = why;
-    Part {
-        name,
-        rule,
-        #[cfg(test)]
-        why,
-    }
-}
-
 const WINDOW: &str = "A window the person opens and closes: the next one opened is the new program.";
 const JOB: &str = "It does one job and ends: the next one started is the new program.";
 
 pub const PARTS: &[Part] = &[
-    renews("trindle-ring", Rule::InPlace, "Closed, with nothing open on it."),
-    renews("trindle-portal", Rule::InPlace, "No window of its own up, no request half answered, nothing kept awake through it and no screen share running."),
-    renews("trindle-wallpaper", Rule::HandsOver, "Any time: the old one leaves once the new one has drawn every screen."),
-    renews("trindle-clipboard", Rule::InPlace, "The watcher, when no password manager's copy waits to be wiped and no copy is being written down. `copy` holds the one thing put back on the clipboard and ends at the next copy."),
-    renews("trindle-keyring", Rule::HandsOver, "No password window up, no question waiting and no unlock under way."),
-    renews("trindle-idle", Rule::InPlace, "Nothing is dimmed, dark, showing the clock or locked by it."),
-    renews("trindle-nightlight", Rule::InPlace, "The screens are their daytime colour."),
-    renews("trindle-wsdd", Rule::InPlace, "Nobody is being answered."),
+    part("trindle-ring", Rule::InPlace, "Closed, with nothing open on it."),
+    part("trindle-portal", Rule::InPlace, "No window of its own up, no request half answered, nothing kept awake through it and no screen share running."),
+    part("trindle-wallpaper", Rule::HandsOver, "Any time: the old one leaves once the new one has drawn every screen."),
+    part("trindle-clipboard", Rule::InPlace, "The watcher, when no password manager's copy waits to be wiped and no copy is being written down. `copy` holds the one thing put back on the clipboard and ends at the next copy."),
+    part("trindle-keyring", Rule::HandsOver, "No password window up, no question waiting and no unlock under way."),
+    part("trindle-idle", Rule::InPlace, "Nothing is dimmed, dark, showing the clock or locked by it."),
+    part("trindle-nightlight", Rule::InPlace, "The screens are their daytime colour."),
+    part("trindle-wsdd", Rule::InPlace, "Nobody is being answered."),
     part("trindle-thunder", Rule::Package, "Restarted by the package as it is installed."),
     part("trindle-controller", Rule::Brief, "Started by its socket when the compositor connects and ended after 30 quiet seconds: the next one started is the new program, and none is cut off mid-game."),
     part("trindle-usb-retry", Rule::Package, "Restarted by the package as it is installed."),
@@ -106,7 +96,7 @@ pub const PARTS: &[Part] = &[
     part("trindle-autostart", Rule::Stays, "It does its work once, at login. Where it stays on, under another compositor, it only starts the ring again by name, which is the new program."),
     part("trindle-lock", Rule::Stays, "It is the locked screen: one that ended would leave the screen locked with nobody to unlock it. The next lock is the new program."),
     part("trindle-mcp", Rule::Stays, "An assistant started it and talks to it down a pipe, mid-conversation. The assistant's next start is the new program."),
-    renews("trindle-plugin", Rule::InPlace, "The keeper of a plugin's background part, only at the moment the plugin's part has stopped by itself and nothing of it is running: never while the part is busy. It becomes the new program in its own place, holding the plugin's lock all the way, and starts the part again. Every other use of `trindle-plugin` is a single job that ends."),
+    part("trindle-plugin", Rule::InPlace, "The keeper of a plugin's background part, only at the moment the plugin's part has stopped by itself and nothing of it is running: never while the part is busy. It becomes the new program in its own place, holding the plugin's lock all the way, and starts the part again. Every other use of `trindle-plugin` is a single job that ends."),
     part("trindle-boxed", Rule::Stays, "It is the outside of a running app's box and ends with the app."),
     part("trindle-greeter", Rule::Brief, "The login screen: each one shown is the new program."),
     part("trindle-greeter-session", Rule::Brief, "The login screen's session: each one is the new program."),
@@ -119,7 +109,6 @@ pub const PARTS: &[Part] = &[
     part("trindle-drives", Rule::Brief, WINDOW),
     part("trindle-disks", Rule::Brief, WINDOW),
     part("trindle-activity", Rule::Brief, WINDOW),
-    part("trindle-welcome", Rule::Brief, WINDOW),
     part("trindle-live-welcome", Rule::Brief, WINDOW),
     part("trindle-installer", Rule::Brief, WINDOW),
     part("trindle-screenshot", Rule::Brief, WINDOW),
@@ -327,8 +316,7 @@ fn waits(file: &str, words: &[String]) -> Option<&'static str> {
     if old != if name == "trindle-compose" { COMPOSE } else { INSTALLED } {
         return None;
     }
-    let keeper = is_keeper(words);
-    (part.rule == Rule::Stays && (name != "trindle-plugin" || keeper)).then_some(part.said())
+    (part.rule == Rule::Stays).then_some(part.said())
 }
 
 fn lags(words: &[String], exe: &str) -> Option<&'static str> {
@@ -559,11 +547,11 @@ mod tests {
         use super::{lags, sentence, waits};
         assert_eq!(sentence(&[], &[]), None);
         assert_eq!(sentence(&["the desktop itself"], &[]).as_deref(),
-            Some("This update is already in use, except the desktop itself, which will be the new version after the next log out."));
+            Some("This update is already in use, except for the desktop itself, which will switch to the new version after you next log out."));
         assert_eq!(sentence(&["the desktop itself", "plugins running in the background"], &[]).as_deref(),
-            Some("This update is already in use, except the desktop itself and plugins running in the background, which will be the new version after the next log out."));
+            Some("This update is already in use, except for the desktop itself and plugins running in the background, which will switch to the new version after you next log out."));
         let all = sentence(&["a", "b", "c"], &[]).unwrap();
-        assert!(all.contains("except a, b and c,"));
+        assert!(all.contains("except for a, b and c,"));
         assert!(!all.contains("reboot") && !all.contains("restart"));
         let words = |w: &[&str]| w.iter().map(|s| s.to_string()).collect::<Vec<_>>();
 
@@ -614,9 +602,9 @@ mod tests {
         assert_eq!(SOON, 3 * super::LOOK_SECS as i64);
 
         assert_eq!(sentence(&["the desktop itself"], &["the keyring", "the wallpaper"]).as_deref(),
-            Some("This update is already in use, except the desktop itself, the keyring and the wallpaper, which will be the new version after the next log out at the latest."));
+            Some("This update is already in use, except for the desktop itself, the keyring and the wallpaper, which will switch to the new version the next time you log out, at the latest."));
         assert_eq!(sentence(&[], &["the keyring"]).as_deref(),
-            Some("This update is already in use, except the keyring, which will be the new version after the next log out at the latest."));
+            Some("This update is already in use, except for the keyring, which will switch to the new version the next time you log out, at the latest."));
     }
 
     #[test]

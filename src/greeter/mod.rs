@@ -14,7 +14,8 @@ use account::{drawing_file, reader_file, remember, remembered_user, session_cmd}
 use greetd::{Backend, Greetd};
 use image::DynamicImage;
 use serde_json::{json, Value};
-use words::{HINT, no_chip, no_match, pam_words, phone_hint, phone_no, ready_name, ready_phone, ready_plain, trouble, welcome_back, welcome_new};
+use zeroize::{Zeroize, Zeroizing};
+use words::{HINT, pam_words};
 
 use crate::common::{faces, pocketkey};
 use crate::common::files::cache_home;
@@ -45,21 +46,20 @@ enum Answer {
 
     Send(Option<String>),
 
+    Password,
+
     Ask,
 
     PhoneFailed,
 }
 
-fn answer(what: &str, text: &str, by_phone: bool, secret: &mut Option<String>) -> Answer {
+fn answer(what: &str, text: &str, by_phone: bool, has_secret: bool) -> Answer {
     match what {
         "visible" | "secret" if text.as_bytes() == pocketkey::QUESTION.to_bytes() => {
             Answer::Send(Some(if by_phone { "yes" } else { "no" }.into()))
         }
         "secret" if by_phone => Answer::PhoneFailed,
-        "secret" => match secret.take() {
-            Some(s) => Answer::Send(Some(s)),
-            None => Answer::Ask,
-        },
+        "secret" if has_secret => Answer::Password,
         "info" | "error" => Answer::Send(None),
         _ => Answer::Ask,
     }
@@ -80,7 +80,7 @@ fn plain_error(reply: &Value) -> String {
         return words.to_string();
     }
     if reply["error_type"] == "auth_error" {
-        return no_match().into();
+        return t!("greeter-no-match").into();
     }
     if description.is_empty() { t!("greeter-login-failed").into() } else { description.into() }
 }
@@ -142,7 +142,9 @@ impl Helpers {
 
     fn end(child: &mut Option<std::process::Child>) {
         if let Some(mut c) = child.take() {
-            if let Ok(pid) = libc::pid_t::try_from(c.id()) {
+
+            let ended = !matches!(c.try_wait(), Ok(None));
+            if let (false, Ok(pid)) = (ended, libc::pid_t::try_from(c.id())) {
                 // SAFETY: kill only sends a signal, to a child this program
 
                 unsafe { libc::kill(pid, libc::SIGTERM) };
@@ -174,7 +176,7 @@ struct Greeter {
     user: String,
 
     known: bool,
-    password: String,
+    password: Zeroizing<String>,
 
     placeholder: String,
 
@@ -197,7 +199,7 @@ struct Greeter {
     pending_question: bool,
     retried: bool,
     started: bool,
-    secret: Option<String>,
+    secret: Option<Zeroizing<String>>,
 
     light: Option<bool>,
     face: Option<Rc<DynamicImage>>,
@@ -225,7 +227,7 @@ impl Greeter {
         let known = !user.trim().is_empty();
         let mut g = Greeter {
             backend, events, me, bus: None, icons: Rc::new(Icons::new()),
-            user, known, password: String::new(), placeholder: t!("greeter-password-box").into(),
+            user, known, password: Zeroizing::default(), placeholder: t!("greeter-password-box").into(),
             headline: String::new(), problem: None, busy: false,
             phone, due, phone_off: false, hint: false, hint_shown: 0,
             by_phone: false, pending_question: false, retried: false, started: false, secret: None,
@@ -278,7 +280,7 @@ impl Greeter {
     }
 
     fn welcome(&self) -> &'static str {
-        if self.known { welcome_back() } else { welcome_new() }
+        if self.known { t!("greeter-welcome-back") } else { t!("greeter-welcome") }
     }
 
     fn say(&mut self, text: &str) {
@@ -293,11 +295,11 @@ impl Greeter {
 
     fn ready(&self) -> &'static str {
         if self.user.trim().is_empty() {
-            ready_name()
+            t!("greeter-ready-name")
         } else if self.phone {
-            ready_phone()
+            t!("greeter-ready-phone")
         } else {
-            ready_plain()
+            t!("greeter-ready")
         }
     }
 
@@ -332,8 +334,8 @@ impl Greeter {
         if self.pending_question {
             self.pending_question = false;
             self.busy = true;
-            self.send(json!({"type": "post_auth_message_response", "response": self.password}), Step::Reply);
-            self.password.clear();
+            self.send(json!({"type": "post_auth_message_response", "response": self.password.as_str()}), Step::Reply);
+            self.password.zeroize();
             return;
         }
         let name = self.user.trim().to_string();
@@ -349,7 +351,7 @@ impl Greeter {
         self.by_phone = by_phone;
         self.secret = if by_phone { None } else { Some(self.password.clone()) };
         if by_phone {
-            self.password.clear();
+            self.password.zeroize();
         }
         self.send(json!({"type": "create_session", "username": name}), Step::Reply);
     }
@@ -364,16 +366,21 @@ impl Greeter {
             "auth_message" => self.auth_message(&reply),
             "success" => self.session_made(),
             "error" => self.session_refused(&reply),
-            _ => {}
+
+            _ => self.fail(t!("greeter-login-failed")),
         }
     }
 
     fn auth_message(&mut self, reply: &Value) {
         let what = reply["auth_message_type"].as_str().unwrap_or("");
         let text = reply["auth_message"].as_str().unwrap_or("").to_string();
-        match answer(what, &text, self.by_phone, &mut self.secret) {
+        match answer(what, &text, self.by_phone, self.secret.is_some()) {
             Answer::Send(Some(response)) => {
                 self.send(json!({"type": "post_auth_message_response", "response": response}), Step::Reply);
+            }
+            Answer::Password => {
+                let secret = self.secret.take().unwrap_or_default();
+                self.send(json!({"type": "post_auth_message_response", "response": secret.as_str()}), Step::Reply);
             }
             Answer::Send(None) => {
                 if what == "error" {
@@ -383,11 +390,11 @@ impl Greeter {
                 }
                 self.send(json!({"type": "post_auth_message_response"}), Step::Reply);
             }
-            Answer::PhoneFailed => self.fail(phone_no()),
+            Answer::PhoneFailed => self.fail(t!("greeter-phone-failed")),
             Answer::Ask => {
 
                 self.busy = false;
-                self.password.clear();
+                self.password.zeroize();
                 let hint = text.trim();
                 self.placeholder = if hint.is_empty() { t!("greeter-answer-box").into() } else { hint.into() };
                 self.news(&text);
@@ -453,7 +460,7 @@ impl Greeter {
         self.send(json!({"type": "cancel_session"}), Step::Cancelled);
         self.busy = false;
         self.phone_off = false;
-        self.password.clear();
+        self.password.zeroize();
         self.placeholder = t!("greeter-password-box").into();
         self.say(text);
         self.focus_pass();
@@ -504,7 +511,7 @@ impl Greeter {
     fn set_reader(&mut self, on: bool) {
         use crate::common::screen_reader as reader;
         if !reader::installed() {
-            self.say(reader::NONE_YET);
+            self.say(reader::none_yet());
             return;
         }
         if on && !reader::running() {
@@ -539,6 +546,8 @@ impl App for Greeter {
                 }
             }
             Msg::Pass(t) => {
+
+                let t = Zeroizing::new(t);
                 if !self.busy {
                     self.password = t;
                 }
@@ -619,7 +628,7 @@ impl Greeter {
             items.push(label(text.clone()).tone(Tone::Problem).width(Length::Fill));
         }
 
-        let mut pass_row = vec![entry(self.password.clone(), self.placeholder.clone(), Msg::Pass).key("pass")
+        let mut pass_row = vec![entry(self.password.to_string(), self.placeholder.clone(), Msg::Pass).key("pass")
             .secret().guarded().grab(self.grab_pass).on_submit(Msg::Submit).width(Length::Fill)];
         if self.phone {
             let phone = button("phone-symbolic", t!("greeter-use-phone"));
@@ -631,7 +640,7 @@ impl Greeter {
         let under = match (&self.problem, self.due) {
             (Some((text, Under::Password)), _) => label(text.clone()).tone(Tone::Problem).width(Length::Fill),
             (_, Some(secs)) => note(pocketkey::due_words(secs)).width(Length::Fill),
-            _ if self.hint => note(phone_hint()).width(Length::Fill),
+            _ if self.hint => note(t!("greeter-phone-hint")).width(Length::Fill),
             _ => note(self.ready()).width(Length::Fill),
         };
         items.push(column(vec![under]).height(Length::Fixed(PROBLEM_ROOM)));
@@ -659,9 +668,9 @@ impl Greeter {
         };
         buttons.push(power("system-reboot-symbolic", t!("greeter-restart"), t!("greeter-restart-sure"), "Reboot"));
         buttons.push(power("system-shutdown-symbolic", t!("greeter-shut-down"), t!("greeter-shut-down-sure"), "PowerOff"));
-        let mut said = vec![note(trouble())];
+        let mut said = vec![note(t!("greeter-trouble"))];
         if self.light.is_some() {
-            said.push(note(no_chip()));
+            said.push(note(t!("greeter-no-chip")));
         }
         let mut foot = vec![column(said).gap(4.0).width(Length::Fill)];
         foot.extend(buttons);
@@ -669,7 +678,6 @@ impl Greeter {
     }
 
     fn sign_in(&self) -> Node<Msg> {
-
         crate::toolkit::widget::main_action("go-next-symbolic", t!("greeter-sign-in")).on_press(Msg::Submit).off(self.busy)
     }
 }

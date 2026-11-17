@@ -16,10 +16,12 @@ pub mod chosen;
 pub mod mic;
 pub mod lid;
 pub mod updates;
+pub mod attention;
 pub mod using;
 pub mod note_goes;
 pub mod notes;
 pub mod stack;
+pub mod ticker;
 pub mod notice;
 pub mod open_windows;
 pub mod outside;
@@ -46,7 +48,14 @@ use crate::toolkit::window::Display;
 
 pub const BUS_NAME: &str = "org.trindle.Ring";
 pub const BUS_PATH: &str = "/org/trindle/Ring";
-pub(crate) const XML: &str = r#"<interface name="org.trindle.Ring"><method name="Run"><arg type="as" direction="in"/></method><method name="Tick"/><method name="CloseRing"/></interface>"#;
+
+pub(crate) fn plain<'a>(argv: &[&'a str]) -> Vec<&'a str> {
+    let mut with = vec!["env", "LC_ALL=C"];
+    with.extend_from_slice(argv);
+    with
+}
+
+pub(crate) const XML: &str = r#"<interface name="org.trindle.Ring"><method name="Run"><arg type="as" direction="in"/></method><method name="CloseRing"/></interface>"#;
 
 pub fn menu_button() -> f32 {
     crate::toolkit::theme::sheet().ring_button
@@ -75,10 +84,6 @@ impl Job {
             Job::Tray => s.ring_job_tray,
         }
     }
-}
-
-pub fn tick_at_edge(bus: &Bus, lp: &Loop) {
-    ask(bus, lp, "Tick");
 }
 
 pub fn give_way(bus: &Bus, lp: &Loop) {
@@ -267,7 +272,7 @@ fn start(lp: &Loop, session: Option<Bus>, program: &str, words: Vec<String>) -> 
     }
     battery_alert::start(&ctx);
 
-    outside::start(lp);
+    outside::start(&ctx);
 
     let drives = drives::start(&ctx);
     let windows = windows::Windows::start(lp);
@@ -306,10 +311,6 @@ fn start_services(ctx: &Rc<Ctx>) {
     chosen::start();
     sni::start(ctx);
     notify::start(ctx);
-
-    if !matches!(crate::common::files::setting("ring_place").as_str(), "" | "none") {
-        let _ = crate::common::files::set_setting("ring_place", "none");
-    }
 
     crate::corner::start(ctx);
     crate::polkit::start(ctx);
@@ -350,8 +351,6 @@ fn serve_commands(bus: &Bus, ctx: &Rc<Ctx>) -> Option<Served> {
                     c.tell(Do::Command(args));
                 }
 
-                "Tick" => c.tell(Do::Tick),
-
                 "CloseRing" => c.tell(Do::CloseRing),
                 _ => {}
             }
@@ -383,12 +382,12 @@ impl Parts {
     fn answer(&self, d: Do) {
         match d {
             Do::Command(words) => self.command(&words),
-            Do::Tick => self.notice.show(t!("settings-common-done")),
             Do::Notice(words) => self.notice.show(&words),
             Do::CloseRing => self.ring.close(),
             Do::Redraw => self.ring.redraw(),
             Do::ShowNote(id) => self.ring.show_note(id),
             Do::Face(f) => self.ring.change(f),
+            Do::FaceIf(f) => self.ring.change_if(f),
 
             Do::AppsChanged => {
                 let run = self.icons.borrow_mut().changed();

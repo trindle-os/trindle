@@ -23,7 +23,7 @@ text-save-as = Save as
 # The words a screen reader gives the Save as button, with its shortcut.
 text-save-as-key = Save as (Ctrl+Shift+S)
 # Line under the Save button when the file was changed by something else after Text opened, saved or reloaded it. Nothing has been saved.
-text-changed-elsewhere = Changed elsewhere since you opened it.
+text-changed-elsewhere = This file changed since you opened it.
 # Button beside that line: save the words here over the changed file.
 text-save-anyway = Save anyway
 # Button beside that line: read the file again from disk and drop the unsaved changes here.
@@ -39,7 +39,7 @@ text-find-replace-key = Find and replace (Ctrl+H)
 # Button in the menu that opens the go to line bar, with its shortcut.
 text-go-to-line-key = Go to line (Ctrl+G)
 # Button in the menu for a Markdown file that shows it as it will look finished, with its shortcut.
-text-finished-key = Finished look (Ctrl+E)
+text-finished-key = Preview (Ctrl+E)
 # Button in the menu for a Markdown file that exports it as a web page. Also the title of the chooser for that.
 text-export-html = Export as a web page
 # Button in the menu for a Markdown file that exports it as a PDF. Also the title of the chooser for that.
@@ -55,7 +55,7 @@ text-close-tab = Close { $name }
 # Tip of the button that closes the open bar.
 text-close-bar = Close the bar
 # Words the screen reader gives the button that shows the finished look of the text, with its shortcut.
-text-finished-look = Finished look
+text-finished-look = Preview
 # Menu item that copies everything in the text.
 text-copy-all = Copy all the text
 # Menu items for the text box: cut, copy, paste and select all the words.
@@ -66,7 +66,7 @@ text-select-all = Select all
 # Menu item for a misspelt word in the text box that opens the spelling check. The same words label the Settings switch that turns spelling checking on or off.
 text-check-spelling = Check spelling
 # Shown when a character cannot be saved in the encoding the file is kept in. $c is the character, $encoding the encoding's name.
-text-encoding-cannot-write = ‘{ $c }’ cannot be written in { $encoding }. Choose another encoding from the status bar.
+text-encoding-cannot-write = ‘{ $c }’ can't be written in { $encoding }. Choose another encoding from the status bar.
 # The words on the status bar: the line and column of the caret.
 text-line-column = Line { $line }, column { $col }
 # The words on the status bar: how many words and letters there are. Each count has its own singular and plural.
@@ -115,7 +115,7 @@ text-replace-all = Replace all
 # The words a screen reader gives the Replace all button.
 text-replace-all-spoken = Replace every word found
 # Words on the find bar when a find has been asked for and has no match.
-text-none-found = None found
+text-none-found = No matches
 # Words on the find bar when a find has matches. $at is which one is shown, $n how many there are.
 text-of-found = { $at } of { $n }
 # Words on the find bar when a find has matches and none is shown. $n is how many there are.
@@ -141,9 +141,9 @@ text-back = Back to the text
 ## The spelling bar (src/text/mod.rs)
 
 # Words on the spelling bar, after the word: the word was added to the person's own words.
-text-spell-added = is now one of your words
+text-spell-added = was added to your words
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are no suggestions.
-text-spell-none = is not in the dictionary, which has nothing like it
+text-spell-none = is not in the dictionary, and there are no suggestions
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are suggestions.
 text-spell-offers = is not in the dictionary. Did you mean one of these?
 # Button on the spelling bar that uses the spelling suggested.
@@ -169,13 +169,13 @@ text-starting = Starting
 # Label of the choice on the settings page: what happens when Text opens.
 text-when-opens = When Text opens
 # First choice: Text opens the files it had open last time.
-text-reopen = Reopen last time's files
+text-reopen = Reopen earlier files
 # Second choice: Text opens with an empty page.
-text-start-blank = Start blank
+text-start-blank = Start fresh
 # Note under the start choice: work not saved to a file is kept whichever choice is made.
-text-keep-note = Work not saved to a file is always kept and comes back either way.
+text-keep-note = Your unsaved work is kept and restored whichever option you choose.
 # Heading of the group on the settings page for how the text looks.
-text-showing = Showing the text
+text-showing = Text appearance
 # Label of the size slider: how big the text is.
 text-size = Size
 # Name of the size slider, read out by a screen reader.
@@ -202,15 +202,19 @@ text-read-as = Read the file as
 # Heading over the encodings a file is saved in.
 text-save-in = Save in
 # Note under the save encoding: the next save writes the file in this encoding.
-text-next-save = The next save writes the file in this encoding.
+text-next-save = The file will use this encoding the next time you save it.
 # Words saying the text has changes that are not saved to its file. $path is the file.
-text-changes-not-saved = { $name } has changes not saved to its file.
+text-changes-not-saved = { $name } has unsaved changes.
 # Words saying the text has changes and no file yet.
-text-not-saved = This text has not been saved to a file.
+text-not-saved = This text isn't saved to a file.
 # Heading of the question shown before closing a tab with changes. $name is the tab's file name.
 text-save-named = Save { $name }?
 # Words in the question before closing: how many other tabs with changes are left after this one. $left is the number.
-text-more-after = { $left } more after this one.
+text-more-after =
+    { $left ->
+        [one] { $left } more tab to save.
+       *[other] { $left } more tabs to save.
+    }
 # Button in the question before closing that closes the tab without saving it.
 text-close-no-save = Close without saving
 # Button in the question before closing that keeps the tab open.
@@ -219,45 +223,51 @@ text-keep-open = Keep it open
 text-two-problems = { $said } { $problem }
 # Shown when the file chosen is a folder. $name is the file's path.
 text-is-folder = { $name } is a folder.
+# Shown when a link in the finished look is pressed and is not a web address, or no browser started.
+text-link-not-opened = Only web addresses open from here.
+
 # Shown when the file is too big to open in Text. $name is the file's path.
 text-too-big = { $name } is too big to open here.
 # Shown when a file could not be opened. $name is the file's path and $reason why.
-text-cannot-open = { $name } could not be opened: { $reason }
+text-cannot-open = Trindle couldn't open { $name }: { $reason }
 # Shown when a file could not be written. $name is the file's path and $reason why.
-text-cannot-write = { $name } could not be written: { $reason }
+text-cannot-write = Trindle couldn't write { $name }: { $reason }
 # Shown when a file could not be saved. $name is the file's path and $reason why.
-text-cannot-save = { $name } could not be saved: { $reason }
+text-cannot-save = Trindle couldn't save { $name }: { $reason }
 # Shown when a file could not be read again. $name is the file's path and $reason why.
-text-cannot-read = { $name } could not be read: { $reason }
+text-cannot-read = Couldn't read { $name }: { $reason }
 # Shown when the list of open work could not be written. $folder is the folder and $reason why.
-text-work-not-kept = Work could not be kept in { $folder }: { $reason }
+text-work-not-kept = Trindle couldn't save your work in { $folder }: { $reason }
 # Shown when the settings could not be saved. $reason says why.
-text-settings-not-saved = Settings could not be saved: { $reason }
+text-settings-not-saved = Couldn't save settings: { $reason }
 # Shown when a word could not be added to the person's own words. $word is the word and $reason why.
-text-word-not-added = { $word } could not be added to your words: { $reason }
+text-word-not-added = Trindle couldn't add { $word } to your dictionary: { $reason }
 # Shown when the list of recent files could not be cleared. $reason says why.
-text-list-not-cleared = The list could not be cleared: { $reason }
+text-list-not-cleared = Trindle couldn't clear the list: { $reason }
 # Shown when the file chooser could not be opened.
-text-chooser-failed = The file chooser could not be opened.
+text-chooser-failed = Couldn't open the file chooser.
 # Shown when the file chooser cannot be used because there is no session bus.
-text-no-bus = Files cannot be chosen without a session bus.
+text-no-bus = Trindle can't open the file chooser right now.
 # Shown when the spelling language asked for is not on the computer. $lang is its name.
 text-no-dictionary = There is no dictionary called { $lang }.
 # Shown when a spelling dictionary could not be read. $lang is its name and $reason why.
-text-dictionary-unreadable = The { $lang } dictionary could not be read: { $reason }
+text-dictionary-unreadable = Trindle couldn't read the { $lang } dictionary: { $reason }
 # Shown when a save was stopped and the text it held before was kept in a folder. $reason says what went wrong and $path is where the old text is kept.
-text-kept-before = { $reason }. What it held before is kept in { $path }.
+text-kept-before = { $reason }. The old text is saved in { $path }.
 # Shown when a save was stopped part way and the old text is kept. $why says why, and $path is where the old text is kept.
-text-kept-before-that = { $why } What it held before that save is kept in { $path }.
+text-kept-before-that = { $why } The text from before that save is in { $path }.
 # Shown when a save was stopped and what was kept of it cannot be read. $name is the file's path.
-text-saved-unreadable = { $name } was being saved when Text was stopped, and what was kept of the save cannot be read.
+text-saved-unreadable = Text closed while it was saving { $name }, and Trindle can't read the part that was saved.
 # Shown when a save was stopped and the file has changed since. $name is the file's path.
-text-saved-changed = { $name } was being saved when Text was stopped, and has been changed since, so it is left as it is.
+text-saved-changed = Text closed while it was saving { $name }. The file has changed since, so Trindle has left it as it is.
 # Shown when a save was stopped and the old text could not be put back. $name is the file's path, $reason why, and $path where the old text is kept.
-text-saved-not-put-back = { $name } was being saved when Text was stopped, and could not be put back as it was: { $reason }. What it held before that save is kept in { $path }.
+text-saved-not-put-back = Text closed while it was saving { $name }, and Trindle couldn't put the file back as it was: { $reason }. The text from before that save is in { $path }.
 
 # Quiet word beside what was just saved, exported or changed.
 text-done = Done
 
 # Suggested file name in the Save as chooser for text never saved before.
 text-untitled-file = Untitled.txt
+
+# The misspelt word, shown in quotation marks on the spelling bar. { $word } is the word.
+text-spell-word = ‘{ $word }’

@@ -9,15 +9,15 @@ settings-users-keywords = tài khoản người dùng mật khẩu ảnh đại 
 
 # Help line at the foot of the Users page.
 # SAFETY: needs a human review before it ships
-settings-users-help = Thêm người, đổi mật khẩu và xoá tài khoản cần mật khẩu quản trị viên.
+settings-users-help = Bạn cần mật khẩu quản trị viên để thêm người, đổi mật khẩu hoặc xoá tài khoản.
 
 # Beside a change that is waiting for the administrator's password to be typed.
 # SAFETY: needs a human review before it ships
-settings-users-waiting = Đang chờ mật khẩu...
+settings-users-waiting = Đang chờ mật khẩu của bạn…
 
 # Headline of the Users page when nobody on the computer is an administrator.
 # SAFETY: needs a human review before it ships
-settings-users-sum-nobody-admin = Ở đây không ai là quản trị viên, nên không thể cài đặt hay thay đổi gì cho mọi người.
+settings-users-sum-nobody-admin = Ở đây không ai là quản trị viên, nên không ai có thể cài đặt hay thay đổi gì cho mọi người.
 
 # Headline of the Users page when you are the only person and an administrator.
 # SAFETY: needs a human review before it ships
@@ -51,7 +51,7 @@ settings-users-sum-admins =
 settings-users-this-is-you = Đây là bạn.
 
 # Under a person's name on their card when the card is someone else's: the name shown is their login name.
-settings-users-login-name = Tên đăng nhập của họ.
+settings-users-login-name = Tên đăng nhập
 
 # Tip of the round button on a person's card that picks their picture, and title of the window that opens.
 settings-users-choose-picture = Chọn ảnh
@@ -65,7 +65,7 @@ settings-users-change-password = Đổi mật khẩu
 
 # Tip of the round button on a person's card that deletes them and their files.
 # SAFETY: needs a human review before it ships
-settings-users-delete = Xoá, cùng với các tệp của họ
+settings-users-delete = Xoá tài khoản và các tệp
 
 # Said beside a person once they are deleted.
 # SAFETY: needs a human review before it ships
@@ -75,17 +75,13 @@ settings-users-deleted = Đã xoá
 # SAFETY: needs a human review before it ships
 settings-users-administrator = Quản trị viên
 
-# Under the Administrator line: what an administrator can do.
-# SAFETY: needs a human review before it ships
-settings-users-admin-can = Có thể cài đặt và thay đổi mọi thứ cho mọi người.
-
 # Tip of the administrator switch on your own card, and said when you press it: you cannot remove your own administrator rights.
 # SAFETY: needs a human review before it ships
-settings-users-cannot-take-away = Bạn không thể tự gỡ quyền này của mình.
+settings-users-cannot-take-away = Bạn không thể gỡ quyền quản trị của chính mình.
 
 # Said beside a person after they are made an administrator.
 # SAFETY: needs a human review before it ships
-settings-users-admin-now = Đã là quản trị viên
+settings-users-admin-now = Giờ là quản trị viên
 
 # Said beside a person after they stop being an administrator.
 # SAFETY: needs a human review before it ships
@@ -93,7 +89,7 @@ settings-users-admin-no-longer = Không còn là quản trị viên
 
 # Help text for a person's card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-person-about = Ảnh, mật khẩu của họ và, với bất kỳ ai ngoài bạn, việc xoá họ cùng các tệp là những nút tròn bên cạnh tên. Quản trị viên có thể cài chương trình và thay đổi mọi thứ cho mọi người; bạn không thể tự gỡ quyền này của mình. Mỗi thay đổi đều hỏi mật khẩu quản trị viên.
+settings-users-person-about = Quản trị viên có thể cài chương trình và thay đổi mọi thứ cho mọi người. Bạn không thể gỡ quyền quản trị của chính mình. Mỗi thay đổi cần mật khẩu quản trị viên.
 
 # Typing box in the change password form, for your own current password.
 # SAFETY: needs a human review before it ships
@@ -120,11 +116,11 @@ settings-users-cancel = Huỷ
 
 # Red words in the change password form when your current password was left empty.
 # SAFETY: needs a human review before it ships
-settings-users-need-current = Cần cả mật khẩu hiện tại của bạn, để các thông tin đăng nhập đã lưu vẫn dùng được.
+settings-users-need-current = Hãy nhập cả mật khẩu hiện tại của bạn, để các thông tin đăng nhập đã lưu vẫn dùng được.
 
 # Red words in the change password form when the new password is too short.
 # SAFETY: needs a human review before it ships
-settings-users-at-least-8 = Xin nhập ít nhất 8 ký tự.
+settings-users-at-least-8 = Hãy dùng ít nhất 8 ký tự.
 
 # Red words in the change password form when the two new passwords differ.
 # SAFETY: needs a human review before it ships
@@ -136,7 +132,7 @@ settings-users-password-changed = Đã đổi mật khẩu
 
 # Red words after a password change when the saved logins could not take the new password.
 # SAFETY: needs a human review before it ships
-settings-users-not-rekeyed = Đã đổi mật khẩu, nhưng các thông tin đăng nhập đã lưu vẫn mở bằng mật khẩu cũ.
+settings-users-not-rekeyed = Đã đổi mật khẩu, nhưng các thông tin đăng nhập đã lưu của bạn vẫn dùng mật khẩu cũ.
 
 # Red words when the chosen file is not a picture the page can use.
 settings-users-png-please = Xin chọn PNG, JPG hoặc WebP.
@@ -148,21 +144,17 @@ settings-users-picture-not-changed = Không đổi được ảnh.
 settings-users-saved = Đã lưu
 
 # Red words when your new picture works at login but could not be copied to your home folder.
-settings-users-picture-not-shared = Ảnh hiện ở màn hình đăng nhập, nhưng không chuyển được cho các chương trình khác của bạn.
+settings-users-picture-not-shared = Ảnh của bạn hiện ở màn hình đăng nhập, nhưng Trindle không chia sẻ được ảnh cho các chương trình khác của bạn.
 
 # Heading of the form for adding a person.
 settings-users-add-someone = Thêm người dùng
 
 # Help text for the Add someone form (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-add-about = Một tài khoản mới cho người khác: họ tên đầy đủ, tên đăng nhập gồm chữ cái thường và chữ số, bắt đầu bằng chữ cái, và mật khẩu ít nhất 8 ký tự. Họ có thể đăng nhập ngay. Quản trị viên có thể cài chương trình và thay đổi mọi thứ cho mọi người.
+settings-users-add-about = Hãy nhập họ tên đầy đủ, tên đăng nhập và mật khẩu ít nhất 8 ký tự. Tên đăng nhập chỉ gồm chữ cái thường và chữ số, và phải bắt đầu bằng chữ cái. Họ có thể đăng nhập ngay. Quản trị viên có thể cài chương trình và thay đổi mọi thứ cho mọi người.
 
 # Heading of the line in the Add someone form that holds the button.
 settings-users-new-account = Tài khoản mới
-
-# Under the New account heading.
-# SAFETY: needs a human review before it ships
-settings-users-new-account-sub = Họ có thể đăng nhập ngay bằng mật khẩu này.
 
 # Typing box in the Add someone form for the person's full name.
 settings-users-full-name = Họ tên đầy đủ
@@ -196,23 +188,19 @@ settings-users-saved-logins = Thông tin đăng nhập đã lưu
 
 # Help text for the Saved logins card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-keyring-about = Các mật khẩu mà chương trình giữ giúp bạn, chẳng hạn cho thư hoặc Wi-Fi, được lưu trong một chùm khoá mở bằng mật khẩu đăng nhập của bạn. Mọi người tự chuyển sang chùm khoá của Trindle khi đăng nhập. Nếu của bạn chưa chuyển được, việc chuyển sẽ sao chép mọi thông tin đăng nhập đã lưu, hỏi mật khẩu của bất kỳ chùm khoá nào mà chùm khoá của bạn không mở được, và các tệp của GNOME được để nguyên.
+settings-users-keyring-about = Các chương trình giữ mật khẩu giúp bạn, chẳng hạn cho thư hoặc Wi-Fi, trong một chùm khoá mở khi bạn đăng nhập. Khi bạn đăng nhập, Trindle chuyển chùm khoá của bạn sang chùm khoá của riêng nó. Nếu việc đó không thành, bạn có thể chuyển ở đây. Mọi thông tin đăng nhập đã lưu đều được sao chép. Bạn có thể được hỏi mật khẩu của chùm khoá mà mật khẩu đăng nhập của bạn không mở được. Các tệp của GNOME được để nguyên.
 
 # Heading of the line on the Saved logins card when the logins are kept by Trindle's keyring.
 # SAFETY: needs a human review before it ships
-settings-users-kept-trindle = Do chùm khoá của Trindle giữ
+settings-users-kept-trindle = Trong chùm khoá của Trindle
 
 # Heading of the line on the Saved logins card when the logins are kept by GNOME's keyring.
 # SAFETY: needs a human review before it ships
-settings-users-kept-gnome = Do chùm khoá của GNOME giữ
-
-# Under the heading when the logins are kept by Trindle's keyring.
-# SAFETY: needs a human review before it ships
-settings-users-opens-login = Mở bằng mật khẩu đăng nhập của bạn.
+settings-users-kept-gnome = Trong chùm khoá của GNOME
 
 # Under the heading when the logins are still kept by GNOME's keyring.
 # SAFETY: needs a human review before it ships
-settings-users-could-not-move = Thông tin đăng nhập của bạn chưa chuyển chúng sang được.
+settings-users-could-not-move = Trindle chưa chuyển được chúng lúc đăng nhập.
 
 # Tip of the button that moves saved logins to Trindle's keyring.
 # SAFETY: needs a human review before it ships
@@ -223,7 +211,7 @@ settings-users-move-keyring = Chuyển sang chùm khoá của Trindle
 settings-users-your-password = Mật khẩu của bạn
 
 # Tip of the button that starts moving the saved logins.
-settings-users-go-ahead = Tiến hành
+settings-users-go-ahead = Chuyển ngay
 
 # Typing box for the password of one GNOME keyring that stayed shut: the keyring's name is { $name }.
 # SAFETY: needs a human review before it ships
@@ -231,11 +219,11 @@ settings-users-password-for = Mật khẩu của { $name }
 
 # Red words when the move of saved logins was started without a password.
 # SAFETY: needs a human review before it ships
-settings-users-your-password-please = Xin nhập mật khẩu của bạn.
+settings-users-your-password-please = Hãy nhập mật khẩu của bạn.
 
 # Said beside the Saved logins line while they are copied.
 # SAFETY: needs a human review before it ships
-settings-users-copying = Đang sao chép thông tin đăng nhập đã lưu...
+settings-users-copying = Đang sao chép thông tin đăng nhập đã lưu…
 
 # Said beside the Saved logins line when the copy is done: how many logins were copied.
 settings-users-copied = Đã sao chép { $n }
@@ -244,17 +232,17 @@ settings-users-copied = Đã sao chép { $n }
 # SAFETY: needs a human review before it ships
 settings-users-nothing-moved =
     { $n ->
-       *[other] Chưa chuyển được gì: { $names } cần mật khẩu riêng.
+       *[other] Chưa có gì được chuyển. Hãy nhập mật khẩu cho { $names }.
     }
 
 # Red words when the move of saved logins stopped unexpectedly.
-settings-users-stopped = Việc này dừng giữa chừng.
+settings-users-stopped = Việc này chưa hoàn tất.
 
 # Words in place of the people while the accounts are still being read.
-settings-users-looking-accounts = Đang xem các tài khoản…
+settings-users-looking-accounts = Đang kiểm tra các tài khoản…
 
 # Heading of the placeholder card shown while the accounts are being read.
 settings-users-people = Người dùng
 
 # Under the Administrator line of the placeholder card.
-settings-users-looking = Đang xem…
+settings-users-looking = Đang tải…

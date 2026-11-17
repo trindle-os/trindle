@@ -1,0 +1,129 @@
+## What an app can be allowed to do, and what goes wrong without it. Each
+## permission has a name (said after "asks for", as in "Weather asks for
+## the internet and sound"), the line under its switch, and for some a warning.
+
+access-network-name = internet
+access-network-without = Nó sẽ không kết nối được với internet hay các máy tính gần đó.
+access-sound-name = âm thanh
+access-sound-without = Nó sẽ không phát ra âm thanh.
+access-microphone-name = micro của bạn
+access-microphone-without = Nó sẽ không nghe được bạn.
+access-sound-and-microphone-name = âm thanh và micro của bạn
+access-sound-and-microphone-without = Nó sẽ không phát ra âm thanh và không nghe được bạn.
+access-files-name = các thư mục Tài liệu, Tải xuống, Ảnh, Nhạc, Video và Màn hình nền của bạn
+access-files-without = Nó sẽ không mở được tệp của bạn hay lưu vào thư mục của bạn.
+access-home-name = mọi thứ trong thư mục nhà của bạn, kể cả các tệp cài đặt ẩn
+access-home-without = Nó sẽ không mở được tệp của bạn hay lưu vào thư mục của bạn.
+access-devices-name = camera và các thiết bị khác bạn cắm vào
+access-devices-without = Nó sẽ không thấy được bạn hay dùng được thứ bạn cắm vào.
+access-bluetooth-name = thiết bị Bluetooth như tai nghe
+access-bluetooth-without = Nó sẽ không kết nối được với bất cứ thứ gì qua Bluetooth.
+access-notifications-name = thông báo
+access-notifications-without = Nó sẽ không báo cho bạn biết khi có việc xảy ra.
+access-background-name = tự khởi động khi bạn đăng nhập
+access-background-without = Nó sẽ chỉ chạy khi bạn đang mở nó.
+access-screen-name = ảnh chụp màn hình của bạn, nội dung bạn sao chép và việc gõ thay cho bạn như thể là bàn phím của bạn
+access-screen-without = Nó sẽ không thấy được các cửa sổ khác hay đọc được nội dung bạn sao chép bất cứ lúc nào.
+access-x11-name = vẽ cửa sổ theo cách cũ, cho phép nó theo dõi các ứng dụng cũ khác và những gì được gõ trong đó
+access-x11-without = Cửa sổ của nó sẽ không mở được.
+access-computer-name = làm việc bên ngoài hộp của nó, với mọi thứ bạn tự truy cập được
+access-computer-without = Những gì bạn gõ vào nó chỉ nằm trong hộp của nó, nên sudo và các tệp của bạn sẽ không dùng được ở đó.
+access-control-name = điều khiển bàn phím, chuột và bộ nhớ tạm của bạn
+access-control-without = Nó sẽ không di chuyển được con trỏ, không gõ phím được và không chia sẻ được nội dung bạn sao chép.
+access-capture-name = chia sẻ chuột và bàn phím của bạn với máy tính khác
+access-capture-without = Con trỏ sẽ không thể sang máy tính khác.
+access-copied-name = các tệp bạn sao chép
+access-copied-without = Nó sẽ không đọc được các tệp bạn sao chép, nên không gửi được chúng sang máy tính khác.
+access-summon-name = mở vòng tròn trên cửa sổ toàn màn hình, như khi bạn nhấn phím
+access-summon-without = Phím và cú nhấp của nó sẽ chỉ mở vòng tròn trên màn hình nền, không bao giờ mở trên cửa sổ toàn màn hình.
+access-listen-name = để các máy tính khác trong mạng cục bộ của bạn kết nối tới nó
+access-listen-without = Các máy tính khác trong mạng cục bộ của bạn sẽ không tìm thấy hay kết nối được tới nó.
+access-home-network-name = chỉ các thiết bị trong mạng cục bộ của bạn
+access-home-network-without = Nó sẽ không tìm thấy hay kết nối được với máy in, máy quét hay thiết bị khác trong mạng cục bộ.
+access-usb-devices-name = máy quét và thiết bị USB
+access-usb-devices-without = Nó sẽ không dùng được máy quét đang cắm vào máy tính này.
+access-expand-name = mở rộng các mã ngắn khi bạn gõ
+access-expand-without = Các mã ngắn của nó sẽ không được mở rộng khi bạn gõ.
+access-accessibility-name = đọc to mọi cửa sổ
+access-accessibility-without = Nó sẽ không đọc to được các cửa sổ của bạn.
+access-unnamed-name = một thứ nó không nêu tên
+
+access-control-warning = Nó có thể gõ phím, nhấp chuột và đọc nội dung bạn sao chép như thể là bạn. Chỉ cho phép với plugin bạn tin tưởng.
+access-capture-warning = Khi con trỏ đang ở máy tính kia, mọi thứ bạn gõ và nhấp đều đi tới plugin này. Chỉ cho phép với plugin bạn tin tưởng.
+access-copied-warning = Nó chỉ đọc được đúng các tệp bạn sao chép khi đang được cho phép, không đọc gì khác. Chỉ cho phép với plugin bạn tin tưởng.
+access-summon-warning = Nó có thể đặt vòng tròn, thứ nhận mọi thứ bạn gõ, lên trên một trò chơi hay một bộ phim mà bạn không cần chạm vào phím nào. Chỉ cho phép với plugin bạn tin tưởng.
+access-home-network-warning = Nó có thể kết nối với mọi thiết bị trong mạng cục bộ của bạn, kể cả bộ định tuyến, nhưng không ra được internet. Chỉ cho phép với plugin bạn tin tưởng.
+access-usb-devices-warning = Nó có thể dùng các máy quét và thiết bị ảnh đang cắm khi nó khởi động, và không dùng thiết bị USB nào khác. Chỉ cho phép với plugin bạn tin tưởng.
+access-expand-warning = Trindle theo dõi những gì bạn gõ để tìm các mã của nó và gõ các từ của nó thay bạn. Plugin không bao giờ thấy những gì bạn gõ. Chỉ cho phép với plugin bạn tin tưởng.
+access-accessibility-warning = Nó có thể đọc mọi thứ trên màn hình của bạn. Như mọi trình đọc màn hình, nó cũng có thể bấm nút và gõ chữ trong các cửa sổ khác, dù nó không có bàn phím hay chuột riêng. Chỉ cho phép với plugin bạn tin tưởng.
+
+## Titles (for a tooltip) and the line under a switch, which says what switching it off means.
+access-network-title = Internet
+access-network-off = Tắt thì nó không kết nối được với internet hay các máy tính gần đó.
+access-sound-title = Phát âm thanh
+access-sound-off = Tắt thì không có âm thanh.
+access-microphone-title = Micro của bạn
+access-microphone-off = Tắt thì nó không nghe được bạn.
+access-sound-and-microphone-title = Phát âm thanh và dùng micro của bạn
+access-sound-and-microphone-off = Tắt thì nó không phát ra âm thanh và không nghe được bạn.
+access-files-title = Các thư mục Tài liệu, Tải xuống, Ảnh, Nhạc, Video và Màn hình nền của bạn
+access-files-off = Tắt thì nó không mở được tệp của bạn hay lưu vào thư mục của bạn.
+access-home-title = Mọi thứ trong thư mục nhà của bạn, kể cả các tệp cài đặt ẩn
+access-home-off = Tắt thì nó không mở được tệp của bạn hay lưu vào thư mục của bạn.
+access-devices-title = Camera và các thiết bị khác bạn cắm vào
+access-devices-off = Tắt thì nó không dùng được camera hay bất cứ thứ gì bạn cắm vào.
+access-bluetooth-title = Bluetooth, cho tai nghe và những thứ khác ở gần
+access-bluetooth-off = Tắt thì nó không kết nối được với bất cứ thứ gì qua Bluetooth.
+access-notifications-title = Hiện thông báo
+access-notifications-off = Tắt thì nó không báo cho bạn biết khi có việc xảy ra.
+access-background-title = Tự khởi động khi bạn đăng nhập
+access-background-off = Tắt thì nó chỉ chạy khi bạn đang mở nó.
+access-screen-title = Chụp ảnh màn hình, đọc nội dung bạn sao chép và gõ phím như bàn phím của bạn
+access-screen-off = Tắt thì nó không thấy được các cửa sổ khác hay đọc được nội dung bạn sao chép bất cứ lúc nào nó muốn.
+access-x11-title = Vẽ cửa sổ theo cách cũ, cho phép nó theo dõi các ứng dụng cũ khác và những gì được gõ trong đó
+access-x11-off = Tắt thì cửa sổ của nó không mở được.
+access-computer-title = Làm việc bên ngoài hộp của nó, với mọi thứ bạn tự truy cập được
+access-computer-off = Tắt thì những gì bạn gõ vào nó chỉ nằm trong hộp của nó, nên sudo và các tệp của bạn không dùng được ở đó.
+access-control-title = Điều khiển bàn phím, chuột và bộ nhớ tạm của bạn
+access-control-off = Tắt thì nó không di chuyển được con trỏ, không gõ phím được và không chia sẻ được nội dung bạn sao chép.
+access-capture-title = Chia sẻ chuột và bàn phím của bạn với máy tính khác
+access-capture-off = Tắt thì con trỏ không thể sang máy tính khác.
+access-copied-title = Đọc các tệp bạn sao chép
+access-copied-off = Tắt thì nó không đọc được các tệp bạn sao chép và không gửi được chúng sang máy tính khác.
+access-summon-title = Mở vòng tròn trên cửa sổ toàn màn hình, như khi bạn nhấn phím
+access-summon-off = Tắt thì phím và cú nhấp của nó chỉ mở vòng tròn trên màn hình nền, không bao giờ mở trên cửa sổ toàn màn hình.
+access-listen-title = Để các máy tính khác trong mạng cục bộ của bạn kết nối tới nó
+access-listen-off = Tắt thì các máy tính khác trong mạng cục bộ của bạn không tìm thấy hay kết nối được tới nó.
+access-home-network-title = Chỉ kết nối với các thiết bị trong mạng cục bộ của bạn
+access-home-network-off = Tắt thì nó không tìm thấy hay kết nối được với máy in, máy quét hay thiết bị khác trong mạng cục bộ.
+access-usb-devices-title = Dùng máy quét và thiết bị USB
+access-usb-devices-off = Tắt thì nó không dùng được máy quét đang cắm vào máy tính này.
+access-expand-title = Mở rộng các mã ngắn của bạn khi bạn gõ
+access-expand-off = Tắt thì Trindle sẽ không mở rộng các mã ngắn của nó khi bạn gõ.
+access-accessibility-title = Đọc những gì mọi cửa sổ hiển thị và đọc to ra
+access-accessibility-off = Tắt thì nó không đọc to được các cửa sổ của bạn.
+access-unnamed-title = Một thứ nó không nêu tên
+
+## The few words on a plugin's row of the Permissions page.
+access-note-acts-as-you = nó có thể hành động như bạn
+access-note-home-network = nó có thể kết nối với mọi thiết bị trong mạng cục bộ của bạn
+access-note-usb-devices = nó có thể dùng máy quét và thiết bị ảnh
+access-note-expand = nó có thể gõ vào các cửa sổ của bạn
+access-note-accessibility = nó có thể đọc mọi thứ trên màn hình của bạn
+
+access-listen-detail = { $ports }, chỉ từ các máy tính trong mạng cục bộ của bạn. Nó cũng cần được cho phép dùng internet.
+
+## A request that is unusual for the kind of app that makes it.
+access-unusual = Điều này không bình thường với { $kind }. Chỉ cho phép nếu bạn tin nguồn gốc của ứng dụng này.
+access-kind-terminal = một ứng dụng terminal
+access-kind-calculator = một máy tính bỏ túi
+access-kind-photo = một ứng dụng ảnh
+access-kind-text-editor = một trình soạn thảo văn bản
+access-kind-browser = một trình duyệt web
+access-kind-office = một ứng dụng văn phòng
+access-kind-graphics = một ứng dụng đồ họa
+access-kind-game = một trò chơi
+access-kind-sound-video = một ứng dụng âm thanh và video
+access-kind-programming = một công cụ lập trình
+access-kind-utility = một tiện ích
+access-kind-other = một ứng dụng như thế này

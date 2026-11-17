@@ -1,20 +1,16 @@
 //! Speaking to the ring: listening to the microphone and doing what was heard.
 
-use std::cell::Cell;
 use std::rc::Rc;
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 use crate::common::run::{capture, spawn};
 use crate::ring::{tray, updates};
-use crate::ring::ctx::Program;
+use crate::ring::ctx::{Ctx, Program};
 use crate::ring::windows::Window;
 use crate::toolkit::t;
-use crate::toolkit::event::Flow;
 use crate::voice::commands;
 
 use super::{ALL, Face, FAVOURITES};
-
-const PULSE_MS: u64 = 40;
 
 const ANSWER_SECONDS: u32 = 6;
 
@@ -32,25 +28,11 @@ impl Face {
         self.listener = Some(listener);
         self.listening = true;
         self.listen_turn += 1;
+        self.listening_since = Instant::now();
         self.say(t!("ring-listening"), 0);
         let (ctx, turn) = (self.ctx.clone(), self.listen_turn);
-        self.ctx.lp.after(Duration::from_secs(seconds as u64), {
-            let ctx = ctx.clone();
-            move || ctx.face(move |f| if f.listen_turn == turn && f.listening { f.finish_listening() })
-        });
-        let alive = Rc::new(Cell::new(true));
-        self.ctx.lp.every(Duration::from_millis(PULSE_MS), move || {
-            if !alive.get() {
-                return Flow::Stop;
-            }
-            let a = alive.clone();
-            ctx.face(move |f| {
-                if !f.listening || f.listen_turn != turn {
-                    a.set(false);
-                }
-                f.pulse = (f.pulse + 0.04) % 1.0;
-            });
-            Flow::Continue
+        self.ctx.lp.after(Duration::from_secs(seconds as u64), move || {
+            ctx.face(move |f| if f.listen_turn == turn && f.listening { f.finish_listening() })
         });
     }
 
@@ -86,7 +68,7 @@ impl Face {
             A::Close(target) => self.heard_close(target, &all, &mut words),
             A::Level(l) => self.set_level(if l > 0 { ALL } else { FAVOURITES }),
             A::Updates => self.heard_updates(),
-            other => heard_of_the_computer(other, &mut words),
+            other => heard_of_the_computer(&self.ctx, other, &mut words),
         }
         self.say(&words, 5);
     }
@@ -134,7 +116,7 @@ impl Face {
         } else {
             let ctx = self.ctx.clone();
 
-            updates::waiting(&self.ctx, None, crate::common::update_checks::may_ask_network(true, false), move |w, _| {
+            updates::waiting(None, crate::common::update_checks::may_ask_network(true, false), move |w, _| {
                 let words = w.spoken();
                 ctx.face(move |f| f.say(&words, ANSWER_SECONDS));
             });
@@ -142,11 +124,24 @@ impl Face {
     }
 }
 
-fn heard_of_the_computer(action: commands::Action, words: &mut String) {
+fn ask(ctx: &Rc<Ctx>, argv: &[&str]) {
+    let ctx = ctx.clone();
+    capture(argv, None, move |ok, _, _| {
+        if let Some(words) = failed_words(ok) {
+            ctx.face(move |f| f.say(words, ANSWER_SECONDS));
+        }
+    });
+}
+
+pub(super) fn failed_words(ok: bool) -> Option<&'static str> {
+    (!ok).then(|| t!("ring-voice-failed"))
+}
+
+fn heard_of_the_computer(ctx: &Rc<Ctx>, action: commands::Action, words: &mut String) {
     use commands::Action as A;
     match action {
-        A::Volume(step) => capture(&["wpctl", "set-volume", "-l", "1.0", "@DEFAULT_AUDIO_SINK@", step], None, |_, _, _| {}),
-        A::Mute(on) => capture(&["wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", if on { "1" } else { "0" }], None, |_, _, _| {}),
+        A::Volume(step) => ask(ctx, &["wpctl", "set-volume", "-l", "1.0", "@DEFAULT_AUDIO_SINK@", step]),
+        A::Mute(on) => ask(ctx, &["wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", if on { "1" } else { "0" }]),
         A::Wallpaper => {
             if !spawn(&["trindle-wallpaper", "--next"]) {
                 *words = t!("ring-could-not-open").into();
@@ -157,8 +152,8 @@ fn heard_of_the_computer(action: commands::Action, words: &mut String) {
             *words = t!("ring-voice-time", time = now.line(crate::toolkit::lang::format::Pattern::Clock), date = now.line(crate::toolkit::lang::format::Pattern::DayMonthPadded));
         }
         A::KeepAwake(on) => crate::session::idle::set_keep_awake(on),
-        A::Radio("wifi", on) => capture(&["nmcli", "radio", "wifi", if on { "on" } else { "off" }], None, |_, _, _| {}),
-        A::Radio(_, on) => capture(&["bluetoothctl", "power", if on { "on" } else { "off" }], None, |_, _, _| {}),
+        A::Radio("wifi", on) => ask(ctx, &["nmcli", "radio", "wifi", if on { "on" } else { "off" }]),
+        A::Radio(_, on) => ask(ctx, &["bluetoothctl", "power", if on { "on" } else { "off" }]),
         A::Brightness(way) => {
             if crate::session::brightness::backlight().is_none() {
                 *words = t!("ring-brightness-fixed").into();

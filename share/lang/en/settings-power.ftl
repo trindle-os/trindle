@@ -7,7 +7,7 @@ settings-power-title = Power
 # Words a person might type into the Settings search to find the power page; separate them with spaces.
 settings-power-keywords = battery suspend sleep shut down restart log out screen off idle dim lock password pin keypad caffeine keep awake charge charging limit 80 battery health
 # Introduction under the heading of the power page, and the words behind the page i.
-settings-power-help = Battery, power mode, and when the screen dims, locks and turns off, on a laptop separately for its battery and for the charger. The cup in the ring keeps the screen awake. Lock, restart and shut down are here too.
+settings-power-help = Choose your power mode, and when the screen dims, locks and switches off. On a laptop you set these separately for the battery and for the charger. The cup in the ring keeps the screen awake. You can also lock, restart and shut down from here.
 
 ## Times in the lists
 
@@ -39,7 +39,7 @@ settings-power-time-only-sleep = Only when it sleeps
 ## Session buttons and lid
 
 # Heading of the line, and name of its round button, that suspends the computer.
-settings-power-suspend = Suspend
+settings-power-suspend = Sleep
 # Heading of the line, and name of its round button, that restarts the computer.
 settings-power-restart = Restart
 # Heading of the line, and name of its round button, that shuts the computer down.
@@ -59,27 +59,19 @@ settings-power-lid-shut-down = Shut down
 
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-dim = Dim the screen after
-# Small words under an idle timer line.
-settings-power-timer-dim-about = Any movement brings the brightness back.
 # Heading of an idle timer line, and the name of its lists.
 settings-power-timer-clock = Show the moving clock after
-# Small words under an idle timer line.
-settings-power-timer-clock-about = The time alone, moving slowly about.
 # Heading of an idle timer line, and the name of its lists.
-settings-power-timer-off = Turn the screen off after
-# Small words under an idle timer line.
-settings-power-timer-off-about = Any key or movement turns it on again.
+settings-power-timer-off = Screen off after
 # Heading of an idle timer line, and the name of its lists.
-settings-power-timer-suspend = Suspend after
-# Small words under an idle timer line.
-settings-power-timer-suspend-about = Left alone this long, it goes to sleep.
+settings-power-timer-suspend = Sleep after
 
 ## Warnings and states
 
 # Red words under the keep the screen awake switch when turning it on could not be saved.
-settings-power-no-awake = The screen could not be kept awake: the choice could not be saved.
+settings-power-no-awake = Trindle couldn't keep the screen awake because it couldn't save your choice.
 # Red words under the keep the screen awake switch when turning it off could not be saved.
-settings-power-no-sleep = Keeping the screen awake could not be turned off: the choice could not be saved.
+settings-power-no-sleep = Trindle couldn't save your choice, so the screen will stay awake.
 # Name of the power mode that saves the battery.
 settings-power-profile-saver = Battery saver
 # Name of the balanced power mode.
@@ -104,9 +96,9 @@ settings-power-minutes = { $m } min
 ## Top sentence
 
 # Sentence at the top of the page on a computer with no battery.
-settings-power-top-no-battery = Plugged in: this computer has no battery to look after.
+settings-power-top-no-battery = Plugged in. This computer has no battery.
 # Sentence at the top of the page on a computer with no battery; { $mode } is the power mode.
-settings-power-top-no-battery-mode = Plugged in, in { $mode } mode: no battery to look after.
+settings-power-top-no-battery-mode = Plugged in, in { $mode } mode. This computer has no battery.
 # Sentence at the top of the page while charging; { $percent } is how full.
 settings-power-top-charging = Charging, { $percent }%.
 # Sentence at the top of the page while charging; { $percent } is how full and { $left } how long until full.
@@ -120,38 +112,32 @@ settings-power-top-battery = Battery at { $percent }%.
 # Sentence at the top of the page on battery; { $percent } is how full and { $left } how long is left.
 settings-power-top-battery-left = Battery at { $percent }%, about { $left } left.
 # Sentence at the top of the page while the battery is being read.
-settings-power-top-looking = Looking at the battery…
+settings-power-top-looking = Checking the battery…
 
 ## Power mode and battery card
 
 # Red words under the power mode line when the mode could not be changed.
-settings-power-mode-failed = The power mode could not be changed.
+settings-power-mode-failed = Couldn't change the power mode.
 # Heading of the power mode line, and the name of its list.
 settings-power-mode = Power mode
-# Small words under the power mode line.
-settings-power-mode-about = Saver runs cooler; performance faster.
 # Said in green under a line after its choice was kept.
 settings-power-saved = Saved
 # Name of the list of battery levels to warn at.
 settings-power-warn-name = Warn when the battery is down to
 # Heading of the line for the battery warning.
 settings-power-warn = Warn when it is down to
-# Small words under the battery warning line.
-settings-power-warn-about = Once, in the middle of the screen.
 # Choice in the list of battery levels: never warn.
 settings-power-never = Never
 # Heading of the line, and name of its switch, for stopping charging at 80%.
 settings-power-limit = Stop charging at 80%
-# Small words under the charge limit line.
-settings-power-limit-about = Kinder to a battery mostly plugged in.
 # Title of the battery card on a laptop.
 settings-power-card-battery = Battery
 # Title of the battery card when there is no battery picture and no power modes.
 settings-power-card-looking-after = Looking after the battery
 # Words behind the i of the battery card.
-settings-power-battery-about = Battery saver runs cooler and makes the battery last longer; performance runs faster; balanced sits between the two. The warning appears in the middle of the screen once, while the battery runs down. Stopping at 80% is kinder to the battery of a laptop that is mostly plugged in: it charges to 80% and no further, and lasts more years. Turn it off before a day away from a socket.
+settings-power-battery-about = Battery saver runs cooler and makes the battery last longer. Performance runs faster. Balanced is in between. The warning appears once, in the middle of the screen, as the battery runs down. Stopping at 80% is better for a laptop that is plugged in most of the time, and helps the battery last more years. Switch it off before a day away from a socket.
 # Words under the charge limit line while the password window is open.
-settings-power-limit-waiting = Waiting for the password...
+settings-power-limit-waiting = Waiting for your password…
 # Green words under the charge limit line after charging was limited to 80%.
 settings-power-limit-on = Stops at 80%
 # Green words under the charge limit line after the limit was removed.
@@ -161,20 +147,16 @@ settings-power-limit-off = Charges to full
 
 # Heading of the keep the screen awake line, and name of its switch.
 settings-power-awake = Keep the screen awake
-# Small words under the keep the screen awake line.
-settings-power-awake-about = The cup in the ring does the same.
 # Title of the card about dimming and the moving clock.
 settings-power-screen-title = Screen
 # Words behind the i of the Screen card.
-settings-power-screen-about = While Keep the screen awake is on, none of these happen; the cup in the ring turns it on and off too. Dimming: any movement brings the brightness back; only screens with their own brightness, such as a laptop's, dim. The moving clock: the screen goes dark with just the time on it, moving slowly about, and any key or movement brings everything back. On a laptop each time is set twice, for its battery and for the charger.
+settings-power-screen-about = While Keep the screen awake is on, none of these happen. The cup in the ring switches it on and off too. Only screens with their own brightness control, such as a laptop's, can dim. The moving clock darkens the screen and shows only the time, drifting slowly around. Moving the mouse or pressing a key brings everything back. On a laptop, you set each time twice: once for the battery and once for the charger.
 # Title of the card about turning the screen off and sleeping.
 settings-power-sleep-title = Screen off and sleep
 # Words behind the i of the Screen off and sleep card.
-settings-power-sleep-about = Any key or movement turns the screen on again. Suspending puts the computer to sleep until you wake it. On a laptop each time is set twice, for its battery and for the charger. With a second screen plugged in, closing the lid does nothing, so you can carry on with the bigger screen.
+settings-power-sleep-about = Pressing a key or moving the mouse switches the screen on again. Sleep pauses the computer until you wake it. On a laptop, you set each time twice: once for the battery and once for the charger. If a second screen is plugged in, closing the lid does nothing, so you can carry on with the bigger screen.
 # Heading of the line for what closing the lid does.
 settings-power-lid = When the lid is closed
-# Small words under that line.
-settings-power-lid-about = Nothing happens with a second screen in.
 
 ## Battery or charger captions
 
@@ -191,79 +173,71 @@ settings-power-named-charger = { $title }: plugged in
 
 # Heading of the lock the screen line, and name of its switch.
 settings-power-lock = Lock the screen
-# Small words under the lock the screen line.
-settings-power-lock-about = Your password or a PIN gets you back in.
 # Heading of the lock after line, and the name of its list.
 settings-power-lock-after-name = Lock after
-# Small words under the lock after line.
-settings-power-lock-after-about = Left alone this long, whatever else is set.
 # Heading of the line, and name of its switch, for locking when the computer sleeps.
 settings-power-lock-sleep = Lock when the computer sleeps
-# Small words under that line.
-settings-power-lock-sleep-about = So it always wakes up locked.
 # Heading of the line, and name of its button, that locks the screen now.
 settings-power-lock-now = Lock now
 # Small words under the lock now line.
-settings-power-lock-now-about = Also Super and L together.
+settings-power-lock-now-about = Or press Super and L.
 # Red words under the lock now line when the lock screen would not start.
-settings-power-lock-now-failed = The screen could not be locked: the lock screen would not start.
+settings-power-lock-now-failed = Trindle couldn't lock the screen because the lock screen wouldn't start.
 # Title of the locking card.
 settings-power-lock-title = Locking
 # Words behind the i of the locking card.
-settings-power-lock-card-about = When you are away, the screen locks, and your password, or a four-digit PIN if you choose one, gets you back in. Nothing on the screen shows until then. Logging in always needs your password. Lock after is how long the computer is left alone before it locks, whatever the screen and sleep times are; until then, coming back needs no PIN. Turning locking off also forgets the PIN. Four digits are quicker to type than your password: after the time chosen for the PIN locked, or after five wrong tries, your password is needed instead. The bin stops using a PIN.
+settings-power-lock-card-about = When you're away, the screen locks. Nothing shows on it until you unlock it with your password, or with a four-digit PIN if you set one. Logging in always needs your password. Lock after is how long the computer can be left alone before it locks, whatever the screen and sleep times are. Until then, you don't need a PIN when you come back. Switching locking off also removes the PIN. After the time set in The PIN works for, or after five wrong tries, you need your password instead.
 
 ## PIN
 
 # Heading of the line for adding a PIN.
 settings-power-pin-add = Unlock with a PIN as well
-# Small words under that line.
-settings-power-pin-add-about = Four digits, quicker than your password.
 # Heading of the line, and name of its list, for how long a PIN works after the screen locks.
 settings-power-pin-works-name = The PIN works for
-# Small words under that line.
-settings-power-pin-works-about = Then your password is needed instead.
 # Name of the bin button that stops using a PIN.
 settings-power-pin-stop = Stop using a PIN
 # Heading of the line shown when a PIN is kept.
-settings-power-pin-kept = A PIN is kept
-# Small words under that line.
-settings-power-pin-kept-about = Type four new digits to change it.
+settings-power-pin-kept = A PIN is set
 # Placeholder of the box for typing a new PIN.
 settings-power-pin-new = New PIN
 # Name of the button that keeps the PIN typed.
-settings-power-pin-keep = Keep this PIN
+settings-power-pin-keep = Save this PIN
+# Placeholder of the box for typing your account password before a PIN is saved.
+settings-power-pin-password = Your password
+# Red words under the PIN box when no password was typed.
+settings-power-pin-need-password = Type your password first, then save the PIN.
+# Red words under the PIN box when the password typed was wrong.
+settings-power-pin-wrong-password = That password isn't right, so Trindle didn't save the PIN.
 # Red words under the PIN line when the PIN could not be removed.
-settings-power-pin-not-removed = The PIN could not be removed, so it still unlocks the screen.
+settings-power-pin-not-removed = Trindle couldn't remove the PIN, so it still unlocks the screen.
 # Red words under the PIN box when it is not the right length; { $n } is how many digits a PIN has.
 settings-power-pin-digits =
     { $n ->
-        [one] A PIN is { $n } digit.
-       *[other] A PIN is { $n } digits.
+        [one] Use { $n } digit.
+       *[other] Use { $n } digits.
     }
 
 ## Session
 
 # Heading of the log out line, and name of its round button.
 settings-power-log-out = Log out
-# Small words under the log out line.
-settings-power-log-out-about = Back to the login screen.
 # Title of the card with log out, suspend, restart and shut down.
 settings-power-session-title = Session
 # Words behind the i of the session card.
-settings-power-session-about = Logging out closes every window and goes back to the login screen. Suspend puts the computer to sleep until you wake it. Each button asks twice, the same as the power choice in the ring, so a slip does nothing.
+settings-power-session-about = Logging out closes every window and takes you back to the login screen. Sleep pauses the computer until you wake it. Each button needs a second press to confirm, like the power choices in the ring, so one slip does nothing.
 # Red words under a session button when the system bus is not there.
-settings-power-no-bus = The system bus is not available.
+settings-power-no-bus = Can't reach the system service.
 # Red words under a session button when the computer would not do it.
-settings-power-would-not = The computer would not do that.
+settings-power-would-not = The computer couldn't do that.
 
 ## Pictures
 
 # Spoken description of the battery picture while the battery is being read.
-settings-power-art-looking-tip = Looking at the battery.
+settings-power-art-looking-tip = Checking the battery.
 # Spoken description of the battery picture; { $percent } is how full and { $state } what it is doing, such as Charging.
 settings-power-art-tip = Battery at { $percent }%. { $state }
 # Word drawn in the empty battery picture while the battery is being read.
-settings-power-art-looking = Looking
+settings-power-art-looking = Loading
 # Word drawn under the battery figure when its state is not known.
 settings-power-art-battery = Battery
 # Words drawn in the battery picture: { $left } is the time left and { $state } is either empty or full.
@@ -273,9 +247,9 @@ settings-power-art-left =
        *[full] { $left } to full
     }
 # Spoken description of the battery range bar when there is no warning; { $top } is the percent it charges to.
-settings-power-limits-tip = Charges to { $top }%; no warning.
+settings-power-limits-tip = Charges to { $top }%, no warning.
 # Spoken description of the battery range bar; { $top } is the percent it charges to and { $warn } where a warning comes.
-settings-power-limits-tip-warn = Charges to { $top }%; a warning at { $warn }%.
+settings-power-limits-tip-warn = Charges to { $top }%, with a warning at { $warn }%.
 
 ## PIN times (src/common/pin.rs)
 

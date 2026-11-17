@@ -10,7 +10,7 @@ settings-region-keywords = لغة اللغة البلد الصيغ التاري�
 settings-region-help = تسري اللغة والصيغ عند تسجيل دخولك في المرة القادمة.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = اخرج ثم ادخل لتراها.
+settings-region-later = سجّل الدخول من جديد لتراه في كل مكان.
 
 # Shown while the page reads the computer.
 settings-region-looking = جارٍ النظر…
@@ -39,7 +39,7 @@ settings-region-installed-done = تم التثبيت
 settings-region-everything-in = كل شيء بلغة { $lang }.
 
 # Headline when the formats differ from the language: the names are { $lang } and { $fmt }.
-settings-region-menus-in = القوائم بلغة { $lang }؛ والتواريخ والأرقام تُكتب كما في { $fmt }.
+settings-region-menus-in = القوائم بلغة { $lang }. وتتبع التواريخ والأرقام نمط { $fmt }.
 
 # Headline when a change is saved but waits for the next login: { $words } is the sentence so far.
 settings-region-with-wait = { $words } اخرج ثم ادخل لترى التغيير.
@@ -54,13 +54,10 @@ settings-region-language = اللغة
 settings-region-formats = الصيغ
 
 # Help text of the Language card (the information button).
-settings-region-language-about = اللغة هي ما تُعرض به القوائم والرسائل. والصيغ هي طريقة كتابة التواريخ والأوقات والأرقام والعملة والقياسات وحجم الورق، وقد تتبع عادات بلد آخر. كلاهما يسري عند تسجيل دخولك في المرة القادمة.
+settings-region-language-about = تُستخدم اللغة للقوائم والرسائل. وتحدد الصيغ طريقة كتابة التواريخ والأوقات والأرقام والعملة والقياسات، وحجم الورق. ويمكن أن تتبع نمط بلد آخر. كلاهما يسري عند تسجيل دخولك في المرة القادمة.
 
 # Under the Language heading.
-settings-region-language-sub = القوائم والرسائل، من الدخول القادم.
-
-# Under the Formats heading.
-settings-region-formats-sub = التواريخ والأرقام والعملة وحجم الورق.
+settings-region-language-sub = تتغير القوائم والرسائل عند الدخول القادم.
 
 # Heading of the line that shows a date and a number in the chosen formats.
 settings-region-date-number = تاريخ ورقم
@@ -76,7 +73,7 @@ settings-region-add = أضف لغة
 
 # Help text of the Add a language card (the information button).
 # SAFETY: needs a human review before it ships
-settings-region-add-about = يثبّت لغة أخرى لتُختار للقوائم أو للصيغ. يستغرق صنع لغة وقتًا قصيرًا ويحتاج إلى كلمة مرور المسؤول.
+settings-region-add-about = يثبّت لغة أخرى، لتتمكن من اختيارها للقوائم أو للصيغ. يستغرق التثبيت وقتًا قصيرًا ويحتاج إلى كلمة مرور المسؤول.
 
 # Heading of the line shown when every language is already installed.
 settings-region-all-installed = كل اللغات مثبّتة بالفعل
@@ -100,11 +97,7 @@ settings-region-install-another = ثبّت لغة أخرى
 
 # Tip of the button that installs the chosen language.
 # SAFETY: needs a human review before it ships
-settings-region-install-this = ثبّت هذه اللغة (يطلب كلمة مرورك)
-
-# Under the Install another heading.
-# SAFETY: needs a human review before it ships
-settings-region-needs-password = يحتاج إلى كلمة مرور المسؤول.
+settings-region-install-this = ثبّت هذه اللغة
 
 # Heading of the line saying how many more languages can be made.
 settings-region-ready = جاهزة للإضافة
@@ -112,12 +105,12 @@ settings-region-ready = جاهزة للإضافة
 # Under the Ready to add heading: how many more languages can be made.
 settings-region-more =
     { $n ->
-        [one] لغة واحدة أخرى يستطيع هذا الحاسوب صنعها.
-        [two] لغتان أخريان يستطيع هذا الحاسوب صنعهما.
-        [few] { $n } لغات أخرى يستطيع هذا الحاسوب صنعها.
-        [many] { $n } لغة أخرى يستطيع هذا الحاسوب صنعها.
-        [zero] { $n } لغة أخرى يستطيع هذا الحاسوب صنعها.
-       *[other] { $n } لغة أخرى يستطيع هذا الحاسوب صنعها.
+        [one] يمكنك تثبيت لغة أخرى واحدة.
+        [two] يمكنك تثبيت لغتين أخريين.
+        [few] يمكنك تثبيت { $n } لغات أخرى.
+        [many] يمكنك تثبيت { $n } لغة أخرى.
+        [zero] يمكنك تثبيت { $n } لغة أخرى.
+       *[other] يمكنك تثبيت { $n } لغة أخرى.
     }
 
 settings-region-removing = جارٍ الإزالة
@@ -128,7 +121,6 @@ settings-region-remove-language = أزل هذه اللغة
 
 settings-region-kept = لغات هذا الحاسوب
 
-settings-region-kept-about = كل اللغات المثبّتة هنا. أزل ما لا تستخدمه؛ أما اللغة التي تستخدمها فتبقى. يطلب كلمة مرور المسؤول.
+settings-region-kept-about = كل اللغات المثبّتة على هذا الحاسوب. أزل ما لا تستخدمه، عدا اللغة التي تستخدمها. تتطلب الإزالة كلمة مرور المسؤول.
 
-settings-region-in-use-stays = قيد الاستخدام، لذلك تبقى
-
+settings-region-in-use-stays = قيد الاستخدام.

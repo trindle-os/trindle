@@ -11,6 +11,16 @@ use crate::keyring::store;
 use crate::toolkit::bus::Asked;
 use super::{Asker, FAILED, Fault, INVALID, IS_LOCKED, Keyring, NO_SUCH, PORTAL_SCHEMA, PORTAL_SECRET, Work, answer, args, fault, portal_answer};
 
+fn typed_password(bytes: &[u8]) -> Option<Zeroizing<String>> {
+    match String::from_utf8(bytes.to_vec()) {
+        Ok(text) => Some(Zeroizing::new(text)),
+        Err(e) => {
+            drop(Zeroizing::new(e.into_bytes()));
+            None
+        }
+    }
+}
+
 impl Keyring {
 
     pub(super) fn retrieve_secret(&self, msg: &Message, asked: &mut Option<Asked>) -> Result<(), Fault> {
@@ -36,7 +46,7 @@ impl Keyring {
     pub(super) fn hand_over(&self, app_id: &str, fd: OwnedFd) -> bool {
         let secret = self.portal_secret(app_id);
         match secret {
-            Ok(secret) => std::fs::File::from(fd).write_all(&secret).is_ok(),
+            Ok(secret) => give_without_waiting(fd, &secret),
             Err(Fault(_, e)) => {
                 eprintln!("trindle-keyring: the secret for {app_id}: {e}");
                 false
@@ -73,6 +83,10 @@ impl Keyring {
     }
 
     pub(super) fn change_password(&self, old: Zeroizing<Vec<u8>>, new: Zeroizing<Vec<u8>>, asked: Asked) {
+        if self.working() {
+            asked.fail(FAILED, "The keyring is busy with another password");
+            return;
+        }
         let Some(salt) = self.store.borrow().as_ref().map(Store::salt) else {
             asked.fail(NO_SUCH, "There is no keyring yet");
             return;
@@ -118,9 +132,17 @@ impl Keyring {
             asked.reply(&());
             return;
         }
+
+        if self.working() {
+            asked.fail(FAILED, "The keyring is busy with another password");
+            return;
+        }
         let Some(salt) = self.store.borrow().as_ref().map(Store::salt) else {
 
-            let typed = Zeroizing::new(String::from_utf8_lossy(&password).into_owned());
+            let Some(typed) = typed_password(&password) else {
+                asked.fail(INVALID, crate::toolkit::t!("keyring-password-unreadable"));
+                return;
+            };
             self.try_password(typed, Box::new(move |r| match r {
                 Ok(()) => asked.reply(&()),
                 Err(e) => asked.fail(INVALID, &e),
@@ -158,5 +180,44 @@ impl Keyring {
         std::thread::spawn(move || {
             post.send(work());
         });
+    }
+}
+
+fn give_without_waiting(fd: OwnedFd, bytes: &[u8]) -> bool {
+    use std::os::fd::AsRawFd;
+    // SAFETY: the descriptor is open and owned here; the calls only read and set its flags.
+    let set = unsafe {
+        let flags = libc::fcntl(fd.as_raw_fd(), libc::F_GETFL);
+        flags >= 0 && libc::fcntl(fd.as_raw_fd(), libc::F_SETFL, flags | libc::O_NONBLOCK) >= 0
+    };
+    set && std::fs::File::from(fd).write_all(bytes).is_ok()
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn a_full_pipe_is_not_waited_on() {
+        use std::os::fd::FromRawFd;
+        let mut ends = [0; 2];
+        // SAFETY: pipe fills the two-element array it is given.
+        assert_eq!(unsafe { libc::pipe(ends.as_mut_ptr()) }, 0);
+        // SAFETY: both descriptors are fresh and owned here.
+        let (read, write) = unsafe { (std::os::fd::OwnedFd::from_raw_fd(ends[0]), std::os::fd::OwnedFd::from_raw_fd(ends[1])) };
+        assert!(super::give_without_waiting(write.try_clone().unwrap(), b"secret"));
+        let fill = vec![0u8; 1 << 20];
+        let mut file = std::fs::File::from(write.try_clone().unwrap());
+        // SAFETY: as above, on the descriptor just cloned.
+        unsafe { libc::fcntl(std::os::fd::AsRawFd::as_raw_fd(&file), libc::F_SETFL, libc::O_NONBLOCK) };
+        let _ = std::io::Write::write(&mut file, &fill);
+        let started = std::time::Instant::now();
+        assert!(!super::give_without_waiting(write, b"secret"));
+        assert!(started.elapsed().as_secs() < 2);
+        drop(read);
+    }
+
+    #[test]
+    fn a_password_is_kept_exactly_or_refused() {
+        assert_eq!(super::typed_password("pässword".as_bytes()).as_deref().map(String::as_str), Some("pässword"));
+        assert!(super::typed_password(b"p\xe4ssword").is_none(), "changed rather than refused");
     }
 }

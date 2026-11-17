@@ -38,16 +38,7 @@ pub(super) fn put_in(root: &Path, from: &Path) -> Result<Installed, String> {
     let _ = std::fs::remove_dir_all(&fresh);
     copy_aside(from, &fresh)?;
     let old = check(&at.join("app")).ok();
-
     let changed = old.is_some_and(|old| !same_ports(&old.listen, &p.listen));
-    if changed {
-        revoke_listen(&at);
-    }
-
-    if let Err(e) = drop_unasked(&at, &p.asks) {
-        let _ = std::fs::remove_dir_all(&fresh);
-        return Err(e.to_string());
-    }
 
     let live = root == folders() && at.join("app").exists();
     if live {
@@ -60,7 +51,7 @@ pub(super) fn put_in(root: &Path, from: &Path) -> Result<Installed, String> {
             None => why,
         }
     };
-    if let Err(e) = swap_in(&at, &fresh) {
+    if let Err(e) = swap_then_revoke(&at, &fresh, &p, changed, &|a, b| std::fs::rename(a, b)) {
         return Err(not_swapped(e));
     }
     let background = if live && p.background.is_some() && allowed(&p).iter().any(|a| a == "background") {
@@ -106,13 +97,23 @@ fn settle(root: &Path, p: &Plugin, changed: bool) {
     let _ = shortcuts::refresh();
 }
 
-fn swap_in(at: &Path, fresh: &Path) -> Result<(), String> {
+fn swap_then_revoke(at: &Path, fresh: &Path, p: &Plugin, changed: bool, rename: &dyn Fn(&Path, &Path) -> std::io::Result<()>) -> Result<(), String> {
+    swap_in_with(at, fresh, rename)?;
+    if changed {
+        revoke_listen(at);
+    }
+    drop_unasked(at, &p.asks).map_err(|e| e.to_string())
+}
+
+fn swap_in_with(at: &Path, fresh: &Path, rename: &dyn Fn(&Path, &Path) -> std::io::Result<()>) -> Result<(), String> {
     let (app, old_app) = (at.join("app"), at.join("app.old"));
     let _ = std::fs::remove_dir_all(&old_app);
-    let aside = std::fs::rename(&app, &old_app).is_ok();
-    if let Err(e) = std::fs::rename(fresh, &app) {
+    let aside = rename(&app, &old_app).is_ok();
+    if let Err(e) = rename(fresh, &app) {
         if aside {
-            let _ = std::fs::rename(&old_app, &app);
+            if let Err(back) = rename(&old_app, &app) {
+                return Err(t!("plugins-swap-not-back", why = e.to_string(), back = back.to_string()).to_string());
+            }
         }
         let _ = std::fs::remove_dir_all(fresh);
         return Err(e.to_string());

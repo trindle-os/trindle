@@ -10,6 +10,7 @@ use std::sync::mpsc;
 use std::time::Duration;
 
 use serde_json::Value;
+use zeroize::{Zeroize, Zeroizing};
 
 use crate::toolkit::t;
 use crate::toolkit::event::Loop;
@@ -52,8 +53,10 @@ impl Greetd {
             let mut sock = None;
             for job in inbox {
                 match job {
-                    Job::Send(id, request) => {
+                    Job::Send(id, mut request) => {
                         let r = exchange(&path, &mut sock, &request);
+
+                        wipe(&mut request);
                         if r.is_err() {
                             sock = None;
                         }
@@ -78,9 +81,10 @@ fn exchange(path: &Option<String>, sock: &mut Option<UnixStream>, request: &Valu
         *sock = Some(s);
     }
     let s = sock.as_mut().ok_or(t!("greeter-service-no-connection"))?;
-    let data = request.to_string().into_bytes();
-    let mut frame = (data.len() as u32).to_ne_bytes().to_vec();
-    frame.extend(&data);
+    let data = Zeroizing::new(request.to_string().into_bytes());
+    let mut frame = Zeroizing::new(Vec::with_capacity(4 + data.len()));
+    frame.extend((data.len() as u32).to_ne_bytes());
+    frame.extend(data.iter());
     let timed_out = |e: std::io::Error| {
         if matches!(e.kind(), std::io::ErrorKind::WouldBlock | std::io::ErrorKind::TimedOut) {
             t!("greeter-service-timeout").to_string()
@@ -102,6 +106,15 @@ fn exchange(path: &Option<String>, sock: &mut Option<UnixStream>, request: &Valu
     serde_json::from_slice(&body).map_err(|e| e.to_string())
 }
 
+fn wipe(value: &mut Value) {
+    match value {
+        Value::String(s) => s.zeroize(),
+        Value::Array(all) => all.iter_mut().for_each(wipe),
+        Value::Object(all) => all.values_mut().for_each(wipe),
+        _ => {}
+    }
+}
+
 impl Backend for Greetd {
     fn send(&self, request: Value, done: Done) {
         let id = self.next.get() + 1;
@@ -117,5 +130,15 @@ impl Backend for Greetd {
 
     fn reset(&self) {
         let _ = self.jobs.send(Job::Reset);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn a_request_sent_keeps_no_password() {
+        let mut request = serde_json::json!({"type": "post_auth_message_response", "response": "example-password", "more": ["example-password"]});
+        super::wipe(&mut request);
+        assert!(!request.to_string().contains("example"), "{request}");
     }
 }

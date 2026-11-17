@@ -11,7 +11,7 @@ settings-region-keywords = dil yerel ayar ülke biçimler tarih para birimi
 settings-region-help = Dil ve biçimler bir sonraki oturum açışınızda etkili olur.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = Görmek için oturumu kapatıp yeniden açın.
+settings-region-later = Her yerde görmek için yeniden oturum açın.
 
 # Shown while the page reads the computer.
 settings-region-looking = Aranıyor…
@@ -58,10 +58,7 @@ settings-region-formats = Biçimler
 settings-region-language-about = Dil, menülerin ve iletilerin dilidir. Biçimler; tarihlerin, saatlerin, sayıların, paranın, ölçülerin ve kâğıt boyutunun nasıl yazıldığıdır ve başka bir ülkenin düzenini izleyebilir. İkisi de bir sonraki oturum açışınızda etkili olur.
 
 # Under the Language heading.
-settings-region-language-sub = Menüler ve iletiler, sonraki oturum açışından itibaren.
-
-# Under the Formats heading.
-settings-region-formats-sub = Tarihler, sayılar, para ve kâğıt boyutu.
+settings-region-language-sub = Menüler ve iletiler sonraki oturum açışta değişir.
 
 # Heading of the line that shows a date and a number in the chosen formats.
 settings-region-date-number = Tarih ve sayı
@@ -77,7 +74,7 @@ settings-region-add = Dil ekle
 
 # Help text of the Add a language card (the information button).
 # SAFETY: needs a human review before it ships
-settings-region-add-about = Başka bir dil kurar; böylece menüler veya biçimler için seçilebilir. Yapılması biraz sürer ve bir yöneticinin parolasını gerektirir.
+settings-region-add-about = Başka bir dil kurar; böylece menüler veya biçimler için seçebilirsiniz. Kurmak biraz sürer ve bir yöneticinin parolasını gerektirir.
 
 # Heading of the line shown when every language is already installed.
 settings-region-all-installed = Her dil zaten kurulu
@@ -97,11 +94,7 @@ settings-region-install-another = Başkasını kur
 
 # Tip of the button that installs the chosen language.
 # SAFETY: needs a human review before it ships
-settings-region-install-this = Bu dili kur (parolanızı sorar)
-
-# Under the Install another heading.
-# SAFETY: needs a human review before it ships
-settings-region-needs-password = Bir yöneticinin parolası gerekir.
+settings-region-install-this = Bu dili kur
 
 # Heading of the line saying how many more languages can be made.
 settings-region-ready = Eklemeye hazır
@@ -109,8 +102,8 @@ settings-region-ready = Eklemeye hazır
 # Under the Ready to add heading: how many more languages can be made.
 settings-region-more =
     { $n ->
-        [one] Bu bilgisayarın yapabileceği { $n } dil daha.
-       *[other] Bu bilgisayarın yapabileceği { $n } dil daha.
+        [one] { $n } dil daha kurabilirsiniz.
+       *[other] { $n } dil daha kurabilirsiniz.
     }
 
 settings-region-removing = Kaldırılıyor
@@ -121,7 +114,6 @@ settings-region-remove-language = Bu dili kaldır
 
 settings-region-kept = Bu bilgisayardaki diller
 
-settings-region-kept-about = Burada kurulu tüm diller. Kullanmadıklarını kaldır; kullandığın dil kalır. Yönetici parolasını ister.
+settings-region-kept-about = Bu bilgisayarda kurulu tüm diller. Kullanmadıklarınızı kaldırın; yalnızca kullandığınız dil kalır. Bir dili kaldırmak yöneticinin parolasını gerektirir.
 
-settings-region-in-use-stays = Kullanımda, bu yüzden kalır
-
+settings-region-in-use-stays = Kullanımda.

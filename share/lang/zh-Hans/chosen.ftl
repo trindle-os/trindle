@@ -13,13 +13,13 @@ chosen-act-name-empty = 名称不能为空。
 chosen-act-name-slash = 名称中不能包含斜杠。
 
 # Red words under a name being typed when it is . or ..
-chosen-act-name-kept = 这个名称是系统保留的。
+chosen-act-name-kept = 系统已经在使用这个名称。
 
 # Red words under a name being typed when it is too long.
 chosen-act-name-long = 这个名称太长。
 
 # Red words under the name box, and at the foot of Folders, when a rename fails: the item's name, then the reason.
-chosen-inplace-not-renamed = 无法重命名 { $name }：{ $why }。
+chosen-inplace-not-renamed = Trindle 无法重命名 { $name }：{ $why }。
 
 # Red words under the name box, and at the foot of Folders, when a name is already used in that place; the kind is the word folder or file.
 chosen-inplace-taken =

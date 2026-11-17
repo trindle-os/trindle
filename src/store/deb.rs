@@ -16,7 +16,7 @@ use super::app_page::{fact_line, part};
 use super::listing::BLANK;
 use super::pages::pictures::icon;
 use super::screen::CARD_GAP;
-use crate::common::filling::Dial;
+use crate::common::filling::{Dial, Turning};
 use crate::common::run::{on_thread, text};
 use crate::settings::ui::{INSTALL_ICON, UPDATE_ICON};
 use crate::toolkit::event::{Flow, Loop, Post};
@@ -167,10 +167,6 @@ fn sentence(deb: &Deb, state: &State) -> (String, Tone) {
     }
 }
 
-fn caution() -> &'static str {
-    t!("store-deb-caution")
-}
-
 #[derive(Clone)]
 pub struct Msg(Rc<dyn Fn(&mut Package)>);
 
@@ -222,15 +218,21 @@ impl Package {
         let mut d = Dial::default();
         set(&mut d);
         self.dial = Some(d);
-        let me = self.me.clone();
+        let (me, turning) = (self.me.clone(), Turning::default());
         self.events.every(super::TICK, move || {
             let Some(shown) = me.borrow().upgrade() else { return Flow::Stop };
             if !shown.with(Package::busy) {
                 return Flow::Stop;
             }
-            shown.change(|_| {});
+            if shown.with(|p| turning.turned_alone(p.turn())) {
+                shown.change(|_| {});
+            }
             Flow::Continue
         });
+    }
+
+    fn turn(&self) -> bool {
+        self.dial.as_ref().is_some_and(Dial::turn)
     }
 
     fn settle(&mut self, words: &str, after: impl FnOnce(&mut Package) + 'static) {
@@ -284,7 +286,7 @@ impl App for Package {
             _ => note(BLANK),
         };
         let mut items = vec![column(vec![head, failure]).gap(k.gap), self.origin_card(),
-                             card(row(vec![icon("dialog-warning-symbolic".into(), 20.0), note(caution()).width(Length::Fill)]).gap(k.gap))];
+                             card(row(vec![icon("dialog-warning-symbolic".into(), 20.0), note(t!("store-deb-caution")).width(Length::Fill)]).gap(k.gap))];
         if let Some((deb, state)) = deb {
             items.extend(self.details(deb, state));
         }
@@ -316,7 +318,7 @@ impl Package {
     }
 
     fn actions(&self, deb: Option<(&Deb, &State)>) -> Node<Msg> {
-        let wide = theme::app_page().action;
+        let wide = super::look::action_room();
         let tall = theme::sheet().action_height;
         let can = deb.filter(|(_, state)| **state == State::New);
         let remove = match (can, &self.boxed) {
@@ -352,11 +354,13 @@ impl Package {
         let mut out = Vec::new();
         if *state == State::New {
             let (head, sub) = match self.boxed.as_deref() {
-                None => (t!("store-deb-goes-in").to_string(), t!("store-deb-goes-in-note").to_string()),
-                Some(have) if have == v => (t!("store-deb-same-version", version = v), t!("store-deb-same-version-note").into()),
-                Some(have) => (t!("store-deb-other-version", version = have), t!("store-deb-other-version-note", version = v)),
+                None => (t!("store-deb-goes-in").to_string(), Some(t!("store-deb-goes-in-note").to_string())),
+                Some(have) if have == v => (t!("store-deb-same-version", version = v), None),
+                Some(have) => (t!("store-deb-other-version", version = have), Some(t!("store-deb-other-version-note", version = v))),
             };
-            out.push(card(column(vec![label(head), note(sub)]).gap(4.0)));
+            let mut lines = vec![label(head)];
+            lines.extend(sub.map(note));
+            out.push(card(column(lines).gap(4.0)));
         }
         let or_dash = |s: String| if s.trim().is_empty() { "\u{2013}".to_string() } else { s };
         out.push(part("dialog-information-symbolic", t!("store-app-facts"), vec![
@@ -427,16 +431,21 @@ fn install_boxed(p: &mut Package) {
 }
 
 fn remove_boxed(p: &mut Package) {
+    if !super::pages::installed::may_remove_program() {
+        return;
+    }
     let Some(deb) = deb_of(p) else { return };
-    match super::boxed::install::remove(&deb.name) {
-        Ok(()) => {
+    let name = deb.name.clone();
+
+    on_thread(move || super::boxed::install::remove(&name).map(|()| name), p.then(move |p: &mut Package, res: std::io::Result<String>| match res {
+        Ok(name) => {
             p.said = None;
-            p.boxed = super::boxed::version(&deb.name);
+            p.boxed = super::boxed::version(&name);
             p.stand();
             p.headline = (t!("store-deb-removed").into(), Tone::Plain);
         }
         Err(e) => p.headline = (t!("store-plugins-not-removed", why = e.to_string()), Tone::Problem),
-    }
+    }));
 }
 
 pub fn open(events: &Loop, display: &Rc<Display>, path: PathBuf, closed: impl Fn() + 'static) -> Option<Rc<Shown<Package>>> {
@@ -490,6 +499,36 @@ mod tests {
     use crate::toolkit::widget::Tone;
 
     #[test]
+    fn the_packages_ring_moves_with_no_new_view() {
+        use crate::toolkit::ui::App;
+        struct Counted { p: super::Package, built: std::cell::Cell<u32> }
+        impl App for Counted {
+            type Msg = <super::Package as App>::Msg;
+            fn update(&mut self, _: Self::Msg) {}
+            fn view(&self) -> crate::toolkit::widget::Node<Self::Msg> {
+                self.built.set(self.built.get() + 1);
+                self.p.view()
+            }
+        }
+        let deb = parse("Package: code\nVersion: 1.95\nArchitecture: amd64\nDescription: An editor\n").unwrap();
+        let events = crate::toolkit::event::Loop::new();
+        let mut p = super::made_up(&events, Some(Ok((deb, State::New))), None, None, true);
+        if let Some(d) = p.dial.as_mut() {
+            d.expect(1.0);
+        }
+        let mut h = crate::toolkit::testing::Harness::new(Counted { p, built: std::cell::Cell::new(0) }, (1000, 600));
+        let first = h.picture(1.0);
+        let mut moved = false;
+        for _ in 0..20 {
+            std::thread::sleep(std::time::Duration::from_millis(50));
+            moved |= h.app().p.turn();
+        }
+        assert!(moved, "the job's guess moved on");
+        assert_ne!(h.picture(1.0).data(), first.data(), "the ring shows it");
+        assert_eq!(h.app().built.get(), 1, "the window was built once");
+    }
+
+    #[test]
     fn says_how_the_package_stands() {
         let d = parse("Package: code\nVersion: 1.95\nDescription: An editor\n").unwrap();
         assert_eq!(sentence(&d, &State::New), ("code is ready to install in its own folder.".to_string(), Tone::Calm));
@@ -497,7 +536,7 @@ mod tests {
         assert_eq!(sentence(&d, &State::Trindle).1, Tone::Problem);
         assert_eq!(sentence(&d, &State::Service).1, Tone::Problem);
 
-        assert!(!super::caution().contains("whole computer"));
+        assert!(!crate::toolkit::t!("store-deb-caution").contains("whole computer"));
     }
 
     #[test]

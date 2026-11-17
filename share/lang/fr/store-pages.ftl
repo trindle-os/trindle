@@ -31,10 +31,10 @@ store-grid-none-found = Aucune application ne correspond à « { $text } ».
 store-grid-none-here = Il n'y a pas encore d'applications ici.
 
 # Advice in the empty page of a search.
-store-grid-try-shorter = Essayez un mot plus court, ou parcourez une catégorie à gauche.
+store-grid-try-shorter = Essayez un mot plus court, ou choisissez une catégorie à gauche.
 
 # Advice in the empty page of a kind of apps.
-store-grid-search-or-look = Cherchez par nom ci-dessus, ou parcourez une autre catégorie à gauche.
+store-grid-search-or-look = Cherchez par nom ci-dessus, ou choisissez une autre catégorie à gauche.
 
 # Under a page of apps: how many are shown of how many there are.
 store-grid-showing = { $shown } affichées sur { $apps }.
@@ -49,7 +49,7 @@ store-wait-fetching = Récupération de la liste des applications depuis Flathub
 store-wait-no-reach = Apps n'a pas pu joindre Flathub.
 
 # Under the title of the waiting page when the computer is not connected.
-store-wait-offline = Cet ordinateur n'est pas connecté à Internet. Apps réessaie tout seul dès qu'il l'est.
+store-wait-offline = Cet ordinateur n'est pas connecté à Internet. Apps réessaiera quand il le sera.
 
 # In the waiting page when the computer is not connected.
 store-wait-comes-from = Les applications à choisir viennent de Flathub, par Internet.
@@ -70,26 +70,26 @@ store-wait-try-again = Réessayer
 store-back-results = Résultats
 
 # Red words under the search box when no web browser opens a link.
-store-no-browser = Aucun navigateur web pour ouvrir { $url }. Obtenez-en un d'abord dans Apps.
+store-no-browser = Il n'y a pas de navigateur web pour ouvrir { $url }. Installez-en un depuis Apps d'abord.
 
 # Said in the card or under the title while the lists are being read.
 store-looking = Recherche…
 
 # Said under an app's row on the Install page when the app was put in.
-store-done-installed-note = Elle est maintenant dans Installées, et dans l'anneau
+store-done-installed-note = Elle est maintenant dans Installées et dans l'anneau
 
 # SAFETY: needs a human review before it ships
 # Said under an app's row when it was taken off, and the word on its dial.
 store-done-removed = Supprimée
 
 # The word on an app's dial when installing or removing did not work.
-store-done-not = Non fait
+store-done-not = Échec
 
 # The word on an app's dial when it was installed.
 store-done-installed = Installée
 
 # Red words under an app when Flatpak gave no reason it would not work.
-store-flatpak-refused = Flatpak a refusé.
+store-flatpak-refused = Flatpak a échoué.
 
 # Tab of the Installed page that shows everything.
 store-tab-all = Toutes
@@ -104,16 +104,16 @@ store-tab-appimages = AppImage
 store-tab-deb-files = Fichiers deb
 
 # Tab of the Installed page that shows plugins.
-store-tab-plugins = Extensions
+store-tab-plugins = Modules
 
 # Line under the title of the Installed page when nothing is installed.
-store-installed-nothing = Rien n'est encore installé. Découvrir est plein de choses à essayer.
+store-installed-nothing = Rien n'est encore installé. Vous trouverez des applications à essayer dans Découvrir.
 
 # Line under the title of the Installed page when only plugins are installed.
 store-installed-only-plugins =
     { $n ->
-        [one] 1 extension est installée
-       *[other] { $n } extensions sont installées
+        [one] 1 module est installé
+       *[other] { $n } modules sont installés
     }
 
 # Start of the Installed page's line when programs are installed.
@@ -194,8 +194,8 @@ store-installed-part-debs =
 # Part of the Installed line: how many plugins there are.
 store-installed-part-plugins =
     { $n ->
-        [one] 1 extension
-       *[other] { $n } extensions
+        [one] 1 module
+       *[other] { $n } modules
     }
 
 # The whole Installed line: what is installed, then how up to date it is.
@@ -233,14 +233,10 @@ store-installed-search = Rechercher parmi ce qui est installé
 store-installed-appimage-failed = L'AppImage n'a pas pu être ajoutée.
 
 # In the card of the Installed page when nothing is installed.
-store-installed-empty = Les applications que vous installez depuis Découvrir, depuis GitHub ou en AppImage, les programmes des fichiers .deb et les extensions apparaissent ici.
+store-installed-empty = Tout ce que vous installez apparaît ici : applications de Découvrir ou de GitHub, AppImage, programmes des fichiers .deb et modules.
 
 # In the card of the Installed page when the search matches nothing.
 store-installed-no-match = Rien d'installé ne correspond à « { $find } ».
-
-# SAFETY: needs a human review before it ships
-# Note at the foot of the Installed list.
-store-installed-remove-twice = Supprimer demande confirmation : appuyez de nouveau dans les trois secondes.
 
 # On an installed thing's line: its version.
 store-installed-version = version { $version }
@@ -261,10 +257,10 @@ store-installed-update = Mettre à jour { $name }
 store-installed-about = À propos
 
 # Under an installed thing's row while it is being taken off.
-store-installed-removing = Suppression...
+store-installed-removing = Suppression…
 
 # Red words in the Installed card when the session bus cannot be asked for a file.
-store-add-no-bus = Il n'y a pas de bus de session pour demander quel fichier.
+store-add-no-bus = Trindle ne peut pas ouvrir le sélecteur de fichiers pour le moment.
 
 # Title of the window that asks which AppImage to add.
 store-add-choose-title = Choisir une AppImage
@@ -273,13 +269,13 @@ store-add-choose-title = Choisir une AppImage
 store-add-filter = AppImage
 
 # Red words in the Installed card when the file chooser could not be asked.
-store-add-no-chooser = Le sélecteur de fichiers n'a pas pu être appelé.
+store-add-no-chooser = Trindle ne peut pas ouvrir le sélecteur de fichiers.
 
 # Words in the Installed card while an AppImage is being added.
-store-add-adding = Ajout...
+store-add-adding = Ajout…
 
 # Words under the search box when an AppImage let go on the window is already there.
-store-add-already = { $name } est déjà là : voir Installées.
+store-add-already = { $name } est déjà installé. Vous le trouverez dans Installées.
 
 # Words once an AppImage is in the ring.
 store-add-in-ring = Ajouté. C'est maintenant dans votre liste.
@@ -287,59 +283,53 @@ store-add-in-ring = Ajouté. C'est maintenant dans votre liste.
 # Red words under the search box when a dropped file is not a Flatpak reference this computer can use.
 store-add-bad-ref = Ce n'est pas une référence Flatpak que cet ordinateur peut utiliser.
 
-# Words under the search box while a Flatpak reference is installed; the source is given.
-store-add-installing-ref = Installation de { $name } depuis { $host }...
-
 # Words under the search box once a Flatpak reference is installed.
 store-add-installed-ref = { $name } est installé.
 
 # Red words when Flatpak gave no reason it would not install a reference.
-store-add-ref-refused = Flatpak n'a pas voulu l'installer.
+store-add-ref-refused = Flatpak n'a pas pu l'installer.
 
 # Red words under the search box when a Flatpak reference could not be installed; the reason follows.
-store-add-ref-failed = { $name } n'a pas pu être installé. { $why }
+store-add-ref-failed = Trindle n'a pas pu installer { $name }. { $why }
 
 # Words in the Installed card while an AppImage replaces another.
-store-add-replacing = Remplacement...
+store-add-replacing = Remplacement…
 
 # SAFETY: needs a human review before it ships
 # Heading of the question when an AppImage has the name of one already there.
 store-replace-head = { $name } est déjà là
 
 # Small heading over the AppImage being brought.
-store-replace-new = Celle qu'on apporte
+store-replace-new = La nouvelle
 
 # Small heading over the AppImage already there.
 store-replace-old = Celle qui est déjà là
 
 # SAFETY: needs a human review before it ships
 # Tip of the round button that keeps the AppImage already there.
-store-replace-skip = Ignorer : garder celle qui est déjà là
+store-replace-skip = Ignorer et garder l'ancienne
 
 # SAFETY: needs a human review before it ships
 # Button that replaces the AppImage already there with the new one.
 store-replace-do = Remplacer
 
 # Red words under a button when a job ended and gave no reason.
-store-job-no-reason = Cela ne s'est pas terminé, et aucune raison n'a été donnée.
+store-job-no-reason = Cela ne s'est pas terminé. Aucune raison n'a été donnée.
 
 # Tip of the round i button beside a refusal that shows what is behind it.
 store-show-behind = Montrer où est le problème
 
 # Placeholder of the box on the GitHub page.
-store-gh-search-placeholder = Rechercher sur GitHub : tapez, puis appuyez sur Entrée
+store-gh-search-placeholder = Rechercher des applications (Entrée pour chercher aussi sur GitHub)
 
 # Heading of the card of matches from AppImageHub.
 store-gh-hub = Sur AppImageHub ({ $n })
 
-# Note on the GitHub page before GitHub has been asked.
-store-gh-press-enter = Appuyez sur Entrée pour aussi chercher dans tout GitHub.
-
 # Note on the GitHub page when the computer has no internet.
-store-gh-offline-note = GitHub n'a pas été interrogé : il n'y a pas d'Internet pour le faire.
+store-gh-offline-note = Trindle n'a pas pu chercher sur GitHub, car cet ordinateur n'est pas connecté à Internet.
 
 # Note on the GitHub page while GitHub is being asked.
-store-gh-asking = Interrogation de GitHub...
+store-gh-asking = Vérification de GitHub…
 
 # Note on the GitHub page when GitHub knows nothing more.
 store-gh-nothing-more = Rien de plus sur GitHub.
@@ -347,8 +337,8 @@ store-gh-nothing-more = Rien de plus sur GitHub.
 # Note on the GitHub page while the projects found are looked through.
 store-gh-looking =
     { $n ->
-        [one] Recherche de fichiers AppImage et Flatpak dans { $n } projet...
-       *[other] Recherche de fichiers AppImage et Flatpak dans { $n } projets...
+        [one] Recherche de fichiers AppImage et Flatpak dans { $n } projet…
+       *[other] Recherche de fichiers AppImage et Flatpak dans { $n } projets…
     }
 
 # Note on the GitHub page when no match has a file for this computer.
@@ -362,7 +352,7 @@ store-gh-search-card = Rechercher sur GitHub
 
 # SAFETY: needs a human review before it ships
 # Line under the title of the GitHub page.
-store-gh-line = Des applications sur GitHub sous forme de fichiers AppImage ou Flatpak. Personne ne les vérifie : n'installez que celles de personnes en qui vous avez confiance.
+store-gh-line = Des applications sur GitHub, sous forme de fichiers AppImage ou Flatpak. Personne ne les vérifie, n'installez donc que celles de personnes en qui vous avez confiance.
 
 # Line under the title of the GitHub page when the computer has no internet.
 store-gh-offline = GitHub ne peut pas être consulté tant que cet ordinateur n'est pas connecté à Internet.
@@ -386,19 +376,19 @@ store-gh-file-line = { $kind }, { $size }, version { $tag }
 store-gh-key = Clé GitHub
 
 # Name of the GitHub key's button when a key is stored.
-store-gh-key-stored = Clé GitHub : une est enregistrée
+store-gh-key-stored = Une clé GitHub est enregistrée
 
 # In the GitHub key's box: what the key is for.
-store-gh-key-words = Vous n'en avez presque certainement pas besoin. Sans clé, GitHub répond à 60 questions par heure depuis cet ordinateur ; avec une clé, il répond à 5 000. La clé ne fait que relever cette limite. Elle sert à consulter des fichiers publics et rien d'autre : elle ne donne à Trindle aucun accès à votre compte, et vous ne cochez aucune permission en la créant. Elle est gardée sur cet ordinateur, dans votre trousseau, et envoyée à GitHub seulement.
+store-gh-key-words = Vous n'en avez presque certainement pas besoin. Sans clé, GitHub autorise 60 requêtes par heure depuis cet ordinateur. Avec une clé, il en autorise 5 000. La clé ne fait que relever cette limite. Elle sert à consulter des fichiers publics et rien d'autre. Elle ne donne à Trindle aucun accès à votre compte, et vous ne cochez aucune autorisation en la créant. Elle est enregistrée sur cet ordinateur, dans votre trousseau, et envoyée uniquement à GitHub.
 
 # In the GitHub key's box: how to make a key.
-store-gh-key-how = Créez une clé sur GitHub, donnez-lui le nom de votre choix, ne touchez à aucune permission, appuyez sur Generate token, puis collez ici ce qui s'affiche.
+store-gh-key-how = Créez une clé sur GitHub, donnez-lui le nom de votre choix et ne touchez à aucune autorisation. Appuyez sur Generate token, puis collez ici ce qui s'affiche.
 
 # Red words under the GitHub key's box when the key could not be removed.
-store-gh-key-not-removed = Impossible de la supprimer : { $why }
+store-gh-key-not-removed = Elle n'a pas été supprimée : { $why }
 
 # Red words under the GitHub key's box when the key could not be kept.
-store-gh-key-not-kept = Impossible de la garder : { $why }
+store-gh-key-not-kept = Elle n'a pas été enregistrée : { $why }
 
 # Placeholder of the GitHub key's box when a key is stored already.
 store-gh-key-keep-empty = Laissez vide pour la garder
@@ -414,10 +404,10 @@ store-gh-key-remove = Supprimer la clé
 store-gh-key-make = Créer une clé sur GitHub
 
 # Tip of the round button that keeps the GitHub key typed.
-store-gh-key-keep = Garder la clé
+store-gh-key-keep = Enregistrer la clé
 
 # Red words when a project's newest release has nothing for this computer.
-store-gh-nothing-installs = Rien dans sa dernière version ne s'installe ici.
+store-gh-nothing-installs = Rien dans sa dernière version ne peut être installé sur cet ordinateur.
 
 # Word on the file's dial and under a GitHub file when it was added.
 store-added = Ajoutée
@@ -448,25 +438,16 @@ store-bk-apps-list =
     }
 
 # Under the Apps switch: the list, then why the file stays small.
-store-bk-apps-sub = { $list } L'autre ordinateur les installe de nouveau depuis Flathub, le fichier reste donc petit.
+store-bk-apps-sub = { $list }
 
 # Name of the switch for the apps' own data in a backup.
 store-bk-data = Données propres des applications
 
-# Under the Apps' own data switch.
-store-bk-data-sub = Les réglages et le travail enregistré de chaque application, sans ses caches.
-
 # Name of the switch for AppImages in a backup.
 store-bk-appimages = AppImage
 
-# Under the AppImages switch.
-store-bk-appimages-sub = Gardées entières, car ce sont des fichiers uniques.
-
 # Name of the switch for Trindle's settings in a backup.
 store-bk-settings = Réglages de Trindle
-
-# Under the Trindle settings switch.
-store-bk-settings-sub = L'anneau, le choix du fond d'écran, les couleurs, le clavier, l'alimentation, les applications par défaut et votre image.
 
 # Under a switch: what it holds, then how big it is now.
 store-bk-now = { $sub } Actuellement { $size }.
@@ -478,26 +459,23 @@ store-bk-where = Où il va
 store-bk-where-sub = Votre dossier personnel, sous le nom { $name }
 
 # Heading of the card that puts a backup back.
-store-bk-back-card = Remettre une sauvegarde
+store-bk-back-card = Restaurer une sauvegarde
 
 # Tip of the round button, and name of the row, that choose a backup file.
 store-bk-choose = Choisir un fichier de sauvegarde
 
-# Under the choose row: which backups can be used; the name of Flat's backups is given.
-store-bk-choose-sub = Une sauvegarde de Trindle, ou une faite par { $flat }.
-
 # SAFETY: needs a human review before it ships
 # Note in the card that puts a backup back.
-store-bk-back-note = Ses applications sont installées et ses données et réglages remis en place. Vos documents et images n'y sont pas : copiez-les vous-même.
+store-bk-back-note = La restauration installe ses applications et remet en place ses données et réglages. Vos documents et images ne sont pas dans la sauvegarde, copiez-les donc vous-même.
 
 # Said while a backup is being made.
-store-bk-making = Sauvegarde en cours... cela peut prendre quelques minutes.
+store-bk-making = Sauvegarde en cours. Cela peut prendre quelques minutes.
 
 # Said when a backup is made: the file and its size.
-store-bk-made = C'est { $path } ({ $size }). Copiez-le sur une clé USB ou un stockage en ligne pour l'emporter.
+store-bk-made = La sauvegarde est { $path } ({ $size }). Copiez-la sur une clé USB ou un stockage en ligne pour l'emporter.
 
 # Red words when no connection to the file chooser exists.
-store-bk-no-bus = Aucune sauvegarde n'a été choisie, car Trindle n'a pas de connexion au sélecteur de fichiers.
+store-bk-no-bus = Aucune sauvegarde n'a été choisie, car Trindle ne peut pas se connecter au sélecteur de fichiers.
 
 # Title of the window that asks which backup to use.
 store-bk-choose-title = Choisir une sauvegarde
@@ -509,10 +487,7 @@ store-bk-filter = Sauvegardes de Trindle et de Flat
 store-bk-no-answer = Aucune sauvegarde n'a été choisie, car le sélecteur de fichiers n'a pas répondu.
 
 # Said while a backup file is read.
-store-bk-reading = Lecture de la sauvegarde...
-
-# Said when a backup was put back.
-store-bk-logout = Déconnectez-vous puis reconnectez-vous pour voir tous les réglages.
+store-bk-reading = Lecture de la sauvegarde…
 
 # Said when a backup was put back, after what was done; the first part is given.
 store-bk-logout-after = { $last } Déconnectez-vous puis reconnectez-vous pour voir tous les réglages.
@@ -520,26 +495,26 @@ store-bk-logout-after = { $last } Déconnectez-vous puis reconnectez-vous pour v
 # Said once a Flat backup is read: how many apps and how many have settings.
 store-bk-found =
     { $apps ->
-        [one] 1 application, { $with } avec leurs réglages. Démarrage...
-       *[other] { $apps } applications, { $with } avec leurs réglages. Démarrage...
+        [one] 1 application trouvée, dont { $with } avec réglages. Démarrage…
+       *[other] { $apps } applications trouvées, dont { $with } avec réglages. Démarrage…
     }
 
 # Line under the title of the Software sources page: how many makers' sources are added.
 store-src-line =
     { $n ->
-        [0] Aucune source propre à un créateur n'est encore ajoutée.
-        [one] 1 source de créateur ajoutée, tenue à jour avec les mises à jour de Debian.
-       *[other] { $n } sources de créateurs ajoutées, tenues à jour avec les mises à jour de Debian.
+        [0] Aucune source de logiciels n'est encore ajoutée.
+        [one] 1 source de logiciels ajoutée, tenue à jour avec les mises à jour de Debian.
+       *[other] { $n } sources de logiciels ajoutées, tenues à jour avec les mises à jour de Debian.
     }
 
 # Under a maker's source that is added and installed.
-store-src-added = { $what }. Ajoutée et tenue à jour.
+store-src-added = { $what } est ajoutée et tenue à jour.
 
 # Under a maker's source that is added but whose program is not installed.
 store-src-no-program = { $what }. La source est ajoutée, mais le programme n'est pas installé.
 
 # Under a maker's source whose program is installed another way.
-store-src-other-way = { $what }. Installé autrement.
+store-src-other-way = { $what } a été installé autrement.
 
 # SAFETY: needs a human review before it ships
 # Tip of the round button that removes a maker's source and its program.
@@ -560,32 +535,17 @@ store-src-ready = Prêtes à ajouter
 # Name of the field for the address of a source.
 store-src-address = Adresse
 
-# Under the address field.
-store-src-address-sub = L'adresse du dépôt, tirée des instructions d'installation de son créateur.
-
 # Name of the field for the suite of a source.
 store-src-suite = Suite
-
-# Under the suite field.
-store-src-suite-sub = En général trixie ou stable.
 
 # Name of the field for the components of a source.
 store-src-components = Composants
 
-# Under the components field.
-store-src-components-sub = En général main.
-
 # Name of the field for a source's signing key.
 store-src-key = Clé de signature
 
-# Under the signing key field.
-store-src-key-sub = L'adresse de sa clé de signature.
-
 # Name of the field for the program to install from a source.
 store-src-program = Programme à installer
-
-# Under the program field.
-store-src-program-sub = Le nom de son paquet, si vous voulez l'installer maintenant.
 
 # Placeholder of the program field.
 store-src-program-hint = facultatif
@@ -623,7 +583,7 @@ store-src-starting = Démarrage
 store-src-opening = Ouverture de la page de connexion de Tailscale...
 
 # Said under Tailscale's row once its sign-in page has opened.
-store-src-opened = Connectez-vous sur la page qui s'est ouverte ; cela se termine tout seul.
+store-src-opened = Connectez-vous sur la page qui s'est ouverte. Trindle continue tout seul dès que c'est fait.
 
 # Said under Tailscale's row when it is connected.
 store-src-connected = Connecté
@@ -637,7 +597,7 @@ store-bk-http-title = Non chiffré
 
 # SAFETY: needs a human review before it ships
 # Words of that card.
-store-bk-http-card = Cette adresse n'est pas chiffrée. Quelqu'un sur le chemin pourrait voir ce qui est envoyé, et pourrait remplacer la sauvegarde par une autre.
+store-bk-http-card = Cette connexion n'est pas chiffrée. Quelqu'un pourrait voir ce qui est envoyé en chemin, ou remplacer la sauvegarde par une autre.
 
 # SAFETY: needs a human review before it ships
 # Label of the tick box on that card; the restore button works only once it is on.
@@ -662,7 +622,7 @@ store-flatpak-ask-size = Ses données enregistrées occupent { $size }.
 store-flatpak-ask-none = Elle n'a aucune donnée enregistrée.
 
 # Under that heading while the size of the saved data is being counted.
-store-flatpak-ask-measuring = Calcul de ses données enregistrées...
+store-flatpak-ask-measuring = Mesure de ses données enregistrées…
 
 # Under the choices: the two that delete data cannot be undone.
 # SAFETY: needs a human review before it ships
@@ -670,7 +630,7 @@ store-flatpak-ask-undone = Les données supprimées ne peuvent pas être récup�
 
 # Button: remove the app and leave the data it saved.
 # SAFETY: needs a human review before it ships
-store-flatpak-keep = Retirer et garder ses données
+store-flatpak-keep = Retirer mais garder les données
 
 # Button (red): remove the app and delete its saved data.
 # SAFETY: needs a human review before it ships
@@ -685,22 +645,22 @@ store-flatpak-data-only-none = Elle n'a aucune donnée enregistrée à supprimer
 
 # Tip of the round button that shuts the card with nothing done.
 # SAFETY: needs a human review before it ships
-store-flatpak-cancel = Annuler : tout garder
+store-flatpak-cancel = Annuler
 
 # Said under the card or the row once only the data has been deleted.
-store-flatpak-data-gone = Ses données enregistrées sont supprimées.
+store-flatpak-data-gone = Ses données enregistrées ont disparu.
 
 # Words while only the data is being deleted.
-store-flatpak-data-going = Suppression de ses données enregistrées...
+store-flatpak-data-going = Suppression de ses données enregistrées…
 
 # Under that heading when the folder of the saved data cannot be read, so its size is not known.
 # SAFETY: needs a human review before it ships
-store-flatpak-ask-uncounted = Ses données enregistrées n'ont pas pu être comptées.
+store-flatpak-ask-uncounted = Ses données enregistrées n'ont pas pu être mesurées.
 
-store-hub-warning = AppImageHub ne fait que répertorier des projets : personne ne les examine ni ne les analyse, et ils ne sont pas forcément signés. Trindle exécute chaque AppImage dans une boîte avec un dossier personnel privé : au début, il peut utiliser internet et le son, et ne voit aucun de vos fichiers.
+store-hub-warning = AppImageHub ne fait que répertorier des projets. Personne ne les examine ni ne les analyse, et ils n'ont pas besoin d'être signés. Trindle exécute chaque AppImage dans une boîte avec son propre dossier personnel privé. Au début, il peut utiliser internet et le son, mais il ne voit aucun de vos fichiers.
 
 # Said once where AppImages are listed: the line saying where each comes from is not checked.
-store-from-hint = L'origine d'un AppImage est une indication, pas une vérification.
+store-from-hint = L'origine qu'un AppImage déclare n'est qu'une indication. Trindle ne la vérifie pas.
 
 # Where an AppImage comes from: a project on GitHub, by its owner and name.
 store-from-github = Sur GitHub : { $repo }
@@ -709,7 +669,7 @@ store-from-github = Sur GitHub : { $repo }
 store-from-github-stars = Sur GitHub : { $repo }, { $stars } étoiles
 
 # Where an AppImage comes from: a website, by its name.
-store-from-site = Pas sur GitHub : d'un site web, { $site }
+store-from-site = Pas sur GitHub. Il vient de { $site }
 
 # Where an AppImage comes from, for one added by hand.
 store-from-unknown = Origine inconnue
@@ -751,7 +711,7 @@ store-browse-line = { $n ->
 store-browse-fetching = Récupération de la liste d'AppImageHub…
 
 # The same when the list could not be fetched.
-store-browse-failed = La liste d'AppImageHub n'a pas pu être récupérée.
+store-browse-failed = Trindle n'a pas pu obtenir la liste d'AppImageHub.
 
 # The same with no internet and no copy kept.
 store-browse-offline = La liste d'AppImageHub ne peut pas être récupérée tant que cet ordinateur n'est pas connecté à internet.
@@ -774,7 +734,7 @@ store-browse-details = Voir les détails et les fichiers
 store-grid-home-unchecked = la recherche de mises à jour est désactivée
 
 # One line at the foot of Apps' results when the search asks for ChatGPT, OpenAI or Codex.
-store-chatgpt-returns = ChatGPT reviendra quand OpenAI aura signé son téléchargement.
+store-chatgpt-returns = ChatGPT sera de retour quand OpenAI aura signé son téléchargement.
 
 
 
@@ -803,7 +763,7 @@ store-appimage-line-bare = AppImage
 store-appimage-warn-head = Les AppImages ne sont pas vérifiés. Personne ne les examine ni ne les analyse.
 
 # Under it: how Trindle boxes an AppImage.
-store-appimage-warn-box = Trindle exécute chaque AppImage dans une boîte avec un dossier personnel privé : au début, il peut utiliser internet et le son, et ne voit aucun de vos fichiers.
+store-appimage-warn-box = Trindle exécute chaque AppImage dans une boîte avec son propre dossier personnel privé. Au début, il peut utiliser internet et le son, mais il ne voit aucun de vos fichiers.
 
 # Label of the small tick in that card's corner; once it is set the card never comes again.
 store-appimage-warn-hide = Ne plus afficher
@@ -814,3 +774,18 @@ store-appimage-warn-ok = OK
 # Button on that card that gives the install up.
 store-appimage-warn-cancel = Annuler
 
+# Printed by the command line after a backup. { $size } is how big the file is.
+store-cli-backed-up = sauvegardé ({ $size })
+
+# Printed by the command line after Trindle's own settings were put back.
+store-cli-settings-back = Réglages de Trindle restaurés
+
+
+# Tick box under the Search page's box: look on Flathub, for Flatpaks.
+store-gh-place-flathub = Flathub (Flatpaks)
+
+# Tick box: look on AppImageHub, for AppImages.
+store-gh-place-hub = AppImageHub (AppImages)
+
+# Tick box: look on GitHub, which needs Enter.
+store-gh-place-github = GitHub

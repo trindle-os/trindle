@@ -11,7 +11,7 @@ plugins-pin-no-answer = Другой компьютер не ответил.
 
 # Red words on the PIN card when the unlocking command refused without saying why.
 # SAFETY: needs a human review before it ships
-plugins-pin-not-unlocked = Не разблокировано.
+plugins-pin-not-unlocked = Всё ещё заблокировано.
 
 # Name the screen reader gives to the four dots on the PIN card.
 plugins-pin-dots = PIN-код

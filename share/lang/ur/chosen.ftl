@@ -13,13 +13,13 @@ chosen-act-name-empty = نام خالی نہیں ہو سکتا۔
 chosen-act-name-slash = نام میں سلیش نہیں ہو سکتا۔
 
 # Red words under a name being typed when it is . or ..
-chosen-act-name-kept = یہ نام نظام کے لیے محفوظ ہے۔
+chosen-act-name-kept = یہ نام سسٹم استعمال کرتا ہے۔
 
 # Red words under a name being typed when it is too long.
 chosen-act-name-long = یہ نام بہت لمبا ہے۔
 
 # Red words under the name box, and at the foot of Folders, when a rename fails: the item's name, then the reason.
-chosen-inplace-not-renamed = { $name } کا نام تبدیل نہیں ہو سکا: { $why }۔
+chosen-inplace-not-renamed = Trindle { $name } کا نام تبدیل نہیں کر سکا: { $why }۔
 
 # Red words under the name box, and at the foot of Folders, when a name is already used in that place; the kind is the word folder or file.
 chosen-inplace-taken =

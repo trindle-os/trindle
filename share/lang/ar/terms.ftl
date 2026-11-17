@@ -5,4 +5,4 @@
 terms-accept = أوافق على [اتفاقية الترخيص](eula)
 
 # In the foot, while the box is not ticked, saying why the button beside it is off.
-terms-needed = ضع علامة في المربع للمتابعة
+terms-needed = الموافقة مطلوبة

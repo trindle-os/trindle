@@ -46,7 +46,7 @@ text-find-replace-key = Tafuta na ubadilishe (Ctrl+H)
 text-go-to-line-key = Nenda kwenye mstari (Ctrl+G)
 
 # Button in the menu for a Markdown file that shows it as it will look finished, with its shortcut.
-text-finished-key = Mwonekano wa mwisho (Ctrl+E)
+text-finished-key = Hakiki (Ctrl+E)
 
 # Button in the menu for a Markdown file that exports it as a web page. Also the title of the chooser for that.
 text-export-html = Hamisha kama ukurasa wa wavuti
@@ -70,7 +70,7 @@ text-close-tab = Funga { $name }
 text-close-bar = Funga upau
 
 # Words the screen reader gives the button that shows the finished look of the text, with its shortcut.
-text-finished-look = Mwonekano wa mwisho
+text-finished-look = Hakiki
 
 # Menu item that copies everything in the text.
 text-copy-all = Nakili maandishi yote
@@ -186,10 +186,10 @@ text-go-to-line = Nenda kwenye mstari
 text-back = Rudi kwenye maandishi
 
 # Words on the spelling bar, after the word: the word was added to the person's own words.
-text-spell-added = sasa ni mojawapo ya maneno yako
+text-spell-added = imeongezwa kwenye maneno yako
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are no suggestions.
-text-spell-none = haimo kwenye kamusi, ambayo haina kinachofanana nayo
+text-spell-none = haimo kwenye kamusi, na hakuna mapendekezo
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are suggestions.
 text-spell-offers = haimo kwenye kamusi. Je, ulimaanisha mojawapo ya haya?
@@ -220,16 +220,16 @@ text-starting = Kuanza
 text-when-opens = Maandishi yanapofunguka
 
 # First choice: Text opens the files it had open last time.
-text-reopen = Fungua tena faili za mara iliyopita
+text-reopen = Fungua tena faili za awali
 
 # Second choice: Text opens with an empty page.
 text-start-blank = Anza na ukurasa mtupu
 
 # Note under the start choice: work not saved to a file is kept whichever choice is made.
-text-keep-note = Kazi isiyohifadhiwa kwenye faili daima huhifadhiwa na hurudi kwa vyovyote vile.
+text-keep-note = Kazi yako isiyohifadhiwa huhifadhiwa na kurudishwa kwa chaguo lolote utakalochagua.
 
 # Heading of the group on the settings page for how the text looks.
-text-showing = Kuonyesha maandishi
+text-showing = Mwonekano wa maandishi
 
 # Label of the size slider: how big the text is.
 text-size = Ukubwa
@@ -265,10 +265,10 @@ text-read-as = Soma faili kama
 text-save-in = Hifadhi katika
 
 # Note under the save encoding: the next save writes the file in this encoding.
-text-next-save = Uhifadhi unaofuata utaandika faili katika usimbaji huu.
+text-next-save = Faili itatumia usimbaji huu utakapoihifadhi mara ijayo.
 
 # Words saying the text has changes that are not saved to its file. $path is the file.
-text-changes-not-saved = { $name } ina mabadiliko ambayo hayajahifadhiwa kwenye faili yake.
+text-changes-not-saved = { $name } ina mabadiliko ambayo hayajahifadhiwa.
 
 # Words saying the text has changes and no file yet.
 text-not-saved = Maandishi haya hayajahifadhiwa kwenye faili.
@@ -277,7 +277,11 @@ text-not-saved = Maandishi haya hayajahifadhiwa kwenye faili.
 text-save-named = Hifadhi { $name }?
 
 # Words in the question before closing: how many other tabs with changes are left after this one. $left is the number.
-text-more-after = { $left } zaidi baada ya hii.
+text-more-after =
+    { $left ->
+        [one] Kichupo { $left } kingine cha kuhifadhi.
+       *[other] Vichupo { $left } vingine vya kuhifadhi.
+    }
 
 # Button in the question before closing that closes the tab without saving it.
 # SAFETY: needs a human review before it ships
@@ -296,55 +300,55 @@ text-is-folder = { $name } ni folda.
 text-too-big = { $name } ni kubwa mno kufunguliwa hapa.
 
 # Shown when a file could not be opened. $name is the file's path and $reason why.
-text-cannot-open = { $name } haikuweza kufunguliwa: { $reason }
+text-cannot-open = Trindle haikuweza kufungua { $name }: { $reason }
 
 # Shown when a file could not be written. $name is the file's path and $reason why.
-text-cannot-write = { $name } haikuweza kuandikwa: { $reason }
+text-cannot-write = Trindle haikuweza kuandika { $name }: { $reason }
 
 # Shown when a file could not be saved. $name is the file's path and $reason why.
-text-cannot-save = { $name } haikuweza kuhifadhiwa: { $reason }
+text-cannot-save = Trindle haikuweza kuhifadhi { $name }: { $reason }
 
 # Shown when a file could not be read again. $name is the file's path and $reason why.
-text-cannot-read = { $name } haikuweza kusomwa: { $reason }
+text-cannot-read = Imeshindwa kusoma { $name }: { $reason }
 
 # Shown when the list of open work could not be written. $folder is the folder and $reason why.
-text-work-not-kept = Kazi haikuweza kuhifadhiwa katika { $folder }: { $reason }
+text-work-not-kept = Trindle haikuweza kuhifadhi kazi yako katika { $folder }: { $reason }
 
 # Shown when the settings could not be saved. $reason says why.
-text-settings-not-saved = Mipangilio haikuweza kuhifadhiwa: { $reason }
+text-settings-not-saved = Imeshindwa kuhifadhi mipangilio: { $reason }
 
 # Shown when a word could not be added to the person's own words. $word is the word and $reason why.
-text-word-not-added = { $word } haikuweza kuongezwa kwenye maneno yako: { $reason }
+text-word-not-added = Trindle haikuweza kuongeza { $word } kwenye kamusi yako: { $reason }
 
 # Shown when the list of recent files could not be cleared. $reason says why.
-text-list-not-cleared = Orodha haikuweza kufutwa: { $reason }
+text-list-not-cleared = Trindle haikuweza kufuta orodha: { $reason }
 
 # Shown when the file chooser could not be opened.
 text-chooser-failed = Kichagua faili hakikuweza kufunguliwa.
 
 # Shown when the file chooser cannot be used because there is no session bus.
-text-no-bus = Faili haziwezi kuchaguliwa bila basi la kipindi.
+text-no-bus = Trindle haiwezi kufungua kichagua faili kwa sasa.
 
 # Shown when the spelling language asked for is not on the computer. $lang is its name.
 text-no-dictionary = Hakuna kamusi inayoitwa { $lang }.
 
 # Shown when a spelling dictionary could not be read. $lang is its name and $reason why.
-text-dictionary-unreadable = Kamusi ya { $lang } haikuweza kusomwa: { $reason }
+text-dictionary-unreadable = Trindle haikuweza kusoma kamusi ya { $lang }: { $reason }
 
 # Shown when a save was stopped and the text it held before was kept in a folder. $reason says what went wrong and $path is where the old text is kept.
-text-kept-before = { $reason }. Kilichokuwa ndani yake kabla kimehifadhiwa katika { $path }.
+text-kept-before = { $reason }. Maandishi ya zamani yamehifadhiwa katika { $path }.
 
 # Shown when a save was stopped part way and the old text is kept. $why says why, and $path is where the old text is kept.
-text-kept-before-that = { $why } Kilichokuwa ndani yake kabla ya uhifadhi huo kimehifadhiwa katika { $path }.
+text-kept-before-that = { $why } Maandishi ya kabla ya uhifadhi huo yako katika { $path }.
 
 # Shown when a save was stopped and what was kept of it cannot be read. $name is the file's path.
-text-saved-unreadable = { $name } ilikuwa ikihifadhiwa Maandishi iliposimamishwa, na kilichohifadhiwa cha uhifadhi huo hakiwezi kusomwa.
+text-saved-unreadable = Programu ya Maandishi ilifungwa ilipokuwa ikihifadhi { $name }, na Trindle haiwezi kusoma sehemu iliyohifadhiwa.
 
 # Shown when a save was stopped and the file has changed since. $name is the file's path.
-text-saved-changed = { $name } ilikuwa ikihifadhiwa Maandishi iliposimamishwa, na imebadilishwa tangu hapo, kwa hiyo imeachwa kama ilivyo.
+text-saved-changed = Programu ya Maandishi ilifungwa ilipokuwa ikihifadhi { $name }. Faili imebadilika tangu hapo, kwa hiyo Trindle imeiacha ilivyo.
 
 # Shown when a save was stopped and the old text could not be put back. $name is the file's path, $reason why, and $path where the old text is kept.
-text-saved-not-put-back = { $name } ilikuwa ikihifadhiwa Maandishi iliposimamishwa, na haikuweza kurudishwa kama ilivyokuwa: { $reason }. Kilichokuwa ndani yake kabla ya uhifadhi huo kimehifadhiwa katika { $path }.
+text-saved-not-put-back = Programu ya Maandishi ilifungwa ilipokuwa ikihifadhi { $name }, na Trindle haikuweza kurudisha faili ilivyokuwa: { $reason }. Maandishi ya kabla ya uhifadhi huo yako katika { $path }.
 
 # Quiet word beside what was just saved, exported or changed.
 text-done = Imekamilika
@@ -352,10 +356,13 @@ text-done = Imekamilika
 # Suggested file name in the Save as chooser for text never saved before.
 text-untitled-file = Bila jina.txt
 
+# The misspelt word, shown in quotation marks on the spelling bar. { $word } is the word.
+text-spell-word = ‘{ $word }’
+
 
 
 # Line under the Save button when the file was changed by something else after Text opened, saved or reloaded it. Nothing has been saved.
-text-changed-elsewhere = Imebadilishwa kwingine tangu uifungue.
+text-changed-elsewhere = Faili hii imebadilika tangu uifungue.
 
 # Button beside that line: save the words here over the changed file.
 text-save-anyway = Hifadhi hata hivyo
@@ -363,3 +370,4 @@ text-save-anyway = Hifadhi hata hivyo
 # Button beside that line: read the file again from disk and drop the unsaved changes here.
 text-reload = Pakia upya
 
+text-link-not-opened = Ni anwani za wavuti pekee zinazofunguka kutoka hapa.

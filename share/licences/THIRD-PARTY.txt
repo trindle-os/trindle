@@ -11745,7 +11745,7 @@ Same text as the one printed under: io-lifetimes 1.0.11 (LICENSE-Apache-2.0_WITH
 Same text as the one printed under: adler2 2.0.1 (LICENSE-MIT)
 
 ================================================================
-rustix 1.1.5
+rustix 1.1.6
 Licence: Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT
 
 --- LICENSE-APACHE
@@ -13806,27 +13806,27 @@ Licence: MIT
 Same text as the one printed under: tracing 0.1.44 (LICENSE)
 
 ================================================================
-trindle 0.9.0-beta.1
+trindle 0.9.1-beta.4
 Licence: GPL-3.0-or-later
 Part of Trindle itself.
 
 ================================================================
-trindle-common 0.9.0-beta.1
+trindle-common 0.9.1-beta.4
 Licence: GPL-3.0-or-later
 Part of Trindle itself.
 
 ================================================================
-trindle-common 0.9.0-beta.1
+trindle-common 0.9.1-beta.4
 Licence: GPL-3.0-or-later
 Part of Trindle itself.
 
 ================================================================
-trindle-help 0.1.0
+trindle-help 0.9.1-beta.4
 Licence: GPL-3.0-or-later
 Part of Trindle itself.
 
 ================================================================
-trindle-toolkit 0.9.0-beta.1
+trindle-toolkit 0.9.1-beta.4
 Licence: GPL-3.0-or-later
 Part of Trindle itself.
 
@@ -16899,4 +16899,35 @@ Licence: MIT
 
 --- LICENSE
 Same text as the one printed under: adler2 2.0.1 (LICENSE-MIT)
+
+================================================================
+wlsunset (code followed in src/session/nightlight.rs)
+Licence: MIT
+
+--- LICENSE
+Copyright 2020 Kenny Levinsen
+
+Permission is hereby granted, free of charge, to any
+person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the
+Software without restriction, including without
+limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software
+is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice
+shall be included in all copies or substantial portions
+of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
+ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
+SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
 

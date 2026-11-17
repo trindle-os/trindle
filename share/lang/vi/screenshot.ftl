@@ -5,7 +5,7 @@
 screenshot-name = Ảnh chụp màn hình
 
 # Note on the overlay before any part is chosen.
-screenshot-drag = Kéo qua phần muốn giữ lại
+screenshot-drag = Kéo chọn phần muốn giữ lại
 
 # Name of the round button that keeps the whole screen.
 screenshot-whole = Toàn bộ màn hình
@@ -108,19 +108,19 @@ screenshot-not-saved = Chưa lưu được ảnh chụp màn hình
 screenshot-not-copied = Chưa sao chép được ảnh chụp màn hình
 
 # Words of that notice.
-screenshot-clipboard-refused = Bảng nhớ tạm không nhận được.
+screenshot-clipboard-refused = Trindle không sao chép được.
 
 # Words of the notice that the screenshot could not be saved: the picture was not made.
-screenshot-no-picture = không tạo được ảnh
+screenshot-no-picture = Không chụp được ảnh màn hình.
 
 # Words of the notice that the screenshot could not be saved: no bus to ask on.
-screenshot-no-bus = không có bus phiên để hỏi nơi lưu
+screenshot-no-bus = Trindle không hỏi được nơi lưu.
 
 # Words of the notice that the screenshot could not be saved: the file chooser could not be asked.
-screenshot-no-chooser = không hỏi được bộ chọn tệp
+screenshot-no-chooser = Không mở được bộ chọn tệp.
 
 # Words of the notice that the screenshot could not be saved: every file name was taken.
-screenshot-no-free-name = không còn tên trống
+screenshot-no-free-name = Không còn tên trống
 
 # Words of the notice that the screenshot could not be saved: the path and why it failed.
 screenshot-write-failed = { $path }: { $why }
@@ -129,25 +129,25 @@ screenshot-write-failed = { $path }: { $why }
 screenshot-eye-title = Chấm màu
 
 # Words that float beside the i of the eye dropper's window.
-screenshot-eye-help = Nhấn chấm màu, rồi nhấn vào bất kỳ đâu trên màn hình để lấy màu dưới con trỏ. Nhấn Escape để bỏ qua. Mỗi màu được sao chép ngay dưới dạng mã hex và giữ trong danh sách bên dưới, màu mới nhất ở đầu, để có thể sao chép lại sau.
+screenshot-eye-help = Nhấn chấm màu, rồi nhấn vào bất kỳ đâu trên màn hình để lấy màu dưới con trỏ. Nhấn Escape để hủy. Mỗi màu được sao chép ngay dưới dạng mã hex và thêm vào danh sách bên dưới, màu mới nhất ở đầu, để bạn có thể sao chép lại sau.
 
 # Name of the i button beside the title.
 screenshot-eye-about = Giới thiệu về chấm màu
 
 # Name of the main button that takes a colour.
-screenshot-eye-take = Lấy một màu
+screenshot-eye-take = Chọn một màu
 
 # Sentence under the title while no colour has been taken.
-screenshot-eye-none = Lấy một màu từ bất kỳ đâu trên màn hình.
+screenshot-eye-none = Chọn một màu từ màn hình.
 
 # Sentence under the title once colours have been taken.
 screenshot-eye-taken =
     { $n ->
-       *[other] Đã lấy { $n } màu; màu mới nhất là { $newest }.
+       *[other] Đã chọn { $n } màu. Màu mới nhất là { $newest }.
     }
 
 # Shown in the big card while no colour has been taken.
-screenshot-eye-latest-empty = Màu bạn lấy sẽ hiện ở đây, to, sẵn sàng để sao chép.
+screenshot-eye-latest-empty = Chưa chọn màu nào.
 
 # Name of the card that holds the latest colour.
 screenshot-eye-latest = Màu mới nhất
@@ -157,10 +157,10 @@ screenshot-eye-latest = Màu mới nhất
 screenshot-eye-clear = Xóa danh sách
 
 # Head of the card with the list of colours taken.
-screenshot-eye-list = Các màu đã lấy
+screenshot-eye-list = Các màu của bạn
 
 # Shown in the list card while no colour has been taken.
-screenshot-eye-list-empty = Các màu lấy bằng chấm màu được giữ ở đây, màu mới nhất ở đầu.
+screenshot-eye-list-empty = Chưa chọn màu nào.
 
 # Name of the round button that takes a colour out of the list.
 # SAFETY: needs a human review before it ships
@@ -174,10 +174,10 @@ screenshot-eye-damaged = Màu của chấm màu
 screenshot-pick-title = Chia sẻ màn hình của bạn với { $app }?
 
 # Sentence under the title when several things can be picked.
-screenshot-pick-many = Chọn một hoặc nhiều mục. Chỉ những gì bạn chọn được chia sẻ, cho đến khi ứng dụng dừng hoặc đóng.
+screenshot-pick-many = Chọn một hoặc nhiều mục. Chỉ những gì bạn chọn được chia sẻ, cho đến khi ứng dụng ngừng chia sẻ hoặc đóng.
 
 # Sentence under the title when one thing can be picked.
-screenshot-pick-one = Chọn một mục. Chỉ những gì bạn chọn được chia sẻ, cho đến khi ứng dụng dừng hoặc đóng.
+screenshot-pick-one = Chọn một mục. Chỉ những gì bạn chọn được chia sẻ, cho đến khi ứng dụng ngừng chia sẻ hoặc đóng.
 
 # Heading over the screens that can be shared.
 screenshot-pick-screens = Màn hình
@@ -192,7 +192,7 @@ screenshot-pick-nothing = Không có gì để chia sẻ.
 screenshot-pick-desktop = Toàn bộ màn hình nền
 
 # Words under that choice.
-screenshot-pick-desktop-detail = Mọi màn hình, theo cách chúng được sắp xếp
+screenshot-pick-desktop-detail = Tất cả màn hình, theo cách đã sắp xếp
 
 # Words under a screen's choice: its size in pixels.
 screenshot-pick-size = { $width } x { $height }
@@ -231,11 +231,11 @@ screenshot-portal-name = Tên
 
 # Heading when an unknown program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks-unknown = Một chương trình hỏi bạn là ai
+screenshot-account-asks-unknown = Một chương trình muốn xem thông tin của bạn
 
 # Heading when a program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks = { $who } hỏi bạn là ai
+screenshot-account-asks = { $who } muốn xem thông tin của bạn
 
 # Name the screen reader gives to the person's picture.
 screenshot-account-picture = Ảnh của bạn
@@ -247,7 +247,7 @@ screenshot-account-signed-in = Đã đăng nhập với tên { $id }
 screenshot-apps-search = Tìm ứng dụng
 
 # Shown when no app can open the file.
-screenshot-apps-none = Không có ứng dụng nào ở đây mở được tệp này
+screenshot-apps-none = Không có ứng dụng nào mở được tệp này
 
 # Name of the switch that remembers the choice.
 screenshot-apps-always = Luôn dùng ứng dụng này cho loại tệp này
@@ -307,7 +307,7 @@ screenshot-wallpaper-ask = Đặt ảnh này làm hình nền?
 
 # Heading when a program offers a wallpaper.
 # SAFETY: needs a human review before it ships
-screenshot-wallpaper-asks = { $who } đề xuất một hình nền mới
+screenshot-wallpaper-asks = { $who } muốn đặt hình nền
 
 # Name the screen reader gives to the picture offered.
 screenshot-wallpaper-picture = Hình nền mới
@@ -317,7 +317,7 @@ screenshot-wallpaper-picture = Hình nền mới
 screenshot-wallpaper-set = Đặt làm hình nền
 
 # Red line under the printer box when no printer is set up.
-screenshot-print-no-printer = Chưa cài máy in nào. Hãy thêm một máy trong Cài đặt, Máy in.
+screenshot-print-no-printer = Chưa cài máy in nào. Hãy thêm một máy trong Cài đặt, mục Máy in.
 
 # Red line under the printer box when the printing system does not answer.
 screenshot-print-not-answering = Dịch vụ in không phản hồi.
@@ -371,7 +371,7 @@ screenshot-print-from = In từ { $who }
 screenshot-print-failed = Không in được
 
 # Words of that notice when the choices made were not kept.
-screenshot-print-lost = Các lựa chọn của nó không được giữ lại. Hãy in lại.
+screenshot-print-lost = Không lưu được cài đặt. Hãy in lại.
 
 # Line in the menu on a file or folder: change its name.
 screenshot-chooser-rename = Đổi tên
@@ -415,7 +415,7 @@ screenshot-chooser-no-folder = Thư mục đó không có.
 
 # Words under the box when saving would replace a file.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-ask = { $name } đã có sẵn. Nhấn Thay thế, hoặc nhấn Enter lần nữa, để đặt mục này vào chỗ của nó.
+screenshot-chooser-replace-ask = { $name } đã tồn tại. Để thay thế, nhấn Thay thế hoặc nhấn Enter lần nữa.
 
 # Words under the box when a key is pressed on Recent, which is not a folder.
 screenshot-chooser-recent-not-folder = Gần đây không phải một thư mục. Hãy mở một thư mục trước.
@@ -424,7 +424,7 @@ screenshot-chooser-recent-not-folder = Gần đây không phải một thư mụ
 screenshot-chooser-nothing-picked = Chưa chọn gì.
 
 # Words under the box while a file by that name is already there.
-screenshot-chooser-there = { $name } đã có sẵn.
+screenshot-chooser-there = { $name } đã tồn tại.
 
 # Name of the round button that hides the hidden files.
 screenshot-chooser-hide-hidden = Ẩn các tệp ẩn
@@ -436,10 +436,10 @@ screenshot-chooser-show-hidden = Hiện các tệp ẩn
 screenshot-chooser-choose-folder = Chọn thư mục
 
 # Head of the question when a folder of that name is already there.
-screenshot-chooser-clash-folder = Đã có sẵn một thư mục tên { $name }
+screenshot-chooser-clash-folder = Thư mục tên { $name } đã tồn tại
 
 # Head of the question when a file of that name is already there.
-screenshot-chooser-clash-file = { $name } đã có sẵn
+screenshot-chooser-clash-file = { $name } đã tồn tại
 
 # Name of the round button that leaves a pasted thing out.
 # SAFETY: needs a human review before it ships
@@ -454,49 +454,49 @@ screenshot-chooser-replace = Thay thế
 
 # What the screen reader says for the button that replaces a folder.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-spoken = Thay thế: thư mục đã có sẵn sẽ được chuyển vào Thùng rác
+screenshot-chooser-replace-spoken = Thay thế. Thư mục hiện có sẽ được chuyển vào Thùng rác.
 
 # Name of the main button that merges two folders.
 # SAFETY: needs a human review before it ships
 screenshot-chooser-merge = Gộp
 
 # Words in the question when folders are being pasted.
-screenshot-chooser-rest-folders = Cùng một câu trả lời cho mọi thư mục đã có sẵn.
+screenshot-chooser-rest-folders = Áp dụng cho mọi thư mục đã tồn tại.
 
 # Words in the question when files are being pasted.
-screenshot-chooser-rest-files = Cùng một câu trả lời cho mọi tệp đã có sẵn.
+screenshot-chooser-rest-files = Áp dụng cho mọi tệp đã tồn tại.
 
 # Name of the switch that gives the same answer to the rest.
 screenshot-chooser-same = Làm tương tự cho các mục còn lại
 
 # Words under the box after Cut.
-screenshot-chooser-was-cut = Đã cắt { $what }. Hãy dán vào một thư mục.
+screenshot-chooser-was-cut = Sẵn sàng để di chuyển: { $what }
 
 # Words under the box after Copy.
-screenshot-chooser-was-copied = Đã sao chép { $what }. Hãy dán vào một thư mục.
+screenshot-chooser-was-copied = Sẵn sàng để sao chép: { $what }
 
 # Words under the box when Paste is pressed and there is nothing to paste.
 screenshot-chooser-nothing-cut = Chưa cắt hoặc sao chép gì.
 
 # Words under the box when Paste is pressed while a paste is still going.
-screenshot-chooser-paste-busy = Một lần dán vẫn đang diễn ra.
+screenshot-chooser-paste-busy = Trindle vẫn đang dán.
 
 # Red line after some items could not be moved.
 screenshot-chooser-not-moved =
     { $n ->
-       *[other] Không di chuyển được { $n } mục: { $names }.
+       *[other] Trindle không di chuyển được { $n } mục: { $names }.
     }
 
 # Red line after some items could not be copied.
 screenshot-chooser-not-copied =
     { $n ->
-       *[other] Không sao chép được { $n } mục: { $names }.
+       *[other] Trindle không sao chép được { $n } mục: { $names }.
     }
 
 # Red line after some items could not be put in the Trash.
 screenshot-chooser-not-trashed =
     { $n ->
-       *[other] Không chuyển được { $n } mục vào Thùng rác: { $names }.
+       *[other] Trindle không chuyển được { $n } mục vào Thùng rác: { $names }.
     }
 
 # Name of the box where a file or folder is renamed.
@@ -509,10 +509,10 @@ screenshot-chooser-items =
     }
 
 # Title of the notice when an email could not be started.
-screenshot-mail-failed = Không khởi động được email
+screenshot-mail-failed = Không tạo được email
 
 # Why: no mail program is chosen or installed.
-screenshot-mail-no-app = Chưa đặt chương trình thư. Hãy chọn một chương trình trong Cài đặt, Ứng dụng mặc định.
+screenshot-mail-no-app = Bạn chưa chọn chương trình thư. Hãy chọn một chương trình trong Cài đặt, Ứng dụng mặc định.
 
 # Why: a program asked to attach more files than allowed.
 screenshot-mail-too-many = Có quá nhiều tệp để đính kèm.
@@ -559,6 +559,11 @@ screenshot-chooser-pin-not-kept = Không lưu được mục ghim.
 # Red line after some items could not be deleted.
 screenshot-chooser-not-deleted =
     { $n ->
-       *[other] Không xóa được { $n } mục: { $names }.
+       *[other] Trindle không xóa được { $n } mục: { $names }.
     }
 
+# What the screen reader says for the list of places down the left of the file chooser.
+screenshot-chooser-places = Vị trí
+
+# What the screen reader says for the list of files and folders in the file chooser.
+screenshot-chooser-files = Tệp

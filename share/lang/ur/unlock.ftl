@@ -7,7 +7,7 @@ unlock-title-default = ڈسک کا پاس ورڈ
 
 # SAFETY: needs a human review before it ships
 # Heading of the box in place of cryptsetup's own wording ("Please unlock disk ...", "Enter passphrase").
-unlock-title-encryption = خفیہ کاری کا پاس ورڈ درج کریں
+unlock-title-encryption = ڈسک کا پاس ورڈ درج کریں
 
 # SAFETY: needs a human review before it ships
 # Key hint under the box: Tab, or the eye, shows the typed password.

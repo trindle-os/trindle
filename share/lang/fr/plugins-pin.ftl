@@ -8,10 +8,10 @@ plugins-pin-four = Un code PIN comporte 4 chiffres.
 plugins-pin-not-saved = Le code PIN n'est pas enregistré
 
 # Red words on the PIN card when the unlocking command gave no answer of its own.
-plugins-pin-no-answer = Aucune réponse de l'autre ordinateur.
+plugins-pin-no-answer = L'autre ordinateur n'a pas répondu.
 
 # Red words on the PIN card when the unlocking command refused without saying why.
-plugins-pin-not-unlocked = Non déverrouillé.
+plugins-pin-not-unlocked = Toujours verrouillé.
 
 # Name the screen reader gives to the four dots on the PIN card.
 plugins-pin-dots = Code PIN

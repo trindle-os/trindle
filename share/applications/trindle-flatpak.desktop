@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Trindle Flatpak installer
+Comment=See what a Flatpak program will reach, then install it
+Exec=trindle-apps --flatpakref %f
+Icon=trindle-flatpak
+Terminal=false
+Type=Application
+MimeType=application/vnd.flatpak.ref;application/vnd.flatpak;
+StartupNotify=false
+StartupWMClass=org.trindle.Store

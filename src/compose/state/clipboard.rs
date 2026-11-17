@@ -1,6 +1,6 @@
 // Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
-use super::{selection_slot, AnvilState, Backend, DndIcon};
+use super::{selection_slot, Compose, Backend, DndIcon};
 
 use std::os::unix::io::OwnedFd;
 
@@ -29,7 +29,7 @@ use smithay::{
 
 use smithay::wayland::selection::{SelectionSource, SelectionTarget};
 
-impl<BackendData: Backend> DataDeviceHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> DataDeviceHandler for Compose<BackendData> {
     fn data_device_state(&self) -> &DataDeviceState {
         &self.data_device_state
     }
@@ -61,7 +61,7 @@ impl<BackendData: Backend> DataDeviceHandler for AnvilState<BackendData> {
     }
 }
 
-impl<BackendData: Backend> ClientDndGrabHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> ClientDndGrabHandler for Compose<BackendData> {
     fn started(&mut self, source: Option<WlDataSource>, icon: Option<WlSurface>, _seat: Seat<Self>) {
         self.xdnd_wayland_drag(source.clone());
         self.drag_started(source);
@@ -88,7 +88,7 @@ impl<BackendData: Backend> ClientDndGrabHandler for AnvilState<BackendData> {
     }
 }
 
-impl<BackendData: Backend> ServerDndGrabHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> ServerDndGrabHandler for Compose<BackendData> {
     fn accept(&mut self, mime_type: Option<String>, _seat: Seat<Self>) {
         self.xdnd_server_accept(mime_type);
     }
@@ -111,9 +111,9 @@ impl<BackendData: Backend> ServerDndGrabHandler for AnvilState<BackendData> {
         self.xdnd_released();
     }
 }
-delegate_data_device!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_data_device!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend> SelectionHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> SelectionHandler for Compose<BackendData> {
     type SelectionUserData = ();
 
     fn new_selection(&mut self, ty: SelectionTarget, source: Option<SelectionSource>, _seat: Seat<Self>) {
@@ -146,24 +146,24 @@ impl<BackendData: Backend> SelectionHandler for AnvilState<BackendData> {
     }
 }
 
-impl<BackendData: Backend> PrimarySelectionHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> PrimarySelectionHandler for Compose<BackendData> {
     fn primary_selection_state(&self) -> &PrimarySelectionState {
         &self.primary_selection_state
     }
 }
-delegate_primary_selection!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_primary_selection!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend> DataControlHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> DataControlHandler for Compose<BackendData> {
     fn data_control_state(&self) -> &DataControlState {
         &self.data_control_state
     }
 }
 
-delegate_data_control!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_data_control!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend> ShmHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> ShmHandler for Compose<BackendData> {
     fn shm_state(&self) -> &ShmState {
         &self.shm_state
     }
 }
-delegate_shm!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_shm!(@<BackendData: Backend + 'static> Compose<BackendData>);

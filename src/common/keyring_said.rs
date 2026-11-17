@@ -263,42 +263,39 @@ mod tests {
 
     #[test]
     fn a_turn_another_program_holds_is_waited_for() {
-        use std::os::fd::AsRawFd;
+        use std::io::{BufRead, Write};
         use std::process::{Command, Stdio};
         let file = turn_file("another-program");
         pretend(Some("test:beside-another-program".into()));
         pretend_shared(Some(file.clone()));
 
-        let held = |file: &std::path::Path| {
-            let Ok(look) = std::fs::File::open(file) else { return false };
-            // SAFETY: the descriptor is that of `look`, open throughout; a lock had here goes as it closes.
-            unsafe { libc::flock(look.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) != 0 }
-        };
-        let hold = |secs: &str| {
-            let other = Command::new(crate::common::needs::program("flock")).arg("--exclusive").arg(&file).args(["sleep", secs])
-                .stdin(Stdio::null()).stdout(Stdio::null()).spawn().expect("flock could not be started");
-            for _ in 0..300 {
-                if held(&file) {
-                    break;
-                }
-                std::thread::sleep(Duration::from_millis(10));
-            }
-            assert!(held(&file), "the other program never took the file");
+        let hold = || {
+            let mut other = Command::new(crate::common::needs::program("flock")).arg("--exclusive").arg(&file).arg("cat")
+                .stdin(Stdio::piped()).stdout(Stdio::piped()).spawn().expect("flock could not be started");
+            other.stdin.as_mut().unwrap().write_all(b"held\n").unwrap();
+            let mut echo = String::new();
+            std::io::BufReader::new(other.stdout.take().unwrap()).read_line(&mut echo).unwrap();
+            assert_eq!(echo, "held\n", "the other program never took the file");
             other
         };
-        let mut other = hold("0.8");
+        let mut other = hold();
+        let input = other.stdin.take().unwrap();
+        let letting_go = std::thread::spawn(move || {
+            std::thread::sleep(Duration::from_millis(800));
+            drop(input);
+        });
         let since = std::time::Instant::now();
         assert_eq!(within(|| Ok(5)), Ok(5));
-        assert!(since.elapsed() >= Duration::from_millis(300), "the work did not wait for the other program: {:?}", since.elapsed());
+        assert!(since.elapsed() >= Duration::from_millis(700), "the work did not wait for the other program: {:?}", since.elapsed());
+        letting_go.join().unwrap();
         assert!(other.wait().unwrap().success());
 
-        let mut other = hold("30");
+        let mut other = hold();
         let since = std::time::Instant::now();
         assert_eq!(within(|| Ok(6)), Err(silent_words().to_string()));
         assert!(since.elapsed() < DEADLINE * 2, "{:?}", since.elapsed());
-
-        other.kill().unwrap();
-        let _ = other.wait();
+        drop(other.stdin.take());
+        assert!(other.wait().unwrap().success());
 
         pretend(Some("test:no-turn-file".into()));
         pretend_shared(Some(file.join("under-a-file")));
@@ -308,7 +305,7 @@ mod tests {
             d.store(true, std::sync::atomic::Ordering::SeqCst);
             Ok(())
         });
-        assert!(got.as_ref().is_err_and(|why| why.starts_with("The turn with the keyring could not be taken (")), "{got:?}");
+        assert!(got.as_ref().is_err_and(|why| why.starts_with("Trindle couldn't get access to the keyring (")), "{got:?}");
         assert!(!done.load(std::sync::atomic::Ordering::SeqCst), "the work was done with no turn taken");
         let _ = std::fs::remove_dir_all(file.parent().unwrap());
     }
@@ -338,20 +335,20 @@ mod tests {
         for (what, removing) in [("key", false), ("key", true), ("login", false)] {
             let meanwhile = waiting(what, removing);
             assert!(!meanwhile.failed, "not answered yet is not a failure");
-            assert!(meanwhile.words.contains("has not answered yet") && meanwhile.words.contains("this line will say so") && meanwhile.words.contains(what), "{meanwhile:?}");
+            assert!(meanwhile.words.contains("hasn't answered yet") && meanwhile.words.contains("this message will say so") && meanwhile.words.contains(what), "{meanwhile:?}");
             let good = late(what, removing, &Ok(()));
-            assert!(!good.failed && good.words == format!("The keyring answered late: the {what} is {}.", if removing { "removed" } else { "kept" }), "{good:?}");
+            assert!(!good.failed && good.words == format!("The keyring answered late, and the {what} has been {}.", if removing { "removed" } else { "saved" }), "{good:?}");
             let bad = late(what, removing, &Err(locked_words().into()));
-            assert!(bad.failed && bad.words.contains("answered late and did not") && bad.words.ends_with(locked_words()), "{bad:?}");
+            assert!(bad.failed && bad.words.contains("answered late and didn't") && bad.words.ends_with(locked_words()), "{bad:?}");
             let never = late(what, removing, &Err(never_words().into()));
             assert!(never.failed && !never.words.contains("answered late"), "{never:?}");
-            assert_eq!(never.words, format!("The keyring never answered, so the {what} is not {}.", if removing { "removed" } else { "kept" }));
+            assert_eq!(never.words, format!("The keyring never answered, so the {what} hasn't been {}.", if removing { "removed" } else { "saved" }));
         }
 
         for removing in [false, true] {
             let (words, good) = crate::store::github::late_words(removing, &Err(never_words().to_string()));
             assert!(!good && !words.contains("answered late"), "{words}");
-            assert!(words.starts_with("The keyring never answered, so the key is not"), "{words}");
+            assert!(words.starts_with("The keyring never answered, so the key hasn't been"), "{words}");
             assert_eq!(crate::store::github::waiting_words(removing), waiting("key", removing).words);
         }
     }

@@ -20,9 +20,9 @@ use smithay::{
     utils::{Monotonic, Time},
     wayland::presentation::Refresh,
 };
-use tracing::{error, trace, warn};
+use tracing::{debug, trace, warn};
 
-use super::{recovery::try_again, AnvilState, SurfaceData, UdevData, UdevOutputId};
+use super::{recovery::try_again, Compose, SurfaceData, UdevData, UdevOutputId};
 use crate::{render::frame_duration, shell::WindowElement};
 
 struct Vblank {
@@ -56,7 +56,7 @@ impl Vblank {
     }
 }
 
-impl AnvilState<UdevData> {
+impl Compose<UdevData> {
     pub(super) fn frame_finish(&mut self, dev_id: DrmNode, crtc: crtc::Handle, metadata: &mut Option<DrmEventMetadata>) {
         let Some(surface) = vblank_surface(&mut self.backend_data, dev_id, crtc) else {
             return;
@@ -135,7 +135,7 @@ fn vblank_surface(data: &mut UdevData, dev_id: DrmNode, crtc: crtc::Handle) -> O
     let device_backend = match data.backends.get_mut(&dev_id) {
         Some(backend) => backend,
         None => {
-            error!("Trying to finish frame on non-existent backend {}", dev_id);
+            debug!("A vblank came after its card was unplugged: {}", dev_id);
             return None;
         }
     };
@@ -143,7 +143,7 @@ fn vblank_surface(data: &mut UdevData, dev_id: DrmNode, crtc: crtc::Handle) -> O
     match device_backend.surfaces.get_mut(&crtc) {
         Some(surface) => Some(surface),
         None => {
-            error!("Trying to finish frame on non-existent crtc {:?}", crtc);
+            debug!("A vblank came after its screen was unplugged: {:?}", crtc);
             None
         }
     }
@@ -157,7 +157,7 @@ pub(super) fn output_for(space: &Space<WindowElement>, id: UdevOutputId) -> Opti
 }
 
 fn throttled(
-    handle: &LoopHandle<'static, AnvilState<UdevData>>,
+    handle: &LoopHandle<'static, Compose<UdevData>>,
     surface: &mut SurfaceData,
     dev_id: DrmNode,
     crtc: crtc::Handle,
@@ -184,14 +184,20 @@ fn throttled(
         sequence: vblank.sequence,
         time: DrmEventTime::Monotonic(throttled_time),
     };
-    let timer_token = handle
-        .insert_source(Timer::from_duration(vblank_remaining_time), move |_, _, data| {
-            data.frame_finish(dev_id, crtc, &mut Some(throttled_metadata));
-            TimeoutAction::Drop
-        })
-        .expect("failed to register vblank throttle timer");
-    surface.vblank_throttle_timer = Some(timer_token);
-    true
+    let timer = handle.insert_source(Timer::from_duration(vblank_remaining_time), move |_, _, data| {
+        data.frame_finish(dev_id, crtc, &mut Some(throttled_metadata));
+        TimeoutAction::Drop
+    });
+    match timer {
+        Ok(token) => {
+            surface.vblank_throttle_timer = Some(token);
+            true
+        }
+        Err(err) => {
+            warn!("could not put a vblank off: {err}");
+            false
+        }
+    }
 }
 
 fn submit_frame(surface: &mut SurfaceData, frame_duration: Duration, vblank: &Vblank) -> (bool, bool) {

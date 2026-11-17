@@ -29,15 +29,15 @@ keyring-checking = जाँच हो रही है…
 
 # SAFETY: needs a human review before it ships
 # Under the title when no keyring exists yet and a program wants to keep a password.
-keyring-why-none = एक प्रोग्राम किसी पासवर्ड को सुरक्षित रखना चाहता है। कीरिंग शुरू करने के लिए अपना लॉगिन पासवर्ड लिखें; इसके बाद वह लॉगिन करते ही अपने आप खुल जाएगी।
+keyring-why-none = एक प्रोग्राम किसी पासवर्ड को सुरक्षित रखना चाहता है। कीरिंग शुरू करने के लिए अपना लॉगिन पासवर्ड लिखें। इसके बाद वह लॉगिन करते ही अपने आप खुल जाएगी।
 
 # SAFETY: needs a human review before it ships
 # Under the title when the keyring was made with a different password from the login one.
-keyring-why-old = आपका लॉगिन पासवर्ड वह नहीं है जिससे यह कीरिंग बनी थी। पुराना पासवर्ड एक बार लिखें; इसके बाद वह लॉगिन पर अपने आप खुल जाएगी।
+keyring-why-old = आपका लॉगिन पासवर्ड वह नहीं है जिससे यह कीरिंग बनी थी। पुराना पासवर्ड एक बार लिखें। इसके बाद कीरिंग लॉगिन पर अपने आप खुल जाएगी।
 
 # SAFETY: needs a human review before it ships
 # Under the title when no password was typed at log in, for example with a fingerprint or automatic log in.
-keyring-why-no-login = लॉगिन पर कोई पासवर्ड नहीं लिखा गया (फ़िंगरप्रिंट या अपने आप लॉगिन), इसलिए कीरिंग अपने आप नहीं खुल सकी। अपना लॉगिन पासवर्ड लिखें।
+keyring-why-no-login = लॉगिन करते समय आपने कोई पासवर्ड नहीं लिखा (आपने फ़िंगरप्रिंट या अपने आप होने वाले लॉगिन का इस्तेमाल किया), इसलिए कीरिंग अपने आप नहीं खुल सकी। अपना लॉगिन पासवर्ड लिखें।
 
 # SAFETY: needs a human review before it ships
 # Under the title when a program asks for a saved password and the keyring is shut.
@@ -51,7 +51,7 @@ keyring-stopped = कीरिंग बंद हो गई है
 keyring-not-the-keyring-password = यह कीरिंग का पासवर्ड नहीं है
 
 # Shown under the box when the keyring file is damaged and has been left as it is.
-keyring-damaged-left = कीरिंग फ़ाइल खराब है, इसलिए उसे छुआ नहीं गया
+keyring-damaged-left = कीरिंग फ़ाइल खराब है, इसलिए Trindle ने उसमें कोई बदलाव नहीं किया
 
 # SAFETY: needs a human review before it ships
 # Shown under the box when the password is not the person's login password.
@@ -72,7 +72,7 @@ keyring-error-locked = कीरिंग बंद (लॉक) है
 keyring-error-wrong-password = यह पासवर्ड कीरिंग नहीं खोलता
 
 # Said when the collection or item asked for is not there.
-keyring-error-no-such = ऐसा कोई संग्रह या आइटम नहीं है
+keyring-error-no-such = वह आइटम मौजूद नहीं है
 
 # Said when the keyring file cannot be read as a keyring.
 keyring-error-damaged = कीरिंग फ़ाइल खराब है
@@ -82,8 +82,10 @@ keyring-error-damaged = कीरिंग फ़ाइल खराब है
 keyring-asked-by = { $program } ने माँगा है
 
 # Told to a program that asked while the keyring was taking over from the one before and many calls already waited.
-keyring-starting = कीरिंग शुरू हो रही है। दोबारा माँगें।
+keyring-starting = कीरिंग शुरू हो रही है। फिर कोशिश करें।
 
 # The program in "Asked for by", for a program on the bus: $name is the name it gives itself, which anything can claim.
 keyring-named-itself = एक प्रोग्राम जो खुद को { $name } कहता है
 
+# Said to a program that gave a password with letters the keyring can't read, so no keyring is made with it.
+keyring-password-unreadable = उस पासवर्ड में ऐसे अक्षर हैं जिन्हें कीरिंग पढ़ नहीं सकती

@@ -7,6 +7,7 @@ mod repaint;
 mod seat;
 
 pub use repaint::{take_presentation_feedback, update_primary_scanout_output, SurfaceDmabufFeedback};
+pub(crate) use init::unsandboxed;
 
 use std::sync::{atomic::AtomicBool, Arc};
 
@@ -67,6 +68,8 @@ pub struct ClientState {
 
     pub from_root: bool,
 
+    pub pidfd: Option<std::os::fd::OwnedFd>,
+
     pub ours: bool,
 
     pub asked: bool,
@@ -85,12 +88,12 @@ impl ClientData for ClientState {
 }
 
 #[derive(Debug)]
-pub struct AnvilState<BackendData: Backend + 'static> {
+pub struct Compose<BackendData: Backend + 'static> {
     pub backend_data: BackendData,
     pub socket_name: Option<String>,
     pub display_handle: DisplayHandle,
     pub running: Arc<AtomicBool>,
-    pub handle: LoopHandle<'static, AnvilState<BackendData>>,
+    pub handle: LoopHandle<'static, Compose<BackendData>>,
 
     pub space: Space<WindowElement>,
     pub popups: PopupManager,
@@ -101,7 +104,7 @@ pub struct AnvilState<BackendData: Backend + 'static> {
     pub output_manager_state: OutputManagerState,
     pub primary_selection_state: PrimarySelectionState,
     pub data_control_state: DataControlState,
-    pub seat_state: SeatState<AnvilState<BackendData>>,
+    pub seat_state: SeatState<Compose<BackendData>>,
     pub keyboard_shortcuts_inhibit_state: KeyboardShortcutsInhibitState,
     pub shm_state: ShmState,
     pub viewporter_state: ViewporterState,
@@ -134,6 +137,12 @@ pub struct AnvilState<BackendData: Backend + 'static> {
 
     pub toplevel_list_state: smithay::wayland::foreign_toplevel_list::ForeignToplevelListState,
     pub toplevel_list: Vec<(WlSurface, smithay::wayland::foreign_toplevel_list::ForeignToplevelHandle)>,
+
+    pub panel_told: Vec<crate::protocols::windows::WindowInfo>,
+
+    pub panel_stale: bool,
+
+    pub panel_seen: (u64, usize, usize),
     pub screens_state: ScreensState,
     pub output_power_state: OutputPowerState,
     pub night_state: NightState,
@@ -143,7 +152,7 @@ pub struct AnvilState<BackendData: Backend + 'static> {
 
     pub plugged: crate::lock::Plugged,
 
-    pub idle_notifier_state: IdleNotifierState<AnvilState<BackendData>>,
+    pub idle_notifier_state: IdleNotifierState<Compose<BackendData>>,
     pub idle_inhibit_state: IdleInhibitManagerState,
     pub idle_inhibitors: Vec<WlSurface>,
     pub pads: crate::game_pads::Pads,
@@ -183,9 +192,9 @@ pub struct AnvilState<BackendData: Backend + 'static> {
     pub xkb_names: (String, String, String, Option<String>),
     pub cursor_status: CursorImageStatus,
     pub seat_name: String,
-    pub seat: Seat<AnvilState<BackendData>>,
+    pub seat: Seat<Compose<BackendData>>,
     pub clock: Clock<Monotonic>,
-    pub pointer: PointerHandle<AnvilState<BackendData>>,
+    pub pointer: PointerHandle<Compose<BackendData>>,
 
     pub rooms: crate::xrooms::Rooms,
 
@@ -214,7 +223,7 @@ pub struct DndIcon {
     pub offset: Point<i32, Logical>,
 }
 
-delegate_compositor!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+delegate_compositor!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
 pub fn selection_slot(ty: SelectionTarget) -> usize {
     match ty {
@@ -231,12 +240,12 @@ pub trait Backend {
     fn early_import(&mut self, surface: &WlSurface);
     fn update_led_state(&mut self, led_state: LedState);
 
-    fn output_heads(state: &AnvilState<Self>) -> Vec<ScreenFacts>
+    fn output_heads(state: &Compose<Self>) -> Vec<ScreenFacts>
     where
         Self: Sized + 'static;
 
     fn apply_output_config(
-        state: &mut AnvilState<Self>,
+        state: &mut Compose<Self>,
         targets: &[ScreenPlan],
         test_only: bool,
     ) -> Result<(), String>
@@ -247,7 +256,7 @@ pub trait Backend {
         None
     }
 
-    fn set_output_power(_state: &mut AnvilState<Self>, _output: &Output, _on: bool) -> bool
+    fn set_output_power(_state: &mut Compose<Self>, _output: &Output, _on: bool) -> bool
     where
         Self: Sized + 'static,
     {
@@ -269,6 +278,24 @@ pub trait Backend {
     fn unlocked(&mut self) {}
 }
 
+impl<BackendData: Backend + 'static> Compose<BackendData> {
+
+    pub fn tidy_after_a_turn(&mut self) {
+        self.space.refresh();
+        self.popups.cleanup();
+        self.refresh_panel();
+        self.refresh_session_lock();
+        self.refresh_idle_inhibit();
+        self.refresh_suspended();
+    }
+}
+
+pub fn send_waiting(display_handle: &mut DisplayHandle) {
+    if let Err(e) = display_handle.flush_clients() {
+        tracing::warn!("programs could not all be sent what was waiting for them: {e}");
+    }
+}
+
 fn num_lock_file() -> std::path::PathBuf {
     crate::files::home().join(".local/state/trindle/num-lock")
 }
@@ -278,7 +305,8 @@ fn remembered_num_lock() -> bool {
 }
 
 fn remember_num_lock(on: bool) {
-    if remembered_num_lock() == on {
+    static LAST: std::sync::atomic::AtomicU8 = std::sync::atomic::AtomicU8::new(0);
+    if !differs_from(&LAST, on) || remembered_num_lock() == on {
         return;
     }
     let file = num_lock_file();
@@ -286,6 +314,11 @@ fn remember_num_lock(on: bool) {
         let _ = std::fs::create_dir_all(dir);
     }
     let _ = crate::files::write_text(&file, if on { "on\n" } else { "off\n" });
+}
+
+fn differs_from(last: &std::sync::atomic::AtomicU8, on: bool) -> bool {
+    let now = 1 + u8::from(on);
+    last.swap(now, std::sync::atomic::Ordering::Relaxed) != now
 }
 
 #[cfg(test)]
@@ -299,4 +332,16 @@ pub(crate) fn code() -> &'static str {
     files.sort();
     let text: String = files.iter().map(|p| std::fs::read_to_string(p).unwrap()).collect();
     crate::source::code(Box::leak(text.into_boxed_str()))
+}
+
+#[cfg(test)]
+mod num_lock_tests {
+    #[test]
+    fn a_light_that_has_not_changed_does_not_reach_the_file() {
+        let last = std::sync::atomic::AtomicU8::new(0);
+        assert!(super::differs_from(&last, true));
+        assert!(!super::differs_from(&last, true));
+        assert!(super::differs_from(&last, false));
+        assert!(!super::differs_from(&last, false));
+    }
 }

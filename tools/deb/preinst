@@ -20,8 +20,8 @@ Trindle is built and tested on Debian 13 (trixie) only.
 
 This computer says it is: $what
 
-It may well work. Nothing has been tested on Debian testing or unstable, on
-Ubuntu, or on anything built from them, and a login screen that will not start
+It may well work. Nothing has been tested on Debian testing or unstable, or
+on any system built from them, and a login screen that will not start
 is harder to undo than it sounds. Keep a way back before you restart.
 
 WARN

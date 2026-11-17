@@ -8,16 +8,16 @@ settings-display-title = الشاشة
 settings-display-keywords = شاشة عرض دقة حجم تكبير تصغير تدوير تحديث إضاءة ليلية دافئة ضوء أزرق مساء عيون screen monitor resolution size scale zoom bigger smaller rotate refresh night light warm blue light evening eyes
 
 # Introduction under the heading of the display page, and the words behind the page i.
-settings-display-help = تُطبَّق التغييرات فورًا. إذا ساء حال الشاشة فلا تفعل شيئًا: ستعود تلقائيًا بعد 15 ثانية ما لم تضغط الإبقاء. الإضاءة الليلية تجعل الشاشة أدفأ في المساء.
+settings-display-help = تُطبَّق التغييرات فورًا. إذا لم تظهر الشاشة كما ينبغي فلا تفعل شيئًا. ستعود تلقائيًا بعد 15 ثانية ما لم تضغط الإبقاء. الإضاءة الليلية تجعل الشاشة أدفأ في المساء.
 
 # Question along the bottom of the page while a change of displays waits to be kept.
 settings-display-foot-keep = هل تريد الإبقاء على هذا الترتيب؟
 
 # Sentence at the top of the page while the displays are being found.
-settings-display-looking = جارٍ البحث عن الشاشات…
+settings-display-looking = جارٍ فحص الشاشات…
 
 # Sentence at the top of the page when no display was found.
-settings-display-none-found = لم يُعثر على أي شاشة.
+settings-display-none-found = تعذّر العثور على شاشة.
 
 # First half of the sentence at the top of the page: no display is in use.
 settings-display-used-none = لا توجد شاشة قيد الاستخدام
@@ -99,32 +99,20 @@ settings-display-rotation-of = تدوير { $display }
 # Heading of the resolution line.
 settings-display-resolution = الدقة
 
-# Small words under that line.
-settings-display-resolution-about = كم نقطة تعرض، وكم مرة في الثانية.
-
 # Heading of the size line.
 settings-display-size = الحجم
 
-# Small words under that line.
-settings-display-size-about = مدى كبر كل شيء على هذه الشاشة.
-
 # Heading of the rotation line.
 settings-display-rotation = التدوير
-
-# Small words under that line.
-settings-display-rotation-about = لشاشة موضوعة على جانبها.
 
 # Heading of the line, and name of its switch, that turns a display on or off.
 settings-display-use = استخدام هذه الشاشة
 
 # Small words under that line for the only display in use.
-settings-display-use-only = لا يمكن إيقاف الشاشة الوحيدة قيد الاستخدام.
-
-# Small words under that line otherwise.
-settings-display-use-off = متوقفة، لا يُعرض عليها شيء.
+settings-display-use-only = لا يمكنك إيقاف الشاشة الوحيدة قيد الاستخدام.
 
 # Words behind the i of a display's card.
-settings-display-card-about = تُطبَّق التغييرات فورًا. إذا ساء حال الشاشة فلا تفعل شيئًا: ستعود تلقائيًا بعد 15 ثانية ما لم تضغط الإبقاء. الدقة الموصى بها هي دقة الشاشة الأصلية؛ والحجم القياسي هو ما اختاره Trindle لهذه الشاشة.
+settings-display-card-about = تُطبَّق التغييرات فورًا. إذا لم تظهر الشاشة كما ينبغي فلا تفعل شيئًا. ستعود تلقائيًا بعد 15 ثانية ما لم تضغط الإبقاء. الدقة الموصى بها هي الدقة التي صُنعت الشاشة لها. الحجم القياسي هو الذي اختاره Trindle لهذه الشاشة.
 
 # Name of the list of where a display sits, and heading of its line when there are more than two displays; { $display } is the display.
 settings-display-place-name = موضع { $display }
@@ -139,13 +127,13 @@ settings-display-relative = { $display } بالنسبة إلى { $other }
 settings-display-arrangement-title = الترتيب
 
 # Words behind the i of that card.
-settings-display-arrangement-about = أين تقع الشاشات بجانب بعضها، لينتقل المؤشر من إحداها إلى التالية عبر الحافة المشتركة.
+settings-display-arrangement-about = حدّد أين تقع الشاشات بجانب بعضها، ليتمكّن المؤشر من الانتقال عبر الحافة المشتركة بينها.
 
 # Small words on that card while fewer than two displays are in use.
-settings-display-arrangement-waits = استخدم شاشتين لوضع إحداهما بجانب الأخرى.
+settings-display-arrangement-waits = تحتاج إلى شاشتين لوضع إحداهما بجانب الأخرى.
 
 # Red words when the desktop refused a change of displays and gave no reason.
-settings-display-refused = رفض سطح المكتب ذلك.
+settings-display-refused = تعذّر تغيير ذلك.
 
 # Said aloud after the displays changed; { $seconds } is how long until they go back.
 settings-display-aloud-changed =
@@ -162,45 +150,31 @@ settings-display-aloud-changed =
 settings-display-not-undone = تعذّر التراجع عن التغيير. { $why }
 
 # Red words when the arrangement could not be kept for the next login.
-settings-display-not-kept = الترتيب قيد الاستخدام الآن، لكن تعذّر حفظه لتسجيل الدخول التالي.
+settings-display-not-kept = الترتيب قيد الاستخدام الآن، لكن Trindle لم يستطع حفظه لتسجيل الدخول التالي.
 
 # Heading of the line under the picture of the displays when the desktop refused a change.
 settings-display-nothing-changed = لم يتغيّر شيء
 
 # Small words under that line.
-settings-display-refused-change = رفض سطح المكتب التغيير.
+settings-display-refused-change = تعذّر إجراء هذا التغيير.
 
 # Heading of the line under the picture of the displays.
 settings-display-apply-at-once = تُطبَّق التغييرات فورًا
-
-# Small words under that line; { $seconds } is how long Keep is asked for.
-settings-display-keep-asked =
-    { $seconds ->
-        [zero] يظهر سؤال الإبقاء أسفل النافذة.
-        [one] يظهر سؤال الإبقاء أسفل النافذة لمدة ثانية واحدة.
-        [two] يظهر سؤال الإبقاء أسفل النافذة لمدة ثانيتين.
-        [few] يظهر سؤال الإبقاء أسفل النافذة لمدة { $seconds } ثوانٍ.
-        [many] يظهر سؤال الإبقاء أسفل النافذة لمدة { $seconds } ثانية.
-       *[other] يظهر سؤال الإبقاء أسفل النافذة لمدة { $seconds } ثانية.
-    }
 
 # Title of the night light card.
 settings-display-night-title = الإضاءة الليلية
 
 # Words behind the i of that card.
-settings-display-night-about = تصبح الشاشة أدفأ في المساء، وهذا ألطف على العينين. تتبع الغروب والشروق المحسوبين من المنطقة الزمنية، أو أوقاتًا تحددها بنفسك؛ وحين لا تحدد المنطقة الزمنية مكان هذا الحاسوب تُستخدم الأوقات المحددة.
+settings-display-night-about = تصبح الشاشة أدفأ في المساء، وهذا أريح للعينين. تتبع الغروب والشروق المحسوبين من منطقتك الزمنية، أو أوقاتًا تحددها بنفسك. وإذا لم يستطع Trindle معرفة مكانك من منطقتك الزمنية، فإنه يستخدم الأوقات التي حددتها.
 
 # Heading of the night light line, and name of its switch.
 settings-display-night = الإضاءة الليلية
-
-# Small words under that line.
-settings-display-night-about-line = ألوان أدفأ في المساء.
 
 # Small words under the When line; { $zone } is the time zone.
 settings-display-when-zone = الغروب والشروق في { $zone }.
 
 # Small words under the When line when the time zone gives no place.
-settings-display-when-no-place = المنطقة الزمنية لا تحدد مكانًا: أوقات محددة.
+settings-display-when-no-place = يستخدم Trindle أوقاتًا محددة لأنه لا يعرف وقت الغروب.
 
 # Choice in the When list: from sunset to sunrise.
 settings-display-when-sun = من الغروب إلى الشروق
@@ -220,9 +194,6 @@ settings-display-to = إلى
 # Heading of the warmth line, and name of its slider.
 settings-display-warmth = الدفء
 
-# Small words under the warmth line.
-settings-display-warmth-about = مدى دفء الشاشة ليلًا.
-
 # Small word under the left end of the warmth slider.
 settings-display-little = قليل
 
@@ -241,12 +212,12 @@ settings-display-one-display-tip = { $name }، { $res }
 # Spoken description of the picture of the displays when several are in use; { $n } is how many.
 settings-display-many-displays-tip =
     { $n ->
-        [zero] لا توجد شاشات، جنبًا إلى جنب كما هي مرتبة
-        [one] شاشة واحدة، جنبًا إلى جنب كما هي مرتبة
-        [two] شاشتان، جنبًا إلى جنب كما هما مرتبتان
-        [few] { $n } شاشات، جنبًا إلى جنب كما هي مرتبة
-        [many] { $n } شاشة، جنبًا إلى جنب كما هي مرتبة
-       *[other] { $n } شاشة، جنبًا إلى جنب كما هي مرتبة
+        [zero] لا توجد شاشات
+        [one] شاشة واحدة
+        [two] شاشتان، كما هما مرتبتان
+        [few] { $n } شاشات، كما هي مرتبة
+        [many] { $n } شاشة، كما هي مرتبة
+       *[other] { $n } شاشة، كما هي مرتبة
     }
 
 # Word drawn in the picture of the displays when none is in use.
@@ -256,25 +227,25 @@ settings-display-no-display = لا شاشة
 settings-display-your-displays = شاشاتك
 
 # Small words under Nothing to show on when the desktop listed no displays.
-settings-display-listed-none = لم يُدرج سطح المكتب أي شاشة.
+settings-display-listed-none = لم يجد Trindle أي شاشة.
 
 # Title of the card shown when no display was found.
 settings-display-none-title = لم يُعثر على شاشات
 
 # Heading of the line in that card.
-settings-display-none-heading = لا شيء للعرض عليه
+settings-display-none-heading = لم يُعثر على شاشات
 
 # Title of the card about the graphics card.
 settings-display-graphics-title = الرسومات
 
 # Words behind the i of that card.
-settings-display-graphics-about = في هذا الحاسوب بطاقة NVIDIA تستخدم برنامج التشغيل المفتوح. كل شيء يعمل. وفي البطاقات من نحو عام 2022 فصاعدًا سيبدو بطيئًا، لأن برنامج التشغيل المفتوح لا يستطيع رفع سرعة البطاقة. ويمكن تثبيت برنامج NVIDIA الخاص.
+settings-display-graphics-about = في هذا الحاسوب بطاقة رسوميات من NVIDIA تستخدم برنامج التشغيل المفتوح. وهي تعمل، لكن البطاقة من نحو عام 2022 فصاعدًا ستبدو بطيئة، لأن برنامج التشغيل المفتوح لا يستطيع رفع سرعة البطاقة. يمكنك تثبيت برنامج NVIDIA الخاص بدلًا منه.
 
 # Heading of the line about an NVIDIA card on the open driver.
-settings-display-nvidia = بطاقة NVIDIA على برنامج التشغيل المفتوح
+settings-display-nvidia = بطاقة NVIDIA ببرنامج التشغيل المفتوح
 
 # Small words under that line.
-settings-display-nvidia-about = تعمل؛ لكن البطاقة من 2022 فصاعدًا تبدو بطيئة.
+settings-display-nvidia-about = قد تعمل البطاقات من 2022 فصاعدًا ببطء.
 
 # Words of the link that opens help about the NVIDIA driver.
 settings-display-nvidia-help = ماذا أفعل حيال ذلك

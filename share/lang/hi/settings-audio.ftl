@@ -7,25 +7,25 @@ settings-audio-title = ऑडियो
 settings-audio-keywords = आवाज़ ध्वनि वॉल्यूम स्पीकर हेडफ़ोन माइक्रोफ़ोन माइक म्यूट टेस्ट sound volume speakers headphones microphone mic mute test
 
 # Introduction under the heading of the audio page, and the words behind the page i.
-settings-audio-help = चुनें कि कौन-से स्पीकर या हेडफ़ोन आवाज़ चलाएँ, और कौन-सा माइक्रोफ़ोन सुने।
+settings-audio-help = चुनें कि कौन-से स्पीकर या हेडफ़ोन आवाज़ चलाएँ, और कौन-सा माइक्रोफ़ोन इस्तेमाल हो।
 
 # Red sentence at the top of the page when PipeWire, the sound system, is not installed.
-settings-audio-top-missing = कोई आवाज़ नहीं: PipeWire इंस्टॉल नहीं है।
+settings-audio-top-missing = कोई आवाज़ नहीं, क्योंकि PipeWire इंस्टॉल नहीं है।
 
 # Red sentence at the top of the page when PipeWire is installed but not answering.
-settings-audio-top-failed = कोई आवाज़ नहीं: PipeWire जवाब नहीं दे रहा।
+settings-audio-top-failed = कोई आवाज़ नहीं, क्योंकि आवाज़ की सेवा PipeWire जवाब नहीं दे रही।
 
 # Red sentence at the top of the page when there are no speakers or headphones.
-settings-audio-top-no-output = कोई स्पीकर या हेडफ़ोन नहीं मिला।
+settings-audio-top-no-output = कोई स्पीकर या हेडफ़ोन नहीं है।
 
 # Plain sentence at the top of the page while the page is still finding out about sound.
-settings-audio-top-listening = आवाज़ का पता लगाया जा रहा है…
+settings-audio-top-listening = आवाज़ जाँची जा रही है…
 
 # Warning at the top of the page when sound is muted; { $device } is the speakers or headphones.
-settings-audio-top-muted = आवाज़ म्यूट है, इसलिए { $device } चुप है।
+settings-audio-top-muted = { $device } म्यूट है।
 
 # Warning at the top of the page when the volume is at nothing; { $device } is the speakers or headphones.
-settings-audio-top-down = वॉल्यूम बिल्कुल कम है, इसलिए { $device } चुप है।
+settings-audio-top-down = { $device } का वॉल्यूम बिल्कुल कम है।
 
 # Sentence at the top of the page when all is well; { $device } is the speakers or headphones and { $percent } the volume.
 settings-audio-top-playing = आवाज़ { $device } से { $percent }% पर चल रही है।
@@ -37,10 +37,10 @@ settings-audio-out-title = स्पीकर और हेडफ़ोन
 settings-audio-in-title = माइक्रोफ़ोन
 
 # Heading of the line shown when no speakers or headphones are found.
-settings-audio-out-none = कोई आउटपुट डिवाइस नहीं
+settings-audio-out-none = कोई स्पीकर नहीं मिला
 
 # Heading of the line shown when no microphone is found.
-settings-audio-in-none = कोई इनपुट डिवाइस नहीं
+settings-audio-in-none = कोई माइक्रोफ़ोन नहीं
 
 # Small words under that line for speakers.
 settings-audio-out-plug = स्पीकर या हेडफ़ोन लगाएँ।
@@ -51,17 +51,11 @@ settings-audio-in-plug = माइक्रोफ़ोन या हेडस�
 # Heading of the line with the list of devices.
 settings-audio-device = डिवाइस
 
-# Small words under the device line for speakers.
-settings-audio-out-device-about = आवाज़ कहाँ चलती है।
-
-# Small words under the device line for microphones.
-settings-audio-in-device-about = कौन सुनता है।
-
 # Name of the list of speakers and headphones.
 settings-audio-out-device-name = आवाज़ कहाँ चलती है
 
 # Name of the list of microphones.
-settings-audio-in-device-name = कौन सुनता है
+settings-audio-in-device-name = माइक्रोफ़ोन
 
 # Heading of the volume line.
 settings-audio-volume = वॉल्यूम
@@ -81,32 +75,20 @@ settings-audio-out-mute-name = आवाज़ म्यूट करें
 # Name of the switch that mutes the microphone.
 settings-audio-in-mute-name = माइक्रोफ़ोन म्यूट करें
 
-# Small words under the mute line for the speakers.
-settings-audio-mute-out-about = चुप, वॉल्यूम वही रहता है।
-
-# Small words under the mute line for the microphone.
-settings-audio-mute-in-about = चालू रहने पर कुछ नहीं सुना जाता।
-
 # Heading of the line that plays a test sound.
 settings-audio-test = परीक्षण
-
-# Small words under the test line.
-settings-audio-test-about = इस डिवाइस से एक छोटी घंटी बजाता है।
 
 # Name of the button that plays a test sound.
 settings-audio-test-button = परीक्षण ध्वनि बजाएँ
 
 # Words behind the i of the speakers card.
-settings-audio-out-about = चुनें कि कौन-से स्पीकर या हेडफ़ोन आवाज़ चलाएँ। यहाँ का वॉल्यूम और म्यूट वही है जो कीबोर्ड की कुंजियों और रिंग के साउंड सर्कल का है।
+settings-audio-out-about = चुनें कि कौन-से स्पीकर या हेडफ़ोन आवाज़ चलाएँ। यहाँ का वॉल्यूम और म्यूट आपके कीबोर्ड की कुंजियों और रिंग के साउंड सर्कल की तरह ही काम करते हैं।
 
 # Heading of the line with the microphone level bar.
 settings-audio-level = स्तर
 
-# Small words under the level line.
-settings-audio-level-about = बोलिए, और जब वह आपको सुनेगा तो पट्टी हिलेगी।
-
 # Words behind the i of the microphone card.
-settings-audio-in-about = चुनें कि कौन-सा माइक्रोफ़ोन सुने। यह पेज खुला होने पर स्तर की पट्टी वही दिखाती है जो वह सुनता है; कुछ भी रिकॉर्ड या सहेजा नहीं जाता।
+settings-audio-in-about = चुनें कि कौन-सा माइक्रोफ़ोन इस्तेमाल हो। यह पेज खुला होने पर पट्टी दिखाती है कि वह कितनी आवाज़ पकड़ रहा है। Trindle कुछ भी रिकॉर्ड या सहेजता नहीं।
 
 # Title of the card shown when PipeWire is not answering.
 settings-audio-failed-title = आवाज़
@@ -115,19 +97,19 @@ settings-audio-failed-title = आवाज़
 settings-audio-failed-heading = PipeWire जवाब नहीं दे रहा
 
 # Small words under that line.
-settings-audio-failed-about = हो सकता है इस सत्र के लिए आवाज़ शुरू ही न हुई हो।
+settings-audio-failed-about = हो सकता है आपके लॉग इन करने पर आवाज़ शुरू ही न हुई हो।
 
 # Red words under the volume line when the volume could not be changed.
-settings-audio-no-volume = वॉल्यूम बदला नहीं जा सका। हो सकता है आवाज़ शुरू न हुई हो; लॉग आउट करके फिर लॉग इन करें, और दोबारा कोशिश करें।
+settings-audio-no-volume = Trindle वॉल्यूम नहीं बदल सका। हो सकता है आवाज़ शुरू न हुई हो। लॉग आउट करके फिर लॉग इन करें, और दोबारा कोशिश करें।
 
 # Red words under the mute line when the sound could not be muted.
-settings-audio-no-mute = आवाज़ म्यूट नहीं की जा सकी। हो सकता है आवाज़ शुरू न हुई हो; लॉग आउट करके फिर लॉग इन करें, और दोबारा कोशिश करें।
+settings-audio-no-mute = Trindle आवाज़ म्यूट नहीं कर सका। हो सकता है आवाज़ शुरू न हुई हो। लॉग आउट करके फिर लॉग इन करें, और दोबारा कोशिश करें।
 
 # Red words under the mute line when the sound could not be turned back on.
-settings-audio-no-unmute = आवाज़ फिर चालू नहीं की जा सकी। हो सकता है आवाज़ शुरू न हुई हो; लॉग आउट करके फिर लॉग इन करें, और दोबारा कोशिश करें।
+settings-audio-no-unmute = Trindle आवाज़ फिर चालू नहीं कर सका। हो सकता है आवाज़ शुरू न हुई हो। लॉग आउट करके फिर लॉग इन करें, और दोबारा कोशिश करें।
 
 # Red words under the device line when the device could not be chosen.
-settings-audio-not-chosen = वह डिवाइस चुना नहीं जा सका।
+settings-audio-not-chosen = उस डिवाइस पर स्विच नहीं हो सका।
 
 # Red words under the test line when the test sound would not play.
 settings-audio-test-failed = परीक्षण ध्वनि इस डिवाइस से नहीं बजी।
@@ -154,15 +136,14 @@ settings-audio-kind-speakers = स्पीकर
 # Heading of the line shown while Bluetooth plays the sound.
 settings-audio-bt-now = आवाज़ ब्लूटूथ पर जा रही है
 
-# Words under that heading.
-settings-audio-bt-now-about = स्पीकर पर स्विच करें; ब्लूटूथ जुड़ा रहेगा।
-
 # Tooltip of the button that moves the sound to the speakers; { $device } is the speakers, kind included.
 settings-audio-use-speakers = { $device } से चलाएँ
 
 # Heading of the line when Bluetooth devices are connected but have no sound output; { $names } lists them.
-settings-audio-bt-silent = { $names }: जुड़ा है, लेकिन आवाज़ का आउटपुट नहीं है।
+settings-audio-bt-silent = { $names } जुड़ा है, पर उससे आवाज़ नहीं चल सकती।
 
 # Words under that heading.
-settings-audio-bt-silent-about = इसकी ध्वनि प्रोफ़ाइल बंद हो सकती है। इसे अलग करके फिर जोड़ें।
+settings-audio-bt-silent-about = हो सकता है इसकी ध्वनि सेट अप न हो। इसे अलग करके फिर जोड़ें।
 
+# Red words when the sound devices could not be read.
+settings-audio-not-read = Trindle को साउंड डिवाइस नहीं मिले।

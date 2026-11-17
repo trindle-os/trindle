@@ -95,3 +95,32 @@ fn a_second_with_nothing_new_asks_for_no_painting() {
     assert!(s.second(), "going to another page is something to show");
     assert_eq!(s.pages[s.current].id(), "help");
 }
+
+#[test]
+fn a_search_finds_the_apps_pages_and_a_blank_one_finds_every_page() {
+    let events = Loop::new();
+    let asks = events.post(|_: Do| {});
+    let mut pages = panels::all();
+    pages.retain(|p| !IN_APPS.contains(&p.id()));
+    let mut s = Settings { kit: Kit::new(events.clone(), asks, None, None), pages, current: 0, search: String::new(), tall: 0.0 };
+    assert!(s.found_in_apps().is_empty());
+    assert!(s.pages.iter().all(|p| s.matches(&**p)));
+    s.search = "  ".into();
+    assert!(s.found_in_apps().is_empty() && s.pages.iter().all(|p| s.matches(&**p)));
+    s.search = "PERMISSIONS".into();
+    assert!(s.found_in_apps().iter().any(|a| a.0 == "permissions"), "{:?}", s.found_in_apps());
+    s.search = "zzzqqq".into();
+    assert!(s.found_in_apps().is_empty() && !s.pages.iter().any(|p| s.matches(&**p)));
+}
+
+#[test]
+fn a_search_lowers_each_pages_words_once() {
+    let mut s = settings_with_every_page();
+    s.search = "wi-fi".into();
+    let before = LOWERED.with(|n| n.get());
+    for _ in 0..5 {
+        s.side_list();
+    }
+    let lowered = LOWERED.with(|n| n.get()) - before;
+    assert!(lowered as usize <= s.pages.len(), "{lowered} lowerings for {} pages over five draws", s.pages.len());
+}

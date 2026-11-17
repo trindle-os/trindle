@@ -1,6 +1,6 @@
 // Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
-use super::{AnvilState, Backend, DndIcon};
+use super::{Compose, Backend, DndIcon};
 
 use std::{collections::HashMap, time::Duration};
 
@@ -55,7 +55,7 @@ pub fn steady_primary_scanout_output_compare<'a>(
     }
 }
 
-impl<BackendData: Backend + 'static> AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> Compose<BackendData> {
 
     pub fn refresh_screens(&mut self) {
         crate::protocols::screens::refresh(self);
@@ -183,8 +183,11 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
 struct Waiting(HashMap<ClientId, Client>);
 
 impl Waiting {
-    fn add(&mut self, client: Client) {
-        self.0.insert(client.id(), client);
+
+    fn add_owner(&mut self, surface: &WlSurface) {
+        if let Some(client) = surface.client() {
+            self.0.insert(client.id(), client);
+        }
     }
 
     fn into_clients(self) -> impl Iterator<Item = Client> {
@@ -209,8 +212,7 @@ fn signal_commit_timer(surface: &WlSurface, states: &SurfaceData, frame_target: 
         .map(|commit_timer| commit_timer.lock().unwrap())
     {
         commit_timer_state.signal_until(frame_target);
-        let client = surface.client().unwrap();
-        clients.add(client);
+        clients.add_owner(surface);
     }
 }
 
@@ -237,8 +239,7 @@ fn settle_surface(output: &Output, surface: &WlSurface, states: &SurfaceData, cl
 
         if let Some(fifo_barrier) = fifo_barrier {
             fifo_barrier.signal();
-            let client = surface.client().unwrap();
-            clients.add(client);
+            clients.add_owner(surface);
         }
     }
 }
@@ -331,6 +332,27 @@ pub fn take_presentation_feedback(
     }
 
     output_presentation_feedback
+}
+
+#[cfg(test)]
+mod gone_tests {
+    use super::Waiting;
+    use crate::rig::{alone, Rig};
+    use crate::state::ClientState;
+
+    #[test]
+    fn a_surface_whose_program_has_gone_wakes_no_one() {
+        alone("state::repaint::gone_tests::a_surface_whose_program_has_gone_wakes_no_one", |dir| {
+            let mut rig = Rig::new(dir);
+            let who = rig.join(ClientState::default());
+            let surface = rig.window(who, false);
+            let ours = rig.server_side(who, &surface);
+            rig.crash(who);
+            let mut clients = Waiting::default();
+            clients.add_owner(&ours);
+            assert_eq!(clients.into_clients().count(), 0, "a program that has gone was woken");
+        });
+    }
 }
 
 #[cfg(test)]

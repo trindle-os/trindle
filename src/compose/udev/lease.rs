@@ -9,9 +9,9 @@ use smithay::{
 };
 use tracing::warn;
 
-use super::{AnvilState, BackendData, UdevData};
+use super::{Compose, BackendData, UdevData};
 
-impl DrmLeaseHandler for AnvilState<UdevData> {
+impl DrmLeaseHandler for Compose<UdevData> {
     fn drm_lease_state(&mut self, node: DrmNode) -> &mut DrmLeaseState {
         let data = &mut self.backend_data;
         lease_state_for(&mut data.backends, &mut data.retired_leases, node)
@@ -76,7 +76,7 @@ impl DrmLeaseHandler for AnvilState<UdevData> {
     }
 }
 
-delegate_drm_lease!(AnvilState<UdevData>);
+delegate_drm_lease!(Compose<UdevData>);
 
 fn lease_state_for<'a>(backends: &'a mut HashMap<DrmNode, BackendData>, retired: &'a mut HashMap<DrmNode, DrmLeaseState>, node: DrmNode) -> &'a mut DrmLeaseState {
     let state = if backends.get(&node).is_some_and(|b| b.leasing_global.is_some()) {

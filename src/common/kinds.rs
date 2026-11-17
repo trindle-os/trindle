@@ -163,19 +163,22 @@ pub fn icon_for(kind: Option<&str>) -> &'static str {
 }
 
 pub fn recent(xbel: &str) -> Vec<PathBuf> {
+    use quick_xml::{events::Event, Reader};
     let mut found: Vec<(String, PathBuf)> = Vec::new();
-    for tag in xbel.split("<bookmark ").skip(1) {
-        let tag = &tag[..tag.find('>').unwrap_or(tag.len())];
-        let attr = |name: &str| {
-            let at = tag.find(&format!(" {name}=\"")).or_else(|| tag.starts_with(&format!("{name}=\"")).then_some(0))?;
-            let from = tag[at..].find('"')? + at + 1;
-            let len = tag[from..].find('"')?;
-            Some(tag[from..from + len].replace("&amp;", "&").replace("&apos;", "'").replace("&quot;", "\""))
-        };
-        let Some(path) = attr("href").as_deref().and_then(uri_path) else { continue };
-        let when = attr("modified").or_else(|| attr("visited")).unwrap_or_default();
-        found.retain(|(_, p)| *p != path);
-        found.push((when, path));
+    let mut reader = Reader::from_str(xbel);
+    loop {
+        match reader.read_event() {
+            Ok(Event::Eof) | Err(_) => break,
+            Ok(Event::Start(e) | Event::Empty(e)) if e.name().as_ref() == b"bookmark" => {
+                let attr = |name: &str| e.attributes().flatten().find(|a| a.key.as_ref() == name.as_bytes())
+                    .and_then(|a| a.normalized_value(quick_xml::XmlVersion::Implicit1_0).ok().map(|v| v.to_string()));
+                let Some(path) = attr("href").as_deref().and_then(uri_path) else { continue };
+                let when = attr("modified").or_else(|| attr("visited")).unwrap_or_default();
+                found.retain(|(_, p)| *p != path);
+                found.push((when, path));
+            }
+            _ => {}
+        }
     }
     found.sort_by(|a, b| b.0.cmp(&a.0));
     found.into_iter().map(|(_, p)| p).collect()
@@ -214,6 +217,15 @@ pub fn when_text(secs: i64) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn the_recent_files_are_read_as_xml_is_read() {
+        let xbel = "<xbel><bookmark href=\"file:///h/old.txt\" modified=\"2026-01-01T00:00:00Z\"/>\n\
+                    <bookmark\n href='file:///h/a&amp;apos;b.txt' modified=\"2026-03-01T00:00:00Z\"><info/></bookmark>\
+                    <bookmark href=\"file:///h/quote&quot;d.txt\" modified=\"2026-02-01T00:00:00Z\"/></xbel>";
+        assert_eq!(recent(xbel), [PathBuf::from("/h/a&apos;b.txt"), PathBuf::from("/h/quote\"d.txt"), PathBuf::from("/h/old.txt")]);
+        assert!(recent("<bookmark href=").is_empty());
+    }
 
     fn made_up(mime: &Path) -> Lists {
         let dir = mime.parent().unwrap().file_name().unwrap().to_string_lossy().into_owned();

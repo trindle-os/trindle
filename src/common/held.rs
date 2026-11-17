@@ -5,7 +5,6 @@
 //! releases it.
 
 use std::collections::BTreeSet;
-use std::io::Write;
 use std::path::{Path, PathBuf};
 
 const NAME: &str = "held-updates";
@@ -209,27 +208,10 @@ impl Held {
         let path = place();
         let mut now = Held::read_at(&path);
         with(&mut now.things);
-        write_whole(&path, &now.text())?;
+        super::files::write_text(&path, &now.text())?;
         *self = now;
         Ok(())
     }
-}
-
-fn write_whole(path: &Path, text: &str) -> std::io::Result<()> {
-    if let Some(dir) = path.parent() {
-        std::fs::create_dir_all(dir)?;
-    }
-    let tmp = path.with_extension(format!("{}-tmp", std::process::id()));
-    let written = (|| {
-        let mut f = std::fs::File::create(&tmp)?;
-        f.write_all(text.as_bytes())?;
-        f.sync_all()?;
-        std::fs::rename(&tmp, path)
-    })();
-    if written.is_err() {
-        let _ = std::fs::remove_file(&tmp);
-    }
-    written
 }
 
 #[cfg(not(test))]
@@ -284,12 +266,16 @@ pub fn temp(name: &str) -> PathBuf {
     dir.join(NAME)
 }
 
+pub fn held_back_names(unheld: Vec<String>) -> Option<Vec<String>> {
+    (!unheld.is_empty()).then_some(unheld)
+}
+
 #[cfg(test)]
 pub fn names_for_update(out: &str, held: &Held) -> Option<Vec<String>> {
     if !held.any_flatpak() {
         return Some(Vec::new());
     }
-    Some(flatpaks_to_update(out, held)).filter(|names| !names.is_empty())
+    held_back_names(flatpaks_to_update(out, held))
 }
 
 #[cfg(test)]

@@ -25,7 +25,7 @@ use crate::{
         windows::{self, Change, WindowInfo, WindowsHandler, WindowsState},
     },
     shell::{FullscreenSurface, WindowElement},
-    state::{AnvilState, Backend},
+    state::{Compose, Backend},
 };
 
 const FORCE_AFTER: std::time::Duration = std::time::Duration::from_secs(4);
@@ -60,13 +60,19 @@ fn end_x11_program(number: u32, window: u32) {
             warn!("force close: no program of this person's to end");
             return;
         }
+        let held = held_program(|| x11_program(&conn, window));
         let _ = conn.kill_client(window);
         let _ = conn.flush();
-        if let Some(pid) = pid {
-            // SAFETY: kill only sends a signal.
-            unsafe { libc::kill(pid as libc::pid_t, libc::SIGKILL) };
+        if let Some(pidfd) = held {
+            crate::peer::signal(&pidfd, libc::SIGKILL);
         }
     });
+}
+
+fn held_program(named: impl Fn() -> Option<u32>) -> Option<std::os::fd::OwnedFd> {
+    let pid = named().filter(|p| ours(*p))?;
+    let pidfd = crate::peer::pidfd_open(pid)?;
+    (named() == Some(pid)).then_some(pidfd)
 }
 
 pub type PutAway = (WindowElement, Point<i32, Logical>);
@@ -77,15 +83,7 @@ pub(crate) fn is_listed(window: &WindowElement) -> bool {
     if let Some(x11) = window.0.x11_surface() {
         return !x11.is_override_redirect();
     }
-    let _ = window;
     true
-}
-
-fn is_fullscreen(window: &WindowElement) -> bool {
-    match window.0.underlying_surface() {
-        WindowSurface::Wayland(t) => t.current_state().states.contains(xdg_toplevel::State::Fullscreen),
-        WindowSurface::X11(x11) => x11.is_fullscreen(),
-    }
 }
 
 fn describe(window: &WindowElement, active: bool, minimized: bool, outputs: Vec<Output>) -> Option<WindowInfo> {
@@ -118,6 +116,7 @@ fn describe(window: &WindowElement, active: bool, minimized: bool, outputs: Vec<
             (x11.title(), class, x11.is_maximized(), x11.is_fullscreen(), None)
         }
     };
+    let title = crate::shell::ssd::capped_title(title);
     Some(WindowInfo { surface, title, app_id, active, minimized, maximized, fullscreen, outputs, parent })
 }
 
@@ -127,21 +126,23 @@ pub fn capture_size(window: &WindowElement, scale: f64) -> smithay::utils::Size<
     (size.w.max(1), size.h.max(1)).into()
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     fn force_close(&mut self, window: &WindowElement) {
         use smithay::reexports::wayland_server::Resource;
-        let pid = match window.0.underlying_surface() {
+        let ended = match window.0.underlying_surface() {
             WindowSurface::Wayland(t) => {
                 let Some(client) = t.wl_surface().client() else { return };
-                if client.get_data::<crate::state::ClientState>().is_some_and(|c| c.from_root) {
+                let Some(data) = client.get_data::<crate::state::ClientState>() else { return };
+                if data.from_root {
                     return;
                 }
                 let pid = client.get_credentials(&self.display_handle).ok().map(|c| c.pid as u32);
+                let ended = pid.is_some_and(ours) && data.pidfd.as_ref().is_some_and(|pidfd| crate::peer::signal(pidfd, libc::SIGKILL));
 
                 self.display_handle.backend_handle().kill_client(client.id(),
                     smithay::reexports::wayland_server::backend::DisconnectReason::ConnectionClosed);
-                pid
+                ended
             }
             WindowSurface::X11(x11) => {
                 match x11.xwm_id().and_then(|id| self.rooms.display_of(id)) {
@@ -151,12 +152,9 @@ impl<BackendData: Backend> AnvilState<BackendData> {
                 return;
             }
         };
-        let Some(pid) = pid.filter(|&p| ours(p)) else {
+        if !ended {
             warn!("force close: no program of this person's to end");
-            return;
-        };
-        // SAFETY: kill only sends a signal.
-        unsafe { libc::kill(pid as libc::pid_t, libc::SIGKILL) };
+        }
     }
 
     pub fn refresh_panel(&mut self) {
@@ -165,9 +163,16 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         self.hidden.retain(|(w, _)| w.alive());
         self.refocus_if_lost();
 
-        let windows = self.toplevel_infos();
-        self.refresh_toplevel_list(&windows);
-        windows::refresh(self, windows);
+        let seen = (self.space.changes(), self.minimized.len(), self.hidden.len());
+        if std::mem::take(&mut self.panel_stale) || seen != self.panel_seen {
+            self.panel_seen = seen;
+            let windows = self.toplevel_infos();
+            if windows != self.panel_told {
+                self.refresh_toplevel_list(&windows);
+                windows::refresh(self, windows.clone());
+                self.panel_told = windows;
+            }
+        }
         self.image_capture_state.refresh();
 
         let (count, showing) = (self.workspaces, self.active_workspace);
@@ -355,10 +360,9 @@ impl<BackendData: Backend> AnvilState<BackendData> {
 
     pub(crate) fn bring_back(&mut self, window: WindowElement, loc: Point<i32, Logical>) {
         self.space.map_element(window.clone(), loc, false);
-        if is_fullscreen(&window) {
+        if window.is_fullscreen() {
             if let Some(output) = self.output_at(loc) {
-                output.user_data().insert_if_missing(FullscreenSurface::default);
-                output.user_data().get::<FullscreenSurface>().unwrap().set(window);
+                output.user_data().get_or_insert(FullscreenSurface::default).set(window);
             }
         } else {
             self.fit_window_to_room(&window);
@@ -412,10 +416,9 @@ impl<BackendData: Backend> AnvilState<BackendData> {
                 self.backend_data.reset_buffers(output);
             }
         }
-        if is_fullscreen(window) {
+        if window.is_fullscreen() {
             if let Some(output) = on.first() {
-                output.user_data().insert_if_missing(FullscreenSurface::default);
-                output.user_data().get::<FullscreenSurface>().unwrap().set(window.clone());
+                output.user_data().get_or_insert(FullscreenSurface::default).set(window.clone());
             }
         }
     }
@@ -520,7 +523,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
     }
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     pub fn set_workspace_count(&mut self, count: usize) {
         let count = count.max(1);
@@ -553,7 +556,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
     }
 }
 
-impl<BackendData: Backend> WindowsHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> WindowsHandler for Compose<BackendData> {
     fn windows_state(&mut self) -> &mut WindowsState {
         &mut self.windows_state
     }
@@ -569,7 +572,7 @@ impl<BackendData: Backend> WindowsHandler for AnvilState<BackendData> {
         self.focus_window(&window);
     }
 
-    fn close_window(&mut self, wl_surface: WlSurface) {
+    fn close_or_force(&mut self, wl_surface: WlSurface) {
         let Some(window) = self.find_window(&wl_surface) else { return };
         self.close_asked.retain(|(w, _)| w.alive());
         self.close_asked.retain(|(_, at)| at.elapsed() < FORCE_UNTIL);
@@ -600,7 +603,7 @@ impl<BackendData: Backend> WindowsHandler for AnvilState<BackendData> {
     }
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     fn maximize_window(&mut self, wl_surface: &WlSurface, maximized: bool) {
         let Some(window) = self.window_for_surface(wl_surface) else {
@@ -642,7 +645,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
     }
 }
 
-impl<BackendData: Backend> WorkspacesHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> WorkspacesHandler for Compose<BackendData> {
     fn workspaces_state(&mut self) -> &mut WorkspacesState {
         &mut self.workspaces_state
     }
@@ -654,5 +657,25 @@ impl<BackendData: Backend> WorkspacesHandler for AnvilState<BackendData> {
     }
 }
 
-crate::delegate_windows!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
-crate::delegate_workspaces!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+crate::delegate_windows!(@<BackendData: Backend + 'static> Compose<BackendData>);
+crate::delegate_workspaces!(@<BackendData: Backend + 'static> Compose<BackendData>);
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn force_close_holds_the_program_the_server_still_names() {
+        let mut child = std::process::Command::new("sleep").arg("30").spawn().unwrap();
+        let pid = child.id();
+        let asked = std::cell::Cell::new(0);
+        let gone_after_first = || {
+            asked.set(asked.get() + 1);
+            (asked.get() == 1).then_some(pid)
+        };
+        assert!(super::held_program(gone_after_first).is_none(), "held a number the server no longer gives");
+        let held = super::held_program(|| Some(pid)).expect("the program the server names");
+        assert!(crate::peer::signal(&held, libc::SIGKILL));
+        assert!(!child.wait().unwrap().success());
+        assert!(super::held_program(|| Some(1)).is_none(), "held a program that is not the person's");
+    }
+}

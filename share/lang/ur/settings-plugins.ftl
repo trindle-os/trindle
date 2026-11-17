@@ -8,10 +8,10 @@ settings-plugins-title = آپ کے پلگ ان
 settings-plugins-keywords = پلگ ان ایڈ آن ایکسٹینشن انسٹال شدہ ہٹائیں ترتیبات plugins add-ons extensions installed remove settings
 
 # Help line at the foot of the Your plugins page.
-settings-plugins-help = پلگ ان Trindle میں اضافہ کرتے ہیں: حلقہ میں ایک آئیکن، یہاں ترتیبات، اطلاعات، یا لاگ ان سے چلنے والی کوئی چیز۔ ہر ایک الگ تھلگ چلتا ہے، اور جب تک آپ اجازتوں میں اجازت نہ دیں اسے کچھ نہیں ملتا؛ اجازتیں اس صفحے کے عنوان کے آخر والا بٹن کھولتا ہے۔ یہاں ہر پلگ ان کے کارڈ میں اس کی اپنی ترتیبات ہیں؛ کارڈ پر ردی کا ڈبا دو بار دبانے سے وہ پلگ ان ہٹ جاتا ہے۔
+settings-plugins-help = پلگ ان Trindle میں اضافہ کرتے ہیں۔ پلگ ان حلقہ میں آئیکن، یہاں ترتیبات، اطلاعات، یا لاگ ان پر شروع ہونے والی کوئی چیز شامل کر سکتا ہے۔ ہر پلگ ان اپنے الگ ماحول میں چلتا ہے اور جب تک آپ اجازتوں میں اجازت نہ دیں کچھ استعمال نہیں کر سکتا۔ اجازتیں صفحے کے عنوان کے ساتھ والا بٹن کھولتا ہے۔ کسی پلگ ان کو ہٹانے کے لیے اس کے کارڈ پر ردی کا ڈبا دو بار دبائیں۔
 
 # Red words when the window that asks what a plugin may use could not be opened.
-settings-plugins-window-failed = وہ ونڈو کھولی نہیں جا سکی جو پوچھتی ہے کہ یہ کیا استعمال کر سکتا ہے۔
+settings-plugins-window-failed = Trindle وہ ونڈو نہیں کھول سکا جو پوچھتی ہے کہ پلگ ان کیا استعمال کر سکتا ہے۔
 
 # Under About it: the plugin's version number is { $v }.
 settings-plugins-version = ورژن { $v }۔
@@ -21,22 +21,18 @@ settings-plugins-version-settled = ورژن { $v }۔ { $settled }
 
 # SAFETY: needs a human review before it ships
 # Help text of a plugin's card when it asks for nothing: the plugin's name is { $name }.
-settings-plugins-asks-nothing = { $name } کچھ نہیں مانگتا، اس لیے یہ الگ تھلگ چلتا ہے اور اسے کچھ بھی اجازت نہیں ہے۔
+settings-plugins-asks-nothing = { $name } کچھ نہیں مانگتا، اس لیے یہ اپنے الگ ماحول میں چلتا ہے اور اسے کچھ بھی اجازت نہیں ہے۔
 
 # SAFETY: needs a human review before it ships
 # Help text of a plugin's card: its name is { $name }, { $list } is what it asks for, { $allowed } of { $asks } are allowed.
 settings-plugins-asks-for =
     { $asks ->
-        [one] { $name } { $list } مانگتا ہے؛ { $asks } میں سے { $allowed } کی اجازت ہے۔ یہ الگ تھلگ چلتا ہے، صرف اتنے کے ساتھ جتنی آپ اجازت دیں۔
-       *[other] { $name } { $list } مانگتا ہے؛ { $asks } میں سے { $allowed } کی اجازت ہے۔ یہ الگ تھلگ چلتا ہے، صرف اتنے کے ساتھ جتنی آپ اجازت دیں۔
+        [one] { $name } { $list } مانگتا ہے۔ آپ نے { $asks } میں سے { $allowed } کی اجازت دی ہے۔ یہ اپنے الگ ماحول میں چلتا ہے، صرف اسی کے ساتھ جس کی آپ اجازت دیں۔
+       *[other] { $name } { $list } مانگتا ہے۔ آپ نے { $asks } میں سے { $allowed } کی اجازت دی ہے۔ یہ اپنے الگ ماحول میں چلتا ہے، صرف اسی کے ساتھ جس کی آپ اجازت دیں۔
     }
 
-# SAFETY: needs a human review before it ships
-# Under the line that tells a plugin needs more allowed, beside its Allow button.
-settings-plugins-needs-more = اجازت دیں ہر مانگی گئی چیز سوئچ کے ساتھ دکھاتا ہے۔
-
 # Heading of the line about a plugin on its card.
-settings-plugins-about-it = اس کے بارے میں
+settings-plugins-about-it = بارے میں
 
 # SAFETY: needs a human review before it ships
 # Tip of the button that changes what a plugin may use.
@@ -57,7 +53,7 @@ settings-plugins-type-here = یہاں لکھیں
 settings-plugins-no-settings = { $name } کی اپنی کوئی ترتیبات نہیں ہیں۔
 
 # Note on a plugin's card when none of its settings show now: its name is { $name }.
-settings-plugins-no-settings-now = موجودہ حالات میں { $name } کی کوئی ترتیب دکھانے کو نہیں ہے۔
+settings-plugins-no-settings-now = اس وقت { $name } کی کوئی ترتیب دکھانے کو نہیں ہے۔
 
 # Headline of the Your plugins page: how many plugins are installed and { $list } their names.
 settings-plugins-installed =
@@ -73,18 +69,15 @@ settings-plugins-group = پلگ ان
 # Heading of the line shown when no plugin is installed.
 settings-plugins-none = کوئی انسٹال نہیں
 
-# Under the None installed heading.
-settings-plugins-none-sub = Apps میں شامل کرنے کے لیے پلگ ان ہیں۔
-
 # SAFETY: needs a human review before it ships
 # Tip of the button at the end of the page's title that opens the Permissions page.
 settings-plugins-open-permissions = اجازتیں کھولیں
 
 # Said at the top of a plugin's card while its service has not yet answered; the plugin's name is {$name}.
-settings-plugins-rows-asking = { $name } سے پوچھا جا رہا ہے۔
+settings-plugins-rows-asking = { $name } سے پوچھا جا رہا ہے…
 
 # Said at the top of a plugin's card, and in red under a row, when its service does not answer; the plugin's name is {$name}.
-settings-plugins-rows-silent = { $name } جواب نہیں دے رہا۔ ہو سکتا ہے اس کی سروس رکی ہوئی ہو۔
+settings-plugins-rows-silent = { $name } جواب نہیں دے رہا۔ ہو سکتا ہے اس کی سروس رک گئی ہو۔
 
 # Said beside a row after the plugin kept the change.
 settings-plugins-rows-saved = محفوظ ہو گیا۔
@@ -97,4 +90,3 @@ settings-plugins-rows-failed = { $name } یہ نہیں کر سکا۔
 
 # Red words under a row when the change failed; the plugin's name is {$name} and the reason it gave is {$why}.
 settings-plugins-rows-failed-why = { $name } یہ نہیں کر سکا: { $why }۔
-

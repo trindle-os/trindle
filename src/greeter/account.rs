@@ -1,4 +1,4 @@
-//! What the login screen keeps about the people who use it: the last one, the drawing choice and the screen reader, and the people it lists.
+//! What the login screen keeps about the people who use it (the last one, the drawing choice and the screen reader), and the accounts on this computer.
 
 use std::ffi::{c_char, CStr};
 use std::path::PathBuf;

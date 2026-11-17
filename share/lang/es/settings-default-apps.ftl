@@ -7,7 +7,7 @@ settings-default-apps-title = Aplicaciones predeterminadas
 settings-default-apps-keywords = navegador correo email archivos imágenes música vídeo pdf calendario abrir con terminal predeterminadas
 
 # Introduction under the heading of the default apps page, and the words behind the page i.
-settings-default-apps-help = Qué programa abre los enlaces web, los correos, las imágenes, el calendario y lo demás. El terminal se elige en ~/.config/xdg-terminals.list; si no hay ninguno elegido, Trindle usa el primero que esté instalado.
+settings-default-apps-help = Elige qué programa abre los enlaces web, los correos, las imágenes, el calendario y demás. El terminal se elige en ~/.config/xdg-terminals.list. Si no has elegido ninguno, Trindle usa el primero que esté instalado.
 
 # Name of a kind of thing to open, as the heading of a line and the name of its list on the default apps page.
 settings-default-apps-kind-web = Web
@@ -67,45 +67,37 @@ settings-default-apps-kind-calendar-in-sentence = el calendario
 settings-default-apps-card-internet = Internet
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-internet-about = El programa que abre un enlace web al hacer clic en él en cualquier sitio, el que redacta un correo al hacer clic en una dirección y el que abre una invitación de calendario.
+settings-default-apps-card-internet-about = Elige qué programas abren enlaces web, direcciones de correo e invitaciones de calendario.
 
 # Title of a card on the default apps page.
 settings-default-apps-card-files = Archivos y documentos
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-files-about = El programa que abre una carpeta, un archivo de texto sin formato y un documento PDF cuando abres uno desde Carpetas, el escritorio u otra aplicación.
+settings-default-apps-card-files-about = Elige qué programas abren carpetas, archivos de texto sin formato y documentos PDF.
 
 # Title of a card on the default apps page.
 settings-default-apps-card-media = Imágenes y sonido
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-media-about = El programa que abre una imagen, una pieza de música o un vídeo cuando abres uno.
+settings-default-apps-card-media-about = Elige qué programas abren imágenes, música y vídeos.
 
 # Sentence at the top of the page when every kind has a program; { $web } is the program that opens web links.
-settings-default-apps-all-set-web = Todo tiene un programa que lo abre; { $web } abre los enlaces web.
+settings-default-apps-all-set-web = Todo tiene un programa que lo abre, y { $web } abre los enlaces web.
 
 # Sentence at the top of the page when every kind has a program and the one for web links is not known.
 settings-default-apps-all-set = Todo tiene un programa que lo abre.
 
 # Sentence at the top of the page when one kind has no program chosen; { $kind } is its name in lower case.
-settings-default-apps-one-missing = Todavía no hay nada elegido para abrir { $kind }.
+settings-default-apps-one-missing = Elige un programa para abrir { $kind }.
 
 # Sentence at the top of the page when several kinds have no program chosen; { $kinds } is their names as a list joined with "or".
-settings-default-apps-many-missing = Todavía no hay nada elegido para abrir { $kinds }.
+settings-default-apps-many-missing = Todavía no has elegido un programa para abrir { $kinds }.
 
 # Small words under a kind that no installed program can open.
-settings-default-apps-none-installed = Aún no hay nada instalado que pueda abrir esto.
+settings-default-apps-none-installed = Todavía no hay ningún programa instalado que abra esto.
 
 # First choice in a list when no program is chosen for that kind yet.
 settings-default-apps-not-chosen = Aún sin elegir
 
-# Small words under a kind with a program list; { $n } is how many programs can open it.
-settings-default-apps-can-open =
-    { $n ->
-        [one] El único programa que puede.
-       *[other] { $n } programas pueden abrir esto.
-    }
-
 # Said in green under a kind's list after the choice was kept.
 settings-default-apps-saved = Guardado
-

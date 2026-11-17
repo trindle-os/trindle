@@ -7,7 +7,7 @@ settings-about-title = عن هذا الحاسوب
 settings-about-keywords = اسم المضيف اسم الحاسوب اسم الشبكة حول النظام الإصدار ديبيان ترندل hostname debian trindle الذاكرة رام ram المعالج cpu القرص الرسوميات الشاشة الطراز النواة kernel الإصدار المتجدد النشاط البرامج العاملة مشغول مدير المهام مراقب النظام الأقراص usb المساحة
 
 # Text behind the info button of the About page.
-settings-about-help = اسم هذا الحاسوب كما تراه الحواسيب الأخرى على الشبكة، ومم يتكون، وكم يستغرق بدؤه. ما يفعله الآن، والبرامج التي تستخدم الذاكرة والمعالج، في «النشاط»، والأقراص والمساحة عليها في «الأقراص»، وكل منهما نافذة مستقلة: تفتحهما الأسهم في «مزيد من التفاصيل».
+settings-about-help = تعرض هذه الصفحة اسم هذا الحاسوب كما تراه الحواسيب الأخرى على الشبكة، ومم يتكون، وكم يستغرق بدؤه. يعرض «النشاط» ما يفعله الحاسوب الآن والبرامج التي تستخدم الذاكرة والمعالج. وتعرض «الأقراص» أقراصك ومساحتها. يُفتح كل منهما في نافذة مستقلة. استخدم الأسهم في «مزيد من التفاصيل» لفتحهما.
 
 # What is shown when a fact about the computer cannot be found.
 settings-about-unknown = غير معروف
@@ -96,17 +96,17 @@ settings-about-up-days =
     }
 
 # Red words under the computer name box when the name is not allowed.
-settings-about-name-bad = حروف وأرقام وشرطات فقط، دون أن يبدأ بشرطة أو ينتهي بها.
+settings-about-name-bad = استخدم حروفًا وأرقامًا وشرطات فقط. لا تبدأ بشرطة ولا تنتهِ بها.
 
 # Words under the computer name box while the password window is open.
 # SAFETY: needs a human review before it ships
-settings-about-name-waiting = بانتظار كلمة المرور...
+settings-about-name-waiting = بانتظار كلمة مرورك…
 
 # Red words under the computer name box when renaming failed.
 settings-about-name-failed = تعذّرت إعادة تسمية الحاسوب.
 
 # Words under the computer name box after renaming worked.
-settings-about-name-done = البرامج المفتوحة بالفعل ترى الاسم الجديد بعد تسجيل الدخول التالي.
+settings-about-name-done = ستستخدم البرامج المفتوحة بالفعل الاسم الجديد بعد تسجيل دخولك التالي.
 
 # Placeholder and spoken name of the typing box for the computer's name.
 settings-about-name-entry = اسم الحاسوب
@@ -117,51 +117,27 @@ settings-about-rename = أعد تسمية هذا الحاسوب
 # Bold line of the computer name setting.
 settings-about-name = اسم الحاسوب
 
-# Quiet line under the computer name setting.
-settings-about-name-sub = حروف وأرقام وشرطات.
-
 # Heading of the card with the computer's name.
 settings-about-name-group = الاسم
 
 # Text behind the info button of the Name card.
 # SAFETY: needs a human review before it ships
-settings-about-name-about = كيف يظهر هذا الحاسوب على الشبكة، وعند موجّه الأوامر في الطرفية. حروف وأرقام وشرطات، دون أن يبدأ بشرطة أو ينتهي بها. تغييره يطلب كلمة مرورك.
+settings-about-name-about = هذا هو اسم الحاسوب على الشبكة وعند موجّه الأوامر في الطرفية. استخدم حروفًا وأرقامًا وشرطات، ولا تبدأ بشرطة ولا تنتهِ بها. عليك إدخال كلمة مرورك لتغييره.
 
 # Heading of the card about the computer's hardware.
 settings-about-hardware = الحاسوب
 
 # Text behind the info button of the hardware card.
-settings-about-hardware-about = الصانع والطراز، والمعالج وعدد الخيوط التي يشغّلها معًا، والرسوميات، وكل شاشة قيد الاستخدام بحجمها ومعدل تحديثها.
-
-# Quiet line under the maker and model.
-settings-about-hw-computer = الحاسوب
-
-# Quiet line under the processor.
-settings-about-hw-processor = المعالج
-
-# Quiet line under the graphics.
-settings-about-hw-graphics = يرسم الصور
-
-# Quiet line under the screens.
-settings-about-hw-screen = الشاشة
+settings-about-hardware-about = تعرض هذه الصفحة الصانع والطراز والمعالج والرسوميات. وتعرض أيضًا عدد الخيوط التي يستطيع المعالج تشغيلها معًا، وكل شاشة قيد الاستخدام بحجمها ومعدل تحديثها.
 
 # Heading of the card about the software.
 settings-about-software = البرمجيات
 
 # Text behind the info button of the software card.
-settings-about-software-about = Trindle سطح مكتب فوق Debian، الذي يتولى البرامج التي تحته. النواة هي الجزء الذي يتحدث مع العتاد، ومُركِّب Trindle الخاص يرسم سطح المكتب على Wayland.
-
-# Quiet line under the Debian version.
-settings-about-sw-debian = يعمل تحته
-
-# Quiet line under the kernel version.
-settings-about-sw-kernel = النواة
+settings-about-software-about = Trindle سطح مكتب يعمل فوق Debian، الذي يتولى البرامج التي تحته. النواة هي الجزء الذي يتعامل مع العتاد. ومُركِّب Trindle الخاص يرسم سطح المكتب باستخدام Wayland.
 
 # Bold line naming Trindle's compositor.
 settings-about-sw-compositor = مُركِّب Trindle الخاص
-
-# Quiet line under the compositor line.
-settings-about-sw-compositor-sub = يرسم سطح المكتب على Wayland
 
 # Bold line saying how many apps are installed; n is the count.
 settings-about-sw-apps =
@@ -174,20 +150,14 @@ settings-about-sw-apps =
        *[other] { $n } تطبيق
     }
 
-# Quiet line under the number of apps.
-settings-about-sw-apps-sub = مثبّتة وجاهزة في الحلقة
-
 # Heading of the card with the ways to Activity and Drives.
 settings-about-more = مزيد من التفاصيل
 
 # Text behind the info button of the More detail card.
-settings-about-more-about = ما يفعله الآن، والبرامج التي تستخدم الذاكرة والمعالج، في «النشاط». كل قرص، ومدى امتلائه وسلامته، ومفاتيح USB، في «الأقراص».
+settings-about-more-about = يعرض «النشاط» ما يفعله الحاسوب الآن والبرامج التي تستخدم الذاكرة والمعالج. وتعرض «الأقراص» كل قرص ومدى امتلائه وسلامته، وأي مفاتيح USB.
 
 # Bold line of the setting that opens Activity.
 settings-about-activity = انظر ما الذي يعمل
-
-# Quiet line under the setting that opens Activity.
-settings-about-activity-sub = البرامج التي تستخدم الذاكرة والمعالج.
 
 # Tip of the arrow that opens the Activity program.
 settings-about-activity-name = النشاط
@@ -195,14 +165,17 @@ settings-about-activity-name = النشاط
 # Bold line of the setting that opens Drives.
 settings-about-drives = الأقراص والمساحة
 
-# Quiet line under the setting that opens Drives.
-settings-about-drives-sub = كل قرص، ومدى امتلائه وسلامته.
-
 # Tip of the arrow that opens the Drives program.
 settings-about-drives-name = الأقراص
 
 # Red words under the start-up times line when the file could not be saved.
-settings-about-times-failed = تعذّر حفظ أوقات البدء في التنزيلات.
+settings-about-times-failed = تعذّر على Trindle حفظ أوقات البدء في التنزيلات.
+
+# First line of the saved start-up times file: the two columns, separated by a comma.
+settings-about-times-heading = التاريخ والوقت,الثواني
+
+# File name of the saved start-up times, in Downloads.
+settings-about-times-file = أوقات بدء تشغيل Trindle.csv
 
 # Words under the start-up times line after the file was saved; file is the file's name.
 settings-about-times-saved = في التنزيلات، باسم { $file }
@@ -214,7 +187,7 @@ settings-about-times-save = احفظ
 settings-about-times-save-spoken = احفظ كل أوقات البدء في التنزيلات
 
 # Bold line of the setting that saves the start-up times.
-settings-about-times-keep = كل بدء، للاحتفاظ
+settings-about-times-keep = احفظ وقت كل بدء
 
 # Quiet line under that setting.
 settings-about-times-keep-sub = يُحفظ في التنزيلات كجدول بيانات.
@@ -227,7 +200,7 @@ settings-about-times = آخر عشر مرات بدء
 
 # Text behind the info button of the start-up times card.
 # SAFETY: needs a human review before it ships
-settings-about-times-about = يُحسب زمن كل بدء من زر التشغيل إلى شاشة الدخول، دون الوقت الذي يُقضى في كتابة كلمة مرور القرص. الأحدث في الأعلى.
+settings-about-times-about = يقيس Trindle زمن كل بدء من زر التشغيل إلى شاشة الدخول. لا يُحسب الوقت الذي تقضيه في كتابة كلمة مرور القرص. الأحدث في الأعلى.
 
 # Heading of the memory tile.
 settings-about-memory = الذاكرة
@@ -235,30 +208,66 @@ settings-about-memory = الذاكرة
 # Heading of the disk tile.
 settings-about-disk = القرص
 
+# Heading of the card on About that holds the switch and the optional names for problem reports.
+settings-about-reports = تقارير المشكلات
+
+# Text behind the round i of that card. Buildmorphic is the community that helps build Trindle; keep its name.
+settings-about-reports-about = تذهب التقارير إلى Buildmorphic، المجتمع الذي يساعد في بناء Trindle. يمكنك الانضمام ببريد إلكتروني فقط. تكسب نقاطًا ومستويات عن المشكلات التي تكون أول من يبلّغ عنها، حتى لو لم تستطع إصلاحها. يحتوي التقرير على قائمة محددة من التفاصيل فقط، ولا يُرسل شيء حتى تضغط إرسال. اسم المستخدم أو اسم GitHub اختياري، واسم المستخدم لا يكون أبدًا عنوان بريدك الإلكتروني.
+
+# Switch: whether Trindle asks about problems and about sharing reports. Name of the switch for the screen reader too.
+settings-about-reports-offer = اعرض إرسال تقرير عند حدوث خطأ
+
+# Box for the optional Buildmorphic username, also its name for the screen reader. Buildmorphic is a name.
+settings-about-reports-name = اسم مستخدم Buildmorphic
+
+# Box for the optional GitHub name, also its name for the screen reader. GitHub is a name.
+settings-about-reports-github = اسم GitHub
+
+# Name of the round button that opens the Buildmorphic community website, and of its line.
+settings-about-reports-community = عن المجتمع
+
+# Said under the switch when it is turned off and reports that were waiting to be sent were deleted; n is how many.
+settings-about-reports-deleted =
+    { $n ->
+        [zero] متوقف. لم يُحذف أي تقرير منتظر.
+        [one] متوقف. حُذف تقرير منتظر واحد.
+        [two] متوقف. حُذف تقريران منتظران.
+        [few] متوقف. حُذفت { $n } تقارير منتظرة.
+        [many] متوقف. حُذف { $n } تقريرًا منتظرًا.
+       *[other] متوقف. حُذف { $n } تقرير منتظر.
+    }
+
+# Said in red under the switch when it is turned off but some waiting reports could not be deleted; n is how many.
+settings-about-reports-kept =
+    { $n ->
+        [zero] متوقف. حُذفت كل التقارير المنتظرة.
+        [one] متوقف. تعذّر حذف تقرير منتظر واحد.
+        [two] متوقف. تعذّر حذف تقريرين منتظرين.
+        [few] متوقف. تعذّر حذف { $n } تقارير منتظرة.
+        [many] متوقف. تعذّر حذف { $n } تقريرًا منتظرًا.
+       *[other] متوقف. تعذّر حذف { $n } تقرير منتظر.
+    }
+
 
 # Heading of the card with the switch for looking for updates.
 settings-about-updates = التحديثات
 
 # Text behind the info button of the updates card.
-settings-about-updates-about = يبحث Trindle عن إصدارات جديدة من التطبيقات والإضافات والبرامج الثابتة ومن نفسه بعد تسجيل دخولك بقليل وكل بضع ساعات، وتُثبَّت إصلاحات Debian الأمنية كل يوم. عند الإيقاف لا يبحث إلا عندما تضغط «البحث عن تحديثات» في التطبيقات، أو زر التحديثات في الحلقة. لإصلاحات Debian الأمنية مفتاحها الخاص، وعند إيقافه لا تُثبَّت من تلقاء نفسها وتبقى الأعطال المعروفة مفتوحة حتى تحدّث. يطلب تغيير أيٍّ من المفتاحين كلمة مرور المسؤول، حتى ترى خدمات الحاسوب نفسه الاختيار أيضًا.
+settings-about-updates-about = يبحث Trindle عن إصدارات جديدة من التطبيقات والإضافات والبرامج الثابتة ومن نفسه بعد تسجيل دخولك بقليل، ثم كل بضع ساعات. إذا أوقفت هذا المفتاح، فلن يبحث Trindle إلا عندما تضغط «البحث عن تحديثات» في التطبيقات، أو زر التحديثات في الحلقة. تُثبَّت إصلاحات Debian الأمنية كل يوم ولها مفتاحها الخاص. إذا أوقفته، فلن تُثبَّت من تلقاء نفسها وتبقى الثغرات الأمنية المعروفة دون إصلاح حتى تحدّث. يتطلب تغيير أيٍّ من المفتاحين كلمة مرور المسؤول، حتى يستخدم الحاسوب كله اختيارك.
 
 # Bold line of the switch for looking for updates by itself; also the switch's name for a screen reader.
 settings-about-updates-by-itself = البحث عن تحديثات
 
 # Words under the Check for updates switch while the password window is open.
-settings-about-updates-waiting = بانتظار كلمة المرور...
-
-# Quiet line under that switch.
-settings-about-updates-by-itself-sub = متوقف، لا شيء يبحث ما لم تطلب.
+settings-about-updates-waiting = بانتظار كلمة مرورك…
 
 
 
 # Bold line of the switch for Debian's security fixes; also the switch's name for a screen reader.
 settings-about-security = التحديثات الأمنية
 
-# Quiet line under the Security updates switch when it is on.
-settings-about-security-sub = تُثبَّت الإصلاحات الأمنية من تلقاء نفسها كل يوم.
-
 # Warning line under the Security updates switch when it is off.
 settings-about-security-off = لم تعد الإصلاحات الأمنية تُثبَّت من تلقاء نفسها.
 
+# Said in red under the switch when it is turned off but the Reporting add-on could not delete the reports it keeps; the reason follows.
+settings-about-reports-addon-kept = متوقف، لكن التقارير المنتظرة في إضافة Reporting لم تُحذف.

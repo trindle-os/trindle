@@ -222,7 +222,7 @@ fn each_window_says_what_it_is_and_the_box_is_optional() {
     let c = ready("crashdoc", Mode::Crash);
     let t: serde_json::Value = serde_json::from_str(&c.text()).unwrap();
     assert_eq!(t["crash"]["program"], "trindle-ring");
-    assert!(summary().contains("File names and web addresses can still be in the log lines. It does not send your files or passwords"));
+    assert!(summary().contains("File names and web addresses can still appear in the log lines. It doesn't send your files or passwords"));
 }
 
 #[test]
@@ -276,7 +276,7 @@ fn a_folder_that_cannot_be_written_says_why_and_can_be_tried_again() {
     std::fs::write(&dir, "a file where the folder should be").unwrap();
     let mut r = Reporter::new(who(), "Acme Box".into(), dir.clone());
     r.update(Msg::Save);
-    assert!(r.refusal.starts_with("Could not save it: "), "{}", r.refusal);
+    assert!(r.refusal.starts_with("Couldn't save it: "), "{}", r.refusal);
     assert!(r.saved.is_none());
     let _ = std::fs::remove_file(&dir);
 }
@@ -293,7 +293,12 @@ fn the_hardware_summary_is_own_and_holds_nothing_personal() {
 
 #[test]
 fn in_the_beta_reports_are_asked_about_until_the_person_says_no() {
-    assert_eq!(crate::common::files::default_setting(OFFER_KEY), "on", "the beta's one place to flip at the full release");
+    use crate::common::files::report_offer_for;
+    assert_eq!(report_offer_for("0.9.1-beta.4"), "on");
+    assert_eq!(report_offer_for("1.0.0-rc.1"), "on");
+    assert_eq!(report_offer_for("1.0.0"), "off");
+    assert_eq!(report_offer_for("1.2.3"), "off");
+    assert_eq!(crate::common::files::default_setting(OFFER_KEY), report_offer_for(env!("CARGO_PKG_VERSION")));
     assert!(offered() || crate::common::files::setting(OFFER_KEY) == "off", "on unless the person chose off");
 }
 
@@ -317,4 +322,10 @@ fn a_log_with_no_lines_of_its_own_is_read_from_trindles_units() {
 fn the_fallback_log_reads_trindles_own_units_from_the_user_journal() {
     let a = super::unit_log_argv("50");
     assert!(a.windows(2).any(|w| w == ["-u", "trindle-*"]) && a.contains(&"--user") && a.windows(2).any(|w| w == ["-n", "50"]), "{a:?}");
+}
+
+#[test]
+fn the_words_of_a_report_lose_every_hidden_character_the_assistant_loses() {
+    assert_eq!(plain("a\u{AD}b\u{206A}c\u{E0041}d\u{E0100}e\u{202E}f\u{7}g"), "abcdef g");
+    assert_eq!(plain("one\ntwo"), "one\ntwo", "a line break stays");
 }

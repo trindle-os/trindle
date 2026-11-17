@@ -35,9 +35,11 @@ use smithay::{
 };
 use tracing::info;
 
+pub const LOG: &str = module_path!();
+
 use crate::{
     focus::{KeyboardFocusTarget, PointerFocusTarget},
-    state::{AnvilState, Backend},
+    state::{Compose, Backend},
 };
 
 pub const LOCK_COLOR: Color32F = Color32F::new(0.0, 0.0, 0.0, 1.0);
@@ -90,6 +92,71 @@ pub struct SessionLock {
     pub(crate) flow_tries: u32,
 
     questions: Vec<(WlSurface, Instant)>,
+
+    revive: Revive,
+}
+
+const LOCK_SCREEN: &str = "trindle-lock --now";
+
+const FIRST_REVIVE_WAIT: Duration = Duration::from_secs(2);
+const LONGEST_REVIVE_WAIT: Duration = Duration::from_secs(60);
+
+#[derive(Debug, Default)]
+struct Revive {
+    starts: u32,
+
+    next: Option<Instant>,
+}
+
+impl Revive {
+
+    fn due(&mut self, active: bool, held: bool, now: Instant) -> bool {
+        if !active || held || self.next.is_some_and(|next| now < next) {
+            return false;
+        }
+        let wait = FIRST_REVIVE_WAIT.checked_mul(1u32.checked_shl(self.starts).unwrap_or(u32::MAX))
+            .map_or(LONGEST_REVIVE_WAIT, |w| w.min(LONGEST_REVIVE_WAIT));
+        self.starts = self.starts.saturating_add(1);
+        self.next = Some(now + wait);
+        true
+    }
+}
+
+fn locked_hint(locked: bool) {
+    use std::sync::{mpsc, OnceLock};
+
+    if cfg!(test) {
+        return;
+    }
+    static HINTS: OnceLock<Option<mpsc::Sender<bool>>> = OnceLock::new();
+    let tx = HINTS.get_or_init(|| {
+        let (tx, rx) = mpsc::channel();
+        let started = std::thread::Builder::new().name("locked-hint".into())
+            .spawn(move || send_hints(&rx, zbus::blocking::Connection::system));
+        started.map_err(|e| tracing::warn!("the lock cannot be told to logind: {e}")).ok().map(|_| tx)
+    });
+    if tx.as_ref().is_none_or(|tx| tx.send(locked).is_err()) {
+        tracing::warn!(locked, "logind was not told whether the screen is locked");
+    }
+}
+
+fn send_hints(rx: &std::sync::mpsc::Receiver<bool>, connect: impl Fn() -> zbus::Result<zbus::blocking::Connection>) {
+    let mut bus = None;
+    while let Ok(mut locked) = rx.recv() {
+        while let Ok(newer) = rx.try_recv() {
+            locked = newer;
+        }
+        if bus.is_none() {
+            bus = connect().map_err(|e| tracing::warn!("no system bus to tell logind the lock: {e}")).ok();
+        }
+        let Some(conn) = &bus else { continue };
+        let said = conn.call_method(Some("org.freedesktop.login1"), "/org/freedesktop/login1/session/auto",
+                                    Some("org.freedesktop.login1.Session"), "SetLockedHint", &(locked,));
+        if let Err(e) = said {
+            tracing::warn!(locked, "logind's locked hint was not set: {e}");
+            bus = None;
+        }
+    }
 }
 
 impl SessionLock {
@@ -142,7 +209,7 @@ pub fn works_while_locked(keysym: Keysym) -> bool {
     (Keysym::XF86_Switch_VT_1.raw()..=Keysym::XF86_Switch_VT_12.raw()).contains(&keysym.raw())
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
     pub fn is_locked(&self) -> bool {
         self.session_lock.active
     }
@@ -194,6 +261,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         let target = surface.map(KeyboardFocusTarget::LockSurface);
         let keyboard = self.seat.get_keyboard().unwrap();
         if keyboard.current_focus() != target {
+            info!(on_lock_surface = target.is_some(), "the keyboard goes to the lock screen");
             self.give_keyboard(target, SERIAL_COUNTER.next_serial());
         }
     }
@@ -284,6 +352,14 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         if lock.pending.as_ref().is_some_and(|p| !p.ext_session_lock().is_alive()) {
             lock.pending = None;
         }
+        let held = lock.lock.as_ref().is_some_and(|l| l.is_alive());
+        if lock.revive.due(lock.active, held, Instant::now()) {
+            info!("The lock screen has gone while locked; starting another");
+
+            if !cfg!(test) {
+                self.spawn(LOCK_SCREEN);
+            }
+        }
 
         let surfaces: Vec<(Output, LockSurface)> = self.session_lock.surfaces.clone();
         for (output, surface) in surfaces {
@@ -335,7 +411,7 @@ pub fn is_flow_client(client: &Client) -> bool {
         && crate::virtual_input::app_id_of(client).is_some_and(|id| crate::own_hands::is_flow(&id))
 }
 
-impl<BackendData: Backend + 'static> crate::protocols::unlock::UnlockHandler for AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> crate::protocols::unlock::UnlockHandler for Compose<BackendData> {
     fn unlock_with_pin(&mut self, client: &Client, pin: &str) -> Result<(), String> {
         use crate::flow_unlock::{judge, Verdict};
         if !is_flow_client(client) {
@@ -355,7 +431,9 @@ impl<BackendData: Backend + 'static> crate::protocols::unlock::UnlockHandler for
             }
             Verdict::Unlock => {
                 let now = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map_or(0, |d| d.as_secs() as i64);
-                let _ = crate::flow_unlock::note(&crate::flow_unlock::notes(), now);
+                if let Err(e) = crate::flow_unlock::note(&crate::flow_unlock::notes(), now) {
+                    tracing::warn!("Flow's unlock was not written to the unlock notes: {e}");
+                }
                 info!("Flow unlocked the screen with the PIN");
                 if let Some(lock) = self.session_lock.lock.clone() {
                     lock.finished();
@@ -367,9 +445,9 @@ impl<BackendData: Backend + 'static> crate::protocols::unlock::UnlockHandler for
     }
 }
 
-crate::delegate_unlock!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+crate::delegate_unlock!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
-impl<BackendData: Backend + 'static> SessionLockHandler for AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> SessionLockHandler for Compose<BackendData> {
     fn lock_state(&mut self) -> &mut SessionLockManagerState {
         &mut self.session_lock_state
     }
@@ -398,6 +476,9 @@ impl<BackendData: Backend + 'static> SessionLockHandler for AnvilState<BackendDa
         }
 
         crate::locked::mark(true);
+        if !self.session_lock.active {
+            locked_hint(true);
+        }
         let lock = &mut self.session_lock;
         lock.active = true;
         lock.lock = Some(confirmation.ext_session_lock().clone());
@@ -418,6 +499,7 @@ impl<BackendData: Backend + 'static> SessionLockHandler for AnvilState<BackendDa
         info!("Unlocking the screen");
         let lock = std::mem::take(&mut self.session_lock);
         crate::locked::mark(false);
+        locked_hint(false);
         self.backend_data.unlocked();
         let keyboard = self.seat.get_keyboard().unwrap();
         match lock.focus_before.filter(|f| f.alive()) {
@@ -451,7 +533,7 @@ impl<BackendData: Backend + 'static> SessionLockHandler for AnvilState<BackendDa
     }
 }
 
-impl<BackendData: Backend + 'static> Dispatch<ExtSessionLockV1, SessionLockState> for AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> Dispatch<ExtSessionLockV1, SessionLockState> for Compose<BackendData> {
     fn request(
         state: &mut Self,
         client: &Client,
@@ -475,13 +557,13 @@ impl<BackendData: Backend + 'static> Dispatch<ExtSessionLockV1, SessionLockState
     }
 }
 
-smithay::reexports::wayland_server::delegate_global_dispatch!(@<BackendData: Backend + 'static> AnvilState<BackendData>: [
+smithay::reexports::wayland_server::delegate_global_dispatch!(@<BackendData: Backend + 'static> Compose<BackendData>: [
     ExtSessionLockManagerV1: SessionLockManagerGlobalData
 ] => SessionLockManagerState);
-smithay::reexports::wayland_server::delegate_dispatch!(@<BackendData: Backend + 'static> AnvilState<BackendData>: [
+smithay::reexports::wayland_server::delegate_dispatch!(@<BackendData: Backend + 'static> Compose<BackendData>: [
     ExtSessionLockManagerV1: ()
 ] => SessionLockManagerState);
-smithay::reexports::wayland_server::delegate_dispatch!(@<BackendData: Backend + 'static> AnvilState<BackendData>: [
+smithay::reexports::wayland_server::delegate_dispatch!(@<BackendData: Backend + 'static> Compose<BackendData>: [
     ExtSessionLockSurfaceV1: ExtLockSurfaceUserData
 ] => SessionLockManagerState);
 
@@ -714,6 +796,21 @@ mod tests {
         }
 
         #[test]
+        fn a_lock_screen_that_dies_is_started_again_once_and_the_screens_stay_locked() {
+            alone("lock::tests::live::a_lock_screen_that_dies_is_started_again_once_and_the_screens_stay_locked", |dir| {
+                let mut rig = Rig::new(dir);
+                let locker = locked(&mut rig);
+                turn(&mut rig);
+                assert_eq!(rig.state.session_lock.revive.starts, 0, "started again while it still holds");
+                rig.crash(locker);
+                turn(&mut rig);
+                turn(&mut rig);
+                assert!(rig.state.is_locked());
+                assert_eq!(rig.state.session_lock.revive.starts, 1, "started once, not again before its wait");
+            });
+        }
+
+        #[test]
         fn a_device_a_program_made_is_never_plugged_in_even_when_allowed() {
             alone("lock::tests::live::a_device_a_program_made_is_never_plugged_in_even_when_allowed", |dir| {
                 let mut rig = Rig::new(dir);
@@ -734,6 +831,54 @@ mod tests {
                 assert!(!rig.state.keys_changed.plugged_in("event9"), "allowing a made device by name made it plugged in");
             });
         }
+    }
+
+    #[test]
+    fn a_lock_screen_is_started_again_at_once_then_after_a_growing_wait() {
+        let now = Instant::now();
+        let mut r = Revive::default();
+        assert!(!r.due(false, false, now), "unlocked: nothing to start");
+        assert!(!r.due(true, true, now), "a lock screen holds");
+        assert!(r.due(true, false, now));
+        assert!(!r.due(true, false, now + Duration::from_secs(1)));
+        assert!(r.due(true, false, now + FIRST_REVIVE_WAIT));
+        let mut at = now + FIRST_REVIVE_WAIT;
+        for _ in 0..40 {
+            at += LONGEST_REVIVE_WAIT;
+            assert!(r.due(true, false, at), "it never gives up");
+        }
+        assert!(!r.due(true, false, at + LONGEST_REVIVE_WAIT - Duration::from_millis(1)));
+    }
+
+    #[test]
+    fn the_lock_is_told_to_logind_in_order() {
+        use std::sync::{Arc, Mutex};
+        struct Session(Arc<Mutex<Vec<bool>>>);
+        #[zbus::interface(name = "org.freedesktop.login1.Session")]
+        impl Session {
+            fn set_locked_hint(&self, locked: bool) {
+                self.0.lock().unwrap().push(locked);
+            }
+        }
+        let daemon = trindle_toolkit::bus::testing::own_daemon();
+        let address = daemon.1.clone();
+        assert!(address.starts_with("unix:"), "{address}");
+        let heard = Arc::new(Mutex::new(Vec::new()));
+        let _logind = zbus::blocking::connection::Builder::address(address.as_str()).unwrap()
+            .name("org.freedesktop.login1").unwrap()
+            .serve_at("/org/freedesktop/login1/session/auto", Session(heard.clone())).unwrap()
+            .build().unwrap();
+        let (tx, rx) = std::sync::mpsc::channel();
+        tx.send(true).unwrap();
+        drop(tx);
+        send_hints(&rx, || zbus::blocking::connection::Builder::address(address.as_str())?.build());
+        let (tx, rx) = std::sync::mpsc::channel();
+        for locked in [true, false, true, false] {
+            tx.send(locked).unwrap();
+        }
+        drop(tx);
+        send_hints(&rx, || zbus::blocking::connection::Builder::address(address.as_str())?.build());
+        assert_eq!(*heard.lock().unwrap(), [true, false], "the newest of those waiting is the one told");
     }
 
     #[test]

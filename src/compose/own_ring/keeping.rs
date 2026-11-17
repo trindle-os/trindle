@@ -16,9 +16,15 @@ use super::launch::{nonblocking, pipe, start_on};
 use super::pulse::hear_on;
 use super::steps::{step, Step};
 use super::{start_of, Told, ENDS_WITHIN, LINGER, NAME, RETRY, TRIES, WINDOW};
-use crate::state::{AnvilState, Backend, ClientState};
+use crate::state::{Compose, Backend, ClientState};
 
-impl<BackendData: Backend + 'static> AnvilState<BackendData> {
+fn send(told: &Sender<Told>, what: Told) {
+    if told.send(what).is_err() {
+        tracing::warn!("the ring's keeper has gone: it was not told");
+    }
+}
+
+impl<BackendData: Backend + 'static> Compose<BackendData> {
 
     pub fn keep_ring(&mut self) -> Option<Sender<Told>> {
         crate::session::launch().ring.as_ref()?;
@@ -87,9 +93,9 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
     fn look_again_soon(&mut self, running: Option<u64>) {
 
         let (told, number) = (self.ring.told.clone(), running);
-        let _ = self.handle.insert_source(Timer::from_duration(LINGER), move |_, _, _| {
+        crate::session::watch(&self.handle, Timer::from_duration(LINGER), move |_, _, _| {
             if let (Some(told), Some(number)) = (&told, number) {
-                let _ = told.send(Told::Lingers(number));
+                send(told, Told::Lingers(number));
             }
             TimeoutAction::Drop
         });
@@ -118,9 +124,9 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
         crate::ring_said::leave(crate::ring_said::Said::HeldBack);
         crate::stopped::say(crate::stopped::Stopped::Ring);
         let told = self.ring.told.clone();
-        let _ = self.handle.insert_source(Timer::from_duration(long), move |_, _, _| {
+        crate::session::watch(&self.handle, Timer::from_duration(long), move |_, _, _| {
             if let Some(told) = &told {
-                let _ = told.send(Told::Again);
+                send(told, Told::Again);
             }
             TimeoutAction::Drop
         });
@@ -163,8 +169,8 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
             self.display_handle.backend_handle().kill_client(id, DisconnectReason::ConnectionClosed);
         }
         if let Some(told) = self.ring.told.clone() {
-            let _ = self.handle.insert_source(Timer::from_duration(ENDS_WITHIN), move |_, _, _| {
-                let _ = told.send(Told::Unended(number));
+            crate::session::watch(&self.handle, Timer::from_duration(ENDS_WITHIN), move |_, _, _| {
+                send(&told, Told::Unended(number));
                 TimeoutAction::Drop
             });
         }
@@ -232,15 +238,15 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
         crate::stopped::say(crate::stopped::Stopped::Ring);
 
         self.ring.running = None;
-        let _ = self.handle.insert_source(Timer::from_duration(RETRY), move |_, _, _| {
-            let _ = told.send(Told::Again);
+        crate::session::watch(&self.handle, Timer::from_duration(RETRY), move |_, _, _| {
+            send(&told, Told::Again);
             TimeoutAction::Drop
         });
     }
 }
 
 #[cfg(test)]
-impl<BackendData: Backend + 'static> AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> Compose<BackendData> {
 
     pub(crate) fn start_ring_for_rig(&mut self) -> Option<(u64, std::fs::File, std::fs::File)> {
         self.ring.asked = true;

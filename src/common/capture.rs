@@ -2,6 +2,7 @@
 //! ext-image-copy-capture. Screenshots and the
 //! magnifier come here, so no outside program is needed.
 
+use crate::toolkit::t;
 use std::path::Path;
 
 use tiny_skia::{FillRule, FilterQuality, IntSize, Mask, PathBuilder, Pixmap, PixmapPaint, Rect};
@@ -96,12 +97,12 @@ fn unpremultiplied(px: [u8; 4]) -> [u8; 4] {
 }
 
 pub fn take(area: Option<Area>, cursor: bool) -> Result<Picture, String> {
-    let conn = Connection::connect_to_env().map_err(|_| "There is no desktop to photograph.".to_string())?;
+    let conn = Connection::connect_to_env().map_err(|_| t!("common-shot-no-desktop").to_string())?;
     let mut desk = Desk::open(&conn)?;
     let boxes: Vec<Option<Area>> = desk.state.displays.iter().map(Display::area).collect();
-    let everything = boxes.iter().flatten().copied().reduce(Area::join).ok_or("There is no display to photograph.")?;
+    let everything = boxes.iter().flatten().copied().reduce(Area::join).ok_or(t!("common-shot-no-display"))?;
     let area = match area {
-        Some(a) => a.meet(everything).ok_or("That part of the desktop has no display on it.")?,
+        Some(a) => a.meet(everything).ok_or(t!("common-shot-no-display-there"))?,
         None => everything,
     };
     desk.ask_for_shots(&boxes, area, cursor);
@@ -128,10 +129,10 @@ impl Desk {
         let qh = queue.handle();
         let copier: ExtImageCopyCaptureManagerV1 = globals
             .bind(&qh, 1..=1, ())
-            .map_err(|_| "This desktop cannot be photographed.".to_string())?;
+            .map_err(|_| t!("common-shot-cannot").to_string())?;
         let sources: ExtOutputImageCaptureSourceManagerV1 = globals
             .bind(&qh, 1..=1, ())
-            .map_err(|_| "This desktop cannot be photographed.".to_string())?;
+            .map_err(|_| t!("common-shot-cannot").to_string())?;
         let shm: wl_shm::WlShm = globals.bind(&qh, 1..=1, ()).map_err(|e| e.to_string())?;
 
         let places: Option<ZxdgOutputManagerV1> = globals.bind(&qh, 1..=3, ()).ok();
@@ -229,15 +230,15 @@ fn sideways(t: Transform) -> bool {
 fn lay_out(area: Area, parts: Vec<(Area, Upright)>) -> Result<Picture, String> {
     let scale = parts.iter().map(|(b, u)| u.width as f64 / b.width.max(1) as f64).fold(1.0_f64, f64::max);
     let (width, height) = ((area.width as f64 * scale) as i32, (area.height as f64 * scale) as i32);
-    let mut picture = Pixmap::new(width as u32, height as u32).ok_or("The picture is too big.")?;
+    let mut picture = Pixmap::new(width as u32, height as u32).ok_or(t!("common-shot-too-big"))?;
     for (b, u) in parts {
         let source = IntSize::from_wh(u.width as u32, u.height as u32)
             .and_then(|size| Pixmap::from_vec(u.data, size))
-            .ok_or("A display gave a picture of no size.")?;
+            .ok_or(t!("common-shot-no-size"))?;
 
         let (x, y) = (((b.x - area.x) as f64 * scale).trunc(), ((b.y - area.y) as f64 * scale).trunc());
         let (w, h) = (b.width as f64 * scale, b.height as f64 * scale);
-        let mut clip = Mask::new(width as u32, height as u32).ok_or("The picture is too big.")?;
+        let mut clip = Mask::new(width as u32, height as u32).ok_or(t!("common-shot-too-big"))?;
         if let Some(rect) = Rect::from_xywh(x as f32, y as f32, w as f32, h as f32) {
             clip.fill_path(&PathBuilder::from_rect(rect), FillRule::Winding, false, tiny_skia::Transform::identity());
         }
@@ -318,13 +319,13 @@ impl State {
             return;
         }
         let (Some((width, height)), true) = (shot.size, shot.readable) else {
-            shot.outcome = Some(Err("The desktop offered no picture this can read.".into()));
+            shot.outcome = Some(Err(t!("common-shot-unreadable").into()));
             return;
         };
         let stride = width * 4;
         let len = stride as usize * height as usize;
         let Some(memory) = Memory::new(c"trindle-capture", len) else {
-            shot.outcome = Some(Err("There was no memory for the picture.".into()));
+            shot.outcome = Some(Err(t!("common-shot-no-memory").into()));
             return;
         };
         let pool = self.shm.create_pool(memory.fd(), len as i32, qh, ());
@@ -352,7 +353,7 @@ impl Dispatch<ExtImageCopyCaptureSessionV1, usize> for State {
             Event::ShmFormat { format: WEnum::Value(wl_shm::Format::Xrgb8888) } => shot.readable = true,
             Event::Done => state.ask(*index, qh),
             Event::Stopped => {
-                shot.outcome.get_or_insert(Err("The desktop stopped photographing the screen.".into()));
+                shot.outcome.get_or_insert(Err(t!("common-shot-stopped").into()));
             }
             _ => {}
         }
@@ -366,7 +367,7 @@ impl Dispatch<ExtImageCopyCaptureFrameV1, usize> for State {
         let Some(shot) = state.shots.get_mut(*index) else { return };
         match event {
             Event::Ready => shot.outcome = Some(Ok(())),
-            Event::Failed { .. } => shot.outcome = Some(Err("The desktop could not photograph the screen.".into())),
+            Event::Failed { .. } => shot.outcome = Some(Err(t!("common-shot-failed").into())),
             _ => {}
         }
     }

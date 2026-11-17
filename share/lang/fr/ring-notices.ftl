@@ -92,7 +92,7 @@ ring-crash-stopped = { $name } s'est arrêté de manière inattendue
 ring-drive-gone = Ce disque n'est plus là
 
 # Title of the notice when a drive could not be opened; the reason follows under it.
-ring-drive-not-opened = { $name } n'a pas pu être ouvert
+ring-drive-not-opened = Impossible d'ouvrir { $name }
 
 # Choice for what closing the laptop lid does: sleep.
 ring-lid-sleep = Veille
@@ -110,7 +110,7 @@ ring-lid-nothing = Rien
 ring-lid-shut-down = Éteindre
 
 # Reason the system lists beside Trindle's hold on the lid switch (shown by tools that list what stops sleep).
-ring-lid-reason = La fermeture du couvercle fait ce qu'indiquent les paramètres, Alimentation
+ring-lid-reason = Vous pouvez choisir ce qui se passe à la fermeture du couvercle dans les paramètres, sous Alimentation.
 
 # Notice at the foot of the screen for a few seconds when the magnifier starts.
 ring-magnify-hint = Maintenez n'importe où pour agrandir
@@ -131,10 +131,10 @@ ring-mic-on-tip = Réactiver le microphone
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when something other than the person pressed the microphone switch on.
-ring-mic-own-press = Seul votre propre appui peut réactiver le microphone.
+ring-mic-own-press = Vous seul pouvez réactiver le microphone.
 
 # Line in the ring when the microphone switch could not be changed; the reason follows.
-ring-mic-not-changed = L'interrupteur du microphone n'a pas pu être modifié : { $why }
+ring-mic-not-changed = Trindle n'a pas pu modifier l'interrupteur du microphone : { $why }
 
 # Notice when a notification was clicked and no program could be found for it.
 ring-goes-no-program = Aucun programme trouvé
@@ -152,7 +152,7 @@ ring-notes-copied = Copié pour votre assistant
 ring-notes-name = Notification
 
 # Said when a pinned notification has been held long enough and now follows the pointer.
-ring-notes-moving = Déplacement en cours. Relâchez pour déposer, Échap pour remettre en place.
+ring-notes-moving = Déplacement de la notification. Relâchez pour la déposer, ou appuyez sur Échap pour la remettre en place.
 
 # Said when a pinned notification has been dropped or moved by keys.
 ring-notes-moved = Déplacée
@@ -195,7 +195,11 @@ ring-plugin-needs = { $name } a besoin de votre autorisation
 
 # SAFETY: needs a human review before it ships
 # Line under the notice that a plugin needs permission: none of the permissions it asks for are given.
-ring-plugin-cannot-work = Il ne peut pas encore fonctionner : 0 autorisation sur { $asks } accordée.
+ring-plugin-cannot-work =
+    { $asks ->
+        [one] Il ne peut pas encore fonctionner. Vous n'avez pas accordé la seule autorisation qu'il demande.
+       *[other] Il ne peut pas encore fonctionner. Vous n'avez accordé aucune des { $asks } autorisations qu'il demande.
+    }
 
 # Said to a screen reader when a notification was copied; $said is what the circle said.
 ring-copied-said = Copié. { $said }
@@ -216,3 +220,5 @@ ring-outside-body =
        *[other] { $names } et { $more } autres
     }
 
+# Said under the magnifier when the screen picture it took has the wrong size.
+ring-magnify-wrong-size = L'image n'avait pas la bonne taille.

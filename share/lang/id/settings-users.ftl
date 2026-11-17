@@ -8,14 +8,14 @@ settings-users-keywords = akun orang kata sandi password gambar foto administrat
 
 # Help line at the foot of the Users page.
 # SAFETY: needs a human review before it ships
-settings-users-help = Menambah orang, mengganti kata sandi, dan menghapus akun memerlukan kata sandi administrator.
+settings-users-help = Anda memerlukan kata sandi administrator untuk menambah orang, mengganti kata sandi, atau menghapus akun.
 
 # Beside a change that is waiting for the administrator's password to be typed.
 # SAFETY: needs a human review before it ships
-settings-users-waiting = Menunggu kata sandi...
+settings-users-waiting = Menunggu kata sandi Anda…
 
 # Headline of the Users page when nobody on the computer is an administrator.
-settings-users-sum-nobody-admin = Tidak ada administrator di sini, jadi tidak ada yang dapat dipasang atau diubah untuk semua orang.
+settings-users-sum-nobody-admin = Tidak ada administrator di sini, jadi tidak ada yang dapat memasang atau mengubah hal untuk semua orang.
 
 # Headline of the Users page when you are the only person and an administrator.
 settings-users-sum-only-you = Hanya Anda yang memakai komputer ini, dan Anda adalah administratornya.
@@ -45,7 +45,7 @@ settings-users-sum-admins =
 settings-users-this-is-you = Ini Anda.
 
 # Under a person's name on their card when the card is someone else's: the name shown is their login name.
-settings-users-login-name = Nama login mereka.
+settings-users-login-name = Nama login
 
 # Tip of the round button on a person's card that picks their picture, and title of the window that opens.
 settings-users-choose-picture = Pilih gambar
@@ -59,7 +59,7 @@ settings-users-change-password = Ganti kata sandi
 
 # Tip of the round button on a person's card that deletes them and their files.
 # SAFETY: needs a human review before it ships
-settings-users-delete = Hapus, beserta file mereka
+settings-users-delete = Hapus akun dan file
 
 # Said beside a person once they are deleted.
 # SAFETY: needs a human review before it ships
@@ -69,13 +69,9 @@ settings-users-deleted = Dihapus
 # SAFETY: needs a human review before it ships
 settings-users-administrator = Administrator
 
-# Under the Administrator line: what an administrator can do.
-# SAFETY: needs a human review before it ships
-settings-users-admin-can = Dapat memasang dan mengubah hal untuk semua orang.
-
 # Tip of the administrator switch on your own card, and said when you press it: you cannot remove your own administrator rights.
 # SAFETY: needs a human review before it ships
-settings-users-cannot-take-away = Anda tidak dapat mencabut ini dari diri sendiri.
+settings-users-cannot-take-away = Anda tidak dapat mencabut hak administrator Anda sendiri.
 
 # Said beside a person after they are made an administrator.
 # SAFETY: needs a human review before it ships
@@ -87,7 +83,7 @@ settings-users-admin-no-longer = Bukan administrator lagi
 
 # Help text for a person's card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-person-about = Gambar, kata sandi, dan, untuk semua orang selain Anda, menghapus mereka beserta file mereka adalah tombol bulat di samping nama mereka. Administrator dapat memasang program dan mengubah hal untuk semua orang; Anda tidak dapat mencabut ini dari diri sendiri. Setiap perubahan meminta kata sandi administrator.
+settings-users-person-about = Administrator dapat memasang program dan mengubah hal untuk semua orang. Anda tidak dapat mencabut hak administrator Anda sendiri. Setiap perubahan memerlukan kata sandi administrator.
 
 # Typing box in the change password form, for your own current password.
 # SAFETY: needs a human review before it ships
@@ -98,7 +94,7 @@ settings-users-current-password = Kata sandi saat ini
 settings-users-new-password = Kata sandi baru
 
 # Typing box in the change password form where the new password is typed again.
-settings-users-again = Ulangi
+settings-users-again = Ketik lagi
 
 # Button in the change password form that saves the new password.
 settings-users-save = Simpan
@@ -113,7 +109,7 @@ settings-users-cancel = Batal
 
 # Red words in the change password form when your current password was left empty.
 # SAFETY: needs a human review before it ships
-settings-users-need-current = Kata sandi Anda saat ini juga diperlukan, agar login tersimpan Anda tetap berfungsi.
+settings-users-need-current = Masukkan juga kata sandi Anda saat ini, agar login tersimpan Anda tetap berfungsi.
 
 # Red words in the change password form when the new password is too short.
 # SAFETY: needs a human review before it ships
@@ -129,7 +125,7 @@ settings-users-password-changed = Kata sandi diganti
 
 # Red words after a password change when the saved logins could not take the new password.
 # SAFETY: needs a human review before it ships
-settings-users-not-rekeyed = Kata sandi diganti, tetapi login tersimpan masih terbuka dengan yang lama.
+settings-users-not-rekeyed = Kata sandi diganti, tetapi login tersimpan Anda masih memakai kata sandi lama.
 
 # Red words when the chosen file is not a picture the page can use.
 settings-users-png-please = Mohon pilih PNG, JPG, atau WebP.
@@ -141,20 +137,17 @@ settings-users-picture-not-changed = Gambar tidak dapat diganti.
 settings-users-saved = Tersimpan
 
 # Red words when your new picture works at login but could not be copied to your home folder.
-settings-users-picture-not-shared = Gambar tampil saat login, tetapi tidak dapat diberikan ke program Anda yang lain.
+settings-users-picture-not-shared = Gambar Anda tampil di layar login, tetapi Trindle tidak dapat membagikannya ke program Anda yang lain.
 
 # Heading of the form for adding a person.
 settings-users-add-someone = Tambah orang
 
 # Help text for the Add someone form (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-add-about = Akun baru untuk orang lain: nama lengkap mereka, nama login berupa huruf kecil dan angka yang diawali huruf, dan kata sandi minimal 8 karakter. Mereka dapat langsung login. Administrator dapat memasang program dan mengubah hal untuk semua orang.
+settings-users-add-about = Isi nama lengkap mereka, nama login, dan kata sandi minimal 8 karakter. Nama login hanya boleh berisi huruf kecil dan angka, dan harus diawali huruf. Mereka dapat langsung login. Administrator dapat memasang program dan mengubah hal untuk semua orang.
 
 # Heading of the line in the Add someone form that holds the button.
 settings-users-new-account = Akun baru
-
-# Under the New account heading.
-settings-users-new-account-sub = Mereka dapat langsung login dengan kata sandi ini.
 
 # Typing box in the Add someone form for the person's full name.
 settings-users-full-name = Nama lengkap
@@ -187,19 +180,16 @@ settings-users-saved-logins = Login tersimpan
 
 # Help text for the Saved logins card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-keyring-about = Kata sandi yang disimpan program untuk Anda, misalnya untuk surel atau Wi-Fi, disimpan di gantungan kunci yang terbuka dengan login Anda. Semua orang pindah ke gantungan kunci Trindle sendiri saat login. Jika milik Anda tidak dapat dipindahkan, pemindahan menyalin setiap login tersimpan, meminta kata sandi untuk gantungan kunci apa pun yang tidak terbuka dengan milik Anda, dan file GNOME dibiarkan apa adanya.
+settings-users-keyring-about = Program menyimpan kata sandi untuk Anda, misalnya untuk surel atau Wi-Fi, di gantungan kunci yang terbuka saat Anda login. Saat Anda login, Trindle memindahkan gantungan kunci Anda ke gantungan kunci miliknya. Jika itu tidak berhasil, Anda dapat memindahkannya di sini. Setiap login tersimpan disalin. Anda mungkin diminta kata sandi untuk gantungan kunci yang tidak terbuka dengan login Anda. File GNOME dibiarkan apa adanya.
 
 # Heading of the line on the Saved logins card when the logins are kept by Trindle's keyring.
-settings-users-kept-trindle = Disimpan oleh gantungan kunci Trindle
+settings-users-kept-trindle = Ada di gantungan kunci Trindle
 
 # Heading of the line on the Saved logins card when the logins are kept by GNOME's keyring.
-settings-users-kept-gnome = Disimpan oleh gantungan kunci GNOME
-
-# Under the heading when the logins are kept by Trindle's keyring.
-settings-users-opens-login = Terbuka dengan login Anda.
+settings-users-kept-gnome = Ada di gantungan kunci GNOME
 
 # Under the heading when the logins are still kept by GNOME's keyring.
-settings-users-could-not-move = Login Anda tidak dapat memindahkannya.
+settings-users-could-not-move = Trindle tidak dapat memindahkannya saat login.
 
 # Tip of the button that moves saved logins to Trindle's keyring.
 settings-users-move-keyring = Pindahkan ke gantungan kunci Trindle
@@ -209,7 +199,7 @@ settings-users-move-keyring = Pindahkan ke gantungan kunci Trindle
 settings-users-your-password = Kata sandi Anda
 
 # Tip of the button that starts moving the saved logins.
-settings-users-go-ahead = Lanjutkan
+settings-users-go-ahead = Pindahkan sekarang
 
 # Typing box for the password of one GNOME keyring that stayed shut: the keyring's name is { $name }.
 # SAFETY: needs a human review before it ships
@@ -217,7 +207,7 @@ settings-users-password-for = Kata sandi untuk { $name }
 
 # Red words when the move of saved logins was started without a password.
 # SAFETY: needs a human review before it ships
-settings-users-your-password-please = Mohon isi kata sandi Anda.
+settings-users-your-password-please = Ketik kata sandi Anda.
 
 # Said beside the Saved logins line while they are copied.
 settings-users-copying = Menyalin login tersimpan Anda...
@@ -229,11 +219,11 @@ settings-users-copied = { $n } disalin
 # SAFETY: needs a human review before it ships
 settings-users-nothing-moved =
     { $n ->
-       *[other] Belum ada yang dipindahkan: { $names } memerlukan kata sandi masing-masing.
+       *[other] Belum ada yang dipindahkan. Ketik kata sandi untuk { $names }.
     }
 
 # Red words when the move of saved logins stopped unexpectedly.
-settings-users-stopped = Berhenti di tengah jalan.
+settings-users-stopped = Tidak selesai.
 
 # Words in place of the people while the accounts are still being read.
 settings-users-looking-accounts = Memeriksa akun…
@@ -242,4 +232,4 @@ settings-users-looking-accounts = Memeriksa akun…
 settings-users-people = Orang
 
 # Under the Administrator line of the placeholder card.
-settings-users-looking = Memeriksa…
+settings-users-looking = Memuat…

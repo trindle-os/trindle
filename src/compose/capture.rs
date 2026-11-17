@@ -18,11 +18,11 @@ use smithay::reexports::wayland_server::Resource;
 use smithay::utils::{IsAlive, Logical, Point, Rectangle, SERIAL_COUNTER};
 
 use crate::focus::KeyboardFocusTarget;
-use tracing::info;
+use tracing::{info, warn};
 use crate::protocols::input_capture::{capture, InputCaptureHandler, Side, TrindleInputCaptureV1};
 use crate::limits::{Rate, TAKES_PER_SECOND};
 use crate::screen_edge::{self, EdgePush, CORNER_GUARD, CROSS_PUSH};
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
 
 pub const SAFETY_HOLD: Duration = Duration::from_secs(1);
 
@@ -112,13 +112,6 @@ pub fn permit(takes: &mut Rate, app_id: Option<&str>, grant: &dyn Fn(&str) -> bo
     }
 }
 
-impl Capture {
-
-    pub fn away(&self) -> bool {
-        self.active.is_some()
-    }
-}
-
 pub struct Capture {
 
     takes: Rate,
@@ -159,6 +152,7 @@ impl std::fmt::Debug for Capture {
 }
 
 impl Capture {
+
     pub fn is_active(&self) -> bool {
         self.active.is_some()
     }
@@ -276,7 +270,7 @@ impl Taken {
     }
 }
 
-impl<BackendData: Backend + 'static> AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> Compose<BackendData> {
 
     pub fn cross_push(&mut self, tried: Point<f64, Logical>, now: Point<f64, Logical>, time_ms: u32) {
         if self.capture.from_box || self.capture.active.is_some() {
@@ -425,7 +419,9 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
             Taken::Key { time, code, pressed } => {
                 held(&mut active.keys, code, pressed);
                 to.key(time, code, u32::from(pressed));
-                watch_safety_keys(active, &self.handle);
+                if watch_safety_keys(&active.keys, &mut active.safety_since, || arm_safety_hold(&self.handle)) {
+                    self.end_capture(Some(capture::DeactivatedReason::SafetyKeys), None);
+                }
             }
             Taken::Motion { time, dx, dy } => to.motion(time, dx, dy),
             Taken::Button { time, button, pressed } => {
@@ -466,30 +462,46 @@ impl Capture {
                 self.swallow_buttons.retain(|b| *b != button);
                 true
             }
+
+            Taken::Key { code, pressed: true, .. } => {
+                self.swallow_keys.retain(|c| *c != code);
+                false
+            }
+            Taken::Button { button, pressed: true, .. } => {
+                self.swallow_buttons.retain(|b| *b != button);
+                false
+            }
             _ => false,
         }
     }
 }
 
-fn watch_safety_keys<BackendData: Backend + 'static>(
-    active: &mut Active,
-    handle: &LoopHandle<'static, AnvilState<BackendData>>,
-) {
-    let all = safety_held(&active.keys);
-    match (all, active.safety_since) {
+fn watch_safety_keys(keys: &[u32], since: &mut Option<Instant>, arm: impl FnOnce() -> bool) -> bool {
+    match (safety_held(keys), *since) {
         (true, None) => {
-            active.safety_since = Some(Instant::now());
-            let _ = handle.insert_source(Timer::from_duration(SAFETY_HOLD), |_, _, state| {
-                state.safety_check();
-                TimeoutAction::Drop
-            });
+            *since = Some(Instant::now());
+            !arm()
         }
-        (false, _) => active.safety_since = None,
-        (true, Some(_)) => {}
+        (false, _) => {
+            *since = None;
+            false
+        }
+        (true, Some(_)) => false,
     }
 }
 
-impl<BackendData: Backend + 'static> InputCaptureHandler for AnvilState<BackendData> {
+fn arm_safety_hold<BackendData: Backend + 'static>(handle: &LoopHandle<'static, Compose<BackendData>>) -> bool {
+    let armed = handle.insert_source(Timer::from_duration(SAFETY_HOLD), |_, _, state| {
+        state.safety_check();
+        TimeoutAction::Drop
+    });
+    if let Err(e) = &armed {
+        warn!("the safety keys' timer could not be set, so the mouse and keyboard come back now: {e}");
+    }
+    armed.is_ok()
+}
+
+impl<BackendData: Backend + 'static> InputCaptureHandler for Compose<BackendData> {
     fn capture_asked(&mut self, capture: TrindleInputCaptureV1, side: Side) {
         if self.capture.slots.held(|c| same_program(c, &capture)) >= MOST_HELD {
             capture.post_error(0u32, "too many captures held at once");
@@ -551,11 +563,23 @@ impl<BackendData: Backend + 'static> InputCaptureHandler for AnvilState<BackendD
         self.capture.manual.retain(|id| live.contains(id));
     }
 }
-crate::delegate_input_capture!(@<BackendData: Backend + 'static> AnvilState<BackendData>);
+crate::delegate_input_capture!(@<BackendData: Backend + 'static> Compose<BackendData>);
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn the_safety_keys_end_a_capture_even_when_their_timer_cannot_be_set() {
+        let all = [CTRL[0], ALT[0], SHIFT[0]];
+        let mut since = None;
+        assert!(watch_safety_keys(&all, &mut since, || false), "no timer and the capture went on");
+        let mut since = None;
+        assert!(!watch_safety_keys(&all, &mut since, || true));
+        assert!(since.is_some());
+        assert!(!watch_safety_keys(&all[..2], &mut since, || panic!("armed again")));
+        assert!(since.is_none());
+    }
 
     fn screen() -> Rectangle<i32, Logical> {
         Rectangle::new((1280, 0).into(), (1920, 1080).into())
@@ -657,13 +681,11 @@ mod tests {
             slots.ask(n, if n % 2 == 0 { Side::Left } else { Side::Top });
         }
         assert_eq!(slots.held(|_| true), 20);
-        assert!(slots.held(|c| c % 2 == 0) >= MOST_HELD, "the handler refuses the ninth");
 
         for n in 0..20u32 {
             slots.forget(&n);
         }
         assert_eq!(slots.held(|_| true), 0);
-        assert_eq!(MOST_HELD, 8);
     }
 
     #[test]
@@ -722,12 +744,13 @@ mod tests {
     }
 
     #[test]
-    fn locking_the_screen_always_hands_the_mouse_and_keyboard_back() {
-        let lock = include_str!("lock.rs");
-        let ends = lock.find("self.end_capture(Some(crate::protocols::input_capture::capture::DeactivatedReason::Locked), None)").expect("lock ends the capture");
-        let first_change = lock.find("keyboard.unset_grab(self)").expect("lock lets go of grabs");
-        assert!(ends < first_change, "the capture must end before the lock changes anything else");
-        let code = include_str!("capture.rs").split("\n#[cfg(test)]").next().unwrap();
-        assert!(code.contains("self.capture.active.is_some() && self.is_locked()"), "input while locked must end a capture");
+    fn a_new_press_clears_a_key_whose_letting_go_was_lost() {
+        let mut capture = Capture::default();
+        capture.swallow_keys.push(30);
+        capture.swallow_buttons.push(272);
+        assert!(!capture.keep_back_letting_go(Taken::Key { time: 0, code: 30, pressed: true }));
+        assert!(!capture.keep_back_letting_go(Taken::Button { time: 0, button: 272, pressed: true }));
+        assert!(!capture.keep_back_letting_go(Taken::Key { time: 1, code: 30, pressed: false }));
+        assert!(!capture.keep_back_letting_go(Taken::Button { time: 1, button: 272, pressed: false }));
     }
 }

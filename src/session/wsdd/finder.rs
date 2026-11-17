@@ -13,7 +13,10 @@ use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 use super::{DISCOVERY_TO, GET, HOST_CHECK, HTTP_PORT, HTTP_WAIT, PROBE_KEEP, WSA, WSD};
 use super::host::{lasting_urn, wants_us, Host};
 use super::http::{http_reply, post, read_request, url_host};
-use super::limits::{spawn_within, started, ANSWERING, DESCRIBING, MOST_ANSWERING, MOST_DESCRIBING, MOST_REPLYING, MOST_SHOUTING, REPLYING, SHOUTING};
+
+const STALE_SECONDS: i64 = 3600;
+
+use super::limits::{cut, spawn_within, MOST_DEVICES, MOST_TEXT, MOST_TYPES, started, ANSWERING, DESCRIBING, MOST_ANSWERING, MOST_DESCRIBING, MOST_REPLYING, MOST_SHOUTING, REPLYING, SHOUTING};
 use super::message::{clean, envelope, escape, local_time, new_urn, random_byte, same_type};
 use super::net::{interfaces, listen_socket, send_socket, shout};
 use super::xml::{metadata_of, Node};
@@ -66,6 +69,13 @@ impl Finder {
         let conf = std::fs::read_to_string(crate::common::sharing::SMB_CONF).unwrap_or_default();
         let host = Host::new(lasting_urn(), crate::common::sharing::host_name(), crate::common::sharing::workgroup(&conf));
         Finder { state: Mutex::new(State::default()), urn: new_urn(), host }
+    }
+
+    #[cfg(test)]
+    pub(super) fn shape(&self) -> (usize, usize, usize) {
+        let state = self.lock();
+        let dev = state.devices.values().next().expect("one");
+        (state.devices.len(), dev.name.chars().count(), dev.types.len())
     }
 
     fn lock(&self) -> MutexGuard<'_, State> {
@@ -380,19 +390,40 @@ impl Finder {
         let Some(root) = Node::parse(&reply) else { return };
         let Some((props, types)) = metadata_of(&root) else { return };
 
+        self.record(endpoint, host, net, &props, types);
+    }
+
+    pub(super) fn record(&self, endpoint: &str, host: String, net: &str, props: &BTreeMap<String, String>, types: Option<Vec<String>>) {
+        let now = SystemTime::now().duration_since(UNIX_EPOCH).map_or(0, |d| d.as_secs() as i64);
+        self.record_at(now, endpoint, host, net, props, types);
+    }
+
+    pub(super) fn record_at(&self, now: i64, endpoint: &str, host: String, net: &str, props: &BTreeMap<String, String>, types: Option<Vec<String>>) {
+        let endpoint = cut(endpoint, MOST_TEXT);
         let mut state = self.lock();
-        let dev = state.devices.entry(endpoint.to_string()).or_default();
-        if let Some(types) = types {
-            dev.types = types;
+        if !state.devices.contains_key(&endpoint) && state.devices.len() >= MOST_DEVICES {
+            state.devices.retain(|_, d| now - d.last_seen < STALE_SECONDS);
+            if state.devices.len() >= MOST_DEVICES {
+                return;
+            }
         }
-        dev.addresses.entry(net.to_string()).or_default().insert(host);
-        dev.last_seen = SystemTime::now().duration_since(UNIX_EPOCH).map_or(0, |d| d.as_secs() as i64);
+        let dev = state.devices.entry(endpoint).or_default();
+        if let Some(types) = types {
+            dev.types = types.iter().take(MOST_TYPES).map(|t| cut(t, MOST_TEXT)).collect();
+        }
+        if dev.addresses.len() < MOST_TYPES || dev.addresses.contains_key(net) {
+            let seen = dev.addresses.entry(net.to_string()).or_default();
+            if seen.len() < MOST_TYPES {
+                seen.insert(cut(&host, MOST_TEXT));
+            }
+        }
+        dev.last_seen = now;
         match (props.get("DisplayName"), props.get("BelongsTo"), props.get("FriendlyName")) {
             (Some(name), Some(group), _) => {
-                dev.name = name.clone();
-                dev.belongs_to = group.clone();
+                dev.name = cut(name, MOST_TEXT);
+                dev.belongs_to = cut(group, MOST_TEXT);
             }
-            (_, _, Some(name)) => dev.name = name.clone(),
+            (_, _, Some(name)) => dev.name = cut(name, MOST_TEXT),
             _ => {}
         }
     }

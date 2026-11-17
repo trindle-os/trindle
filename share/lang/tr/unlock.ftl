@@ -7,7 +7,7 @@ unlock-title-default = Disk parolası
 
 # Heading of the box in place of cryptsetup's own wording ("Please unlock disk ...", "Enter passphrase").
 # SAFETY: needs a human review before it ships
-unlock-title-encryption = Şifreleme parolasını girin
+unlock-title-encryption = Disk parolasını girin
 
 # Key hint under the box: Tab, or the eye, shows the typed password.
 unlock-show = Göster
@@ -24,4 +24,3 @@ unlock-turn-off = Kapat
 # Red line inside the card when Enter is pressed with nothing typed.
 # SAFETY: needs a human review before it ships
 unlock-type-first = Parolayı yazın, sonra Enter'a basın
-

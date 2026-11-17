@@ -5,11 +5,9 @@
 use std::fmt::Write as _;
 use std::io::{Read, Write};
 use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
-use std::path::{Path, PathBuf};
+use std::path::Path;
 
 pub const FOLDER: &str = "/var/lib/trindle/login-scales";
-
-const FOLDER_ENV: &str = "TRINDLE_LOGIN_SCALES";
 
 const TARGET_DPI: f64 = 125.0;
 
@@ -25,7 +23,7 @@ const MOST_BYTES: u64 = 4096;
 
 const LONGEST: usize = 64;
 
-const FIRST_PERSON: u32 = 1000;
+pub const ORDINARY_UIDS: std::ops::Range<u32> = 1000..60000;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Screen {
@@ -68,17 +66,13 @@ fn clean(text: &str) -> String {
 }
 
 pub fn for_login(screen: &Screen) -> f64 {
-    let wanted = remembered(&folder(), screen).unwrap_or_else(|| screen.worked_out());
+    let wanted = remembered(Path::new(FOLDER), screen).unwrap_or_else(|| screen.worked_out());
     fit(wanted, screen.pixels.1)
 }
 
 pub fn fit(scale: f64, tall: i32) -> f64 {
     let room = if tall > 0 { tall as f64 / LOGIN_ROOM } else { LARGEST };
     scale.min(room).clamp(SMALLEST, LARGEST)
-}
-
-fn folder() -> PathBuf {
-    std::env::var_os(FOLDER_ENV).filter(|f| !f.is_empty()).map(PathBuf::from).unwrap_or_else(|| PathBuf::from(FOLDER))
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -126,7 +120,7 @@ fn read_trusted(path: &Path) -> Option<(i64, Vec<Kept>)> {
 }
 
 pub fn read_login_file(path: &Path, most: u64) -> Option<(i64, String)> {
-    let uid: u32 = path.file_name()?.to_str()?.parse().ok().filter(|u| *u >= FIRST_PERSON)?;
+    let uid: u32 = path.file_name()?.to_str()?.parse().ok().filter(|u| ORDINARY_UIDS.contains(u))?;
     let file = std::fs::OpenOptions::new().read(true)
         .custom_flags(libc::O_NOFOLLOW | libc::O_NONBLOCK).open(path).ok()?;
     let meta = file.metadata().ok()?;
@@ -146,7 +140,7 @@ pub fn login_files(folder: &Path, most: u64) -> Vec<(i64, String)> {
 }
 
 pub fn remember(screens: &[(Screen, f64)]) {
-    if let Err(e) = remember_in(&folder(), screens) {
+    if let Err(e) = remember_in(Path::new(FOLDER), screens) {
         eprintln!("trindle: could not keep the screens' scales for the login screen: {e}");
     }
 }
@@ -190,7 +184,7 @@ pub fn write_login_file(folder: &Path, text: &str, most: u64) -> std::io::Result
         .custom_flags(libc::O_NOFOLLOW | libc::O_NONBLOCK).open(&path)?;
     let meta = file.metadata()?;
     if !meta.is_file() || meta.uid() != me {
-        return Err(std::io::Error::other("the file there is not this person's own"));
+        return Err(std::io::Error::other(crate::toolkit::t!("common-login-file-not-yours").to_string()));
     }
     file.set_len(0)?;
     file.write_all(text.as_bytes())
@@ -199,6 +193,7 @@ pub fn write_login_file(folder: &Path, text: &str, most: u64) -> std::io::Result
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::path::PathBuf;
 
     fn screen(connector: &str, pixels: (i32, i32), millimetres: (i32, i32)) -> Screen {
         Screen { connector: connector.into(), make: "BOE".into(), model: "NE135A1M-NY1".into(), serial: "".into(), pixels, millimetres }
@@ -226,6 +221,17 @@ mod tests {
         assert_eq!(fit(1.5, 500), 1.0);
         assert_eq!(fit(0.5, 1080), 1.0);
         assert_eq!(fit(9.0, 0), 3.0);
+    }
+
+    #[test]
+    fn nobody_and_the_system_accounts_are_not_people() {
+        assert!(ORDINARY_UIDS.contains(&1000) && ORDINARY_UIDS.contains(&59999));
+        assert!(!ORDINARY_UIDS.contains(&999) && !ORDINARY_UIDS.contains(&65534));
+        let d = scratch("nobody");
+        let mine = d.join("65534");
+        std::fs::write(&mine, "x").unwrap();
+        assert_eq!(read_login_file(&mine, 4096), None);
+        let _ = std::fs::remove_dir_all(&d);
     }
 
     fn scratch(name: &str) -> PathBuf {

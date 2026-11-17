@@ -15,11 +15,11 @@ settings-tailscale-last-online = آخری بار آن لائن: { $day }
 
 # Shown beside the Use Tailscale switch while the password is asked for, when Tailscale is already installed.
 # SAFETY: needs a human review before it ships
-settings-tailscale-waiting = پاس ورڈ کا انتظار ہے...
+settings-tailscale-waiting = آپ کے پاس ورڈ کا انتظار ہے…
 
 # Shown beside the Use Tailscale switch while the password is asked for, before Tailscale is installed.
 # SAFETY: needs a human review before it ships
-settings-tailscale-waiting-install = پاس ورڈ کا انتظار ہے، پھر Tailscale انسٹال ہوگا...
+settings-tailscale-waiting-install = Tailscale انسٹال کرنے سے پہلے آپ کے پاس ورڈ کا انتظار ہے…
 
 # Shown beside the switch after Tailscale is turned on.
 settings-tailscale-done-on = Tailscale آن ہے
@@ -28,7 +28,7 @@ settings-tailscale-done-on = Tailscale آن ہے
 settings-tailscale-done-off = Tailscale بند ہے
 
 # Shown under the Sign in line once the browser is being opened.
-settings-tailscale-opening = آپ کے براؤزر میں لاگ اِن کا صفحہ کھل رہا ہے...
+settings-tailscale-opening = آپ کے براؤزر میں لاگ اِن کا صفحہ کھل رہا ہے…
 
 # Red words under the Sign in line when Tailscale could not be started.
 settings-tailscale-not-started = Tailscale شروع نہیں ہو سکا۔
@@ -67,20 +67,14 @@ settings-tailscale-title = Tailscale
 settings-tailscale-keywords = tailscale vpn نجی نیٹ ورک آلات ریموٹ tailnet
 
 # Help text at the top of the page.
-settings-tailscale-help = Tailscale آپ کے اپنے کمپیوٹرز اور فونز کو، چاہے وہ کہیں بھی ہوں، ایک نجی نیٹ ورک میں جوڑ دیتا ہے۔ جب تک آپ اسے آن نہ کریں اس کا کچھ بھی انسٹال نہیں ہوتا، اور بند ہونے پر یہ کوئی میموری استعمال نہیں کرتا۔
-
-# Small line under the Use Tailscale switch before Tailscale is installed.
-settings-tailscale-switch-sub-first = اسے Tailscale کے اپنے ذریعے سے انسٹال کرتا ہے۔
-
-# Small line under the Use Tailscale switch once Tailscale is installed.
-settings-tailscale-switch-sub = بند: رکا ہوا، کمپیوٹر کے ساتھ شروع نہیں ہوتا۔
+settings-tailscale-help = Tailscale آپ کے اپنے کمپیوٹرز اور فونز کو، وہ جہاں بھی ہوں، ایک نجی نیٹ ورک میں جوڑ دیتا ہے۔ جب تک آپ اسے آن نہ کریں کچھ بھی انسٹال نہیں ہوتا، اور بند ہونے پر یہ کوئی میموری استعمال نہیں کرتا۔
 
 # Text of the switch that turns Tailscale on or off, and heading of its line.
 settings-tailscale-switch = Tailscale استعمال کریں
 
 # Help text (i button) of the Tailscale card when Tailscale is off or has not answered.
 # SAFETY: needs a human review before it ships
-settings-tailscale-about-plain = پہلی بار آن کرنے پر Tailscale اس کے اپنے سافٹ ویئر ذریعے سے انسٹال ہوتا ہے، پھر شروع ہوتا ہے۔ اس کی پس منظر کی سروس آن ہونے پر میموری استعمال کرتی ہے، اس لیے یہ صرف تب چلتی ہے جب یہ آن ہو۔ بند ہونے پر Tailscale رکا رہتا ہے اور کمپیوٹر کے ساتھ شروع نہیں ہوتا۔ فائر وال آپ کے اپنے Tailscale آلات کو اندر آنے دیتی ہے، اور باقی سب کو پہلے کی طرح باہر رکھتی ہے۔
+settings-tailscale-about-plain = پہلی بار آپ اسے آن کریں تو Trindle، Tailscale کو Tailscale کے اپنے سافٹ ویئر ذریعے سے انسٹال کرتا ہے، پھر شروع کرتا ہے۔ Tailscale کی پس منظر کی سروس چلنے پر میموری استعمال کرتی ہے، اس لیے یہ صرف تب چلتی ہے جب یہ آن ہو۔ بند ہونے پر Tailscale رکا رہتا ہے اور کمپیوٹر کے ساتھ شروع نہیں ہوتا۔ فائر وال آپ کے اپنے Tailscale آلات کو اندر آنے دیتی ہے، اور باقی سب کو پہلے کی طرح باہر رکھتی ہے۔
 
 # Help text (i button) of the Tailscale card when Tailscale is on but not yet connected.
 settings-tailscale-about-sign-in = { settings-tailscale-about-plain } لاگ اِن کرنے سے آپ کے براؤزر میں Tailscale کا لاگ اِن صفحہ کھلتا ہے۔ اپنے ہر آلے پر ایک ہی اکاؤنٹ استعمال کریں۔
@@ -90,9 +84,6 @@ settings-tailscale-about-connected = { settings-tailscale-about-plain } لاگ �
 
 # Line in the devices card when there are no other devices.
 settings-tailscale-no-devices = ابھی کوئی اور آلہ نہیں
-
-# Small line under "No other devices yet".
-settings-tailscale-no-devices-sub = اسی اکاؤنٹ سے کسی دوسرے آلے پر لاگ اِن کریں۔
 
 # Shown on the devices card while Tailscale is off.
 settings-tailscale-waits-off = اپنے آلات دیکھنے کے لیے Tailscale آن کریں۔
@@ -118,28 +109,19 @@ settings-tailscale-this-computer = یہ کمپیوٹر
 # Heading of the line that signs in to Tailscale, and tip of its round button.
 settings-tailscale-sign-in = لاگ اِن کریں
 
-# Small line under the Sign in line.
-settings-tailscale-sign-in-sub = آپ کے براؤزر میں لاگ اِن کا صفحہ کھولتا ہے۔
-
 # Heading of the line that joins the private network again, and tip of its round button.
 settings-tailscale-connect = جڑیں
 
-# Small line under the Connect line.
-settings-tailscale-connect-sub = آپ کے نجی نیٹ ورک میں دوبارہ شامل کرتا ہے۔
-
 # Heading of the line that says the firewall lets the person's own devices in.
 # SAFETY: needs a human review before it ships
-settings-tailscale-firewall = آپ کے اپنے آلات اندر آ سکتے ہیں
+settings-tailscale-firewall = آپ کے آلات اندر آ سکتے ہیں
 
 # Small line under that heading.
 # SAFETY: needs a human review before it ships
-settings-tailscale-firewall-sub = باقی سب کو پہلے کی طرح باہر رکھا جاتا ہے۔
+settings-tailscale-firewall-sub = فائر وال باقی سب کو اب بھی روکتی ہے۔
 
 # Heading of the line that signs out, and tip of its button.
 settings-tailscale-sign-out = لاگ آؤٹ کریں
-
-# Small line under the Sign out line.
-settings-tailscale-sign-out-sub = آپ کے نجی نیٹ ورک سے نکل جاتا ہے۔
 
 # Heading of the card with the Tailscale switch.
 settings-tailscale-card = Tailscale
@@ -148,4 +130,4 @@ settings-tailscale-card = Tailscale
 settings-tailscale-devices = آپ کے آلات
 
 # Help text (i button) of the Your devices card.
-settings-tailscale-devices-about = آپ کے نجی نیٹ ورک میں لاگ اِن ہر آلہ، اس پر اس کے پتے، وہ کیا چلاتا ہے اور آخری بار کب آن لائن تھا، کے ساتھ۔ نیا آلہ شامل کرنے کے لیے اپنے فون یا کسی دوسرے کمپیوٹر پر Tailscale انسٹال کریں اور اسی اکاؤنٹ سے لاگ اِن کریں۔
+settings-tailscale-devices-about = آپ کے نجی نیٹ ورک میں لاگ اِن ہر آلہ، اس نیٹ ورک پر اس کے پتے، وہ کیا چلاتا ہے اور آخری بار کب آن لائن تھا، کے ساتھ۔ آلہ شامل کرنے کے لیے اپنے فون یا کسی دوسرے کمپیوٹر پر Tailscale انسٹال کریں اور اسی اکاؤنٹ سے لاگ اِن کریں۔

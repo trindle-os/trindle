@@ -9,25 +9,25 @@ settings-games-title = Game
 settings-games-keywords = game permainan steam proton berderak tersendat suara buffer drive pustaka split lock pengontrol game gamepad joystick pad tombol ubah petakan tukar stik pemicu d-pad xbox playstation nintendo
 
 # What the page is for, in the help.
-settings-games-help = Pengaturan yang membantu game berjalan baik. Steam menyimpan pengaturannya sendiri di Steam. Tekan tombol pada pengontrol dan tombol itu naik ke atas daftar, menyala pada gambar. Lalu tekan tombol papan ketik yang harus menjadi gantinya. Sebuah tombol juga bisa menjadi tombol lain, atau tidak apa-apa, dari daftarnya. Setiap pengontrol menyimpan perubahannya sendiri, menurut merek dan modelnya, dan game membaca pengontrol yang sudah diubah. Escape menghentikan perubahan yang Anda mulai.
+settings-games-help = Pengaturan yang membantu game berjalan baik. Ubah pengaturan Steam di Steam. Untuk mengubah tombol pengontrol, tekan tombol itu. Tombol itu naik ke atas daftar dan menyala pada gambar. Lalu tekan tombol papan ketik yang harus menjadi gantinya. Sebuah tombol juga bisa menjadi tombol lain, atau tidak ada tombol, dari daftarnya. Trindle menyimpan perubahan untuk setiap merek dan model pengontrol, dan game memakai pengontrol yang sudah diubah. Tekan Escape untuk membatalkan perubahan yang Anda mulai.
 
 # The sentence at the top of the page.
 settings-games-top = Bantuan untuk game yang suaranya berderak, tersendat, atau butuh lebih banyak ruang.
 
 # Shown beside a switch while the person is asked for the password.
-settings-games-waiting = Menunggu kata sandi...
+settings-games-waiting = Menunggu kata sandi Anda…
 
 # The card holding the sound and split-lock switches.
 settings-games-smooth = Game lebih mulus
 
 # What that card is for.
-settings-games-smooth-about = Perbaikan untuk game yang suaranya berderak atau tersendat. Keduanya mati pada awalnya.
+settings-games-smooth-about = Perbaikan untuk game yang suaranya berderak atau tersendat. Keduanya mati secara bawaan.
 
 # The sound switch.
 settings-games-sound = Buffer suara lebih besar
 
 # Under the sound switch.
-settings-games-sound-sub = Untuk game yang suaranya berderak. Suara datang sedikit lebih lambat.
+settings-games-sound-sub = Untuk game yang suaranya berderak. Suara diputar sedikit lebih lambat.
 
 # After the sound switch is turned on.
 settings-games-sound-done-on = Buffer lebih besar hidup
@@ -42,7 +42,7 @@ settings-games-sound-done-off = Buffer lebih besar mati
 settings-games-split = Perbaikan tersendat untuk game lama
 
 # Under the split-lock switch.
-settings-games-split-sub = Game lama lebih sedikit tersendat; satu program dapat memperlambat yang lain.
+settings-games-split-sub = Game lama lebih sedikit tersendat, tetapi satu program dapat memperlambat yang lain.
 
 # After the split-lock switch is turned on.
 settings-games-split-done-on = Perbaikan tersendat hidup
@@ -54,7 +54,7 @@ settings-games-split-done-off = Perbaikan tersendat mati
 settings-games-drive-title = Drive game
 
 # What that card is for.
-settings-games-drive-about = Drive kedua untuk game, siap di setiap start.
+settings-games-drive-about = Drive kedua untuk game, siap setiap kali Anda menyalakan komputer.
 
 # A drive with no name of its own.
 settings-games-drive-unnamed = Drive
@@ -62,14 +62,11 @@ settings-games-drive-unnamed = Drive
 # One drive in the list: its name, size and kind of filesystem.
 settings-games-drive-name = { $name }, { $size }, { $fs }
 
-# Under a drive that can be used for games.
-settings-games-drive-ready = Siap untuk game
-
 # The button that makes a drive the games drive.
 settings-games-drive-use = Pakai untuk game
 
 # Under the drive in use for games.
-settings-games-drive-in-use = Drive game, di { $place }
+settings-games-drive-in-use = Drive game di { $place }
 
 # The button that stops using a drive for games.
 settings-games-drive-stop = Berhenti memakai untuk game
@@ -83,14 +80,11 @@ settings-games-drive-forgotten = Tidak lagi dipakai untuk game
 # When there is no second drive.
 settings-games-drive-none = Tidak ada drive kedua
 
-# Under that.
-settings-games-drive-none-sub = Pasang atau colokkan drive kedua untuk menyimpan game di sana.
-
 # When the drives could not be listed.
-settings-games-drive-unread = Drive tidak dapat didaftarkan
+settings-games-drive-unread = Tidak bisa menampilkan daftar drive
 
 # When Steam could not be let reach the games drive.
-settings-games-drive-steam-failed = Steam tidak dapat diberi drive itu
+settings-games-drive-steam-failed = Tidak bisa memberikan drive itu ke Steam
 
 # How to add the games drive in Steam.
 settings-games-drive-steam = Tambahkan di Steam
@@ -99,16 +93,16 @@ settings-games-drive-steam = Tambahkan di Steam
 settings-games-drive-steam-sub = Di Steam: Pengaturan, Penyimpanan, Tambah drive.
 
 # Why a Windows-formatted drive cannot be used.
-settings-games-drive-windows = Format Windows: game rusak di sana. Format untuk Linux.
+settings-games-drive-windows = Drive ini diformat untuk Windows, dan game tidak berjalan dengan baik di sana. Format untuk Linux.
 
 # Why a locked drive cannot be used.
-settings-games-drive-locked = Terkunci: buka kuncinya di Disk dulu.
+settings-games-drive-locked = Buka kuncinya di Drive dulu.
 
 # Why a part that holds no files cannot be used.
-settings-games-drive-not-files = Tidak berisi file
+settings-games-drive-not-files = Bukan untuk file
 
 # Why an unknown kind of drive cannot be used.
-settings-games-drive-unknown = Bukan format tempat game dapat berjalan
+settings-games-drive-unknown = Game tidak bisa berjalan dari sini
 
 
 
@@ -116,7 +110,7 @@ settings-games-drive-unknown = Bukan format tempat game dapat berjalan
 settings-games-steam-title = Game Steam
 
 # What that card is for.
-settings-games-steam-about = Perbaikan untuk masing-masing game. Steam harus ditutup untuk mengubahnya.
+settings-games-steam-about = Perbaikan untuk masing-masing game. Tutup Steam sebelum mengubahnya.
 
 # Shown, and beside every control, while Steam is open.
 settings-games-steam-open = Steam terbuka
@@ -128,16 +122,16 @@ settings-games-steam-open-sub = Tutup Steam untuk mengubah ini.
 settings-games-game-running = Game sedang berjalan
 
 # Under a game's name.
-settings-games-game-sub = Grafis lebih kuat, Proton komunitas, mulai baru. Mulai baru memindahkan pengaturan Windows game ke Sampah, dan simpanan di dalamnya ikut pergi kecuali Steam Cloud menyimpannya.
+settings-games-game-sub = Mulai baru memindahkan pengaturan dan simpanan lokalnya ke Sampah.
 
 # The switch for a game: use the stronger graphics chip.
-settings-games-stronger = Gunakan grafis yang lebih kuat
+settings-games-stronger = Gunakan grafis yang lebih cepat
 
 # After that switch is turned on.
-settings-games-stronger-on = Grafis lebih kuat aktif
+settings-games-stronger-on = Grafis lebih cepat aktif
 
 # After that switch is turned off.
-settings-games-stronger-off = Grafis lebih kuat mati
+settings-games-stronger-off = Grafis lebih cepat mati
 
 # The switch for a game: use the community Proton build.
 settings-games-proton-one = Gunakan Proton komunitas
@@ -146,25 +140,25 @@ settings-games-proton-one = Gunakan Proton komunitas
 settings-games-proton-all = Proton komunitas untuk semua game
 
 # Under that.
-settings-games-proton-all-sub = Dipasang saat pertama kali. Setiap game bisa memilih sendiri.
+settings-games-proton-all-sub = Dipasang saat sebuah game pertama kali membutuhkannya.
 
 # While the community Proton build is being installed.
-settings-games-proton-installing = Memasang Proton komunitas...
+settings-games-proton-installing = Memasang Proton komunitas…
 
 # After a game or all games are given community Proton.
 settings-games-proton-on = Proton komunitas dipilih
 
 # After the choice is given back to Steam.
-settings-games-proton-off = Steam memilih lagi
+settings-games-proton-off = Pakai pilihan Steam
 
 # When community Proton was not found after installing.
-settings-games-proton-missing = Proton komunitas tidak ditemukan.
+settings-games-proton-missing = Tidak bisa menemukan Proton komunitas.
 
 # The button that gives a game a fresh start.
 settings-games-fresh = Mulai baru
 
 # After a fresh start.
-settings-games-fresh-done = Dipindahkan ke Sampah. Steam membuat yang baru saat dimulai berikutnya.
+settings-games-fresh-done = Pengaturannya ada di Sampah. Steam membuat yang baru saat game dimulai berikutnya.
 
 # When the game had no Windows setup to move.
 settings-games-fresh-none = Tidak ada yang dipindahkan
@@ -172,6 +166,8 @@ settings-games-fresh-none = Tidak ada yang dipindahkan
 # When no Steam games are installed.
 settings-games-none = Tidak ada game Steam ditemukan
 
-# Under that.
-settings-games-none-sub = Game yang Anda pasang di Steam tercantum di sini.
+# Red words when community Proton could not be installed.
+settings-games-proton-not-installed = Trindle tidak dapat memasang Proton komunitas.
 
+# Red words when Steam's settings could not be changed for a game.
+settings-games-proton-not-changed = Trindle tidak dapat mengubah pengaturan Steam.

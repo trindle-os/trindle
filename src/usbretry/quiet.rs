@@ -197,8 +197,7 @@ mod tests {
         assert_eq!(line("ProtectSystem="), "strict");
         assert_eq!(line("ReadWritePaths="), "/sys/devices", "the hubs' files are the one place it may write");
         assert!(!unit.contains("ProtectKernelTunables=yes"), "that would make /sys read-only");
-        let owner_may_write = |mode: u32| mode & 0o200 != 0;
-        assert!(owner_may_write(0o644) && !unit.contains("CAP_DAC"), "root owns the files, so no capability is needed to write them");
+        assert!(!unit.contains("CAP_DAC"), "root owns the files, so no capability is needed to write them");
         let install = include_str!("../../tools/system-files.sh");
         assert!(install.contains("for t in reboot kexec; do"), "linked into the restart targets");
         assert!(!install.contains("poweroff.target.wants/trindle-usb-quiet") && !install.contains("halt.target.wants/trindle-usb-quiet"));

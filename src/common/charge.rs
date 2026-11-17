@@ -212,7 +212,7 @@ mod tests {
         std::fs::remove_file(battery.join(START)).unwrap();
         std::fs::create_dir(battery.join(START)).unwrap();
         let said = tell(std::slice::from_ref(&battery), false, Ok(())).unwrap_err();
-        assert!(said.starts_with("Could not set") && said.contains(START), "{said}");
+        assert!(said.starts_with("Couldn't set") && said.contains(START), "{said}");
         std::fs::remove_dir_all(&dir).unwrap();
     }
 }

@@ -180,13 +180,7 @@ fn resting() -> bool {
 }
 
 fn locked() -> bool {
-    let me = std::fs::metadata("/proc/self").map(|m| std::os::unix::fs::MetadataExt::uid(&m)).ok();
-    let Ok(dir) = std::fs::read_dir("/proc") else { return false };
-    dir.flatten().any(|e| {
-        e.file_name().to_string_lossy().bytes().all(|b| b.is_ascii_digit())
-            && std::fs::read_to_string(e.path().join("comm")).is_ok_and(|c| c.trim() == "trindle-lock")
-            && e.metadata().ok().map(|m| std::os::unix::fs::MetadataExt::uid(&m)) == me
-    })
+    crate::common::locked::path().exists()
 }
 
 fn tell(state: &State, session: &str) {
@@ -313,6 +307,14 @@ mod tests {
     use super::super::portal::PATH;
     use super::super::portal_ask::testkit::{call, Rig};
     use crate::toolkit::bus::testing::until;
+
+    #[test]
+    fn the_lock_is_found_from_its_marker_not_by_reading_every_process() {
+        let scan = ["read_dir(\"", "/proc\")"].concat();
+        assert!(!include_str!("portal_inhibit.rs").contains(&scan), "every process was read every two seconds");
+        let (some, none) = (std::path::Path::new("/"), std::path::Path::new("/nowhere/at/all"));
+        assert!(some.exists() && !none.exists());
+    }
 
     #[test]
     fn holds_last_until_closed() {

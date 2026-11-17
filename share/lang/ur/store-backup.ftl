@@ -5,7 +5,7 @@
 store-refusal-nothing = کچھ بھی واپس نہیں رکھا گیا، کیونکہ { $why }۔
 
 # A refusal of a restore that went part of the way; the reason follows "because".
-store-refusal-part = بیک اپ کا کچھ حصہ واپس نہیں رکھا گیا، کیونکہ { $why }۔
+store-refusal-part = Trindle نے بیک اپ کا صرف کچھ حصہ واپس رکھا، کیونکہ { $why }۔
 
 # SAFETY: needs a human review before it ships
 # The reason when the backup holds a link or something else that would reach outside the folder it goes into.
@@ -17,14 +17,11 @@ store-because-in-the-way = اس کمپیوٹر پر کوئی چیز پہلے ہ�
 # The reason when there is nowhere to unpack the backup.
 store-because-no-unpack = بیک اپ کھولنے کے لیے کوئی جگہ نہیں ہے
 
-# The reason when the backup file cannot be read.
-store-because-unreadable = بیک اپ فائل پڑھی نہیں جا سکی
-
 # The reason when the file is not a Trindle backup.
 store-because-not-trindle = وہ فائل Trindle کا بیک اپ نہیں ہے
 
 # The reason when the backup's list is damaged or too big.
-store-because-damaged-list = بیک اپ خراب ہے اور اس کی فہرست پڑھی نہیں جا سکی
+store-because-damaged-list = بیک اپ خراب ہے اور Trindle اس کی فہرست پڑھ نہیں سکا
 
 # The reason when the file is not a Flat backup.
 store-because-not-flat = وہ فائل Flat کے بیک اپ جیسی نہیں لگتی
@@ -42,11 +39,11 @@ store-because-no-apps = اس فائل میں کوئی ایپ نہیں ہے
 store-because-not-read = بیک اپ پڑھا نہیں جا سکا: { $why }
 
 # The reason when the program gave none.
-store-because-none = اس نے کوئی وجہ نہیں بتائی
+store-because-none = کوئی وجہ نہیں دی گئی
 
 # SAFETY: needs a human review before it ships
 # The reason when the system said permission was denied.
-store-because-permission = یہ کمپیوٹر Trindle کو وہاں لکھنے نہیں دے گا
+store-because-permission = Trindle کو وہاں لکھنے کی اجازت نہیں
 
 # The reason when the disk is full.
 store-because-space = اس کمپیوٹر پر جگہ باقی نہیں رہی
@@ -61,7 +58,7 @@ store-because-quota = اس اکاؤنٹ کے لیے دی گئی جگہ ختم ہ
 store-because-missing = جو فائل یا پروگرام درکار ہے وہ موجود نہیں
 
 # The reason when no reason could be read from the program's last line.
-store-because-failed = ناکام ہو گیا
+store-because-failed = یہ ناکام ہو گیا
 
 # The reason when the backup has no name to be written under.
 store-because-no-name = اس کا کوئی نام نہیں
@@ -70,26 +67,26 @@ store-because-no-name = اس کا کوئی نام نہیں
 store-because-outside-own = بیک اپ میں اس کی ترتیبات اس کے اپنے فولڈر سے باہر پہنچتی ہیں
 
 # The reason when something is too big to be read whole.
-store-because-too-big = یہ اتنا بڑا ہے کہ پورا پڑھا نہیں جا سکتا
+store-because-too-big = یہ پڑھنے کے لیے بہت بڑا ہے
 
 # SAFETY: needs a human review before it ships
 # The reason when an app's settings in the backup do not match their checksum.
-store-because-checksum = بیک اپ میں اس کی ترتیبات اپنے چیک سم سے نہیں ملتیں
+store-because-checksum = بیک اپ میں اس کی ترتیبات خراب ہو گئی ہیں یا بدل گئی ہیں
 
 # Said when the person's account picture was not put back; the reason follows.
-store-refusal-picture-only = واپس رکھ دیا گیا، سوائے آپ کے اکاؤنٹ کی تصویر کے۔ { $why }
+store-refusal-picture-only = سب کچھ واپس رکھ دیا گیا، سوائے آپ کے اکاؤنٹ کی تصویر کے۔ { $why }
 
 # Said when something else failed and the account picture was not put back either.
-store-refusal-picture-too = { $words } آپ کے اکاؤنٹ کی تصویر بھی واپس نہیں رکھی گئی۔ { $why }
+store-refusal-picture-too = { $words } Trindle نے آپ کے اکاؤنٹ کی تصویر بھی واپس نہیں رکھی۔ { $why }
 
 # Said when the pkexec program could not be started.
-store-refusal-pkexec = pkexec شروع نہیں ہو سکا: { $why }
+store-refusal-pkexec = پاس ورڈ مانگا نہیں جا سکا: { $why }
 
 # Said when the backup could not be read at all.
-store-refusal-not-read-from = اسے بیک اپ سے پڑھا نہیں جا سکا: { $why }۔
+store-refusal-not-read-from = Trindle اسے بیک اپ سے پڑھ نہیں سکا: { $why }۔
 
 # Said when a backup was not made; the reason follows "because".
-store-backup-not-made = بیک اپ نہیں بنا، کیونکہ { $why }۔
+store-backup-not-made = Trindle نے بیک اپ نہیں بنایا، کیونکہ { $why }۔
 
 # Beside the size of a part of the backup that is not there yet.
 store-backup-nothing-yet = ابھی کچھ نہیں
@@ -98,40 +95,27 @@ store-backup-nothing-yet = ابھی کچھ نہیں
 store-backup-about = تقریباً { $size }
 
 # Step shown while Trindle's own settings and AppImages are put back.
-store-backup-step-trindle = Trindle کی ترتیبات اور AppImages واپس رکھی جا رہی ہیں...
-
-# Step shown while the settings and data are put back.
-store-backup-step-data = ترتیبات اور ڈیٹا واپس رکھا جا رہا ہے...
-
-# Step shown while apps are installed from Flathub.
-store-backup-step-installing =
-    { $count ->
-        [one] Flathub سے { $count } ایپ انسٹال ہو رہی ہے... اس میں کچھ وقت لگ سکتا ہے۔
-       *[other] Flathub سے { $count } ایپس انسٹال ہو رہی ہیں... اس میں کچھ وقت لگ سکتا ہے۔
-    }
+store-backup-step-trindle = Trindle کی ترتیبات اور AppImages واپس رکھی جا رہی ہیں…
 
 # Said after a restore when some apps could not be installed because Flatpak refused them.
-store-not-installed-failed = ترتیبات اور ڈیٹا واپس رکھ دیے گئے، مگر یہ ایپس انسٹال نہیں ہوئیں، کیونکہ Flatpak نے انہیں قبول نہیں کیا: { $failed }۔
-
-# The same, when other apps were also left out for another reason.
-store-not-installed-both = ترتیبات اور ڈیٹا واپس رکھ دیے گئے، مگر یہ ایپس انسٹال نہیں ہوئیں، کیونکہ Flatpak نے انہیں قبول نہیں کیا: { $failed }۔ یہ بھی انسٹال نہیں ہوئیں: { $refused }۔
+store-not-installed-failed = Trindle نے آپ کی ترتیبات اور ڈیٹا واپس رکھ دیے، مگر Flatpak نے یہ ایپس انسٹال نہیں کیں: { $failed }۔
 
 # Said after a restore when some apps were left out before Flatpak was asked.
-store-not-installed-refused = ترتیبات اور ڈیٹا واپس رکھ دیے گئے، مگر یہ ایپس انسٹال نہیں ہوئیں: { $refused }۔
+store-not-installed-refused = Trindle نے آپ کی ترتیبات اور ڈیٹا واپس رکھ دیے، مگر اس نے یہ ایپس انسٹال نہیں کیں: { $refused }۔
 
 # Said among what could not be done, when some apps were skipped because their names were not valid.
 store-flat-skipped =
     { $n ->
-        [one] 1 ایپ چھوڑ دی گئی: اس کا نام درست نہیں تھا۔
-       *[other] { $n } ایپس چھوڑ دی گئیں: ان کے نام درست نہیں تھے۔
+        [one] Trindle نے 1 ایپ چھوڑ دی، کیونکہ اس کا نام درست نہیں تھا۔
+       *[other] Trindle نے { $n } ایپس چھوڑ دیں، کیونکہ ان کے نام درست نہیں تھے۔
     }
 
 # SAFETY: needs a human review before it ships
 # Said beside an app whose source is not secure: the source's name is given.
-store-flat-not-secure = { $name } ریموٹ خفیہ کردہ نہیں ہے اور قبول نہیں کیا گیا، اس لیے استعمال نہیں ہوا
+store-flat-not-secure = { $name } ذریعہ خفیہ کردہ نہیں ہے، اس لیے Trindle نے اسے استعمال نہیں کیا
 
 # Said when a source is not on this computer and the backup does not say where it is.
-store-flat-no-address = { $name } ریموٹ اس کمپیوٹر پر نہیں ہے اور بیک اپ یہ نہیں بتاتا کہ وہ کہاں ہے
+store-flat-no-address = { $name } ذریعہ اس کمپیوٹر پر نہیں ہے، اور بیک اپ یہ نہیں بتاتا کہ وہ کہاں ہے
 
 # Said among what could not be done: an app's settings failed their checks.
 store-flat-settings-checks = { $name } کی ترتیبات (کیونکہ بیک اپ میں ان کی نقل جانچ میں پاس نہیں ہوئی)
@@ -143,13 +127,13 @@ store-flat-source-name = { $name } (کیونکہ اس کے ماخذ کا نام 
 store-flat-failed-because = { $what } (کیونکہ { $why })
 
 # Said among what could not be done: the app Flatpak refused.
-store-flat-flatpak-refused = { $name } (کیونکہ Flatpak نے اسے قبول نہیں کیا: { $why })
+store-flat-flatpak-refused = { $name } (Flatpak اسے انسٹال نہیں کر سکا: { $why })
 
 # Said among what could not be done when there was nowhere to unpack the backup.
 store-flat-nowhere = سب کچھ (کیونکہ بیک اپ کھولنے کے لیے کوئی جگہ نہیں)
 
 # Said among what could not be done: the settings that apply to every app.
-store-flat-every-app = جو کچھ ہر ایپ کو کرنے کی اجازت ہے
+store-flat-every-app = ہر ایپ کے لیے اجازتیں
 
 # Said among what could not be done: one app's settings.
 store-flat-app-settings = { $name } کی ترتیبات
@@ -158,10 +142,10 @@ store-flat-app-settings = { $name } کی ترتیبات
 store-flat-kept-as = { $why }۔ جو پہلے وہاں تھا وہ { $path } کے طور پر رکھا گیا ہے: { $error }
 
 # Step shown for each app being installed, with its place in the list.
-store-flat-step-installing = { $name } انسٹال ہو رہی ہے ({ $total } میں سے { $at })...
+store-flat-step-installing = { $name } انسٹال ہو رہی ہے ({ $total } میں سے { $at })…
 
 # Step shown for each app's settings being put back, with its place in the list.
-store-flat-step-settings = { $name } کی ترتیبات واپس رکھی جا رہی ہیں ({ $total } میں سے { $at })...
+store-flat-step-settings = { $name } کی ترتیبات واپس رکھی جا رہی ہیں ({ $total } میں سے { $at })…
 
 # Summary of a restore from a Flat backup: how many apps were installed.
 store-flat-summary-installed =
@@ -171,20 +155,21 @@ store-flat-summary-installed =
     }
 
 # Summary of a restore: how many apps had their settings put back.
-store-flat-summary-settings = { $n } کی ترتیبات واپس رکھی گئیں۔
+store-flat-summary-settings =
+    { $n ->
+        [one] ایک ایپ کی سیٹنگز واپس رکھی گئیں۔
+       *[other] { $n } ایپس کی سیٹنگز واپس رکھی گئیں۔
+    }
 
 # Summary of a restore: how many apps were already installed and left alone.
 store-flat-summary-already =
     { $n ->
-        [one] { $n } پہلے سے موجود ہے، جیسی تھی ویسی چھوڑ دی گئی۔
-       *[other] { $n } پہلے سے موجود ہیں، جیسی تھیں ویسی چھوڑ دی گئیں۔
+        [one] { $n } ایپ پہلے سے انسٹال تھی۔
+       *[other] { $n } ایپس پہلے سے انسٹال تھیں۔
     }
 
 # Summary of a restore: what could not be put back, as a list.
-store-flat-summary-failed = واپس نہیں رکھا گیا: { $list }
+store-flat-summary-failed = چھوڑی گئیں: { $list }
 
-# Name of Flat's backup program, which Trindle reads backups from.
-store-flat-name = Trindle Flat
-
-# Said among the apps that were not installed: the app and why.
-store-backup-app-why = { $id } ({ $why })
+# Said among what could not be done when a backup's permissions asked for more than the app had: only ones that take access away are put back.
+store-flat-grants-left-out = { $what }: Trindle نے صرف وہ اجازتیں واپس رکھیں جو رسائی ختم کرتی ہیں۔

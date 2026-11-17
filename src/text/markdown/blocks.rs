@@ -136,7 +136,9 @@ fn cells(line: &str) -> Vec<String> {
     while let Some(c) = chars.next() {
         match c {
             '\\' if chars.peek() == Some(&'|') => {
-                out.last_mut().unwrap_or(&mut String::new()).push('|');
+                if let Some(cell) = out.last_mut() {
+                    cell.push('|');
+                }
                 chars.next();
             }
             '|' => out.push(String::new()),
@@ -306,10 +308,11 @@ fn item_lines(lines: &[&str], i: &mut usize, m: &Marker) -> Vec<String> {
     while *i < lines.len() {
         let l = lines[*i];
         if blank(l) {
-            let next = lines[*i + 1..].iter().position(|l| !blank(l)).map(|k| lines[*i + 1 + k]);
-            if next.is_some_and(|n| indent(n) >= width) {
-                body.push(String::new());
-                *i += 1;
+
+            let run = lines[*i..].iter().take_while(|l| blank(l)).count();
+            if lines.get(*i + run).is_some_and(|n| indent(n) >= width) {
+                body.extend(std::iter::repeat_n(String::new(), run));
+                *i += run;
                 continue;
             }
             break;

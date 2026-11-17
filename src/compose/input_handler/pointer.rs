@@ -3,7 +3,7 @@
 use std::convert::TryInto;
 
 use super::BTN_LEFT;
-use crate::{focus::PointerFocusTarget, screen_edge, state::Backend, AnvilState};
+use crate::{focus::PointerFocusTarget, screen_edge, state::Backend, Compose};
 
 use smithay::{
     backend::input::{
@@ -25,7 +25,7 @@ use smithay::{
 };
 use tracing::info;
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
     pub(super) fn on_pointer_button<B: InputBackend>(&mut self, evt: B::PointerButtonEvent) {
         let serial = SCOUNTER.next_serial();
         let button = evt.button_code();
@@ -58,7 +58,9 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         );
         pointer.frame(self);
         if wl_pointer::ButtonState::Released == state {
-            self.update_edge_cursor(self.pointer.current_location());
+            let at = self.pointer.current_location();
+            let over_surface = self.surface_under(at).is_some();
+            self.update_edge_cursor(at, over_surface);
         }
     }
 
@@ -108,7 +110,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         }
         if button == BTN_LEFT {
 
-            if self.desktop_double(at, time, crate::pointer::DOUBLE_CLICK_SLOP, self.pointer.is_grabbed()) {
+            if self.desktop_double(at, time, crate::pointer::DOUBLE_CLICK_SLOP, self.pointer.is_grabbed(), true) {
                 if let Some(cmd) = self.config.desktop_double_click.clone() {
                     self.spawn_for_click(&cmd);
                 }
@@ -196,7 +198,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         evt: B::PointerMotionAbsoluteEvent,
         output: &Output,
     ) {
-        let output_geo = self.space.output_geometry(output).unwrap();
+        let Some(output_geo) = self.space.output_geometry(output) else { return };
 
         let pos = evt.position_transformed(output_geo.size) + output_geo.loc.to_f64();
         let pos = self.clamp_coords(pos);
@@ -207,6 +209,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
 
         let pointer = self.pointer.clone();
         let under = self.surface_under(pos);
+        let over_surface = under.is_some();
         pointer.motion(
             self,
             under,
@@ -217,7 +220,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
             },
         );
         pointer.frame(self);
-        self.update_edge_cursor(pos);
+        self.update_edge_cursor(pos, over_surface);
     }
 
     pub fn refresh_pointer_focus(&mut self) {
@@ -291,7 +294,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
 
         pointer.motion(self, new_under.clone(), arrived);
         pointer.frame(self);
-        self.update_edge_cursor(arrived.location);
+        self.update_edge_cursor(arrived.location, new_under.is_some());
         if !confined {
             self.cross_push(tried, arrived.location, arrived.time);
         }
@@ -327,6 +330,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
 
         let pointer = self.pointer.clone();
         let under = self.surface_under(pointer_location);
+        let over_surface = under.is_some();
 
         pointer.motion(
             self,
@@ -338,7 +342,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
             },
         );
         pointer.frame(self);
-        self.update_edge_cursor(pointer_location);
+        self.update_edge_cursor(pointer_location, over_surface);
     }
 
     fn moved_while_held(&mut self, to: Point<f64, Logical>, time: u32) -> bool {
@@ -366,7 +370,7 @@ struct Hold {
 }
 
 fn pointer_hold(
-    pointer: &PointerHandle<AnvilState<impl Backend>>,
+    pointer: &PointerHandle<Compose<impl Backend>>,
     under: Option<&(PointerFocusTarget, Point<f64, Logical>)>,
     pointer_location: Point<f64, Logical>,
 ) -> Hold {

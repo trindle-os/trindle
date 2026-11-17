@@ -5,22 +5,19 @@
 settings-words-heading = Vos propres mots
 
 # Under the heading.
-settings-words-about = Changez n'importe quel mot affiché par Trindle, dans n'importe quelle langue, et partagez la feuille sous forme de fichier.
+settings-words-about = Changez n'importe quel mot affiché par Trindle, dans n'importe quelle langue, et partagez vos changements.
 
 # The first line of the card: what is locked, in plain words.
-settings-words-rule = Une feuille modifiée ailleurs que dans sa dernière colonne, ou qui n'est pas celle de Trindle, est rejetée en entier.
+settings-words-rule = Ne modifiez que la dernière colonne. Si vous modifiez autre chose, ou si la feuille n'est pas une feuille de Trindle, Trindle ne l'acceptera pas.
 
 # The line that picks which language the boxes are for.
 settings-words-language = Langue
-
-# Under the language line.
-settings-words-language-sub = La feuille est pour cette langue.
 
 # The name of the language list for the screen reader.
 settings-words-language-tip = Langue de la feuille
 
 # The line that exports the sheet, and its button's tip.
-settings-words-export = Télécharger la feuille
+settings-words-export = Enregistrer la feuille
 
 # Under the export line.
 settings-words-export-sub = L'anglais à gauche, votre langue à côté. Modifiez la partie de droite.
@@ -29,10 +26,10 @@ settings-words-export-sub = L'anglais à gauche, votre langue à côté. Modifie
 settings-words-export-title = Enregistrer la feuille de mots
 
 # The line that imports a sheet, and its button's tip.
-settings-words-import = Envoyer la feuille
+settings-words-import = Ouvrir une feuille
 
 # Under the import line.
-settings-words-import-sub = Vérifiée en entier d'abord. Toute différence n'installe rien.
+settings-words-import-sub = Si quelque chose y est incorrect, rien n'est installé.
 
 # Title of the window that asks which sheet to open.
 settings-words-import-title = Ouvrir une feuille de mots
@@ -41,80 +38,80 @@ settings-words-import-title = Ouvrir une feuille de mots
 settings-words-imported = Installée
 
 # Under a box or the export button when the words could not be kept.
-settings-words-not-saved = Enregistrement impossible
+settings-words-not-saved = Impossible de l'enregistrer.
 
 # Under the import button: the file is bigger than any sheet.
-settings-words-too-big = Rejetée : le fichier est trop gros
+settings-words-too-big = Le fichier est trop gros.
 
 # Under the import button: the file is not text.
-settings-words-not-text = Rejetée : ce n'est pas du texte brut
+settings-words-not-text = Ce n'est pas du texte brut.
 
 # Under the import button: the file holds control or hidden characters.
-settings-words-not-plain = Rejetée : caractères cachés ou de contrôle
+settings-words-not-plain = Il contient des caractères cachés ou de contrôle.
 
 # Under the import button: a line is longer than any line of a sheet.
-settings-words-line-long = Rejetée : une ligne est trop longue
+settings-words-line-long = Une ligne est trop longue.
 
 # Under the import button: the file is not a Trindle word sheet.
-settings-words-not-mine = Rejetée : ce n'est pas une feuille de mots de Trindle
+settings-words-not-mine = Ce n'est pas une feuille de mots de Trindle.
 
 # Under the import button: the sheet is of another version.
-settings-words-version = Rejetée : autre version de la feuille
+settings-words-version = Elle est pour une autre version de Trindle.
 
 # Under the import button: the language tag is not usable.
-settings-words-bad-language = Rejetée : la langue n'est pas valide
+settings-words-bad-language = La langue n'est pas valide.
 
 # Under the import button: the notes at the top were changed.
-settings-words-notes = Rejetée : le haut de la feuille a été modifié
+settings-words-notes = Le haut de la feuille a été modifié.
 
 # Under the import button: lines are missing or extra.
-settings-words-count = Rejetée : des lignes manquent ou sont en trop
+settings-words-count = Des lignes manquent ou sont en trop.
 
 # Under the import button: a key is not the one Trindle has. The key is { $key }.
-settings-words-key = Rejetée : la clé à { $key } a été modifiée
+settings-words-key = La clé { $key } a été modifiée.
 
 # Under the import button: an English line was changed. The key is { $key }.
-settings-words-english = Rejetée : l'anglais de { $key } a été modifié
+settings-words-english = L'anglais de { $key } a été modifié.
 
 # Under the import button: a row is not in the right form. The key is { $key }.
-settings-words-shape = Rejetée : la ligne de { $key } n'a pas la bonne forme
+settings-words-shape = La ligne de { $key } n'est pas présentée correctement.
 
 # Under a box or the import button: the translation is too long. The key is { $key }.
-settings-words-long = Rejetée : les mots de { $key } sont trop longs
+settings-words-long = Les mots de { $key } sont trop longs.
 
 # Under a box or the import button: the translation holds hidden or control characters. The key is { $key }.
-settings-words-characters = Rejetée : les mots de { $key } contiennent des caractères cachés
+settings-words-characters = Les mots de { $key } contiennent des caractères cachés.
 
 # Under a box or the import button: the translation holds markup, a link or a path. The key is { $key }.
-settings-words-links = Rejetée : les mots de { $key } contiennent du balisage, un lien ou un chemin
+settings-words-links = Les mots de { $key } contiennent une mise en forme, un lien ou un chemin.
 
 # Under a box or the import button: the translation's placeholders differ from the English. The key is { $key }.
-settings-words-placeholders = Rejetée : les marqueurs de { $key } sont différents
+settings-words-placeholders = Les marqueurs de { $key } ne correspondent pas à l'anglais.
 
 # Under the import button: the file cannot be read as a plain file.
-settings-words-not-sheet = Rejetée : le fichier n'a pas pu être lu
+settings-words-not-sheet = Trindle n'a pas pu lire le fichier.
 
-# Under the rule on the card: when changed words appear.
-settings-words-next-start = Vos mots apparaissent au prochain démarrage d'un programme.
+# Added to the card's i: when changed words appear.
+settings-words-next-start = Réglages affiche vos mots tout de suite, les autres programmes au prochain démarrage.
 
 # Under the import button: the check value does not match what Trindle wrote.
-settings-words-check-value = Rejetée : la valeur de contrôle ne correspond pas
+settings-words-check-value = Le code de contrôle ne correspond pas.
 
 settings-words-reset = Revenir aux mots de Trindle
 
-settings-words-reset-sub = Remet cette langue comme elle était livrée. Vos mots sont gardés dans un fichier de sauvegarde.
+settings-words-reset-sub = Remet les mots de Trindle. Les vôtres sont gardés dans une sauvegarde.
 
 # The button that opens the page where a finished sheet is offered for the next version.
-settings-words-offer = Proposer votre feuille
+settings-words-offer = Partager votre feuille
 
 # Under the offer button: who can send and why.
-settings-words-offer-sub = Ouvre une page où vous vous connectez à Buildmorphic pour l'envoyer. Trindle ne l'envoie jamais à votre place.
+settings-words-offer-sub = Ouvre une page pour l'envoyer vous-même. Trindle ne l'envoie jamais.
 
 # The line that starts a language of your own, and its button's tip.
-settings-words-start = Créer une langue à vous
+settings-words-start = Créez votre propre langue
 
 # Under the start line.
-settings-words-start-sub = Donnez-lui un nom, réel ou inventé. Elle commence comme l'anglais et apparaît comme la vôtre.
+settings-words-start-sub = Donnez-lui le nom que vous voulez. Elle commence comme une copie de l'anglais.
 
 # Inside the empty name box, and its name for the screen reader.
 settings-words-name-tip = Nom de votre langue
@@ -126,14 +123,13 @@ settings-words-started = Créée
 settings-words-name-length = Utilisez de 1 à 30 lettres
 
 # Under the start line: the name holds markup, a path or hidden characters.
-settings-words-name-plain = Des lettres seulement : pas de balisage, de chemins ni de caractères cachés
+settings-words-name-plain = Utilisez uniquement des lettres, sans mise en forme, chemins ni caractères cachés.
 
 # Under the start line: another language of your own has this name.
-settings-words-name-taken = Vous avez déjà une langue de ce nom
+settings-words-name-taken = Vous en avez déjà une avec ce nom.
 
 # A language of your own in the language lists. { $name } is the name the person gave it.
 settings-words-own-label = { $name } (la vôtre)
 
 # Under the reset line for a language of your own: the button asks twice. Never taken from a sheet.
-settings-words-reset-own-sub = Supprime cette langue à vous. Ses mots sont gardés dans un dossier de sauvegarde.
-
+settings-words-reset-own-sub = Supprime votre langue et garde une sauvegarde de ses mots.

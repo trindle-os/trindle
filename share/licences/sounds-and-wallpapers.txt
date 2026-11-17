@@ -1,8 +1,7 @@
 Sounds and wallpapers
 
-The two event sounds (open.flac and close.flac) are made by Trindle's own
-program tools/gen-sounds.rs, as soft sine chimes. No recording or sample from
-anyone else is in them.
+The two event sounds (open.flac and close.flac) were made for Trindle by
+its author. No recording or sample from anyone else is in them.
 
 Eight wallpapers, the pictures in the style of earlier painters, were made
 for Trindle with AI image tools, with the Trindle mark in each. They are not

@@ -144,13 +144,19 @@ fn after(k: &Known, user: &str, started: bool) -> Outcome {
 fn before(k: &Known) {
     if k.id == "claude" {
         // Should it add one all the same, `after` takes it away again.
-        let _ = replace(Path::new("/etc/default/claude-desktop"), b"CLAUDE_DESKTOP_ADD_REPO=\"false\"\n", 0o644);
+        let _ = replace(&at("/etc/default/claude-desktop"), b"CLAUDE_DESKTOP_ADD_REPO=\"false\"\n", 0o644);
     }
 }
 
 pub fn add(args: &[String]) -> Outcome {
     let [id, user] = args else { return Err("usage: trindle-admin source-add ID USER".into()) };
+
+    is_caller(user, &super::shares::caller()?.name)?;
     add_for(id, user, true)
+}
+
+fn is_caller(user: &str, caller: &str) -> Outcome {
+    if user == caller { Ok(()) } else { Err(t!("admin-source-not-you").into()) }
 }
 
 pub fn add_unstarted(id: &str, user: &str) -> Outcome {
@@ -228,7 +234,7 @@ pub fn remove(args: &[String]) -> Outcome {
         }
         if k.id == "claude" {
             // A line of settings nothing reads once the program has gone.
-            let _ = std::fs::remove_file("/etc/default/claude-desktop");
+            let _ = std::fs::remove_file(at("/etc/default/claude-desktop"));
         }
     } else if !(id.starts_with("custom-") && id.chars().all(|c| c.is_ascii_lowercase() || c.is_ascii_digit() || c == '-')) {
         return Err(t!("admin-source-not-ours").into());
@@ -262,8 +268,8 @@ mod tests {
         s.stuck(&format!("{KEYRINGS}/trindle-{ID}.gpg"));
         let key = s.path(&format!("{KEYRINGS}/trindle-{ID}.asc"));
         let said = use_source(ID, "https://example.com/apt", "stable", "main", &key, &was).unwrap_err();
-        assert!(!said.contains("taken away again"), "{said}");
-        assert!(said.contains("not signed") && said.contains("did not work either"), "{said}");
+        assert!(!said.contains("removed it again"), "{said}");
+        assert!(said.contains("not signed") && said.contains("also couldn't put things back as they were"), "{said}");
     }
 
     #[test]
@@ -272,7 +278,7 @@ mod tests {
         s.write(&format!("{LISTS}/other.sources"), b"");
         let key = s.path(&format!("{KEYRINGS}/trindle-{ID}.asc"));
         let said = use_source(ID, "https://example.com/apt", "stable", "main", &key, &Was::of(ID).unwrap()).unwrap_err();
-        assert!(said.starts_with("The source could not be used, so it was taken away again."), "{said}");
+        assert!(said.starts_with("Trindle couldn't use the source, so it removed it again."), "{said}");
         assert!(!s.path(&sources::file_for(ID).to_string_lossy()).exists());
     }
 
@@ -289,7 +295,7 @@ mod tests {
         std::fs::write(&gpg, b"\x99another").unwrap();
         let said = use_source(ID, "https://example.com/other", "stable", "main", &gpg, &was).unwrap_err();
 
-        assert_eq!(said, "The source could not be used. E: The repository is not signed.");
+        assert_eq!(said, t!("admin-source-unusable", why = "E: The repository is not signed."));
         assert_eq!(std::fs::read_to_string(&file).unwrap(), "Types: deb\nURIs: https://example.com/working\n");
         assert_eq!(std::fs::read(&asc).unwrap(), b"the key that works");
         assert!(!gpg.exists(), "the key that came with the one refused is gone");
@@ -305,7 +311,7 @@ mod tests {
             let k = sources::known(id).expect("one of the ready-made sources");
             let s = StandIn::failing("source-after", tool, "it would not");
             let said = after(k, "john", true).unwrap_err();
-            assert!(said.contains("is installed, but its setting up did not finish") && said.ends_with("it would not"), "{id}: {said}");
+            assert!(said.contains("is installed, but Trindle couldn't finish setting it up") && said.ends_with("it would not"), "{id}: {said}");
             drop(s);
             let _s = StandIn::all_well("source-after");
             assert!(after(k, "john", true).is_ok(), "{id}");
@@ -314,5 +320,11 @@ mod tests {
         let s = StandIn::failing("source-after", "tailscale set", "it would not");
         assert!(after(sources::known("tailscale").unwrap(), "john", false).is_ok());
         assert!(s.ran().is_empty());
+    }
+
+    #[test]
+    fn a_program_is_added_for_the_person_who_asked_and_nobody_else() {
+        assert!(is_caller("john", "john").is_ok());
+        assert_eq!(is_caller("mary", "john").unwrap_err(), t!("admin-source-not-you"));
     }
 }

@@ -1,8 +1,8 @@
 //! `trindle-boxed --restart-ask`: the question before everything, the compositor too, is restarted. Nothing happens unless Restart is pressed.
 
 use crate::toolkit::t;
-use std::cell::{Cell, RefCell};
-use std::rc::{Rc, Weak};
+use std::cell::Cell;
+use std::rc::Rc;
 
 use crate::toolkit::event::Loop;
 use crate::toolkit::ui::{App, Shown};
@@ -56,7 +56,6 @@ fn lock() -> Option<std::fs::File> {
 
 fn everything() {
     let Some(flag) = crate::common::restart::flag() else { return };
-    // SAFETY: kill only sends a signal.
     everything_with(&flag, || { crate::common::restart::end(crate::common::restart::PARTS); }, crate::common::compositor::desktop(),
                     |pid| {
                         // SAFETY: kill only sends a signal.
@@ -96,10 +95,8 @@ pub fn main() -> i32 {
     });
     let restart = Rc::new(Cell::new(false));
     let ask = Ask { restart: restart.clone(), events: events.clone() };
-    let me: Rc<RefCell<Weak<Shown<Ask>>>> = Rc::new(RefCell::new(Weak::new()));
     let Some(shown) = Shown::open(&events, &display, shape, (WIDTH, 1), ask) else { return 1 };
     let shown = Rc::new(shown);
-    *me.borrow_mut() = Rc::downgrade(&shown);
     shown.fit();
     let quit = events.clone();
     shown.window.on_close(move || quit.quit());
@@ -112,6 +109,8 @@ pub fn main() -> i32 {
 
 #[cfg(test)]
 mod tests {
+    use std::cell::RefCell;
+
     use super::*;
 
     #[test]
@@ -130,14 +129,7 @@ mod tests {
             Ask { restart: restart.clone(), events: events.clone() }.update(msg);
             assert_eq!(restart.get(), want);
         }
-
-        assert!(!Rc::new(Cell::new(false)).get());
     }
-}
-
-#[cfg(test)]
-mod everything_tests {
-    use super::*;
 
     #[test]
     fn everything_marks_then_ends_the_parts_then_the_compositor_and_never_leaves_a_mark_with_nothing_to_end() {
@@ -154,19 +146,6 @@ mod everything_tests {
         assert!(!flag.exists(), "no compositor found: no mark left to log anyone out later");
         let _ = std::fs::remove_dir_all(&dir);
     }
-
-    #[test]
-    fn the_package_restarts_the_parts_of_every_logged_in_person_after_an_update() {
-        let postinst = include_str!("../../tools/deb/postinst");
-        assert!(postinst.contains("--restart-parts-after-update"), "the package does not restart the parts");
-        let main = include_str!("../store/boxed/first_apps.rs");
-        assert!(main.contains("\"--restart-parts-after-update\" => return crate::session::restart_ask::after_update()"));
-        assert!(include_str!("restart_ask.rs").contains("begin_waiting(Who::Boxes"), "it waits for the update to finish first");
-    }
-}
-
-#[cfg(test)]
-mod table_tests {
 
     #[test]
     fn the_parts_restarted_are_renewing_ones_and_no_window() {

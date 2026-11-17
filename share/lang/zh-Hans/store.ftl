@@ -23,7 +23,7 @@ store-nav-updates-waiting = 更新（{ $n }）
 store-nav-plugins = 插件
 
 # Side bar place: apps from GitHub.
-store-nav-github = 来自 GitHub
+store-nav-github = 搜索
 
 # Side bar place: where software comes from.
 store-nav-sources = 软件来源
@@ -39,9 +39,6 @@ store-group-settings = 应用设置
 
 # Small heading over the categories of apps.
 store-group-categories = 分类
-
-# Small heading over the other ways to get an app.
-store-group-more = 获取应用的更多方式
 
 # Title of a page of search results; the words searched for are in the quotes.
 store-grid-results = “{ $text }”的搜索结果
@@ -89,20 +86,24 @@ store-cat-utility = 实用工具
 store-cat-system = 系统
 
 # Red words when the list of apps could not be read.
-store-catalogue-unreadable = 无法读取目录：{ $why }
+store-catalogue-unreadable = Trindle 无法读取目录：{ $why }
 
 # Red words when Flathub's list of apps could not be fetched. { $why } is what Flatpak said.
-store-catalogue-not-fetched = 无法从 Flathub 获取应用列表。请检查网络连接。{ $why }
+store-catalogue-not-fetched = Trindle 无法从 Flathub 获取应用列表。请检查你的网络连接。{ $why }
 
 # Red words under the search box when nothing that was dropped on the window is a kind Apps takes.
 store-dropped-only = 这里只能拖入 .deb、.AppImage 和 .flatpakref 文件。
 
 # Red words under an app that Flatpak did not update; what Flatpak said follows.
-store-not-updated-said = 未更新。Flatpak 提示：{ $why }
+store-not-updated-said = Flatpak 没有更新它：{ $why }
 
 # Red words under an app that Flatpak did not update and gave no reason for.
-store-not-updated-none = 未更新，Flatpak 也没有给出原因。
+store-not-updated-none = 它没有更新，也没有给出原因。
 
 # Side bar place and title: the AppImages AppImageHub lists.
 store-nav-browse = 浏览 AppImage
+
+
+# Heading of the Flatpaks a detailed search found on Flathub.
+store-gh-flathub = Flathub 上的 Flatpak（{ $n }）
 

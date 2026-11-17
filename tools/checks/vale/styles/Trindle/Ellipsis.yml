@@ -1,0 +1,6 @@
+extends: existence
+message: "Use the single ellipsis character … not three dots."
+level: warning
+nonword: true
+tokens:
+  - '\.\.\.'

@@ -12,7 +12,7 @@ settings-users-help = Чтобы добавлять людей, менять п�
 
 # Beside a change that is waiting for the administrator's password to be typed.
 # SAFETY: needs a human review before it ships
-settings-users-waiting = Ждём пароль...
+settings-users-waiting = Ждём ваш пароль…
 
 # Headline of the Users page when nobody on the computer is an administrator.
 settings-users-sum-nobody-admin = Здесь нет ни одного администратора, поэтому для всех ничего нельзя установить или изменить.
@@ -54,7 +54,7 @@ settings-users-sum-admins =
 settings-users-this-is-you = Это вы.
 
 # Under a person's name on their card when the card is someone else's: the name shown is their login name.
-settings-users-login-name = Имя для входа.
+settings-users-login-name = Имя для входа
 
 # Tip of the round button on a person's card that picks their picture, and title of the window that opens.
 settings-users-choose-picture = Выбрать картинку
@@ -68,7 +68,7 @@ settings-users-change-password = Сменить пароль
 
 # Tip of the round button on a person's card that deletes them and their files.
 # SAFETY: needs a human review before it ships
-settings-users-delete = Удалить вместе с файлами
+settings-users-delete = Удалить учётную запись и файлы
 
 # Said beside a person once they are deleted.
 # SAFETY: needs a human review before it ships
@@ -78,13 +78,9 @@ settings-users-deleted = Удалён
 # SAFETY: needs a human review before it ships
 settings-users-administrator = Администратор
 
-# Under the Administrator line: what an administrator can do.
-# SAFETY: needs a human review before it ships
-settings-users-admin-can = Может устанавливать и менять всё для всех.
-
 # Tip of the administrator switch on your own card, and said when you press it: you cannot remove your own administrator rights.
 # SAFETY: needs a human review before it ships
-settings-users-cannot-take-away = Вы не можете лишить себя этого.
+settings-users-cannot-take-away = Вы не можете убрать у себя права администратора.
 
 # Said beside a person after they are made an administrator.
 # SAFETY: needs a human review before it ships
@@ -96,7 +92,7 @@ settings-users-admin-no-longer = Больше не администратор
 
 # Help text for a person's card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-person-about = Картинка, пароль и (для всех, кроме вас) удаление вместе с файлами - это круглые кнопки рядом с именем. Администратор может устанавливать программы и менять всё для всех; вы не можете лишить себя этого. Для каждого изменения нужен пароль администратора.
+settings-users-person-about = Администратор может устанавливать программы и менять всё для всех. Вы не можете убрать у себя права администратора. Для каждого изменения нужен пароль администратора.
 
 # Typing box in the change password form, for your own current password.
 # SAFETY: needs a human review before it ships
@@ -108,7 +104,7 @@ settings-users-new-password = Новый пароль
 
 # Typing box in the change password form where the new password is typed again.
 # SAFETY: needs a human review before it ships
-settings-users-again = Ещё раз
+settings-users-again = Введите ещё раз
 
 # Button in the change password form that saves the new password.
 settings-users-save = Сохранить
@@ -123,11 +119,11 @@ settings-users-cancel = Отмена
 
 # Red words in the change password form when your current password was left empty.
 # SAFETY: needs a human review before it ships
-settings-users-need-current = Нужен и ваш текущий пароль, чтобы сохранённые пароли продолжали работать.
+settings-users-need-current = Введите также текущий пароль, чтобы сохранённые пароли продолжали работать.
 
 # Red words in the change password form when the new password is too short.
 # SAFETY: needs a human review before it ships
-settings-users-at-least-8 = Пожалуйста, не менее 8 символов.
+settings-users-at-least-8 = Не менее 8 символов.
 
 # Red words in the change password form when the two new passwords differ.
 # SAFETY: needs a human review before it ships
@@ -139,7 +135,7 @@ settings-users-password-changed = Пароль изменён
 
 # Red words after a password change when the saved logins could not take the new password.
 # SAFETY: needs a human review before it ships
-settings-users-not-rekeyed = Пароль изменён, но сохранённые пароли всё ещё открываются старым.
+settings-users-not-rekeyed = Пароль изменён, но сохранённые пароли всё ещё используют старый.
 
 # Red words when the chosen file is not a picture the page can use.
 settings-users-png-please = Пожалуйста, PNG, JPG или WebP.
@@ -151,20 +147,17 @@ settings-users-picture-not-changed = Не удалось изменить кар
 settings-users-saved = Сохранено
 
 # Red words when your new picture works at login but could not be copied to your home folder.
-settings-users-picture-not-shared = Картинка видна при входе, но не удалось передать её вашим другим программам.
+settings-users-picture-not-shared = Ваша картинка видна на экране входа, но Trindle не удалось передать её вашим другим программам.
 
 # Heading of the form for adding a person.
 settings-users-add-someone = Добавить пользователя
 
 # Help text for the Add someone form (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-add-about = Новая учётная запись для другого человека: полное имя, имя для входа из строчных букв и цифр, начинающееся с буквы, и пароль не короче 8 символов. Войти можно сразу. Администратор может устанавливать программы и менять всё для всех.
+settings-users-add-about = Введите полное имя, имя для входа и пароль не короче 8 символов. Имя для входа может состоять только из строчных букв и цифр и должно начинаться с буквы. Войти можно сразу. Администратор может устанавливать программы и менять всё для всех.
 
 # Heading of the line in the Add someone form that holds the button.
 settings-users-new-account = Новая учётная запись
-
-# Under the New account heading.
-settings-users-new-account-sub = С этим паролем можно войти сразу.
 
 # Typing box in the Add someone form for the person's full name.
 settings-users-full-name = Полное имя
@@ -198,23 +191,19 @@ settings-users-saved-logins = Сохранённые пароли
 
 # Help text for the Saved logins card (the information button).
 # SAFETY: needs a human review before it ships
-settings-users-keyring-about = Пароли, которые программы хранят для вас, например от почты или Wi-Fi, лежат в связке ключей, которая открывается вашим входом. Каждый сам переходит на связку ключей Trindle при входе. Если вашу не удалось перенести, перенос копирует все сохранённые пароли и запрашивает пароль любой связки ключей, которую ваш вход не открывает; файлы GNOME остаются как есть.
+settings-users-keyring-about = Программы хранят для вас пароли, например от почты или Wi-Fi, в связке ключей, которая открывается при входе. При входе Trindle переносит вашу связку ключей в свою. Если это не удалось, перенести её можно здесь. Копируются все сохранённые пароли. Вас могут попросить ввести пароль связки ключей, которую ваш вход не открывает. Файлы GNOME остаются как есть.
 
 # Heading of the line on the Saved logins card when the logins are kept by Trindle's keyring.
 # SAFETY: needs a human review before it ships
-settings-users-kept-trindle = Хранятся в связке ключей Trindle
+settings-users-kept-trindle = В связке ключей Trindle
 
 # Heading of the line on the Saved logins card when the logins are kept by GNOME's keyring.
 # SAFETY: needs a human review before it ships
-settings-users-kept-gnome = Хранятся в связке ключей GNOME
-
-# Under the heading when the logins are kept by Trindle's keyring.
-# SAFETY: needs a human review before it ships
-settings-users-opens-login = Открывается вашим входом.
+settings-users-kept-gnome = В связке ключей GNOME
 
 # Under the heading when the logins are still kept by GNOME's keyring.
 # SAFETY: needs a human review before it ships
-settings-users-could-not-move = Ваш вход не смог их перенести.
+settings-users-could-not-move = Trindle не смог перенести их при входе.
 
 # Tip of the button that moves saved logins to Trindle's keyring.
 # SAFETY: needs a human review before it ships
@@ -226,7 +215,7 @@ settings-users-your-password = Ваш пароль
 
 # Tip of the button that starts moving the saved logins.
 # SAFETY: needs a human review before it ships
-settings-users-go-ahead = Продолжить
+settings-users-go-ahead = Перенести сейчас
 
 # Typing box for the password of one GNOME keyring that stayed shut: the keyring's name is { $name }.
 # SAFETY: needs a human review before it ships
@@ -238,7 +227,7 @@ settings-users-your-password-please = Введите ваш пароль.
 
 # Said beside the Saved logins line while they are copied.
 # SAFETY: needs a human review before it ships
-settings-users-copying = Копируем сохранённые пароли...
+settings-users-copying = Копируем сохранённые пароли…
 
 # Said beside the Saved logins line when the copy is done: how many logins were copied.
 # SAFETY: needs a human review before it ships
@@ -248,20 +237,20 @@ settings-users-copied = Скопировано: { $n }
 # SAFETY: needs a human review before it ships
 settings-users-nothing-moved =
     { $n ->
-        [one] Пока ничего не перенесено: для «{ $names }» нужен собственный пароль.
-        [few] Пока ничего не перенесено: для «{ $names }» нужны собственные пароли.
-        [many] Пока ничего не перенесено: для «{ $names }» нужны собственные пароли.
-       *[other] Пока ничего не перенесено: для «{ $names }» нужны собственные пароли.
+        [one] Пока ничего не перенесено. Введите пароль для «{ $names }».
+        [few] Пока ничего не перенесено. Введите пароли для «{ $names }».
+        [many] Пока ничего не перенесено. Введите пароли для «{ $names }».
+       *[other] Пока ничего не перенесено. Введите пароли для «{ $names }».
     }
 
 # Red words when the move of saved logins stopped unexpectedly.
-settings-users-stopped = Остановилось на полпути.
+settings-users-stopped = Не завершилось.
 
 # Words in place of the people while the accounts are still being read.
-settings-users-looking-accounts = Читаем учётные записи…
+settings-users-looking-accounts = Проверяем учётные записи…
 
 # Heading of the placeholder card shown while the accounts are being read.
 settings-users-people = Люди
 
 # Under the Administrator line of the placeholder card.
-settings-users-looking = Поиск…
+settings-users-looking = Загрузка…

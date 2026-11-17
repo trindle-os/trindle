@@ -89,20 +89,20 @@ impl Store {
     }
 
     pub(super) fn preload(&mut self) -> bool {
-        if self.preloaded || self.hidden {
+        if self.ahead.done || self.hidden {
             return false;
         }
-        self.preloaded = true;
+        self.ahead.done = true;
         self.read_ahead(true);
         false
     }
 
     fn read_ahead(&mut self, first: bool) {
-        self.stale = false;
+        self.ahead.stale = false;
         #[cfg(test)]
         {
             let _ = first;
-            self.read_aheads += 1;
+            self.ahead.count += 1;
         }
         #[cfg(not(test))]
         {
@@ -118,11 +118,11 @@ impl Store {
     }
 
     pub(super) fn apps_changed(&mut self) {
-        if !self.preloaded {
+        if !self.ahead.done {
             return;
         }
         if self.hidden {
-            self.stale = true;
+            self.ahead.stale = true;
             return;
         }
         self.read_ahead(false);
@@ -130,7 +130,7 @@ impl Store {
 
     pub(super) fn back_in_sight(&mut self) {
         self.hidden = false;
-        if self.stale {
+        if self.ahead.stale {
             self.read_ahead(false);
         }
     }

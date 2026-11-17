@@ -4,7 +4,6 @@ pub mod allowed;
 pub mod ask;
 pub mod sysfs;
 
-use crate::toolkit::t;
 use std::collections::HashSet;
 use std::fs;
 use std::io::{self, BufRead, BufReader, Read, Write};
@@ -24,6 +23,10 @@ pub const SOCKET: &str = "/run/trindle-thunder/socket";
 const CLIENTS: usize = 16;
 
 const LINE: usize = 512;
+
+const OUTSIDERS: usize = CLIENTS / 2;
+
+const IDLE: Duration = Duration::from_secs(30);
 
 #[derive(Clone, Debug)]
 pub struct Places {
@@ -110,7 +113,8 @@ pub enum Outcome {
     Locked,
 
     Unknown,
-    Failed(String),
+
+    Failed,
 }
 
 impl Outcome {
@@ -119,7 +123,7 @@ impl Outcome {
             Outcome::Ok => "ok".into(),
             Outcome::Locked => "locked".into(),
             Outcome::Unknown => "unknown".into(),
-            Outcome::Failed(w) => format!("failed\t{}", sysfs::clean(w)),
+            Outcome::Failed => "failed".into(),
         }
     }
 }
@@ -259,7 +263,7 @@ impl Guard {
         };
         if let Err(e) = done {
             eprintln!("trindle-thunder: {} ({}) could not be let in: {e}", dev.kernel, q.id);
-            return Outcome::Failed(t!("thunder-unplug").into());
+            return Outcome::Failed;
         }
         eprintln!("trindle-thunder: {} ({}) answered {}", dev.kernel, q.id, choice.word());
         self.waiting.remove(pos);
@@ -369,6 +373,10 @@ fn heard_thunderbolt(fd: RawFd) -> bool {
     loop {
         // SAFETY: buf is writable for its whole length.
         let n = unsafe { libc::recv(fd, buf.as_mut_ptr().cast(), buf.len(), 0) };
+        if n < 0 && !matches!(io::Error::last_os_error().kind(), io::ErrorKind::WouldBlock | io::ErrorKind::Interrupted) {
+
+            return true;
+        }
         if n <= 0 {
             break;
         }
@@ -383,6 +391,8 @@ struct Client {
     uid: Option<u32>,
     got: Vec<u8>,
     watching: bool,
+
+    last: std::time::Instant,
 }
 
 impl Client {
@@ -421,6 +431,7 @@ pub fn serve(places: Places, opts: Opts) -> io::Result<()> {
         (None, Some(_)) => Some(Duration::from_millis(100)),
         (e, None) => e,
     };
+    let wake = Some(wake.map_or(IDLE, |w| w.min(IDLE)));
     let mut guard = Guard::new(places);
     guard.rescan();
     let mut clients: Vec<Client> = Vec::new();
@@ -429,10 +440,7 @@ pub fn serve(places: Places, opts: Opts) -> io::Result<()> {
         if opts.stop.as_ref().is_some_and(|s| s.load(Ordering::Relaxed)) {
             return Ok(());
         }
-        if !guard.news.is_empty() {
-            let lines: Vec<String> = std::mem::take(&mut guard.news);
-            clients.retain_mut(|c| !c.watching || c.send(&lines));
-        }
+        send_news(&mut guard, &mut clients);
         let Some((fds, first_client)) = wait(&listener, news.as_ref(), &clients, wake)? else { continue };
         if every.is_some_and(|e| last.elapsed() >= e) {
             last = std::time::Instant::now();
@@ -443,11 +451,27 @@ pub fn serve(places: Places, opts: Opts) -> io::Result<()> {
                 guard.rescan();
             }
         }
-        talk(&mut guard, &mut clients, &fds, first_client);
+        news_then_talk(&mut guard, &mut clients, &fds, first_client);
         if fds[0].revents != 0 {
-            accept(&listener, &mut clients);
+            accept(&listener, &mut clients, &guard);
         }
     }
+}
+
+fn send_news(guard: &mut Guard, clients: &mut [Client]) {
+    if !guard.news.is_empty() {
+        let lines: Vec<String> = std::mem::take(&mut guard.news);
+        for c in clients.iter_mut().filter(|c| c.watching) {
+            if !c.send(&lines) {
+                let _ = c.stream.shutdown(std::net::Shutdown::Both);
+            }
+        }
+    }
+}
+
+fn news_then_talk(guard: &mut Guard, clients: &mut Vec<Client>, fds: &[libc::pollfd], first_client: usize) {
+    send_news(guard, clients);
+    talk(guard, clients, fds, first_client, IDLE);
 }
 
 fn bind(places: &Places) -> io::Result<UnixListener> {
@@ -482,13 +506,15 @@ fn wait(listener: &UnixListener, news: Option<&OwnedFd>, clients: &[Client], wak
     Ok(Some((fds, first_client)))
 }
 
-fn talk(guard: &mut Guard, clients: &mut Vec<Client>, fds: &[libc::pollfd], first_client: usize) {
+fn talk(guard: &mut Guard, clients: &mut Vec<Client>, fds: &[libc::pollfd], first_client: usize, idle: Duration) {
     let mut drop = vec![false; clients.len()];
     for (i, c) in clients.iter_mut().enumerate() {
         let revents = fds[first_client + i].revents;
         if revents == 0 {
+            drop[i] = !c.watching && c.last.elapsed() >= idle;
             continue;
         }
+        c.last = std::time::Instant::now();
         let mut buf = [0u8; 1024];
         match c.stream.read(&mut buf) {
             Ok(0) => drop[i] = true,
@@ -517,18 +543,21 @@ fn talk(guard: &mut Guard, clients: &mut Vec<Client>, fds: &[libc::pollfd], firs
     });
 }
 
-fn accept(listener: &UnixListener, clients: &mut Vec<Client>) {
+fn accept(listener: &UnixListener, clients: &mut Vec<Client>, guard: &Guard) {
     while let Ok((stream, _)) = listener.accept() {
         if clients.len() >= CLIENTS || stream.set_nonblocking(true).is_err() {
             continue;
         }
         let uid = peer_uid(stream.as_raw_fd());
-        clients.push(Client { stream, uid, got: Vec::new(), watching: false });
+        if !guard.may(uid) && clients.iter().filter(|c| !guard.may(c.uid)).count() >= OUTSIDERS {
+            continue;
+        }
+        clients.push(Client { stream, uid, got: Vec::new(), watching: false, last: std::time::Instant::now() });
     }
 }
 
 pub fn socket_path() -> PathBuf {
-    std::env::var_os("TRINDLE_THUNDER_SOCKET").filter(|s| !s.is_empty()).map(PathBuf::from).unwrap_or_else(|| SOCKET.into())
+    SOCKET.into()
 }
 
 pub fn ask_service(line: &str) -> io::Result<Vec<String>> {
@@ -591,46 +620,26 @@ pub fn forget(id: &str) -> io::Result<()> {
 }
 
 pub fn main(args: Vec<String>) -> i32 {
-    let mut places = Places::system();
-    let mut opts = Opts { uevents: true, every: None, stop: None };
-    let mut it = args.iter().skip(1);
-    while let Some(a) = it.next() {
-        match a.as_str() {
-            "--ask" => return ask::main(),
-            "--list" => {
-                return match ask_service("list") {
-                    Ok(lines) => {
-                        lines.iter().for_each(|l| println!("{l}"));
-                        0
-                    }
-                    Err(e) => {
-                        eprintln!("trindle-thunder: {e}");
-                        1
-                    }
-                };
-            }
-            "--sys" | "--state" | "--socket" | "--seat" | "--run-user" => {
-                let Some(v) = it.next() else {
-                    eprintln!("trindle-thunder: {a} needs a path");
-                    return 2;
-                };
-                let p = PathBuf::from(v);
-                match a.as_str() {
-                    "--sys" => places.sys = p,
-                    "--state" => places.state = p,
-                    "--socket" => places.socket = p,
-                    "--seat" => places.seat = p,
-                    _ => places.run_user = p,
+    if let Some(a) = args.get(1) {
+        return match a.as_str() {
+            "--ask" => ask::main(),
+            "--list" => match ask_service("list") {
+                Ok(lines) => {
+                    lines.iter().for_each(|l| println!("{l}"));
+                    0
                 }
-            }
-            "--no-uevents" => opts.uevents = false,
+                Err(e) => {
+                    eprintln!("trindle-thunder: {e}");
+                    1
+                }
+            },
             _ => {
-                eprintln!("trindle-thunder: [--ask | --list | --sys DIR --state DIR --socket PATH --seat FILE --run-user DIR --no-uevents]");
-                return 2;
+                eprintln!("trindle-thunder: [--ask | --list]");
+                2
             }
-        }
+        };
     }
-    match serve(places, opts) {
+    match serve(Places::system(), Opts { uevents: true, every: None, stop: None }) {
         Ok(()) => 0,
         Err(e) => {
             eprintln!("trindle-thunder: {e}");

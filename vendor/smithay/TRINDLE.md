@@ -1,8 +1,14 @@
 # Smithay 0.7.0, as Trindle uses it
 
 A copy of smithay 0.7.0 from crates.io (MIT, see LICENSE.txt), with its
-examples and benchmarks left out and the changes below. The first, all in
-`src/backend/renderer/utils/wayland.rs`:
+examples and benchmarks left out and the thirteen changes below.
+The crate it was taken from, smithay-0.7.0.crate, has the SHA-256
+740cea6927892bc182d5bf70c8f79806c8bc9f68f2fb96e55a30be171b63af98, the same
+as crates.io's index gives. Its dependency cgmath 0.18.0 is unmaintained and
+has an unsound `swap_columns` (RUSTSEC-2026-0196 and 0197); nothing here calls
+it, and deny.toml says why both are let through.
+
+Change 1, all in `src/backend/renderer/utils/wayland.rs`:
 
 - `set_early_shm_release(bool)`: when on, `import_surface` hands a shared
   memory buffer back to its client (wl_buffer.release) as soon as its texture
@@ -18,7 +24,7 @@ this change (pull request 2104) was turned down because a second renderer may
 need to read the buffer again, so the compositor turns it on only while a
 single GPU draws everything.
 
-The second, in `src/wayland/selection/data_device/dnd_grab.rs`
+Change 2, in `src/wayland/selection/data_device/dnd_grab.rs`
 (`DnDGrab::drop`): a drag whose data source is no longer alive is never
 "validated", so the surface under the pointer is sent `leave` and not `drop`.
 
@@ -28,7 +34,7 @@ program under the pointer that it had been dropped there, with nothing behind
 it to read. The compositor also ends such a drag at once (`dragging.rs`),
 which goes through the same function.
 
-The third, fourth and fifth, all for Xwayland (18 October 2026):
+Change 3, for Xwayland:
 
 - `src/xwayland/xserver.rs`, `Instance::take_socket`: the display pipe
   closing with no number on it is an error, so `XWaylandEvent::Error` is
@@ -46,7 +52,7 @@ To move to a newer smithay: copy the new release here and apply the changes
 again, or drop this folder and the [patch.crates-io] entry once GTK is fixed
 and smithay no longer drops for a dead source.
 
-Third and fourth changes, for drag and drop between older (X11) programs and
+Change 4, for drag and drop between older (X11) programs and
 Wayland ones (spec, Older programs). Smithay has no bridge between XDND and
 the data device.
 
@@ -67,7 +73,7 @@ the data device.
   blocking: it was non-blocking, so a program writing more than 64 KB at once
   was told to try again part way and the copy ended early.
 
-Two more changes, for older (X11) programs (20 October 2026).
+Change 5, for older (X11) programs:
 
 - `src/xwayland/xwm/surface.rs` (`X11Surface::configure`): a window that is
   not yet reparented (not yet shown) is sent the synthetic ConfigureNotify too
@@ -79,7 +85,7 @@ Two more changes, for older (X11) programs (20 October 2026).
   the answer to its new request, so every paste after the first from one
   window came back empty.
 
-Two more, for typing expansion (24 October 2026):
+Change 6, for typing expansion:
 
 - `src/wayland/virtual_keyboard/virtual_keyboard_handle.rs`, `type_with_keymap`:
   the compositor types text with a keymap of its own made for those letters,
@@ -92,12 +98,12 @@ Two more, for typing expansion (24 October 2026):
   knows a password box.
   `active_sensitive` is the same for the sensitive-data hint.
 
-- `src/input/keyboard/keymap_file.rs`: the temporary-file path used for
+Change 7, in `src/input/keyboard/keymap_file.rs`: the temporary-file path used for
   wl_keyboard versions below 7 now rewinds the file after writing (the offset is shared with the
   client's descriptor, so a client reading from the current offset got nothing),
   and also writes the closing NUL and counts it in `size`, as the sealed path does.
 
-Also (28 October 2026), in `src/backend/drm`: a virtual graphics card
+Change 8, in `src/backend/drm`: a virtual graphics card
 (QEMU virtio, VMware, VirtualBox) hides its cursor plane from an atomic
 program that does not ask for `DRM_CLIENT_CAP_CURSOR_PLANE_HOTSPOT` (kernel
 6.6 and later), so the pointer was drawn into every frame by the processor.
@@ -106,7 +112,7 @@ program that does not ask for `DRM_CLIENT_CAP_CURSOR_PLANE_HOTSPOT` (kernel
 the picture; the atomic surface writes it to the plane's `HOTSPOT_X` and
 `HOTSPOT_Y` where they exist, which is only on those cards.
 
-Also (30 October 2026, games), in `src/xwayland/xwm`: `X11Surface::emulated_screens()`
+Change 9, for games, in `src/xwayland/xwm`: `X11Surface::emulated_screens()`
 reads `_XWAYLAND_RANDR_EMU_MONITOR_RECTS`, the screens as a program sees them
 after it changed the resolution through RandR (Xwayland only pretends to, and
 scales the window up with wp_viewporter when the window manager gives it that
@@ -115,14 +121,37 @@ size), with `WmWindowProperty::EmulatedScreens` when it changes; and
 without unmapping the frame, for a program that asked to be minimised and
 waits to see the answer there (Wine's full-screen games do).
 
-Also (2 November 2026), so the copy builds without warnings on newer Rust: the
+Change 10, so the copy builds without warnings on newer Rust: the
 unused `tracing::error` import is dropped from six files (backend/drm/surface/gbm.rs,
 backend/session/libseat.rs, backend/winit/mod.rs, input/keyboard/mod.rs,
 wayland/seat/keyboard.rs, xwayland/xwm/mod.rs), and wayland/shm/pool.rs casts
 the SIGBUS handler through a pointer (`as *const () as libc::sighandler_t`)
 rather than straight from the function to a number.
 
-Also (2 November 2026): the cursor hotspot was written only by the atomic
+Change 11: the cursor hotspot was written only by the atomic
 request builder that debug builds use (`#[cfg(debug_assertions)]`); release
 builds have a second builder, which now writes `HOTSPOT_X` and `HOTSPOT_Y`
 too, so the pointer's point is right on a virtual card in what ships.
+
+Change 12, in `src/wayland/xwayland_shell.rs` and `src/xwayland/xwm/mod.rs`:
+the surfaces Xwayland has committed with a `WL_SURFACE_SERIAL` are kept per
+window manager (`XwmId`), taken out when an X11 window is matched with one, and
+dead ones dropped; `surface_for_serial` is now `take_surface_for_serial`.
+
+Why: every Xwayland numbers its windows from 1, and Smithay kept one map of
+number to surface for all of them, never emptied. A box's Xwayland that died
+and started again had its first window matched with the dead server's surface
+of the same number, so the window showed nothing but its frame; with two
+running at once, a window could be matched with another Xwayland's surface.
+
+Change 13, in `src/desktop/space/mod.rs`: `Space::changes()`, a count that
+goes up whenever an element is mapped, moved, raised or unmapped, an output
+is mapped or unmapped, or an element enters or leaves an output in `refresh`.
+
+Why: the panel's window list was compared with the last one on every turn of
+the event loop, a pass over every window even while only the pointer moved.
+With the count the compositor looks at its windows only on a turn when the
+space, or a window itself, changed.
+
+Besides the code, `README.md` lacks one line of upstream's list of compositors
+built with Smithay (a desktop whose name Trindle's shipped files may not carry).

@@ -36,6 +36,8 @@ pub struct Press<'a> {
     pub down: bool,
     pub mods: ModifiersState,
     pub real: bool,
+
+    pub private: bool,
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -310,7 +312,7 @@ impl ReaderKeys {
     }
 
     fn browsing(&mut self, p: &Press) -> Option<bool> {
-        if p.down && (p.mods.ctrl || p.mods.alt || p.mods.logo) {
+        if p.down && (p.private || p.mods.ctrl || p.mods.alt || p.mods.logo) {
             return None;
         }
         if !p.down && !self.browsed.contains(&p.code) {
@@ -365,12 +367,7 @@ fn own_socket(path: PathBuf) -> Option<PathBuf> {
 }
 
 fn peer_is_us(s: &UnixStream) -> bool {
-    use std::os::fd::AsRawFd;
-    let mut cred = libc::ucred { pid: 0, uid: u32::MAX, gid: 0 };
-    let mut len = std::mem::size_of::<libc::ucred>() as libc::socklen_t;
-    // SAFETY: `cred` and `len` are live and sized for SO_PEERCRED; the fd is open for the call.
-    let got = unsafe { libc::getsockopt(s.as_raw_fd(), libc::SOL_SOCKET, libc::SO_PEERCRED, (&mut cred as *mut libc::ucred).cast(), &mut len) };
-    got == 0 && cred.uid == my_uid()
+    crate::peer::credentials(s).is_some_and(|c| c.uid == my_uid())
 }
 
 #[cfg(not(test))]
@@ -395,30 +392,9 @@ thread_local! {
     static TEST_EXE: std::cell::RefCell<Option<PathBuf>> = const { std::cell::RefCell::new(None) };
 }
 
-fn exe_is_reader(exe: &Path, expected: &Path) -> bool {
-    exe == expected
-}
-
-const SO_PEERPIDFD: libc::c_int = 77;
-
 fn peer_is_reader(s: &UnixStream) -> bool {
-    use std::os::fd::{AsRawFd, FromRawFd, OwnedFd};
-    let mut cred = libc::ucred { pid: 0, uid: u32::MAX, gid: 0 };
-    let mut len = std::mem::size_of::<libc::ucred>() as libc::socklen_t;
-    // SAFETY: `cred` and `len` are live and sized for SO_PEERCRED; the fd is open for the call.
-    let got = unsafe { libc::getsockopt(s.as_raw_fd(), libc::SOL_SOCKET, libc::SO_PEERCRED, (&mut cred as *mut libc::ucred).cast(), &mut len) };
-    if got != 0 || cred.pid <= 0 {
-        return false;
-    }
-    let mut pidfd: libc::c_int = -1;
-    let mut len = std::mem::size_of::<libc::c_int>() as libc::socklen_t;
-    // SAFETY: `pidfd` and `len` are live and sized for an int.
-    let got = unsafe { libc::getsockopt(s.as_raw_fd(), libc::SOL_SOCKET, SO_PEERPIDFD, (&mut pidfd as *mut libc::c_int).cast(), &mut len) };
-    if got != 0 || pidfd < 0 {
-        return false;
-    }
-    // SAFETY: a pidfd the kernel just gave us, owned by nothing else.
-    let pidfd = unsafe { OwnedFd::from_raw_fd(pidfd) };
+    let Some(cred) = crate::peer::credentials(s).filter(|c| c.pid > 0) else { return false };
+    let Some(pidfd) = crate::peer::pidfd_of_peer(s) else { return false };
     let Some(expected) = reader_exe() else {
         return false;
     };
@@ -426,13 +402,11 @@ fn peer_is_reader(s: &UnixStream) -> bool {
 }
 
 fn reader_is(pid: i32, pidfd: &std::os::fd::OwnedFd, expected: &Path) -> bool {
-    use std::os::fd::AsRawFd;
+
     let Some(exe) = exe_of(pid) else {
         return false;
     };
-    // SAFETY: no pointers; signal 0 only asks whether the process is there.
-    let alive = unsafe { libc::syscall(libc::SYS_pidfd_send_signal, pidfd.as_raw_fd(), 0, std::ptr::null::<libc::siginfo_t>(), 0) } == 0;
-    alive && exe_is_reader(&exe, expected)
+    crate::peer::signal(pidfd, 0) && exe == expected
 }
 
 fn exe_of(pid: i32) -> Option<PathBuf> {
@@ -507,7 +481,7 @@ mod tests {
     use super::*;
 
     fn p(code: u32, name: &str, down: bool) -> Press<'_> {
-        Press { code, name, reader_key: is_reader_key(xkb::keysym_from_name(name, 0)), down, mods: ModifiersState::default(), real: true }
+        Press { code, name, reader_key: is_reader_key(xkb::keysym_from_name(name, 0)), down, mods: ModifiersState::default(), real: true, private: false }
     }
 
     fn switched_on<R>(name: &str, during: impl FnOnce() -> R) -> R {
@@ -733,6 +707,9 @@ mod tests {
             ctrl.mods.ctrl = true;
             assert!(!k.take(&ctrl), "Ctrl keys are the window's");
             assert!(!k.take(&p(31, "s", false)), "and so is the release of one it never took");
+            let mut typed = p(32, "x", true);
+            typed.private = true;
+            assert!(!k.take(&typed), "a key typed at a question only the person may answer went to the reader");
             b.write_all(b"state\tbrowse\toff\n").unwrap();
             k.hear();
             assert!(!k.take(&p(30, "d", true)));
@@ -782,15 +759,6 @@ mod tests {
         let map = xkb::Keymap::new_from_names(&ctx, "", "", "us", "", None, xkb::KEYMAP_COMPILE_NO_FLAGS).unwrap();
         let at = |evdev: u32| name(&map, 0, (evdev + 8).into()).unwrap();
         assert_eq!((at(76), at(19), at(51), at(58), at(110)), ("KP_5".into(), "r".into(), "comma".into(), "Caps_Lock".into(), "Insert".into()));
-    }
-
-    #[test]
-    fn only_the_real_reader_program_is_accepted() {
-        let want = Path::new("/home/x/.local/share/trindle/plugins/org.trindle.ScreenReader/bin/trindle-screen-reader");
-        assert!(exe_is_reader(want, want));
-        assert!(!exe_is_reader(Path::new("/usr/bin/python3"), want));
-        assert!(!exe_is_reader(Path::new("/home/x/.local/share/trindle/plugins/org.trindle.ScreenReader/bin/trindle-screen-reader (deleted)"), want));
-        assert!(!exe_is_reader(Path::new("/home/x/.local/share/trindle/plugins/com.example.Other/bin/trindle-screen-reader"), want));
     }
 
     #[test]

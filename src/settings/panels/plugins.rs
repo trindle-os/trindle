@@ -4,8 +4,11 @@
 use std::collections::{BTreeMap, HashMap};
 use std::time::Duration;
 
+use crate::common::run;
 use crate::plugins::{self, Field, Kind, Plugin};
-use crate::settings::ui::{confirm, dropdown, group, headline, in_words, line, on, page_with, Kit, Msg, Page, not_saved};
+use crate::settings::ui::{confirm, dropdown, group, headline, in_words, line, on, page_with, Kit, Msg, Page, Rounds, not_saved};
+use crate::toolkit::t;
+use crate::toolkit::widget::{button, entry, main_action, note, switch, Length, Node};
 
 fn ask_again(key: String, id: String) -> Msg {
     on::<Plugins>(move |_, k| {
@@ -13,8 +16,6 @@ fn ask_again(key: String, id: String) -> Msg {
         k.started(&key, started, t!("settings-plugins-window-failed"));
     })
 }
-use crate::toolkit::t;
-use crate::toolkit::widget::{button, entry, main_action, note, switch, Length, Node};
 
 const TYPING_PAUSE: Duration = Duration::from_millis(700);
 
@@ -28,7 +29,7 @@ pub struct Plugins {
 
     values: HashMap<String, BTreeMap<String, String>>,
 
-    round: u32,
+    rounds: Rounds,
 
     choices: HashMap<(String, String), Vec<(String, String)>>,
 
@@ -37,41 +38,56 @@ pub struct Plugins {
     standing: HashMap<String, (usize, usize)>,
 
     pub(super) rows: super::plugin_rows::Cards,
+
+    waiting: u8,
 }
+
+#[derive(Default)]
+struct Look {
+    values: HashMap<String, BTreeMap<String, String>>,
+    choices: HashMap<(String, String), Vec<(String, String)>>,
+    notes: HashMap<(String, String), String>,
+    standing: HashMap<String, (usize, usize)>,
+}
+
+fn look(all: &[Plugin]) -> Look {
+    let each = |want: fn(&Field) -> bool| all.iter().flat_map(move |p| p.fields.iter().filter(move |f| want(f)).map(move |f| (p, f)));
+    Look {
+        values: all.iter().map(|p| (p.id.clone(), plugins::values(p))).collect(),
+        choices: each(|f| f.choices_from.is_some()).map(|(p, f)| ((p.id.clone(), f.name.clone()), plugins::choices_of(&p.id, f))).collect(),
+        notes: each(|f| matches!(f.kind, Kind::Note(_))).map(|(p, f)| ((p.id.clone(), f.name.clone()), plugins::note_of(&p.id, f))).collect(),
+        standing: all.iter().map(|p| (p.id.clone(), plugins::standing(p))).collect(),
+    }
+}
+
+const LOOK_PATIENCE: u8 = 10;
 
 impl Plugins {
     fn read(&mut self) {
         self.all = plugins::installed();
-        self.values = self.all.iter().map(|p| (p.id.clone(), plugins::values(p))).collect();
-        self.choices = self.all.iter().flat_map(|p| p.fields.iter().filter(|f| matches!(f.kind, Kind::Choice(_)))
+        let seen = look(&self.all);
+        self.values.clone_from(&seen.values);
+        self.choices = self.all.iter().flat_map(|p| p.fields.iter().filter(|f| matches!(f.kind, Kind::Choice(_)) && f.choices_from.is_none())
             .map(|f| ((p.id.clone(), f.name.clone()), plugins::choices_of(&p.id, f)))).collect();
-        self.standing = self.all.iter().map(|p| (p.id.clone(), plugins::standing(p))).collect();
-        self.reread_notes();
+        self.take(seen);
     }
 
-    fn reread_notes(&mut self) {
-        self.notes = self.all.iter().flat_map(|p| p.fields.iter().filter(|f| matches!(f.kind, Kind::Note(_)))
-            .map(|f| ((p.id.clone(), f.name.clone()), plugins::note_of(&p.id, f)))).collect();
+    fn take(&mut self, seen: Look) -> bool {
+        let listed = |id: &str| self.all.iter().any(|p| p.id == id);
+        let notes: HashMap<_, _> = seen.notes.into_iter().filter(|((id, _), _)| listed(id)).collect();
+        let standing: HashMap<_, _> = seen.standing.into_iter().filter(|(id, _)| listed(id)).collect();
+        let mut changed = notes != self.notes || standing != self.standing;
+        self.notes = notes;
+        self.standing = standing;
+        for (key, now) in seen.choices.into_iter().filter(|((id, _), _)| listed(id)) {
+            changed |= self.choices.insert(key, now.clone()).as_ref() != Some(&now);
+        }
         for p in &self.all {
-            let now = plugins::values(p);
+            let Some(now) = seen.values.get(&p.id) else { continue };
             let kept = self.values.entry(p.id.clone()).or_default();
             for f in p.fields.iter().filter(|f| matches!(f.kind, Kind::Switch | Kind::Choice(_))) {
                 if let Some(v) = now.get(&f.name) {
-                    kept.insert(f.name.clone(), v.clone());
-                }
-            }
-        }
-    }
-
-    fn reread_choices(&mut self) -> bool {
-        let mut changed = false;
-        for p in &self.all {
-            for f in p.fields.iter().filter(|f| f.choices_from.is_some()) {
-                let now = plugins::choices_of(&p.id, f);
-                let slot = self.choices.entry((p.id.clone(), f.name.clone())).or_default();
-                if *slot != now {
-                    *slot = now;
-                    changed = true;
+                    changed |= kept.insert(f.name.clone(), v.clone()).as_ref() != Some(v);
                 }
             }
         }
@@ -144,25 +160,25 @@ impl Plugins {
     fn needs_row(&self, kit: &Kit, p: &Plugin, words: &str) -> Node<Msg> {
         let id = p.id.clone();
         let asks_key = format!("plugin-asks:{}", p.id);
-        line(words.to_string()).sub(t!("settings-plugins-needs-more")).key(asks_key.clone())
+        line(words.to_string()).key(asks_key.clone())
             .control(main_action(plugins::ALLOW_ICON, plugins::allow_word()).on_press(ask_again(asks_key, id)))
             .node(kit)
     }
 
     fn about_row(&self, kit: &Kit, p: &Plugin, says: &Says) -> Node<Msg> {
-    let key = format!("plugin:{}", p.id);
-    let mut about = line(t!("settings-plugins-about-it")).sub(says.about.clone()).key(key.clone());
-    if says.change {
-        let id = p.id.clone();
-        about = about.control(button(plugins::ALLOW_ICON, t!("settings-plugins-change")).on_press(ask_again(key.clone(), id)));
-    }
-    let id = p.id.clone();
-    about = about.control(confirm::<Plugins>(kit, &key, "user-trash-symbolic", t!("settings-plugins-remove"), move |me, k| {
-        if k.settle_quietly(&format!("plugin:{id}"), plugins::remove(&id), t!("settings-plugins-not-removed")).is_some() {
-            me.read();
+        let key = format!("plugin:{}", p.id);
+        let mut about = line(t!("settings-plugins-about-it")).sub(says.about.clone()).key(key.clone());
+        if says.change {
+            let id = p.id.clone();
+            about = about.control(button(plugins::ALLOW_ICON, t!("settings-plugins-change")).on_press(ask_again(key.clone(), id)));
         }
-    }));
-    about.node(kit)
+        let id = p.id.clone();
+        about = about.control(confirm::<Plugins>(&key, "user-trash-symbolic", t!("settings-plugins-remove"), move |me, k| {
+            if k.settle_quietly(&format!("plugin:{id}"), plugins::remove(&id), t!("settings-plugins-not-removed")).is_some() {
+                me.read();
+            }
+        }));
+        about.node(kit)
     }
 
     fn field_row(&self, kit: &Kit, p: &Plugin, f: &Field) -> Option<Node<Msg>> {
@@ -183,7 +199,7 @@ impl Plugins {
                 let offered = self.choices.get(&(p.id.clone(), f.name.clone())).cloned().unwrap_or_default();
                 let chosen = offered.iter().position(|(value, _)| *value == now);
                 let labels: Vec<String> = offered.iter().map(|(_, label)| label.clone()).collect();
-                dropdown(kit, &key, labels, chosen, &f.label, move |i| {
+                dropdown(&key, labels, chosen, &f.label, move |i| {
                     let (id, name, value) = (id.clone(), name.clone(), offered[i].0.clone());
                     on::<Plugins>(move |me, k| me.save(k, &id, &name, &value, true))
                 })
@@ -200,10 +216,11 @@ impl Plugins {
 
     fn typed(&mut self, kit: &mut Kit, id: &str, name: &str, text: String) {
         self.values.entry(id.to_string()).or_default().insert(name.to_string(), text);
-        self.round = self.round.wrapping_add(1);
-        let (mine, id, name) = (self.round, id.to_string(), name.to_string());
+        let box_ = field_key(id, name);
+        let mine = self.rounds.next(&box_);
+        let (id, name) = (id.to_string(), name.to_string());
         kit.after::<Plugins>(TYPING_PAUSE, move |me, k| {
-            if me.round == mine {
+            if me.rounds.latest(&box_, mine) {
                 let value = me.value(&id, &name);
 
                 me.save(k, &id, &name, &value, false);
@@ -265,21 +282,29 @@ impl Page for Plugins {
 
     fn second(&mut self, kit: &mut Kit) -> bool {
         self.rows.second(kit);
-        self.reread_choices();
-        self.reread_notes();
-        self.standing = self.all.iter().map(|p| (p.id.clone(), plugins::standing(p))).collect();
-        true
+        if self.waiting > 0 {
+            self.waiting -= 1;
+            return false;
+        }
+        self.waiting = LOOK_PATIENCE;
+        let all = self.all.clone();
+        let heard = kit.then_if::<Plugins, Look>(|me, _, seen| {
+            me.waiting = 0;
+            me.take(seen)
+        });
+        run::on_thread(move || look(&all), heard);
+        false
     }
     fn view(&self, kit: &Kit) -> Node<Msg> {
         let mut names: Vec<String> = self.all.iter().map(|p| p.name.clone()).collect();
         names.extend(self.rows.names());
         let words = t!("settings-plugins-installed", n = names.len(), list = in_words(&names));
 
-        let mut items = vec![headline(kit, words)];
+        let mut items = vec![headline(words)];
         items.extend(self.all.iter().map(|p| self.card(kit, p)));
         items.extend(self.rows.nodes(kit));
         if self.all.is_empty() && self.rows.is_empty() {
-            items.push(group(t!("settings-plugins-group")).rows(vec![line(t!("settings-plugins-none")).sub(t!("settings-plugins-none-sub")).node(kit)]).node(kit));
+            items.push(group(t!("settings-plugins-group")).rows(vec![line(t!("settings-plugins-none")).node(kit)]).grows().node(kit));
         }
         let permissions = button("changes-prevent-symbolic", t!("settings-plugins-open-permissions")).key("plugins:permissions")
             .on_press(on::<Plugins>(|_, k| k.go_to("permissions")));
@@ -323,6 +348,20 @@ impl Plugins {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn no_line_under_a_plugins_control_explains_it() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let kit = Kit::new(events, asks, None, None);
+        let said = Plugins::made_up().view(&kit).said().join("|");
+        for old in [
+            "Press Allow to choose what it may use.",
+            "Find plugins in Apps.",
+        ] {
+            assert!(!said.contains(old), "{old} is still on the page");
+        }
+    }
     use super::*;
     use crate::settings::ui::Do;
     use crate::settings::Settings;
@@ -424,15 +463,15 @@ mod tests {
         let p = pair();
         let none = page_of(vec![p.clone()], 0);
         let says = none.says(&p);
-        assert_eq!(says.needs.as_deref(), Some("Pair needs your permission to work: 0 of 3 allowed."));
+        assert_eq!(says.needs.as_deref(), Some("Pair needs your permission before it can work. You've allowed none of the 3 permissions it asks for."));
         assert_eq!(says.about, "Version 1.2.");
         assert!(!says.change);
         let some = page_of(vec![p.clone()], 2);
-        assert_eq!(some.says(&p).needs.as_deref(), Some("Pair has only some of the permission it asks for: 2 of 3 allowed."));
+        assert_eq!(some.says(&p).needs.as_deref(), Some("You've allowed only 2 of the 3 permissions Pair asks for."));
         let all = page_of(vec![p.clone()], 3);
         let says = all.says(&p);
         assert_eq!(says.needs, None);
-        assert_eq!(says.about, "Version 1.2. All 3 things it asks for are allowed.");
+        assert_eq!(says.about, "Version 1.2. All 3 permissions it asks for are allowed.");
         assert!(says.change);
 
         let mut plain = pair();
@@ -452,7 +491,7 @@ mod tests {
             (view.said(), view.buttons())
         };
         let allow = |b: &[(String, bool)]| b.iter().filter(|(tip, _)| tip == "Allow").count();
-        for (allowed, words) in [(0, "Pair needs your permission"), (2, "Pair has only some of the permission")] {
+        for (allowed, words) in [(0, "Pair needs your permission"), (2, "You've allowed only 2 of the 3 permissions")] {
             let (said, buttons) = seen(allowed);
             let at = |w: &str| said.iter().position(|x| x.starts_with(w)).unwrap_or_else(|| panic!("{w} not in {said:?}"));
             assert!(at(words) < at("Version 1.2."), "the words come before the rest of the card");
@@ -461,7 +500,7 @@ mod tests {
             assert!(buttons.iter().any(|(tip, can)| tip == "Allow" && *can));
         }
         let (said, buttons) = seen(3);
-        assert!(!said.iter().any(|w| w.contains("needs your permission") || w.contains("only some of the permission")), "{said:?}");
+        assert!(!said.iter().any(|w| w.contains("needs your permission") || w.contains("You've allowed only")), "{said:?}");
         assert_eq!(allow(&buttons), 0, "{buttons:?}");
     }
 
@@ -485,7 +524,7 @@ mod tests {
         let me = page_of(vec![hidden.clone()], 3);
         let says = me.says(&hidden);
         assert!(says.fields.is_empty());
-        assert_eq!(says.none.as_deref(), Some("Pair has no settings to show as things stand."));
+        assert_eq!(says.none.as_deref(), Some("Pair has no settings to show at the moment."));
         let p = pair();
         assert_eq!(page_of(vec![p.clone()], 3).says(&p).none, None);
     }
@@ -515,7 +554,7 @@ mod tests {
             assert!(!said.iter().any(|w| w == gone), "{gone} is no longer a line on the page");
         }
 
-        for words in ["the ring", "settings", "notifications", "login", "walled off", "Permissions", "bin", "removes"] {
+        for words in ["the ring", "settings", "notifications", "log in", "own box", "Permissions", "bin", "remove"] {
             assert!(me.help().contains(words), "the i says: {words}");
         }
         assert!(view.buttons().contains(&("Open Permissions".to_string(), true)));
@@ -536,7 +575,7 @@ mod tests {
         let events = Loop::new();
         let asks = events.post(|_: Do| {});
         let said = none.view(&Kit::new(events.clone(), asks, None, None)).said();
-        assert!(said.contains(&"None installed".to_string()));
+        assert!(said.contains(&"No plugins are installed.".to_string()));
     }
 
     #[test]
@@ -561,7 +600,39 @@ mod tests {
     }
 
     #[test]
-    #[ignore]
+    fn a_second_while_open_reads_nothing_on_the_drawing_thread() {
+        let events = Loop::new();
+        let asks = events.post(|_: Do| {});
+        let mut kit = Kit::new(events, asks, None, None);
+        let mut me = Plugins::made_up();
+        me.standing.insert("org.example.Weather".into(), (9, 9));
+        assert!(!me.second(&mut kit), "the page is drawn again only when an answer brings news");
+        assert_eq!(me.standing["org.example.Weather"], (9, 9), "nothing is read before the answer");
+        assert!(!me.second(&mut kit), "a look still out is not asked for twice");
+    }
+
+    #[test]
+    fn a_look_is_news_only_when_something_shown_changed() {
+        let mut me = Plugins::made_up();
+        let same = || Look { standing: me_standing(), ..Look::default() };
+        fn me_standing() -> HashMap<String, (usize, usize)> {
+            [("org.example.Pair".to_string(), (2, 2)), ("org.example.Weather".to_string(), (2, 0))].into_iter().collect()
+        }
+        assert!(!me.take(same()), "the same standing is no news");
+        let mut moved = same();
+        moved.standing.insert("org.example.Weather".into(), (2, 1));
+        assert!(me.take(moved));
+        let mut gone = Look { standing: me.standing.clone(), ..Look::default() };
+        gone.standing.insert("org.example.Gone".into(), (1, 1));
+        gone.values.insert("org.example.Pair".into(), [("start".to_string(), "false".to_string()), ("name".to_string(), "typed over".to_string())].into_iter().collect());
+        assert!(me.take(gone), "a switch the plugin turned off is news");
+        assert!(!me.standing.contains_key("org.example.Gone"));
+        assert_eq!(me.value("org.example.Pair", "start"), "false");
+        assert_eq!(me.value("org.example.Pair", "name"), "", "what is being typed is left alone");
+    }
+
+    #[test]
+    #[ignore = "writes pictures to TRINDLE_SHOTS and asserts nothing; run it by hand with --ignored"]
     fn shoot_plugin_cards() {
         let out = std::path::PathBuf::from(std::env::var("TRINDLE_SHOTS").unwrap_or_else(|_| "target/style-check".into()));
         std::fs::create_dir_all(&out).unwrap();

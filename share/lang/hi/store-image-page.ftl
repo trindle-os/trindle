@@ -1,7 +1,6 @@
 # machine translated (Hindi), not yet reviewed by a person.
 
 
-
 # Name of the line of Facts that says how many people starred the project on GitHub.
 store-image-fact-stars = स्टार
 

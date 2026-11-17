@@ -14,16 +14,16 @@ voice-brighter = আরও উজ্জ্বল
 voice-dimmer = আরও কম আলো
 
 # Said under the ring when the request is to let the screen rest again.
-voice-keep-awake-off = পর্দা আবার বিশ্রাম নিতে পারবে
+voice-keep-awake-off = পর্দা আবার ঘুমাতে পারবে
 
 # Said under the ring when the screen is kept awake.
-voice-keep-awake-on = জাগিয়ে রাখা হচ্ছে
+voice-keep-awake-on = জেগে থাকছে
 
 # Said under the ring when the request is to look for updates.
 voice-updates = আপডেট খোঁজা হচ্ছে
 
 # Said under the ring when nothing was heard at all.
-voice-nothing-heard = কিছু শোনা যায়নি। রিংয়ের মাঝখানে ছুঁয়ে কথা বলুন।
+voice-nothing-heard = Trindle আপনার কথা শুনতে পায়নি। রিংয়ের মাঝখানে ছুঁয়ে কথা বলুন।
 
 # Said under the ring when the volume goes up.
 voice-louder = আরও জোরে
@@ -86,7 +86,7 @@ voice-showing-app = { $name } দেখানো হচ্ছে
 voice-opening-app = { $name } খোলা হচ্ছে
 
 # Said under the ring when the request was heard but not understood; what was heard comes in.
-voice-heard-unknown = “{ $heard }” শোনা গেছে, কিন্তু কী করতে হবে বোঝা যায়নি
+voice-heard-unknown = Trindle “{ $heard }” কমান্ডটি চিনতে পারেনি
 
 # Said in the ring when voice has not been added yet.
 voice-optional = ভয়েস একটি ঐচ্ছিক অতিরিক্ত সুবিধা। সেটিংসে, রিং পাতায় এটি যোগ করুন।
@@ -95,31 +95,31 @@ voice-optional = ভয়েস একটি ঐচ্ছিক অতিরি
 voice-switched-off = ভয়েস বন্ধ আছে। সেটিংসে, রিং পাতায় এটি চালু করুন।
 
 # Said in the ring when the microphone cannot be opened; the reason comes after it.
-voice-mic-failed = মাইক্রোফোন খোলা যায়নি: { $why }
+voice-mic-failed = Trindle মাইক্রোফোন ব্যবহার করতে পারেনি: { $why }
 
 # Said in the ring when the microphone's recorder would not start.
-voice-mic-not-started = মাইক্রোফোন খোলা যায়নি: pw-record চালু হয়নি
+voice-mic-not-started = রেকর্ড করার প্রোগ্রাম চালু না হওয়ায় Trindle মাইক্রোফোন ব্যবহার করতে পারেনি
 
 # Said in the ring when listening stopped and nothing was recorded.
 voice-nothing-recorded = কিছু রেকর্ড হয়নি।
 
 # Said in the ring when the recording had no speech in it.
-voice-nothing-heard-after = কিছু শোনা যায়নি। রিংয়ের মাঝখানে ছুঁয়ে কথা বলুন।
+voice-nothing-heard-after = Trindle আপনার কথা শুনতে পায়নি। রিংয়ের মাঝখানে ছুঁয়ে কথা বলুন।
 
 # Said in the ring when the speech engine failed and gave no reason.
 voice-whisper-failed = Whisper ব্যর্থ হয়েছে
 
 # Progress line while the build tools are added for the build; the names of the packages come in.
-voice-installing-tools = আপাতত তৈরির সরঞ্জাম ইনস্টল হচ্ছে: { $names }
+voice-installing-tools = সাময়িকভাবে তৈরির সরঞ্জাম ইনস্টল হচ্ছে: { $names }
 
 # Progress line while whisper.cpp is built; its version comes in.
-voice-building = ভয়েসের জন্য whisper.cpp { $version } তৈরি হচ্ছে (এক-দুই মিনিট)
+voice-building = ভয়েস নিয়ন্ত্রণের জন্য whisper.cpp { $version } তৈরি হচ্ছে। এতে এক-দুই মিনিট লাগবে।
 
 # Progress line while the speech model is downloaded (148 MB).
-voice-fetching-model = কথা শোনার মডেল আনা হচ্ছে (148 MB)
+voice-fetching-model = কথা শোনার মডেল ডাউনলোড হচ্ছে (148 MB)
 
 # Progress line while the build tools are taken away again.
-voice-removing-tools = তৈরির সরঞ্জাম আবার সরানো হচ্ছে
+voice-removing-tools = তৈরির সরঞ্জাম এখন সরানো হচ্ছে
 
 # Said once voice is added and ready to use.
 voice-ready = ভয়েস নিয়ন্ত্রণ তৈরি। রিং খুলুন, মাঝখানে ছুঁয়ে কথা বলুন।
@@ -132,3 +132,15 @@ voice-press-enter = বন্ধ করতে Enter চাপুন।
 
 # Shown when the command is run with neither install nor remove.
 voice-usage = ব্যবহার: trindle-voice-setup install | remove
+
+# Said when a step of the voice set-up fails. { $program } is the program that was run, with its first word.
+voice-step-failed = { $program } কাজ করেনি।
+
+# Said when the whisper.cpp download isn't the one Trindle checks for, so nothing is built from it.
+voice-whisper-fingerprint = whisper.cpp-এর ডাউনলোডটি Trindle যা আশা করেছিল তা নয়, তাই এটি বানানো হয়নি।
+
+# Said when the speech model download isn't the one Trindle checks for, so it isn't installed.
+voice-model-fingerprint = বক্তৃতা মডেলের ডাউনলোডটি Trindle যা আশা করেছিল তা নয়, তাই এটি ইনস্টল করা হয়নি।
+
+# The reason after "Trindle couldn't access the microphone:" when the session has no private folder to keep a recording in.
+voice-no-private-folder = ব্যক্তিগত ফোল্ডার নেই।

@@ -1,8 +1,11 @@
+> [!IMPORTANT]
+> **Trindle is still being built.** It changes fast, so expect things to move around and sometimes break. Come and help shape it: [join the Trindle community](https://buildmorphic.com/join/trindle).
+
 <div align="center">
 
 <img src="docs/images/banner.png" width="1280" alt="Trindle: a small desktop in one circle, for Debian">
 
-[![Version](https://img.shields.io/badge/version-0.9.0--beta.1-fbc711?style=flat-square&labelColor=18181b)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.9.1--beta.4-fbc711?style=flat-square&labelColor=18181b)](CHANGELOG.md)
 [![Licence](https://img.shields.io/badge/licence-GPL--3.0--or--later-fbc711?style=flat-square&labelColor=18181b)](LICENSE)
 [![Base](https://img.shields.io/badge/base-Debian%2013-fbc711?style=flat-square&labelColor=18181b)](https://trindle.org/install.html)
 [![Telemetry](https://img.shields.io/badge/telemetry-none-fbc711?style=flat-square&labelColor=18181b)](SECURITY.md)
@@ -120,9 +123,21 @@ One Rust program answers to almost every `trindle-*` name; `trindle --names`
 lists them. Two are programs of their own, built from the same source:
 `trindle-compose`, the compositor, which puts every window on the screen, from
 the login screen on; and `trindle-unlock`, the
-disk-password screen, which runs before the desktop is there. Only `trindle-admin`
-runs as root, through pkexec, and it checks every argument and reads passwords
-from standard input alone.
+disk-password screen, which runs before the desktop is there.
+
+These run as root, each with only the powers it needs:
+
+- `trindle-admin`, through pkexec or a system timer: it checks every argument
+  and reads passwords from standard input alone.
+- `trindle-thunder`, the Thunderbolt guard: may only read folders.
+- `trindle-usb-retry`, which retries a USB port that failed: may only read the
+  kernel log, and nothing at all when it lets go of USB hubs before a restart.
+- `trindle-controller`, which makes game controllers: may only change user.
+- `trindle-dns --started` and `--stopped`, which point the system at the
+  blocker and back; the blocker itself runs as its own user.
+- `trindle-boxed --patch`, which puts security fixes into the packages inside app folders.
+- `trindle-unlock`, the disk-password screen and the start-up and shut-down picture.
+- `trindle-keyring`, which opens your keyring with your password as you log in.
 
 | Path | What is in it |
 | --- | --- |
@@ -210,6 +225,7 @@ Installed with `--no-install-recommends`; nothing else is pulled in.
 | `libxkbcommon0` | keyboard layouts in the compositor |
 | `trindle-folders` | the file manager, a package of its own |
 | `trindle-help` | Help, a package of its own; one of the programs a person cannot uninstall |
+| `trindle-welcome` | the Welcome tour at the first login, a package of its own |
 | `trindle-toolkit-lang` | the Toolkit's words in every language, shared with Folders and Help |
 | `trindle-voice` | speech for the screen reader and Talk; the models (253 MB) are added by the image build |
 | `gvfs-backends` | network places and phones for other programs: Folders speaks its own, but GTK programs and Flatpak apps allowed to (Firefox, Text Editor) reach shares, phones and web addresses through it; kept |
@@ -229,6 +245,7 @@ Installed with `--no-install-recommends`; nothing else is pulled in.
 | `ca-certificates` | TLS for the download |
 | `adwaita-icon-theme` | GTK fallback icons |
 | `fonts-noto-core` | wide language coverage |
+| `fonts-noto-cjk` | Chinese, Japanese and Korean |
 | `fonts-dejavu-core` | monospace |
 | `fonts-noto-color-emoji` | colour emoji |
 | `xdg-utils` | xdg-open |
@@ -240,6 +257,7 @@ Installed with `--no-install-recommends`; nothing else is pulled in.
 | `gsettings-desktop-schemas` | GTK theme, font, dark mode keys |
 | `dconf-gsettings-backend` | GSettings storage |
 | `trindle-circle-icon-theme` | the round app icons, the default; from Trindle's own repository |
+| `trindle-square-icon-theme` | the same icons on rounded squares, the other choice |
 | `papirus-icon-theme` | what both build on, and the pictures inside the icons Trindle makes |
 | `librsvg2-common` | SVG icons in GTK programs |
 | `pipewire-audio` | sound |
@@ -255,6 +273,7 @@ Installed with `--no-install-recommends`; nothing else is pulled in.
 | `pkexec` | runs trindle-admin |
 | `bubblewrap` | walls round debs installed in their own folder, and round plugins |
 | `passt` | pasta: the network room of a plugin allowed to reach the home network only |
+| `xdg-dbus-proxy` | the filtered session bus of a boxed AppImage |
 | `cups` | printing |
 | `cups-client` | lpstat, lpadmin, lp |
 | `cups-filters` | driverless printer discovery |
@@ -270,7 +289,7 @@ Installed with `--no-install-recommends`; nothing else is pulled in.
 | `nftables` | the firewall that keeps out connections this computer did not ask for |
 | `fwupd` | firmware updates for the computer and its parts |
 | `fwupd-amd64-signed` | the signed piece fwupd starts at boot to put new firmware in place |
-| `unattended-upgrades` | Debian's security fixes, installed by themselves every day unless Check for updates is switched off |
+| `unattended-upgrades` | Debian's security fixes, installed by themselves every day |
 | `systemd-timesyncd` | network time |
 | `locales` | languages |
 | `xkb-data` | keyboard layouts |
@@ -289,7 +308,7 @@ login screen.
 
 ## Where your data lives
 
-Your own settings live outside the repository, in `~/.config/trindle/`. There is no account and no telemetry. By default Trindle looks for updates by itself soon after login and every few hours; one switch in Settings, About this computer, turns that off, and then it looks only when you ask. That switch also stops Debian's daily security fixes and, if you have switched the blocker on, the daily refresh of the lists of sites it keeps out. Beyond that, the clock is set from time servers on the internet and NetworkManager checks from time to time whether a Wi-Fi network wants a sign-in. Everything else happens only when you ask, and every contact is listed on the [privacy page](https://trindle.org/privacy.html). A problem report goes only when you press Send.
+Your own settings live outside the repository, in `~/.config/trindle/`. There is no account and no telemetry. By default Trindle looks for updates by itself soon after login and every few hours; one switch in Settings, About this computer, turns that off, and then it looks only when you ask. That switch also stops the daily refresh of the lists of sites the blocker keeps out, if you have switched it on. Debian's security fixes still install by themselves every day. Beyond that, the clock is set from time servers on the internet and NetworkManager checks from time to time whether a Wi-Fi network wants a sign-in. Everything else happens only when you ask, and every contact is listed on the [privacy page](https://trindle.org/privacy.html). A problem report goes only when you press Send.
 
 | File | What it holds |
 | --- | --- |
@@ -299,7 +318,7 @@ Your own settings live outside the repository, in `~/.config/trindle/`. There is
 
 ## Security
 
-Only `trindle-admin` runs as root, through pkexec, and it checks every argument. Programs and plugins run in their own sealed boxes. To report a problem privately, see [SECURITY.md](SECURITY.md).
+Only the programs listed under [How it is put together](#how-it-is-put-together) run as root, each with only the powers it needs. Programs and plugins run in their own sealed boxes. To report a problem privately, see [SECURITY.md](SECURITY.md).
 
 Software sources you add yourself are other people's programs. They come from a signed apt repository that apt checks.
 

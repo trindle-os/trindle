@@ -1,22 +1,26 @@
 //! Plain event lines for the screen reader, if one is listening; lengths and times only, never what is typed.
 
 use std::os::fd::{AsRawFd, FromRawFd, OwnedFd};
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 #[derive(Default)]
 pub(super) struct Reader {
     sock: Option<OwnedFd>,
-    path: Option<PathBuf>,
+
+    to: Option<(PathBuf, PathBuf)>,
     entry: usize,
 }
 
 impl Reader {
+
     pub(super) fn new() -> Self {
-        Reader::at(std::env::var_os("XDG_RUNTIME_DIR").map(|d| PathBuf::from(d).join("trindle-screen-reader/events.sock")))
+        use crate::common::screen_reader;
+        let path = std::env::var_os("XDG_RUNTIME_DIR").map(|d| PathBuf::from(d).join("trindle-screen-reader/events.sock"));
+        Reader::at(path.filter(|_| screen_reader::on()).map(|p| (p, PathBuf::from(screen_reader::EXE))))
     }
 
-    fn at(path: Option<PathBuf>) -> Self {
-        Reader { sock: None, path, entry: 0 }
+    fn at(to: Option<(PathBuf, PathBuf)>) -> Self {
+        Reader { sock: None, to, entry: 0 }
     }
 
     pub(super) fn locked(&mut self) {
@@ -45,7 +49,7 @@ impl Reader {
 
     fn send(&mut self, line: &str) {
         if self.sock.is_none() {
-            self.sock = self.path.as_deref().and_then(connect);
+            self.sock = self.to.as_ref().and_then(|(path, exe)| connect(path, exe));
         }
         let Some(fd) = &self.sock else { return };
         let text = format!("{line}\n");
@@ -57,7 +61,7 @@ impl Reader {
     }
 }
 
-fn connect(path: &std::path::Path) -> Option<OwnedFd> {
+fn connect(path: &Path, exe: &Path) -> Option<OwnedFd> {
     use std::os::unix::ffi::OsStrExt;
     let bytes = path.as_os_str().as_bytes();
     // SAFETY: sockaddr_un is plain numbers; all zero is a valid start.
@@ -79,7 +83,16 @@ fn connect(path: &std::path::Path) -> Option<OwnedFd> {
     let len = (std::mem::size_of::<libc::sa_family_t>() + bytes.len() + 1) as libc::socklen_t;
     // SAFETY: addr is a whole sockaddr_un and len lies within it.
     let r = unsafe { libc::connect(fd.as_raw_fd(), (&addr as *const libc::sockaddr_un).cast(), len) };
-    (r == 0).then_some(fd)
+    (r == 0 && peer_is(&fd, exe)).then_some(fd)
+}
+
+fn peer_is(fd: &OwnedFd, exe: &Path) -> bool {
+    // SAFETY: ucred is plain numbers; all zero is a valid start.
+    let mut cred: libc::ucred = unsafe { std::mem::zeroed() };
+    let mut len = std::mem::size_of::<libc::ucred>() as libc::socklen_t;
+    // SAFETY: getsockopt fills at most `len` bytes of the local `cred`.
+    let r = unsafe { libc::getsockopt(fd.as_raw_fd(), libc::SOL_SOCKET, libc::SO_PEERCRED, (&mut cred as *mut libc::ucred).cast(), &mut len) };
+    r == 0 && cred.pid > 0 && std::fs::read_link(format!("/proc/{}/exe", cred.pid)).is_ok_and(|p| p == exe)
 }
 
 #[cfg(test)]
@@ -99,7 +112,7 @@ mod tests {
         let dir = crate::common::files::private_temp("lrd").unwrap();
         let path = dir.join("e.sock");
         let listener = UnixListener::bind(&path).unwrap();
-        let mut reader = Reader::at(Some(path));
+        let mut reader = Reader::at(Some((path, std::env::current_exe().unwrap())));
         let (wrong, right) = ("hunter2-secret", "correct horse");
         reader.locked();
         reader.time(7, 3);
@@ -130,10 +143,26 @@ mod tests {
     }
 
     #[test]
+    fn a_listener_that_is_not_the_screen_reader_is_told_nothing() {
+        let dir = crate::common::files::private_temp("lrd").unwrap();
+        let path = dir.join("e.sock");
+        let listener = UnixListener::bind(&path).unwrap();
+        let mut reader = Reader::at(Some((path, PathBuf::from(crate::common::screen_reader::EXE))));
+        reader.locked();
+        reader.entry(5);
+        reader.unlocked();
+        drop(reader);
+        listener.set_nonblocking(true).unwrap();
+        let got: Vec<String> = std::iter::from_fn(|| listener.accept().ok()).flat_map(|(c, _)| lines(c)).collect();
+        assert!(got.is_empty(), "{got:?}");
+        std::fs::remove_dir_all(&dir).ok();
+    }
+
+    #[test]
     fn a_missing_socket_is_silent_and_never_created() {
         let dir = crate::common::files::private_temp("lrd").unwrap();
         let path = dir.join("none.sock");
-        let mut reader = Reader::at(Some(path.clone()));
+        let mut reader = Reader::at(Some((path.clone(), PathBuf::from("/usr/bin/true"))));
         reader.locked();
         reader.entry(3);
         reader.wrong();

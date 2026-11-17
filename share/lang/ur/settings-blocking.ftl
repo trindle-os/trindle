@@ -27,7 +27,7 @@ settings-blocking-ago-days =
 
 # Shown beside the Block adverts and bad sites switch while the person is asked for the password.
 # SAFETY: needs a human review before it ships
-settings-blocking-waiting = پاس ورڈ کا انتظار ہے...
+settings-blocking-waiting = آپ کے پاس ورڈ کا انتظار ہے…
 
 # Shown beside the switch after blocking is turned on.
 settings-blocking-done-on = بلاکنگ چالو ہے
@@ -42,22 +42,22 @@ settings-blocking-saved = محفوظ ہو گیا
 settings-blocking-bad-site = کسی سائٹ کا نام لکھیں، جیسے example.com۔
 
 # Headline of the page when blocking is off.
-settings-blocking-top-off = بلاکنگ بند ہے۔ تلاش پہلے کی طرح آپ کے نیٹ ورک کے اپنے سرورز پر جاتی ہے۔
+settings-blocking-top-off = بلاکنگ بند ہے۔ ویب سائٹس کا پتا پہلے کی طرح آپ کے نیٹ ورک کے اپنے سرورز سے لیا جاتا ہے۔
 
 # Headline of the page while blocking is starting.
 settings-blocking-top-starting = بلاکنگ شروع ہو رہی ہے۔
 
 # Headline of the page when blocking works and lookups go privately to the chosen server.
-settings-blocking-top-private = اشتہارات اور مضر سائٹس بلاک ہیں، اور تلاش نجی طور پر { $provider } پر جاتی ہے۔
+settings-blocking-top-private = اشتہارات اور مضر سائٹس بلاک ہیں، اور ویب سائٹس کا پتا نجی طور پر { $provider } کے ذریعے لیا جاتا ہے۔
 
 # Headline of the page when the private server cannot be reached on this network.
-settings-blocking-top-fallback = اس نیٹ ورک پر نجی سرور تک رسائی نہیں ہو سکی، اس لیے فی الحال آپ کے نیٹ ورک کے اپنے سرورز استعمال ہو رہے ہیں۔ بلاکنگ اب بھی کام کرتی ہے۔
+settings-blocking-top-fallback = Trindle اس نیٹ ورک پر نجی سرور تک نہیں پہنچ سکتا، اس لیے فی الحال آپ کے نیٹ ورک کے اپنے سرورز استعمال کر رہا ہے۔ بلاکنگ اب بھی کام کرتی ہے۔
 
 # Headline of the page when lookups go to the network's own servers.
-settings-blocking-top-network = اشتہارات اور مضر سائٹس بلاک ہیں۔ تلاش آپ کے نیٹ ورک کے اپنے سرورز پر جاتی ہے، جو اسے دیکھ سکتے ہیں۔
+settings-blocking-top-network = اشتہارات اور مضر سائٹس بلاک ہیں۔ ویب سائٹس کا پتا آپ کے نیٹ ورک کے اپنے سرورز سے لیا جاتا ہے، جو آپ کی کھولی ہوئی ہر سائٹ دیکھ سکتے ہیں۔
 
 # Headline of the page when lookups go through the VPN.
-settings-blocking-top-vpn = اشتہارات اور مضر سائٹس بلاک ہیں۔ تلاش VPN کے ذریعے آپ کے VPN کے اپنے سرورز پر جاتی ہے۔
+settings-blocking-top-vpn = اشتہارات اور مضر سائٹس بلاک ہیں۔ ویب سائٹس کا پتا آپ کے VPN کے اپنے سرورز سے لیا جاتا ہے۔
 
 # Headline of the page when blocking is on and the lookups are still being set up.
 settings-blocking-top-on = اشتہارات اور مضر سائٹس بلاک ہیں۔
@@ -84,7 +84,7 @@ settings-blocking-tile-today-note = آج بلاک ہونے والی تلاشیں
 settings-blocking-tile-lists = فہرستیں
 
 # Number of the lists tile while the lists are being fetched.
-settings-blocking-tile-fetching = حاصل ہو رہی ہیں
+settings-blocking-tile-fetching = اپ ڈیٹ ہو رہی ہیں
 
 # Number of the lists tile when no list has been fetched yet.
 settings-blocking-tile-none = ابھی تک کوئی نہیں
@@ -93,13 +93,10 @@ settings-blocking-tile-none = ابھی تک کوئی نہیں
 settings-blocking-tile-lists-note = سائٹس کی فہرستیں
 
 # Line under the lists tile: how many sites are listed and how long ago they were fetched.
-settings-blocking-tile-listed-note = سائٹس درج ہیں، { $ago } حاصل کی گئیں
+settings-blocking-tile-listed-note = سائٹس درج ہیں، { $ago } اپ ڈیٹ ہوئیں
 
 # Line in the Recently blocked card when nothing has been blocked.
 settings-blocking-nothing = ابھی تک کچھ بلاک نہیں ہوا
-
-# Small line under "Nothing blocked yet".
-settings-blocking-nothing-sub = سائٹس یہاں نظر آئیں گی، نئی سب سے پہلے۔
 
 # Tip of the plus button on a blocked site, and beside the Add a site box: lets the site through.
 # SAFETY: needs a human review before it ships
@@ -109,19 +106,16 @@ settings-blocking-let-through = اس سائٹ کو ہمیشہ اجازت دیں
 settings-blocking-recent = حال ہی میں بلاک ہوئیں
 
 # Help text (i button) of the Recently blocked card.
-settings-blocking-recent-about = سائٹس بلاک ہوتے ہی یہاں نظر آتی ہیں، نئی سب سے پہلے۔ پلس کا بٹن کسی سائٹ کو آئندہ کے لیے گزرنے دیتا ہے۔ یہاں صرف بلاک شدہ سائٹس دکھائی جاتی ہیں۔ جنہیں گزرنے دیا گیا ہو انہیں کبھی محفوظ نہیں رکھا جاتا۔
+settings-blocking-recent-about = سائٹس بلاک ہوتے ہی یہاں نظر آتی ہیں، نئی سب سے پہلے۔ کسی سائٹ کو آئندہ کے لیے گزرنے دینے کے لیے پلس دبائیں۔ Trindle گزرنے دی گئی سائٹس کا کوئی ریکارڈ نہیں رکھتا۔
 
 # Shown on the Recently blocked card while blocking is off.
 settings-blocking-recent-waits = کیا بلاک ہوتا ہے یہ دیکھنے کے لیے بلاکنگ چالو کریں۔
 
 # Placeholder of the box where a site name is typed.
-settings-blocking-site-placeholder = مثلاً example.com
+settings-blocking-site-placeholder = example.com
 
 # Heading of the line with the box for adding a site.
 settings-blocking-add = سائٹ شامل کریں
-
-# Small line under "Add a site".
-settings-blocking-add-sub = یہ اور اس کی تمام ذیلی ڈومینز کبھی بلاک نہیں ہوں گی۔
 
 # Tip of the minus button on a site that is let through: blocks it again.
 # SAFETY: needs a human review before it ships
@@ -133,7 +127,7 @@ settings-blocking-allowed = ہمیشہ اجازت یافتہ
 
 # Help text (i button) of the Always let through card.
 # SAFETY: needs a human review before it ships
-settings-blocking-allowed-about = یہاں درج سائٹس، اور ان کی تمام ذیلی ڈومینز، کبھی بلاک نہیں ہوتیں، چاہے وہ فہرستوں میں ہوں۔ مائنس کا بٹن کسی سائٹ کو دوبارہ بلاک کر دیتا ہے۔
+settings-blocking-allowed-about = یہ سائٹس، اور ان کے نیچے کے ہر پتے، کبھی بلاک نہیں ہوتے، چاہے وہ فہرستوں میں ہوں۔ کسی سائٹ کو دوبارہ بلاک کرنے کے لیے مائنس دبائیں۔
 
 # Name of the page in the list of settings pages and its heading.
 settings-blocking-title = بلاکنگ
@@ -142,7 +136,7 @@ settings-blocking-title = بلاکنگ
 settings-blocking-keywords = بلاک اشتہارات ٹریکرز میلویئر دھوکے dns نجی تلاش quad9 mullvad cloudflare اجازت
 
 # Help text at the top of the page.
-settings-blocking-help = اس کمپیوٹر کے ہر براؤزر اور ایپ کے لیے اشتہارات، ٹریکرز اور معلوم مضر سائٹس کو بلاک کرتی ہے، اور ناموں کی تلاش مخفی (انکرپٹڈ) کنکشن پر بھیجتی ہے، تاکہ آپ کا نیٹ ورک انہیں پڑھ یا بدل نہ سکے۔
+settings-blocking-help = اس کمپیوٹر کے ہر براؤزر اور ایپ کے لیے اشتہارات، ٹریکرز اور معلوم مضر سائٹس کو بلاک کرتی ہے۔ یہ ویب سائٹس کا پتا بھی مخفی (انکرپٹڈ) کنکشن پر لیتی ہے، تاکہ آپ کا نیٹ ورک نہ دیکھ سکے اور نہ بدل سکے کہ آپ کون سی سائٹس کھولتے ہیں۔
 
 # Text of the switch that turns blocking on or off.
 settings-blocking-switch = اشتہارات اور مضر سائٹس بلاک کریں
@@ -151,16 +145,36 @@ settings-blocking-switch = اشتہارات اور مضر سائٹس بلاک ک
 settings-blocking-where = تلاش کہاں جائے
 
 # Help text (i button) of the Blocking card.
-settings-blocking-card-about = HaGeZi کی اشتہارات، ٹریکرز اور معلوم مضر سائٹس کی فہرستیں استعمال کرتی ہے، جو دن میں ایک بار حاصل کی جاتی ہیں۔ جب یہ بند ہو تو کچھ نہیں چلتا۔ ناموں کی تلاش یہاں منتخب کیے گئے نجی سرور پر مخفی (انکرپٹڈ) کنکشن سے جاتی ہے۔ Quad9 کوئی ریکارڈ نہیں رکھتا کہ کس نے پوچھا۔ "آپ کا نیٹ ورک" پھر بھی بلاک کرتا ہے، لیکن نجی نہیں ہے: آپ کے نیٹ ورک کے اپنے سرورز ہر تلاش دیکھتے ہیں۔
-
-# Small line under the Block adverts and bad sites switch.
-settings-blocking-switch-sub = HaGeZi کی فہرستیں، دن میں ایک بار حاصل ہوتی ہیں۔
+settings-blocking-card-about = HaGeZi کی اشتہارات، ٹریکرز اور معلوم مضر سائٹس کی فہرستیں استعمال کرتی ہے، جو دن میں ایک بار اپ ڈیٹ ہوتی ہیں۔ جب بلاکنگ بند ہو تو کچھ نہیں چلتا۔ ویب سائٹس کا پتا یہاں منتخب کیے گئے نجی سرور کے ذریعے مخفی (انکرپٹڈ) کنکشن پر لیا جاتا ہے۔ Quad9 کوئی ریکارڈ نہیں رکھتا کہ کس نے پوچھا۔ "آپ کا نیٹ ورک" پھر بھی بلاک کرتا ہے، لیکن نجی نہیں ہے، کیونکہ آپ کے نیٹ ورک کے اپنے سرورز آپ کی کھولی ہوئی ہر سائٹ دیکھ لیتے ہیں۔
 
 # Heading of the line with the private server dropdown.
 settings-blocking-private = نجی سرور
 
-# Small line under Private server.
-settings-blocking-private-sub = Quad9 کوئی ریکارڈ نہیں رکھتا کہ کس نے پوچھا۔
-
 # Name of the choice in Private server that uses the network's own servers.
 settings-blocking-provider-network = آپ کا نیٹ ورک
+
+# Heading of the Firewall card, first on the Firewall and blocking page.
+settings-firewall = فائر وال
+
+# Help text (i button) of the Firewall card.
+settings-firewall-about = جب فائر وال چالو ہو تو دوسرے کمپیوٹر اس کمپیوٹر سے نہیں جڑ سکتے، سوائے اس کے کہ کنکشن اسی کمپیوٹر نے شروع کیا ہو۔ اس لیے اسی Wi-Fi پر کوئی اندر آنے کی کوشش نہیں کر سکتا۔ براؤزنگ، اپ ڈیٹس اور پرنٹر پھر بھی کام کرتے ہیں۔ جو پروگرام دوسرے کمپیوٹروں کے جڑنے کا انتظار کرتا ہے، جیسے گیم سرور، اس کا پورٹ نیچے کھولنا پڑتا ہے۔ جب فائر وال بند ہو تو نیٹ ورک کا کوئی بھی کمپیوٹر ہر اس پروگرام تک پہنچ سکتا ہے جو کنکشن کا انتظار کر رہا ہو۔ اسے چالو یا بند کرنے کے لیے ایڈمنسٹریٹر کا پاس ورڈ چاہیے۔
+
+# Name of the firewall's on and off switch.
+settings-firewall-switch = فائر وال
+
+# Small line under the switch while the firewall is off.
+settings-firewall-off-sub = دوسرے کمپیوٹر ان پروگراموں تک پہنچ سکتے ہیں جو ان کا انتظار کرتے ہیں۔
+
+# Said beside the switch once the firewall is on.
+settings-firewall-done-on = فائر وال چل رہی ہے
+
+# Said beside the switch once the firewall is off.
+settings-firewall-done-off = فائر وال بند ہے
+
+# Heading of the card that blocks adverts and bad sites, on the Firewall and blocking page.
+settings-blocking-card = روک
+
+
+
+# Small line under the firewall switch when it is on but its rules are not loaded.
+settings-firewall-not-in-force = فائر وال چالو ہے مگر کام نہیں کر رہی، کیونکہ کمپیوٹر شروع ہونے پر اس کے قواعد لوڈ نہیں ہوئے۔ اسے بند کر کے دوبارہ چالو کریں۔

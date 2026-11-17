@@ -22,34 +22,34 @@ ring-cli-command = { $program } [OPTION…]
 ring-cli-options = অপশন:
 
 # Help for the ring's --say option, printed in a terminal.
-ring-cli-say = এই কথাগুলো যা বলে তা করুন, যেন রিংকে মুখে বলা হয়েছে (মাইক্রোফোন ছাড়া ভয়েস কমান্ড পরখ করতে)
+ring-cli-say = মাইক্রোফোন ছাড়াই লেখা থেকে একটি ভয়েস কমান্ড চালান
 
 # Help for the ring's --background option, printed in a terminal.
-ring-cli-background = না দেখিয়ে চালু করুন, যাতে প্রথমবার খুলতেই তৎক্ষণাৎ খোলে
+ring-cli-background = চোখের আড়ালে চালু করুন, যাতে প্রথমবার রিং তৎক্ষণাৎ খোলে
 
 # Help for the ring's --show-desktop option, printed in a terminal.
-ring-cli-show-desktop = ডেস্কটপ দেখাতে সব উইন্ডো সরিয়ে রাখুন, বা ফিরিয়ে আনুন (Super ও D এটি চায়)
+ring-cli-show-desktop = ডেস্কটপ দেখাতে সব উইন্ডো লুকান, বা ফিরিয়ে আনুন (Super ও D কী এটি করে)
 
 # Help for the ring's --listen option, printed in a terminal.
-ring-cli-listen = রিং শোনা অবস্থায় খুলুন, যেমন কীবোর্ড শর্টকাট পারে
+ring-cli-listen = কীবোর্ড শর্টকাটের মতো করে রিং এমনভাবে খুলুন যেন সে ভয়েস কমান্ডের জন্য আগেই শুনছে
 
 # Help for the ring's --all option, printed in a terminal.
 ring-cli-all = চারপাশে সব অ্যাপ দেখিয়ে রিং খুলুন
 
 # Help for the ring's --power option, printed in a terminal.
-ring-cli-power = লগ আউট, রিস্টার্ট ও বন্ধ করার জন্য রিং খুলুন
+ring-cli-power = রিংয়ের পাওয়ার অপশন খুলুন: লগ আউট, রিস্টার্ট ও বন্ধ করা
 
 # Help for the ring's --favourites option, printed in a terminal.
 ring-cli-favourites = সেটিংসে প্রিয়দের পাতা খুলুন
 
 # Help for the ring's --restyle option, printed in a terminal.
-ring-cli-restyle = সেটিংস থেকে নতুন চেহারা (হালকা বা গাঢ়, বা নতুন রং) এখনই নিন
+ring-cli-restyle = সেটিংস থেকে নতুন চেহারা এখনই প্রয়োগ করুন (হালকা বা গাঢ়, বা নতুন হাইলাইট রং)
 
 # Help for the ring's --corners option, printed in a terminal.
-ring-cli-corners = উপরের কোণের স্পর্শ-স্থানগুলো আবার তৈরি করুন
+ring-cli-corners = উপরের কোণের স্পর্শ-স্থানগুলো আবার সাজান
 
 # Help for the ring's --notes option, printed in a terminal.
-ring-cli-notes = কীবোর্ড পর্দার বিজ্ঞপ্তি-বৃত্তে নিয়ে যান (Super ও N এটি চায়)
+ring-cli-notes = কীবোর্ডের নিয়ন্ত্রণ পর্দার বিজ্ঞপ্তি-বৃত্তে নিয়ে যান (Super ও N কী এটি করে)
 
 # Error printed in a terminal when the ring is given an option it does not know.
 ring-cli-unknown = অজানা অপশন { $option }
@@ -112,13 +112,13 @@ ring-tool-report = সমস্যা জানান
 ring-gone = সেটি আর নেই।
 
 # Line in the ring when nothing could open the item that was pressed.
-ring-could-not-open = কিছুই সেটি খুলতে পারেনি।
+ring-could-not-open = Trindle সেটি খুলতে পারে না।
 
 # Line in the ring while it listens to a spoken command.
-ring-listening = শুনছি... বলুন, আপনি থামলে আমিও থামব
+ring-listening = শুনছি… আপনার কমান্ড বলুন। আপনি থামলে শোনা থামবে
 
 # Line in the ring while it works out what was said.
-ring-working-out = বুঝে নিচ্ছি...
+ring-working-out = বুঝে নিচ্ছি…
 
 # Answer to the spoken command to close windows when none are open.
 ring-nothing-to-close = বন্ধ করার মতো কিছু নেই
@@ -186,7 +186,7 @@ ring-star-remove = প্রিয়দের থেকে সরান
 ring-star-add = প্রিয়দের মধ্যে যোগ করুন
 
 # Screen reader name of the red button that shows why an uninstall failed.
-ring-not-done = হয়নি
+ring-not-done = কেন হয়নি?
 
 # Note on an app's menu when the middle of the ring has no room for another favourite; the number is how many it holds.
 ring-middle-full =
@@ -200,7 +200,7 @@ ring-power-lock = লক
 ring-power-screensaver = স্ক্রিনসেভার
 
 # Choice on the ring's power page: put the computer to sleep.
-ring-power-suspend = সাসপেন্ড
+ring-power-suspend = ঘুম পাড়ান
 
 # Choice on the ring's power page: hibernate.
 ring-power-hibernate = হাইবারনেট
@@ -222,7 +222,7 @@ ring-empty-hint = "সব অ্যাপ"-এ ক্লিক করুন, ত
 
 # Line in the ring when a spoken or typed power choice needs a click to confirm.
 # SAFETY: needs a human review before it ships
-ring-power-only-click = শুধু ক্লিক করলেই এটি নিশ্চিত হয়।
+ring-power-only-click = নিশ্চিত করতে ক্লিক করুন।
 
 # Line in the ring when something other than the person tried to shut the computer down.
 # SAFETY: needs a human review before it ships
@@ -230,7 +230,7 @@ ring-power-only-own = শুধু আপনিই এই কম্পিউট�
 
 # Line in the ring when the power page closed because a program pressed a key.
 # SAFETY: needs a human review before it ships
-ring-power-closed = পাওয়ার পাতা বন্ধ হয়েছে: আপনি নন, একটি প্রোগ্রাম কী চেপেছে।
+ring-power-closed = পাওয়ার পাতা বন্ধ হয়েছে, কারণ একটি প্রোগ্রাম কী চেপেছে।
 
 ring-startup-add = লগইনে চালু করুন
 
@@ -239,11 +239,20 @@ ring-startup-remove = লগইনে চালু করা বন্ধ কর
 
 
 # Help for the option that opens the shortcut list, or closes it when it is showing.
-ring-cli-shortcuts = সব কিবোর্ড শর্টকাট তালিকায় দেখান, অথবা তালিকা সরিয়ে রাখুন (Super ও K, সেটিংসে না বদলালে)
+ring-cli-shortcuts = সব কিবোর্ড শর্টকাটের একটি তালিকা দেখান, বা তালিকা লুকান (Super ও K, সেটিংসে না বদলালে)
 
 # Notice from the new ring after the parts were restarted from the keyboard.
 ring-restarted = আবার চালু হয়েছে
 
 # Under the notice above.
-ring-restarted-why = রিং ও সহায়ক অংশ আবার চালু হয়েছে।
+ring-restarted-why = রিং ও এর সহায়ক অংশ আবার চালু হয়েছে।
 
+
+# Tip on the app menu's red button when removing the app did not work.
+ring-uninstall-failed = সরানো যায়নি।
+
+# Shorter name of the Sound and video piece of All apps, for when the full name does not fit along it.
+ring-category-media-short = শব্দ
+
+# Line in the ring when a spoken command, such as turning the sound down, did not work.
+ring-voice-failed = কাজ হয়নি।

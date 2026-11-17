@@ -188,7 +188,6 @@ pub const MESSAGES: &[crate::common::more::Entry] = &[
     ("store-refusal-pkexec", BACKUP_PUT),
     ("store-refusal-not-read-from", BACKUP_PUT),
     ("store-not-installed-failed", BACKUP_PUT),
-    ("store-not-installed-both", BACKUP_PUT),
     ("store-not-installed-refused", BACKUP_PUT),
     ("store-flat-summary-failed", BACKUP_PUT),
 

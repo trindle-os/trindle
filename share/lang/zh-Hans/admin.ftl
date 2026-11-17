@@ -11,7 +11,7 @@ admin-login-too-long = 这个登录名太长了。
 admin-user-none = 没有名为 { $name } 的用户。
 
 # Red words in Settings when the account asked about is the system's own and not a person's. { $name } is the login name.
-admin-user-system = { $name } 是系统账户，不会被改动。
+admin-user-system = { $name } 是系统账户，所以 Trindle 没有改动它。
 
 # SAFETY: needs a human review before it ships
 # Red words in Settings when no password reached the helper that sets it.
@@ -24,16 +24,16 @@ admin-password-short =
        *[other] 密码至少需要 { $n } 个字符。
     }
 
-# SAFETY: needs a human review before it ships
 # Red words in Settings when a new password has a line break in it.
-admin-password-line-break = 密码中不能包含换行。
+# SAFETY: needs a human review before it ships
+admin-password-line-break = 密码不能包含换行。
 
 # Red words in Settings when the login name chosen for a new person is taken. { $name } is the login name.
 admin-user-exists = { $name } 已存在。
 
 # SAFETY: needs a human review before it ships
 # Red words in Settings when the only administrator is asked to stop being one. { $name } is the login name.
-admin-user-only-admin = { $name } 是唯一的管理员，所以仍保留管理员身份。
+admin-user-only-admin = { $name } 是唯一的管理员，所以必须保留管理员身份。
 
 # SAFETY: needs a human review before it ships
 # Red words in Settings when a person tries to delete the account they are signed in to.
@@ -41,7 +41,7 @@ admin-delete-self = 你不能删除自己的账户。
 
 # SAFETY: needs a human review before it ships
 # Red words in Settings when an account was deleted but its picture on the login screen could not be removed. { $name } is the login name; { $why } is the system's reason.
-admin-delete-picture-kept = { $name } 已被删除，但其登录界面上的头像仍然保留：{ $why }
+admin-delete-picture-kept = Trindle 已删除 { $name } 的账户，但无法移除其登录界面上的头像：{ $why }
 
 # Red words in Settings when the picture chosen for the login screen is too big.
 admin-picture-large = 这张图片太大了。
@@ -50,51 +50,51 @@ admin-picture-large = 这张图片太大了。
 admin-picture-not-ours = 这不是 Trindle 制作的图片。
 
 # Red words in Settings when the folder of login pictures could not be opened to the login screen. { $why } is the system's reason.
-admin-picture-folder = 无法让登录界面访问头像文件夹：{ $why }
+admin-picture-folder = Trindle 无法让登录界面访问头像文件夹：{ $why }
 
 # Red words in Settings when the language chosen has a name that cannot be one.
 admin-language-invalid = 这不是有效的语言名称。
 
 # Red words in Settings when Debian's list of languages could not be read. { $why } is the system's reason.
-admin-language-list = 无法读取 Debian 的语言列表：{ $why }
+admin-language-list = Trindle 无法读取 Debian 的语言列表：{ $why }
 
 # Red words in Settings when the language chosen is not one Debian knows. { $code } is the language's code.
-admin-language-unknown = { $code } 不是 Debian 已知的语言。
+admin-language-unknown = Debian 不认识语言 { $code }。
 
 # Red words in Settings when the computer name typed is not allowed.
-admin-hostname-invalid = 电脑名称由字母、数字和连字符组成，最多 63 个字符，不能以连字符开头或结尾。
+admin-hostname-invalid = 电脑名称只能使用字母、数字和连字符。最多 63 个字符，不能以连字符开头或结尾。
 
 # Red words in Settings when the 80% charging limit is on but could not be kept for the next start. { $why } is the system's reason.
-admin-charge-limit-lost = 限制目前已开启，但关机后会失效：{ $why }
+admin-charge-limit-lost = 充电上限目前已开启，但关机后会失效：{ $why }
 
 # Red words in Settings when charging was set to full but the limit could not be taken off for good. { $why } is the system's reason.
-admin-charge-limit-returns = 目前已充满电，但下次启动时限制会恢复：{ $why }
+admin-charge-limit-returns = 目前已开启充满电，但下次电脑启动时充电上限会恢复：{ $why }
 
 # Red words in Settings when a radio's block would not come off. { $words } is why; { $said } is what the system added.
 admin-radio-refused = { $words } { $said }
 
 # SAFETY: needs a human review before it ships
 # Red words in Settings when the switch that lets other computers connect could not be put off. { $why } is the system's reason.
-admin-sharing-still-on = 其他电脑仍然可以连接，因为开关无法关闭：{ $why }
+admin-sharing-still-on = 其他电脑仍然可以连接，因为 Trindle 无法关闭共享：{ $why }
 
 # Red words in Settings when a plugin's id is not one.
-admin-plugin-id-invalid = 这不是有效的插件标识。
+admin-plugin-id-invalid = 这不是插件标识。
 
 # Red words in Settings when the person a firewall step is for is not known.
-admin-person-unknown = 不认识这个人。
+admin-person-unknown = 没有这个人。
 
 # Red words in Settings when the folder of the person a step is for is not known.
-admin-person-folder-unknown = 不知道此人的文件夹。
+admin-person-folder-unknown = 此人没有文件夹。
 
 # SAFETY: needs a human review before it ships
 # Red words in Settings when the list of plugins let through the firewall could not be kept. { $why } is the system's reason.
-admin-plugins-list-not-kept = 无法保存放行的插件列表：{ $why }。
+admin-plugins-list-not-kept = Trindle 无法保存允许使用的插件列表：{ $why }。
 
 # Red words in Settings when the plugin a firewall step is for was not found.
-admin-plugin-not-found = 找不到该插件。
+admin-plugin-not-found = 没有这个插件。
 
 # Red words in Settings and Apps when Debian's updates were not installed because Trindle's own version could not be read.
-admin-update-version-unknown = 没有更新任何内容：无法确定这台电脑的 Trindle 版本，所以无法把 Trindle 自身的更新排除在外。
+admin-update-version-unknown = 没有更新任何内容。Trindle 无法确定自己安装的是哪个版本，所以无法把自身的更新排除在外。
 
 # First line of the progress while Debian's updates go in.
 admin-step-installing-updates = 正在安装更新
@@ -108,9 +108,9 @@ admin-step-installing-trindle = 正在安装 Trindle
 # Red words when the name of the package to remove is not a package's name.
 admin-package-invalid = 这不是软件包的名称。
 
-# SAFETY: needs a human review before it ships
 # Red words when the package to remove is not installed.
-admin-package-not-installed = 未执行：它没有安装。
+# SAFETY: needs a human review before it ships
+admin-package-not-installed = 该软件包未安装。
 
 # Red words in Settings when the firmware device asked for is not one fwupd knows.
 admin-device-invalid = 这不是 fwupd 已知的设备。
@@ -119,7 +119,7 @@ admin-device-invalid = 这不是 fwupd 已知的设备。
 admin-install-and-lists = { $first }；{ $lists }
 
 # Red words in Settings when Tailscale cannot be turned on because it is not known who asked.
-admin-tailscale-who = 无法确定是谁请求了 Tailscale。
+admin-tailscale-who = Trindle 不知道是谁要用 Tailscale。
 
 # Red words in Settings when the site blocking did not start in time.
 admin-blocking-late = 网站拦截未能及时启动。
@@ -129,48 +129,48 @@ admin-blocking-late = 网站拦截未能及时启动。
 admin-blocking-not-off = 拦截没有完全关闭：{ $why }
 
 # Part of the red words when turning site blocking off could not put a file back. { $path } is the file; { $why } is the system's reason.
-admin-file-not-put-back = 无法还原 { $path }：{ $why }
+admin-file-not-put-back = Trindle 无法还原 { $path }：{ $why }
 
 # Red words in Settings when the site typed to never block is not a site name.
 admin-site-invalid = 这不是网站名称。
 
 # Red words in Settings when the private server chosen for lookups is not one.
-admin-server-unknown = 没有这样的服务器。
+admin-server-unknown = 没有这个服务器。
 
 # Red words when a tool a step runs could not be started. { $tool } is the tool's name; { $why } is the system's reason.
 admin-tool-error = { $tool }：{ $why }
 
 # Red words when a tool stopped before it was given everything. { $tool } is the tool's name; { $why } is the system's reason.
-admin-tool-stopped = { $tool } 在收到全部内容之前就停止了，所以不能算已完成：{ $why }
+admin-tool-stopped = { $tool } 在拿到所需的全部内容之前就停止了，所以任务没有完成：{ $why }
 
 # Red words when a tool a step runs failed and said nothing. { $tool } is the tool's name.
 admin-tool-failed = { $tool } 失败了。
 
-# SAFETY: needs a human review before it ships
 # Red words when a file could not be taken away. { $path } is the file; { $why } is the system's reason.
-admin-file-not-removed = 无法删除 { $path }：{ $why }
+# SAFETY: needs a human review before it ships
+admin-file-not-removed = 无法移除 { $path }：{ $why }
 
 # Red words when a system file could not be read, so nothing was changed. { $why } is the system's reason; { $path } is the file.
-admin-file-not-read = 没有改动任何内容，因为{ $why }：{ $path }
+admin-file-not-read = 没有改动任何内容，因为 Trindle 无法读取 { $path }：{ $why }
 
 # SAFETY: needs a human review before it ships
 # Red words when a step failed and what it had done could not be put back either. { $why } is the first failure; { $problem } is the second.
-admin-undone-failed = { $why } 恢复原状也没有成功：{ $problem }
+admin-undone-failed = { $why } Trindle 也无法恢复原状：{ $problem }
 
 # Red words in Settings when the time chosen for keeping earlier versions is not one on offer.
-admin-home-keep-invalid = 这不是可以用来保留早期版本的时长。
+admin-home-keep-invalid = 这不是有效的早期版本保留时长。
 
 # Red words in Settings when the folder the earlier versions are kept in is not there.
-admin-home-folder-missing = 找不到快照文件夹。
+admin-home-folder-missing = 找不到早期版本。
 
 # Red words in Settings when something that is not a folder is where the earlier versions would go.
-admin-home-folder-blocked = 存放快照的位置上有一个不是文件夹的东西。
+admin-home-folder-blocked = 本该是存放早期版本的文件夹的位置上，有一个文件。
 
 # Red words in Folders when it is not known who asked for a step.
-admin-caller-unknown = 无法确定是谁提出的请求。
+admin-caller-unknown = 不知道是谁提出的。
 
-# SAFETY: needs a human review before it ships
 # Red words when a step that must go through the administrator's password was started another way.
+# SAFETY: needs a human review before it ships
 admin-pkexec-only = 这只能通过 pkexec 运行。
 
 # Red words in Folders when the name of the computer to connect to is not a computer's name.
@@ -187,16 +187,16 @@ admin-share-path-invalid = 这不是共享文件夹的路径。
 
 # SAFETY: needs a human review before it ships
 # Red words in Folders when the shared folder to close is not one of the person's own.
-admin-share-not-yours = 在这里只能关闭你自己的共享文件夹。
+admin-share-not-yours = 在这里你只能关闭自己的共享文件夹。
 
 # Red words in Folders when no shared folder is open at the place named.
 admin-share-not-open = 那里没有打开的共享文件夹。
 
 # Red words in Folders when the folder shares open in has been changed by something else. { $path } is the folder.
-admin-share-folder-changed = { $path } 与 Trindle 留下时不一样了，所以不会在那里挂载任何内容。
+admin-share-folder-changed = 自 Trindle 设置好 { $path } 以来，有东西改动了它，所以不会在那里连接任何内容。
 
 # Red words in Folders when the private folder the login is kept in has been changed by something else. { $path } is the folder.
-admin-share-private-changed = { $path } 与 Trindle 留下时不一样了。
+admin-share-private-changed = { $path } 已被改动。
 
 # Red words when a folder could not be made. { $path } is the folder; { $why } is the system's reason.
 admin-path-error = { $path }：{ $why }
@@ -205,20 +205,20 @@ admin-path-error = { $path }：{ $why }
 admin-share-too-many = 打开的共享文件夹太多了。
 
 # Red words in Folders when the program that connects to a share is not installed. { $tool } is its name; { $package } is the Debian package it comes in.
-admin-tool-missing = 没有安装 { $tool }。它包含在 Debian 的 { $package } 软件包中。
+admin-tool-missing = 没有安装 { $tool }。它随 Debian 的 { $package } 软件包提供。
 
-# SAFETY: needs a human review before it ships
 # Red words in Folders when the login for a share could not be read.
+# SAFETY: needs a human review before it ships
 admin-login-unreadable = 无法读取登录信息。
 
 # Red words in Folders when the list of what is open on this computer could not be read. { $why } is the system's reason.
-admin-mounts-unreadable = 无法读取这台电脑上已挂载的内容：{ $why }
+admin-mounts-unreadable = Trindle 无法读取这台电脑上已挂载的内容：{ $why }
 
 # Red words in Folders when a shared folder cannot be closed because a program is using it.
-admin-share-busy = 仍有程序在使用其中的内容。请先关闭它。
+admin-share-busy = 仍有程序在使用此文件夹中的内容。请先关闭该程序，然后再试一次。
 
 # Red words in Folders when a shared folder's computer does not answer while it is being closed.
-admin-share-not-answering = 那台电脑没有响应。注销时会将其关闭。
+admin-share-not-answering = 那台电脑没有响应。你注销时，共享文件夹会关闭。
 
 # Red words when the number given for a person is not a user number.
 admin-user-id-invalid = 这不是用户编号。
@@ -247,22 +247,22 @@ admin-snapshot-number-invalid = 这不是快照编号。
 admin-snapshot-description = 在设置中创建
 
 # Red words in Settings when it could not be told which disk the system is on.
-admin-disk-unknown = 无法确定系统位于哪块磁盘。
+admin-disk-unknown = Trindle 无法确定系统位于哪块磁盘。
 
 # SAFETY: needs a human review before it ships
 # Red words in Settings when the system cannot be swapped for a snapshot because it is not in a subvolume of its own.
-admin-system-subvolume = 系统不在独立的 Btrfs 子卷中，所以无法换成快照。
+admin-system-subvolume = 系统不在独立的 Btrfs 子卷中，所以 Trindle 无法把它换成快照。
 
 # SAFETY: needs a human review before it ships
 # Red words in Apps when a source's signing key could not be fetched. { $url } is the address.
-admin-key-fetch = 无法从 { $url } 获取签名密钥。
+admin-key-fetch = Trindle 无法从 { $url } 获取签名密钥。
 
 # SAFETY: needs a human review before it ships
 # Red words in Apps when the address given for a signing key gave back something else.
-admin-key-invalid = 该地址返回的内容不是签名密钥。
+admin-key-invalid = 该地址没有返回签名密钥。
 
 # Red words in Apps when a source's file could not be read, so nothing was changed. { $path } is the file; { $why } is the system's reason.
-admin-source-file-unreadable = 没有改动任何内容，因为无法读取 { $path }：{ $why }
+admin-source-file-unreadable = 没有改动任何内容，因为 Trindle 无法读取 { $path }：{ $why }
 
 # First line of the progress while a source is added: the signing key is fetched.
 admin-step-fetching-key = 正在获取它的签名密钥
@@ -274,25 +274,25 @@ admin-step-adding-source = 正在添加并读取它的列表
 admin-source-unusable = 无法使用该软件源。{ $why }
 
 # Red words in Apps when a source could not be used and so was taken away again. { $why } is the reason.
-admin-source-unusable-removed = 无法使用该软件源，所以已将其移除。{ $why }
+admin-source-unusable-removed = Trindle 无法使用该软件源，所以已将其移除。{ $why }
 
 # SAFETY: needs a human review before it ships
 # Red words in Apps when the person could not be let switch Tailscale on or off. { $user } is the login name; { $why } is the reason.
 admin-source-tailscale-operator = { $user } 还不能开关它：{ $why }
 
 # Red words in Apps when Syncthing could not be started for a person. { $user } is the login name; { $why } is the reason.
-admin-source-syncthing = 无法为 { $user } 启动它：{ $why }
+admin-source-syncthing = Trindle 无法为 { $user } 启动它：{ $why }
 
 # SAFETY: needs a human review before it ships
 # Red words in Apps when the person could not be let use virtual machines, which Claude's Cowork needs. { $user } is the login name; { $why } is the reason.
-admin-source-claude-kvm = 无法让 { $user } 使用虚拟机，而 Cowork 需要它：{ $why }
+admin-source-claude-kvm = Trindle 无法让 { $user } 使用虚拟机，而 Cowork 需要它：{ $why }
 
 # SAFETY: needs a human review before it ships
 # Red words in Apps when the person could not be let use Docker without a password. { $user } is the login name; { $why } is the reason.
-admin-source-docker = 无法让 { $user } 免密码使用它：{ $why }
+admin-source-docker = Trindle 无法让 { $user } 免密码使用它：{ $why }
 
 # Red words in Apps when a program was installed but its setting up did not finish. { $name } is the program; { $why } is the reason.
-admin-source-set-up-failed = { $name } 已安装，但设置没有完成：{ $why }
+admin-source-set-up-failed = { $name } 已安装，但 Trindle 无法完成对它的设置：{ $why }
 
 # Line of the progress while a program is installed.
 admin-step-installing-it = 正在安装
@@ -307,7 +307,7 @@ admin-source-arch = { $name } 不是为这种电脑（{ $arch }）制作的。
 admin-step-setting-up = 正在设置
 
 # Red words in Apps when the address of a custom source is not an https address.
-admin-source-address = 地址必须以 https:// 开头，且不能包含其他内容。
+admin-source-address = 每个地址必须是以 https:// 开头的普通网址。
 
 # Red words in Apps when the suite or components of a custom source are not plain words.
 admin-source-words = 套件和组件必须是普通的词。
@@ -334,45 +334,45 @@ admin-snapshot-missing = 磁盘上没有快照 { $n }。
 
 # SAFETY: needs a human review before it ships
 # Red words in Settings when a restore did not begin because the snapshot could not be made ready. { $why } is the reason.
-admin-restore-not-ready = 没有改动任何内容：快照无法准备就绪。{ $why }
+admin-restore-not-ready = 没有改动任何内容，因为 Trindle 无法准备好快照。{ $why }
 
 # SAFETY: needs a human review before it ships
 # Red words in Settings when the present system could not be set aside during a restore. { $why } is the reason.
-admin-restore-aside = 无法把当前系统暂时放到一边：{ $why }
+admin-restore-aside = Trindle 无法把当前系统暂时放到一边：{ $why }
 
 # SAFETY: needs a human review before it ships
 # Red words in Settings when a restore failed and the present system could not be put back under its name. { $aside } is the name it now has; { $sub } is the name it needs; { $why } is the reason.
-admin-restore-stranded = 当前系统现在名为 { $aside }，而不是 { $sub }，在改回 { $sub } 之前电脑将无法启动：{ $why }
+admin-restore-stranded = 当前系统现在叫 { $aside }，而不是 { $sub }，在改回 { $sub } 之前电脑无法启动：{ $why }
 
 # SAFETY: needs a human review before it ships
 # Red words in Settings when the earlier snapshots could not be moved into the restored system. { $why } is the reason.
-admin-restore-snapshots-across = 无法迁移快照：{ $why }
+admin-restore-snapshots-across = Trindle 无法迁移快照：{ $why }
 
 # Red words in Settings joining two reasons a restore could not be undone. { $first } and { $second } are the two reasons.
 admin-both-failures = { $first }；{ $second }
 
 # SAFETY: needs a human review before it ships
 # Red words in Settings when the restored system could not be put in place. { $why } is the reason.
-admin-restore-in-place = 无法把快照放到位：{ $why }
+admin-restore-in-place = Trindle 无法把快照放到位：{ $why }
 
 # Red words in Settings when the list of systems set aside could not be brought up to date. { $why } is the reason.
-admin-restore-list = 无法更新已搁置系统的列表：{ $why }
+admin-restore-list = Trindle 无法更新已搁置系统的列表：{ $why }
 
-# SAFETY: needs a human review before it ships
 # Red words in Settings when systems set aside could not be removed. { $names } lists them.
-admin-restore-not-removed = 无法移除：{ $names }
+# SAFETY: needs a human review before it ships
+admin-restore-not-removed = 无法移除 { $names }
 
 # SAFETY: needs a human review before it ships
 # Last line of an update's tidying when it took programs away: which, and that nothing needed them. Help address updates-removed.
-admin-tidied-away = 已不再有任何东西需要这些程序，所以已将其移除：{ $list }。
+admin-tidied-away = Trindle 已移除这些内容，因为已经没有任何东西需要它们了：{ $list }。
 
 # Red words in Settings and Apps when an update ended with packages still kept back. { $list } names them. Help address updates-kept-back.
-admin-update-kept-back = 部分更新未能安装。已保留的更新：{ $list }。
+admin-update-kept-back = 并非所有更新都已安装。以下更新被保留：{ $list }。
 
 # Red words after an update when a driver (DKMS) would not build for the new kernel. The kernel and the rest of the update went in. { $driver } is the driver, { $feature } what is off. Help address updates-driver-off.
-admin-driver-off-known = { $feature }已关闭：它的驱动（{ $driver }，DKMS）暂时无法在新内核上构建。
+admin-driver-off-known = 由于驱动（{ $driver }，DKMS）暂时无法为新的 Linux 内核构建，{ $feature }已关闭。
 
-admin-driver-off = 一个驱动（{ $driver }，DKMS）暂时无法在新内核上构建，因此它提供的功能已关闭。
+admin-driver-off = 驱动（{ $driver }，DKMS）暂时无法为新的 Linux 内核构建。需要它的功能已关闭。
 
 # Said once after the drivers that are off.
 admin-driver-off-rest = 内核和其余更新已安装。
@@ -380,38 +380,82 @@ admin-driver-off-rest = 内核和其余更新已安装。
 # The feature that the v4l2loopback driver gives.
 admin-driver-virtual-camera = 虚拟摄像头
 
-admin-language-in-use = { $code } 是这台电脑启动时使用的语言，所以会保留。
-
+admin-language-in-use = { $code } 是这台电脑启动时使用的语言，所以无法移除。
 
 
 # The kernel or chip has no split-lock slowing to turn off.
-admin-split-lock-none = 这台电脑没有可以关闭的拆分锁减速功能。
+admin-split-lock-none = 这台电脑没有可以关闭的拆分锁减速。
 
 # The drive chosen for games is not there, or is the computer's own.
-admin-games-drive-not-found = 找不到该磁盘，或者它存放着系统。
+admin-games-drive-not-found = Trindle 找不到该磁盘，或者它是系统盘。
 
 # The drive could not be closed where it was open.
-admin-games-drive-busy = 该磁盘正在使用。请关闭其中已打开的内容，然后重试：{ $why }
+admin-games-drive-busy = 该磁盘正在使用。请关闭其中的所有文件和程序，然后重试：{ $why }
 
 # Another software change has the read-only system open.
-admin-system-busy = 另一项软件更改正在进行。请在它结束后重试。
+admin-system-busy = 另一项软件更改正在进行。请在它完成后重试。
 
 # The read-only system could not be opened for a software change; nothing was changed.
-admin-system-not-opened = 没有做任何更改：系统无法解锁：{ $why }
+admin-system-not-opened = 没有做任何更改，因为 Trindle 无法解锁系统：{ $why }
 
 # The read-only system could not be locked again after a change.
-admin-system-left-open = 系统无法重新锁定。下次启动时会将其锁定：{ $why }
+admin-system-left-open = Trindle 无法重新锁定系统。下次启动时会将其锁定：{ $why }
 
 # The system was locked, but /usr/local could not be kept writable on top of it.
-admin-system-local-locked = 无法保持 /usr/local 可写：{ $why }
+admin-system-local-locked = Trindle 无法保持 /usr/local 可写：{ $why }
 
 # A command that opens the system outside a software change, run other than by root itself.
 admin-system-root-only = 只有 root 才能运行，且不能通过 pkexec 运行。
 
 # Switching the read-only system on where the system's disk is not Btrfs.
-admin-system-needs-btrfs = 需要 Btrfs。
+admin-system-needs-btrfs = 这需要 Btrfs。
 
 
 # Red words in Settings when a restore swapped the systems but could not finish tidying up. { $why } is the reason.
-admin-restore-finish-later = 快照已就位，电脑将从它启动。清理旧系统没有完成，下次启动时会再试一次：{ $why }
+admin-restore-finish-later = 快照已就位，电脑将从它启动。Trindle 无法完成对旧系统的清理，会在电脑下次启动时再试一次：{ $why }
 
+
+# Red words in Settings when too many ports are open already. { $most } is a number.
+admin-ports-too-many = 你最多可以开放 { $most } 个端口。
+
+# Red words in Settings when the list of open ports could not be kept. { $why } is the system's reason.
+admin-ports-not-kept = Trindle 无法保存已开放端口的列表：{ $why }。
+
+# Red words in Settings when the firewall could not be switched off. { $why } is the system's reason.
+admin-firewall-still-on = 防火墙仍然开着：{ $why }
+
+# Red line when a plugin now asks for other network ports than the ones the administrator's password was typed for.
+admin-plugin-ports-changed = 这个插件现在请求的网络端口与你允许的不同。请再次允许它，才能打开这些端口。
+
+# Red words when a program is asked to be set up for someone other than the person asking.
+admin-source-not-you = 只能为提出请求的人添加程序。
+
+# Red words when a snapshot is put back and the name for the system set aside is already used. 
+admin-restore-name-taken = 刚才另一次还原用了同一个名称。请等几秒钟，再试一次。
+
+# Said when a shared folder can't be disconnected. { $path } is the folder, { $error } the system's reason.
+admin-share-not-closed = 无法断开 { $path }：{ $error }
+
+# Said when shared folders don't answer while they are being disconnected. { $n } is how many.
+admin-shares-left =
+    { $n ->
+       *[other] 有 { $n } 个共享文件夹没有响应，所以仍处于连接状态。电脑关机时它们会被断开。
+    }
+
+# Red words in Drives when a swap file could not be switched off before making room. { $path } is the file, { $why } the system's reason.
+admin-swap-not-off = 无法关闭交换文件 { $path }：{ $why }
+
+# Red words in Drives when a swap file could not be switched back on after making room. { $path } is the file, { $why } the system's reason.
+admin-swap-not-on = 无法重新开启交换文件 { $path }：{ $why }
+
+# Red words when Drives asks about a swap file that the system's own settings don't name.
+admin-swap-not-listed = { $path } 不是系统的交换文件。
+
+# Red words when a swap file, or a folder above it, could be changed or read by someone other than the administrator. { $why } is that file or folder.
+admin-swap-not-safe = Trindle 不会使用交换文件 { $path }，因为其他人可能更改或读取 { $why }。
+
+# Red words in Drives when, after making room, Trindle couldn't find where the swap file now starts, which waking from hibernation needs.
+admin-swap-resume-unread = 找不到交换文件现在的位置，从休眠中唤醒可能失败。
+
+# Said when the swap file moved and the running system couldn't be told: hibernation is refused until the computer restarts.
+admin-swap-resume-restart = 重启后，休眠就能再用了。

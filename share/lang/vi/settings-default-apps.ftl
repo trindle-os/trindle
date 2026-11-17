@@ -8,7 +8,7 @@ settings-default-apps-title = Ứng dụng mặc định
 settings-default-apps-keywords = trình duyệt thư email tệp ảnh nhạc video pdf lịch mở bằng terminal
 
 # Introduction under the heading of the default apps page, and the words behind the page i.
-settings-default-apps-help = Chương trình nào mở liên kết web, email, ảnh, lịch và những thứ còn lại. Terminal được chọn trong ~/.config/xdg-terminals.list; nếu chưa chọn, Trindle dùng chương trình đầu tiên đã cài.
+settings-default-apps-help = Chọn chương trình mở liên kết web, email, ảnh, lịch và những thứ khác. Bạn chọn terminal trong ~/.config/xdg-terminals.list. Nếu bạn chưa chọn, Trindle dùng terminal đầu tiên đã cài.
 
 # Name of a kind of thing to open, as the heading of a line and the name of its list on the default apps page.
 settings-default-apps-kind-web = Web
@@ -68,28 +68,28 @@ settings-default-apps-kind-calendar-in-sentence = lịch
 settings-default-apps-card-internet = Internet
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-internet-about = Chương trình mở liên kết web được nhấp ở bất kỳ đâu, chương trình soạn email khi nhấp vào một địa chỉ, và chương trình mở lời mời lịch.
+settings-default-apps-card-internet-about = Chọn chương trình mở liên kết web, địa chỉ email và lời mời lịch.
 
 # Title of a card on the default apps page.
 settings-default-apps-card-files = Tệp và tài liệu
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-files-about = Chương trình mở thư mục, tệp văn bản thuần và tài liệu PDF khi bạn mở từ Folders, màn hình nền hoặc ứng dụng khác.
+settings-default-apps-card-files-about = Chọn chương trình mở thư mục, tệp văn bản thuần và tài liệu PDF.
 
 # Title of a card on the default apps page.
 settings-default-apps-card-media = Ảnh và âm thanh
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-media-about = Chương trình mở ảnh, bản nhạc hoặc video khi bạn mở chúng.
+settings-default-apps-card-media-about = Chọn chương trình mở ảnh, nhạc và video.
 
 # Sentence at the top of the page when every kind has a program; { $web } is the program that opens web links.
-settings-default-apps-all-set-web = Mọi thứ đều có chương trình để mở; { $web } mở liên kết web.
+settings-default-apps-all-set-web = Mọi thứ đều có chương trình để mở, và { $web } mở liên kết web.
 
 # Sentence at the top of the page when every kind has a program and the one for web links is not known.
 settings-default-apps-all-set = Mọi thứ đều có chương trình để mở.
 
 # Sentence at the top of the page when one kind has no program chosen; { $kind } is its name in lower case.
-settings-default-apps-one-missing = Chưa chọn chương trình nào để mở { $kind }.
+settings-default-apps-one-missing = Hãy chọn một chương trình để mở { $kind }.
 
 # Sentence at the top of the page when several kinds have no program chosen; { $kinds } is their names as a list joined with "or".
 settings-default-apps-many-missing = Chưa chọn chương trình nào để mở { $kinds }.
@@ -100,12 +100,5 @@ settings-default-apps-none-installed = Chưa có chương trình nào đã cài 
 # First choice in a list when no program is chosen for that kind yet.
 settings-default-apps-not-chosen = Chưa chọn
 
-# Small words under a kind with a program list; { $n } is how many programs can open it.
-settings-default-apps-can-open =
-    { $n ->
-       *[other] { $n } chương trình có thể mở những thứ này.
-    }
-
 # Said in green under a kind's list after the choice was kept.
 settings-default-apps-saved = Đã lưu
-

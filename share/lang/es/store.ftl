@@ -23,7 +23,7 @@ store-nav-updates-waiting = Actualizaciones ({ $n })
 store-nav-plugins = Complementos
 
 # Side bar place: apps from GitHub.
-store-nav-github = De GitHub
+store-nav-github = Buscar
 
 # Side bar place: where software comes from.
 store-nav-sources = Fuentes de software
@@ -39,9 +39,6 @@ store-group-settings = Ajustes de aplicaciones
 
 # Small heading over the categories of apps.
 store-group-categories = Categorías
-
-# Small heading over the other ways to get an app.
-store-group-more = Más formas de conseguir aplicaciones
 
 # Title of a page of search results; the words searched for are in the quotes.
 store-grid-results = Resultados de “{ $text }”
@@ -89,20 +86,24 @@ store-cat-utility = Utilidades
 store-cat-system = Sistema
 
 # Red words when the list of apps could not be read.
-store-catalogue-unreadable = No se pudo leer el catálogo: { $why }
+store-catalogue-unreadable = Trindle no pudo leer el catálogo: { $why }
 
 # Red words when Flathub's list of apps could not be fetched. { $why } is what Flatpak said.
-store-catalogue-not-fetched = No se pudo obtener la lista de aplicaciones de Flathub. Comprueba la conexión a internet. { $why }
+store-catalogue-not-fetched = Trindle no pudo obtener la lista de aplicaciones de Flathub. Comprueba tu conexión a internet. { $why }
 
 # Red words under the search box when nothing that was dropped on the window is a kind Apps takes.
 store-dropped-only = Aquí solo se pueden soltar archivos .deb, .AppImage y .flatpakref.
 
 # Red words under an app that Flatpak did not update; what Flatpak said follows.
-store-not-updated-said = No se actualizó. Flatpak dijo: { $why }
+store-not-updated-said = Flatpak no la actualizó: { $why }
 
 # Red words under an app that Flatpak did not update and gave no reason for.
-store-not-updated-none = No se actualizó, y Flatpak no dio ningún motivo.
+store-not-updated-none = No se actualizó. No se indicó ningún motivo.
 
 # Side bar place and title: the AppImages AppImageHub lists.
 store-nav-browse = Explorar AppImages
+
+
+# Heading of the Flatpaks a detailed search found on Flathub.
+store-gh-flathub = Flatpaks en Flathub ({ $n })
 

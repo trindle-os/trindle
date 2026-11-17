@@ -5,7 +5,7 @@
 screenshot-name = Tangkapan layar
 
 # Note on the overlay before any part is chosen.
-screenshot-drag = Seret melintasi bagian yang ingin disimpan
+screenshot-drag = Seret di atas bagian yang ingin disimpan
 
 # Name of the round button that keeps the whole screen.
 screenshot-whole = Seluruh layar
@@ -108,19 +108,19 @@ screenshot-not-saved = Tangkapan layar tidak disimpan
 screenshot-not-copied = Tangkapan layar tidak disalin
 
 # Words of that notice.
-screenshot-clipboard-refused = Papan klip tidak bisa menerimanya.
+screenshot-clipboard-refused = Trindle tidak dapat menyalinnya.
 
 # Words of the notice that the screenshot could not be saved: the picture was not made.
-screenshot-no-picture = gambar tidak bisa dibuat
+screenshot-no-picture = Tidak dapat mengambil tangkapan layar.
 
 # Words of the notice that the screenshot could not be saved: no bus to ask on.
-screenshot-no-bus = tidak ada bus sesi untuk menanyakan tempatnya
+screenshot-no-bus = Trindle tidak dapat menanyakan tempat penyimpanan.
 
 # Words of the notice that the screenshot could not be saved: the file chooser could not be asked.
-screenshot-no-chooser = pemilih file tidak bisa ditanyai
+screenshot-no-chooser = Tidak dapat membuka pemilih file.
 
 # Words of the notice that the screenshot could not be saved: every file name was taken.
-screenshot-no-free-name = tidak ada nama yang bebas
+screenshot-no-free-name = Tidak ada nama yang bebas
 
 # Words of the notice that the screenshot could not be saved: the path and why it failed.
 screenshot-write-failed = { $path }: { $why }
@@ -129,7 +129,7 @@ screenshot-write-failed = { $path }: { $why }
 screenshot-eye-title = Pipet warna
 
 # Words that float beside the i of the eye dropper's window.
-screenshot-eye-help = Tekan pipet, lalu klik di mana saja di layar untuk mengambil warna di bawah penunjuk. Escape membatalkan. Setiap warna langsung disalin sebagai kode hex dan disimpan di daftar di bawah, yang terbaru di atas, sehingga bisa disalin lagi nanti.
+screenshot-eye-help = Tekan pipet, lalu klik di mana saja di layar untuk mengambil warna di bawah penunjuk. Tekan Escape untuk membatalkan. Setiap warna langsung disalin sebagai kode hex dan ditambahkan ke daftar di bawah, yang terbaru di atas, sehingga Anda bisa menyalinnya lagi nanti.
 
 # Name of the i button beside the title.
 screenshot-eye-about = Tentang pipet warna
@@ -138,16 +138,16 @@ screenshot-eye-about = Tentang pipet warna
 screenshot-eye-take = Ambil warna
 
 # Sentence under the title while no colour has been taken.
-screenshot-eye-none = Ambil warna dari mana saja di layar.
+screenshot-eye-none = Ambil warna dari layar.
 
 # Sentence under the title once colours have been taken.
 screenshot-eye-taken =
     { $n ->
-       *[other] { $n } warna diambil; yang terbaru { $newest }.
+       *[other] { $n } warna diambil. Yang terbaru adalah { $newest }.
     }
 
 # Shown in the big card while no colour has been taken.
-screenshot-eye-latest-empty = Warna yang Anda ambil tampil di sini, besar, siap disalin.
+screenshot-eye-latest-empty = Belum ada warna yang diambil.
 
 # Name of the card that holds the latest colour.
 screenshot-eye-latest = Warna terbaru
@@ -157,10 +157,10 @@ screenshot-eye-latest = Warna terbaru
 screenshot-eye-clear = Kosongkan daftar
 
 # Head of the card with the list of colours taken.
-screenshot-eye-list = Warna yang diambil
+screenshot-eye-list = Warna Anda
 
 # Shown in the list card while no colour has been taken.
-screenshot-eye-list-empty = Warna yang diambil dengan pipet warna disimpan di sini, yang terbaru di atas.
+screenshot-eye-list-empty = Belum ada warna yang diambil.
 
 # Name of the round button that takes a colour out of the list.
 # SAFETY: needs a human review before it ships
@@ -175,11 +175,11 @@ screenshot-pick-title = Bagikan layar Anda dengan { $app }?
 
 # Sentence under the title when several things can be picked.
 # SAFETY: needs a human review before it ships
-screenshot-pick-many = Pilih satu atau lebih. Hanya yang Anda pilih yang dibagikan, sampai aplikasi berhenti atau ditutup.
+screenshot-pick-many = Pilih satu atau lebih. Hanya yang Anda pilih yang dibagikan, sampai aplikasi berhenti berbagi atau ditutup.
 
 # Sentence under the title when one thing can be picked.
 # SAFETY: needs a human review before it ships
-screenshot-pick-one = Pilih satu. Hanya yang Anda pilih yang dibagikan, sampai aplikasi berhenti atau ditutup.
+screenshot-pick-one = Pilih satu. Hanya yang Anda pilih yang dibagikan, sampai aplikasi berhenti berbagi atau ditutup.
 
 # Heading over the screens that can be shared.
 screenshot-pick-screens = Layar
@@ -195,7 +195,7 @@ screenshot-pick-nothing = Tidak ada yang bisa dibagikan.
 screenshot-pick-desktop = Seluruh desktop
 
 # Words under that choice.
-screenshot-pick-desktop-detail = Semua layar, sesuai letaknya
+screenshot-pick-desktop-detail = Semua layar, sesuai susunannya
 
 # Words under a screen's choice: its size in pixels.
 screenshot-pick-size = { $width } kali { $height }
@@ -234,11 +234,11 @@ screenshot-portal-name = Nama
 
 # Heading when an unknown program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks-unknown = Sebuah program menanyakan siapa Anda
+screenshot-account-asks-unknown = Sebuah program meminta info Anda
 
 # Heading when a program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks = { $who } menanyakan siapa Anda
+screenshot-account-asks = { $who } meminta info Anda
 
 # Name the screen reader gives to the person's picture.
 screenshot-account-picture = Gambar Anda
@@ -250,7 +250,7 @@ screenshot-account-signed-in = Masuk sebagai { $id }
 screenshot-apps-search = Cari aplikasi
 
 # Shown when no app can open the file.
-screenshot-apps-none = Tidak ada aplikasi di sini yang bisa membukanya
+screenshot-apps-none = Tidak ada aplikasi yang bisa membukanya
 
 # Name of the switch that remembers the choice.
 # SAFETY: needs a human review before it ships
@@ -310,7 +310,7 @@ screenshot-wallpaper-ask = Jadikan gambar ini wallpaper Anda?
 
 # Heading when a program offers a wallpaper.
 # SAFETY: needs a human review before it ships
-screenshot-wallpaper-asks = { $who } menawarkan wallpaper baru
+screenshot-wallpaper-asks = { $who } ingin mengatur wallpaper
 
 # Name the screen reader gives to the picture offered.
 screenshot-wallpaper-picture = Wallpaper baru
@@ -320,10 +320,10 @@ screenshot-wallpaper-picture = Wallpaper baru
 screenshot-wallpaper-set = Jadikan wallpaper
 
 # Red line under the printer box when no printer is set up.
-screenshot-print-no-printer = Belum ada printer. Tambahkan di Pengaturan, Printer.
+screenshot-print-no-printer = Belum ada printer yang diatur. Tambahkan di Pengaturan, di bawah Printer.
 
 # Red line under the printer box when the printing system does not answer.
-screenshot-print-not-answering = Layanan cetak tidak menjawab.
+screenshot-print-not-answering = Layanan cetak tidak merespons.
 
 # Red line under the printer box when printing is not installed.
 screenshot-print-not-installed = Layanan cetak tidak terpasang di komputer ini.
@@ -374,7 +374,7 @@ screenshot-print-from = Cetak dari { $who }
 screenshot-print-failed = Tidak bisa mencetak
 
 # Words of that notice when the choices made were not kept.
-screenshot-print-lost = Pilihannya tidak tersimpan. Cetak lagi.
+screenshot-print-lost = Tidak dapat menyimpan pengaturan. Cetak lagi.
 
 # Line in the menu on a file or folder: change its name.
 screenshot-chooser-rename = Ganti nama
@@ -408,7 +408,7 @@ screenshot-chooser-empty = Kosong
 screenshot-chooser-kind = Jenis file
 
 # Said where a place on another computer is not answering.
-screenshot-chooser-not-answering = Komputer lain tidak menjawab.
+screenshot-chooser-not-answering = Komputer lain tidak merespons.
 
 # What the saved list of last folders is called when it is found damaged and set aside.
 screenshot-chooser-damaged = Folder pemilih
@@ -418,7 +418,7 @@ screenshot-chooser-no-folder = Folder itu tidak ada.
 
 # Words under the box when saving would replace a file.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-ask = { $name } sudah ada. Tekan Ganti, atau Enter lagi, untuk menggantinya dengan ini.
+screenshot-chooser-replace-ask = { $name } sudah ada. Untuk menggantinya, tekan Ganti atau tekan Enter lagi.
 
 # Words under the box when a key is pressed on Recent, which is not a folder.
 screenshot-chooser-recent-not-folder = Terbaru bukan folder. Buka salah satu folder dulu.
@@ -456,27 +456,27 @@ screenshot-chooser-replace = Ganti
 
 # What the screen reader says for the button that replaces a folder.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-spoken = Ganti: folder yang sudah ada dipindahkan ke Tempat sampah
+screenshot-chooser-replace-spoken = Ganti. Folder yang sudah ada dipindahkan ke Tempat sampah.
 
 # Name of the main button that merges two folders.
 # SAFETY: needs a human review before it ships
 screenshot-chooser-merge = Gabungkan
 
 # Words in the question when folders are being pasted.
-screenshot-chooser-rest-folders = Jawaban yang sama untuk setiap folder yang sudah ada.
+screenshot-chooser-rest-folders = Lakukan ini untuk setiap folder yang sudah ada.
 
 # Words in the question when files are being pasted.
-screenshot-chooser-rest-files = Jawaban yang sama untuk setiap file yang sudah ada.
+screenshot-chooser-rest-files = Lakukan ini untuk setiap file yang sudah ada.
 
 # Name of the switch that gives the same answer to the rest.
 # SAFETY: needs a human review before it ships
 screenshot-chooser-same = Lakukan hal yang sama untuk sisanya
 
 # Words under the box after Cut.
-screenshot-chooser-was-cut = { $what } dipotong. Tempel ke sebuah folder.
+screenshot-chooser-was-cut = Siap dipindahkan: { $what }
 
 # Words under the box after Copy.
-screenshot-chooser-was-copied = { $what } disalin. Tempel ke sebuah folder.
+screenshot-chooser-was-copied = Siap disalin: { $what }
 
 # Words under the box when Paste is pressed and there is nothing to paste.
 screenshot-chooser-nothing-cut = Belum ada yang dipotong atau disalin.
@@ -487,20 +487,20 @@ screenshot-chooser-paste-busy = Penempelan masih berlangsung.
 # Red line after some items could not be moved.
 screenshot-chooser-not-moved =
     { $n ->
-       *[other] { $n } item tidak bisa dipindahkan: { $names }.
+       *[other] Trindle tidak dapat memindahkan { $n } item: { $names }.
     }
 
 # Red line after some items could not be copied.
 screenshot-chooser-not-copied =
     { $n ->
-       *[other] { $n } item tidak bisa disalin: { $names }.
+       *[other] Trindle tidak dapat menyalin { $n } item: { $names }.
     }
 
 # Red line after some items could not be put in the Trash.
 # SAFETY: needs a human review before it ships
 screenshot-chooser-not-trashed =
     { $n ->
-       *[other] { $n } item tidak bisa dimasukkan ke Tempat sampah: { $names }.
+       *[other] Trindle tidak dapat memindahkan { $n } item ke Tempat sampah: { $names }.
     }
 
 # Name of the box where a file or folder is renamed.
@@ -513,10 +513,10 @@ screenshot-chooser-items =
     }
 
 # Title of the notice when an email could not be started.
-screenshot-mail-failed = Tidak bisa memulai email
+screenshot-mail-failed = Tidak bisa membuat email
 
 # Why: no mail program is chosen or installed.
-screenshot-mail-no-app = Belum ada program email. Pilih satu di Pengaturan, Aplikasi bawaan.
+screenshot-mail-no-app = Anda belum memilih program email. Pilih satu di Pengaturan, Aplikasi bawaan.
 
 # Why: a program asked to attach more files than allowed.
 screenshot-mail-too-many = Terlalu banyak file untuk dilampirkan.
@@ -525,7 +525,7 @@ screenshot-mail-too-many = Terlalu banyak file untuk dilampirkan.
 screenshot-mail-too-big = File terlalu besar untuk dilampirkan.
 
 # Why: a file could not be read as a plain file.
-screenshot-mail-bad-file = Sebuah file tidak bisa dilampirkan.
+screenshot-mail-bad-file = Tidak bisa melampirkan file.
 
 # Why: an address was not a plain address.
 screenshot-mail-bad-address = Sebuah alamat tidak valid.
@@ -537,7 +537,7 @@ screenshot-mail-bad-subject = Subjek tidak valid.
 screenshot-mail-bad-words = Teksnya tidak valid.
 
 # Why: no private place to keep the files.
-screenshot-mail-no-place = File tidak bisa disimpan dengan aman.
+screenshot-mail-no-place = Tidak bisa menyimpan file dengan aman.
 
 # Why: the mail program did not start.
 screenshot-mail-not-started = Program email tidak mulai.
@@ -558,11 +558,16 @@ screenshot-chooser-pin = Sematkan ke bilah samping
 screenshot-chooser-unpin = Lepas sematan
 
 # Red line after a pin could not be kept.
-screenshot-chooser-pin-not-kept = Sematan tidak dapat disimpan.
+screenshot-chooser-pin-not-kept = Tidak dapat menyimpan sematan.
 
 # Red line after some items could not be deleted.
 screenshot-chooser-not-deleted =
     { $n ->
-       *[other] { $n } item tidak dapat dihapus: { $names }.
+       *[other] Trindle tidak dapat menghapus { $n } item: { $names }.
     }
 
+# What the screen reader says for the list of places down the left of the file chooser.
+screenshot-chooser-places = Lokasi
+
+# What the screen reader says for the list of files and folders in the file chooser.
+screenshot-chooser-files = File

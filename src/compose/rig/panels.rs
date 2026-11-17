@@ -5,10 +5,11 @@ use std::os::fd::{AsFd, FromRawFd, OwnedFd};
 
 use smithay::output::{Mode, Output, PhysicalProperties, Subpixel};
 use wayland_client::protocol::{wl_buffer, wl_shm, wl_surface};
+use wayland_protocols::xdg::shell::client::xdg_toplevel;
 use wayland_protocols_wlr::layer_shell::v1::client::zwlr_layer_shell_v1::Layer as On;
 use wayland_protocols_wlr::layer_shell::v1::client::zwlr_layer_surface_v1::{self, KeyboardInteractivity};
 
-use crate::state::{AnvilState, ClientState};
+use crate::state::{Compose, ClientState};
 use crate::virtual_input::Maker;
 
 use super::*;
@@ -169,7 +170,51 @@ impl Rig {
         self.window_first_drawn(who, full, (300, 200))
     }
 
-    pub fn window_first_drawn(&mut self, who: usize, full: bool, first: (i32, i32)) -> wl_surface::WlSurface {
+    pub fn drag_from(&mut self, who: usize, surface: &wl_surface::WlSurface, kind: &str, words: &[u8]) {
+        let p = &mut self.programs[who];
+        let qh = p.queue.handle();
+        p.program.drag_words = words.to_vec();
+        let serial = *p.program.numbered.last().expect("a button the program was sent");
+        let manager = p.program.data.as_ref().expect("the drag and drop global");
+        let source = manager.create_data_source(&qh, ());
+        source.offer(kind.into());
+        source.set_actions(wayland_client::protocol::wl_data_device_manager::DndAction::Copy);
+        let device = manager.get_data_device(p.program.seat.as_ref().expect("the seat"), &qh, ());
+        device.start_drag(Some(&source), surface, None, serial);
+        self.pump();
+    }
+
+    pub fn take_drops(&mut self, who: usize, kind: &str) {
+        let p = &mut self.programs[who];
+        let qh = p.queue.handle();
+        p.program.takes = Some(kind.into());
+        let manager = p.program.data.as_ref().expect("the drag and drop global");
+        manager.get_data_device(p.program.seat.as_ref().expect("the seat"), &qh, ());
+        self.pump();
+    }
+
+    pub fn read_drop(&mut self, who: usize, got: &mut Vec<u8>) -> bool {
+        use std::io::Read;
+        let Some((_, pipe)) = self.programs[who].program.dropped.as_mut() else { return false };
+        let mut buf = [0u8; 4096];
+        loop {
+            match pipe.read(&mut buf) {
+                Ok(0) => break,
+                Ok(n) => got.extend_from_slice(&buf[..n]),
+                Err(_) => return false,
+            }
+        }
+        let (offer, _) = self.programs[who].program.dropped.take().expect("the drop");
+        offer.finish();
+        self.pump();
+        true
+    }
+
+    pub fn dragged_said(&self, who: usize) -> Vec<&'static str> {
+        self.programs[who].program.dragged.clone()
+    }
+
+    pub fn window_and_top(&mut self, who: usize, first: (i32, i32)) -> (wl_surface::WlSurface, xdg_toplevel::XdgToplevel) {
         let p = &self.programs[who];
         let qh = p.queue.handle();
         let surface = p.program.compositor.as_ref().expect("the compositor's global").create_surface(&qh, ());
@@ -178,6 +223,11 @@ impl Rig {
         surface.commit();
         self.pump();
         self.show(who, &surface, first.0, first.1);
+        (surface, top)
+    }
+
+    pub fn window_first_drawn(&mut self, who: usize, full: bool, first: (i32, i32)) -> wl_surface::WlSurface {
+        let (surface, top) = self.window_and_top(who, first);
         if full {
             top.set_fullscreen(None);
             self.pump();
@@ -228,7 +278,7 @@ impl Rig {
         let mode = Mode { size: (1280, 800).into(), refresh: 60_000 };
         output.change_current_state(Some(mode), None, None, Some((1280, 0).into()));
         output.set_preferred(mode);
-        output.create_global::<AnvilState<RigData>>(&self.state.display_handle);
+        output.create_global::<Compose<RigData>>(&self.state.display_handle);
         self.state.space.map_output(&output, (1280, 0));
         self.pump();
         output

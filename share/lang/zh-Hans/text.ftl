@@ -47,7 +47,7 @@ text-find-replace-key = 查找和替换 (Ctrl+H)
 text-go-to-line-key = 转到行 (Ctrl+G)
 
 # Button in the menu for a Markdown file that shows it as it will look finished, with its shortcut.
-text-finished-key = 成品效果 (Ctrl+E)
+text-finished-key = 预览 (Ctrl+E)
 
 # Button in the menu for a Markdown file that exports it as a web page. Also the title of the chooser for that.
 text-export-html = 导出为网页
@@ -71,7 +71,7 @@ text-close-tab = 关闭 { $name }
 text-close-bar = 关闭此栏
 
 # Words the screen reader gives the button that shows the finished look of the text, with its shortcut.
-text-finished-look = 成品效果
+text-finished-look = 预览
 
 # Menu item that copies everything in the text.
 text-copy-all = 复制全部文本
@@ -148,7 +148,7 @@ text-replace-all = 全部替换
 text-replace-all-spoken = 替换所有找到的词
 
 # Words on the find bar when a find has been asked for and has no match.
-text-none-found = 未找到
+text-none-found = 无匹配
 
 # Words on the find bar when a find has matches. $at is which one is shown, $n how many there are.
 text-of-found = 第 { $at } 个，共 { $n } 个
@@ -180,10 +180,10 @@ text-go-to-line = 转到行
 text-back = 返回文本
 
 # Words on the spelling bar, after the word: the word was added to the person's own words.
-text-spell-added = 已成为你的词汇之一
+text-spell-added = 已添加到你的词汇中
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are no suggestions.
-text-spell-none = 不在词典中，词典里也没有相近的词
+text-spell-none = 不在词典中，也没有建议
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are suggestions.
 text-spell-offers = 不在词典中。你是不是想写下面的某个词？
@@ -214,16 +214,16 @@ text-starting = 启动
 text-when-opens = 打开文本时
 
 # First choice: Text opens the files it had open last time.
-text-reopen = 重新打开上次的文件
+text-reopen = 重新打开之前的文件
 
 # Second choice: Text opens with an empty page.
-text-start-blank = 从空白开始
+text-start-blank = 从头开始
 
 # Note under the start choice: work not saved to a file is kept whichever choice is made.
-text-keep-note = 未保存到文件的内容总会保留，无论选哪一项都会恢复。
+text-keep-note = 无论选哪一项，你未保存的内容都会保留并恢复。
 
 # Heading of the group on the settings page for how the text looks.
-text-showing = 文本显示
+text-showing = 文本外观
 
 # Label of the size slider: how big the text is.
 text-size = 大小
@@ -259,20 +259,23 @@ text-read-as = 按以下编码读取文件
 text-save-in = 保存编码
 
 # Note under the save encoding: the next save writes the file in this encoding.
-text-next-save = 下次保存时会用此编码写入文件。
+text-next-save = 下次保存时，文件会使用此编码。
 
 # Words saying the text has changes that are not saved to its file. $path is the file.
-text-changes-not-saved = { $name } 有更改尚未保存到文件。
+text-changes-not-saved = { $name } 有未保存的更改。
 
 # Words saying the text has changes and no file yet.
-text-not-saved = 这段文本尚未保存到文件。
+text-not-saved = 这段文本没有保存到文件。
 
 # Heading of the question shown before closing a tab with changes. $name is the tab's file name.
 # SAFETY: needs a human review before it ships
 text-save-named = 保存 { $name }？
 
 # Words in the question before closing: how many other tabs with changes are left after this one. $left is the number.
-text-more-after = 此后还有 { $left } 个。
+text-more-after =
+    { $left ->
+       *[other] 还有 { $left } 个标签页要保存。
+    }
 
 # Button in the question before closing that closes the tab without saving it.
 # SAFETY: needs a human review before it ships
@@ -291,55 +294,55 @@ text-is-folder = { $name } 是一个文件夹。
 text-too-big = { $name } 太大，无法在这里打开。
 
 # Shown when a file could not be opened. $name is the file's path and $reason why.
-text-cannot-open = 无法打开 { $name }：{ $reason }
+text-cannot-open = Trindle 无法打开 { $name }：{ $reason }
 
 # Shown when a file could not be written. $name is the file's path and $reason why.
-text-cannot-write = 无法写入 { $name }：{ $reason }
+text-cannot-write = Trindle 无法写入 { $name }：{ $reason }
 
 # Shown when a file could not be saved. $name is the file's path and $reason why.
-text-cannot-save = 无法保存 { $name }：{ $reason }
+text-cannot-save = Trindle 无法保存 { $name }：{ $reason }
 
 # Shown when a file could not be read again. $name is the file's path and $reason why.
 text-cannot-read = 无法读取 { $name }：{ $reason }
 
 # Shown when the list of open work could not be written. $folder is the folder and $reason why.
-text-work-not-kept = 无法将工作内容保留在 { $folder }：{ $reason }
+text-work-not-kept = Trindle 无法将你的工作内容保存在 { $folder }：{ $reason }
 
 # Shown when the settings could not be saved. $reason says why.
 text-settings-not-saved = 无法保存设置：{ $reason }
 
 # Shown when a word could not be added to the person's own words. $word is the word and $reason why.
-text-word-not-added = 无法将 { $word } 添加到你的词汇：{ $reason }
+text-word-not-added = Trindle 无法将 { $word } 添加到你的词典：{ $reason }
 
 # Shown when the list of recent files could not be cleared. $reason says why.
-text-list-not-cleared = 无法清空列表：{ $reason }
+text-list-not-cleared = Trindle 无法清空列表：{ $reason }
 
 # Shown when the file chooser could not be opened.
 text-chooser-failed = 无法打开文件选择器。
 
 # Shown when the file chooser cannot be used because there is no session bus.
-text-no-bus = 没有会话总线，无法选择文件。
+text-no-bus = Trindle 目前无法打开文件选择器。
 
 # Shown when the spelling language asked for is not on the computer. $lang is its name.
 text-no-dictionary = 没有名为 { $lang } 的词典。
 
 # Shown when a spelling dictionary could not be read. $lang is its name and $reason why.
-text-dictionary-unreadable = 无法读取 { $lang } 词典：{ $reason }
+text-dictionary-unreadable = Trindle 无法读取 { $lang } 词典：{ $reason }
 
 # Shown when a save was stopped and the text it held before was kept in a folder. $reason says what went wrong and $path is where the old text is kept.
-text-kept-before = { $reason }。之前的内容保存在 { $path }。
+text-kept-before = { $reason }。旧的文本保存在 { $path }。
 
 # Shown when a save was stopped part way and the old text is kept. $why says why, and $path is where the old text is kept.
-text-kept-before-that = { $why } 此次保存之前的内容保存在 { $path }。
+text-kept-before-that = { $why } 此次保存之前的文本存放在 { $path }。
 
 # Shown when a save was stopped and what was kept of it cannot be read. $name is the file's path.
-text-saved-unreadable = 保存 { $name } 时文本程序被中止，已保留的保存内容无法读取。
+text-saved-unreadable = 保存 { $name } 时文本程序关闭了，Trindle 无法读取已保存的部分。
 
 # Shown when a save was stopped and the file has changed since. $name is the file's path.
-text-saved-changed = 保存 { $name } 时文本程序被中止，之后该文件又被更改，所以保持原样。
+text-saved-changed = 保存 { $name } 时文本程序关闭了。之后该文件又被更改，所以 Trindle 保持它原样。
 
 # Shown when a save was stopped and the old text could not be put back. $name is the file's path, $reason why, and $path where the old text is kept.
-text-saved-not-put-back = 保存 { $name } 时文本程序被中止，无法恢复原样：{ $reason }。此次保存之前的内容保存在 { $path }。
+text-saved-not-put-back = 保存 { $name } 时文本程序关闭了，Trindle 无法把文件恢复原样：{ $reason }。此次保存之前的文本在 { $path }。
 
 # Quiet word beside what was just saved, exported or changed.
 text-done = 完成
@@ -347,10 +350,12 @@ text-done = 完成
 # Suggested file name in the Save as chooser for text never saved before.
 text-untitled-file = 未命名.txt
 
+# The misspelt word, shown in quotation marks on the spelling bar. { $word } is the word.
+text-spell-word = ‘{ $word }’
 
 
 # Line under the Save button when the file was changed by something else after Text opened, saved or reloaded it. Nothing has been saved.
-text-changed-elsewhere = 自你打开后，它已在别处被更改。
+text-changed-elsewhere = 自你打开后，此文件已被更改。
 
 # Button beside that line: save the words here over the changed file.
 text-save-anyway = 仍然保存
@@ -358,3 +363,5 @@ text-save-anyway = 仍然保存
 # Button beside that line: read the file again from disk and drop the unsaved changes here.
 text-reload = 重新载入
 
+# Shown when a link in the finished look is pressed and is not a web address, or no browser started.
+text-link-not-opened = 这里只能打开网址。

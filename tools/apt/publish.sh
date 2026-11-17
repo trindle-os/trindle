@@ -64,10 +64,8 @@ put trindle-archive-keyring.gpg
 put trindle.sources
 
 echo "indexes"
-for arch in amd64 arm64; do
-    for f in Packages Packages.gz Release; do
-        put "dists/stable/main/binary-$arch/$f"
-    done
+for f in Packages Packages.gz Release; do
+    put "dists/stable/main/binary-amd64/$f"
 done
 
 echo "signatures, last"
@@ -86,8 +84,6 @@ for p in \
     dists/stable/Release.gpg \
     dists/stable/main/binary-amd64/Packages \
     dists/stable/main/binary-amd64/Packages.gz \
-    dists/stable/main/binary-arm64/Packages \
-    dists/stable/main/binary-arm64/Packages.gz \
     trindle-archive-keyring.gpg \
     trindle.sources
 do

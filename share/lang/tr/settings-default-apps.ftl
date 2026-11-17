@@ -8,7 +8,7 @@ settings-default-apps-title = Varsayılan uygulamalar
 settings-default-apps-keywords = tarayıcı posta e-posta dosyalar resimler müzik video pdf takvim birlikte aç terminal
 
 # Introduction under the heading of the default apps page, and the words behind the page i.
-settings-default-apps-help = Web bağlantılarını, e-postaları, resimleri, takvimi ve diğerlerini hangi programın açacağı. Terminal ~/.config/xdg-terminals.list dosyasında seçilir; hiçbiri seçilmemişse Trindle kurulu ilkini kullanır.
+settings-default-apps-help = Web bağlantılarını, e-postaları, resimleri, takvimi ve diğerlerini hangi programın açacağını seçin. Terminali ~/.config/xdg-terminals.list dosyasında seçersiniz. Hiçbiri seçilmemişse Trindle kurulu olanların ilkini kullanır.
 
 # Name of a kind of thing to open, as the heading of a line and the name of its list on the default apps page.
 settings-default-apps-kind-web = Web
@@ -68,28 +68,28 @@ settings-default-apps-kind-calendar-in-sentence = takvim
 settings-default-apps-card-internet = İnternet
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-internet-about = Her yerde tıklanan bir web bağlantısını açan program, bir adrese tıklanınca e-posta yazan program ve bir takvim davetini açan program.
+settings-default-apps-card-internet-about = Web bağlantılarını, e-posta adreslerini ve takvim davetlerini hangi programların açacağını seçin.
 
 # Title of a card on the default apps page.
 settings-default-apps-card-files = Dosyalar ve belgeler
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-files-about = Klasörler'den, masaüstünden veya başka bir uygulamadan açtığınızda bir klasörü, düz metin dosyasını ve PDF belgesini açan program.
+settings-default-apps-card-files-about = Klasörleri, düz metin dosyalarını ve PDF belgelerini hangi programların açacağını seçin.
 
 # Title of a card on the default apps page.
 settings-default-apps-card-media = Resimler ve ses
 
 # Words behind the i of a card on the default apps page.
-settings-default-apps-card-media-about = Bir resmi, bir müziği veya bir videoyu açtığınızda onu açan program.
+settings-default-apps-card-media-about = Resimleri, müziği ve videoları hangi programların açacağını seçin.
 
 # Sentence at the top of the page when every kind has a program; { $web } is the program that opens web links.
-settings-default-apps-all-set-web = Her şeyin açılacağı bir program var; web bağlantılarını { $web } açar.
+settings-default-apps-all-set-web = Her şeyi açacak bir program var ve web bağlantılarını { $web } açar.
 
 # Sentence at the top of the page when every kind has a program and the one for web links is not known.
 settings-default-apps-all-set = Her şeyin açılacağı bir program var.
 
 # Sentence at the top of the page when one kind has no program chosen; { $kind } is its name in lower case.
-settings-default-apps-one-missing = { $kind } açmak için henüz bir program seçilmedi.
+settings-default-apps-one-missing = { $kind } açmak için bir program seçin.
 
 # Sentence at the top of the page when several kinds have no program chosen; { $kinds } is their names as a list joined with "or".
 settings-default-apps-many-missing = { $kinds } açmak için henüz bir program seçilmedi.
@@ -99,13 +99,6 @@ settings-default-apps-none-installed = Kurulu hiçbir program bunları henüz a�
 
 # First choice in a list when no program is chosen for that kind yet.
 settings-default-apps-not-chosen = Henüz seçilmedi
-
-# Small words under a kind with a program list; { $n } is how many programs can open it.
-settings-default-apps-can-open =
-    { $n ->
-        [one] Açabilen tek program.
-       *[other] { $n } program bunları açabilir.
-    }
 
 # Said in green under a kind's list after the choice was kept.
 settings-default-apps-saved = Kaydedildi

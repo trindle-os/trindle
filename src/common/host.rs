@@ -35,10 +35,8 @@ impl Host for Trindle {
     }
 
     fn act(&self, act: &str) -> Act {
-        use super::person_only::{ACTS, WAITING};
-        if WAITING.iter().any(|waiting| waiting.0 == act) {
-            Act::Waiting
-        } else if ACTS.iter().any(|listed| listed.0 == act) {
+        use super::person_only::ACTS;
+        if ACTS.iter().any(|listed| listed.0 == act) {
             Act::PersonsOwn
         } else {
             Act::Unknown
@@ -126,15 +124,11 @@ mod tests {
     }
 
     fn every_act_on_the_list() {
-        use crate::common::person_only::{ACTS, WAITING};
+        use crate::common::person_only::ACTS;
 
         for (act, _, _) in ACTS {
             assert!(!with_named(true, Some(7), || with_press(Some(8), || persons_own(act))), "{act}");
             assert!(with_named(true, Some(7), || with_press(Some(7), || persons_own(act))), "{act}");
-        }
-        for (act, _, _) in WAITING {
-            assert!(with_named(true, None, || persons_own(act)), "{act} is waiting for the owner and was refused");
-            assert!(!ACTS.iter().any(|a| a.0 == act), "{act} is on both lists");
         }
         assert!(!with_named(true, Some(7), || with_press(Some(7), || persons_own("no-such-act"))));
     }

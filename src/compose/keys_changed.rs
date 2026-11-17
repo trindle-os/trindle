@@ -7,13 +7,26 @@ use std::path::PathBuf;
 use smithay::backend::input::{ButtonState, Device, Event, InputBackend, InputEvent, KeyState, KeyboardKeyEvent, PointerButtonEvent};
 
 use crate::remap::{Changer, Out, Table};
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
 use crate::virtual_input::{Button, Key};
 
 const MADE_BY_A_PROGRAM: &str = "/sys/devices/virtual/";
 
 pub fn made_by_a_program(syspath: Option<&std::path::Path>) -> bool {
     syspath.is_some_and(|p| p.starts_with(MADE_BY_A_PROGRAM))
+}
+
+const MOST_NAMES: usize = 64;
+
+fn remember(names: &mut Vec<Seen>, seen: &Seen) -> bool {
+    if names.contains(seen) {
+        return false;
+    }
+    if names.len() >= MOST_NAMES {
+        names.remove(names.iter().position(|s| s.made).unwrap_or(0));
+    }
+    names.push(seen.clone());
+    true
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -58,8 +71,7 @@ impl KeysChanged {
 
     pub fn arrived(&mut self, id: String, name: String, made: bool) {
         let seen = Seen { name: crate::remap::clean_name(&name), made };
-        if !self.names.contains(&seen) {
-            self.names.push(seen.clone());
+        if remember(&mut self.names, &seen) {
             self.write_list();
         }
         self.devices.insert(id, seen);
@@ -110,7 +122,7 @@ fn came<B: InputBackend>(event: &InputEvent<B>) -> Option<(Came, B::Device)> {
 
 pub type Console = Option<i32>;
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     pub fn keys_reread(&mut self) {
         self.keys_changed.allowed = crate::own_helpers::allowed_devices();
@@ -245,6 +257,17 @@ mod tests {
     use super::*;
     use crate::rig::{alone, kept_ring::beat, Rig, KEY_A, KEY_F5};
     use crate::state::ClientState;
+
+    #[test]
+    fn names_of_devices_a_program_made_cannot_grow_the_list_for_ever() {
+        let mut names = Vec::new();
+        remember(&mut names, &Seen { name: "Real Keyboard".into(), made: false });
+        for n in 0..(MOST_NAMES * 3) {
+            remember(&mut names, &Seen { name: format!("made up {n}"), made: true });
+        }
+        assert_eq!(names.len(), MOST_NAMES);
+        assert!(names.iter().any(|s| s.name == "Real Keyboard"), "a plugged-in keyboard was pushed out by made-up ones");
+    }
 
     const CAPS: u32 = 58;
     const ESC: u32 = 1;

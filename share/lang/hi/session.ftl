@@ -24,15 +24,15 @@ session-lock-use-pin = PIN इस्तेमाल करें
 session-lock-use-phone = फ़ोन इस्तेमाल करें
 
 # Shown while the typed password or PIN is being checked.
-session-lock-checking = जाँच हो रही है...
+session-lock-checking = जाँच हो रही है…
 
 # SAFETY: needs a human review before it ships
 # Shown when the PIN has run out of time and the password is asked for instead.
-session-lock-pin-timed-out = PIN का समय खत्म हो गया है; अपना पासवर्ड लिखें।
+session-lock-pin-timed-out = PIN का समय खत्म हो गया है। अपना पासवर्ड लिखें।
 
 # SAFETY: needs a human review before it ships
 # Shown after too many wrong PINs, and the password is asked for instead.
-session-lock-too-many-pins = गलत PIN बहुत हो गए; अपना पासवर्ड लिखें।
+session-lock-too-many-pins = गलत PIN बहुत हो गए। अपना पासवर्ड इस्तेमाल करें।
 
 # SAFETY: needs a human review before it ships
 # Shown after a wrong PIN, with how many tries are left (1 is one try left).
@@ -43,15 +43,15 @@ session-lock-wrong-pin =
     }
 
 # Shown while the phone is asked to unlock the screen.
-session-lock-asking-phone = आपके फ़ोन से पूछा जा रहा है...
+session-lock-asking-phone = आपके फ़ोन से पूछा जा रहा है…
 
 # SAFETY: needs a human review before it ships
 # Shown when the phone did not unlock the screen and the PIN may be typed.
-session-lock-phone-no-pin = आपके फ़ोन ने इसे अनलॉक नहीं किया। अपना PIN इस्तेमाल करें।
+session-lock-phone-no-pin = Trindle आपके फ़ोन से अनलॉक नहीं कर सका। अपना PIN इस्तेमाल करें।
 
 # SAFETY: needs a human review before it ships
 # Shown when the phone did not unlock the screen and the password must be typed.
-session-lock-phone-no-password = आपके फ़ोन ने इसे अनलॉक नहीं किया। अपना पासवर्ड लिखें।
+session-lock-phone-no-password = Trindle आपके फ़ोन से अनलॉक नहीं कर सका। अपना पासवर्ड लिखें।
 
 # SAFETY: needs a human review before it ships
 # Shown when the password typed is not the person's password.
@@ -73,7 +73,7 @@ session-wallpaper-larger-4k = 4K से बड़ी
 session-wallpaper-larger-screen = आपकी स्क्रीन से बड़ी
 
 # A reason a wallpaper was left out: its file is over 20 MB, or over 200 MB if it moves.
-session-wallpaper-over-20-or-200 = 20 MB से ऊपर (चलती हो तो 200 MB से ऊपर)
+session-wallpaper-over-20-or-200 = 20 MB से ऊपर (एनिमेटेड हो तो 200 MB से ऊपर)
 
 # A reason a wallpaper was left out: its file is over 20 MB.
 session-wallpaper-over-20 = 20 MB से ऊपर
@@ -85,18 +85,21 @@ session-wallpaper-over-200 = 200 MB से ऊपर
 session-wallpaper-reasons-or = { $first } या { $second }
 
 # The line that says how many wallpapers were left out and why; the count and the reasons come in.
-session-wallpaper-left-out = { $count } छोड़े गए: { $why }।
+session-wallpaper-left-out =
+    { $count ->
+        [one] Trindle ने { $count } तस्वीर छोड़ दी क्योंकि वह { $why } है।
+       *[other] Trindle ने { $count } तस्वीरें छोड़ दीं क्योंकि वे { $why } हैं।
+    }
 
 # Under the lock screen when a phone or password check was given up on.
 session-lock-check-abandoned = इसमें बहुत समय लगा। फिर से कोशिश करें।
-
 
 
 # Heading of the question asked by Ctrl+Alt+Shift+Esc and by the Restart everything button in Settings.
 session-restart-question = पूरा डेस्कटॉप रीस्टार्ट करें?
 
 # Under the heading: what restarting everything does to the open windows.
-session-restart-windows = हर खुली विंडो बंद हो जाएगी, और उनमें जो कुछ सहेजा नहीं गया है वह खो जाएगा।
+session-restart-windows = हर खुली विंडो बंद हो जाएगी। आपने जो सहेजा नहीं है, वह खो जाएगा।
 
 # Tip of the round button that leaves everything as it is.
 session-restart-cancel = रद्द करें
@@ -104,3 +107,12 @@ session-restart-cancel = रद्द करें
 # Main button that restarts the whole desktop.
 session-restart-go = रीस्टार्ट करें
 
+# Under the lock screen when Enter is pressed while the last try, given up on, is still being checked.
+session-lock-still-checking = आपकी पिछली कोशिश की जाँच अभी चल रही है। थोड़ी देर में फिर कोशिश करें।
+
+# Under the lock screen after several wrong tries, with how many seconds to wait (1 is one second).
+session-lock-wait =
+    { $n ->
+        [one] बहुत गलत कोशिशें हो गईं। { $n } सेकंड बाद फिर कोशिश करें।
+       *[other] बहुत गलत कोशिशें हो गईं। { $n } सेकंड बाद फिर कोशिश करें।
+    }

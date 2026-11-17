@@ -26,7 +26,7 @@ pub fn never_autoremove() -> Vec<String> {
 }
 
 pub fn would_go(simulation: &str) -> Vec<String> {
-    simulation.lines().filter_map(|l| l.strip_prefix(concat!("Re", "mv "))).flat_map(|l| l.split_whitespace().take(1))
+    simulation.lines().filter_map(|l| l.strip_prefix("Remv ")).flat_map(|l| l.split_whitespace().take(1))
         .flat_map(|n| n.split(':').take(1)).map(String::from).collect()
 }
 
@@ -100,10 +100,12 @@ mod tests {
 
     #[test]
     fn nothing_else_runs_an_unprotected_autoremove() {
-        let src = ["mod.rs", "accounts.rs", "dns.rs", "firewall.rs", "machine.rs", "packages.rs", "sources.rs", "tailscale.rs", "updates.rs"];
+        let src = ["mod.rs", "accounts.rs", "dns.rs", "firewall.rs", "machine.rs", "packages.rs", "sources.rs", "tailscale.rs", "updates.rs", "../installer/steps.rs"];
         for f in src {
             let text = std::fs::read_to_string(std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("src/admin").join(f)).unwrap();
-            for (n, l) in text.lines().enumerate() {
+
+            let code_only = text.split("#[cfg(test)]\nmod tests").next().unwrap_or(&text);
+            for (n, l) in code_only.lines().enumerate() {
                 let code = l.split("//").next().unwrap_or("");
                 assert!(!code.contains("\"autoremove\"") || code.contains("protected"), "{f}:{}: {l}", n + 1);
             }

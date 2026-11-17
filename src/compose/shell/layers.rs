@@ -20,9 +20,9 @@ use smithay::{
     },
 };
 
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
 
-impl<BackendData: Backend> WlrLayerShellHandler for AnvilState<BackendData> {
+impl<BackendData: Backend> WlrLayerShellHandler for Compose<BackendData> {
     fn shell_state(&mut self) -> &mut WlrLayerShellState {
         &mut self.layer_shell_state
     }
@@ -37,13 +37,22 @@ impl<BackendData: Backend> WlrLayerShellHandler for AnvilState<BackendData> {
         if namespace == crate::trusted::MODAL && !self.modal_asked(&surface, layer_kind) {
             return;
         }
-        let output = wl_output
+
+        let Some(output) = wl_output
             .as_ref()
             .and_then(Output::from_resource)
-            .unwrap_or_else(|| self.space.outputs().next().unwrap().clone());
+            .or_else(|| self.space.outputs().next().cloned())
+        else {
+            surface.send_close();
+            return;
+        };
         let mut map = layer_map_for_output(&output);
         let question = crate::person_only::ASKED_BY_NAME.contains(&namespace.as_str()) && crate::trusted::outside_every_box(surface.wl_surface());
-        map.map_layer(&LayerSurface::new(surface, namespace)).unwrap();
+        let layer = LayerSurface::new(surface, namespace);
+        if map.map_layer(&layer).is_err() {
+            layer.layer_surface().send_close();
+            return;
+        }
         crate::trusted::keep_on_top(&mut map);
         drop(map);
         if question {
@@ -81,7 +90,7 @@ impl<BackendData: Backend> WlrLayerShellHandler for AnvilState<BackendData> {
     }
 }
 
-impl<BackendData: Backend> AnvilState<BackendData> {
+impl<BackendData: Backend> Compose<BackendData> {
 
     pub fn panel_of(&self, surface: &WlSurface) -> Option<LayerSurface> {
         self.space.outputs().find_map(|o| layer_map_for_output(o).layer_for_surface(surface, WindowSurfaceType::TOPLEVEL).cloned())
@@ -100,7 +109,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
             return None;
         }
 
-        if self.question_window_in_front() && self.panel_of(surface).is_some_and(|l| crate::trusted::standing(&l) == crate::trusted::Kind::News) {
+        if self.question_window_in_front() && self.panel_of(surface).is_some_and(|l| crate::trusted::kind_of(&l) == crate::trusted::Kind::News) {
             return None;
         }
         self.space.outputs().find_map(|o| {
@@ -117,7 +126,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
         let mut panels: Vec<LayerSurface> =
             self.layer_shell_state.layer_surfaces().rev().filter_map(|l| self.whole_keyboard_panel(l.wl_surface())).collect();
         panels.sort_by_key(|l| {
-            std::cmp::Reverse((crate::trusted::standing(l), self.keyboard_layers.iter().position(|s| s == l.wl_surface())))
+            std::cmp::Reverse((crate::trusted::kind_of(l), self.keyboard_layers.iter().position(|s| s == l.wl_surface())))
         });
         panels
     }
@@ -158,7 +167,7 @@ impl<BackendData: Backend> AnvilState<BackendData> {
 
         let Some(layer) = self.whole_keyboard_panel(surface) else { return };
 
-        let above = self.whole_keyboard_panels().iter().any(|p| crate::trusted::standing(p) > crate::trusted::standing(&layer));
+        let above = self.whole_keyboard_panels().iter().any(|p| crate::trusted::kind_of(p) > crate::trusted::kind_of(&layer));
         let Some(keyboard) = self.seat.get_keyboard() else { return };
         self.keyboard_layers.push(surface.clone());
         if above {
@@ -219,8 +228,7 @@ fn layer_comes_back(surface: &WlSurface) -> bool {
     let has_buffer = smithay::backend::renderer::utils::with_renderer_surface_state(surface, |s| s.buffer().is_some())
         .unwrap_or(false);
     with_states(surface, |states| {
-        states.data_map.insert_if_missing(|| std::cell::Cell::new(None::<LayerShown>));
-        let cell = states.data_map.get::<std::cell::Cell<Option<LayerShown>>>().unwrap();
+        let cell = states.data_map.get_or_insert(|| std::cell::Cell::new(None::<LayerShown>));
         match (cell.get(), has_buffer) {
             (_, true) => {
                 cell.set(Some(LayerShown::Shown));
@@ -313,10 +321,9 @@ pub(super) fn configure_layer(surface: &WlSurface, output: &Output) {
     map.arrange();
 
     if !initial_configure_sent || back {
-        let layer = map
-            .layer_for_surface(surface, WindowSurfaceType::TOPLEVEL)
-            .unwrap();
 
-        layer.layer_surface().send_configure();
+        if let Some(layer) = map.layer_for_surface(surface, WindowSurfaceType::TOPLEVEL) {
+            layer.layer_surface().send_configure();
+        }
     }
 }

@@ -69,12 +69,40 @@ pub fn plugin_program(info: &str) -> Option<String> {
     (id.len() <= 80 && id.bytes().all(|b| b.is_ascii_alphanumeric() || b == b'.')).then(|| format!("trindle-plugin {id}"))
 }
 
+pub fn part_of(info: &str) -> Option<&'static str> {
+    let line = info.lines().find_map(|l| l.trim().strip_prefix("Command Line:"))?;
+    let first = line.split_whitespace().next()?.rsplit('/').next()?;
+    crate::NAMES.iter().copied().find(|n| *n == first)
+}
+
+pub fn build_id(info: &str, exe: &str) -> Option<String> {
+    info.lines().find_map(|l| {
+        let rest = l.trim().strip_prefix("Module ")?;
+        let (module, id) = rest.split_once(" with build-id ")?;
+        let name = module.trim_end_matches(" (deleted)").rsplit('/').next()?;
+        let id = id.split_whitespace().next()?;
+        (name == exe && id.len() <= 64 && id.bytes().all(|b| b.is_ascii_hexdigit())).then(|| id.to_string())
+    })
+}
+
+pub fn with_build(trace: String, id: Option<String>) -> String {
+    match id {
+        Some(id) => format!("{}\nBuild id: {id}", trace.chars().take(TRACE_MOST - 100).collect::<String>().trim_end()),
+        None => trace,
+    }
+}
+
 pub fn coredump() -> Option<(Crash, i64)> {
     let list = crate::common::run::text(&["coredumpctl", "--no-pager", "--json=short", "list"]);
     let (pid, program, at) = newest(&list)?;
     let info = crate::common::run::text(&["coredumpctl", "--no-pager", "info", &pid.to_string()]);
     let (signal, trace) = parse_info(&info);
-    let program = if program == "trindle-plugin" { plugin_program(&info).unwrap_or(program) } else { program };
+    let trace = with_build(trace, build_id(&info, &program));
+    let program = match program.as_str() {
+        "trindle-plugin" => plugin_program(&info).unwrap_or(program),
+        "trindle" => part_of(&info).map_or(program, str::to_string),
+        _ => program,
+    };
     Some((Crash { program, signal, trace }, at))
 }
 
@@ -87,21 +115,38 @@ pub fn before_this_boot(at: i64, up: i64) -> bool {
     up > 0 && at < now - up
 }
 
-pub fn log_before(at: Option<i64>) -> String {
-    let n = super::LOG_LINES.to_string();
-    let mut argv = vec!["journalctl".to_string(), "--no-pager".into(), "-q".into(), "-o".into(), "short-iso".into(), "-n".into(), n];
+pub fn log_before(crash: Option<(&str, i64)>) -> String {
+    let at = crash.map(|c| c.1);
+    let argv = log_argv(crash.map(|c| c.0), at, at.is_some_and(|t| before_this_boot(t, uptime())));
+    let argv: Vec<&str> = argv.iter().map(String::as_str).collect();
+    crate::common::run::text(&argv)
+}
+
+fn log_argv(program: Option<&str>, at: Option<i64>, earlier_boot: bool) -> Vec<String> {
+    let mut argv: Vec<String> = ["journalctl", "--no-pager", "-q", "-o", "short-iso", "-n"].map(String::from).into();
+    argv.push(super::LOG_LINES.to_string());
+    let mut own = super::programs();
+    own.extend(["trindle", "trindle-compose", "trindle-unlock"]);
+
+    if let Some(p) = program.and_then(|p| p.split_whitespace().next()).filter(|p| p.starts_with("trindle")) {
+        own.push(p);
+    }
+    own.sort_unstable();
+    own.dedup();
+    for p in own {
+        argv.extend(["-t".into(), p.into()]);
+    }
     match at {
         Some(t) => {
 
-            if before_this_boot(t, uptime()) {
+            if earlier_boot {
                 argv.extend(["-b".into(), "-1".into()]);
             }
             argv.extend(["--since".into(), format!("@{}", t - BEFORE), "--until".into(), format!("@{}", t + 5)]);
         }
         None => argv.extend(["--since".into(), format!("-{BEFORE}s")]),
     }
-    let argv: Vec<&str> = argv.iter().map(String::as_str).collect();
-    crate::common::run::text(&argv)
+    argv
 }
 
 fn graphics() -> Vec<String> {
@@ -180,4 +225,41 @@ pub fn hardware_text(model: &str, summary: Option<&str>) -> String {
 fn system_name() -> Option<String> {
     let text = std::fs::read_to_string("/etc/os-release").ok()?;
     text.lines().find_map(|l| l.strip_prefix("PRETTY_NAME=")).map(|v| v.trim_matches('"').to_string())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::log_argv;
+
+    fn tags(argv: &[String]) -> Vec<&str> {
+        argv.windows(2).filter(|w| w[0] == "-t").map(|w| w[1].as_str()).collect()
+    }
+
+    #[test]
+    fn crash_log_reads_only_trindle_programs() {
+        for (program, at) in [(Some("trindle-compose"), Some(1_000_000)), (None, None), (Some("trindle-plugin org.example.x"), Some(5))] {
+            let argv = log_argv(program, at, false);
+            let tags = tags(&argv);
+            assert!(!tags.is_empty(), "{argv:?}");
+            assert_eq!(argv.iter().filter(|a| *a == "-t").count(), tags.len());
+            assert!(tags.iter().all(|t| t.starts_with("trindle")), "{tags:?}");
+            assert!(!argv.iter().any(|a| a == "-u" || a == "--user"));
+        }
+    }
+
+    #[test]
+    fn crash_log_holds_the_crashed_program() {
+        assert!(tags(&log_argv(Some("trindle-compose"), Some(9), false)).contains(&"trindle-compose"));
+        assert!(tags(&log_argv(Some("trindle-plugin org.example.x"), Some(9), false)).contains(&"trindle-plugin"));
+        assert!(tags(&log_argv(Some("trindle-folders"), Some(9), false)).contains(&"trindle-folders"));
+        assert!(!tags(&log_argv(Some("bash"), Some(9), false)).contains(&"bash"));
+    }
+
+    #[test]
+    fn crash_log_window_and_boot() {
+        let argv = log_argv(Some("trindle-ring"), Some(1_000), true);
+        let s = argv.join(" ");
+        assert!(s.contains("-b -1") && s.contains("--since @700") && s.contains("--until @1005"), "{s}");
+        assert!(log_argv(None, None, false).join(" ").contains("--since -300s"));
+    }
 }

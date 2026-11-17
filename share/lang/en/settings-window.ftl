@@ -31,18 +31,18 @@ settings-window-no-page = No page matches. Try a shorter word, or look in Help.
 ## Command line (src/settings/mod.rs)
 
 # Printed in a terminal by trindle-settings --themes for a theme that cannot be used; id is its short name, name its full name, why the reason.
-settings-window-theme-refused = {"  "}{ $id }  { $name } (cannot be used: { $why })
+settings-window-theme-refused = {"  "}{ $id }  { $name } (can't be used: { $why })
 # Printed in a terminal when trindle-settings --theme is given no theme name.
-settings-window-theme-name = Name a theme, such as: trindle-settings --theme default
+settings-window-theme-name = Type a theme name, for example: trindle-settings --theme default
 # Printed in a terminal after trindle-settings --theme worked; theme is the theme's name.
 settings-window-theme-now = The theme is now { $theme }.
 # The name printed for the built-in theme in the line above.
 settings-window-theme-own = Trindle's own
 # Printed in a terminal when the theme could not be chosen; error says why and ends with a full stop.
-settings-window-themes-list = { $error } trindle-settings --themes lists them.
+settings-window-themes-list = { $error } Run trindle-settings --themes to see the list.
 # Printed in a terminal when trindle-settings --keys is not given the word default.
-settings-window-keys-how = To put every key and button back: trindle-settings --keys default
+settings-window-keys-how = To put every key and button back to normal, run: trindle-settings --keys default
 # Printed in a terminal after every key and button was put back.
-settings-window-keys-back = Every key and button is back as it is printed.
+settings-window-keys-back = Every key and button is back to normal.
 # Printed in a terminal when the keys could not be put back; error says why.
-settings-window-keys-failed = The keys could not be put back: { $error }
+settings-window-keys-failed = Trindle couldn't put the keys back: { $error }

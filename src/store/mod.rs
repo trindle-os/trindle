@@ -42,8 +42,10 @@ pub mod origin;
 mod look;
 pub(crate) mod listing;
 mod app_page;
+mod heard;
 mod pages;
 mod dropped;
+mod flatpak_peek;
 mod screen;
 mod update_page;
 mod plugin_page;
@@ -89,11 +91,11 @@ const PATH: &str = "/org/trindle/Store";
 const XML: &str = r#"<interface name="org.trindle.Store"><method name="Show"/><method name="Open"><arg type="as" direction="in"/></method></interface>"#;
 const SIZE: (u32, u32) = (1100, 760);
 
-const TICK: Duration = Duration::from_millis(250);
+const TICK: Duration = crate::common::filling::TURN;
 
 const PAGE: usize = 120;
 
-const GITHUB_CHECKS: usize = 12;
+const GITHUB_CHECKS: usize = 5;
 
 const FADE_MS: u64 = 180;
 
@@ -141,6 +143,8 @@ fn go(f: impl Fn(&mut Store) + 'static) -> Msg {
 enum Do {
 
     Then(Box<dyn FnOnce(&mut Store)>),
+
+    ThenIf(Box<dyn FnOnce(&mut Store) -> bool>),
     Show,
 
     Open(Vec<String>),
@@ -154,6 +158,89 @@ enum Do {
     Lit(f32),
 
     Settings(crate::settings::ui::Do),
+}
+
+#[derive(Default)]
+struct ReadAhead {
+    done: bool,
+    stale: bool,
+
+    #[cfg(test)]
+    count: u32,
+}
+
+#[derive(Default)]
+struct Opening {
+    app: Option<String>,
+    github: Option<String>,
+}
+
+struct Spot {
+
+    asked: Option<String>,
+
+    kept: Option<Instant>,
+
+    last: &'static str,
+}
+
+struct FadeIn {
+
+    shown: f32,
+    tween: Option<Tween>,
+
+    lit: f32,
+}
+
+#[derive(Default)]
+struct RowWords {
+
+    said: HashMap<String, (String, Tone)>,
+
+    on: HashMap<String, &'static str>,
+
+    behind: HashMap<String, Vec<String>>,
+    open: BTreeSet<String>,
+}
+
+#[derive(Default)]
+struct Hub {
+
+    list: Option<Rc<Vec<github::Found>>>,
+
+    asked: bool,
+}
+
+struct Prefs {
+    show: formats::Show,
+    warning_off: bool,
+    conf: std::path::PathBuf,
+}
+
+#[derive(Default)]
+struct Answers {
+
+    facts: heard::Heard<pages::install::AppFacts>,
+    ratings: heard::Heard<reviews::Ratings>,
+
+    reviews: HashMap<String, Vec<reviews::Review>>,
+
+    shots: HashMap<String, Option<Rc<image::DynamicImage>>>,
+
+    missed: std::collections::HashSet<String>,
+}
+
+struct Size {
+
+    across: f32,
+
+    tall: f32,
+}
+
+#[derive(Default)]
+struct Pulse {
+    on: Rc<Cell<bool>>,
+    timer: Rc<Cell<bool>>,
 }
 
 pub struct Store {
@@ -195,36 +282,22 @@ pub struct Store {
 
     image: Option<github::Found>,
     search: String,
-    pending_github: Option<String>,
 
-    preloaded: bool,
-    stale: bool,
-
-    #[cfg(test)]
-    read_aheads: u32,
+    ahead: ReadAhead,
 
     pressed_at: Option<crate::toolkit::widget::Rect>,
-    pending_app: Option<String>,
 
-    pending_spot: Option<String>,
+    opening: Opening,
 
-    spot_kept: Option<Instant>,
+    spot: Spot,
 
-    spot_last: &'static str,
-
-    fade: f32,
-    fading: Option<Tween>,
-
-    lit: f32,
+    fade_in: FadeIn,
 
     dials: HashMap<String, Dial>,
 
-    said: HashMap<String, (String, Tone)>,
+    turning: crate::common::filling::Turning,
 
-    said_on: HashMap<String, &'static str>,
-
-    behind: HashMap<String, Vec<String>>,
-    behind_open: BTreeSet<String>,
+    words: RowWords,
 
     top: Option<(String, Tone)>,
 
@@ -232,15 +305,13 @@ pub struct Store {
 
     shown: usize,
 
-    hub: Option<Rc<Vec<github::Found>>>,
+    appimagehub: Hub,
 
-    hub_asked: bool,
-
-    show: formats::Show,
-    warning_off: bool,
-    conf: std::path::PathBuf,
+    prefs: Prefs,
 
     warn: Option<pages::appimage_warning::Warn>,
+
+    flatpaks: Vec<pages::flatpak_page::Page>,
 
     browse: browse::Page,
 
@@ -251,33 +322,19 @@ pub struct Store {
     sources: pages::SourcesPage,
 
     plugins: plugin_page::PluginPage,
-    reviews: HashMap<String, Option<reviews::Ratings>>,
 
     trouble: HashMap<String, String>,
     owned: pages::InstalledPage,
 
-    reviews_heard: std::collections::HashSet<String>,
-
-    said_about: HashMap<String, Vec<reviews::Review>>,
+    heard: Answers,
 
     shot: usize,
 
-    across: f32,
-
-    tall: f32,
-
-    shots: HashMap<String, Option<Rc<image::DynamicImage>>>,
-
-    shots_missed: std::collections::HashSet<String>,
+    size: Size,
 
     upd: update_page::UpdatesPage,
 
-    facts: HashMap<String, Option<pages::install::AppFacts>>,
-
-    facts_heard: std::collections::HashSet<String>,
-
-    pulsing: Rc<Cell<bool>>,
-    pulse_timer: Rc<Cell<bool>>,
+    pulse: Pulse,
 
     bus: Option<Bus>,
     chooser: Option<Listen>,
@@ -294,22 +351,16 @@ impl Store {
             installed: HashMap::new(), updatable: Vec::new(), trindle_waiting: None, debian: Vec::new(), firmware: Vec::new(),
             held: crate::common::held::Held::read(), firmware_fetched: false, lists_fetched: false,
             busy: HashMap::new(), jobs: HashMap::new(), working: 0, hidden: false,
-            view: View::Home, detail: None, image: None, search: String::new(), pending_github: None,
-            preloaded: false, stale: false,
-            #[cfg(test)]
-            read_aheads: 0,
-            pressed_at: None, pending_app: None, pending_spot: None, spot_kept: None, spot_last: spot::SPOT,
-            fade: 1.0, fading: None, lit: 0.0,
-            dials: HashMap::new(), said: HashMap::new(), said_on: HashMap::new(), behind: HashMap::new(), behind_open: BTreeSet::new(),
-            top: None, headline: None, shown: PAGE,
-            hub: None, hub_asked: false,
-            show: formats::show_in(&conf), warning_off: formats::warning_off_in(&conf), conf, warn: None,
+            view: View::Home, detail: None, image: None, search: String::new(), ahead: ReadAhead::default(),
+            pressed_at: None, opening: Opening::default(), spot: Spot { asked: None, kept: None, last: spot::SPOT },
+            fade_in: FadeIn { shown: 1.0, tween: None, lit: 0.0 },
+            dials: HashMap::new(), turning: Default::default(), words: RowWords::default(),
+            top: None, headline: None, shown: PAGE, appimagehub: Hub::default(),
+            prefs: Prefs { show: formats::show_in(&conf), warning_off: formats::warning_off_in(&conf), conf }, warn: None, flatpaks: Vec::new(),
             browse: Default::default(), github: Default::default(), backup: Default::default(), sources: Default::default(), plugins: Default::default(),
-            reviews: HashMap::new(), trouble: HashMap::new(), owned: Default::default(), reviews_heard: Default::default(),
-            said_about: HashMap::new(), shots: HashMap::new(), shots_missed: Default::default(), shot: 0,
-            across: SIZE.0 as f32, tall: SIZE.1 as f32,
-            upd: update_page::UpdatesPage::default(), facts: HashMap::new(), facts_heard: Default::default(),
-            pulsing: Rc::default(), pulse_timer: Rc::default(),
+            trouble: HashMap::new(), owned: Default::default(), heard: Answers::default(), shot: 0,
+            size: Size { across: SIZE.0 as f32, tall: SIZE.1 as f32 },
+            upd: update_page::UpdatesPage::default(), pulse: Pulse::default(),
             bus: None, chooser: None, hosted: None,
         }
     }

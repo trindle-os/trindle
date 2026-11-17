@@ -38,16 +38,23 @@ pub fn preset_reader(folders: &Path, id: &str) {
 }
 
 pub fn installed() -> Vec<Plugin> {
-    let mut all: Vec<Plugin> = std::fs::read_dir(folders()).into_iter().flatten().flatten()
-        .filter_map(|e| check(&e.path().join("app")).ok())
-        .filter(|p| folder(&p.id).join("app").is_dir())
+    installed_in(&folders())
+}
+
+pub(super) fn installed_in(root: &Path) -> Vec<Plugin> {
+    let mut all: Vec<Plugin> = std::fs::read_dir(root).into_iter().flatten().flatten()
+        .filter_map(|e| check(&e.path().join("app")).ok().filter(|p| e.file_name() == p.id.as_str()))
         .collect();
     all.sort_by_key(|p| p.name.to_lowercase());
     all
 }
 
 pub fn find(id: &str) -> Option<Plugin> {
-    good_id(id).then(|| check(&folder(id).join("app")).ok()).flatten()
+    find_in(&folders(), id)
+}
+
+pub(super) fn find_in(root: &Path, id: &str) -> Option<Plugin> {
+    good_id(id).then(|| check(&root.join(id).join("app")).ok()).flatten().filter(|p| p.id == id)
 }
 
 pub fn allowed(p: &Plugin) -> Vec<String> {
@@ -152,10 +159,9 @@ pub fn firewall_apply(id: &str) -> Result<(), String> {
 pub(super) fn firewall_said(opening: bool, why: &str, put_off: Result<(), String>) -> String {
     let why = why.trim().trim_end_matches('.');
     match (opening, put_off) {
-        (false, _) => format!("its ports could not be closed: {why}."),
-        (true, Ok(())) => format!("its ports were not opened, so listening is off again: {why}."),
-        (true, Err(kept)) => format!("its ports were not opened ({why}), and listening could not be switched off again either ({}). \
-                                      Nothing is open; switch it off in Settings, Permissions.", kept.trim().trim_end_matches('.')),
+        (false, _) => t!("plugins-ports-not-closed", why = why).to_string(),
+        (true, Ok(())) => t!("plugins-ports-not-opened", why = why).to_string(),
+        (true, Err(kept)) => t!("plugins-ports-not-opened-kept", why = why, kept = kept.trim().trim_end_matches('.')).to_string(),
     }
 }
 

@@ -14,7 +14,7 @@ voice-brighter = 调亮
 voice-dimmer = 调暗
 
 # Said under the ring when the request is to let the screen rest again.
-voice-keep-awake-off = 屏幕可以再次休息了
+voice-keep-awake-off = 屏幕可以再次休眠
 
 # Said under the ring when the screen is kept awake.
 voice-keep-awake-on = 保持唤醒
@@ -23,7 +23,7 @@ voice-keep-awake-on = 保持唤醒
 voice-updates = 正在查找更新
 
 # Said under the ring when nothing was heard at all.
-voice-nothing-heard = 没有听到声音。请轻点圆环中间并说话。
+voice-nothing-heard = Trindle 没有听到你的声音。请轻点圆环中间并说话。
 
 # Said under the ring when the volume goes up.
 voice-louder = 调大声
@@ -86,7 +86,7 @@ voice-showing-app = 正在显示 { $name }
 voice-opening-app = 正在打开 { $name }
 
 # Said under the ring when the request was heard but not understood; what was heard comes in.
-voice-heard-unknown = 听到了“{ $heard }”，但不知道该做什么
+voice-heard-unknown = Trindle 无法识别命令“{ $heard }”
 
 # Said in the ring when voice has not been added yet.
 voice-optional = 语音是可选的附加功能。请在“设置”的“圆环”页面中添加。
@@ -95,16 +95,16 @@ voice-optional = 语音是可选的附加功能。请在“设置”的“圆环
 voice-switched-off = 语音已关闭。请在“设置”的“圆环”页面中打开。
 
 # Said in the ring when the microphone cannot be opened; the reason comes after it.
-voice-mic-failed = 无法打开麦克风：{ $why }
+voice-mic-failed = Trindle 无法访问麦克风：{ $why }
 
 # Said in the ring when the microphone's recorder would not start.
-voice-mic-not-started = 无法打开麦克风：pw-record 没有启动
+voice-mic-not-started = 录音程序没有启动，Trindle 无法访问麦克风
 
 # Said in the ring when listening stopped and nothing was recorded.
 voice-nothing-recorded = 没有录到任何内容。
 
 # Said in the ring when the recording had no speech in it.
-voice-nothing-heard-after = 没有听到声音。请轻点圆环中间并说话。
+voice-nothing-heard-after = Trindle 没有听到你的声音。请轻点圆环中间并说话。
 
 # Said in the ring when the speech engine failed and gave no reason.
 voice-whisper-failed = Whisper 失败
@@ -113,14 +113,14 @@ voice-whisper-failed = Whisper 失败
 voice-installing-tools = 暂时安装构建工具：{ $names }
 
 # Progress line while whisper.cpp is built; its version comes in.
-voice-building = 正在为语音构建 whisper.cpp { $version }（需要一两分钟）
+voice-building = 正在为语音控制构建 whisper.cpp { $version }。需要一两分钟。
 
 # Progress line while the speech model is downloaded (148 MB).
-voice-fetching-model = 正在获取语音模型（148 MB）
+voice-fetching-model = 正在下载语音模型（148 MB）
 
 # Progress line while the build tools are taken away again.
 # SAFETY: needs a human review before it ships
-voice-removing-tools = 正在再次删除构建工具
+voice-removing-tools = 正在删除构建工具
 
 # Said once voice is added and ready to use.
 voice-ready = 语音控制已就绪。请打开圆环，轻点中间并说话。
@@ -135,3 +135,14 @@ voice-press-enter = 按回车键关闭。
 # Shown when the command is run with neither install nor remove.
 voice-usage = 用法：trindle-voice-setup install | remove
 
+# Said when a step of the voice set-up fails. { $program } is the program that was run, with its first word.
+voice-step-failed = { $program } 没有成功。
+
+# Said when the whisper.cpp download isn't the one Trindle checks for, so nothing is built from it.
+voice-whisper-fingerprint = 下载的 whisper.cpp 不是 Trindle 预期的那个，所以没有构建。
+
+# Said when the speech model download isn't the one Trindle checks for, so it isn't installed.
+voice-model-fingerprint = 下载的语音模型不是 Trindle 预期的那个，所以没有安装。
+
+
+voice-no-private-folder = 没有可用的私有文件夹。

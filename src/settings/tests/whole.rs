@@ -117,7 +117,7 @@ fn every_full_page_has_the_house_shape() {
 }
 
 #[test]
-#[ignore]
+#[ignore = "writes pictures to TRINDLE_SHOTS and asserts nothing; run it by hand with --ignored"]
 fn shoot_the_layout_of_every_page() {
     let out = std::path::PathBuf::from(std::env::var("TRINDLE_SHOTS").unwrap_or_else(|_| "target/style-check".into()));
     let prefix = std::env::var("TRINDLE_SHOT_PREFIX").unwrap_or_else(|_| "settings-".into());
@@ -143,4 +143,53 @@ fn shoot_the_layout_of_every_page() {
             pix.save_png(out.join(format!("{prefix}{id}{tail}.png"))).unwrap();
         }
     }
+}
+
+#[test]
+fn no_strip_of_answers_is_cut_in_any_language() {
+    use crate::common::shipped_languages::{in_language, tags};
+    use crate::toolkit::widget::What;
+    fn strips(n: &Node<Msg>, into: &mut Vec<(String, Vec<String>)>) {
+        if let What::Choice { options, .. } = &n.what {
+            into.push((n.key.clone().unwrap_or_default(), options.clone()));
+        }
+        n.items().iter().for_each(|i| strips(i, into));
+    }
+    let mut wrong = Vec::new();
+    for tag in tags() {
+        in_language(&tag, || {
+            for pages in [every_page(), made_up_pages()] {
+                let events = Loop::new();
+                let asks = events.post(|_: Do| {});
+                let mut s = Settings { kit: Kit::new(events.clone(), asks, None, None), pages, current: 0, search: String::new(), tall: 692.0 };
+                for i in 0..s.pages.len() {
+                    s.current = i;
+                    let view = s.view();
+                    let mut found = Vec::new();
+                    strips(&view, &mut found);
+                    if found.is_empty() {
+                        continue;
+                    }
+                    for w in [1278, 1920] {
+                        let mut ui = Ui::new(s.view(), Theme::new(true, "#fbc711"));
+                        ui.lay_at(w, 692);
+                        let boxes = ui.boxes();
+                        for (key, options) in &found {
+                            if key.is_empty() {
+                                wrong.push(format!("{} has a strip with no name: {options:?}", s.pages[i].id()));
+                                continue;
+                            }
+                            let Some(laid) = boxes.iter().find(|b| b.0 == *key).map(|b| b.1) else { continue };
+                            let need = crate::settings::ui::strip_width(options);
+                            if laid.w + 0.5 < need {
+                                wrong.push(format!("{tag} {} at {w}: {options:?} laid {} of {need}", s.pages[i].id(), laid.w));
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+    wrong.dedup();
+    assert!(wrong.is_empty(), "{} strips are cut:\n{}", wrong.len(), wrong.join("\n"));
 }

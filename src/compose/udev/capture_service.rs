@@ -5,10 +5,10 @@ use std::time::Duration;
 use smithay::output::Output;
 use tracing::warn;
 
-use super::{AnvilState, UdevData};
+use super::{Compose, UdevData};
 use crate::capture_scene::Scene;
 
-impl AnvilState<UdevData> {
+impl Compose<UdevData> {
 
     pub(super) fn service_image_capture(&mut self, output: &Output) {
         self.keep_pointer_away();

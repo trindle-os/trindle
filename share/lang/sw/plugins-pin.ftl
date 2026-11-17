@@ -8,11 +8,11 @@ plugins-pin-four = PIN ni tarakimu 4.
 plugins-pin-not-saved = PIN haihifadhiwi
 
 # Red words on the PIN card when the unlocking command gave no answer of its own.
-plugins-pin-no-answer = Hakuna jibu kutoka kompyuta nyingine.
+plugins-pin-no-answer = Kompyuta nyingine haikujibu.
 
 # Red words on the PIN card when the unlocking command refused without saying why.
 # SAFETY: needs a human review before it ships
-plugins-pin-not-unlocked = Haikufunguliwa.
+plugins-pin-not-unlocked = Bado imefungwa.
 
 # Name the screen reader gives to the four dots on the PIN card.
 plugins-pin-dots = PIN

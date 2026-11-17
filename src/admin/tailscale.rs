@@ -1,9 +1,7 @@
 //! The helper's steps for Tailscale: turning it on and off and the settings it is given.
 
-use std::path::Path;
-
 use super::accounts::name_of;
-use super::{sources, Outcome, replace, run};
+use super::{at, sources, Outcome, replace, run};
 use crate::toolkit::t;
 
 pub(super) fn tailscale_on() -> Outcome {
@@ -47,8 +45,8 @@ pub(super) fn tailscale_off() -> Outcome {
 
 pub(super) fn mark_tailscale() -> Outcome {
     use crate::common::dns;
-    std::fs::create_dir_all("/etc/trindle").map_err(|e| e.to_string())?;
-    replace(Path::new(dns::TAILSCALE_MARK), b"", 0o644)
+    std::fs::create_dir_all(at("/etc/trindle")).map_err(|e| e.to_string())?;
+    replace(&at(dns::TAILSCALE_MARK), b"", 0o644)
 }
 
 #[cfg(test)]

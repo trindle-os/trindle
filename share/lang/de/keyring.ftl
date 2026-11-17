@@ -37,7 +37,7 @@ keyring-why-old = Dein Anmeldepasswort ist nicht das, mit dem dieser Schlüsselb
 
 # Under the title when no password was typed at log in, for example with a fingerprint or automatic log in.
 # SAFETY: needs a human review before it ships
-keyring-why-no-login = Bei der Anmeldung wurde kein Passwort eingegeben (Fingerabdruck oder automatische Anmeldung), daher konnte sich der Schlüsselbund nicht von selbst öffnen. Gib dein Anmeldepasswort ein.
+keyring-why-no-login = Du hast bei der Anmeldung kein Passwort eingegeben (Fingerabdruck oder automatische Anmeldung), darum konnte sich der Schlüsselbund nicht von selbst öffnen. Gib dein Anmeldepasswort ein.
 
 # Under the title when a program asks for a saved password and the keyring is shut.
 # SAFETY: needs a human review before it ships
@@ -51,7 +51,7 @@ keyring-stopped = Der Schlüsselbund wurde angehalten
 keyring-not-the-keyring-password = Das ist nicht das Passwort des Schlüsselbunds
 
 # Shown under the box when the keyring file is damaged and has been left as it is.
-keyring-damaged-left = Die Schlüsselbund-Datei ist beschädigt und wurde unverändert gelassen
+keyring-damaged-left = Die Schlüsselbund-Datei ist beschädigt, deshalb hat Trindle sie nicht verändert
 
 # Shown under the box when the password is not the person's login password.
 # SAFETY: needs a human review before it ships
@@ -73,7 +73,7 @@ keyring-error-locked = Der Schlüsselbund ist gesperrt
 keyring-error-wrong-password = Dieses Passwort öffnet den Schlüsselbund nicht
 
 # Said when the collection or item asked for is not there.
-keyring-error-no-such = Keine solche Sammlung und kein solches Element
+keyring-error-no-such = Das Element gibt es nicht
 
 # Said when the keyring file cannot be read as a keyring.
 keyring-error-damaged = Die Schlüsselbund-Datei ist beschädigt
@@ -83,8 +83,10 @@ keyring-error-damaged = Die Schlüsselbund-Datei ist beschädigt
 keyring-asked-by = Angefragt von { $program }
 
 # Told to a program that asked while the keyring was taking over from the one before and many calls already waited.
-keyring-starting = Der Schlüsselbund startet. Frage erneut an.
+keyring-starting = Der Schlüsselbund startet. Versuche es noch einmal.
 
 # The program in "Asked for by", for a program on the bus: $name is the name it gives itself, which anything can claim.
 keyring-named-itself = ein Programm, das sich { $name } nennt
 
+# Said to a program that gave a password with letters the keyring can't read, so no keyring is made with it.
+keyring-password-unreadable = Das Passwort enthält Zeichen, die der Schlüsselbund nicht lesen kann

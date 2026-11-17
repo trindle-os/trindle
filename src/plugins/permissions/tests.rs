@@ -40,13 +40,13 @@ fn an_update_keeps_what_was_allowed_and_allows_nothing_new() {
 #[test]
 fn the_firewall_step_says_what_is_true_of_listening() {
     assert_eq!(firewall_said(true, "No password was given, so nothing changed.", Ok(())),
-               "its ports were not opened, so listening is off again: No password was given, so nothing changed.");
+               "Trindle couldn't open its ports, so listening is switched off again: No password was given, so nothing changed.");
     let kept = firewall_said(true, "No password was given.", Err("Permission denied (os error 13)".into()));
-    assert_eq!(kept, "its ports were not opened (No password was given), and listening could not be switched off again either \
-                      (Permission denied (os error 13)). Nothing is open; switch it off in Settings, Permissions.");
+    assert_eq!(kept, "Its ports weren't opened (No password was given), and listening couldn't be switched off again either \
+                      (Permission denied (os error 13)). Nothing is open. Switch it off in Settings, Permissions.");
     assert!(!kept.contains("is off again"), "never said when it could not be put off");
     let closing = firewall_said(false, "the firewall could not be told", Ok(()));
-    assert_eq!(closing, "its ports could not be closed: the firewall could not be told.");
+    assert_eq!(closing, "Its ports couldn't be closed: the firewall could not be told.");
     assert!(!closing.contains("opened") && !closing.contains("off again"));
 
     let source = plugin_code();
@@ -61,14 +61,14 @@ fn the_firewall_step_says_what_is_true_of_listening() {
 fn the_plugins_words_follow_the_language_and_fall_back_word_by_word() {
     use crate::toolkit::lang::{english, with_catalogue, Bundle, Catalogue};
     let french = "plugins-allow = Autoriser\n\
-                  plugins-needs-none = { $name } a besoin de votre permission : 0 sur { $n } autorisées.\n\
+                  plugins-needs-none =\n    { $n ->\n        [one] { $name } a besoin de votre permission : 0 sur 1 autorisée.\n       *[other] { $name } a besoin de votre permission : 0 sur { $n } autorisées.\n    }\n\
                   plugins-settled =\n    { $n ->\n        [0] Il ne demande rien.\n        [one] La seule chose qu'il demande est autorisée.\n       *[other] Les { $n } choses qu'il demande sont autorisées.\n    }\n";
     with_catalogue(Catalogue::new(Bundle::from_text("fr", french), english()), || {
         assert_eq!(allow_word(), "Autoriser");
         assert_eq!(needs_words("Météo", 3, 0).unwrap(), "Météo a besoin de votre permission : 0 sur 3 autorisées.");
         assert_eq!(settled_words(0), "Il ne demande rien.");
         assert_eq!(settled_words(4), "Les 4 choses qu'il demande sont autorisées.");
-        assert_eq!(needs_words("Météo", 3, 1).unwrap(), "Météo has only some of the permission it asks for: 1 of 3 allowed.");
+        assert_eq!(needs_words("Météo", 3, 1).unwrap(), "You've allowed only 1 of the 3 permissions Météo asks for.");
         assert_eq!(pin::four(), "A PIN is 4 digits.");
     });
 }
@@ -112,7 +112,7 @@ fn summon_is_allowed_and_withdrawn_like_the_other_permissions_and_is_what_the_co
     assert_eq!(boxed::walls::engine_for(&v(&[WORD])), boxed::walls::engine_for(&v(&[])));
 
     let ask = crate::common::access::ask(WORD);
-    assert_eq!(ask.name, "open the ring over a full-screen window, as if you pressed the key");
+    assert_eq!(ask.name, "opening the ring over a full-screen window, as if you pressed the key");
     assert_eq!(ask.without, "Its keys and clicks will open the ring on the desktop only, never over a full-screen window.");
     assert_eq!(crate::common::access::warning(WORD),
         Some("It can put the ring, which takes everything you type, over a game or a film without you touching a key. Only allow this for a plugin you trust."));
@@ -182,11 +182,11 @@ fn listen_is_kept_and_withdrawn_like_the_other_permissions() {
 #[test]
 fn listen_has_words_and_names_its_ports() {
     let a = crate::common::access::ask("listen");
-    assert_eq!(a.name, "let other computers on your home network reach it");
+    assert_eq!(a.name, "being reached by other computers on your local network");
     assert!(a.without.ends_with('.'));
     let p = listening("words", &with_listen("network;listen", LISTENING)).unwrap();
     assert_eq!(crate::common::access::listen_detail(&p.listen),
-               "Ports TCP 24810 and UDP 24811, from computers on your home network only. It needs the internet allowed too.");
+               "Ports TCP 24810 and UDP 24811, from computers on your local network only. It needs the internet allowed too.");
 }
 
 #[test]
@@ -206,7 +206,7 @@ fn root_opens_only_what_the_person_allowed_and_was_shown() {
     assert!(ports_to_open(&at, me).is_err());
 
     keep(&at, &m, "network\nlisten\n", None);
-    assert!(ports_to_open(&at, me).unwrap_err().contains("allowed again"));
+    assert!(ports_to_open(&at, me).unwrap_err().contains("allow connections on them again"));
     keep(&at, &m, "network\nlisten\n", Some("tcp:24810\n"));
     assert!(ports_to_open(&at, me).is_err());
 
@@ -295,16 +295,16 @@ fn a_switch_can_be_waited_on_to_be_off() {
 
 #[test]
 fn a_plugin_short_of_permission_is_said_in_plain_words() {
-    assert_eq!(needs_words("Weather", 7, 0).as_deref(), Some("Weather needs your permission to work: 0 of 7 allowed."));
+    assert_eq!(needs_words("Weather", 7, 0).as_deref(), Some("Weather needs your permission before it can work. You've allowed none of the 7 permissions it asks for."));
     assert_eq!(needs_words("Weather", 7, 3).as_deref(),
-               Some("Weather has only some of the permission it asks for: 3 of 7 allowed."));
+               Some("You've allowed only 3 of the 7 permissions Weather asks for."));
     assert_eq!(needs_words("Weather", 7, 7), None);
     assert_eq!(needs_words("Weather", 0, 0), None);
 
     assert_eq!(needs_words("Weather", 2, 9), None);
     assert_eq!(settled_words(0), "It asks for nothing.");
-    assert_eq!(settled_words(1), "The one thing it asks for is allowed.");
-    assert_eq!(settled_words(7), "All 7 things it asks for are allowed.");
+    assert_eq!(settled_words(1), "The permission it needs is allowed.");
+    assert_eq!(settled_words(7), "All 7 permissions it asks for are allowed.");
 }
 
 #[test]
@@ -324,7 +324,7 @@ fn a_malformed_ask_for_either_is_refused_and_says_why() {
     for bad in ["home_network", "Home-Network", "HOME-NETWORK", "homenetwork", "home network", "home-networks", "home-network:all", "home-network=1",
                 "usb-device", "usb_devices", "USB-devices", "usb", "usbdevices", "usb-devices/all", "usb-devices=1", "scanner", "devices", "camera"] {
         let e = asking(bad).unwrap_err().join(" ");
-        assert!(e.contains(&format!("Permission {} is not one there is", bad.split(';').next().unwrap())), "{bad}: {e}");
+        assert!(e.contains(&format!("Permission {} doesn't exist", bad.split(';').next().unwrap())), "{bad}: {e}");
 
         assert!(e.contains("home-network") && e.contains("usb-devices"), "{bad}: {e}");
     }
@@ -419,7 +419,7 @@ fn a_permission_is_switched_on_only_where_the_person_answers() {
 #[test]
 fn the_permission_window_says_both_in_plain_words_with_the_risk() {
     for (key, name, risk) in [
-        (HOME_NETWORK, "Reach devices on your home network only", "your router included, but not to the internet"),
+        (HOME_NETWORK, "Reach devices on your local network only", "your router included, but not to the internet"),
         (USB_DEVICES, "Use scanners and USB devices", "and no other USB device"),
     ] {
         let lines = crate::store::asking::lines_of(PERMISSIONS, &[key.to_string()], &[], &[], "");
@@ -429,7 +429,7 @@ fn the_permission_window_says_both_in_plain_words_with_the_risk() {
         assert!(!lines[0].on, "{key} starts off");
         assert!(lines[0].without.starts_with("It will not be able to"), "{key}");
 
-        assert!(crate::common::access::off_line(&lines[0].without).starts_with("Off: it will not be able to"));
+        assert!(crate::common::access::off_line(key).starts_with("Off means it can't"));
     }
 }
 
@@ -468,11 +468,11 @@ fn only_the_screen_reader_may_ask_for_accessibility_and_it_is_off_until_allowed(
         let dir = folder_with("other-asks", &ini(id, "sound;accessibility"));
         let e = check(&dir).unwrap_err().join(" ");
         let _ = std::fs::remove_dir_all(&dir);
-        assert!(e.contains("only for Trindle's screen reader"), "{id}: {e}");
+        assert!(e.contains("Only Trindle's screen reader from the catalogue can use the accessibility permission"), "{id}: {e}");
     }
     for bad in ["Accessibility", "accessibilty", "accessibility-bus", "accessible", "a11y", "read-screen", "accessibility=1", "access"] {
         let e = asking(bad).unwrap_err().join(" ");
-        assert!(e.contains(&format!("Permission {bad} is not one there is")) && e.contains("accessibility"), "{bad}: {e}");
+        assert!(e.contains(&format!("Permission {bad} doesn't exist")) && e.contains("accessibility"), "{bad}: {e}");
     }
     let e = asking("accessibility;accessibility").unwrap_err().join(" ");
     assert!(e.contains("is named twice"), "{e}");
@@ -498,4 +498,20 @@ fn the_permission_window_says_accessibility_in_plain_words_with_the_risk() {
     assert_eq!(lines[0].name, "Read what every window shows and say it aloud");
     assert!(lines[0].warning.as_deref().is_some_and(|w| w.contains("press buttons and type text in other windows") && w.ends_with("Only allow this for a plugin you trust.")));
     assert!(!lines[0].on && lines[0].without == "It will not be able to read your windows aloud.");
+}
+
+#[test]
+fn a_folder_that_names_another_plugin_is_not_a_plugin() {
+    let root = std::env::temp_dir().join(format!("trindle-named-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(&root).unwrap();
+    let real = folder_with("named-real", GOOD);
+    put_in(&root, &real).unwrap();
+    assert_eq!(find_in(&root, "org.example.Weather").map(|p| p.name), Some("Weather".into()));
+    assert_eq!(installed_in(&root).len(), 1);
+    std::fs::rename(root.join("org.example.Weather"), root.join("org.example.Other")).unwrap();
+    assert!(find_in(&root, "org.example.Other").is_none());
+    assert!(installed_in(&root).is_empty());
+    let _ = std::fs::remove_dir_all(&root);
+    let _ = std::fs::remove_dir_all(real);
 }

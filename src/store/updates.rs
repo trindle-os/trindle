@@ -78,7 +78,7 @@ impl Installed {
 }
 
 pub fn installed(done: impl FnOnce(Vec<Installed>) + 'static) {
-    capture(&["flatpak", "list", "--app", "--columns=application,name,origin,installation,size,version"], None,
+    capture(&super::progress::english(&["flatpak", "list", "--app", "--columns=application,name,origin,installation,size,version"]), None,
             move |_, out, _| {
         let mut list: Vec<Installed> = out.lines().filter_map(|l| {
             let c: Vec<&str> = l.split('\t').collect();
@@ -114,7 +114,7 @@ pub fn installed(done: impl FnOnce(Vec<Installed>) + 'static) {
 #[derive(Clone, Debug, PartialEq)]
 pub enum Removal {
 
-    Flatpak { system: bool, delete_data: bool },
+    Flatpak { system: bool },
 
     AppImage(PathBuf),
 
@@ -127,7 +127,7 @@ impl Installed {
 
     pub fn removal(&self) -> Removal {
         match &self.source {
-            Source::Flatpak { installation, .. } => Removal::Flatpak { system: installation == "system", delete_data: false },
+            Source::Flatpak { installation, .. } => Removal::Flatpak { system: installation == "system" },
             Source::AppImage(path) => Removal::AppImage(path.clone()),
             Source::Deb { .. } => Removal::Deb,
             Source::Plugin { .. } => Removal::Plugin,
@@ -135,21 +135,11 @@ impl Installed {
     }
 }
 
-impl Removal {
-
-    #[cfg(test)]
-    pub fn with_data(self, delete: bool) -> Removal {
-        match self {
-            Removal::Flatpak { system, .. } => Removal::Flatpak { system, delete_data: delete },
-            other => other,
-        }
-    }
-}
-
 pub fn remove(item: &Installed, delete_data: bool, done: impl FnOnce(Result<(), String>) + 'static) {
     let said = |r: std::io::Result<()>| r.map_err(|e| e.to_string());
-    let r = match item.removal() {
-        Removal::Flatpak { system, .. } => {
+    let id = item.id.clone();
+    let work: Box<dyn FnOnce() -> Result<(), String> + Send> = match item.removal() {
+        Removal::Flatpak { system } => {
             let argv = crate::common::removal::flatpak_uninstall(Some(if system { "--system" } else { "--user" }), &item.id, delete_data);
             let argv: Vec<&str> = argv.iter().map(String::as_str).collect();
             capture(&argv, None, move |ok, _, err| {
@@ -157,11 +147,12 @@ pub fn remove(item: &Installed, delete_data: bool, done: impl FnOnce(Result<(), 
             });
             return;
         }
-        Removal::AppImage(path) => said(crate::icons::appimages::remove(&path)),
-        Removal::Deb => said(super::boxed::install::remove(&item.id)),
-        Removal::Plugin => said(crate::plugins::remove(&item.id)),
+        Removal::AppImage(path) => Box::new(move || said(crate::icons::appimages::remove(&path))),
+        Removal::Deb => Box::new(move || said(super::boxed::install::remove(&id))),
+        Removal::Plugin => Box::new(move || said(crate::plugins::remove(&id))),
     };
-    crate::common::run::soon(move || done(r));
+
+    crate::common::run::on_thread(work, done);
 }
 
 pub fn trindle_version() -> &'static str {
@@ -184,38 +175,23 @@ pub fn shown(v: &str) -> String {
     t!("store-version-pre", main = main, kind = kind, number = number).trim_end().to_string()
 }
 
-fn version_key(v: &str) -> (u32, Vec<u32>, u32) {
-    let v = v.trim_start_matches('v');
-
-    let (epoch, v) = match v.split_once(':') {
-        Some((e, rest)) => (e.parse().unwrap_or(0), rest),
-        None => (0, v),
-    };
-
-    let cut = v.find('~').or_else(|| v.find("-rc")).or_else(|| v.find("-beta")).or_else(|| v.find("-alpha"));
-    let (main, pre) = match cut {
-        Some(i) => (&v[..i], &v[i + 1..]),
-        None => (v, ""),
-    };
-    let numbers: Vec<u32> = main.split('.')
-        .map(|p| p.chars().take_while(char::is_ascii_digit).collect::<String>())
-        .map(|p| p.parse().unwrap_or(0)).collect();
-
-    let rank = if pre.is_empty() {
-        u32::MAX
-    } else {
-        let pre = pre.split('+').next().unwrap_or(pre);
-        pre.chars().filter(char::is_ascii_digit).collect::<String>().parse().unwrap_or(0)
-    };
-    (epoch, numbers, rank)
+fn debian_form(v: &str) -> String {
+    let v = v.trim().trim_start_matches('v');
+    match ["~", "-rc", "-beta", "-alpha"].iter().filter_map(|m| v.find(m)).min() {
+        Some(i) => {
+            let pre: String = v[i..].trim_start_matches(['~', '-']).chars().filter(|c| *c != '.').collect();
+            format!("{}~{pre}", &v[..i])
+        }
+        None => v.to_string(),
+    }
 }
 
 pub fn newer(latest: &str, current: &str) -> bool {
-    version_key(latest) > version_key(current)
+    super::patch::compare(&debian_form(latest), &debian_form(current)) == std::cmp::Ordering::Greater
 }
 
 pub fn trindle_waiting(done: impl FnOnce(Option<String>) + 'static) {
-    capture(&["apt-cache", "policy", "trindle"], None, move |ok, out, _| {
+    capture(&super::progress::english(&["apt-cache", "policy", "trindle"]), None, move |ok, out, _| {
         if !ok {
             done(None);
             return;
@@ -242,7 +218,7 @@ const LISTS_STAMP: &str = "/var/cache/apt/pkgcache.bin";
 const LISTS_FRESH: std::time::Duration = std::time::Duration::from_secs(3600);
 
 pub fn debian_upgradable(done: impl FnOnce(Vec<String>) + 'static) {
-    capture(&["apt", "list", "--upgradable"], None, move |_, out, _| {
+    capture(&super::progress::english(&["apt", "list", "--upgradable"]), None, move |_, out, _| {
 
         done(out.lines().filter(|l| l.contains("[upgradable"))
             .filter_map(|l| l.split('/').next().map(String::from))
@@ -304,6 +280,9 @@ mod tests {
 
     #[test]
     fn a_candidate_comes_before_the_release_it_is_a_candidate_for() {
+        assert!(super::newer("1.0.0~rc1", "1.0.0~beta2"), "rc 1 follows beta 2");
+        assert!(!super::newer("1.0.0~beta2", "1.0.0~rc1"));
+        assert!(super::newer("1.0.0-rc.1", "1.0.0-beta.2"));
         assert!(super::newer("1.0.0", "1.0.0~rc1"));
         assert!(super::newer("1.0.0~rc2", "1.0.0~rc1"));
         assert!(super::newer("1.0.0~rc1", "0.15.0"));
@@ -324,6 +303,15 @@ mod tests {
         assert!(super::newer("1:0.9.0~beta2", "1:0.9.0~beta1+local3"));
         assert!(!super::newer("1:0.9.0~beta1", "1:0.9.0~beta1"));
         assert!(!super::newer("1.0.16", "1:0.9.0~beta1"));
+    }
+
+    #[test]
+    fn this_version_reaches_those_on_the_first_three_betas() {
+
+        let this = format!("1:{}", super::debian_form(env!("CARGO_PKG_VERSION")));
+        for old in ["1:0.9.0~beta11319", "1:0.9.0~beta11320+local11"] {
+            assert!(super::newer(&this, old), "{this} must come after {old}");
+        }
     }
 
     #[test]

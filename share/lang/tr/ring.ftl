@@ -23,22 +23,22 @@ ring-cli-command = { $program } [SEÇENEK…]
 ring-cli-options = Seçenekler:
 
 # Help for the ring's --say option, printed in a terminal.
-ring-cli-say = Bu sözcüklerin istediğini yap, halkaya konuşulmuş gibi (mikrofonsuz sesli komutları denemek için)
+ring-cli-say = Mikrofon kullanmadan metinden sesli komut çalıştır
 
 # Help for the ring's --background option, printed in a terminal.
-ring-cli-background = Göstermeden başlat, böylece ilk açılış anında olur
+ring-cli-background = Görünmeden başlat, böylece halka ilk seferde anında açılır
 
 # Help for the ring's --show-desktop option, printed in a terminal.
-ring-cli-show-desktop = Masaüstünü göstermek için tüm pencereleri kaldır ya da geri getir (Super ve D bunu ister)
+ring-cli-show-desktop = Masaüstünü göstermek için tüm pencereleri gizle ya da geri getir (Super ve D tuşları bunu yapar)
 
 # Help for the ring's --listen option, printed in a terminal.
-ring-cli-listen = Halkayı, bir klavye kısayolunun yapabileceği gibi, zaten dinler durumda aç
+ring-cli-listen = Halkayı, bir klavye kısayolunun yaptığı gibi, sesli komut için zaten dinler durumda aç
 
 # Help for the ring's --all option, printed in a terminal.
 ring-cli-all = Halkayı, çevresinde tüm uygulamalar gösterilerek aç
 
 # Help for the ring's --power option, printed in a terminal.
-ring-cli-power = Halkayı oturumu kapatma, yeniden başlatma ve kapatma için aç
+ring-cli-power = Halkanın güç seçeneklerini aç: oturumu kapat, yeniden başlat ve kapat
 
 # Help for the ring's --favourites option, printed in a terminal.
 ring-cli-favourites = Ayarlar'daki sık kullanılanlar sayfasını aç
@@ -50,7 +50,7 @@ ring-cli-restyle = Ayarlar'dan yeni bir görünümü (açık veya koyu, ya da ye
 ring-cli-corners = Üst köşelerdeki dokunma noktalarını yeniden oluştur
 
 # Help for the ring's --notes option, printed in a terminal.
-ring-cli-notes = Klavyeyi ekrandaki bildirim dairelerine taşı (Super ve N bunu ister)
+ring-cli-notes = Klavye denetimini ekrandaki bildirim dairelerine taşı (Super ve N tuşları bunu yapar)
 
 # Error printed in a terminal when the ring is given an option it does not know.
 ring-cli-unknown = bilinmeyen seçenek { $option }
@@ -74,13 +74,13 @@ ring-uninstalling = Kaldırılıyor
 ring-uninstalled = Kaldırıldı
 
 # Tip of the round button on the menu of an app put there by hand: it only leaves the ring.
-ring-take-off = Halkadan çıkar
+ring-take-off = Halkadan kaldır
 
 # Line that replaces that button while the app is being taken off the ring.
-ring-taking-off = Çıkarılıyor
+ring-taking-off = Kaldırılıyor
 
 # Line that replaces that button once the app is off the ring.
-ring-taken-off = Çıkarıldı
+ring-taken-off = Kaldırıldı
 
 # Name of the ring's round button that opens Apps.
 ring-tool-apps = Uygulamalar
@@ -113,13 +113,13 @@ ring-tool-report = Sorun bildir
 ring-gone = Bu artık yok.
 
 # Line in the ring when nothing could open the item that was pressed.
-ring-could-not-open = Bunu hiçbir şey açamadı.
+ring-could-not-open = Trindle bunu açamıyor.
 
 # Line in the ring while it listens to a spoken command.
-ring-listening = Dinliyor... konuşun, siz susunca durur
+ring-listening = Dinliyor… Komutunuzu söyleyin. Konuşmayı bırakınca dinleme durur
 
 # Line in the ring while it works out what was said.
-ring-working-out = Anlaşılıyor...
+ring-working-out = Anlaşılıyor…
 
 # Answer to the spoken command to close windows when none are open.
 ring-nothing-to-close = Kapatılacak bir şey yok
@@ -188,7 +188,7 @@ ring-star-remove = Sık kullanılanlardan kaldır
 ring-star-add = Sık kullanılanlara ekle
 
 # Screen reader name of the red button that shows why an uninstall failed.
-ring-not-done = Yapılamadı
+ring-not-done = Neden olmadı?
 
 # Note on an app's menu when the middle of the ring has no room for another favourite; the number is how many it holds.
 ring-middle-full =
@@ -224,7 +224,7 @@ ring-empty-hint = Tüm uygulamalar'a tıklayın, sonra buraya eklemek için bir 
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when a spoken or typed power choice needs a click to confirm.
-ring-power-only-click = Bunu yalnızca bir tıklama onaylar.
+ring-power-only-click = Onaylamak için tıklayın.
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when something other than the person tried to shut the computer down.
@@ -232,7 +232,7 @@ ring-power-only-own = Bu bilgisayarı yalnızca siz kapatabilirsiniz.
 
 # SAFETY: needs a human review before it ships
 # Line in the ring when the power page closed because a program pressed a key.
-ring-power-closed = Güç sayfası kapandı: bir tuşa siz değil, bir program bastı.
+ring-power-closed = Güç sayfası kapandı, çünkü bir program tuş basışı gönderdi.
 
 ring-startup-add = Oturum açılınca başlat
 
@@ -241,11 +241,13 @@ ring-startup-remove = Oturum açılınca başlatmayı durdur
 
 
 # Help for the option that opens the shortcut list, or closes it when it is showing.
-ring-cli-shortcuts = Tüm klavye kısayollarını liste olarak göster ya da listeyi kaldır (Super ve K, Ayarlar'da değiştirilmediyse)
+ring-cli-shortcuts = Tüm klavye kısayollarının listesini göster ya da listeyi gizle (Super ve K, Ayarlar'da değiştirmediyseniz)
 
 # Notice from the new ring after the parts were restarted from the keyboard.
 ring-restarted = Yeniden başlatıldı
 
 # Under the notice above.
 ring-restarted-why = Halka ve yardımcı parçalar yeniden başladı.
-
+ring-uninstall-failed = Kaldırılamadı.
+ring-category-media-short = Ses
+ring-voice-failed = Bu işe yaramadı.

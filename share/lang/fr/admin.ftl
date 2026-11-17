@@ -9,11 +9,11 @@ admin-login-too-long = Cet identifiant est trop long.
 
 # Red words in Settings when the account asked about does not exist. { $name } is the login name.
 # SAFETY: needs a human review before it ships
-admin-user-none = Il n'y a aucun utilisateur nommé { $name }.
+admin-user-none = Aucun utilisateur nommé { $name }.
 
 # Red words in Settings when the account asked about is the system's own and not a person's. { $name } is the login name.
 # SAFETY: needs a human review before it ships
-admin-user-system = { $name } est un compte système et n'est pas touché.
+admin-user-system = { $name } est un compte système, Trindle ne l'a donc pas modifié.
 
 # Red words in Settings when no password reached the helper that sets it.
 # SAFETY: needs a human review before it ships
@@ -38,7 +38,7 @@ admin-user-exists = { $name } existe déjà.
 
 # Red words in Settings when the only administrator is asked to stop being one. { $name } is the login name.
 # SAFETY: needs a human review before it ships
-admin-user-only-admin = { $name } est le seul administrateur, il le reste donc.
+admin-user-only-admin = { $name } est le seul administrateur, il doit donc le rester.
 
 # Red words in Settings when a person tries to delete the account they are signed in to.
 # SAFETY: needs a human review before it ships
@@ -46,7 +46,7 @@ admin-delete-self = Vous ne pouvez pas supprimer votre propre compte.
 
 # Red words in Settings when an account was deleted but its picture on the login screen could not be removed. { $name } is the login name; { $why } is the system's reason.
 # SAFETY: needs a human review before it ships
-admin-delete-picture-kept = { $name } a été supprimé, mais sa photo reste conservée pour l'écran de connexion : { $why }
+admin-delete-picture-kept = Trindle a supprimé le compte de { $name }, mais n'a pas pu retirer sa photo de l'écran de connexion : { $why }
 
 # Red words in Settings when the picture chosen for the login screen is too big.
 admin-picture-large = Cette image est trop grande.
@@ -55,50 +55,50 @@ admin-picture-large = Cette image est trop grande.
 admin-picture-not-ours = Ce n'est pas une image créée par Trindle.
 
 # Red words in Settings when the folder of login pictures could not be opened to the login screen. { $why } is the system's reason.
-admin-picture-folder = Le dossier des images n'a pas pu être ouvert à l'écran de connexion : { $why }
+admin-picture-folder = Trindle n'a pas pu donner à l'écran de connexion l'accès au dossier des images : { $why }
 
 # Red words in Settings when the language chosen has a name that cannot be one.
 admin-language-invalid = Ce n'est pas un nom de langue.
 
 # Red words in Settings when Debian's list of languages could not be read. { $why } is the system's reason.
-admin-language-list = La liste des langues de Debian n'a pas pu être lue : { $why }
+admin-language-list = Trindle n'a pas pu lire la liste des langues de Debian : { $why }
 
 # Red words in Settings when the language chosen is not one Debian knows. { $code } is the language's code.
-admin-language-unknown = { $code } n'est pas une langue connue de Debian.
+admin-language-unknown = Debian ne reconnaît pas la langue { $code }.
 
 # Red words in Settings when the computer name typed is not allowed.
-admin-hostname-invalid = Un nom d'ordinateur se compose de lettres, de chiffres et de traits d'union, jusqu'à 63, sans commencer ni finir par un trait d'union.
+admin-hostname-invalid = Un nom d'ordinateur ne peut contenir que des lettres, des chiffres et des traits d'union. Il peut compter jusqu'à 63 caractères et ne peut ni commencer ni finir par un trait d'union.
 
 # Red words in Settings when the 80% charging limit is on but could not be kept for the next start. { $why } is the system's reason.
-admin-charge-limit-lost = La limite est active pour l'instant, mais sera perdue à l'extinction de l'ordinateur : { $why }
+admin-charge-limit-lost = La limite de charge est active pour l'instant, mais elle sera perdue à l'extinction de l'ordinateur : { $why }
 
 # Red words in Settings when charging was set to full but the limit could not be taken off for good. { $why } is the system's reason.
-admin-charge-limit-returns = La charge est complète pour l'instant, mais la limite reviendra au prochain démarrage : { $why }
+admin-charge-limit-returns = La charge complète est activée pour l'instant, mais la limite reviendra au prochain démarrage de l'ordinateur : { $why }
 
 # Red words in Settings when a radio's block would not come off. { $words } is why; { $said } is what the system added.
 admin-radio-refused = { $words } { $said }
 
 # Red words in Settings when the switch that lets other computers connect could not be put off. { $why } is the system's reason.
 # SAFETY: needs a human review before it ships
-admin-sharing-still-on = Les autres ordinateurs peuvent encore se connecter, car l'interrupteur n'a pas pu être désactivé : { $why }
+admin-sharing-still-on = Les autres ordinateurs peuvent encore se connecter, car Trindle n'a pas pu désactiver le partage : { $why }
 
 # Red words in Settings when a plugin's id is not one.
-admin-plugin-id-invalid = Ce n'est pas un identifiant d'extension.
+admin-plugin-id-invalid = Ce n'est pas un identifiant de module.
 
 # Red words in Settings when the person a firewall step is for is not known.
-admin-person-unknown = Cette personne est inconnue.
+admin-person-unknown = Cette personne n'existe pas.
 
 # Red words in Settings when the folder of the person a step is for is not known.
-admin-person-folder-unknown = Le dossier de cette personne est inconnu.
+admin-person-folder-unknown = Cette personne n'a pas de dossier.
 
 # Red words in Settings when the list of plugins let through the firewall could not be kept. { $why } is the system's reason.
-admin-plugins-list-not-kept = La liste des extensions autorisées n'a pas pu être conservée : { $why }.
+admin-plugins-list-not-kept = Trindle n'a pas pu enregistrer la liste des modules autorisés : { $why }.
 
 # Red words in Settings when the plugin a firewall step is for was not found.
-admin-plugin-not-found = Cette extension est introuvable.
+admin-plugin-not-found = Ce module n'existe pas.
 
 # Red words in Settings and Apps when Debian's updates were not installed because Trindle's own version could not be read.
-admin-update-version-unknown = Rien n'a été mis à jour : la version de Trindle présente sur cet ordinateur n'a pas pu être déterminée, donc la mise à jour de Trindle elle-même n'a pas pu être exclue.
+admin-update-version-unknown = Rien n'a été mis à jour. Trindle n'a pas pu déterminer quelle version de lui-même est installée, il n'a donc pas pu exclure sa propre mise à jour.
 
 # First line of the progress while Debian's updates go in.
 admin-step-installing-updates = Installation des mises à jour
@@ -114,7 +114,7 @@ admin-package-invalid = Ce n'est pas un nom de paquet.
 
 # Red words when the package to remove is not installed.
 # SAFETY: needs a human review before it ships
-admin-package-not-installed = Non effectué : il n'est pas installé.
+admin-package-not-installed = Ce paquet n'est pas installé.
 
 # Red words in Settings when the firmware device asked for is not one fwupd knows.
 admin-device-invalid = Ce n'est pas un appareil connu de fwupd.
@@ -123,7 +123,7 @@ admin-device-invalid = Ce n'est pas un appareil connu de fwupd.
 admin-install-and-lists = { $first } ; { $lists }
 
 # Red words in Settings when Tailscale cannot be turned on because it is not known who asked.
-admin-tailscale-who = Impossible de savoir qui a demandé Tailscale.
+admin-tailscale-who = Trindle ne sait pas qui veut Tailscale.
 
 # Red words in Settings when the site blocking did not start in time.
 # SAFETY: needs a human review before it ships
@@ -134,7 +134,7 @@ admin-blocking-late = Le blocage n'a pas démarré à temps.
 admin-blocking-not-off = Le blocage n'est pas entièrement désactivé : { $why }
 
 # Part of the red words when turning site blocking off could not put a file back. { $path } is the file; { $why } is the system's reason.
-admin-file-not-put-back = { $path } n'a pas pu être remis en place : { $why }
+admin-file-not-put-back = Trindle n'a pas pu remettre { $path } en place : { $why }
 
 # Red words in Settings when the site typed to never block is not a site name.
 admin-site-invalid = Ce n'est pas un nom de site.
@@ -146,28 +146,28 @@ admin-server-unknown = Aucun serveur de ce nom.
 admin-tool-error = { $tool } : { $why }
 
 # Red words when a tool stopped before it was given everything. { $tool } is the tool's name; { $why } is the system's reason.
-admin-tool-stopped = { $tool } s'est arrêté avant d'avoir tout reçu, on ne peut donc pas dire que c'est terminé : { $why }
+admin-tool-stopped = { $tool } s'est arrêté avant d'avoir reçu tout ce dont il avait besoin, le travail n'est donc pas terminé : { $why }
 
 # Red words when a tool a step runs failed and said nothing. { $tool } is the tool's name.
 admin-tool-failed = { $tool } a échoué.
 
 # Red words when a file could not be taken away. { $path } is the file; { $why } is the system's reason.
-admin-file-not-removed = { $path } n'a pas pu être supprimé : { $why }
+admin-file-not-removed = Impossible de supprimer { $path } : { $why }
 
 # Red words when a system file could not be read, so nothing was changed. { $why } is the system's reason; { $path } is the file.
-admin-file-not-read = Rien n'a été modifié, car { $why } : { $path }
+admin-file-not-read = Rien n'a été modifié, car Trindle n'a pas pu lire { $path } : { $why }
 
 # Red words when a step failed and what it had done could not be put back either. { $why } is the first failure; { $problem } is the second.
-admin-undone-failed = { $why } Le retour à l'état précédent n'a pas fonctionné non plus : { $problem }
+admin-undone-failed = { $why } Trindle n'a pas non plus pu tout remettre dans son état précédent : { $problem }
 
 # Red words in Settings when the time chosen for keeping earlier versions is not one on offer.
-admin-home-keep-invalid = Ce n'est pas une durée de conservation possible pour les versions antérieures.
+admin-home-keep-invalid = Ce n'est pas une durée valide pour conserver les versions antérieures.
 
 # Red words in Settings when the folder the earlier versions are kept in is not there.
-admin-home-folder-missing = Le dossier des instantanés n'existe pas.
+admin-home-folder-missing = Versions antérieures introuvables.
 
 # Red words in Settings when something that is not a folder is where the earlier versions would go.
-admin-home-folder-blocked = Quelque chose qui n'est pas un dossier se trouve à l'emplacement des instantanés.
+admin-home-folder-blocked = Il y a un fichier à l'emplacement où devrait se trouver le dossier des versions antérieures.
 
 # Red words in Folders when it is not known who asked for a step.
 admin-caller-unknown = Impossible de savoir qui a demandé.
@@ -202,11 +202,11 @@ admin-share-not-open = Aucun dossier partagé n'est ouvert à cet endroit.
 
 # Red words in Folders when the folder shares open in has been changed by something else. { $path } is the folder.
 # SAFETY: needs a human review before it ships
-admin-share-folder-changed = { $path } n'est pas dans l'état où Trindle l'a laissé, rien n'y est donc monté.
+admin-share-folder-changed = Quelque chose a modifié { $path } depuis que Trindle l'a mis en place, rien n'y est donc connecté.
 
 # Red words in Folders when the private folder the login is kept in has been changed by something else. { $path } is the folder.
 # SAFETY: needs a human review before it ships
-admin-share-private-changed = { $path } n'est pas dans l'état où Trindle l'a laissé.
+admin-share-private-changed = { $path } a changé depuis le passage de Trindle.
 
 # Red words when a folder could not be made. { $path } is the folder; { $why } is the system's reason.
 admin-path-error = { $path } : { $why }
@@ -219,18 +219,18 @@ admin-share-too-many = Trop de dossiers partagés sont ouverts.
 admin-tool-missing = { $tool } n'est pas installé. Il se trouve dans le paquet Debian { $package }.
 
 # Red words in Folders when the login for a share could not be read.
-admin-login-unreadable = L'identifiant n'a pas pu être lu.
+admin-login-unreadable = Impossible de lire l'identifiant.
 
 # Red words in Folders when the list of what is open on this computer could not be read. { $why } is the system's reason.
-admin-mounts-unreadable = Ce qui est monté sur cet ordinateur n'a pas pu être lu : { $why }
+admin-mounts-unreadable = Trindle n'a pas pu lire ce qui est monté sur cet ordinateur : { $why }
 
 # Red words in Folders when a shared folder cannot be closed because a program is using it.
 # SAFETY: needs a human review before it ships
-admin-share-busy = Un programme a encore quelque chose d'ouvert dessus. Fermez-le d'abord.
+admin-share-busy = Un programme utilise encore quelque chose dans ce dossier. Fermez-le, puis réessayez.
 
 # Red words in Folders when a shared folder's computer does not answer while it is being closed.
 # SAFETY: needs a human review before it ships
-admin-share-not-answering = Cet ordinateur ne répond pas. Il est fermé quand vous fermez votre session.
+admin-share-not-answering = Cet ordinateur ne répond pas. Le dossier partagé se fermera quand vous fermerez votre session.
 
 # Red words when the number given for a person is not a user number.
 # SAFETY: needs a human review before it ships
@@ -238,7 +238,7 @@ admin-user-id-invalid = Ce n'est pas un identifiant d'utilisateur.
 
 # Red words in Settings when the group that may share folders could not be made.
 # SAFETY: needs a human review before it ships
-admin-sharing-group = Le groupe sambashare n'a pas pu être créé.
+admin-sharing-group = Impossible de créer le groupe sambashare.
 
 # First line of the progress while sharing is set up: the sharing software is fetched.
 admin-step-fetching-samba = Récupération de Samba
@@ -261,20 +261,20 @@ admin-snapshot-number-invalid = Ce n'est pas un numéro d'instantané.
 admin-snapshot-description = Pris dans les réglages
 
 # Red words in Settings when it could not be told which disk the system is on.
-admin-disk-unknown = Impossible de savoir sur quel disque se trouve le système.
+admin-disk-unknown = Trindle n'a pas pu savoir sur quel disque se trouve le système.
 
 # Red words in Settings when the system cannot be swapped for a snapshot because it is not in a subvolume of its own.
 # SAFETY: needs a human review before it ships
-admin-system-subvolume = Le système n'est pas dans un sous-volume Btrfs à lui seul, il ne peut donc pas être remplacé par un instantané.
+admin-system-subvolume = Le système n'est pas dans un sous-volume Btrfs à lui seul, Trindle ne peut donc pas le remplacer par un instantané.
 
 # Red words in Apps when a source's signing key could not be fetched. { $url } is the address.
-admin-key-fetch = Impossible de récupérer la clé de signature depuis { $url }.
+admin-key-fetch = Trindle n'a pas pu récupérer la clé de signature depuis { $url }.
 
 # Red words in Apps when the address given for a signing key gave back something else.
-admin-key-invalid = Ce que cette adresse a renvoyé n'est pas une clé de signature.
+admin-key-invalid = Cette adresse n'a pas renvoyé de clé de signature.
 
 # Red words in Apps when a source's file could not be read, so nothing was changed. { $path } is the file; { $why } is the system's reason.
-admin-source-file-unreadable = Rien n'a été modifié, car { $path } est illisible : { $why }
+admin-source-file-unreadable = Rien n'a été modifié, car Trindle n'a pas pu lire { $path } : { $why }
 
 # First line of the progress while a source is added: the signing key is fetched.
 admin-step-fetching-key = Récupération de sa clé de signature
@@ -283,28 +283,28 @@ admin-step-fetching-key = Récupération de sa clé de signature
 admin-step-adding-source = Ajout et lecture de sa liste
 
 # Red words in Apps when a source could not be used and an earlier one was kept. { $why } is the reason.
-admin-source-unusable = La source n'a pas pu être utilisée. { $why }
+admin-source-unusable = Impossible d'utiliser la source. { $why }
 
 # Red words in Apps when a source could not be used and so was taken away again. { $why } is the reason.
-admin-source-unusable-removed = La source n'a pas pu être utilisée, elle a donc été retirée. { $why }
+admin-source-unusable-removed = Trindle n'a pas pu utiliser la source, il l'a donc retirée. { $why }
 
 # Red words in Apps when the person could not be let switch Tailscale on or off. { $user } is the login name; { $why } is the reason.
 # SAFETY: needs a human review before it ships
 admin-source-tailscale-operator = { $user } ne peut pas encore l'activer ni le désactiver : { $why }
 
 # Red words in Apps when Syncthing could not be started for a person. { $user } is the login name; { $why } is the reason.
-admin-source-syncthing = il n'a pas pu être démarré pour { $user } : { $why }
+admin-source-syncthing = Trindle n'a pas pu le démarrer pour { $user } : { $why }
 
 # Red words in Apps when the person could not be let use virtual machines, which Claude's Cowork needs. { $user } is the login name; { $why } is the reason.
 # SAFETY: needs a human review before it ships
-admin-source-claude-kvm = { $user } n'a pas pu être autorisé à utiliser des machines virtuelles, dont Cowork a besoin : { $why }
+admin-source-claude-kvm = Trindle n'a pas pu autoriser { $user } à utiliser des machines virtuelles, dont Cowork a besoin : { $why }
 
 # Red words in Apps when the person could not be let use Docker without a password. { $user } is the login name; { $why } is the reason.
 # SAFETY: needs a human review before it ships
-admin-source-docker = { $user } n'a pas pu être autorisé à l'utiliser sans mot de passe : { $why }
+admin-source-docker = Trindle n'a pas pu autoriser { $user } à l'utiliser sans mot de passe : { $why }
 
 # Red words in Apps when a program was installed but its setting up did not finish. { $name } is the program; { $why } is the reason.
-admin-source-set-up-failed = { $name } est installé, mais sa configuration ne s'est pas terminée : { $why }
+admin-source-set-up-failed = { $name } est installé, mais Trindle n'a pas pu terminer sa configuration : { $why }
 
 # Line of the progress while a program is installed.
 admin-step-installing-it = Installation
@@ -319,7 +319,7 @@ admin-source-arch = { $name } n'est pas conçu pour ce type d'ordinateur ({ $arc
 admin-step-setting-up = Configuration
 
 # Red words in Apps when the address of a custom source is not an https address.
-admin-source-address = Les adresses doivent commencer par https:// et ne rien contenir d'autre.
+admin-source-address = Chaque adresse doit être une simple adresse web qui commence par https://.
 
 # Red words in Apps when the suite or components of a custom source are not plain words.
 admin-source-words = La suite et les composants doivent être des mots simples.
@@ -334,7 +334,7 @@ admin-step-removing = Retrait
 admin-step-reading-lists = Nouvelle lecture des listes
 
 # Red words in Apps when the source to remove was not added by Trindle.
-admin-source-not-ours = Seules les sources ajoutées par Trindle sont retirées ici.
+admin-source-not-ours = Seules les sources ajoutées par Trindle peuvent être retirées ici.
 
 # Red words in Apps when a source could not be taken away. { $why } is the reason.
 admin-source-still-there = La source est toujours là : { $why }
@@ -345,46 +345,46 @@ admin-snapshot-missing = L'instantané { $n } n'est pas sur le disque.
 
 # Red words in Settings when a restore did not begin because the snapshot could not be made ready. { $why } is the reason.
 # SAFETY: needs a human review before it ships
-admin-restore-not-ready = Rien n'a été modifié : l'instantané n'a pas pu être préparé. { $why }
+admin-restore-not-ready = Rien n'a été modifié, car Trindle n'a pas pu préparer l'instantané. { $why }
 
 # Red words in Settings when the present system could not be set aside during a restore. { $why } is the reason.
 # SAFETY: needs a human review before it ships
-admin-restore-aside = Impossible de mettre le système actuel de côté : { $why }
+admin-restore-aside = Trindle n'a pas pu mettre le système actuel de côté : { $why }
 
 # Red words in Settings when a restore failed and the present system could not be put back under its name. { $aside } is the name it now has; { $sub } is the name it needs; { $why } is the reason.
 # SAFETY: needs a human review before it ships
-admin-restore-stranded = le système actuel s'appelle maintenant { $aside } et non { $sub }, et l'ordinateur ne démarrera pas tant qu'il ne s'appellera pas de nouveau { $sub } : { $why }
+admin-restore-stranded = Le système actuel s'appelle maintenant { $aside } au lieu de { $sub }, et l'ordinateur ne démarrera pas tant qu'il ne s'appellera pas de nouveau { $sub } : { $why }
 
 # Red words in Settings when the earlier snapshots could not be moved into the restored system. { $why } is the reason.
 # SAFETY: needs a human review before it ships
-admin-restore-snapshots-across = Impossible de déplacer les instantanés : { $why }
+admin-restore-snapshots-across = Trindle n'a pas pu déplacer les instantanés : { $why }
 
 # Red words in Settings joining two reasons a restore could not be undone. { $first } and { $second } are the two reasons.
 admin-both-failures = { $first } ; { $second }
 
 # Red words in Settings when the restored system could not be put in place. { $why } is the reason.
 # SAFETY: needs a human review before it ships
-admin-restore-in-place = Impossible de mettre l'instantané en place : { $why }
+admin-restore-in-place = Trindle n'a pas pu mettre l'instantané en place : { $why }
 
 # Red words in Settings when the list of systems set aside could not be brought up to date. { $why } is the reason.
 # SAFETY: needs a human review before it ships
-admin-restore-list = La liste de ce qui a été mis de côté n'a pas pu être mise à jour : { $why }
+admin-restore-list = Trindle n'a pas pu mettre à jour la liste des systèmes mis de côté : { $why }
 
 # Red words in Settings when systems set aside could not be removed. { $names } lists them.
 # SAFETY: needs a human review before it ships
-admin-restore-not-removed = Impossible de supprimer : { $names }
+admin-restore-not-removed = Impossible de supprimer { $names }
 
 # Last line of an update's tidying when it took programs away: which, and that nothing needed them. Help address updates-removed.
 # SAFETY: needs a human review before it ships
-admin-tidied-away = Plus rien n'en avait besoin, ils ont donc été supprimés : { $list }.
+admin-tidied-away = Trindle a supprimé ces éléments, car plus rien n'en avait besoin : { $list }.
 
 # Red words in Settings and Apps when an update ended with packages still kept back. { $list } names them. Help address updates-kept-back.
-admin-update-kept-back = Toutes les mises à jour n'ont pas été installées. Retenus : { $list }.
+admin-update-kept-back = Toutes les mises à jour n'ont pas été installées. Ont été retenues : { $list }.
 
 # Red words after an update when a driver (DKMS) would not build for the new kernel. The kernel and the rest of the update went in. { $driver } is the driver, { $feature } what is off. Help address updates-driver-off.
-admin-driver-off-known = La fonction « { $feature } » est désactivée : son pilote ({ $driver }, DKMS) ne se compile pas encore sur le nouveau noyau.
+admin-driver-off-known = La fonction « { $feature } » est désactivée, car son pilote ({ $driver }, DKMS) ne se compile pas encore pour le nouveau noyau Linux.
 
-admin-driver-off = Un pilote ({ $driver }, DKMS) ne se compile pas encore sur le nouveau noyau, donc ce qu'il apporte est désactivé.
+admin-driver-off = Le pilote ({ $driver }, DKMS) ne se compile pas encore pour le nouveau noyau Linux. Les fonctions qui en ont besoin sont désactivées.
 
 # Said once after the drivers that are off.
 admin-driver-off-rest = Le noyau et le reste de la mise à jour ont été installés.
@@ -392,7 +392,7 @@ admin-driver-off-rest = Le noyau et le reste de la mise à jour ont été instal
 # The feature that the v4l2loopback driver gives.
 admin-driver-virtual-camera = caméra virtuelle
 
-admin-language-in-use = { $code } est la langue dans laquelle cet ordinateur démarre, elle reste donc.
+admin-language-in-use = { $code } est la langue dans laquelle cet ordinateur démarre, elle ne peut donc pas être supprimée.
 
 
 
@@ -400,30 +400,76 @@ admin-language-in-use = { $code } est la langue dans laquelle cet ordinateur dé
 admin-split-lock-none = Cet ordinateur n'a pas de ralentissement « split-lock » à désactiver.
 
 # The drive chosen for games is not there, or is the computer's own.
-admin-games-drive-not-found = Ce disque est introuvable ou contient le système.
+admin-games-drive-not-found = Trindle n'a pas trouvé ce disque, ou c'est le disque du système.
 
 # The drive could not be closed where it was open.
-admin-games-drive-busy = Le disque est utilisé. Fermez ce qui est ouvert dessus, puis réessayez : { $why }
+admin-games-drive-busy = Le disque est utilisé. Fermez les fichiers ou les programmes ouverts dessus, puis réessayez : { $why }
 
 # Another software change has the read-only system open.
 admin-system-busy = Une autre modification de logiciel est en cours. Réessayez quand elle sera terminée.
 
 # The read-only system could not be opened for a software change; nothing was changed.
-admin-system-not-opened = Rien n'a été modifié : le système n'a pas pu être déverrouillé : { $why }
+admin-system-not-opened = Rien n'a été modifié, car Trindle n'a pas pu déverrouiller le système : { $why }
 
 # The read-only system could not be locked again after a change.
-admin-system-left-open = Le système n'a pas pu être reverrouillé. Il le sera au prochain démarrage : { $why }
+admin-system-left-open = Trindle n'a pas pu reverrouiller le système. Il le sera au prochain démarrage : { $why }
 
 # The system was locked, but /usr/local could not be kept writable on top of it.
-admin-system-local-locked = /usr/local n'a pas pu rester modifiable : { $why }
+admin-system-local-locked = Trindle n'a pas pu garder /usr/local modifiable : { $why }
 
 # A command that opens the system outside a software change, run other than by root itself.
 admin-system-root-only = Seul root peut l'exécuter, et pas avec pkexec.
 
 # Switching the read-only system on where the system's disk is not Btrfs.
-admin-system-needs-btrfs = Nécessite Btrfs.
+admin-system-needs-btrfs = Cela nécessite Btrfs.
 
 
 # Red words in Settings when a restore swapped the systems but could not finish tidying up. { $why } is the reason.
-admin-restore-finish-later = L'instantané est en place et l'ordinateur démarrera à partir de lui. Le nettoyage de l'ancien système n'est pas terminé et sera retenté au prochain démarrage : { $why }
+admin-restore-finish-later = L'instantané est en place et l'ordinateur démarrera à partir de lui. Trindle n'a pas pu finir de nettoyer l'ancien système. Il réessaiera au prochain démarrage de l'ordinateur : { $why }
 
+
+# Red words in Settings when too many ports are open already. { $most } is a number.
+admin-ports-too-many = Vous pouvez ouvrir au plus { $most } ports.
+
+# Red words in Settings when the list of open ports could not be kept. { $why } is the system's reason.
+admin-ports-not-kept = Trindle n'a pas pu enregistrer la liste des ports ouverts : { $why }.
+
+# Red words in Settings when the firewall could not be switched off. { $why } is the system's reason.
+admin-firewall-still-on = Le pare-feu est toujours activé : { $why }
+
+# Red line when a plugin now asks for other network ports than the ones the administrator's password was typed for.
+admin-plugin-ports-changed = Ce module demande maintenant d'autres ports réseau que ceux que vous avez autorisés. Autorisez-le à nouveau pour les ouvrir.
+
+# Red words when a program is asked to be set up for someone other than the person asking.
+admin-source-not-you = Un programme ne peut être ajouté que pour la personne qui le demande.
+
+# Red words when a snapshot is put back and the name for the system set aside is already used. 
+admin-restore-name-taken = Une autre restauration a utilisé le même nom il y a un instant. Attendez quelques secondes, puis réessayez.
+
+# Said when a shared folder can't be disconnected. { $path } is the folder, { $error } the system's reason.
+admin-share-not-closed = { $path } n'a pas pu être déconnecté : { $error }
+
+# Said when shared folders don't answer while they are being disconnected. { $n } is how many.
+admin-shares-left =
+    { $n ->
+        [one] 1 dossier partagé n'a pas répondu, il est donc toujours connecté. Il sera déconnecté à l'arrêt de l'ordinateur.
+       *[other] { $n } dossiers partagés n'ont pas répondu, ils sont donc toujours connectés. Ils seront déconnectés à l'arrêt de l'ordinateur.
+    }
+
+# Red words in Drives when a swap file could not be switched off before making room. { $path } is the file, { $why } the system's reason.
+admin-swap-not-off = Impossible de désactiver le fichier d'échange { $path } : { $why }
+
+# Red words in Drives when a swap file could not be switched back on after making room. { $path } is the file, { $why } the system's reason.
+admin-swap-not-on = Impossible de réactiver le fichier d'échange { $path } : { $why }
+
+# Red words when Drives asks about a swap file that the system's own settings don't name.
+admin-swap-not-listed = { $path } n'est pas un fichier d'échange du système.
+
+# Red words when a swap file, or a folder above it, could be changed or read by someone other than the administrator. { $why } is that file or folder.
+admin-swap-not-safe = Trindle n'utilisera pas le fichier d'échange { $path }, car d'autres pourraient modifier ou lire { $why }.
+
+# Red words in Drives when, after making room, Trindle couldn't find where the swap file now starts, which waking from hibernation needs.
+admin-swap-resume-unread = Impossible de trouver où est le fichier d'échange, la sortie d'hibernation peut échouer.
+
+# Said when the swap file moved and the running system couldn't be told: hibernation is refused until the computer restarts.
+admin-swap-resume-restart = L'hibernation refonctionnera après un redémarrage.

@@ -1,6 +1,6 @@
 // Origin: began from anvil, Smithay's example compositor (MIT, Copyright (c) 2017 Victor Berger and Victoria Brekenfeld), changed by Trindle. Licence text: THIRD-PARTY.txt.
 
-use super::{remembered_num_lock, AnvilState, Backend, ClientState};
+use super::{remembered_num_lock, Compose, Backend, ClientState};
 
 use std::sync::{atomic::AtomicBool, Arc};
 
@@ -52,7 +52,7 @@ use crate::protocols::{
 };
 use smithay::{wayland::xwayland_keyboard_grab::XWaylandKeyboardGrabState, wayland::xwayland_shell};
 
-fn unsandboxed(client: &Client) -> bool {
+pub(crate) fn unsandboxed(client: &Client) -> bool {
     client
         .get_data::<ClientState>()
         .is_none_or(|client_state| client_state.security_context.is_none())
@@ -100,14 +100,14 @@ struct ScreenGlobals<BackendData: Backend + 'static> {
     output_power_state: OutputPowerState,
     night_state: NightState,
     session_lock_state: SessionLockManagerState,
-    idle_notifier_state: IdleNotifierState<AnvilState<BackendData>>,
+    idle_notifier_state: IdleNotifierState<Compose<BackendData>>,
     idle_inhibit_state: IdleInhibitManagerState,
 }
 
 struct SeatParts<BackendData: Backend + 'static> {
     seat_name: String,
-    seat: Seat<AnvilState<BackendData>>,
-    pointer: PointerHandle<AnvilState<BackendData>>,
+    seat: Seat<Compose<BackendData>>,
+    pointer: PointerHandle<Compose<BackendData>>,
     config: crate::config::Config,
 }
 
@@ -115,9 +115,9 @@ struct Parts<BackendData: Backend + 'static> {
     backend_data: BackendData,
     display_handle: DisplayHandle,
     socket_name: Option<String>,
-    handle: LoopHandle<'static, AnvilState<BackendData>>,
+    handle: LoopHandle<'static, Compose<BackendData>>,
     clock: Clock<Monotonic>,
-    seat_state: SeatState<AnvilState<BackendData>>,
+    seat_state: SeatState<Compose<BackendData>>,
     keyboard_shortcuts_inhibit_state: KeyboardShortcutsInhibitState,
     xwayland_shell_state: xwayland_shell::XWaylandShellState,
     desktop: DesktopGlobals,
@@ -126,13 +126,13 @@ struct Parts<BackendData: Backend + 'static> {
     seat: SeatParts<BackendData>,
 }
 
-impl<BackendData: Backend + 'static> AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> Compose<BackendData> {
     pub fn init(
-        display: Display<AnvilState<BackendData>>,
-        handle: LoopHandle<'static, AnvilState<BackendData>>,
+        display: Display<Compose<BackendData>>,
+        handle: LoopHandle<'static, Compose<BackendData>>,
         backend_data: BackendData,
         listen_on_socket: bool,
-    ) -> AnvilState<BackendData> {
+    ) -> Compose<BackendData> {
         let dh = display.handle();
 
         dh.backend_handle().set_default_max_buffer_size(crate::limits::SLOW_CLIENT_ROOM);
@@ -180,9 +180,10 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
         handle
             .insert_source(source, |client_stream, _, data| {
                 let from_root = crate::trusted::from_root(&client_stream);
+                let pidfd = crate::peer::pidfd_of_peer(&client_stream);
                 if let Err(err) = data
                     .display_handle
-                    .insert_client(client_stream, Arc::new(ClientState { from_root, ..ClientState::default() }))
+                    .insert_client(client_stream, Arc::new(ClientState { from_root, pidfd, ..ClientState::default() }))
                 {
                     warn!("Error adding wayland client: {}", err);
                 };
@@ -198,8 +199,8 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
                 Generic::new(display, Interest::READ, Mode::Level),
                 |_, display, data| {
                     // Safety: we don't drop the display
-                    unsafe {
-                        display.get_mut().dispatch_clients(data).unwrap();
+                    if let Err(err) = unsafe { display.get_mut().dispatch_clients(data) } {
+                        warn!("a request from a program could not be handled: {err}");
                     }
                     Ok(PostAction::Continue)
                 },
@@ -325,7 +326,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
             keyboard_shortcuts_inhibit_state, xwayland_shell_state, desktop, input, screens, seat,
         } = parts;
         let initial_workspaces = seat.config.workspaces.max(1);
-        AnvilState {
+        Compose {
             config: seat.config, release_key: None, released_bind: None, startup: crate::session::launch().startup, ring: Default::default(),
             desktop_tap: None, edge_cursor: false, backend_data, display_handle, socket_name, running: Arc::new(AtomicBool::new(true)), handle,
             space: Space::default(), popups: PopupManager::default(),
@@ -340,7 +341,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
             windows_state: screens.windows_state, workspaces_state: screens.workspaces_state,
             minimized: Vec::new(), hidden: Vec::new(), close_asked: Vec::new(), fresh: std::collections::HashMap::new(),
             fresh_for: std::time::Duration::from_secs(5), workspaces: initial_workspaces, active_workspace: 0,
-            image_capture_state: desktop.image_capture_state, toplevel_list_state: desktop.toplevel_list_state, toplevel_list: Vec::new(),
+            image_capture_state: desktop.image_capture_state, toplevel_list_state: desktop.toplevel_list_state, toplevel_list: Vec::new(), panel_told: Vec::new(), panel_stale: true, panel_seen: (0, 0, 0),
             screens_state: screens.screens_state, output_power_state: screens.output_power_state, night_state: screens.night_state,
             session_lock_state: screens.session_lock_state, session_lock: SessionLock::default(), plugged: Default::default(),
             idle_notifier_state: screens.idle_notifier_state, idle_inhibit_state: screens.idle_inhibit_state, idle_inhibitors: Vec::new(),

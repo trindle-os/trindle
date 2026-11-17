@@ -18,15 +18,24 @@ polkit-allow = Autoriser
 polkit-cancel = Annuler
 
 # Said when the password typed is not accepted, and the question is asked again.
-polkit-not-accepted = Ce mot de passe n'a pas été accepté. Réessayez.
+polkit-not-accepted = Ce mot de passe n'est pas le bon. Réessayez.
 
 # Name a screen reader speaks for the password question window.
-polkit-spoken = Authentification
+polkit-spoken = Votre mot de passe
 
 # Under the password box, when other requests for a password are waiting for
 # this one to end. { $n } is how many.
 polkit-waiting-behind =
     { $n ->
-        [one] Une autre demande attend celle-ci.
-       *[other] { $n } autres demandes attendent celle-ci.
+        [one] Une autre demande attend.
+       *[other] { $n } autres demandes attendent.
     }
+
+# Under the heading, when Drives asks for the password to take the snapshot before making room.
+polkit-reason-drives-snapshot = Disques a besoin du mot de passe d'un administrateur pour faire un instantané avant de libérer de la place.
+
+# Under the heading, when Drives asks for the password to switch a swap file off before making room.
+polkit-reason-drives-swap-off = Disques a besoin du mot de passe d'un administrateur pour désactiver le fichier d'échange pendant qu'il libère de la place.
+
+# Under the heading, when Drives asks for the password to switch a swap file back on.
+polkit-reason-drives-swap-on = Disques a besoin du mot de passe d'un administrateur pour réactiver le fichier d'échange.

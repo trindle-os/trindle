@@ -8,10 +8,10 @@ settings-plugins-keywords = modules plugins extensions installés supprimer reti
 
 # Help line at the foot of the Your plugins page.
 # SAFETY: needs a human review before it ships
-settings-plugins-help = Les modules ajoutent des choses à Trindle : une icône dans l'anneau, des réglages ici, des notifications ou quelque chose qui s'exécute dès la connexion. Chacun s'exécute isolé, sans rien d'autorisé tant que vous ne l'autorisez pas dans Autorisations, que le bouton au bout du titre de cette page ouvre. La carte de chaque module contient ses propres réglages ; la corbeille d'une carte, pressée deux fois, retire ce module.
+settings-plugins-help = Les modules ajoutent des choses à Trindle. Un module peut ajouter une icône à l'anneau, des réglages ici, des notifications, ou quelque chose qui démarre quand vous ouvrez votre session. Chaque module s'exécute dans sa propre boîte et ne peut rien utiliser tant que vous ne l'autorisez pas dans Autorisations. Le bouton à côté du titre de la page ouvre Autorisations. Pour retirer un module, appuyez deux fois sur la corbeille de sa carte.
 
 # Red words when the window that asks what a plugin may use could not be opened.
-settings-plugins-window-failed = La fenêtre qui demande ce qu'il peut utiliser n'a pas pu être ouverte.
+settings-plugins-window-failed = Trindle n'a pas pu ouvrir la fenêtre qui demande ce que le module peut utiliser.
 
 # Under About it: the plugin's version number is { $v }.
 settings-plugins-version = Version { $v }.
@@ -20,23 +20,19 @@ settings-plugins-version = Version { $v }.
 settings-plugins-version-settled = Version { $v }. { $settled }
 
 # Help text of a plugin's card when it asks for nothing: the plugin's name is { $name }.
-settings-plugins-asks-nothing = { $name } ne demande rien, il s'exécute donc isolé, sans rien d'autorisé.
+settings-plugins-asks-nothing = { $name } ne demande rien, il s'exécute donc dans sa propre boîte, sans rien d'autorisé.
 
 # Help text of a plugin's card: its name is { $name }, { $list } is what it asks for, { $allowed } of { $asks } are allowed.
 # SAFETY: needs a human review before it ships
 settings-plugins-asks-for =
     { $asks ->
-        [one] { $name } demande { $list } ; { $allowed } sur { $asks } autorisé. Il s'exécute isolé, avec seulement ce que vous autorisez.
-        [many] { $name } demande { $list } ; { $allowed } sur { $asks } autorisés. Il s'exécute isolé, avec seulement ce que vous autorisez.
-       *[other] { $name } demande { $list } ; { $allowed } sur { $asks } autorisés. Il s'exécute isolé, avec seulement ce que vous autorisez.
+        [one] { $name } demande { $list }. Vous avez autorisé { $allowed } sur { $asks }. Il s'exécute dans sa propre boîte, avec seulement ce que vous autorisez.
+        [many] { $name } demande { $list }. Vous avez autorisé { $allowed } sur { $asks }. Il s'exécute dans sa propre boîte, avec seulement ce que vous autorisez.
+       *[other] { $name } demande { $list }. Vous avez autorisé { $allowed } sur { $asks }. Il s'exécute dans sa propre boîte, avec seulement ce que vous autorisez.
     }
 
-# Under the line that tells a plugin needs more allowed, beside its Allow button.
-# SAFETY: needs a human review before it ships
-settings-plugins-needs-more = Autoriser montre chaque chose demandée, avec un interrupteur.
-
 # Heading of the line about a plugin on its card.
-settings-plugins-about-it = À son sujet
+settings-plugins-about-it = À propos
 
 # Tip of the button that changes what a plugin may use.
 # SAFETY: needs a human review before it ships
@@ -47,7 +43,7 @@ settings-plugins-change = Changer ce qu'il peut utiliser
 settings-plugins-remove = Retirer ce module
 
 # Red words when a plugin could not be removed.
-settings-plugins-not-removed = Il n'a pas pu être retiré.
+settings-plugins-not-removed = Impossible de le retirer.
 
 # Faint words in an empty typing box whose label is too long to show.
 settings-plugins-type-here = Écrivez ici
@@ -73,14 +69,11 @@ settings-plugins-group = Modules
 # Heading of the line shown when no plugin is installed.
 settings-plugins-none = Aucun d'installé
 
-# Under the None installed heading.
-settings-plugins-none-sub = Applications propose des modules à ajouter.
-
 # Tip of the button at the end of the page's title that opens the Permissions page.
 settings-plugins-open-permissions = Ouvrir Autorisations
 
 # Said at the top of a plugin's card while its service has not yet answered; the plugin's name is {$name}.
-settings-plugins-rows-asking = Demande à { $name }.
+settings-plugins-rows-asking = Demande à { $name }…
 
 # Said at the top of a plugin's card, and in red under a row, when its service does not answer; the plugin's name is {$name}.
 settings-plugins-rows-silent = { $name } ne répond pas. Son service est peut-être arrêté.
@@ -96,4 +89,3 @@ settings-plugins-rows-failed = { $name } n'a pas pu le faire.
 
 # Red words under a row when the change failed; the plugin's name is {$name} and the reason it gave is {$why}.
 settings-plugins-rows-failed-why = { $name } n'a pas pu le faire : { $why }.
-

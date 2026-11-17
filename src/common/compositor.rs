@@ -3,6 +3,8 @@
 //! need no telling: it notices their files change and takes them up.
 
 use std::process::{Command, Stdio};
+
+use super::run::parsed;
 use std::time::{Duration, Instant};
 
 const NAME: &str = "trindle-compose";
@@ -29,8 +31,8 @@ pub fn end_session() {
 
     let pid = desktop();
     let session = pid.and_then(session_of).or_else(seat_session);
-    end_programs();
     std::thread::spawn(move || {
+        end_programs();
 
         if shares_open() {
             within(SERVICES_WAIT, Command::new("pkexec").args([crate::common::run::admin_helper().as_str(), "smb-unmount-all"]));
@@ -67,16 +69,29 @@ const SERVICES_WAIT: Duration = Duration::from_secs(8);
 const FINISH_WAIT: Duration = Duration::from_secs(5);
 
 fn within(limit: Duration, cmd: &mut Command) {
-    let Ok(mut child) = cmd.stdin(Stdio::null()).stdout(Stdio::null()).stderr(Stdio::null()).spawn() else { return };
+    output_within(limit, cmd.stdout(Stdio::null()));
+}
+
+fn output_within(limit: Duration, cmd: &mut Command) -> Option<String> {
+    use std::io::Read;
+    let mut child = cmd.stdin(Stdio::null()).stderr(Stdio::null()).spawn().ok()?;
     let end = Instant::now() + limit;
-    while Instant::now() < end {
-        if !matches!(child.try_wait(), Ok(None)) {
-            return;
+    let status = loop {
+        match child.try_wait() {
+            Ok(Some(status)) => break status,
+            Ok(None) if Instant::now() < end => std::thread::sleep(Duration::from_millis(50)),
+            _ => {
+                let _ = child.kill();
+                let _ = child.wait();
+                return None;
+            }
         }
-        std::thread::sleep(Duration::from_millis(100));
+    };
+    let mut out = String::new();
+    if let Some(mut pipe) = child.stdout.take() {
+        let _ = pipe.by_ref().take(1 << 20).read_to_string(&mut out);
     }
-    let _ = child.kill();
-    let _ = child.wait();
+    status.success().then_some(out)
 }
 
 fn session_of(pid: u32) -> Option<String> {
@@ -87,28 +102,41 @@ fn session_of(pid: u32) -> Option<String> {
 fn seat_session() -> Option<String> {
     // SAFETY: getuid cannot fail.
     let uid = unsafe { libc::getuid() };
-    let out = Command::new("loginctl").args(["show-user", &uid.to_string(), "-p", "Display", "--value"])
-        .stdin(Stdio::null()).stderr(Stdio::null()).output().ok()?;
+    let out = parsed(Command::new("loginctl").args(["show-user", &uid.to_string(), "-p", "Display", "--value"])
+        .stdin(Stdio::null()).stderr(Stdio::null())).output().ok()?;
     let id = String::from_utf8_lossy(&out.stdout).trim().to_string();
     (!id.is_empty()).then_some(id)
 }
 
 pub fn end_programs() {
-    let Ok(out) = Command::new("systemctl").args(["--user", "list-units", "--plain", "--no-legend", "app-*.scope"])
-        .stdin(Stdio::null()).stderr(Stdio::null()).output() else { return };
+    let Some(out) = output_within(SERVICES_WAIT, parsed(Command::new("systemctl")
+        .args(["--user", "list-units", "--plain", "--no-legend", "app-*.scope"]).stdout(Stdio::piped()))) else { return };
     let own = own_scope();
-    let scopes: Vec<String> = String::from_utf8_lossy(&out.stdout).lines()
+    let scopes: Vec<String> = out.lines()
         .filter_map(|l| l.split_whitespace().next().map(str::to_string))
         .filter(|u| Some(u) != own.as_ref())
         .collect();
     if scopes.is_empty() {
         return;
     }
-    let _ = Command::new("systemctl").args(["--user", "stop", "--no-block"]).args(&scopes)
-        .stdin(Stdio::null()).stdout(Stdio::null()).stderr(Stdio::null()).status();
+    within(SERVICES_WAIT, Command::new("systemctl").args(["--user", "stop", "--no-block"]).args(&scopes));
 }
 
 fn own_scope() -> Option<String> {
     let cgroup = std::fs::read_to_string("/proc/self/cgroup").ok()?;
     cgroup.trim().rsplit('/').next().filter(|s| s.starts_with("app-") && s.ends_with(".scope")).map(str::to_string)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_command_that_hangs_is_ended_at_its_limit_and_one_that_answers_is_heard() {
+        let started = Instant::now();
+        assert_eq!(output_within(Duration::from_millis(300), Command::new("sleep").arg("30").stdout(Stdio::piped())), None);
+        assert!(started.elapsed() < Duration::from_secs(5), "it was waited for to its end");
+        assert_eq!(output_within(SERVICES_WAIT, Command::new("echo").arg("hi").stdout(Stdio::piped())).as_deref(), Some("hi\n"));
+        assert_eq!(output_within(SERVICES_WAIT, Command::new("false").stdout(Stdio::piped())), None);
+    }
 }

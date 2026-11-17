@@ -52,7 +52,9 @@ impl Chooser {
         }
         self.menu_on = on.and_then(|i| self.entries.get(i)).map(|e| e.path.clone());
         let pinned = self.menu_on.as_ref().is_some_and(|p| lent::is_pinned(&self.pins, p));
-        let menu = Popup::new(acts.iter().map(|a| a.line(pinned)).collect(), popup::Place::At(at.0, at.1));
+        let rows: Vec<popup::Row> = acts.iter().map(|a| a.line(pinned)).collect();
+        let width = fitted_width(&rows);
+        let menu = Popup::new(rows, popup::Place::At(at.0, at.1)).width(width);
         self.menu = Some((if keys { menu.lit() } else { menu }, acts));
     }
 
@@ -148,6 +150,13 @@ impl Chooser {
         let bin = self.bin.clone();
         self.work(Verb::Trashed, move || lent::to_trash(paths, bin));
     }
+}
+
+const MENU_MOST: f32 = 2.0;
+
+pub(super) fn fitted_width(rows: &[popup::Row]) -> f32 {
+    let least = crate::toolkit::theme::sheet().menu_width;
+    rows.iter().map(|r| crate::common::widest::menu_line(&r.words, &r.keys)).fold(least, f32::max).min(MENU_MOST * least).ceil()
 }
 
 fn what(paths: &[PathBuf]) -> String {

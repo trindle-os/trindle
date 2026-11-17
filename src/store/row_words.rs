@@ -7,24 +7,29 @@ impl Store {
 
     pub(super) fn say(&mut self, key: &str, words: impl Into<String>, tone: Tone) {
         let (words, behind) = refusal::apart(&words.into());
-        self.said.insert(key.to_string(), (words, tone));
-        self.said_on.remove(key);
-        self.behind_open.remove(key);
+        if tone == Tone::Problem && crate::common::refused::closed_box(&words) {
+            self.words.said.remove(key);
+            self.words.behind.remove(key);
+            return;
+        }
+        self.words.said.insert(key.to_string(), (words, tone));
+        self.words.on.remove(key);
+        self.words.open.remove(key);
         if behind.is_empty() {
-            self.behind.remove(key);
+            self.words.behind.remove(key);
         } else {
-            self.behind.insert(key.to_string(), behind);
+            self.words.behind.insert(key.to_string(), behind);
         }
     }
 
     pub(super) fn say_on(&mut self, key: &str, words: impl Into<String>, page: &'static str) {
         self.say(key, words, Tone::Problem);
-        self.said_on.insert(key.to_string(), page);
+        self.words.on.insert(key.to_string(), page);
     }
 
     pub(super) fn more(&self, key: &str) -> Msg {
-        let mut said = self.said.get(key).map(|(w, _)| w.clone()).unwrap_or_default();
-        for line in self.behind.get(key).into_iter().flatten() {
+        let mut said = self.words.said.get(key).map(|(w, _)| w.clone()).unwrap_or_default();
+        for line in self.words.behind.get(key).into_iter().flatten() {
             said.push('\n');
             said.push_str(line);
         }
@@ -32,12 +37,12 @@ impl Store {
     }
 
     pub(super) fn page_of(&self, key: &str) -> &'static str {
-        self.said_on.get(key).copied().unwrap_or_else(|| help::of_key(key))
+        self.words.on.get(key).copied().unwrap_or_else(|| help::of_key(key))
     }
 
     pub(super) fn toggle_behind(&mut self, key: &str) {
-        if !self.behind_open.remove(key) {
-            self.behind_open.insert(key.to_string());
+        if !self.words.open.remove(key) {
+            self.words.open.insert(key.to_string());
         }
     }
 }

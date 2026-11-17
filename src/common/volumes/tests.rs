@@ -463,3 +463,14 @@ fn the_reader_alone_honours_the_file_of_hidden_drives_as_it_changes() {
     drop(watching);
     std::fs::remove_dir_all(&dir).unwrap();
 }
+
+#[test]
+fn only_an_unlock_blames_a_refusal_on_the_passphrase() {
+    let refused = Failed::new("org.freedesktop.UDisks2.Error.NotAuthorized", "Operation not permitted");
+    assert_eq!(unlock_words(&refused), t!("common-volumes-wrong-passphrase"));
+    assert_ne!(words(&refused), t!("common-volumes-wrong-passphrase"), "a drive with no passphrase is not blamed on one");
+    assert_eq!(unlock_words(&Failed::new("x", "Error unlocking: Failed to activate device")), t!("common-volumes-wrong-passphrase"));
+    let open = Failed::new("org.freedesktop.UDisks2.Error.AlreadyMounted", "Device is already mounted");
+    assert_eq!(words(&open), t!("common-volumes-already-open"));
+    assert_eq!(unlock_words(&open), t!("common-volumes-already-open"));
+}

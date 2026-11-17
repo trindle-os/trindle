@@ -1,7 +1,7 @@
 # machine translated (Arabic), not yet reviewed by a person.
 
 # Tip of the pin button on a clipboard or notification item that is not pinned: keeps it for good.
-ring-quick-pin = تثبيت: احتفظ به دائمًا
+ring-quick-pin = ثبّته للاحتفاظ به
 
 # Tip of the pin button on a clipboard or notification item that is pinned.
 ring-quick-unpin = إلغاء التثبيت
@@ -12,7 +12,7 @@ ring-quick-forget-one = انسَ هذا العنصر
 
 # Tip of the bin button that forgets everything on the page except what is pinned; it asks twice.
 # SAFETY: needs a human review before it ships
-ring-quick-forget-all = انسَ كل شيء عدا العناصر المثبتة
+ring-quick-forget-all = امسح كل شيء عدا العناصر المثبتة
 
 # Name of the volume slider for the speakers on the sound page.
 ring-quick-speakers = مكبرات الصوت
@@ -69,7 +69,7 @@ ring-quick-bt-switch = Bluetooth
 ring-quick-bt-off = Bluetooth متوقف.
 
 # Line on the Bluetooth page while it looks for devices and none is found yet.
-ring-quick-bt-searching = جارٍ البحث... ضع الجهاز في وضع الاقتران.
+ring-quick-bt-searching = جارٍ البحث… ضع الجهاز في وضع الاقتران.
 
 # Tip of the button beside a connected Bluetooth device that disconnects it.
 ring-quick-bt-disconnect = اقطع الاتصال
@@ -84,29 +84,29 @@ ring-quick-bt-pair = اقترن واتصل
 ring-quick-bt-device = جهاز Bluetooth
 
 # Line under the Bluetooth page while pairing with a device.
-ring-quick-bt-pairing = جارٍ الاقتران مع { $name }...
+ring-quick-bt-pairing = جارٍ الاقتران مع { $name }…
 
 # Line under the Bluetooth page while connecting a device.
-ring-quick-bt-connecting = جارٍ الاتصال بـ { $name }...
+ring-quick-bt-connecting = جارٍ الاتصال بـ { $name }…
 
 # Line under the Bluetooth page while disconnecting a device.
-ring-quick-bt-disconnecting = جارٍ قطع الاتصال بـ { $name }...
+ring-quick-bt-disconnecting = جارٍ قطع الاتصال بـ { $name }…
 
 # Line under the Bluetooth page when connecting or disconnecting did not work.
 ring-quick-bt-failed = لم ينجح ذلك. هل هو مشغَّل وقريب؟
 
 # Line under the Bluetooth page when pairing failed because the codes were not accepted.
-ring-quick-bt-codes = لم يتم الاقتران: لم تُقبل الرموز.
+ring-quick-bt-codes = فشل الاقتران. لم تُقبل الرموز.
 
 # Line under the Bluetooth page when pairing failed.
-ring-quick-bt-not-paired = لم يتم الاقتران. هل هو في وضع الاقتران وقريب؟
+ring-quick-bt-not-paired = لم يقترن. هل هو في وضع الاقتران وقريب؟
 
 # Line under the Bluetooth page when pairing worked but connecting did not.
 ring-quick-bt-paired-not-connected = تم الاقتران، لكن الاتصال لم يتم. حاول مرة أخرى بعد قليل.
 
 # Question in the ring when a Bluetooth device wants a PIN typed.
 # SAFETY: needs a human review before it ships
-ring-quick-bt-ask-pin = اكتب رمز PIN لهذا الجهاز. غالبًا ما يكون في تعليماته، أو 0000.
+ring-quick-bt-ask-pin = اكتب رمز PIN لهذا الجهاز. يمكنك غالبًا العثور عليه في تعليمات الجهاز، أو جرّب 0000.
 
 # Typing box for the PIN of a Bluetooth device, shown quietly while empty.
 ring-quick-bt-pin-box = PIN
@@ -145,7 +145,7 @@ ring-quick-wifi-switch = Wi-Fi
 ring-quick-wifi-off = Wi-Fi متوقف.
 
 # Line on the Wi-Fi page while it looks for networks.
-ring-quick-wifi-looking = جارٍ البحث عن شبكات...
+ring-quick-wifi-looking = جارٍ البحث عن شبكات…
 
 # Tip of the button beside the Wi-Fi network in use that leaves it.
 ring-quick-wifi-disconnect = اقطع الاتصال
@@ -162,7 +162,7 @@ ring-quick-wifi-password-box = كلمة المرور
 ring-quick-wifi-join = انضم
 
 # Line under the Wi-Fi page while joining a network.
-ring-quick-wifi-joining = جارٍ الانضمام إلى { $ssid }...
+ring-quick-wifi-joining = جارٍ الانضمام إلى { $ssid }…
 
 # Question text in the ring when the Wi-Fi password was not accepted.
 # SAFETY: needs a human review before it ships
@@ -178,7 +178,7 @@ ring-quick-battery-none = لا توجد بطارية في هذا الحاسوب.
 ring-quick-brightness-fixed = لا يمكن تغيير سطوع هذه الشاشة من هنا
 
 # Line on the clipboard page when nothing has been copied yet.
-ring-quick-clip-empty = لم يُنسخ شيء بعد. ما تنسخه يُحفظ هنا.
+ring-quick-clip-empty = لم يُنسخ شيء بعد.
 
 # Line on the clipboard page for a copied picture.
 ring-quick-clip-picture = صورة
@@ -208,7 +208,7 @@ ring-quick-charging-full = قيد الشحن: تمتلئ خلال نحو { $time
 ring-quick-charging = قيد الشحن
 
 # Line on the battery page on battery, with the time left and the power in watts.
-ring-quick-on-battery-left = تعمل بالبطارية: يتبقى نحو { $time }، والاستهلاك { $rate } واط
+ring-quick-on-battery-left = تعمل بالبطارية. يتبقى نحو { $time }، والاستهلاك { $rate } واط.
 
 # Line on the battery page on battery, when the time is not known.
 ring-quick-on-battery = تعمل بالبطارية
@@ -222,9 +222,9 @@ ring-quick-plugged = موصولة بالكهرباء، لا تُشحن
 # Line on the battery page about how much charge the battery still holds. The health is good, worn, or something else for worn out.
 ring-quick-health =
     { $how ->
-        [good] الحالة: جيدة. تحتفظ بـ { $capacity }% مما كانت عليه وهي جديدة.
-        [worn] الحالة: متآكلة. تحتفظ بـ { $capacity }% مما كانت عليه وهي جديدة.
-       *[old] الحالة: منتهية: حان وقت بطارية جديدة. تحتفظ بـ { $capacity }% مما كانت عليه وهي جديدة.
+        [good] البطارية بصحة جيدة. تستطيع الآن تخزين { $capacity }% من الشحنة التي كانت تخزّنها وهي جديدة.
+        [worn] البطارية متآكلة. تستطيع الآن تخزين { $capacity }% من الشحنة التي كانت تخزّنها وهي جديدة.
+       *[old] البطارية منتهية، فقد حان وقت بطارية جديدة. تستطيع الآن تخزين { $capacity }% من الشحنة التي كانت تخزّنها وهي جديدة.
     }
 
 # Line on the battery page about how many times the battery has been charged.
@@ -267,3 +267,4 @@ ring-quick-title-tray = أيقونات الصينية
 # Heading of the shortcut list page, opened with Super and K.
 ring-quick-title-shortcuts = الاختصارات
 
+ring-quick-wifi-leave-failed = تعذّر قطع الاتصال.

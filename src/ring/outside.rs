@@ -12,8 +12,10 @@ use std::path::Path;
 use std::time::Duration;
 
 use super::notify;
-use crate::common::outside::{self, Kind, Seen, Tables};
-use crate::toolkit::event::Loop;
+use crate::common::outside::{self, Kind, Seen};
+use std::rc::Rc;
+
+use super::ctx::Ctx;
 use crate::toolkit::t;
 
 const LOOK: Duration = Duration::from_secs(5);
@@ -40,26 +42,23 @@ thread_local! {
     static STATE: RefCell<State> = RefCell::new(State::default());
 }
 
-pub fn start(lp: &Loop) {
-    let post = lp.post(|seen: Vec<Seen>| heard(&seen));
+pub fn start(ctx: &Rc<Ctx>) {
+    let c = ctx.clone();
+    let post = ctx.lp.post(move |seen: Vec<Seen>| heard(&seen, &c.apps()));
     std::thread::spawn(move || {
         std::thread::sleep(FIRST);
+        let mut watch = outside::Watch::new(Path::new("/proc"));
         loop {
-            let (net, files) = (outside::network_on(), outside::files_on());
-            if let (true, Some(mine)) = (net || files, outside::my_room(Path::new("/proc"))) {
-                let sockets = if net { outside::reaching(&Tables::read(Path::new("/proc/net"))) } else { HashSet::new() };
-                let folders = outside::personal_folders(&crate::common::files::home());
-                let seen = outside::scan(Path::new("/proc"), &sockets, &folders, &mine, net, files);
-                if !seen.is_empty() && !post.send(seen) {
-                    return;
-                }
+            let seen = watch.look();
+            if !seen.is_empty() && !post.send(seen) {
+                return;
             }
             std::thread::sleep(LOOK);
         }
     });
 }
 
-fn heard(seen: &[Seen]) {
+fn heard(seen: &[Seen], launchers: &[crate::common::apps::Entry]) {
     let fine = outside::fine();
     let kept = said_path();
     STATE.with(|s| {
@@ -79,7 +78,7 @@ fn heard(seen: &[Seen]) {
         if let Some(path) = &kept {
             STATE.with(|s| keep_said(path, &s.borrow().said));
         }
-        say(kind, &fresh);
+        say(kind, &fresh, launchers);
     }
 }
 
@@ -113,9 +112,8 @@ pub fn body(names: &[String]) -> String {
     t!("ring-outside-body", names = shown, more = names.len().saturating_sub(NAMED) as i64)
 }
 
-fn say(kind: Kind, fresh: &[Seen]) {
-    let launchers = crate::common::apps::entries();
-    let names: Vec<String> = fresh.iter().map(|s| shown(s, &launchers)).collect();
+fn say(kind: Kind, fresh: &[Seen], launchers: &[crate::common::apps::Entry]) {
+    let names: Vec<String> = fresh.iter().map(|s| shown(s, launchers)).collect();
     let (summary, icon) = match kind {
         Kind::Network => (t!("ring-outside-network"), "network-workgroup-symbolic"),
         Kind::Files => (t!("ring-outside-files"), "folder-symbolic"),

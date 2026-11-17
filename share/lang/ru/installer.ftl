@@ -70,39 +70,46 @@ installer-arm = Нажмите ещё раз, чтобы установить
 installer-arm-erase = Нажмите ещё раз, чтобы стереть диск и установить
 
 # Note beside Next on the first page while no language is chosen.
-installer-missing-language = Выберите язык
+installer-missing-language = Выберите свой язык
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = Выберите язык Trindle
 
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = Выберите клавиатуру
 
 # Note beside Next on the first page while no time zone is chosen.
-installer-missing-time = Выберите время
+installer-missing-time = Выберите часовой пояс
 
 # Note beside Next on the disk page while no disk is chosen.
-installer-missing-disk = Выберите, куда установить Trindle
+installer-missing-disk = Выберите, куда ставить Trindle
+
+# Note beside Next on the disk page while the disks are read again, after one turned out not to be the disk shown.
+installer-disks-rereading = Читаем диски заново
 
 # Note beside Next on the disk password page while no password has been typed twice.
 # SAFETY: needs a human review before it ships
-installer-missing-disk-password = Введите пароль диска дважды, одинаково оба раза
+installer-missing-disk-password = Введите пароль диска дважды. Он должен совпадать оба раза
 
 # Note beside Next on the account page while the sign-in name is not good.
-installer-missing-username = Нужно имя для входа
+installer-missing-username = Введите имя для входа
 
 # Note beside Next on the account page while the computer's name is not good.
 installer-missing-hostname = Дайте компьютеру имя
 
 # Note beside Next on the account page while no password has been typed twice.
 # SAFETY: needs a human review before it ships
-installer-missing-password = Введите пароль дважды, одинаково оба раза
+installer-missing-password = Введите пароль дважды. Он должен совпадать оба раза
 
 # Title of the first page.
 installer-welcome-title = Добро пожаловать в { $name }
 
 # Sentence under the title of the first page.
-installer-welcome-help = Выберите язык; клавиатура и время подстроятся под него, и вы можете изменить и то, и другое.
+installer-welcome-help = Выберите свой язык, и Trindle подберёт под него всё остальное.
 
-# Head of the card for choosing the language, and the name of its search box.
-installer-language = Язык
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
+installer-language = Ваш язык
+# Label beside the box at the right of the first page's sentence, for choosing the language of Trindle's own words (only those Trindle has).
+installer-trindle-language = Язык Trindle
 
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = Клавиатура
@@ -114,14 +121,14 @@ installer-time = Время
 installer-select = Выбрать
 
 # Title of the disk page.
-installer-disks-title = Куда устанавливается { $name }
+installer-disks-title = Куда ставить { $name }
 
 # Sentence under the title of the disk page.
 # SAFETY: needs a human review before it ships
-installer-disks-help = Всё на выбранном диске будет заменено, если только вы не освободите место рядом с уже имеющимся.
+installer-disks-help = Всё на выбранном диске будет заменено, если только вы не решите установить систему рядом с тем, что там уже есть.
 
 # Shown on the disk page when no disk is big enough.
-installer-disks-none = Не найдено достаточно большого диска. Trindle нужно 20 ГБ.
+installer-disks-none = Trindle не нашёл достаточно большой диск. Нужно 20 ГБ.
 
 # Name and words of the choice to erase a whole disk.
 # SAFETY: needs a human review before it ships
@@ -132,7 +139,7 @@ installer-disks-whole = Использовать весь диск, замени
 installer-disks-share = Сохранить { $what } и разделить диск
 
 # Under the slider that decides how much of a shared partition is kept: the size each side gets.
-installer-disks-split = { $kept } остаётся для того, что там сейчас, { $mine } для Trindle
+installer-disks-split = { $kept } останется для того, что там сейчас, а { $mine } отводится под Trindle
 
 # A partition or disk with its size, such as the name of a disk and how big it is.
 installer-named-size = { $name }, { $size }
@@ -165,10 +172,10 @@ installer-swap-title = Файл подкачки { $gb } ГБ
 installer-swap-switch = Создать файл подкачки
 
 # Under the swap file's head when Secure Boot is on.
-installer-swap-secure-boot = Включена безопасная загрузка (Secure Boot), поэтому этот компьютер не может переходить в гибернацию, но файл подкачки всё равно помогает, когда не хватает памяти. Он создаётся, только если на диске достаточно свободного места.
+installer-swap-secure-boot = Включена безопасная загрузка (Secure Boot), поэтому этот компьютер не может переходить в гибернацию, но файл подкачки всё равно помогает, когда не хватает памяти. Trindle создаёт его, только если на диске достаточно свободного места.
 
 # Under the swap file's head when the computer can hibernate.
-installer-swap-note = Место для гибернации, при которой всё открытое сохраняется при выключенном питании, и запас на случай нехватки памяти. Без него компьютер не сможет перейти в гибернацию. Он создаётся, только если на диске достаточно свободного места.
+installer-swap-note = Файл подкачки позволяет компьютеру переходить в гибернацию: всё открытое сохраняется, пока питание выключено. Он также даёт компьютеру запас на случай нехватки памяти. Без него компьютер не сможет перейти в гибернацию. Trindle создаёт его, только если на диске достаточно свободного места.
 
 # Title of the page about encrypting the disk.
 installer-privacy-title = Шифрование диска
@@ -196,7 +203,7 @@ installer-privacy-about = О чипе
 
 # In the card about the chip, on a computer that has one.
 # SAFETY: needs a human review before it ships
-installer-privacy-chip = В этом компьютере есть чип TPM. При первом запуске после установки пароль будет запрошен один раз, пока чип запоминает этот компьютер; после этого чип сам разблокирует диск, и вводить ничего не нужно. Сохраните пароль: это единственный способ войти, если чип заменят или диск перенесут в другой компьютер.
+installer-privacy-chip = В этом компьютере есть чип TPM. При первом запуске после установки пароль запрашивается один раз, пока чип настраивается. После этого чип разблокирует диск, и вводить ничего не нужно. Сохраните пароль: он понадобится, если чип заменят или диск перенесут в другой компьютер.
 
 # In the card about the chip, on a computer that has none Trindle can use.
 installer-privacy-no-chip = В этом компьютере нет чипа TPM, который мог бы использовать Trindle, поэтому пароль будет запрашиваться при каждом запуске. На компьютере с таким чипом он может сам разблокировать диск.
@@ -216,7 +223,7 @@ installer-disk-password = Пароль диска
 installer-disk-suggest = Предложить парольную фразу
 
 # Label and name of the second box of a password, where it is typed again.
-installer-same-again = Повторите то же самое
+installer-same-again = Введите ещё раз
 
 # Red line under the password boxes when the two do not match.
 # SAFETY: needs a human review before it ships
@@ -228,7 +235,7 @@ installer-disk-write-down = Запишите его
 
 # Words in that card.
 # SAFETY: needs a human review before it ships
-installer-disk-write-down-text = Запишите этот пароль на бумаге и храните в надёжном месте, вдали от компьютера. Без него диск невозможно открыть ни вам, ни кому-либо другому, никогда. Пути назад нет. Четыре обычных слова образуют парольную фразу, которую легко набрать и трудно угадать.
+installer-disk-write-down-text = Запишите этот пароль на бумаге и храните в надёжном месте, вдали от компьютера. Без него никто не сможет открыть диск, даже вы. Пути назад нет. Парольную фразу из четырёх обычных слов легко набрать и трудно угадать.
 
 # Title of the account page.
 installer-you-title = О вас
@@ -260,16 +267,16 @@ installer-password = Пароль
 installer-strength = Насколько трудно угадать
 
 # Red line under the account boxes: the sign-in name is empty.
-installer-user-needed = Нужно имя для входа.
+installer-user-needed = Введите имя для входа.
 
 # Red line under the account boxes: a name is too long.
 installer-name-too-long = Это имя слишком длинное.
 
 # Red line under the account boxes: the sign-in name does not start with a small letter.
-installer-user-start = Начните со строчной буквы.
+installer-user-start = Начните с буквы a-z.
 
 # Red line under the account boxes: the sign-in name uses letters it may not.
-installer-user-letters = Только строчные буквы, цифры, - и _.
+installer-user-letters = Только a-z, 0-9, - и _.
 
 # Red line under the account boxes: the sign-in name belongs to the system.
 installer-user-taken = Это имя уже занято системой.
@@ -332,14 +339,14 @@ installer-ready-nothing-changed = Пока ничего не изменено
 installer-ready-security = Обновления безопасности
 
 # In the card about security updates.
-installer-ready-security-text = { $name } сам устанавливает исправления безопасности Debian каждый день. Это нельзя отключить.
+installer-ready-security-text = { $name } сам устанавливает исправления безопасности Debian каждый день. Это можно отключить в «Настройках», в разделе «Об этом компьютере».
 
 # Sentence under the title when a whole disk will be replaced.
 # SAFETY: needs a human review before it ships
 installer-ready-replaced = Всё на { $disk } будет заменено.
 
 # Sentence under the title when the install goes beside what is there.
-installer-ready-kept = Всё на { $part } сохранится, но сначала сделайте резервную копию: при уменьшении раздела файлы можно потерять, если отключится питание.
+installer-ready-kept = Всё на { $part } сохранится, но сначала сделайте резервную копию. Если во время уменьшения отключится питание, файлы можно потерять.
 
 # Sentence under the title when no disk has been chosen.
 installer-ready-none = Диск ещё не выбран.
@@ -356,13 +363,13 @@ installer-ready-whole-text = Всё на нём будет заменено на
 installer-ready-beside = Рядом с { $part }
 
 # Words of that row.
-installer-ready-beside-text = { $part } будет уменьшен до { $size }, а { $name } займёт освободившееся место.
+installer-ready-beside-text = { $part } уменьшится до { $size }, а { $name } установится в освободившееся место.
 
 # Name of a row in the list when no disk is chosen.
 installer-ready-no-disk = Нет диска
 
 # Words of that row.
-installer-ready-no-disk-text = Диск не выбран.
+installer-ready-no-disk-text = Выберите диск.
 
 # Name of a row in the list: the disk will not be encrypted.
 # SAFETY: needs a human review before it ships
@@ -382,10 +389,22 @@ installer-ready-locked-password = Вы вводите пароль диска п
 
 # Words of that row when the TPM chip unlocks the disk.
 # SAFETY: needs a human review before it ships
-installer-ready-locked-chip = Пароль нужен один раз, затем диск разблокирует чип TPM этого компьютера.
+installer-ready-locked-chip = Пароль вводится один раз, затем диск разблокирует чип TPM этого компьютера.
 
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = Клавиатура: { $keyboard }, время: { $zone }.
+# Added to the end of the disk's row on the last page when a swap file is to be made, with its size in GB.
+installer-ready-swap = Плюс файл подкачки на { $gb } ГБ.
+
+# Under the choice to let the TPM chip unlock the disk, on a computer with no usable chip.
+installer-privacy-chip-off = Нужен чип TPM, который может использовать Trindle.
+
+# In the card about the chip when the disk is not being encrypted, on a computer that has a chip.
+installer-privacy-chip-none = В этом компьютере есть чип TPM, он может разблокировать зашифрованный диск.
+
+# In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
+installer-privacy-no-chip-none = В этом компьютере нет чипа TPM, который мог бы использовать Trindle.
+
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle на языке «{ $trindle }», клавиатура: { $keyboard }, время: { $zone }.
 
 # Title of the page shown while the install runs.
 installer-installing-title = Установка { $name }
@@ -405,23 +424,23 @@ installer-done-keep = Храните пароль диска в надёжном
 
 # In that card when the TPM chip unlocks the disk.
 # SAFETY: needs a human review before it ships
-installer-keep-chip = Диск зашифрован. При первом запуске пароль диска будет запрошен один раз, пока чип запоминает этот компьютер; после этого диск открывается сам. Запишите этот пароль на бумаге и храните в надёжном месте вдали от компьютера. Без него диск невозможно открыть ни вам, ни кому-либо другому, никогда.
+installer-keep-chip = Диск зашифрован. При первом запуске компьютер один раз запросит пароль диска, пока настраивается чип. После этого диск открывается сам. Запишите этот пароль на бумаге и храните в надёжном месте вдали от этого компьютера. Без него никто не сможет открыть диск, даже вы.
 
 # In that card when the password is typed at each start.
 # SAFETY: needs a human review before it ships
-installer-keep-password = Диск зашифрован. Если вы ещё этого не сделали, запишите пароль диска на бумаге сейчас и храните в надёжном месте вдали от компьютера. Без него диск невозможно открыть ни вам, ни кому-либо другому, никогда.
+installer-keep-password = Диск зашифрован. Если вы ещё этого не сделали, запишите пароль диска на бумаге сейчас и храните в надёжном месте вдали от этого компьютера. Без него никто не сможет открыть диск, даже вы.
 
 # Title of the first slide.
 installer-slide-ring = Всё в одном круге
 
 # Words of the first slide.
-installer-slide-ring-text = Переместите указатель к краю экрана и дважды щёлкните, и откроется кольцо: ваши программы по внешнему краю, время и переключатели посередине.
+installer-slide-ring-text = Переместите указатель к краю экрана и дважды щёлкните, чтобы открыть кольцо. Ваши программы расположены по внешнему краю, а время и переключатели посередине.
 
 # Title of the second slide.
-installer-slide-snapshots = Верните то, что сломало обновление
+installer-slide-snapshots = Отмените неудачное обновление
 
 # Words of the second slide.
-installer-slide-snapshots-text = Снимок системы делается до и после каждого изменения программ. В «Настройках» можно вернуть всю систему к любому из них, а меню загрузки сделает это, если компьютер не запускается.
+installer-slide-snapshots-text = Trindle делает снимок системы до и после каждого изменения программ. В «Настройках» можно вернуть всю систему к любому из них. Если компьютер не запускается, это можно сделать из меню загрузки.
 
 # Title of the third slide.
 installer-slide-apps = Приложения, которые не мешают
@@ -430,16 +449,16 @@ installer-slide-apps = Приложения, которые не мешают
 installer-slide-apps-text = Приложения Flathub, приложения самого Debian, AppImage и источники программ в одном месте, с резервными копиями, которые можно перенести на другой компьютер.
 
 # Title of the fourth slide.
-installer-slide-yours = Ваш, и быстро
+installer-slide-yours = Настройте под себя
 
 # Words of the fourth slide.
-installer-slide-yours-text = Светлая или тёмная тема, собственные звуки и буфер обмена, который помнит скопированное.
+installer-slide-yours-text = Выберите светлую или тёмную тему, задайте свои звуки и пользуйтесь буфером обмена, который помнит скопированное.
 
 # Title of the fifth slide.
 installer-slide-small = Небольшой и тихий
 
 # Words of the fifth slide.
-installer-slide-small-text = Рабочий стол почти не нагружает память и запускается за несколько секунд, так что старый ноутбук снова ощущается как новый
+installer-slide-small-text = Рабочий стол почти не нагружает память и запускается за несколько секунд, так что старый ноутбук снова ощущается как новый.
 
 # Title of the tour slide about the ring.
 installer-tour-ring = Кольцо - это весь рабочий стол
@@ -454,13 +473,13 @@ installer-tour-ring-time = Время и дата посередине
 installer-tour-ring-programs = Ваши программы расположены по внешнему краю
 
 # Note on the ring picture, at the switches.
-installer-tour-ring-switches = Звук, экран, все ваши приложения, режим «не засыпать» и выключение
+installer-tour-ring-switches = Переключатели звука, экрана, всех приложений, режима «не засыпать» и выключения
 
 # Title of the tour slide about Settings.
 installer-tour-settings = Настройки простыми словами
 
 # Note on the Settings picture, at the search box.
-installer-tour-settings-search = Введите здесь, чтобы найти настройку, не разыскивая её
+installer-tour-settings-search = Введите здесь, чтобы найти настройку
 
 # Note on the Settings picture, at Network.
 installer-tour-settings-network = В разделе «Сеть» вы подключаетесь к сети Wi-Fi
@@ -484,31 +503,31 @@ installer-tour-apps-many = Тысячи бесплатных программ и
 installer-tour-apps-updates = Обновления для всего, включая сам Trindle
 
 # Title of the tour slide about voice control.
-installer-tour-voice = Можно говорить с ним вместо этого
+installer-tour-voice = Говорите с компьютером
 
 # Note on the voice picture, at where voice control lives.
-installer-tour-voice-where = Голосовое управление находится здесь: «Настройки», затем «Кольцо»
+installer-tour-voice-where = Голосовое управление находится в «Настройках», в разделе «Кольцо»
 
 # Note on the voice picture, at the button that adds voice.
-installer-tour-voice-add = Один раз нажмите «Добавить голос». Это около 150 МБ и займёт несколько минут
+installer-tour-voice-add = Один раз нажмите «Добавить голосовое управление». Загрузка занимает около 150 МБ и несколько минут
 
 # Note on the voice picture, about what to say.
-installer-tour-voice-say = Затем коснитесь середины кольца и назовите приложение, скажите «громче» или «настройки Wi-Fi»
+installer-tour-voice-say = Затем коснитесь середины кольца и назовите приложение или скажите «громче» либо «настройки Wi-Fi»
 
 # Note on the voice picture, about where speech is understood.
-installer-tour-voice-private = Сказанное распознаётся на этом компьютере и никуда не уходит
+installer-tour-voice-private = Trindle распознаёт вашу речь на этом компьютере и никуда её не отправляет
 
 # Title of the tour slide about snapshots.
-installer-tour-snapshots = Путь назад, прежде чем что-то изменится
+installer-tour-snapshots = Вернитесь к состоянию до изменения
 
 # Note on the snapshots picture, about when a snapshot is taken.
-installer-tour-snapshots-before = Компьютер делает снимок перед каждым обновлением
+installer-tour-snapshots-before = Trindle делает снимок перед каждым обновлением
 
 # Note on the snapshots picture, about going back.
-installer-tour-snapshots-back = Если что-то сломается, вернитесь к прежнему состоянию через меню загрузки
+installer-tour-snapshots-back = Если что-то сломается, вы можете вернуться к прежнему состоянию через меню загрузки
 
 # Name of the picture of the ring, and the head of its card.
-installer-live-caption = Кольцо, где находится всё
+installer-live-caption = Кольцо, в котором есть всё
 
 # Sentence under the title of the welcome from a stick.
 installer-live-help = Вы работаете с USB-накопителя, поэтому на этом компьютере ничего не изменено.
@@ -523,19 +542,19 @@ installer-live-open = Откройте кольцо
 installer-live-open-line = Дважды щёлкните у края экрана или нажмите Super.
 
 # Name of the second thing to do.
-installer-live-speak = Говорите с ним
+installer-live-speak = Используйте голос
 
 # Line under it when voice control is there.
 installer-live-speak-line = Коснитесь середины кольца и скажите, что вам нужно.
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = Добавьте голос в «Настройках», «Кольцо», затем коснитесь середины и говорите.
+installer-live-speak-add = Нажмите «Добавить голосовое управление» в «Настройках», в разделе «Кольцо». Затем коснитесь середины и говорите.
 
 # Name of the third thing to do.
 installer-live-tab = Всё в кольце
 
 # Line under it.
-installer-live-tab-line = Открытое, ваши уведомления и буфер обмена: всё здесь.
+installer-live-tab-line = Здесь вы найдёте открытое, свои уведомления и буфер обмена.
 
 # The choice of the dark look.
 installer-live-dark = Тёмная
@@ -559,7 +578,7 @@ installer-step-room = Освобождение места
 installer-step-prepare = Подготовка диска
 
 # Foot of the install page while a place is made beside another system.
-installer-step-place = Создание места для Trindle
+installer-step-place = Освобождение места для Trindle
 
 # Foot of the install page while the disk is looked at.
 installer-step-check = Проверка того, что уже есть на диске
@@ -571,7 +590,7 @@ installer-step-smaller = Уменьшение другой системы
 installer-step-lock = Шифрование диска
 
 # Foot of the install page while the TPM chip is set up.
-installer-step-chip = Настройка чипа компьютера
+installer-step-chip = Настройка чипа TPM
 
 # Foot of the install page while the system is copied.
 installer-step-copy = Копирование Trindle на диск
@@ -583,7 +602,7 @@ installer-step-settings = Запись настроек
 installer-step-account = Создание вашей учётной записи
 
 # Foot of the install page while the stick's own parts are taken out.
-installer-step-live-parts = Удаление частей, нужных только для запуска с накопителя
+installer-step-live-parts = Удаляем лишнее с флешки
 
 # Foot of the install page while the start-up files are made.
 installer-step-startup = Создание файлов запуска
@@ -631,26 +650,26 @@ installer-bad-keyboard = Trindle не может использовать эту
 installer-bad-timezone = Trindle не может использовать этот часовой пояс.
 
 # Red line at the foot: the person's name has something that cannot be written.
-installer-bad-fullname = В этом имени есть то, что Trindle не может записать.
+installer-bad-fullname = В этом имени есть символ, который Trindle не может использовать.
 
 # Red line at the foot: a password has a line break in it.
 # SAFETY: needs a human review before it ships
-installer-bad-password = Пароль не может содержать перевод строки.
+installer-bad-password = В пароле не может быть перевода строки.
 
 # Red line at the foot: the second half of the installer was not started as root.
-installer-needs-root = Вторая половина установщика должна работать от имени root.
+installer-needs-root = Вторая часть установщика должна запускаться от имени root.
 
 # Red line at the foot: there is no boot partition to share.
 installer-no-boot-partition = На этом диске нет загрузочного раздела для совместного использования, поэтому Trindle нельзя установить рядом с тем, что уже есть.
 
 # Red line at the foot: the partition just made cannot be found.
-installer-new-part-missing = Не удалось найти новую часть диска.
+installer-new-part-missing = Не удалось найти новый раздел.
 
 # Red line at the foot: the size of a partition cannot be read.
 installer-size-unreadable = Не удалось прочитать размер { $part }.
 
 # Red line at the foot: a partition of this kind cannot be made smaller.
-installer-cannot-shrink = Trindle не может уменьшить раздел { $fs }.
+installer-cannot-shrink = Trindle не умеет уменьшать разделы { $fs }.
 
 # Red line at the foot: a partition of a kind that is not known cannot be made smaller.
 installer-cannot-shrink-unknown = Trindle не может уменьшить раздел неизвестного типа.
@@ -686,16 +705,16 @@ installer-sure = Уверены?
 
 
 # Note on the ring picture, at the tab at the edge.
-installer-tour-ring-foot = Что открыто, буфер обмена и кнопка, которая очищает экран
+installer-tour-ring-foot = Смотрите, что открыто, пользуйтесь буфером обмена и очищайте экран одной кнопкой
 
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } это флешка, с которой запущена Trindle.
 
 # Red line at the foot: something on the chosen disk is mounted or swapped to.
-installer-disk-in-use = { $dev } используется. Закройте то, что его использует, и попробуйте снова.
+installer-disk-in-use = { $dev } используется. Закройте всё, что его использует, и попробуйте снова.
 
 # Said beside how far the install has got, once it has started.
-installer-started = Установка началась
+installer-started = Идёт установка
 
 # The button that ends an install under way.
 installer-halt = Остановить
@@ -724,14 +743,40 @@ installer-memory-short = Для Trindle нужно не менее 1 GB памя
 installer-lock-needs-uefi = Диск можно зашифровать только на компьютере, который запускается через UEFI, а этот так не запускается.
 
 # Red words when the Windows partition chosen to share the disk was hibernated or left in Windows' fast start-up; { $part } is the partition.
-installer-windows-asleep = Windows на { $part } была переведена в режим гибернации или оставлена в режиме быстрого запуска, поэтому при уменьшении раздела можно потерять её файлы. Запустите Windows, выберите «Перезагрузка» и повторите попытку.
+installer-windows-asleep = Windows на { $part } была переведена в гибернацию или выключена с быстрым запуском. Если уменьшить раздел сейчас, можно потерять её файлы. Запустите Windows, выберите «Перезагрузка» и повторите попытку.
 
 # Red words on the last page when the snapshots could not be set up; { $why } is the reason.
 installer-snapshots-failed = Trindle установлен, но снимки настроить не удалось: { $why }
 
 # Red words on the last page when the boot menu could not be made after setting up snapshots; { $why } is the reason.
-installer-snapshots-menu-failed = Trindle установлен, но меню загрузки не удалось настроить так, чтобы в нём были снимки: { $why }
+installer-snapshots-menu-failed = Trindle установлен, но не смог добавить снимки в меню загрузки: { $why }
 
 # Head of the card on the last page that lists what could not be done.
 installer-done-problems = Настроено не всё
 
+# Red line under the disk password boxes: the computer gave no random numbers, so no passphrase could be made.
+installer-suggest-failed = Trindle не удалось придумать парольную фразу. Введите свою.
+
+# Red line at the foot: the disk was swapped for another after the list was read.
+installer-disk-changed = Это не тот диск, который был показан: { $dev }. Вернитесь назад и выберите диск ещё раз.
+
+# Red line at the foot: a disk with an old-style partition table cannot be shared with.
+installer-no-gpt = На { $dev } нет таблицы разделов GPT, поэтому Trindle нельзя установить рядом с тем, что там уже есть.
+
+# Red line at the foot: the boot partition on the disk is too small to share.
+installer-boot-partition-small = Загрузочный раздел на этом диске слишком мал, чтобы им делиться, поэтому Trindle нельзя установить рядом с тем, что там уже есть.
+
+# Note on the last page: the swap file was not made, with why.
+installer-swap-failed = Trindle установлен, но файл подкачки создать не удалось: { $why }
+
+# Red line at the foot: a partition's identity could not be read after it was made.
+installer-uuid-missing = Trindle не удалось опознать { $dev } после настройки.
+
+# Words on the last page: the disk that will be replaced, with what it holds.
+installer-ready-replaced-known = Всё на { $disk } будет заменено ({ $holds }).
+
+# A disk named with its model and size, then its place such as /dev/sda.
+installer-disk-named = { $what }, { $dev }
+
+# Red line at the foot: a program the installer runs stopped before it had all it was given.
+installer-run-stopped = Программа { $program } остановилась, не получив всего нужного: { $why }

@@ -9,11 +9,7 @@ use super::Msg;
 use super::model::percent;
 use super::view::RING;
 
-pub(super) fn map_caption() -> &'static str {
-    t!("disks-map-caption")
-}
-
-pub(super) const MAP_ROW: f32 = 98.0;
+pub(super) const MAP_ROW: f32 = 112.0;
 pub(super) const MAP_GAP: f32 = 16.0;
 const MAP_TITLE: f32 = 26.0;
 pub(super) const MAP_BAR: f32 = 20.0;
@@ -178,11 +174,16 @@ impl Drawn<'_> {
             let ink = |c| if p.quiet { theme::alpha(c, quiet) } else { c };
             pen.fonts.draw(canvas, &name, (x * s).round(), y.round(), ink(t.fg));
             if !p.words.is_empty() {
-                let words = pen.fonts.layout(&p.words, &style(12.0, 400), None).cut(w * s, &dots(12.0, 400));
+                let words = under_part(pen.fonts, &p.words, &style(12.0, 400), w * s);
                 pen.fonts.draw(canvas, &words, (x * s).round(), (y + name.height).round(), t.muted);
             }
         }
     }
+}
+
+pub(super) fn under_part(fonts: &crate::toolkit::text::Fonts, words: &str, style: &Style, room: f32) -> crate::toolkit::text::Layout {
+    let dots = fonts.layout("\u{2026}", style, None);
+    fonts.layout(words, style, Some(room)).cut_after(2, room, &dots)
 }
 
 pub(super) fn map_spacing(high: f32, count: usize) -> (f32, f32, f32) {
@@ -192,4 +193,23 @@ pub(super) fn map_spacing(high: f32, count: usize) -> (f32, f32, f32) {
     let grow = (extra / n).min(MAP_GROW_MOST);
     let top = ((extra - grow * n) / 2.0).max(0.0);
     (MAP_ROW + grow, MAP_BAR + grow * 0.5, top)
+}
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn a_parts_words_take_a_second_line_before_being_cut_in_every_language() {
+        use crate::common::shipped_languages::{in_language, tags};
+        use crate::toolkit::text::{Fonts, Style};
+        let fonts = Fonts::new();
+        let style = Style { weight: 400, ..Style::new(12.0) };
+        for tag in tags() {
+            in_language(&tag, || {
+                let words = crate::toolkit::t!("disks-kind-none");
+                let laid = super::under_part(&fonts, words, &style, 90.0);
+                assert!(!laid.cut && laid.lines.len() <= 2, "{tag}: {words:?} in {} lines, cut {}", laid.lines.len(), laid.cut);
+            });
+        }
+    }
 }

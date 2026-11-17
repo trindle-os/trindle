@@ -59,14 +59,14 @@ fn now() -> u64 {
     SystemTime::now().duration_since(UNIX_EPOCH).map(|d| d.as_secs()).unwrap_or(0)
 }
 
-pub const DAMAGED: &str = "Clipboard history";
+pub fn damaged() -> &'static str { t!("common-damaged-clipboard") }
 
 pub fn load() -> Vec<Item> {
     load_from(&dir().join("index.json"))
 }
 
 pub fn load_from(file: &std::path::Path) -> Vec<Item> {
-    let text = super::damaged::read_whole(file, DAMAGED, |t| serde_json::from_str::<Value>(t).is_ok_and(|v| v.is_array()));
+    let text = super::damaged::read_whole(file, damaged(), |t| serde_json::from_str::<Value>(t).is_ok_and(|v| v.is_array()));
     let v: Value = serde_json::from_str(&text).unwrap_or(Value::Null);
     v.as_array().map(|a| a.iter().filter_map(|e| Some(Item {
         id: e["id"].as_u64()?,
@@ -81,7 +81,7 @@ fn save(items: &[Item]) {
     use std::os::unix::fs::{DirBuilderExt, PermissionsExt};
     let d = dir();
 
-    if super::damaged::may_write(&d.join("index.json"), DAMAGED).is_err() {
+    if super::damaged::may_write(&d.join("index.json"), damaged()).is_err() {
         return;
     }
 
@@ -127,12 +127,21 @@ fn tidy_with(items: &mut Vec<Item>, forget: &str) {
     });
 }
 
-pub fn store() {
-
-    if matches!(std::env::var("CLIPBOARD_STATE").as_deref(), Ok("sensitive") | Ok("clear") | Ok("nil")) {
-        return;
+fn turn() -> Option<std::fs::File> {
+    use std::os::fd::AsRawFd;
+    use std::os::unix::fs::{DirBuilderExt, OpenOptionsExt};
+    let d = dir();
+    std::fs::DirBuilder::new().recursive(true).mode(0o700).create(&d).ok()?;
+    let held = std::fs::OpenOptions::new().read(true).custom_flags(libc::O_DIRECTORY | libc::O_NOFOLLOW | libc::O_CLOEXEC).open(&d).ok()?;
+    loop {
+        // SAFETY: the descriptor is that of `held`, which is open throughout the call.
+        if unsafe { libc::flock(held.as_raw_fd(), libc::LOCK_EX) } == 0 {
+            return Some(held);
+        }
+        if std::io::Error::last_os_error().kind() != std::io::ErrorKind::Interrupted {
+            return None;
+        }
     }
-    keep(stdin());
 }
 
 fn stdin() -> Vec<u8> {
@@ -142,12 +151,10 @@ fn stdin() -> Vec<u8> {
 }
 
 pub(crate) fn keep(data: Vec<u8>) {
-    if data.is_empty() {
-        return;
-    }
+    let Some(_turn) = (!data.is_empty()).then(turn).flatten() else { return };
     let mut items = load();
 
-    if super::damaged::may_write(&dir().join("index.json"), DAMAGED).is_err() {
+    if super::damaged::may_write(&dir().join("index.json"), damaged()).is_err() {
         return;
     }
     let id = items.iter().map(|i| i.id).max().unwrap_or(0) + 1;
@@ -194,6 +201,7 @@ fn raise(mut items: Vec<Item>, pos: usize) {
 }
 
 pub fn at_login() {
+    let Some(_turn) = turn() else { return };
     let mut items = load();
     if forget_setting() == "reboot" {
         items.retain(|i| i.pinned);
@@ -210,6 +218,7 @@ pub fn list() -> Vec<Item> {
 }
 
 pub fn set_pinned(id: u64, pinned: bool) {
+    let Some(_turn) = turn() else { return };
     let mut items = load();
     if let Some(i) = items.iter_mut().find(|i| i.id == id) {
         i.pinned = pinned;
@@ -218,12 +227,14 @@ pub fn set_pinned(id: u64, pinned: bool) {
 }
 
 pub fn remove(id: u64) {
+    let Some(_turn) = turn() else { return };
     let mut items = load();
     items.retain(|i| i.id != id);
     save(&items);
 }
 
 pub fn clear() {
+    let Some(_turn) = turn() else { return };
     let mut items = load();
     items.retain(|i| i.pinned);
     save(&items);
@@ -282,11 +293,10 @@ pub fn main(args: Vec<String>) -> i32 {
             let Some(data) = data else { return 1 };
             let _ = std::io::stdout().write_all(&data);
         }
-        Some("store") => store(),
         Some("clear") => clear(),
         Some("login") => at_login(),
         _ => {
-            eprintln!("usage: trindle-clipboard watch|copy [--type TYPE]...|paste [--type TYPE]|store|clear|login");
+            eprintln!("usage: trindle-clipboard watch|copy [--type TYPE]...|paste [--type TYPE]|clear|login");
             return 1;
         }
     }
@@ -296,6 +306,27 @@ pub fn main(args: Vec<String>) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn copies_made_at_the_same_time_are_all_kept() {
+        let dir = std::env::temp_dir().join(format!("trindle-clipboard-turns-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&dir);
+        let workers: Vec<_> = (0..6).map(|w| {
+            let dir = dir.clone();
+            std::thread::spawn(move || {
+                TEST_DIR.with(|d| *d.borrow_mut() = Some(dir));
+                for n in 0..12 {
+                    keep(format!("copy {w}-{n}").into_bytes());
+                }
+            })
+        }).collect();
+        workers.into_iter().for_each(|w| w.join().unwrap());
+        TEST_DIR.with(|d| *d.borrow_mut() = Some(dir.clone()));
+        let kept = load().len();
+        TEST_DIR.with(|d| *d.borrow_mut() = None);
+        let _ = std::fs::remove_dir_all(&dir);
+        assert_eq!(kept, 72);
+    }
 
     #[test]
     fn old_unpinned_go_and_pinned_stay() {

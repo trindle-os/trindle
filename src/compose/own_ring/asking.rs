@@ -8,9 +8,9 @@ use smithay::utils::{Logical, Point};
 
 use super::steps::{step, Step};
 use super::{opens, ring_words, start_of, Told, SHOT, UNANSWERED};
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
 
-impl<BackendData: Backend + 'static> AnvilState<BackendData> {
+impl<BackendData: Backend + 'static> Compose<BackendData> {
 
     pub fn try_again_at(&mut self, at: Point<f64, Logical>) -> bool {
         let on = self.space.outputs().any(|o| self.space.output_geometry(o).is_some_and(|place| crate::stopped::on_button(place, at)));
@@ -76,7 +76,7 @@ impl<BackendData: Backend + 'static> AnvilState<BackendData> {
         let asked = (Instant::now(), crate::ring_pulse::now());
         self.ring.expecting = Some(asked);
         let words = words.to_vec();
-        let _ = self.handle.insert_source(Timer::from_duration(UNANSWERED), move |_, _, state| {
+        crate::session::watch(&self.handle, Timer::from_duration(UNANSWERED), move |_, _, state| {
             state.ring_unanswered(asked, &words);
             TimeoutAction::Drop
         });

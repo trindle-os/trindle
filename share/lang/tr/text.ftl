@@ -47,7 +47,7 @@ text-find-replace-key = Bul ve değiştir (Ctrl+H)
 text-go-to-line-key = Satıra git (Ctrl+G)
 
 # Button in the menu for a Markdown file that shows it as it will look finished, with its shortcut.
-text-finished-key = Bitmiş görünüm (Ctrl+E)
+text-finished-key = Önizleme (Ctrl+E)
 
 # Button in the menu for a Markdown file that exports it as a web page. Also the title of the chooser for that.
 text-export-html = Web sayfası olarak dışa aktar
@@ -71,7 +71,7 @@ text-close-tab = Kapat: { $name }
 text-close-bar = Çubuğu kapat
 
 # Words the screen reader gives the button that shows the finished look of the text, with its shortcut.
-text-finished-look = Bitmiş görünüm
+text-finished-look = Önizleme
 
 # Menu item that copies everything in the text.
 text-copy-all = Tüm metni kopyala
@@ -154,7 +154,7 @@ text-replace-all = Tümünü değiştir
 text-replace-all-spoken = Bulunan her sözcüğü değiştir
 
 # Words on the find bar when a find has been asked for and has no match.
-text-none-found = Bulunamadı
+text-none-found = Eşleşme yok
 
 # Words on the find bar when a find has matches. $at is which one is shown, $n how many there are.
 text-of-found = { $at } / { $n }
@@ -187,10 +187,10 @@ text-go-to-line = Satıra git
 text-back = Metne dön
 
 # Words on the spelling bar, after the word: the word was added to the person's own words.
-text-spell-added = artık sözcüklerinizden biri
+text-spell-added = sözcüklerinize eklendi
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are no suggestions.
-text-spell-none = sözlükte yok ve sözlükte buna benzer bir şey de yok
+text-spell-none = sözlükte yok ve öneri de yok
 
 # Words on the spelling bar, after the word: the word is not in the dictionary and there are suggestions.
 text-spell-offers = sözlükte yok. Şunlardan birini mi demek istediniz?
@@ -221,16 +221,16 @@ text-starting = Başlangıç
 text-when-opens = Metin açılınca
 
 # First choice: Text opens the files it had open last time.
-text-reopen = Geçen seferki dosyaları yeniden aç
+text-reopen = Önceki dosyaları yeniden aç
 
 # Second choice: Text opens with an empty page.
-text-start-blank = Boş başla
+text-start-blank = Sıfırdan başla
 
 # Note under the start choice: work not saved to a file is kept whichever choice is made.
-text-keep-note = Bir dosyaya kaydedilmemiş çalışma, hangi seçenek seçilirse seçilsin her zaman saklanır ve geri gelir.
+text-keep-note = Kaydedilmemiş çalışmanız, hangi seçeneği seçerseniz seçin saklanır ve geri yüklenir.
 
 # Heading of the group on the settings page for how the text looks.
-text-showing = Metnin görünümü
+text-showing = Metin görünümü
 
 # Label of the size slider: how big the text is.
 text-size = Boyut
@@ -266,10 +266,10 @@ text-read-as = Dosyayı şu olarak oku
 text-save-in = Şu kodlamayla kaydet
 
 # Note under the save encoding: the next save writes the file in this encoding.
-text-next-save = Bir sonraki kaydetme dosyayı bu kodlamayla yazar.
+text-next-save = Dosya, bir sonraki kaydedişinizde bu kodlamayı kullanacak.
 
 # Words saying the text has changes that are not saved to its file. $path is the file.
-text-changes-not-saved = { $name } dosyasında kaydedilmemiş değişiklikler var.
+text-changes-not-saved = { $name } kaydedilmemiş değişiklikler içeriyor.
 
 # Words saying the text has changes and no file yet.
 text-not-saved = Bu metin henüz bir dosyaya kaydedilmedi.
@@ -279,7 +279,11 @@ text-not-saved = Bu metin henüz bir dosyaya kaydedilmedi.
 text-save-named = { $name } kaydedilsin mi?
 
 # Words in the question before closing: how many other tabs with changes are left after this one. $left is the number.
-text-more-after = Bundan sonra { $left } tane daha var.
+text-more-after =
+    { $left ->
+        [one] Kaydedilecek { $left } sekme daha var.
+       *[other] Kaydedilecek { $left } sekme daha var.
+    }
 
 # Button in the question before closing that closes the tab without saving it.
 # SAFETY: needs a human review before it ships
@@ -298,55 +302,55 @@ text-is-folder = { $name } bir klasör.
 text-too-big = { $name } burada açmak için çok büyük.
 
 # Shown when a file could not be opened. $name is the file's path and $reason why.
-text-cannot-open = { $name } açılamadı: { $reason }
+text-cannot-open = Trindle { $name } dosyasını açamadı: { $reason }
 
 # Shown when a file could not be written. $name is the file's path and $reason why.
-text-cannot-write = { $name } yazılamadı: { $reason }
+text-cannot-write = Trindle { $name } dosyasını yazamadı: { $reason }
 
 # Shown when a file could not be saved. $name is the file's path and $reason why.
-text-cannot-save = { $name } kaydedilemedi: { $reason }
+text-cannot-save = Trindle { $name } dosyasını kaydedemedi: { $reason }
 
 # Shown when a file could not be read again. $name is the file's path and $reason why.
-text-cannot-read = { $name } yeniden okunamadı: { $reason }
+text-cannot-read = { $name } okunamadı: { $reason }
 
 # Shown when the list of open work could not be written. $folder is the folder and $reason why.
-text-work-not-kept = Çalışma { $folder } içinde saklanamadı: { $reason }
+text-work-not-kept = Trindle çalışmanızı { $folder } içine kaydedemedi: { $reason }
 
 # Shown when the settings could not be saved. $reason says why.
 text-settings-not-saved = Ayarlar kaydedilemedi: { $reason }
 
 # Shown when a word could not be added to the person's own words. $word is the word and $reason why.
-text-word-not-added = { $word } sözcüklerinize eklenemedi: { $reason }
+text-word-not-added = Trindle { $word } sözcüğünü sözlüğünüze ekleyemedi: { $reason }
 
 # Shown when the list of recent files could not be cleared. $reason says why.
-text-list-not-cleared = Liste temizlenemedi: { $reason }
+text-list-not-cleared = Trindle listeyi temizleyemedi: { $reason }
 
 # Shown when the file chooser could not be opened.
 text-chooser-failed = Dosya seçici açılamadı.
 
 # Shown when the file chooser cannot be used because there is no session bus.
-text-no-bus = Oturum veri yolu olmadan dosya seçilemez.
+text-no-bus = Trindle şu an dosya seçiciyi açamıyor.
 
 # Shown when the spelling language asked for is not on the computer. $lang is its name.
 text-no-dictionary = { $lang } adlı bir sözlük yok.
 
 # Shown when a spelling dictionary could not be read. $lang is its name and $reason why.
-text-dictionary-unreadable = { $lang } sözlüğü okunamadı: { $reason }
+text-dictionary-unreadable = Trindle { $lang } sözlüğünü okuyamadı: { $reason }
 
 # Shown when a save was stopped and the text it held before was kept in a folder. $reason says what went wrong and $path is where the old text is kept.
-text-kept-before = { $reason }. Önceki içeriği { $path } içinde saklandı.
+text-kept-before = { $reason }. Eski metin { $path } içinde saklandı.
 
 # Shown when a save was stopped part way and the old text is kept. $why says why, and $path is where the old text is kept.
-text-kept-before-that = { $why } O kaydetmeden önceki içeriği { $path } içinde saklandı.
+text-kept-before-that = { $why } O kaydetmeden önceki metin { $path } içinde.
 
 # Shown when a save was stopped and what was kept of it cannot be read. $name is the file's path.
-text-saved-unreadable = Metin durdurulduğunda { $name } kaydediliyordu ve kaydın saklanan kısmı okunamıyor.
+text-saved-unreadable = Metin, { $name } dosyasını kaydederken kapandı ve Trindle kaydedilen kısmı okuyamıyor.
 
 # Shown when a save was stopped and the file has changed since. $name is the file's path.
-text-saved-changed = Metin durdurulduğunda { $name } kaydediliyordu ve o zamandan beri değiştirilmiş, bu yüzden olduğu gibi bırakıldı.
+text-saved-changed = Metin, { $name } dosyasını kaydederken kapandı. Dosya o zamandan beri değişti, bu yüzden Trindle onu olduğu gibi bıraktı.
 
 # Shown when a save was stopped and the old text could not be put back. $name is the file's path, $reason why, and $path where the old text is kept.
-text-saved-not-put-back = Metin durdurulduğunda { $name } kaydediliyordu ve eski haline getirilemedi: { $reason }. O kaydetmeden önceki içeriği { $path } içinde saklandı.
+text-saved-not-put-back = Metin, { $name } dosyasını kaydederken kapandı ve Trindle dosyayı eski haline getiremedi: { $reason }. O kaydetmeden önceki metin { $path } içinde.
 
 # Quiet word beside what was just saved, exported or changed.
 text-done = Bitti
@@ -354,10 +358,13 @@ text-done = Bitti
 # Suggested file name in the Save as chooser for text never saved before.
 text-untitled-file = Adsız.txt
 
+# The misspelt word, shown in quotation marks on the spelling bar. { $word } is the word.
+text-spell-word = ‘{ $word }’
+
 
 
 # Line under the Save button when the file was changed by something else after Text opened, saved or reloaded it. Nothing has been saved.
-text-changed-elsewhere = Açtığınızdan beri başka yerde değişti.
+text-changed-elsewhere = Bu dosya, açtığınızdan beri değişti.
 
 # Button beside that line: save the words here over the changed file.
 text-save-anyway = Yine de kaydet
@@ -365,3 +372,5 @@ text-save-anyway = Yine de kaydet
 # Button beside that line: read the file again from disk and drop the unsaved changes here.
 text-reload = Yeniden yükle
 
+# Shown when a link in the finished look is pressed and is not a web address, or no browser started.
+text-link-not-opened = Buradan yalnızca web adresleri açılır.

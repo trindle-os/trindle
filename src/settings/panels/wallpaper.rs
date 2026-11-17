@@ -1,6 +1,5 @@
 //! Wallpaper: one picture, or a folder of them that changes on a timer.
 
-use looking::Film;
 mod cards;
 mod looking;
 
@@ -8,8 +7,6 @@ use std::collections::{HashMap, HashSet, VecDeque};
 use std::path::{Path, PathBuf};
 use std::rc::Rc;
 use std::time::Duration;
-
-use tiny_skia::Pixmap;
 
 use crate::common::files::{home, set_setting, setting};
 use crate::common::run::spawn;
@@ -114,7 +111,6 @@ fn pictures_folder() -> PathBuf {
 struct Now {
     src: PathBuf,
     plain: bool,
-    is_dir: bool,
     rotating: bool,
 
     showing: PathBuf,
@@ -135,7 +131,7 @@ struct Now {
 
 enum Thumb {
     Waiting,
-    Ready(Rc<Pixmap>),
+    Ready(Rc<cards::Cover>),
     Failed,
 }
 
@@ -148,12 +144,13 @@ enum Slot {
 struct Play {
     gen: u64,
     path: PathBuf,
-    step: usize,
 
-    film: Option<Film>,
+    ask: std::sync::mpsc::Sender<()>,
+
+    asked: std::time::Instant,
     left: usize,
     gap: Duration,
-    frame: Option<Rc<Pixmap>>,
+    frame: Option<Rc<cards::Cover>>,
 }
 
 #[derive(Default)]
@@ -166,6 +163,8 @@ pub struct Wallpaper {
     away: bool,
     preview: Option<Play>,
     tile: Option<Play>,
+
+    hovered: Option<PathBuf>,
     gen: u64,
 
     looks: u64,
@@ -173,7 +172,6 @@ pub struct Wallpaper {
 }
 
 impl Wallpaper {
-
     fn set(&mut self, kit: &mut Kit, key: &str, value: &str, line: Option<&str>) {
         let result = set_setting(key, value).map_err(|e| e.words(not_saved())).and_then(|()| match tell_changer(false) {
             true => Ok(()),
@@ -272,7 +270,6 @@ impl Wallpaper {
             self.set(kit, "wallpaper_color", &code, Some("colour"));
         }
     }
-
 }
 
 impl Page for Wallpaper {
@@ -319,7 +316,7 @@ impl Page for Wallpaper {
     fn view(&self, kit: &Kit) -> Node<Msg> {
         let shade = typed_colour(&self.colour);
         let items = vec![
-            headline(kit, self.now.said.clone()),
+            headline(self.now.said.clone()),
             self.picture_card(shade),
             self.wallpaper_card(kit, shade),
             self.changing_card(kit),
@@ -345,14 +342,14 @@ impl Wallpaper {
 
     pub(crate) fn with_memory() -> Wallpaper {
         let mut page = Wallpaper::made_up();
-        page.now.memory = vec![limits::bigger_than_screen(), limits::moving_costs()];
+        page.now.memory = vec![t!("session-wallpaper-bigger-than-screen"), t!("session-wallpaper-moving-costs")];
         page
     }
 
     pub(crate) fn made_up() -> Wallpaper {
         let folder = PathBuf::from("/made-up/Pictures");
         let choices: Vec<PathBuf> = (1..=8).map(|n| folder.join(format!("holiday-{n}.jpg"))).collect();
-        let now = Now { src: folder, plain: false, is_dir: true, rotating: true, showing: choices[0].clone(), showing_there: false,
+        let now = Now { src: folder, plain: false, rotating: true, showing: choices[0].clone(), showing_there: false,
                         showing_words: "8 of 8 pictures from /made-up/Pictures".into(), choices, skip: HashSet::new(),
                         said: "The picture changes every 5 minutes, from your own folder.".into(), every: 300,
                         order: "shuffle".into(), fit: "fill".into(), memory: Vec::new() };

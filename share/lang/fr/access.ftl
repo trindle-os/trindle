@@ -1,0 +1,129 @@
+## What an app can be allowed to do, and what goes wrong without it. Each
+## permission has a name (said after "asks for", as in "Weather asks for
+## the internet and sound"), the line under its switch, and for some a warning.
+
+access-network-name = Internet
+access-network-without = Il ne pourra pas accéder à Internet ni aux autres ordinateurs proches.
+access-sound-name = le son
+access-sound-without = Il ne produira aucun son.
+access-microphone-name = votre microphone
+access-microphone-without = Il ne pourra pas vous entendre.
+access-sound-and-microphone-name = le son et votre microphone
+access-sound-and-microphone-without = Il ne produira aucun son et ne pourra pas vous entendre.
+access-files-name = vos dossiers Documents, Téléchargements, Images, Musique, Vidéos et Bureau
+access-files-without = Il ne pourra pas ouvrir vos fichiers ni enregistrer dans vos dossiers.
+access-home-name = tout votre dossier personnel, y compris les fichiers de réglages cachés
+access-home-without = Il ne pourra pas ouvrir vos fichiers ni enregistrer dans vos dossiers.
+access-devices-name = votre caméra et les autres appareils branchés
+access-devices-without = Il ne pourra pas vous voir ni utiliser ce que vous branchez.
+access-bluetooth-name = les appareils Bluetooth, comme un casque
+access-bluetooth-without = Il ne pourra communiquer avec rien en Bluetooth.
+access-notifications-name = les notifications
+access-notifications-without = Il ne pourra pas vous prévenir quand quelque chose se passe.
+access-background-name = le démarrage à l'ouverture de session
+access-background-without = Il ne s'exécutera que lorsque vous l'ouvrirez.
+access-screen-name = des images de votre écran, ce que vous copiez et la saisie à votre place, comme si c'était votre clavier
+access-screen-without = Il ne pourra pas voir les autres fenêtres ni lire ce que vous copiez quand il le veut.
+access-x11-name = l'affichage de ses fenêtres à l'ancienne, ce qui lui permet de surveiller d'autres anciennes applications et ce qu'on y saisit
+access-x11-without = Ses fenêtres ne s'ouvriront pas.
+access-computer-name = le travail hors de sa boîte, avec tout ce à quoi vous avez accès vous-même
+access-computer-without = Ce que vous y saisissez reste enfermé dans sa boîte : sudo et vos propres fichiers n'y fonctionneront pas.
+access-control-name = le contrôle de votre clavier, de votre souris et du presse-papiers
+access-control-without = Il ne pourra pas déplacer le pointeur, taper ni partager ce que vous copiez.
+access-capture-name = le partage de votre souris et de votre clavier avec un autre ordinateur
+access-capture-without = Le pointeur ne pourra pas passer sur un autre ordinateur.
+access-copied-name = les fichiers que vous copiez
+access-copied-without = Il ne pourra pas lire les fichiers que vous copiez, donc il ne pourra pas les emporter sur un autre ordinateur.
+access-summon-name = l'ouverture de l'anneau par-dessus une fenêtre en plein écran, comme si vous appuyiez sur la touche
+access-summon-without = Ses touches et ses clics n'ouvriront l'anneau que sur le bureau, jamais par-dessus une fenêtre en plein écran.
+access-listen-name = le fait d'être joignable par les autres ordinateurs de votre réseau local
+access-listen-without = Les autres ordinateurs de votre réseau local ne pourront ni le trouver ni s'y connecter.
+access-home-network-name = les appareils de votre réseau local uniquement
+access-home-network-without = Il ne pourra pas trouver ni joindre les imprimantes, les scanners ou les autres appareils du réseau local.
+access-usb-devices-name = les scanners et les appareils USB
+access-usb-devices-without = Il ne pourra pas utiliser un scanner branché à cet ordinateur.
+access-expand-name = le remplacement de vos codes courts pendant que vous tapez
+access-expand-without = Ses codes courts ne seront pas remplacés pendant que vous tapez.
+access-accessibility-name = la lecture à voix haute de chaque fenêtre
+access-accessibility-without = Il ne pourra pas lire vos fenêtres à voix haute.
+access-unnamed-name = quelque chose qui n'est pas précisé
+
+access-control-warning = Il peut taper, cliquer et lire ce que vous copiez comme s'il était vous. N'autorisez cela que pour un module de confiance.
+access-capture-warning = Tant que le pointeur est sur l'autre ordinateur, tout ce que vous tapez et cliquez va à ce module. N'autorisez cela que pour un module de confiance.
+access-copied-warning = Il peut lire exactement les fichiers que vous copiez tant qu'il est autorisé, et rien d'autre. N'autorisez cela que pour un module de confiance.
+access-summon-warning = Il peut placer l'anneau, qui reçoit tout ce que vous tapez, par-dessus un jeu ou un film sans que vous touchiez une touche. N'autorisez cela que pour un module de confiance.
+access-home-network-warning = Il peut communiquer avec chaque appareil de votre réseau local, votre box ou routeur compris, mais pas avec Internet. N'autorisez cela que pour un module de confiance.
+access-usb-devices-warning = Il peut utiliser les scanners et les appareils d'images branchés au démarrage, et aucun autre appareil USB. N'autorisez cela que pour un module de confiance.
+access-expand-warning = Trindle surveille ce que vous tapez pour repérer vos codes et tape ses mots à votre place. Le module ne voit jamais ce que vous tapez. N'autorisez cela que pour un module de confiance.
+access-accessibility-warning = Il peut lire tout ce qui est à l'écran. Comme tout lecteur d'écran, il peut aussi appuyer sur des boutons et saisir du texte dans d'autres fenêtres, bien qu'il n'ait ni clavier ni souris à lui. N'autorisez cela que pour un module de confiance.
+
+## Titles (for a tooltip) and the line under a switch, which says what switching it off means.
+access-network-title = Internet
+access-network-off = Désactivé, impossible d'accéder à Internet ou aux autres ordinateurs proches.
+access-sound-title = Produire du son
+access-sound-off = Désactivé, aucun son.
+access-microphone-title = Votre microphone
+access-microphone-off = Désactivé, impossible de vous entendre.
+access-sound-and-microphone-title = Produire du son et utiliser votre microphone
+access-sound-and-microphone-off = Désactivé, aucun son et impossible de vous entendre.
+access-files-title = Vos dossiers Documents, Téléchargements, Images, Musique, Vidéos et Bureau
+access-files-off = Désactivé, impossible d'ouvrir vos fichiers ou d'enregistrer dans vos dossiers.
+access-home-title = Tout votre dossier personnel, y compris les fichiers de réglages cachés
+access-home-off = Désactivé, impossible d'ouvrir vos fichiers ou d'enregistrer dans vos dossiers.
+access-devices-title = Votre caméra et les autres appareils branchés
+access-devices-off = Désactivé, impossible d'utiliser votre caméra ou ce que vous branchez.
+access-bluetooth-title = Bluetooth, pour un casque et d'autres appareils proches
+access-bluetooth-off = Désactivé, impossible de se connecter à quoi que ce soit en Bluetooth.
+access-notifications-title = Afficher des notifications
+access-notifications-off = Désactivé, impossible de vous prévenir quand quelque chose se passe.
+access-background-title = Démarrer tout seul à l'ouverture de session
+access-background-off = Désactivé, le programme ne s'exécute que lorsque vous l'ouvrez.
+access-screen-title = Prendre des captures de votre écran, lire ce que vous copiez et saisir comme depuis votre clavier
+access-screen-off = Désactivé, le programme ne peut pas voir les autres fenêtres ni lire ce que vous copiez quand il le veut.
+access-x11-title = Afficher ses fenêtres à l'ancienne, ce qui lui permet de surveiller d'autres anciennes applications et ce qu'on y saisit
+access-x11-off = Désactivé, ses fenêtres ne s'ouvrent pas.
+access-computer-title = Travailler hors de sa boîte, avec tout ce à quoi vous avez accès vous-même
+access-computer-off = Désactivé, ce que vous y saisissez reste enfermé dans sa boîte : sudo et vos propres fichiers n'y fonctionnent pas.
+access-control-title = Contrôler votre clavier, votre souris et le presse-papiers
+access-control-off = Désactivé, le programme ne peut pas déplacer le pointeur, taper ni partager ce que vous copiez.
+access-capture-title = Partager votre souris et votre clavier avec un autre ordinateur
+access-capture-off = Désactivé, le pointeur ne peut pas passer sur un autre ordinateur.
+access-copied-title = Lire les fichiers que vous copiez
+access-copied-off = Désactivé, le programme ne peut pas lire les fichiers que vous copiez ni les envoyer à un autre ordinateur.
+access-summon-title = Ouvrir l'anneau par-dessus une fenêtre en plein écran, comme si vous appuyiez sur la touche
+access-summon-off = Désactivé, ses touches et ses clics n'ouvrent l'anneau que sur le bureau, jamais par-dessus une fenêtre en plein écran.
+access-listen-title = Laisser les autres ordinateurs de votre réseau local le joindre
+access-listen-off = Désactivé, les autres ordinateurs de votre réseau local ne peuvent ni le trouver ni s'y connecter.
+access-home-network-title = Joindre uniquement les appareils de votre réseau local
+access-home-network-off = Désactivé, le programme ne peut pas trouver ni joindre les imprimantes, les scanners ou les autres appareils du réseau local.
+access-usb-devices-title = Utiliser les scanners et les appareils USB
+access-usb-devices-off = Désactivé, le programme ne peut pas utiliser un scanner branché à cet ordinateur.
+access-expand-title = Remplacer vos codes courts pendant que vous tapez
+access-expand-off = Désactivé, Trindle ne remplacera pas ses codes courts pendant que vous tapez.
+access-accessibility-title = Lire ce que montre chaque fenêtre et le dire à voix haute
+access-accessibility-off = Désactivé, le programme ne peut pas lire vos fenêtres à voix haute.
+access-unnamed-title = Quelque chose qui n'est pas précisé
+
+## The few words on a plugin's row of the Permissions page.
+access-note-acts-as-you = peut agir à votre place
+access-note-home-network = peut joindre chaque appareil de votre réseau local
+access-note-usb-devices = peut utiliser les scanners et les appareils d'images
+access-note-expand = peut taper dans vos fenêtres
+access-note-accessibility = peut lire tout ce qui est à l'écran
+
+access-listen-detail = { $ports }, depuis les ordinateurs de votre réseau local uniquement. Internet doit aussi être autorisé.
+
+## A request that is unusual for the kind of app that makes it.
+access-unusual = C'est inhabituel pour { $kind }. N'autorisez cela que si vous faites confiance à la provenance de cette application.
+access-kind-terminal = un terminal
+access-kind-calculator = une calculatrice
+access-kind-photo = une application photo
+access-kind-text-editor = un éditeur de texte
+access-kind-browser = un navigateur web
+access-kind-office = une application de bureautique
+access-kind-graphics = une application de graphisme
+access-kind-game = un jeu
+access-kind-sound-video = une application de son et de vidéo
+access-kind-programming = un outil de programmation
+access-kind-utility = un utilitaire
+access-kind-other = une application comme celle-ci

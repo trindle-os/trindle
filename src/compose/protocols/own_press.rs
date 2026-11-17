@@ -5,6 +5,7 @@
 //! did not start and can hand nothing: Activity's Stop ends a program, and
 //! could not tell a plugin's made-up click from the person's.
 
+use super::Filtered;
 use smithay::reexports::wayland_server::protocol::wl_surface::WlSurface;
 use smithay::reexports::wayland_server::{Client, DataInit, Dispatch, DisplayHandle, GlobalDispatch, New, Resource};
 
@@ -41,18 +42,14 @@ pub struct OwnPressState {
     refused: Vec<(smithay::reexports::wayland_server::backend::ClientId, std::time::Instant)>,
 }
 
-pub struct OwnPressGlobalData {
-    filter: Box<dyn for<'c> Fn(&'c Client) -> bool + Send + Sync>,
-}
-
 impl OwnPressState {
 
     pub fn new<D, F>(display: &DisplayHandle, filter: F) -> OwnPressState
     where
-        D: GlobalDispatch<TrindleOwnPressV1, OwnPressGlobalData> + Dispatch<TrindleOwnPressV1, ()> + OwnPressHandler + 'static,
+        D: GlobalDispatch<TrindleOwnPressV1, Filtered> + Dispatch<TrindleOwnPressV1, ()> + OwnPressHandler + 'static,
         F: for<'c> Fn(&'c Client) -> bool + Send + Sync + 'static,
     {
-        display.create_global::<D, TrindleOwnPressV1, _>(VERSION, OwnPressGlobalData { filter: Box::new(filter) });
+        display.create_global::<D, TrindleOwnPressV1, _>(VERSION, Filtered::new(filter));
         OwnPressState::default()
     }
 
@@ -81,9 +78,6 @@ impl OwnPressState {
         }
         said
     }
-}
-
-impl OwnPressState {
 
     pub fn tell_was(&mut self, to: &WlSurface, serial: u32, code: u32) {
         let Some(whose) = to.client().map(|c| c.id()) else { return };
@@ -94,24 +88,24 @@ impl OwnPressState {
     }
 }
 
-impl<D> GlobalDispatch<TrindleOwnPressV1, OwnPressGlobalData, D> for OwnPressState
+impl<D> GlobalDispatch<TrindleOwnPressV1, Filtered, D> for OwnPressState
 where
-    D: GlobalDispatch<TrindleOwnPressV1, OwnPressGlobalData> + Dispatch<TrindleOwnPressV1, ()> + OwnPressHandler + 'static,
+    D: GlobalDispatch<TrindleOwnPressV1, Filtered> + Dispatch<TrindleOwnPressV1, ()> + OwnPressHandler + 'static,
 {
     fn bind(
         state: &mut D,
         _: &DisplayHandle,
         _: &Client,
         resource: New<TrindleOwnPressV1>,
-        _: &OwnPressGlobalData,
+        _: &Filtered,
         data_init: &mut DataInit<'_, D>,
     ) {
         let told = data_init.init(resource, ());
         state.own_press_state().told.push(told);
     }
 
-    fn can_view(client: Client, global_data: &OwnPressGlobalData) -> bool {
-        (global_data.filter)(&client)
+    fn can_view(client: Client, global_data: &Filtered) -> bool {
+        global_data.can_view(&client)
     }
 }
 
@@ -134,7 +128,7 @@ where
 macro_rules! delegate_own_press {
     ($(@<$( $lt:tt $( : $clt:tt $(+ $dlt:tt )* )? ),+>)? $ty: ty) => {
         smithay::reexports::wayland_server::delegate_global_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
-            $crate::protocols::own_press::TrindleOwnPressV1: $crate::protocols::own_press::OwnPressGlobalData
+            $crate::protocols::own_press::TrindleOwnPressV1: $crate::protocols::Filtered
         ] => $crate::protocols::own_press::OwnPressState);
         smithay::reexports::wayland_server::delegate_dispatch!($(@< $( $lt $( : $clt $(+ $dlt )* )? ),+ >)? $ty: [
             $crate::protocols::own_press::TrindleOwnPressV1: ()

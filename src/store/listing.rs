@@ -41,10 +41,37 @@ pub fn two_lines<M>(words: impl Into<String>) -> Node<M> {
 }
 
 const ROW_LINES: u8 = 2;
+const ROW_LINES_MOST: u8 = 3;
+
+thread_local! {
+
+    static LINES: std::cell::RefCell<Option<(crate::common::widest::Stamp, u32, u8)>> = const { std::cell::RefCell::new(None) };
+}
+
+pub fn row_lines() -> u8 {
+    let across = super::screen::across();
+    if !(across > 0.0 && across.is_finite()) {
+        return ROW_LINES;
+    }
+    let now = crate::common::widest::stamp();
+    LINES.with(|kept| {
+        if let Some((had, at, lines)) = &*kept.borrow() {
+            if *had == now && *at == across.to_bits() {
+                return *lines;
+            }
+        }
+        let need = [pages::installed_row::longest_lines(across), super::update_page::rows::longest_lines(across)].iter()
+            .flat_map(|(room, all)| all.iter().map(|w| crate::common::widest::note_lines(w, room.max(1.0))))
+            .max().unwrap_or(0);
+        let lines = u8::try_from(need).unwrap_or(u8::MAX).clamp(ROW_LINES, ROW_LINES_MOST);
+        *kept.borrow_mut() = Some((now, across.to_bits(), lines));
+        lines
+    })
+}
 
 pub fn row_line<M>(words: impl Into<String>) -> Node<M> {
     let words = words.into();
-    note(if words.trim().is_empty() { BLANK.to_string() } else { words }).cut_after(ROW_LINES).width(Length::Fill)
+    note(if words.trim().is_empty() { BLANK.to_string() } else { words }).cut_after(row_lines()).width(Length::Fill)
 }
 
 pub fn listing<M>(picture: Option<Node<M>>, name: impl Into<String>, line: Node<M>, under: Vec<Node<M>>, end: Vec<Node<M>>) -> Node<M> {
@@ -67,7 +94,7 @@ fn made<M>(greyed: bool, roomy: bool, picture: Option<Node<M>>, name: impl Into<
     let mut parts: Vec<Node<M>> = picture.map(|p| p.opacity(shows)).into_iter().collect();
     let words = column(words).gap(LINE_GAP).width(Length::Fill);
     parts.push(if roomy {
-        let room = column(vec![label(BLANK).cut(), note(BLANK).room_for(ROW_LINES)]).gap(LINE_GAP).width(Length::Fixed(0.0));
+        let room = column(vec![label(BLANK).cut(), note(BLANK).room_for(row_lines())]).gap(LINE_GAP).width(Length::Fixed(0.0));
         row(vec![room, words]).gap(0.0).width(Length::Fill)
     } else {
         words
@@ -89,7 +116,7 @@ pub fn dotted_row_line(s: &Store, dot: Dot, words: impl Into<String>) -> Node<Ms
     row(vec![look::dot(s, dot), row_line(words)]).gap(DOT_GAP)
 }
 
-const DOT_GAP: f32 = 8.0;
+pub(super) const DOT_GAP: f32 = 8.0;
 
 pub fn standing(s: &Store, id: &str) -> Option<Dot> {
     if !s.installed.contains_key(id) {
@@ -106,8 +133,8 @@ pub fn standing(s: &Store, id: &str) -> Option<Dot> {
 fn action(s: &Store, a: &App) -> Node<Msg> {
     let id = a.id.clone();
 
-    if let Some(share) = super::update_page::app_share(s, &a.id) {
-        return button(crate::settings::ui::UPDATE_ICON, t!("store-installed-updating", name = &a.name)).working(share, Tone::Accent);
+    if let Some(share) = super::update_page::app_ring(s, &a.id) {
+        return button(crate::settings::ui::UPDATE_ICON, t!("store-installed-updating", name = &a.name)).working_following(&share, Tone::Accent);
     }
     if let Some(d) = s.dials.get(&a.id) {
         let words = if s.busy.get(&a.id) == Some(&"uninstall") { t!("store-list-removing", name = &a.name) } else { t!("store-list-installing", name = &a.name) };
@@ -176,5 +203,16 @@ mod tests {
 
         let tile = Ui::new(listing::<Msg>(None, "Notes", line(LONGER), Vec::new(), Vec::new()), theme()).natural_height(260.0);
         assert_eq!(tile, name + LINE_GAP + one);
+    }
+
+    #[test]
+    fn an_app_updating_runs_its_line_round_its_button_following_the_job() {
+        let events = crate::toolkit::event::Loop::new();
+        let mut s = Store::new(&events, events.post(|_: super::super::Do| {}), None);
+        let a = App { id: "org.example.Paint".into(), name: "Paint".into(), ..Default::default() };
+        s.dials.insert(super::super::update_page::app_key(&a.id), crate::common::filling::Dial::default());
+        let shown = crate::common::filling::following_buttons(&action(&s, &a));
+        let ring = super::super::update_page::app_ring(&s, &a.id).expect("it is going in");
+        assert_eq!(shown.into_iter().map(|(_, r)| r).collect::<Vec<_>>(), vec![ring]);
     }
 }

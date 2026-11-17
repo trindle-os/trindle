@@ -1,7 +1,9 @@
 //! Screen-lock PIN, accepted only for a limited time after locking.
 //! Stored as a yescrypt hash (libcrypt) in a 0600 file.
 
-use std::ffi::{c_char, c_int, c_ulong, CStr, CString};
+use std::ffi::{c_char, c_int, c_ulong, c_void, CStr, CString};
+
+use zeroize::Zeroizing;
 use std::path::PathBuf;
 
 use super::files::{config_path, setting};
@@ -14,9 +16,13 @@ pub const TRIES: u32 = 5;
 
 #[link(name = "libcrypt.so.1", kind = "dylib", modifiers = "+verbatim")]
 extern "C" {
-    fn crypt(key: *const c_char, setting: *const c_char) -> *mut c_char;
-    fn crypt_gensalt(prefix: *const c_char, count: c_ulong, rbytes: *const c_char, nrbytes: c_int) -> *mut c_char;
+    fn crypt_rn(key: *const c_char, setting: *const c_char, data: *mut c_void, size: c_int) -> *mut c_char;
+    fn crypt_gensalt_rn(prefix: *const c_char, count: c_ulong, rbytes: *const c_char, nrbytes: c_int, output: *mut c_char, size: c_int) -> *mut c_char;
 }
+
+const CRYPT_DATA: usize = 32768;
+
+const SALT_MOST: usize = 192;
 
 fn file() -> PathBuf {
     config_path("pin")
@@ -24,9 +30,11 @@ fn file() -> PathBuf {
 
 fn hash_with(pin: &str, setting: &str) -> Option<String> {
     let (k, s) = (CString::new(pin).ok()?, CString::new(setting).ok()?);
-    // SAFETY: both arguments are NUL-terminated and outlive the call. crypt
 
-    let out = unsafe { crypt(k.as_ptr(), s.as_ptr()) };
+    let mut data = Zeroizing::new(vec![0u8; CRYPT_DATA]);
+    // SAFETY: both strings are NUL-terminated and outlive the call, and
+
+    let out = unsafe { crypt_rn(k.as_ptr(), s.as_ptr(), data.as_mut_ptr().cast(), CRYPT_DATA as c_int) };
     if out.is_null() {
         return None;
     }
@@ -34,6 +42,18 @@ fn hash_with(pin: &str, setting: &str) -> Option<String> {
     let h = unsafe { CStr::from_ptr(out) }.to_string_lossy().to_string();
 
     (!h.starts_with('*')).then_some(h)
+}
+
+fn new_salt() -> Option<String> {
+    let mut out = [0 as c_char; SALT_MOST];
+    // SAFETY: a NUL-terminated prefix, a null rbytes, which is how libcrypt
+
+    let salt = unsafe { crypt_gensalt_rn(c"$y$".as_ptr(), 0, std::ptr::null(), 0, out.as_mut_ptr(), SALT_MOST as c_int) };
+    if salt.is_null() {
+        return None;
+    }
+    // SAFETY: not null, and NUL-terminated within `out`.
+    Some(unsafe { CStr::from_ptr(salt) }.to_string_lossy().to_string())
 }
 
 pub fn valid(pin: &str) -> bool {
@@ -46,18 +66,11 @@ pub fn is_set() -> bool {
 
 pub fn set(pin: &str) -> Result<(), String> {
     if !valid(pin) {
-        return Err(format!("A PIN is {LENGTH} digits."));
+        return Err(t!("common-pin-digits", n = LENGTH.to_string()));
     }
-    let prefix = CString::new("$y$").map_err(|e| e.to_string())?;
-    // SAFETY: a NUL-terminated prefix that outlives the call, and a null
-
-    let salt = unsafe { crypt_gensalt(prefix.as_ptr(), 0, std::ptr::null(), 0) };
-    if salt.is_null() {
-        return Err("The PIN could not be hashed.".into());
-    }
-    // SAFETY: not null, and NUL-terminated; copied before any further call.
-    let salt = unsafe { CStr::from_ptr(salt) }.to_string_lossy().to_string();
-    let hash = hash_with(pin, &salt).ok_or("The PIN could not be hashed.")?;
+    let not_hashed = || t!("common-pin-not-hashed").to_string();
+    let salt = new_salt().ok_or_else(not_hashed)?;
+    let hash = hash_with(pin, &salt).ok_or_else(not_hashed)?;
     let path = file();
     if let Some(dir) = path.parent() {
         std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
@@ -105,10 +118,7 @@ mod tests {
 
     #[test]
     fn hashes_check_and_differ() {
-        // SAFETY: a static NUL-terminated prefix, and libcrypt's own
-
-        let salt = unsafe { CStr::from_ptr(crypt_gensalt(c"$y$".as_ptr(), 0, std::ptr::null(), 0)) }
-            .to_string_lossy().to_string();
+        let salt = new_salt().unwrap();
         let h = hash_with("4821", &salt).unwrap();
         assert!(h.starts_with("$y$"));
         assert_eq!(hash_with("4821", &h).unwrap(), h);

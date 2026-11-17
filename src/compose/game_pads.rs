@@ -17,7 +17,7 @@ use tracing::{info, warn};
 
 use crate::controller_wire::{self as wire, Axis, Client, Event, Refusal, EV_SYN};
 use crate::pads::{self, Change, Changer, Layout, Out, Range, EV_ABS, EV_KEY};
-use crate::state::{AnvilState, Backend};
+use crate::state::{Compose, Backend};
 
 const SCAN_EVERY: Duration = Duration::from_secs(2);
 
@@ -220,18 +220,21 @@ impl std::fmt::Debug for Pads {
     }
 }
 
-impl<B: Backend + 'static> AnvilState<B> {
+impl<B: Backend + 'static> Compose<B> {
 
     pub fn watch_pads(&mut self) {
         let (tell, inbox) = channel::channel::<Reply>();
-        let _ = self.handle.insert_source(inbox, |event, _, state| {
+        if let Err(e) = self.handle.insert_source(inbox, |event, _, state| {
             if let channel::Event::Msg(reply) = event {
                 state.pad_reply(reply);
             }
-        });
+        }) {
+            tracing::warn!("controllers' answers cannot be heard, so no profile changes one: {e}");
+            return;
+        }
         self.pads.desk = Some(Desk::start(Box::new(Client::connect), Box::new(move |reply| drop(tell.send(reply)))));
         Games::watch(self.pads.games.clone());
-        let _ = self.handle.insert_source(Timer::from_duration(SCAN_EVERY), |_, _, state| {
+        crate::session::watch(&self.handle, Timer::from_duration(SCAN_EVERY), |_, _, state| {
             state.scan_pads();
             TimeoutAction::ToDuration(SCAN_EVERY)
         });
@@ -317,7 +320,7 @@ impl<B: Backend + 'static> AnvilState<B> {
         let made = wire::Pad { bus: id[0], vendor: id[1], product: id[2], version: id[3], keys: keys.clone(), axes: axes.clone() };
         let slot = (0..wire::SLOTS)
             .find(|s| !self.pads.held.iter().any(|h| h.slot == *s) && !self.pads.asked.iter().any(|a| a.1 == *s))
-            .ok_or(std::io::ErrorKind::OutOfMemory)?;
+            .ok_or_else(|| std::io::Error::other("no free slot"))?;
         let Some(desk) = &self.pads.desk else { return Err(std::io::ErrorKind::NotConnected.into()) };
         self.pads.asked.push((node.to_string(), slot));
         desk.ask(Job::Make { slot, pad: made, pending: Box::new(Pending { node: node.to_string(), file, slot, changes, keys, axes }) });

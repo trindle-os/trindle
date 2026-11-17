@@ -14,7 +14,6 @@ use super::sni::menu::{menu_frame, menu_gap, menu_line, menu_words};
 use super::view::Face;
 use crate::plugins::{self, DynItem, MenuItem, Plugin, RingNote};
 use crate::toolkit::event::Flow;
-use crate::toolkit::icon::Icons;
 use crate::toolkit::input::{Input, Keysym};
 use crate::toolkit::watch::Watch;
 use crate::toolkit::widget::{self, Length, Node, Pointer};
@@ -131,7 +130,7 @@ fn refresh() {
         watching(&plugins::folder(&p.id));
         if let Some((icon, label, _)) = p.ring.as_ref().filter(|_| plugins::launcher::status_icon(p)) {
             let file = icon.to_string_lossy().into_owned();
-            let look = Rc::new(Look::shape(Rc::new(Icons::new()), file));
+            let look = Rc::new(Look::shape(ctx.icons.clone(), file));
             let menu = plugins::menu_of(&plugins::folder(&p.id).join("app"));
             buttons.push(Button { id: p.id.clone(), label: label.clone(), look, menu });
         }
@@ -258,7 +257,7 @@ fn lines(items: &[MenuItem], note: &RingNote) -> Vec<Line> {
     all
 }
 
-fn open_settings(f: &mut Face, _id: &str) {
+fn open_settings(f: &mut Face) {
     f.settings(Some("plugins"));
 }
 
@@ -322,8 +321,7 @@ fn menu_card(id: &str, all: &[Line], turn: u32) -> Node<Msg> {
             if Some(n) == first { line.grab(turn) } else { line }
         }
         Line::Settings => {
-            let id = id.to_string();
-            let line = menu_line(t!("ring-settings").into(), msg(move |f| open_settings(f, &id)));
+            let line = menu_line(t!("ring-settings").into(), msg(open_settings));
             if Some(n) == first { line.grab(turn) } else { line }
         }
     }).collect())
@@ -399,7 +397,7 @@ mod tests {
     #[test]
     fn a_plugin_pressed_while_allowed_nothing_is_said_with_allow() {
         assert_eq!(super::nothing_allowed("Weather", 2, 0),
-                   Some(("Weather needs your permission".to_string(), "It cannot work yet: 0 of 2 allowed.".to_string())));
+                   Some(("Weather needs your permission".to_string(), "It can't work yet. You've allowed none of the 2 permissions it asks for.".to_string())));
 
         assert_eq!(super::nothing_allowed("Weather", 2, 1), None);
         assert_eq!(super::nothing_allowed("Weather", 2, 2), None);

@@ -7,10 +7,10 @@ settings-plugins-title = आपके प्लगइन
 settings-plugins-keywords = plugins add-ons extensions installed remove settings प्लगइन एक्सटेंशन इंस्टॉल हटाएँ सेटिंग
 
 # Help line at the foot of the Your plugins page.
-settings-plugins-help = प्लगइन Trindle में कुछ जोड़ते हैं: रिंग में एक आइकन, यहाँ सेटिंग, सूचनाएँ, या कुछ ऐसा जो लॉगिन से चलता है। हर प्लगइन अलग घेरे में चलता है और जब तक आप अनुमतियाँ में अनुमति न दें, उसे कुछ भी करने की अनुमति नहीं होती; अनुमतियाँ इस पेज के शीर्षक के अंत वाले बटन से खुलती हैं। यहाँ हर प्लगइन के कार्ड में उसकी अपनी सेटिंग हैं; कार्ड पर कूड़ेदान को दो बार दबाने से वह प्लगइन हट जाता है।
+settings-plugins-help = प्लगइन Trindle में कुछ जोड़ते हैं। प्लगइन रिंग में आइकन, यहाँ सेटिंग, सूचनाएँ, या लॉगिन करते ही शुरू होने वाली कोई चीज़ जोड़ सकता है। हर प्लगइन अपने अलग घेरे में चलता है और जब तक आप अनुमतियाँ पेज में अनुमति न दें, वह कुछ भी इस्तेमाल नहीं कर सकता। अनुमतियाँ पेज के शीर्षक के पास वाले बटन से खुलती हैं। किसी प्लगइन को हटाने के लिए उसके कार्ड पर कूड़ेदान को दो बार दबाएँ।
 
 # Red words when the window that asks what a plugin may use could not be opened.
-settings-plugins-window-failed = वह विंडो नहीं खुल सकी जो पूछती है कि प्लगइन क्या इस्तेमाल कर सकता है।
+settings-plugins-window-failed = Trindle वह विंडो नहीं खोल सका जो पूछती है कि प्लगइन क्या इस्तेमाल कर सकता है।
 
 # Under About it: the plugin's version number is { $v }.
 settings-plugins-version = संस्करण { $v }।
@@ -26,13 +26,9 @@ settings-plugins-asks-nothing = { $name } कुछ नहीं माँगत
 # Help text of a plugin's card: its name is { $name }, { $list } is what it asks for, { $allowed } of { $asks } are allowed.
 settings-plugins-asks-for =
     { $asks ->
-        [one] { $name } { $list } माँगता है; { $asks } में से { $allowed } की अनुमति है। वह अलग घेरे में चलता है, केवल उसी के साथ जिसकी आप अनुमति दें।
-       *[other] { $name } { $list } माँगता है; { $asks } में से { $allowed } की अनुमति है। वह अलग घेरे में चलता है, केवल उसी के साथ जिसकी आप अनुमति दें।
+        [one] { $name } { $list } माँगता है। आपने { $asks } में से { $allowed } की अनुमति दी है। वह अपने अलग घेरे में चलता है, केवल उसी के साथ जिसकी आप अनुमति दें।
+       *[other] { $name } { $list } माँगता है। आपने { $asks } में से { $allowed } की अनुमति दी है। वह अपने अलग घेरे में चलता है, केवल उसी के साथ जिसकी आप अनुमति दें।
     }
-
-# SAFETY: needs a human review before it ships
-# Under the line that tells a plugin needs more allowed, beside its Allow button.
-settings-plugins-needs-more = अनुमति दें दिखाता है कि वह क्या-क्या माँगता है, हर एक के लिए एक स्विच के साथ।
 
 # Heading of the line about a plugin on its card.
 settings-plugins-about-it = इसके बारे में
@@ -56,7 +52,7 @@ settings-plugins-type-here = यहाँ लिखें
 settings-plugins-no-settings = { $name } की अपनी कोई सेटिंग नहीं है।
 
 # Note on a plugin's card when none of its settings show now: its name is { $name }.
-settings-plugins-no-settings-now = { $name } की अभी दिखाने लायक कोई सेटिंग नहीं है।
+settings-plugins-no-settings-now = { $name } की इस समय दिखाने लायक कोई सेटिंग नहीं है।
 
 # Headline of the Your plugins page: how many plugins are installed and { $list } their names.
 settings-plugins-installed =
@@ -72,14 +68,11 @@ settings-plugins-group = प्लगइन
 # Heading of the line shown when no plugin is installed.
 settings-plugins-none = कोई इंस्टॉल नहीं है
 
-# Under the None installed heading.
-settings-plugins-none-sub = ऐप्स में जोड़ने के लिए प्लगइन हैं।
-
 # Tip of the button at the end of the page's title that opens the Permissions page.
 settings-plugins-open-permissions = अनुमतियाँ खोलें
 
 # Said at the top of a plugin's card while its service has not yet answered; the plugin's name is {$name}.
-settings-plugins-rows-asking = { $name } से पूछा जा रहा है।
+settings-plugins-rows-asking = { $name } से पूछा जा रहा है…
 
 # Said at the top of a plugin's card, and in red under a row, when its service does not answer; the plugin's name is {$name}.
 settings-plugins-rows-silent = { $name } जवाब नहीं दे रहा। हो सकता है उसकी सेवा रुकी हो।
@@ -95,4 +88,3 @@ settings-plugins-rows-failed = { $name } यह नहीं कर सका।
 
 # Red words under a row when the change failed; the plugin's name is {$name} and the reason it gave is {$why}.
 settings-plugins-rows-failed-why = { $name } यह नहीं कर सका: { $why }।
-

@@ -34,10 +34,16 @@ impl Default for Brand {
 }
 
 pub fn brand() -> Brand {
-    let Some(text) = PLACES.iter().find_map(|p| std::fs::read_to_string(p).ok()) else {
-        return Brand::default();
+    let brand = match PLACES.iter().find_map(|p| std::fs::read_to_string(p).ok()) {
+        Some(text) => read(&text),
+        None => Brand::default(),
     };
-    read(&text)
+    with_version(brand, env!("CARGO_PKG_VERSION"))
+}
+
+fn with_version(mut brand: Brand, version: &str) -> Brand {
+    brand.name = format!("{} {}", brand.name, crate::store::updates::shown(version));
+    brand
 }
 
 pub fn read(text: &str) -> Brand {
@@ -122,6 +128,12 @@ mod tests {
             assert_eq!(crate::toolkit::t!("installer-guess-minutes", n = 1), "Environ 1 minute.");
             assert_eq!(crate::toolkit::t!("installer-guess-minutes", n = 5), "Environ 5 minutes.");
         });
+    }
+
+    #[test]
+    fn the_name_says_which_version_is_being_installed() {
+        assert_eq!(with_version(read("name=Trindle\n"), "0.9.1-beta.4").name, "Trindle 0.9.1 beta 4");
+        assert_eq!(with_version(read(""), "0.9.1-beta.4").name, "Trindle 0.9.1 beta 4");
     }
 
     #[test]

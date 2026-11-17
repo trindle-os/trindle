@@ -182,14 +182,20 @@ fn sealed(name: &str, bytes: &[u8], password: &[u8]) -> Result<Keyring, Refused>
     Ok(Keyring { name: name.to_string(), label, items })
 }
 
+const MOST_ROUNDS: u32 = 5_000_000;
+
 fn unseal(body: &mut [u8], password: &[u8], salt: &[u8], rounds: u32) -> Result<(), Refused> {
+
+    if rounds > MOST_ROUNDS {
+        return Err(Refused::Damaged);
+    }
     let mut digest = Zeroizing::new(<[u8; 32]>::from(Sha256::new().chain_update(password).chain_update(salt).finalize()));
     for _ in 1..rounds {
         *digest = Sha256::digest(*digest).into();
     }
-    let key: [u8; 16] = digest[..16].try_into().map_err(|_| Refused::Damaged)?;
-    let iv: [u8; 16] = digest[16..].try_into().map_err(|_| Refused::Damaged)?;
-    cbc::Decryptor::<aes::Aes128>::new(&key.into(), &iv.into())
+    let key = Zeroizing::new(<[u8; 16]>::try_from(&digest[..16]).map_err(|_| Refused::Damaged)?);
+    let iv = Zeroizing::new(<[u8; 16]>::try_from(&digest[16..]).map_err(|_| Refused::Damaged)?);
+    cbc::Decryptor::<aes::Aes128>::new_from_slices(&key[..], &iv[..]).map_err(|_| Refused::Damaged)?
         .decrypt_padded_mut::<NoPadding>(body).map_err(|_| Refused::Damaged)?;
     if Md5::digest(&body[16..])[..] != body[..16] {
         return Err(Refused::WrongPassword);
@@ -392,4 +398,11 @@ mod tests {
         println!("{}", serde_json::Value::Object(out));
     }
 
+    #[test]
+    fn a_keyring_asking_for_endless_rounds_is_refused_at_once() {
+        let mut body = [0u8; 32];
+        let began = std::time::Instant::now();
+        assert_eq!(unseal(&mut body, b"pw", b"saltsalt", u32::MAX), Err(Refused::Damaged));
+        assert!(began.elapsed() < std::time::Duration::from_secs(1));
+    }
 }

@@ -25,10 +25,10 @@ settings-window-group-about = О системе
 settings-window-in-apps = В «Приложениях»
 
 # Small grey heading over the row a search finds that opens the Folders program's settings.
-settings-window-in-folders = В «Папках»
+settings-window-in-folders = В Folders
 
 # The side bar row that opens the Folders program at its own settings.
-settings-window-in-folders-name = Собственные настройки «Папок»
+settings-window-in-folders-name = Собственные настройки Folders
 
 # Words the Settings search matches the Folders settings row by, in lower case, separated by spaces.
 settings-window-in-folders-keywords =
@@ -50,13 +50,13 @@ settings-window-theme-now = Теперь используется тема { $th
 settings-window-theme-own = собственная тема Trindle
 
 # Printed in a terminal when the theme could not be chosen; error says why and ends with a full stop.
-settings-window-themes-list = { $error } Список тем покажет trindle-settings --themes.
+settings-window-themes-list = { $error } Чтобы увидеть список, выполните trindle-settings --themes.
 
 # Printed in a terminal when trindle-settings --keys is not given the word default.
-settings-window-keys-how = Чтобы вернуть все клавиши и кнопки: trindle-settings --keys default
+settings-window-keys-how = Чтобы вернуть все клавиши и кнопки в обычное состояние, выполните: trindle-settings --keys default
 
 # Printed in a terminal after every key and button was put back.
-settings-window-keys-back = Все клавиши и кнопки возвращены, как показано.
+settings-window-keys-back = Все клавиши и кнопки возвращены в обычное состояние.
 
 # Printed in a terminal when the keys could not be put back; error says why.
 settings-window-keys-failed = Не удалось вернуть клавиши: { $error }

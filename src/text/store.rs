@@ -190,6 +190,8 @@ pub struct Entry {
     pub unsaved: bool,
     pub caret: usize,
     pub markdown: bool,
+
+    pub stamp: Option<Stamp>,
 }
 
 pub fn write_list(dir: &Path, tabs: &[Entry], active: usize) -> std::io::Result<()> {
@@ -200,8 +202,8 @@ pub fn write_list(dir: &Path, tabs: &[Entry], active: usize) -> std::io::Result<
     for t in tabs {
         let path = t.path.as_deref().map(line_of).unwrap_or_default();
         out.push_str(&format!(
-            "tab\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n",
-            t.id, t.enc, t.bom as u8, t.crlf as u8, t.unsaved as u8, t.caret, t.markdown as u8, path
+            "tab\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n",
+            t.id, t.enc, t.bom as u8, t.crlf as u8, t.unsaved as u8, t.caret, t.markdown as u8, stamp_line(t.stamp), path
         ));
     }
     files::write_text(&dir.join("session"), &out)?;
@@ -215,11 +217,17 @@ pub fn read_list(dir: &Path) -> (Vec<Entry>, usize) {
         let f: Vec<&str> = line.splitn(9, '\t').collect();
         match f.as_slice() {
             ["active", n] => active = n.parse().unwrap_or(0),
-            ["tab", id, enc, bom, crlf, unsaved, caret, md, path] => {
+            ["tab", id, enc, bom, crlf, unsaved, caret, md, rest] => {
                 let Ok(id) = id.parse() else { continue };
+
+                let (stamp, path) = match rest.split_once('\t') {
+                    Some((s, p)) if s == NO_STAMP || s.starts_with(STAMP_MARK) => (stamp_of(s), p),
+                    _ => (None, *rest),
+                };
                 tabs.push(Entry {
                     id,
                     path: (!path.is_empty()).then(|| path_of(path)),
+                    stamp,
                     enc: enc.to_string(),
                     bom: *bom == "1",
                     crlf: *crlf == "1",
@@ -277,6 +285,30 @@ pub struct Stamp {
     inode: u64,
 }
 
+const NO_STAMP: &str = "-";
+const STAMP_MARK: char = '=';
+
+fn stamp_line(stamp: Option<Stamp>) -> String {
+    let Some(s) = stamp else { return NO_STAMP.to_string() };
+    let when = s.modified.and_then(|m| m.duration_since(std::time::UNIX_EPOCH).ok());
+    let when = when.map_or(NO_STAMP.to_string(), |d| format!("{}.{}", d.as_secs(), d.subsec_nanos()));
+    format!("{STAMP_MARK}{}:{}:{when}", s.len, s.inode)
+}
+
+fn stamp_of(line: &str) -> Option<Stamp> {
+    let mut f = line.strip_prefix(STAMP_MARK)?.splitn(3, ':');
+    let (len, inode, when) = (f.next()?.parse().ok()?, f.next()?.parse().ok()?, f.next()?);
+    let modified = match when.split_once('.') {
+        Some((secs, nanos)) => {
+            let nanos: u32 = nanos.parse().ok().filter(|n| *n < 1_000_000_000)?;
+            Some(std::time::UNIX_EPOCH.checked_add(std::time::Duration::new(secs.parse().ok()?, nanos))?)
+        }
+        None if when == NO_STAMP => None,
+        None => return None,
+    };
+    Some(Stamp { modified, len, inode })
+}
+
 pub fn stamp(path: &Path) -> Option<Stamp> {
     use std::os::unix::fs::MetadataExt;
     let m = std::fs::metadata(path).ok()?;
@@ -285,7 +317,7 @@ pub fn stamp(path: &Path) -> Option<Stamp> {
 
 pub fn read_document(path: &Path) -> std::io::Result<Vec<u8>> {
     if std::fs::metadata(path).is_ok_and(|m| m.len() > LARGEST) {
-        return Err(std::io::Error::new(std::io::ErrorKind::InvalidData, "the file is too big to open"));
+        return Err(std::io::Error::new(std::io::ErrorKind::FileTooLarge, crate::toolkit::t!("text-too-big", name = path.display().to_string()).to_string()));
     }
     files::read_file(path)
 }
@@ -300,14 +332,41 @@ thread_local! {
     pub(super) static CUT: std::cell::Cell<u8> = const { std::cell::Cell::new(0) };
 }
 
+type Put = Box<dyn FnMut(&mut fs::File, &[u8], bool) -> std::io::Result<()>>;
+
+#[cfg(not(test))]
+fn writer() -> Put {
+    Box::new(|file, words, _| put(file, words))
+}
+
+#[cfg(test)]
+fn writer() -> Put {
+    use std::io::Write;
+    Box::new(|file, words, restoring| {
+        let cut = CUT.get();
+        if restoring {
+            return if cut == 0 { put(file, words) } else { Err(std::io::Error::other("stopped")) };
+        }
+        if cut == 1 || BREAKS.get() {
+            file.write_all(&words[..words.len() / 2])?;
+            return Err(if cut == 1 { std::io::Error::other("stopped half way") } else { std::io::Error::from_raw_os_error(libc::ENOSPC) });
+        }
+        put(file, words)?;
+        if cut == 2 { Err(std::io::Error::other("stopped before tidying")) } else { Ok(()) }
+    })
+}
+
 pub fn write_document(path: &Path, bytes: &[u8], state: &Path) -> std::io::Result<()> {
     use std::io::Write;
-    use std::os::unix::fs::MetadataExt;
+    use std::os::unix::fs::{MetadataExt, OpenOptionsExt};
     let real = fs::canonicalize(path).unwrap_or_else(|_| path.to_path_buf());
     let old = match fs::metadata(&real) {
         Ok(old) if old.is_file() => old,
 
-        Ok(_) => return fs::write(&real, bytes),
+        Ok(_) => {
+            let mut out = fs::OpenOptions::new().write(true).truncate(true).custom_flags(libc::O_NONBLOCK).open(&real)?;
+            return out.write_all(bytes);
+        }
 
         Err(_) if fs::symlink_metadata(path).is_ok() => {
             let mut file = fs::File::create(path)?;
@@ -326,23 +385,11 @@ pub fn write_document(path: &Path, bytes: &[u8], state: &Path) -> std::io::Resul
     let mut file = fs::OpenOptions::new().write(true).open(&real)?;
     let before = read_document(&real)?;
     let kept = Kept::keep(state, &real, &before, bytes)?;
-    #[cfg(test)]
-    let (breaks, cut) = (BREAKS.get(), CUT.get());
-    #[cfg(not(test))]
-    let (breaks, cut) = (false, 0);
-    if cut == 1 {
-
-        file.write_all(&bytes[..bytes.len() / 2])?;
-        return Err(std::io::Error::other("stopped half way"));
-    }
-    let done = put(&mut file, bytes, breaks);
-    if cut == 2 {
-
-        return Err(std::io::Error::other("stopped before tidying"));
-    }
+    let mut write = writer();
+    let done = write(&mut file, bytes, false);
     match &done {
         Ok(()) => kept.forget(),
-        Err(e) => match put(&mut file, &before, false) {
+        Err(e) => match write(&mut file, &before, true) {
             Ok(()) => kept.forget(),
 
             Err(_) => return Err(std::io::Error::new(e.kind(), t!("text-kept-before", reason = e.to_string(), path = kept.old().display().to_string()))),
@@ -351,13 +398,9 @@ pub fn write_document(path: &Path, bytes: &[u8], state: &Path) -> std::io::Resul
     done
 }
 
-fn put(file: &mut fs::File, words: &[u8], breaks: bool) -> std::io::Result<()> {
+fn put(file: &mut fs::File, words: &[u8]) -> std::io::Result<()> {
     use std::io::{Seek, Write};
     file.rewind()?;
-    if breaks {
-        file.write_all(&words[..words.len() / 2])?;
-        return Err(std::io::Error::from_raw_os_error(libc::ENOSPC));
-    }
     file.write_all(words)?;
     file.set_len(words.len() as u64)?;
     file.sync_all()
@@ -474,7 +517,7 @@ impl Kept {
         if !cut_short {
             return self.leave(document, Some(words), t!("text-saved-changed", name = &shown));
         }
-        let back = fs::OpenOptions::new().write(true).open(files::through(&named)).and_then(|mut file| put(&mut file, &before, false));
+        let back = fs::OpenOptions::new().write(true).open(files::through(&named)).and_then(|mut file| put(&mut file, &before));
         match back {
             Ok(()) => {
                 self.forget();
@@ -637,6 +680,23 @@ mod tests {
         fs::remove_dir_all(&dir).ok();
     }
 
+    #[test]
+    fn a_save_onto_a_pipe_nobody_reads_is_an_error_not_a_wait() {
+        let dir = scratch("save-pipe");
+        fs::create_dir_all(&dir).unwrap();
+        let pipe = dir.join("p");
+        let c = std::ffi::CString::new(pipe.to_str().unwrap()).unwrap();
+        // SAFETY: a path that ends in a nought, for a pipe made in this test's own folder.
+        assert_eq!(unsafe { libc::mkfifo(c.as_ptr(), 0o600) }, 0);
+        let (tell, hear) = std::sync::mpsc::channel();
+        let (pipe2, state) = (pipe.clone(), dir.join("state"));
+        std::thread::spawn(move || {
+            let _ = tell.send(write_document(&pipe2, b"words", &state).is_err());
+        });
+        assert_eq!(hear.recv_timeout(std::time::Duration::from_secs(5)), Ok(true));
+        fs::remove_dir_all(&dir).ok();
+    }
+
     fn two_names(dir: &Path, words: &str) -> PathBuf {
         fs::create_dir_all(dir).unwrap();
         let file = dir.join("report.txt");
@@ -718,7 +778,7 @@ mod tests {
             PathBuf::from("/home/john/plain.txt"),
         ];
         let tabs: Vec<Entry> = odd.iter().enumerate().map(|(i, p)| Entry {
-            id: i as u64 + 1, path: Some(p.clone()), enc: "UTF-8".into(), bom: false, crlf: false, unsaved: true, caret: 0, markdown: false,
+            id: i as u64 + 1, path: Some(p.clone()), enc: "UTF-8".into(), bom: false, crlf: false, unsaved: true, caret: 0, markdown: false, stamp: None,
         }).collect();
         write_list(&dir, &tabs, 0).unwrap();
         assert_eq!(read_list(&dir).0, tabs);
@@ -776,8 +836,9 @@ mod tests {
             unsaved: false,
             caret: 2,
             markdown: true,
+            stamp: stamp(&file),
         };
-        let draft = Entry { id: 7, path: None, enc: "UTF-8".into(), bom: false, crlf: false, unsaved: true, caret: 5, markdown: false };
+        let draft = Entry { id: 7, path: None, enc: "UTF-8".into(), bom: false, crlf: false, unsaved: true, caret: 5, markdown: false, stamp: None };
         keep_text(&dir, 7, "draft text").unwrap();
         keep_text(&dir, 9, "left over").unwrap();
         write_list(&dir, &[saved.clone(), draft.clone()], 1).unwrap();
@@ -788,6 +849,22 @@ mod tests {
         assert_eq!(restore(&dir, false), (vec![draft], 0));
         fs::remove_file(&file).unwrap();
         assert_eq!(restore(&dir, true).0.len(), 1, "a file gone since is not reopened");
+        let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn a_list_from_before_stamps_still_loads_and_a_stamp_round_trips() {
+        let dir = scratch("old-list");
+        ensure(&dir).unwrap();
+        let file = dir.join("=odd name.txt");
+        fs::write(&file, "x").unwrap();
+        fs::write(dir.join("session"), format!("active\t0\ntab\t4\tUTF-8\t0\t0\t1\t3\t0\t{}\ntab\t5\tUTF-8\t0\t0\t0\t0\t0\t-\n", file.display())).unwrap();
+        let (old, _) = read_list(&dir);
+        assert_eq!((old.len(), old[0].stamp, old[0].path.as_deref(), old[1].path.as_deref()), (2, None, Some(file.as_path()), Some(Path::new("-"))));
+        let with = Entry { stamp: stamp(&file), ..old[0].clone() };
+        assert!(with.stamp.is_some());
+        write_list(&dir, std::slice::from_ref(&with), 0).unwrap();
+        assert_eq!(read_list(&dir).0, vec![with]);
         let _ = fs::remove_dir_all(&dir);
     }
 }

@@ -2,10 +2,10 @@
 //! the computer until it is switched on here; see common/tailscale.rs. The
 //! page asks Tailscale how it is while on screen, and not at all otherwise.
 
-use crate::common::run::{admin_error, admin_helper, capture, spawn};
+use crate::common::run::{capture, spawn};
 use crate::common::tailscale::{self, Device, Status};
-use crate::settings::panels::network::banded;
-use crate::settings::ui::{confirm, group, headline, line, on, open_link, page, ran, Kit, Msg, Page, Raw, no_browser};
+use crate::toolkit::widget::banded_list;
+use crate::settings::ui::{admin_step, confirm, group, headline, line, on, open_link, page, ran, Kit, Msg, Page, Raw, no_browser};
 use crate::toolkit::t;
 use crate::toolkit::widget::{main_action, switch, Node};
 
@@ -24,6 +24,8 @@ pub struct Tailscale {
     asked: bool,
     status: Option<Status>,
     looks: u32,
+
+    looking: bool,
 
     signing: bool,
     opened: String,
@@ -74,6 +76,11 @@ struct Cards {
 }
 
 impl Tailscale {
+
+    fn start_look(&mut self) -> bool {
+        !std::mem::replace(&mut self.looking, true)
+    }
+
     fn look(&mut self, kit: &mut Kit) {
         self.on = tailscale::on();
         if !self.on {
@@ -81,17 +88,25 @@ impl Tailscale {
             self.status = None;
             return;
         }
-        let back = kit.then::<Tailscale, (bool, String, String)>(|me, k, (_, out, _)| {
+        if !self.start_look() {
+            return;
+        }
+        let back = kit.then_if::<Tailscale, (bool, String, String)>(|me, k, (_, out, _)| {
+            me.looking = false;
+            let status = tailscale::parse(&out);
+            let news = !me.asked || status != me.status;
             me.asked = true;
-            me.status = tailscale::parse(&out);
-            let Some(s) = &me.status else { return };
+            me.status = status;
+            let Some(s) = &me.status else { return news };
             if s.connected() {
                 me.signing = false;
             } else if me.signing && !s.sign_in.is_empty() && s.sign_in != me.opened {
                 me.opened = s.sign_in.clone();
                 let opened = open_link(&s.sign_in);
                 k.started(SIGN_IN, opened, no_browser());
+                return true;
             }
+            news
         });
         capture(&["tailscale", "status", "--json"], None, move |ok, out, err| back((ok, out, err)));
     }
@@ -104,16 +119,11 @@ impl Tailscale {
         } else {
             t!("settings-tailscale-waiting")
         };
-        kit.say(SWITCH, words, true, true);
-        let back = kit.then::<Tailscale, (bool, String, String)>(move |me, k, (ok, _, err)| {
+        let done = if on { t!("settings-tailscale-done-on") } else { t!("settings-tailscale-done-off") };
+        admin_step::<Tailscale>(kit, SWITCH, &[if on { "tailscale-on" } else { "tailscale-off" }], words, done, |me, k, _| {
             me.busy = false;
-            let err = admin_error(&err);
-            k.done(SWITCH, if ok { None } else { Some(&err) }, if on { t!("settings-tailscale-done-on") } else { t!("settings-tailscale-done-off") });
             me.look(k);
         });
-        let helper = admin_helper();
-        capture(&["pkexec", &helper, if on { "tailscale-on" } else { "tailscale-off" }], None,
-                move |ok, out, err| back((ok, out, err)));
     }
 
     fn sign_in(&mut self, kit: &mut Kit) {
@@ -134,8 +144,8 @@ impl Tailscale {
         capture(&["tailscale", "logout"], None, move |ok, _, err| back(ran(ok, &err)));
     }
 
-    fn top(&self, kit: &Kit) -> Node<Msg> {
-        headline(kit, self.top_words(tailscale::installed()))
+    fn top(&self) -> Node<Msg> {
+        headline(self.top_words(tailscale::installed()))
     }
 
     fn top_words(&self, installed: bool) -> String {
@@ -163,20 +173,20 @@ impl Tailscale {
             .icon("computer-symbolic").sub(address).node(kit));
         cards.waits = None;
         if !s.devices.is_empty() {
-            cards.list = banded(s.devices.iter().map(|d| line(d.name.clone()).icon(device_icon(&d.system)).sub(about_device(d)).node(kit)).collect());
+            cards.list = banded_list(s.devices.iter().map(|d| line(d.name.clone()).icon(device_icon(&d.system)).sub(about_device(d)).node(kit)).collect());
         }
     }
 
     fn not_connected(&self, kit: &Kit, s: &Status, cards: &mut Cards) {
-        let (heading, sub, tip) = if s.needs_sign_in() {
-            (t!("settings-tailscale-sign-in"), t!("settings-tailscale-sign-in-sub"), t!("settings-tailscale-sign-in"))
+        let heading = if s.needs_sign_in() {
+            t!("settings-tailscale-sign-in")
         } else {
-            (t!("settings-tailscale-connect"), t!("settings-tailscale-connect-sub"), t!("settings-tailscale-connect"))
+            t!("settings-tailscale-connect")
         };
 
-        let press = main_action("network-transmit-receive-symbolic", tip)
+        let press = main_action("network-transmit-receive-symbolic", heading)
             .on_press(on::<Tailscale>(|me, k| me.sign_in(k))).off_because(crate::common::ui::wait_while(self.signing && s.sign_in.is_empty()));
-        cards.rows.push(line(heading).sub(sub).key(SIGN_IN).control(press).node(kit));
+        cards.rows.push(line(heading).key(SIGN_IN).control(press).node(kit));
         cards.about = t!("settings-tailscale-about-sign-in");
     }
 }
@@ -207,20 +217,19 @@ impl Page for Tailscale {
             return false;
         }
         self.looks = 0;
+        let was = (self.on, self.asked, self.status.is_some());
         self.look(kit);
-        true
+        was != (self.on, self.asked, self.status.is_some())
     }
     fn view(&self, kit: &Kit) -> Node<Msg> {
-        let mut items = vec![self.top(kit)];
-        let first = !tailscale::installed();
-        let sub = if first { t!("settings-tailscale-switch-sub-first") } else { t!("settings-tailscale-switch-sub") };
+        let mut items = vec![self.top()];
         let toggle = switch(self.on, t!("settings-tailscale-switch"), |v| on::<Tailscale>(move |me, k| me.set(k, v))).off_because(crate::common::ui::wait_while(self.busy));
 
         let mut cards = Cards {
-            rows: vec![line(t!("settings-tailscale-switch")).sub(sub).key(SWITCH).control(toggle).node(kit)],
+            rows: vec![line(t!("settings-tailscale-switch")).key(SWITCH).control(toggle).node(kit)],
             about: t!("settings-tailscale-about-plain"),
 
-            list: vec![line(t!("settings-tailscale-no-devices")).sub(t!("settings-tailscale-no-devices-sub")).node(kit)],
+            list: vec![line(t!("settings-tailscale-no-devices")).node(kit)],
             waits: Some(match (self.on, &self.status) {
                 (false, _) => t!("settings-tailscale-waits-off"),
                 (true, None) => t!("settings-tailscale-waits-looking"),
@@ -238,8 +247,8 @@ impl Page for Tailscale {
         cards.rows.push(line(t!("settings-tailscale-firewall")).sub(t!("settings-tailscale-firewall-sub")).node(kit));
 
         if self.on && self.status.as_ref().is_some_and(Status::connected) {
-            let out = confirm::<Tailscale>(kit, SIGN_OUT, "system-log-out-symbolic", t!("settings-tailscale-sign-out"), |me, k| me.sign_out(k));
-            cards.rows.push(line(t!("settings-tailscale-sign-out")).sub(t!("settings-tailscale-sign-out-sub")).key(SIGN_OUT).control(out).node(kit));
+            let out = confirm::<Tailscale>(SIGN_OUT, "system-log-out-symbolic", t!("settings-tailscale-sign-out"), |me, k| me.sign_out(k));
+            cards.rows.push(line(t!("settings-tailscale-sign-out")).key(SIGN_OUT).control(out).node(kit));
             cards.about = t!("settings-tailscale-about-connected");
         }
         items.push(group(t!("settings-tailscale-card")).icon("network-vpn-symbolic").about(cards.about).rows(cards.rows).node(kit));
@@ -289,16 +298,37 @@ impl Tailscale {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
+    #[test]
+    fn a_look_is_not_started_while_the_last_has_not_answered() {
+        let mut page = Tailscale::default();
+        assert!(page.start_look());
+        assert!(!page.start_look(), "a second look started on top of the first");
+        page.looking = false;
+        assert!(page.start_look());
+    }
+
+    #[test]
+    fn a_page_left_open_is_not_drawn_again_for_nothing() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let mut kit = Kit::new(events, asks, None, None);
+        let mut page = Tailscale { asked: true, looking: true, ..Tailscale::default() };
+        page.on = tailscale::on();
+        let drawn = (0..LOOK_EVERY * 4).filter(|_| page.second(&mut kit)).count();
+        assert_eq!(drawn, 0, "the page was drawn again {drawn} times with nothing new");
+    }
     use super::{about_device as about, day};
     use crate::common::tailscale::Device;
 
     #[test]
     fn the_top_line_follows_not_installed_off_signed_out_and_connected() {
         let [connected, off, signing, looking] = <[super::Tailscale; 4]>::try_from(super::Tailscale::flipped()).ok().unwrap();
-        assert_eq!(off.top_words(false), "Tailscale is not installed. Switch it on below to install it.");
+        assert_eq!(off.top_words(false), "Tailscale isn't installed. Switch it on below to install it.");
         assert_eq!(off.top_words(true), "Tailscale is off, so it uses no memory.");
-        assert_eq!(signing.top_words(true), "Tailscale is on. Sign in below to join your private network.");
-        assert_eq!(looking.top_words(true), "Tailscale is not answering. It may still be starting.");
+        assert_eq!(signing.top_words(true), "Tailscale is on. Log in below to join your private network.");
+        assert_eq!(looking.top_words(true), "Tailscale isn't responding. It may still be starting.");
         assert_eq!(connected.top_words(true), "Connected to example.ts.net as johns-laptop.");
         assert_eq!(super::Tailscale::default().top_words(true), "Asking Tailscale\u{2026}");
     }

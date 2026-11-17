@@ -1,0 +1,5 @@
+# American English: only the lines that differ from English. The rest is English.
+
+activity-help-2 = A program's bubble glows and pulses while it is working. Faster, brighter pulses mean more work. Cool colors mean little work, orange means heavy use, and red means full use. Each bar around the edge shows one thread, a part of the processor that handles work. Longer bars and warmer colors mean more work. When all the bars are long and red, the computer is working as hard as it can. The brightest bubble shows which program is doing the most work.
+
+activity-help-3 = Click a bubble, or a program in the list, to see what it is doing in plain figures. You can also stop a program that has stopped responding. Press the stop button twice and Trindle asks the program to close. Anything you haven't saved in it may be lost. The two gray bubbles show everything else. Trindle desktop is the part that draws the screen, the ring, the tab and the wallpaper. Linux and other programs is Linux itself and the programs that look after the computer.

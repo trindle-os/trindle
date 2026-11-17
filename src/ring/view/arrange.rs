@@ -31,7 +31,7 @@ pub(super) fn pieces_of(all: &[Program], favourites: &[String], first: &[usize],
         let mut these: Vec<usize> = (0..all.len())
             .filter(|&i| all[i].category == c && !first.contains(&i) && !favourites.contains(&all[i].id) && !has_own_button(&all[i].id))
             .collect();
-        these.sort_by_cached_key(|&i| all[i].name.to_lowercase());
+        these.sort_by_cached_key(|&i| sort_key(&all[i].name));
         if !these.is_empty() {
             groups.push((c.to_string(), these));
         }
@@ -39,12 +39,37 @@ pub(super) fn pieces_of(all: &[Program], favourites: &[String], first: &[usize],
     groups
 }
 
+pub(in crate::ring) fn sort_key(name: &str) -> (String, String) {
+    let plain = name.to_lowercase().chars().flat_map(|c| -> Vec<char> {
+        match c {
+            'à'..='å' | 'ā' | 'ă' | 'ą' => vec!['a'],
+            'ç' | 'ć' | 'č' => vec!['c'],
+            'ď' => vec!['d'],
+            'è'..='ë' | 'ē' | 'ė' | 'ę' | 'ě' => vec!['e'],
+            'ğ' => vec!['g'],
+            'ì'..='ï' | 'ī' | 'į' | 'ı' => vec!['i'],
+            'ł' => vec!['l'],
+            'ñ' | 'ń' | 'ň' => vec!['n'],
+            'ò'..='ö' | 'ø' | 'ō' | 'ő' => vec!['o'],
+            'ř' => vec!['r'],
+            'ś' | 'š' | 'ş' => vec!['s'],
+            'ß' => vec!['s', 's'],
+            'ť' => vec!['t'],
+            'ù'..='ü' | 'ū' | 'ů' | 'ű' | 'ų' => vec!['u'],
+            'ý' | 'ÿ' => vec!['y'],
+            'ź' | 'ż' | 'ž' => vec!['z'],
+            c => vec![c],
+        }
+    }).collect();
+    (plain, name.to_lowercase())
+}
+
 fn has_own_button(id: &str) -> bool {
     apps::own(id).is_some_and(|o| o.key == "drives")
 }
 
 pub(super) fn found(all: &[Program], typed: &str) -> Vec<usize> {
-    let names: Vec<&str> = all.iter().map(|p| p.name.as_str()).collect();
+    let names: Vec<(&str, &[String])> = all.iter().map(|p| (p.name.as_str(), p.keywords.as_slice())).collect();
     rank_found(typed, &names)
 }
 
@@ -52,20 +77,33 @@ pub(super) fn quick_side(disc_radius: f64) -> f64 {
     disc_radius * 2.0 - 16.0
 }
 
-pub(super) fn rank_found(typed: &str, apps: &[impl AsRef<str>]) -> Vec<usize> {
+fn words_in(text: &str) -> Vec<String> {
+    text.to_lowercase().split(|c: char| !c.is_alphanumeric()).filter(|w| !w.is_empty()).map(String::from).collect()
+}
+
+pub(super) fn rank_found(typed: &str, apps: &[(impl AsRef<str>, &[String])]) -> Vec<usize> {
     let want = typed.trim().to_lowercase();
-    if want.is_empty() {
+    let tokens = words_in(&want);
+    if tokens.is_empty() {
         return Vec::new();
     }
-    let mut hits: Vec<(usize, String, usize)> = apps
-        .iter()
-        .enumerate()
-        .map(|(i, name)| (name.as_ref().to_lowercase(), i))
-        .filter(|(name, _)| name.starts_with(&want))
-        .map(|(name, i)| (name.split_whitespace().count(), name, i))
-        .collect();
+    let starts = |words: &[String]| tokens.iter().all(|t| words.iter().any(|w| w.starts_with(t.as_str())));
+    let mut hits: Vec<(usize, usize, String, usize)> = apps.iter().enumerate().filter_map(|(i, (name, keywords))| {
+        let name = name.as_ref().to_lowercase();
+        let in_name = words_in(&name);
+        let tier = if name.starts_with(&want) {
+            0
+        } else if starts(&in_name) {
+            1
+        } else if starts(&[in_name, keywords.iter().flat_map(|k| words_in(k)).collect()].concat()) {
+            2
+        } else {
+            return None;
+        };
+        Some((tier, name.split_whitespace().count(), name, i))
+    }).collect();
     hits.sort();
-    hits.into_iter().map(|(_, _, i)| i).collect()
+    hits.into_iter().map(|(.., i)| i).collect()
 }
 
 impl Face {
@@ -93,6 +131,9 @@ impl Face {
     }
 
     pub(super) fn relayout(&mut self) {
+        if self.menu.as_ref().is_some_and(|(i, ..)| self.menu_app(*i).is_none()) {
+            self.close_menu();
+        }
         if self.searching() {
             let found = found(&self.all(), &self.typed);
             self.best_match = found.first().copied();
@@ -142,6 +183,7 @@ impl Face {
     pub(super) fn set_typed(&mut self, text: String) {
         if text != self.typed {
             self.typed = text;
+            self.typed_turn += 1;
             self.relayout();
         }
     }

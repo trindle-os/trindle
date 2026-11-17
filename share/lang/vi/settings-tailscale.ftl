@@ -15,11 +15,11 @@ settings-tailscale-last-online = trực tuyến lần cuối { $day }
 
 # Shown beside the Use Tailscale switch while the password is asked for, when Tailscale is already installed.
 # SAFETY: needs a human review before it ships
-settings-tailscale-waiting = Đang chờ mật khẩu...
+settings-tailscale-waiting = Đang chờ mật khẩu của bạn…
 
 # Shown beside the Use Tailscale switch while the password is asked for, before Tailscale is installed.
 # SAFETY: needs a human review before it ships
-settings-tailscale-waiting-install = Đang chờ mật khẩu, sau đó cài đặt Tailscale...
+settings-tailscale-waiting-install = Đang chờ mật khẩu của bạn trước khi cài Tailscale…
 
 # Shown beside the switch after Tailscale is turned on.
 settings-tailscale-done-on = Tailscale đã bật
@@ -69,18 +69,12 @@ settings-tailscale-keywords = tailscale vpn mạng riêng thiết bị từ xa t
 # Help text at the top of the page.
 settings-tailscale-help = Tailscale nối các máy tính và điện thoại của riêng bạn thành một mạng riêng, dù mỗi máy ở đâu. Không có gì được cài đặt cho đến khi bạn bật nó, và khi tắt thì nó không dùng bộ nhớ.
 
-# Small line under the Use Tailscale switch before Tailscale is installed.
-settings-tailscale-switch-sub-first = Cài đặt từ nguồn riêng của Tailscale.
-
-# Small line under the Use Tailscale switch once Tailscale is installed.
-settings-tailscale-switch-sub = Tắt: đã dừng, không khởi động cùng máy tính.
-
 # Text of the switch that turns Tailscale on or off, and heading of its line.
 settings-tailscale-switch = Dùng Tailscale
 
 # Help text (i button) of the Tailscale card when Tailscale is off or has not answered.
 # SAFETY: needs a human review before it ships
-settings-tailscale-about-plain = Lần đầu bật, Tailscale được cài đặt từ nguồn phần mềm riêng của Tailscale, rồi được khởi động. Dịch vụ nền của nó dùng bộ nhớ khi bật, nên chỉ chạy khi mục này bật. Khi tắt, Tailscale dừng và không khởi động cùng máy tính. Tường lửa cho các thiết bị Tailscale của riêng bạn đi vào, và vẫn chặn mọi thứ khác như trước.
+settings-tailscale-about-plain = Lần đầu bạn bật, Trindle cài Tailscale từ nguồn phần mềm riêng của Tailscale, rồi khởi động nó. Dịch vụ nền của Tailscale dùng bộ nhớ khi chạy, nên chỉ chạy khi mục này bật. Khi mục này tắt, Tailscale dừng và không khởi động cùng máy tính. Tường lửa cho các thiết bị Tailscale của riêng bạn đi vào, và vẫn chặn mọi thứ khác như trước.
 
 # Help text (i button) of the Tailscale card when Tailscale is on but not yet connected.
 # SAFETY: needs a human review before it ships
@@ -92,9 +86,6 @@ settings-tailscale-about-connected = { settings-tailscale-about-plain } Đăng x
 
 # Line in the devices card when there are no other devices.
 settings-tailscale-no-devices = Chưa có thiết bị nào khác
-
-# Small line under "No other devices yet".
-settings-tailscale-no-devices-sub = Hãy đăng nhập trên thiết bị khác bằng cùng tài khoản.
 
 # Shown on the devices card while Tailscale is off.
 settings-tailscale-waits-off = Hãy bật Tailscale để xem các thiết bị của bạn.
@@ -120,28 +111,19 @@ settings-tailscale-this-computer = Máy tính này
 # Heading of the line that signs in to Tailscale, and tip of its round button.
 settings-tailscale-sign-in = Đăng nhập
 
-# Small line under the Sign in line.
-settings-tailscale-sign-in-sub = Mở trang đăng nhập trong trình duyệt của bạn.
-
 # Heading of the line that joins the private network again, and tip of its round button.
 settings-tailscale-connect = Kết nối
 
-# Small line under the Connect line.
-settings-tailscale-connect-sub = Tham gia lại mạng riêng của bạn.
-
 # Heading of the line that says the firewall lets the person's own devices in.
 # SAFETY: needs a human review before it ships
-settings-tailscale-firewall = Thiết bị của riêng bạn được vào
+settings-tailscale-firewall = Thiết bị của bạn có thể vào
 
 # Small line under that heading.
 # SAFETY: needs a human review before it ships
-settings-tailscale-firewall-sub = Mọi thứ khác vẫn bị chặn như trước.
+settings-tailscale-firewall-sub = Tường lửa vẫn chặn mọi thứ còn lại.
 
 # Heading of the line that signs out, and tip of its button.
 settings-tailscale-sign-out = Đăng xuất
-
-# Small line under the Sign out line.
-settings-tailscale-sign-out-sub = Rời khỏi mạng riêng của bạn.
 
 # Heading of the card with the Tailscale switch.
 settings-tailscale-card = Tailscale

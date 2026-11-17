@@ -6,7 +6,7 @@ use std::collections::{BTreeMap, HashSet};
 use std::path::{Path, PathBuf};
 
 use crate::common::apps::app_dirs;
-use crate::common::files::{home, own_place, read_text, write_text};
+use crate::common::files::{home, own_place, read_text, setting, write_text};
 
 const ELSEWHERE_WAIT: std::time::Duration = std::time::Duration::from_secs(1);
 
@@ -83,6 +83,7 @@ const MARK: &str = "<!-- made by trindle-icons -->";
 pub const THEME: &str = "Trindle";
 
 pub const CIRCLES: &str = "Trindle-Circle";
+pub const SQUARES: &str = "Trindle-Square";
 const SIZES: &[&str] = &["scalable", "512x512", "256x256", "192x192", "128x128", "96x96", "64x64", "48x48", "32x32"];
 
 const PAPIRUS_SIZES: &[&str] = &["64x64", "128x128", "48x48", "32x32"];
@@ -99,21 +100,21 @@ pub fn theme_made() -> bool {
 }
 
 pub fn is_a_set(name: &str) -> bool {
-    name == CIRCLES
+    name == CIRCLES || name == SQUARES
 }
 
 pub fn chosen_set() -> &'static str {
-    CIRCLES
+    if setting("icon_source") == SQUARES { SQUARES } else { CIRCLES }
 }
 
 #[derive(Clone, Copy, PartialEq, Debug)]
 enum Shape {
     Disc,
+    Square,
 }
 
 fn shape_of(set: &str) -> Shape {
-    let _ = set;
-    Shape::Disc
+    if set == SQUARES { Shape::Square } else { Shape::Disc }
 }
 
 fn data_dirs() -> Vec<PathBuf> {
@@ -219,6 +220,8 @@ fn face(shape: Shape) -> &'static str {
     match shape {
         Shape::Disc => "<circle cx=\"24\" cy=\"23\" r=\"19.5\" fill=\"url(#face)\"/>\n\
                         <circle cx=\"24\" cy=\"23\" r=\"18.7\" fill=\"none\" stroke=\"#09090b\" stroke-opacity=\"0.32\" stroke-width=\"1.6\"/>",
+        Shape::Square => "<rect x=\"5.25\" y=\"4.25\" width=\"37.5\" height=\"37.5\" rx=\"10.5\" fill=\"url(#face)\"/>\n\
+                          <rect x=\"6.05\" y=\"5.05\" width=\"35.9\" height=\"35.9\" rx=\"9.7\" fill=\"none\" stroke=\"#09090b\" stroke-opacity=\"0.32\" stroke-width=\"1.6\"/>",
     }
 }
 
@@ -547,21 +550,19 @@ mod tests {
     }
 
     #[test]
-    fn a_saved_squares_value_loads_as_circles() {
-        assert!(!is_a_set("Trindle-Square"));
-        assert_eq!(chosen_set(), CIRCLES);
-    }
-
-    #[test]
-    fn circles_are_round() {
+    fn squares_are_square_and_circles_round() {
+        assert!(badge(Shape::Square, "#000000", None, "A").contains("<rect x=\"5.25\""));
+        assert!(!badge(Shape::Square, "#000000", None, "A").contains("<circle"));
         assert!(badge(Shape::Disc, "#000000", None, "A").contains("<circle"));
+        assert_eq!(shape_of(SQUARES), Shape::Square);
         assert_eq!(shape_of(CIRCLES), Shape::Disc);
     }
 
     #[test]
     fn the_theme_falls_through_to_the_chosen_set_then_papirus() {
         assert!(index_for(CIRCLES).contains("\nInherits=Trindle-Circle,Papirus,hicolor\n"));
-        assert!(is_a_set(CIRCLES) && !is_a_set("Trindle-Square") && !is_a_set("Papirus") && !is_a_set("Numix-Circle"));
+        assert!(index_for(SQUARES).contains("\nInherits=Trindle-Square,Papirus,hicolor\n"));
+        assert!(is_a_set(CIRCLES) && is_a_set(SQUARES) && !is_a_set("Papirus") && !is_a_set("Numix-Circle"));
     }
 
     #[test]

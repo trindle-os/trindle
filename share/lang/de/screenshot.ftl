@@ -108,19 +108,19 @@ screenshot-not-saved = Bildschirmfoto nicht gespeichert
 screenshot-not-copied = Bildschirmfoto nicht kopiert
 
 # Words of that notice.
-screenshot-clipboard-refused = Die Zwischenablage konnte es nicht annehmen.
+screenshot-clipboard-refused = Trindle konnte es nicht kopieren.
 
 # Words of the notice that the screenshot could not be saved: the picture was not made.
-screenshot-no-picture = das Bild konnte nicht erstellt werden
+screenshot-no-picture = Das Bildschirmfoto konnte nicht aufgenommen werden.
 
 # Words of the notice that the screenshot could not be saved: no bus to ask on.
-screenshot-no-bus = es gibt keinen Sitzungsbus, über den gefragt werden könnte
+screenshot-no-bus = Trindle kann nicht fragen, wo gespeichert werden soll.
 
 # Words of the notice that the screenshot could not be saved: the file chooser could not be asked.
-screenshot-no-chooser = die Dateiauswahl konnte nicht gefragt werden
+screenshot-no-chooser = Die Dateiauswahl konnte nicht geöffnet werden.
 
 # Words of the notice that the screenshot could not be saved: every file name was taken.
-screenshot-no-free-name = kein freier Name
+screenshot-no-free-name = Kein freier Name
 
 # Words of the notice that the screenshot could not be saved: the path and why it failed.
 screenshot-write-failed = { $path }: { $why }
@@ -129,26 +129,26 @@ screenshot-write-failed = { $path }: { $why }
 screenshot-eye-title = Farbpipette
 
 # Words that float beside the i of the eye dropper's window.
-screenshot-eye-help = Drücke auf die Farbpipette und klicke dann irgendwo auf den Bildschirm, um die Farbe unter dem Zeiger zu übernehmen. Mit Escape brichst du ab. Jede Farbe wird sofort als Hex-Code kopiert und in der Liste darunter aufbewahrt, die neueste zuerst, damit du sie später noch einmal kopieren kannst.
+screenshot-eye-help = Drücke auf die Farbpipette und klicke dann irgendwo auf den Bildschirm, um die Farbe unter dem Zeiger zu übernehmen. Drücke Escape zum Abbrechen. Jede Farbe wird sofort als Hex-Code kopiert und der Liste darunter hinzugefügt, die neueste zuerst, damit du sie später noch einmal kopieren kannst.
 
 # Name of the i button beside the title.
 screenshot-eye-about = Über die Farbpipette
 
 # Name of the main button that takes a colour.
-screenshot-eye-take = Farbe aufnehmen
+screenshot-eye-take = Farbe auswählen
 
 # Sentence under the title while no colour has been taken.
-screenshot-eye-none = Nimm eine Farbe von irgendwo auf dem Bildschirm auf.
+screenshot-eye-none = Wähle eine Farbe vom Bildschirm aus.
 
 # Sentence under the title once colours have been taken.
 screenshot-eye-taken =
     { $n ->
-        [one] Eine Farbe aufgenommen: { $newest }.
-       *[other] { $n } Farben aufgenommen; die neueste ist { $newest }.
+        [one] Eine Farbe ausgewählt: { $newest }.
+       *[other] { $n } Farben ausgewählt. Die neueste ist { $newest }.
     }
 
 # Shown in the big card while no colour has been taken.
-screenshot-eye-latest-empty = Die aufgenommene Farbe erscheint hier groß und bereit zum Kopieren.
+screenshot-eye-latest-empty = Noch keine Farbe ausgewählt.
 
 # Name of the card that holds the latest colour.
 screenshot-eye-latest = Letzte Farbe
@@ -158,10 +158,10 @@ screenshot-eye-latest = Letzte Farbe
 screenshot-eye-clear = Liste leeren
 
 # Head of the card with the list of colours taken.
-screenshot-eye-list = Aufgenommene Farben
+screenshot-eye-list = Deine Farben
 
 # Shown in the list card while no colour has been taken.
-screenshot-eye-list-empty = Mit der Farbpipette aufgenommene Farben werden hier aufbewahrt, die neueste zuerst.
+screenshot-eye-list-empty = Noch keine Farben ausgewählt.
 
 # Name of the round button that takes a colour out of the list.
 # SAFETY: needs a human review before it ships
@@ -176,11 +176,11 @@ screenshot-pick-title = Deinen Bildschirm mit { $app } teilen?
 
 # Sentence under the title when several things can be picked.
 # SAFETY: needs a human review before it ships
-screenshot-pick-many = Wähle eines oder mehrere aus. Nur das Gewählte wird geteilt, bis die App anhält oder geschlossen wird.
+screenshot-pick-many = Wähle eines oder mehrere aus. Nur das Gewählte wird geteilt, bis die App das Teilen beendet oder geschlossen wird.
 
 # Sentence under the title when one thing can be picked.
 # SAFETY: needs a human review before it ships
-screenshot-pick-one = Wähle eines aus. Nur das Gewählte wird geteilt, bis die App anhält oder geschlossen wird.
+screenshot-pick-one = Wähle eines aus. Nur das Gewählte wird geteilt, bis die App das Teilen beendet oder geschlossen wird.
 
 # Heading over the screens that can be shared.
 screenshot-pick-screens = Bildschirme
@@ -234,11 +234,11 @@ screenshot-portal-name = Name
 
 # Heading when an unknown program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks-unknown = Ein Programm fragt, wer du bist
+screenshot-account-asks-unknown = Ein Programm möchte deine Daten
 
 # Heading when a program asks who the person is.
 # SAFETY: needs a human review before it ships
-screenshot-account-asks = { $who } fragt, wer du bist
+screenshot-account-asks = { $who } möchte deine Daten
 
 # Name the screen reader gives to the person's picture.
 screenshot-account-picture = Dein Bild
@@ -250,7 +250,7 @@ screenshot-account-signed-in = Angemeldet als { $id }
 screenshot-apps-search = Apps suchen
 
 # Shown when no app can open the file.
-screenshot-apps-none = Keine App hier kann sie öffnen
+screenshot-apps-none = Keine App kann sie öffnen
 
 # Name of the switch that remembers the choice.
 screenshot-apps-always = Diese App immer für diese Art von Datei verwenden
@@ -310,7 +310,7 @@ screenshot-wallpaper-ask = Dieses Bild als Hintergrundbild festlegen?
 
 # Heading when a program offers a wallpaper.
 # SAFETY: needs a human review before it ships
-screenshot-wallpaper-asks = { $who } bietet ein neues Hintergrundbild an
+screenshot-wallpaper-asks = { $who } möchte ein Hintergrundbild festlegen
 
 # Name the screen reader gives to the picture offered.
 screenshot-wallpaper-picture = Das neue Hintergrundbild
@@ -374,7 +374,7 @@ screenshot-print-from = Drucken aus { $who }
 screenshot-print-failed = Drucken nicht möglich
 
 # Words of that notice when the choices made were not kept.
-screenshot-print-lost = Die Auswahl wurde nicht behalten. Drucke noch einmal.
+screenshot-print-lost = Die Einstellungen konnten nicht gespeichert werden. Drucke noch einmal.
 
 # Line in the menu on a file or folder: change its name.
 screenshot-chooser-rename = Umbenennen
@@ -405,7 +405,7 @@ screenshot-chooser-folder = Ordner
 screenshot-chooser-empty = Hier ist nichts
 
 # Name of the choice of which kind of file is shown.
-screenshot-chooser-kind = Dateiart
+screenshot-chooser-kind = Dateityp
 
 # Said where a place on another computer is not answering.
 screenshot-chooser-not-answering = Der andere Computer antwortet nicht.
@@ -418,7 +418,7 @@ screenshot-chooser-no-folder = Dieser Ordner ist nicht da.
 
 # Words under the box when saving would replace a file.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-ask = { $name } ist schon da. Drücke auf Ersetzen oder noch einmal die Eingabetaste, um es durch dieses zu ersetzen.
+screenshot-chooser-replace-ask = { $name } existiert bereits. Zum Ersetzen drückst du Ersetzen oder noch einmal die Eingabetaste.
 
 # Words under the box when a key is pressed on Recent, which is not a folder.
 screenshot-chooser-recent-not-folder = „Zuletzt verwendet“ ist kein Ordner. Öffne zuerst einen.
@@ -427,7 +427,7 @@ screenshot-chooser-recent-not-folder = „Zuletzt verwendet“ ist kein Ordner. 
 screenshot-chooser-nothing-picked = Nichts ist ausgewählt.
 
 # Words under the box while a file by that name is already there.
-screenshot-chooser-there = { $name } ist schon da.
+screenshot-chooser-there = { $name } existiert bereits.
 
 # Name of the round button that hides the hidden files.
 screenshot-chooser-hide-hidden = Versteckte Dateien ausblenden
@@ -440,11 +440,11 @@ screenshot-chooser-choose-folder = Ordner wählen
 
 # Head of the question when a folder of that name is already there.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-clash-folder = Ein Ordner namens { $name } ist schon da
+screenshot-chooser-clash-folder = Ein Ordner namens { $name } existiert bereits
 
 # Head of the question when a file of that name is already there.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-clash-file = { $name } ist schon da
+screenshot-chooser-clash-file = { $name } existiert bereits
 
 # Name of the round button that leaves a pasted thing out.
 # SAFETY: needs a human review before it ships
@@ -460,53 +460,53 @@ screenshot-chooser-replace = Ersetzen
 
 # What the screen reader says for the button that replaces a folder.
 # SAFETY: needs a human review before it ships
-screenshot-chooser-replace-spoken = Ersetzen: Der Ordner, der schon da ist, kommt in den Papierkorb
+screenshot-chooser-replace-spoken = Ersetzen. Der vorhandene Ordner kommt in den Papierkorb.
 
 # Name of the main button that merges two folders.
 # SAFETY: needs a human review before it ships
 screenshot-chooser-merge = Zusammenführen
 
 # Words in the question when folders are being pasted.
-screenshot-chooser-rest-folders = Dieselbe Antwort für jeden Ordner, der schon da ist.
+screenshot-chooser-rest-folders = Das für jeden vorhandenen Ordner übernehmen.
 
 # Words in the question when files are being pasted.
-screenshot-chooser-rest-files = Dieselbe Antwort für jede Datei, die schon da ist.
+screenshot-chooser-rest-files = Das für jede vorhandene Datei übernehmen.
 
 # Name of the switch that gives the same answer to the rest.
 # SAFETY: needs a human review before it ships
 screenshot-chooser-same = Beim Rest genauso verfahren
 
 # Words under the box after Cut.
-screenshot-chooser-was-cut = { $what } ausgeschnitten. Füge es in einen Ordner ein.
+screenshot-chooser-was-cut = Bereit zum Verschieben: { $what }
 
 # Words under the box after Copy.
-screenshot-chooser-was-copied = { $what } kopiert. Füge es in einen Ordner ein.
+screenshot-chooser-was-copied = Bereit zum Kopieren: { $what }
 
 # Words under the box when Paste is pressed and there is nothing to paste.
-screenshot-chooser-nothing-cut = Es wurde nichts ausgeschnitten oder kopiert.
+screenshot-chooser-nothing-cut = Es ist nichts ausgeschnitten oder kopiert.
 
 # Words under the box when Paste is pressed while a paste is still going.
-screenshot-chooser-paste-busy = Es läuft noch ein Einfügen.
+screenshot-chooser-paste-busy = Trindle fügt noch ein.
 
 # Red line after some items could not be moved.
 screenshot-chooser-not-moved =
     { $n ->
-        [one] Ein Element konnte nicht verschoben werden: { $names }.
-       *[other] { $n } Elemente konnten nicht verschoben werden: { $names }.
+        [one] Trindle konnte ein Element nicht verschieben: { $names }.
+       *[other] Trindle konnte { $n } Elemente nicht verschieben: { $names }.
     }
 
 # Red line after some items could not be copied.
 screenshot-chooser-not-copied =
     { $n ->
-        [one] Ein Element konnte nicht kopiert werden: { $names }.
-       *[other] { $n } Elemente konnten nicht kopiert werden: { $names }.
+        [one] Trindle konnte ein Element nicht kopieren: { $names }.
+       *[other] Trindle konnte { $n } Elemente nicht kopieren: { $names }.
     }
 
 # Red line after some items could not be put in the Trash.
 screenshot-chooser-not-trashed =
     { $n ->
-        [one] Ein Element konnte nicht in den Papierkorb gelegt werden: { $names }.
-       *[other] { $n } Elemente konnten nicht in den Papierkorb gelegt werden: { $names }.
+        [one] Trindle konnte ein Element nicht in den Papierkorb verschieben: { $names }.
+       *[other] Trindle konnte { $n } Elemente nicht in den Papierkorb verschieben: { $names }.
     }
 
 # Name of the box where a file or folder is renamed.
@@ -520,10 +520,10 @@ screenshot-chooser-items =
     }
 
 # Title of the notice when an email could not be started.
-screenshot-mail-failed = E-Mail konnte nicht gestartet werden
+screenshot-mail-failed = E-Mail konnte nicht erstellt werden
 
 # Why: no mail program is chosen or installed.
-screenshot-mail-no-app = Es ist kein Mailprogramm festgelegt. Wähle eines unter Einstellungen, Standard-Apps.
+screenshot-mail-no-app = Du hast kein Mailprogramm festgelegt. Wähle eines unter Einstellungen, Standard-Apps.
 
 # Why: a program asked to attach more files than allowed.
 screenshot-mail-too-many = Zu viele Dateien zum Anhängen.
@@ -535,16 +535,16 @@ screenshot-mail-too-big = Die Dateien sind zu groß zum Anhängen.
 screenshot-mail-bad-file = Eine Datei konnte nicht angehängt werden.
 
 # Why: an address was not a plain address.
-screenshot-mail-bad-address = Eine Adresse war ungültig.
+screenshot-mail-bad-address = Eine Adresse ist ungültig.
 
 # Why: the subject was too long or had odd characters.
-screenshot-mail-bad-subject = Der Betreff war ungültig.
+screenshot-mail-bad-subject = Der Betreff ist ungültig.
 
 # Why: the words were too long or had odd characters.
-screenshot-mail-bad-words = Der Text war ungültig.
+screenshot-mail-bad-words = Der Text ist ungültig.
 
 # Why: no private place to keep the files.
-screenshot-mail-no-place = Die Dateien konnten nicht sicher aufbewahrt werden.
+screenshot-mail-no-place = Die Dateien konnten nicht sicher gespeichert werden.
 
 # Why: the mail program did not start.
 screenshot-mail-not-started = Das Mailprogramm wurde nicht gestartet.
@@ -570,7 +570,12 @@ screenshot-chooser-pin-not-kept = Die Anheftung konnte nicht gespeichert werden.
 # Red line after some items could not be deleted.
 screenshot-chooser-not-deleted =
     { $n ->
-        [one] Ein Element konnte nicht gelöscht werden: { $names }.
-       *[other] { $n } Elemente konnten nicht gelöscht werden: { $names }.
+        [one] Trindle konnte ein Element nicht löschen: { $names }.
+       *[other] Trindle konnte { $n } Elemente nicht löschen: { $names }.
     }
 
+# What the screen reader says for the list of places down the left of the file chooser.
+screenshot-chooser-places = Orte
+
+# What the screen reader says for the list of files and folders in the file chooser.
+screenshot-chooser-files = Dateien

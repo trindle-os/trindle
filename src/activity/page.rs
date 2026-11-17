@@ -60,7 +60,6 @@ impl Activity {
         let b = theme::bento();
         card(column(vec![
             tile_head("computer-symbolic", t!("activity-right-now"), Vec::new()),
-            note(t!("activity-caption")),
             picture,
         ]).gap(16.0)).height(Length::Fill).beside().span_grows(b.picture.0, b.picture.1, b.words)
     }
@@ -106,7 +105,6 @@ impl Activity {
         };
         card(column(vec![
             tile_head("view-list-symbolic", t!("activity-programs"), Vec::new()),
-            note(t!("activity-list-caption")),
             body,
         ]).gap(16.0)).height(Length::Fill).beside().span_grows(b.card.0, b.card.0 + 1, b.words)
     }

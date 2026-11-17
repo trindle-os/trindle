@@ -17,7 +17,7 @@ store-app-state-removing = हटाया जा रहा है
 store-app-state-downloading = डाउनलोड हो रहा है
 
 # The state beside the dot while Flatpak is putting the fetched app in.
-store-app-state-putting-in = लगाया जा रहा है
+store-app-state-putting-in = इंस्टॉल हो रहा है
 
 # The state beside the dot while the app's own update goes in.
 store-app-state-updating = अपडेट हो रहा है
@@ -26,7 +26,7 @@ store-app-state-updating = अपडेट हो रहा है
 store-app-state-held = इंस्टॉल है, रोका हुआ
 
 # The state beside the dot for an installed app whose updates are held back.
-store-app-state-held-version = इंस्टॉल है, संस्करण { $version } पर रोका हुआ
+store-app-state-held-version = इंस्टॉल है, संस्करण { $version } पर अपडेट रोके गए हैं
 
 # The state beside the dot for an installed app with an update waiting; the end says what waits.
 store-app-state-waiting = इंस्टॉल है, { $waits }
@@ -63,7 +63,7 @@ store-app-remove = हटाएँ
 store-app-open-round = खोलें
 
 # Main button that releases an app whose updates are held back.
-store-app-release = रिलीज़
+store-app-release = अपडेट की अनुमति दें
 
 # Main button that updates the app.
 store-app-update = अपडेट करें
@@ -81,13 +81,13 @@ store-app-website = वेबसाइट
 store-app-no-pictures = इस ऐप के कोई चित्र नहीं हैं।
 
 # In the picture frame when the picture could not be fetched.
-store-app-picture-missed = यह चित्र लाया नहीं जा सका।
+store-app-picture-missed = Trindle यह चित्र नहीं ला सका।
 
 # In the picture frame while the picture is being fetched.
 store-app-picture-fetching = चित्र लाया जा रहा है…
 
 # In the picture frame when the computer has no internet.
-store-app-picture-offline = जब तक यह कंप्यूटर इंटरनेट से जुड़ा नहीं है, चित्र नहीं लाए जा सकते।
+store-app-picture-offline = चित्र देखने के लिए इंटरनेट से जुड़ें।
 
 # Between the picture buttons: which picture, when it has no caption.
 store-app-picture-of = { $n } में से चित्र { $at }
@@ -162,13 +162,13 @@ store-app-review-no-title = कोई शीर्षक नहीं
 store-app-people-none = अभी तक किसी ने इस ऐप के बारे में नहीं लिखा।
 
 # Under What people say when there is no internet.
-store-app-people-offline = जब तक यह कंप्यूटर इंटरनेट से जुड़ा नहीं है, लोगों की राय नहीं लाई जा सकती।
+store-app-people-offline = समीक्षाएँ पढ़ने के लिए इंटरनेट से जुड़ें।
 
 # Under What people say while reviews are being fetched.
-store-app-people-looking = लोगों की राय खोजी जा रही है…
+store-app-people-looking = समीक्षाएँ लोड हो रही हैं…
 
 # Name of the card of reviews.
-store-app-people = लोग क्या कहते हैं
+store-app-people = समीक्षाएँ
 
 # Facts line: when the app's project was made.
 store-app-fact-created = बनाया गया

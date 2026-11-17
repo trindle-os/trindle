@@ -183,7 +183,7 @@ mod tests {
     #[test]
     fn the_words_say_what_the_person_can_do() {
         assert_eq!(hard_words(Radio::Bluetooth),
-                   "Bluetooth is switched off by a switch or a key on the computer itself. Turn that on, then try again.");
+                   "Bluetooth is switched off by a switch or key on the computer itself. Switch it on, then try again.");
         assert!(hard_words(Radio::Wifi).starts_with("Wi-Fi is switched off by a switch"));
 
         for words in [hard_words(Radio::Bluetooth), refused_words(Radio::Bluetooth)] {

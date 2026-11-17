@@ -19,15 +19,24 @@ polkit-cancel = Huỷ
 
 # Said when the password typed is not accepted, and the question is asked again.
 # SAFETY: needs a human review before it ships
-polkit-not-accepted = Mật khẩu không được chấp nhận. Hãy thử lại.
+polkit-not-accepted = Mật khẩu chưa đúng. Hãy thử lại.
 
 # Name a screen reader speaks for the password question window.
 # SAFETY: needs a human review before it ships
-polkit-spoken = Xác thực
+polkit-spoken = Mật khẩu của bạn
 
 # Under the password box, when other requests for a password are waiting for
 # this one to end. { $n } is how many.
 polkit-waiting-behind =
     { $n ->
-       *[other] Còn { $n } yêu cầu khác đang chờ yêu cầu này.
+       *[other] Còn { $n } yêu cầu khác đang chờ.
     }
+
+# Under the heading, when Drives asks for the password to take the snapshot before making room.
+polkit-reason-drives-snapshot = Ổ đĩa cần mật khẩu của quản trị viên để chụp ảnh nhanh trước khi tạo chỗ trống.
+
+# Under the heading, when Drives asks for the password to switch a swap file off before making room.
+polkit-reason-drives-swap-off = Ổ đĩa cần mật khẩu của quản trị viên để tắt tệp hoán đổi trong lúc tạo chỗ trống.
+
+# Under the heading, when Drives asks for the password to switch a swap file back on.
+polkit-reason-drives-swap-on = Ổ đĩa cần mật khẩu của quản trị viên để bật lại tệp hoán đổi.

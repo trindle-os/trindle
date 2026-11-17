@@ -7,14 +7,14 @@ settings-display-title = Màn hình
 settings-display-keywords = màn hình độ phân giải kích thước tỷ lệ phóng to thu nhỏ xoay tần số quét ánh sáng đêm ấm ánh sáng xanh buổi tối mắt
 
 # Introduction under the heading of the display page, and the words behind the page i.
-settings-display-help = Thay đổi có hiệu lực ngay. Nếu màn hình bị lỗi, bạn không cần làm gì: sau 15 giây nó sẽ tự quay về như cũ trừ khi bạn nhấn Giữ lại. Ánh sáng đêm làm màn hình ấm hơn vào buổi tối.
+settings-display-help = Thay đổi có hiệu lực ngay. Nếu màn hình bị lỗi, bạn không cần làm gì. Sau 15 giây nó sẽ tự quay về như cũ, trừ khi bạn nhấn Giữ lại. Ánh sáng đêm làm màn hình ấm hơn vào buổi tối.
 
 # Question along the bottom of the page while a change of displays waits to be kept.
 # SAFETY: needs a human review before it ships
 settings-display-foot-keep = Giữ cách sắp xếp này?
 
 # Sentence at the top of the page while the displays are being found.
-settings-display-looking = Đang xem các màn hình…
+settings-display-looking = Đang kiểm tra các màn hình…
 
 # Sentence at the top of the page when no display was found.
 settings-display-none-found = Không tìm thấy màn hình nào.
@@ -94,32 +94,20 @@ settings-display-rotation-of = Hướng xoay của { $display }
 # Heading of the resolution line.
 settings-display-resolution = Độ phân giải
 
-# Small words under that line.
-settings-display-resolution-about = Số điểm ảnh hiển thị và tần suất làm mới.
-
 # Heading of the size line.
 settings-display-size = Kích thước
 
-# Small words under that line.
-settings-display-size-about = Mọi thứ trông lớn đến đâu trên màn hình này.
-
 # Heading of the rotation line.
 settings-display-rotation = Hướng xoay
-
-# Small words under that line.
-settings-display-rotation-about = Dành cho màn hình dựng đứng.
 
 # Heading of the line, and name of its switch, that turns a display on or off.
 settings-display-use = Dùng màn hình này
 
 # Small words under that line for the only display in use.
-settings-display-use-only = Màn hình duy nhất đang dùng không thể tắt.
-
-# Small words under that line otherwise.
-settings-display-use-off = Đã tắt, không hiện gì trên đó.
+settings-display-use-only = Bạn không thể tắt màn hình duy nhất đang dùng.
 
 # Words behind the i of a display's card.
-settings-display-card-about = Thay đổi có hiệu lực ngay. Nếu màn hình bị lỗi, bạn không cần làm gì: sau 15 giây nó sẽ tự quay về như cũ trừ khi bạn nhấn Giữ lại. Độ phân giải khuyên dùng là độ phân giải gốc của màn hình; kích thước chuẩn là kích thước Trindle đã chọn cho màn hình này.
+settings-display-card-about = Thay đổi có hiệu lực ngay. Nếu màn hình bị lỗi, bạn không cần làm gì. Sau 15 giây nó sẽ tự quay về như cũ, trừ khi bạn nhấn Giữ lại. Độ phân giải khuyên dùng là độ phân giải gốc mà màn hình được làm ra để dùng. Kích thước chuẩn là kích thước Trindle đã chọn cho màn hình này.
 
 # Name of the list of where a display sits, and heading of its line when there are more than two displays; { $display } is the display.
 settings-display-place-name = Đặt { $display }
@@ -134,13 +122,13 @@ settings-display-relative = { $display } so với { $other }
 settings-display-arrangement-title = Sắp xếp
 
 # Words behind the i of that card.
-settings-display-arrangement-about = Vị trí các màn hình cạnh nhau, để con trỏ di chuyển từ màn hình này sang màn hình kia qua cạnh chung.
+settings-display-arrangement-about = Đặt vị trí các màn hình cạnh nhau, để con trỏ có thể di chuyển qua cạnh chung của chúng.
 
 # Small words on that card while fewer than two displays are in use.
-settings-display-arrangement-waits = Hãy dùng hai màn hình để đặt cái này cạnh cái kia.
+settings-display-arrangement-waits = Bạn cần có hai màn hình để đặt cái này cạnh cái kia.
 
 # Red words when the desktop refused a change of displays and gave no reason.
-settings-display-refused = Màn hình nền từ chối thay đổi.
+settings-display-refused = Không thay đổi được.
 
 # Said aloud after the displays changed; { $seconds } is how long until they go back.
 settings-display-aloud-changed =
@@ -152,40 +140,31 @@ settings-display-aloud-changed =
 settings-display-not-undone = Không hoàn tác được thay đổi. { $why }
 
 # Red words when the arrangement could not be kept for the next login.
-settings-display-not-kept = Cách sắp xếp đang được dùng, nhưng không lưu được cho lần đăng nhập sau.
+settings-display-not-kept = Cách sắp xếp đang được dùng, nhưng Trindle không lưu được cho lần đăng nhập sau.
 
 # Heading of the line under the picture of the displays when the desktop refused a change.
 settings-display-nothing-changed = Chưa thay đổi gì
 
 # Small words under that line.
-settings-display-refused-change = Màn hình nền đã từ chối thay đổi.
+settings-display-refused-change = Không thực hiện được thay đổi đó.
 
 # Heading of the line under the picture of the displays.
 settings-display-apply-at-once = Thay đổi có hiệu lực ngay
-
-# Small words under that line; { $seconds } is how long Keep is asked for.
-settings-display-keep-asked =
-    { $seconds ->
-       *[other] Câu hỏi Giữ lại hiện ở cuối cửa sổ trong { $seconds } giây.
-    }
 
 # Title of the night light card.
 settings-display-night-title = Ánh sáng đêm
 
 # Words behind the i of that card.
-settings-display-night-about = Màn hình ấm hơn vào buổi tối, dễ chịu hơn cho mắt. Nó theo giờ mặt trời lặn và mọc, tính từ múi giờ, hoặc theo giờ do bạn đặt; khi múi giờ không cho biết máy này ở đâu thì dùng giờ đã đặt.
+settings-display-night-about = Màn hình ấm hơn vào buổi tối, dễ chịu hơn cho mắt. Nó theo giờ mặt trời lặn và mọc, tính từ múi giờ của bạn, hoặc theo giờ bạn tự đặt. Nếu Trindle không xác định được bạn ở đâu từ múi giờ, nó dùng giờ bạn đã đặt.
 
 # Heading of the night light line, and name of its switch.
 settings-display-night = Ánh sáng đêm
-
-# Small words under that line.
-settings-display-night-about-line = Màu ấm hơn vào buổi tối.
 
 # Small words under the When line; { $zone } is the time zone.
 settings-display-when-zone = Mặt trời lặn và mọc theo { $zone }.
 
 # Small words under the When line when the time zone gives no place.
-settings-display-when-no-place = Múi giờ không cho biết nơi chốn: dùng giờ đã đặt.
+settings-display-when-no-place = Trindle đang dùng giờ cố định vì không biết giờ mặt trời lặn.
 
 # Choice in the When list: from sunset to sunrise.
 settings-display-when-sun = Từ lúc mặt trời lặn đến lúc mọc
@@ -205,9 +184,6 @@ settings-display-to = Đến
 # Heading of the warmth line, and name of its slider.
 settings-display-warmth = Độ ấm
 
-# Small words under the warmth line.
-settings-display-warmth-about = Màn hình ấm đến đâu vào ban đêm.
-
 # Small word under the left end of the warmth slider.
 settings-display-little = Hơi ấm
 
@@ -226,7 +202,7 @@ settings-display-one-display-tip = { $name }, { $res }
 # Spoken description of the picture of the displays when several are in use; { $n } is how many.
 settings-display-many-displays-tip =
     { $n ->
-       *[other] { $n } màn hình, xếp cạnh nhau theo cách đã sắp xếp
+       *[other] { $n } màn hình, theo cách đã sắp xếp
     }
 
 # Word drawn in the picture of the displays when none is in use.
@@ -236,26 +212,25 @@ settings-display-no-display = Không có màn hình
 settings-display-your-displays = Các màn hình của bạn
 
 # Small words under Nothing to show on when the desktop listed no displays.
-settings-display-listed-none = Màn hình nền không liệt kê màn hình nào.
+settings-display-listed-none = Trindle không tìm thấy màn hình nào.
 
 # Title of the card shown when no display was found.
 settings-display-none-title = Không tìm thấy màn hình
 
 # Heading of the line in that card.
-settings-display-none-heading = Không có gì để hiển thị
+settings-display-none-heading = Không tìm thấy màn hình
 
 # Title of the card about the graphics card.
 settings-display-graphics-title = Đồ họa
 
 # Words behind the i of that card.
-settings-display-graphics-about = Máy này có card NVIDIA, dùng trình điều khiển mở. Mọi thứ đều chạy được. Với card từ khoảng năm 2022 trở đi, máy sẽ cảm thấy chậm, vì trình điều khiển mở không nâng được tốc độ của card. Có thể cài trình điều khiển riêng của NVIDIA.
+settings-display-graphics-about = Máy này có card đồ họa NVIDIA dùng trình điều khiển mở. Máy vẫn chạy được, nhưng card từ khoảng năm 2022 trở đi sẽ cảm thấy chậm, vì trình điều khiển mở không nâng được tốc độ của card. Bạn có thể cài trình điều khiển riêng của NVIDIA.
 
 # Heading of the line about an NVIDIA card on the open driver.
 settings-display-nvidia = Card NVIDIA, dùng trình điều khiển mở
 
 # Small words under that line.
-settings-display-nvidia-about = Chạy được; card từ 2022 trở đi sẽ cảm thấy chậm.
+settings-display-nvidia-about = Card từ 2022 trở đi có thể chạy chậm.
 
 # Words of the link that opens help about the NVIDIA driver.
 settings-display-nvidia-help = Nên làm gì
-

@@ -10,11 +10,11 @@ use smithay::{
     reexports::calloop::timer::{TimeoutAction, Timer},
 };
 
-use super::{AnvilState, UdevData};
+use super::{Compose, UdevData};
 
 const HOLD_FIRST_FRAME: Duration = Duration::from_secs(4);
 
-impl AnvilState<UdevData> {
+impl Compose<UdevData> {
 
     pub(super) fn look_at_resting(&mut self) {
         let now = Instant::now();

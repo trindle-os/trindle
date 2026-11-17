@@ -1,4 +1,4 @@
-//! trindle-nightlight: warms the screens in the evening and cools them in the morning.
+// Origin: the colour and sun sums follow wlsunset (MIT, Copyright 2020 Kenny Levinsen). Licence text: THIRD-PARTY.txt.
 
 use std::cell::RefCell;
 use std::f64::consts::PI;
@@ -109,6 +109,7 @@ fn degrees(text: &str, whole: usize) -> Option<f64> {
     Some(sign * (part(0, whole) + part(whole, whole + 2) / 60.0 + part(whole + 2, whole + 4) / 3600.0))
 }
 
+#[derive(Default)]
 pub struct Choice {
     pub on: bool,
     pub by_sun: bool,
@@ -118,9 +119,13 @@ pub struct Choice {
 }
 
 impl Choice {
+
     fn saved() -> Choice {
+        if setting(ON) != "on" {
+            return Choice::default();
+        }
         Choice {
-            on: setting(ON) == "on",
+            on: true,
             by_sun: setting(WHEN) != BY_TIMES,
             from: setting(FROM),
             to: setting(TO),
@@ -143,13 +148,13 @@ struct Plan {
     when: When,
 }
 
-fn plan(choice: &Choice, place: Option<(f64, f64)>) -> Option<Plan> {
+fn plan(choice: &Choice, place: impl FnOnce() -> Option<(f64, f64)>) -> Option<Plan> {
     if !choice.on {
         return None;
     }
     let seconds = |t: String| t.split_once(':')
         .and_then(|(h, m)| Some(h.parse::<i64>().ok()? * 3600 + m.parse::<i64>().ok()? * 60)).unwrap_or(0);
-    let when = match place.filter(|_| choice.by_sun) {
+    let when = match Some(choice.by_sun).filter(|&sun| sun).and_then(|_| place()) {
         Some((lat, lon)) => When::Sun(lat, lon),
         None => When::Times(seconds(to_time(&choice.to)), seconds(from_time(&choice.from))),
     };
@@ -438,7 +443,7 @@ impl State {
 pub fn main(_args: Vec<String>) -> i32 {
 
     stop_running();
-    let Some(plan) = plan(&Choice::saved(), place()) else { return 0 };
+    let Some(plan) = plan(&Choice::saved(), place) else { return 0 };
 
     let Ok(conn) = Connection::connect_to_env() else {
         eprintln!("trindle-nightlight: no desktop to warm");
@@ -567,14 +572,14 @@ mod tests {
 
     #[test]
     fn makes_the_plan() {
-        assert_eq!(plan(&choice(false, true, "20:00", "07:00", "4000"), Some((51.5, -0.12))), None);
+        assert_eq!(plan(&choice(false, true, "20:00", "07:00", "4000"), || panic!("place looked up while off")), None);
         let london = place_for("Europe/London", TABS, LINKS);
-        assert_eq!(plan(&choice(true, true, "20:00", "07:00", "4000"), london).unwrap(),
+        assert_eq!(plan(&choice(true, true, "20:00", "07:00", "4000"), || london).unwrap(),
                    Plan { warm: 4000, when: When::Sun(london.unwrap().0, london.unwrap().1) });
-        assert_eq!(plan(&choice(true, false, "21:30", "06:00", "3500"), Some((51.5, -0.12))).unwrap(),
+        assert_eq!(plan(&choice(true, false, "21:30", "06:00", "3500"), || Some((51.5, -0.12))).unwrap(),
                    Plan { warm: 3500, when: When::Times(6 * 3600, 21 * 3600 + 1800) });
 
-        assert_eq!(plan(&choice(true, true, "03:00", "", "100"), None).unwrap(),
+        assert_eq!(plan(&choice(true, true, "03:00", "", "100"), || None).unwrap(),
                    Plan { warm: 3000, when: When::Times(7 * 3600, 20 * 3600) });
     }
 
@@ -695,5 +700,15 @@ mod tests {
 
         assert!(shares(3000)[2] < shares(4000)[2] && shares(4000)[2] < shares(5500)[2]);
         assert!(shares(3000).iter().all(|&v| v > u16::MAX / 10));
+    }
+
+    #[test]
+    fn wlsunsets_notice_ships_with_its_sums() {
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
+        let notices = std::fs::read_to_string(root.join("share/licences/THIRD-PARTY.txt")).unwrap();
+        let at = notices.find("\nwlsunset (code followed in src/session/nightlight.rs)\n").expect("no wlsunset notice");
+        assert!(notices[at..].contains("Copyright 2020 Kenny Levinsen\n\nPermission is hereby granted"));
+        assert!(std::fs::read_to_string(root.join("tools/licences.sh")).unwrap().contains("wlsunset"));
+        assert!(include_str!("nightlight.rs").starts_with("// Origin: the colour and sun sums follow wlsunset (MIT, Copyright 2020 Kenny Levinsen)"));
     }
 }

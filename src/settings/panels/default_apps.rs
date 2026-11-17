@@ -1,9 +1,12 @@
 //! Default applications, kept in ~/.config/mimeapps.list.
 
 use crate::common::apps::{self, Entry};
-use crate::settings::ui::{app_icon, dropdown, group, headline, icon, in_words, line, on, page, Kit, Msg, Page};
+use crate::settings::ui::{app_icon, dropdown_beside, group, headline, icon, in_words_or, line, on, page, Kit, Msg, Page};
 use crate::toolkit::widget::{row, Length, Node};
 use crate::toolkit::t;
+
+const PICTURE: f32 = 32.0;
+const PICTURE_GAP: f32 = crate::settings::ui::CONTROL_GAP;
 
 const KINDS: &[(&str, &[&str])] = &[
     ("Web", &["x-scheme-handler/http", "x-scheme-handler/https", "text/html"]),
@@ -102,7 +105,7 @@ impl DefaultApps {
             ([], Some(web)) => t!("settings-default-apps-all-set-web", web = &web),
             ([], None) => t!("settings-default-apps-all-set").into(),
             ([one], _) => t!("settings-default-apps-one-missing", kind = one),
-            (many, _) => t!("settings-default-apps-many-missing", kinds = in_words(many).replace(" and ", " or ")),
+            (many, _) => t!("settings-default-apps-many-missing", kinds = in_words_or(many)),
         }
     }
 
@@ -123,18 +126,16 @@ impl DefaultApps {
             chosen = Some(0);
         }
         let ids: Vec<String> = o.could.iter().map(|e| e.id.clone()).collect();
-        let pick = dropdown(kit, &key, options, chosen, title, move |i| {
+        let pick = dropdown_beside(&key, options, chosen, title, PICTURE + PICTURE_GAP, move |i| {
             let id = i.checked_sub(offset).and_then(|n| ids.get(n)).cloned();
             on::<DefaultApps>(move |me, k| if let Some(id) = &id { me.choose(k, at, id) })
         });
-        let n = o.could.len();
-        let sub = t!("settings-default-apps-can-open", n = n);
         let pic = match &o.chosen {
-            Some(e) => app_icon(e.icons(), 32.0),
-            None => icon(crate::common::apps::GENERIC_ICONS[0], 32.0),
+            Some(e) => app_icon(e.icons(), PICTURE),
+            None => icon(crate::common::apps::GENERIC_ICONS[0], PICTURE),
         };
-        row(vec![pic, line(title).sub(sub).key(key).control(pick).node(kit).width(Length::Fill)])
-            .gap(12.0).width(Length::Fill)
+        row(vec![pic, line(title).key(key).control(pick).node(kit).width(Length::Fill)])
+            .gap(PICTURE_GAP).width(Length::Fill)
     }
 
     fn card(&self, kit: &Kit, (name, icon, kinds, about): &(&str, &str, &[usize], &str)) -> Node<Msg> {
@@ -177,7 +178,7 @@ impl Page for DefaultApps {
         self.read();
     }
     fn view(&self, kit: &Kit) -> Node<Msg> {
-        let mut items = vec![headline(kit, self.sum_up())];
+        let mut items = vec![headline(self.sum_up())];
         items.extend(cards().iter().map(|c| self.card(kit, c)));
         page(kit, self.title(), self.help(), items)
     }

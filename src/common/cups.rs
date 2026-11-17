@@ -7,8 +7,10 @@ use std::os::fd::OwnedFd;
 use std::process::{Command, Stdio};
 use std::time::{Duration, Instant};
 
+use crate::common::run::parsed;
 use crate::toolkit::t;
 
+#[derive(Debug, PartialEq)]
 pub struct Printer {
     pub name: String,
     pub state: String,
@@ -31,12 +33,68 @@ pub fn parse_printers(out: &str) -> Vec<Printer> {
             word
         } else if rest.starts_with("now printing") {
             "printing".to_string()
+        } else if rest.starts_with("disabled since") {
+            "paused".to_string()
         } else {
             continue;
         };
         printers.push(Printer { name: name.to_string(), state, disabled: line.contains("disabled") });
     }
     printers
+}
+
+pub type Ran = (bool, String, String);
+
+#[derive(Debug, PartialEq)]
+pub enum Listing {
+    Ready { printers: Vec<Printer>, default: Option<String> },
+
+    Unreachable(String),
+}
+
+fn unreachable_words(err: &str) -> bool {
+    let e = err.to_lowercase();
+    ["connect", "refused", "no such file", "not running", "bad file descriptor", "timed out", "broken pipe", "unreachable", "host", "server"]
+        .iter().any(|w| e.contains(w))
+}
+
+fn why_unreachable(err: &str) -> String {
+    let e = err.trim();
+    if e.is_empty() {
+        return t!("settings-printers-lpstat-failed").to_string();
+    }
+    if unreachable_words(e) {
+        return t!("printers-unreachable").to_string();
+    }
+    explain(&e.lines().next().unwrap_or("").chars().take(200).collect::<String>().replace("lpstat:", ""))
+}
+
+fn look(run: &mut impl FnMut(&[&str]) -> Ran) -> Listing {
+    let (ok, out, err) = run(&["lpstat", "-p"]);
+    let printers = parse_printers(&out);
+    let quiet = err.contains("No destinations");
+    if !ok && !quiet && printers.is_empty() {
+        let scheduler = run(&["lpstat", "-r"]).1;
+        if !scheduler.contains("scheduler is running") {
+            return Listing::Unreachable(why_unreachable(&err));
+        }
+    }
+    let default = if printers.is_empty() { None } else { parse_default(&run(&["lpstat", "-d"]).1) };
+    Listing::Ready { printers, default }
+}
+
+pub fn run_blocking(argv: &[&str]) -> Ran {
+    crate::common::run::captured(&argv.iter().map(|a| a.to_string()).collect::<Vec<_>>(), None)
+}
+
+pub fn read_printers(mut run: impl FnMut(&[&str]) -> Ran, pause: impl FnOnce()) -> Listing {
+    match look(&mut run) {
+        Listing::Unreachable(_) => {
+            pause();
+            look(&mut run)
+        }
+        ready => ready,
+    }
 }
 
 pub fn parse_default(out: &str) -> Option<String> {
@@ -82,6 +140,8 @@ pub fn is_queue_name(name: &str) -> bool {
     !name.is_empty() && name.len() <= 127 && !name.starts_with('-')
         && name.bytes().all(|b| b.is_ascii_graphic() && b != b'/' && b != b'#')
 }
+
+pub const WAKE: Duration = Duration::from_secs(3);
 
 pub const MOST_COPIES: u32 = 99;
 
@@ -370,7 +430,9 @@ impl Choices {
         if let Some(o) = get("orientation").and_then(|w| Orientation::from_gtk(&w)) {
             c.orientation = o;
         }
+        let kept = c.pages.take();
         c.pages = match get("print-pages").as_deref() {
+            Some("all") => None,
             Some("ranges") => get("page-ranges").and_then(|r| {
                 let counted: Result<Vec<(u32, u32)>, _> = parse_ranges(&r.split(',').map(|p| {
 
@@ -379,11 +441,17 @@ impl Choices {
                     format!("{}-{}", up(a), up(b))
                 }).collect::<Vec<_>>().join(","));
                 counted.ok()
-            }),
-            _ => None,
+            }).or(kept),
+            _ => kept,
         };
         c
     }
+}
+
+fn lpstat() -> Command {
+    let mut command = Command::new("lpstat");
+    parsed(command.args(["-p"]).stdin(Stdio::null()));
+    command
 }
 
 const SEND_LIMIT: Duration = Duration::from_secs(15 * 60);
@@ -406,7 +474,7 @@ pub fn send(choices: &Choices, title: &str, document: OwnedFd) -> Result<String,
     if !is_queue_name(&choices.printer) {
         return Err(t!("printers-bad-name").into());
     }
-    let listed = Command::new("lpstat").args(["-p"]).stdin(Stdio::null()).output()
+    let listed = lpstat().output()
         .map_err(|_| t!("printers-not-installed").to_string())?;
     let known = parse_printers(&String::from_utf8_lossy(&listed.stdout));
     match known.iter().find(|p| p.name == choices.printer) {
@@ -414,12 +482,12 @@ pub fn send(choices: &Choices, title: &str, document: OwnedFd) -> Result<String,
         Some(p) if p.disabled => return Err(t!("printers-paused", name = &choices.printer)),
         Some(_) => {}
     }
-    let mut child = Command::new("lp")
+    let mut child = parsed(Command::new("lp")
         .args(choices.lp_args())
         .args(["-t", &job_title(title)])
         .stdin(Stdio::from(document))
         .stdout(Stdio::piped())
-        .stderr(Stdio::piped())
+        .stderr(Stdio::piped()))
         .spawn()
         .map_err(|_| t!("printers-not-installed").to_string())?;
     let start = Instant::now();
@@ -505,6 +573,12 @@ mod tests {
     }
 
     #[test]
+    fn the_listing_is_asked_for_in_english() {
+        let said: Vec<_> = lpstat().get_envs().map(|(k, v)| (k.to_owned(), v.map(|v| v.to_owned()))).collect();
+        assert_eq!(said, [("LC_ALL".into(), Some("C".into()))]);
+    }
+
+    #[test]
     fn what_a_program_sent_comes_back_and_what_is_wrong_is_left() {
         let told = choices().for_program();
         let get = |k: &str| told.iter().find(|(n, _)| *n == k).map(|(_, v)| v.clone());
@@ -514,6 +588,9 @@ mod tests {
         let nonsense = |k: &str| Some(match k { "n-copies" => "500", "duplex" => "sideways", "printer" => "-evil", "print-pages" => "ranges",
                                                 "page-ranges" => "3-1", _ => "?" }.to_string());
         assert_eq!(Choices::from_program(base.clone(), nonsense), base);
+        let paged = Choices { pages: Some(vec![(2, 2)]), ..base.clone() };
+        assert_eq!(Choices::from_program(paged.clone(), |_| None), paged, "nothing said, nothing changed");
+        assert_eq!(Choices::from_program(paged.clone(), |k| (k == "print-pages").then(|| "all".to_string())).pages, None);
         assert_eq!(get("page-ranges").as_deref(), Some("0-2,4"), "programs count from nought");
         assert_eq!(get("duplex").as_deref(), Some("horizontal"));
     }
@@ -541,12 +618,76 @@ mod tests {
 
     #[test]
     fn printers_and_the_default_are_read() {
-        let out = "printer Office is idle.  enabled since Sat\nprinter Old disabled since Sat -\nprinter Busy now printing Busy-4.  enabled since x\nsystem default destination: Office\n";
+        let out = "printer Office is idle.  enabled since Sat\nprinter Busy now printing Busy-4.  enabled since x\nsystem default destination: Office\n";
         let p = parse_printers(out);
         assert_eq!(p.iter().map(|p| p.name.as_str()).collect::<Vec<_>>(), ["Office", "Busy"]);
         assert_eq!(p[1].state, "printing");
         assert_eq!(parse_default(out).as_deref(), Some("Office"));
         assert_eq!(parse_default("no system default destination"), None);
+    }
+
+    fn fake(answers: Vec<(&'static str, Ran)>) -> impl FnMut(&[&str]) -> Ran {
+        let mut answers = answers.into_iter();
+        move |argv| {
+            let (want, got) = answers.next().expect("asked more than expected");
+            assert_eq!(argv.join(" "), want);
+            got
+        }
+    }
+    fn said(ok: bool, out: &str, err: &str) -> Ran {
+        (ok, out.into(), err.into())
+    }
+
+    #[test]
+    fn a_default_that_fails_alone_keeps_the_list() {
+        let run = fake(vec![("lpstat -p", said(true, "printer Office is idle.  enabled since Sat\n", "")),
+                            ("lpstat -d", said(false, "", "lpstat: Invalid destination name in list \"Gone\"\n"))]);
+        let Listing::Ready { printers, default } = read_printers(run, || panic!("no wait needed")) else { panic!("called unreachable") };
+        assert_eq!((printers.len(), default), (1, None));
+    }
+
+    #[test]
+    fn an_odd_error_with_printers_listed_keeps_them() {
+        let run = fake(vec![("lpstat -p", said(false, "printer Office is idle.  enabled since Sat\n", "lpstat: Not Found\n")),
+                            ("lpstat -d", said(true, "system default destination: Office\n", ""))]);
+        let Listing::Ready { printers, default } = read_printers(run, || panic!("no wait needed")) else { panic!("called unreachable") };
+        assert_eq!((printers.len(), default.as_deref()), (1, Some("Office")));
+    }
+
+    #[test]
+    fn no_printers_is_not_a_broken_service() {
+        let run = fake(vec![("lpstat -p", said(false, "", "lpstat: No destinations added.\n"))]);
+        assert_eq!(read_printers(run, || panic!("no wait needed")), Listing::Ready { printers: vec![], default: None });
+    }
+
+    #[test]
+    fn a_running_scheduler_is_believed_over_an_odd_error() {
+        let run = fake(vec![("lpstat -p", said(false, "", "lpstat: Bad Request\n")), ("lpstat -r", said(true, "scheduler is running\n", ""))]);
+        assert_eq!(read_printers(run, || panic!("no wait needed")), Listing::Ready { printers: vec![], default: None });
+    }
+
+    #[test]
+    fn a_cold_start_is_waited_for_once() {
+        let run = fake(vec![("lpstat -p", said(false, "", "lpstat: Connection refused\n")), ("lpstat -r", said(false, "scheduler is not running\n", "")),
+                            ("lpstat -p", said(true, "printer Office is idle.  enabled since Sat\n", "")), ("lpstat -d", said(true, "no system default destination\n", ""))]);
+        let mut waited = 0;
+        let got = read_printers(run, || waited += 1);
+        assert_eq!(waited, 1);
+        assert!(matches!(got, Listing::Ready { ref printers, .. } if printers.len() == 1));
+    }
+
+    #[test]
+    fn a_service_that_stays_away_is_said_so_in_plain_words() {
+        let down = || ("lpstat -p", said(false, "", "lpstat: Connection refused\n"));
+        let off = || ("lpstat -r", said(false, "scheduler is not running\n", ""));
+        let run = fake(vec![down(), off(), down(), off()]);
+        assert_eq!(read_printers(run, || {}), Listing::Unreachable(t!("printers-unreachable").to_string()));
+    }
+
+    #[test]
+    fn a_paused_printer_is_listed() {
+        let p = parse_printers("printer Old disabled since Sat 18 Oct 2026 -\n\treason unknown\n");
+        assert_eq!((p.len(), p[0].disabled), (1, true));
     }
 
     #[test]

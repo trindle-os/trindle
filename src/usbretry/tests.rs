@@ -74,12 +74,15 @@ fn reads_the_kernels_words() {
     assert_eq!(failed_port(a).as_deref(), Some("3-1-port2"));
     let b = "3,812,5000;usb usb3-port1: unable to enumerate USB device";
     assert_eq!(failed_port(b).as_deref(), Some("usb3-port1"));
-    let c = "3,812,5000;3-1.4-port3: unable to enumerate USB device";
+    let c = "3,812,5000;usb 3-1.4-port3: unable to enumerate USB device";
     assert_eq!(failed_port(c).as_deref(), Some("3-1.4-port3"));
 
     assert_eq!(failed_port("3,1,5;usb 3-1: device descriptor read/64, error -71"), None);
     assert_eq!(failed_port("3,1,5;usb ../../etc: unable to enumerate USB device"), None);
     assert_eq!(failed_port("3,1,5;hello unable to enumerate USB device"), None);
+
+    assert_eq!(failed_port("6,9,1;usb 1-1: Product: usb3-port1: unable to enumerate USB device"), None);
+    assert_eq!(failed_port("6,9,1;3-1.4-port3: unable to enumerate USB device"), None);
     assert_eq!(failed_port("3,1,5;usb 3-1-port2: unable to enumerate USB device later"), None);
 }
 
@@ -95,7 +98,7 @@ fn switches_off_then_on_once_and_notes_it() {
     );
     let log = read_log(&f.places.log);
     assert_eq!(log, vec![Entry { port: "3-1-port2".into(), worked: false, controller: false }]);
-    assert!(log[0].words().contains("did not come back after a restart"));
+    assert!(log[0].words().contains("didn't start again after a restart"));
     assert!(log[0].words().contains("Switch the computer off and on"));
 }
 
@@ -171,7 +174,7 @@ fn says_when_a_device_came_up() {
     assert_eq!(r.consider("3-1-port2"), Ok(Outcome::Worked));
     let log = read_log(&f.places.log);
     assert!(log[0].worked);
-    assert!(log[0].words().contains("A device came up"));
+    assert!(log[0].words().contains("A device was detected"));
 }
 
 #[test]
@@ -261,7 +264,7 @@ fn a_controller_still_dead_after_that_says_to_switch_off_and_on() {
     assert!(!log[0].worked && log[0].controller);
     assert_eq!(
         log[0].words(),
-        "USB port usb3-port1 did not start. Trindle restarted its USB controller and nothing came up. Switch the computer off and on to bring it back."
+        "USB port usb3-port1 didn't start. Trindle restarted its USB controller, but no device was detected. Switch the computer off and on again to bring the port back."
     );
 }
 

@@ -72,7 +72,9 @@ installer-arm = Kurmak için yeniden tıklayın
 installer-arm-erase = Silip kurmak için yeniden tıklayın
 
 # Note beside Next on the first page while no language is chosen.
-installer-missing-language = Bir dil seçin
+installer-missing-language = Dilinizi seçin
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = Trindle'ın dilini seçin
 
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = Bir klavye seçin
@@ -84,28 +86,33 @@ installer-missing-time = Bir saat dilimi seçin
 # SAFETY: needs a human review before it ships
 installer-missing-disk = Trindle'ın nereye kurulacağını seçin
 
+# Note beside Next on the disk page while the disks are read again, after one turned out not to be the disk shown.
+installer-disks-rereading = Diskler yeniden okunuyor
+
 # Note beside Next on the disk password page while no password has been typed twice.
 # SAFETY: needs a human review before it ships
-installer-missing-disk-password = Disk parolasını iki kez yazın, ikisinde de aynı olsun
+installer-missing-disk-password = Disk parolasını iki kez yazın. İkisi de aynı olmalı
 
 # Note beside Next on the account page while the sign-in name is not good.
-installer-missing-username = Bir oturum açma adı gerekli
+installer-missing-username = Bir oturum açma adı girin
 
 # Note beside Next on the account page while the computer's name is not good.
 installer-missing-hostname = Bu bilgisayara bir ad verin
 
 # Note beside Next on the account page while no password has been typed twice.
 # SAFETY: needs a human review before it ships
-installer-missing-password = Parolanızı iki kez yazın, ikisinde de aynı olsun
+installer-missing-password = Parolanızı iki kez yazın. İkisi de aynı olmalı
 
 # Title of the first page.
 installer-welcome-title = { $name } uygulamasına hoş geldiniz
 
 # Sentence under the title of the first page.
-installer-welcome-help = Dilinizi seçin; klavye ve saat onu izler, ikisini de değiştirebilirsiniz.
+installer-welcome-help = Dilinizi seçin; Trindle gerisini ona göre ayarlar.
 
-# Head of the card for choosing the language, and the name of its search box.
-installer-language = Dil
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
+installer-language = Diliniz
+# Label beside the box at the right of the first page's sentence, for choosing the language of Trindle's own words (only those Trindle has).
+installer-trindle-language = Trindle'ın dili
 
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = Klavye
@@ -121,10 +128,10 @@ installer-disks-title = { $name } nereye kurulacak
 
 # Sentence under the title of the disk page.
 # SAFETY: needs a human review before it ships
-installer-disks-help = Yanındaki mevcut sistem için yer açmazsanız, seçtiğiniz diskteki her şey değiştirilir.
+installer-disks-help = Seçtiğiniz diskteki her şey değiştirilir; ancak orada zaten olan sistemin yanına kurmayı seçerseniz değiştirilmez.
 
 # Shown on the disk page when no disk is big enough.
-installer-disks-none = Yeterince büyük disk bulunamadı. Trindle 20 GB gerektirir.
+installer-disks-none = Trindle yeterince büyük bir disk bulamadı. 20 GB gerekiyor.
 
 # Name and words of the choice to erase a whole disk.
 # SAFETY: needs a human review before it ships
@@ -169,10 +176,10 @@ installer-swap-title = { $gb } GB takas dosyası
 installer-swap-switch = Takas dosyası oluştur
 
 # Under the swap file's head when Secure Boot is on.
-installer-swap-secure-boot = Güvenli Önyükleme açık, bu yüzden bu bilgisayar hazırda bekletilemez, ancak takas dosyası bellek azaldığında yine de yardımcı olur. Yalnızca diskte bol yer varsa oluşturulur.
+installer-swap-secure-boot = Güvenli Önyükleme açık, bu yüzden bu bilgisayar hazırda bekletilemez, ancak takas dosyası bellek azaldığında yine de yardımcı olur. Trindle bunu yalnızca diskte bol yer varsa oluşturur.
 
 # Under the swap file's head when the computer can hibernate.
-installer-swap-note = Her şey açıkken güç kapalı olarak hazırda beklemek için yer ve bellek azaldığında başvurulacak bir yer. Olmazsa bilgisayar hazırda bekletilemez. Yalnızca diskte bol yer varsa oluşturulur.
+installer-swap-note = Takas dosyası bilgisayarın hazırda beklemesini sağlar; böylece güç kapalıyken her şey açık kalır. Bellek azaldığında bilgisayara fazladan yer de sağlar. Olmazsa bilgisayar hazırda bekletilemez. Trindle bunu yalnızca diskte bol yer varsa oluşturur.
 
 # Title of the page about encrypting the disk.
 installer-privacy-title = Diski şifreleme
@@ -200,7 +207,7 @@ installer-privacy-about = Yonga hakkında
 
 # In the card about the chip, on a computer that has one.
 # SAFETY: needs a human review before it ships
-installer-privacy-chip = Bu bilgisayarda bir TPM yongası var. Kurulumdan sonraki ilk açılışta yonga bu bilgisayarı öğrenirken parola bir kez sorulur; bundan sonra disk kendiliğinden açılır ve hiçbir şey yazılmaz. Parolayı saklayın: yonga değiştirilirse ya da disk başka bir bilgisayara takılırsa içeri girmenin tek yolu odur.
+installer-privacy-chip = Bu bilgisayarda bir TPM yongası var. Kurulumdan sonraki ilk açılışta yonga ayarlanırken parola bir kez sorulur. Bundan sonra diski yonga açar ve hiçbir şey yazmazsınız. Parolayı saklayın, çünkü yonga değiştirilirse ya da disk başka bir bilgisayara takılırsa ona ihtiyacınız olacak.
 
 # In the card about the chip, on a computer that has none Trindle can use.
 # SAFETY: needs a human review before it ships
@@ -221,7 +228,7 @@ installer-disk-password = Disk parolası
 installer-disk-suggest = Bir parola öbeği öner
 
 # Label and name of the second box of a password, where it is typed again.
-installer-same-again = Aynısını yeniden
+installer-same-again = Tekrar yazın
 
 # Red line under the password boxes when the two do not match.
 # SAFETY: needs a human review before it ships
@@ -233,7 +240,7 @@ installer-disk-write-down = Bunu bir yere yazın
 
 # Words in that card.
 # SAFETY: needs a human review before it ships
-installer-disk-write-down-text = Bu parolayı kâğıda yazın ve bilgisayardan uzak, güvenli bir yerde saklayın. Onsuz disk, ne siz ne de başkası tarafından, hiçbir zaman açılamaz. Geri dönmenin yolu yoktur. Dört sıradan kelime, yazması kolay, tahmini zor bir parola öbeği oluşturur.
+installer-disk-write-down-text = Bu parolayı kâğıda yazın ve bilgisayardan uzak, güvenli bir yerde saklayın. Onsuz diski hiç kimse açamaz, siz bile. Geri dönmenin yolu yoktur. Dört sıradan kelimeden oluşan bir parola öbeği yazması kolay, tahmin etmesi zordur.
 
 # Title of the account page.
 installer-you-title = Sizin hakkınızda
@@ -265,16 +272,16 @@ installer-password = Parola
 installer-strength = Tahmin edilmesi ne kadar zor
 
 # Red line under the account boxes: the sign-in name is empty.
-installer-user-needed = Bir oturum açma adı gerekli.
+installer-user-needed = Bir oturum açma adı girin.
 
 # Red line under the account boxes: a name is too long.
 installer-name-too-long = Bu ad çok uzun.
 
 # Red line under the account boxes: the sign-in name does not start with a small letter.
-installer-user-start = Küçük bir harfle başlayın.
+installer-user-start = a-z arası bir harfle başlayın.
 
 # Red line under the account boxes: the sign-in name uses letters it may not.
-installer-user-letters = Yalnızca küçük harf, rakam, - ve _ kullanılabilir.
+installer-user-letters = Yalnızca a-z, 0-9, - ve _ kullanın.
 
 # Red line under the account boxes: the sign-in name belongs to the system.
 installer-user-taken = Bu ad sistem tarafından zaten kullanılıyor.
@@ -283,7 +290,7 @@ installer-user-taken = Bu ad sistem tarafından zaten kullanılıyor.
 installer-host-needed = Bu bilgisayara bir ad verin.
 
 # Red line under the account boxes: the computer's name uses letters it may not.
-installer-host-letters = Yalnızca harf, rakam ve - kullanılabilir.
+installer-host-letters = Yalnızca harf, rakam ve -.
 
 # Under the strength meter: how long a computer would take to guess the password, when it is at once.
 installer-guess-now = Bir bilgisayar bunu hemen tahmin eder.
@@ -317,19 +324,19 @@ installer-guess-years =
     }
 
 # Under the strength meter: the password is too strong to guess in any time worth saying.
-installer-guess-never = Bir bilgisayarın bunu tahmin etmesi kayıtlı tarihten daha uzun sürer.
+installer-guess-never = Bir bilgisayarın bunu tahmin etmesi kayıtlı tüm tarihten daha uzun sürer.
 
 # Title of the Ready page.
 installer-ready-title = Kurulmaya hazır
 
 # Head of the card that lists what will happen.
-installer-ready-nothing-changed = Henüz hiçbir şey değiştirilmedi
+installer-ready-nothing-changed = Henüz hiçbir şey değişmedi
 
 # Head of the card about security updates.
 installer-ready-security = Güvenlik güncellemeleri
 
 # In the card about security updates.
-installer-ready-security-text = { $name }, Debian'ın güvenlik düzeltmelerini her gün kendiliğinden kurar. Bu kapatılamaz.
+installer-ready-security-text = { $name }, Debian'ın güvenlik düzeltmelerini her gün kendiliğinden kurar. Bunu Ayarlar'da, Bu bilgisayar hakkında bölümünden kapatabilirsiniz.
 
 # Sentence under the title when a whole disk will be replaced.
 # SAFETY: needs a human review before it ships
@@ -360,7 +367,7 @@ installer-ready-beside-text = { $part } bölümü { $size } boyutuna kadar küç
 installer-ready-no-disk = Disk yok
 
 # Words of that row.
-installer-ready-no-disk-text = Disk seçilmedi.
+installer-ready-no-disk-text = Bir disk seçin.
 
 # Name of a row in the list: the disk will not be encrypted.
 # SAFETY: needs a human review before it ships
@@ -379,10 +386,22 @@ installer-ready-locked-password = Parolasını bilgisayar her açıldığında y
 
 # Words of that row when the TPM chip unlocks the disk.
 # SAFETY: needs a human review before it ships
-installer-ready-locked-chip = Parola bir kez, sonra bu bilgisayarın TPM yongası kilidi açar.
+installer-ready-locked-chip = Parolayı bir kez yazarsınız, sonra bu bilgisayarın TPM yongası diskin kilidini açar.
 
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = Klavye { $keyboard }, saat { $zone }.
+# Added to the end of the disk's row on the last page when a swap file is to be made, with its size in GB.
+installer-ready-swap = Ayrıca { $gb } GB'lık bir takas dosyası.
+
+# Under the choice to let the TPM chip unlock the disk, on a computer with no usable chip.
+installer-privacy-chip-off = Trindle'ın kullanabileceği bir TPM yongası gerekir.
+
+# In the card about the chip when the disk is not being encrypted, on a computer that has a chip.
+installer-privacy-chip-none = Bu bilgisayarda şifrelenmiş bir diskin kilidini açabilen bir TPM yongası var.
+
+# In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
+installer-privacy-no-chip-none = Bu bilgisayarda Trindle'ın kullanabileceği bir TPM yongası yok.
+
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle { $trindle } dilinde, { $keyboard } klavye, { $zone } saati.
 
 # Title of the page shown while the install runs.
 installer-installing-title = { $name } kuruluyor
@@ -402,23 +421,23 @@ installer-done-keep = Disk parolasını güvende tutun
 
 # In that card when the TPM chip unlocks the disk.
 # SAFETY: needs a human review before it ships
-installer-keep-chip = Disk şifreli. İlk açılışta yonga bu bilgisayarı öğrenirken disk parolası bir kez sorulur; bundan sonra kendiliğinden açılır. O parolayı kâğıda yazın ve bu bilgisayardan uzak, güvenli bir yerde saklayın. Onsuz disk, ne siz ne de başkası tarafından, hiçbir zaman açılamaz.
+installer-keep-chip = Disk şifreli. Bilgisayar ilk kez açıldığında, yonga ayarlanırken disk parolası bir kez sorulur. Bundan sonra disk kendiliğinden açılır. O parolayı kâğıda yazın ve bu bilgisayardan uzak, güvenli bir yerde saklayın. Onsuz diski hiç kimse açamaz, siz bile.
 
 # In that card when the password is typed at each start.
 # SAFETY: needs a human review before it ships
-installer-keep-password = Disk şifreli. Henüz yapmadıysanız disk parolasını şimdi kâğıda yazın ve bu bilgisayardan uzak, güvenli bir yerde saklayın. Onsuz disk, ne siz ne de başkası tarafından, hiçbir zaman açılamaz.
+installer-keep-password = Disk şifreli. Henüz yapmadıysanız disk parolasını şimdi kâğıda yazın ve bu bilgisayardan uzak, güvenli bir yerde saklayın. Onsuz diski hiç kimse açamaz, siz bile.
 
 # Title of the first slide.
 installer-slide-ring = Her şey tek bir dairede
 
 # Words of the first slide.
-installer-slide-ring-text = İşaretçiyi ekranın kenarına götürüp çift tıklayın, halka açılır: programlarınız dış çevrede, saat ve anahtarlar ortada.
+installer-slide-ring-text = İşaretçiyi ekranın kenarına götürüp halkayı açmak için çift tıklayın. Programlarınız dış çevrede, saat ve anahtarlar ortadadır.
 
 # Title of the second slide.
-installer-slide-snapshots = Bir güncellemenin bozduğunu geri koyun
+installer-slide-snapshots = Kötü bir güncellemeyi geri alın
 
 # Words of the second slide.
-installer-slide-snapshots-text = Her yazılım değişikliğinden önce ve sonra sistemin bir anlık görüntüsü alınır. Ayarlar tüm sistemi bunlardan herhangi birine geri koyar; bilgisayar açılmazsa önyükleme menüsü de bunu yapabilir.
+installer-slide-snapshots-text = Trindle her yazılım değişikliğinden önce ve sonra sistemin bir anlık görüntüsünü alır. Ayarlar'dan tüm sistemi bunlardan herhangi birine geri döndürebilirsiniz. Bilgisayar açılmazsa bunu önyükleme menüsünden de yapabilirsiniz.
 
 # Title of the third slide.
 installer-slide-apps = Yolunuza çıkmayan uygulamalar
@@ -427,10 +446,10 @@ installer-slide-apps = Yolunuza çıkmayan uygulamalar
 installer-slide-apps-text = Flathub uygulamaları, Debian'ın kendi uygulamaları, AppImage'lar ve yazılım kaynakları tek yerde; başka bir bilgisayara taşıyabileceğiniz yedeklerle.
 
 # Title of the fourth slide.
-installer-slide-yours = Sizin, çabucak
+installer-slide-yours = Sizin olsun
 
 # Words of the fourth slide.
-installer-slide-yours-text = Açık ya da koyu, kendi sesleriniz ve kopyaladıklarınızı hatırlayan bir pano.
+installer-slide-yours-text = Açık ya da koyu temayı seçin, kendi seslerinizi belirleyin ve kopyaladıklarınızı hatırlayan bir pano kullanın.
 
 # Title of the fifth slide.
 installer-slide-small = Küçük ve sessiz
@@ -445,19 +464,19 @@ installer-tour-ring = Halka tüm masaüstüdür
 installer-tour-ring-corner = İşaretçiyi bu köşeye götürün, halka açılır
 
 # Note on the ring picture, at the time.
-installer-tour-ring-time = Saat ve tarih, ortada
+installer-tour-ring-time = Saat ve tarih ortada
 
 # Note on the ring picture, at the programs.
-installer-tour-ring-programs = Programlarınız dış çevrede durur
+installer-tour-ring-programs = Programlarınız dış çevrede
 
 # Note on the ring picture, at the switches.
-installer-tour-ring-switches = Ses, ekran, tüm uygulamalarınız, uyanık tut ve kapatma
+installer-tour-ring-switches = Ses, ekran, tüm uygulamalarınız, uyanık kalma ve kapatma anahtarları
 
 # Title of the tour slide about Settings.
 installer-tour-settings = Ayarlar, sade sözlerle
 
 # Note on the Settings picture, at the search box.
-installer-tour-settings-search = Aramadan bir ayar bulmak için buraya yazın
+installer-tour-settings-search = Bir ayar bulmak için buraya yazın
 
 # Note on the Settings picture, at Network.
 installer-tour-settings-network = Ağ, bir Wi-Fi ağına katıldığınız yerdir
@@ -481,31 +500,31 @@ installer-tour-apps-many = Flathub ve Debian'dan binlerce ücretsiz program
 installer-tour-apps-updates = Trindle dahil her şey için güncellemeler
 
 # Title of the tour slide about voice control.
-installer-tour-voice = Onunla konuşabilirsiniz
+installer-tour-voice = Bilgisayarınızla konuşun
 
 # Note on the voice picture, at where voice control lives.
-installer-tour-voice-where = Sesli denetim burada: Ayarlar, sonra Halka
+installer-tour-voice-where = Sesli denetim Ayarlar'da, Halka bölümünde
 
 # Note on the voice picture, at the button that adds voice.
-installer-tour-voice-add = Ses ekle düğmesine bir kez basın. Yaklaşık 150 MB'tır ve birkaç dakika sürer
+installer-tour-voice-add = Sesli denetimi ekle düğmesine bir kez basın. İndirme yaklaşık 150 MB'tır ve birkaç dakika sürer
 
 # Note on the voice picture, about what to say.
 installer-tour-voice-say = Sonra halkanın ortasına dokunun ve bir uygulamanın adını, “sesi yükselt” ya da “Wi-Fi ayarları” deyin
 
 # Note on the voice picture, about where speech is understood.
-installer-tour-voice-private = Söyledikleriniz bu bilgisayarda anlaşılır ve başka hiçbir yere gitmez
+installer-tour-voice-private = Trindle söylediklerinizi bu bilgisayarda anlar ve hiçbir yere göndermez
 
 # Title of the tour slide about snapshots.
-installer-tour-snapshots = Hiçbir şey değişmeden önce geri dönüş yolu
+installer-tour-snapshots = Bir değişiklikten önceki haline dönün
 
 # Note on the snapshots picture, about when a snapshot is taken.
-installer-tour-snapshots-before = Bilgisayar her güncellemeden önce bir anlık görüntü alır
+installer-tour-snapshots-before = Trindle her güncellemeden önce bir anlık görüntü alır
 
 # Note on the snapshots picture, about going back.
-installer-tour-snapshots-back = Bir şey bozulursa önyükleme menüsünden eski haline dönün
+installer-tour-snapshots-back = Bir şey bozulursa önyükleme menüsünden eski haline dönebilirsiniz
 
 # Name of the picture of the ring, and the head of its card.
-installer-live-caption = Her şeyin yaşadığı yer: halka
+installer-live-caption = Halka, her şey içinde
 
 # Sentence under the title of the welcome from a stick.
 installer-live-help = USB bellekten çalışıyorsunuz, bu yüzden bu bilgisayarda hiçbir şey değiştirilmedi.
@@ -520,19 +539,19 @@ installer-live-open = Halkayı açın
 installer-live-open-line = Ekranın kenarına çift tıklayın ya da Super tuşuna basın.
 
 # Name of the second thing to do.
-installer-live-speak = Onunla konuşun
+installer-live-speak = Sesinizi kullanın
 
 # Line under it when voice control is there.
 installer-live-speak-line = Halkanın ortasına dokunun ve ne istediğinizi söyleyin.
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = Ayarlar, Halka bölümünden sesi ekleyin, sonra ortaya dokunup konuşun.
+installer-live-speak-add = Ayarlar'da Halka bölümünden Sesli denetimi ekle düğmesine basın. Sonra ortaya dokunup konuşun.
 
 # Name of the third thing to do.
 installer-live-tab = Hepsi halkada
 
 # Line under it.
-installer-live-tab-line = Nelerin açık olduğu, bildirimleriniz ve pano hep orada.
+installer-live-tab-line = Nelerin açık olduğunu, bildirimlerinizi ve panoyu orada bulursunuz.
 
 # The choice of the dark look.
 installer-live-dark = Koyu
@@ -556,7 +575,7 @@ installer-step-room = Yer açılıyor
 installer-step-prepare = Disk hazırlanıyor
 
 # Foot of the install page while a place is made beside another system.
-installer-step-place = Trindle için bir yer açılıyor
+installer-step-place = Trindle için yer açılıyor
 
 # Foot of the install page while the disk is looked at.
 installer-step-check = Diskte zaten ne olduğu denetleniyor
@@ -567,10 +586,10 @@ installer-step-smaller = Diğer sistem küçültülüyor
 
 # Foot of the install page while the disk is encrypted.
 # SAFETY: needs a human review before it ships
-installer-step-lock = Disk kilitleniyor
+installer-step-lock = Disk şifreleniyor
 
 # Foot of the install page while the TPM chip is set up.
-installer-step-chip = Bilgisayarın yongası ayarlanıyor
+installer-step-chip = TPM yongası ayarlanıyor
 
 # Foot of the install page while the system is copied.
 installer-step-copy = Trindle diske kopyalanıyor
@@ -582,7 +601,7 @@ installer-step-settings = Ayarlar yazılıyor
 installer-step-account = Hesabınız oluşturuluyor
 
 # Foot of the install page while the stick's own parts are taken out.
-installer-step-live-parts = Canlı parçalar çıkarılıyor
+installer-step-live-parts = USB belleğin ek parçaları kaldırılıyor
 
 # Foot of the install page while the start-up files are made.
 installer-step-startup = Açılış dosyaları oluşturuluyor
@@ -615,47 +634,47 @@ installer-not-a-disk-here = { $dev } bu bilgisayarda bir disk değil.
 installer-no-disk-chosen = Disk seçilmedi.
 
 # Red line at the foot: the sign-in name cannot be used.
-installer-bad-username = Bu oturum açma adı, Trindle'ın kullanabileceği bir ad değil.
+installer-bad-username = Trindle bu oturum açma adını kullanamaz.
 
 # Red line at the foot: the computer's name cannot be used.
-installer-bad-hostname = Bu bilgisayar adı, Trindle'ın kullanabileceği bir ad değil.
+installer-bad-hostname = Trindle bu bilgisayar adını kullanamaz.
 
 # Red line at the foot: the language cannot be used.
-installer-bad-language = Bu dil, Trindle'ın kullanabileceği bir dil değil.
+installer-bad-language = Trindle bu dili kullanamaz.
 
 # Red line at the foot: the keyboard cannot be used.
-installer-bad-keyboard = Bu klavye, Trindle'ın kullanabileceği bir klavye değil.
+installer-bad-keyboard = Trindle bu klavyeyi kullanamaz.
 
 # Red line at the foot: the time zone cannot be used.
-installer-bad-timezone = Bu saat dilimi, Trindle'ın kullanabileceği bir saat dilimi değil.
+installer-bad-timezone = Trindle bu saat dilimini kullanamaz.
 
 # Red line at the foot: the person's name has something that cannot be written.
-installer-bad-fullname = Bu ad, Trindle'ın yazamadığı bir şey içeriyor.
+installer-bad-fullname = Bu adda Trindle'ın kullanamadığı bir karakter var.
 
 # Red line at the foot: a password has a line break in it.
 # SAFETY: needs a human review before it ships
 installer-bad-password = Parola satır sonu içeremez.
 
 # Red line at the foot: the second half of the installer was not started as root.
-installer-needs-root = Yükleyicinin ikinci yarısı root olarak çalışmalıdır.
+installer-needs-root = Yükleyicinin ikinci bölümünün root olarak çalışması gerekir.
 
 # Red line at the foot: there is no boot partition to share.
 # SAFETY: needs a human review before it ships
 installer-no-boot-partition = Bu diskte paylaşılacak önyükleme bölümü yok, bu yüzden Trindle burada zaten olanın yanına kurulamaz.
 
 # Red line at the foot: the partition just made cannot be found.
-installer-new-part-missing = Diskin yeni bölümü bulunamadı.
+installer-new-part-missing = Yeni disk bölümü bulunamadı.
 
 # Red line at the foot: the size of a partition cannot be read.
 installer-size-unreadable = { $part } boyutu okunamadı.
 
 # Red line at the foot: a partition of this kind cannot be made smaller.
 # SAFETY: needs a human review before it ships
-installer-cannot-shrink = Trindle bir { $fs } bölümünü küçültemez.
+installer-cannot-shrink = Trindle { $fs } bölümlerini küçültemez.
 
 # Red line at the foot: a partition of a kind that is not known cannot be made smaller.
 # SAFETY: needs a human review before it ships
-installer-cannot-shrink-unknown = Trindle bilinmeyen bir bölümü küçültemez.
+installer-cannot-shrink-unknown = Trindle türü bilinmeyen bir bölümü küçültemez.
 
 # Red line at the foot: encrypting needs a password and there is none.
 # SAFETY: needs a human review before it ships
@@ -688,16 +707,16 @@ installer-sure = Emin misin?
 
 
 # Note on the ring picture, at the tab at the edge.
-installer-tour-ring-foot = Neyin açık olduğu, pano ve ekranı temizleyen bir düğme
+installer-tour-ring-foot = Nelerin açık olduğunu görün, panoyu kullanın ve ekranı tek düğmeyle temizleyin
 
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev }, Trindle'ın çalıştığı bellektir.
 
 # Red line at the foot: something on the chosen disk is mounted or swapped to.
-installer-disk-in-use = { $dev } kullanımda. Onu kullananı kapatın, sonra yeniden deneyin.
+installer-disk-in-use = { $dev } kullanımda. Onu kullanan her şeyi kapatın, sonra yeniden deneyin.
 
 # Said beside how far the install has got, once it has started.
-installer-started = Kurulum başladı
+installer-started = Kuruluyor
 
 # The button that ends an install under way.
 installer-halt = Durdur
@@ -726,14 +745,40 @@ installer-memory-short = Trindle için en az 1 GB bellek gerekir ve bu bilgisaya
 installer-lock-needs-uefi = Bir disk yalnızca UEFI ile açılan bir bilgisayarda şifrelenebilir ve bu bilgisayar UEFI ile açılmıyor.
 
 # Red words when the Windows partition chosen to share the disk was hibernated or left in Windows' fast start-up; { $part } is the partition.
-installer-windows-asleep = { $part } üzerindeki Windows hazırda bekletilmiş ya da hızlı başlatma durumunda bırakılmış, bu yüzden küçültmek dosyalarının kaybolmasına yol açabilir. Windows'u başlatın, Yeniden başlat'ı seçin, sonra yeniden deneyin.
+installer-windows-asleep = { $part } üzerindeki Windows hazırda bekletilmiş ya da hızlı başlatmayla kapatılmış. Şimdi küçültmek dosyalarının kaybolmasına yol açabilir. Windows'u başlatın, Yeniden başlat'ı seçin, sonra yeniden deneyin.
 
 # Red words on the last page when the snapshots could not be set up; { $why } is the reason.
 installer-snapshots-failed = Trindle kuruldu, ancak anlık görüntüler ayarlanamadı: { $why }
 
 # Red words on the last page when the boot menu could not be made after setting up snapshots; { $why } is the reason.
-installer-snapshots-menu-failed = Trindle kuruldu, ancak önyükleme menüsünün anlık görüntüleri listelemesi sağlanamadı: { $why }
+installer-snapshots-menu-failed = Trindle kuruldu, ancak anlık görüntüler önyükleme menüsüne eklenemedi: { $why }
 
 # Head of the card on the last page that lists what could not be done.
 installer-done-problems = Her şey ayarlanamadı
 
+# Red line under the disk password boxes: the computer gave no random numbers, so no passphrase could be made.
+installer-suggest-failed = Trindle bir parola oluşturamadı. Kendi parolanızı yazın.
+
+# Red line at the foot: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev }, gösterilen disk değil. Geri dönüp diski yeniden seçin.
+
+# Red line at the foot: a disk with an old-style partition table cannot be shared with.
+installer-no-gpt = { $dev } GPT bölüm tablosu kullanmıyor, bu yüzden Trindle, üzerindeki mevcut verilerle birlikte kurulamaz.
+
+# Red line at the foot: the boot partition on the disk is too small to share.
+installer-boot-partition-small = Bu diskteki önyükleme bölümü paylaşılamayacak kadar küçük, bu yüzden Trindle, üzerindeki mevcut verilerle birlikte kurulamaz.
+
+# Note on the last page: the swap file was not made, with why.
+installer-swap-failed = Trindle kuruldu ama takas dosyasını oluşturamadı: { $why }
+
+# Red line at the foot: a partition's identity could not be read after it was made.
+installer-uuid-missing = Trindle, { $dev } aygıtını ayarladıktan sonra tanımlayamadı.
+
+# Words on the last page: the disk that will be replaced, with what it holds.
+installer-ready-replaced-known = { $disk } üzerindeki her şey değiştirilecek ({ $holds }).
+
+# A disk named with its model and size, then its place such as /dev/sda.
+installer-disk-named = { $what }, { $dev }
+
+# Red line at the foot: a program the installer runs stopped before it had all it was given.
+installer-run-stopped = { $program }, gereken her şey hazır olmadan durdu: { $why }

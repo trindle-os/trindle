@@ -1,9 +1,8 @@
 //! The one plugin whose made-up presses are the person's own hands: Flow,
-//! put in from Trindle's own signed catalogue.
-//! The person works one computer from another through
-//! Flow, so every click and key there is Flow's made-up press, and the
-//! power buttons, Save in the file chooser and the password box refused
-//! him.
+//! put in from Trindle's own signed catalogue. The person works one computer
+//! from another through Flow, so every click and key there is Flow's made-up
+//! press, and without this the power buttons, Save in the file chooser and
+//! the password box would refuse them.
 
 use std::io::Read;
 use std::path::Path;

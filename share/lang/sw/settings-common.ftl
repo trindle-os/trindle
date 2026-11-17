@@ -6,13 +6,16 @@ settings-common-saved = Imehifadhiwa
 # Said beside a button that worked, when nothing more is known.
 settings-common-done = Imekamilika
 
+# Words that only say "that worked", in lower case and separated by bars. A line saying one of them under a control that has already moved is left out, as the glow says it. Translate each word, and keep the bars.
+settings-common-quiet-words = imehifadhiwa|imekamilika|inatumika sasa|imebadilishwa|imewekwa|imechukuliwa|imeongezwa|imeachiliwa|imeondolewa|imehifadhiwa|imesakinishwa|imesasishwa|imejiunga|imenakiliwa|chaguomsingi sasa|imechezwa|imetumwa|imeunganishwa|inaunganisha|imewashwa|imezimwa|imesahaulika|inasimama kwa 80%|inachaji hadi kujaa|huanza unapoingia|imehifadhiwa, lakini haianzi|imesasishwa kikamilifu
+
 # Said beside a button that failed, when nothing more is known.
 settings-common-not-done = Haikufanyika
 
 # Tip of the information button at the top of every Settings page.
 settings-common-about-page = Kuhusu ukurasa huu
 
-# Tip of the information button on a card: { $name } is the card's heading in lower case.
+# Tip of the information button on a card: { $name } is the card's heading as it is written.
 settings-common-about-card = Kuhusu { $name }
 
 # Heading of the question when a name is already taken: { $name } is the name.
@@ -29,7 +32,7 @@ settings-common-same-for-rest-more =
 settings-common-same-for-rest = Fanya vivyo hivyo kwa zilizobaki
 
 # Tip of the button that keeps the one already there.
-settings-common-skip = Ruka: weka iliyopo tayari
+settings-common-skip = Ruka na uweke iliyopo
 
 # Button that replaces the one already there.
 # SAFETY: needs a human review before it ships
@@ -37,10 +40,10 @@ settings-common-replace = Badilisha
 
 # Spoken name of the Replace button.
 # SAFETY: needs a human review before it ships
-settings-common-replace-spoken = Badilisha iliyopo tayari na inayoletwa
+settings-common-replace-spoken = Badilisha iliyopo na mpya
 
 # Heading of the line that shows the new one, in the question about a name already taken.
-settings-common-being-brought = Inayoletwa
+settings-common-being-brought = Mpya
 
 # Heading of the line that shows the one already there.
 settings-common-already-line = Iliyopo tayari
@@ -52,19 +55,19 @@ settings-common-replace-question = Ibadilishe iliyopo tayari?
 # At the foot of the window while a change is on trial: how many seconds are left.
 settings-common-goes-back =
     { $left ->
-        [one] Itarudi nyuma baada ya sekunde { $left }.
-       *[other] Itarudi nyuma baada ya sekunde { $left }.
+        [one] Inatendua baada ya sekunde { $left }.
+       *[other] Inatendua baada ya sekunde { $left }.
     }
 
 # At the foot of the window while a change is on trial: the seconds left, then { $more } such as what Escape does.
 settings-common-goes-back-more =
     { $left ->
-        [one] Itarudi nyuma baada ya sekunde { $left }. { $more }
-       *[other] Itarudi nyuma baada ya sekunde { $left }. { $more }
+        [one] Inatendua baada ya sekunde { $left }. { $more }
+       *[other] Inatendua baada ya sekunde { $left }. { $more }
     }
 
 # Button at the foot of the window that undoes the change on trial.
-settings-common-go-back-now = Rudi nyuma sasa
+settings-common-go-back-now = Tengua sasa
 
 # Button at the foot of the window that keeps the change on trial.
 settings-common-keep = Weka
@@ -73,10 +76,10 @@ settings-common-keep = Weka
 settings-common-not-available = { $what } haipatikani
 
 # Under that heading: { $package } is the name of the package to install.
-settings-common-install-with = Iweke kwa: sudo apt install { $package }
+settings-common-install-with = Ili kuisakinisha, endesha: sudo apt install { $package }
 
 # Red words when a web page could not be opened.
-settings-common-no-browser = Ukurasa wa wavuti haukuweza kufunguliwa: hakuna kivinjari kilichoweza kuanzishwa.
+settings-common-no-browser = Trindle haikuweza kufungua ukurasa wa wavuti, kwa sababu haikuweza kuanzisha kivinjari.
 
 # Red words when one of Trindle's programs could not be opened: { $name } is its name.
 settings-common-could-not-open = { $name } haikuweza kufunguliwa.
@@ -85,19 +88,19 @@ settings-common-could-not-open = { $name } haikuweza kufunguliwa.
 settings-common-not-saved = Haikuweza kuhifadhiwa.
 
 # Red words when an action needs the system's message bus and there is none.
-settings-common-no-system-bus = Haikufanyika: basi la ujumbe la mfumo halikufikika. Washa kompyuta upya, kisha jaribu tena.
+settings-common-no-system-bus = Trindle haikuweza kufanya hivyo kwa sababu sehemu ya mfumo haijibu. Washa kompyuta upya, kisha jaribu tena.
 
 # Red words when an action needs this login's message bus and there is none.
-settings-common-no-session-bus = Haikufanyika: basi la ujumbe la kuingia huku halikufikika. Toka kisha ingia tena, halafu jaribu tena.
+settings-common-no-session-bus = Trindle haikuweza kufanya hivyo kwa sababu sehemu ya kuingia kwako haijibu. Toka kisha ingia tena, halafu jaribu tena.
 
 # Red words when the window for choosing a file or folder could not be opened.
-settings-common-no-chooser = Dirisha la kuchagua halikuweza kufunguliwa. Toka kisha ingia tena, halafu jaribu tena.
+settings-common-no-chooser = Trindle haikuweza kufungua dirisha la kuchagua faili au folda. Toka kisha ingia tena, halafu jaribu tena.
 
 # Cause given in red words after an action failed: the disk is full.
 settings-common-why-full = Diski imejaa.
 
 # Cause given in red words after an action failed: the disk is read only.
-settings-common-why-read-only = Diski haiwezi kuandikwa kwa sasa.
+settings-common-why-read-only = Trindle haiwezi kuandika kwenye diski kwa sasa.
 
 # Cause given in red words after an action failed: the part of the system that does it is not running.
 settings-common-why-not-running = Sehemu ya mfumo inayofanya hili haifanyi kazi.
@@ -111,7 +114,7 @@ settings-common-why-password = Nenosiri halikutolewa.
 
 # Cause given in red words after an action failed: the account is not allowed.
 # SAFETY: needs a human review before it ships
-settings-common-why-not-allowed = Akaunti hii hairuhusiwi kufanya hivyo.
+settings-common-why-not-allowed = Akaunti hii haiwezi kufanya hivyo.
 
 # Cause given in red words after an action failed: something needed is missing.
 settings-common-why-missing = Kuna kitu kinachohitajika kinakosekana kwenye kompyuta hii.
@@ -126,16 +129,16 @@ settings-common-and = { $rest } na { $last }
 settings-common-list-comma = { ", " }
 
 # Spoken name of the picture of the ring opening on a small screen.
-settings-common-ring-picture = Pete hufunguka kwa kubofya ukingoni mwa skrini.
+settings-common-ring-picture = Unafungua pete kwa kubofya mara mbili ukingoni mwa skrini.
 
 # Word drawn in the middle of that picture.
 settings-common-ring-name = Pete
 
 # Red words under the charge limit switch when the laptop's firmware door could not be opened; { $error } is the system's reason.
-charge-no-firmware-door = Firmware ya kompyuta mpakato haikufikika: { $error }
+charge-no-firmware-door = Trindle haikuweza kufikia vidhibiti vya kuchaji vya kompyuta mpakato: { $error }
 
 # Red words under the charge limit switch when the laptop's firmware refused the limit.
-charge-firmware-refused = Firmware ya kompyuta mpakato haikukubali kikomo cha kuchaji.
+charge-firmware-refused = Kompyuta mpakato haikukubali kikomo cha kuchaji.
 
 # Red words under the charge limit switch on a computer that cannot stop charging early.
 charge-not-allowed = Kompyuta hii hairuhusu kuchaji kusimamishwa mapema.
@@ -147,7 +150,10 @@ charge-could-not-set = Haikuweza kuweka { $path }: { $error }
 graphics-vm-title = Kujaribu Trindle kwenye mashine pepe
 
 # Note to someone in a virtual machine that has 3D graphics; { $machine } is the machine's name.
-graphics-vm-body-fast = Trindle inafanya kazi kwenye { $machine }. Inafanya kazi vizuri huko, lakini mashine pepe haiwi haraka wala laini kama kompyuta halisi, kwa hiyo tafadhali pima kasi yake kwenye kompyuta halisi.
+graphics-vm-body-fast = Trindle inafanya kazi kwenye { $machine }. Inafanya kazi vizuri huko, lakini mashine pepe haiwi haraka wala laini kabisa kama kompyuta halisi. Pima kasi yake kwenye kompyuta halisi.
 
 # Note to someone in a virtual machine without 3D graphics; { $machine } is the machine's name.
-graphics-vm-body-slow = Trindle inafanya kazi kwenye { $machine } bila michoro ya 3D, kwa hiyo kichakataji lazima kichore kila kitu ambacho chipu ya michoro kwa kawaida huchora. Madirisha, video na kurasa za wavuti zitahisi polepole kuliko kwenye kompyuta halisi, na Trindle huacha uhuishaji wake ili kusaidia. Kama kompyuta inayoiendesha inaweza, kuwasha kasi ya 3D kwenye mipangilio ya skrini ya mashine pepe hubadilisha sana. Ikiwekwa kwenye kompyuta halisi, hakuna kati ya haya linalohusika.
+graphics-vm-body-slow = Trindle inafanya kazi kwenye { $machine } bila michoro ya 3D. Kichakataji lazima kichore kila kitu ambacho chipu ya michoro kwa kawaida huchora. Madirisha, video na kurasa za wavuti zitaonekana polepole kuliko kwenye kompyuta halisi, kwa hiyo Trindle huacha uhuishaji wake. Kama kompyuta inayoiendesha inaweza, washa kasi ya 3D kwenye mipangilio ya skrini ya mashine pepe. Hilo hubadilisha sana. Hakuna kati ya haya linalohusika ukisakinisha Trindle kwenye kompyuta halisi.
+
+# A list of choices ends with this: { $rest } is the names before the last, { $last } the last.
+settings-common-or = { $rest } au { $last }

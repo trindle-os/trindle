@@ -9,10 +9,10 @@ settings-plugins-keywords = plugin tiện ích bổ sung tiện ích mở rộng
 
 # Help line at the foot of the Your plugins page.
 # SAFETY: needs a human review before it ships
-settings-plugins-help = Plugin bổ sung thêm cho Trindle: một biểu tượng trong vòng tròn, cài đặt ở đây, thông báo, hoặc thứ chạy từ lúc đăng nhập. Mỗi plugin chạy trong môi trường cách ly, không được phép gì cho đến khi bạn cho phép trong Quyền, nút ở cuối tiêu đề trang này sẽ mở trang đó. Thẻ của mỗi plugin ở đây chứa cài đặt riêng của nó; bấm hai lần vào thùng rác trên thẻ để gỡ plugin đó.
+settings-plugins-help = Plugin bổ sung thêm cho Trindle. Một plugin có thể thêm biểu tượng vào vòng tròn, cài đặt ở đây, thông báo, hoặc thứ bắt đầu chạy khi bạn đăng nhập. Mỗi plugin chạy riêng biệt và không dùng được gì cho đến khi bạn cho phép trong Quyền. Nút bên cạnh tiêu đề trang này sẽ mở Quyền. Để gỡ một plugin, hãy bấm hai lần vào thùng rác trên thẻ của nó.
 
 # Red words when the window that asks what a plugin may use could not be opened.
-settings-plugins-window-failed = Không mở được cửa sổ hỏi plugin được dùng những gì.
+settings-plugins-window-failed = Trindle không mở được cửa sổ hỏi plugin được dùng những gì.
 
 # Under About it: the plugin's version number is { $v }.
 settings-plugins-version = Phiên bản { $v }.
@@ -22,18 +22,14 @@ settings-plugins-version-settled = Phiên bản { $v }. { $settled }
 
 # Help text of a plugin's card when it asks for nothing: the plugin's name is { $name }.
 # SAFETY: needs a human review before it ships
-settings-plugins-asks-nothing = { $name } không xin gì cả, nên nó chạy cách ly và không được phép gì.
+settings-plugins-asks-nothing = { $name } không xin gì cả, nên nó chạy riêng biệt và không được phép gì.
 
 # Help text of a plugin's card: its name is { $name }, { $list } is what it asks for, { $allowed } of { $asks } are allowed.
 # SAFETY: needs a human review before it ships
 settings-plugins-asks-for =
     { $asks ->
-       *[other] { $name } xin { $list }; đã cho phép { $allowed } trên { $asks }. Nó chạy cách ly, chỉ với những gì bạn cho phép.
+       *[other] { $name } xin { $list }. Bạn đã cho phép { $allowed } trên { $asks }. Nó chạy riêng biệt, chỉ với những gì bạn cho phép.
     }
-
-# Under the line that tells a plugin needs more allowed, beside its Allow button.
-# SAFETY: needs a human review before it ships
-settings-plugins-needs-more = Nút Cho phép hiện từng thứ nó xin, kèm một công tắc.
 
 # Heading of the line about a plugin on its card.
 settings-plugins-about-it = Giới thiệu
@@ -71,17 +67,14 @@ settings-plugins-group = Plugin
 # Heading of the line shown when no plugin is installed.
 settings-plugins-none = Chưa cài gì
 
-# Under the None installed heading.
-settings-plugins-none-sub = Ứng dụng có plugin để thêm.
-
 # Tip of the button at the end of the page's title that opens the Permissions page.
 settings-plugins-open-permissions = Mở Quyền
 
 # Said at the top of a plugin's card while its service has not yet answered; the plugin's name is {$name}.
-settings-plugins-rows-asking = Đang hỏi { $name }.
+settings-plugins-rows-asking = Đang hỏi { $name }…
 
 # Said at the top of a plugin's card, and in red under a row, when its service does not answer; the plugin's name is {$name}.
-settings-plugins-rows-silent = { $name } không trả lời. Dịch vụ của nó có thể đã dừng.
+settings-plugins-rows-silent = { $name } không phản hồi. Dịch vụ của nó có thể đã dừng.
 
 # Said beside a row after the plugin kept the change.
 settings-plugins-rows-saved = Đã lưu.
@@ -94,4 +87,3 @@ settings-plugins-rows-failed = { $name } không làm được việc đó.
 
 # Red words under a row when the change failed; the plugin's name is {$name} and the reason it gave is {$why}.
 settings-plugins-rows-failed-why = { $name } không làm được việc đó: { $why }.
-

@@ -31,13 +31,13 @@ installer-stop-done = Imekamilika
 installer-getting-ready = Inajiandaa
 
 # Red line at the foot when the installer's helper could not be started.
-installer-no-start = Kisakinishi hakikuweza kuanza: { $why }
+installer-no-start = Imeshindwa kuanzisha kisakinishi: { $why }
 
 # Written to the error output when the plan sent to the helper could not be read.
-installer-plan-unreadable = Mpango haukuweza kusomwa.
+installer-plan-unreadable = Imeshindwa kusoma mpango.
 
 # Written to the error output when the plan sent to the helper could not be read, with the reason.
-installer-plan-unreadable-why = Mpango haukuweza kusomwa: { $why }
+installer-plan-unreadable-why = Imeshindwa kusoma mpango: { $why }
 
 # Red line at the foot when the helper stopped without saying why.
 installer-stopped = Usakinishaji umesimama. Hakuna kingine kilichoandikwa.
@@ -68,39 +68,46 @@ installer-arm = Bofya tena ili kusakinisha
 installer-arm-erase = Bofya tena ili kufuta na kusakinisha
 
 # Note beside Next on the first page while no language is chosen.
-installer-missing-language = Chagua lugha
+installer-missing-language = Chagua lugha yako
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = Chagua lugha ya Trindle
 
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = Chagua kibodi
 
 # Note beside Next on the first page while no time zone is chosen.
-installer-missing-time = Chagua saa
+installer-missing-time = Chagua ukanda wa saa
 
 # Note beside Next on the disk page while no disk is chosen.
-installer-missing-disk = Chagua mahali Trindle itakapokaa
+installer-missing-disk = Chagua mahali pa Trindle
+
+# Note beside Next on the disk page while the disks are read again, after one turned out not to be the disk shown.
+installer-disks-rereading = Inasoma diski tena
 
 # Note beside Next on the disk password page while no password has been typed twice.
 # SAFETY: needs a human review before it ships
-installer-missing-disk-password = Andika nenosiri la diski mara mbili, sawa kabisa
+installer-missing-disk-password = Andika nenosiri la diski mara mbili. Lazima liwe sawa mara zote mbili
 
 # Note beside Next on the account page while the sign-in name is not good.
-installer-missing-username = Jina la kuingia linahitajika
+installer-missing-username = Andika jina la kuingia
 
 # Note beside Next on the account page while the computer's name is not good.
 installer-missing-hostname = Ipe kompyuta hii jina
 
 # Note beside Next on the account page while no password has been typed twice.
 # SAFETY: needs a human review before it ships
-installer-missing-password = Andika nenosiri lako mara mbili, sawa kabisa
+installer-missing-password = Andika nenosiri lako mara mbili. Lazima liwe sawa mara zote mbili
 
 # Title of the first page.
 installer-welcome-title = Karibu kwenye { $name }
 
 # Sentence under the title of the first page.
-installer-welcome-help = Chagua lugha yako; kibodi na saa hufuata lugha, na unaweza kubadilisha kimojawapo.
+installer-welcome-help = Chagua lugha yako, na Trindle itaweka mengine kulingana nayo.
 
-# Head of the card for choosing the language, and the name of its search box.
-installer-language = Lugha
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
+installer-language = Lugha yako
+# Label beside the box at the right of the first page's sentence, for choosing the language of Trindle's own words (only those Trindle has).
+installer-trindle-language = Lugha ya Trindle
 
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = Kibodi
@@ -112,14 +119,14 @@ installer-time = Saa
 installer-select = Chagua
 
 # Title of the disk page.
-installer-disks-title = Mahali { $name } itakapokaa
+installer-disks-title = Mahali pa { $name }
 
 # Sentence under the title of the disk page.
 # SAFETY: needs a human review before it ships
-installer-disks-help = Kila kitu kilicho kwenye diski unayochagua kitabadilishwa, isipokuwa utengeneze nafasi kando ya kilichopo.
+installer-disks-help = Kila kitu kilicho kwenye diski unayochagua kitabadilishwa, isipokuwa uchague kusakinisha kando ya kilichopo tayari.
 
 # Shown on the disk page when no disk is big enough.
-installer-disks-none = Hakuna diski kubwa ya kutosha iliyopatikana. Trindle inahitaji GB 20.
+installer-disks-none = Trindle haikupata diski kubwa ya kutosha. Inahitaji GB 20.
 
 # Name and words of the choice to erase a whole disk.
 # SAFETY: needs a human review before it ships
@@ -129,7 +136,7 @@ installer-disks-whole = Tumia diski nzima, ukibadilisha kila kitu kilicho juu ya
 installer-disks-share = Weka { $what } na ushiriki diski
 
 # Under the slider that decides how much of a shared partition is kept: the size each side gets.
-installer-disks-split = { $kept } kwa kilichopo sasa, { $mine } kwa Trindle
+installer-disks-split = Kwa kilichopo sasa: { $kept }. Kwa Trindle: { $mine }
 
 # A partition or disk with its size, such as the name of a disk and how big it is.
 installer-named-size = { $name }, { $size }
@@ -162,16 +169,16 @@ installer-swap-title = Faili ya swap ya GB { $gb }
 installer-swap-switch = Tengeneza faili ya swap
 
 # Under the swap file's head when Secure Boot is on.
-installer-swap-secure-boot = Secure Boot imewashwa, kwa hiyo kompyuta hii haiwezi kujihifadhi usingizini (hibernate), lakini faili ya swap bado husaidia kumbukumbu inapopungua. Hutengenezwa tu ikiwa diski ina nafasi nyingi ya ziada.
+installer-swap-secure-boot = Secure Boot imewashwa, kwa hiyo kompyuta hii haiwezi kujihifadhi usingizini (hibernate), lakini faili ya swap bado husaidia kumbukumbu inapopungua. Trindle huitengeneza tu ikiwa diski ina nafasi nyingi ya ziada.
 
 # Under the swap file's head when the computer can hibernate.
-installer-swap-note = Nafasi ya kujihifadhi usingizini (hibernate), ukiweka kila kitu kilicho wazi hata umeme ukizimwa, na mahali pa kugeukia kumbukumbu inapopungua. Bila hiyo kompyuta haiwezi kujihifadhi usingizini. Hutengenezwa tu ikiwa diski ina nafasi nyingi ya ziada.
+installer-swap-note = Faili ya swap huiwezesha kompyuta kujihifadhi usingizini (hibernate), ambapo kila kitu kilicho wazi huhifadhiwa hata umeme ukiwa umezimwa. Pia huipa kompyuta nafasi ya ziada kumbukumbu inapopungua. Bila hiyo, kompyuta haiwezi kujihifadhi usingizini. Trindle huitengeneza tu ikiwa diski ina nafasi nyingi ya ziada.
 
 # Title of the page about encrypting the disk.
 installer-privacy-title = Kusimba diski kwa usimbaji fiche
 
 # Sentence under the title of that page.
-installer-privacy-help = Diski iliyosimbwa haiwezi kusomwa na mtu yeyote atakayeitoa kwenye kompyuta hii.
+installer-privacy-help = Hakuna anayeweza kusoma diski iliyosimbwa akiitoa kwenye kompyuta hii.
 
 # Head of the card with the three choices.
 installer-privacy-locked = Jinsi diski inavyofungwa
@@ -191,7 +198,7 @@ installer-privacy-about = Kuhusu chipu
 
 # In the card about the chip, on a computer that has one.
 # SAFETY: needs a human review before it ships
-installer-privacy-chip = Kompyuta hii ina chipu ya TPM. Mwanzo wa kwanza baada ya kusakinisha huomba nenosiri mara moja, chipu inapojifunza kompyuta hii; baada ya hapo hufungua diski yenyewe na hakuna kinachoandikwa. Hifadhi nenosiri: ndiyo njia ya kuingia ikiwa chipu itabadilishwa au diski ikihamishiwa kompyuta nyingine.
+installer-privacy-chip = Kompyuta hii ina chipu ya TPM. Itakapoanza mara ya kwanza baada ya kusakinisha, itaomba nenosiri mara moja wakati chipu inaandaliwa. Baada ya hapo chipu hufungua diski na huandiki chochote. Hifadhi nenosiri, kwa sababu utalihitaji ikiwa chipu itabadilishwa au diski ikihamishiwa kompyuta nyingine.
 
 # In the card about the chip, on a computer that has none Trindle can use.
 installer-privacy-no-chip = Kompyuta hii haina chipu ya TPM ambayo Trindle inaweza kutumia, kwa hiyo nenosiri litaombwa kila inapoanza. Kwenye kompyuta yenye chipu, chipu inaweza kufungua diski yenyewe.
@@ -200,7 +207,7 @@ installer-privacy-no-chip = Kompyuta hii haina chipu ya TPM ambayo Trindle inawe
 installer-disk-title = Nenosiri la diski
 
 # Sentence under the title of the disk password page.
-installer-disk-help = Huandikwa kabla ya kitu kingine chochote kompyuta inapoanza.
+installer-disk-help = Unaliandika kabla ya kitu kingine chochote kompyuta inapoanza.
 
 # Head of the card with the disk password boxes, and the name of the first box.
 installer-disk-password = Nenosiri la diski
@@ -209,7 +216,7 @@ installer-disk-password = Nenosiri la diski
 installer-disk-suggest = Pendekeza kifungu cha siri
 
 # Label and name of the second box of a password, where it is typed again.
-installer-same-again = Lile lile tena
+installer-same-again = Andika tena
 
 # Red line under the password boxes when the two do not match.
 # SAFETY: needs a human review before it ships
@@ -220,7 +227,7 @@ installer-disk-write-down = Liandike
 
 # Words in that card.
 # SAFETY: needs a human review before it ships
-installer-disk-write-down-text = Andika nenosiri hili kwenye karatasi na uliweke mahali salama, mbali na kompyuta. Bila hilo diski haiwezi kufunguliwa, na wewe wala mtu mwingine yeyote, kamwe. Hakuna njia ya kurudi ndani. Maneno manne ya kawaida hutengeneza kifungu cha siri ambacho ni rahisi kuandika na kigumu kubashiri.
+installer-disk-write-down-text = Andika nenosiri hili kwenye karatasi na uliweke mahali salama, mbali na kompyuta. Bila hilo, hakuna anayeweza kufungua diski kamwe, hata wewe. Hakuna njia ya kurudi ndani. Kifungu cha siri chenye maneno manne ya kawaida ni rahisi kuandika na kigumu kubashiri.
 
 # Title of the account page.
 installer-you-title = Kukuhusu
@@ -251,19 +258,19 @@ installer-password = Nenosiri
 installer-strength = Ugumu wa kubashiri
 
 # Red line under the account boxes: the sign-in name is empty.
-installer-user-needed = Jina la kuingia linahitajika.
+installer-user-needed = Andika jina la kuingia.
 
 # Red line under the account boxes: a name is too long.
 installer-name-too-long = Jina hilo ni refu mno.
 
 # Red line under the account boxes: the sign-in name does not start with a small letter.
-installer-user-start = Anza kwa herufi ndogo.
+installer-user-start = Anza kwa herufi a-z.
 
 # Red line under the account boxes: the sign-in name uses letters it may not.
-installer-user-letters = Herufi ndogo, tarakimu, - na _ tu.
+installer-user-letters = Tumia a-z, 0-9, - na _ tu.
 
 # Red line under the account boxes: the sign-in name belongs to the system.
-installer-user-taken = Jina hilo tayari linatumiwa na mfumo.
+installer-user-taken = Mfumo tayari unatumia jina hilo.
 
 # Red line under the account boxes: the computer's name is empty.
 installer-host-needed = Ipe kompyuta hii jina.
@@ -309,20 +316,20 @@ installer-guess-never = Kompyuta ingehitaji muda mrefu kuliko historia yote iliy
 installer-ready-title = Tayari kusakinisha
 
 # Head of the card that lists what will happen.
-installer-ready-nothing-changed = Hakuna kilichobadilishwa bado
+installer-ready-nothing-changed = Hakuna kilichobadilika bado
 
 # Head of the card about security updates.
 installer-ready-security = Masasisho ya usalama
 
 # In the card about security updates.
-installer-ready-security-text = { $name } husakinisha marekebisho ya usalama ya Debian yenyewe kila siku. Hili haliwezi kuzimwa.
+installer-ready-security-text = { $name } husakinisha marekebisho ya usalama ya Debian yenyewe kila siku. Unaweza kuzima hili kwenye Mipangilio, Kuhusu kompyuta hii.
 
 # Sentence under the title when a whole disk will be replaced.
 # SAFETY: needs a human review before it ships
 installer-ready-replaced = Kila kitu kilicho kwenye { $disk } kitabadilishwa.
 
 # Sentence under the title when the install goes beside what is there.
-installer-ready-kept = Kila kitu kilicho kwenye { $part } kinabaki, lakini kihifadhi nakala kwanza: kukipunguza ukubwa kunaweza kupoteza faili umeme ukikatika.
+installer-ready-kept = Kila kitu kilicho kwenye { $part } kinabaki, lakini kihifadhi nakala kwanza. Umeme ukikatika wakati inapunguzwa ukubwa, faili zinaweza kupotea.
 
 # Sentence under the title when no disk has been chosen.
 installer-ready-none = Bado hakuna diski iliyochaguliwa.
@@ -338,13 +345,13 @@ installer-ready-whole-text = Kila kitu kilicho juu yake kinabadilishwa na { $nam
 installer-ready-beside = Kando ya { $part }
 
 # Words of that row.
-installer-ready-beside-text = { $part } inapunguzwa hadi { $size }, na { $name } inawekwa kwenye nafasi iliyopatikana.
+installer-ready-beside-text = { $part } inapungua hadi { $size }, na { $name } inasakinishwa kwenye nafasi inayopatikana.
 
 # Name of a row in the list when no disk is chosen.
 installer-ready-no-disk = Hakuna diski
 
 # Words of that row.
-installer-ready-no-disk-text = Hakuna diski iliyochaguliwa.
+installer-ready-no-disk-text = Chagua diski.
 
 # Name of a row in the list: the disk will not be encrypted.
 # SAFETY: needs a human review before it ships
@@ -361,10 +368,22 @@ installer-ready-locked = Imesimbwa
 installer-ready-locked-password = Unaandika nenosiri lake kila kompyuta inapoanza.
 
 # Words of that row when the TPM chip unlocks the disk.
-installer-ready-locked-chip = Nenosiri mara moja, kisha chipu ya TPM ya kompyuta hii inaifungua.
+installer-ready-locked-chip = Unaandika nenosiri mara moja, kisha chipu ya TPM ya kompyuta hii inafungua diski.
 
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = Kibodi { $keyboard }, saa { $zone }.
+# Added to the end of the disk's row on the last page when a swap file is to be made, with its size in GB.
+installer-ready-swap = Pamoja na faili ya swap ya GB { $gb }.
+
+# Under the choice to let the TPM chip unlock the disk, on a computer with no usable chip.
+installer-privacy-chip-off = Inahitaji chipu ya TPM ambayo Trindle inaweza kutumia.
+
+# In the card about the chip when the disk is not being encrypted, on a computer that has a chip.
+installer-privacy-chip-none = Kompyuta hii ina chipu ya TPM, inayoweza kufungua diski iliyosimbwa.
+
+# In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
+installer-privacy-no-chip-none = Kompyuta hii haina chipu ya TPM ambayo Trindle inaweza kutumia.
+
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle kwa { $trindle }, kibodi { $keyboard }, saa { $zone }.
 
 # Title of the page shown while the install runs.
 installer-installing-title = Inasakinisha { $name }
@@ -383,41 +402,41 @@ installer-done-keep = Hifadhi nenosiri la diski salama
 
 # In that card when the TPM chip unlocks the disk.
 # SAFETY: needs a human review before it ships
-installer-keep-chip = Diski imesimbwa. Mwanzo wa kwanza huomba nenosiri la diski mara moja, chipu inapojifunza kompyuta hii; baada ya hapo hujifungua yenyewe. Andika nenosiri hilo kwenye karatasi na ulihifadhi mahali salama mbali na kompyuta hii. Bila hilo diski haiwezi kufunguliwa, na wewe wala mtu mwingine yeyote, kamwe.
+installer-keep-chip = Diski imesimbwa. Kompyuta itakapoanza mara ya kwanza, itaomba nenosiri la diski mara moja wakati chipu inaandaliwa. Baada ya hapo diski hujifungua yenyewe. Andika nenosiri hilo kwenye karatasi na ulihifadhi mahali salama, mbali na kompyuta hii. Bila hilo, hakuna anayeweza kufungua diski kamwe, hata wewe.
 
 # In that card when the password is typed at each start.
 # SAFETY: needs a human review before it ships
-installer-keep-password = Diski imesimbwa. Andika nenosiri la diski kwenye karatasi sasa, kama hujafanya hivyo, na ulihifadhi mahali salama mbali na kompyuta hii. Bila hilo diski haiwezi kufunguliwa, na wewe wala mtu mwingine yeyote, kamwe.
+installer-keep-password = Diski imesimbwa. Kama hujafanya hivyo, andika nenosiri la diski kwenye karatasi sasa na ulihifadhi mahali salama, mbali na kompyuta hii. Bila hilo, hakuna anayeweza kufungua diski kamwe, hata wewe.
 
 # Title of the first slide.
 installer-slide-ring = Kila kitu katika duara moja
 
 # Words of the first slide.
-installer-slide-ring-text = Sogeza kielekezi hadi ukingo wa skrini na ubofye mara mbili, nalo duara hufunguka: programu zako kuzunguka nje, saa na swichi katikati.
+installer-slide-ring-text = Sogeza kielekezi hadi ukingo wa skrini na ubofye mara mbili ili kufungua duara. Programu zako ziko kwenye ukingo wa nje, na saa na swichi ziko katikati.
 
 # Title of the second slide.
-installer-slide-snapshots = Rudisha kile ambacho sasisho liliharibu
+installer-slide-snapshots = Tengua sasisho baya
 
 # Words of the second slide.
-installer-slide-snapshots-text = Picha ya mfumo (snapshot) huchukuliwa kabla na baada ya kila badiliko la programu. Mipangilio hurudisha mfumo mzima kwenye yoyote kati yake, na menyu ya kuwasha inaweza kufanya hivyo kompyuta isipoanza.
+installer-slide-snapshots-text = Trindle huchukua picha ya mfumo (snapshot) kabla na baada ya kila badiliko la programu. Kwenye Mipangilio unaweza kurudisha mfumo mzima kwenye yoyote kati yake. Kompyuta isipoanza, unaweza kufanya hivyo kutoka kwenye menyu ya kuwasha.
 
 # Title of the third slide.
 installer-slide-apps = Programu zisizokusumbua
 
 # Words of the third slide.
-installer-slide-apps-text = Programu za Flathub, za Debian yenyewe, AppImage na vyanzo vya programu mahali pamoja, pamoja na nakala rudufu unazoweza kubeba hadi kompyuta nyingine.
+installer-slide-apps-text = Programu za Flathub, programu za Debian yenyewe, AppImage na vyanzo vya programu vyote viko mahali pamoja, pamoja na nakala rudufu unazoweza kubeba hadi kompyuta nyingine.
 
 # Title of the fourth slide.
-installer-slide-yours = Yako, kwa haraka
+installer-slide-yours = Ifanye yako
 
 # Words of the fourth slide.
-installer-slide-yours-text = Nuru au giza, sauti zako mwenyewe, na ubao wa kunakili unaokumbuka ulichonakili.
+installer-slide-yours-text = Chagua nuru au giza, chagua sauti zako mwenyewe, na utumie ubao wa kunakili unaokumbuka ulichonakili.
 
 # Title of the fifth slide.
 installer-slide-small = Ndogo na tulivu
 
 # Words of the fifth slide.
-installer-slide-small-text = Eneo-kazi ni jepesi kwa kumbukumbu na huanza kwa sekunde chache, hivyo kompyuta ya zamani huhisi mpya tena.
+installer-slide-small-text = Eneo-kazi hutumia kumbukumbu kidogo na huanza kwa sekunde chache, hivyo kompyuta ya zamani huhisi mpya tena.
 
 # Title of the tour slide about the ring.
 installer-tour-ring = Duara ndilo eneo-kazi lote
@@ -426,19 +445,19 @@ installer-tour-ring = Duara ndilo eneo-kazi lote
 installer-tour-ring-corner = Weka kielekezi kwenye kona hii na duara litafunguka
 
 # Note on the ring picture, at the time.
-installer-tour-ring-time = Saa na tarehe, katikati
+installer-tour-ring-time = Saa na tarehe ziko katikati
 
 # Note on the ring picture, at the programs.
-installer-tour-ring-programs = Programu zako ziko kuzunguka nje
+installer-tour-ring-programs = Programu zako ziko kwenye ukingo wa nje
 
 # Note on the ring picture, at the switches.
-installer-tour-ring-switches = Sauti, skrini, programu zako zote, kuzuia kompyuta kulala, na kuzima
+installer-tour-ring-switches = Swichi za sauti, skrini, programu zako zote, kuzuia kompyuta kulala na kuzima
 
 # Title of the tour slide about Settings.
 installer-tour-settings = Mipangilio, kwa maneno rahisi
 
 # Note on the Settings picture, at the search box.
-installer-tour-settings-search = Andika hapa kupata mpangilio bila kutafuta kwa shida
+installer-tour-settings-search = Andika hapa kupata mpangilio
 
 # Note on the Settings picture, at Network.
 installer-tour-settings-network = Mtandao ni mahali pa kujiunga na mtandao wa Wi-Fi
@@ -456,37 +475,37 @@ installer-tour-apps = Programu, kwa kila kitu kingine
 installer-tour-apps-search = Tafuta programu kwa jina au kwa kile inachofanya
 
 # Note on the Apps picture, at the list.
-installer-tour-apps-many = Maelfu ya programu, bure, kutoka Flathub na Debian
+installer-tour-apps-many = Maelfu ya programu za bure, kutoka Flathub na Debian
 
 # Note on the Apps picture, at updates.
 installer-tour-apps-updates = Masasisho ya kila kitu, ikiwemo Trindle yenyewe
 
 # Title of the tour slide about voice control.
-installer-tour-voice = Unaweza kuongea nayo badala yake
+installer-tour-voice = Ongea na kompyuta yako
 
 # Note on the voice picture, at where voice control lives.
-installer-tour-voice-where = Udhibiti wa sauti uko hapa: Mipangilio, kisha Duara
+installer-tour-voice-where = Udhibiti wa sauti uko kwenye Mipangilio, kisha Pete
 
 # Note on the voice picture, at the button that adds voice.
-installer-tour-voice-add = Bonyeza Ongeza sauti mara moja. Ni takriban MB 150 na huchukua dakika chache
+installer-tour-voice-add = Bonyeza Ongeza udhibiti kwa sauti mara moja. Upakuaji ni takriban MB 150 na huchukua dakika chache
 
 # Note on the voice picture, about what to say.
 installer-tour-voice-say = Kisha gusa katikati ya duara na useme jina la programu, “sauti juu”, au “mipangilio ya Wi-Fi”
 
 # Note on the voice picture, about where speech is understood.
-installer-tour-voice-private = Unachosema kinaeleweka kwenye kompyuta hii na hakiendi popote pengine
+installer-tour-voice-private = Trindle inaelewa unachosema kwenye kompyuta hii, na hakitumwi popote pengine kamwe
 
 # Title of the tour slide about snapshots.
-installer-tour-snapshots = Njia ya kurudi, kabla ya chochote kubadilika
+installer-tour-snapshots = Rudi kabla ya badiliko
 
 # Note on the snapshots picture, about when a snapshot is taken.
-installer-tour-snapshots-before = Kompyuta huchukua picha ya mfumo kabla ya kila sasisho
+installer-tour-snapshots-before = Trindle huchukua picha ya mfumo kabla ya kila sasisho
 
 # Note on the snapshots picture, about going back.
-installer-tour-snapshots-back = Kitu kikiharibika, rudi jinsi ilivyokuwa, kutoka kwenye menyu ya kuwasha
+installer-tour-snapshots-back = Kitu kikiharibika, unaweza kurudi jinsi ilivyokuwa kutoka kwenye menyu ya kuwasha
 
 # Name of the picture of the ring, and the head of its card.
-installer-live-caption = Duara, mahali kila kitu kilipo
+installer-live-caption = Duara, lenye kila kitu ndani yake
 
 # Sentence under the title of the welcome from a stick.
 installer-live-help = Unatumia kutoka kwenye USB stick, kwa hiyo hakuna kilichobadilishwa kwenye kompyuta hii.
@@ -501,19 +520,19 @@ installer-live-open = Fungua duara
 installer-live-open-line = Bofya mara mbili ukingoni mwa skrini, au bonyeza Super.
 
 # Name of the second thing to do.
-installer-live-speak = Iongeleshe
+installer-live-speak = Tumia sauti yako
 
 # Line under it when voice control is there.
 installer-live-speak-line = Gusa katikati ya duara na useme unachotaka.
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = Ongeza sauti kwenye Mipangilio, Duara, kisha gusa katikati na uongee.
+installer-live-speak-add = Bonyeza Ongeza udhibiti kwa sauti kwenye Mipangilio, chini ya Pete. Kisha gusa katikati na uongee.
 
 # Name of the third thing to do.
 installer-live-tab = Vyote kwenye duara
 
 # Line under it.
-installer-live-tab-line = Kilicho wazi, arifa zako na ubao wa kunakili vyote viko hapo.
+installer-live-tab-line = Utapata kilicho wazi, arifa zako na ubao wa kunakili hapo.
 
 # The choice of the dark look.
 installer-live-dark = Giza
@@ -537,7 +556,7 @@ installer-step-room = Inatengeneza nafasi
 installer-step-prepare = Inaandaa diski
 
 # Foot of the install page while a place is made beside another system.
-installer-step-place = Inatengeneza mahali pa Trindle
+installer-step-place = Inatengeneza nafasi ya Trindle
 
 # Foot of the install page while the disk is looked at.
 installer-step-check = Inakagua kilichopo tayari kwenye diski
@@ -546,10 +565,10 @@ installer-step-check = Inakagua kilichopo tayari kwenye diski
 installer-step-smaller = Inapunguza ukubwa wa mfumo mwingine
 
 # Foot of the install page while the disk is encrypted.
-installer-step-lock = Inafunga diski
+installer-step-lock = Inasimba diski
 
 # Foot of the install page while the TPM chip is set up.
-installer-step-chip = Inaweka chipu ya kompyuta
+installer-step-chip = Inaweka chipu ya TPM
 
 # Foot of the install page while the system is copied.
 installer-step-copy = Inanakili Trindle kwenye diski
@@ -561,7 +580,7 @@ installer-step-settings = Inaandika mipangilio
 installer-step-account = Inatengeneza akaunti yako
 
 # Foot of the install page while the stick's own parts are taken out.
-installer-step-live-parts = Inaondoa sehemu za USB stick
+installer-step-live-parts = Inaondoa vya ziada vya USB
 
 # Foot of the install page while the start-up files are made.
 installer-step-startup = Inatengeneza faili za kuanzia
@@ -582,7 +601,7 @@ installer-run-no-start = { $program } haikuweza kuanza: { $why }
 installer-run-failed = { $program } haikumaliza. { $why }
 
 # Red line at the foot: a file could not be written.
-installer-write-failed = { $path } haikuweza kuandikwa: { $why }
+installer-write-failed = Imeshindwa kuandika { $path }: { $why }
 
 # Red line at the foot: something given as a disk is not one.
 installer-not-a-disk = { $dev } si diski.
@@ -609,54 +628,54 @@ installer-bad-keyboard = Kibodi hiyo haiwezi kutumiwa na Trindle.
 installer-bad-timezone = Ukanda huo wa saa hauwezi kutumiwa na Trindle.
 
 # Red line at the foot: the person's name has something that cannot be written.
-installer-bad-fullname = Jina hilo lina kitu ambacho Trindle haiwezi kuandika.
+installer-bad-fullname = Jina hilo lina herufi ambayo Trindle haiwezi kutumia.
 
 # Red line at the foot: a password has a line break in it.
 # SAFETY: needs a human review before it ships
 installer-bad-password = Nenosiri haliwezi kuwa na mstari mpya.
 
 # Red line at the foot: the second half of the installer was not started as root.
-installer-needs-root = Nusu ya pili ya kisakinishi lazima iendeshwe kama root.
+installer-needs-root = Sehemu ya pili ya kisakinishi inahitaji kuendeshwa kama root.
 
 # Red line at the foot: there is no boot partition to share.
-installer-no-boot-partition = Diski hii haina kizigeu cha kuwasha cha kushiriki, kwa hiyo Trindle haiwezi kukaa kando ya kilichopo.
+installer-no-boot-partition = Diski hii haina kizigeu cha kuwasha cha kushiriki, kwa hiyo Trindle haiwezi kusakinishwa kando ya kilichopo juu yake.
 
 # Red line at the foot: the partition just made cannot be found.
-installer-new-part-missing = Sehemu mpya ya diski haikupatikana.
+installer-new-part-missing = Trindle haikupata kizigeu kipya.
 
 # Red line at the foot: the size of a partition cannot be read.
-installer-size-unreadable = Ukubwa wa { $part } haukuweza kusomwa.
+installer-size-unreadable = Imeshindwa kusoma ukubwa wa { $part }.
 
 # Red line at the foot: a partition of this kind cannot be made smaller.
-installer-cannot-shrink = Trindle haiwezi kupunguza ukubwa wa kizigeu cha { $fs }.
+installer-cannot-shrink = Trindle haiwezi kupunguza ukubwa wa vizigeu vya { $fs }.
 
 # Red line at the foot: a partition of a kind that is not known cannot be made smaller.
-installer-cannot-shrink-unknown = Trindle haiwezi kupunguza ukubwa wa kizigeu kisichojulikana.
+installer-cannot-shrink-unknown = Trindle haiwezi kupunguza ukubwa wa kizigeu cha aina isiyojulikana.
 
 # Red line at the foot: encrypting needs a password and there is none.
 # SAFETY: needs a human review before it ships
-installer-disk-password-needed = Nenosiri linahitajika ili kusimba diski.
+installer-disk-password-needed = Unahitaji nenosiri ili kusimba diski.
 
 # Red line at the foot: the copy of the system could not start.
-installer-copy-no-start = Mfumo haukuweza kunakiliwa: { $why }
+installer-copy-no-start = Imeshindwa kunakili mfumo: { $why }
 
 # Red line at the foot: the copy of the system failed.
-installer-copy-failed = Mfumo haukuweza kunakiliwa. { $why }
+installer-copy-failed = Imeshindwa kunakili mfumo. { $why }
 
 # Red line at the foot: there is not enough room for a swap file.
 installer-swap-no-room = Hakuna nafasi ya faili ya swap.
 
 # Red line at the foot: the swap file's place on the disk cannot be read.
-installer-swap-unreadable = Mahali pa faili ya swap kwenye diski haipatikani kusomwa.
+installer-swap-unreadable = Trindle haikuweza kusoma mahali faili ya swap ilipo kwenye diski.
 
 # Red line at the foot: the new partitions could not be named in the table of disks.
-installer-fstab-unidentified = Vizigeu vipya havikuweza kutambuliwa.
+installer-fstab-unidentified = Trindle haikuweza kutambua vizigeu vipya.
 
 # Red line at the foot: the time zone could not be set.
-installer-timezone-failed = Ukanda wa saa haukuweza kuwekwa: { $why }
+installer-timezone-failed = Imeshindwa kuweka ukanda wa saa: { $why }
 
 # Red line at the foot: the boot menu could not be installed.
-installer-boot-failed = Menyu ya kuwasha haikuweza kusakinishwa kwenye kompyuta hii.
+installer-boot-failed = Trindle haikuweza kusakinisha menyu ya kuwasha kwenye kompyuta hii.
 
 # Name of that button after one press, when a second press goes ahead.
 installer-sure = Una uhakika?
@@ -664,16 +683,16 @@ installer-sure = Una uhakika?
 
 
 # Note on the ring picture, at the tab at the edge.
-installer-tour-ring-foot = Kilicho wazi, ubao wa kunakili, na kitufe kinachosafisha skrini
+installer-tour-ring-foot = Ona kilicho wazi, tumia ubao wa kunakili, na usafishe skrini kwa kitufe kimoja
 
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } ni kijiti ambacho Trindle inaendeshwa kutoka kwacho.
 
 # Red line at the foot: something on the chosen disk is mounted or swapped to.
-installer-disk-in-use = { $dev } inatumika. Funga kinachoitumia, kisha jaribu tena.
+installer-disk-in-use = { $dev } inatumika. Funga chochote kinachoitumia, kisha jaribu tena.
 
 # Said beside how far the install has got, once it has started.
-installer-started = Usakinishaji umeanza
+installer-started = Inasakinisha
 
 # The button that ends an install under way.
 installer-halt = Simamisha
@@ -685,7 +704,7 @@ installer-halt-sure = Kusimamisha usakinishaji? Yaliyokuwa kwenye diski tayari y
 installer-halting = Inasimamisha
 
 # When Stop could not let go of the disk.
-installer-halt-stuck = Diski haikuweza kuachiliwa. Washa kompyuta upya ujaribu tena.
+installer-halt-stuck = Trindle haikuweza kuachilia diski. Washa kompyuta upya ujaribu tena.
 
 # The copy is done and the person is still answering.
 installer-step-waiting = Imenakiliwa. Inasubiri majibu yako.
@@ -699,17 +718,34 @@ installer-already-running = Kisakinishi kingine tayari kinafanya kazi kwenye kom
 installer-memory-short = Trindle inahitaji angalau GB 1 ya kumbukumbu, na kompyuta hii ina kidogo kuliko hiyo.
 
 # Shown beside the disabled Next button on the privacy page, and as the reason the install will not start, when the disk is to be encrypted on a computer that did not start by UEFI.
-installer-lock-needs-uefi = Diski inaweza kusimbwa tu kwenye kompyuta inayoanza kwa UEFI, na hii haifanyi hivyo.
+installer-lock-needs-uefi = Unaweza kusimba diski tu kwenye kompyuta inayoanza kwa UEFI, na hii haifanyi hivyo.
 
 # Red words when the Windows partition chosen to share the disk was hibernated or left in Windows' fast start-up; { $part } is the partition.
-installer-windows-asleep = Windows kwenye { $part } ilikuwa imejihifadhi usingizini (hibernate) au kuachwa katika kuanza haraka, kwa hiyo kuipunguza ukubwa kunaweza kupoteza faili zake. Washa Windows, chagua Anzisha upya, kisha jaribu tena.
+installer-windows-asleep = Windows kwenye { $part } ilikuwa imejihifadhi usingizini (hibernate) au kuzimwa kwa kuanza haraka. Kuipunguza ukubwa sasa kunaweza kupoteza faili zake. Washa Windows, chagua Anzisha upya, kisha jaribu tena.
 
 # Red words on the last page when the snapshots could not be set up; { $why } is the reason.
-installer-snapshots-failed = Trindle imesakinishwa, lakini picha za hali hazikuweza kusanidiwa: { $why }
+installer-snapshots-failed = Trindle imesakinishwa, lakini haikuweza kusanidi picha za hali: { $why }
 
 # Red words on the last page when the boot menu could not be made after setting up snapshots; { $why } is the reason.
-installer-snapshots-menu-failed = Trindle imesakinishwa, lakini menyu ya kuwasha haikuweza kuorodhesha picha za hali: { $why }
+installer-snapshots-menu-failed = Trindle imesakinishwa, lakini haikuweza kuweka picha za hali kwenye menyu ya kuwasha: { $why }
 
 # Head of the card on the last page that lists what could not be done.
 installer-done-problems = Si kila kitu kilisanidiwa
 
+installer-suggest-failed = Trindle haikuweza kutengeneza nenosiri. Andika lako mwenyewe.
+
+installer-disk-changed = { $dev } si diski iliyoonyeshwa. Rudi nyuma na uchague diski tena.
+
+installer-no-gpt = { $dev } haitumii jedwali la vizigeu la GPT, kwa hiyo Trindle haiwezi kusakinishwa kando ya kilichopo juu yake.
+
+installer-boot-partition-small = Kizigeu cha kuwasha kwenye diski hii ni kidogo mno kushirikiwa, kwa hiyo Trindle haiwezi kusakinishwa kando ya kilichopo juu yake.
+
+installer-swap-failed = Trindle imesakinishwa, lakini haikuweza kutengeneza faili ya swap: { $why }
+
+installer-uuid-missing = Trindle haikuweza kutambua { $dev } baada ya kuiandaa.
+
+installer-ready-replaced-known = Kila kitu kilicho kwenye { $disk } kitabadilishwa ({ $holds }).
+
+installer-disk-named = { $what }, { $dev }
+
+installer-run-stopped = { $program } ilisimama kabla ya kupata kila ilichohitaji: { $why }

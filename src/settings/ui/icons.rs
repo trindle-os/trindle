@@ -35,14 +35,6 @@ pub fn app_icon<M>(names: Vec<String>, size: f32) -> Node<M> {
     })
 }
 
-pub fn logo<M>(path: std::path::PathBuf, size: f32) -> Node<M> {
-    if path.is_file() {
-        icon(path.to_string_lossy().into_owned(), size)
-    } else {
-        icon(crate::common::apps::GENERIC_ICONS[0], size)
-    }
-}
-
 pub const KEY_DOT: f32 = 16.0;
 
 pub fn in_use_dot<M>(kind: crate::common::in_use::Kind) -> Node<M> {

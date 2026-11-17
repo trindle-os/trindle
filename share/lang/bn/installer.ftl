@@ -31,13 +31,13 @@ installer-stop-done = সম্পন্ন
 installer-getting-ready = প্রস্তুতি চলছে
 
 # Red line at the foot when the installer's helper could not be started.
-installer-no-start = ইনস্টলার চালু হয়নি: { $why }
+installer-no-start = ইনস্টলার চালু করা যায়নি: { $why }
 
 # Written to the error output when the plan sent to the helper could not be read.
-installer-plan-unreadable = পরিকল্পনা পড়া যায়নি।
+installer-plan-unreadable = পরিকল্পনাটি পড়া যায়নি।
 
 # Written to the error output when the plan sent to the helper could not be read, with the reason.
-installer-plan-unreadable-why = পরিকল্পনা পড়া যায়নি: { $why }
+installer-plan-unreadable-why = পরিকল্পনাটি পড়া যায়নি: { $why }
 
 # Red line at the foot when the helper stopped without saying why.
 installer-stopped = ইনস্টল থেমে গেছে। আর কিছু লেখা হয়নি।
@@ -70,39 +70,46 @@ installer-arm = ইনস্টল করতে আবার ক্লিক ক
 installer-arm-erase = মুছে ইনস্টল করতে আবার ক্লিক করুন
 
 # Note beside Next on the first page while no language is chosen.
-installer-missing-language = একটি ভাষা বেছে নিন
+installer-missing-language = আপনার ভাষা বেছে নিন
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = Trindle-এর ভাষা বেছে নিন
 
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = একটি কিবোর্ড বেছে নিন
 
 # Note beside Next on the first page while no time zone is chosen.
-installer-missing-time = একটি সময় বেছে নিন
+installer-missing-time = একটি সময় অঞ্চল বেছে নিন
 
 # Note beside Next on the disk page while no disk is chosen.
-installer-missing-disk = Trindle কোথায় যাবে তা বেছে নিন
+installer-missing-disk = Trindle কোথায় যাবে তা বাছুন
+
+# Note beside Next on the disk page while the disks are read again, after one turned out not to be the disk shown.
+installer-disks-rereading = ডিস্কগুলো আবার পড়া হচ্ছে
 
 # Note beside Next on the disk password page while no password has been typed twice.
 # SAFETY: needs a human review before it ships
-installer-missing-disk-password = ডিস্কের পাসওয়ার্ড দুইবার লিখুন, দুইবারই একই
+installer-missing-disk-password = ডিস্কের পাসওয়ার্ড দুইবার লিখুন। দুইবারই একই হতে হবে
 
 # Note beside Next on the account page while the sign-in name is not good.
-installer-missing-username = একটি সাইন-ইন নাম দরকার
+installer-missing-username = একটি লগইন নাম লিখুন
 
 # Note beside Next on the account page while the computer's name is not good.
 installer-missing-hostname = এই কম্পিউটারকে একটি নাম দিন
 
 # Note beside Next on the account page while no password has been typed twice.
 # SAFETY: needs a human review before it ships
-installer-missing-password = আপনার পাসওয়ার্ড দুইবার লিখুন, দুইবারই একই
+installer-missing-password = আপনার পাসওয়ার্ড দুইবার লিখুন। দুইবারই একই হতে হবে
 
 # Title of the first page.
 installer-welcome-title = { $name }-এ স্বাগতম
 
 # Sentence under the title of the first page.
-installer-welcome-help = আপনার ভাষা বেছে নিন; কিবোর্ড ও সময় তার সঙ্গে মিলবে, এবং আপনি দুটিই বদলাতে পারেন।
+installer-welcome-help = আপনার ভাষা বেছে নিন, Trindle বাকি সব তার সঙ্গে মিলিয়ে দেবে।
 
-# Head of the card for choosing the language, and the name of its search box.
-installer-language = ভাষা
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
+installer-language = আপনার ভাষা
+# Label beside the box at the right of the first page's sentence, for choosing the language of Trindle's own words (only those Trindle has).
+installer-trindle-language = Trindle-এর ভাষা
 
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = কিবোর্ড
@@ -118,10 +125,10 @@ installer-disks-title = { $name } কোথায় যাবে
 
 # Sentence under the title of the disk page.
 # SAFETY: needs a human review before it ships
-installer-disks-help = আপনি যে ডিস্ক বাছবেন তার সবকিছু বদলে যাবে, যদি না আপনি সেখানে যা আছে তার পাশে জায়গা করে নেন।
+installer-disks-help = আপনি যে ডিস্ক বাছবেন তার সবকিছু বদলে যাবে, যদি না আপনি সেখানে যা আছে তার পাশে ইনস্টল করা বেছে নেন।
 
 # Shown on the disk page when no disk is big enough.
-installer-disks-none = যথেষ্ট বড় কোনো ডিস্ক পাওয়া যায়নি। Trindle-এর ২০ GB দরকার।
+installer-disks-none = Trindle যথেষ্ট বড় কোনো ডিস্ক পায়নি। এর ২০ GB দরকার।
 
 # Name and words of the choice to erase a whole disk.
 # SAFETY: needs a human review before it ships
@@ -165,10 +172,10 @@ installer-swap-title = { $gb } GB-এর একটি সোয়াপ ফা�
 installer-swap-switch = একটি সোয়াপ ফাইল বানান
 
 # Under the swap file's head when Secure Boot is on.
-installer-swap-secure-boot = Secure Boot চালু আছে, তাই এই কম্পিউটার হাইবারনেট করতে পারে না, কিন্তু মেমরি কমে গেলে সোয়াপ ফাইল তবুও কাজে লাগে। ডিস্কে প্রচুর বাড়তি জায়গা থাকলেই শুধু এটি বানানো হয়।
+installer-swap-secure-boot = Secure Boot চালু আছে, তাই এই কম্পিউটার হাইবারনেট করতে পারে না, কিন্তু মেমরি কমে গেলে সোয়াপ ফাইল তবুও কাজে লাগে। ডিস্কে প্রচুর বাড়তি জায়গা থাকলেই Trindle শুধু এটি বানায়।
 
 # Under the swap file's head when the computer can hibernate.
-installer-swap-note = হাইবারনেট করার জায়গা, অর্থাৎ পাওয়ার বন্ধ রেখেও সবকিছু খোলা রাখা, এবং মেমরি কমে গেলে ভরসা করার জায়গা। এটি ছাড়া কম্পিউটার হাইবারনেট করতে পারে না। ডিস্কে প্রচুর বাড়তি জায়গা থাকলেই শুধু এটি বানানো হয়।
+installer-swap-note = সোয়াপ ফাইল থাকলে কম্পিউটার হাইবারনেট করতে পারে, অর্থাৎ পাওয়ার বন্ধ থাকলেও সবকিছু খোলা থাকে। মেমরি কমে গেলে এটি কম্পিউটারকে বাড়তি জায়গাও দেয়। এটি ছাড়া কম্পিউটার হাইবারনেট করতে পারে না। ডিস্কে প্রচুর বাড়তি জায়গা থাকলেই Trindle শুধু একটি বানায়।
 
 # Title of the page about encrypting the disk.
 installer-privacy-title = ডিস্ক এনক্রিপ্ট করা
@@ -196,11 +203,11 @@ installer-privacy-about = চিপ সম্পর্কে
 
 # In the card about the chip, on a computer that has one.
 # SAFETY: needs a human review before it ships
-installer-privacy-chip = এই কম্পিউটারে একটি TPM চিপ আছে। ইনস্টলের পরে প্রথমবার চালু হলে একবার পাসওয়ার্ড চাওয়া হয়, যখন চিপ এই কম্পিউটারকে চিনে নেয়; এরপর এটি নিজেই ডিস্ক খোলে ও কিছু লিখতে হয় না। পাসওয়ার্ড রেখে দিন: চিপ বদলালে বা ডিস্ক অন্য কম্পিউটারে নিলে এটিই ঢোকার পথ।
+installer-privacy-chip = এই কম্পিউটারে একটি TPM চিপ আছে। ইনস্টলের পরে প্রথমবার চালু হলে চিপ সাজানোর সময় একবার পাসওয়ার্ড চাওয়া হয়। এরপর চিপই ডিস্ক খোলে, আপনাকে কিছু লিখতে হয় না। পাসওয়ার্ড রেখে দিন, কারণ চিপ বদলালে বা ডিস্ক অন্য কম্পিউটারে নিলে এটি লাগবে।
 
 # In the card about the chip, on a computer that has none Trindle can use.
 # SAFETY: needs a human review before it ships
-installer-privacy-no-chip = এই কম্পিউটারে Trindle ব্যবহার করতে পারে এমন কোনো TPM চিপ নেই, তাই প্রতিবার চালু হলে পাসওয়ার্ড চাওয়া হবে। যে কম্পিউটারে চিপ আছে সেখানে চিপ নিজেই ডিস্ক খুলতে পারে।
+installer-privacy-no-chip = এই কম্পিউটারে Trindle ব্যবহার করতে পারে এমন কোনো TPM চিপ নেই, তাই প্রতিবার চালু হলে এটি পাসওয়ার্ড চাইবে। চিপ আছে এমন কম্পিউটারে চিপ নিজেই ডিস্ক খুলতে পারে।
 
 # Title of the disk password page.
 # SAFETY: needs a human review before it ships
@@ -218,7 +225,7 @@ installer-disk-password = ডিস্কের পাসওয়ার্ড
 installer-disk-suggest = একটি পাসফ্রেজ প্রস্তাব করুন
 
 # Label and name of the second box of a password, where it is typed again.
-installer-same-again = আবার একই
+installer-same-again = আবার লিখুন
 
 # Red line under the password boxes when the two do not match.
 # SAFETY: needs a human review before it ships
@@ -229,13 +236,13 @@ installer-disk-write-down = লিখে রাখুন
 
 # Words in that card.
 # SAFETY: needs a human review before it ships
-installer-disk-write-down-text = এই পাসওয়ার্ড কাগজে লিখে কম্পিউটার থেকে দূরে কোনো নিরাপদ জায়গায় রাখুন। এটি ছাড়া ডিস্ক কখনও খোলা যাবে না, না আপনি, না অন্য কেউ। ফেরার কোনো পথ নেই। চারটি সাধারণ শব্দ মিলে একটি পাসফ্রেজ হয়, যা লেখা সহজ ও আন্দাজ করা কঠিন।
+installer-disk-write-down-text = এই পাসওয়ার্ড কাগজে লিখে কম্পিউটার থেকে দূরে কোনো নিরাপদ জায়গায় রাখুন। এটি ছাড়া কেউ কখনও ডিস্ক খুলতে পারবে না, এমনকি আপনিও না। ফেরার কোনো পথ নেই। চারটি সাধারণ শব্দের পাসফ্রেজ লেখা সহজ ও আন্দাজ করা কঠিন।
 
 # Title of the account page.
 installer-you-title = আপনার সম্পর্কে
 
 # Sentence under the title of the account page.
-installer-you-help = এটি সেই অ্যাকাউন্ট যা দিয়ে আপনি সাইন ইন করবেন।
+installer-you-help = এটি সেই অ্যাকাউন্ট যা দিয়ে আপনি লগইন করবেন।
 
 # Head of the card with the name boxes.
 installer-account = আপনার অ্যাকাউন্ট
@@ -244,7 +251,7 @@ installer-account = আপনার অ্যাকাউন্ট
 installer-your-name = আপনার নাম
 
 # Label and name of the box for the sign-in name.
-installer-user-name = সাইন-ইন নাম
+installer-user-name = লগইন নাম
 
 # Label and name of the box for the computer's name.
 installer-host-name = এই কম্পিউটারের নাম
@@ -261,16 +268,16 @@ installer-password = পাসওয়ার্ড
 installer-strength = আন্দাজ করা কতটা কঠিন
 
 # Red line under the account boxes: the sign-in name is empty.
-installer-user-needed = একটি সাইন-ইন নাম দরকার।
+installer-user-needed = একটি লগইন নাম লিখুন।
 
 # Red line under the account boxes: a name is too long.
 installer-name-too-long = নামটি খুব লম্বা।
 
 # Red line under the account boxes: the sign-in name does not start with a small letter.
-installer-user-start = ছোট হাতের (ইংরেজি) অক্ষর দিয়ে শুরু করুন।
+installer-user-start = a-z অক্ষর দিয়ে শুরু করুন।
 
 # Red line under the account boxes: the sign-in name uses letters it may not.
-installer-user-letters = শুধু ছোট হাতের অক্ষর, অঙ্ক, - ও _ চলবে।
+installer-user-letters = শুধু a-z, 0-9, - ও _ ব্যবহার করুন।
 
 # Red line under the account boxes: the sign-in name belongs to the system.
 installer-user-taken = এই নামটি সিস্টেম আগেই ব্যবহার করছে।
@@ -279,7 +286,7 @@ installer-user-taken = এই নামটি সিস্টেম আগেই
 installer-host-needed = এই কম্পিউটারকে একটি নাম দিন।
 
 # Red line under the account boxes: the computer's name uses letters it may not.
-installer-host-letters = শুধু অক্ষর, অঙ্ক ও - চলবে।
+installer-host-letters = শুধু অক্ষর, অঙ্ক ও -।
 
 # Under the strength meter: how long a computer would take to guess the password, when it is at once.
 # SAFETY: needs a human review before it ships
@@ -319,19 +326,19 @@ installer-guess-years =
 
 # Under the strength meter: the password is too strong to guess in any time worth saying.
 # SAFETY: needs a human review before it ships
-installer-guess-never = একটি কম্পিউটারের এটি আন্দাজ করতে লিখিত ইতিহাসের চেয়ে বেশি সময় লাগবে।
+installer-guess-never = একটি কম্পিউটারের এটি আন্দাজ করতে গোটা লিখিত ইতিহাসের চেয়েও বেশি সময় লাগবে।
 
 # Title of the Ready page.
 installer-ready-title = ইনস্টলের জন্য প্রস্তুত
 
 # Head of the card that lists what will happen.
-installer-ready-nothing-changed = এখনও কিছুই বদলানো হয়নি
+installer-ready-nothing-changed = এখনও কিছু বদলায়নি
 
 # Head of the card about security updates.
 installer-ready-security = নিরাপত্তা আপডেট
 
 # In the card about security updates.
-installer-ready-security-text = { $name } প্রতিদিন নিজে থেকেই Debian-এর নিরাপত্তা সংশোধন ইনস্টল করে। এটি বন্ধ করা যায় না।
+installer-ready-security-text = { $name } প্রতিদিন নিজে থেকেই Debian-এর নিরাপত্তা সংশোধন ইনস্টল করে। আপনি এটি সেটিংসের "এই কম্পিউটার সম্পর্কে" অংশে বন্ধ করতে পারেন।
 
 # Sentence under the title when a whole disk will be replaced.
 # SAFETY: needs a human review before it ships
@@ -339,7 +346,7 @@ installer-ready-replaced = { $disk }-এর সবকিছু বদলে য�
 
 # Sentence under the title when the install goes beside what is there.
 # SAFETY: needs a human review before it ships
-installer-ready-kept = { $part }-এর সবকিছু থাকবে, তবে আগে ব্যাকআপ নিন: বিদ্যুৎ চলে গেলে এটি ছোট করতে গিয়ে ফাইল হারিয়ে যেতে পারে।
+installer-ready-kept = { $part }-এর সবকিছু থাকবে, তবে আগে ব্যাকআপ নিন। ছোট করার সময় বিদ্যুৎ চলে গেলে ফাইল হারিয়ে যেতে পারে।
 
 # Sentence under the title when no disk has been chosen.
 installer-ready-none = এখনও কোনো ডিস্ক বাছা হয়নি।
@@ -356,13 +363,13 @@ installer-ready-whole-text = এর সবকিছু { $name } দিয়ে
 installer-ready-beside = { $part }-এর পাশে
 
 # Words of that row.
-installer-ready-beside-text = { $part } ছোট করে { $size } করা হবে, এবং খালি হওয়া জায়গায় { $name } যাবে।
+installer-ready-beside-text = { $part } ছোট হয়ে { $size } হবে, এবং এতে খালি হওয়া জায়গায় { $name } ইনস্টল হবে।
 
 # Name of a row in the list when no disk is chosen.
 installer-ready-no-disk = কোনো ডিস্ক নেই
 
 # Words of that row.
-installer-ready-no-disk-text = কোনো ডিস্ক বাছা হয়নি।
+installer-ready-no-disk-text = একটি ডিস্ক বেছে নিন।
 
 # Name of a row in the list: the disk will not be encrypted.
 # SAFETY: needs a human review before it ships
@@ -381,10 +388,22 @@ installer-ready-locked-password = কম্পিউটার চালু হ�
 
 # Words of that row when the TPM chip unlocks the disk.
 # SAFETY: needs a human review before it ships
-installer-ready-locked-chip = একবার পাসওয়ার্ড, তারপর এই কম্পিউটারের TPM চিপ এটি খোলে।
+installer-ready-locked-chip = আপনি একবার পাসওয়ার্ড লিখবেন, তারপর এই কম্পিউটারের TPM চিপ ডিস্ক খুলবে।
 
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = কিবোর্ড { $keyboard }, সময় { $zone }।
+# Added to the end of the disk's row on the last page when a swap file is to be made, with its size in GB.
+installer-ready-swap = সাথে { $gb } GB-এর একটি সোয়াপ ফাইল।
+
+# Under the choice to let the TPM chip unlock the disk, on a computer with no usable chip.
+installer-privacy-chip-off = Trindle ব্যবহার করতে পারে এমন TPM চিপ লাগবে।
+
+# In the card about the chip when the disk is not being encrypted, on a computer that has a chip.
+installer-privacy-chip-none = এই কম্পিউটারে TPM চিপ আছে, যা এনক্রিপ্ট করা ডিস্ক খুলতে পারে।
+
+# In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
+installer-privacy-no-chip-none = এই কম্পিউটারে Trindle ব্যবহার করতে পারে এমন TPM চিপ নেই।
+
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle { $trindle } ভাষায়, { $keyboard } কিবোর্ড, { $zone } সময়।
 
 # Title of the page shown while the install runs.
 installer-installing-title = { $name } ইনস্টল হচ্ছে
@@ -404,41 +423,41 @@ installer-done-keep = ডিস্কের পাসওয়ার্ড ন�
 
 # In that card when the TPM chip unlocks the disk.
 # SAFETY: needs a human review before it ships
-installer-keep-chip = ডিস্ক এনক্রিপ্ট করা। প্রথমবার চালু হলে একবার ডিস্কের পাসওয়ার্ড চাওয়া হয়, যখন চিপ এই কম্পিউটারকে চিনে নেয়; এরপর এটি নিজেই খোলে। সেই পাসওয়ার্ড কাগজে লিখে এই কম্পিউটার থেকে দূরে কোনো নিরাপদ জায়গায় রাখুন। এটি ছাড়া ডিস্ক কখনও খোলা যাবে না, না আপনি, না অন্য কেউ।
+installer-keep-chip = ডিস্ক এনক্রিপ্ট করা। কম্পিউটার প্রথমবার চালু হলে চিপ সাজানোর সময় একবার ডিস্কের পাসওয়ার্ড চাওয়া হয়। এরপর ডিস্ক নিজেই খোলে। সেই পাসওয়ার্ড কাগজে লিখে এই কম্পিউটার থেকে দূরে কোনো নিরাপদ জায়গায় রাখুন। এটি ছাড়া কেউ কখনও ডিস্ক খুলতে পারবে না, এমনকি আপনিও না।
 
 # In that card when the password is typed at each start.
 # SAFETY: needs a human review before it ships
-installer-keep-password = ডিস্ক এনক্রিপ্ট করা। এখনও না করে থাকলে ডিস্কের পাসওয়ার্ড এখনই কাগজে লিখে এই কম্পিউটার থেকে দূরে কোনো নিরাপদ জায়গায় রাখুন। এটি ছাড়া ডিস্ক কখনও খোলা যাবে না, না আপনি, না অন্য কেউ।
+installer-keep-password = ডিস্ক এনক্রিপ্ট করা। এখনও না করে থাকলে ডিস্কের পাসওয়ার্ড এখনই কাগজে লিখে এই কম্পিউটার থেকে দূরে কোনো নিরাপদ জায়গায় রাখুন। এটি ছাড়া কেউ কখনও ডিস্ক খুলতে পারবে না, এমনকি আপনিও না।
 
 # Title of the first slide.
 installer-slide-ring = সবকিছু একটি বৃত্তে
 
 # Words of the first slide.
-installer-slide-ring-text = পয়েন্টার পর্দার কিনারায় নিয়ে ডাবল ক্লিক করুন, রিং খুলবে: বাইরের দিকে আপনার প্রোগ্রাম, মাঝখানে সময় ও সুইচ।
+installer-slide-ring-text = পয়েন্টার পর্দার কিনারায় নিয়ে ডাবল ক্লিক করলে রিং খোলে। বাইরের দিকে আপনার প্রোগ্রাম, আর মাঝখানে সময় ও সুইচ থাকে।
 
 # Title of the second slide.
-installer-slide-snapshots = আপডেটে যা ভেঙেছে তা ফিরিয়ে আনুন
+installer-slide-snapshots = খারাপ আপডেট ফিরিয়ে নিন
 
 # Words of the second slide.
-installer-slide-snapshots-text = প্রতিটি সফটওয়্যার বদলের আগে ও পরে সিস্টেমের একটি স্ন্যাপশট নেওয়া হয়। সেটিংস পুরো সিস্টেমকে যেকোনো একটিতে ফিরিয়ে দেয়, আর কম্পিউটার না চললে বুট মেনুও তা করতে পারে।
+installer-slide-snapshots-text = প্রতিটি সফটওয়্যার বদলের আগে ও পরে Trindle সিস্টেমের একটি স্ন্যাপশট নেয়। সেটিংসে গিয়ে আপনি পুরো সিস্টেমকে যেকোনো একটিতে ফিরিয়ে দিতে পারেন। কম্পিউটার চালু না হলে বুট মেনু থেকেও তা করা যায়।
 
 # Title of the third slide.
 installer-slide-apps = পথ থেকে সরে থাকা অ্যাপ
 
 # Words of the third slide.
-installer-slide-apps-text = Flathub-এর অ্যাপ, Debian-এর নিজস্ব, AppImage ও সফটওয়্যারের উৎস এক জায়গায়, এবং ব্যাকআপ যা আপনি অন্য কম্পিউটারে নিয়ে যেতে পারেন।
+installer-slide-apps-text = Flathub-এর অ্যাপ, Debian-এর নিজস্ব অ্যাপ, AppImage ও সফটওয়্যারের উৎস সব এক জায়গায়, সঙ্গে ব্যাকআপ, যা আপনি অন্য কম্পিউটারে নিয়ে যেতে পারেন।
 
 # Title of the fourth slide.
-installer-slide-yours = আপনার, দ্রুত
+installer-slide-yours = নিজের মতো করে নিন
 
 # Words of the fourth slide.
-installer-slide-yours-text = হালকা বা গাঢ়, আপনার নিজের শব্দ, আর কপি করা জিনিস মনে রাখা ক্লিপবোর্ড।
+installer-slide-yours-text = হালকা বা গাঢ় রং বেছে নিন, নিজের পছন্দের শব্দ ঠিক করুন, আর কপি করা জিনিস মনে রাখে এমন ক্লিপবোর্ড ব্যবহার করুন।
 
 # Title of the fifth slide.
 installer-slide-small = ছোট ও শান্ত
 
 # Words of the fifth slide.
-installer-slide-small-text = ডেস্কটপ মেমরিতে হালকা এবং কয়েক সেকেন্ডে চালু হয়, তাই পুরনো ল্যাপটপ আবার নতুনের মতো লাগে।
+installer-slide-small-text = ডেস্কটপ কম মেমরি নেয় এবং কয়েক সেকেন্ডে চালু হয়, তাই পুরনো ল্যাপটপ আবার নতুনের মতো লাগে।
 
 # Title of the tour slide about the ring.
 installer-tour-ring = রিংই পুরো ডেস্কটপ
@@ -447,19 +466,19 @@ installer-tour-ring = রিংই পুরো ডেস্কটপ
 installer-tour-ring-corner = পয়েন্টার এই কোণে রাখুন, রিং খুলবে
 
 # Note on the ring picture, at the time.
-installer-tour-ring-time = সময় ও তারিখ, মাঝখানে
+installer-tour-ring-time = সময় ও তারিখ মাঝখানে থাকে
 
 # Note on the ring picture, at the programs.
-installer-tour-ring-programs = আপনার প্রোগ্রাম বাইরের দিকে ঘিরে থাকে
+installer-tour-ring-programs = আপনার প্রোগ্রাম বাইরের দিকে থাকে
 
 # Note on the ring picture, at the switches.
-installer-tour-ring-switches = শব্দ, পর্দা, সব অ্যাপ, জাগিয়ে রাখা, এবং বন্ধ করা
+installer-tour-ring-switches = শব্দ, পর্দা, সব অ্যাপ, জাগিয়ে রাখা ও বন্ধ করার সুইচ
 
 # Title of the tour slide about Settings.
 installer-tour-settings = সেটিংস, সহজ কথায়
 
 # Note on the Settings picture, at the search box.
-installer-tour-settings-search = খুঁজে না বেড়িয়ে কোনো সেটিং পেতে এখানে লিখুন
+installer-tour-settings-search = কোনো সেটিং খুঁজতে এখানে লিখুন
 
 # Note on the Settings picture, at Network.
 installer-tour-settings-network = নেটওয়ার্কে আপনি Wi-Fi-তে যুক্ত হন
@@ -477,37 +496,37 @@ installer-tour-apps = অ্যাপ, বাকি সবকিছুর জন
 installer-tour-apps-search = নাম দিয়ে বা কাজ দিয়ে প্রোগ্রাম খুঁজুন
 
 # Note on the Apps picture, at the list.
-installer-tour-apps-many = হাজার হাজার প্রোগ্রাম, বিনামূল্যে, Flathub ও Debian থেকে
+installer-tour-apps-many = Flathub ও Debian থেকে হাজার হাজার বিনামূল্যের প্রোগ্রাম
 
 # Note on the Apps picture, at updates.
 installer-tour-apps-updates = সবকিছুর আপডেট, Trindle নিজেও
 
 # Title of the tour slide about voice control.
-installer-tour-voice = এর বদলে আপনি কথা বলতে পারেন
+installer-tour-voice = কম্পিউটারের সঙ্গে কথা বলুন
 
 # Note on the voice picture, at where voice control lives.
-installer-tour-voice-where = ভয়েস নিয়ন্ত্রণ এখানে থাকে: সেটিংস, তারপর রিং
+installer-tour-voice-where = ভয়েস নিয়ন্ত্রণ আছে সেটিংসে, তারপর রিংয়ে
 
 # Note on the voice picture, at the button that adds voice.
-installer-tour-voice-add = একবার "ভয়েস যোগ করুন" চাপুন। এটি প্রায় ১৫০ MB এবং কয়েক মিনিট লাগে
+installer-tour-voice-add = একবার “ভয়েস নিয়ন্ত্রণ যোগ করুন” চাপুন। ডাউনলোড প্রায় ১৫০ MB এবং কয়েক মিনিট লাগে
 
 # Note on the voice picture, about what to say.
 installer-tour-voice-say = তারপর রিংয়ের মাঝখানে চাপ দিয়ে কোনো অ্যাপের নাম, “জোরে”, বা “Wi-Fi সেটিংস” বলুন
 
 # Note on the voice picture, about where speech is understood.
-installer-tour-voice-private = আপনি যা বলেন তা এই কম্পিউটারেই বোঝা হয় এবং অন্য কোথাও যায় না
+installer-tour-voice-private = Trindle আপনার কথা এই কম্পিউটারেই বোঝে, আর তা কখনও অন্য কোথাও পাঠানো হয় না
 
 # Title of the tour slide about snapshots.
-installer-tour-snapshots = কিছু বদলানোর আগে ফেরার পথ
+installer-tour-snapshots = পরিবর্তনের আগের অবস্থায় ফিরে যান
 
 # Note on the snapshots picture, about when a snapshot is taken.
-installer-tour-snapshots-before = প্রতিটি আপডেটের আগে কম্পিউটার একটি স্ন্যাপশট নেয়
+installer-tour-snapshots-before = প্রতিটি আপডেটের আগে Trindle একটি স্ন্যাপশট নেয়
 
 # Note on the snapshots picture, about going back.
-installer-tour-snapshots-back = কিছু ভেঙে গেলে বুট মেনু থেকে আগের অবস্থায় ফিরে যান
+installer-tour-snapshots-back = কিছু ভেঙে গেলে বুট মেনু থেকে আপনি আগের অবস্থায় ফিরে যেতে পারেন
 
 # Name of the picture of the ring, and the head of its card.
-installer-live-caption = রিং, যেখানে সবকিছু থাকে
+installer-live-caption = রিং, যার মধ্যে সবকিছু আছে
 
 # Sentence under the title of the welcome from a stick.
 installer-live-help = আপনি স্টিক থেকে চালাচ্ছেন, তাই এই কম্পিউটারের কিছুই বদলানো হয়নি।
@@ -522,19 +541,19 @@ installer-live-open = রিং খুলুন
 installer-live-open-line = পর্দার কিনারায় ডাবল ক্লিক করুন, অথবা Super চাপুন।
 
 # Name of the second thing to do.
-installer-live-speak = এর সঙ্গে কথা বলুন
+installer-live-speak = আপনার কণ্ঠ ব্যবহার করুন
 
 # Line under it when voice control is there.
 installer-live-speak-line = রিংয়ের মাঝখানে চাপ দিয়ে যা চান তা বলুন।
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = সেটিংস, রিংয়ে ভয়েস যোগ করুন, তারপর মাঝখানে চাপ দিয়ে বলুন।
+installer-live-speak-add = সেটিংসে রিংয়ের নিচে “ভয়েস নিয়ন্ত্রণ যোগ করুন” চাপুন। তারপর মাঝখানে চাপ দিয়ে বলুন।
 
 # Name of the third thing to do.
 installer-live-tab = সব রিংয়ের মধ্যে
 
 # Line under it.
-installer-live-tab-line = যা খোলা আছে, আপনার বিজ্ঞপ্তি ও ক্লিপবোর্ড, সবই এখানে।
+installer-live-tab-line = যা খোলা আছে, আপনার বিজ্ঞপ্তি ও ক্লিপবোর্ড সেখানে পাবেন।
 
 # The choice of the dark look.
 installer-live-dark = গাঢ়
@@ -567,10 +586,10 @@ installer-step-check = ডিস্কে আগে থেকে কী আছ�
 installer-step-smaller = অন্য সিস্টেম ছোট করা হচ্ছে
 
 # Foot of the install page while the disk is encrypted.
-installer-step-lock = ডিস্কে তালা দেওয়া হচ্ছে
+installer-step-lock = ডিস্ক এনক্রিপ্ট করা হচ্ছে
 
 # Foot of the install page while the TPM chip is set up.
-installer-step-chip = কম্পিউটারের চিপ সাজানো হচ্ছে
+installer-step-chip = TPM চিপ সাজানো হচ্ছে
 
 # Foot of the install page while the system is copied.
 installer-step-copy = Trindle ডিস্কে কপি করা হচ্ছে
@@ -582,7 +601,7 @@ installer-step-settings = সেটিংস লেখা হচ্ছে
 installer-step-account = আপনার অ্যাকাউন্ট বানানো হচ্ছে
 
 # Foot of the install page while the stick's own parts are taken out.
-installer-step-live-parts = লাইভ অংশগুলো সরানো হচ্ছে
+installer-step-live-parts = স্টিকের বাড়তি অংশ সরানো হচ্ছে
 
 # Foot of the install page while the start-up files are made.
 installer-step-startup = চালু হওয়ার ফাইল বানানো হচ্ছে
@@ -615,7 +634,7 @@ installer-not-a-disk-here = { $dev } এই কম্পিউটারের �
 installer-no-disk-chosen = কোনো ডিস্ক বাছা হয়নি।
 
 # Red line at the foot: the sign-in name cannot be used.
-installer-bad-username = এই সাইন-ইন নাম Trindle ব্যবহার করতে পারে না।
+installer-bad-username = এই লগইন নাম Trindle ব্যবহার করতে পারে না।
 
 # Red line at the foot: the computer's name cannot be used.
 installer-bad-hostname = এই কম্পিউটারের নাম Trindle ব্যবহার করতে পারে না।
@@ -630,7 +649,7 @@ installer-bad-keyboard = এই কিবোর্ড Trindle ব্যবহা
 installer-bad-timezone = এই সময় অঞ্চল Trindle ব্যবহার করতে পারে না।
 
 # Red line at the foot: the person's name has something that cannot be written.
-installer-bad-fullname = এই নামে এমন কিছু আছে যা Trindle লিখে রাখতে পারে না।
+installer-bad-fullname = এই নামে এমন একটি অক্ষর আছে যা Trindle ব্যবহার করতে পারে না।
 
 # Red line at the foot: a password has a line break in it.
 # SAFETY: needs a human review before it ships
@@ -640,23 +659,23 @@ installer-bad-password = পাসওয়ার্ডে লাইন বি�
 installer-needs-root = ইনস্টলারের দ্বিতীয় অংশ অবশ্যই root হিসেবে চলতে হবে।
 
 # Red line at the foot: there is no boot partition to share.
-installer-no-boot-partition = এই ডিস্কে ভাগ করার মতো কোনো বুট পার্টিশন নেই, তাই এখানে যা আছে তার পাশে Trindle যেতে পারে না।
+installer-no-boot-partition = এই ডিস্কে ভাগ করার মতো কোনো বুট পার্টিশন নেই, তাই এতে যা আছে তার পাশাপাশি Trindle ইনস্টল করা যায় না।
 
 # Red line at the foot: the partition just made cannot be found.
-installer-new-part-missing = ডিস্কের নতুন অংশটি পাওয়া যায়নি।
+installer-new-part-missing = Trindle নতুন পার্টিশনটি খুঁজে পায়নি।
 
 # Red line at the foot: the size of a partition cannot be read.
 installer-size-unreadable = { $part }-এর আকার পড়া যায়নি।
 
 # Red line at the foot: a partition of this kind cannot be made smaller.
-installer-cannot-shrink = Trindle একটি { $fs } পার্টিশন ছোট করতে পারে না।
+installer-cannot-shrink = Trindle { $fs } পার্টিশন ছোট করতে পারে না।
 
 # Red line at the foot: a partition of a kind that is not known cannot be made smaller.
-installer-cannot-shrink-unknown = Trindle একটি অজানা পার্টিশন ছোট করতে পারে না।
+installer-cannot-shrink-unknown = Trindle অজানা ধরনের একটি পার্টিশন ছোট করতে পারে না।
 
 # Red line at the foot: encrypting needs a password and there is none.
 # SAFETY: needs a human review before it ships
-installer-disk-password-needed = ডিস্ক এনক্রিপ্ট করতে একটি পাসওয়ার্ড দরকার।
+installer-disk-password-needed = ডিস্ক এনক্রিপ্ট করতে আপনার একটি পাসওয়ার্ড লাগবে।
 
 # Red line at the foot: the copy of the system could not start.
 installer-copy-no-start = সিস্টেম কপি করা যায়নি: { $why }
@@ -665,19 +684,19 @@ installer-copy-no-start = সিস্টেম কপি করা যায়
 installer-copy-failed = সিস্টেম কপি করা যায়নি। { $why }
 
 # Red line at the foot: there is not enough room for a swap file.
-installer-swap-no-room = সোয়াপ ফাইলের জন্য জায়গা নেই।
+installer-swap-no-room = সোয়াপ ফাইলের জায়গা নেই।
 
 # Red line at the foot: the swap file's place on the disk cannot be read.
-installer-swap-unreadable = ডিস্কে সোয়াপ ফাইলের জায়গা পড়া যায়নি।
+installer-swap-unreadable = Trindle ডিস্কে সোয়াপ ফাইল কোথায় আছে তা পড়তে পারেনি।
 
 # Red line at the foot: the new partitions could not be named in the table of disks.
-installer-fstab-unidentified = নতুন পার্টিশনগুলো শনাক্ত করা যায়নি।
+installer-fstab-unidentified = Trindle নতুন পার্টিশনগুলো শনাক্ত করতে পারেনি।
 
 # Red line at the foot: the time zone could not be set.
 installer-timezone-failed = সময় অঞ্চল ঠিক করা যায়নি: { $why }
 
 # Red line at the foot: the boot menu could not be installed.
-installer-boot-failed = এই কম্পিউটারে বুট মেনু ইনস্টল করা যায়নি।
+installer-boot-failed = Trindle এই কম্পিউটারে বুট মেনু ইনস্টল করতে পারেনি।
 
 # Name of that button after one press, when a second press goes ahead.
 installer-sure = নিশ্চিত?
@@ -685,7 +704,7 @@ installer-sure = নিশ্চিত?
 
 
 # Note on the ring picture, at the tab at the edge.
-installer-tour-ring-foot = কী খোলা আছে, ক্লিপবোর্ড, আর পর্দা পরিষ্কার করার একটি বোতাম
+installer-tour-ring-foot = কী খোলা আছে দেখুন, ক্লিপবোর্ড ব্যবহার করুন, আর একটি বোতামে পর্দা পরিষ্কার করুন
 
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } হলো সেই স্টিক যা থেকে Trindle চলছে।
@@ -694,7 +713,7 @@ installer-disk-is-stick = { $dev } হলো সেই স্টিক যা �
 installer-disk-in-use = { $dev } ব্যবহার হচ্ছে। যা ব্যবহার করছে তা বন্ধ করে আবার চেষ্টা করুন।
 
 # Said beside how far the install has got, once it has started.
-installer-started = ইনস্টল শুরু হয়েছে
+installer-started = ইনস্টল হচ্ছে
 
 # The button that ends an install under way.
 installer-halt = থামান
@@ -706,7 +725,7 @@ installer-halt-sure = ইনস্টল থামাবেন? ডিস্ক�
 installer-halting = থামানো হচ্ছে
 
 # When Stop could not let go of the disk.
-installer-halt-stuck = ডিস্কটি ছাড়া যায়নি। আবার চেষ্টা করতে কম্পিউটার রিস্টার্ট করুন।
+installer-halt-stuck = Trindle ডিস্কটি ছাড়তে পারেনি। আবার চেষ্টা করতে কম্পিউটার রিস্টার্ট করুন।
 
 # The copy is done and the person is still answering.
 installer-step-waiting = কপি হয়েছে। আপনার উত্তরের অপেক্ষায়।
@@ -723,14 +742,40 @@ installer-memory-short = Trindle-এর কমপক্ষে ১ GB মেম�
 installer-lock-needs-uefi = ডিস্ক শুধু সেই কম্পিউটারেই এনক্রিপ্ট করা যায় যেটি UEFI দিয়ে চালু হয়, আর এটি তা নয়।
 
 # Red words when the Windows partition chosen to share the disk was hibernated or left in Windows' fast start-up; { $part } is the partition.
-installer-windows-asleep = { $part }-এর Windows হাইবারনেট অবস্থায় ছিল বা ফাস্ট স্টার্ট-আপে রাখা ছিল, তাই এটি ছোট করলে এর ফাইল হারিয়ে যেতে পারে। Windows চালু করে পুনরায় চালু করা বেছে নিন, তারপর আবার চেষ্টা করুন।
+installer-windows-asleep = { $part }-এর Windows হাইবারনেট করা ছিল বা ফাস্ট স্টার্ট-আপ দিয়ে বন্ধ করা ছিল। এখন এটি ছোট করলে এর ফাইল হারিয়ে যেতে পারে। Windows চালু করে পুনরায় চালু করা বেছে নিন, তারপর আবার চেষ্টা করুন।
 
 # Red words on the last page when the snapshots could not be set up; { $why } is the reason.
-installer-snapshots-failed = Trindle ইনস্টল হয়েছে, কিন্তু স্ন্যাপশট সেট আপ করা যায়নি: { $why }
+installer-snapshots-failed = Trindle ইনস্টল হয়েছে, কিন্তু স্ন্যাপশট সেট আপ করতে পারেনি: { $why }
 
 # Red words on the last page when the boot menu could not be made after setting up snapshots; { $why } is the reason.
-installer-snapshots-menu-failed = Trindle ইনস্টল হয়েছে, কিন্তু বুট মেনুতে স্ন্যাপশটের তালিকা দেখানো যায়নি: { $why }
+installer-snapshots-menu-failed = Trindle ইনস্টল হয়েছে, কিন্তু বুট মেনুতে স্ন্যাপশট যোগ করতে পারেনি: { $why }
 
 # Head of the card on the last page that lists what could not be done.
 installer-done-problems = সবকিছু সেট আপ হয়নি
 
+# Red line under the disk password boxes: the computer gave no random numbers, so no passphrase could be made.
+installer-suggest-failed = Trindle পাসফ্রেজ বানাতে পারেনি। নিজে একটি লিখুন।
+
+# Red line at the foot: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev } সেই ডিস্ক নয় যা দেখানো হয়েছিল। পিছনে গিয়ে আবার ডিস্কটি বেছে নিন।
+
+# Red line at the foot: a disk with an old-style partition table cannot be shared with.
+installer-no-gpt = { $dev } GPT পার্টিশন টেবিল ব্যবহার করে না, তাই এতে যা আছে তার পাশাপাশি Trindle ইনস্টল করা যায় না।
+
+# Red line at the foot: the boot partition on the disk is too small to share.
+installer-boot-partition-small = এই ডিস্কের বুট পার্টিশন ভাগ করার জন্য খুব ছোট, তাই এতে যা আছে তার পাশাপাশি Trindle ইনস্টল করা যায় না।
+
+# Note on the last page: the swap file was not made, with why.
+installer-swap-failed = Trindle ইনস্টল হয়েছে, কিন্তু সোয়াপ ফাইল বানাতে পারেনি: { $why }
+
+# Red line at the foot: a partition's identity could not be read after it was made.
+installer-uuid-missing = সেট আপ করার পর Trindle { $dev } শনাক্ত করতে পারেনি।
+
+# Words on the last page: the disk that will be replaced, with what it holds.
+installer-ready-replaced-known = { $disk }-এর সবকিছু বদলে যাবে ({ $holds })।
+
+# A disk named with its model and size, then its place such as /dev/sda.
+installer-disk-named = { $what }, { $dev }
+
+# Red line at the foot: a program the installer runs stopped before it had all it was given.
+installer-run-stopped = দরকারি সবকিছু পাওয়ার আগেই { $program } থেমে গেছে: { $why }

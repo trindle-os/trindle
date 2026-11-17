@@ -26,18 +26,18 @@ keyring-checking = Checking…
 ## Why the password window is up (src/keyring/service.rs, why)
 
 # Under the title when no keyring exists yet and a program wants to keep a password.
-keyring-why-none = A program wants to keep a password safe. Type your login password to start the keyring; from now on it opens by itself when you log in.
+keyring-why-none = A program wants to keep a password safe. Type your login password to start the keyring. From now on, it will open by itself when you log in.
 # Under the title when the keyring was made with a different password from the login one.
-keyring-why-old = Your login password is not the one this keyring was made with. Type the old one once; after that it opens by itself at log in.
+keyring-why-old = Your login password isn't the one this keyring was made with. Type the old one once. After that, the keyring will open by itself when you log in.
 # Under the title when no password was typed at log in, for example with a fingerprint or automatic log in.
-keyring-why-no-login = No password was typed at log in (a fingerprint or automatic log in), so the keyring could not open by itself. Type your login password.
+keyring-why-no-login = You didn't type a password when you logged in (you used a fingerprint or automatic login), so the keyring couldn't open by itself. Type your login password.
 # Under the title when a program asks for a saved password and the keyring is shut.
 keyring-why-wanted = A program wants a saved password. Type your login password to unlock the keyring.
 
 # Under the reason, naming the program that asked, when the keyring can find its name.
-keyring-asked-by = Asked for by { $program }
+keyring-asked-by = Requested by { $program }
 # Told to a program that asked while the keyring was taking over from the one before and many calls already waited.
-keyring-starting = The keyring is starting. Ask again.
+keyring-starting = The keyring is starting. Try again.
 # The program in "Asked for by", for a program on the bus: $name is the name it gives itself, which anything can claim.
 keyring-named-itself = a program that calls itself { $name }
 
@@ -46,26 +46,28 @@ keyring-named-itself = a program that calls itself { $name }
 # Shown under the box when the keyring has stopped before it could check the password.
 keyring-stopped = The keyring has stopped
 # Shown under the box when the password does not open the keyring.
-keyring-not-the-keyring-password = That is not the keyring's password
+keyring-not-the-keyring-password = That isn't the keyring's password
 # Shown under the box when the keyring file is damaged and has been left as it is.
-keyring-damaged-left = The keyring file is damaged, so it has been left alone
+keyring-damaged-left = The keyring file is damaged, so Trindle hasn't changed it
 # Shown under the box when the password is not the person's login password.
-keyring-not-login-password = That is not your login password
+keyring-not-login-password = That isn't your login password
+# Said to a program that gave a password with letters the keyring can't read, so no keyring is made with it.
+keyring-password-unreadable = That password has letters the keyring can't read
 
 ## Moving the keyring from Settings (src/keyring/migrate.rs)
 
 # Shown in Settings when the password typed there is not the person's password.
-keyring-not-your-password = That is not your password.
+keyring-not-your-password = That isn't your password.
 # Shown in Settings when the old keyring is still running after its time to stop has run out.
-keyring-would-not-stop = The old keyring would not stop.
+keyring-would-not-stop = The old keyring didn't stop.
 
 ## Words the keyring gives when it is asked (src/keyring/store.rs, Error)
 
 # Said when the keyring is locked and cannot be used.
 keyring-error-locked = The keyring is locked
 # Said when the password given does not open the keyring.
-keyring-error-wrong-password = That password does not open the keyring
+keyring-error-wrong-password = That password doesn't open the keyring
 # Said when the collection or item asked for is not there.
-keyring-error-no-such = No such collection or item
+keyring-error-no-such = That item doesn't exist
 # Said when the keyring file cannot be read as a keyring.
 keyring-error-damaged = The keyring file is damaged

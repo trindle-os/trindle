@@ -127,7 +127,7 @@ pub fn installed(s: &Store) -> Node<Msg> {
     let add = main_action("list-add-symbolic", t!("store-installed-add-appimage")).on_press(go(|s| before(s, add_appimage)));
     let named = tab_counts(list);
     let tab = if named[p.tab.min(updates::KINDS)].1 == 0 { 0 } else { p.tab.min(updates::KINDS) };
-    let words_in: Vec<String> = p.find.to_lowercase().split_whitespace().map(String::from).collect();
+    let words_in = super::mixed::words_of(&p.find);
     let shown: Vec<&updates::Installed> = list.iter().filter(|i| under_tab(tab, i))
         .filter(|i| words_in.iter().all(|w| i.name.to_lowercase().contains(w.as_str()) || i.id.to_lowercase().contains(w.as_str())))
         .collect();
@@ -139,7 +139,7 @@ pub fn installed(s: &Store) -> Node<Msg> {
 }
 
 fn tabs_and_search(s: &Store, named: &[(&'static str, usize)], tab: usize) -> Node<Msg> {
-    row(vec![look::tabs(named, tab, list_room(s.across), |i| go(move |s| s.owned.tab = i)).key(INSTALLED_TABS),
+    row(vec![look::tabs(named, tab, list_room(s.size.across), |i| go(move |s| s.owned.tab = i)).key(INSTALLED_TABS),
              look::search(&s.owned.find, t!("store-installed-search"), |t| go(move |s| s.owned.find = t.clone()))])
         .gap(theme::sheet().gap).centred().stacks()
 }
@@ -186,7 +186,6 @@ fn list_rows(s: &Store, all: Option<&[updates::Installed]>, shown: &[&updates::I
         Some(_) if shown.is_empty() => rows.push(empty_state(t!("store-installed-no-match", find = s.owned.find.trim()), None)),
         Some(_) => {
             rows.extend(listing::rows(shown.iter().map(|item| installed_row(s, item)).collect()));
-            rows.push(note(t!("store-installed-remove-twice")));
             if shown.iter().any(|i| matches!(i.source, updates::Source::AppImage(_))) {
                 rows.push(note(t!("store-from-hint")));
             }
@@ -195,14 +194,21 @@ fn list_rows(s: &Store, all: Option<&[updates::Installed]>, shown: &[&updates::I
     rows
 }
 
+pub(crate) fn may_remove_program() -> bool {
+    crate::toolkit::window::persons_own(crate::common::person_only::APPS_REMOVE)
+}
+
 pub(crate) fn remove_installed(s: &mut Store, item: &updates::Installed, wipe: bool) {
     if matches!(item.source, updates::Source::Plugin { .. }) && !plugin_page::may_remove() {
+        return;
+    }
+    if matches!(item.source, updates::Source::Deb { .. } | updates::Source::AppImage(_)) && !may_remove_program() {
         return;
     }
 
     #[cfg(test)]
     if let Some(noted) = s.owned.removals.clone() {
-        noted.borrow_mut().push((item.removal().with_data(wipe), item.id.clone()));
+        noted.borrow_mut().push((item.removal(), item.id.clone(), wipe));
         return removal_done(s, item, Ok(()), false);
     }
     s.owned.said.insert(item.key(), (t!("store-installed-removing").into(), Tone::Plain));
@@ -250,6 +256,7 @@ pub fn installed_opened(s: &mut Store) {
             updates::Source::AppImage(p) => Some(p.clone()),
             _ => None,
         }).collect();
+        super::pictures::forget_files();
         s.owned.list = Some(list);
         run::on_thread(move || files.into_iter().map(|f| {
             let from = came_from::read(&f.file_name().unwrap_or_default().to_string_lossy());
