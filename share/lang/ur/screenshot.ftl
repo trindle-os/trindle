@@ -13,6 +13,9 @@ screenshot-whole = پوری اسکرین
 # Name of the round button that closes the overlay or a pinned picture.
 screenshot-close = بند کریں
 
+# Word on the button, shown when the report window asked for the picture, that hands the chosen part to the report.
+screenshot-add-to-report = رپورٹ میں شامل کریں
+
 # SAFETY: needs a human review before it ships
 # Name of the round button that gives the screenshot up.
 screenshot-cancel = منسوخ کریں

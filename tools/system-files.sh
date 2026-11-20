@@ -9,7 +9,7 @@ prefix=/usr/lib/trindle
 
 [ -x "$program" ] || { echo "system-files.sh: no program at $program" >&2; exit 1; }
 
-install -d "$dest$prefix/bin" "$dest$prefix/libexec" "$dest$prefix/share/icons/apps"
+install -d "$dest$prefix/bin" "$dest$prefix/libexec" "$dest$prefix/share"
 install -m755 "$program" "$dest$prefix/bin/trindle"
 unlock=$(dirname "$program")/trindle-unlock
 if [ -x "$unlock" ]; then install -m755 "$unlock" "$dest$prefix/bin/trindle-unlock"; fi
@@ -22,7 +22,7 @@ fi
 (cd "$here/share" && tar chf - --exclude=./grub --exclude=./iso --exclude=./fonts --exclude=./licences --exclude=./lang .) \
     | (cd "$dest$prefix/share" && tar xf -)
 install -d "$dest/usr/share/trindle/lang"
-(cd "$here/share/lang" && tar chf - .) | (cd "$dest/usr/share/trindle/lang" && tar xf -)
+(cd "$here/share/lang" && tar chf - --exclude='./*/docs' .) | (cd "$dest/usr/share/trindle/lang" && tar xf -)
 [ -s "$dest/usr/share/trindle/lang/fr/settings-about.ftl" ] \
     || { echo "share/lang did not reach /usr/share/trindle/lang" >&2; exit 1; }
 [ -s "$dest$prefix/share/style.css" ] && [ -d "$dest$prefix/share/themes" ] \

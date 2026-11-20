@@ -41,11 +41,11 @@ settings-network-access-change = fungua na ubadilishe kwa nenosiri lako
 
 # Small line of a shared folder: anyone on the local network may open it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-open = yeyote kwenye mtandao wa ndani anaweza kufungua
+settings-network-access-guests-open = yeyote aliye karibu anaweza kufungua
 
 # Small line of a shared folder: anyone on the local network may change it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-change = yeyote kwenye mtandao wa ndani anaweza kubadilisha
+settings-network-access-guests-change = yeyote aliye karibu anaweza kubadilisha
 
 # Small line of a shared folder: where it is, then who may do what with it; both are already written.
 settings-network-shared-sub = { $place }: { $access }

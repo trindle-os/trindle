@@ -875,7 +875,7 @@ settings-help-topics-keys-step2-1 = Super seule, ou Super et Espace : ouvrir ou 
 settings-help-topics-keys-step2-2 = Super et Entrée, ou Ctrl, Alt et T : ouvrir un Terminal.
 
 # Help topic "Keyboard shortcuts": step 3 of the numbered steps at block 2.
-settings-help-topics-keys-step2-3 = Super et I : ouvrir Réglages.
+settings-help-topics-keys-step2-3 = Super et I : Réglages.
 
 # Help topic "Keyboard shortcuts": step 4 of the numbered steps at block 2.
 settings-help-topics-keys-step2-4 = Super et L : verrouiller l'écran, une fois le verrouillage activé dans Réglages, Alimentation.

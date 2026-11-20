@@ -94,6 +94,23 @@ impl WindowElement {
         })
     }
 
+    pub fn app_id(&self) -> String {
+        ssd::capped_title(match self.0.underlying_surface() {
+            WindowSurface::Wayland(t) => with_states(t.wl_surface(), |states| {
+                states
+                    .data_map
+                    .get::<XdgToplevelSurfaceData>()
+                    .and_then(|d| d.lock().ok()?.app_id.clone())
+                    .unwrap_or_default()
+            }),
+            WindowSurface::X11(x) => x.class(),
+        })
+    }
+
+    pub fn stays_on_top(&self) -> bool {
+        is_on_top_title(&self.title()) && is_browser(&self.app_id())
+    }
+
     pub fn deco_offset(&self) -> Point<i32, Logical> {
         if self.has_ssd() {
             (BORDER, HEADER_BAR_HEIGHT).into()
@@ -674,5 +691,41 @@ pub fn frame_extra(ssd: bool) -> Size<i32, Logical> {
         (2 * BORDER, HEADER_BAR_HEIGHT + BORDER).into()
     } else {
         (0, 0).into()
+    }
+}
+
+pub fn is_on_top_title(title: &str) -> bool {
+    title == "Picture in picture" || title == "Picture-in-Picture"
+}
+
+const BROWSERS: [&str; 15] = ["firefox", "org.mozilla.firefox", "chromium", "chromium-browser", "org.chromium.chromium",
+    "google-chrome", "com.google.chrome", "brave", "brave-browser", "com.brave.browser", "vivaldi", "com.vivaldi.vivaldi",
+    "msedge", "microsoft-edge", "com.microsoft.edge"];
+
+pub fn is_browser(app_id: &str) -> bool {
+    let id = app_id.to_ascii_lowercase();
+    BROWSERS.iter().any(|b| id.strip_prefix(b).is_some_and(|rest| rest.is_empty() || rest.starts_with('-')))
+}
+
+#[cfg(test)]
+mod on_top_tests {
+    #[test]
+    fn only_the_browsers_keep_a_window_on_top() {
+        for b in ["firefox", "firefox-esr", "org.mozilla.firefox", "Firefox", "chromium", "Chromium-browser", "org.chromium.Chromium",
+            "google-chrome", "Google-chrome-beta", "com.google.Chrome", "brave-browser", "com.brave.Browser", "vivaldi-stable", "msedge", "microsoft-edge-dev", "com.microsoft.Edge"] {
+            assert!(super::is_browser(b), "{b}");
+        }
+        for other in ["", "notes", "org.example.Firefoxish", "firefoxy", "chromiumbad", "trindle", "my.brave.Thing", "edge"] {
+            assert!(!super::is_browser(other), "{other}");
+        }
+    }
+
+    #[test]
+    fn only_the_browsers_picture_in_picture_titles_stay_on_top() {
+        assert!(super::is_on_top_title("Picture in picture"));
+        assert!(super::is_on_top_title("Picture-in-Picture"));
+        for other in ["", "picture in picture film.mp4", "Picture in picture - Notes", "Files"] {
+            assert!(!super::is_on_top_title(other), "{other}");
+        }
     }
 }

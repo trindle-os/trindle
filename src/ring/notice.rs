@@ -201,7 +201,7 @@ mod tests {
         let k = theme::sheet();
         let long = "1 item, 345 KB. Copied a picture with a long name of its own - John Smith's notes [example.com] and a great deal more besides, \
                     on and on past the edge of any screen, and then further still.";
-        for line in [Line::new("No app or favourite is called that"), Line::new(long), Line::problem(long), Line::problem("The ring stopped.")] {
+        for line in [Line::new("Listening for words"), Line::new(long), Line::problem(long), Line::problem("The ring stopped.")] {
             for (across, scale) in [(360u32, 1.0f32), (560, 1.0), (1280, 1.0), (1280, 2.0), (2560, 1.5)] {
                 let pen = Pen { theme: &t, fonts: &fonts, icons: &icons, scale };
                 let mut pix = tiny_skia::Pixmap::new(across, (line.tall() * scale) as u32).unwrap();
@@ -227,7 +227,7 @@ mod tests {
 
     #[test]
     fn lines_outside_the_disc_never_overlap_each_other_or_the_ring() {
-        let three = [Line::new("No app or favourite is called that"), Line::new("Done"), Line::problem("The ring stopped.")];
+        let three = [Line::new("Listening for words"), Line::new("Done"), Line::problem("The ring stopped.")];
         for tall in [600.0f32, 768.0, 800.0, 1080.0, 1440.0] {
             for clear in [178.0f32, 226.0, tall / 2.0 - 40.0 - WORDS_BAND, tall / 2.0 - 40.0] {
                 for count in 1..=3 {

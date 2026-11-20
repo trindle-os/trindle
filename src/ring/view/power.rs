@@ -116,6 +116,11 @@ impl Face {
     }
 
     fn power_choice(&mut self, what: &str) {
+
+        if !matches!(what, "lock" | "screensaver") && crate::common::installing::installing() {
+            self.armed = None;
+            return self.say(t!("ring-power-installing"), REFUSED_SECONDS);
+        }
         let step = power_step(what, self.armed.as_deref(), kept::own_press());
         match spoken_step(step, self.offered, kept::clicked()) {
             Power::Refuse => {
@@ -189,7 +194,7 @@ impl Face {
             band(list.iter().map(|&(icon, words, what)| {
                 let armed = self.armed.as_deref() == Some(what);
                 let said = if armed { crate::common::ui::click_again(words) } else { words.to_string() };
-                let b = button(if armed { crate::common::ui::TICK_ICON } else { icon }, said.clone())
+                let b = button(if armed { crate::common::no_tick::CONFIRM_ICON } else { icon }, said.clone())
                     .size(core())
                     .key(format!("power:{what}"))
                     .spoken(said)

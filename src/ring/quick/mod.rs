@@ -164,20 +164,12 @@ struct Dev {
     connected: bool,
 }
 
-#[derive(Clone, Debug, PartialEq)]
-struct Net {
-    ssid: String,
-    signal: u32,
-    inuse: bool,
-    secured: bool,
-}
-
 enum Body {
     Empty,
     Sound(Vec<Level>),
 
     Bt(Option<bool>, Vec<Dev>),
-    Wifi(Option<bool>, Vec<Net>, HashSet<String>),
+    Wifi(Option<bool>, trindle_common::wifi::Seen),
     Battery { big: String, state: String, health: String, mode: Option<String> },
     Bright(f32, String),
     Clip(Vec<clipboard::Item>, String),
@@ -223,7 +215,10 @@ pub struct Quick {
     across: Option<f32>,
     pop_width: Option<f32>,
     list_height: f32,
-    wifi_asking: bool,
+
+    wifi_typing: Option<(String, Zeroizing<String>, &'static str)>,
+
+    wifi_joining: Option<String>,
     agent: Option<Served>,
     bt_names: HashMap<String, String>,
     scan: Option<Child>,
@@ -297,7 +292,7 @@ impl Quick {
         Quick {
             ctx, gen: Rc::new(Cell::new(0)), panel: None, head: ("", ""), said: String::new(),
             body: Body::Empty, ask: None, turn: 0, ticked: false, tick_gen: 0,
-            bright_gen: 0, width: None, across: None, pop_width: None, list_height: LIST_HEIGHT, wifi_asking: false,
+            bright_gen: 0, width: None, across: None, pop_width: None, list_height: LIST_HEIGHT, wifi_typing: None, wifi_joining: None,
             agent: None, bt_names: HashMap::new(), scan: None, meter: None, heard: 0.0, busy: HashSet::new(), order: KeptOrder::default(),
         }
     }
@@ -376,7 +371,8 @@ impl Quick {
         self.panel = None;
         self.cancel_ask();
         self.body = Body::Empty;
-        self.wifi_asking = false;
+        self.wifi_typing = None;
+        self.wifi_joining = None;
         self.ticked = false;
         self.busy.clear();
     }
@@ -442,7 +438,7 @@ impl Quick {
             Body::Empty => vec![],
             Body::Sound(levels) => self.sound_view(levels),
             Body::Bt(on, devices) => self.bt_view(*on, devices),
-            Body::Wifi(on, nets, saved) => self.wifi_view(*on, nets, saved),
+            Body::Wifi(on, seen) => self.wifi_view(*on, seen),
             Body::Battery { big, state, health, mode } => battery_view(big, state, health, mode.as_deref()),
             Body::Bright(value, pct) => vec![row(vec![
                 icon("display-brightness-symbolic", ROW_ICON),

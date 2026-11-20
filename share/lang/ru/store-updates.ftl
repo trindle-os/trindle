@@ -133,6 +133,18 @@ store-upd-install-n =
 # Main button that restarts the computer.
 # SAFETY: needs a human review before it ships
 store-upd-restart-now = Перезагрузить сейчас
+# Beside Restart now: the box that puts the restart off, then the ring's Updates button reminds. Its answers are the choices below.
+store-upd-remind-later = Напомнить позже
+# Red words under the headline when the Remind me later time could not be saved; the reason follows.
+store-upd-remind-not-saved = Не удалось сохранить напоминание: { $why }.
+# One answer in the Remind me later box.
+store-upd-remind-hours =
+    { $n ->
+        [one] Через { $n } час
+        [few] Через { $n } часа
+        [many] Через { $n } часов
+       *[other] Через { $n } часа
+    }
 
 # Main button that checks for updates.
 store-upd-check-for = Проверить обновления
@@ -236,23 +248,11 @@ store-upd-debian-count =
        *[other] { $n } обновления, которые устанавливаются вместе
     }
 
-# On a row of Debian's updates: where it comes from.
-store-upd-from-debian = Источник: Debian
-
 # Under Debian's rows: how many of them show.
 store-upd-debian-showing = Показано обновлений Debian: { $shown } из { $total }.
 
 # Note on the Trindle and Debian card: which version of Trindle the computer has.
 store-upd-has-trindle = На этом компьютере установлен Trindle { $version }.
-
-# Heading of the Trindle and Debian card.
-store-upd-card-system = Trindle и Debian
-
-# Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Пакеты Debian рассчитаны на совместную работу. Один пакет может потянуть другие или нарушить согласованность, поэтому все ставятся вместе.
-
-# Note on the Trindle and Debian card: why no row has a Hold back button.
-store-upd-not-held = Обновления Trindle и Debian содержат исправления безопасности для всего компьютера, поэтому их нельзя откладывать.
 
 # Heading of the card about the daily security updates.
 store-upd-card-security = Обновления безопасности
@@ -317,7 +317,6 @@ store-patch-not-fetched = Trindle не смог загрузить { $package } 
 # Said when a security fix for a boxed app was downloaded but isn't there to use.
 store-patch-not-found = Trindle не нашёл загруженный пакет.
 
-
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
 store-upd-off = Автоматическая проверка обновлений выключена.
 
@@ -338,3 +337,4 @@ store-upd-stopped-all = Остановлено. Установите снова,
 
 # Note under the Apps card.
 store-upd-steam-restarts = Steam перезапустится, когда не будет запущена ни одна игра.
+

@@ -513,6 +513,9 @@ impl Screen {
     }
 
     fn finish(&mut self, how: Finish) {
+        if self.handing && how != Finish::Keep {
+            return;
+        }
         self.stop_typing(true);
         let Some((picture, png, size)) = self.core.result() else {
             self.out.send(Out::Then(Box::new(|l: &Rc<Life>| l.say.not_saved(t!("screenshot-no-picture")))));
@@ -621,6 +624,7 @@ impl App for Screen {
             Msg::Act(Act::Save) => self.finish(Finish::Save),
             Msg::Act(Act::SaveAs) => self.finish(Finish::SaveAs),
             Msg::Act(Act::Pin) => self.finish(Finish::Pin),
+            Msg::Act(Act::AddToReport) => self.finish(Finish::Keep),
             Msg::Finish(how) => self.finish(how),
             Msg::Act(Act::Cancel) | Msg::Close => {
                 self.out.send(Out::Close);
@@ -667,7 +671,7 @@ impl App for Screen {
             Some(part) if !matches!(st.doing, Doing::Choosing(..)) => {
                 let now = Now { tool: st.tool, colour: st.colour, thick: st.thick,
                                 undo: st.marks.can_undo() || st.typing.is_some(), redo: st.marks.can_redo() };
-                all.push(placed(toolbar::card_of(&now, Msg::Act).floats(), move |(w, h), (aw, ah)| {
+                all.push(placed(toolbar::card_of(&now, Msg::Act, self.handing).floats(), move |(w, h), (aw, ah)| {
                     let (x, y) = area::tools_at(part, (w as f64, h as f64), (aw as f64, ah as f64), GAP);
                     (x as f32, y as f32)
                 }));
@@ -921,6 +925,34 @@ mod tests {
         assert!(matches!(blur.shape, Shape::Blur(_, _, None)));
         blur.make_blur(&core.still);
         assert!(matches!(blur.shape, Shape::Blur(_, _, Some(_))), "the blocks are made when asked, as on release");
+    }
+
+    #[test]
+    fn asked_for_by_the_report_only_handing_over_finishes() {
+        let (w, h) = (400u32, 300u32);
+        let size = (f64::from(w), f64::from(h));
+        let core = Rc::new(Core {
+            shot: RefCell::new(Shot { part: Some(Rect { x: 0.0, y: 0.0, w: size.0, h: size.1 }), doing: Doing::Idle, tool: None,
+                                      colour: COLOURS[0].0, thick: THICKNESS[1].0, marks: History::default(), drawing: None, typing: None }),
+            still: Pixmap::new(w, h).unwrap(), size, shown: Cell::new(Rect { x: 0.0, y: 0.0, w: size.0, h: size.1 }),
+            win: RefCell::new(Weak::new()), display: None, fonts: Fonts::new(),
+        });
+        let events = Loop::new();
+        let sent = Rc::new(Cell::new(0));
+        let s = sent.clone();
+        let mut screen = Screen { core, out: events.post(move |_: Out| s.set(s.get() + 1)), start: (0.0, 0.0), handing: true };
+        for other in [Finish::Copy, Finish::Save, Finish::SaveAs, Finish::Pin] {
+            screen.finish(other);
+        }
+        let quit = events.clone();
+        events.after(Duration::from_millis(50), move || quit.quit());
+        events.run();
+        assert_eq!(sent.get(), 0, "a way of finishing other than handing over was taken");
+        screen.update(Msg::Act(Act::AddToReport));
+        let quit = events.clone();
+        events.after(Duration::from_millis(50), move || quit.quit());
+        events.run();
+        assert_eq!(sent.get(), 1, "Add to report did not hand the part over");
     }
 
     #[test]

@@ -869,7 +869,7 @@ settings-help-topics-keys-step2-1 = Super saja, atau Super dan Spasi: buka atau 
 settings-help-topics-keys-step2-2 = Super dan Enter, atau Ctrl, Alt dan T: buka Terminal.
 
 # Help topic "Keyboard shortcuts": step 3 of the numbered steps at block 2.
-settings-help-topics-keys-step2-3 = Super dan I: buka Pengaturan.
+settings-help-topics-keys-step2-3 = Super dan I: Pengaturan.
 
 # Help topic "Keyboard shortcuts": step 4 of the numbered steps at block 2.
 settings-help-topics-keys-step2-4 = Super dan L: kunci layar, setelah penguncian dinyalakan di Pengaturan, Daya.

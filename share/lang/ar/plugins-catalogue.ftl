@@ -36,9 +36,9 @@ plugins-refused-not-signed = فهرس إضافات Trindle غير موقّع ب�
 # SAFETY: needs a human review before it ships
 plugins-refused-no-number = فهرس إضافات Trindle بلا رقم إصدار، لذلك لم يستخدمه Trindle.
 
-# Red line under Trindle's own plugins when the catalogue is older than one accepted before. { $is } is its number; { $after } is the number accepted before.
+# Red line under Trindle's own plugins when the catalogue is older than one accepted before.
 # SAFETY: needs a human review before it ships
-plugins-refused-older = لم يستخدم Trindle فهرس الإضافات هذا لأن رقم إصداره { $is } أقدم من الرقم الذي قُبل قبله { $after }.
+plugins-refused-older = لم يستخدم Trindle فهرس الإضافات هذا لأنه أقدم من فهرس استخدمه من قبل.
 
 # Red line under Trindle's own plugins when the catalogue is signed but cannot be read. { $why } says what is wrong with it.
 # SAFETY: needs a human review before it ships

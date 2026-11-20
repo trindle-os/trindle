@@ -47,6 +47,7 @@ impl<BackendData: Backend> XdgShellHandler for Compose<BackendData> {
 
     fn title_changed(&mut self, _: ToplevelSurface) {
         self.panel_stale = true;
+        self.keep_on_top();
     }
 
     fn app_id_changed(&mut self, _: ToplevelSurface) {

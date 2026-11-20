@@ -323,7 +323,7 @@ disks-mount = माउंट करें
 disks-unmount = अनमाउंट करें
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = बदलाव करें
+disks-change-it = बदलें
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = नाम
@@ -500,7 +500,7 @@ disks-folder-appears = यह { $dir } में दिखता है
 disks-startup-on = शुरू होते ही { $dir } में माउंट होता है
 
 # Words on a row when a part is set not to mount at start-up.
-disks-startup-off = शुरू होते समय माउंट नहीं होता
+disks-startup-off = बूट पर माउंट नहीं
 
 # Words on a row while a folder or start-up choice is being saved.
 disks-saving = सहेजा जा रहा है

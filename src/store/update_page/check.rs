@@ -19,7 +19,13 @@ pub fn opened(s: &mut Store) {
 
     s.upd.held_card = !s.held.is_empty();
     s.upd.held_rows = s.held.things().cloned().collect();
+
+    s.upd.restart = s.upd.restart || reboot_waits();
     looked_again(s);
+}
+
+fn reboot_waits() -> bool {
+    std::path::Path::new(super::REBOOT_REQUIRED).exists() || crate::common::remind::state() != crate::common::remind::Reminder::None
 }
 
 pub fn looked_again(s: &mut Store) {

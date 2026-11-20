@@ -29,6 +29,8 @@ pub enum Act {
     SaveAs,
     Pin,
     Cancel,
+
+    AddToReport,
 }
 
 pub struct Now {
@@ -39,7 +41,7 @@ pub struct Now {
     pub redo: bool,
 }
 
-pub fn card_of<M: Clone + 'static>(now: &Now, wrap: fn(Act) -> M) -> Node<M> {
+pub fn card_of<M: Clone + 'static>(now: &Now, wrap: fn(Act) -> M, for_report: bool) -> Node<M> {
     let gap = || space().width(Length::Fixed(GROUP));
     let mut top: Vec<Node<M>> = Tool::ALL.iter()
         .map(|t| {
@@ -77,7 +79,14 @@ pub fn card_of<M: Clone + 'static>(now: &Now, wrap: fn(Act) -> M) -> Node<M> {
             .on(t == now.thick).on_press(wrap(Act::Thick(i)))
     }));
 
-    let foot = vec![
+    let foot = if for_report {
+        vec![
+            word_button(t!("screenshot-add-to-report")).on_press(wrap(Act::AddToReport)),
+            space(),
+            gap(),
+            button("window-close-symbolic", t!("screenshot-close")).on_press(wrap(Act::Cancel)),
+        ]
+    } else { vec![
         button("edit-copy-symbolic", t!("screenshot-copy")).on_press(wrap(Act::Copy)),
         word_button(t!("screenshot-save")).on_press(wrap(Act::Save)),
         word_button(t!("screenshot-save-as")).on_press(wrap(Act::SaveAs)),
@@ -85,7 +94,7 @@ pub fn card_of<M: Clone + 'static>(now: &Now, wrap: fn(Act) -> M) -> Node<M> {
         space(),
         gap(),
         button("window-close-symbolic", t!("screenshot-cancel")).on_press(wrap(Act::Cancel)),
-    ];
+    ] };
 
     let rows = vec![
         row(top).gap(SPACING).width(Length::Fill),
@@ -247,7 +256,7 @@ mod tests {
     #[test]
     fn save_and_save_as_are_words_and_the_rows_end_together() {
         let now = Now { tool: Some(Tool::Pen), colour: COLOURS[1].0, thick: THICKNESS[1].0, undo: true, redo: true };
-        let card: Node<Act> = card_of(&now, |a| a);
+        let card: Node<Act> = card_of(&now, |a| a, false);
         let worded: Vec<(String, Option<String>)> = card.worded().into_iter().filter(|(tip, _)| tip.starts_with("Save")).collect();
         assert_eq!(worded, [("Save".to_string(), Some("Save".to_string())), ("Save as".to_string(), Some("Save as".to_string()))]);
         assert!(card.iconed().iter().all(|(tip, _)| !tip.starts_with("Save")), "a Save button has an icon");
@@ -259,6 +268,21 @@ mod tests {
         let ends: Vec<f32> = ui.round_and_worded().into_iter().filter(|(tip, _)| tip == "Redo" || tip == "Cancel").map(|(_, r)| r.x + r.w).collect();
         assert_eq!(ends.len(), 2, "{places:?}");
         assert!((ends[0] - ends[1]).abs() <= 1.0, "Redo ends at {} and Cancel, under it, at {}", ends[0], ends[1]);
+    }
+
+    #[test]
+    fn for_the_report_the_card_offers_only_close_and_add_to_report() {
+        let now = Now { tool: None, colour: COLOURS[0].0, thick: THICKNESS[0].0, undo: false, redo: false };
+        let card: Node<Act> = card_of(&now, |a| a, true);
+        let tips: Vec<String> = card.iconed().into_iter().map(|(tip, _)| tip).chain(card.worded().into_iter().map(|(tip, _)| tip)).collect();
+        for gone in ["Copy", "Save", "Save as", "Pin on screen", "Cancel"] {
+            assert!(!tips.iter().any(|t| t == gone), "{gone} is offered to the report: {tips:?}");
+        }
+        for kept in ["Close", "Add to report"] {
+            assert!(tips.iter().any(|t| t == kept), "{kept} is missing: {tips:?}");
+        }
+        let plain: Node<Act> = card_of(&now, |a| a, false);
+        assert!(plain.iconed().iter().any(|(tip, _)| tip == "Copy"), "the usual card lost Copy");
     }
 
     #[test]
@@ -275,7 +299,7 @@ mod tests {
 
     fn card_width() -> f32 {
         let now = Now { tool: Some(Tool::Pen), colour: COLOURS[1].0, thick: THICKNESS[1].0, undo: true, redo: true };
-        let card: Node<Act> = card_of(&now, |a| a);
+        let card: Node<Act> = card_of(&now, |a| a, false);
         let node = crate::toolkit::widget::layers(vec![crate::toolkit::widget::space(), crate::toolkit::widget::placed(card.floats(), |_, _| (24.0, 24.0))]);
         let mut ui = Ui::new(node, Theme::new(false, crate::common::style::DEFAULT_ACCENT));
         ui.places_at((1600, 300));
@@ -293,7 +317,7 @@ mod tests {
             assert_eq!(Tool::Pen.name(), "Crayon");
             assert_eq!(Tool::Line.name(), "Line", "a word French lacks is English");
             let now = Now { tool: None, colour: COLOURS[0].0, thick: THICKNESS[0].0, undo: true, redo: true };
-            let card: Node<Act> = card_of(&now, |a| a);
+            let card: Node<Act> = card_of(&now, |a| a, false);
             assert!(card.iconed().iter().any(|(tip, _)| tip == "Annuler"));
             assert_eq!(t!("screenshot-eye-taken", n = 1, newest = "#FF0000"), "Une couleur prise : #FF0000.");
             assert_eq!(t!("screenshot-eye-taken", n = 3, newest = "#FF0000"), "3 couleurs prises ; la dernière est #FF0000.");
@@ -305,7 +329,7 @@ mod tests {
     fn shoot_the_toolbar() {
         let Some(dir) = std::env::var_os("TRINDLE_SHOTS") else { return };
         let now = Now { tool: Some(Tool::Pen), colour: COLOURS[1].0, thick: THICKNESS[1].0, undo: true, redo: false };
-        let card: Node<Act> = card_of(&now, |a| a);
+        let card: Node<Act> = card_of(&now, |a| a, false);
         let node = crate::toolkit::widget::layers(vec![
             crate::toolkit::widget::space(),
             crate::toolkit::widget::placed(card.floats(), |_, _| (24.0, 24.0)),

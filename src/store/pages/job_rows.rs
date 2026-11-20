@@ -63,7 +63,7 @@ pub(super) fn pictured_row_with(s: &Store, picture: Option<Node<Msg>>, key: &str
                 let own = key.to_string();
                 let mut beside = vec![note(w.clone()).tone(*t).width(Length::Fill)];
                 beside.extend(more);
-                beside.push(button("dialog-information-symbolic", t!("store-show-behind")).size(theme::sheet().info)
+                beside.push(button("dialog-information-symbolic", t!("store-show-behind")).size(theme::sheet().info).hushed()
                     .on_press(go(move |s| s.toggle_behind(&own))));
                 under.push(row(beside).gap(8.0).centred());
                 if s.words.open.contains(key) {

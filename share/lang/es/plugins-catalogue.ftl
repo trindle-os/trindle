@@ -31,8 +31,8 @@ plugins-refused-not-signed = El catálogo de complementos de Trindle no está fi
 # Red line under Trindle's own plugins when the catalogue does not say which number it is.
 plugins-refused-no-number = El catálogo de complementos de Trindle no tiene número de versión, así que Trindle no lo usó.
 
-# Red line under Trindle's own plugins when the catalogue is older than one accepted before. { $is } is its number; { $after } is the number accepted before.
-plugins-refused-older = Trindle no usó este catálogo de complementos porque su número de versión, { $is }, es anterior al aceptado antes, { $after }.
+# Red line under Trindle's own plugins when the catalogue is older than one accepted before.
+plugins-refused-older = Trindle no usó este catálogo de complementos porque es más antiguo que otro que usó antes.
 
 # Red line under Trindle's own plugins when the catalogue is signed but cannot be read. { $why } says what is wrong with it.
 plugins-refused-unreadable = El catálogo de complementos de Trindle está firmado pero no se puede leer, así que Trindle no lo usó: { $why }
@@ -98,4 +98,3 @@ plugins-install-note = Trindle instaló el complemento, pero no pudo registrar q
 
 # Red words when an update is asked for a plugin that is not installed.
 plugins-update-not-installed = No está instalado, así que no hay nada que actualizar.
-

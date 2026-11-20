@@ -327,7 +327,7 @@ disks-mount = Monter
 disks-unmount = Démonter
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = Modifier
+disks-change-it = Changer
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = Nom

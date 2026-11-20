@@ -54,9 +54,6 @@ ring-cli-unknown = अज्ञात विकल्प { $option }
 # Error printed in a terminal when --say is given no words.
 ring-cli-missing-say = --say के लिए तर्क नहीं दिया गया
 
-# Line in the ring's results when what was typed matches no app or favourite.
-ring-find-nothing = इस नाम का कोई ऐप या पसंदीदा नहीं है
-
 # Tip of the round button on an app's menu that removes the app.
 # SAFETY: needs a human review before it ships
 ring-uninstall = अनइंस्टॉल करें
@@ -230,7 +227,6 @@ ring-startup-add = लॉगिन पर शुरू करें
 
 ring-startup-remove = लॉगिन पर शुरू करना बंद करें
 
-
 # Help for the option that opens the shortcut list, or closes it when it is showing.
 ring-cli-shortcuts = हर कीबोर्ड शॉर्टकट की सूची दिखाएँ, या सूची छिपाएँ (Super और K, जब तक आप सेटिंग्स में इसे न बदलें)
 
@@ -248,3 +244,6 @@ ring-category-media-short = आवाज़
 
 # Line in the ring when a spoken command, such as turning the sound down, did not work.
 ring-voice-failed = यह नहीं हो सका।
+
+# Said under the ring when sleep, log out, restart or shut down is pressed while Trindle is being installed.
+ring-power-installing = Trindle इंस्टॉल हो रहा है। पूरा होने तक रुकें।

@@ -68,6 +68,10 @@ impl Spot {
     }
 }
 
+const LINE: f32 = 22.0;
+
+const FIX_GAP: f32 = 26.0;
+
 fn unit(screen: &Screen) -> f32 {
     (screen.height as f32 / 900.0).clamp(0.6, 2.5)
 }
@@ -88,13 +92,19 @@ impl Frame {
     }
 }
 
-pub fn draw(screen: &mut Screen, prompt: &str, typed: &str, show: bool, empty: bool,
+#[derive(Clone, Copy, Default)]
+pub struct Lines<'a> {
+    pub why: Option<&'a str>,
+    pub empty: bool,
+}
+
+pub fn draw(screen: &mut Screen, prompt: &str, typed: &str, show: bool, lines: Lines,
             pointer: Option<(f32, f32)>) -> Spot {
     let font = FontRef::try_from_slice(FONT).ok();
     screen.fill(BACK);
     let f = Frame { w: screen.width, h: screen.height, unit: unit(screen) };
     mark(screen, f.middle() as f32, (f.h / 2) as f32 - 232.0 * f.unit, 44.0 * f.unit, 0.0);
-    let card_w = draw_card(screen, font.as_ref(), &f, prompt, show, empty);
+    let card_w = draw_card(screen, font.as_ref(), &f, prompt, show, lines);
     let eye = draw_box(screen, font.as_ref(), &f, typed, show, card_w);
     screen.keep();
     if let Some((px, py)) = pointer {
@@ -104,7 +114,7 @@ pub fn draw(screen: &mut Screen, prompt: &str, typed: &str, show: bool, empty: b
     eye
 }
 
-fn draw_card(screen: &mut Screen, font: Option<&FontRef>, f: &Frame, prompt: &str, show: bool, empty: bool) -> usize {
+fn draw_card(screen: &mut Screen, font: Option<&FontRef>, f: &Frame, prompt: &str, show: bool, lines: Lines) -> usize {
     let (middle, unit) = (f.middle(), f.unit);
     let card_w = ((684.0 * unit) as usize).min(f.w.saturating_sub(40));
     let card_top = f.offset_from_middle(-150.0);
@@ -113,9 +123,17 @@ fn draw_card(screen: &mut Screen, font: Option<&FontRef>, f: &Frame, prompt: &st
         write(screen, font, prompt, middle, f.offset_from_middle(-92.0), 30.0 * unit, TEXT);
 
         keys_line(screen, font, &[("Tab", if show { t!("unlock-hide") } else { t!("unlock-show") }), ("F1", t!("unlock-restart")), ("F2", t!("unlock-turn-off"))],
-                  middle, f.offset_from_middle(86.0), unit);
-        if empty {
-            write(screen, font, t!("unlock-type-first"), middle, f.offset_from_middle(30.0), 22.0 * unit, WRONG);
+                  middle, f.offset_from_middle(100.0), unit);
+
+        let mut why = lines.why.map(str::lines).into_iter().flatten();
+        let first = why.next();
+        if lines.empty {
+            write(screen, font, t!("unlock-type-first"), middle, f.offset_from_middle(30.0), LINE * unit, WRONG);
+        } else if let Some(first) = first {
+            write(screen, font, first, middle, f.offset_from_middle(30.0), LINE * unit, TEXT);
+        }
+        if let Some(fix) = why.next() {
+            write(screen, font, fix, middle, f.offset_from_middle(30.0 + FIX_GAP), LINE * unit, TEXT);
         }
     }
     card_w
@@ -468,7 +486,7 @@ mod tests {
     fn the_eye_is_there_and_crossed_only_when_the_password_shows() {
         for (show, name) in [(false, "hidden"), (true, "shown")] {
             let mut screen = Screen::in_memory(1280, 800);
-            let eye = draw(&mut screen, "Enter encryption password", "correct horse #battery", show, false,
+            let eye = draw(&mut screen, "Enter encryption password", "correct horse #battery", show, Lines::default(),
                            show.then_some((930.0, 420.0)));
             assert!(eye.holds(880.0, 370.0), "a click on the eye would miss it");
             assert!(!eye.holds(640.0, 370.0), "a click in the middle of the box would count as the eye");
@@ -487,7 +505,7 @@ mod tests {
     fn the_card_fits_big_and_small_screens() {
         for (w, h) in [(1920, 1080), (1024, 768), (800, 600)] {
             let mut screen = Screen::in_memory(w, h);
-            draw(&mut screen, "Enter encryption password", "secret", false, true, None);
+            draw(&mut screen, "Enter encryption password", "secret", false, Lines { why: None, empty: true }, None);
             let rgb = screen.rgb();
             let at = |x: usize, y: usize| {
                 let i = (y * w + x) * 3;
@@ -505,5 +523,41 @@ mod tests {
             }
         }
     }
-}
 
+    fn width(text: &str, size: f32) -> f32 {
+        let font = FontRef::try_from_slice(FONT).unwrap();
+        let scaled = font.as_scaled(PxScale::from(size));
+        text.chars().map(|c| scaled.h_advance(font.glyph_id(c))).sum()
+    }
+
+    #[test]
+    fn the_chips_line_fits_and_gives_way_to_the_red_one() {
+        let (w, h) = (800, 600);
+        for why in [crate::chip::why(true, true).unwrap(), crate::chip::why(true, false).unwrap()] {
+            let why = why.as_str();
+            let mut screen = Screen::in_memory(w, h);
+            let u = unit(&screen);
+            let card_w = ((684.0 * u) as usize).min(w - 40) as f32;
+            for line in why.lines() {
+                assert!(width(line, LINE * u) < card_w - 64.0 * u, "{line:?} is wider than the card");
+            }
+            let row = |screen: &Screen| {
+                let y = (h as f32 / 2.0 + 24.0 * u) as usize;
+                screen.rgb()[y * w * 3..(y + 1) * w * 3].to_vec()
+            };
+            draw(&mut screen, "Enter disk password", "", false, Lines::default(), None);
+            let plain = row(&screen);
+            draw(&mut screen, "Enter disk password", "", false, Lines { why: Some(why), empty: false }, None);
+            assert_ne!(plain, row(&screen), "the line is not drawn");
+            if let Some(dir) = std::env::var_os("UNLOCK_PREVIEW") {
+                let mut ppm = format!("P6 {w} {h} 255\n").into_bytes();
+                ppm.extend_from_slice(&screen.rgb());
+                std::fs::write(std::path::Path::new(&dir).join(format!("unlock-chip-{}.ppm", why.len())), ppm).unwrap();
+            }
+            draw(&mut screen, "Enter disk password", "", false, Lines { why: None, empty: true }, None);
+            let red = row(&screen);
+            draw(&mut screen, "Enter disk password", "", false, Lines { why: Some(why), empty: true }, None);
+            assert_eq!(red, row(&screen), "the chip's line is drawn under the red one");
+        }
+    }
+}

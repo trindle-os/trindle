@@ -835,7 +835,7 @@ settings-help-topics-keys-step2-1 = 单独按 Super，或 Super 加空格：打�
 settings-help-topics-keys-step2-2 = Super 加回车，或 Ctrl、Alt 加 T：打开终端。
 
 # Help topic "Keyboard shortcuts": step 3 of the numbered steps at block 2.
-settings-help-topics-keys-step2-3 = Super 加 I：打开设置。
+settings-help-topics-keys-step2-3 = Super 加 I：设置。
 
 # Help topic "Keyboard shortcuts": step 4 of the numbered steps at block 2.
 settings-help-topics-keys-step2-4 = Super 加 L：锁定屏幕，需先在“设置”“电源”中打开锁定。

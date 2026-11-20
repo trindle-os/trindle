@@ -6,9 +6,8 @@ use crate::common::run::{self, spawn};
 use crate::ring::notify;
 use crate::settings::pictures;
 use crate::settings::ui::{confirm, dropdown, group, headline, line, on, page, why, Kit, Msg, Page, INSTALL_ICON, not_saved};
-use crate::toolkit::tiles::picture;
 use crate::store::updates::admin_watching;
-use crate::toolkit::widget::{button, note, row, switch, Length, Node};
+use crate::toolkit::widget::{button, card, note, row, switch, Length, Node};
 use crate::toolkit::t;
 
 const VOICE: &str = "voice";
@@ -233,6 +232,11 @@ fn voice_failed(verb: &str, err: &str) -> String {
     why(err, could_not)
 }
 
+fn ring_picture() -> Node<Msg> {
+    let b = crate::toolkit::theme::bento();
+    card(pictures::ring().height(Length::Fill)).height(Length::Fill).beside().span_grows(b.picture.0, b.picture.1, b.words)
+}
+
 #[cfg(test)]
 impl Ring {
 
@@ -276,12 +280,12 @@ impl Page for Ring {
     fn view(&self, kit: &Kit) -> Node<Msg> {
         page(kit, self.title(), self.help(), vec![
             headline(self.sum_up()),
-
             self.opening(kit),
-            picture(RING_ICON, t!("settings-ring-picture"), pictures::ring()),
             self.notifications(kit),
-            self.clipboard(kit),
             self.voice(kit),
+
+            self.clipboard(kit),
+            ring_picture(),
         ])
     }
 }

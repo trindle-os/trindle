@@ -35,8 +35,8 @@ plugins-refused-not-signed = Katalog plugin Trindle tidak ditandatangani dengan 
 # Red line under Trindle's own plugins when the catalogue does not say which number it is.
 plugins-refused-no-number = Katalog plugin Trindle tidak memiliki nomor versi, jadi Trindle tidak menggunakannya.
 
-# Red line under Trindle's own plugins when the catalogue is older than one accepted before. { $is } is its number; { $after } is the number accepted before.
-plugins-refused-older = Trindle tidak menggunakan katalog plugin ini karena nomor versinya, { $is }, lebih lama daripada yang diterima sebelumnya, { $after }.
+# Red line under Trindle's own plugins when the catalogue is older than one accepted before.
+plugins-refused-older = Trindle tidak menggunakan katalog plugin ini karena lebih lama daripada yang pernah digunakan sebelumnya.
 
 # Red line under Trindle's own plugins when the catalogue is signed but cannot be read. { $why } says what is wrong with it.
 plugins-refused-unreadable = Katalog plugin Trindle sudah ditandatangani tetapi tidak dapat dibaca, jadi Trindle tidak menggunakannya: { $why }

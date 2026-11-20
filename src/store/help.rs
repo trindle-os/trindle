@@ -142,6 +142,7 @@ pub const MESSAGES: &[crate::common::more::Entry] = &[
     ("common-updating-not-installed", UPDATE),
     ("store-upd-too-long", UPDATE),
 
+    ("store-upd-remind-not-saved", UPDATE),
     ("store-upd-not-held-list", HELD),
     ("store-upd-not-released-list", HELD),
     ("store-upd-held-not-told", HELD),

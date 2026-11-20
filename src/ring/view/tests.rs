@@ -171,6 +171,18 @@ fn nothing_on_the_way_to_the_rings_panel_waits_on_a_folder() {
 }
 
 #[test]
+fn taking_every_letter_off_goes_back_to_the_favourites() {
+    use super::arrange::left_after;
+    assert_eq!(left_after(String::new(), true), None);
+    assert_eq!(left_after("f".into(), true), Some("f".into()));
+    assert_eq!(left_after(String::new(), false), Some(String::new()));
+    let code = view_code();
+    assert!(!code.contains("ring-find-nothing"), "typing that finds nothing says nothing");
+    let start = code.find("f.set_level(ALL);").zip(code.find("f.typed_in = true;"));
+    assert!(start.is_some_and(|(level, marked)| marked > level), "typing on the favourites marks All apps as opened by typing");
+}
+
+#[test]
 fn ctrl_backspace_takes_off_the_last_word() {
     assert_eq!(less_word("visual studio"), "visual ");
     assert_eq!(less_word("visual studio  "), "visual ");
@@ -895,7 +907,7 @@ fn a_favourite_is_in_the_middle_ring_and_in_no_piece() {
 
     assert_eq!(found(&all, "fire"), vec![0, 3, 2]);
     assert_eq!(found(&all, "firew"), vec![3]);
-    assert!(found(&all, "zzz").is_empty(), "nothing matches: the ring says so");
+    assert!(found(&all, "zzz").is_empty(), "nothing matches, and nothing is shown");
 }
 
 #[test]

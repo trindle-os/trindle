@@ -13,9 +13,6 @@ settings-ring-help = 你收藏的应用围绕在圆环中间。你可以直接�
 # Sentence at the top of the ring page saying how the ring opens.
 settings-ring-headline = 圆环从屏幕边缘打开，你打开的窗口也在其中。
 
-# Name of the picture on the ring page that shows where things open.
-settings-ring-picture = 打开的位置
-
 # Line saying how many favourites the ring has; { $n } is the number.
 settings-ring-favourites =
     { $n ->

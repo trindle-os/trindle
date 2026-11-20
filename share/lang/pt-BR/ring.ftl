@@ -54,9 +54,6 @@ ring-cli-unknown = opção desconhecida { $option }
 # Error printed in a terminal when --say is given no words.
 ring-cli-missing-say = falta um argumento para --say
 
-# Line in the ring's results when what was typed matches no app or favourite.
-ring-find-nothing = Nenhum aplicativo ou favorito tem esse nome
-
 # Tip of the round button on an app's menu that removes the app.
 # SAFETY: needs a human review before it ships
 ring-uninstall = Desinstalar
@@ -234,8 +231,6 @@ ring-startup-add = Iniciar ao entrar
 
 ring-startup-remove = Parar de iniciar ao entrar
 
-
-
 # Help for the option that opens the shortcut list, or closes it when it is showing.
 ring-cli-shortcuts = Mostrar uma lista de todos os atalhos de teclado, ou esconder a lista (Super e K, a menos que você mude nas Configurações)
 
@@ -250,3 +245,6 @@ ring-uninstall-failed = Não foi possível remover.
 ring-category-media-short = Som
 # Line in the ring when a spoken command, such as turning the sound down, did not work.
 ring-voice-failed = Isso não funcionou.
+
+# Said under the ring when sleep, log out, restart or shut down is pressed while Trindle is being installed.
+ring-power-installing = O Trindle está sendo instalado. Espere até terminar.

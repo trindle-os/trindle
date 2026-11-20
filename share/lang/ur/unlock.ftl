@@ -26,3 +26,15 @@ unlock-turn-off = بند کریں
 # SAFETY: needs a human review before it ships
 # Red line inside the card when Enter is pressed with nothing typed.
 unlock-type-first = پاس ورڈ لکھیں، پھر Enter دبائیں
+
+# Line under the box when the disk is set up to be opened by the computer's TPM security chip and the chip did not open it this start (a firmware update, a BIOS reset or a changed Secure Boot setting can cause it).
+unlock-chip-refused = سیکیورٹی چپ نے ڈسک نہیں کھولی۔ BIOS اپ ڈیٹ سے ایسا ہو سکتا ہے۔
+
+# Second line under unlock-chip-refused: how to have the chip unlock the disk again. "Settings", "Hardware" and "Use the chip again" must match the names in Settings.
+unlock-chip-refused-fix = سیٹنگز، ہارڈ ویئر میں "چپ دوبارہ استعمال کریں" دبائیں۔
+
+# Line under the box when the disk is set up to be opened by the computer's TPM security chip and no chip could be found this start.
+unlock-chip-missing = سیکیورٹی چپ نہیں ملی۔ ہو سکتا ہے BIOS میں بند ہو۔
+
+# Second line under unlock-chip-missing: how to have the chip unlock the disk again.
+unlock-chip-missing-fix = پاس ورڈ کے بغیر شروع کرنے کے لیے اسے BIOS میں دوبارہ آن کریں۔

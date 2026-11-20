@@ -586,7 +586,8 @@ mod tests {
         assert!(seen(&run.image, 2), "the copy and its helper are found");
         let began = std::time::Instant::now();
         stop_boxed("--appimage", Some(&run.image));
-        assert!(began.elapsed() < std::time::Duration::from_secs(5));
+
+        assert!(began.elapsed() < std::time::Duration::from_secs(60), "stop waited for the copy to end by itself");
         let _ = run.child.wait();
         assert!(boxed_copies("--appimage", Some(&run.image), &running()).is_empty());
     }

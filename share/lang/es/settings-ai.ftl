@@ -182,3 +182,7 @@ settings-ai-keys = Claves dadas a los programas de IA
 # Help text of the keys card (the information button).
 # SAFETY: needs a human review before it ships
 settings-ai-keys-about = Los programas de IA nunca reciben las claves y los tokens de tu sesión. Solo reciben una clave que escribas aquí.
+# Under the AI programs card, greyed, when none of the listed AI programs is on this computer.
+settings-ai-none-installed = No hay programas de IA en este equipo.
+# Under the box, when the program typed in to add is not on this computer.
+settings-ai-not-installed = Ese programa no está en este equipo.

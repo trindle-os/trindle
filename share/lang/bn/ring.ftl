@@ -57,9 +57,6 @@ ring-cli-unknown = অজানা অপশন { $option }
 # Error printed in a terminal when --say is given no words.
 ring-cli-missing-say = --say এর জন্য আর্গুমেন্ট নেই
 
-# Line in the ring's results when what was typed matches no app or favourite.
-ring-find-nothing = এই নামে কোনো অ্যাপ বা প্রিয় নেই
-
 # Tip of the round button on an app's menu that removes the app.
 # SAFETY: needs a human review before it ships
 ring-uninstall = আনইনস্টল করুন
@@ -236,8 +233,6 @@ ring-startup-add = লগইনে চালু করুন
 
 ring-startup-remove = লগইনে চালু করা বন্ধ করুন
 
-
-
 # Help for the option that opens the shortcut list, or closes it when it is showing.
 ring-cli-shortcuts = সব কিবোর্ড শর্টকাটের একটি তালিকা দেখান, বা তালিকা লুকান (Super ও K, সেটিংসে না বদলালে)
 
@@ -247,7 +242,6 @@ ring-restarted = আবার চালু হয়েছে
 # Under the notice above.
 ring-restarted-why = রিং ও এর সহায়ক অংশ আবার চালু হয়েছে।
 
-
 # Tip on the app menu's red button when removing the app did not work.
 ring-uninstall-failed = সরানো যায়নি।
 
@@ -256,3 +250,6 @@ ring-category-media-short = শব্দ
 
 # Line in the ring when a spoken command, such as turning the sound down, did not work.
 ring-voice-failed = কাজ হয়নি।
+
+# Said under the ring when sleep, log out, restart or shut down is pressed while Trindle is being installed.
+ring-power-installing = Trindle ইনস্টল হচ্ছে। শেষ না হওয়া পর্যন্ত অপেক্ষা করুন।

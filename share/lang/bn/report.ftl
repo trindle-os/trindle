@@ -8,7 +8,7 @@ report-title-crash = কিছু একটা গোলমাল হয়ে�
 
 # Under the title: what a report holds, and what it never holds.
 # SAFETY: needs a human review before it ships
-report-summary = এটি ত্রুটি, কম্পিউটারের সারসংক্ষেপ এবং লগের শেষ কয়েকটি লাইন পাঠায়, যেখান থেকে নাম, ইমেল ঠিকানা, নেটওয়ার্ক ঠিকানা ও Wi-Fi-এর নাম বাদ দেওয়া হয়। লগের লাইনে ফাইলের নাম ও ওয়েব ঠিকানা তবু থাকতে পারে। এটি আপনার ফাইল বা পাসওয়ার্ড পাঠায় না।
+report-summary = এটি আপনার লেখা, কম্পিউটারের তথ্য, এই বুটের ত্রুটি এবং Trindle-এর লগ পাঠায়। Trindle যা জোগাড় করে তা থেকে নাম ও ঠিকানা (ইমেল, নেটওয়ার্ক, Wi-Fi) বাদ দেওয়া হয়। লগের লাইনে ফাইলের নাম ও ওয়েব ঠিকানা তবু থাকতে পারে। এটি আপনার ফাইল বা পাসওয়ার্ড পাঠায় না।
 
 # Big typing box in the middle of the window, shown quietly while empty.
 report-what-doing = কী হয়েছিল?
@@ -56,12 +56,6 @@ report-checking = দেখা হচ্ছে।
 
 # Why a report is waiting: Buildmorphic had too many reports at once and the report is tried again later.
 report-too-many = একসঙ্গে অনেক বেশি রিপোর্ট।
-
-# Written beside the Send button once the report has been sent.
-report-already-sent = আগেই পাঠানো হয়েছে।
-
-# Written under the typing box when Save is pressed a second time.
-report-already-saved = আগেই সংরক্ষণ করা হয়েছে।
 
 # Written beside the buttons while a report that could not be sent waits for the computer to be online.
 report-waiting = সংযোগের অপেক্ষায়।
@@ -165,10 +159,7 @@ report-picture-damaged = ছবিটি নষ্ট।
 
 report-picture-unreadable = পড়া যায়নি।
 
-
-
 report-sent-as-bug = পাঠানো হয়েছে। আপনার বাগ রিপোর্টের নম্বর { $number }। ধন্যবাদ।
-
 
 # Under the title, beta only: why a report matters and what it holds.
 report-beta = Trindle এখন বিটায় আছে। রিপোর্ট বেনামি: নাম, ইমেইল ঠিকানা ও হোম ফোল্ডার সরিয়ে দেওয়া হয়। ব্যবহারকারীর নাম ঐচ্ছিক।

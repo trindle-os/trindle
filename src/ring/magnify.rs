@@ -59,7 +59,6 @@ struct Magnifier {
 
     held: Option<(f32, f32)>,
     note: bool,
-    at: Option<(i32, i32, i32, i32)>,
     finished: Rc<dyn Fn()>,
 }
 
@@ -101,15 +100,10 @@ impl App for Magnifier {
             parts.push(placed(pill, move |_, (_, ah)| (0.0, ah - foot - room - tall)));
         }
 
-        let off = button("zoom-in-symbolic", t!("ring-magnify-stop")).on(true).on_press(Msg::Off);
-        parts.push(match self.at {
-            Some((x, y, w, h)) => {
-                let off = off.width(Length::Fixed(w as f32)).height(Length::Fixed(h as f32));
-                placed(off, move |_, _| (x as f32, y as f32))
-            }
-
-            None => placed(off, |(w, h), (aw, ah)| ((aw - w) / 2.0, ah - h - OFF_FOOT)),
-        });
+        if self.picture.is_some() {
+            let off = button("window-close-symbolic", t!("ring-magnify-stop")).on_press(Msg::Off);
+            parts.push(placed(off, |(w, h), (aw, ah)| ((aw - w) / 2.0, ah - h - OFF_FOOT)));
+        }
         layers(parts)
     }
 }
@@ -150,14 +144,14 @@ fn picture(shot: &capture::Picture) -> Option<Pixmap> {
     Some(out)
 }
 
-pub fn start(ctx: &Rc<Ctx>, at: Option<(i32, i32, i32, i32)>, finished: impl Fn() + 'static) {
+pub fn start(ctx: &Rc<Ctx>, finished: impl Fn() + 'static) {
     stop();
     let finished: Rc<dyn Fn()> = Rc::new(finished);
     let kind = Kind::Panel(Panel {
         layer: Layer::Overlay, edges: Edges::ALL, keep: -1, margins: [0; 4], keys: Keys::Never,
         name: "trindle-magnify".into(), screen: None,
     });
-    let app = Magnifier { lp: ctx.lp.clone(), picture: None, held: None, note: true, at, finished: finished.clone() };
+    let app = Magnifier { lp: ctx.lp.clone(), picture: None, held: None, note: true, finished: finished.clone() };
     let Some(shown) = Shown::open(&ctx.lp, &ctx.display, kind, (0, 0), app) else {
         eprintln!("trindle-ring: magnifier: no window");
         finished();
@@ -174,9 +168,9 @@ pub fn start(ctx: &Rc<Ctx>, at: Option<(i32, i32, i32, i32)>, finished: impl Fn(
         }
     });
 
-    let (me, display) = (Rc::downgrade(&shown), ctx.display.clone());
+    let (me, display, lp) = (Rc::downgrade(&shown), ctx.display.clone(), ctx.lp.clone());
     let mut tries = 0;
-    ctx.lp.every(PLACE_WAIT, move || {
+    ctx.lp.after(super::RING_GONE, move || lp.every(PLACE_WAIT, move || {
         let Some(s) = me.upgrade() else { return Flow::Stop };
         tries += 1;
         let place = s.window.place().or_else(|| if tries >= PLACE_TRIES { display.places().first().copied() } else { None });
@@ -198,7 +192,7 @@ pub fn start(ctx: &Rc<Ctx>, at: Option<(i32, i32, i32, i32)>, finished: impl Fn(
             }
         });
         Flow::Stop
-    });
+    }));
 }
 
 #[cfg(test)]
@@ -224,8 +218,8 @@ mod tests {
         }
         let shot = Rc::new(shot);
         drawn::none(drawn::in_every_look("the magnifier", 2, || {
-            for (state, held, note, at) in [("held, with its hint", Some((400.0, 300.0)), true, None), ("at rest", None, false, Some((380, 280, 40, 40)))] {
-                let app = Magnifier { lp: Loop::new(), picture: Some(shot.clone()), held, note, at, finished: Rc::new(|| {}) };
+            for (state, held, note) in [("held, with its hint", Some((400.0, 300.0)), true), ("at rest", None, false)] {
+                let app = Magnifier { lp: Loop::new(), picture: Some(shot.clone()), held, note, finished: Rc::new(|| {}) };
                 drawn::window(state, App::view(&app), Theme::chosen(), (800, 600), true);
             }
         }));
@@ -240,7 +234,7 @@ mod tests {
             *px = tiny_skia::PremultipliedColorU8::from_rgba(x / 2 + 40, y / 2 + 40, 90, 255).unwrap();
         }
         let app = Magnifier {
-            lp: Loop::new(), picture: Some(Rc::new(shot)), held: Some((400.0, 300.0)), note: true, at: None, finished: Rc::new(|| {}),
+            lp: Loop::new(), picture: Some(Rc::new(shot)), held: Some((400.0, 300.0)), note: true, finished: Rc::new(|| {}),
         };
         crate::ring::shots::save("magnifier", App::view(&app), (800, 600));
     }

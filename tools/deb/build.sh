@@ -34,7 +34,7 @@ toolkit=$(sed -n '/^name = "trindle-toolkit"$/{n;s/^version = "\(.*\)"$/\1/p;q}'
 [ -n "$toolkit" ] || { echo "no trindle-toolkit version in Cargo.lock" >&2; exit 1; }
 depends=$(echo "$depends" | sed "s/\(^\|, \)trindle-toolkit-lang\(,\|$\)/\1trindle-toolkit-lang (>= $toolkit)\2/")
 case "$depends" in *"trindle-toolkit-lang (>= $toolkit)"*) ;; *) echo "packages.txt must name trindle-toolkit-lang" >&2; exit 1 ;; esac
-icons=1.4.8
+icons=1.4.9
 for set in circle square; do
     depends=$(echo "$depends" | sed "s/\(^\|, \)trindle-$set-icon-theme\(,\|$\)/\1trindle-$set-icon-theme (>= $icons)\2/")
 done

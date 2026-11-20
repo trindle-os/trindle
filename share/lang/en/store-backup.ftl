@@ -39,7 +39,7 @@ store-because-quota = the space allowed for this account is used up
 # The reason when a file or program is missing.
 store-because-missing = a file or program it needs is missing
 # The reason when no reason could be read from the program's last line.
-store-because-failed = it failed
+store-because-failed = failed
 # The reason when the backup has no name to be written under.
 store-because-no-name = it has no name
 # The reason when a backup's settings for an app reach outside the app's own folder.

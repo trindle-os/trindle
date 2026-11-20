@@ -13,6 +13,9 @@ screenshot-whole = Tela inteira
 # Name of the round button that closes the overlay or a pinned picture.
 screenshot-close = Fechar
 
+# Word on the button, shown when the report window asked for the picture, that hands the chosen part to the report.
+screenshot-add-to-report = Adicionar ao relatório
+
 # SAFETY: needs a human review before it ships
 # Name of the round button that gives the screenshot up.
 screenshot-cancel = Cancelar

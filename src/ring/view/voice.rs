@@ -84,7 +84,7 @@ impl Face {
                 None => self.open_own("store", &[]),
             },
             A::Confirm(what) => self.confirm(what, words),
-            A::Tool("magnifier") => self.toggle_magnifier(None),
+            A::Tool("magnifier") => self.toggle_magnifier(),
             A::Tool("activity") => self.open_own("activity", &[]),
             A::Tool(panel) => self.quick.show(panel),
             A::Lock => self.run(&["trindle-lock", "--now"]),

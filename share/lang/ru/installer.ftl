@@ -71,12 +71,14 @@ installer-arm-erase = Нажмите ещё раз, чтобы стереть д
 
 # Note beside Next on the first page while no language is chosen.
 installer-missing-language = Выберите язык
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = Выберите язык Trindle
 
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = Выберите клавиатуру
 
 # Note beside Next on the first page while no time zone is chosen.
-installer-missing-time = Выберите часовой пояс
+installer-missing-time = Задайте часовой пояс
 
 # Note beside Next on the disk page while no disk is chosen.
 installer-missing-disk = Выберите, куда ставить Trindle
@@ -102,10 +104,12 @@ installer-missing-password = Введите пароль дважды. Он до
 installer-welcome-title = Добро пожаловать в { $name }
 
 # Sentence under the title of the first page.
-installer-welcome-help = Выберите язык, и Trindle подберёт под него клавиатуру и часовой пояс. Их можно изменить.
+installer-welcome-help = Выберите свой язык, и Trindle подберёт под него всё остальное.
 
-# Head of the card for choosing the language, and the name of its search box.
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
 installer-language = Язык
+# Label beside the box at the right of the first page's sentence, for choosing the language of Trindle's own words (only those Trindle has).
+installer-trindle-language = Язык Trindle
 
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = Клавиатура
@@ -399,8 +403,8 @@ installer-privacy-chip-none = В этом компьютере есть чип T
 # In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
 installer-privacy-no-chip-none = В этом компьютере нет чипа TPM, который мог бы использовать Trindle.
 
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = Клавиатура: { $keyboard }, время: { $zone }.
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle на языке «{ $trindle }», клавиатура: { $keyboard }, время: { $zone }.
 
 # Title of the page shown while the install runs.
 installer-installing-title = Установка { $name }
@@ -544,7 +548,7 @@ installer-live-speak = Используйте голос
 installer-live-speak-line = Коснитесь середины кольца и скажите, что вам нужно.
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = Нажмите «Добавить голосовое управление» в «Настройках», в разделе «Кольцо». Затем коснитесь середины и говорите.
+installer-live-speak-add = Когда Trindle будет установлена, добавьте голосовое управление в «Настройках», в разделе «Кольцо».
 
 # Name of the third thing to do.
 installer-live-tab = Всё в кольце
@@ -683,6 +687,9 @@ installer-copy-failed = Не удалось скопировать систем�
 # Red line at the foot: there is not enough room for a swap file.
 installer-swap-no-room = Нет места для файла подкачки.
 
+# Under the swap file switch when the chosen disk or space is too small for one; the switch is then off and cannot be turned on.
+installer-swap-too-small = Это место слишком мало для файла подкачки.
+
 # Red line at the foot: the swap file's place on the disk cannot be read.
 installer-swap-unreadable = Не удалось прочитать расположение файла подкачки на диске.
 
@@ -706,8 +713,8 @@ installer-tour-ring-foot = Смотрите, что открыто, пользу
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } это флешка, с которой запущена Trindle.
 
-# Red line at the foot: something on the chosen disk is mounted or swapped to.
-installer-disk-in-use = { $dev } используется. Закройте всё, что его использует, и попробуйте снова.
+# Red words under the disk, back on the disk page: something on the chosen disk is mounted, swapped to or open.
+installer-disk-in-use = { $dev } используется. Закройте всё, что его использует, и выберите диск снова.
 
 # Said beside how far the install has got, once it has started.
 installer-started = Идёт установка
@@ -753,8 +760,8 @@ installer-done-problems = Настроено не всё
 # Red line under the disk password boxes: the computer gave no random numbers, so no passphrase could be made.
 installer-suggest-failed = Trindle не удалось придумать парольную фразу. Введите свою.
 
-# Red line at the foot: the disk was swapped for another after the list was read.
-installer-disk-changed = Это не тот диск, который был показан: { $dev }. Вернитесь назад и выберите диск ещё раз.
+# Red words on the disk page: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev } не тот диск, который был показан. Выберите диск ещё раз.
 
 # Red line at the foot: a disk with an old-style partition table cannot be shared with.
 installer-no-gpt = На { $dev } нет таблицы разделов GPT, поэтому Trindle нельзя установить рядом с тем, что там уже есть.
@@ -776,3 +783,39 @@ installer-disk-named = { $what }, { $dev }
 
 # Red line at the foot: a program the installer runs stopped before it had all it was given.
 installer-run-stopped = Программа { $program } остановилась, не получив всего нужного: { $why }
+
+# Red words on the last page: the TPM chip could not be set up to open the disk, so the disk password is asked for at every start.
+installer-chip-not-set-up = Чип TPM не удалось настроить, поэтому компьютер будет запрашивать пароль диска при каждом запуске.
+
+# Red words on the last page: the keyboard for the disk password screen could not be set, so it may be the American one.
+installer-start-keyboard-failed = Trindle установлен, но на экране пароля диска может быть американская раскладка клавиатуры.
+
+# Red words on the last page: the login screen could not be switched on; { $why } is the reason.
+installer-login-screen-failed = Trindle установлен, но не удалось включить экран входа: { $why }
+
+# Red words on the last page: Trindle could not be set to take its own updates; { $why } is the reason.
+installer-updates-held = Trindle установлен, но пока не будет получать собственные обновления: { $why }
+
+# Red words on the last page: earlier versions of people's files (home snapshots) could not be switched on.
+installer-home-snapshots-failed = Trindle установлен, но прежние версии ваших файлов выключены. Включить их можно в разделе «Настройки», «Снимки».
+
+# Red words on the last page: Trindle could not be added to the computer's own start-up list; { $why } is the reason.
+installer-firmware-entry-failed = Trindle установлен, но не удалось добавить его в список запуска компьютера: { $why }
+
+# Red line: the account the stick ran as could not be removed from the new system, so the install stopped.
+installer-live-account-left = Не удалось удалить из новой системы учётную запись флешки { $user }.
+
+# Under the swap file's switch when a size smaller than memory is chosen.
+installer-swap-no-hibernate = Меньше памяти этого компьютера, поэтому он не сможет перейти в режим гибернации.
+
+# In the swap size list: the size of the computer's memory, which hibernating needs.
+installer-swap-size-hibernate = { $gb } ГБ, достаточно для гибернации
+
+# In the swap size list: a smaller size.
+installer-swap-size = { $gb } ГБ
+
+# Tip of the swap size list.
+installer-swap-size-tip = Размер файла подкачки
+
+# Why logind holds off sleep and shutting down while the installer changes the disk (shown by systemd-inhibit --list).
+installer-power-held = Идёт установка Trindle

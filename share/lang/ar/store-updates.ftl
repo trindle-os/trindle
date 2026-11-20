@@ -140,6 +140,20 @@ store-upd-install-n =
 
 # Main button that restarts the computer.
 store-upd-restart-now = أعد التشغيل الآن
+# Beside Restart now: the box that puts the restart off, then the ring's Updates button reminds. Its answers are the choices below.
+store-upd-remind-later = ذكّرني لاحقًا
+# Red words under the headline when the Remind me later time could not be saved; the reason follows.
+store-upd-remind-not-saved = تعذّر حفظ التذكير: { $why }.
+# One answer in the Remind me later box.
+store-upd-remind-hours =
+    { $n ->
+        [zero] بعد { $n } ساعة
+        [one] بعد ساعة واحدة
+        [two] بعد ساعتين
+        [few] بعد { $n } ساعات
+        [many] بعد { $n } ساعة
+       *[other] بعد { $n } ساعة
+    }
 
 # Main button that checks for updates.
 store-upd-check-for = ابحث عن تحديثات
@@ -249,23 +263,11 @@ store-upd-debian-count =
        *[other] { $n } تحديث، تُثبَّت معًا
     }
 
-# On a row of Debian's updates: where it comes from.
-store-upd-from-debian = من Debian
-
 # Under Debian's rows: how many of them show.
 store-upd-debian-showing = يُعرض { $shown } من { $total } من تحديثات Debian.
 
 # Note on the Trindle and Debian card: which version of Trindle the computer has.
 store-upd-has-trindle = على هذا الحاسوب Trindle { $version }.
-
-# Heading of the Trindle and Debian card.
-store-upd-card-system = Trindle وDebian
-
-# Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = حزم Debian مصنوعة لتعمل معًا. وتثبيت واحدة فقط قد يثبّت غيرها أو يتركها غير متوافقة، لذلك تُثبَّت كلها معًا.
-
-# Note on the Trindle and Debian card: why no row has a Hold back button.
-store-upd-not-held = تحديثات Trindle وDebian تحمل إصلاحات أمنية للحاسوب كله، لذلك لا يمكن حجزها.
 
 # Heading of the card about the daily security updates.
 store-upd-card-security = التحديثات الأمنية
@@ -330,8 +332,6 @@ store-patch-not-fetched = تعذّر على Trindle تنزيل { $package } { $v
 # Said when a security fix for a boxed app was downloaded but isn't there to use.
 store-patch-not-found = تعذّر على Trindle العثور على الحزمة التي نزّلها.
 
-
-
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
 store-upd-off = البحث التلقائي عن التحديثات متوقف.
 
@@ -352,3 +352,4 @@ store-upd-stopped-all = أُوقف. ثبّت مرة أخرى للمتابعة.
 
 # Note under the Apps card.
 store-upd-steam-restarts = يُعاد تشغيل Steam عندما لا تكون أي لعبة قيد التشغيل.
+

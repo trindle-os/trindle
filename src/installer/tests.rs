@@ -39,6 +39,7 @@ fn installer(events: &Loop) -> Installer {
     let machine = Machine {
         locales: vec![("en_GB.UTF-8".into(), "English (United Kingdom)".into()),
                       ("fr_FR.UTF-8".into(), "French (France)".into())],
+        tongues: vec![("en".into(), "English".into()), ("fr".into(), "Français".into())],
         keyboards: vec![("gb\t".into(), "English (UK)".into())],
         zones: vec![("Europe/London".into(), "Europe/London".into())],
         disks: vec![disk],
@@ -431,6 +432,7 @@ fn a_computer_with_too_little_memory_cannot_go_past_the_first_page_and_says_why(
     let events = Loop::new();
     let mut app = installer(&events);
     app.plan.locale = "en_GB.UTF-8".into();
+    app.plan.trindle_language = "en".into();
     app.plan.layout = "gb".into();
     app.plan.timezone = "Europe/London".into();
     assert_eq!(app.missing(), None);
@@ -481,7 +483,9 @@ fn a_changed_disk_reads_the_disks_again_and_only_then() {
     use std::sync::atomic::{AtomicUsize, Ordering};
     static READS: AtomicUsize = AtomicUsize::new(0);
     let exit = |code: i32| Ok(std::process::ExitStatus::from_raw(code << 8));
-    assert!(matches!(actions::ended(exit(steps::CHANGED), "changed".into()), Msg::DiskChanged(w) if w == "changed"));
+    for code in [steps::CHANGED, steps::REFUSED, steps::DISK_REFUSED] {
+        assert!(matches!(actions::ended(exit(code), "said".into()), Msg::Refused(c, w) if c == code && w == "said"));
+    }
     assert!(matches!(actions::ended(exit(1), "no room left".into()), Msg::Finished(Err(w)) if w == "no room left"));
     assert!(matches!(actions::ended(exit(steps::STOPPED), String::new()), Msg::Stopped(true)));
 
@@ -503,12 +507,14 @@ fn a_changed_disk_reads_the_disks_again_and_only_then() {
     app.update(Msg::Finished(Err("no room left".into())));
     assert!(!app.rereading && READS.load(Ordering::SeqCst) == 0, "no other failure reads the disks again");
     let words = t!("installer-disk-changed", dev = "/dev/sda");
-    app.update(Msg::DiskChanged(words.clone()));
-    assert!(app.failed && app.rereading && app.plan.target.is_none() && app.plan.disk_id.is_empty());
-    assert!(app.foot().said().contains(&words), "{:?}", app.foot().said());
-    app.page = 1;
+    app.update(Msg::Refused(steps::DISK_REFUSED, "in use".into()));
+    assert!(!app.rereading && READS.load(Ordering::SeqCst) == 0, "a disk in use reads the disks again");
+    app.update(Msg::Erase("/dev/sda".into()));
+    app.update(Msg::Refused(steps::CHANGED, words.clone()));
+    assert!(app.page == 1 && app.rereading && app.plan.target.is_none() && app.plan.disk_id.is_empty());
+    assert!(app.body().said().contains(&words), "{:?}", app.body().said());
     assert_eq!(app.missing(), Some(t!("installer-disks-rereading")));
-    app.update(Msg::DiskChanged(words));
+    app.update(Msg::Refused(steps::CHANGED, words));
     let ev = events.clone();
     events.after(Duration::from_secs(30), move || ev.quit());
     events.run();
@@ -533,6 +539,7 @@ fn picking_a_language_shows_the_installer_in_it_at_once() {
     use crate::common::live_language::switched;
     let events = Loop::new();
     let mut app = installer(&events);
+    app.machine.tongues = plan::trindle_languages();
     app.machine.locales.extend([("ar_EG.UTF-8".into(), "Arabic (Egypt)".into()), ("tlh.UTF-8".into(), "Klingon".into())]);
     let at = |app: &Installer, code: &str| matching(&app.machine.locales, "").iter().position(|(k, _)| k == code).unwrap();
     assert_eq!(app.window_title(), None, "nothing to tell before a language is picked");
@@ -554,6 +561,48 @@ fn picking_a_language_shows_the_installer_in_it_at_once() {
     assert_eq!(switched(), None, "built-in English is in use in tests, so nothing changes");
     app.update(Msg::Pick(0, at(&app, "tlh.UTF-8")));
     assert_eq!(switched(), None, "no words for it: English stays");
+}
+
+#[test]
+fn trindle_s_language_is_its_own_choice_from_the_languages_it_has() {
+    use crate::common::live_language::switched;
+    use super::{LANGUAGE, TONGUE};
+    let events = Loop::new();
+    let mut app = installer(&events);
+    app.machine.tongues = plan::trindle_languages();
+    let codes: Vec<&str> = app.machine.tongues.iter().map(|(c, _)| c.as_str()).collect();
+    for has in ["en", "en-US", "fr", "de", "ar", "zh-Hans"] {
+        assert!(codes.contains(&has), "{has}: {codes:?}");
+    }
+    assert!(!codes.contains(&"af"), "no words for Afrikaans, so it is not offered");
+    app.machine.locales.push(("af_ZA.UTF-8".into(), "Afrikaans (South Africa)".into()));
+    let at = |items: &[(String, String)], code: &str| matching(items, "").iter().position(|(k, _)| k == code).unwrap();
+    assert_eq!(app.missing(), Some(t!("installer-missing-language")));
+    app.update(Msg::Pick(LANGUAGE, at(&app.machine.locales, "af_ZA.UTF-8")));
+    assert_eq!((app.plan.locale.as_str(), app.plan.trindle_language.as_str()), ("af_ZA.UTF-8", "en"));
+    assert_eq!(app.plan.language_setting(), None, "English is what Afrikaans gives anyway");
+    app.update(Msg::Pick(TONGUE, at(&app.machine.tongues, "fr")));
+    assert_eq!(app.plan.locale, "af_ZA.UTF-8", "the computer's language stays");
+    assert_eq!(switched().as_deref(), Some(&["fr".to_string()][..]), "the installer is shown in French");
+    assert_eq!(app.plan.language_setting().as_deref(), Some("language=fr"));
+    assert_eq!(app.plan.words_in(), "fr", "the helper speaks French too");
+    app.update(Msg::Pick(LANGUAGE, at(&app.machine.locales, "fr_FR.UTF-8")));
+    assert_eq!(app.plan.trindle_language, "fr");
+    assert_eq!(app.plan.language_setting(), None, "French follows from French, so Trindle keeps following the system");
+    app.plan.trindle_language.clear();
+    assert_eq!(app.missing(), Some(t!("installer-missing-trindle-language")));
+}
+
+#[test]
+fn a_short_window_keeps_room_for_the_lists() {
+    let events = Loop::new();
+    let mut app = installer(&events);
+    let lists = |app: &Installer| Ui::new(app.view(), Theme::chosen()).natural_height(SIZE.0 as f32);
+    let tall = lists(&app);
+    assert!(app.resized(SIZE.0 as f32, 600.0), "going short lays the page out again");
+    assert!(lists(&app) > tall, "the lists keep their room, so the page grows and scrolls");
+    assert!(!app.resized(SIZE.0 as f32, 620.0), "still short: nothing to lay out again");
+    assert!(app.resized(SIZE.0 as f32, 1000.0));
 }
 
 #[test]
@@ -593,6 +642,21 @@ fn the_ready_page_lists_the_swap_file_only_when_it_is_on() {
 }
 
 #[test]
+fn the_swap_files_size_is_chosen_and_a_small_one_says_it_cannot_hibernate() {
+    let events = Loop::new();
+    let mut app = installer(&events);
+    app.machine.memory = 16;
+    app.update(Msg::Erase("/dev/sda".into()));
+    assert_eq!(app.swap_now(), (vec![16, 8, 4], 16), "on 500 GB every size fits; the memory's first");
+    app.update(Msg::SwapSize(4));
+    assert_eq!(app.swap_now().1, 4);
+    app.page = 1;
+    assert!(app.view().said().iter().any(|w| w == t!("installer-swap-no-hibernate")));
+    app.page = READY;
+    assert!(app.view().said().iter().any(|w| w.contains(&t!("installer-ready-swap", gb = 4))));
+}
+
+#[test]
 fn without_a_tpm_chip_the_chip_choice_is_off_with_its_reason() {
     let events = Loop::new();
     let mut app = installer(&events);
@@ -606,4 +670,77 @@ fn without_a_tpm_chip_the_chip_choice_is_off_with_its_reason() {
     assert!(!view.said().iter().any(|w| w.starts_with("This computer has") && w.contains("password")), "{:?}", view.said());
     app.update(Msg::Lock(Lock::Password));
     assert!(app.privacy().said().iter().any(|w| w.contains("ask for the password every time")), "{:?}", app.privacy().said());
+}
+
+#[test]
+fn a_refused_install_goes_back_to_the_disk_with_the_whole_reason() {
+    let events = Loop::new();
+    let mut app = installer(&events);
+    app.update(Msg::Erase("/dev/sda".into()));
+    app.update(Msg::Terms(true));
+    app.page = READY;
+    let (helper, _lines) = std::sync::mpsc::channel();
+    app.helper = Some(helper);
+    let foot = app.foot();
+    assert!(!foot.said().contains(&"button: Back".to_string()), "{:?}", foot.said());
+    assert_eq!(foot.buttons().into_iter().find(|(tip, _)| tip == "Install").map(|(_, on)| on), Some(false));
+    app.update(Msg::Install);
+    assert!(!app.armed, "a second install started while the first was checking");
+    let words = t!("installer-disk-in-use", dev = "/dev/sda");
+    app.update(Msg::Refused(steps::DISK_REFUSED, format!("{words}\n")));
+    assert_eq!(app.page, 1);
+    assert!(app.helper.is_none() && !app.failed && app.plan.target.is_none());
+
+    assert!(app.body().said().contains(&words) && !app.foot().said().contains(&words), "{:?}", app.body().said());
+    assert!(app.missing().is_some(), "Next is on with nothing to install to");
+    app.update(Msg::Erase("/dev/sda".into()));
+    assert!(!app.body().said().contains(&words), "the reason stays after a new pick");
+}
+
+#[test]
+fn a_refusal_not_over_the_disk_stays_on_the_ready_page() {
+    let events = Loop::new();
+    let mut app = installer(&events);
+    app.update(Msg::Erase("/dev/sda".into()));
+    app.page = READY;
+    let (helper, _lines) = std::sync::mpsc::channel();
+    app.helper = Some(helper);
+    let words = t!("installer-already-running");
+    app.update(Msg::Refused(steps::REFUSED, words.into()));
+    assert!(app.page == READY && app.plan.target.is_some());
+    assert!(app.body().said().contains(&words.to_string()), "{:?}", app.body().said());
+    let (helper, _lines) = std::sync::mpsc::channel();
+    app.helper = Some(helper);
+    app.update(Msg::Line("1 Making room".into()));
+    assert_eq!(app.page, ABOUT_YOU);
+}
+
+#[test]
+fn a_chip_not_set_up_is_said_on_the_last_page() {
+    let events = Loop::new();
+    let mut app = installer(&events);
+    app.plan.lock = Lock::Chip;
+    app.page = DONE;
+    app.update(Msg::Line(format!("! {}", t!("installer-chip-not-set-up"))));
+    let said = app.body().said();
+    assert!(said.contains(&t!("installer-chip-not-set-up").to_string()), "{said:?}");
+    assert!(said.contains(&t!("installer-keep-password").to_string()) && !said.contains(&t!("installer-keep-chip").to_string()), "{said:?}");
+}
+
+#[test]
+#[ignore]
+fn shoot_the_swap_size_choice() {
+    let Some(out) = std::env::var_os("TRINDLE_SHOTS") else { return };
+    let events = Loop::new();
+    let mut app = installer(&events);
+    app.machine.memory = 16;
+    app.update(Msg::Erase("/dev/sda".into()));
+    app.update(Msg::SwapSize(4));
+    app.page = 1;
+    let mut ui = crate::toolkit::ui::Ui::new(app.view(), Theme::for_page("installer"));
+    let (w, h) = SIZE;
+    ui.lay_at(w, h);
+    let mut pix = tiny_skia::Pixmap::new(w, h).unwrap();
+    ui.paint(&mut pix.as_mut(), 1.0);
+    pix.save_png(std::path::Path::new(&out).join("installer-swap-size.png")).unwrap();
 }

@@ -172,6 +172,14 @@ fn the_image_build_writes_what_the_download_page_names() {
 }
 
 #[test]
+fn a_private_package_only_goes_into_an_image_named_private() {
+    let build = read("tools/iso/build.sh");
+    assert!(build.contains("tag=-PRIVATE") && build.contains("-amd64$tag.iso\"") && build.contains("volume=\"Trindle PRIVATE\""));
+    assert!(build.contains("but this is not a PRIVATE image; not building"));
+    assert!(!gate_ships() || read(GATE).contains("is not named trindle-$want-amd64.iso"), "the release gate must refuse a PRIVATE image");
+}
+
+#[test]
 fn no_tool_needs_a_script_from_the_build_folder() {
     for name in ["tools/iso/build.sh", "tools/real-polkit-check.sh", "tools/themes-preview.sh", "tools/site/strip.py", GATE] {
         if name == GATE && !gate_ships() {

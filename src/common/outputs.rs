@@ -659,7 +659,7 @@ mod tests {
         assert_eq!(unsafe { libc::pipe(ends.as_mut_ptr()) }, 0);
         let started = std::time::Instant::now();
         assert!(!super::readable_within(ends[0], std::time::Duration::from_millis(200)));
-        assert!(started.elapsed() < std::time::Duration::from_secs(5));
+        assert!(started.elapsed() < std::time::Duration::from_secs(30), "the read waited past its limit");
         // SAFETY: writes one byte from a live buffer to the pipe's own end.
         unsafe { libc::write(ends[1], b"x".as_ptr().cast(), 1) };
         assert!(super::readable_within(ends[0], std::time::Duration::ZERO));

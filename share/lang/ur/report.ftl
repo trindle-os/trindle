@@ -8,7 +8,7 @@ report-title-note = مسئلے کی اطلاع دیں
 report-title-crash = کچھ غلط ہو گیا۔ رپورٹ بھیجیں؟
 
 # Under the title: what a report holds, and what it never holds.
-report-summary = یہ خرابی، کمپیوٹر کا خلاصہ اور لاگ کی آخری سطریں بھیجتا ہے، جن میں سے نام، ای میل پتے، نیٹ ورک پتے اور Wi-Fi کے نام نکال دیے جاتے ہیں۔ لاگ کی سطروں میں فائلوں کے نام اور ویب پتے پھر بھی ہو سکتے ہیں۔ یہ آپ کی فائلیں یا پاس ورڈ نہیں بھیجتا۔
+report-summary = یہ آپ کے الفاظ، کمپیوٹر کی تفصیل، اس بوٹ کی خرابیاں اور Trindle کا لاگ بھیجتا ہے۔ Trindle جو کچھ جمع کرتا ہے اس میں سے نام اور پتے (ای میل، نیٹ ورک، Wi-Fi) نکال دیے جاتے ہیں۔ لاگ کی سطروں میں فائلوں کے نام اور ویب پتے پھر بھی ہو سکتے ہیں۔ یہ آپ کی فائلیں یا پاس ورڈ نہیں بھیجتا۔
 
 # Big typing box in the middle of the window, shown quietly while empty.
 report-what-doing = کیا ہوا؟
@@ -56,12 +56,6 @@ report-checking = جانچ ہو رہی ہے۔
 
 # Why a report is waiting: Buildmorphic had too many reports at once and the report is tried again later.
 report-too-many = ایک ساتھ بہت زیادہ رپورٹیں۔
-
-# Written beside the Send button once the report has been sent.
-report-already-sent = پہلے ہی بھیجی جا چکی ہے۔
-
-# Written under the typing box when Save is pressed a second time.
-report-already-saved = پہلے ہی محفوظ ہو چکی ہے۔
 
 # Written beside the buttons while a report that could not be sent waits for the computer to be online.
 report-waiting = کنکشن کا انتظار ہے۔
@@ -165,10 +159,7 @@ report-picture-damaged = تصویر خراب ہے۔
 
 report-picture-unreadable = پڑھی نہیں جا سکی۔
 
-
-
 report-sent-as-bug = بھیج دیا گیا۔ آپ کی خرابی کی رپورٹ کا نمبر { $number } ہے۔ شکریہ۔
-
 
 # Under the title, beta only: why a report matters and what it holds.
 report-beta = Trindle بیٹا میں ہے۔ رپورٹیں گمنام ہوتی ہیں: نام، ای میل پتے اور ہوم فولڈر ہٹا دیے جاتے ہیں۔ صارف نام اختیاری ہے۔

@@ -21,7 +21,7 @@ use super::read::{bytes_from, flatpaks_heard, parse_flat_updates, parse_package_
 use super::rows::{app_name, held_row_key};
 use super::stopping::{stop_update, stopped};
 use super::view::view;
-use super::words::{debian_why, found_sentence, from_words, headline, held_not_told, held_words, hold_why, never_held, no_flathub, no_lists, no_more, not_checked, not_fetched, not_held, not_told, nothing_held, nothing_known, release_why, released, released_not_told, status, too_long};
+use super::words::{found_sentence, from_words, headline, held_not_told, held_words, hold_why, never_held, no_flathub, no_lists, no_more, not_checked, not_fetched, not_told, nothing_held, nothing_known, release_why, released, released_not_told, status, too_long};
 
 #[test]
 fn why_flatpak_could_not_be_told_is_said_with_what_it_means() {
@@ -66,7 +66,7 @@ fn lists_refused_as_apps_opens_are_said_and_a_closed_box_is_not() {
     assert!(opens.contains("update_page::check::lists_fetched(s, res, false)"));
 }
 
-fn store_with_updates() -> Store {
+pub(super) fn store_with_updates() -> Store {
     let events = crate::toolkit::event::Loop::new();
     let asks = events.post(|_: crate::store::Do| {});
     let mut s = Store::new(&events, asks, None);
@@ -251,18 +251,17 @@ fn one_update_alone_holds_the_turn_and_the_counts_drop_by_one() {
 }
 
 #[test]
-fn debian_s_packages_have_one_button_and_the_card_says_why() {
+fn debian_s_packages_have_one_button_and_are_listed_by_package_name_with_no_tick() {
     let s = store_with_updates();
     let page = view(&s);
     let said = page.said();
-    assert!(said.iter().any(|w| w == debian_why()), "{said:?}");
     assert!(said.iter().any(|w| w == "2 updates, installed together"));
+    assert!(["bash", "curl"].iter().all(|p| said.iter().any(|w| w == p)), "each package by its own name: {said:?}");
+    assert!(!said.iter().any(|w| w.starts_with("tick: ") || w.starts_with("button: about")), "no tick and no i on the card: {said:?}");
     let tips: Vec<String> = page.buttons().into_iter().map(|(tip, _)| tip).collect();
     assert!(tips.contains(&"Update Debian packages".to_string()));
     assert!(!tips.iter().any(|t| t == "Update bash" || t == "Update curl"), "no package of Debian's has a button of its own: {tips:?}");
-    for words in [debian_why(), "An app brings the shared parts its new version needs."] {
-        assert!(!words.contains('\u{2014}') && words.ends_with('.'));
-    }
+    assert_eq!(counts(&s).0, s.updatable.len() + s.upd.parts() + 2 + s.firmware.len() + 1 + plugin_page::waiting(&s).len(), "every waiting package counts");
 }
 
 #[test]
@@ -531,7 +530,7 @@ fn the_holding_buttons_are_there_and_nothing_is_held(s: &Store) {
                 "Hold back org.example.One"],
                "an app, a shared part, a device's firmware and a plugin; not Trindle, and not Debian's packages");
     assert!(before.iter().all(|(_, can)| *can));
-    assert!(view(s).said().iter().any(|w| w == not_held()) && view(s).said().iter().any(|w| w == never_held()), "why Trindle's and Debian's have none");
+    assert!(view(s).said().iter().any(|w| w == never_held()), "why the daily fixes are never held");
     assert_eq!(counts(s), (8, 0));
     assert_eq!(headline_of(&view(s)), "8 updates are ready, 350 MB in all. Restart to finish the firmware update.");
     assert_eq!(flatpaks_for_all(s), Some(Vec::new()), "nothing held: Flatpak updates everything, as ever");
@@ -1101,4 +1100,36 @@ fn the_security_switch_says_a_failure_under_its_card() {
     assert!(view(&s).said().iter().any(|w| w == "Example reason."));
     s.say(super::SECURITY_ROW, crate::common::refused::not_done(crate::common::refused::Refused::Cancelled), Tone::Problem);
     assert!(!view(&s).said().iter().any(|w| w == "Example reason." || w.contains("no administrator's password")));
+}
+
+#[test]
+fn restart_now_has_remind_me_later_beside_it_offering_exactly_five_times() {
+    assert_eq!(super::view::remind_choices(), ["In 1 hour", "In 3 hours", "In 6 hours", "In 12 hours", "In 24 hours"]);
+    assert_eq!(super::view::remind_choices().len(), crate::common::remind::HOURS.len());
+    let mut s = store_with_updates();
+    (s.updatable, s.debian, s.trindle_waiting, s.firmware, s.plugins) = (Vec::new(), Vec::new(), None, Vec::new(), Default::default());
+    s.notice_updating();
+    let said = |s: &Store| view(s).said();
+    assert!(!said(&s).iter().any(|w| w == "dropdown: Remind me later"), "nothing to restart for");
+    s.upd.restart = true;
+    assert!(said(&s).iter().any(|w| w == "dropdown: Remind me later"), "{:?}", said(&s));
+}
+
+#[test]
+fn the_time_picked_shows_in_the_box_and_a_failed_save_is_said_in_red_and_keeps_the_old_time() {
+    use super::view::remind_saved;
+    let mut s = store_with_updates();
+    (s.updatable, s.debian, s.trindle_waiting, s.firmware, s.plugins) = (Vec::new(), Vec::new(), None, Vec::new(), Default::default());
+    s.upd.restart = true;
+    assert_eq!(s.upd.reminded, None);
+    remind_saved(&mut s, 2, Ok(()));
+    assert_eq!(s.upd.reminded, Some(2));
+    assert!(!s.words.said.contains_key(super::REMIND_ROW));
+    remind_saved(&mut s, 4, Err(std::io::Error::other("Permission denied")));
+    assert_eq!(s.upd.reminded, Some(2), "the box still shows the time that is saved");
+    let (words, tone) = s.words.said.get(super::REMIND_ROW).cloned().expect("said");
+    assert_eq!((words.as_str(), tone), ("Couldn't save the reminder: Permission denied.", crate::toolkit::widget::Tone::Problem));
+    assert!(view(&s).said().contains(&words), "where the person is working");
+    remind_saved(&mut s, 1, Ok(()));
+    assert!(!view(&s).said().iter().any(|w| w.starts_with("Couldn't save the reminder")), "gone when a save works");
 }

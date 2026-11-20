@@ -3,6 +3,7 @@
 //! validated; passwords come on stdin to keep them out of the process list.
 
 mod accounts;
+mod chip;
 mod dns;
 mod firewall;
 mod games;
@@ -221,6 +222,7 @@ pub fn main(args: Vec<String>) -> i32 {
 fn command(verb: &str, rest: &[String]) -> Outcome {
     match verb {
         "add" => accounts::add(rest),
+        "chip-reseal" => chip::reseal(rest),
         "password" => accounts::password(rest),
         "admin" => accounts::admin(rest),
         "delete" => accounts::delete(rest),

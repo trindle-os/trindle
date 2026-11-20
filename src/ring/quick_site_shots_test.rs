@@ -25,14 +25,14 @@ fn site_page_pictures() {
         name, target: "", out, value: 60.0, pct: "60%".into(), muted: false, touched: None,
         nodes: vec![(1, if out { "Built-in speakers" } else { "Built-in microphone" }.into()), (2, "Headphones".into())], chosen: 0,
     };
-    let nets: Vec<Net> = ["Home network", "Cafe guest", "Neighbour's network"].iter().enumerate()
-        .map(|(i, s)| Net { ssid: s.to_string(), signal: (90 - 20 * i) as u32, inuse: i == 0, secured: i != 1 }).collect();
+    let nets: Vec<trindle_common::wifi::Net> = ["Home network", "Cafe guest", "Neighbour's network"].iter().enumerate()
+        .map(|(i, s)| trindle_common::wifi::Net { ssid: s.to_string(), signal: (90 - 20 * i) as u32, inuse: i == 0, secured: i != 1 }).collect();
     for (name, q) in [
         ("sound", page("sound", "Sound", Body::Sound(vec![level("Speakers", true), level("Microphone", false)]))),
         ("clipboard", page("clipboard", "Clipboard", Body::Clip(clips, String::new()))),
         ("notes", page("notes", "Notifications", Body::Notes(notes.clone()))),
         ("note", page("notes", "Notifications", Body::Whole(notes[2].0.clone(), icon_name()))),
-        ("wifi", page("wifi", "Wi-Fi", Body::Wifi(Some(true), nets, HashSet::new()))),
+        ("wifi", page("wifi", "Wi-Fi", Body::Wifi(Some(true), trindle_common::wifi::Seen { near: nets, ..Default::default() }))),
         ("battery", page("power", "Battery", Body::Battery { big: "82%".into(), state: "About 5 hours 20 minutes left".into(), health: "Health 91% of new".into(), mode: Some("balanced".into()) })),
     ] {
         let mut q = q;

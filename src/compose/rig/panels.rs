@@ -226,6 +226,18 @@ impl Rig {
         (surface, top)
     }
 
+    pub fn dialog_of(&mut self, who: usize, parent: &xdg_toplevel::XdgToplevel, first: (i32, i32)) -> wl_surface::WlSurface {
+        let p = &self.programs[who];
+        let qh = p.queue.handle();
+        let surface = p.program.compositor.as_ref().expect("the compositor's global").create_surface(&qh, ());
+        let xdg = p.program.wm.as_ref().expect("the windows' global").get_xdg_surface(&surface, &qh, ());
+        xdg.get_toplevel(&qh, ()).set_parent(Some(parent));
+        surface.commit();
+        self.pump();
+        self.show(who, &surface, first.0, first.1);
+        surface
+    }
+
     pub fn window_first_drawn(&mut self, who: usize, full: bool, first: (i32, i32)) -> wl_surface::WlSurface {
         let (surface, top) = self.window_and_top(who, first);
         if full {

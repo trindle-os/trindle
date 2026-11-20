@@ -70,13 +70,15 @@ installer-arm = ইনস্টল করতে আবার ক্লিক ক
 installer-arm-erase = মুছে ইনস্টল করতে আবার ক্লিক করুন
 
 # Note beside Next on the first page while no language is chosen.
-installer-missing-language = একটি ভাষা বেছে নিন
+installer-missing-language = ভাষা বেছে নিন
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = Trindle-এর ভাষা বেছে নিন
 
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = একটি কিবোর্ড বেছে নিন
 
 # Note beside Next on the first page while no time zone is chosen.
-installer-missing-time = একটি সময় অঞ্চল বেছে নিন
+installer-missing-time = সময় অঞ্চল ঠিক করুন
 
 # Note beside Next on the disk page while no disk is chosen.
 installer-missing-disk = Trindle কোথায় যাবে তা বাছুন
@@ -102,10 +104,12 @@ installer-missing-password = আপনার পাসওয়ার্ড দ�
 installer-welcome-title = { $name }-এ স্বাগতম
 
 # Sentence under the title of the first page.
-installer-welcome-help = আপনার ভাষা বেছে নিন, Trindle তার সঙ্গে কিবোর্ড ও সময় অঞ্চল মিলিয়ে দেবে, যা আপনি বদলাতে পারেন।
+installer-welcome-help = আপনার ভাষা বেছে নিন, Trindle বাকি সব তার সঙ্গে মিলিয়ে দেবে।
 
-# Head of the card for choosing the language, and the name of its search box.
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
 installer-language = ভাষা
+# Label beside the box at the right of the first page's sentence, for choosing the language of Trindle's own words (only those Trindle has).
+installer-trindle-language = Trindle-এর ভাষা
 
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = কিবোর্ড
@@ -398,8 +402,8 @@ installer-privacy-chip-none = এই কম্পিউটারে TPM চি�
 # In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
 installer-privacy-no-chip-none = এই কম্পিউটারে Trindle ব্যবহার করতে পারে এমন TPM চিপ নেই।
 
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = { $keyboard } কিবোর্ড, { $zone } সময়।
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle { $trindle } ভাষায়, { $keyboard } কিবোর্ড, { $zone } সময়।
 
 # Title of the page shown while the install runs.
 installer-installing-title = { $name } ইনস্টল হচ্ছে
@@ -543,7 +547,7 @@ installer-live-speak = আপনার কণ্ঠ ব্যবহার কর
 installer-live-speak-line = রিংয়ের মাঝখানে চাপ দিয়ে যা চান তা বলুন।
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = সেটিংসে রিংয়ের নিচে “ভয়েস নিয়ন্ত্রণ যোগ করুন” চাপুন। তারপর মাঝখানে চাপ দিয়ে বলুন।
+installer-live-speak-add = Trindle ইনস্টল হওয়ার পর সেটিংসে রিংয়ের নিচে ভয়েস নিয়ন্ত্রণ যোগ করুন।
 
 # Name of the third thing to do.
 installer-live-tab = সব রিংয়ের মধ্যে
@@ -582,7 +586,7 @@ installer-step-check = ডিস্কে আগে থেকে কী আছ�
 installer-step-smaller = অন্য সিস্টেম ছোট করা হচ্ছে
 
 # Foot of the install page while the disk is encrypted.
-installer-step-lock = ডিস্ক এনক্রিপ্ট করা হচ্ছে
+installer-step-lock = ডিস্ক এনক্রিপ্ট হচ্ছে
 
 # Foot of the install page while the TPM chip is set up.
 installer-step-chip = TPM চিপ সাজানো হচ্ছে
@@ -597,7 +601,7 @@ installer-step-settings = সেটিংস লেখা হচ্ছে
 installer-step-account = আপনার অ্যাকাউন্ট বানানো হচ্ছে
 
 # Foot of the install page while the stick's own parts are taken out.
-installer-step-live-parts = স্টিকের বাড়তি অংশ সরানো হচ্ছে
+installer-step-live-parts = লাইভ বাড়তি অংশ সরানো হচ্ছে
 
 # Foot of the install page while the start-up files are made.
 installer-step-startup = চালু হওয়ার ফাইল বানানো হচ্ছে
@@ -682,6 +686,9 @@ installer-copy-failed = সিস্টেম কপি করা যায়�
 # Red line at the foot: there is not enough room for a swap file.
 installer-swap-no-room = সোয়াপ ফাইলের জায়গা নেই।
 
+# Under the swap file switch when the chosen disk or space is too small for one; the switch is then off and cannot be turned on.
+installer-swap-too-small = এই জায়গাটি সোয়াপ ফাইলের জন্য খুব ছোট।
+
 # Red line at the foot: the swap file's place on the disk cannot be read.
 installer-swap-unreadable = Trindle ডিস্কে সোয়াপ ফাইল কোথায় আছে তা পড়তে পারেনি।
 
@@ -705,8 +712,8 @@ installer-tour-ring-foot = কী খোলা আছে দেখুন, ক্
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } হলো সেই স্টিক যা থেকে Trindle চলছে।
 
-# Red line at the foot: something on the chosen disk is mounted or swapped to.
-installer-disk-in-use = { $dev } ব্যবহার হচ্ছে। যা ব্যবহার করছে তা বন্ধ করে আবার চেষ্টা করুন।
+# Red words under the disk, back on the disk page: something on the chosen disk is mounted, swapped to or open.
+installer-disk-in-use = { $dev } ব্যবহার হচ্ছে। যা ব্যবহার করছে তা বন্ধ করুন, তারপর আবার বেছে নিন।
 
 # Said beside how far the install has got, once it has started.
 installer-started = ইনস্টল হচ্ছে
@@ -752,8 +759,8 @@ installer-done-problems = সবকিছু সেট আপ হয়নি
 # Red line under the disk password boxes: the computer gave no random numbers, so no passphrase could be made.
 installer-suggest-failed = Trindle পাসফ্রেজ বানাতে পারেনি। নিজে একটি লিখুন।
 
-# Red line at the foot: the disk was swapped for another after the list was read.
-installer-disk-changed = { $dev } সেই ডিস্ক নয় যা দেখানো হয়েছিল। পিছনে গিয়ে আবার ডিস্কটি বেছে নিন।
+# Red words on the disk page: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev } দেখানো ডিস্কটি নয়। আবার ডিস্ক বেছে নিন।
 
 # Red line at the foot: a disk with an old-style partition table cannot be shared with.
 installer-no-gpt = { $dev } GPT পার্টিশন টেবিল ব্যবহার করে না, তাই এতে যা আছে তার পাশাপাশি Trindle ইনস্টল করা যায় না।
@@ -775,3 +782,39 @@ installer-disk-named = { $what }, { $dev }
 
 # Red line at the foot: a program the installer runs stopped before it had all it was given.
 installer-run-stopped = দরকারি সবকিছু পাওয়ার আগেই { $program } থেমে গেছে: { $why }
+
+# Red words on the last page: the TPM chip could not be set up to open the disk, so the disk password is asked for at every start.
+installer-chip-not-set-up = TPM চিপ সাজানো যায়নি, তাই কম্পিউটার চালু হলে প্রতিবার ডিস্ক পাসওয়ার্ড চাইবে।
+
+# Red words on the last page: the keyboard for the disk password screen could not be set, so it may be the American one.
+installer-start-keyboard-failed = Trindle ইনস্টল হয়েছে, কিন্তু ডিস্ক পাসওয়ার্ডের পর্দায় আমেরিকান কিবোর্ড থাকতে পারে।
+
+# Red words on the last page: the login screen could not be switched on; { $why } is the reason.
+installer-login-screen-failed = Trindle ইনস্টল হয়েছে, কিন্তু লগইন পর্দা চালু করা যায়নি: { $why }
+
+# Red words on the last page: Trindle could not be set to take its own updates; { $why } is the reason.
+installer-updates-held = Trindle ইনস্টল হয়েছে, কিন্তু এটি এখনো নিজের আপডেট নেবে না: { $why }
+
+# Red words on the last page: earlier versions of people's files (home snapshots) could not be switched on.
+installer-home-snapshots-failed = Trindle ইনস্টল হয়েছে, কিন্তু আপনার ফাইলের আগের সংস্করণ বন্ধ আছে। সেটিংস, স্ন্যাপশটে গিয়ে চালু করতে পারেন।
+
+# Red words on the last page: Trindle could not be added to the computer's own start-up list; { $why } is the reason.
+installer-firmware-entry-failed = Trindle ইনস্টল হয়েছে, কিন্তু কম্পিউটারের চালু হওয়ার তালিকায় নিজেকে যোগ করতে পারেনি: { $why }
+
+# Red line: the account the stick ran as could not be removed from the new system, so the install stopped.
+installer-live-account-left = নতুন সিস্টেম থেকে স্টিকের অ্যাকাউন্ট { $user } সরানো যায়নি।
+
+# Under the swap file's switch when a size smaller than memory is chosen.
+installer-swap-no-hibernate = এই কম্পিউটারের মেমোরির চেয়ে ছোট, তাই এটি হাইবারনেট করতে পারবে না।
+
+# In the swap size list: the size of the computer's memory, which hibernating needs.
+installer-swap-size-hibernate = { $gb } GB, হাইবারনেটের জন্য যথেষ্ট
+
+# In the swap size list: a smaller size.
+installer-swap-size = { $gb } GB
+
+# Tip of the swap size list.
+installer-swap-size-tip = সোয়াপ ফাইলের আকার
+
+# Why logind holds off sleep and shutting down while the installer changes the disk (shown by systemd-inhibit --list).
+installer-power-held = Trindle ইনস্টল হচ্ছে

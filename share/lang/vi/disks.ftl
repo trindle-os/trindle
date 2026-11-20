@@ -316,7 +316,7 @@ disks-mount = Gắn
 disks-unmount = Bỏ gắn
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = Thay đổi
+disks-change-it = Đổi
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = Tên

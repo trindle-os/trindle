@@ -180,6 +180,9 @@ settings-permissions-appimages = AppImage
 # Heading of the card for programs started from Folders.
 settings-permissions-from-folders = 从 Folders 启动
 
+# Tab name on Settings, Permissions, beside Started from Folders.
+settings-permissions-other = 其他设置
+
 # Under a kind of app on the Permissions page when none is installed.
 settings-permissions-none-installed = 没有已安装的。
 

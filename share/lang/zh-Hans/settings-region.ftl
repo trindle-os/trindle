@@ -11,7 +11,7 @@ settings-region-keywords = 语言 区域 国家 格式 日期 货币
 settings-region-help = 语言和格式在你下次登录时生效。
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = 重新登录后可在所有地方看到。
+settings-region-later = 重新登录后可见。
 
 # Shown while the page reads the computer.
 settings-region-looking = 查看中…

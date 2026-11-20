@@ -94,6 +94,16 @@ store-upd-install-n =
     }
 # Main button that restarts the computer.
 store-upd-restart-now = Restart now
+# Beside Restart now: the box that puts the restart off, then the ring's Updates button reminds. Its answers are the choices below.
+store-upd-remind-later = Remind me later
+# Red words under the headline when the Remind me later time could not be saved; the reason follows.
+store-upd-remind-not-saved = Couldn't save the reminder: { $why }.
+# One answer in the Remind me later box.
+store-upd-remind-hours =
+    { $n ->
+        [one] In 1 hour
+       *[other] In { $n } hours
+    }
 # Main button that checks for updates.
 store-upd-check-for = Check for updates
 # Tip of the round button that releases a thing held back.
@@ -126,6 +136,7 @@ store-upd-up-to-date = Up to date
 store-upd-from-change = From { $from }, { $change }
 # On a row of the Updates page: where an app comes from.
 store-upd-from = From { $from }
+
 # On a row: a part that apps share, and where it comes from.
 store-upd-shared-part = A shared part, from { $from }
 # Note under the Apps card.
@@ -171,18 +182,10 @@ store-upd-debian-count =
         [one] 1 update, installed on its own
        *[other] { $n } updates, installed together
     }
-# On a row of Debian's updates: where it comes from.
-store-upd-from-debian = From Debian
 # Under Debian's rows: how many of them show.
 store-upd-debian-showing = Showing { $shown } of { $total } Debian updates.
 # Note on the Trindle and Debian card: which version of Trindle the computer has.
 store-upd-has-trindle = This computer has Trindle { $version }.
-# Heading of the Trindle and Debian card.
-store-upd-card-system = Trindle and Debian
-# Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Debian packages are made to work together. Installing just one can install others too, or leave them out of step, so they're all installed together.
-# Note on the Trindle and Debian card: why no row has a Hold back button.
-store-upd-not-held = Trindle's updates and Debian's bring security fixes for the whole computer, so they can't be held back.
 # Heading of the card about the daily security updates.
 store-upd-card-security = Security updates
 # On the security card: its state.

@@ -503,7 +503,7 @@ store-src-added = { $what }已添加，并会保持更新。
 store-src-no-program = { $what }。软件源已添加，但程序没有安装。
 
 # Under a maker's source whose program is installed another way.
-store-src-other-way = { $what }是通过其他方式安装的。
+store-src-other-way = { $what }。通过其他方式安装。
 
 # Tip of the round button that removes a maker's source and its program.
 # SAFETY: needs a human review before it ships

@@ -69,13 +69,15 @@ installer-arm = Bấm lần nữa để cài đặt
 installer-arm-erase = Bấm lần nữa để xóa sạch và cài đặt
 
 # Note beside Next on the first page while no language is chosen.
-installer-missing-language = Hãy chọn ngôn ngữ
+installer-missing-language = Chọn ngôn ngữ
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = Hãy chọn ngôn ngữ của Trindle
 
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = Hãy chọn bàn phím
 
 # Note beside Next on the first page while no time zone is chosen.
-installer-missing-time = Hãy chọn múi giờ
+installer-missing-time = Chọn múi giờ
 
 # Note beside Next on the disk page while no disk is chosen.
 installer-missing-disk = Hãy chọn nơi cài Trindle
@@ -99,10 +101,12 @@ installer-missing-password = Gõ mật khẩu của bạn hai lần. Hai lần p
 installer-welcome-title = Chào mừng bạn đến với { $name }
 
 # Sentence under the title of the first page.
-installer-welcome-help = Hãy chọn ngôn ngữ. Trindle sẽ chọn bàn phím và múi giờ phù hợp với ngôn ngữ đó, và bạn có thể đổi lại.
+installer-welcome-help = Hãy chọn ngôn ngữ của bạn. Trindle sẽ chọn phần còn lại cho phù hợp.
 
-# Head of the card for choosing the language, and the name of its search box.
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
 installer-language = Ngôn ngữ
+# Label beside the box at the right of the first page's sentence, for choosing the language of Trindle's own words (only those Trindle has).
+installer-trindle-language = Ngôn ngữ của Trindle
 
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = Bàn phím
@@ -367,8 +371,8 @@ installer-privacy-chip-none = Máy tính này có chip TPM, có thể mở khoá
 # In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
 installer-privacy-no-chip-none = Máy tính này không có chip TPM mà Trindle dùng được.
 
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = Bàn phím { $keyboard }, giờ { $zone }.
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle bằng { $trindle }, bàn phím { $keyboard }, giờ { $zone }.
 
 # Title of the page shown while the install runs.
 installer-installing-title = Đang cài đặt { $name }
@@ -509,7 +513,7 @@ installer-live-speak = Dùng giọng nói
 installer-live-speak-line = Chạm vào giữa vòng tròn và nói điều bạn muốn.
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = Bấm Thêm điều khiển bằng giọng nói trong Cài đặt, mục Vòng tròn. Sau đó chạm vào giữa và nói.
+installer-live-speak-add = Sau khi cài Trindle, hãy thêm điều khiển bằng giọng nói trong Cài đặt, mục Vòng tròn.
 
 # Name of the third thing to do.
 installer-live-tab = Tất cả trong vòng tròn
@@ -646,6 +650,9 @@ installer-copy-failed = Không chép được hệ thống. { $why }
 # Red line at the foot: there is not enough room for a swap file.
 installer-swap-no-room = Không đủ chỗ cho tệp hoán đổi.
 
+# Under the swap file switch when the chosen disk or space is too small for one; the switch is then off and cannot be turned on.
+installer-swap-too-small = Chỗ này quá nhỏ cho tệp hoán đổi.
+
 # Red line at the foot: the swap file's place on the disk cannot be read.
 installer-swap-unreadable = Trindle không đọc được vị trí của tệp hoán đổi trên ổ đĩa.
 
@@ -669,8 +676,8 @@ installer-tour-ring-foot = Xem những gì đang mở, dùng bảng nhớ tạm,
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } là thanh USB mà Trindle đang chạy từ đó.
 
-# Red line at the foot: something on the chosen disk is mounted or swapped to.
-installer-disk-in-use = { $dev } đang được dùng. Hãy đóng thứ đang dùng nó, rồi thử lại.
+# Red words under the disk, back on the disk page: something on the chosen disk is mounted, swapped to or open.
+installer-disk-in-use = { $dev } đang được dùng. Hãy đóng thứ đang dùng nó, rồi chọn lại ổ đĩa này.
 
 # Said beside how far the install has got, once it has started.
 installer-started = Đang cài đặt
@@ -716,8 +723,8 @@ installer-done-problems = Chưa thiết lập xong mọi thứ
 # Red line under the disk password boxes: the computer gave no random numbers, so no passphrase could be made.
 installer-suggest-failed = Trindle không tạo được cụm mật khẩu. Hãy tự gõ một cụm.
 
-# Red line at the foot: the disk was swapped for another after the list was read.
-installer-disk-changed = { $dev } không phải ổ đĩa đã hiện ra. Hãy quay lại và chọn lại ổ đĩa.
+# Red words on the disk page: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev } không phải ổ đĩa đã hiện ra. Hãy chọn lại ổ đĩa.
 
 # Red line at the foot: a disk with an old-style partition table cannot be shared with.
 installer-no-gpt = { $dev } không dùng bảng phân vùng GPT, nên Trindle không thể cài bên cạnh những gì đang có trên đó.
@@ -739,3 +746,39 @@ installer-disk-named = { $what }, { $dev }
 
 # Red line at the foot: a program the installer runs stopped before it had all it was given.
 installer-run-stopped = { $program } đã dừng trước khi có đủ những gì cần: { $why }
+
+# Red words on the last page: the TPM chip could not be set up to open the disk, so the disk password is asked for at every start.
+installer-chip-not-set-up = Không thể cài đặt chip TPM, nên ổ đĩa sẽ hỏi mật khẩu mỗi lần máy tính khởi động.
+
+# Red words on the last page: the keyboard for the disk password screen could not be set, so it may be the American one.
+installer-start-keyboard-failed = Trindle đã được cài, nhưng màn hình nhập mật khẩu ổ đĩa có thể dùng bàn phím kiểu Mỹ.
+
+# Red words on the last page: the login screen could not be switched on; { $why } is the reason.
+installer-login-screen-failed = Trindle đã được cài, nhưng không bật được màn hình đăng nhập: { $why }
+
+# Red words on the last page: Trindle could not be set to take its own updates; { $why } is the reason.
+installer-updates-held = Trindle đã được cài, nhưng chưa nhận được bản cập nhật của chính nó: { $why }
+
+# Red words on the last page: earlier versions of people's files (home snapshots) could not be switched on.
+installer-home-snapshots-failed = Trindle đã được cài, nhưng các phiên bản cũ của tệp của bạn đang tắt. Bạn có thể bật lại trong Cài đặt, Snapshots.
+
+# Red words on the last page: Trindle could not be added to the computer's own start-up list; { $why } is the reason.
+installer-firmware-entry-failed = Trindle đã được cài, nhưng không tự thêm được vào danh sách khởi động của máy tính: { $why }
+
+# Red line: the account the stick ran as could not be removed from the new system, so the install stopped.
+installer-live-account-left = Không xóa được tài khoản { $user } của USB khỏi hệ thống mới.
+
+# Under the swap file's switch when a size smaller than memory is chosen.
+installer-swap-no-hibernate = Nhỏ hơn bộ nhớ của máy tính này, nên máy không thể ngủ đông.
+
+# In the swap size list: the size of the computer's memory, which hibernating needs.
+installer-swap-size-hibernate = { $gb } GB, đủ để ngủ đông
+
+# In the swap size list: a smaller size.
+installer-swap-size = { $gb } GB
+
+# Tip of the swap size list.
+installer-swap-size-tip = Kích thước tệp hoán đổi
+
+# Why logind holds off sleep and shutting down while the installer changes the disk (shown by systemd-inhibit --list).
+installer-power-held = Trindle đang được cài đặt

@@ -2,6 +2,8 @@
 
 use crate::store::{updates, Store};
 use crate::common::held::{self};
+use crate::common::apt_choice::valid_name;
+use crate::common::apt_source;
 use crate::common::run;
 use super::check::{could_not};
 use super::words::no_flathub;
@@ -70,13 +72,26 @@ pub(super) fn read_system(s: &mut Store, then: impl FnOnce(&mut Store) + 'static
             }
             let back = s.then(move |s: &mut Store, out: String| {
                 s.upd.sizes.extend(parse_package_sizes(&out));
-                then(s);
+                read_origins(s, then);
             });
             let mut argv = vec!["apt-cache", "show", "--no-all-versions"];
             argv.extend(names.iter().map(String::as_str));
             run::capture(&crate::store::progress::english(&argv), None, move |_, out, _| back(out));
         }));
     }));
+}
+
+fn read_origins(s: &mut Store, then: impl FnOnce(&mut Store) + 'static) {
+    let names: Vec<String> = s.debian.iter().filter(|p| valid_name(p)).cloned().collect();
+    let back = s.then(move |s: &mut Store, (archives, each): (String, String)| {
+        s.upd.origins = apt_source::candidates(&each, &apt_source::archives(&archives));
+        then(s);
+    });
+    run::capture(&crate::store::progress::english(&["apt-cache", "policy"]), None, move |_, archives, _| {
+        let mut argv = vec!["apt-cache", "policy"];
+        argv.extend(names.iter().map(String::as_str));
+        run::capture(&crate::store::progress::english(&argv), None, move |_, each, _| back((archives, each)));
+    });
 }
 
 pub(super) fn parse_flat_updates(out: &str) -> Vec<Flat> {

@@ -71,12 +71,14 @@ installer-arm-erase = Klik lagi untuk menghapus dan memasang
 
 # Note beside Next on the first page while no language is chosen.
 installer-missing-language = Pilih bahasa
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = Pilih bahasa Trindle
 
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = Pilih papan ketik
 
 # Note beside Next on the first page while no time zone is chosen.
-installer-missing-time = Pilih zona waktu
+installer-missing-time = Atur zona waktu
 
 # Note beside Next on the disk page while no disk is chosen.
 installer-missing-disk = Pilih tempat Trindle dipasang
@@ -100,10 +102,12 @@ installer-missing-password = Ketik kata sandi Anda dua kali. Keduanya harus sama
 installer-welcome-title = Selamat datang di { $name }
 
 # Sentence under the title of the first page.
-installer-welcome-help = Pilih bahasa Anda, dan Trindle akan menyesuaikan papan ketik dan zona waktu dengannya. Keduanya dapat Anda ubah.
+installer-welcome-help = Pilih bahasa Anda, dan Trindle akan menyesuaikan sisanya.
 
-# Head of the card for choosing the language, and the name of its search box.
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
 installer-language = Bahasa
+# Label beside the box at the right of the first page's sentence, for choosing the language of Trindle's own words (only those Trindle has).
+installer-trindle-language = Bahasa Trindle
 
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = Papan ketik
@@ -370,8 +374,8 @@ installer-privacy-chip-none = Komputer ini punya chip TPM, yang dapat membuka di
 # In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
 installer-privacy-no-chip-none = Komputer ini tidak punya chip TPM yang dapat dipakai Trindle.
 
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = Papan ketik { $keyboard }, waktu { $zone }.
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle dalam { $trindle }, papan ketik { $keyboard }, waktu { $zone }.
 
 # Title of the page shown while the install runs.
 installer-installing-title = Memasang { $name }
@@ -514,7 +518,7 @@ installer-live-speak = Pakai suara Anda
 installer-live-speak-line = Ketuk bagian tengah ring dan ucapkan apa yang Anda mau.
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = Tekan Tambahkan kontrol suara di Pengaturan, di bawah Ring. Lalu ketuk bagian tengah dan berbicaralah.
+installer-live-speak-add = Setelah Trindle terpasang, tambahkan kontrol suara di Pengaturan, di bawah Ring.
 
 # Name of the third thing to do.
 installer-live-tab = Semua ada di ring
@@ -568,7 +572,7 @@ installer-step-settings = Menulis pengaturan
 installer-step-account = Membuat akun Anda
 
 # Foot of the install page while the stick's own parts are taken out.
-installer-step-live-parts = Membuang tambahan flash disk
+installer-step-live-parts = Membuang tambahan live
 
 # Foot of the install page while the start-up files are made.
 installer-step-startup = Membuat file awal
@@ -651,6 +655,9 @@ installer-copy-failed = Tidak dapat menyalin sistem. { $why }
 # Red line at the foot: there is not enough room for a swap file.
 installer-swap-no-room = Tidak ada ruang untuk file swap.
 
+# Under the swap file switch when the chosen disk or space is too small for one; the switch is then off and cannot be turned on.
+installer-swap-too-small = Ruang ini terlalu kecil untuk file swap.
+
 # Red line at the foot: the swap file's place on the disk cannot be read.
 installer-swap-unreadable = Trindle tidak dapat membaca lokasi file swap di disk.
 
@@ -674,8 +681,8 @@ installer-tour-ring-foot = Lihat yang sedang terbuka, pakai papan klip, dan bers
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } adalah stik tempat Trindle sedang berjalan.
 
-# Red line at the foot: something on the chosen disk is mounted or swapped to.
-installer-disk-in-use = { $dev } sedang dipakai. Tutup apa pun yang memakainya, lalu coba lagi.
+# Red words under the disk, back on the disk page: something on the chosen disk is mounted, swapped to or open.
+installer-disk-in-use = { $dev } sedang dipakai. Tutup apa pun yang memakainya, lalu pilih disk itu lagi.
 
 # Said beside how far the install has got, once it has started.
 installer-started = Memasang
@@ -721,8 +728,8 @@ installer-done-problems = Tidak semuanya berhasil disiapkan
 # Red line under the disk password boxes: the computer gave no random numbers, so no passphrase could be made.
 installer-suggest-failed = Trindle tidak dapat membuat frasa sandi. Ketik sendiri.
 
-# Red line at the foot: the disk was swapped for another after the list was read.
-installer-disk-changed = { $dev } bukan disk yang ditampilkan tadi. Kembali dan pilih disk lagi.
+# Red words on the disk page: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev } bukan disk yang ditampilkan tadi. Pilih disk lagi.
 
 # Red line at the foot: a disk with an old-style partition table cannot be shared with.
 installer-no-gpt = { $dev } tidak memakai tabel partisi GPT, sehingga Trindle tidak dapat dipasang berdampingan dengan yang sudah ada di dalamnya.
@@ -744,3 +751,39 @@ installer-disk-named = { $what }, { $dev }
 
 # Red line at the foot: a program the installer runs stopped before it had all it was given.
 installer-run-stopped = { $program } berhenti sebelum mendapat semua yang dibutuhkannya: { $why }
+
+# Red words on the last page: the TPM chip could not be set up to open the disk, so the disk password is asked for at every start.
+installer-chip-not-set-up = Chip TPM tidak dapat disiapkan, jadi disk akan meminta kata sandinya setiap kali komputer dinyalakan.
+
+# Red words on the last page: the keyboard for the disk password screen could not be set, so it may be the American one.
+installer-start-keyboard-failed = Trindle sudah terpasang, tetapi layar kata sandi disk mungkin memakai keyboard Amerika.
+
+# Red words on the last page: the login screen could not be switched on; { $why } is the reason.
+installer-login-screen-failed = Trindle sudah terpasang, tetapi layar masuk tidak dapat diaktifkan: { $why }
+
+# Red words on the last page: Trindle could not be set to take its own updates; { $why } is the reason.
+installer-updates-held = Trindle sudah terpasang, tetapi belum akan menerima pembaruannya sendiri: { $why }
+
+# Red words on the last page: earlier versions of people's files (home snapshots) could not be switched on.
+installer-home-snapshots-failed = Trindle sudah terpasang, tetapi versi file Anda yang lebih lama tidak aktif. Anda dapat mengaktifkannya di Pengaturan, Snapshot.
+
+# Red words on the last page: Trindle could not be added to the computer's own start-up list; { $why } is the reason.
+installer-firmware-entry-failed = Trindle sudah terpasang, tetapi tidak dapat menambahkan dirinya ke daftar mulai komputer: { $why }
+
+# Red line: the account the stick ran as could not be removed from the new system, so the install stopped.
+installer-live-account-left = Akun stik { $user } tidak dapat dihapus dari sistem baru.
+
+# Under the swap file's switch when a size smaller than memory is chosen.
+installer-swap-no-hibernate = Lebih kecil dari memori komputer ini, sehingga tidak dapat hibernasi.
+
+# In the swap size list: the size of the computer's memory, which hibernating needs.
+installer-swap-size-hibernate = { $gb } GB, cukup untuk hibernasi
+
+# In the swap size list: a smaller size.
+installer-swap-size = { $gb } GB
+
+# Tip of the swap size list.
+installer-swap-size-tip = Ukuran file swap
+
+# Why logind holds off sleep and shutting down while the installer changes the disk (shown by systemd-inhibit --list).
+installer-power-held = Trindle sedang dipasang

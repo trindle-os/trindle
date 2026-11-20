@@ -57,7 +57,7 @@ store-because-quota = der für dieses Konto erlaubte Platz aufgebraucht ist
 store-because-missing = eine Datei oder ein Programm, das es braucht, fehlt
 
 # The reason when no reason could be read from the program's last line.
-store-because-failed = es fehlgeschlagen ist
+store-because-failed = fehlgeschlagen
 
 # The reason when the backup has no name to be written under.
 store-because-no-name = sie keinen Namen hat

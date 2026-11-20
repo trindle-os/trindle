@@ -10,7 +10,7 @@ settings-region-keywords = idioma língua locale país região formatos data moe
 settings-region-help = O idioma e os formatos passam a valer na próxima vez que você entrar.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = Entre de novo para ver em todo lugar.
+settings-region-later = Entre de novo para ver.
 
 # Shown while the page reads the computer.
 settings-region-looking = Verificando…

@@ -79,11 +79,18 @@ pub type PutAway = (WindowElement, Point<i32, Logical>);
 
 struct OnWorkspace(Cell<usize>);
 
+fn is_own(window: &WindowElement) -> bool {
+    window.0.x11_surface().is_none_or(|x11| !x11.is_override_redirect())
+}
+
 pub(crate) fn is_listed(window: &WindowElement) -> bool {
-    if let Some(x11) = window.0.x11_surface() {
-        return !x11.is_override_redirect();
-    }
-    true
+    is_own(window) && (!window.is_wayland() || has_picture(window))
+}
+
+fn has_picture(window: &WindowElement) -> bool {
+    window.wl_surface().is_some_and(|s| {
+        smithay::backend::renderer::utils::with_renderer_surface_state(&s, |st| st.buffer().is_some()).unwrap_or(false)
+    })
 }
 
 fn describe(window: &WindowElement, active: bool, minimized: bool, outputs: Vec<Output>) -> Option<WindowInfo> {
@@ -190,7 +197,7 @@ impl<BackendData: Backend> Compose<BackendData> {
             })
             .collect();
         let put_away = self.minimized.iter().map(|p| (p, true)).chain(self.hidden.iter().map(|p| (p, false)));
-        for ((window, loc), minimized) in put_away {
+        for ((window, loc), minimized) in put_away.filter(|((w, _), _)| is_listed(w)) {
             let outputs = self.output_at(*loc).into_iter().collect();
             infos.extend(describe(window, false, minimized, outputs));
         }
@@ -286,7 +293,7 @@ impl<BackendData: Backend> Compose<BackendData> {
     pub fn window_owners(&self) -> Vec<(u32, String)> {
         use smithay::reexports::wayland_server::Resource;
         let shown = self.space.elements().filter(|w| is_listed(w));
-        let away = self.minimized.iter().chain(self.hidden.iter()).map(|(w, _)| w);
+        let away = self.minimized.iter().chain(self.hidden.iter()).map(|(w, _)| w).filter(|w| is_listed(w));
         shown
             .chain(away)
             .filter_map(|w| {
@@ -369,6 +376,16 @@ impl<BackendData: Backend> Compose<BackendData> {
         }
     }
 
+    pub fn keep_on_top(&mut self) {
+        let on_top: Vec<WindowElement> = self.space.elements().filter(|w| w.stays_on_top()).cloned().collect();
+        for w in &on_top {
+            self.space.raise_element(w, false);
+            if let Some(x11) = w.0.x11_surface() {
+                self.raise_x11(x11);
+            }
+        }
+    }
+
     pub fn focus_window(&mut self, window: &WindowElement) {
         if self.is_locked() {
             self.focus_after_unlock(window.clone().into());
@@ -394,6 +411,7 @@ impl<BackendData: Backend> Compose<BackendData> {
                 self.raise_x11(x11);
             }
         }
+        self.keep_on_top();
 
         for w in self.space.elements() {
             if let WindowSurface::Wayland(t) = w.0.underlying_surface() {
@@ -444,6 +462,14 @@ impl<BackendData: Backend> Compose<BackendData> {
             Some(window) => self.focus_window(&window),
             None if self.is_locked() => {}
             None => self.give_keyboard(None, SERIAL_COUNTER.next_serial()),
+        }
+    }
+
+    pub(crate) fn hand_keyboard_on_from(&mut self, window: &WindowElement) {
+        let had = self.seat.get_keyboard().and_then(|k| k.current_focus())
+            .is_some_and(|f| f == KeyboardFocusTarget::Window(window.0.clone()));
+        if had {
+            self.focus_topmost();
         }
     }
 
@@ -503,7 +529,7 @@ impl<BackendData: Backend> Compose<BackendData> {
         let leaving: Vec<WindowElement> = self
             .space
             .elements()
-            .filter(|w| is_listed(w) && self.workspace_of(w) != index)
+            .filter(|w| is_own(w) && self.workspace_of(w) != index)
             .cloned()
             .collect();
         for window in leaving {

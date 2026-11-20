@@ -82,6 +82,8 @@ pub struct Face {
 
     typed_turn: u32,
 
+    typed_in: bool,
+
     menu: Option<(usize, String, [f32; 4])>,
     beside: Option<(String, [f32; 4], Rc<dyn Fn() -> Node<Msg>>)>,
     pressed_at: [f32; 4],
@@ -252,7 +254,7 @@ impl Face {
             typed: String::new(),
             favourites: store::favourites(), fav_stamp: store::favourites_changed_at(),
             pinned: RefCell::default(), image_stamps: None, images_there: Vec::new(), looking: Rc::default(), opening: Rc::default(),
-            lay: Rc::new(layout::<usize>(&[], &[], 1280.0, 800.0)), first_len: 0, best_match: None, typed_turn: 0,
+            lay: Rc::new(layout::<usize>(&[], &[], 1280.0, 800.0)), first_len: 0, best_match: None, typed_turn: 0, typed_in: false,
             menu: None, beside: None, pressed_at: [0.0; 4], press: None,
             power: false, armed: None, offered: false, arm_turn: 0, can_hibernate: false,
             words: None, words_turn: 0, said: None,

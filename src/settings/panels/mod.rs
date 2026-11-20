@@ -30,6 +30,7 @@ pub mod permissions;
 mod outside_card;
 pub mod ai_programs;
 pub mod games;
+pub mod hardware;
 
 use super::ui::Page;
 
@@ -47,6 +48,7 @@ pub fn all() -> Vec<Box<dyn Page>> {
         Box::new(appearance::Appearance::default()),
         Box::new(keyboard::Keyboard::default()),
         Box::new(power::Power::default()),
+        Box::new(hardware::Hardware::default()),
         Box::new(games::Games::default()),
         Box::new(default_apps::DefaultApps::default()),
         Box::new(printers::Printers::default()),

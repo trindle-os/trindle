@@ -154,6 +154,9 @@ pub enum Lock {
 #[derive(Clone, Default, Serialize, Deserialize)]
 pub struct Plan {
     pub locale: String,
+
+    #[serde(default)]
+    pub trindle_language: String,
     pub layout: String,
     pub variant: String,
     pub timezone: String,
@@ -172,12 +175,33 @@ pub struct Plan {
     pub swap: bool,
 
     #[serde(default)]
+    pub swap_gib: u64,
+
+    #[serde(default)]
     pub terms: bool,
 }
 
 pub fn secure_boot() -> bool {
     std::fs::read("/sys/firmware/efi/efivars/SecureBoot-8be4df61-93ca-11d2-aa0d-00e098032b8c")
         .ok().and_then(|b| b.last().copied()) == Some(1)
+}
+
+const SWAP_SPARE: u64 = 30 * GIB;
+
+const LAYOUT: u64 = 2 * GIB;
+
+pub fn swap_fits(free: u64, gib: u64) -> bool {
+    fits(free, gib)
+}
+
+const SMALLER_SWAP: [u64; 2] = [8, 4];
+
+pub fn swap_sizes(memory: u64) -> Vec<u64> {
+    std::iter::once(memory).chain(SMALLER_SWAP.into_iter().filter(|g| *g < memory)).collect()
+}
+
+fn fits(free: u64, memory_gib: u64) -> bool {
+    free >= memory_gib.saturating_mul(GIB).saturating_add(SWAP_SPARE)
 }
 
 pub fn memory_gib() -> u64 {
@@ -203,9 +227,30 @@ pub fn uefi() -> bool {
     Path::new("/sys/firmware/efi").exists()
 }
 
+impl Plan {
+
+    pub fn words_in(&self) -> &str {
+        if self.trindle_language.is_empty() { &self.locale } else { &self.trindle_language }
+    }
+
+    pub fn language_setting(&self) -> Option<String> {
+        let own = self.trindle_language.trim();
+        (!own.is_empty() && own != nearest_tongue(&self.locale)).then(|| format!("language={own}"))
+    }
+}
+
+pub fn trindle_languages() -> Vec<(String, String)> {
+    crate::common::language_names::codes_in(&crate::common::live_language::folders()).into_iter()
+        .map(|c| { let name = crate::common::language_names::both_names(&c); (c, name) }).collect()
+}
+
+pub fn nearest_tongue(locale: &str) -> String {
+    crate::common::live_language::for_locale(locale).into_iter().next().unwrap_or_else(|| "en".to_string())
+}
+
 impl std::fmt::Debug for Plan {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        f.debug_struct("Plan").field("locale", &self.locale).field("hostname", &self.hostname)
+        f.debug_struct("Plan").field("locale", &self.locale).field("trindle_language", &self.trindle_language).field("hostname", &self.hostname)
             .field("username", &self.username).field("lock", &self.lock).field("target", &self.target)
             .field("swap", &self.swap).finish_non_exhaustive()
     }
@@ -220,6 +265,29 @@ impl Drop for Plan {
 }
 
 impl Plan {
+
+    pub fn swap_choices(&self, disks: &[Disk], memory: u64) -> Vec<u64> {
+        let space = self.space(disks);
+        swap_sizes(memory).into_iter().filter(|g| space.is_none_or(|s| swap_fits(s, *g))).collect()
+    }
+
+    fn space(&self, disks: &[Disk]) -> Option<u64> {
+        let space = match &self.target {
+            None => None,
+            Some(Where::Erase { disk }) => disks.iter().find(|d| d.dev == *disk).map(|d| d.size),
+            Some(Where::Beside { part, leave }) => disks.iter().flat_map(|d| &d.parts).find(|p| p.dev == *part)
+                .map(|p| p.size.saturating_sub(*leave)),
+        };
+        space.map(|s| s.saturating_sub(LAYOUT))
+    }
+
+    pub fn swap_size(&self) -> u64 {
+        if self.swap_gib == 0 { memory_gib() } else { self.swap_gib }
+    }
+
+    pub fn swap_hibernates(&self) -> bool {
+        self.swap_size() >= memory_gib()
+    }
 
     pub fn with_swap(mut self) -> Plan {
         self.swap = true;
@@ -677,6 +745,51 @@ pub fn hostname_fault(name: &str) -> Option<&'static str> {
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn the_swap_file_fits_only_with_room_to_spare() {
+        let gib = super::GIB;
+        assert!(super::fits(34 * gib, 4));
+        assert!(!super::fits(34 * gib - 1, 4));
+        assert!(!super::fits(30 * gib, 4), "a 32 GB disk with 4 GB of memory has no room");
+        assert!(!super::fits(u64::MAX - 1, u64::MAX), "huge memory never wraps round into a fit");
+    }
+
+    #[test]
+    fn the_sizes_offered_are_the_memory_then_smaller_ones_that_fit() {
+        use super::{swap_sizes, Disk, Plan, Where, GIB};
+        assert_eq!(swap_sizes(16), [16, 8, 4]);
+        assert_eq!(swap_sizes(8), [8, 4]);
+        assert_eq!(swap_sizes(4), [4]);
+        assert_eq!(swap_sizes(2), [2]);
+        let disks = vec![Disk { dev: "/dev/sda".into(), size: 2 * GIB + 30 * GIB + 8 * GIB, ..Disk::default() }];
+        let mut plan = Plan::default();
+        assert_eq!(plan.swap_choices(&disks, 16), [16, 8, 4], "every size until a space is chosen");
+        plan.target = Some(Where::Erase { disk: "/dev/sda".into() });
+        assert_eq!(plan.swap_choices(&disks, 16), [8, 4], "16 GB does not fit beside 30 GB to spare; 8 does");
+        plan.swap_gib = 4;
+        assert_eq!(plan.swap_size(), 4);
+        plan.swap_gib = 0;
+        assert_eq!(plan.swap_size(), super::memory_gib(), "a plan from before the choice is the memory's size");
+    }
+
+    #[test]
+    fn the_offer_follows_the_space_chosen() {
+        use super::{Disk, Part, Plan, Where, GIB};
+        let disks = vec![
+            Disk { dev: "/dev/sda".into(), size: 32 * GIB, ..Disk::default() },
+            Disk { dev: "/dev/sdb".into(), size: 1024 * GIB, parts: vec![Part { dev: "/dev/sdb1".into(), size: 1024 * GIB, ..Part::default() }], ..Disk::default() },
+        ];
+        let on = |target| {
+            let mut plan = Plan::default();
+            plan.target = target;
+            !plan.swap_choices(&disks, 4).is_empty()
+        };
+        assert!(on(None), "offered until a space is chosen");
+        assert!(!on(Some(Where::Erase { disk: "/dev/sda".into() })));
+        assert!(on(Some(Where::Erase { disk: "/dev/sdb".into() })));
+        assert!(!on(Some(Where::Beside { part: "/dev/sdb1".into(), leave: 1000 * GIB })), "only what is left for Trindle counts");
+    }
+
     #[test]
     fn too_little_memory_is_refused_and_unreadable_memory_is_not() {
         assert!(super::short_of(Some(512 * 1024)) && super::short_of(Some(900 * 1024 - 1)));

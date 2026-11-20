@@ -393,6 +393,7 @@ fn a_folder_that_could_not_be_kept_is_said_under_the_formatted_row() {
     rig.fails.borrow_mut().insert("AddConfigurationItem", DISMISSED);
     rig.d.busy = 1;
     rig.d.carry_known(carried("/mnt/example"), "uuid-new");
+    assert!(rig.ended(), "the carrying ended");
     assert_eq!(rig.said("/d/usb", "/b/Photos"), Some((plan::folder_not_kept("/mnt/example", plan::no_password()), true)));
     assert_eq!(rig.log.borrow().clone(), vec!["polkit: what leave is kept?", "AddConfigurationItem", "polkit: what leave is kept?"]);
 
@@ -401,6 +402,7 @@ fn a_folder_that_could_not_be_kept_is_said_under_the_formatted_row() {
     rig.d.said.clear();
     rig.d.busy = 1;
     rig.d.carry_known(carried("/mnt/example"), "uuid-new");
+    assert!(rig.ended(), "the carrying ended");
     assert_eq!(rig.said("/d/usb", "/b/Photos"), Some(("Formatted".to_string(), false)));
 }
 

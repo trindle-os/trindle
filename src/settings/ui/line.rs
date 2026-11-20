@@ -2,7 +2,7 @@
 
 use super::{Kit, Msg, icon};
 use crate::toolkit::widget::{column, form_label, note,
-                             row, Length, Node, Tone};
+                             row, space, Length, Node, Tone};
 
 pub const CONTROL_GAP: f32 = 12.0;
 
@@ -66,6 +66,15 @@ impl Line {
     }
 
     pub fn node(mut self, kit: &Kit) -> Node<Msg> {
+
+        if self.controls.len() == 1 {
+            self.controls = self.controls.into_iter().map(Node::choosers_hushed).collect();
+        }
+        for c in &mut self.controls {
+            if c.tip() == Some(self.title.as_str()) {
+                *c = std::mem::replace(c, space()).hushed();
+            }
+        }
         let mut words = vec![form_label(self.title)];
         if self.room > 0 {
             let sub = note(self.sub.unwrap_or_default()).room_for(self.room);

@@ -44,7 +44,14 @@ pub fn in_use_dot<M>(kind: crate::common::in_use::Kind) -> Node<M> {
 pub fn in_use_dot_sized<M>(kind: crate::common::in_use::Kind, size: f32) -> Node<M> {
     drawing((size, size), "", move |canvas, pen| {
         let r = canvas.width().min(canvas.height()) as f32 / 2.0;
-        if let Some(path) = tiny_skia::PathBuilder::from_circle(r, r, r) {
+        let top = r / 2.0;
+        let mut pb = tiny_skia::PathBuilder::new();
+        pb.move_to(0.0, top);
+        pb.line_to(2.0 * r, top);
+        pb.cubic_to(2.0 * r, top + r * 0.55, r * 1.55, top + r, r, top + r);
+        pb.cubic_to(r * 0.45, top + r, 0.0, top + r * 0.55, 0.0, top);
+        pb.close();
+        if let Some(path) = pb.finish() {
             let (red, green, blue) = kind.colour_in(pen.theme.light);
             let mut paint = tiny_skia::Paint::default();
             paint.set_color(tiny_skia::Color::from_rgba(red as f32, green as f32, blue as f32, 1.0).unwrap_or(tiny_skia::Color::BLACK));

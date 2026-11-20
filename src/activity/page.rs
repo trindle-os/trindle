@@ -33,7 +33,7 @@ impl Activity {
 
     pub(super) fn page(&self) -> Node<Msg> {
         let b = theme::bento();
-        let info = button("dialog-information-symbolic", t!("activity-about-page")).size(theme::sheet().info)
+        let info = button("dialog-information-symbolic", t!("activity-about-page")).size(theme::sheet().info).hushed()
             .on(self.help).on_press(Msg::Help);
         let mut all = vec![
             row(vec![page_title(t!("activity-title")), info, space(), note(self.forced.clone())]).gap(12.0).centred(),

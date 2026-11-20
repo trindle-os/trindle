@@ -9,7 +9,7 @@ report-title-crash = Etwas ist schiefgegangen. Einen Bericht senden?
 
 # Under the title: what a report holds, and what it never holds.
 # SAFETY: needs a human review before it ships
-report-summary = Dabei werden der Fehler, eine Zusammenfassung deines Computers und die letzten Zeilen des Protokolls gesendet. Namen, E-Mail-Adressen, Netzwerkadressen und WLAN-Namen werden entfernt. Dateinamen und Webadressen können in den Protokollzeilen noch vorkommen. Deine Dateien und Passwörter werden nicht gesendet.
+report-summary = Dabei werden deine Worte, Angaben zu deinem Computer, die Fehler dieses Starts und das Protokoll von Trindle gesendet. Namen und Adressen (E-Mail, Netzwerk, WLAN) werden aus dem entfernt, was Trindle sammelt. Dateinamen und Webadressen können in den Protokollzeilen noch vorkommen. Deine Dateien und Passwörter werden nicht gesendet.
 
 # Big typing box in the middle of the window, shown quietly while empty.
 report-what-doing = Was ist passiert?
@@ -58,12 +58,6 @@ report-checking = Wird geprüft.
 
 # Why a report is waiting: Buildmorphic had too many reports at once and the report is tried again later.
 report-too-many = Zu viele Berichte auf einmal.
-
-# Written beside the Send button once the report has been sent.
-report-already-sent = Schon gesendet.
-
-# Written under the typing box when Save is pressed a second time.
-report-already-saved = Schon gespeichert.
 
 # Written beside the buttons while a report that could not be sent waits for the computer to be online.
 report-waiting = Warte auf eine Verbindung.
@@ -167,10 +161,7 @@ report-picture-damaged = Das Bild ist beschädigt.
 
 report-picture-unreadable = Es ließ sich nicht lesen.
 
-
-
 report-sent-as-bug = Gesendet. Die Nummer deines Fehlerberichts ist { $number }. Danke.
-
 
 # Under the title, beta only: why a report matters and what it holds.
 report-beta = Trindle befindet sich in der Beta. Berichte sind anonym: Namen, E-Mail-Adressen und Home-Ordner werden entfernt. Ein Benutzername ist optional.

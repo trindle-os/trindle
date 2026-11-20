@@ -570,7 +570,7 @@ store-src-added = { $what } imeongezwa na inasasishwa.
 store-src-no-program = { $what }. Chanzo kimeongezwa, lakini programu haijasakinishwa.
 
 # Under a maker's source whose program is installed another way.
-store-src-other-way = { $what } ilisakinishwa kwa njia nyingine.
+store-src-other-way = { $what }. Imesakinishwa tofauti.
 
 # Tip of the round button that removes a maker's source and its program.
 # SAFETY: needs a human review before it ships

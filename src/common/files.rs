@@ -73,7 +73,8 @@ pub fn default_setting(key: &str) -> &'static str {
 
         "older_programs" => "yes",
 
-        "outside_network" | "outside_files" | "downloads_boxed" => "yes",
+        "outside_files" | "downloads_boxed" => "yes",
+        "outside_network" => "no",
 
         pointer::SPEED => "0",
 

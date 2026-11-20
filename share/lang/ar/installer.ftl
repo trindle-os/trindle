@@ -72,6 +72,8 @@ installer-arm-erase = انقر مرة أخرى للمسح والتثبيت
 
 # Note beside Next on the first page while no language is chosen.
 installer-missing-language = اختر لغة
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = اختر لغة Trindle
 
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = اختر لوحة مفاتيح
@@ -103,10 +105,12 @@ installer-missing-password = اكتب كلمة مرورك مرتين. يجب أ�
 installer-welcome-title = مرحبًا بك في { $name }
 
 # Sentence under the title of the first page.
-installer-welcome-help = اختر لغتك، وسيطابق Trindle لوحة المفاتيح والمنطقة الزمنية معها، ويمكنك تغييرهما.
+installer-welcome-help = اختر لغتك، وسيطابق Trindle بقية الإعدادات معها.
 
-# Head of the card for choosing the language, and the name of its search box.
-installer-language = اللغة
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
+installer-language = لغتك
+# Label beside the box at the right of the first page's sentence, for choosing the language of Trindle's own words (only those Trindle has).
+installer-trindle-language = لغة Trindle
 
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = لوحة المفاتيح
@@ -418,8 +422,8 @@ installer-privacy-chip-none = في هذا الحاسوب شريحة TPM، يمك
 # In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
 installer-privacy-no-chip-none = ليس في هذا الحاسوب شريحة TPM يستطيع Trindle استخدامها.
 
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = لوحة مفاتيح { $keyboard }، وتوقيت { $zone }.
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle بلغة { $trindle }، ولوحة مفاتيح { $keyboard }، وتوقيت { $zone }.
 
 # Title of the page shown while the install runs.
 installer-installing-title = جارٍ تثبيت { $name }
@@ -563,7 +567,7 @@ installer-live-speak = استخدم صوتك
 installer-live-speak-line = اضغط على وسط الحلقة وقل ما تريد.
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = اضغط «أضف التحكم الصوتي» في الإعدادات، تحت الحلقة. ثم اضغط الوسط وتحدّث.
+installer-live-speak-add = بعد تثبيت Trindle، أضف التحكم الصوتي في الإعدادات، تحت الحلقة.
 
 # Name of the third thing to do.
 installer-live-tab = كل شيء في الحلقة
@@ -705,6 +709,9 @@ installer-copy-failed = تعذّر نسخ النظام. { $why }
 # Red line at the foot: there is not enough room for a swap file.
 installer-swap-no-room = لا توجد مساحة لملف التبديل.
 
+# Under the swap file switch when the chosen disk or space is too small for one; the switch is then off and cannot be turned on.
+installer-swap-too-small = هذه المساحة أصغر من أن تتسع لملف التبديل.
+
 # Red line at the foot: the swap file's place on the disk cannot be read.
 installer-swap-unreadable = تعذّر على Trindle قراءة موضع ملف التبادل على القرص.
 
@@ -728,8 +735,8 @@ installer-tour-ring-foot = اعرض ما هو مفتوح، واستخدم الح
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } هو الذاكرة المحمولة التي يعمل منها Trindle.
 
-# Red line at the foot: something on the chosen disk is mounted or swapped to.
-installer-disk-in-use = { $dev } قيد الاستخدام. أغلق ما يستخدمه ثم حاول مرة أخرى.
+# Red words under the disk, back on the disk page: something on the chosen disk is mounted, swapped to or open.
+installer-disk-in-use = { $dev } قيد الاستخدام. أغلق ما يستخدمه ثم اخترْه مرة أخرى.
 
 # Said beside how far the install has got, once it has started.
 installer-started = جارٍ التثبيت
@@ -774,7 +781,8 @@ installer-done-problems = لم يكتمل إعداد كل شيء
 
 installer-suggest-failed = تعذّر على Trindle إنشاء عبارة مرور. اكتب عبارتك الخاصة.
 
-installer-disk-changed = { $dev } ليس القرص الذي ظهر لك. ارجع واختر القرص مرة أخرى.
+# Red words on the disk page: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev } ليس القرص الذي ظهر لك. اختر القرص مرة أخرى.
 
 installer-no-gpt = { $dev } لا يستخدم جدول أقسام GPT، لذلك لا يمكن تثبيت Trindle بجانب ما هو موجود عليه.
 
@@ -789,3 +797,39 @@ installer-ready-replaced-known = سيُستبدل كل ما على { $disk } ({ 
 installer-disk-named = { $what }، { $dev }
 
 installer-run-stopped = توقف { $program } قبل أن يحصل على كل ما يحتاجه: { $why }
+
+# Red words on the last page: the TPM chip could not be set up to open the disk, so the disk password is asked for at every start.
+installer-chip-not-set-up = تعذّر إعداد شريحة TPM، لذلك سيطلب القرص كلمة المرور في كل مرة يبدأ فيها الحاسوب.
+
+# Red words on the last page: the keyboard for the disk password screen could not be set, so it may be the American one.
+installer-start-keyboard-failed = تم تثبيت Trindle، لكن شاشة كلمة مرور القرص قد تستخدم لوحة مفاتيح أمريكية.
+
+# Red words on the last page: the login screen could not be switched on; { $why } is the reason.
+installer-login-screen-failed = تم تثبيت Trindle، لكنه لم يستطع تشغيل شاشة تسجيل الدخول: { $why }
+
+# Red words on the last page: Trindle could not be set to take its own updates; { $why } is the reason.
+installer-updates-held = تم تثبيت Trindle، لكنه لن يتلقى تحديثاته بنفسه بعد: { $why }
+
+# Red words on the last page: earlier versions of people's files (home snapshots) could not be switched on.
+installer-home-snapshots-failed = تم تثبيت Trindle، لكن النسخ السابقة من ملفاتك متوقفة. يمكنك تشغيلها من الإعدادات، اللقطات.
+
+# Red words on the last page: Trindle could not be added to the computer's own start-up list; { $why } is the reason.
+installer-firmware-entry-failed = تم تثبيت Trindle، لكنه لم يستطع إضافة نفسه إلى قائمة الإقلاع في الحاسوب: { $why }
+
+# Red line: the account the stick ran as could not be removed from the new system, so the install stopped.
+installer-live-account-left = تعذّرت إزالة حساب الفلاشة { $user } من النظام الجديد.
+
+# Under the swap file's switch when a size smaller than memory is chosen.
+installer-swap-no-hibernate = أصغر من ذاكرة هذا الحاسوب، لذلك لن يستطيع الإسبات.
+
+# In the swap size list: the size of the computer's memory, which hibernating needs.
+installer-swap-size-hibernate = { $gb } GB، يكفي للإسبات
+
+# In the swap size list: a smaller size.
+installer-swap-size = { $gb } GB
+
+# Tip of the swap size list.
+installer-swap-size-tip = حجم ملف التبادل
+
+# Why logind holds off sleep and shutting down while the installer changes the disk (shown by systemd-inhibit --list).
+installer-power-held = يجري تثبيت Trindle

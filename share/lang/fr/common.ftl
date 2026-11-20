@@ -95,7 +95,7 @@ common-updating-failed = Elle ne s'est pas terminée. { $why }
 
 # Red words beside an update that was never started. { $why } is the end of a sentence such as "because no administrator's password was given."
 # SAFETY: needs a human review before it ships
-common-updating-not-installed = Elle n'a pas été installée, { $why }
+common-updating-not-installed = Non installée, { $why }
 
 # End of a sentence saying why a step was refused: the password box was closed. It follows "because".
 # SAFETY: needs a human review before it ships
@@ -264,11 +264,11 @@ common-x11-would-not-start = Xwayland ne s'est pas lancé
 # Second line of that notice, when the desktop will try the older-programs display again soon.
 common-x11-try-again = Réessayez dans une minute
 
-# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each dot with what it means.
-common-in-use-key = Ce que signifient les points
+# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each mark with what it means.
+common-in-use-key = Sens des marques
 
-# Under the dots in that key: where a dot shows up.
-common-in-use-where = Les points s'affichent en haut au centre de l'écran et sur les onglets des fenêtres.
+# Under the marks in that key: where a mark shows up. On the screen it is a half circle hung from the top edge; on a window tab it is a small dot.
+common-in-use-where = Les demi-cercles pendent au milieu du haut de l'écran. Les onglets de fenêtre montrent de petits points.
 
 # Screen reader name of the microphone dot and its row, and the line shown on pointing at the dots, when no program is named.
 common-in-use-microphone = Microphone utilisé
@@ -289,7 +289,7 @@ common-in-use-screen = Écran en cours d'enregistrement
 common-in-use-screen-by = Écran enregistré par { $who }
 
 # Screen reader name of the input dot and its row, and the line shown on pointing at the dots, when no program is named: the mouse and keyboard are in another program's hands.
-common-in-use-input = Souris et clavier utilisés
+common-in-use-input = Souris, clavier occupés
 
 # Line on pointing at the dots, and its screen reader name, when programs have taken the mouse and keyboard. { $who } is the programs' names.
 common-in-use-input-by = { $who } utilise votre clavier et votre souris
@@ -370,6 +370,9 @@ common-no-driver-class-bluetooth = Bluetooth
 common-no-driver-class-sound = audio
 
 common-no-driver-class-graphics = graphique
+
+# Said of a device with no driver that nothing is known about. The name is its name, or its two hex numbers.
+common-no-driver-device-none = { $name } n'a pas de pilote.
 
 # The small round button beside a failure message that opens Help at the page
 # about it. Its tip, and the name a screen reader says.

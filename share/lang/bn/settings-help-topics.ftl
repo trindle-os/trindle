@@ -870,7 +870,7 @@ settings-help-topics-keys-step2-1 = শুধু Super, অথবা Super আ�
 settings-help-topics-keys-step2-2 = Super আর Enter, অথবা Ctrl, Alt আর T: একটি টার্মিনাল খোলা।
 
 # Help topic "Keyboard shortcuts": step 3 of the numbered steps at block 2.
-settings-help-topics-keys-step2-3 = Super আর I: সেটিংস খোলা।
+settings-help-topics-keys-step2-3 = Super আর I: সেটিংস।
 
 # Help topic "Keyboard shortcuts": step 4 of the numbered steps at block 2.
 settings-help-topics-keys-step2-4 = Super আর L: পর্দা লক করা, সেটিংস, পাওয়ারে লক করা চালু থাকলে।

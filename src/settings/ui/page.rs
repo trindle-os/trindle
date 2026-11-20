@@ -25,19 +25,22 @@ fn toggle_info(key: String, words: String) -> Msg {
 
 pub(super) fn info(kit: &Kit, key: &str, tip: &str, words: &str) -> Node<Msg> {
     let open = kit.info.as_ref().is_some_and(|(k, _, _)| k == key);
-    button("dialog-information-symbolic", tip).size(crate::toolkit::theme::sheet().info).on(open)
+    button("dialog-information-symbolic", tip).size(crate::toolkit::theme::sheet().info).hushed().on(open)
         .on_press(toggle_info(key.to_string(), words.to_string()))
 }
 
 pub(crate) fn with_info(kit: &Kit, page: Node<Msg>) -> Node<Msg> {
-    const WIDE: f32 = 360.0;
-    match kit.info.clone() {
-        Some((_, words, at)) => {
-            let panel = boxed(note(words).width(Length::Fill)).floats().width(Length::Fixed(WIDE));
-            crate::toolkit::popup::dismissing(page, crate::toolkit::popup::under_the_i(panel, at), on_kit(|k| k.info = None), Msg(Rc::new(|_: &mut Settings| ())))
-        }
+    match info_box(kit) {
+        Some((panel, close)) => crate::toolkit::popup::dismissing(page, panel, close, Msg(Rc::new(|_: &mut Settings| ()))),
         None => page,
     }
+}
+
+pub(crate) fn info_box(kit: &Kit) -> Option<(Node<Msg>, Msg)> {
+    const WIDE: f32 = 360.0;
+    let (_, words, at) = kit.info.clone()?;
+    let panel = boxed(note(words).width(Length::Fill)).floats().width(Length::Fixed(WIDE));
+    Some((crate::toolkit::popup::under_the_i(panel, at), on_kit(|k| k.info = None)))
 }
 
 pub fn page(kit: &Kit, heading: &str, help: &str, items: Vec<Node<Msg>>) -> Node<Msg> {

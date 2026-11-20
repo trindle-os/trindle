@@ -32,8 +32,8 @@ plugins-refused-not-signed = Danh mục plugin của Trindle không được ký
 # Red line under Trindle's own plugins when the catalogue does not say which number it is.
 plugins-refused-no-number = Danh mục plugin của Trindle không có số phiên bản, nên Trindle không dùng nó.
 
-# Red line under Trindle's own plugins when the catalogue is older than one accepted before. { $is } is its number; { $after } is the number accepted before.
-plugins-refused-older = Trindle không dùng danh mục plugin này vì số phiên bản của nó, { $is }, cũ hơn số đã nhận trước đó, { $after }.
+# Red line under Trindle's own plugins when the catalogue is older than one accepted before.
+plugins-refused-older = Trindle không dùng danh mục plugin này vì nó cũ hơn danh mục đã dùng trước đó.
 
 # Red line under Trindle's own plugins when the catalogue is signed but cannot be read. { $why } says what is wrong with it.
 plugins-refused-unreadable = Danh mục plugin của Trindle đã được ký nhưng không đọc được, nên Trindle không dùng nó: { $why }

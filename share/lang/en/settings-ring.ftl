@@ -10,8 +10,6 @@ settings-ring-keywords = favourites favorites launcher edge click hot corner voi
 settings-ring-help = Your favourites sit around the middle of the ring. You choose them in the ring itself. Right-click any app in the ring to add or remove it, and drag a favourite to another place to change the order.
 # Sentence at the top of the ring page saying how the ring opens.
 settings-ring-headline = The ring opens at the edge of the screen, and your open windows appear in it.
-# Name of the picture on the ring page that shows where things open.
-settings-ring-picture = Where things open
 ## Opening the ring
 
 # Line saying how many favourites the ring has; { $n } is the number.

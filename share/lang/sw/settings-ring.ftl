@@ -12,9 +12,6 @@ settings-ring-help = Vipendwa vyako vimezunguka katikati ya pete. Unavichagua kw
 # Sentence at the top of the ring page saying how the ring opens.
 settings-ring-headline = Pete hufunguka ukingoni mwa skrini, na madirisha yako yaliyofunguliwa huonekana ndani yake.
 
-# Name of the picture on the ring page that shows where things open.
-settings-ring-picture = Mahali vitu vinapofunguka
-
 # Line saying how many favourites the ring has; { $n } is the number.
 settings-ring-favourites =
     { $n ->

@@ -78,11 +78,11 @@ fn paths_names_and_email_addresses_are_blanked_over_many_lines() {
 }
 
 #[test]
-fn only_the_last_lines_are_kept_and_each_is_blanked() {
+fn only_the_newest_lines_are_kept_and_each_is_blanked() {
     let raw: String = (0..500).fold(String::new(), |mut s, i| { let _ = writeln!(s, "line {i} /home/jsmith/f{i} a{i}@example.com"); s });
     let lines = log_lines(&raw, &who());
     assert_eq!(lines.len(), LOG_LINES);
-    assert!(lines[0].starts_with("line 300 ~/f300 [email]"), "{}", lines[0]);
+    assert!(lines[0].starts_with("line 0 ~/f0 [email]"), "{}", lines[0]);
     assert!(lines.iter().all(|l| !l.contains("jsmith") && !l.contains('@')));
 }
 
@@ -94,7 +94,7 @@ fn parts<'a>(mode: Mode, words: &'a str, hardware: &'a str, crash: Option<&'a Cr
 fn a_report_holds_only_the_fixed_list_and_each_part_is_blanked() {
     let log = vec!["one 10.0.0.9".to_string(), "two".to_string()];
     let crash = Crash { program: "trindle-ring".into(), signal: "11 (SEGV)".into(), trace: "at /home/jsmith/x aa:bb:cc:dd:ee:ff".into() };
-    let text = document(&parts(Mode::Crash, "It froze for John at jsmith@example.com", "Computer: Acme Box on laptop-7", Some(&crash), &log), &who());
+    let text = document(&parts(Mode::Crash, "It froze for John at jsmith@example.com", "Acme Box on laptop-7\nProcessor: Acme on laptop-7", Some(&crash), &log), &who());
     let v: serde_json::Value = serde_json::from_str(&text).unwrap();
     let mut got: Vec<&str> = v.as_object().unwrap().keys().map(String::as_str).collect();
     let mut want = FIELDS.to_vec();
@@ -107,8 +107,8 @@ fn a_report_holds_only_the_fixed_list_and_each_part_is_blanked() {
     c.sort();
     assert_eq!(c, CRASH_FIELDS);
     assert_eq!((v["project"].as_str(), v["kind"].as_str(), v["version"].as_str()), (Some("trindle"), Some("crash"), Some("1.2")));
-    assert_eq!(v["words"], "It froze for [name] at [email]");
-    assert_eq!(v["hardware"], "Computer: Acme Box on [name]");
+    assert_eq!(v["words"], "It froze for John at jsmith@example.com", "the person's own words are sent as typed");
+    assert_eq!(v["hardware"], "Acme Box on laptop-7\nProcessor: Acme on [name]", "the model line is kept, the rest blanked");
     assert_eq!(v["crash"]["trace"], "at ~/x [mac]");
     assert_eq!(v["log"], serde_json::json!(["one [ip]", "two"]));
     assert_eq!(v["username"], "jsmith2", "the username is the person's own, trimmed");
@@ -118,7 +118,7 @@ fn a_report_holds_only_the_fixed_list_and_each_part_is_blanked() {
     let o: serde_json::Value = serde_json::from_str(&document(&parts(Mode::Crash, "", "", Some(&only), &[]), &who())).unwrap();
     assert_eq!(o["crash"], serde_json::json!({ "program": "trindle-ring" }));
 
-    let bare = Parts { mode: Mode::Note, version: "1.2", words: "  ", hardware: "Computer: x", crash: None, log: &[], username: "", github: "" };
+    let bare = Parts { mode: Mode::Note, version: "1.2", words: "  ", hardware: "x", crash: None, log: &[], username: "", github: "" };
     let b: serde_json::Value = serde_json::from_str(&document(&bare, &who())).unwrap();
     let mut keys: Vec<&str> = b.as_object().unwrap().keys().map(String::as_str).collect();
     keys.sort();
@@ -205,7 +205,7 @@ fn nothing_is_sent_before_send_and_send_goes_once_with_the_exact_text_shown() {
     assert_eq!(r.outbox[0], r.text(), "what is sent is byte for byte what is shown");
     r.update(Msg::Send);
     assert_eq!(r.outbox.len(), 1, "only once per window");
-    assert_eq!(r.refusal, already_sent());
+    assert!(r.refusal.is_empty(), "{}", r.refusal);
 
     let mut q = ready("dont", Mode::Crash);
     q.update(Msg::Cancel);
@@ -222,7 +222,7 @@ fn each_window_says_what_it_is_and_the_box_is_optional() {
     let c = ready("crashdoc", Mode::Crash);
     let t: serde_json::Value = serde_json::from_str(&c.text()).unwrap();
     assert_eq!(t["crash"]["program"], "trindle-ring");
-    assert!(summary().contains("File names and web addresses can still appear in the log lines. It doesn't send your files or passwords"));
+    assert!(summary().contains("File names and web addresses can still appear in log lines. It doesn't send your files or passwords"));
 }
 
 #[test]
@@ -266,7 +266,7 @@ fn save_works_once_and_holds_the_same_text() {
     assert_eq!(kept, r.text());
     r.update(Msg::Save);
     assert_eq!(files(&dir), 1);
-    assert_eq!(r.refusal, already());
+    assert!(r.refusal.is_empty(), "{}", r.refusal);
     let _ = std::fs::remove_dir_all(&dir);
 }
 
@@ -287,7 +287,8 @@ fn the_hardware_summary_is_own_and_holds_nothing_personal() {
     assert_eq!(probe::graphics_line("", "", ""), "Graphics: unknown maker");
     let s = probe::hardware_summary();
     assert!(s.chars().count() <= 20_000);
-    assert!(!s.contains("/home"));
+    let who = Who::quick();
+    assert!(!hardware_field(&s, &who).contains(&who.home), "the home folder is in what is sent");
     assert!(!include_str!("../../packages.txt").lines().any(|l| l.starts_with("hw-probe")));
 }
 
@@ -328,4 +329,66 @@ fn the_fallback_log_reads_trindles_own_units_from_the_user_journal() {
 fn the_words_of_a_report_lose_every_hidden_character_the_assistant_loses() {
     assert_eq!(plain("a\u{AD}b\u{206A}c\u{E0041}d\u{E0100}e\u{202E}f\u{7}g"), "abcdef g");
     assert_eq!(plain("one\ntwo"), "one\ntwo", "a line break stays");
+}
+
+#[test]
+fn the_window_opens_before_the_slow_reading_of_wifi_names() {
+    let window = include_str!("window.rs");
+    let opened = window.split("pub(super) fn open(").nth(1).and_then(|o| o.split("\n}\n").next()).unwrap_or_default();
+    assert!(!opened.contains("Who::here()"), "the window waits for nmcli before it is drawn");
+    assert!(opened.contains("Who::quick()"));
+    let reading = window.split("fn read_in_background(").nth(1).unwrap_or_default();
+    assert!(reading.contains("Do::Who(Who::here())"), "the Wi-Fi names are read off the window's thread");
+    let first = reading.find("Do::Who(").unwrap_or(usize::MAX);
+    assert!(first < reading.find("Do::Log(").unwrap_or(0) && first < reading.find("Do::Crash(").unwrap_or(0), "lines are blanked with the names, so the names come first");
+    assert!(scrub::Who::quick().ssids.is_empty());
+}
+
+#[test]
+fn a_second_press_also_brings_a_minimised_window_up() {
+    let window = include_str!("window.rs");
+    let shows = window.split("let mut taken = false;").nth(1).and_then(|s| s.split("asked.reply").next()).unwrap_or_default();
+    assert!(shows.contains("raise_key(\"report\")") && shows.contains("thread::spawn"));
+}
+
+#[test]
+fn once_sent_the_window_says_sent_once_and_the_button_says_close() {
+    let mut r = ready("sentclose", Mode::Note);
+    let before = r.view();
+    assert!(before.iconed().iter().any(|(tip, _)| tip == "Cancel"));
+    r.update(Msg::Send);
+    r.answered(Answer::Taken(None));
+    let after = r.view();
+    let said = after.said();
+    assert!(said.iter().any(|s| s == t!("report-sent")), "{said:?}");
+    assert_eq!(said.iter().filter(|s| s.contains("sent") || s.contains("Sent")).count(), 1, "two lines say it was sent: {said:?}");
+    let tips: Vec<String> = after.iconed().into_iter().map(|(tip, _)| tip).collect();
+    assert!(tips.iter().any(|t| t == "Close") && !tips.iter().any(|t| t == "Cancel"), "{tips:?}");
+}
+
+#[test]
+fn close_after_sending_ends_the_window_every_time() {
+    for waiting in [false, true] {
+        let mut r = ready("closeat", Mode::Crash);
+        let events = Loop::new();
+        r.events = Some(events.clone());
+        r.update(Msg::Send);
+        if waiting {
+            r.waiting = Some("No connection.".into());
+        } else {
+            r.answered(Answer::Taken(Some(3)));
+        }
+        r.update(Msg::Cancel);
+        assert!(events.quitting(), "Close did nothing (waiting {waiting})");
+    }
+}
+
+#[test]
+fn while_a_report_is_on_its_way_only_sending_shows() {
+    let mut r = ready("onway", Mode::Note);
+    r.update(Msg::Typed("The ring froze after I pressed Super twice".into()));
+    r.update(Msg::Send);
+    assert_eq!(r.send_off(), Some(""), "a word appeared beside the buttons while sending");
+    let said = r.view().said();
+    assert!(said.iter().any(|s| s == t!("report-sending")), "{said:?}");
 }

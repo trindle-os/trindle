@@ -312,7 +312,7 @@ fn what_the_shipped_languages_say_passes_the_checks() {
     let root = Path::new(env!("CARGO_MANIFEST_DIR"));
     let mut failed = Vec::new();
     let mut seen = 0;
-    for tag in ["es", "fr", "zh-Hans", "hi", "ar", "pt-BR", "bn", "de", "id", "ru", "sw", "tr", "ur", "vi"] {
+    for tag in ["es", "fr", "zh-Hans", "hi", "ar", "pt-BR", "bn", "de", "id", "ru", "sw", "tr", "ur", "vi", "ja", "ko"] {
         for share in [root.join("share/lang"), crate::common::source::toolkit_root().join("share/lang")] {
             for (_, text) in lang::folder_files(&share.join(tag)) {
                 for (key, body) in lang::raw_messages(&text) {

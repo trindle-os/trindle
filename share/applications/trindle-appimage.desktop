@@ -1,4 +1,5 @@
 [Desktop Entry]
+NoDisplay=true
 Name=Trindle AppImage manager
 Comment=Add an AppImage you have downloaded to your apps
 Exec=trindle-apps --appimage %f

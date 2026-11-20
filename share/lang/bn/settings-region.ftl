@@ -11,7 +11,7 @@ settings-region-keywords = ভাষা অঞ্চল দেশ ফরম্�
 settings-region-help = ভাষা ও ফরম্যাট আপনি পরের বার লগ ইন করলে কার্যকর হয়।
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = সব জায়গায় দেখতে আবার লগ ইন করুন।
+settings-region-later = দেখতে আবার লগ ইন করুন।
 
 # Shown while the page reads the computer.
 settings-region-looking = খোঁজা হচ্ছে…

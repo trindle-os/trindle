@@ -58,9 +58,6 @@ ring-cli-unknown = tùy chọn không rõ { $option }
 # Error printed in a terminal when --say is given no words.
 ring-cli-missing-say = thiếu đối số cho --say
 
-# Line in the ring's results when what was typed matches no app or favourite.
-ring-find-nothing = Không có ứng dụng hay mục yêu thích nào tên như vậy
-
 # Tip of the round button on an app's menu that removes the app.
 # SAFETY: needs a human review before it ships
 ring-uninstall = Gỡ cài đặt
@@ -236,8 +233,6 @@ ring-startup-add = Chạy khi đăng nhập
 
 ring-startup-remove = Thôi chạy khi đăng nhập
 
-
-
 # Help for the option that opens the shortcut list, or closes it when it is showing.
 ring-cli-shortcuts = Hiện danh sách mọi phím tắt, hoặc ẩn danh sách (Super và K, trừ khi bạn đổi trong Cài đặt)
 
@@ -255,3 +250,6 @@ ring-category-media-short = Âm thanh
 
 # Line in the ring when a spoken command, such as turning the sound down, did not work.
 ring-voice-failed = Việc đó không thành công.
+
+# Said under the ring when sleep, log out, restart or shut down is pressed while Trindle is being installed.
+ring-power-installing = Trindle đang được cài đặt. Hãy đợi cho đến khi xong.

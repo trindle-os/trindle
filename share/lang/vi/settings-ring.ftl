@@ -13,9 +13,6 @@ settings-ring-help = Các mục yêu thích nằm quanh giữa vòng tròn. Bạ
 # Sentence at the top of the ring page saying how the ring opens.
 settings-ring-headline = Vòng tròn mở ra ở cạnh màn hình, và các cửa sổ đang mở hiện trong đó.
 
-# Name of the picture on the ring page that shows where things open.
-settings-ring-picture = Nơi mọi thứ mở ra
-
 # Line saying how many favourites the ring has; { $n } is the number.
 settings-ring-favourites =
     { $n ->

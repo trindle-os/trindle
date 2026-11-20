@@ -61,15 +61,15 @@ fn apt_upgrade_keeping(trindle_at: Option<String>) -> Outcome {
     apt_run(&argv)?;
 
     let kept = kept_back(&argv, keep.is_some());
+    tidy_after([headers, kept])
+}
+
+fn tidy_after(earlier: [Outcome; 2]) -> Outcome {
+    use crate::common::filling::step_line;
     println!("{}", step_line(2, 2, t!("admin-step-tidying")));
     let tidied = tidy();
     let driver = driver_off();
-    let mut said = Vec::new();
-    for ended in [headers, kept, tidied, driver] {
-        if let Err(e) = ended {
-            said.push(e);
-        }
-    }
+    let said: Vec<String> = earlier.into_iter().chain([tidied, driver]).filter_map(Result::err).collect();
     if said.is_empty() { Ok(()) } else { Err(said.join(" ")) }
 }
 

@@ -322,7 +322,7 @@ disks-mount = Bağla
 disks-unmount = Bağlantıyı kes
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = Değişiklik yap
+disks-change-it = Değiştir
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = Ad

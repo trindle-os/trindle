@@ -127,9 +127,6 @@ settings-common-and = { $rest } và { $last }
 # What goes between names in a list, before the last two.
 settings-common-list-comma = { ", " }
 
-# Spoken name of the picture of the ring opening on a small screen.
-settings-common-ring-picture = Bạn mở vòng tròn bằng cách nhấp đúp vào mép màn hình.
-
 # Word drawn in the middle of that picture.
 settings-common-ring-name = Vòng tròn
 

@@ -250,11 +250,11 @@ common-x11-would-not-start = لم يبدأ Xwayland
 # Second line of that notice, when the desktop will try the older-programs display again soon.
 common-x11-try-again = حاول مرة أخرى بعد دقيقة
 
-# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each dot with what it means.
-common-in-use-key = ماذا تعني النقاط
+# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each mark with what it means.
+common-in-use-key = ماذا تعني العلامات
 
-# Under the dots in that key: where a dot shows up.
-common-in-use-where = تظهر النقاط في أعلى منتصف الشاشة وعلى علامات تبويب النوافذ.
+# Under the marks in that key: where a mark shows up. On the screen it is a half circle hung from the top edge; on a window tab it is a small dot.
+common-in-use-where = أنصاف الدوائر تتدلى من أعلى منتصف الشاشة. وعلى علامات تبويب النوافذ تظهر نقاط صغيرة.
 
 # Screen reader name of the microphone dot and its row, and the line shown on pointing at the dots, when no program is named.
 common-in-use-microphone = الميكروفون قيد الاستخدام
@@ -275,7 +275,7 @@ common-in-use-screen = الشاشة قيد التسجيل
 common-in-use-screen-by = الشاشة قيد التسجيل من { $who }
 
 # Screen reader name of the input dot and its row, and the line shown on pointing at the dots, when no program is named: the mouse and keyboard are in another program's hands.
-common-in-use-input = الفأرة ولوحة المفاتيح قيد الاستخدام
+common-in-use-input = الفأرة ولوحة المفاتيح مشغولتان
 
 # Line on pointing at the dots, and its screen reader name, when programs have taken the mouse and keyboard. { $who } is the programs' names.
 common-in-use-input-by = { $who } يستخدم لوحة المفاتيح والفأرة
@@ -287,10 +287,10 @@ common-in-use-files = الملفات التي نسختها قيد القراءة
 common-in-use-files-by = { $who } يقرأ الملفات التي نسختها
 
 # The ring's who-is-using-what row while a plugin reaches devices on the local network.
-common-in-use-home-network = الشبكة المحلية قيد الاستخدام
+common-in-use-home-network = الشبكة المحلية مستخدمة
 
 # The same with the plugin's name.
-common-in-use-home-network-by = الشبكة المحلية قيد الاستخدام من { $who }
+common-in-use-home-network-by = الشبكة المحلية مستخدمة من { $who }
 
 # The ring's who-is-using-what row while a plugin uses scanners and USB devices.
 common-in-use-usb = الماسحات وأجهزة USB قيد الاستخدام
@@ -356,6 +356,9 @@ common-no-driver-class-bluetooth = Bluetooth
 common-no-driver-class-sound = الصوت
 
 common-no-driver-class-graphics = الرسوميات
+
+# Said of a device with no driver that nothing is known about. The name is its name, or its two hex numbers.
+common-no-driver-device-none = لا يوجد برنامج تشغيل لـ { $name }.
 
 # The small round button beside a failure message that opens Help at the page
 # about it. Its tip, and the name a screen reader says.

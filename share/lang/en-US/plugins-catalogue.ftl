@@ -10,7 +10,7 @@ plugins-refused-not-signed = Trindle's plugin catalog isn't signed with Trindle'
 
 plugins-refused-no-number = Trindle's plugin catalog has no version number, so Trindle didn't use it.
 
-plugins-refused-older = Trindle didn't use this plugin catalog because its version number, { $is }, is older than the one accepted before, { $after }.
+plugins-refused-older = Trindle didn't use this plugin catalog because it's older than one it used before.
 
 plugins-refused-unreadable = Trindle's plugin catalog is signed but can't be read, so Trindle didn't use it: { $why }
 

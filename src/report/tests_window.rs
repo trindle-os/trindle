@@ -464,3 +464,36 @@ fn on_a_720_screen_the_whole_window_is_in_view_in_every_language() {
         });
     }
 }
+
+fn press_on(ui: &mut crate::toolkit::ui::Ui<Msg>, name: &str) -> Vec<Msg> {
+    use crate::toolkit::input::{Button, Input};
+    let now = std::time::Instant::now();
+    let tree = ui.access("");
+    let b = tree.nodes.iter().find(|(_, p)| p.label() == Some(name) && p.role() != accesskit::Role::Window)
+        .and_then(|(_, p)| p.bounds()).unwrap_or_else(|| panic!("no {name}"));
+    let (x, y) = (((b.x0 + b.x1) / 2.0) as f32, ((b.y0 + b.y1) / 2.0) as f32);
+    let mut got = ui.input(&Input::PointerMove { x, y }, now).messages;
+    got.extend(ui.input(&Input::Press { button: Button::Left, x, y }, now).messages);
+    got.extend(ui.input(&Input::Release { button: Button::Left, x, y }, now).messages);
+    got
+}
+
+#[test]
+fn close_after_sending_closes_at_the_first_press() {
+    use crate::toolkit::{theme::Theme, ui::Ui};
+    let mut r = made(Mode::Note, false, Gate::Open);
+    r.typed = "The panel went blank after the lid closed".into();
+    let mut ui = Ui::new(r.view(), Theme::chosen());
+    ui.lay_at(SIZE.0, SIZE.1);
+
+    r.sent = true;
+    r.sending = true;
+    ui.set_view(r.view());
+    ui.lay_at(SIZE.0, SIZE.1);
+    r.sending = false;
+    r.delivered = true;
+    ui.set_view(r.view());
+    ui.lay_at(SIZE.0, SIZE.1);
+    let got = press_on(&mut ui, t!("screenshot-close"));
+    assert!(got.iter().any(|m| matches!(m, Msg::Cancel)), "the first press on Close did nothing");
+}

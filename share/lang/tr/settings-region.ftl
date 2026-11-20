@@ -11,7 +11,7 @@ settings-region-keywords = dil yerel ayar ülke biçimler tarih para birimi
 settings-region-help = Dil ve biçimler bir sonraki oturum açışınızda etkili olur.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = Her yerde görmek için yeniden oturum açın.
+settings-region-later = Görmek için yeniden oturum açın.
 
 # Shown while the page reads the computer.
 settings-region-looking = Aranıyor…

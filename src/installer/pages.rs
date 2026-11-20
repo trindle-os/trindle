@@ -1,6 +1,6 @@
 //! The installer's pages and the parts they are built from.
 
-use super::{ABOUT_YOU, BESIDE_WIDTH, DISK_PASSWORD, DONE, Installer, MARK, MARKS, MARK_GAP, Msg, READY, RUNNING, SWAP_WIDTH, tour};
+use super::{LEAST_LISTS, SHORT_WINDOW, ABOUT_YOU, BESIDE_WIDTH, DISK_PASSWORD, DONE, Installer, KEYBOARD, LANGUAGE, MARK, MARKS, MARK_GAP, Msg, READY, RUNNING, SWAP_WIDTH, TIME, TONGUE, tour};
 use super::plan::{self, Disk, Lock, Where};
 use crate::common::terms;
 use crate::toolkit::colour::Colour;
@@ -79,17 +79,21 @@ impl Installer {
         column(vec![
             self.heading(t!("installer-welcome-title", name = &self.name), t!("installer-welcome-help")),
             row(vec![
-                self.field(0, "preferences-desktop-locale-symbolic", t!("installer-language"), &m.locales, &p.locale),
-                self.field(1, "input-keyboard-symbolic", t!("installer-keyboard"), &m.keyboards, keyboard),
-                self.field(2, "preferences-system-time-symbolic", t!("installer-time"), &m.zones, &p.timezone),
-            ]).gap(theme::bento().gap).height(Length::Fill),
+                self.field(LANGUAGE, "preferences-desktop-locale-symbolic", t!("installer-language"), &m.locales, &p.locale),
+                self.field(TONGUE, "preferences-desktop-locale-symbolic", t!("installer-trindle-language"), &m.tongues, &p.trindle_language),
+                self.field(KEYBOARD, "input-keyboard-symbolic", t!("installer-keyboard"), &m.keyboards, keyboard),
+                self.field(TIME, "preferences-system-time-symbolic", t!("installer-time"), &m.zones, &p.timezone),
+            ]).gap(theme::bento().gap).height(if self.tall < SHORT_WINDOW { Length::Fixed(LEAST_LISTS) } else { Length::Fill }),
         ]).gap(12.0)
     }
 
     fn disks_page(&self) -> Node<Msg> {
         let head = self.heading(t!("installer-disks-title", name = &self.name), t!("installer-disks-help"));
         if self.machine.disks.is_empty() {
-            return column(vec![head, note(t!("installer-disks-none"))]).gap(12.0);
+            let mut page = vec![head];
+            page.extend(self.refused_here(""));
+            page.push(note(t!("installer-disks-none")));
+            return column(page).gap(12.0);
         }
         let mut cards = Vec::new();
         for disk in &self.machine.disks {
@@ -111,25 +115,52 @@ impl Installer {
                     note(t!("installer-disks-split", kept = plan::size(leave), mine = plan::size(part.size.saturating_sub(leave)))),
                 ]).gap(8.0));
             }
+            if let Some(why) = self.refused_here(&disk.dev) {
+                items.push(why);
+            }
             cards.push(card(column(items).gap(12.0)));
         }
 
         let gap = theme::bento().gap;
         let swap = column(vec![self.swap_card(), space()]).width(Length::Fixed(SWAP_WIDTH)).height(Length::Fill);
-        column(vec![head, row(vec![scroll("disks", column(cards).gap(gap)), swap]).gap(gap).height(Length::Fill)]).gap(12.0)
+        let mut page = vec![head];
+
+        if !self.machine.disks.iter().any(|d| self.refusal.as_ref().is_some_and(|(dev, _)| *dev == d.dev)) {
+            page.extend(self.refused_here(""));
+        }
+        page.push(row(vec![scroll("disks", column(cards).gap(gap)), swap]).gap(gap).height(Length::Fill));
+        column(page).gap(12.0)
+    }
+
+    fn refused_here(&self, dev: &str) -> Option<Node<Msg>> {
+        let (_, why) = self.refusal.as_ref().filter(|(at, _)| dev.is_empty() || at == dev)?;
+        Some(lead(why.as_str()).tone(Tone::Problem).width(Length::Fill))
     }
 
     fn swap_card(&self) -> Node<Msg> {
-        let words = if self.machine.secure_boot {
+        let (choices, size) = self.swap_now();
+        let fits = !choices.is_empty();
+        let memory = self.machine.memory;
+        let words = if !fits {
+            t!("installer-swap-too-small")
+        } else if size < memory {
+            t!("installer-swap-no-hibernate")
+        } else if self.machine.secure_boot {
             t!("installer-swap-secure-boot")
         } else {
             t!("installer-swap-note")
         };
-        card(column(vec![
-            row(vec![tile_head("system-hibernate-symbolic", t!("installer-swap-title", gb = self.machine.memory), Vec::new()),
-                     switch(self.plan.swap, t!("installer-swap-switch"), Msg::Swap).key("swap")]).gap(12.0),
-            note(words),
-        ]).gap(12.0))
+        let mut parts = vec![
+            row(vec![tile_head("system-hibernate-symbolic", t!("installer-swap-title", gb = size), Vec::new()),
+                     switch(self.plan.swap && fits, t!("installer-swap-switch"), Msg::Swap).key("swap").off(!fits)]).gap(12.0),
+        ];
+        if fits && self.plan.swap {
+            let names = choices.iter().map(|g| if *g == memory { t!("installer-swap-size-hibernate", gb = *g) } else { t!("installer-swap-size", gb = *g) }).collect();
+            let at = choices.iter().position(|g| *g == size);
+            parts.push(crate::toolkit::widget::dropdown(names, at, t!("installer-swap-size-tip"), move |i| Msg::SwapSize(choices[i])).key("swap-size"));
+        }
+        parts.push(note(words));
+        card(column(parts).gap(12.0))
     }
 
     pub(super) fn pair(&self, main: Node<Msg>, beside: Node<Msg>) -> Node<Msg> {
@@ -239,7 +270,7 @@ impl Installer {
         let disk = self.machine.disks.iter().find(|d| d.dev == p.disk());
         let (words, tone) = ready_sentence(&p.target, disk);
 
-        let swap = if p.swap { format!(" {}", t!("installer-ready-swap", gb = self.machine.memory)) } else { String::new() };
+        let swap = if p.swap { format!(" {}", t!("installer-ready-swap", gb = self.swap_now().1)) } else { String::new() };
         let target = match &p.target {
             Some(Where::Erase { disk: dev }) => (t!("installer-ready-whole", disk = disk.map_or(dev.clone(), Disk::named)),
                                                  format!("{}{swap}", t!("installer-ready-whole-text", name = name))),
@@ -252,7 +283,8 @@ impl Installer {
             Lock::Password => (t!("installer-ready-locked").into(), t!("installer-ready-locked-password").into()),
             Lock::Chip => (t!("installer-ready-locked").into(), t!("installer-ready-locked-chip").into()),
         };
-        let language = (plan::language_name(&p.locale), t!("installer-ready-language", keyboard = &p.layout, zone = &p.timezone));
+        let tongue = self.machine.tongues.iter().find(|(c, _)| *c == p.trindle_language).map_or(p.trindle_language.as_str(), |(_, n)| n.as_str());
+        let language = (plan::language_name(&p.locale), t!("installer-ready-language", trindle = tongue, keyboard = &p.layout, zone = &p.timezone));
         let security = t!("installer-ready-security-text", name = name);
         let facts = [
             ("drive-harddisk-symbolic", target),
@@ -282,7 +314,9 @@ impl Installer {
         } else {
             facts
         };
-        column(vec![head, main.height(Length::Fill), terms::tick_row(self.terms, Msg::Terms, Msg::ReadTerms(true))]).gap(8.0)
+        let mut page = vec![head, main.height(Length::Fill), terms::tick_row(self.terms, Msg::Terms, Msg::ReadTerms(true))];
+        page.extend(self.refused_here(""));
+        column(page).gap(8.0)
     }
 
     pub(super) fn installing(&self) -> Node<Msg> {
@@ -300,7 +334,8 @@ impl Installer {
     pub(super) fn done(&self) -> Node<Msg> {
         let mut items = vec![];
 
-        if let Some(words) = keep_words(self.plan.lock) {
+        let unchipped = self.problems.iter().any(|p| p == t!("installer-chip-not-set-up"));
+        if let Some(words) = keep_words(if unchipped { Lock::Password } else { self.plan.lock }) {
             items.push(card(column(vec![
                 tile_head("dialog-password-symbolic", t!("installer-done-keep"), Vec::new()),
                 lead(words).width(Length::Fill),
@@ -331,7 +366,8 @@ impl Installer {
         let n = self.page;
         let missing = self.missing();
         let mut items = Vec::new();
-        if (n > 0 && n <= READY) || (self.failed && !self.stuck) {
+
+        if (n > 0 && n <= READY && self.helper.is_none()) || (self.failed && !self.stuck) {
             items.push(button("go-previous-symbolic", t!("installer-back")).on_press(Msg::Back));
         }
 
@@ -341,9 +377,9 @@ impl Installer {
                 .width(Length::Fixed(280.0)));
         }
 
-        if n == RUNNING || n == ABOUT_YOU && (self.helper.is_some() || self.failed) {
+        if n == RUNNING || (n == ABOUT_YOU || n == READY) && (self.helper.is_some() || self.failed) {
             if self.failed {
-                items.push(label(self.doing.clone()).tone(Tone::Problem).cut().width(Length::Fill));
+                items.push(label(self.doing.clone()).tone(Tone::Problem).width(Length::Fill));
             } else {
                 let figure = Some(format!("{}%", (self.share * 100.0).round()));
                 items.push(standard_ring_with(Some(self.share), figure, 34.0).width(Length::Shrink));
@@ -370,7 +406,8 @@ impl Installer {
         if n == READY {
 
             let word = if self.armed { t!("installer-sure") } else { t!("installer-install") };
-            let install = main_action("system-software-install-symbolic", word).on_press(Msg::Install).key("installer:install").off(!self.terms);
+            let install = main_action("system-software-install-symbolic", word).on_press(Msg::Install).key("installer:install")
+                .off(!self.terms || self.helper.is_some());
 
             items.push(if self.erases() { install.cannot_be_undone() } else { install });
         }

@@ -10,56 +10,52 @@ use crate::store::screen::{rows_tile, small, tile};
 use super::install::{update_debian, update_device, update_trindle};
 use super::rows::{Own, red_words, update_line};
 use super::view::{checking};
-use super::words::{debian_why, held_words, never_held, not_held, size_words, status};
+use super::words::{held_words, never_held, size_words, status};
 use super::{DEBIAN_ROW, SECURITY_ROW, FIRMWARE, FIRST_ROWS, MORE_ROWS, SYSTEM, SYSTEM_ROW, TRINDLE_ROW, debian_name, going_under, job_ring, ring_under};
 
-pub(super) fn system_card(s: &Store) -> Node<Msg> {
-    let mut names: Vec<&str> = s.debian.iter().map(String::as_str).collect();
-    let debian_bytes: u64 = names.iter().filter_map(|n| s.upd.sizes.get(*n)).sum();
-    if s.trindle_waiting.is_some() {
-        names.push("trindle");
-    }
-    let bytes: u64 = names.iter().filter_map(|n| s.upd.sizes.get(*n)).sum();
-    let waiting = s.debian.len() + s.trindle_waiting.is_some() as usize;
-    let (d, words) = status(s, SYSTEM, going_under(s, &[SYSTEM_ROW, TRINDLE_ROW, DEBIAN_ROW]), waiting, bytes, 0);
+pub(super) fn trindle_card(s: &Store) -> Node<Msg> {
+    let waiting = s.trindle_waiting.is_some() as usize;
+    let bytes = if waiting > 0 { s.upd.sizes.get("trindle").copied().unwrap_or(0) } else { 0 };
+    let (d, words) = status(s, SYSTEM, going_under(s, &[SYSTEM_ROW, TRINDLE_ROW]), waiting, bytes, 0);
     let mut items = vec![look::status_line(s, d, words, crate::store::help::UPDATE)];
-
-    let going = |own: &str| ring_under(s, &[SYSTEM_ROW, own]);
     let current = updates::shown(updates::trindle_version());
     if let Some(latest) = &s.trindle_waiting {
         items.push(update_line(s, None, t!("store-upd-trindle").into(), t!("store-upd-version-to", from = &current, to = updates::shown(latest)), String::new(),
-                               size_words(s.upd.sizes.get("trindle").copied()), Own::button(s, TRINDLE_ROW.into(), going(TRINDLE_ROW), update_trindle)));
+                               size_words(s.upd.sizes.get("trindle").copied()), Own::button(s, TRINDLE_ROW.into(), ring_under(s, &[SYSTEM_ROW, TRINDLE_ROW]), update_trindle)));
     }
-    if !s.debian.is_empty() {
+    items.push(note(t!("store-upd-has-trindle", version = &current)));
+    items.extend(red_words(s, SYSTEM_ROW));
+    tile("computer-symbolic", t!("store-upd-trindle"), checking(s, SYSTEM), items, small())
+}
 
-        let n = t!("store-upd-debian-count", n = s.debian.len());
-        items.push(update_line(s, None, debian_name().into(), n, String::new(), size_words(Some(debian_bytes)),
-                               Own::button(s, DEBIAN_ROW.into(), going(DEBIAN_ROW), update_debian)));
+pub(super) fn debian_card(s: &Store) -> Node<Msg> {
+    let bytes: u64 = s.debian.iter().filter_map(|n| s.upd.sizes.get(n)).sum();
+    let (d, words) = status(s, SYSTEM, going_under(s, &[SYSTEM_ROW, DEBIAN_ROW]), s.debian.len(), bytes, 0);
+    let mut items = vec![look::status_line(s, d, words, crate::store::help::UPDATE)];
+    if !s.debian.is_empty() {
+        items.push(update_line(s, None, debian_name().into(), t!("store-upd-debian-count", n = s.debian.len()), String::new(), size_words(Some(bytes)),
+                               Own::button(s, DEBIAN_ROW.into(), ring_under(s, &[SYSTEM_ROW, DEBIAN_ROW]), update_debian)));
     }
     let shown = if s.upd.shown == 0 { FIRST_ROWS } else { s.upd.shown };
     for p in s.debian.iter().take(shown) {
-        items.push(update_line(s, None, p.clone(), t!("store-upd-from-debian").into(), String::new(), size_words(s.upd.sizes.get(p).copied()), Own::WithGroup));
+        items.push(update_line(s, None, p.clone(), from_words(s, p), String::new(), size_words(s.upd.sizes.get(p).copied()), Own::Plain));
     }
     if s.debian.len() > shown {
         items.push(row(vec![note(t!("store-upd-debian-showing", shown = shown, total = s.debian.len())).width(Length::Fill),
                             look::link(&t!("store-grid-show-more", next = MORE_ROWS.min(s.debian.len() - shown)),
                                        go(move |s| s.upd.shown = shown + MORE_ROWS))]).gap(12.0).centred());
     }
-    if !s.debian.is_empty() {
-        items.push(note(debian_why()));
-    }
-    if waiting > 0 {
-        items.push(note(not_held()));
-    }
-    items.push(note(t!("store-upd-has-trindle", version = &current)));
-    items.extend(red_words(s, SYSTEM_ROW));
-    tile("computer-symbolic", t!("store-upd-card-system"), checking(s, SYSTEM), items, small())
+    tile("system-software-install-symbolic", debian_name(), checking(s, SYSTEM), items, small())
+}
+
+fn from_words(s: &Store, package: &str) -> String {
+    s.upd.origins.get(package).map(|from| t!("store-upd-from", from = from)).unwrap_or_default()
 }
 
 pub(super) fn security_card(s: &Store) -> Node<Msg> {
     let on = !s.upd.security_off;
     let switch = crate::toolkit::widget::switch(on, crate::common::security_updates::tip(on), move |now| go(move |s| set_security(s, now)));
-    tile("security-high-symbolic", t!("store-upd-card-security"), vec![switch], vec![
+    crate::store::screen::tile_far("security-high-symbolic", t!("store-upd-card-security"), vec![switch], vec![
         if on { dot_line(s, Dot::UpToDate, t!("store-upd-security-on")) } else { note(t!("settings-about-security-off")) },
         note(never_held()),
     ].into_iter().chain(red_words(s, SECURITY_ROW)).collect(), small())

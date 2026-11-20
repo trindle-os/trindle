@@ -1,4 +1,5 @@
 [Desktop Entry]
+NoDisplay=true
 Name=Eye dropper
 Comment=Take a colour from anywhere on the screen and copy it as a hex code
 Exec=trindle-eye-dropper

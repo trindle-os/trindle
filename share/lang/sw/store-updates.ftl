@@ -125,6 +125,16 @@ store-upd-install-n =
 # Main button that restarts the computer.
 # SAFETY: needs a human review before it ships
 store-upd-restart-now = Anzisha upya sasa
+# Beside Restart now: the box that puts the restart off, then the ring's Updates button reminds. Its answers are the choices below.
+store-upd-remind-later = Nikumbushe baadaye
+# Red words under the headline when the Remind me later time could not be saved; the reason follows.
+store-upd-remind-not-saved = Imeshindwa kuhifadhi kikumbusho: { $why }.
+# One answer in the Remind me later box.
+store-upd-remind-hours =
+    { $n ->
+        [one] Baada ya saa 1
+       *[other] Baada ya saa { $n }
+    }
 
 # Main button that checks for updates.
 store-upd-check-for = Kagua masasisho
@@ -222,23 +232,11 @@ store-upd-debian-count =
        *[other] masasisho { $n }, yanayosakinishwa pamoja
     }
 
-# On a row of Debian's updates: where it comes from.
-store-upd-from-debian = Kutoka Debian
-
 # Under Debian's rows: how many of them show.
 store-upd-debian-showing = Inaonyesha { $shown } kati ya masasisho { $total } ya Debian.
 
 # Note on the Trindle and Debian card: which version of Trindle the computer has.
 store-upd-has-trindle = Kompyuta hii ina Trindle { $version }.
-
-# Heading of the Trindle and Debian card.
-store-upd-card-system = Trindle na Debian
-
-# Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Vifurushi vya Debian vimetengenezwa kufanya kazi pamoja. Kusakinisha kimoja tu kunaweza kusakinisha vingine pia, au kuviacha visivyoendana, kwa hiyo vyote husakinishwa pamoja.
-
-# Note on the Trindle and Debian card: why no row has a Hold back button.
-store-upd-not-held = Masasisho ya Trindle na ya Debian huleta marekebisho ya usalama kwa kompyuta nzima, kwa hiyo hayawezi kuzuiliwa.
 
 # Heading of the card about the daily security updates.
 store-upd-card-security = Masasisho ya usalama
@@ -303,7 +301,6 @@ store-patch-not-fetched = Trindle haikuweza kupakua { $package } { $version }.
 # Said when a security fix for a boxed app was downloaded but isn't there to use.
 store-patch-not-found = Trindle haikuweza kupata kifurushi ilichopakua.
 
-
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
 store-upd-off = Ukaguzi wa masasisho wa kiotomatiki umezimwa.
 
@@ -324,3 +321,4 @@ store-upd-stopped-all = Imesimamishwa. Sakinisha tena ili kuendelea.
 
 # Note under the Apps card.
 store-upd-steam-restarts = Steam huanza upya mara hakuna mchezo unaoendeshwa.
+

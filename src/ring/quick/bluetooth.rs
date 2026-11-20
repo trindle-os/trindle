@@ -125,7 +125,7 @@ impl Quick {
         let top = card(row(vec![
             label(t!("ring-quick-bt-switch")),
             space(),
-            switch(on == Some(true), t!("ring-quick-bt-switch"), |on| m(move |q| q.bt_power(on))),
+            switch(on == Some(true), t!("ring-quick-bt-switch"), |on| m(move |q| q.bt_power(on))).hushed(),
         ]).gap(ROW_GAP)).snug().flat();
         let rows: Vec<Node<Msg>> = match on {
             None => vec![],

@@ -564,7 +564,7 @@ store-src-added = { $what } eklendi ve güncel tutuluyor.
 store-src-no-program = { $what }. Kaynak eklendi, ama program kurulu değil.
 
 # Under a maker's source whose program is installed another way.
-store-src-other-way = { $what } başka bir yolla kurulmuş.
+store-src-other-way = { $what }. Başka yolla kuruldu.
 
 # SAFETY: needs a human review before it ships
 # Tip of the round button that removes a maker's source and its program.

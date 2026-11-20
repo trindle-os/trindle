@@ -61,7 +61,8 @@ name = "trindle-unlock"
 path = "src/unlock/main.rs"
 
 [dependencies]
-trindle-toolkit = { git = "https://github.com/trindle-os/trindle-toolkit", rev = "4f188cdef76a3c3072148d2e58d30c26de9dd7dd" }
+trindle-toolkit = { git = "https://github.com/trindle-os/trindle-toolkit", rev = "6cda075f3ce5b00c17343707e06189302281ce06" }
+trindle-common = { git = "https://github.com/trindle-os/trindle-toolkit", rev = "6cda075f3ce5b00c17343707e06189302281ce06" }
 wayland-client.workspace = true
 wayland-protocols.workspace = true
 wayland-protocols-wlr.workspace = true
@@ -146,8 +147,8 @@ test-catalogue = ["publisher"]
 
 [dev-dependencies]
 # What the tests read of the toolkit: see its "testing" feature.
-trindle-toolkit = { git = "https://github.com/trindle-os/trindle-toolkit", rev = "4f188cdef76a3c3072148d2e58d30c26de9dd7dd", features = ["testing"] }
-trindle-help = { git = "https://github.com/trindle-os/trindle-help", rev = "634f633a39286c1af7ea89b8de4781cb3daccf02" }
+trindle-toolkit = { git = "https://github.com/trindle-os/trindle-toolkit", rev = "6cda075f3ce5b00c17343707e06189302281ce06", features = ["testing"] }
+trindle-help = { git = "https://github.com/trindle-os/trindle-help", rev = "62b05bd7a4f8396aa512724673622c64b2d9216c" }
 # The stand-in keyboard a test types with; already built for the compositor.
 wayland-protocols-misc.workspace = true
 # The tree of named parts a window tells a screen reader, as the tests read it.

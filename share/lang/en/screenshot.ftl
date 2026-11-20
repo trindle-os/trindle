@@ -10,6 +10,8 @@ screenshot-drag = Drag over the part to keep
 screenshot-whole = Whole screen
 # Name of the round button that closes the overlay or a pinned picture.
 screenshot-close = Close
+# Word on the button, shown when the report window asked for the picture, that hands the chosen part to the report.
+screenshot-add-to-report = Add to report
 # Name of the round button that gives the screenshot up.
 screenshot-cancel = Cancel
 # Name of the round button that takes back the last mark.

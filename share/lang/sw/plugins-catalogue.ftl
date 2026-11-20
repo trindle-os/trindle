@@ -36,9 +36,9 @@ plugins-refused-not-signed = Orodha ya programu jalizi ya Trindle haijatiwa sain
 # SAFETY: needs a human review before it ships
 plugins-refused-no-number = Orodha ya programu jalizi ya Trindle haina namba ya toleo, kwa hiyo Trindle haikuitumia.
 
-# Red line under Trindle's own plugins when the catalogue is older than one accepted before. { $is } is its number; { $after } is the number accepted before.
+# Red line under Trindle's own plugins when the catalogue is older than one accepted before.
 # SAFETY: needs a human review before it ships
-plugins-refused-older = Trindle haikutumia orodha hii ya programu jalizi kwa sababu namba yake ya toleo, { $is }, ni ya zamani kuliko ile iliyokubaliwa awali, { $after }.
+plugins-refused-older = Trindle haikutumia orodha hii ya programu jalizi kwa sababu ni ya zamani kuliko ile iliyotumia awali.
 
 # Red line under Trindle's own plugins when the catalogue is signed but cannot be read. { $why } says what is wrong with it.
 # SAFETY: needs a human review before it ships

@@ -867,7 +867,7 @@ settings-help-topics-keys-step2-1 = Super allein oder Super und Leertaste: den R
 settings-help-topics-keys-step2-2 = Super und Eingabetaste oder Strg, Alt und T: ein Terminal öffnen.
 
 # Help topic "Keyboard shortcuts": step 3 of the numbered steps at block 2.
-settings-help-topics-keys-step2-3 = Super und I: die Einstellungen öffnen.
+settings-help-topics-keys-step2-3 = Super und I: Einstellungen
 
 # Help topic "Keyboard shortcuts": step 4 of the numbered steps at block 2.
 settings-help-topics-keys-step2-4 = Super und L: den Bildschirm sperren, sobald das Sperren in den Einstellungen unter „Energie“ eingeschaltet ist.

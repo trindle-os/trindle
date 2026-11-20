@@ -172,3 +172,7 @@ settings-ai-keys = Kunci yang diberikan kepada program AI
 
 # Help text of the keys card (the information button).
 settings-ai-keys-about = Program AI tidak pernah mendapat kunci dan token di sesi Anda. Mereka hanya mendapat kunci yang Anda ketik di sini.
+# Under the AI programs card, greyed, when none of the listed AI programs is on this computer.
+settings-ai-none-installed = Tidak ada program AI di komputer ini.
+# Under the box, when the program typed in to add is not on this computer.
+settings-ai-not-installed = Program itu tidak ada di komputer ini.

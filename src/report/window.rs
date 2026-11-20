@@ -76,6 +76,8 @@ fn serve_first(events: &Loop, bus: &Bus, mode: Mode, program: String) -> Option<
                 shown.change(|r| taken = same_window(r.mode, &r.program, crash, &program));
                 if taken {
                     shown.window.raise();
+
+                    std::thread::spawn(|| { crate::ring::windows::Windows::raise_key("report"); });
                 }
             }
             asked.reply(&taken);
@@ -91,9 +93,8 @@ pub(super) fn open(events: &Loop, mode: Mode, program: String) -> Option<Rc<Show
     let display = Display::connect(events, move || gone.quit())?;
     let events = events.clone();
     let slot: Slot = Rc::new(RefCell::new(Weak::new()));
-    let who = Who::here();
-    let asks = answering(&events, &slot, &who);
-    let mut app = Reporter::new(who, model(), home().join("Downloads"));
+    let asks = answering(&events, &slot);
+    let mut app = Reporter::new(Who::quick(), model(), home().join("Downloads"));
     app.mode = mode;
     app.program = program.clone();
     app.username = username();
@@ -131,9 +132,8 @@ fn refit(shown: &Shown<Reporter>) {
     shown.fit();
 }
 
-fn answering(events: &Loop, slot: &Slot, who: &Who) -> Post<Do> {
+fn answering(events: &Loop, slot: &Slot) -> Post<Do> {
     let (s, t) = (slot.clone(), slot.clone());
-    let for_log = who.clone();
     let answer = events.post(move |result: Answer| {
         let Some(shown) = t.borrow().upgrade() else { return };
         shown.change(|r| r.answered(result));
@@ -142,16 +142,13 @@ fn answering(events: &Loop, slot: &Slot, who: &Who) -> Post<Do> {
     events.post(move |ask: Do| {
         let Some(shown) = s.borrow().upgrade() else { return };
         match ask {
-            Do::Log(raw) => {
-                let lines = log_lines(&raw, &for_log);
-                shown.change(|r| r.log = Some(lines));
-            }
+            Do::Who(who) => shown.change(|r| r.who = who),
+            Do::Log(raw) => shown.change(|r| r.log = Some(log_lines(&raw, &r.who))),
             Do::Hardware(h) => shown.change(|r| r.hardware = h),
             Do::Crash(found, raw) => {
-                let lines = log_lines(&raw, &for_log);
                 shown.change(|r| {
+                    r.log = Some(log_lines(&raw, &r.who));
                     r.crash = Some(found);
-                    r.log = Some(lines);
                 });
             }
             Do::Copy(text) => shown.window.copy(&text),
@@ -205,6 +202,8 @@ fn read_in_background(asks: &Post<Do>, mode: Mode, program: String) {
     }
     let reads = asks.clone();
     std::thread::spawn(move || {
+
+        reads.send(Do::Who(Who::here()));
         match mode {
             Mode::Crash => {
                 let found = probe::coredump();

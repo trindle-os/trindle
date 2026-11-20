@@ -10,7 +10,7 @@ settings-region-keywords = langue paramètres régionaux pays formats date monna
 settings-region-help = La langue et les formats prennent effet à votre prochaine connexion.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = Reconnectez-vous pour le voir partout.
+settings-region-later = Reconnectez-vous pour le voir.
 
 # Shown while the page reads the computer.
 settings-region-looking = Recherche…

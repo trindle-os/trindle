@@ -540,3 +540,26 @@ fn with_the_network_limited_only_listed_hosts_can_be_reached() {
     set_net_limit(&room.root, false).unwrap();
     assert!(net_limit(&room.root).is_none());
 }
+
+#[test]
+fn a_program_is_installed_only_when_it_can_be_run_from_path() {
+    use std::os::unix::fs::PermissionsExt;
+    let base = PathBuf::from(format!("/var/tmp/trindle-fence-installed-{}", std::process::id()));
+    let (bin, links, plain) = (base.join("bin"), base.join("links"), base.join("plain"));
+    for d in [&bin, &links, &plain] {
+        std::fs::create_dir_all(d).unwrap();
+    }
+    std::fs::write(bin.join("aider"), "").unwrap();
+    std::fs::set_permissions(bin.join("aider"), std::fs::Permissions::from_mode(0o755)).unwrap();
+    std::fs::write(plain.join("codex"), "").unwrap();
+    std::fs::create_dir_all(bin.join("gemini")).unwrap();
+    std::fs::write(links.join("claude"), "").unwrap();
+    std::fs::set_permissions(links.join("claude"), std::fs::Permissions::from_mode(0o755)).unwrap();
+    let path = std::env::join_paths([bin.as_path(), plain.as_path(), links.as_path(), Path::new("relative")]).unwrap();
+    assert!(installed_on(&path, &links, "aider"));
+    assert!(!installed_on(&path, &links, "codex"), "a file that cannot run");
+    assert!(!installed_on(&path, &links, "gemini"), "a folder");
+    assert!(!installed_on(&path, &links, "claude"), "Trindle's own link");
+    assert!(!installed_on(&path, &links, "../bin/aider"), "a path, not a name");
+    let _ = std::fs::remove_dir_all(&base);
+}

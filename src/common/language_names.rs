@@ -5,23 +5,30 @@ use std::collections::BTreeSet;
 
 use crate::toolkit::lang::{self, Bundle};
 
-pub const VARIANTS: [&str; 3] = ["en-GB", "en-GB-oxendict", "en-US"];
+pub const VARIANTS: [&str; 2] = ["en-GB-oxendict", "en-US"];
 
-const OWN_NAMES: &[(&str, &str)] = &[
-    ("en", "English"), ("en-GB", "English (British)"), ("en-GB-oxendict", "English (Oxford)"), ("en-US", "English (American)"),
-    ("ar", "العربية"), ("bg", "Български"), ("bn", "বাংলা"), ("ca", "Català"), ("cs", "Čeština"), ("cy", "Cymraeg"), ("da", "Dansk"),
-    ("de", "Deutsch"), ("el", "Ελληνικά"), ("es", "Español"), ("et", "Eesti"), ("eu", "Euskara"), ("fa", "فارسی"),
-    ("fi", "Suomi"), ("fr", "Français"), ("ga", "Gaeilge"), ("gd", "Gàidhlig"), ("gl", "Galego"), ("he", "עברית"),
-    ("hi", "हिन्दी"), ("hr", "Hrvatski"), ("hu", "Magyar"), ("id", "Bahasa Indonesia"), ("is", "Íslenska"),
-    ("it", "Italiano"), ("ja", "日本語"), ("ko", "한국어"), ("lt", "Lietuvių"), ("lv", "Latviešu"), ("nb", "Norsk bokmål"),
-    ("nl", "Nederlands"), ("nn", "Norsk nynorsk"), ("pl", "Polski"), ("pt", "Português"), ("pt-BR", "Português (Brasil)"),
-    ("ro", "Română"), ("ru", "Русский"), ("sk", "Slovenčina"), ("sl", "Slovenščina"), ("sr", "Српски"), ("sv", "Svenska"), ("sw", "Kiswahili"),
-    ("th", "ไทย"), ("tr", "Türkçe"), ("uk", "Українська"), ("ur", "اردو"), ("vi", "Tiếng Việt"), ("zh", "中文"),
-    ("zh-Hans", "简体中文"), ("zh-Hant", "繁體中文"),
+const OWN_NAMES: &[(&str, &str, &str)] = &[
+    ("en", "English (UK)", ""), ("en-GB-oxendict", "English (Oxford)", ""), ("en-US", "English (US)", ""),
+    ("ar", "العربية", "Arabic"), ("bg", "Български", "Bulgarian"), ("bn", "বাংলা", "Bengali"), ("ca", "Català", "Catalan"), ("cs", "Čeština", "Czech"), ("cy", "Cymraeg", "Welsh"), ("da", "Dansk", "Danish"),
+    ("de", "Deutsch", "German"), ("el", "Ελληνικά", "Greek"), ("es", "Español", "Spanish"), ("et", "Eesti", "Estonian"), ("eu", "Euskara", "Basque"), ("fa", "فارسی", "Persian"),
+    ("fi", "Suomi", "Finnish"), ("fr", "Français", "French"), ("ga", "Gaeilge", "Irish"), ("gd", "Gàidhlig", "Scottish Gaelic"), ("gl", "Galego", "Galician"), ("he", "עברית", "Hebrew"),
+    ("hi", "हिन्दी", "Hindi"), ("hr", "Hrvatski", "Croatian"), ("hu", "Magyar", "Hungarian"), ("id", "Bahasa Indonesia", "Indonesian"), ("is", "Íslenska", "Icelandic"),
+    ("it", "Italiano", "Italian"), ("ja", "日本語", "Japanese"), ("ko", "한국어", "Korean"), ("lt", "Lietuvių", "Lithuanian"), ("lv", "Latviešu", "Latvian"), ("nb", "Norsk bokmål", "Norwegian Bokmål"),
+    ("nl", "Nederlands", "Dutch"), ("nn", "Norsk nynorsk", "Norwegian Nynorsk"), ("pl", "Polski", "Polish"), ("pt", "Português", "Portuguese"), ("pt-BR", "Português (Brasil)", "Portuguese (Brazil)"),
+    ("ro", "Română", "Romanian"), ("ru", "Русский", "Russian"), ("sk", "Slovenčina", "Slovak"), ("sl", "Slovenščina", "Slovenian"), ("sr", "Српски", "Serbian"), ("sv", "Svenska", "Swedish"), ("sw", "Kiswahili", "Swahili"),
+    ("th", "ไทย", "Thai"), ("tr", "Türkçe", "Turkish"), ("uk", "Українська", "Ukrainian"), ("ur", "اردو", "Urdu"), ("vi", "Tiếng Việt", "Vietnamese"), ("zh", "中文", "Chinese"),
+    ("zh-Hans", "简体中文", "Chinese (Simplified)"), ("zh-Hant", "繁體中文", "Chinese (Traditional)"),
 ];
 
 pub fn own_name(code: &str) -> String {
-    OWN_NAMES.iter().find(|(c, _)| c.eq_ignore_ascii_case(code)).map(|(_, n)| n.to_string()).unwrap_or_else(|| code.to_string())
+    OWN_NAMES.iter().find(|(c, _, _)| c.eq_ignore_ascii_case(code)).map(|(_, n, _)| n.to_string()).unwrap_or_else(|| code.to_string())
+}
+
+pub fn both_names(code: &str) -> String {
+    match OWN_NAMES.iter().find(|(c, _, _)| c.eq_ignore_ascii_case(code)) {
+        Some((_, own, english)) if !english.is_empty() => format!("{own} ({english})"),
+        _ => own_name(code),
+    }
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -80,7 +87,7 @@ pub fn found(dirs: &[std::path::PathBuf], english: &Bundle) -> Vec<Tongue> {
                 english.keys().filter(|k| have.get(k).is_some()).count()
             };
             let machine = !whole && is_machine(&code, dirs);
-            Tongue { name: own_name(&code), code, done, all, machine }
+            Tongue { name: both_names(&code), code, done, all, machine }
         })
         .collect()
 }
@@ -118,15 +125,17 @@ mod tests {
         let all = found(&[dir], &english);
         let get = |c: &str| all.iter().find(|t| t.code == c).cloned();
         let de = get("de").unwrap();
-        assert_eq!((de.name.as_str(), de.done, de.all), ("Deutsch", 2, 4));
+        assert_eq!((de.name.as_str(), de.done, de.all), ("Deutsch (German)", 2, 4));
         assert_eq!(de.share(), 0.5);
 
         assert_eq!(get("xx").unwrap().name, "xx");
         assert!(get("empty").is_none() && get("not a language").is_none());
 
-        for code in ["en", "en-GB", "en-GB-oxendict", "en-US"] {
+        for code in ["en", "en-GB-oxendict", "en-US"] {
             assert_eq!(get(code).unwrap().share(), 1.0, "{code}");
         }
-        assert_eq!(get("en-US").unwrap().name, "English (American)");
+        assert_eq!(get("en-US").unwrap().name, "English (US)");
+        assert_eq!(get("en").unwrap().name, "English (UK)");
+        assert!(get("en-GB").is_none(), "British is plain English, not a second choice that looks the same");
     }
 }

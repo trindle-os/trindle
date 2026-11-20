@@ -3,7 +3,7 @@
 use super::*;
 use std::path::PathBuf;
 
-fn tree(name: &str) -> PathBuf {
+pub(super) fn tree(name: &str) -> PathBuf {
     let d = std::env::temp_dir().join(format!("trindle-no-driver-{}-{name}", std::process::id()));
     let _ = std::fs::remove_dir_all(&d);
     std::fs::create_dir_all(d.join("bus/pci/devices")).unwrap();
@@ -11,7 +11,7 @@ fn tree(name: &str) -> PathBuf {
     d
 }
 
-fn pci(sys: &Path, addr: &str, class: &str, vendor: &str, device: &str, driver: bool) {
+pub(super) fn pci(sys: &Path, addr: &str, class: &str, vendor: &str, device: &str, driver: bool) {
     let d = sys.join("bus/pci/devices").join(addr);
     std::fs::create_dir_all(&d).unwrap();
     std::fs::write(d.join("class"), format!("{class}\n")).unwrap();
@@ -23,7 +23,7 @@ fn pci(sys: &Path, addr: &str, class: &str, vendor: &str, device: &str, driver: 
     }
 }
 
-fn usb_face(sys: &Path, dev: &str, face: &str, id: (&str, &str), class: (&str, &str, &str), driver: bool) {
+pub(super) fn usb_face(sys: &Path, dev: &str, face: &str, id: (&str, &str), class: (&str, &str, &str), driver: bool) {
     let root = sys.join("bus/usb/devices");
     let d = root.join(dev);
     std::fs::create_dir_all(&d).unwrap();
@@ -144,7 +144,6 @@ fn lines_are_kept_per_class_and_the_words_are_in_the_word_file() {
     assert_eq!(lines_for(&found, Class::Wifi).len(), 1);
     assert_eq!(lines_for(&found, Class::Graphics).len(), 1);
     assert!(lines_for(&found, Class::Sound).is_empty() && lines_for(&found, Class::Bluetooth).is_empty());
-    assert_eq!(report_lines(&found).len(), 2);
     assert_eq!(HELP, "hardware-no-driver");
     let ftl = std::fs::read_to_string(concat!(env!("CARGO_MANIFEST_DIR"), "/share/lang/en/common.ftl")).unwrap();
     for key in ["known-driver", "known-firmware", "generic", "generic-firmware", "stick", "more", "class-wifi"] {

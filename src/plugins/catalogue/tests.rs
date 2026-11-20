@@ -321,23 +321,23 @@ fn an_older_catalogue_is_refused_however_good_its_signature() {
 
     let old = Site::signed(&numbered("1.0", 5), &pair);
     assert_eq!(read(&old, Duration::ZERO, &trust),
-               (vec!["2.0".to_string()], Some("Trindle didn't use this plugin catalogue because its version number, 5, is older than the one accepted before, 7. \
+               (vec!["2.0".to_string()], Some("Trindle didn't use this plugin catalogue because it's older than one it used before. \
                                                The last good one is shown.".to_string())));
     assert_eq!(std::fs::read_to_string(&trust.note).unwrap(), "7");
 
     std::fs::remove_dir_all(top.join("cache")).unwrap();
     assert_eq!(read(&old, Duration::ZERO, &trust),
-               (Vec::new(), Some("Trindle didn't use this plugin catalogue because its version number, 5, is older than the one accepted before, 7.".to_string())));
+               (Vec::new(), Some("Trindle didn't use this plugin catalogue because it's older than one it used before.".to_string())));
 
     assert!(read(&Site::signed(&numbered("2.0", 7), &pair), Duration::ZERO, &trust).1.is_none());
     std::fs::remove_file(&trust.note).unwrap();
-    assert!(read(&old, Duration::ZERO, &trust).1.is_some_and(|w| w.contains("its version number, 5, is older than the one accepted before, 7")));
+    assert!(read(&old, Duration::ZERO, &trust).1.is_some_and(|w| w.contains("it's older than one it used before")));
 
     let unnumbered = write(&[entry()], 1).replace("Serial=1\n", "");
     assert_eq!(number_of(&unnumbered), None);
     assert!(read(&Site::signed(&unnumbered, &pair), Duration::ZERO, &trust).1.is_some_and(|w| w.starts_with("Trindle's plugin catalogue has no version number")));
     let first = Trust { floor: 6, ..trust_in(&top.join("first"), &[public]) };
-    assert!(read(&old, Duration::ZERO, &first).1.is_some_and(|w| w.contains("its version number, 5, is older than the one accepted before, 6")));
+    assert!(read(&old, Duration::ZERO, &first).1.is_some_and(|w| w.contains("it's older than one it used before")));
     assert_eq!(read(&Site::signed(&numbered("2.0", 7), &pair), Duration::ZERO, &first), (vec!["2.0".to_string()], None), "a first run takes any at or over it");
 
     for bad in ["-1", "+5", "5 6", "0x10", "", "99999999999999999999"] {
@@ -411,7 +411,7 @@ fn a_remembered_number_that_cannot_be_read_fails_shut() {
 
     assert_eq!(read(&site, Duration::ZERO, &trust), (vec!["2.0".to_string()], None));
     std::fs::write(&trust.note, "seven").unwrap();
-    assert!(read(&Site::signed(&numbered("1.0", 5), &pair), Duration::ZERO, &trust).1.is_some_and(|w| w.contains("its version number, 5, is older than the one accepted before, 7")));
+    assert!(read(&Site::signed(&numbered("1.0", 5), &pair), Duration::ZERO, &trust).1.is_some_and(|w| w.contains("it's older than one it used before")));
     assert_eq!(read(&Site::signed(&numbered("3.0", 8), &pair), Duration::ZERO, &trust), (vec!["3.0".to_string()], None));
     assert_eq!(std::fs::read_to_string(&trust.note).unwrap(), "8");
     let _ = std::fs::remove_dir_all(&top);
@@ -716,14 +716,26 @@ fn a_catalogue_of_very_many_plugins_is_read_in_good_time() {
 fn a_first_run_takes_no_catalogue_numbered_before_the_first_key_was_made() {
 
     const _: () = assert!(NUMBER_FLOOR >= 1_791_763_200, "NUMBER_FLOOR is before 12 October 2026");
-    const _: () = assert!(NUMBER_FLOOR >= 1_794_324_682, "NUMBER_FLOOR is under the beta 4 catalogue");
+    const _: () = assert!(NUMBER_FLOOR >= 1_794_148_869, "NUMBER_FLOOR is under the beta 4 catalogue");
     let top = temp("floor");
     let (pair, public) = test_key();
     let trust = Trust { floor: NUMBER_FLOOR, ..trust_in(&top, &[public]) };
     let said = read(&Site::signed(&numbered("1.0", 5), &pair), Duration::ZERO, &trust);
     assert_eq!(said.0, Vec::<String>::new());
-    assert!(said.1.is_some_and(|w| w.contains("its version number, 5, is older than the one accepted before, ")));
+    assert!(said.1.is_some_and(|w| w.contains("it's older than one it used before")));
     assert_eq!(read(&Site::signed(&numbered("1.0", NUMBER_FLOOR), &pair), Duration::ZERO, &trust), (vec!["1.0".to_string()], None));
+    let _ = std::fs::remove_dir_all(&top);
+}
+
+#[test]
+fn a_fresh_install_takes_the_published_catalogue() {
+    const PUBLISHED_SERIAL: u64 = 1_794_148_869;
+    const _: () = assert!(NUMBER_FLOOR <= PUBLISHED_SERIAL, "NUMBER_FLOOR is above the published catalogue");
+    let top = temp("fresh");
+    let (pair, public) = test_key();
+    let trust = Trust { floor: NUMBER_FLOOR, ..trust_in(&top, &[public]) };
+    assert!(!trust.note.exists());
+    assert_eq!(read(&Site::signed(&numbered("1.0", PUBLISHED_SERIAL), &pair), Duration::ZERO, &trust), (vec!["1.0".to_string()], None));
     let _ = std::fs::remove_dir_all(&top);
 }
 

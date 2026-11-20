@@ -57,9 +57,6 @@ ring-cli-unknown = chaguo lisilojulikana { $option }
 # Error printed in a terminal when --say is given no words.
 ring-cli-missing-say = hoja inakosekana kwa --say
 
-# Line in the ring's results when what was typed matches no app or favourite.
-ring-find-nothing = Hakuna programu au kipendwa kinachoitwa hivyo
-
 # Tip of the round button on an app's menu that removes the app.
 # SAFETY: needs a human review before it ships
 ring-uninstall = Ondoa programu
@@ -238,8 +235,6 @@ ring-startup-add = Anza ukiingia
 
 ring-startup-remove = Acha kuanza ukiingia
 
-
-
 # Help for the option that opens the shortcut list, or closes it when it is showing.
 ring-cli-shortcuts = Onyesha orodha ya kila njia ya mkato ya kibodi, au ifiche orodha hiyo (Super na K, usipoibadilisha kwenye Mipangilio)
 
@@ -257,3 +252,6 @@ ring-category-media-short = Sauti
 
 # Line in the ring when a spoken command, such as turning the sound down, did not work.
 ring-voice-failed = Hilo halikufanya kazi.
+
+# Said under the ring when sleep, log out, restart or shut down is pressed while Trindle is being installed.
+ring-power-installing = Trindle inasakinishwa. Subiri hadi imalize.

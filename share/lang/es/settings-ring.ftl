@@ -13,9 +13,6 @@ settings-ring-help = Tus favoritos están alrededor del centro del anillo. Los e
 # Sentence at the top of the ring page saying how the ring opens.
 settings-ring-headline = El anillo se abre en el borde de la pantalla, y tus ventanas abiertas aparecen en él.
 
-# Name of the picture on the ring page that shows where things open.
-settings-ring-picture = Dónde se abren las cosas
-
 # Line saying how many favourites the ring has; { $n } is the number.
 settings-ring-favourites =
     { $n ->

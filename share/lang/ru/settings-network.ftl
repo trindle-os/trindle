@@ -40,11 +40,11 @@ settings-network-access-change = открывается и изменяется 
 
 # Small line of a shared folder: anyone on the local network may open it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-open = любой в локальной сети может открыть
+settings-network-access-guests-open = любой рядом может открыть
 
 # Small line of a shared folder: anyone on the local network may change it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-change = любой в локальной сети может изменять
+settings-network-access-guests-change = любой рядом может изменять
 
 # Small line of a shared folder: where it is, then who may do what with it; both are already written.
 settings-network-shared-sub = { $place }: { $access }

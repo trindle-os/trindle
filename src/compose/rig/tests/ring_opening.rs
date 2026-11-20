@@ -408,6 +408,9 @@ fn a_window_redrawing_after_losing_the_keyboard_stays_behind() {
         let s1 = rig.window(who, false);
         let s2 = rig.window(who, false);
         let first = rig.state.space.elements().next().cloned().expect("a window");
+
+        let second = rig.state.space.elements().last().cloned().expect("a window");
+        rig.state.space.map_element(second, (700, 500), true);
         let g = rig.state.space.element_geometry(&first).expect("a place");
         at(&mut rig, (g.loc.x + 5) as f64, (g.loc.y + 5) as f64);
         rig.click_by_hand();

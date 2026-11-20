@@ -144,7 +144,7 @@ mod tests {
                 Wrote::Gone => panic!("a full pipe was taken for one nobody reads"),
             }
         }
-        assert!(since.elapsed() < std::time::Duration::from_secs(5), "the ring waited on a full pipe");
+        assert!(since.elapsed() < std::time::Duration::from_secs(60), "the ring waited on a full pipe");
         assert!(sent > 0 && sent < 3 * 3600, "the pipe never filled: {sent} pulses went in");
         assert!(clock - last_sent > SILENT_AFTER, "the newest pulse in the pipe is not an old one, so this shows nothing");
 

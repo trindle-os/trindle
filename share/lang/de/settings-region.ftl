@@ -11,7 +11,7 @@ settings-region-keywords = sprache region land formate datum währung gebietssch
 settings-region-help = Sprache und Formate gelten ab der nächsten Anmeldung.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = Melde dich neu an, um es überall zu sehen.
+settings-region-later = Melde dich neu an, um es zu sehen.
 
 # Shown while the page reads the computer.
 settings-region-looking = Wird gesucht…

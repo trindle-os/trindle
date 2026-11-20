@@ -657,7 +657,7 @@ settings-help-topics-keys-step2-1 = Super on its own, or Super and Space: open o
 # Help topic "Keyboard shortcuts": step 2 of the numbered steps at block 2.
 settings-help-topics-keys-step2-2 = Super and Enter, or Ctrl, Alt and T: open a Terminal.
 # Help topic "Keyboard shortcuts": step 3 of the numbered steps at block 2.
-settings-help-topics-keys-step2-3 = Super and I: open Settings.
+settings-help-topics-keys-step2-3 = Super and I: Settings.
 # Help topic "Keyboard shortcuts": step 4 of the numbered steps at block 2.
 settings-help-topics-keys-step2-4 = Super and L: lock the screen, once locking is switched on in Settings, Power.
 # Help topic "Keyboard shortcuts": step 5 of the numbered steps at block 2.

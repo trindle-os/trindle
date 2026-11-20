@@ -143,3 +143,5 @@ ring-tray-full = Vier Symbole sind schon im Ring. Nimm zuerst eines heraus.
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = Die Suche ist aus
+# Name of the updates button when a restart to finish installing was put off with Remind me later and the time has come.
+ring-updates-restart = Neu starten, um die Installation abzuschließen

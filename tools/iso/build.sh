@@ -13,6 +13,17 @@ own_debs="$here/../trindle-folders/target/deb/trindle-folders_*.deb $here/../tri
 [ -d "$icons" ] || { echo "the Trindle icon packages are needed: build the trindle-icons project beside this folder (../trindle-icons/dist/apt/pool/main), or set TRINDLE_ICON_DEBS to where they are" >&2; exit 1; }
 command -v lb >/dev/null || { echo "install live-build first" >&2; exit 1; }
 
+private=${TRINDLE_ISO_PRIVATE:-}
+tag=
+volume=Trindle
+if [ -n "$private" ]; then
+    case $(basename "$private") in *.deb) ;; *) echo "TRINDLE_ISO_PRIVATE must name a .deb" >&2; exit 1 ;; esac
+    dpkg-deb -f "$private" Package >/dev/null 2>&1 || { echo "$private is not a package" >&2; exit 1; }
+    [ "${TRINDLE_ISO_TEST:-}" != yes ] || { echo "TRINDLE_ISO_PRIVATE and TRINDLE_ISO_TEST both open port 22; choose one" >&2; exit 1; }
+    tag=-PRIVATE
+    volume="Trindle PRIVATE"
+fi
+
 icon_sets="trindle-circle-icon-theme trindle-square-icon-theme"
 newest() { ls -1 "$icons/${1}_"*_all.deb 2>/dev/null | sort -V | tail -1; }
 for name in $icon_sets; do
@@ -39,7 +50,7 @@ lb config \
     --security true \
     --iso-application "Trindle" \
     --iso-publisher "Trindle; https://trindle.org" \
-    --iso-volume "Trindle" \
+    --iso-volume "$volume" \
     --bootappend-live "boot=live components quiet splash vt.global_cursor_default=0 username=trindle user-fullname=Trindle hostname=trindle"
 
 cp -r "$here/tools/iso/config/." config/
@@ -104,6 +115,12 @@ if [ "${TRINDLE_ISO_TEST:-}" = yes ] && [ -f "${TRINDLE_TEST_KEY:-}" ]; then
     echo "NOTE: this image has a test way in over the network. Do not publish it."
 fi
 
+if [ -n "$private" ]; then
+    cp "$private" config/includes.chroot/opt/trindle/debs/
+    basename "$private" > config/private-package
+    echo "NOTE: this is a PRIVATE image. Never publish it."
+fi
+
 if [ "${TRINDLE_ISO_TEST:-}" != yes ]; then
     if [ -e config/hooks/normal/0400-test-ssh.hook.chroot ] \
         || [ -e config/includes.chroot/etc/skel/.ssh ] \
@@ -112,12 +129,16 @@ if [ "${TRINDLE_ISO_TEST:-}" != yes ]; then
         exit 1
     fi
 fi
+if [ -z "$private" ] && [ -e config/private-package ]; then
+    echo "a private package is still in $work/config but this is not a PRIVATE image; not building" >&2
+    exit 1
+fi
 
 lb build
 
 iso=$(ls -1 live-image-amd64.hybrid.iso 2>/dev/null || true)
 [ -n "$iso" ] || { echo "no image was made" >&2; exit 1; }
-name="trindle-$(sed -n 's/^version = "\(.*\)"/\1/p' "$here/Cargo.toml" | head -1)$suffix-amd64.iso"
+name="trindle-$(sed -n 's/^version = "\(.*\)"/\1/p' "$here/Cargo.toml" | head -1)$suffix-amd64$tag.iso"
 mv "$iso" "$name"
 sha256sum "$name" > SHA256SUMS
 echo "Made $work/$name"

@@ -12,9 +12,6 @@ settings-ring-help = Ваше избранное расположено вокр
 # Sentence at the top of the ring page saying how the ring opens.
 settings-ring-headline = Кольцо открывается у края экрана, и в нём появляются ваши открытые окна.
 
-# Name of the picture on the ring page that shows where things open.
-settings-ring-picture = Где что открывается
-
 # Line saying how many favourites the ring has; { $n } is the number.
 settings-ring-favourites =
     { $n ->

@@ -104,14 +104,7 @@ impl<BackendData: Backend> XwmHandler for Compose<BackendData> {
             crate::animate::closing(&elem);
             self.space.unmap_elem(&elem);
 
-            let had_keyboard = self
-                .seat
-                .get_keyboard()
-                .and_then(|k| k.current_focus())
-                .is_some_and(|f| f == KeyboardFocusTarget::Window(elem.0.clone()));
-            if had_keyboard {
-                self.focus_topmost();
-            }
+            self.hand_keyboard_on_from(&elem);
         }
 
         self.minimized.retain(|(e, _)| e.0.x11_surface() != Some(&window));
@@ -239,6 +232,9 @@ impl<BackendData: Backend> XwmHandler for Compose<BackendData> {
 
     fn property_notify(&mut self, _xwm: XwmId, window: X11Surface, property: WmWindowProperty) {
         self.panel_stale = true;
+        if property == WmWindowProperty::Title {
+            self.keep_on_top();
+        }
         if property != WmWindowProperty::EmulatedScreens || !window.is_fullscreen() {
             return;
         }

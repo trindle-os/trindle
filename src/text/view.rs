@@ -144,9 +144,9 @@ impl Text {
         vec![
             self.grabbing(entry(self.find.clone(), t!("text-find"), Msg::FindText).key("find").on_submit(Msg::Next(true))),
             label(t!("text-match-case")),
-            switch(self.how.case, t!("text-match-case"), Msg::Case),
+            switch(self.how.case, t!("text-match-case"), Msg::Case).hushed(),
             label(t!("text-whole-words")),
-            switch(self.how.whole, t!("text-whole-words"), Msg::Whole),
+            switch(self.how.whole, t!("text-whole-words"), Msg::Whole).hushed(),
             self.found_note(),
             button("go-up-symbolic", t!("text-previous-key")).on_press(Msg::Next(false)),
             button("go-down-symbolic", t!("text-next-key")).on_press(Msg::Next(true)),
@@ -339,7 +339,7 @@ impl Text {
                 title(t!("text-starting")),
                 line(
                     t!("text-when-opens"),
-                    choice(vec![t!("text-reopen").into(), t!("text-start-blank").into()], if s.reopen { 0 } else { 1 }, t!("text-when-opens"), Msg::Reopen),
+                    choice(vec![t!("text-reopen").into(), t!("text-start-blank").into()], if s.reopen { 0 } else { 1 }, t!("text-when-opens"), Msg::Reopen).hushed(),
                 ),
                 note(t!("text-keep-note")),
             ])
@@ -348,8 +348,8 @@ impl Text {
         let showing = card(
             column(vec![
                 title(t!("text-showing")),
-                line(t!("text-wrap"), switch(s.wrap, t!("text-wrap"), Msg::Wrap)),
-                line(t!("text-line-numbers"), switch(s.numbers, t!("text-line-numbers"), Msg::Numbers)),
+                line(t!("text-wrap"), switch(s.wrap, t!("text-wrap"), Msg::Wrap).hushed()),
+                line(t!("text-line-numbers"), switch(s.numbers, t!("text-line-numbers"), Msg::Numbers).hushed()),
                 row(vec![label(t!("text-size")), slider(s.size, store::SIZE_MIN, store::SIZE_MAX, 1.0, t!("text-text-size"), Msg::Size), note(format!("{}", s.size))]).gap(12.0),
             ])
             .gap(10.0),

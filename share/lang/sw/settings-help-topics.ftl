@@ -865,7 +865,7 @@ settings-help-topics-keys-step2-1 = Super peke yake, au Super na Space: fungua a
 settings-help-topics-keys-step2-2 = Super na Enter, au Ctrl, Alt na T: fungua Terminal.
 
 # Help topic "Keyboard shortcuts": step 3 of the numbered steps at block 2.
-settings-help-topics-keys-step2-3 = Super na I: fungua Mipangilio.
+settings-help-topics-keys-step2-3 = Super na I: Mipangilio.
 
 # Help topic "Keyboard shortcuts": step 4 of the numbered steps at block 2.
 settings-help-topics-keys-step2-4 = Super na L: funga skrini, kufunga kukishawashwa kwenye Mipangilio, Nishati.

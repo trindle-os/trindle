@@ -364,8 +364,6 @@ admin-driver-virtual-camera = kamera virtual
 
 admin-language-in-use = { $code } adalah bahasa saat komputer ini menyala, jadi tidak dapat dihapus.
 
-
-
 # The kernel or chip has no split-lock slowing to turn off.
 admin-split-lock-none = Komputer ini tidak punya pelambatan split-lock yang bisa dimatikan.
 
@@ -391,12 +389,10 @@ admin-system-local-locked = Trindle tidak dapat membiarkan /usr/local tetap bisa
 admin-system-root-only = Hanya root yang dapat menjalankan ini, dan bukan lewat pkexec.
 
 # Switching the read-only system on where the system's disk is not Btrfs.
-admin-system-needs-btrfs = Ini memerlukan Btrfs.
-
+admin-system-needs-btrfs = Perlu Btrfs.
 
 # Red words in Settings when a restore swapped the systems but could not finish tidying up. { $why } is the reason.
 admin-restore-finish-later = Snapshot sudah terpasang dan komputer akan menyala darinya. Trindle tidak dapat menyelesaikan pembersihan sistem lama. Trindle akan mencobanya lagi saat komputer menyala berikutnya: { $why }
-
 
 # Red words in Settings when too many ports are open already. { $most } is a number.
 admin-ports-too-many = Anda dapat membuka paling banyak { $most } port.
@@ -442,3 +438,33 @@ admin-swap-resume-unread = Lokasi file swap tidak ditemukan, jadi bangun dari hi
 
 # Said when the swap file moved and the running system couldn't be told: hibernation is refused until the computer restarts.
 admin-swap-resume-restart = Hibernasi akan berfungsi lagi setelah kamu memulai ulang.
+
+# Red words in Settings, Hardware, when Use the chip again is pressed while it is already running.
+admin-chip-busy = Chip sedang disiapkan. Tunggu sampai selesai.
+
+# Red words in Settings, Hardware, when the disk password typed for Use the chip again is wrong.
+admin-chip-wrong-password = Itu bukan kata sandi disk.
+
+# Red words in Settings, Hardware, after several wrong disk passwords in a row.
+admin-chip-wait = Terlalu banyak kata sandi salah. Tunggu semenit, lalu coba lagi.
+
+# Red words in Settings, Hardware, when the chip unlocked the disk at the last start after all.
+admin-chip-not-needed = Chip membuka disk saat mulai terakhir, jadi tidak ada yang perlu dilakukan.
+
+# Red words in Settings, Hardware, when the disk is not the one the start-up screen noted.
+admin-chip-changed = Disk berubah sejak komputer mulai. Mulai ulang, lalu coba lagi.
+
+# Red words in Settings, Hardware, when the computer's TPM security chip can't be found.
+admin-chip-none = Chip keamanan tidak ditemukan. Nyalakan di BIOS, lalu coba lagi.
+
+# Red words in Settings, Hardware, when clevis, the tool that sets up the chip, is missing.
+admin-chip-no-clevis = Alat penyiap chip, clevis, belum terpasang.
+
+# Red words in Settings, Hardware, when the disk has no room left for another key.
+admin-chip-no-slot = Disk tidak punya ruang untuk kunci lain.
+
+# Red words in Settings, Hardware, when the chip couldn't be set up. The disk still opens with its password.
+admin-chip-not-sealed = Chip tidak bisa disiapkan. Disk tetap terbuka dengan kata sandinya.
+
+# Red words in Settings, Hardware, when the chip works again but its old key couldn't be removed.
+admin-chip-old-kept = Chip berfungsi lagi, tetapi kunci lamanya tidak bisa dihapus.

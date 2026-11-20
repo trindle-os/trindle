@@ -171,3 +171,7 @@ settings-ai-keys = An KI-Programme weitergegebene Schlüssel
 
 # Help text of the keys card (the information button).
 settings-ai-keys-about = KI-Programme bekommen nie die Schlüssel und Tokens deiner Sitzung. Sie bekommen nur einen Schlüssel, den du hier eingibst.
+# Under the AI programs card, greyed, when none of the listed AI programs is on this computer.
+settings-ai-none-installed = Auf diesem Computer sind keine KI-Programme.
+# Under the box, when the program typed in to add is not on this computer.
+settings-ai-not-installed = Dieses Programm ist nicht auf diesem Computer.

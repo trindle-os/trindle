@@ -222,14 +222,6 @@ pub(super) fn release_why() -> &'static str {
     t!("store-upd-release-why")
 }
 
-pub(super) fn debian_why() -> &'static str {
-    t!("store-upd-debian-why")
-}
-
-pub(super) fn not_held() -> &'static str {
-    t!("store-upd-not-held")
-}
-
 pub(super) fn never_held() -> &'static str {
     t!("store-upd-never-held")
 }

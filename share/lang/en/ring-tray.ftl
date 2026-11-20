@@ -58,6 +58,8 @@ ring-updates-install-and-look =
 ring-updates-up-to-date = Up to date
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = Checking is off
+# Name of the updates button when a restart to finish installing was put off with Remind me later and the time has come.
+ring-updates-restart = Restart to finish installing
 
 ## Tray (src/ring/tray.rs)
 

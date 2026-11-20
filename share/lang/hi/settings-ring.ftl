@@ -12,9 +12,6 @@ settings-ring-help = आपके पसंदीदा रिंग के ब�
 # Sentence at the top of the ring page saying how the ring opens.
 settings-ring-headline = रिंग स्क्रीन के किनारे पर खुलती है, और आपकी खुली विंडो उसमें दिखती हैं।
 
-# Name of the picture on the ring page that shows where things open.
-settings-ring-picture = चीज़ें कहाँ खुलती हैं
-
 # Line saying how many favourites the ring has; { $n } is the number.
 settings-ring-favourites =
     { $n ->

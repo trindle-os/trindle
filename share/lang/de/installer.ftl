@@ -72,12 +72,14 @@ installer-arm-erase = Zum Löschen und Installieren noch einmal klicken
 
 # Note beside Next on the first page while no language is chosen.
 installer-missing-language = Wähle eine Sprache
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = Wähle die Sprache von Trindle
 
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = Wähle eine Tastatur
 
 # Note beside Next on the first page while no time zone is chosen.
-installer-missing-time = Wähle eine Zeitzone
+installer-missing-time = Zeitzone festlegen
 
 # Note beside Next on the disk page while no disk is chosen.
 installer-missing-disk = Wähle, wo Trindle hin soll
@@ -103,10 +105,12 @@ installer-missing-password = Gib dein Passwort zweimal ein. Es muss beide Male g
 installer-welcome-title = Willkommen bei { $name }
 
 # Sentence under the title of the first page.
-installer-welcome-help = Wähle deine Sprache. Trindle passt Tastatur und Zeitzone daran an, und du kannst beides ändern.
+installer-welcome-help = Wähle deine Sprache. Trindle passt den Rest daran an.
 
-# Head of the card for choosing the language, and the name of its search box.
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
 installer-language = Sprache
+# Label beside the box at the right of the first page's sentence, for choosing the language of Trindle's own words (only those Trindle has).
+installer-trindle-language = Sprache von Trindle
 
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = Tastatur
@@ -385,8 +389,8 @@ installer-privacy-chip-none = Dieser Computer hat einen TPM-Chip, der eine versc
 # In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
 installer-privacy-no-chip-none = Dieser Computer hat keinen TPM-Chip, den Trindle nutzen kann.
 
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = Tastatur { $keyboard }, Zeit { $zone }.
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle auf { $trindle }, Tastatur { $keyboard }, Zeit { $zone }.
 
 # Title of the page shown while the install runs.
 installer-installing-title = { $name } wird installiert
@@ -530,7 +534,7 @@ installer-live-speak = Mit der Stimme steuern
 installer-live-speak-line = Tippe auf die Mitte des Rings und sage, was du möchtest.
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = Drücke in den Einstellungen unter Ring auf Sprachsteuerung hinzufügen. Tippe dann auf die Mitte und sprich.
+installer-live-speak-add = Sobald Trindle installiert ist, füge die Sprachsteuerung in den Einstellungen unter Ring hinzu.
 
 # Name of the third thing to do.
 installer-live-tab = Alles im Ring
@@ -569,7 +573,7 @@ installer-step-check = Prüfen, was schon auf dem Datenträger ist
 installer-step-smaller = Das andere System verkleinern
 
 # Foot of the install page while the disk is encrypted.
-installer-step-lock = Datenträger verschlüsseln
+installer-step-lock = Verschlüsselung läuft
 
 # Foot of the install page while the TPM chip is set up.
 installer-step-chip = TPM-Chip einrichten
@@ -584,7 +588,7 @@ installer-step-settings = Einstellungen schreiben
 installer-step-account = Dein Konto anlegen
 
 # Foot of the install page while the stick's own parts are taken out.
-installer-step-live-parts = Extras des Sticks werden entfernt
+installer-step-live-parts = Live-Extras werden entfernt
 
 # Foot of the install page while the start-up files are made.
 installer-step-startup = Startdateien erstellen
@@ -669,6 +673,9 @@ installer-copy-failed = Das System ließ sich nicht kopieren. { $why }
 # Red line at the foot: there is not enough room for a swap file.
 installer-swap-no-room = Kein Platz für eine Auslagerungsdatei.
 
+# Under the swap file switch when the chosen disk or space is too small for one; the switch is then off and cannot be turned on.
+installer-swap-too-small = Dieser Platz ist zu klein für eine Auslagerungsdatei.
+
 # Red line at the foot: the swap file's place on the disk cannot be read.
 installer-swap-unreadable = Trindle konnte nicht lesen, wo die Auslagerungsdatei auf dem Datenträger liegt.
 
@@ -692,8 +699,8 @@ installer-tour-ring-foot = Sieh, was geöffnet ist, nutze die Zwischenablage und
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } ist der Stick, von dem Trindle gerade läuft.
 
-# Red line at the foot: something on the chosen disk is mounted or swapped to.
-installer-disk-in-use = { $dev } wird gerade benutzt. Schließe alles, was es benutzt, und versuche es dann erneut.
+# Red words under the disk, back on the disk page: something on the chosen disk is mounted, swapped to or open.
+installer-disk-in-use = { $dev } wird gerade benutzt. Schließe alles, was es benutzt, und wähle es dann noch einmal.
 
 # Said beside how far the install has got, once it has started.
 installer-started = Installation läuft
@@ -738,7 +745,8 @@ installer-done-problems = Nicht alles wurde eingerichtet
 
 installer-suggest-failed = Trindle konnte keine Passphrase erzeugen. Tippe selbst eine ein.
 
-installer-disk-changed = { $dev } ist nicht der Datenträger, der angezeigt wurde. Gehe zurück und wähle den Datenträger noch einmal.
+# Red words on the disk page: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev } ist nicht der Datenträger, der angezeigt wurde. Wähle den Datenträger noch einmal.
 
 installer-no-gpt = { $dev } hat keine GPT-Partitionstabelle, daher kann Trindle nicht neben dem Vorhandenen darauf installiert werden.
 
@@ -753,3 +761,39 @@ installer-ready-replaced-known = Alles auf { $disk } wird ersetzt ({ $holds }).
 installer-disk-named = { $what }, { $dev }
 
 installer-run-stopped = { $program } wurde beendet, bevor es alles hatte, was es braucht: { $why }
+
+# Red words on the last page: the TPM chip could not be set up to open the disk, so the disk password is asked for at every start.
+installer-chip-not-set-up = Der TPM-Chip konnte nicht eingerichtet werden. Darum fragt der Datenträger bei jedem Start des Computers nach dem Passwort.
+
+# Red words on the last page: the keyboard for the disk password screen could not be set, so it may be the American one.
+installer-start-keyboard-failed = Trindle ist installiert, aber der Bildschirm für das Datenträger-Passwort nutzt vielleicht eine amerikanische Tastatur.
+
+# Red words on the last page: the login screen could not be switched on; { $why } is the reason.
+installer-login-screen-failed = Trindle ist installiert, konnte aber den Anmeldebildschirm nicht einschalten: { $why }
+
+# Red words on the last page: Trindle could not be set to take its own updates; { $why } is the reason.
+installer-updates-held = Trindle ist installiert, erhält aber noch keine eigenen Updates: { $why }
+
+# Red words on the last page: earlier versions of people's files (home snapshots) could not be switched on.
+installer-home-snapshots-failed = Trindle ist installiert, aber frühere Versionen deiner Dateien sind aus. Du kannst sie in den Einstellungen unter Schnappschüsse einschalten.
+
+# Red words on the last page: Trindle could not be added to the computer's own start-up list; { $why } is the reason.
+installer-firmware-entry-failed = Trindle ist installiert, konnte sich aber nicht in die Startliste des Computers eintragen: { $why }
+
+# Red line: the account the stick ran as could not be removed from the new system, so the install stopped.
+installer-live-account-left = Das Konto { $user } des USB-Sticks konnte nicht aus dem neuen System entfernt werden.
+
+# Under the swap file's switch when a size smaller than memory is chosen.
+installer-swap-no-hibernate = Kleiner als der Speicher dieses Computers, daher kann er nicht in den Ruhezustand wechseln.
+
+# In the swap size list: the size of the computer's memory, which hibernating needs.
+installer-swap-size-hibernate = { $gb } GB, genug für den Ruhezustand
+
+# In the swap size list: a smaller size.
+installer-swap-size = { $gb } GB
+
+# Tip of the swap size list.
+installer-swap-size-tip = Größe der Auslagerungsdatei
+
+# Why logind holds off sleep and shutting down while the installer changes the disk (shown by systemd-inhibit --list).
+installer-power-held = Trindle wird installiert

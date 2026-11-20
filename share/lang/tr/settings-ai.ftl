@@ -179,3 +179,7 @@ settings-ai-keys = Yapay zekâ programlarına verilen anahtarlar
 # SAFETY: needs a human review before it ships
 # Help text of the keys card (the information button).
 settings-ai-keys-about = Yapay zekâ programları oturumunuzdaki anahtarları ve belirteçleri asla almaz. Yalnızca buraya yazdığınız bir anahtarı alırlar.
+# Under the AI programs card, greyed, when none of the listed AI programs is on this computer.
+settings-ai-none-installed = Bu bilgisayarda yapay zekâ programı yok.
+# Under the box, when the program typed in to add is not on this computer.
+settings-ai-not-installed = Bu program bu bilgisayarda yok.

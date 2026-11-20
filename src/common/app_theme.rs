@@ -233,10 +233,55 @@ pub fn write() {
 
         let _ = import_into(&dir.join("gtk.css"));
     }
+    gimp_follows(&config_home().join("GIMP"));
+}
+
+const GIMP_SYSTEM: &str = "(theme-scheme system)";
+
+fn gimp_follows(gimp: &std::path::Path) {
+    let Ok(dirs) = std::fs::read_dir(gimp) else { return };
+    for dir in dirs.flatten().take(32) {
+        let name = dir.file_name();
+        let knows = name.to_str().and_then(|n| n.split_once('.')).and_then(|(a, b)| Some((a.parse::<u32>().ok()?, b.parse::<u32>().ok()?)))
+            .is_some_and(|v| v >= (3, 2));
+        let file = dir.path().join("gimprc");
+        if !knows || !file.exists() {
+            continue;
+        }
+        let Ok(theirs) = crate::common::files::read_small(&file) else { continue };
+        if theirs.lines().any(|l| l.trim_start().starts_with("(theme-scheme")) {
+            continue;
+        }
+        let end = if theirs.is_empty() || theirs.ends_with('\n') { "" } else { "\n" };
+        let _ = write_text(&file, &format!("{theirs}{end}{GIMP_SYSTEM}\n"));
+    }
 }
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn gimp_is_told_to_follow_the_desktop_once_and_only_where_it_understands() {
+        let base = std::path::PathBuf::from(format!("/var/tmp/trindle-gimp-test-{}", std::process::id()));
+        let at = |v: &str| base.join(v).join("gimprc");
+        for v in ["3.2", "3.4", "3.0", "4.0"] {
+            std::fs::create_dir_all(base.join(v)).unwrap();
+        }
+        std::fs::create_dir_all(base.join("3.6")).unwrap();
+        std::fs::write(at("3.2"), "(show-tips no)").unwrap();
+        std::fs::write(at("3.4"), "(theme-scheme dark)\n").unwrap();
+        std::fs::write(at("3.0"), "(show-tips no)\n").unwrap();
+        std::fs::write(at("4.0"), "").unwrap();
+        super::gimp_follows(&base);
+        super::gimp_follows(&base);
+        let read = |v: &str| std::fs::read_to_string(at(v)).unwrap();
+        assert_eq!(read("3.2"), format!("(show-tips no)\n{}\n", super::GIMP_SYSTEM));
+        assert_eq!(read("3.4"), "(theme-scheme dark)\n", "a choice made in GIMP was changed");
+        assert_eq!(read("3.0"), "(show-tips no)\n", "an older GIMP was given a word it refuses");
+        assert_eq!(read("4.0"), format!("{}\n", super::GIMP_SYSTEM));
+        assert!(!at("3.6").exists(), "a file GIMP never made was made");
+        let _ = std::fs::remove_dir_all(&base);
+    }
     use crate::toolkit::colour::Colour;
     use crate::toolkit::theme::{contrast, Theme, EDGES, WORDS};
 

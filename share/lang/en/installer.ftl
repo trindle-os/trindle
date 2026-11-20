@@ -53,10 +53,12 @@ installer-arm = Click again to install
 installer-arm-erase = Click again to erase and install
 # Note beside Next on the first page while no language is chosen.
 installer-missing-language = Choose a language
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = Choose Trindle's language
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = Choose a keyboard
 # Note beside Next on the first page while no time zone is chosen.
-installer-missing-time = Choose a time zone
+installer-missing-time = Set time zone
 # Note beside Next on the disk page while no disk is chosen.
 installer-missing-disk = Choose where Trindle goes
 # Note beside Next on the disk page while the disks are read again, after one turned out not to be the disk shown.
@@ -75,9 +77,11 @@ installer-missing-password = Type your password twice. It must be the same both 
 # Title of the first page.
 installer-welcome-title = Welcome to { $name }
 # Sentence under the title of the first page.
-installer-welcome-help = Choose your language, and Trindle will match the keyboard and time zone to it, which you can change.
-# Head of the card for choosing the language, and the name of its search box.
+installer-welcome-help = Choose your language, and Trindle matches the rest to it.
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
 installer-language = Language
+# Head of the card for choosing the language of Trindle's own words (only those Trindle has), and the name of its search box.
+installer-trindle-language = Trindle's language
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = Keyboard
 # Head of the card for choosing the time zone, and the name of its search box.
@@ -123,6 +127,23 @@ installer-swap-switch = Make a swap file
 installer-swap-secure-boot = Secure Boot is on, so this computer can't hibernate, but the swap file still helps when memory runs short. Trindle only makes it if the disk has plenty of room to spare.
 # Under the swap file's head when the computer can hibernate.
 installer-swap-note = A swap file lets the computer hibernate, which keeps everything open while the power is off. It also gives the computer extra room when memory runs short. Without it, the computer can't hibernate. Trindle only makes one if the disk has plenty of room to spare.
+# Under the swap file switch when the chosen disk or space is too small for one; the switch is then off and cannot be turned on.
+installer-swap-too-small = This space is too small for a swap file.
+
+# Under the swap file's switch when a size smaller than memory is chosen.
+installer-swap-no-hibernate = Smaller than this computer's memory, so it can't hibernate.
+
+# In the swap size list: the size of the computer's memory, which hibernating needs.
+installer-swap-size-hibernate = { $gb } GB, enough to hibernate
+
+# In the swap size list: a smaller size.
+installer-swap-size = { $gb } GB
+
+# Tip of the swap size list.
+installer-swap-size-tip = Size of the swap file
+
+# Why logind holds off sleep and shutting down while the installer changes the disk (shown by systemd-inhibit --list).
+installer-power-held = Trindle is being installed
 
 ## Privacy page
 
@@ -273,8 +294,8 @@ installer-privacy-chip-off = Needs a TPM chip that Trindle can use.
 installer-privacy-chip-none = This computer has a TPM chip, which can unlock an encrypted disk.
 # In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
 installer-privacy-no-chip-none = This computer has no TPM chip that Trindle can use.
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = { $keyboard } keyboard, { $zone } time.
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle in { $trindle }, { $keyboard } keyboard, { $zone } time.
 
 ## Install page
 
@@ -385,7 +406,7 @@ installer-live-speak = Use your voice
 # Line under it when voice control is there.
 installer-live-speak-line = Tap the middle of the ring and say what you want.
 # Line under it when voice control has to be added.
-installer-live-speak-add = Press Add voice control in Settings, under Ring. Then tap the middle and speak.
+installer-live-speak-add = Once Trindle is installed, add voice control in Settings, under Ring.
 # Name of the third thing to do.
 installer-live-tab = All in the ring
 # Line under it.
@@ -414,7 +435,7 @@ installer-step-check = Checking what is already on the disk
 # Foot of the install page while another system is made smaller.
 installer-step-smaller = Making the other system smaller
 # Foot of the install page while the disk is encrypted.
-installer-step-lock = Encrypting the disk
+installer-step-lock = Encrypting disk
 # Foot of the install page while the TPM chip is set up.
 installer-step-chip = Setting up the TPM chip
 # Foot of the install page while the system is copied.
@@ -424,7 +445,7 @@ installer-step-settings = Writing the settings
 # Foot of the install page while the person's account is made.
 installer-step-account = Making your account
 # Foot of the install page while the stick's own parts are taken out.
-installer-step-live-parts = Removing the stick's extras
+installer-step-live-parts = Removing the live extras
 # Foot of the install page while the start-up files are made.
 installer-step-startup = Making the start-up files
 # Foot of the install page while the boot menu is set up.
@@ -445,8 +466,8 @@ installer-not-a-disk = { $dev } is not a disk.
 installer-not-a-disk-here = { $dev } is not a disk on this computer.
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } is the stick Trindle is running from.
-# Red line at the foot: something on the chosen disk is mounted or swapped to.
-installer-disk-in-use = { $dev } is in use. Close whatever is using it, then try again.
+# Red words under the disk, back on the disk page: something on the chosen disk is mounted, swapped to or open.
+installer-disk-in-use = { $dev } is in use. Close whatever is using it, then choose it again.
 # Red line at the foot: no disk was chosen.
 installer-no-disk-chosen = No disk was chosen.
 # Red line at the foot: the sign-in name cannot be used.
@@ -524,8 +545,8 @@ installer-snapshots-menu-failed = Trindle is installed, but it couldn't add the 
 installer-done-problems = Not everything was set up
 # Red line under the disk password boxes: the computer gave no random numbers, so no passphrase could be made.
 installer-suggest-failed = Trindle couldn't make a passphrase. Type your own.
-# Red line at the foot: the disk was swapped for another after the list was read.
-installer-disk-changed = { $dev } is not the disk that was shown. Go back and choose the disk again.
+# Red words on the disk page: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev } is not the disk that was shown. Choose the disk again.
 # Red line at the foot: a disk with an old-style partition table cannot be shared with.
 installer-no-gpt = { $dev } does not use a GPT partition table, so Trindle can't be installed alongside what is already on it.
 # Red line at the foot: the boot partition on the disk is too small to share.
@@ -540,3 +561,17 @@ installer-ready-replaced-known = Everything on { $disk } will be replaced ({ $ho
 installer-disk-named = { $what }, { $dev }
 # Red line at the foot: a program the installer runs stopped before it had all it was given.
 installer-run-stopped = { $program } stopped before it had all it needed: { $why }
+# Red words on the last page: the TPM chip could not be set up to open the disk, so the disk password is asked for at every start.
+installer-chip-not-set-up = The TPM chip couldn't be set up, so the disk will ask for its password each time the computer starts.
+# Red words on the last page: the keyboard for the disk password screen could not be set, so it may be the American one.
+installer-start-keyboard-failed = Trindle is installed, but the disk password screen may use an American keyboard.
+# Red words on the last page: the login screen could not be switched on; { $why } is the reason.
+installer-login-screen-failed = Trindle is installed, but it couldn't switch on the login screen: { $why }
+# Red words on the last page: Trindle could not be set to take its own updates; { $why } is the reason.
+installer-updates-held = Trindle is installed, but it won't take its own updates yet: { $why }
+# Red words on the last page: earlier versions of people's files (home snapshots) could not be switched on.
+installer-home-snapshots-failed = Trindle is installed, but earlier versions of your files are off. You can switch them on in Settings, Snapshots.
+# Red words on the last page: Trindle could not be added to the computer's own start-up list; { $why } is the reason.
+installer-firmware-entry-failed = Trindle is installed, but it couldn't add itself to the computer's start-up list: { $why }
+# Red line: the account the stick ran as could not be removed from the new system, so the install stopped.
+installer-live-account-left = Couldn't remove the stick's account { $user } from the new system.

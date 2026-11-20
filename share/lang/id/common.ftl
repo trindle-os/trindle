@@ -266,11 +266,11 @@ common-x11-would-not-start = Xwayland tidak dimulai
 # Second line of that notice, when the desktop will try the older-programs display again soon.
 common-x11-try-again = Coba lagi satu menit lagi
 
-# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each dot with what it means.
-common-in-use-key = Arti titik-titik
+# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each mark with what it means.
+common-in-use-key = Arti tanda
 
-# Under the dots in that key: where a dot shows up.
-common-in-use-where = Titik muncul di tengah atas layar dan pada tab jendela.
+# Under the marks in that key: where a mark shows up. On the screen it is a half circle hung from the top edge; on a window tab it is a small dot.
+common-in-use-where = Setengah lingkaran menggantung di tengah atas layar. Tab jendela menampilkan titik kecil.
 
 # Screen reader name of the microphone dot and its row, and the line shown on pointing at the dots, when no program is named.
 common-in-use-microphone = Mikrofon sedang digunakan
@@ -291,7 +291,7 @@ common-in-use-screen = Layar sedang direkam
 common-in-use-screen-by = Layar sedang direkam oleh { $who }
 
 # Screen reader name of the input dot and its row, and the line shown on pointing at the dots, when no program is named: the mouse and keyboard are in another program's hands.
-common-in-use-input = Mouse dan papan ketik sedang digunakan
+common-in-use-input = Mouse dan papan ketik sibuk
 
 # Line on pointing at the dots, and its screen reader name, when programs have taken the mouse and keyboard. { $who } is the programs' names.
 common-in-use-input-by = { $who } sedang menggunakan papan ketik dan mouse Anda
@@ -303,10 +303,10 @@ common-in-use-files = File yang Anda salin sedang dibaca
 common-in-use-files-by = { $who } sedang membaca file yang Anda salin
 
 # The ring's who-is-using-what row while a plugin reaches devices on the local network.
-common-in-use-home-network = Jaringan lokal sedang digunakan
+common-in-use-home-network = Jaringan lokal dipakai
 
 # The same with the plugin's name.
-common-in-use-home-network-by = Jaringan lokal sedang digunakan oleh { $who }
+common-in-use-home-network-by = Jaringan lokal dipakai oleh { $who }
 
 # The ring's who-is-using-what row while a plugin uses scanners and USB devices.
 common-in-use-usb = Pemindai dan perangkat USB sedang digunakan
@@ -372,6 +372,9 @@ common-no-driver-class-bluetooth = Bluetooth
 common-no-driver-class-sound = suara
 
 common-no-driver-class-graphics = grafis
+
+# Said of a device with no driver that nothing is known about. The name is its name, or its two hex numbers.
+common-no-driver-device-none = { $name } tidak memiliki driver.
 
 # The small round button beside a failure message that opens Help at the page
 # about it. Its tip, and the name a screen reader says.

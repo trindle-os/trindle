@@ -11,7 +11,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Path, PathBuf};
 
-const ALLOWED: [(&str, usize, &str); 64] = [
+const ALLOWED: [(&str, usize, &str); 65] = [
+    ("admin/chip.rs", 1, "the lock file that keeps sealing to the chip to one at a time, in /run, opened only to be locked, never truncated and never written to"),
     ("admin/swap.rs", 1, "the running kernel's resume place, /sys/power/resume_offset: a kernel file that takes a number written in place and cannot be renamed over"),
     ("mcp/mend.rs", 1, "the assistant's repair writes an app's own settings file beside it and renames it over, through folder handles opened with no links followed, so a link the app planted can never redirect it; write_whole cannot work from a folder handle"),
     ("store/boxed/bus_tests.rs", 2, "tests write stand-in files into their own private temp folders; never a file of the person's"),
@@ -72,7 +73,7 @@ const ALLOWED: [(&str, usize, &str); 64] = [
     ("voice/setup.rs", 1, "the version of what was just built, in a folder made for the build, which the installer then copies"),
 
     ("admin/snapshots.rs", 3, "into a snapshot just made, which is removed again if the restore fails"),
-    ("installer/steps.rs", 6, "into the new system while it is installed; an install that stops is begun again, and the lock file that keeps a second installer out, which holds nothing"),
+    ("installer/steps.rs", 5, "into the new system while it is installed; an install that stops is begun again, and the lock file that keeps a second installer out, which holds nothing"),
     ("mcp/tools.rs", 2, "a copy of the settings into a new folder of its own, before a change; nothing is there to write over"),
     ("store/backup.rs", 5, "into the folder a backup is put together in, removed when the backup is made or fails; and the backup file made empty and private before anything goes in it"),
     ("store/boxed/launchers.rs", 1, "a launcher, into an app's own box while it is put together"),
@@ -84,7 +85,9 @@ const ALLOWED: [(&str, usize, &str); 64] = [
     ("text/store.rs", 5, "what is no file (a device or a pipe), a link to a file not made yet, and a document that must be written where it lies, its old words kept whole first and put back if the writing fails; see Saving never loses the old words"),
 ];
 
-const TAKES: [(&str, usize, &str); 103] = [
+const TAKES: [(&str, usize, &str); 105] = [
+    ("admin/chip_tests.rs", 2, "tests' stand-in files in their own private temp folders; never a file of the person's"),
+    ("unlock/chip.rs", 1, "the note in /run for Settings, taken away just before it is made again new; never a file of the person's"),
     ("mcp/mend.rs", 2, "the assistant's repair moves an app's own cache into its snapshot and back with renameat on folder handles opened with no links followed, after the person said yes, with Undo; never through a path a link could redirect"),
     ("report/picture.rs", 1, "the private folder the screenshot overlay was asked to leave its picture in, made new for this one report and removed once read; never a file of the person's"),
     ("store/boxed/bus_tests.rs", 9, "tests' own private temp folders, made new in each test and removed at its end; never a file of the person's"),
@@ -137,7 +140,7 @@ const TAKES: [(&str, usize, &str); 103] = [
     ("icons/appimages.rs", 3, "the folder an AppImage is looked into, a launcher Trindle made (it bears its mark) for an AppImage that has gone, and an AppImage in its own store removed when the person asks and says again"),
     ("icons/mod.rs", 2, "icons Trindle drew, known by its mark inside them, for apps that have gone; they are drawn again when wanted"),
     ("installer/look.rs", 2, "the empty folders made in /run to look into each part of a drive, which go only if they are empty"),
-    ("installer/steps.rs", 5, "in the new system while it is installed: the time zone's link before it is made again, and what belongs to the stick alone, its machine's number, its login keys, its installer's launchers and its welcome"),
+    ("installer/steps.rs", 2, "in the new system while it is installed: the time zone's link before it is made again, and, through one helper, what belongs to the stick alone or to a chip that could not be taught"),
     ("keyring/pam.rs", 2, "the key handed over at login, in root's own folder, removed when no password was typed, so no old key is mistaken for this one's; and removed after use when it could not be emptied"),
     ("keyring/migrate.rs", 1, "the keyring and its spare copy renamed aside under a name with the time in it, so both are kept"),
     ("keyring/store.rs", 3, "the keyring's own spare file renamed into place, and the copy of the keyring before that, replaced by a second name for the one about to be replaced; and the copy from before a password change, made again from the file just written"),

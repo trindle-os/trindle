@@ -39,7 +39,7 @@ pub const KEYS: &[&str] = &["0586e5476f6b93a84f1cf01d58774e70ecb81719c74d6abe0bd
 #[cfg(feature = "test-catalogue")]
 pub const KEYS: &[&str] = &["838042661858272bf75de1596dc74f61d6b2223825ccf95d52318d1dd9992589"];
 
-const NUMBER_FLOOR: u64 = 1_794_324_682;
+const NUMBER_FLOOR: u64 = 1_794_148_869;
 
 pub const SIGNATURE_END: &str = ".sig";
 const SIGNATURE_BYTES: usize = 64;
@@ -327,7 +327,7 @@ impl Refused {
             Refused::WrongSize => t!("plugins-refused-wrong-size").into(),
             Refused::NotSigned => t!("plugins-refused-not-signed").into(),
             Refused::NoNumber => t!("plugins-refused-no-number").into(),
-            Refused::Older { is, after } => t!("plugins-refused-older", is = *is, after = *after),
+            Refused::Older { .. } => t!("plugins-refused-older").into(),
             Refused::NotRemembered => paused().into(),
             Refused::NotACatalogue(why) => t!("plugins-refused-unreadable", why = why),
         }

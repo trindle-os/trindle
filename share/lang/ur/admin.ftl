@@ -367,8 +367,6 @@ admin-driver-virtual-camera = ورچوئل کیمرا
 
 admin-language-in-use = { $code } وہ زبان ہے جس میں یہ کمپیوٹر شروع ہوتا ہے، اس لیے اسے ہٹایا نہیں جا سکتا۔
 
-
-
 # The kernel or chip has no split-lock slowing to turn off.
 admin-split-lock-none = اس کمپیوٹر میں بند کرنے کے لیے split-lock کی سست روی نہیں ہے۔
 
@@ -394,8 +392,7 @@ admin-system-local-locked = Trindle /usr/local کو قابلِ تحریر نہی
 admin-system-root-only = اسے صرف root چلا سکتا ہے، اور وہ بھی pkexec کے ذریعے نہیں۔
 
 # Switching the read-only system on where the system's disk is not Btrfs.
-admin-system-needs-btrfs = اس کے لیے Btrfs درکار ہے۔
-
+admin-system-needs-btrfs = Btrfs درکار ہے۔
 
 # Red words in Settings when a restore swapped the systems but could not finish tidying up. { $why } is the reason.
 admin-restore-finish-later = اسنیپ شاٹ اپنی جگہ پر ہے، اور کمپیوٹر اسی سے شروع ہوگا۔ Trindle پرانے سسٹم کی صفائی مکمل نہیں کر سکا۔ وہ کمپیوٹر کے اگلی بار شروع ہونے پر دوبارہ کوشش کرے گا: { $why }
@@ -445,3 +442,33 @@ admin-swap-resume-unread = سواپ فائل کی نئی جگہ نہیں ملی�
 
 # Said when the swap file moved and the running system couldn't be told: hibernation is refused until the computer restarts.
 admin-swap-resume-restart = ری سٹارٹ کے بعد ہائبرنیشن دوبارہ کام کرے گا۔
+
+# Red words in Settings, Hardware, when Use the chip again is pressed while it is already running.
+admin-chip-busy = چپ پہلے ہی سیٹ ہو رہی ہے۔ اس کے ختم ہونے کا انتظار کریں۔
+
+# Red words in Settings, Hardware, when the disk password typed for Use the chip again is wrong.
+admin-chip-wrong-password = یہ ڈسک کا پاس ورڈ نہیں ہے۔
+
+# Red words in Settings, Hardware, after several wrong disk passwords in a row.
+admin-chip-wait = بہت زیادہ غلط پاس ورڈ۔ ایک منٹ رکیں، پھر دوبارہ کوشش کریں۔
+
+# Red words in Settings, Hardware, when the chip unlocked the disk at the last start after all.
+admin-chip-not-needed = پچھلی بار چپ نے ڈسک کھول دی تھی، اس لیے کچھ کرنے کی ضرورت نہیں۔
+
+# Red words in Settings, Hardware, when the disk is not the one the start-up screen noted.
+admin-chip-changed = ڈسک بدل گئی ہے۔ ری سٹارٹ کریں، پھر دوبارہ کوشش کریں۔
+
+# Red words in Settings, Hardware, when the computer's TPM security chip can't be found.
+admin-chip-none = سیکیورٹی چپ نہیں ملی۔ اسے BIOS میں آن کریں، پھر دوبارہ کوشش کریں۔
+
+# Red words in Settings, Hardware, when clevis, the tool that sets up the chip, is missing.
+admin-chip-no-clevis = چپ سیٹ کرنے والا ٹول clevis انسٹال نہیں ہے۔
+
+# Red words in Settings, Hardware, when the disk has no room left for another key.
+admin-chip-no-slot = ڈسک میں ایک اور کلید کی جگہ نہیں ہے۔
+
+# Red words in Settings, Hardware, when the chip couldn't be set up. The disk still opens with its password.
+admin-chip-not-sealed = چپ سیٹ نہیں ہو سکی۔ ڈسک اب بھی پاس ورڈ سے کھلتی ہے۔
+
+# Red words in Settings, Hardware, when the chip works again but its old key couldn't be removed.
+admin-chip-old-kept = چپ دوبارہ کام کر رہی ہے، مگر اس کی پرانی کلید ہٹائی نہ جا سکی۔

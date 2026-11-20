@@ -603,7 +603,7 @@ store-src-added = { $what } добавлен и обновляется.
 store-src-no-program = { $what }. Источник добавлен, но программа не установлена.
 
 # Under a maker's source whose program is installed another way.
-store-src-other-way = { $what } был установлен другим способом.
+store-src-other-way = { $what }. Установлено иначе.
 
 # Tip of the round button that removes a maker's source and its program.
 # SAFETY: needs a human review before it ships

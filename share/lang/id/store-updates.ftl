@@ -121,6 +121,15 @@ store-upd-install-n =
 # Main button that restarts the computer.
 # SAFETY: needs a human review before it ships
 store-upd-restart-now = Mulai ulang sekarang
+# Beside Restart now: the box that puts the restart off, then the ring's Updates button reminds. Its answers are the choices below.
+store-upd-remind-later = Ingatkan saya nanti
+# Red words under the headline when the Remind me later time could not be saved; the reason follows.
+store-upd-remind-not-saved = Pengingat tidak dapat disimpan: { $why }.
+# One answer in the Remind me later box.
+store-upd-remind-hours =
+    { $n ->
+       *[other] { $n } jam lagi
+    }
 
 # Main button that checks for updates.
 store-upd-check-for = Periksa pembaruan
@@ -218,24 +227,11 @@ store-upd-debian-count =
        *[other] { $n } pembaruan, yang dipasang bersamaan
     }
 
-# On a row of Debian's updates: where it comes from.
-store-upd-from-debian = Dari Debian
-
 # Under Debian's rows: how many of them show.
 store-upd-debian-showing = Menampilkan { $shown } dari { $total } pembaruan Debian.
 
 # Note on the Trindle and Debian card: which version of Trindle the computer has.
 store-upd-has-trindle = Komputer ini memakai Trindle { $version }.
-
-# Heading of the Trindle and Debian card.
-store-upd-card-system = Trindle dan Debian
-
-# Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Paket Debian dibuat agar bekerja sama. Memasang satu saja dapat memasang paket lain, atau membuatnya tidak selaras, jadi semuanya dipasang bersamaan.
-
-# Note on the Trindle and Debian card: why no row has a Hold back button.
-# SAFETY: needs a human review before it ships
-store-upd-not-held = Pembaruan Trindle dan Debian membawa perbaikan keamanan untuk seluruh komputer, jadi tidak dapat ditahan.
 
 # Heading of the card about the daily security updates.
 store-upd-card-security = Pembaruan keamanan
@@ -301,7 +297,6 @@ store-patch-not-fetched = Trindle tidak dapat mengunduh { $package } { $version 
 # Said when a security fix for a boxed app was downloaded but isn't there to use.
 store-patch-not-found = Trindle tidak dapat menemukan paket yang diunduhnya.
 
-
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
 store-upd-off = Pemeriksaan pembaruan otomatis dimatikan.
 
@@ -322,3 +317,4 @@ store-upd-stopped-all = Dihentikan. Pasang lagi untuk melanjutkan.
 
 # Note under the Apps card.
 store-upd-steam-restarts = Steam dimulai ulang setelah tidak ada game yang berjalan.
+

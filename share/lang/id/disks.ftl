@@ -320,7 +320,7 @@ disks-mount = Mount
 disks-unmount = Unmount
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = Lakukan perubahan
+disks-change-it = Ubah
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = Nama
@@ -498,7 +498,7 @@ disks-folder-appears = Muncul di { $dir }
 disks-startup-on = Di-mount saat menyala di { $dir }
 
 # Words on a row when a part is set not to mount at start-up.
-disks-startup-off = Tidak di-mount saat menyala
+disks-startup-off = Tidak di-mount saat boot
 
 # Words on a row while a folder or start-up choice is being saved.
 disks-saving = Menyimpan

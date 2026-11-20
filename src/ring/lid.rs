@@ -85,7 +85,8 @@ fn another_screen(ctx: &Ctx) -> bool {
 }
 
 fn closed_now(ctx: &Rc<Ctx>) {
-    if another_screen(ctx) {
+
+    if another_screen(ctx) || crate::common::installing::installing() {
         return;
     }
     match choice().as_str() {

@@ -103,7 +103,7 @@ common-updating-no-reason = Es wurde nicht fertig. Es wurde kein Grund genannt.
 common-updating-failed = Es wurde nicht fertig. { $why }
 
 # Red words beside an update that was never started. { $why } is the end of a sentence such as "because no administrator's password was given."
-common-updating-not-installed = Es wurde nicht installiert, { $why }
+common-updating-not-installed = Nicht installiert, { $why }
 
 # End of a sentence saying why a step was refused: the password box was closed. It follows "because".
 # SAFETY: needs a human review before it ships
@@ -264,11 +264,11 @@ common-x11-would-not-start = Xwayland wurde nicht gestartet
 # Second line of that notice, when the desktop will try the older-programs display again soon.
 common-x11-try-again = Versuche es in einer Minute noch einmal
 
-# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each dot with what it means.
-common-in-use-key = Was die Punkte bedeuten
+# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each mark with what it means.
+common-in-use-key = Was Zeichen bedeuten
 
-# Under the dots in that key: where a dot shows up.
-common-in-use-where = Die Punkte erscheinen oben in der Mitte des Bildschirms und auf den Reitern der Fenster.
+# Under the marks in that key: where a mark shows up. On the screen it is a half circle hung from the top edge; on a window tab it is a small dot.
+common-in-use-where = Die Halbkreise hängen oben in der Mitte des Bildschirms. Fensterreiter zeigen kleine Punkte.
 
 # Screen reader name of the microphone dot and its row, and the line shown on pointing at the dots, when no program is named.
 # SAFETY: needs a human review before it ships
@@ -296,7 +296,7 @@ common-in-use-screen-by = Bildschirm wird aufgenommen von { $who }
 
 # Screen reader name of the input dot and its row, and the line shown on pointing at the dots, when no program is named: the mouse and keyboard are in another program's hands.
 # SAFETY: needs a human review before it ships
-common-in-use-input = Maus und Tastatur in Benutzung
+common-in-use-input = Maus und Tastatur belegt
 
 # Line on pointing at the dots, and its screen reader name, when programs have taken the mouse and keyboard. { $who } is the programs' names.
 # SAFETY: needs a human review before it ships
@@ -312,11 +312,11 @@ common-in-use-files-by = { $who } liest die Dateien, die du kopiert hast
 
 # The ring's who-is-using-what row while a plugin reaches devices on the local network.
 # SAFETY: needs a human review before it ships
-common-in-use-home-network = Lokales Netzwerk in Benutzung
+common-in-use-home-network = Lokales Netzwerk genutzt
 
 # The same with the plugin's name.
 # SAFETY: needs a human review before it ships
-common-in-use-home-network-by = Lokales Netzwerk in Benutzung durch { $who }
+common-in-use-home-network-by = Lokales Netzwerk genutzt von { $who }
 
 # The ring's who-is-using-what row while a plugin uses scanners and USB devices.
 # SAFETY: needs a human review before it ships
@@ -387,6 +387,9 @@ common-no-driver-class-bluetooth = Bluetooth
 common-no-driver-class-sound = Ton
 
 common-no-driver-class-graphics = Grafik
+
+# Said of a device with no driver that nothing is known about. The name is its name, or its two hex numbers.
+common-no-driver-device-none = { $name } hat keinen Treiber.
 
 # The small round button beside a failure message that opens Help at the page
 # about it. Its tip, and the name a screen reader says.

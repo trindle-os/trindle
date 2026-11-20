@@ -66,10 +66,10 @@ pub fn view_of(kind: &str, text: &str, read_only: bool) -> Node<Msg> {
         items.push(note(t!("store-fence-sees-next")));
         actions.push(button("window-close-symbolic", t!("store-fence-no")).on_press(Msg::Answer(1)));
         actions.push(button("folder-symbolic", t!("store-fence-share-session")).on_press(Msg::Answer(10)));
-        actions.push(main_action(crate::common::no_tick::GO_ICON, t!("store-fence-share-always")).on_press(Msg::Answer(11)));
+        actions.push(main_action(crate::common::no_tick::CONFIRM_ICON, t!("store-fence-share-always")).on_press(Msg::Answer(11)));
     } else {
         actions.push(button("window-close-symbolic", t!("store-fence-dont-allow")).on_press(Msg::Answer(1)));
-        actions.push(main_action(crate::common::no_tick::GO_ICON, t!("store-fence-allow")).on_press(Msg::Answer(0)));
+        actions.push(main_action(crate::common::no_tick::CONFIRM_ICON, t!("store-fence-allow")).on_press(Msg::Answer(0)));
     }
     items.push(row(actions).gap(12.0).centred());
 

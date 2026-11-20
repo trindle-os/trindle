@@ -135,3 +135,5 @@ ring-tray-full = Vòng đã có bốn biểu tượng. Hãy bỏ bớt một cá
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = Việc kiểm tra đang tắt
+# Name of the updates button when a restart to finish installing was put off with Remind me later and the time has come.
+ring-updates-restart = Khởi động lại để cài đặt xong

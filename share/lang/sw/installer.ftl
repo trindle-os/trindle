@@ -69,12 +69,14 @@ installer-arm-erase = Bofya tena ili kufuta na kusakinisha
 
 # Note beside Next on the first page while no language is chosen.
 installer-missing-language = Chagua lugha
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = Chagua lugha ya Trindle
 
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = Chagua kibodi
 
 # Note beside Next on the first page while no time zone is chosen.
-installer-missing-time = Chagua ukanda wa saa
+installer-missing-time = Weka ukanda wa saa
 
 # Note beside Next on the disk page while no disk is chosen.
 installer-missing-disk = Chagua mahali pa Trindle
@@ -100,10 +102,12 @@ installer-missing-password = Andika nenosiri lako mara mbili. Lazima liwe sawa m
 installer-welcome-title = Karibu kwenye { $name }
 
 # Sentence under the title of the first page.
-installer-welcome-help = Chagua lugha yako, na Trindle itaweka kibodi na ukanda wa saa vinavyolingana nayo, ambavyo unaweza kuvibadilisha.
+installer-welcome-help = Chagua lugha yako, na Trindle itaweka mengine kulingana nayo.
 
-# Head of the card for choosing the language, and the name of its search box.
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
 installer-language = Lugha
+# Label beside the box at the right of the first page's sentence, for choosing the language of Trindle's own words (only those Trindle has).
+installer-trindle-language = Lugha ya Trindle
 
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = Kibodi
@@ -378,8 +382,8 @@ installer-privacy-chip-none = Kompyuta hii ina chipu ya TPM, inayoweza kufungua 
 # In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
 installer-privacy-no-chip-none = Kompyuta hii haina chipu ya TPM ambayo Trindle inaweza kutumia.
 
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = Kibodi { $keyboard }, saa { $zone }.
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle kwa { $trindle }, kibodi { $keyboard }, saa { $zone }.
 
 # Title of the page shown while the install runs.
 installer-installing-title = Inasakinisha { $name }
@@ -522,7 +526,7 @@ installer-live-speak = Tumia sauti yako
 installer-live-speak-line = Gusa katikati ya duara na useme unachotaka.
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = Bonyeza Ongeza udhibiti kwa sauti kwenye Mipangilio, chini ya Pete. Kisha gusa katikati na uongee.
+installer-live-speak-add = Trindle ikishasakinishwa, ongeza udhibiti kwa sauti kwenye Mipangilio, chini ya Pete.
 
 # Name of the third thing to do.
 installer-live-tab = Vyote kwenye duara
@@ -661,6 +665,9 @@ installer-copy-failed = Imeshindwa kunakili mfumo. { $why }
 # Red line at the foot: there is not enough room for a swap file.
 installer-swap-no-room = Hakuna nafasi ya faili ya swap.
 
+# Under the swap file switch when the chosen disk or space is too small for one; the switch is then off and cannot be turned on.
+installer-swap-too-small = Nafasi hii ni ndogo mno kwa faili ya swap.
+
 # Red line at the foot: the swap file's place on the disk cannot be read.
 installer-swap-unreadable = Trindle haikuweza kusoma mahali faili ya swap ilipo kwenye diski.
 
@@ -684,8 +691,8 @@ installer-tour-ring-foot = Ona kilicho wazi, tumia ubao wa kunakili, na usafishe
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } ni kijiti ambacho Trindle inaendeshwa kutoka kwacho.
 
-# Red line at the foot: something on the chosen disk is mounted or swapped to.
-installer-disk-in-use = { $dev } inatumika. Funga chochote kinachoitumia, kisha jaribu tena.
+# Red words under the disk, back on the disk page: something on the chosen disk is mounted, swapped to or open.
+installer-disk-in-use = { $dev } inatumika. Funga chochote kinachoitumia, kisha uchague diski tena.
 
 # Said beside how far the install has got, once it has started.
 installer-started = Inasakinisha
@@ -730,7 +737,8 @@ installer-done-problems = Si kila kitu kilisanidiwa
 
 installer-suggest-failed = Trindle haikuweza kutengeneza nenosiri. Andika lako mwenyewe.
 
-installer-disk-changed = { $dev } si diski iliyoonyeshwa. Rudi nyuma na uchague diski tena.
+# Red words on the disk page: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev } si diski iliyoonyeshwa. Chagua diski tena.
 
 installer-no-gpt = { $dev } haitumii jedwali la vizigeu la GPT, kwa hiyo Trindle haiwezi kusakinishwa kando ya kilichopo juu yake.
 
@@ -745,3 +753,39 @@ installer-ready-replaced-known = Kila kitu kilicho kwenye { $disk } kitabadilish
 installer-disk-named = { $what }, { $dev }
 
 installer-run-stopped = { $program } ilisimama kabla ya kupata kila ilichohitaji: { $why }
+
+# Red words on the last page: the TPM chip could not be set up to open the disk, so the disk password is asked for at every start.
+installer-chip-not-set-up = Chipu ya TPM haikuweza kuwekwa, kwa hiyo diski itaomba nenosiri lake kila kompyuta inapoanza.
+
+# Red words on the last page: the keyboard for the disk password screen could not be set, so it may be the American one.
+installer-start-keyboard-failed = Trindle imewekwa, lakini skrini ya nenosiri la diski inaweza kutumia kibodi ya Kimarekani.
+
+# Red words on the last page: the login screen could not be switched on; { $why } is the reason.
+installer-login-screen-failed = Trindle imewekwa, lakini haikuweza kuwasha skrini ya kuingia: { $why }
+
+# Red words on the last page: Trindle could not be set to take its own updates; { $why } is the reason.
+installer-updates-held = Trindle imewekwa, lakini bado haitapokea masasisho yake yenyewe: { $why }
+
+# Red words on the last page: earlier versions of people's files (home snapshots) could not be switched on.
+installer-home-snapshots-failed = Trindle imewekwa, lakini matoleo ya awali ya faili zako yamezimwa. Unaweza kuyawasha katika Mipangilio, Snapshots.
+
+# Red words on the last page: Trindle could not be added to the computer's own start-up list; { $why } is the reason.
+installer-firmware-entry-failed = Trindle imewekwa, lakini haikuweza kujiongeza kwenye orodha ya kuanzisha ya kompyuta: { $why }
+
+# Red line: the account the stick ran as could not be removed from the new system, so the install stopped.
+installer-live-account-left = Imeshindwa kuondoa akaunti ya kijiti { $user } kwenye mfumo mpya.
+
+# Under the swap file's switch when a size smaller than memory is chosen.
+installer-swap-no-hibernate = Ndogo kuliko kumbukumbu ya kompyuta hii, kwa hiyo haiwezi kujihifadhi usingizini (hibernate).
+
+# In the swap size list: the size of the computer's memory, which hibernating needs.
+installer-swap-size-hibernate = GB { $gb }, ya kutosha kujihifadhi usingizini
+
+# In the swap size list: a smaller size.
+installer-swap-size = GB { $gb }
+
+# Tip of the swap size list.
+installer-swap-size-tip = Ukubwa wa faili ya swap
+
+# Why logind holds off sleep and shutting down while the installer changes the disk (shown by systemd-inhibit --list).
+installer-power-held = Trindle inasakinishwa

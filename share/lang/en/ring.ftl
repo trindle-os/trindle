@@ -49,8 +49,6 @@ ring-cli-missing-say = missing argument for --say
 
 ## The ring itself (src/ring/view/)
 
-# Line in the ring's results when what was typed matches no app or favourite.
-ring-find-nothing = No app or favourite is called that
 # Tip of the round button on an app's menu that removes the app.
 ring-uninstall = Uninstall
 # Line that replaces the uninstall button while the app is being removed.
@@ -163,6 +161,9 @@ ring-power-log-out = Log out
 ring-power-restart = Restart
 # Choice on the ring's power page: turn the computer off.
 ring-power-shut-down = Shut down
+
+# Said under the ring when sleep, log out, restart or shut down is pressed while Trindle is being installed.
+ring-power-installing = Trindle is being installed. Wait until it has finished.
 # Grey line in the middle of the ring when there are no favourites.
 ring-empty-hint = Click All apps, then right-click any app to keep it here
 # Line in the ring when a spoken or typed power choice needs a click to confirm.

@@ -177,7 +177,15 @@ impl Face {
         }
         self.level = level;
         self.typed.clear();
+        self.typed_in = false;
         self.relayout();
+    }
+
+    pub(super) fn take_back(&mut self, text: String) {
+        match left_after(text, self.typed_in) {
+            Some(text) => self.set_typed(text),
+            None => self.set_level(super::FAVOURITES),
+        }
     }
 
     pub(super) fn set_typed(&mut self, text: String) {
@@ -192,4 +200,8 @@ impl Face {
         let t: String = self.typed.chars().chain(more.chars()).take(TYPED_MOST).collect();
         self.set_typed(t);
     }
+}
+
+pub(super) fn left_after(text: String, typed_in: bool) -> Option<String> {
+    (!(text.is_empty() && typed_in)).then_some(text)
 }

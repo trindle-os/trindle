@@ -270,11 +270,11 @@ common-x11-would-not-start = Xwayland не запустился
 # Second line of that notice, when the desktop will try the older-programs display again soon.
 common-x11-try-again = Повторите через минуту
 
-# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each dot with what it means.
-common-in-use-key = Что означают точки
+# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each mark with what it means.
+common-in-use-key = Значки и их смысл
 
-# Under the dots in that key: where a dot shows up.
-common-in-use-where = Точки показываются вверху по центру экрана и на вкладках окон.
+# Under the marks in that key: where a mark shows up. On the screen it is a half circle hung from the top edge; on a window tab it is a small dot.
+common-in-use-where = Полукруги висят у верхнего края экрана посередине. На вкладках окон показаны маленькие точки.
 
 # Screen reader name of the microphone dot and its row, and the line shown on pointing at the dots, when no program is named.
 common-in-use-microphone = Микрофон используется
@@ -295,7 +295,7 @@ common-in-use-screen = Идёт запись экрана
 common-in-use-screen-by = Запись экрана ведёт: { $who }
 
 # Screen reader name of the input dot and its row, and the line shown on pointing at the dots, when no program is named: the mouse and keyboard are in another program's hands.
-common-in-use-input = Мышь и клавиатура используются
+common-in-use-input = Мышь и клавиатура заняты
 
 # Line on pointing at the dots, and its screen reader name, when programs have taken the mouse and keyboard. { $who } is the programs' names.
 common-in-use-input-by = { $who } управляет вашей клавиатурой и мышью
@@ -307,10 +307,10 @@ common-in-use-files = Скопированные вами файлы читаю�
 common-in-use-files-by = { $who } читает скопированные вами файлы
 
 # The ring's who-is-using-what row while a plugin reaches devices on the local network.
-common-in-use-home-network = Локальная сеть используется
+common-in-use-home-network = Используется локальная сеть
 
 # The same with the plugin's name.
-common-in-use-home-network-by = Локальную сеть использует: { $who }
+common-in-use-home-network-by = Локальную сеть использует { $who }
 
 # The ring's who-is-using-what row while a plugin uses scanners and USB devices.
 common-in-use-usb = Сканеры и USB-устройства используются
@@ -376,6 +376,9 @@ common-no-driver-class-bluetooth = Bluetooth
 common-no-driver-class-sound = звук
 
 common-no-driver-class-graphics = графика
+
+# Said of a device with no driver that nothing is known about. The name is its name, or its two hex numbers.
+common-no-driver-device-none = Для { $name } нет драйвера.
 
 # The small round button beside a failure message that opens Help at the page
 # about it. Its tip, and the name a screen reader says.

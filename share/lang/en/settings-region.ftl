@@ -9,7 +9,7 @@ settings-region-keywords = language locale country formats date currency
 # Help line at the foot of the Region and language page.
 settings-region-help = Language and formats take effect the next time you log in.
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = Log in again to see it everywhere.
+settings-region-later = Log in again to see it.
 # Shown while the page reads the computer.
 settings-region-looking = Looking…
 # Under Money and paper: the paper and measures the chosen formats use (paper is a4, letter or other; measures is imperial or metric).

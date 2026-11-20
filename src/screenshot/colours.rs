@@ -143,7 +143,7 @@ impl App for Dropper {
 
     fn intercept(&self, input: &Input, _keys: bool) -> Option<Msg> {
         match input {
-            Input::Key { sym: Keysym::Escape, .. } if self.help => Some(Msg::Help),
+            Input::Key { sym: Keysym::Escape, .. } | Input::Focus(false) if self.help => Some(Msg::Help),
             _ => None,
         }
     }
@@ -152,7 +152,7 @@ impl App for Dropper {
 impl Dropper {
 
     fn page(&self) -> Node<Msg> {
-        let info = button("dialog-information-symbolic", t!("screenshot-eye-about")).size(theme::sheet().info)
+        let info = button("dialog-information-symbolic", t!("screenshot-eye-about")).size(theme::sheet().info).hushed()
             .on(self.help).on_press(Msg::Help);
         let take = main_action(ICON_FALLBACK, t!("screenshot-eye-take")).off(self.taking);
         let take = if self.taking { take } else { take.on_press(Msg::Take) };

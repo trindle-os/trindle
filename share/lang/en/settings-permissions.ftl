@@ -118,6 +118,7 @@ settings-permissions-plugins = Plugins
 settings-permissions-appimages = AppImages
 # Heading of the card for programs started from Folders.
 settings-permissions-from-folders = Started from Folders
+settings-permissions-other = Other settings
 # Under a kind of app on the Permissions page when none is installed.
 settings-permissions-none-installed = None installed.
 # Under a kind of app on the Permissions page when none has been run.

@@ -13,6 +13,7 @@ use std::rc::{Rc, Weak};
 use std::time::{Duration, Instant};
 
 use crate::common::held::{self, Held};
+use crate::common::remind;
 use crate::common::run::{self, capture};
 use crate::common::update_checks;
 use crate::common::updating::{self, Who};
@@ -189,6 +190,8 @@ pub struct Updates {
     other: Option<Who>,
 
     off: bool,
+
+    restart_due: bool,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -247,6 +250,17 @@ fn unchecked(waiting: Waiting, other: Option<Who>, off: bool) -> bool {
     off && stand(waiting, other) == Stand::UpToDate
 }
 
+fn looks(waiting: Waiting, other: Option<Who>, off: bool, restart_due: bool) -> (&'static str, String, Option<Need>) {
+    let stand = stand(waiting, other);
+    if restart_due && stand == Stand::UpToDate {
+        return (UPDATE_ICON, t!("ring-updates-restart").into(), attention::when(true, Need::Update));
+    }
+    let unchecked = unchecked(waiting, other, off);
+    let icon = if stand == Stand::UpToDate && !unchecked { UP_TO_DATE_ICON } else { UPDATE_ICON };
+    let name = if unchecked { t!("ring-updates-off").into() } else { named(waiting, other) };
+    (icon, name, attention::when(stand == Stand::Waiting, Need::Update))
+}
+
 impl Updates {
     pub fn new(ctx: &Rc<Ctx>) -> Updates {
         let first = Rc::downgrade(ctx);
@@ -257,7 +271,7 @@ impl Updates {
             Flow::Continue
         });
         Updates { ctx: ctx.clone(), last: Waiting::default(), looked: Cell::new(None), firmware_asked: None, firmware: Vec::new(),
-                  held_at: held::changed_at(), other: None, off: !update_checks::on() }
+                  held_at: held::changed_at(), other: None, off: !update_checks::on(), restart_due: false }
     }
 
     pub fn look_if_due(&mut self) {
@@ -294,7 +308,10 @@ impl Updates {
         if finished || held_changed {
             self.look();
         }
-        changed || held_changed || switched
+        let due = remind::due();
+        let reminded = due != self.restart_due;
+        self.restart_due = due;
+        changed || held_changed || switched || reminded
     }
 
     pub fn other(&self) -> Option<Who> {
@@ -307,11 +324,8 @@ impl Updates {
             self.looked.set(Some(Instant::now()));
             self.ctx.face(|f| f.updates.look());
         }
-        let unchecked = unchecked(self.last, self.other, self.off);
-        let icon = if stand(self.last, self.other) == Stand::UpToDate && !unchecked { UP_TO_DATE_ICON } else { UPDATE_ICON };
-        let name = if unchecked { t!("ring-updates-off").into() } else { named(self.last, self.other) };
+        let (icon, name, need) = looks(self.last, self.other, self.off, self.restart_due);
         let node = button(icon, name).size(size).on_press(msg(|f| f.updates.press()));
-        let need = attention::when(stand(self.last, self.other) == Stand::Waiting, Need::Update);
         attention::filled(node, icon, need, size)
     }
 
@@ -367,6 +381,24 @@ mod tests {
         if let Some(t) = long_ago {
             assert!(ask_firmware(Some(t), 0));
         }
+    }
+
+    #[test]
+    fn a_restart_reminder_that_is_due_names_the_button_and_marks_it_only_when_nothing_else_speaks() {
+        use super::{looks, Need};
+        let none = Waiting::default();
+        let (icon, name, need) = looks(none, None, false, true);
+        assert_eq!((icon, name.as_str(), need), (crate::settings::ui::UPDATE_ICON, "Restart to finish installing", Some(Need::Update)));
+        let (icon, name, need) = looks(none, None, false, false);
+        assert_eq!((icon, name.as_str(), need), (crate::settings::ui::UP_TO_DATE_ICON, "Up to date", None));
+
+        assert_eq!(looks(none, None, true, true).1, "Restart to finish installing");
+        assert_eq!(looks(none, None, true, false).1, "Checking is off");
+
+        let waiting = Waiting { system: 2, ..Waiting::default() };
+        assert_eq!(looks(waiting, None, false, true).1, "Install 2 updates");
+        assert_eq!(looks(waiting, None, false, true).2, Some(Need::Update));
+        assert_eq!(looks(none, Some(Who::Apps), false, true).2, None);
     }
 
     #[test]

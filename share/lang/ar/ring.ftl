@@ -55,9 +55,6 @@ ring-cli-unknown = خيار غير معروف { $option }
 # Error printed in a terminal when --say is given no words.
 ring-cli-missing-say = وسيط مفقود للخيار --say
 
-# Line in the ring's results when what was typed matches no app or favourite.
-ring-find-nothing = لا يوجد تطبيق أو مفضلة بهذا الاسم
-
 # SAFETY: needs a human review before it ships
 # Tip of the round button on an app's menu that removes the app.
 ring-uninstall = إلغاء التثبيت
@@ -245,8 +242,6 @@ ring-startup-add = ابدأ عند تسجيل الدخول
 
 ring-startup-remove = أوقف البدء عند تسجيل الدخول
 
-
-
 # Help for the option that opens the shortcut list, or closes it when it is showing.
 ring-cli-shortcuts = اعرض قائمة بكل اختصارات لوحة المفاتيح، أو أخفِ القائمة (Super وK، ما لم تغيّرهما في الإعدادات)
 
@@ -264,3 +259,6 @@ ring-category-media-short = الصوت
 
 # Line in the ring when a spoken command, such as turning the sound down, did not work.
 ring-voice-failed = لم ينجح ذلك.
+
+# Said under the ring when sleep, log out, restart or shut down is pressed while Trindle is being installed.
+ring-power-installing = يجري تثبيت Trindle. انتظر حتى ينتهي.

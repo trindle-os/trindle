@@ -323,7 +323,7 @@ disks-mount = Einhängen
 disks-unmount = Aushängen
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = Änderungen vornehmen
+disks-change-it = Ändern
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = Name
@@ -503,7 +503,7 @@ disks-folder-appears = Sie erscheint in { $dir }
 disks-startup-on = Wird beim Start in { $dir } eingehängt
 
 # Words on a row when a part is set not to mount at start-up.
-disks-startup-off = Wird beim Start nicht eingehängt
+disks-startup-off = Beim Start nicht eingehängt
 
 # Words on a row while a folder or start-up choice is being saved.
 disks-saving = Wird gespeichert

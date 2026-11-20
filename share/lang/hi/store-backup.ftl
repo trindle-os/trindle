@@ -56,7 +56,7 @@ store-because-quota = इस खाते के लिए अनुमत ज�
 store-because-missing = इसके लिए ज़रूरी कोई फ़ाइल या प्रोग्राम मौजूद नहीं है
 
 # The reason when no reason could be read from the program's last line.
-store-because-failed = यह विफल रहा
+store-because-failed = विफल रहा
 
 # The reason when the backup has no name to be written under.
 store-because-no-name = इसका कोई नाम नहीं है

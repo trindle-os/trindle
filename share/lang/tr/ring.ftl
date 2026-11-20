@@ -58,9 +58,6 @@ ring-cli-unknown = bilinmeyen seçenek { $option }
 # Error printed in a terminal when --say is given no words.
 ring-cli-missing-say = --say için bağımsız değişken eksik
 
-# Line in the ring's results when what was typed matches no app or favourite.
-ring-find-nothing = Bu adda bir uygulama ya da sık kullanılan yok
-
 # SAFETY: needs a human review before it ships
 # Tip of the round button on an app's menu that removes the app.
 ring-uninstall = Kaldır
@@ -238,8 +235,6 @@ ring-startup-add = Oturum açılınca başlat
 
 ring-startup-remove = Oturum açılınca başlatmayı durdur
 
-
-
 # Help for the option that opens the shortcut list, or closes it when it is showing.
 ring-cli-shortcuts = Tüm klavye kısayollarının listesini göster ya da listeyi gizle (Super ve K, Ayarlar'da değiştirmediyseniz)
 
@@ -251,3 +246,6 @@ ring-restarted-why = Halka ve yardımcı parçalar yeniden başladı.
 ring-uninstall-failed = Kaldırılamadı.
 ring-category-media-short = Ses
 ring-voice-failed = Bu işe yaramadı.
+
+# Said under the ring when sleep, log out, restart or shut down is pressed while Trindle is being installed.
+ring-power-installing = Trindle kuruluyor. Bitene kadar bekleyin.

@@ -10,7 +10,7 @@ settings-region-keywords = भाषा लोकेल देश प्रा�
 settings-region-help = भाषा और प्रारूप अगली बार लॉग इन करने पर लागू होते हैं।
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = हर जगह देखने के लिए दोबारा लॉग इन करें।
+settings-region-later = देखने के लिए दोबारा लॉग इन करें।
 
 # Shown while the page reads the computer.
 settings-region-looking = देख रहा है…

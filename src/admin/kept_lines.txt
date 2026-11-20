@@ -142,3 +142,20 @@ voice/setup.rs	remove_tools	let _ = std::fs::remove_file(LEFT_FILE);
 voice/setup.rs	tools_left	let noted = std::fs::read_to_string(LEFT_FILE).unwrap_or_default();
 voice/setup.rs	main	let _ = std::io::Write::flush(&mut std::io::stdout());
 voice/setup.rs	main	let _ = std::io::stdin().read_line(&mut String::new());
+admin/chip.rs	password	input.take(MOST_PASSWORD + 2).read_to_end(&mut bytes).map_err(|_| t!("admin-password-none"))?;
+admin/chip.rs	password	let text = std::str::from_utf8(&bytes).map_err(|_| t!("admin-chip-wrong-password"))?;
+admin/chip.rs	this_disk	let disk = std::fs::File::open(at(&device)).map_err(|_| t!("admin-chip-changed"))?;
+admin/chip.rs	reseal_with	if old.iter().any(|s| prove(&device, *s).is_ok()) {
+admin/chip.rs	reseal_with	.map_err(|_| t!("admin-chip-not-sealed"))?;
+admin/chip.rs	reseal_with	if prove(&device, new).is_err() {
+admin/chip.rs	reseal_with	.map_err(|_| t!("admin-chip-old-kept"))?;
+admin/chip.rs	checked	let (count, last) = std::fs::symlink_metadata(&tries).ok().filter(|m| m.is_file() && m.len() < 16)
+admin/chip.rs	checked	.map(|m| (std::fs::read_to_string(&tries).ok().and_then(|s| s.trim().parse::<u32>().ok()).unwrap_or(FREE_TRIES), m.modified().ok()))
+admin/chip.rs	checked	.unwrap_or((0, None));
+admin/chip.rs	checked	let waited = last.and_then(|l| l.elapsed().ok()).is_none_or(|e| e >= WAIT);
+admin/chip.rs	opened_slot	said.lines().find_map(|l| l.trim().strip_prefix("Key slot ")?.strip_suffix(" unlocked.")?.parse().ok())
+admin/chip.rs	answered	Ok(()) => Ok(super::stand_in::said(argv).and_then(Result::ok).unwrap_or_default()),
+admin/chip.rs	answered	Err(e) => Err((e.strip_prefix("exit ").and_then(|c| c.parse().ok()), e)),
+admin/chip.rs	answered	let _ = std::io::Write::write_all(&mut pipe, input.as_bytes());
+admin/chip_tests.rs	the_password_is_taken_exactly_or_not_at_all	assert!(password(&mut &bad[..]).is_err(), "{bad:?}");
+admin/chip_tests.rs	the_password_is_taken_exactly_or_not_at_all	assert!(password(&mut &long[..]).is_err());

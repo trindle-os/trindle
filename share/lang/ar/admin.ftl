@@ -369,8 +369,6 @@ admin-driver-virtual-camera = الكاميرا الافتراضية
 
 admin-language-in-use = { $code } هي اللغة التي يبدأ بها هذا الحاسوب، لذلك لا يمكن إزالتها.
 
-
-
 # The kernel or chip has no split-lock slowing to turn off.
 admin-split-lock-none = ليس في هذا الحاسوب إبطاء القفل المنقسم ليتم إيقافه.
 
@@ -396,8 +394,7 @@ admin-system-local-locked = لم يتمكن Trindle من إبقاء /usr/local �
 admin-system-root-only = لا يمكن تشغيل هذا إلا بحساب الجذر، وليس عبر pkexec.
 
 # Switching the read-only system on where the system's disk is not Btrfs.
-admin-system-needs-btrfs = يحتاج هذا إلى Btrfs.
-
+admin-system-needs-btrfs = يحتاج إلى Btrfs.
 
 # Red words in Settings when a restore swapped the systems but could not finish tidying up. { $why } is the reason.
 admin-restore-finish-later = اللقطة في مكانها، وسيبدأ الحاسوب منها. لم يتمكن Trindle من إنهاء تنظيف النظام القديم. وسيحاول مرة أخرى عند التشغيل التالي للحاسوب: { $why }
@@ -449,3 +446,33 @@ admin-swap-resume-unread = لم يُعرف مكان ملف التبديل الآ
 
 # Said when the swap file moved and the running system couldn't be told: hibernation is refused until the computer restarts.
 admin-swap-resume-restart = سيعمل السبات من جديد بعد إعادة التشغيل.
+
+# Red words in Settings, Hardware, when Use the chip again is pressed while it is already running.
+admin-chip-busy = يجري إعداد الشريحة الآن. انتظر حتى ينتهي.
+
+# Red words in Settings, Hardware, when the disk password typed for Use the chip again is wrong.
+admin-chip-wrong-password = هذه ليست كلمة مرور القرص.
+
+# Red words in Settings, Hardware, after several wrong disk passwords in a row.
+admin-chip-wait = كلمات مرور خاطئة كثيرة. انتظر دقيقة ثم أعد المحاولة.
+
+# Red words in Settings, Hardware, when the chip unlocked the disk at the last start after all.
+admin-chip-not-needed = فتحت الشريحة القرص عند التشغيل الأخير، فلا حاجة لأي إجراء.
+
+# Red words in Settings, Hardware, when the disk is not the one the start-up screen noted.
+admin-chip-changed = تغيّر القرص منذ بدء الحاسوب. أعد التشغيل ثم حاول مجدداً.
+
+# Red words in Settings, Hardware, when the computer's TPM security chip can't be found.
+admin-chip-none = لم يتم العثور على شريحة الأمان. شغّلها في BIOS ثم حاول مجدداً.
+
+# Red words in Settings, Hardware, when clevis, the tool that sets up the chip, is missing.
+admin-chip-no-clevis = أداة إعداد الشريحة، clevis، غير مثبّتة.
+
+# Red words in Settings, Hardware, when the disk has no room left for another key.
+admin-chip-no-slot = لا توجد مساحة في القرص لمفتاح آخر.
+
+# Red words in Settings, Hardware, when the chip couldn't be set up. The disk still opens with its password.
+admin-chip-not-sealed = تعذّر إعداد الشريحة. ما زال القرص يُفتح بكلمة المرور.
+
+# Red words in Settings, Hardware, when the chip works again but its old key couldn't be removed.
+admin-chip-old-kept = تعمل الشريحة مجدداً، لكن تعذّرت إزالة مفتاحها القديم.

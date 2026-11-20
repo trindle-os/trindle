@@ -345,8 +345,8 @@ mod tests {
         assert_eq!(choose_in_folders(&script("cancels", "cat >/dev/null; echo '\"Cancelled\"'"), &ask, &pid), Some(Outcome::Cancelled));
 
         let since = std::time::Instant::now();
-        assert_eq!(choose_in_folders(&script("lingers", "cat >/dev/null; echo '\"Cancelled\"'; exec sleep 5"), &ask, &pid), Some(Outcome::Cancelled));
-        assert!(since.elapsed() < std::time::Duration::from_secs(3), "the program waited for the chooser to end");
+        assert_eq!(choose_in_folders(&script("lingers", "cat >/dev/null; echo '\"Cancelled\"'; exec sleep 60"), &ask, &pid), Some(Outcome::Cancelled));
+        assert!(since.elapsed() < std::time::Duration::from_secs(30), "the program waited for the chooser to end");
         assert_eq!(choose_in_folders(&script("unreadable", "cat >/dev/null; exit 2"), &ask, &pid), None);
         assert_eq!(choose_in_folders(&script("garbled", "cat >/dev/null; echo nonsense"), &ask, &pid), None);
         assert_eq!(choose_in_folders(&dir.join("absent").to_string_lossy(), &ask, &pid), None);

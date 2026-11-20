@@ -263,11 +263,11 @@ common-x11-would-not-start = Xwayland başlamadı
 # Second line of that notice, when the desktop will try the older-programs display again soon.
 common-x11-try-again = Bir dakika sonra yeniden deneyin
 
-# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each dot with what it means.
-common-in-use-key = Noktalar ne anlama geliyor
+# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each mark with what it means.
+common-in-use-key = İşaretler ne demek
 
-# Under the dots in that key: where a dot shows up.
-common-in-use-where = Noktalar ekranın üst ortasında ve pencere sekmelerinde görünür.
+# Under the marks in that key: where a mark shows up. On the screen it is a half circle hung from the top edge; on a window tab it is a small dot.
+common-in-use-where = Yarım daireler ekranın üst ortasından sarkar. Pencere sekmelerinde küçük noktalar görünür.
 
 # Screen reader name of the microphone dot and its row, and the line shown on pointing at the dots, when no program is named.
 common-in-use-microphone = Mikrofon kullanımda
@@ -288,7 +288,7 @@ common-in-use-screen = Ekran kaydediliyor
 common-in-use-screen-by = Ekranı kaydedenler: { $who }
 
 # Screen reader name of the input dot and its row, and the line shown on pointing at the dots, when no program is named: the mouse and keyboard are in another program's hands.
-common-in-use-input = Fare ve klavye kullanımda
+common-in-use-input = Fare ve klavye meşgul
 
 # Line on pointing at the dots, and its screen reader name, when programs have taken the mouse and keyboard. { $who } is the programs' names.
 common-in-use-input-by = Klavyenizi ve farenizi kullananlar: { $who }
@@ -303,7 +303,7 @@ common-in-use-files-by = Kopyaladığınız dosyaları okuyanlar: { $who }
 common-in-use-home-network = Yerel ağ kullanımda
 
 # The same with the plugin's name.
-common-in-use-home-network-by = Yerel ağı kullananlar: { $who }
+common-in-use-home-network-by = Yerel ağı kullanan: { $who }
 
 # The ring's who-is-using-what row while a plugin uses scanners and USB devices.
 common-in-use-usb = Tarayıcılar ve USB aygıtları kullanımda
@@ -369,6 +369,9 @@ common-no-driver-class-bluetooth = Bluetooth
 common-no-driver-class-sound = ses
 
 common-no-driver-class-graphics = grafik
+
+# Said of a device with no driver that nothing is known about. The name is its name, or its two hex numbers.
+common-no-driver-device-none = { $name } aygıtının sürücüsü yok.
 
 # The small round button beside a failure message that opens Help at the page
 # about it. Its tip, and the name a screen reader says.

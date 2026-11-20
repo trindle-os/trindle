@@ -185,3 +185,7 @@ settings-ai-keys = Funguo zilizopewa programu za AI
 # Help text of the keys card (the information button).
 # SAFETY: needs a human review before it ships
 settings-ai-keys-about = Programu za AI hazipati kamwe funguo na tokeni zilizo kwenye kipindi chako. Zinapata tu ufunguo unaouandika hapa.
+# Under the AI programs card, greyed, when none of the listed AI programs is on this computer.
+settings-ai-none-installed = Hakuna programu za AI kwenye kompyuta hii.
+# Under the box, when the program typed in to add is not on this computer.
+settings-ai-not-installed = Programu hiyo haipo kwenye kompyuta hii.

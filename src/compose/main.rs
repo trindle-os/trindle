@@ -92,6 +92,7 @@ mod rest;
 #[cfg(test)]
 mod games;
 mod game_pads;
+mod game_power;
 #[cfg(test)]
 mod rig;
 mod screen_edge;

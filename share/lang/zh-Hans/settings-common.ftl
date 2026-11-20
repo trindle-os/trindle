@@ -129,9 +129,6 @@ settings-common-and = { $rest }和{ $last }
 # What goes between names in a list, before the last two.
 settings-common-list-comma = { "、" }
 
-# Spoken name of the picture of the ring opening on a small screen.
-settings-common-ring-picture = 双击屏幕边缘即可打开圆环。
-
 # Word drawn in the middle of that picture.
 settings-common-ring-name = 圆环
 

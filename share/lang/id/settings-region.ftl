@@ -10,7 +10,7 @@ settings-region-keywords = bahasa lokal negara format tanggal mata uang wilayah
 settings-region-help = Bahasa dan format berlaku saat Anda login berikutnya.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = Masuk lagi untuk melihatnya di mana-mana.
+settings-region-later = Masuk lagi untuk melihatnya.
 
 # Shown while the page reads the computer.
 settings-region-looking = Memeriksa…

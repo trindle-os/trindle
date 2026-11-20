@@ -127,6 +127,15 @@ store-upd-install-n =
 # Main button that restarts the computer.
 # SAFETY: needs a human review before it ships
 store-upd-restart-now = Khởi động lại ngay
+# Beside Restart now: the box that puts the restart off, then the ring's Updates button reminds. Its answers are the choices below.
+store-upd-remind-later = Nhắc tôi sau
+# Red words under the headline when the Remind me later time could not be saved; the reason follows.
+store-upd-remind-not-saved = Không lưu được lời nhắc: { $why }.
+# One answer in the Remind me later box.
+store-upd-remind-hours =
+    { $n ->
+       *[other] Sau { $n } giờ
+    }
 
 # Main button that checks for updates.
 store-upd-check-for = Kiểm tra bản cập nhật
@@ -229,24 +238,11 @@ store-upd-debian-count =
        *[other] { $n } bản cập nhật, được cài cùng nhau
     }
 
-# On a row of Debian's updates: where it comes from.
-store-upd-from-debian = Từ Debian
-
 # Under Debian's rows: how many of them show.
 store-upd-debian-showing = Đang hiện { $shown } trên { $total } bản cập nhật Debian.
 
 # Note on the Trindle and Debian card: which version of Trindle the computer has.
 store-upd-has-trindle = Máy tính này đang dùng Trindle { $version }.
-
-# Heading of the Trindle and Debian card.
-store-upd-card-system = Trindle và Debian
-
-# Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Các gói Debian được làm để hoạt động cùng nhau. Cài riêng một gói có thể kéo theo gói khác hoặc làm chúng lệch nhau, nên tất cả được cài cùng nhau.
-
-# Note on the Trindle and Debian card: why no row has a Hold back button.
-# SAFETY: needs a human review before it ships
-store-upd-not-held = Các bản cập nhật của Trindle và Debian mang theo bản vá bảo mật cho cả máy tính, nên không thể giữ lại.
 
 # Heading of the card about the daily security updates.
 # SAFETY: needs a human review before it ships
@@ -315,7 +311,6 @@ store-patch-not-fetched = Trindle không tải được { $package } { $version 
 # Said when a security fix for a boxed app was downloaded but isn't there to use.
 store-patch-not-found = Trindle không tìm thấy gói đã tải.
 
-
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
 store-upd-off = Tự động kiểm tra cập nhật đang tắt.
 
@@ -336,3 +331,4 @@ store-upd-stopped-all = Đã dừng. Hãy cài đặt lại để tiếp tục.
 
 # Note under the Apps card.
 store-upd-steam-restarts = Steam sẽ khởi động lại khi không còn trò chơi nào đang chạy.
+

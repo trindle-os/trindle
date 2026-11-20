@@ -188,6 +188,9 @@ settings-permissions-appimages = AppImage
 # Heading of the card for programs started from Folders.
 settings-permissions-from-folders = Khởi động từ Folders
 
+# Tab name on Settings, Permissions, beside Started from Folders.
+settings-permissions-other = Cài đặt khác
+
 # Under a kind of app on the Permissions page when none is installed.
 settings-permissions-none-installed = Chưa cài cái nào.
 

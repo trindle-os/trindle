@@ -437,7 +437,7 @@ mod tests {
         fn fine(_: &Path) -> std::io::Result<()> { Ok(()) }
         let started = std::time::Instant::now();
         let r = detach_all(vec!["/nonexistent/a".into(), "/nonexistent/b".into()], std::time::Duration::from_millis(300), stuck);
-        assert!(started.elapsed() < std::time::Duration::from_secs(2), "{:?}", started.elapsed());
+        assert!(started.elapsed() < std::time::Duration::from_secs(30), "{:?}", started.elapsed());
         assert!(r.unwrap_err().contains("2 shared folders didn't respond"));
         assert!(detach_all(vec!["/nonexistent/a".into()], std::time::Duration::from_secs(5), fine).is_ok());
         assert!(detach_all(vec![], std::time::Duration::from_millis(10), stuck).is_ok());

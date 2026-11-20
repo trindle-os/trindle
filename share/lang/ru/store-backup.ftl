@@ -60,7 +60,7 @@ store-because-quota = место, выделенное для этой учёт�
 store-because-missing = не хватает нужного ему файла или программы
 
 # The reason when no reason could be read from the program's last line.
-store-because-failed = произошёл сбой
+store-because-failed = сбой
 
 # The reason when the backup has no name to be written under.
 store-because-no-name = у неё нет имени

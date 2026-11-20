@@ -33,4 +33,10 @@ elif [ -n "${VALE:-}" ]; then
 else
     echo "vale: not installed, English rules skipped"
 fi
+stage="$work/stage"; mkdir -p "$stage"; : > "$work/program"; chmod +x "$work/program"
+if ! TRINDLE_DESTDIR="$stage" sh "$here/tools/system-files.sh" "$work/program" > "$work/files" 2>&1; then
+    echo "files: tools/system-files.sh failed: $(tail -1 "$work/files")"; found=1
+elif find "$stage" -path '*/lang/*/docs*' | grep -q .; then
+    echo "files: a language's docs folder was installed"; found=1
+fi
 exit "$found"

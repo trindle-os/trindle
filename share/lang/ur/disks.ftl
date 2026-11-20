@@ -325,7 +325,7 @@ disks-mount = ماؤنٹ کریں
 disks-unmount = ان ماؤنٹ کریں
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = تبدیلی کریں
+disks-change-it = بدلیں
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = نام
@@ -507,7 +507,7 @@ disks-folder-appears = یہ { $dir } میں ظاہر ہوتا ہے
 disks-startup-on = شروع ہوتے ہی { $dir } میں ماؤنٹ ہوتا ہے
 
 # Words on a row when a part is set not to mount at start-up.
-disks-startup-off = شروع ہوتے وقت ماؤنٹ نہیں ہوتا
+disks-startup-off = بوٹ پر ماؤنٹ نہیں
 
 # Words on a row while a folder or start-up choice is being saved.
 disks-saving = محفوظ ہو رہا ہے

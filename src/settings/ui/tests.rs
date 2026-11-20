@@ -361,3 +361,29 @@ fn a_cards_name_goes_into_its_tip_as_it_is_written() {
     let said = group("Bluetooth").about("Pairs headphones.").node(&kit).said().join("|");
     assert!(said.contains(&t!("settings-common-about-card", name = "Bluetooth")), "{said}");
 }
+
+fn hovered(node: Node<Msg>, key: &str) -> Option<String> {
+    let mut ui = crate::toolkit::ui::Ui::new(node, crate::toolkit::theme::Theme::new(false, "#fbc711"));
+    ui.label_at(key)
+}
+
+#[test]
+fn no_i_button_has_a_tip_but_each_keeps_its_name() {
+    let k = kit();
+    let page = info(&k, "page:Network", t!("settings-common-about-page"), "words").key("i");
+    assert!(page.said().join("|").contains(t!("settings-common-about-page")));
+    assert_eq!(hovered(row(vec![page]), "i"), None);
+    let card = group("Wi-Fi and cable").about("words").node(&k);
+    assert!(card.said().join("|").contains(&t!("settings-common-about-card", name = "Wi-Fi and cable")));
+}
+
+#[test]
+fn a_line_does_not_say_again_what_its_words_already_say() {
+    let k = kit();
+    let on = line("Wi-Fi").control(switch(true, "Wi-Fi", |_| Msg(Rc::new(|_: &mut Settings| ()))).key("sw")).node(&k);
+    assert_eq!(hovered(on, "sw"), None);
+    let same = line("Rename").control(button("go-next-symbolic", "Rename").key("same")).node(&k);
+    assert_eq!(hovered(same, "same"), None);
+    let own = line("Name").control(button("go-next-symbolic", "Rename it").key("own")).node(&k);
+    assert_eq!(hovered(own, "own").as_deref(), Some("Rename it"));
+}

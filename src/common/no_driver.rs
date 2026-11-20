@@ -6,6 +6,7 @@
 //! nothing changed); a firmware file it says could not be loaded is found
 //! too. When the log cannot be read, nothing is said about firmware.
 
+use std::io::Read;
 use std::path::Path;
 use std::sync::Mutex;
 
@@ -72,7 +73,8 @@ pub struct Found {
 }
 
 fn hex(path: &Path) -> Option<u32> {
-    let s = std::fs::read_to_string(path).ok()?;
+    let mut s = String::new();
+    std::fs::File::open(path).ok()?.take(64).read_to_string(&mut s).ok()?;
     u32::from_str_radix(s.trim().trim_start_matches("0x"), 16).ok()
 }
 
@@ -107,7 +109,7 @@ fn bound(dir: &Path) -> bool {
 }
 
 fn names_in(dir: &Path) -> Vec<String> {
-    let mut v: Vec<String> = std::fs::read_dir(dir).into_iter().flatten().flatten()
+    let mut v: Vec<String> = std::fs::read_dir(dir).into_iter().flatten().flatten().take(4096)
         .map(|e| e.file_name().to_string_lossy().into_owned()).collect();
     v.sort();
     v
@@ -205,10 +207,6 @@ pub fn scan() -> Vec<Found> {
     scan_in(Path::new("/sys"), kernel_log().as_deref())
 }
 
-pub fn scan_sys() -> Vec<Found> {
-    scan_in(Path::new("/sys"), None)
-}
-
 fn class_words(c: Class) -> &'static str {
     match c {
         Class::Wifi => t!("common-no-driver-class-wifi"),
@@ -240,10 +238,6 @@ pub fn lines_for(found: &[Found], class: Class) -> Vec<String> {
     v
 }
 
-pub fn report_lines(found: &[Found]) -> Vec<String> {
-    found.iter().map(words).collect()
-}
-
 static READY: Mutex<Option<Vec<Found>>> = Mutex::new(None);
 
 pub fn start() {
@@ -259,6 +253,11 @@ pub fn start() {
 pub fn ready_lines(class: Class) -> Vec<String> {
     READY.lock().unwrap_or_else(|e| e.into_inner()).as_ref().map(|f| lines_for(f, class)).unwrap_or_default()
 }
+
+mod devices;
+pub use devices::{inventory, Device, Inventory, Kind, State, KINDS};
+#[cfg(test)]
+pub use devices::inventory_in;
 
 #[cfg(test)]
 mod tests;

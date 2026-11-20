@@ -186,3 +186,7 @@ settings-ai-keys = Ключи, выданные программам ИИ
 # Help text of the keys card (the information button).
 # SAFETY: needs a human review before it ships
 settings-ai-keys-about = Ключи и токены вашего сеанса никогда не попадают к программам ИИ. Им передаётся только ключ, который вы вводите здесь.
+# Under the AI programs card, greyed, when none of the listed AI programs is on this computer.
+settings-ai-none-installed = На этом компьютере нет программ ИИ.
+# Under the box, when the program typed in to add is not on this computer.
+settings-ai-not-installed = Этой программы нет на этом компьютере.

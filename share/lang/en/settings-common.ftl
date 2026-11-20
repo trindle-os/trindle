@@ -93,8 +93,6 @@ settings-common-list-comma = { ", " }
 
 ## The picture of the ring (src/settings/pictures.rs)
 
-# Spoken name of the picture of the ring opening on a small screen.
-settings-common-ring-picture = You open the ring by double-clicking at the edge of the screen.
 # Word drawn in the middle of that picture.
 settings-common-ring-name = The ring
 

@@ -481,17 +481,20 @@ pub fn steam_games_now(proc: &std::path::Path) -> Vec<u32> {
     let mut found: Vec<u32> = all.flatten().take(1 << 16)
         .filter(|e| e.file_name().to_string_lossy().bytes().all(|b| b.is_ascii_digit()))
         .filter_map(|e| {
-            let line = std::fs::read(e.path().join("cmdline")).ok()?;
-            let args: Vec<&[u8]> = line.split(|&b| b == 0).collect();
-            if !args.contains(&&b"SteamLaunch"[..]) {
-                return None;
-            }
-            args.iter().find_map(|a| std::str::from_utf8(a.strip_prefix(b"AppId=")?).ok()?.parse().ok())
+            steam_launch(&std::fs::read(e.path().join("cmdline")).ok()?)
         })
         .collect();
     found.sort_unstable();
     found.dedup();
     found
+}
+
+pub fn steam_launch(cmdline: &[u8]) -> Option<u32> {
+    let args: Vec<&[u8]> = cmdline.split(|&b| b == 0).collect();
+    if !args.contains(&&b"SteamLaunch"[..]) {
+        return None;
+    }
+    args.iter().find_map(|a| std::str::from_utf8(a.strip_prefix(b"AppId=")?).ok()?.parse().ok())
 }
 
 pub fn file() -> PathBuf {

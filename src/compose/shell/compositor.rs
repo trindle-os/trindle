@@ -177,6 +177,9 @@ impl<BackendData: Backend> Compose<BackendData> {
 
             if &root == surface && window.is_wayland() {
                 self.place_when_ready(&window);
+                if !crate::panel::is_listed(&window) {
+                    self.hand_keyboard_on_from(&window);
+                }
             }
 
             if &root == surface {

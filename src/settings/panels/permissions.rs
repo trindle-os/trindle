@@ -602,9 +602,9 @@ impl Permissions {
                 about.push_str(&t!("settings-permissions-title-and-words", title = &o.name, words = w));
             }
         }
-        let card = group(heading).icon(icon).about(about).rows(rows);
-        let (least, most) = if owners.len() > 3 { (5, 8) } else { crate::toolkit::theme::bento().card };
-        card.node(kit).span_grows(least, most, crate::toolkit::theme::bento().words)
+
+        group(heading).icon(icon).about(about).rows(rows).node(kit)
+            .span(12, 12, crate::toolkit::theme::bento().words).wide_by_choice()
     }
 }
 
@@ -656,18 +656,22 @@ impl Page for Permissions {
             (t!("settings-permissions-from-folders"), "folder-open-symbolic", &loose_words(loose_programs()), Kind::Program, &self.programs, t!("settings-permissions-none-run")),
         ];
 
-        let at = self.tab.filter(|t| *t < kinds.len()).unwrap_or_else(|| kinds.iter().position(|k| !k.4.is_empty()).unwrap_or(0));
-        let names = kinds.iter().map(|(heading, _, _, _, owners, _)| if owners.is_empty() { heading.to_string() } else { format!("{heading} ({})", owners.len()) }).collect();
+        let other = kinds.len();
+        let at = self.tab.filter(|t| *t <= other).unwrap_or_else(|| kinds.iter().position(|k| !k.4.is_empty()).unwrap_or(0));
+        let mut names: Vec<String> = kinds.iter().map(|(heading, _, _, _, owners, _)| if owners.is_empty() { heading.to_string() } else { format!("{heading} ({})", owners.len()) }).collect();
+        names.push(t!("settings-permissions-other").to_string());
 
         items.push(crate::toolkit::widget::choice(names, at, t!("settings-permissions-kind-tip"),
-                                                  |i| on::<Permissions>(move |p, _| p.tab = Some(i))).width(crate::toolkit::widget::Length::Shrink).key("permissions-kind"));
-        let (heading, icon, words, kind, owners, none) = kinds[at];
-        items.push(self.card(kit, heading, icon, words, kind, owners, none));
-        items.push(self.codes_card(kit));
-        items.push(self.older_card(kit));
-        items.extend(self.outside.cards(kit));
-        items.push(self.thunder_card(kit));
-        items.push(group(t!("common-in-use-key")).icon("dialog-information-symbolic").about(t!("common-in-use-where")).rows(in_use_key()).node(kit));
+                                                  |i| on::<Permissions>(move |p, _| p.tab = Some(i))).hushed().width(crate::toolkit::widget::Length::Shrink).key("permissions-kind"));
+        if let Some(&(heading, icon, words, kind, owners, none)) = kinds.get(at) {
+            items.push(self.card(kit, heading, icon, words, kind, owners, none));
+        } else {
+            items.push(self.codes_card(kit));
+            items.push(self.older_card(kit));
+            items.extend(self.outside.cards(kit));
+            items.push(self.thunder_card(kit));
+            items.push(group(t!("common-in-use-key")).icon("dialog-information-symbolic").about(t!("common-in-use-where")).rows(in_use_key()).node(kit));
+        }
         page(kit, self.title(), self.help(), items)
     }
 }
@@ -749,7 +753,7 @@ mod tests {
         let events = Loop::new();
         let asks = events.post(|_: Do| {});
         let kit = Kit::new(events.clone(), asks, None, None);
-        let words = Permissions::made_up().view(&kit).said();
+        let words = Permissions { tab: Some(5), ..Permissions::made_up() }.view(&kit).said();
         let head = words.iter().rposition(|w| w == t!("common-in-use-key")).expect("the card");
         for kind in Kind::ALL {
             assert!(words[head..].contains(&kind.spoken(&[])), "{kind:?}");

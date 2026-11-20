@@ -361,8 +361,6 @@ admin-driver-virtual-camera = ভার্চুয়াল ক্যামে�
 
 admin-language-in-use = { $code } হলো এই কম্পিউটার যে ভাষায় চালু হয়, তাই এটি সরানো যাবে না।
 
-
-
 # The kernel or chip has no split-lock slowing to turn off.
 admin-split-lock-none = এই কম্পিউটারে বন্ধ করার মতো কোনো স্প্লিট-লক ধীরগতি নেই।
 
@@ -388,13 +386,10 @@ admin-system-local-locked = Trindle /usr/local লেখার উপযোগ�
 admin-system-root-only = এটি শুধু root চালাতে পারে, pkexec দিয়ে নয়।
 
 # Switching the read-only system on where the system's disk is not Btrfs.
-admin-system-needs-btrfs = এর জন্য Btrfs দরকার।
-
+admin-system-needs-btrfs = Btrfs দরকার।
 
 # Red words in Settings when a restore swapped the systems but could not finish tidying up. { $why } is the reason.
 admin-restore-finish-later = স্ন্যাপশট জায়গামতো বসেছে এবং কম্পিউটার সেটি থেকেই চালু হবে। Trindle পুরনো সিস্টেম গুছিয়ে শেষ করতে পারেনি। কম্পিউটার পরের বার চালু হলে সে আবার চেষ্টা করবে: { $why }
-
-
 
 # Red words in Settings when too many ports are open already. { $most } is a number.
 admin-ports-too-many = সর্বোচ্চ { $most }টি পোর্ট খোলা যায়।
@@ -441,3 +436,33 @@ admin-swap-resume-unread = সোয়াপ ফাইল এখন কোথ�
 
 # Said when the swap file moved and the running system couldn't be told: hibernation is refused until the computer restarts.
 admin-swap-resume-restart = রিস্টার্ট করার পর হাইবারনেট আবার কাজ করবে।
+
+# Red words in Settings, Hardware, when Use the chip again is pressed while it is already running.
+admin-chip-busy = চিপ আগে থেকেই সেট আপ হচ্ছে। শেষ হওয়া পর্যন্ত অপেক্ষা করুন।
+
+# Red words in Settings, Hardware, when the disk password typed for Use the chip again is wrong.
+admin-chip-wrong-password = এটি ডিস্কের পাসওয়ার্ড নয়।
+
+# Red words in Settings, Hardware, after several wrong disk passwords in a row.
+admin-chip-wait = অনেকবার ভুল পাসওয়ার্ড। এক মিনিট অপেক্ষা করে আবার চেষ্টা করুন।
+
+# Red words in Settings, Hardware, when the chip unlocked the disk at the last start after all.
+admin-chip-not-needed = শেষবার চালুর সময় চিপই ডিস্কটি খুলেছে, তাই কিছু করার নেই।
+
+# Red words in Settings, Hardware, when the disk is not the one the start-up screen noted.
+admin-chip-changed = কম্পিউটার চালুর পর ডিস্ক বদলেছে। রিস্টার্ট করে আবার চেষ্টা করুন।
+
+# Red words in Settings, Hardware, when the computer's TPM security chip can't be found.
+admin-chip-none = নিরাপত্তা চিপ পাওয়া যায়নি। BIOS-এ চালু করে আবার চেষ্টা করুন।
+
+# Red words in Settings, Hardware, when clevis, the tool that sets up the chip, is missing.
+admin-chip-no-clevis = চিপ সেট আপের টুল clevis ইনস্টল করা নেই।
+
+# Red words in Settings, Hardware, when the disk has no room left for another key.
+admin-chip-no-slot = ডিস্কে আরেকটি কী রাখার জায়গা নেই।
+
+# Red words in Settings, Hardware, when the chip couldn't be set up. The disk still opens with its password.
+admin-chip-not-sealed = চিপ সেট আপ করা যায়নি। ডিস্ক এখনও পাসওয়ার্ডে খোলে।
+
+# Red words in Settings, Hardware, when the chip works again but its old key couldn't be removed.
+admin-chip-old-kept = চিপ আবার কাজ করছে, কিন্তু আগের কী সরানো যায়নি।

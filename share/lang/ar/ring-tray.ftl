@@ -174,3 +174,5 @@ ring-tray-full = في الحلقة أربع أيقونات بالفعل. أخر�
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = الفحص متوقف
+# Name of the updates button when a restart to finish installing was put off with Remind me later and the time has come.
+ring-updates-restart = أعد التشغيل لإنهاء التثبيت

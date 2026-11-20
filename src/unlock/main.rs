@@ -5,6 +5,7 @@
 #[path = "../said.rs"]
 #[allow(dead_code)]
 mod said;
+mod chip;
 mod fb;
 mod fifo;
 mod keys;
@@ -53,10 +54,14 @@ fn main() -> std::process::ExitCode {
         return give(&key);
     }
 
+    let disk = std::env::var("CRYPTTAB_SOURCE").ok();
+    let note = chip::note(disk.as_deref());
+    let why = note.as_deref();
+
     let _paused = spin::pause();
     let asked = std::time::Instant::now();
-    let answer = ask_on_screen(&prompt, &mut pipe)
-        .or_else(|| keys::ask_plainly(&prompt, &mut pipe));
+    let answer = ask_on_screen(&prompt, why, &mut pipe)
+        .or_else(|| keys::ask_plainly(&why.map_or(prompt.clone(), |w| format!("{w}\n{prompt}")), &mut pipe));
 
     let waited = boot::seconds().map(|_| {
         let before: f64 = std::fs::read_to_string(boot::WAITED).ok()
@@ -105,8 +110,8 @@ fn left_showing(show: bool, used: std::time::Instant, now: std::time::Instant) -
     show && eye::rested(used, now)
 }
 
-fn ask_on_screen(prompt: &str, pipe: &mut Option<fifo::PassFifo>) -> Option<Vec<u8>> {
-    let mut asking = Asking::open(prompt, pipe)?;
+fn ask_on_screen(prompt: &str, why: Option<&str>, pipe: &mut Option<fifo::PassFifo>) -> Option<Vec<u8>> {
+    let mut asking = Asking::open(prompt, why, pipe)?;
     loop {
         match asking.round()? {
             Next::Ask => {}
@@ -131,6 +136,8 @@ struct Asking<'a> {
     mouse: pointer::Pointer,
     pipe: &'a mut Option<fifo::PassFifo>,
     prompt: &'a str,
+
+    why: Option<&'a str>,
     typed: String,
 
     show: bool,
@@ -143,14 +150,14 @@ struct Asking<'a> {
 }
 
 impl<'a> Asking<'a> {
-    fn open(prompt: &'a str, pipe: &'a mut Option<fifo::PassFifo>) -> Option<Asking<'a>> {
+    fn open(prompt: &'a str, why: Option<&'a str>, pipe: &'a mut Option<fifo::PassFifo>) -> Option<Asking<'a>> {
         let mut screen = fb::Screen::open()?;
         let tty = keys::Tty::raw()?;
         let mouse = pointer::Pointer::open(screen.width, screen.height);
         let typed = String::new();
         let used = std::time::Instant::now();
-        let eye = paint::draw(&mut screen, prompt, &typed, false, false, None);
-        Some(Asking { screen, tty, mouse, pipe, prompt, typed, show: false, used, wrong: false, eye, drawn: None, looked: std::time::Instant::now() })
+        let eye = paint::draw(&mut screen, prompt, &typed, false, paint::Lines { why, empty: false }, None);
+        Some(Asking { screen, tty, mouse, pipe, prompt, why, typed, show: false, used, wrong: false, eye, drawn: None, looked: std::time::Instant::now() })
     }
 
     fn wait(&mut self) -> (Vec<libc::pollfd>, Option<usize>, usize) {
@@ -253,7 +260,8 @@ impl<'a> Asking<'a> {
         }
         let at = self.mouse.seen.then_some(self.mouse.at);
         if changed {
-            self.eye = paint::draw(&mut self.screen, self.prompt, &self.typed, self.show, self.wrong, at);
+            let lines = paint::Lines { why: self.why, empty: self.wrong };
+            self.eye = paint::draw(&mut self.screen, self.prompt, &self.typed, self.show, lines, at);
             self.drawn = at;
         } else if let (true, Some(to)) = (moved, at) {
             paint::move_pointer(&mut self.screen, self.drawn, to);

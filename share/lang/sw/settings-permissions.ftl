@@ -173,7 +173,7 @@ settings-permissions-many-apps =
 settings-permissions-flathub-apps = Programu za Flathub
 
 # Heading of the card for programs installed in their own folder.
-settings-permissions-own-folder = Kwenye folda yao wenyewe
+settings-permissions-own-folder = Folda yao wenyewe
 
 # Heading of the card for plugins.
 settings-permissions-plugins = Programu jalizi
@@ -182,7 +182,10 @@ settings-permissions-plugins = Programu jalizi
 settings-permissions-appimages = AppImage
 
 # Heading of the card for programs started from Folders.
-settings-permissions-from-folders = Zilizoanzishwa kutoka Folders
+settings-permissions-from-folders = Kutoka Folders
+
+# Tab name on Settings, Permissions, beside Started from Folders.
+settings-permissions-other = Mipangilio mingine
 
 # Under a kind of app on the Permissions page when none is installed.
 settings-permissions-none-installed = Hakuna zilizosakinishwa.

@@ -1,0 +1,11 @@
+# machine translated (Japanese), not yet reviewed by a person.
+# The words around each help page: English = translation, one a line.
+Trindle help = Trindle ヘルプ
+help = ヘルプ
+Skip to the page = ページへ移動
+Search the help = ヘルプを検索
+Search, such as printer or Wi-Fi = 検索（例：プリンター、Wi-Fi）
+Search = 検索
+On this page = このページの内容
+Page not found = ページが見つかりません
+Trindle help. No cookies, no tracking, no outside fonts or scripts. = Trindle ヘルプ。Cookie も追跡も外部のフォントやスクリプトも使いません。

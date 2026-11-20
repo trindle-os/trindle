@@ -125,6 +125,16 @@ store-upd-install-n =
 # Main button that restarts the computer.
 # SAFETY: needs a human review before it ships
 store-upd-restart-now = अभी रीस्टार्ट करें
+# Beside Restart now: the box that puts the restart off, then the ring's Updates button reminds. Its answers are the choices below.
+store-upd-remind-later = बाद में याद दिलाएँ
+# Red words under the headline when the Remind me later time could not be saved; the reason follows.
+store-upd-remind-not-saved = याद दिलाना सहेजा नहीं जा सका: { $why }।
+# One answer in the Remind me later box.
+store-upd-remind-hours =
+    { $n ->
+        [one] 1 घंटे में
+       *[other] { $n } घंटे में
+    }
 
 # Main button that checks for updates.
 store-upd-check-for = अपडेट खोजें
@@ -222,23 +232,11 @@ store-upd-debian-count =
        *[other] { $n } अपडेट, साथ में इंस्टॉल होते हैं
     }
 
-# On a row of Debian's updates: where it comes from.
-store-upd-from-debian = Debian से
-
 # Under Debian's rows: how many of them show.
 store-upd-debian-showing = Debian के { $total } अपडेट में से { $shown } दिखाए गए हैं।
 
 # Note on the Trindle and Debian card: which version of Trindle the computer has.
 store-upd-has-trindle = इस कंप्यूटर पर Trindle { $version } है।
-
-# Heading of the Trindle and Debian card.
-store-upd-card-system = Trindle और Debian
-
-# Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Debian पैकेज एक-दूसरे के साथ मिलकर काम करने के लिए बने हैं। सिर्फ़ एक को इंस्टॉल करने से दूसरे भी आ सकते हैं या वे बेमेल रह सकते हैं, इसलिए सब साथ में इंस्टॉल होते हैं।
-
-# Note on the Trindle and Debian card: why no row has a Hold back button.
-store-upd-not-held = Trindle और Debian के अपडेट पूरे कंप्यूटर के लिए सुरक्षा सुधार लाते हैं, इसलिए उन्हें रोका नहीं जा सकता।
 
 # Heading of the card about the daily security updates.
 store-upd-card-security = सुरक्षा अपडेट
@@ -304,7 +302,6 @@ store-patch-not-fetched = Trindle { $package } { $version } डाउनलो�
 # Said when a security fix for a boxed app was downloaded but isn't there to use.
 store-patch-not-found = Trindle को डाउनलोड किया हुआ पैकेज नहीं मिला।
 
-
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
 store-upd-off = अपने आप अपडेट जाँचना बंद है।
 
@@ -325,3 +322,4 @@ store-upd-stopped-all = रोका गया। जारी रखने क�
 
 # Note under the Apps card.
 store-upd-steam-restarts = कोई गेम न चल रहा हो, तब Steam रीस्टार्ट होता है।
+

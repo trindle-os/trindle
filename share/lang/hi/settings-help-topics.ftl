@@ -840,7 +840,7 @@ settings-help-topics-keys-step2-1 = अकेली Super, या Super और S
 settings-help-topics-keys-step2-2 = Super और Enter, या Ctrl, Alt और T: Terminal खोलें।
 
 # Help topic "Keyboard shortcuts": step 3 of the numbered steps at block 2.
-settings-help-topics-keys-step2-3 = Super और I: Settings खोलें।
+settings-help-topics-keys-step2-3 = Super और I: Settings।
 
 # Help topic "Keyboard shortcuts": step 4 of the numbered steps at block 2.
 settings-help-topics-keys-step2-4 = Super और L: स्क्रीन लॉक करें, जब Settings, Power में लॉक करना चालू हो।

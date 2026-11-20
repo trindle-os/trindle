@@ -588,13 +588,14 @@ fn a_known_element_with_a_bare_attribute_is_markup() {
 }
 
 #[test]
-fn nothing_personal_goes_in_a_report_the_scrubbing_stays() {
+fn the_persons_own_words_go_as_typed() {
     let mut r = ready("personal");
     r.typed = "Mail jo.smith@example.com from 192.168.1.20 in /home/jo/notes failed".into();
     r.gate_is(true);
     r.update(Msg::Send);
     let sent = &r.outbox[0];
-    assert!(!sent.contains("jo.smith@example.com") && !sent.contains("192.168.1.20") && !sent.contains("/home/jo/"), "{sent}");
+
+    assert!(sent.contains("jo.smith@example.com") && sent.contains("192.168.1.20"), "{sent}");
 }
 
 #[test]

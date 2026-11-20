@@ -4,6 +4,7 @@ pub use crate::toolkit::common::{eye, own_press, selection, sheet, shm, ui};
 pub use crate::toolkit::common::source;
 pub use trindle_shared::screen_scale::ORDINARY_UIDS;
 
+pub mod installing;
 pub mod host;
 pub mod widest;
 #[cfg(test)]
@@ -118,6 +119,8 @@ mod keys_panels;
 #[cfg(test)]
 mod no_waiting_on_a_share;
 #[cfg(test)]
+mod no_obvious_tips;
+#[cfg(test)]
 mod nothing_named_is_followed;
 #[cfg(test)]
 mod lists_are_named;
@@ -176,8 +179,11 @@ pub mod security_updates;
 pub mod tailscale;
 pub mod update_asked;
 pub mod update_checks;
+pub mod remind;
 pub mod stopping;
 pub mod updating;
+pub mod apt_choice;
+pub mod apt_source;
 pub mod sounds;
 pub mod tip;
 pub mod sources;

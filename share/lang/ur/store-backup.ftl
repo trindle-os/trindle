@@ -58,7 +58,7 @@ store-because-quota = اس اکاؤنٹ کے لیے دی گئی جگہ ختم ہ
 store-because-missing = جو فائل یا پروگرام درکار ہے وہ موجود نہیں
 
 # The reason when no reason could be read from the program's last line.
-store-because-failed = یہ ناکام ہو گیا
+store-because-failed = ناکام
 
 # The reason when the backup has no name to be written under.
 store-because-no-name = اس کا کوئی نام نہیں

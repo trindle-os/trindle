@@ -12,6 +12,9 @@ screenshot-whole = 整个屏幕
 # Name of the round button that closes the overlay or a pinned picture.
 screenshot-close = 关闭
 
+# Word on the button, shown when the report window asked for the picture, that hands the chosen part to the report.
+screenshot-add-to-report = 添加到报告
+
 # SAFETY: needs a human review before it ships
 # Name of the round button that gives the screenshot up.
 screenshot-cancel = 取消

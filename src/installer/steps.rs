@@ -4,7 +4,7 @@
 use std::io::{BufRead, BufReader, Write};
 use std::path::Path;
 use std::process::{Command, Stdio};
-use std::sync::atomic::{AtomicBool, AtomicU32, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicI32, AtomicU32, Ordering};
 use std::sync::mpsc::Receiver;
 
 use zeroize::Zeroizing;
@@ -176,6 +176,11 @@ fn check(plan: &Plan) -> Step {
     if plan.lock != Lock::None && plan.disk_password.is_empty() {
         return Err(t!("installer-disk-password-needed").into());
     }
+    disk_fault(plan).inspect_err(|_| refuse(DISK_REFUSED))?;
+    check_words(plan)
+}
+
+fn disk_fault(plan: &Plan) -> Step {
     match plan.target.as_ref().ok_or(t!("installer-no-disk-chosen"))? {
         Where::Erase { disk } => {
             block_device(disk)?;
@@ -206,10 +211,10 @@ fn check(plan: &Plan) -> Step {
 
     let disk = plan.disk();
     if plan.disk_id.is_empty() || super::plan::disk_id(&disk) != plan.disk_id {
-        DISK_CHANGED.store(true, Ordering::SeqCst);
+        refuse(CHANGED);
         return Err(t!("installer-disk-changed", dev = disk));
     }
-    check_words(plan)
+    Ok(())
 }
 
 fn holds_install_image(fstypes: &str) -> bool {
@@ -218,6 +223,7 @@ fn holds_install_image(fstypes: &str) -> bool {
 
 fn check_words(plan: &Plan) -> Step {
     plain_word(t!("installer-bad-language"), &plan.locale, "_.-")?;
+    plain_word(t!("installer-bad-language"), &plan.trindle_language, "-")?;
     plain_word(t!("installer-bad-keyboard"), &plan.layout, "-")?;
     plain_word(t!("installer-bad-keyboard"), &plan.variant, "-_")?;
     plain_word(t!("installer-bad-timezone"), &plan.timezone, "/_+-")?;
@@ -251,11 +257,18 @@ pub const STOPPED: i32 = 4;
 pub const STUCK: i32 = 5;
 
 pub const CHANGED: i32 = 6;
-static STOP: AtomicBool = AtomicBool::new(false);
-static DISK_CHANGED: AtomicBool = AtomicBool::new(false);
 
-pub fn disk_changed() -> bool {
-    DISK_CHANGED.load(Ordering::SeqCst)
+pub const REFUSED: i32 = 7;
+pub const DISK_REFUSED: i32 = 8;
+static STOP: AtomicBool = AtomicBool::new(false);
+static REFUSAL: AtomicI32 = AtomicI32::new(0);
+
+fn refuse(code: i32) {
+    let _ = REFUSAL.compare_exchange(0, code, Ordering::SeqCst, Ordering::SeqCst);
+}
+
+pub fn refusal() -> Option<i32> {
+    Some(REFUSAL.load(Ordering::SeqCst)).filter(|&c| c != 0)
 }
 static COPYING: AtomicU32 = AtomicU32::new(0);
 
@@ -289,9 +302,32 @@ pub fn let_go() -> bool {
     !std::path::Path::new(MAPPED).exists() && !mounts.contains(TARGET) && !mounts.contains(TOP)
 }
 
+struct PowerHeld(Option<std::process::Child>);
+
+impl PowerHeld {
+    fn take() -> PowerHeld {
+        let why = format!("--why={}", t!("installer-power-held"));
+        let child = std::process::Command::new("systemd-inhibit")
+            .args(["--what=shutdown:sleep:idle:handle-power-key:handle-suspend-key:handle-hibernate-key:handle-lid-switch",
+                   "--who=Trindle", &why, "--mode=block", "sleep", "infinity"])
+            .stdin(std::process::Stdio::null()).stdout(std::process::Stdio::null()).stderr(std::process::Stdio::null())
+            .spawn();
+        PowerHeld(child.inspect_err(|e| eprintln!("trindle-installer: systemd-inhibit: {e}")).ok())
+    }
+}
+
+impl Drop for PowerHeld {
+    fn drop(&mut self) {
+        if let Some(mut c) = self.0.take() {
+            let _ = c.kill();
+            let _ = c.wait();
+        }
+    }
+}
+
 fn one_installer() -> Result<std::fs::File, String> {
     use std::os::fd::AsRawFd;
-    let file = std::fs::OpenOptions::new().create(true).write(true).truncate(false).open("/run/trindle-install.lock")
+    let file = std::fs::OpenOptions::new().create(true).write(true).truncate(false).open(crate::common::installing::INSTALL_LOCK)
         .map_err(|e| t!("installer-plan-unreadable-why", why = e.to_string()))?;
     // SAFETY: file owns a valid descriptor for the call.
     if unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) } != 0 {
@@ -300,16 +336,24 @@ fn one_installer() -> Result<std::fs::File, String> {
     Ok(file)
 }
 
-pub fn install(plan: &Plan, answers: &Receiver<String>) -> Step {
+fn ready_to_change(plan: &Plan) -> Result<std::fs::File, String> {
     // SAFETY: asks the kernel for this process's own effective user id.
     if unsafe { libc::geteuid() } != 0 {
         return Err(t!("installer-needs-root").into());
     }
 
     std::env::set_var("PATH", "/usr/sbin:/usr/bin:/sbin:/bin");
-
-    let _only_one = one_installer()?;
+    let only_one = one_installer()?;
     check(plan)?;
+    Ok(only_one)
+}
+
+pub fn install(plan: &Plan, answers: &Receiver<String>) -> Step {
+
+    let _only_one = ready_to_change(plan).inspect_err(|_| refuse(REFUSED))?;
+
+    let _awake = PowerHeld::take();
+
     say(1, t!("installer-step-room"));
     let mut places = partition(plan)?;
     say(6, t!("installer-step-prepare"));
@@ -318,14 +362,14 @@ pub fn install(plan: &Plan, answers: &Receiver<String>) -> Step {
     format(&places)?;
     mount(&places)?;
     go_on()?;
-    let resume = if plan.swap { swap_file().map_err(|why| problem(t!("installer-swap-failed", why = why))).ok() } else { None };
+    let resume = if plan.swap { swap_file(plan).map_err(|why| problem(t!("installer-swap-failed", why = why))).ok() } else { None };
     say(10, t!("installer-step-copy"));
     copy_system()?;
     go_on()?;
     say(69, t!("installer-step-waiting"));
     let json = Zeroizing::new(answers.recv().map_err(|_| t!("installer-stopped").to_string())?);
     let full: Plan = serde_json::from_str(&json).map_err(|e| t!("installer-plan-unreadable-why", why = e.to_string()))?;
-    if full.target != plan.target || full.lock != plan.lock || full.swap != plan.swap
+    if full.target != plan.target || full.lock != plan.lock || full.swap != plan.swap || full.swap_gib != plan.swap_gib
         || full.disk_id != plan.disk_id || full.disk_password != plan.disk_password {
         return Err(t!("installer-plan-unreadable").into());
     }
@@ -498,32 +542,55 @@ fn lock_up(plan: &Plan, places: &mut Places) -> Step {
     Ok(())
 }
 
-const CHIP_POLICY: &str = r#"'{"pcr_bank":"sha256","pcr_ids":"7"}'"#;
+use trindle_shared::luks_chip::POLICY as CHIP_POLICY;
 
 fn arrange_chip_binding(plan: &Plan, places: &Places) -> Step {
-    const UNIT: &str = "[Unit]\n\
-                        Description=Teach this computer's chip to open the disk\n\
-                        After=multi-user.target\n\
-                        ConditionPathExists=/etc/trindle/tpm-key\n\
-                        \n\
-                        [Service]\n\
-                        Type=oneshot\n\
-                        ExecStart=/etc/trindle/chip.sh\n\
-                        ExecStopPost=/bin/rm -f /etc/trindle/tpm-key\n\
-                        \n\
-                        [Install]\n\
-                        WantedBy=multi-user.target\n";
     if plan.lock != Lock::Chip {
         return Ok(());
     }
-    let Some(part) = &places.locked else { return Ok(()) };
+    say(93, t!("installer-step-chip"));
+    if !chip_or_password(TARGET, || teach_chip(plan, places))? {
+        problem(t!("installer-chip-not-set-up").into());
+    }
+    Ok(())
+}
+
+const CHIP_UNIT: &str = "[Unit]\n\
+                    Description=Teach this computer's chip to open the disk\n\
+                    After=multi-user.target\n\
+                    ConditionPathExists=/etc/trindle/tpm-key\n\
+                    \n\
+                    [Service]\n\
+                    Type=oneshot\n\
+                    ExecStart=/etc/trindle/chip.sh\n\
+                    ExecStopPost=/bin/rm -f /etc/trindle/tpm-key\n\
+                    \n\
+                    [Install]\n\
+                    WantedBy=multi-user.target\n";
+
+const CHIP_FILES: [&str; 4] = ["/etc/trindle/tpm-key", "/etc/trindle/chip.sh", "/etc/systemd/system/trindle-chip.service",
+                               "/etc/systemd/system/multi-user.target.wants/trindle-chip.service"];
+
+fn chip_or_password(root: &str, teach: impl FnOnce() -> Step) -> Result<bool, String> {
+    if teach().is_ok() {
+        return Ok(true);
+    }
+    for path in CHIP_FILES {
+        gone(&format!("{root}{path}"))?;
+    }
+    Ok(false)
+}
+
+fn teach_chip(plan: &Plan, places: &Places) -> Step {
+    let part = places.locked.as_ref().ok_or_else(String::new)?;
 
     let part = format!("/dev/disk/by-uuid/{}", uuid_of(part)?);
-    say(93, t!("installer-step-chip"));
+
+    run_input(&["clevis", "encrypt", "tpm2", CHIP_POLICY], Some("trindle"))?;
 
     write_private("/etc/trindle/tpm-key", &plan.disk_password, 0o600)?;
-    write_private("/etc/trindle/chip.sh", &chip_script(&part, CHIP_POLICY), 0o700)?;
-    write("/etc/systemd/system/trindle-chip.service", UNIT)?;
+    write_private("/etc/trindle/chip.sh", &chip_script(&part, &format!("'{CHIP_POLICY}'")), 0o700)?;
+    write("/etc/systemd/system/trindle-chip.service", CHIP_UNIT)?;
     chroot(&["systemctl", "enable", "trindle-chip.service"])
 }
 
@@ -664,11 +731,14 @@ struct Resume {
     offset: String,
 }
 
-fn swap_file() -> Result<Resume, String> {
-    let gib = super::plan::memory_gib();
+fn swap_file(plan: &Plan) -> Result<Resume, String> {
+    let gib = plan.swap_size();
+    if !super::plan::swap_sizes(super::plan::memory_gib()).contains(&gib) {
+        return Err(t!("installer-plan-unreadable").into());
+    }
     let free = text(&["df", "--output=avail", "-B1", &format!("{TARGET}/swap")])
         .lines().nth(1).and_then(|l| l.trim().parse::<u64>().ok()).unwrap_or(0);
-    if free < (gib + 30) * super::plan::GIB {
+    if !super::plan::swap_fits(free, gib) {
         return Err(t!("installer-swap-no-room").into());
     }
     let file = format!("{TARGET}/swap/swapfile");
@@ -691,7 +761,8 @@ fn resume_settings(places: &Places, resume: &Resume) -> Step {
 fn fill(plan: &Plan, places: &Places, resume: Option<Resume>) -> Step {
     say(70, t!("installer-step-settings"));
     fstab(places, resume.is_some())?;
-    if let Some(r) = &resume {
+
+    if let Some(r) = resume.as_ref().filter(|_| plan.swap_hibernates()) {
         resume_settings(places, r)?;
     }
     settings(plan)?;
@@ -701,14 +772,16 @@ fn fill(plan: &Plan, places: &Places, resume: Option<Resume>) -> Step {
     }
     let brand = super::brand::brand();
     go_on()?;
-    remove_live_account();
+    remove_live_account()?;
     people(plan)?;
     say(80, t!("installer-step-live-parts"));
     live_parts(&brand, &plan.username)?;
     say(84, t!("installer-step-startup"));
     crypttab(places)?;
 
-    let _ = chroot(&["setupcon", "--force", "--save-only"]);
+    if chroot(&["setupcon", "--force", "--save-only"]).is_err() && places.locked.is_some() {
+        problem(t!("installer-start-keyboard-failed").into());
+    }
 
     let _ = std::fs::copy(format!("{TARGET}/usr/share/trindle/initramfs-small.conf"),
                           format!("{TARGET}/etc/initramfs-tools/conf.d/trindle-small"));
@@ -720,7 +793,9 @@ fn fill(plan: &Plan, places: &Places, resume: Option<Resume>) -> Step {
     say(96, t!("installer-step-snapshots"));
     snapshots();
     say(99, t!("installer-step-finishing"));
-    let _ = chroot(&["systemctl", "enable", "greetd.service"]);
+    if let Err(why) = chroot(&["systemctl", "enable", "greetd.service"]) {
+        problem(t!("installer-login-screen-failed", why = why));
+    }
     if let Some(after) = &brand.after {
         let _ = chroot(&["sh", "-c", after]);
     }
@@ -780,7 +855,16 @@ fn settings(plan: &Plan) -> Step {
         .map_err(|e| t!("installer-timezone-failed", why = e.to_string()))?;
 
     write("/etc/skel/.config/trindle/environment",
-          &format!("XKB_DEFAULT_LAYOUT={layout}\nXKB_DEFAULT_VARIANT={}\n", plan.variant))
+          &format!("XKB_DEFAULT_LAYOUT={layout}\nXKB_DEFAULT_VARIANT={}\n", plan.variant))?;
+
+    let conf = "/etc/skel/.config/trindle/trindle.conf";
+    let old = std::fs::read_to_string(format!("{TARGET}{conf}")).unwrap_or_default();
+    let mut lines: Vec<String> = old.lines().filter(|l| !l.trim_start().starts_with("language=")).map(str::to_string).collect();
+    lines.extend(plan.language_setting());
+    if lines.is_empty() && old.is_empty() {
+        return Ok(());
+    }
+    write(conf, &(lines.join("\n") + "\n"))
 }
 
 fn people(plan: &Plan) -> Step {
@@ -790,28 +874,35 @@ fn people(plan: &Plan) -> Step {
     chroot(&["useradd", "-m", "-s", "/bin/bash", "-c", &plan.fullname, "-G", groups, &plan.username])?;
     chroot_input(&["chpasswd"], &format!("{}:{}\n", plan.username, plan.password))?;
 
-    let _ = chroot(&["passwd", "-l", "root"]);
-    Ok(())
+    chroot(&["passwd", "-l", "root"])
 }
 
-fn remove_live_account() {
-    let passwd = std::fs::read_to_string(format!("{TARGET}/etc/passwd")).unwrap_or_default();
-    if let Some(live_user) = passwd.lines().find(|l| l.split(':').nth(2) == Some("1000"))
-        .and_then(|l| l.split(':').next()).filter(|u| !u.is_empty())
-    {
-        let _ = chroot(&["userdel", "-r", live_user]);
+fn remove_live_account() -> Step {
+    let passwd = || std::fs::read_to_string(format!("{TARGET}/etc/passwd")).unwrap_or_default();
+    let Some(live_user) = live_account(&passwd()) else { return Ok(()) };
+
+    let tried = chroot(&["userdel", "-r", &live_user]);
+    match (live_account(&passwd()), tried) {
+        (Some(_), Err(why)) => Err(why),
+        (Some(_), Ok(())) => Err(t!("installer-live-account-left", user = live_user)),
+        (None, _) => Ok(()),
     }
+}
+
+fn live_account(passwd: &str) -> Option<String> {
+    passwd.lines().find(|l| l.split(':').nth(2) == Some("1000"))
+        .and_then(|l| l.split(':').next()).filter(|u| !u.is_empty()).map(str::to_string)
 }
 
 fn live_parts(brand: &super::brand::Brand, username: &str) -> Step {
 
-    let _ = std::fs::write(format!("{TARGET}/etc/machine-id"), "");
-    let _ = std::fs::remove_file(format!("{TARGET}/var/lib/dbus/machine-id"));
+    write("/etc/machine-id", "")?;
+    gone(&format!("{TARGET}/var/lib/dbus/machine-id"))?;
 
     if let Ok(dir) = std::fs::read_dir(format!("{TARGET}/etc/ssh")) {
         for e in dir.flatten() {
             if e.file_name().to_string_lossy().starts_with("ssh_host_") {
-                let _ = std::fs::remove_file(e.path());
+                gone(&e.path().to_string_lossy())?;
             }
         }
     }
@@ -819,14 +910,14 @@ fn live_parts(brand: &super::brand::Brand, username: &str) -> Step {
               "/usr/local/share/applications/trindle-installer.desktop",
               "/etc/skel/.config/autostart/trindle-live-welcome.desktop",
               "/etc/skel/.config/autostart/trindle-welcome.desktop"] {
-        let _ = std::fs::remove_file(format!("{TARGET}{f}"));
+        gone(&format!("{TARGET}{f}"))?;
     }
 
     let homes = ["/etc/skel".to_string(), format!("/home/{username}")];
     for home in &homes {
 
         for welcome in ["trindle-live-welcome", "trindle-welcome"] {
-            let _ = std::fs::remove_file(format!("{TARGET}{home}/.config/autostart/{welcome}.desktop"));
+            gone(&format!("{TARGET}{home}/.config/autostart/{welcome}.desktop"))?;
         }
         for (file, drop) in [(".config/trindle/favourites", "trindle-installer"),
                              (".config/trindle/trindle.conf", "lock="),
@@ -849,8 +940,17 @@ fn live_parts(brand: &super::brand::Brand, username: &str) -> Step {
     tidy.insert(1, "--purge".into());
     let _ = chroot(&tidy.iter().map(String::as_str).collect::<Vec<_>>());
 
-    let _ = chroot(&["apt-mark", "unhold", "trindle"]);
+    if let Err(why) = chroot(&["apt-mark", "unhold", "trindle"]) {
+        problem(t!("installer-updates-held", why = why));
+    }
     Ok(())
+}
+
+fn gone(path: &str) -> Step {
+    match std::fs::remove_file(path) {
+        Err(e) if e.kind() != std::io::ErrorKind::NotFound => Err(t!("installer-write-failed", path = path, why = e.to_string())),
+        _ => Ok(()),
+    }
 }
 
 fn boot(disk: &str, places: &Places) -> Step {
@@ -895,8 +995,10 @@ fn name_in_firmware(disk: &str, esp: &str) {
     } else {
         r"\EFI\Trindle\grubx64.efi"
     };
-    let _ = run(&["efibootmgr", "--quiet", "--create", "--disk", disk, "--part", &number_of(esp),
-                  "--label", FIRMWARE_NAME, "--loader", loader]);
+    if let Err(why) = run(&["efibootmgr", "--quiet", "--create", "--disk", disk, "--part", &number_of(esp),
+                            "--label", FIRMWARE_NAME, "--loader", loader]) {
+        problem(t!("installer-firmware-entry-failed", why = why));
+    }
 }
 
 fn firmware_entries_named(list: &str, name: &str) -> Vec<String> {
@@ -920,27 +1022,26 @@ fn snapshots() {
     if let Err(why) = made {
         problem(t!("installer-snapshots-failed", why = why));
     }
-    home_snapshots();
-    let _ = chroot(&["systemctl", "enable", "trindle-snapshots-grub.path"]);
-    if let Err(why) = chroot(&["update-grub"]) {
+    if !home_snapshots() {
+        problem(t!("installer-home-snapshots-failed").into());
+    }
+    if let Err(why) = chroot(&["systemctl", "enable", "trindle-snapshots-grub.path"]).and_then(|()| chroot(&["update-grub"])) {
         problem(t!("installer-snapshots-menu-failed", why = why));
     }
 }
 
-fn home_snapshots() {
+fn home_snapshots() -> bool {
     use crate::common::home_snapshots as home;
     use std::os::unix::fs::PermissionsExt;
     for command in home::setup_commands(false, home::KEEP_DEFAULT) {
         if chroot(&command.iter().map(String::as_str).collect::<Vec<_>>()).is_err() {
-            return;
+            return false;
         }
     }
     let folder = format!("{TARGET}{}", home::SNAPSHOTS);
-    if !std::fs::symlink_metadata(&folder).is_ok_and(|m| m.is_dir())
-        || std::fs::set_permissions(&folder, std::fs::Permissions::from_mode(home::FOLDER_MODE)).is_err() {
-        return;
-    }
-    let _ = write(home::SETTING, &home::Setting { on: true, days: home::KEEP_DEFAULT }.text());
+    std::fs::symlink_metadata(&folder).is_ok_and(|m| m.is_dir())
+        && std::fs::set_permissions(&folder, std::fs::Permissions::from_mode(home::FOLDER_MODE)).is_ok()
+        && write(home::SETTING, &home::Setting { on: true, days: home::KEEP_DEFAULT }.text()).is_ok()
 }
 
 #[cfg(test)]
@@ -1098,6 +1199,46 @@ mod tests {
     fn the_package_rewrites_the_chip_script_as_the_installer_writes_it() {
         let postinst = include_str!("../../tools/deb/postinst");
         let body = postinst.split_once("cat > \"$chip\" <<CHIP\n").unwrap().1.split_once("\nCHIP\n").unwrap().0;
-        assert_eq!(format!("{body}\n"), chip_script("$part", CHIP_POLICY));
+        assert_eq!(format!("{body}\n"), chip_script("$part", &format!("'{CHIP_POLICY}'")));
+    }
+
+    #[test]
+    fn a_chip_that_cannot_be_taught_leaves_the_password_alone() {
+        let top = std::env::temp_dir().join(format!("trindle-unchipped-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&top);
+        let at = |f: &str| top.join(f.trim_start_matches('/'));
+        for f in CHIP_FILES {
+            std::fs::create_dir_all(at(f).parent().unwrap()).unwrap();
+            std::fs::write(at(f), "x").unwrap();
+        }
+        let r = top.to_str().unwrap();
+        assert_eq!(chip_or_password(r, || Ok(())), Ok(true));
+        assert!(CHIP_FILES.iter().all(|f| at(f).exists()));
+        assert_eq!(chip_or_password(r, || Err("no chip".into())), Ok(false));
+        assert!(CHIP_FILES.iter().all(|f| !at(f).exists()), "something of the chip was left");
+        assert_eq!(chip_or_password(r, || Err("no chip".into())), Ok(false), "nothing to remove is not a fault");
+        std::fs::create_dir_all(at("/etc/trindle/tpm-key/stuck")).unwrap();
+        assert!(chip_or_password(r, || Err("no chip".into())).is_err(), "a password copy that would not go was let through");
+        let _ = std::fs::remove_dir_all(&top);
+    }
+
+    #[test]
+    fn the_stick_s_account_is_found_by_its_number() {
+        let passwd = "admin:x:0:0::/home/admin:/bin/bash\nuser:x:1000:1000::/home/user:/bin/bash\n";
+        assert_eq!(live_account(passwd).as_deref(), Some("user"));
+        assert_eq!(live_account("admin:x:0:0::/home/admin:/bin/bash\n"), None);
+        assert_eq!(live_account(":x:1000:1000::/home/x:/bin/sh\n"), None);
+    }
+
+    #[test]
+    fn only_tidying_is_left_unsaid() {
+        let tidy = ["udevadm", "partprobe", "kill", "cryptsetup", "umount", "ntfsfix", "grub-install", "os-prober",
+                    "efibootmgr", "sh", "&argv", "&tidy"];
+        let source = include_str!("steps.rs");
+        let code = source.split("#[cfg(test)]").next().unwrap();
+        let unsaid: Vec<&str> = code.lines().filter(|l| l.contains("let _ = chroot(") || l.contains("let _ = run("))
+            .filter(|l| !tidy.iter().any(|t| l.contains(&format!("[\"{t}\"")) || l.contains(&format!("({t}"))))
+            .collect();
+        assert!(unsaid.is_empty(), "failures nobody is told of: {unsaid:#?}");
     }
 }

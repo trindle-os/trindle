@@ -863,7 +863,7 @@ settings-help-topics-keys-step2-1 = Super وحده، أو Super وSpace: افت�
 settings-help-topics-keys-step2-2 = Super وEnter، أو Ctrl وAlt وT: افتح طرفية.
 
 # Help topic "Keyboard shortcuts": step 3 of the numbered steps at block 2.
-settings-help-topics-keys-step2-3 = Super وI: افتح الإعدادات.
+settings-help-topics-keys-step2-3 = Super وI: الإعدادات.
 
 # Help topic "Keyboard shortcuts": step 4 of the numbered steps at block 2.
 settings-help-topics-keys-step2-4 = Super وL: اقفل الشاشة، بعد تشغيل القفل في الإعدادات، الطاقة.

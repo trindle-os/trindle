@@ -358,7 +358,7 @@ disks-mount = ركّب
 disks-unmount = أزل التركيب
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = أجرِ تغييرات
+disks-change-it = غيّرها
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = الاسم
@@ -536,7 +536,7 @@ disks-folder-appears = يظهر في { $dir }
 disks-startup-on = يُركَّب عند بدء التشغيل في { $dir }
 
 # Words on a row when a part is set not to mount at start-up.
-disks-startup-off = غير مركّب عند بدء التشغيل
+disks-startup-off = غير مركّب عند الإقلاع
 
 # Words on a row while a folder or start-up choice is being saved.
 disks-saving = جارٍ الحفظ

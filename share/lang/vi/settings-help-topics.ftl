@@ -863,7 +863,7 @@ settings-help-topics-keys-step2-1 = Super một mình, hoặc Super và Space: m
 settings-help-topics-keys-step2-2 = Super và Enter, hoặc Ctrl, Alt và T: mở Terminal.
 
 # Help topic "Keyboard shortcuts": step 3 of the numbered steps at block 2.
-settings-help-topics-keys-step2-3 = Super và I: mở Cài đặt.
+settings-help-topics-keys-step2-3 = Super và I: Cài đặt.
 
 # Help topic "Keyboard shortcuts": step 4 of the numbered steps at block 2.
 settings-help-topics-keys-step2-4 = Super và L: khóa màn hình, khi đã bật khóa trong Cài đặt, Nguồn.

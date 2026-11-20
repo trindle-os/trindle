@@ -176,7 +176,7 @@ pub fn view_of(app: &str, lines: &[Line], worked_out: bool) -> Node<Msg> {
     if lines.iter().filter(|l| l.refused.is_none()).count() > 1 {
         actions.push(button("edit-select-all-symbolic", t!("store-ask-allow-all")).on_press(Msg::AllowAll));
     }
-    actions.push(main_action(crate::common::no_tick::GO_ICON, t!("store-ask-keep")).on_press(Msg::Done));
+    actions.push(main_action(crate::common::no_tick::CONFIRM_ICON, t!("store-ask-keep")).on_press(Msg::Done));
     items.push(row(actions).gap(12.0).centred());
 
     column(items).gap(16.0).padding(24.0).on_escape(Msg::Done)

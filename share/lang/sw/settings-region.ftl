@@ -10,7 +10,7 @@ settings-region-keywords = lugha eneo nchi miundo tarehe sarafu
 settings-region-help = Lugha na miundo huanza kutumika utakapoingia tena.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = Ingia tena ili kuona kila mahali.
+settings-region-later = Ingia tena ili kuona.
 
 # Shown while the page reads the computer.
 settings-region-looking = Inatafuta…

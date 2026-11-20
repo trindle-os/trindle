@@ -561,7 +561,7 @@ store-src-added = { $what } ist hinzugefügt und wird aktuell gehalten.
 store-src-no-program = { $what }. Die Quelle ist hinzugefügt, aber das Programm ist nicht installiert.
 
 # Under a maker's source whose program is installed another way.
-store-src-other-way = { $what } wurde auf anderem Weg installiert.
+store-src-other-way = { $what }. Anders installiert.
 
 # Tip of the round button that removes a maker's source and its program.
 # SAFETY: needs a human review before it ships

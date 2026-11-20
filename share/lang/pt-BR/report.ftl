@@ -7,7 +7,7 @@ report-title-note = Relatar um problema
 report-title-crash = Algo deu errado. Enviar um relatório?
 
 # Under the title: what a report holds, and what it never holds.
-report-summary = Isto envia o erro, um resumo do seu computador e as últimas linhas do registro. Nomes, endereços de e-mail, endereços de rede e nomes de Wi-Fi são removidos. Nomes de arquivos e endereços da web ainda podem aparecer nas linhas do registro. Não envia seus arquivos nem suas senhas.
+report-summary = Isto envia suas palavras, dados do seu computador, os erros desta inicialização e o registro do Trindle. Nomes e endereços (e-mail, rede, Wi-Fi) são removidos do que o Trindle reúne. Nomes de arquivos e endereços da web ainda podem aparecer nas linhas do registro. Não envia seus arquivos nem suas senhas.
 
 # Big typing box in the middle of the window, shown quietly while empty.
 report-what-doing = O que aconteceu?
@@ -55,12 +55,6 @@ report-checking = Verificando.
 
 # Why a report is waiting: Buildmorphic had too many reports at once and the report is tried again later.
 report-too-many = Relatórios demais ao mesmo tempo.
-
-# Written beside the Send button once the report has been sent.
-report-already-sent = Já enviado.
-
-# Written under the typing box when Save is pressed a second time.
-report-already-saved = Já salvo.
 
 # Written beside the buttons while a report that could not be sent waits for the computer to be online.
 report-waiting = Aguardando uma conexão.
@@ -164,10 +158,7 @@ report-picture-damaged = A imagem está danificada.
 
 report-picture-unreadable = Não foi possível ler.
 
-
-
 report-sent-as-bug = Enviado. O número do seu relatório de erro é { $number }. Obrigado.
-
 
 # Under the title, beta only: why a report matters and what it holds.
 report-beta = O Trindle está em beta. Os relatórios são anônimos: nomes, endereços de e-mail e pastas pessoais são removidos. O nome de usuário é opcional.

@@ -38,11 +38,11 @@ settings-network-access-change = abrir y cambiar con tu contraseña
 
 # Small line of a shared folder: anyone on the local network may open it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-open = cualquiera en la red local puede abrir
+settings-network-access-guests-open = cualquiera cerca puede abrir
 
 # Small line of a shared folder: anyone on the local network may change it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-change = cualquiera en la red local puede cambiar
+settings-network-access-guests-change = cualquiera cerca puede cambiar
 
 # Small line of a shared folder: where it is, then who may do what with it; both are already written.
 settings-network-shared-sub = { $place }: { $access }

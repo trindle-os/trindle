@@ -196,6 +196,13 @@ impl Rig {
         self.programs[who].conn.protocol_error().is_some()
     }
 
+    pub fn hang_up(&mut self, who: usize) {
+        let fd = self.programs[who].conn.backend().poll_fd().as_raw_fd();
+        // SAFETY: shuts the rig's own open socket; the fd stays open until the connection drops.
+        unsafe { libc::shutdown(fd, libc::SHUT_RDWR) };
+        self.pump();
+    }
+
     pub fn program(&self, who: usize) -> (&Program, QueueHandle<Program>) {
         let p = &self.programs[who];
         (&p.program, p.queue.handle())

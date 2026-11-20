@@ -1021,7 +1021,7 @@ mod tests {
         let both = [user(Kind::HomeNetwork, "Scan"), user(Kind::Usb, "Scan")];
         let users = decode_box(&encode(&both));
         assert_eq!(users, both);
-        assert_eq!(lines(&users, false), ["Local network in use by Scan", "Scanners and USB devices in use by Scan"]);
+        assert_eq!(lines(&users, false), ["Local network used by Scan", "Scanners and USB devices in use by Scan"]);
         assert_eq!(Kind::from_word("home-network"), Some(Kind::HomeNetwork));
         assert_eq!(Kind::from_word("usb"), Some(Kind::Usb));
         assert_eq!(mask(&users), 32 | 64);

@@ -57,11 +57,6 @@ Copyright: the Trindle project
 Comment: Pictures of Trindle, and its fallback pointer, made for Trindle.
 License: GPL-3+
 
-Files: share/icons/apps/*
-Copyright: the Trindle project
-Comment: The logos of Trindle's own sister programs, made for Trindle.
-License: GPL-3+
-
 Files: share/icons/chatgpt.svg
        share/icons/claude-desktop.svg
        share/icons/docker.svg

@@ -39,13 +39,15 @@ pub struct AiPrograms {
     net_on: bool,
     net_hosts: Vec<String>,
     asking: Option<Listen>,
+
+    installed: Vec<String>,
 }
 
 impl Default for AiPrograms {
     fn default() -> Self {
         AiPrograms {
             root: fence::root(), home: home(), enabled: true, programs: Vec::new(), own: Vec::new(), shared: Vec::new(), hosts: Vec::new(),
-            names: Vec::new(), public: None, typed_program: String::new(), typed_host: String::new(), typed_key: String::new(), typed_net: String::new(), net_on: false, net_hosts: Vec::new(), asking: None,
+            names: Vec::new(), public: None, typed_program: String::new(), typed_host: String::new(), typed_key: String::new(), typed_net: String::new(), net_on: false, net_hosts: Vec::new(), asking: None, installed: Vec::new(),
         }
     }
 }
@@ -54,6 +56,7 @@ impl AiPrograms {
     fn look(&mut self) {
         self.enabled = fence::enabled(&self.root);
         self.programs = fence::programs(&self.root);
+        self.installed = self.programs.iter().map(|p| p.0.clone()).filter(|n| fence::installed(&self.root, n)).collect();
         self.own = fence::uses_own_settings(&self.root);
         self.shared = fence::shared(&self.root, &self.home);
         self.hosts = fence::ssh_hosts(&self.root);
@@ -106,8 +109,13 @@ impl AiPrograms {
         if !Self::own_press() {
             return;
         }
+        let name = self.typed_program.trim().to_string();
+        if fence::program_name_ok(&name) && !fence::installed(&self.root, &name) {
+            self.finish(kit, PROGRAM, Err::<(), _>(t!("settings-ai-not-installed")));
+            return;
+        }
         let mut list = self.programs.clone();
-        list.push((self.typed_program.trim().to_string(), true));
+        list.push((name, true));
         let r = fence::set_programs(&self.root, &list);
         if r.is_ok() {
             self.typed_program.clear();
@@ -249,7 +257,7 @@ impl AiPrograms {
         rows.push(line(t!("settings-ai-add-site")).key(NET_ADD).control(add).below(typed).node(kit));
         group(t!("settings-ai-network")).icon("network-wired-symbolic")
             .about(format!("{} {}", t!("settings-ai-network-about"), t!("settings-ai-add-site-sub")))
-            .span(5, 7).rows(rows).node(kit)
+            .span(6, 6).rows(rows).node(kit)
     }
 
     fn fence_card(&self, kit: &Kit) -> Node<Msg> {
@@ -257,14 +265,14 @@ impl AiPrograms {
         let sub = if self.enabled { "" } else { t!("settings-ai-fence-off") };
         group(t!("settings-ai-the-fence")).icon("security-high-symbolic")
             .about(format!("{} {}", t!("settings-ai-fence-about"), t!("settings-ai-inside")))
-            .span(5, 7)
+            .span(6, 6)
             .rows(vec![line(t!("settings-ai-keep-inside")).sub(sub).key(FENCE).control(toggle).node(kit)])
             .node(kit)
     }
 
     fn programs_card(&self, kit: &Kit) -> Node<Msg> {
         let mut rows: Vec<Node<Msg>> = Vec::new();
-        for (name, fenced) in &self.programs {
+        for (name, fenced) in self.programs.iter().filter(|p| self.installed.contains(&p.0)) {
             let n = name.clone();
             let toggle = switch(*fenced, t!("settings-ai-fence-name", name = name), move |v| {
                 let n = n.clone();
@@ -284,13 +292,17 @@ impl AiPrograms {
                     .key(format!("ai:own:{name}")).control(mine).node(kit));
             }
         }
+
+        if self.installed.is_empty() {
+            rows.push(note(t!("settings-ai-none-installed")).off(true));
+        }
         let typed = entry(self.typed_program.clone(), t!("settings-ai-eg-program"), |t| on::<AiPrograms>(move |me, _| me.typed_program = t.clone()))
             .on_submit(on::<AiPrograms>(|me, k| me.add_program(k)));
         let add = button("list-add-symbolic", t!("settings-ai-add-program")).on_press(on::<AiPrograms>(|me, k| me.add_program(k)));
         rows.push(line(t!("settings-ai-add-program")).key(PROGRAM).control(add).below(typed).node(kit));
         group(t!("settings-ai-title")).icon("application-x-executable-symbolic")
             .about(format!("{} {}", t!("settings-ai-programs-about"), t!("settings-ai-own-sub")))
-            .span(5, 7).rows(rows).node(kit)
+            .span(12, 12).wide_by_choice().rows(rows).node(kit)
     }
 
     fn shared_card(&self, kit: &Kit) -> Node<Msg> {
@@ -313,7 +325,7 @@ impl AiPrograms {
         rows.push(line(t!("settings-ai-share-folder")).key(SHARE).control(add).node(kit));
         group(t!("settings-ai-shared")).icon("folder-symbolic")
             .about(format!("{} {}", t!("settings-ai-shared-about"), t!("settings-ai-share-folder-sub")))
-            .span(5, 7).rows(rows).node(kit)
+            .span(6, 6).rows(rows).node(kit)
     }
 
     fn ssh_card(&self, kit: &Kit) -> Node<Msg> {
@@ -339,7 +351,7 @@ impl AiPrograms {
         }
         group(t!("settings-ai-ssh")).icon("network-server-symbolic")
             .about(format!("{} {}", t!("settings-ai-ssh-about"), t!("settings-ai-make-key-sub")))
-            .span(5, 7).rows(rows).node(kit)
+            .span(6, 6).rows(rows).node(kit)
     }
 
     fn keys_card(&self, kit: &Kit) -> Node<Msg> {
@@ -355,7 +367,7 @@ impl AiPrograms {
         rows.push(line(t!("settings-ai-add-key")).key(KEYS).control(add).below(typed).node(kit));
         group(t!("settings-ai-keys")).icon("dialog-password-symbolic")
             .about(t!("settings-ai-keys-about"))
-            .span(5, 7).rows(rows).node(kit)
+            .span(6, 6).rows(rows).node(kit)
     }
 }
 
@@ -386,11 +398,11 @@ impl Page for AiPrograms {
         let items = vec![
             headline(t!("settings-ai-note")),
             self.fence_card(kit),
-            self.programs_card(kit),
             self.shared_card(kit),
             self.ssh_card(kit),
             self.keys_card(kit),
             self.net_card(kit),
+            self.programs_card(kit),
         ];
         page(kit, self.title(), self.help(), items)
     }
@@ -407,6 +419,7 @@ impl AiPrograms {
             shared: vec![fence::Share { path: "/home/john/Projects".into(), read_only: false }, fence::Share { path: "/home/john/Statements".into(), read_only: true }],
             hosts: vec!["nas.example.com".into()], names: vec!["ANTHROPIC_API_KEY".into()], public: Some("ssh-ed25519 AAAA example".into()),
             typed_program: String::new(), typed_host: String::new(), typed_key: String::new(), typed_net: String::new(), net_on: false, net_hosts: vec!["api.anthropic.com".into()], asking: None,
+            installed: vec!["claude".into(), "codex".into(), "aider".into()],
         }
     }
 }
@@ -435,5 +448,24 @@ mod secret_tests {
         page.finish(&mut kit, NET, Err(std::io::Error::from_raw_os_error(28)));
         let (words, red) = kit.said(NET).map(|(w, red)| (w.to_string(), red)).unwrap();
         assert!(red && words.contains(t!("settings-common-why-full")), "the cause was dropped: {words}");
+    }
+
+    #[test]
+    fn only_programs_on_this_computer_are_listed() {
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let kit = Kit::new(events, asks, None, None);
+        let mut page = AiPrograms::made_up();
+        page.installed = vec!["claude".into()];
+        let said = page.programs_card(&kit).said();
+        assert!(said.iter().any(|s| s == "claude") && !said.iter().any(|s| s == "codex" || s == "aider"), "{said:?}");
+        page.installed.clear();
+        let said = page.programs_card(&kit).said();
+        assert!(said.iter().any(|s| s == t!("settings-ai-none-installed")) && !said.iter().any(|s| s == "claude"), "{said:?}");
+        let mut ui = crate::toolkit::ui::Ui::new(page.programs_card(&kit), crate::toolkit::theme::Theme::new(true, "#fbc711"));
+        ui.lay_at(900, 600);
+
+        let head = ui.pressables().first().map(|(id, _)| id.clone()).unwrap_or_default();
+        assert!(ui.pressables().iter().any(|(id, kind)| *kind == "button" && *id != head), "adding a program is not open: {:?}", ui.pressables());
     }
 }

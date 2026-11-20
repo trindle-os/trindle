@@ -54,9 +54,6 @@ ring-cli-unknown = 未知选项 { $option }
 # Error printed in a terminal when --say is given no words.
 ring-cli-missing-say = --say 缺少参数
 
-# Line in the ring's results when what was typed matches no app or favourite.
-ring-find-nothing = 没有叫这个名字的应用或收藏
-
 # SAFETY: needs a human review before it ships
 # Tip of the round button on an app's menu that removes the app.
 ring-uninstall = 卸载
@@ -239,7 +236,6 @@ ring-startup-add = 登录时启动
 
 ring-startup-remove = 不再在登录时启动
 
-
 # Help for the option that opens the shortcut list, or closes it when it is showing.
 ring-cli-shortcuts = 显示所有键盘快捷键的列表，或隐藏列表（Super 和 K，除非你在“设置”中更改）
 
@@ -249,9 +245,11 @@ ring-restarted = 已重启
 # Under the notice above.
 ring-restarted-why = 圆环及其辅助部分已重新启动。
 
-
 ring-uninstall-failed = 无法卸载。
 
 ring-category-media-short = 声音
 
 ring-voice-failed = 这次没有成功。
+
+# Said under the ring when sleep, log out, restart or shut down is pressed while Trindle is being installed.
+ring-power-installing = 正在安装 Trindle，请等它完成。

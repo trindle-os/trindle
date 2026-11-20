@@ -142,3 +142,5 @@ ring-tray-full = रिंग में पहले से चार आइक�
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = जाँच बंद है
+# Name of the updates button when a restart to finish installing was put off with Remind me later and the time has come.
+ring-updates-restart = इंस्टॉल पूरा करने के लिए रीस्टार्ट करें

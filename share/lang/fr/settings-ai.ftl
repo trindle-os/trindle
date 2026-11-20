@@ -174,3 +174,7 @@ settings-ai-keys = Clés données aux programmes d'IA
 
 # Help text of the keys card (the information button).
 settings-ai-keys-about = Les programmes d'IA ne reçoivent jamais les clés et jetons de votre session. Ils ne reçoivent qu'une clé que vous saisissez ici.
+# Under the AI programs card, greyed, when none of the listed AI programs is on this computer.
+settings-ai-none-installed = Aucun programme d’IA sur cet ordinateur.
+# Under the box, when the program typed in to add is not on this computer.
+settings-ai-not-installed = Ce programme n’est pas sur cet ordinateur.

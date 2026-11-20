@@ -11,7 +11,7 @@ settings-region-keywords = ngôn ngữ vùng quốc gia định dạng ngày ti�
 settings-region-help = Ngôn ngữ và định dạng có hiệu lực ở lần đăng nhập tiếp theo.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = Hãy đăng nhập lại để thấy ở mọi nơi.
+settings-region-later = Đăng nhập lại để thấy.
 
 # Shown while the page reads the computer.
 settings-region-looking = Đang xem…

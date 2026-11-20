@@ -146,9 +146,9 @@ pub fn status_line(s: &Store, d: Dot, words: impl Into<String>, page: &'static s
 pub fn tabs(names: &[(&str, usize)], chosen: usize, room: f32, pick: impl Fn(usize) -> Msg + 'static) -> Node<Msg> {
     let words: Vec<String> = names.iter().map(|(name, n)| t!("store-tab-count", name = *name, n = *n)).collect();
     if strip_room(&words) <= room {
-        crate::toolkit::widget::choice(words, chosen, t!("store-tabs-show"), pick).width(Length::Shrink)
+        crate::toolkit::widget::choice(words, chosen, t!("store-tabs-show"), pick).hushed().width(Length::Shrink)
     } else {
-        crate::toolkit::widget::dropdown(words, Some(chosen), t!("store-tabs-show"), pick)
+        crate::toolkit::widget::dropdown(words, Some(chosen), t!("store-tabs-show"), pick).hushed()
     }
 }
 
@@ -191,7 +191,7 @@ pub fn link(words: &str, press: Msg) -> Node<Msg> {
 }
 
 pub fn about_button(tip: &str) -> Node<Msg> {
-    button("dialog-information-symbolic", tip).face(|canvas, r, ink, _pen| {
+    button("dialog-information-symbolic", tip).hushed().face(|canvas, r, ink, _pen| {
         let paint = solid(ink, 1.0);
         let w = r.w;
         let stem = (w * 0.14).max(1.5);

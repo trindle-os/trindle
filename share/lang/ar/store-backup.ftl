@@ -56,7 +56,7 @@ store-because-quota = المساحة المسموح بها لهذا الحساب
 store-because-missing = ملف أو برنامج يحتاجه غير موجود
 
 # The reason when no reason could be read from the program's last line.
-store-because-failed = فشلت العملية
+store-because-failed = فشل
 
 # The reason when the backup has no name to be written under.
 store-because-no-name = ليس له اسم

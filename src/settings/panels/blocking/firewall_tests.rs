@@ -23,7 +23,7 @@ fn the_sharing_card_lists_each_share_with_a_stop_button() {
     let words = said(&n);
     assert_eq!(words[0], "Sharing");
     for w in ["photos", "~/Photos: open with your password", "button: Stop sharing photos",
-              "music", "/srv/music: anyone on the local network can change", "button: Stop sharing music"] {
+              "music", "/srv/music: anyone nearby can change", "button: Stop sharing music"] {
         assert!(words.contains(&w.to_string()), "{w}: {words:?}");
     }
 

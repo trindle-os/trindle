@@ -390,7 +390,7 @@ admin-system-local-locked = Trindle couldn't keep /usr/local writable: { $why }
 # A command that opens the system outside a software change, run other than by root itself.
 admin-system-root-only = Only root can run this, and not through pkexec.
 # Switching the read-only system on where the system's disk is not Btrfs.
-admin-system-needs-btrfs = This needs Btrfs.
+admin-system-needs-btrfs = Needs Btrfs.
 
 # Red words in Settings when too many ports are open already. { $most } is a number.
 admin-ports-too-many = You can open at most { $most } ports.
@@ -428,3 +428,23 @@ admin-swap-not-safe = Trindle won't use the swap file { $path }, because others 
 admin-swap-resume-unread = Couldn't find where the swap file is now, so waking from hibernation may not work.
 # Said when the swap file moved and the running system couldn't be told: hibernation is refused until the computer restarts.
 admin-swap-resume-restart = Hibernation will work again after you restart.
+# Red words in Settings, Hardware, when Use the chip again is pressed while it is already running.
+admin-chip-busy = The chip is already being set up. Wait for that to finish.
+# Red words in Settings, Hardware, when the disk password typed for Use the chip again is wrong.
+admin-chip-wrong-password = That isn't the disk password.
+# Red words in Settings, Hardware, after several wrong disk passwords in a row.
+admin-chip-wait = Too many wrong passwords. Wait a minute, then try again.
+# Red words in Settings, Hardware, when the chip unlocked the disk at the last start after all.
+admin-chip-not-needed = The chip unlocked the disk at the last start, so there's nothing to do.
+# Red words in Settings, Hardware, when the disk is not the one the start-up screen noted.
+admin-chip-changed = The disk has changed since the computer started. Restart, then try again.
+# Red words in Settings, Hardware, when the computer's TPM security chip can't be found.
+admin-chip-none = The security chip wasn't found. Switch it on in the BIOS, then try again.
+# Red words in Settings, Hardware, when clevis, the tool that sets up the chip, is missing.
+admin-chip-no-clevis = The tool that sets up the chip, clevis, isn't installed.
+# Red words in Settings, Hardware, when the disk has no room left for another key.
+admin-chip-no-slot = The disk has no room for another key.
+# Red words in Settings, Hardware, when the chip couldn't be set up. The disk still opens with its password.
+admin-chip-not-sealed = The chip couldn't be set up. The disk still opens with its password.
+# Red words in Settings, Hardware, when the chip works again but its old key couldn't be removed.
+admin-chip-old-kept = The chip works again, but its old key couldn't be removed.

@@ -16,7 +16,7 @@ pub(super) enum Own {
 
     Button { key: String, problem: Option<String>, going: Option<RingShare>, press: Box<dyn Fn(&mut Store)>, hold: Option<Thing>, called: Option<String> },
 
-    WithGroup,
+    Plain,
 }
 
 impl Own {
@@ -75,7 +75,7 @@ pub(super) fn update_line(s: &Store, picture: Option<Node<Msg>>, name: String, d
                 .or_else(|| said_stopped.then(|| note(stopped_row())));
             (figure, keep, b, under, held)
         }
-        Own::WithGroup => (None, room(), room(), None, false),
+        Own::Plain => (None, room(), room(), None, false),
     };
     let line = listing::row_line(if held { held_detail } else { detail });
     let size = note(figure.unwrap_or(size)).off(held);

@@ -10,7 +10,7 @@ settings-region-keywords = idioma configuración regional país formatos fecha m
 settings-region-help = El idioma y los formatos se aplican la próxima vez que inicies sesión.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = Inicia sesión de nuevo para verlo en todas partes.
+settings-region-later = Inicia sesión de nuevo para verlo
 
 # Shown while the page reads the computer.
 settings-region-looking = Buscando…

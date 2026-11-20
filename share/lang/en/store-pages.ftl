@@ -422,7 +422,7 @@ store-src-added = { $what } is added and kept updated.
 # Under a maker's source that is added but whose program is not installed.
 store-src-no-program = { $what }. The source is added, but the program is not installed.
 # Under a maker's source whose program is installed another way.
-store-src-other-way = { $what } was installed another way.
+store-src-other-way = { $what }. Installed another way.
 # Tip of the round button that removes a maker's source and its program.
 store-src-remove-both = Remove it and its source
 # Link to a maker's page, naming the program.

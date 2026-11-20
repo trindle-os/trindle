@@ -1,8 +1,8 @@
-//! No tick glyph and no green state dot: a yes is a word, an accept pill
-//! carries an arrow, a marked line a plain dot, and good news is plain. A
-//! tick that confirms a press is the one tick allowed (see ALLOWED).
+//! Ticks only where something is confirmed, and no green state dot: a
+//! confirming button carries the tick (CONFIRM_ICON, the one name for it),
+//! a marked line a plain dot, and good news is plain.
 
-pub const GO_ICON: &str = "go-next-symbolic";
+pub const CONFIRM_ICON: &str = crate::common::ui::TICK_ICON;
 
 pub const MARK_ICON: &str = "media-record-symbolic";
 
@@ -21,10 +21,9 @@ mod tests {
         ]
     }
 
-    const ALLOWED: [(&str, &str); 3] = [
+    const ALLOWED: [(&str, &str); 2] = [
         ("common/app_theme.rs", "solid(theme::good())"),
         ("settings/tests/colours.rs", "let status = [theme::good()"),
-        ("ring/view/power.rs", "if armed { crate::common::ui::TICK_ICON }"),
     ];
 
     #[test]

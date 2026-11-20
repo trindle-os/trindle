@@ -295,7 +295,7 @@ impl App for Activity {
 
     fn intercept(&self, input: &Input, keys: bool) -> Option<Msg> {
         match input {
-            Input::Key { sym: Keysym::Escape, .. } if self.help => Some(Msg::Help),
+            Input::Key { sym: Keysym::Escape, .. } | Input::Focus(false) if self.help => Some(Msg::Help),
             Input::Key { sym: Keysym::Escape, .. } if keys && self.orbit.picked().is_some() => Some(Msg::Close),
             _ => None,
         }

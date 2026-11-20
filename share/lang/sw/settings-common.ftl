@@ -128,9 +128,6 @@ settings-common-and = { $rest } na { $last }
 # What goes between names in a list, before the last two.
 settings-common-list-comma = { ", " }
 
-# Spoken name of the picture of the ring opening on a small screen.
-settings-common-ring-picture = Unafungua pete kwa kubofya mara mbili ukingoni mwa skrini.
-
 # Word drawn in the middle of that picture.
 settings-common-ring-name = Pete
 

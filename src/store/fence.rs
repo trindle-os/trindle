@@ -92,6 +92,18 @@ pub fn set_programs(root: &Path, list: &[(String, bool)]) -> Result<(), &'static
     Ok(())
 }
 
+pub fn installed(root: &Path, name: &str) -> bool {
+    let path = std::env::var_os("PATH").unwrap_or_default();
+    installed_on(&path, &wrappers(root), name)
+}
+
+fn installed_on(path: &std::ffi::OsStr, skip: &Path, name: &str) -> bool {
+    use std::os::unix::fs::PermissionsExt;
+    program_name_ok(name) && std::env::split_paths(path).take(64)
+        .filter(|d| d.is_absolute() && d != skip)
+        .any(|d| std::fs::metadata(d.join(name)).is_ok_and(|m| m.is_file() && m.permissions().mode() & 0o111 != 0))
+}
+
 pub fn enabled(root: &Path) -> bool {
     !root.join("fence-off").exists()
 }

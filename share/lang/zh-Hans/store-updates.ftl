@@ -121,6 +121,15 @@ store-upd-install-n =
 # Main button that restarts the computer.
 # SAFETY: needs a human review before it ships
 store-upd-restart-now = 立即重启
+# Beside Restart now: the box that puts the restart off, then the ring's Updates button reminds. Its answers are the choices below.
+store-upd-remind-later = 稍后提醒我
+# Red words under the headline when the Remind me later time could not be saved; the reason follows.
+store-upd-remind-not-saved = 无法保存提醒：{ $why }。
+# One answer in the Remind me later box.
+store-upd-remind-hours =
+    { $n ->
+       *[other] { $n } 小时后
+    }
 
 # Main button that checks for updates.
 store-upd-check-for = 检查更新
@@ -216,23 +225,11 @@ store-upd-debian-count =
        *[other] { $n } 个更新，一起安装
     }
 
-# On a row of Debian's updates: where it comes from.
-store-upd-from-debian = 来自 Debian
-
 # Under Debian's rows: how many of them show.
 store-upd-debian-showing = 显示 { $shown } 个 Debian 更新，共 { $total } 个。
 
 # Note on the Trindle and Debian card: which version of Trindle the computer has.
 store-upd-has-trindle = 这台电脑使用的是 Trindle { $version }。
-
-# Heading of the Trindle and Debian card.
-store-upd-card-system = Trindle 和 Debian
-
-# Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Debian 软件包彼此配合。单独安装一个，可能带入其他包，或让它们不同步，所以会一起安装。
-
-# Note on the Trindle and Debian card: why no row has a Hold back button.
-store-upd-not-held = Trindle 和 Debian 的更新包含整台电脑的安全修复，因此不能暂缓。
 
 # Heading of the card about the daily security updates.
 store-upd-card-security = 安全更新
@@ -297,7 +294,6 @@ store-patch-not-fetched = Trindle 无法下载 { $package } { $version }。
 # Said when a security fix for a boxed app was downloaded but isn't there to use.
 store-patch-not-found = Trindle 找不到它下载的软件包。
 
-
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
 store-upd-off = 自动检查更新已关闭。
 
@@ -318,3 +314,4 @@ store-upd-stopped-all = 已停止。点击“安装”继续。
 
 # Note under the Apps card.
 store-upd-steam-restarts = 没有游戏在运行后，Steam 会重启。
+

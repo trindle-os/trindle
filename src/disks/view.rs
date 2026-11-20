@@ -84,7 +84,7 @@ impl Drives {
     }
 
     pub(super) fn page(&self) -> Node<Msg> {
-        let info = button("dialog-information-symbolic", t!("disks-about-tip")).size(theme::sheet().info)
+        let info = button("dialog-information-symbolic", t!("disks-about-tip")).size(theme::sheet().info).hushed()
             .on(self.help).on_press(Msg::Help);
         let head = row(vec![page_title(t!("disks-title")), info, space()]).gap(12.0).centred();
 

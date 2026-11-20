@@ -10,8 +10,6 @@ use smithay::{
 
 use crate::state::{Compose, Backend};
 
-const CASCADE: i32 = 32;
-
 struct Placed;
 
 fn parent_of(space: &Space<WindowElement>, window: &WindowElement) -> Option<WindowElement> {
@@ -59,7 +57,12 @@ pub(super) fn place_new_window(
     window: &WindowElement,
     activate: bool,
 ) -> Rectangle<i32, Logical> {
-    let area = free_area_under(space, pointer_location);
+    let parent = parent_of(space, window)
+        .and_then(|p| Some(Rectangle::new(space.element_location(&p)?, p.geometry().size)));
+    let anchor = parent.map_or(pointer_location, |r| {
+        Point::from((f64::from(r.loc.x + r.size.w / 2), f64::from(r.loc.y + r.size.h / 2)))
+    });
+    let area = free_area_under(space, anchor);
 
     if let Some(toplevel) = window.0.toplevel() {
 
@@ -70,12 +73,7 @@ pub(super) fn place_new_window(
     }
 
     let size = window.geometry().size;
-    let parent = parent_of(space, window)
-        .and_then(|p| Some(Rectangle::new(space.element_location(&p)?, p.geometry().size)));
-    let mut loc = match parent {
-        Some(over) => centred_in(over, size),
-        None => stepped_clear_of_others(space, window, area),
-    };
+    let mut loc = centred_in(area, size);
     loc.x = loc.x.min(area.loc.x + area.size.w - size.w).max(area.loc.x);
     loc.y = loc.y.min(area.loc.y + area.size.h - size.h).max(area.loc.y);
 
@@ -105,27 +103,6 @@ fn free_area_under(space: &Space<WindowElement>, pointer_location: Point<f64, Lo
 
 fn centred_in(over: Rectangle<i32, Logical>, size: Size<i32, Logical>) -> Point<i32, Logical> {
     (over.loc.x + (over.size.w - size.w) / 2, over.loc.y + (over.size.h - size.h) / 2).into()
-}
-
-fn stepped_clear_of_others(space: &Space<WindowElement>, window: &WindowElement, area: Rectangle<i32, Logical>) -> Point<i32, Logical> {
-    let size = window.geometry().size;
-    let mut loc = centred_in(area, size);
-    let taken = |at: Point<i32, Logical>| {
-        space.elements().filter(|w| *w != window).any(|w| {
-            space.element_location(w)
-                .is_some_and(|l| (l.x - at.x).abs() < CASCADE / 4 && (l.y - at.y).abs() < CASCADE / 4)
-        })
-    };
-    let mut steps = 0;
-    while taken(loc) && steps < 32 {
-        loc += Point::from((CASCADE, CASCADE));
-
-        if loc.x + size.w > area.loc.x + area.size.w || loc.y + size.h > area.loc.y + area.size.h {
-            loc = area.loc;
-        }
-        steps += 1;
-    }
-    loc
 }
 
 impl<BackendData: Backend> Compose<BackendData> {

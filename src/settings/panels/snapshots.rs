@@ -592,7 +592,7 @@ mod tests {
         assert!(holds(&said, "switch: System files locked"), "{said:?}");
         let mut stand = Stand::new(Box::new(Snapshots { available: false, fs: "ext4".into(), ..Snapshots::made_up() }));
         let said = stand.page::<Snapshots, _>(|me, k| me.view(k).said());
-        assert!(holds(&said, "System files locked") && holds(&said, "This needs Btrfs."), "{said:?}");
+        assert!(holds(&said, "System files locked") && holds(&said, "Needs Btrfs."), "{said:?}");
         assert!(!said.iter().any(|s| s.starts_with("switch: System files")), "{said:?}");
     }
 

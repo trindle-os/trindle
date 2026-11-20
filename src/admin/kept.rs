@@ -16,6 +16,16 @@ const REWORDED: &str = "said in other words";
 
 const KEPT: &[(&str, &str, &str, &str)] = &[
 
+    ("admin/chip.rs", "answered", THROWN, "the password fed to a tool that stopped early: the tool then ends badly, and that is said"),
+    ("admin/chip.rs", "answered", EMPTIED, "a test's stand-in that prints nothing; never on the computer"),
+    ("admin/chip.rs", "checked", EMPTIED, "a count of wrong passwords that cannot be read is taken as all used, so it only ever waits more"),
+    ("admin/chip.rs", "opened_slot", EMPTIED, "cryptsetup's words that name no slot: sealing then stops and says the chip couldn't be set up"),
+    ("admin/chip.rs", "password", REWORDED, "a password that cannot be read is said as none given or as the wrong one; the reason would only name a pipe"),
+    ("admin/chip.rs", "reseal_with", YES_OR_NO, "an old chip key that does not prove is the reason sealing goes on; one that does means only the note goes"),
+    ("admin/chip.rs", "reseal_with", REWORDED, "clevis's own words are the tool's; the person is told in plain words that the chip couldn't be set up or its old key was kept"),
+    ("admin/chip.rs", "this_disk", REWORDED, "a disk that cannot be opened by its UUID is the disk having changed since the start, which is said"),
+    ("admin/chip_tests.rs", "the_password_is_taken_exactly_or_not_at_all", YES_OR_NO, "a test's own check that bad input is refused"),
+
     ("admin/mod.rs", "watched", THROWN, "reads the words of the tool's refusal; unread, the step still fails by how the tool ended, with plainer words"),
     ("admin/mod.rs", "watched", EMPTIED, "the same words, from the thread that read them"),
     ("admin/mod.rs", "read_line", YES_OR_NO, "a pipe that fails ends the reading as its end does; how the tool ended is what is said"),

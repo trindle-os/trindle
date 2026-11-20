@@ -63,7 +63,7 @@ fn alias(id: &str) -> &str {
 fn page_groups() -> [(&'static str, &'static [&'static str]); 5] {
     [
         (t!("settings-window-group-personal"), &["ring", "wallpaper", "appearance", "sounds"]),
-        (t!("settings-window-group-devices"), &["display", "audio", "bluetooth", "keyboard", "printers", "power", "games"]),
+        (t!("settings-window-group-devices"), &["display", "audio", "bluetooth", "keyboard", "printers", "power", "hardware", "games"]),
         (t!("settings-window-group-network"), &["blocking", "network", "tailscale"]),
         (t!("settings-window-group-system"), &["users", "snapshots", "ai-programs", "region", "datetime"]),
         (t!("settings-window-group-about"), &["about", "thanks", "help"]),
@@ -129,6 +129,7 @@ impl Settings {
     }
 
     fn show(&mut self, id: &str) {
+        self.kit.info = None;
         let (id, topic) = match id.split_once(':') {
             Some((page, topic)) => (page, Some(topic)),
             None => (id, None),
@@ -375,6 +376,7 @@ impl Hosted {
     }
 
     pub fn show(&mut self, id: &str) {
+        self.s.kit.info = None;
         if let Some(at) = self.s.find(id) {
             if at == self.s.current {
                 self.s.pages[at].shown(&mut self.s.kit);
@@ -392,6 +394,7 @@ impl Hosted {
     }
 
     pub fn hide(&mut self) {
+        self.s.kit.info = None;
         let at = self.s.current;
         self.s.pages[at].hidden(&mut self.s.kit);
     }
@@ -399,8 +402,16 @@ impl Hosted {
     pub fn view(&self) -> Node<Msg> {
         self.s.kit.pulse.set(false);
         ui::new_page(self.s.pages[self.s.current].icon());
-        let page = self.s.pages[self.s.current].view(&self.s.kit).width(Length::Fill).height(Length::Fill);
-        ui::with_info(&self.s.kit, page)
+        self.s.pages[self.s.current].view(&self.s.kit).width(Length::Fill).height(Length::Fill)
+    }
+
+    pub fn info_box(&self) -> Option<(Node<Msg>, Msg)> {
+        ui::info_box(&self.s.kit)
+    }
+
+    #[cfg(test)]
+    pub(crate) fn open_info(&mut self, at: crate::toolkit::widget::Rect) {
+        self.s.kit.info = Some(("page".to_string(), "What this page is for.".to_string(), at));
     }
 
     pub fn update(&mut self, msg: Msg) {
@@ -478,8 +489,8 @@ impl Shows for Settings {
             return Some(taken);
         }
         match input {
-            crate::toolkit::input::Input::Key { sym: crate::toolkit::input::Keysym::Escape, .. } if self.kit.info.is_some() =>
-                Some(go(|s| s.kit.info = None)),
+            crate::toolkit::input::Input::Key { sym: crate::toolkit::input::Keysym::Escape, .. } | crate::toolkit::input::Input::Focus(false)
+                if self.kit.info.is_some() => Some(go(|s| s.kit.info = None)),
             _ => None,
         }
     }

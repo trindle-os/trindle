@@ -91,7 +91,7 @@ common-updating-no-reason = Não terminou. Nenhum motivo foi informado.
 common-updating-failed = Não terminou. { $why }
 
 # Red words beside an update that was never started. { $why } is the end of a sentence such as "because no administrator's password was given."
-common-updating-not-installed = Não foi instalado, { $why }
+common-updating-not-installed = Não instalado, { $why }
 
 # End of a sentence saying why a step was refused: the password box was closed. It follows "because".
 # SAFETY: needs a human review before it ships
@@ -251,11 +251,11 @@ common-x11-would-not-start = O Xwayland não iniciou
 # Second line of that notice, when the desktop will try the older-programs display again soon.
 common-x11-try-again = Tente de novo em um minuto
 
-# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each dot with what it means.
-common-in-use-key = O que significam os pontos
+# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each mark with what it means.
+common-in-use-key = O que significam as marcas
 
-# Under the dots in that key: where a dot shows up.
-common-in-use-where = Os pontos aparecem no centro superior da tela e nas abas das janelas.
+# Under the marks in that key: where a mark shows up. On the screen it is a half circle hung from the top edge; on a window tab it is a small dot.
+common-in-use-where = Os semicírculos ficam pendurados no centro superior da tela. As abas das janelas mostram pontos pequenos.
 
 # Screen reader name of the microphone dot and its row, and the line shown on pointing at the dots, when no program is named.
 common-in-use-microphone = Microfone em uso
@@ -288,10 +288,10 @@ common-in-use-files = Os arquivos que você copiou estão sendo lidos
 common-in-use-files-by = { $who } está lendo os arquivos que você copiou
 
 # The ring's who-is-using-what row while a plugin reaches devices on the local network.
-common-in-use-home-network = Rede local em uso
+common-in-use-home-network = Rede local usada
 
 # The same with the plugin's name.
-common-in-use-home-network-by = Rede local em uso por { $who }
+common-in-use-home-network-by = Rede local usada por { $who }
 
 # The ring's who-is-using-what row while a plugin uses scanners and USB devices.
 common-in-use-usb = Scanners e dispositivos USB em uso
@@ -357,6 +357,9 @@ common-no-driver-class-bluetooth = Bluetooth
 common-no-driver-class-sound = som
 
 common-no-driver-class-graphics = gráficos
+
+# Said of a device with no driver that nothing is known about. The name is its name, or its two hex numbers.
+common-no-driver-device-none = { $name } não tem driver.
 
 # The small round button beside a failure message that opens Help at the page
 # about it. Its tip, and the name a screen reader says.

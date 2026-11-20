@@ -2,7 +2,7 @@
 
 use serde_json::Value;
 
-use super::{HARDWARE_MOST, TRACE_MOST};
+use super::TRACE_MOST;
 
 pub const BEFORE: i64 = 300;
 
@@ -122,8 +122,8 @@ pub fn log_before(crash: Option<(&str, i64)>) -> String {
     crate::common::run::text(&argv)
 }
 
-fn log_argv(program: Option<&str>, at: Option<i64>, earlier_boot: bool) -> Vec<String> {
-    let mut argv: Vec<String> = ["journalctl", "--no-pager", "-q", "-o", "short-iso", "-n"].map(String::from).into();
+pub(super) fn log_argv(program: Option<&str>, at: Option<i64>, earlier_boot: bool) -> Vec<String> {
+    let mut argv: Vec<String> = ["journalctl", "--no-pager", "-q", "-o", "short-iso", "-r", "-n"].map(String::from).into();
     argv.push(super::LOG_LINES.to_string());
     let mut own = super::programs();
     own.extend(["trindle", "trindle-compose", "trindle-unlock"]);
@@ -149,25 +149,6 @@ fn log_argv(program: Option<&str>, at: Option<i64>, earlier_boot: bool) -> Vec<S
     argv
 }
 
-fn graphics() -> Vec<String> {
-    let mut out = Vec::new();
-    let Ok(dir) = std::fs::read_dir("/sys/class/drm") else { return out };
-    let mut names: Vec<String> = dir.flatten().map(|e| e.file_name().to_string_lossy().into_owned()).collect();
-    names.sort();
-    for n in names {
-        if !n.starts_with("card") || n.contains('-') {
-            continue;
-        }
-        let base = format!("/sys/class/drm/{n}/device");
-        let get = |f: &str| std::fs::read_to_string(format!("{base}/{f}")).unwrap_or_default().trim().to_string();
-        let line = graphics_line(&get("vendor"), &get("device"), &std::fs::read_link(format!("{base}/driver")).ok().and_then(|p| p.file_name().map(|f| f.to_string_lossy().into_owned())).unwrap_or_default());
-        if !out.contains(&line) {
-            out.push(line);
-        }
-    }
-    out
-}
-
 pub fn graphics_line(vendor: &str, device: &str, driver: &str) -> String {
     let lower = vendor.to_ascii_lowercase();
     let maker = match lower.as_str() {
@@ -190,22 +171,8 @@ pub fn graphics_line(vendor: &str, device: &str, driver: &str) -> String {
     line
 }
 
-fn processor_and_memory() -> Vec<String> {
-    let mut out = Vec::new();
-    if let Some(cpu) = std::fs::read_to_string("/proc/cpuinfo").ok().and_then(|t| t.lines().find_map(|l| l.strip_prefix("model name").and_then(|r| r.split_once(':')).map(|(_, v)| v.trim().to_string()))) {
-        out.push(format!("Processor: {cpu}"));
-    }
-    if let Some(kb) = std::fs::read_to_string("/proc/meminfo").ok().and_then(|t| t.lines().find_map(|l| l.strip_prefix("MemTotal:").and_then(|r| r.trim().split(' ').next().and_then(|n| n.parse::<u64>().ok())))) {
-        out.push(format!("Memory: {} MB", kb / 1024));
-    }
-    out
-}
-
 pub fn hardware_summary() -> String {
-    let mut lines = graphics();
-    lines.extend(processor_and_memory());
-    lines.extend(crate::common::no_driver::report_lines(&crate::common::no_driver::scan_sys()));
-    lines.join("\n").chars().take(HARDWARE_MOST).collect()
+    super::system::gather()
 }
 
 pub fn hardware_text(model: &str, summary: Option<&str>) -> String {

@@ -4,6 +4,7 @@
 
 use std::cell::{Cell, RefCell};
 use std::rc::Rc;
+use std::time::{Duration, Instant};
 
 use tiny_skia::{FillRule, FilterQuality, Mask, Paint, PathBuilder, Pixmap, PixmapMut, PixmapPaint, Rect as Box, Stroke, Transform};
 
@@ -26,6 +27,13 @@ const ZOOM: f32 = 10.0;
 const OFFSET: f32 = 24.0;
 
 pub(super) const PILL_HEIGHT: f32 = 24.0;
+
+const TAP_SLOP: f32 = 12.0;
+
+const TAP_TIME: Duration = Duration::from_millis(300);
+
+const DOUBLE_TIME: Duration = Duration::from_millis(400);
+const TAP_NEAR: f32 = 48.0;
 
 thread_local! {
 
@@ -69,6 +77,7 @@ pub fn main() -> i32 {
     let me = Rc::downgrade(&window);
     let display_ = display.clone();
     let done = RefCell::new(false);
+    let finger = RefCell::new(Finger::default());
     window.on_input(move |input| {
         let Some(w) = me.upgrade() else { return };
         if *done.borrow() {
@@ -85,6 +94,28 @@ pub fn main() -> i32 {
             Input::Press { .. } => Some(None),
             Input::Key { sym: Keysym::Escape, .. } => Some(None),
             Input::Key { sym: Keysym::Return | Keysym::KP_Enter, .. } => pointer.get().map(&colour_at),
+            Input::TouchDown { id, x, y } => {
+                let mut f = finger.borrow_mut();
+                f.down(id, (x, y), Instant::now());
+                if pointer.get().is_none() {
+                    pointer.set(Some((x, y)));
+                    w.redraw();
+                }
+                None
+            }
+            Input::TouchMove { id, x, y } => {
+                let (wide, tall) = w.size();
+                if let (Some(at), Some(moved)) = (pointer.get(), finger.borrow_mut().moved(id, (x, y))) {
+                    pointer.set(Some(((at.0 + moved.0).clamp(0.0, wide as f32), (at.1 + moved.1).clamp(0.0, tall as f32))));
+                    w.redraw();
+                }
+                None
+            }
+            Input::TouchUp { id } => finger.borrow_mut().up(id, Instant::now()).then(|| pointer.get().and_then(&colour_at)),
+            Input::TouchCancel => {
+                *finger.borrow_mut() = Finger::default();
+                None
+            }
             _ => None,
         };
         if let Some(colour) = pick {
@@ -255,9 +286,86 @@ pub fn parse_colour(text: &str) -> Option<(f64, f64, f64)> {
     parts.next().is_none().then_some(colour)
 }
 
+#[derive(Default)]
+struct Finger {
+
+    down: Option<(i32, (f32, f32), (f32, f32), Instant, bool)>,
+
+    tapped: Option<(Instant, (f32, f32))>,
+}
+
+impl Finger {
+    fn down(&mut self, id: i32, at: (f32, f32), now: Instant) {
+        if self.down.is_none() {
+            self.down = Some((id, at, at, now, false));
+        }
+    }
+
+    fn moved(&mut self, id: i32, at: (f32, f32)) -> Option<(f32, f32)> {
+        let (_, last, start, _, past) = self.down.as_mut().filter(|d| d.0 == id)?;
+        if !*past {
+            if (at.0 - start.0).hypot(at.1 - start.1) < TAP_SLOP {
+                return None;
+            }
+
+            *past = true;
+            *last = at;
+            return None;
+        }
+        let by = (at.0 - last.0, at.1 - last.1);
+        *last = at;
+        Some(by)
+    }
+
+    fn up(&mut self, id: i32, now: Instant) -> bool {
+        let Some((fid, _, start, when, past)) = self.down else { return false };
+        if fid != id {
+            return false;
+        }
+        self.down = None;
+        if past || now.duration_since(when) >= TAP_TIME {
+            self.tapped = None;
+            return false;
+        }
+        let double = self.tapped.is_some_and(|(t, p)| now.duration_since(t) < DOUBLE_TIME && (p.0 - start.0).hypot(p.1 - start.1) < TAP_NEAR);
+        self.tapped = if double { None } else { Some((now, start)) };
+        double
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_finger_moves_the_cross_by_its_own_movement_and_a_double_tap_takes_it() {
+        let t0 = Instant::now();
+        let ms = |n: u64| t0 + Duration::from_millis(n);
+        let mut f = Finger::default();
+        f.down(1, (500.0, 500.0), t0);
+        assert_eq!(f.moved(1, (505.0, 500.0)), None, "inside the slop the cross stays");
+        assert_eq!(f.moved(1, (520.0, 500.0)), None, "past the slop, moving starts with no jump");
+        assert_eq!(f.moved(1, (440.0, 500.0)), Some((-80.0, 0.0)));
+        assert_eq!(f.moved(2, (0.0, 0.0)), None, "another finger moves nothing");
+        assert!(!f.up(1, ms(900)), "a drag is not a tap");
+        f.down(1, (300.0, 300.0), ms(1000));
+        assert_eq!(f.moved(1, (303.0, 302.0)), None, "a tap's wobble moves nothing");
+        assert!(!f.up(1, ms(1100)), "one tap takes nothing");
+        f.down(1, (310.0, 305.0), ms(1250));
+        assert!(f.up(1, ms(1330)), "the second tap close by takes the colour");
+        f.down(1, (300.0, 300.0), ms(2000));
+        assert!(!f.up(1, ms(2100)));
+        f.down(1, (300.0, 300.0), ms(2700));
+        assert!(!f.up(1, ms(2750)), "too slow for a double tap");
+        let mut g = Finger::default();
+        g.down(1, (100.0, 100.0), t0);
+        assert!(!g.up(1, ms(100)));
+        g.down(1, (400.0, 400.0), ms(200));
+        assert!(!g.up(1, ms(250)), "too far from the first tap");
+        let mut h = Finger::default();
+        h.down(1, (100.0, 100.0), t0);
+        assert!(!h.up(1, ms(500)), "a long press is not a tap");
+    }
 
     #[test]
     fn a_colour_goes_there_and_back() {

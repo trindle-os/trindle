@@ -135,3 +135,5 @@ ring-tray-full = 环里已经有四个图标。请先取出一个。
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = 检查已关闭
+# Name of the updates button when a restart to finish installing was put off with Remind me later and the time has come.
+ring-updates-restart = 重启以完成安装

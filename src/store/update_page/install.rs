@@ -49,7 +49,7 @@ pub fn install_all(s: &mut Store) {
 
     if updating::needs_password(s.debian.len() + usize::from(s.trindle_waiting.is_some())) {
         s.upd.jobs += 1;
-        upgrade_system(s, hold, SYSTEM_ROW, "apt-upgrade", firmware);
+        upgrade_system(s, hold, SYSTEM_ROW, vec!["apt-upgrade".into()], firmware);
     } else if !firmware.is_empty() {
         s.upd.jobs += 1;
         update_firmware(s, hold, firmware);
@@ -97,12 +97,12 @@ pub(super) fn update_part(s: &mut Store, key: &str) {
 
 pub(super) fn update_trindle(s: &mut Store) {
     let Some(hold) = alone(s, t!("store-upd-trindle"), || updating::begin(Who::Apps)) else { return };
-    upgrade_system(s, hold, TRINDLE_ROW, "apt-upgrade-trindle", Vec::new());
+    upgrade_system(s, hold, TRINDLE_ROW, vec!["apt-upgrade-trindle".into()], Vec::new());
 }
 
 pub(super) fn update_debian(s: &mut Store) {
     let Some(hold) = alone(s, debian_name(), || updating::begin(Who::Apps)) else { return };
-    upgrade_system(s, hold, DEBIAN_ROW, "apt-upgrade-debian", Vec::new());
+    upgrade_system(s, hold, DEBIAN_ROW, vec!["apt-upgrade-debian".into()], Vec::new());
 }
 
 pub(super) fn update_device(s: &mut Store, id: &str) {
@@ -293,7 +293,7 @@ pub(super) fn fetching(line: &str) -> Option<(usize, f32)> {
     Some((n, percent.unwrap_or(0.0) / 100.0))
 }
 
-fn upgrade_system(s: &mut Store, hold: Hold, key: &'static str, step: &'static str, firmware: Vec<firmware::Firmware>) {
+fn upgrade_system(s: &mut Store, hold: Hold, key: &'static str, step: Vec<String>, firmware: Vec<firmware::Firmware>) {
     begin(s, key, |d| d.by_steps());
     s.words.said.remove(key);
     s.working += 1;
@@ -301,7 +301,8 @@ fn upgrade_system(s: &mut Store, hold: Hold, key: &'static str, step: &'static s
         s.upd.wants_restart = true;
     }
     let on_line = s.heard_if(move |s, line| s.dials.get_mut(key).is_some_and(|d| d.hear(line)));
-    updates::debian_watching(step, on_line, s.then(move |s: &mut Store, res: Result<(), String>| {
+    let step: Vec<&str> = step.iter().map(String::as_str).collect();
+    updates::admin_watching(&step, on_line, s.then(move |s: &mut Store, res: Result<(), String>| {
         s.job_over();
 
         let part = Part::of_admin(res);

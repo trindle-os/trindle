@@ -13,6 +13,7 @@ mod moving;
 mod colours;
 mod whole;
 mod trial;
+mod hardware;
 
 fn settings_with_every_page() -> Settings {
     let events = Loop::new();
@@ -32,16 +33,18 @@ fn settings_with_every_page() -> Settings {
     Settings { kit: Kit::new(events.clone(), asks, None, None), pages, current: 0, search: String::new(), tall: 0.0 }
 }
 
-const WIDE_BY_CHOICE: &str = "wallpaper";
+const WIDE_BY_CHOICE: &[(&str, usize)] = &[("wallpaper", 1), ("permissions", 2), ("ai-programs", 1)];
 
 fn by_choice(id: &str, mut found: crate::toolkit::widget::shape::Shape, across: f32) -> crate::toolkit::widget::shape::Shape {
-    if id == WIDE_BY_CHOICE {
-        found.wide = found.wide.saturating_sub(1);
+    if let Some(&(_, n)) = WIDE_BY_CHOICE.iter().find(|(page, _)| *page == id) {
+        found.wide = found.wide.saturating_sub(n);
 
         let wide = |bar: &String| bar.rsplit(' ').next().and_then(|size| size.split('x').next()).and_then(|w| w.parse::<f32>().ok())
             .is_some_and(|w| w > across / 2.0);
-        if let Some(at) = found.bars.iter().position(wide) {
-            found.bars.remove(at);
+        for _ in 0..n {
+            if let Some(at) = found.bars.iter().position(wide) {
+                found.bars.remove(at);
+            }
         }
     }
     found
@@ -98,7 +101,7 @@ fn made_up_pages() -> Vec<Box<dyn Page>> {
         Box::new(tailscale::Tailscale::made_up()), Box::new(blocking::Blocking::made_up()),
         Box::new(bluetooth::Bluetooth::made_up()), Box::new(wallpaper::Wallpaper::made_up()),
         Box::new(appearance::Appearance::made_up()),
-        Box::new(keyboard::Keyboard::made_up()), Box::new(power::Power::made_up()), Box::new(games::Games::made_up()),
+        Box::new(keyboard::Keyboard::made_up()), Box::new(power::Power::made_up()), Box::new(hardware::Hardware::made_up()), Box::new(games::Games::made_up()),
         Box::new(default_apps::DefaultApps::made_up()), Box::new(printers::Printers::made_up()),
         Box::new(region::Region::made_up()), Box::new(datetime::Datetime::made_up()), Box::new(users::Users::made_up()),
         Box::new(snapshots::Snapshots::made_up()), Box::new(permissions::Permissions::made_up()), Box::new(ai_programs::AiPrograms::made_up()),

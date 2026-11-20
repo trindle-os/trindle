@@ -39,9 +39,9 @@ impl Chooser {
             Some(f) => {
                 let names: Vec<String> = parts(f, &self.home).into_iter().map(|(name, _)| name).collect();
                 let last = names.len().saturating_sub(1);
-                choice(names, last, t!("screenshot-chooser-folder"), Msg::Part)
+                choice(names, last, t!("screenshot-chooser-folder"), Msg::Part).hushed()
             }
-            None => choice(vec![t!("screenshot-chooser-recent").into()], 0, t!("screenshot-chooser-folder"), |_| Msg::Part(0)),
+            None => choice(vec![t!("screenshot-chooser-recent").into()], 0, t!("screenshot-chooser-folder"), |_| Msg::Part(0)).hushed(),
         };
         let mut top = vec![path_bar, space()];
         if self.folder().is_some() {
@@ -128,7 +128,7 @@ impl Chooser {
         let accept = if matches!(self.ask.mode, Mode::Save) || self.taken().is_some() {
             main_word(self.accept_words())
         } else {
-            main_action(crate::common::no_tick::GO_ICON, self.accept_words())
+            main_action(crate::common::no_tick::CONFIRM_ICON, self.accept_words())
         };
         bottom.push(accept.on_press(Msg::Accept).off(!self.ready()));
         bottom

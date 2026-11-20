@@ -27,7 +27,7 @@ pub(super) const REQUEST_XML: &str = r#"<interface name="org.freedesktop.impl.po
 
 pub(super) const APP_ID: &str = "org.trindle.Portal";
 pub(super) const CANCEL_ICON: &str = "window-close-symbolic";
-pub(super) const ACCEPT_ICON: &str = crate::common::no_tick::GO_ICON;
+pub(super) const ACCEPT_ICON: &str = crate::common::no_tick::CONFIRM_ICON;
 
 pub(super) type Options = HashMap<String, OwnedValue>;
 pub(super) type Answer = (u32, HashMap<&'static str, Value<'static>>);

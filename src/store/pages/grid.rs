@@ -84,7 +84,7 @@ fn none_page(s: &Store, title: Node<Msg>, foot: Option<Node<Msg>>) -> Node<Msg> 
 fn selector(s: &Store) -> Node<Msg> {
     let names = Show::ALL.iter().map(|x| x.name().to_string()).collect();
     let at = Show::ALL.iter().position(|x| *x == s.prefs.show).unwrap_or(0);
-    choice(names, at, t!("store-tabs-show"), |i| go(move |s| mixed::set_show(s, Show::ALL[i]))).width(Length::Shrink).key(SELECTOR)
+    choice(names, at, t!("store-tabs-show"), |i| go(move |s| mixed::set_show(s, Show::ALL[i]))).hushed().width(Length::Shrink).key(SELECTOR)
 }
 
 pub(crate) const SELECTOR: &str = "apps-show";

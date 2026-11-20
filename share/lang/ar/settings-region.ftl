@@ -10,7 +10,7 @@ settings-region-keywords = لغة اللغة البلد الصيغ التاري�
 settings-region-help = تسري اللغة والصيغ عند تسجيل دخولك في المرة القادمة.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = سجّل الدخول من جديد لتراه في كل مكان.
+settings-region-later = سجّل الدخول مجددًا لتراه.
 
 # Shown while the page reads the computer.
 settings-region-looking = جارٍ النظر…

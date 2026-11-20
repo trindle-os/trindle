@@ -370,8 +370,6 @@ admin-driver-virtual-camera = виртуальная камера
 
 admin-language-in-use = { $code } - язык, на котором запускается этот компьютер, поэтому его нельзя удалить.
 
-
-
 # The kernel or chip has no split-lock slowing to turn off.
 admin-split-lock-none = На этом компьютере нет замедления из-за split-lock, которое можно было бы отключить.
 
@@ -397,12 +395,10 @@ admin-system-local-locked = Не удалось оставить /usr/local до
 admin-system-root-only = Это может запустить только root, и не через pkexec.
 
 # Switching the read-only system on where the system's disk is not Btrfs.
-admin-system-needs-btrfs = Для этого нужна Btrfs.
-
+admin-system-needs-btrfs = Нужна Btrfs.
 
 # Red words in Settings when a restore swapped the systems but could not finish tidying up. { $why } is the reason.
 admin-restore-finish-later = Снимок установлен на место, и компьютер запустится с него. Trindle не удалось закончить уборку старой системы. Попытка повторится при следующем запуске компьютера: { $why }
-
 
 # Red words in Settings when too many ports are open already. { $most } is a number.
 admin-ports-too-many = Можно открыть не более { $most } портов.
@@ -451,3 +447,33 @@ admin-swap-resume-unread = Не найдено, где теперь файл п�
 
 # Said when the swap file moved and the running system couldn't be told: hibernation is refused until the computer restarts.
 admin-swap-resume-restart = Гибернация снова заработает после перезагрузки.
+
+# Red words in Settings, Hardware, when Use the chip again is pressed while it is already running.
+admin-chip-busy = Чип уже настраивается. Дождитесь окончания.
+
+# Red words in Settings, Hardware, when the disk password typed for Use the chip again is wrong.
+admin-chip-wrong-password = Это не пароль диска.
+
+# Red words in Settings, Hardware, after several wrong disk passwords in a row.
+admin-chip-wait = Слишком много неверных паролей. Подождите минуту и повторите.
+
+# Red words in Settings, Hardware, when the chip unlocked the disk at the last start after all.
+admin-chip-not-needed = При последнем запуске чип разблокировал диск, делать ничего не нужно.
+
+# Red words in Settings, Hardware, when the disk is not the one the start-up screen noted.
+admin-chip-changed = Диск изменился с запуска компьютера. Перезагрузитесь и повторите.
+
+# Red words in Settings, Hardware, when the computer's TPM security chip can't be found.
+admin-chip-none = Чип безопасности не найден. Включите его в BIOS и повторите.
+
+# Red words in Settings, Hardware, when clevis, the tool that sets up the chip, is missing.
+admin-chip-no-clevis = Программа clevis, которая настраивает чип, не установлена.
+
+# Red words in Settings, Hardware, when the disk has no room left for another key.
+admin-chip-no-slot = На диске нет места для ещё одного ключа.
+
+# Red words in Settings, Hardware, when the chip couldn't be set up. The disk still opens with its password.
+admin-chip-not-sealed = Чип не удалось настроить. Диск по-прежнему открывается паролем.
+
+# Red words in Settings, Hardware, when the chip works again but its old key couldn't be removed.
+admin-chip-old-kept = Чип снова работает, но старый ключ удалить не удалось.

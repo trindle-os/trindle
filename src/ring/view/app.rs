@@ -4,7 +4,6 @@ use crate::ring::{kept, notice};
 use crate::ring::ctx::{msg, Msg};
 use crate::ring::layout::{button_size, CENTRE};
 use crate::ring::notice::Line;
-use crate::toolkit::t;
 use crate::toolkit::input::{Input, Keysym, Typing};
 use crate::toolkit::theme::Theme;
 use crate::toolkit::ui::App;
@@ -16,10 +15,6 @@ use super::arrange::{less_word, quick_side};
 use super::middle::FINDING;
 use super::paint::disc;
 use super::power::power_closed;
-
-fn nothing_found() -> &'static str {
-    t!("ring-find-nothing")
-}
 
 pub(super) fn look() -> Theme {
     Theme::chosen()
@@ -160,15 +155,16 @@ impl Face {
                     let c = text.as_ref().and_then(|t| t.chars().next()).filter(|c| c.is_alphanumeric())?;
                     return Some(msg(move |f| {
                         f.set_level(ALL);
+                        f.typed_in = true;
                         f.set_typed(c.to_string());
                     }));
                 }
                 match *sym {
-                    Keysym::BackSpace if mods.ctrl => Some(msg(|f| f.set_typed(less_word(&f.typed)))),
+                    Keysym::BackSpace if mods.ctrl => Some(msg(|f| f.take_back(less_word(&f.typed)))),
                     Keysym::BackSpace => Some(msg(|f| {
                         let mut t = f.typed.clone();
                         t.pop();
-                        f.set_typed(t);
+                        f.take_back(t);
                     })),
 
                     Keysym::Return | Keysym::KP_Enter | Keysym::space if keys => None,
@@ -237,9 +233,6 @@ impl Face {
 
     fn words_layers(&self) -> Vec<Node<Msg>> {
         let mut lines = Vec::new();
-        if self.level == ALL && !self.typed.trim().is_empty() && self.best_match.is_none() {
-            lines.push(Line::new(nothing_found()));
-        }
         if let Some(said) = self.said {
             lines.push(Line::problem(said.words()));
         }

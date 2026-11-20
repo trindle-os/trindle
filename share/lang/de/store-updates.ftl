@@ -125,6 +125,16 @@ store-upd-install-n =
 # Main button that restarts the computer.
 # SAFETY: needs a human review before it ships
 store-upd-restart-now = Jetzt neu starten
+# Beside Restart now: the box that puts the restart off, then the ring's Updates button reminds. Its answers are the choices below.
+store-upd-remind-later = Später erinnern
+# Red words under the headline when the Remind me later time could not be saved; the reason follows.
+store-upd-remind-not-saved = Die Erinnerung konnte nicht gespeichert werden: { $why }.
+# One answer in the Remind me later box.
+store-upd-remind-hours =
+    { $n ->
+        [one] In 1 Stunde
+       *[other] In { $n } Stunden
+    }
 
 # Main button that checks for updates.
 store-upd-check-for = Nach Updates suchen
@@ -222,23 +232,11 @@ store-upd-debian-count =
        *[other] { $n } Updates, die zusammen installiert werden
     }
 
-# On a row of Debian's updates: where it comes from.
-store-upd-from-debian = Von Debian
-
 # Under Debian's rows: how many of them show.
 store-upd-debian-showing = Es werden { $shown } von { $total } Debian-Updates angezeigt.
 
 # Note on the Trindle and Debian card: which version of Trindle the computer has.
 store-upd-has-trindle = Dieser Computer hat Trindle { $version }.
-
-# Heading of the Trindle and Debian card.
-store-upd-card-system = Trindle und Debian
-
-# Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Debian-Pakete sind darauf ausgelegt, zusammenzuarbeiten. Wer nur eines installiert, zieht vielleicht andere nach oder bringt sie aus dem Takt. Darum werden alle zusammen installiert.
-
-# Note on the Trindle and Debian card: why no row has a Hold back button.
-store-upd-not-held = Die Updates von Trindle und Debian bringen Sicherheitskorrekturen für den ganzen Computer und können deshalb nicht zurückgehalten werden.
 
 # Heading of the card about the daily security updates.
 store-upd-card-security = Sicherheitsupdates
@@ -303,7 +301,6 @@ store-patch-not-fetched = Trindle konnte { $package } { $version } nicht herunte
 # Said when a security fix for a boxed app was downloaded but isn't there to use.
 store-patch-not-found = Trindle konnte das heruntergeladene Paket nicht finden.
 
-
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
 store-upd-off = Die automatische Suche nach Updates ist ausgeschaltet.
 
@@ -324,3 +321,4 @@ store-upd-stopped-all = Angehalten. Installiere noch einmal, um weiterzumachen.
 
 # Note under the Apps card.
 store-upd-steam-restarts = Steam startet neu, sobald kein Spiel läuft.
+

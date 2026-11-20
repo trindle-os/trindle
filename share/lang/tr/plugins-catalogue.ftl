@@ -35,9 +35,9 @@ plugins-refused-not-signed = Trindle'ın eklenti kataloğu Trindle'ın anahtarı
 # Red line under Trindle's own plugins when the catalogue does not say which number it is.
 plugins-refused-no-number = Trindle'ın eklenti kataloğunda sürüm numarası yok, bu yüzden Trindle onu kullanmadı.
 
-# Red line under Trindle's own plugins when the catalogue is older than one accepted before. { $is } is its number; { $after } is the number accepted before.
+# Red line under Trindle's own plugins when the catalogue is older than one accepted before.
 # SAFETY: needs a human review before it ships
-plugins-refused-older = Bu eklenti kataloğunun sürüm numarası ({ $is }), daha önce kabul edilen numaradan ({ $after }) eski olduğu için Trindle onu kullanmadı.
+plugins-refused-older = Trindle bu eklenti kataloğunu kullanmadı, çünkü daha önce kullandığı katalogdan eski.
 
 # Red line under Trindle's own plugins when the catalogue is signed but cannot be read. { $why } says what is wrong with it.
 plugins-refused-unreadable = Trindle'ın eklenti kataloğu imzalı ama okunamıyor, bu yüzden Trindle onu kullanmadı: { $why }
@@ -105,4 +105,3 @@ plugins-install-note = Trindle eklentiyi kurdu ama Trindle'ın kataloğundan gel
 
 # Red words when an update is asked for a plugin that is not installed.
 plugins-update-not-installed = Kurulu değil, bu yüzden güncellenecek bir şey yok.
-

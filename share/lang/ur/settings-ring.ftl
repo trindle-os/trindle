@@ -13,9 +13,6 @@ settings-ring-help = آپ کے پسندیدہ حلقے کے درمیان کے گ
 # Sentence at the top of the ring page saying how the ring opens.
 settings-ring-headline = حلقہ اسکرین کے کنارے پر کھلتا ہے، اور آپ کی کھلی ونڈوز اس میں نظر آتی ہیں۔
 
-# Name of the picture on the ring page that shows where things open.
-settings-ring-picture = چیزیں کہاں کھلتی ہیں
-
 # Line saying how many favourites the ring has; { $n } is the number.
 settings-ring-favourites =
     { $n ->

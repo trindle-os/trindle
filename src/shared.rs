@@ -53,6 +53,8 @@ pub mod in_use;
 pub mod kit;
 #[path = "common/levels.rs"]
 pub mod levels;
+#[path = "common/luks_chip.rs"]
+pub mod luks_chip;
 #[path = "common/locked.rs"]
 pub mod locked;
 #[path = "common/pads.rs"]

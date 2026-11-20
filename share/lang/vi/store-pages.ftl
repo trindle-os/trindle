@@ -568,7 +568,7 @@ store-src-added = { $what } đã được thêm và luôn được cập nhật.
 store-src-no-program = { $what }. Nguồn đã được thêm, nhưng chương trình chưa được cài.
 
 # Under a maker's source whose program is installed another way.
-store-src-other-way = { $what } đã được cài bằng cách khác.
+store-src-other-way = { $what }. Cài bằng cách khác.
 
 # Tip of the round button that removes a maker's source and its program.
 # SAFETY: needs a human review before it ships

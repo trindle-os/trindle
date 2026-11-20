@@ -364,8 +364,6 @@ admin-driver-virtual-camera = camera ảo
 
 admin-language-in-use = { $code } là ngôn ngữ mà máy tính này khởi động, nên không thể gỡ.
 
-
-
 # The kernel or chip has no split-lock slowing to turn off.
 admin-split-lock-none = Máy tính này không có tính năng làm chậm split-lock để tắt.
 
@@ -391,12 +389,10 @@ admin-system-local-locked = Trindle không giữ được /usr/local ở trạng
 admin-system-root-only = Chỉ root mới chạy được lệnh này, và không qua pkexec.
 
 # Switching the read-only system on where the system's disk is not Btrfs.
-admin-system-needs-btrfs = Việc này cần Btrfs.
-
+admin-system-needs-btrfs = Cần Btrfs.
 
 # Red words in Settings when a restore swapped the systems but could not finish tidying up. { $why } is the reason.
 admin-restore-finish-later = Bản chụp đã vào đúng chỗ và máy tính sẽ khởi động từ đó. Trindle chưa dọn dẹp xong hệ thống cũ. Trindle sẽ thử lại khi máy khởi động lần sau: { $why }
-
 
 # Red words in Settings when too many ports are open already. { $most } is a number.
 admin-ports-too-many = Bạn chỉ có thể mở tối đa { $most } cổng.
@@ -442,3 +438,33 @@ admin-swap-resume-unread = Không tìm thấy vị trí tệp hoán đổi, nên
 
 # Said when the swap file moved and the running system couldn't be told: hibernation is refused until the computer restarts.
 admin-swap-resume-restart = Ngủ đông sẽ dùng được lại sau khi bạn khởi động lại.
+
+# Red words in Settings, Hardware, when Use the chip again is pressed while it is already running.
+admin-chip-busy = Chip đang được thiết lập. Hãy đợi xong.
+
+# Red words in Settings, Hardware, when the disk password typed for Use the chip again is wrong.
+admin-chip-wrong-password = Đó không phải mật khẩu ổ đĩa.
+
+# Red words in Settings, Hardware, after several wrong disk passwords in a row.
+admin-chip-wait = Sai mật khẩu quá nhiều lần. Đợi một phút rồi thử lại.
+
+# Red words in Settings, Hardware, when the chip unlocked the disk at the last start after all.
+admin-chip-not-needed = Lần khởi động trước chip đã mở khóa ổ đĩa, nên không cần làm gì.
+
+# Red words in Settings, Hardware, when the disk is not the one the start-up screen noted.
+admin-chip-changed = Ổ đĩa đã đổi từ khi máy khởi động. Hãy khởi động lại rồi thử lại.
+
+# Red words in Settings, Hardware, when the computer's TPM security chip can't be found.
+admin-chip-none = Không tìm thấy chip bảo mật. Hãy bật nó trong BIOS rồi thử lại.
+
+# Red words in Settings, Hardware, when clevis, the tool that sets up the chip, is missing.
+admin-chip-no-clevis = Công cụ thiết lập chip, clevis, chưa được cài.
+
+# Red words in Settings, Hardware, when the disk has no room left for another key.
+admin-chip-no-slot = Ổ đĩa không còn chỗ cho thêm khóa.
+
+# Red words in Settings, Hardware, when the chip couldn't be set up. The disk still opens with its password.
+admin-chip-not-sealed = Không thiết lập được chip. Ổ đĩa vẫn mở bằng mật khẩu.
+
+# Red words in Settings, Hardware, when the chip works again but its old key couldn't be removed.
+admin-chip-old-kept = Chip đã dùng lại được, nhưng không xóa được khóa cũ.

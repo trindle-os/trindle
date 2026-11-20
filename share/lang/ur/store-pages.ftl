@@ -564,7 +564,7 @@ store-src-added = { $what } شامل ہے اور تازہ رکھا جاتا ہے
 store-src-no-program = { $what }۔ ذریعہ شامل ہے، مگر پروگرام انسٹال نہیں ہے۔
 
 # Under a maker's source whose program is installed another way.
-store-src-other-way = { $what } کسی اور طریقے سے انسٹال ہوا تھا۔
+store-src-other-way = { $what }۔ دوسرے طریقے سے انسٹال۔
 
 # Tip of the round button that removes a maker's source and its program.
 # SAFETY: needs a human review before it ships

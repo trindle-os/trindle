@@ -316,7 +316,7 @@ disks-mount = 挂载
 disks-unmount = 卸载
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = 进行更改
+disks-change-it = 更改
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = 名称

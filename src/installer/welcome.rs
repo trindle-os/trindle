@@ -104,7 +104,7 @@ impl App for Welcome {
         let first = panel("view-app-grid-symbolic", t!("installer-live-begin"), vec![column(rows).gap(0.0).height(Length::Fill)]);
 
         let strip = choice(vec![t!("installer-live-dark").to_string(), t!("installer-live-light").to_string()], usize::from(self.light),
-                           t!("installer-live-look"), |i| Msg::Look(i == 1));
+                           t!("installer-live-look"), |i| Msg::Look(i == 1)).hushed();
 
         let mut right = vec![first.height(Length::Fill)];
 

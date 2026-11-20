@@ -10,7 +10,7 @@ settings-region-keywords = язык локаль страна регион фо�
 settings-region-help = Язык и форматы вступят в силу при следующем входе в систему.
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = Войдите снова, чтобы увидеть это везде.
+settings-region-later = Войдите снова, чтобы увидеть.
 
 # Shown while the page reads the computer.
 settings-region-looking = Поиск…

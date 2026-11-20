@@ -8,7 +8,7 @@ report-title-note = Báo cáo sự cố
 report-title-crash = Đã xảy ra lỗi. Gửi báo cáo?
 
 # Under the title: what a report holds, and what it never holds.
-report-summary = Thao tác này gửi lỗi, bản tóm tắt về máy tính của bạn và các dòng cuối của nhật ký. Tên, địa chỉ email, địa chỉ mạng và tên Wi-Fi đã được loại bỏ. Tên tệp và địa chỉ web vẫn có thể còn trong các dòng nhật ký. Tệp và mật khẩu của bạn không được gửi.
+report-summary = Thao tác này gửi lời bạn viết, thông tin máy tính, các lỗi của lần khởi động này và nhật ký của Trindle. Tên và địa chỉ (email, mạng, Wi-Fi) được loại khỏi những gì Trindle thu thập. Tên tệp và địa chỉ web vẫn có thể còn trong các dòng nhật ký. Thao tác này không gửi tệp hay mật khẩu của bạn.
 
 # Big typing box in the middle of the window, shown quietly while empty.
 report-what-doing = Chuyện gì đã xảy ra?
@@ -55,12 +55,6 @@ report-checking = Đang kiểm tra.
 
 # Why a report is waiting: Buildmorphic had too many reports at once and the report is tried again later.
 report-too-many = Có quá nhiều báo cáo cùng lúc.
-
-# Written beside the Send button once the report has been sent.
-report-already-sent = Đã gửi.
-
-# Written under the typing box when Save is pressed a second time.
-report-already-saved = Đã lưu.
 
 # Written beside the buttons while a report that could not be sent waits for the computer to be online.
 report-waiting = Đang chờ kết nối.
@@ -164,10 +158,7 @@ report-picture-damaged = Ảnh bị hỏng.
 
 report-picture-unreadable = Không đọc được.
 
-
-
 report-sent-as-bug = Đã gửi. Số báo cáo lỗi của bạn là { $number }. Cảm ơn bạn.
-
 
 # Under the title, beta only: why a report matters and what it holds.
 report-beta = Trindle đang ở bản beta. Báo cáo là ẩn danh: tên, địa chỉ email và thư mục cá nhân đều được loại bỏ. Tên người dùng là tùy chọn.

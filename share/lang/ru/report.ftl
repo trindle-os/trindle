@@ -6,9 +6,9 @@ report-title-note = Сообщить о проблеме
 # Window title when Trindle's ring opens it after one of Trindle's programs crashed.
 report-title-crash = Что-то пошло не так. Отправить отчёт?
 
-# SAFETY: needs a human review before it ships
 # Under the title: what a report holds, and what it never holds.
-report-summary = Отправляются ошибка, сводка о вашем компьютере и последние строки журнала. Имена, адреса электронной почты, сетевые адреса и названия сетей Wi-Fi удаляются. Имена файлов и веб-адреса всё же могут остаться в строках журнала. Ваши файлы и пароли не отправляются.
+# SAFETY: needs a human review before it ships
+report-summary = Отправляются ваши слова, сведения о компьютере, ошибки этого запуска и журнал Trindle. Имена и адреса (электронной почты, сети, Wi-Fi) удаляются из того, что собирает Trindle. Имена файлов и веб-адреса всё же могут остаться в строках журнала. Ваши файлы и пароли не отправляются.
 
 # Big typing box in the middle of the window, shown quietly while empty.
 report-what-doing = Что произошло?
@@ -57,12 +57,6 @@ report-checking = Проверка.
 
 # Why a report is waiting: Buildmorphic had too many reports at once and the report is tried again later.
 report-too-many = Слишком много отчётов одновременно.
-
-# Written beside the Send button once the report has been sent.
-report-already-sent = Уже отправлено.
-
-# Written under the typing box when Save is pressed a second time.
-report-already-saved = Уже сохранено.
 
 # Written beside the buttons while a report that could not be sent waits for the computer to be online.
 report-waiting = Ожидание подключения.
@@ -166,10 +160,7 @@ report-picture-damaged = Картинка повреждена.
 
 report-picture-unreadable = Не удалось прочитать.
 
-
-
 report-sent-as-bug = Отправлено. Номер вашего отчёта об ошибке: { $number }. Спасибо.
-
 
 # Under the title, beta only: why a report matters and what it holds.
 report-beta = Trindle находится в бета-версии. Отчёты анонимны: имена, адреса электронной почты и домашние папки удаляются. Имя пользователя указывать необязательно.

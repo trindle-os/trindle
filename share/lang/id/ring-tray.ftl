@@ -135,3 +135,5 @@ ring-tray-full = Sudah ada empat ikon di cincin. Keluarkan satu dulu.
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = Pemeriksaan mati
+# Name of the updates button when a restart to finish installing was put off with Remind me later and the time has come.
+ring-updates-restart = Mulai ulang untuk menyelesaikan pemasangan

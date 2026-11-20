@@ -36,9 +36,9 @@ plugins-refused-not-signed = O catálogo de plugins do Trindle não está assina
 # SAFETY: needs a human review before it ships
 plugins-refused-no-number = O catálogo de plugins do Trindle não tem número de versão, então o Trindle não o usou.
 
-# Red line under Trindle's own plugins when the catalogue is older than one accepted before. { $is } is its number; { $after } is the number accepted before.
+# Red line under Trindle's own plugins when the catalogue is older than one accepted before.
 # SAFETY: needs a human review before it ships
-plugins-refused-older = O Trindle não usou este catálogo de plugins porque o número de versão dele, { $is }, é mais antigo que o aceito antes, { $after }.
+plugins-refused-older = O Trindle não usou este catálogo de plugins porque ele é mais antigo que um catálogo usado antes.
 
 # Red line under Trindle's own plugins when the catalogue is signed but cannot be read. { $why } says what is wrong with it.
 plugins-refused-unreadable = O catálogo de plugins do Trindle está assinado, mas não pode ser lido, então o Trindle não o usou: { $why }

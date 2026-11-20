@@ -452,7 +452,7 @@ mod tests {
         static READS: AtomicUsize = AtomicUsize::new(0);
         fn slow(_: &Path) -> Option<Vec<u8>> {
             READS.fetch_add(1, SeqCst);
-            std::thread::sleep(std::time::Duration::from_secs(3));
+            std::thread::sleep(std::time::Duration::from_secs(60));
             None
         }
         fn quick(file: &Path) -> Option<Vec<u8>> {
@@ -472,7 +472,7 @@ mod tests {
 
         let began = std::time::Instant::now();
         assert!(matches!(elsewhere(Path::new("/far/dead.svg"), slow, wait, yes), Seen::Unknown));
-        assert!(began.elapsed() < std::time::Duration::from_secs(2), "the read was waited for");
+        assert!(began.elapsed() < std::time::Duration::from_secs(20), "the read was waited for");
         let before = READS.load(SeqCst);
         assert!(matches!(elsewhere(Path::new("/far/there.svg"), quick, wait, yes), Seen::Unknown));
         assert_eq!(READS.load(SeqCst), before, "another read went out after one was late");

@@ -9,7 +9,11 @@ fn the_i_shuts_on_a_press_anywhere_outside_its_words() {
     let mut s = showing(Box::new(panels::wallpaper::Wallpaper::made_up()), 900.0);
     shuts_like_every_other("Settings", UNDER_THE_I, &mut s, open, |s| s.kit.info.is_some(), |s| s.view(), |s, m| s.update(m), |s, i| s.intercept(i, false));
     let mut hosted = Hosted { s: showing(Box::new(panels::wallpaper::Wallpaper::made_up()), 900.0) };
-    shuts_like_every_other("Settings in the corner", UNDER_THE_I, &mut hosted, |h| open(&mut h.s), |h| h.s.kit.info.is_some(), |h| h.view(),
+    shuts_like_every_other("Settings in the corner", UNDER_THE_I, &mut hosted, |h| open(&mut h.s), |h| h.s.kit.info.is_some(),
+        |h| match h.info_box() {
+            Some((panel, close)) => crate::toolkit::popup::dismissing(h.view(), panel, close, Msg(Rc::new(|_: &mut Settings| ()))),
+            None => h.view(),
+        },
         |h, m| h.update(m), |_, _| Some(Msg(Rc::new(|s: &mut Settings| { s.kit.info.take(); }))));
 }
 

@@ -13,7 +13,7 @@ report-title-note = Report a problem
 # Window title when Trindle's ring opens it after one of Trindle's programs crashed.
 report-title-crash = Something went wrong. Send a report?
 # Under the title: what a report holds, and what it never holds.
-report-summary = This sends the error, a summary of your computer and the last lines of the log. Names, email addresses, network addresses and Wi-Fi names are taken out. File names and web addresses can still appear in the log lines. It doesn't send your files or passwords.
+report-summary = This sends your words, computer details, this boot's errors and Trindle's log. Names and addresses (email, network, Wi-Fi) are taken out of what Trindle gathers. File names and web addresses can still appear in log lines. It doesn't send your files or passwords.
 # Big typing box in the middle of the window, shown quietly while empty.
 report-what-doing = What happened?
 # Beside the dropdown at the top of the window that says which app the report is about; also its name for the screen reader.
@@ -50,10 +50,6 @@ report-username-box = Buildmorphic username (optional)
 report-try-again = Trindle couldn't send the report. { $why } Press Send to try again.
 # Why a report is waiting: Buildmorphic had too many reports at once and the report is tried again later.
 report-too-many = Too many reports at once.
-# Written beside the Send button once the report has been sent.
-report-already-sent = Already sent.
-# Written under the typing box when Save is pressed a second time.
-report-already-saved = Already saved.
 # Written beside the buttons while a report that could not be sent waits for the computer to be online.
 report-waiting = Waiting for a connection.
 # Under the typing box when the report is waiting. $why is the reason it could not be posted, such as "No connection."

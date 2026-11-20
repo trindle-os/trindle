@@ -13,9 +13,6 @@ settings-ring-help = Sık kullanılanlarınız halkanın ortasının çevresinde
 # Sentence at the top of the ring page saying how the ring opens.
 settings-ring-headline = Halka ekranın kenarında açılır ve açık pencereleriniz içinde görünür.
 
-# Name of the picture on the ring page that shows where things open.
-settings-ring-picture = Nelerin nerede açıldığı
-
 # Line saying how many favourites the ring has; { $n } is the number.
 settings-ring-favourites =
     { $n ->

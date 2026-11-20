@@ -59,7 +59,7 @@ store-because-quota = 这个账户允许使用的空间已用完
 store-because-missing = 缺少它所需的文件或程序
 
 # The reason when no reason could be read from the program's last line.
-store-because-failed = 它失败了
+store-because-failed = 失败了
 
 # The reason when the backup has no name to be written under.
 store-because-no-name = 它没有名称

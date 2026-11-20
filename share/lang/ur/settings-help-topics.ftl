@@ -865,7 +865,7 @@ settings-help-topics-keys-step2-1 = اکیلا Super، یا Super اور Space: 
 settings-help-topics-keys-step2-2 = Super اور Enter، یا Ctrl، Alt اور T: ٹرمینل کھولیں۔
 
 # Help topic "Keyboard shortcuts": step 3 of the numbered steps at block 2.
-settings-help-topics-keys-step2-3 = Super اور I: سیٹنگز کھولیں۔
+settings-help-topics-keys-step2-3 = Super اور I: سیٹنگز۔
 
 # Help topic "Keyboard shortcuts": step 4 of the numbered steps at block 2.
 settings-help-topics-keys-step2-4 = Super اور L: اسکرین مقفل کریں، جب سیٹنگز، پاور میں لاکنگ چالو ہو۔

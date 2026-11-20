@@ -510,7 +510,7 @@ store-src-added = { $what } जोड़ा गया है और अद्य
 store-src-no-program = { $what }। स्रोत जोड़ा गया है, पर प्रोग्राम इंस्टॉल नहीं है।
 
 # Under a maker's source whose program is installed another way.
-store-src-other-way = { $what } दूसरे तरीके से इंस्टॉल किया गया था।
+store-src-other-way = { $what }। दूसरे तरीके से इंस्टॉल।
 
 # SAFETY: needs a human review before it ships
 # Tip of the round button that removes a maker's source and its program.

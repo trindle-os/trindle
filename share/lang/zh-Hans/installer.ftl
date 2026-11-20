@@ -70,13 +70,15 @@ installer-arm = 再点一次即可安装
 installer-arm-erase = 再点一次即可清除整个磁盘并安装
 
 # Note beside Next on the first page while no language is chosen.
-installer-missing-language = 请选择语言
+installer-missing-language = 选择语言
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = 请选择 Trindle 的语言
 
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = 请选择键盘
 
 # Note beside Next on the first page while no time zone is chosen.
-installer-missing-time = 请选择时区
+installer-missing-time = 设置时区
 
 # Note beside Next on the disk page while no disk is chosen.
 installer-missing-disk = 请选择安装 Trindle 的位置
@@ -102,10 +104,12 @@ installer-missing-password = 请输入两次密码，两次必须相同
 installer-welcome-title = 欢迎使用 { $name }
 
 # Sentence under the title of the first page.
-installer-welcome-help = 请选择语言，Trindle 会据此设置键盘和时区，你也可以自行修改。
+installer-welcome-help = 请选择你的语言，Trindle 会据此设置其余内容。
 
-# Head of the card for choosing the language, and the name of its search box.
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
 installer-language = 语言
+# Label beside the box at the right of the first page's sentence, for choosing the language of Trindle's own words (only those Trindle has).
+installer-trindle-language = Trindle 的语言
 
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = 键盘
@@ -384,8 +388,8 @@ installer-privacy-chip-none = 这台电脑有 TPM 芯片，可以解锁加密的
 # In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
 installer-privacy-no-chip-none = 这台电脑没有 Trindle 能使用的 TPM 芯片。
 
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = { $keyboard } 键盘，{ $zone } 时间。
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle 使用{ $trindle }，{ $keyboard } 键盘，{ $zone } 时间。
 
 # Title of the page shown while the install runs.
 installer-installing-title = 正在安装 { $name }
@@ -529,7 +533,7 @@ installer-live-speak = 用语音
 installer-live-speak-line = 点按圆环中间，说出你想要的。
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = 在“设置”的“圆环”中点“添加语音控制”，然后点按中间并说话。
+installer-live-speak-add = 安装好 Trindle 后，在“设置”的“圆环”中添加语音控制。
 
 # Name of the third thing to do.
 installer-live-tab = 全都在圆环里
@@ -583,7 +587,7 @@ installer-step-settings = 正在写入设置
 installer-step-account = 正在创建你的账户
 
 # Foot of the install page while the stick's own parts are taken out.
-installer-step-live-parts = 正在移除 U 盘的附加部分
+installer-step-live-parts = 正在移除 U 盘附加部分
 
 # Foot of the install page while the start-up files are made.
 installer-step-startup = 正在生成启动文件
@@ -666,6 +670,9 @@ installer-copy-failed = 无法复制系统。{ $why }
 # Red line at the foot: there is not enough room for a swap file.
 installer-swap-no-room = 没有空间放交换文件。
 
+# Under the swap file switch when the chosen disk or space is too small for one; the switch is then off and cannot be turned on.
+installer-swap-too-small = 这块空间太小，放不下交换文件。
+
 # Red line at the foot: the swap file's place on the disk cannot be read.
 installer-swap-unreadable = Trindle 无法读取交换文件在磁盘上的位置。
 
@@ -688,8 +695,8 @@ installer-tour-ring-foot = 查看已打开的内容，使用剪贴板，还可�
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } 是 Trindle 正在运行的那个 U 盘。
 
-# Red line at the foot: something on the chosen disk is mounted or swapped to.
-installer-disk-in-use = { $dev } 正在使用。请关闭正在使用它的程序，然后重试。
+# Red words under the disk, back on the disk page: something on the chosen disk is mounted, swapped to or open.
+installer-disk-in-use = { $dev } 正在使用。请关闭正在使用它的程序，然后重新选择这个磁盘。
 
 # Said beside how far the install has got, once it has started.
 installer-started = 正在安装
@@ -734,8 +741,8 @@ installer-done-problems = 并非所有内容都已设置好
 # Red line under the disk password boxes: the computer gave no random numbers, so no passphrase could be made.
 installer-suggest-failed = Trindle 无法生成密码短语。请自己输入一个。
 
-# Red line at the foot: the disk was swapped for another after the list was read.
-installer-disk-changed = { $dev } 不是之前显示的那个磁盘。请返回并重新选择磁盘。
+# Red words on the disk page: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev } 不是之前显示的那个磁盘。请重新选择磁盘。
 
 # Red line at the foot: a disk with an old-style partition table cannot be shared with.
 installer-no-gpt = { $dev } 没有使用 GPT 分区表，所以 Trindle 无法装在其现有内容旁边。
@@ -757,3 +764,39 @@ installer-disk-named = { $what }，{ $dev }
 
 # Red line at the foot: a program the installer runs stopped before it had all it was given.
 installer-run-stopped = { $program } 在拿到所需的全部信息前就停止了：{ $why }
+
+# Red words on the last page: the TPM chip could not be set up to open the disk, so the disk password is asked for at every start.
+installer-chip-not-set-up = 无法设置 TPM 芯片，所以每次电脑启动时，磁盘都会要求输入密码。
+
+# Red words on the last page: the keyboard for the disk password screen could not be set, so it may be the American one.
+installer-start-keyboard-failed = Trindle 已安装，但磁盘密码界面可能使用的是美式键盘。
+
+# Red words on the last page: the login screen could not be switched on; { $why } is the reason.
+installer-login-screen-failed = Trindle 已安装，但无法开启登录界面：{ $why }
+
+# Red words on the last page: Trindle could not be set to take its own updates; { $why } is the reason.
+installer-updates-held = Trindle 已安装，但暂时还不会接收自己的更新：{ $why }
+
+# Red words on the last page: earlier versions of people's files (home snapshots) could not be switched on.
+installer-home-snapshots-failed = Trindle 已安装，但文件的早期版本没有开启。你可以在“设置”的“快照”中开启。
+
+# Red words on the last page: Trindle could not be added to the computer's own start-up list; { $why } is the reason.
+installer-firmware-entry-failed = Trindle 已安装，但无法把自己加入电脑的启动列表：{ $why }
+
+# Red line: the account the stick ran as could not be removed from the new system, so the install stopped.
+installer-live-account-left = 无法从新系统中删除 U 盘的账户 { $user }。
+
+# Under the swap file's switch when a size smaller than memory is chosen.
+installer-swap-no-hibernate = 小于这台电脑的内存，所以无法休眠。
+
+# In the swap size list: the size of the computer's memory, which hibernating needs.
+installer-swap-size-hibernate = { $gb } GB，足够休眠
+
+# In the swap size list: a smaller size.
+installer-swap-size = { $gb } GB
+
+# Tip of the swap size list.
+installer-swap-size-tip = 交换文件的大小
+
+# Why logind holds off sleep and shutting down while the installer changes the disk (shown by systemd-inhibit --list).
+installer-power-held = 正在安装 Trindle

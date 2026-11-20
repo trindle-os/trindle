@@ -14,7 +14,8 @@ pub struct Who {
 }
 
 impl Who {
-    pub fn here() -> Who {
+
+    pub fn quick() -> Who {
         let user = std::env::var("USER").or_else(|_| std::env::var("LOGNAME")).unwrap_or_default();
         let mut names = vec![user.clone()];
         let passwd = std::fs::read_to_string("/etc/passwd").unwrap_or_default();
@@ -33,13 +34,17 @@ impl Who {
             }
         }
         names.push(std::fs::read_to_string("/etc/hostname").unwrap_or_default().trim().to_string());
-        Who { home: home().to_string_lossy().into_owned(), names, ssids: wifi_names() }
+        Who { home: home().to_string_lossy().into_owned(), names, ssids: Vec::new() }
+    }
+
+    pub fn here() -> Who {
+        Who { ssids: wifi_names(), ..Who::quick() }
     }
 }
 
 fn wifi_names() -> Vec<String> {
     let saved = crate::common::run::text(&["nmcli", "-t", "-f", "NAME,TYPE", "connection", "show"]);
-    let seen = crate::common::run::text(&["nmcli", "-t", "-f", "SSID", "device", "wifi", "list"]);
+    let seen = crate::common::run::text(&["nmcli", "-t", "-f", "SSID", "device", "wifi", "list", "--rescan", "no"]);
     let mut all = Vec::new();
     for l in saved.lines() {
         if let Some((name, kind)) = l.rsplit_once(':') {

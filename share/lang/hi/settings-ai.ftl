@@ -165,3 +165,7 @@ settings-ai-keys = AI प्रोग्रामों को दी गई क
 
 # Help text of the keys card (the information button).
 settings-ai-keys-about = आपके सत्र की कुंजियाँ और टोकन AI प्रोग्रामों को कभी नहीं मिलते। उन्हें केवल वही कुंजी मिलती है जो आप यहाँ लिखते हैं।
+# Under the AI programs card, greyed, when none of the listed AI programs is on this computer.
+settings-ai-none-installed = इस कंप्यूटर पर कोई AI प्रोग्राम नहीं है।
+# Under the box, when the program typed in to add is not on this computer.
+settings-ai-not-installed = वह प्रोग्राम इस कंप्यूटर पर नहीं है।

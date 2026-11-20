@@ -9,7 +9,7 @@ use super::clip_panel::{forget_one, preview};
 use super::notifications::newest_first;
 use super::shortcuts::shortcut_lines;
 use super::sound::{heard_level, short_names};
-use super::wifi::{parse_wifi, signal_level};
+use trindle_common::wifi::{self, signal_level, Net, Seen};
 
 pub(in crate::ring) fn quick_code() -> &'static str {
     static CODE: std::sync::OnceLock<String> = std::sync::OnceLock::new();
@@ -76,7 +76,7 @@ fn a_quick_list_keeps_its_order_when_a_row_changes_state() {
 
     let mut order = KeptOrder::default();
     let read = |out: &str, order: &mut KeptOrder| {
-        let (_, _, mut nets) = parse_wifi(out);
+        let mut nets = wifi::parse(out).near;
         order.keep(&mut nets, |n| n.ssid.clone());
         nets.into_iter().map(|n| n.ssid).collect::<Vec<_>>()
     };
@@ -110,17 +110,6 @@ fn quick_bluetooth_list_parses() {
     assert_eq!(devices.iter().map(|d| d.name.as_str()).collect::<Vec<_>>(), vec!["Phone", "Keyboard"]);
     assert!(devices[0].connected && devices[1].paired);
     assert!(!parse_bt("#all\n").0);
-}
-
-#[test]
-fn quick_wifi_list_parses() {
-    let out = "enabled\n#saved\nHome\\:Net\n#near\n:40:WPA2:Cafe\n*:60:WPA2:Home\\:Net\n:80:WPA2:Cafe\n:30:--:Open\n:20::\n";
-    let (on, saved, nets) = parse_wifi(out);
-    assert!(on);
-    assert!(saved.contains("Home:Net"));
-    assert_eq!(nets.iter().map(|n| n.ssid.as_str()).collect::<Vec<_>>(), vec!["Home:Net", "Cafe", "Open"]);
-    assert_eq!(nets[1].signal, 80);
-    assert!(!nets[2].secured);
 }
 
 #[test]
@@ -187,7 +176,7 @@ pub(in crate::ring) fn pages() -> Vec<(&'static str, Quick)> {
     let mut said = page("notes", "Notifications", Body::Notes(notes.clone()));
     said.said = "This went wrong in a way that takes a great many words to say, far more than one line of this panel holds.".into();
     let asking = |code: Option<&str>, entry: Option<(&'static str, bool)>, words: &'static str| {
-        let mut q = page("wifi", "Wi-Fi", Body::Wifi(Some(true), nets.clone(), HashSet::new()));
+        let mut q = page("wifi", "Wi-Fi", Body::Wifi(Some(true), Seen { near: nets.clone(), ..Seen::default() }));
         q.ask = Some(Ask { icon: "network-wireless-symbolic", title: "Example network with a long name".into(), words, code: code.map(str::to_string),
                            entry, yes: "Join", no: "Cancel", text: Zeroizing::new(String::new()), done: None });
         q
@@ -205,7 +194,17 @@ pub(in crate::ring) fn pages() -> Vec<(&'static str, Quick)> {
         ("sound", page("sound", "Sound", Body::Sound(vec![level("Speakers", true), level("Microphone", false)]))),
         ("bluetooth", page("bluetooth", "Bluetooth", Body::Bt(Some(true), devs))),
         ("bluetooth-off", page("bluetooth", "Bluetooth", Body::Bt(Some(false), vec![]))),
-        ("wifi", page("wifi", "Wi-Fi", Body::Wifi(Some(true), nets.clone(), HashSet::new()))),
+        ("wifi", page("wifi", "Wi-Fi", Body::Wifi(Some(true), Seen { near: nets.clone(), ..Seen::default() }))),
+        ("wifi-password", {
+            let mut q = page("wifi", "Wi-Fi", Body::Wifi(Some(true), Seen { near: nets.clone(), ..Seen::default() }));
+            q.wifi_typing = Some((nets[2].ssid.clone(), Zeroizing::new("secret".into()), "That password didn't work."));
+            q
+        }),
+        ("wifi-joining", {
+            let mut q = page("wifi", "Wi-Fi", Body::Wifi(Some(true), Seen { near: nets.clone(), ..Seen::default() }));
+            q.wifi_joining = Some(nets[2].ssid.clone());
+            q
+        }),
         ("battery", page("power", "Battery", Body::Battery { big: "82%".into(), state: "About 5 hours 20 minutes left".into(),
                                                              health: "Health 91% of new".into(), mode: Some("balanced".into()) })),
         ("battery-charging", page("power", "Battery", Body::Battery { big: "78%".into(), state: "Charging: full in about 25 min".into(),
@@ -528,7 +527,7 @@ fn with_fake_nmcli(script: &str) -> (String, String) {
 
 #[test]
 fn the_saved_networks_are_found_by_the_name_they_broadcast_and_nmcli_is_asked_in_english() {
-    let (said, logged) = with_fake_nmcli(super::wifi::WIFI_LOOK);
+    let (said, logged) = with_fake_nmcli(wifi::LOOK);
     let saved: Vec<&str> = said.lines().skip_while(|l| *l != "#saved").skip(1).take_while(|l| *l != "#near").collect();
     assert_eq!(saved, ["Home", "Cafe"], "{said}");
     assert!(logged.lines().all(|l| l.starts_with("C ")), "run in the C locale: {logged}");
@@ -538,4 +537,29 @@ fn the_saved_networks_are_found_by_the_name_they_broadcast_and_nmcli_is_asked_in
 fn leaving_a_network_lets_go_on_each_wifi_adapter_whatever_its_connection_is_called() {
     let (_, logged) = with_fake_nmcli(super::wifi::WIFI_LEAVE);
     assert!(logged.contains("C dev disconnect wlan0") && !logged.contains("eth0"), "{logged}");
+}
+
+#[test]
+fn the_wifi_password_is_typed_under_its_network_and_joining_shows_a_spinner() {
+    let nets: Vec<Net> = (0..3).map(|i| Net { ssid: format!("John Smith's network {i}"), signal: 80, inuse: false, secured: true }).collect();
+    let mut q = Quick::with(None);
+    q.panel = Some("wifi");
+    q.head = ("network-wireless-symbolic", "Wi-Fi");
+    q.body = Body::Wifi(Some(true), Seen { near: nets.clone(), ..Seen::default() });
+    q.wifi_connect(&nets[1].ssid, true);
+    assert!(q.ask.is_none(), "the password took a page of its own");
+    assert!(q.wifi_typing.as_ref().is_some_and(|(s, _, _)| *s == nets[1].ssid));
+    let secret = |q: &Quick| q.view().said().iter().any(|w| w.starts_with("secret: "));
+    assert!(secret(&q), "no password box in the list");
+    q.password_typed("not it".into());
+    q.password_done(false);
+    assert!(q.wifi_typing.is_none() && q.wifi_joining.is_none(), "Cancel did not put the box away");
+
+    q.wifi_joining = Some(nets[1].ssid.clone());
+    assert!(!secret(&q), "the password box stayed while joining");
+    let connects = q.view().said().iter().filter(|w| w.as_str() == "button: Connect").count();
+    assert_eq!(connects, 2, "the network being joined still offered Connect instead of the spinner");
+    assert!(q.wifi_busy(), "the list could move while joining");
+    let said = q.view().said();
+    assert!(said.iter().any(|w| w.contains("Joining John Smith's network 1")), "joining says so in words: {said:?}");
 }

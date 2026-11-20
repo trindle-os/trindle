@@ -446,6 +446,10 @@ impl Rig {
         false
     }
 
+    fn ended(&mut self) -> bool {
+        self.until(|d| d.busy == 0)
+    }
+
     fn said(&mut self, drive: &'static str, row: &str) -> Option<(String, bool)> {
         let key = spot(drive, row);
         let log = self.log.clone();

@@ -105,7 +105,7 @@ common-updating-no-reason = Haikukamilika. Sababu haikutolewa.
 common-updating-failed = Haikukamilika. { $why }
 
 # Red words beside an update that was never started. { $why } is the end of a sentence such as "because no administrator's password was given."
-common-updating-not-installed = Haikusakinishwa, { $why }
+common-updating-not-installed = Haijasakinishwa, { $why }
 
 # End of a sentence saying why a step was refused: the password box was closed. It follows "because".
 # SAFETY: needs a human review before it ships
@@ -265,11 +265,11 @@ common-x11-would-not-start = Xwayland haikuanza
 # Second line of that notice, when the desktop will try the older-programs display again soon.
 common-x11-try-again = Jaribu tena baada ya dakika moja
 
-# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each dot with what it means.
-common-in-use-key = Maana ya vidoti
+# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each mark with what it means.
+common-in-use-key = Maana ya alama
 
-# Under the dots in that key: where a dot shows up.
-common-in-use-where = Nukta huonekana juu katikati ya skrini na kwenye vichupo vya madirisha.
+# Under the marks in that key: where a mark shows up. On the screen it is a half circle hung from the top edge; on a window tab it is a small dot.
+common-in-use-where = Nusu duara hutundikwa juu katikati ya skrini. Vichupo vya madirisha huonyesha vidoti vidogo.
 
 # Screen reader name of the microphone dot and its row, and the line shown on pointing at the dots, when no program is named.
 # SAFETY: needs a human review before it ships
@@ -381,6 +381,9 @@ common-no-driver-class-bluetooth = Bluetooth
 common-no-driver-class-sound = sauti
 
 common-no-driver-class-graphics = picha
+
+# Said of a device with no driver that nothing is known about. The name is its name, or its two hex numbers.
+common-no-driver-device-none = { $name } haina kiendeshi.
 
 # The small round button beside a failure message that opens Help at the page
 # about it. Its tip, and the name a screen reader says.

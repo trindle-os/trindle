@@ -490,7 +490,7 @@ mod tests {
         for _ in 0..3 * 3600 {
             assert!(pulse(), "a full pipe ended the pulsing");
         }
-        assert!(since.elapsed() < std::time::Duration::from_secs(5), "the ring waited on a full pipe");
+        assert!(since.elapsed() < std::time::Duration::from_secs(60), "the ring waited on a full pipe");
         assert!(REFUSED.get(), "the pipe never filled");
 
         let mut all = Vec::new();

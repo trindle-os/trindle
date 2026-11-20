@@ -103,7 +103,7 @@ common-updating-no-reason = یہ مکمل نہیں ہوا۔ کوئی وجہ نہ
 common-updating-failed = یہ مکمل نہیں ہوا۔ { $why }
 
 # Red words beside an update that was never started. { $why } is the end of a sentence such as "because no administrator's password was given."
-common-updating-not-installed = یہ انسٹال نہیں ہوا، { $why }
+common-updating-not-installed = انسٹال نہیں ہوا، { $why }
 
 # End of a sentence saying why a step was refused: the password box was closed. It follows "because".
 # SAFETY: needs a human review before it ships
@@ -262,11 +262,11 @@ common-x11-would-not-start = Xwayland شروع نہیں ہوا
 # Second line of that notice, when the desktop will try the older-programs display again soon.
 common-x11-try-again = ایک منٹ بعد دوبارہ کوشش کریں
 
-# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each dot with what it means.
-common-in-use-key = نقطوں کا مطلب
+# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each mark with what it means.
+common-in-use-key = نشانوں کا مطلب
 
-# Under the dots in that key: where a dot shows up.
-common-in-use-where = نقطے اسکرین کے اوپر بیچ میں اور ونڈوز کے ٹیبز پر دکھائی دیتے ہیں۔
+# Under the marks in that key: where a mark shows up. On the screen it is a half circle hung from the top edge; on a window tab it is a small dot.
+common-in-use-where = آدھے دائرے اسکرین کے اوپر بیچ میں لٹکے ہوتے ہیں۔ ونڈو ٹیبز پر چھوٹے نقطے دکھائی دیتے ہیں۔
 
 # Screen reader name of the microphone dot and its row, and the line shown on pointing at the dots, when no program is named.
 common-in-use-microphone = مائیکروفون استعمال میں ہے
@@ -287,7 +287,7 @@ common-in-use-screen = سکرین ریکارڈ ہو رہی ہے
 common-in-use-screen-by = سکرین { $who } ریکارڈ کر رہا ہے
 
 # Screen reader name of the input dot and its row, and the line shown on pointing at the dots, when no program is named: the mouse and keyboard are in another program's hands.
-common-in-use-input = ماؤس اور کی بورڈ استعمال میں ہیں
+common-in-use-input = ماؤس اور کی بورڈ مصروف ہیں
 
 # Line on pointing at the dots, and its screen reader name, when programs have taken the mouse and keyboard. { $who } is the programs' names.
 common-in-use-input-by = { $who } آپ کا کی بورڈ اور ماؤس استعمال کر رہا ہے
@@ -299,10 +299,10 @@ common-in-use-files = آپ کی کاپی کی ہوئی فائلیں پڑھی ج�
 common-in-use-files-by = { $who } آپ کی کاپی کی ہوئی فائلیں پڑھ رہا ہے
 
 # The ring's who-is-using-what row while a plugin reaches devices on the local network.
-common-in-use-home-network = مقامی نیٹ ورک استعمال میں ہے
+common-in-use-home-network = مقامی نیٹ ورک استعمال میں
 
 # The same with the plugin's name.
-common-in-use-home-network-by = مقامی نیٹ ورک { $who } کے استعمال میں ہے
+common-in-use-home-network-by = مقامی نیٹ ورک { $who } کے استعمال میں
 
 # The ring's who-is-using-what row while a plugin uses scanners and USB devices.
 common-in-use-usb = سکینرز اور USB آلات استعمال میں ہیں
@@ -368,6 +368,9 @@ common-no-driver-class-bluetooth = Bluetooth
 common-no-driver-class-sound = آواز
 
 common-no-driver-class-graphics = گرافکس
+
+# Said of a device with no driver that nothing is known about. The name is its name, or its two hex numbers.
+common-no-driver-device-none = { $name } کا ڈرائیور نہیں ہے۔
 
 # The small round button beside a failure message that opens Help at the page
 # about it. Its tip, and the name a screen reader says.

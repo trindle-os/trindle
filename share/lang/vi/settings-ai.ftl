@@ -181,3 +181,7 @@ settings-ai-keys = Khóa cấp cho các chương trình AI
 # Help text of the keys card (the information button).
 # SAFETY: needs a human review before it ships
 settings-ai-keys-about = Các chương trình AI không bao giờ nhận được khóa và token trong phiên làm việc của bạn. Chúng chỉ nhận khóa bạn nhập ở đây.
+# Under the AI programs card, greyed, when none of the listed AI programs is on this computer.
+settings-ai-none-installed = Máy tính này không có chương trình AI nào.
+# Under the box, when the program typed in to add is not on this computer.
+settings-ai-not-installed = Chương trình đó không có trên máy tính này.

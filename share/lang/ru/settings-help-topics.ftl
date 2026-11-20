@@ -861,7 +861,7 @@ settings-help-topics-keys-step2-1 = Super отдельно или Super и Пр�
 settings-help-topics-keys-step2-2 = Super и Enter или Ctrl, Alt и T: открыть Терминал.
 
 # Help topic "Keyboard shortcuts": step 3 of the numbered steps at block 2.
-settings-help-topics-keys-step2-3 = Super и I: открыть Настройки.
+settings-help-topics-keys-step2-3 = Super и I: Настройки.
 
 # Help topic "Keyboard shortcuts": step 4 of the numbered steps at block 2.
 settings-help-topics-keys-step2-4 = Super и L: заблокировать экран, когда блокировка включена в Настройках, «Питание».

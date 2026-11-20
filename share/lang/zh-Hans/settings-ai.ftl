@@ -192,3 +192,7 @@ settings-ai-keys = 提供给 AI 程序的密钥
 # SAFETY: needs a human review before it ships
 # Help text of the keys card (the information button).
 settings-ai-keys-about = 你会话中的密钥和令牌永远不会交给 AI 程序。它们只会得到你在这里输入的密钥。
+# Under the AI programs card, greyed, when none of the listed AI programs is on this computer.
+settings-ai-none-installed = 这台电脑上没有 AI 程序。
+# Under the box, when the program typed in to add is not on this computer.
+settings-ai-not-installed = 这台电脑上没有该程序。

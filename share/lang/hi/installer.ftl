@@ -72,6 +72,8 @@ installer-arm-erase = मिटाकर इंस्टॉल करने क�
 
 # Note beside Next on the first page while no language is chosen.
 installer-missing-language = भाषा चुनें
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = Trindle की भाषा चुनें
 
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = कीबोर्ड चुनें
@@ -101,10 +103,12 @@ installer-missing-password = अपना पासवर्ड दो बार
 installer-welcome-title = { $name } में आपका स्वागत है
 
 # Sentence under the title of the first page.
-installer-welcome-help = अपनी भाषा चुनें, और Trindle उसके हिसाब से कीबोर्ड और समय क्षेत्र चुन देगा, जिन्हें आप बदल सकते हैं।
+installer-welcome-help = अपनी भाषा चुनें, और Trindle बाकी सब उसके हिसाब से कर देगा।
 
-# Head of the card for choosing the language, and the name of its search box.
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
 installer-language = भाषा
+# Label beside the box at the right of the first page's sentence, for choosing the language of Trindle's own words (only those Trindle has).
+installer-trindle-language = Trindle की भाषा
 
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = कीबोर्ड
@@ -371,8 +375,8 @@ installer-privacy-chip-none = इस कंप्यूटर में TPM च�
 # In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
 installer-privacy-no-chip-none = इस कंप्यूटर में Trindle के इस्तेमाल लायक TPM चिप नहीं है।
 
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = { $keyboard } कीबोर्ड, { $zone } समय।
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle { $trindle } में, { $keyboard } कीबोर्ड, { $zone } समय।
 
 # Title of the page shown while the install runs.
 installer-installing-title = { $name } इंस्टॉल हो रहा है
@@ -513,7 +517,7 @@ installer-live-speak = अपनी आवाज़ इस्तेमाल क
 installer-live-speak-line = रिंग के बीच में टैप करें और बताएँ कि आप क्या चाहते हैं।
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = सेटिंग्स में रिंग के नीचे "आवाज़ से नियंत्रण जोड़ें" दबाएँ। फिर बीच में टैप करके बोलें।
+installer-live-speak-add = Trindle इंस्टॉल होने के बाद सेटिंग्स में रिंग के नीचे आवाज़ से नियंत्रण जोड़ें।
 
 # Name of the third thing to do.
 installer-live-tab = सब कुछ रिंग में
@@ -552,7 +556,7 @@ installer-step-check = देखा जा रहा है कि डिस्�
 installer-step-smaller = दूसरे सिस्टम को छोटा किया जा रहा है
 
 # Foot of the install page while the disk is encrypted.
-installer-step-lock = डिस्क एन्क्रिप्ट की जा रही है
+installer-step-lock = डिस्क एन्क्रिप्ट हो रही है
 
 # Foot of the install page while the TPM chip is set up.
 installer-step-chip = TPM चिप सेट की जा रही है
@@ -567,7 +571,7 @@ installer-step-settings = सेटिंग्स लिखी जा रही
 installer-step-account = आपका खाता बनाया जा रहा है
 
 # Foot of the install page while the stick's own parts are taken out.
-installer-step-live-parts = स्टिक के अतिरिक्त हिस्से हटाए जा रहे हैं
+installer-step-live-parts = लाइव अतिरिक्त हटाए जा रहे हैं
 
 # Foot of the install page while the start-up files are made.
 installer-step-startup = शुरू होने की फ़ाइलें बनाई जा रही हैं
@@ -650,6 +654,9 @@ installer-copy-failed = सिस्टम कॉपी नहीं हो स�
 # Red line at the foot: there is not enough room for a swap file.
 installer-swap-no-room = स्वैप फ़ाइल के लिए जगह नहीं है।
 
+# Under the swap file switch when the chosen disk or space is too small for one; the switch is then off and cannot be turned on.
+installer-swap-too-small = यह जगह स्वैप फ़ाइल के लिए बहुत छोटी है।
+
 # Red line at the foot: the swap file's place on the disk cannot be read.
 installer-swap-unreadable = Trindle यह नहीं पढ़ सका कि स्वैप फ़ाइल डिस्क पर कहाँ है।
 
@@ -672,8 +679,8 @@ installer-tour-ring-foot = देखें क्या खुला है, क
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev } वह स्टिक है जिससे Trindle चल रहा है।
 
-# Red line at the foot: something on the chosen disk is mounted or swapped to.
-installer-disk-in-use = { $dev } उपयोग में है। जो उसे उपयोग कर रहा है उसे बंद करें, फिर दोबारा कोशिश करें।
+# Red words under the disk, back on the disk page: something on the chosen disk is mounted, swapped to or open.
+installer-disk-in-use = { $dev } उपयोग में है। जो उसे उपयोग कर रहा है उसे बंद करें, फिर उसे दोबारा चुनें।
 
 # Said beside how far the install has got, once it has started.
 installer-started = इंस्टॉल हो रहा है
@@ -717,7 +724,8 @@ installer-done-problems = सब कुछ सेट अप नहीं हो 
 
 installer-suggest-failed = Trindle पासफ़्रेज़ नहीं बना सका। अपना खुद लिखें।
 
-installer-disk-changed = { $dev } वह डिस्क नहीं है जो दिखाई गई थी। पीछे जाएँ और डिस्क फिर से चुनें।
+# Red words on the disk page: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev } वह डिस्क नहीं है जो दिखाई गई थी। डिस्क फिर से चुनें।
 
 installer-no-gpt = { $dev } पर GPT पार्टीशन टेबल नहीं है, इसलिए उस पर पहले से मौजूद चीज़ों के साथ Trindle इंस्टॉल नहीं हो सकता।
 
@@ -732,3 +740,39 @@ installer-ready-replaced-known = { $disk } पर सब कुछ बदल द
 installer-disk-named = { $what }, { $dev }
 
 installer-run-stopped = { $program } ज़रूरी चीज़ें मिलने से पहले ही रुक गया: { $why }
+
+# Red words on the last page: the TPM chip could not be set up to open the disk, so the disk password is asked for at every start.
+installer-chip-not-set-up = TPM चिप सेट अप नहीं हो सकी, इसलिए कंप्यूटर चालू होने पर हर बार डिस्क का पासवर्ड माँगा जाएगा।
+
+# Red words on the last page: the keyboard for the disk password screen could not be set, so it may be the American one.
+installer-start-keyboard-failed = Trindle इंस्टॉल हो गया है, पर डिस्क पासवर्ड स्क्रीन पर अमेरिकी कीबोर्ड हो सकता है।
+
+# Red words on the last page: the login screen could not be switched on; { $why } is the reason.
+installer-login-screen-failed = Trindle इंस्टॉल हो गया है, पर लॉगिन स्क्रीन चालू नहीं हो सकी: { $why }
+
+# Red words on the last page: Trindle could not be set to take its own updates; { $why } is the reason.
+installer-updates-held = Trindle इंस्टॉल हो गया है, पर वह अभी अपने अपडेट नहीं लेगा: { $why }
+
+# Red words on the last page: earlier versions of people's files (home snapshots) could not be switched on.
+installer-home-snapshots-failed = Trindle इंस्टॉल हो गया है, पर आपकी फ़ाइलों के पुराने संस्करण बंद हैं। इन्हें सेटिंग्स, स्नैपशॉट में चालू कर सकते हैं।
+
+# Red words on the last page: Trindle could not be added to the computer's own start-up list; { $why } is the reason.
+installer-firmware-entry-failed = Trindle इंस्टॉल हो गया है, पर वह कंप्यूटर की स्टार्ट-अप सूची में खुद को नहीं जोड़ सका: { $why }
+
+# Red line: the account the stick ran as could not be removed from the new system, so the install stopped.
+installer-live-account-left = स्टिक का खाता { $user } नए सिस्टम से नहीं हटाया जा सका।
+
+# Under the swap file's switch when a size smaller than memory is chosen.
+installer-swap-no-hibernate = इस कंप्यूटर की मेमोरी से छोटी है, इसलिए यह हाइबरनेट नहीं कर सकेगा।
+
+# In the swap size list: the size of the computer's memory, which hibernating needs.
+installer-swap-size-hibernate = { $gb } GB, हाइबरनेट के लिए काफ़ी
+
+# In the swap size list: a smaller size.
+installer-swap-size = { $gb } GB
+
+# Tip of the swap size list.
+installer-swap-size-tip = स्वैप फ़ाइल का आकार
+
+# Why logind holds off sleep and shutting down while the installer changes the disk (shown by systemd-inhibit --list).
+installer-power-held = Trindle इंस्टॉल हो रहा है

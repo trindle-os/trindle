@@ -1,0 +1,11 @@
+# machine translated (Korean), not yet reviewed by a person.
+# The words around each help page: English = translation, one a line.
+Trindle help = Trindle 도움말
+help = 도움말
+Skip to the page = 본문으로 건너뛰기
+Search the help = 도움말 검색
+Search, such as printer or Wi-Fi = 검색 (예: 프린터, Wi-Fi)
+Search = 검색
+On this page = 이 페이지의 내용
+Page not found = 페이지를 찾을 수 없어요
+Trindle help. No cookies, no tracking, no outside fonts or scripts. = Trindle 도움말. 쿠키도, 추적도, 외부 글꼴이나 스크립트도 쓰지 않아요.

@@ -7,9 +7,9 @@ report-title-note = Laporkan masalah
 # Window title when Trindle's ring opens it after one of Trindle's programs crashed.
 report-title-crash = Ada yang tidak beres. Kirim laporan?
 
-# SAFETY: needs a human review before it ships
 # Under the title: what a report holds, and what it never holds.
-report-summary = Ini mengirim galat, ringkasan komputer Anda, dan baris terakhir log. Nama, alamat email, alamat jaringan, dan nama Wi-Fi dihapus. Nama berkas dan alamat web masih bisa muncul di baris log. Berkas dan kata sandi Anda tidak dikirim.
+# SAFETY: needs a human review before it ships
+report-summary = Laporan ini mengirim tulisan Anda, detail komputer, galat dari boot ini, dan log Trindle. Nama dan alamat (email, jaringan, Wi-Fi) dihapus dari data yang dikumpulkan Trindle. Nama berkas dan alamat web masih bisa muncul di baris log. Berkas dan kata sandi Anda tidak dikirim.
 
 # Big typing box in the middle of the window, shown quietly while empty.
 report-what-doing = Apa yang terjadi?
@@ -58,12 +58,6 @@ report-checking = Memeriksa.
 
 # Why a report is waiting: Buildmorphic had too many reports at once and the report is tried again later.
 report-too-many = Terlalu banyak laporan sekaligus.
-
-# Written beside the Send button once the report has been sent.
-report-already-sent = Sudah terkirim.
-
-# Written under the typing box when Save is pressed a second time.
-report-already-saved = Sudah disimpan.
 
 # Written beside the buttons while a report that could not be sent waits for the computer to be online.
 report-waiting = Menunggu sambungan.
@@ -167,10 +161,7 @@ report-picture-damaged = Gambar rusak.
 
 report-picture-unreadable = Tidak bisa membacanya.
 
-
-
 report-sent-as-bug = Terkirim. Nomor laporan bug Anda adalah { $number }. Terima kasih.
-
 
 # Under the title, beta only: why a report matters and what it holds.
 report-beta = Trindle masih dalam tahap beta. Laporan bersifat anonim: nama, alamat email, dan folder Home dihapus. Nama pengguna bersifat opsional.

@@ -50,12 +50,7 @@ impl Store {
             return plugin_page::view(self);
         }
         if let (View::Hosted(_), None, Some(h)) = (&self.view, &self.detail, &self.hosted) {
-            let lift: Rc<dyn Fn(crate::settings::ui::Msg) -> Msg> = Rc::new(|m: crate::settings::ui::Msg| go(move |s| {
-                if let Some(h) = s.hosted.as_mut() {
-                    h.update(m.clone());
-                }
-            }));
-            return h.view().map(lift);
+            return h.view().map(lift_hosted());
         }
         if let Some(page) = pages::flatpak_page::view(self) {
             return page;
@@ -114,6 +109,17 @@ impl Store {
                 });
             over.extend([outside, panel]);
         }
+
+        if let (View::Hosted(_), None, Some((panel, close))) = (&self.view, &self.detail, self.hosted.as_ref().and_then(|h| h.info_box())) {
+            let lift = lift_hosted();
+            let shut = lift(close);
+            let outside = drawing((0.0, 0.0), "", |_, _| {}).width(Length::Fill).height(Length::Fill)
+                .on_pointer(move |p| match p {
+                    Pointer::Down(..) | Pointer::Menu(..) | Pointer::Middle(..) => shut.clone(),
+                    _ => go(|_| {}),
+                });
+            over.extend([outside, panel.map(lift)]);
+        }
         if over.is_empty() {
             return window;
         }
@@ -167,6 +173,13 @@ impl Shows for Store {
                         h.escape();
                     }
                 })),
+
+            crate::toolkit::input::Input::Focus(false)
+                if self.hosted.as_ref().is_some_and(|h| h.info_box().is_some()) => Some(go(|s| {
+                    if let Some(h) = s.hosted.as_mut() {
+                        h.escape();
+                    }
+                })),
             _ => None,
         }
     }
@@ -186,6 +199,14 @@ impl Shows for Store {
     }
 }
 
+fn lift_hosted() -> Rc<dyn Fn(crate::settings::ui::Msg) -> Msg> {
+    Rc::new(|m: crate::settings::ui::Msg| go(move |s| {
+        if let Some(h) = s.hosted.as_mut() {
+            h.update(m.clone());
+        }
+    }))
+}
+
 #[cfg(test)]
 mod tests {
     use std::time::Duration;
@@ -197,6 +218,27 @@ mod tests {
         let events = crate::toolkit::event::Loop::new();
         let asks = events.post(|_: Do| {});
         Store::new(&events, asks, None)
+    }
+
+    #[test]
+    fn a_hosted_pages_i_box_sits_under_its_i_and_shuts_on_leaving() {
+        let mut s = store();
+        let events = crate::toolkit::event::Loop::new();
+        let asks = events.post(|_: crate::settings::ui::Do| {});
+        let mut h = crate::settings::Hosted::new(&events, asks, None, None);
+        h.show("startup");
+        let at = crate::toolkit::widget::Rect { x: 600.0, y: 300.0, w: 30.0, h: 30.0 };
+        h.open_info(at);
+        s.hosted = Some(h);
+        s.view = View::Hosted("startup".into());
+        let mut ui = crate::toolkit::ui::Ui::new(Shows::view(&s), crate::toolkit::theme::Theme::new(true, "#fbc711"));
+        ui.lay_at(1400, 900);
+        let gap = crate::toolkit::theme::gaps().medium;
+        let found = ui.boxes().into_iter().any(|(_, r, _)| (r.w - 360.0).abs() < 1.0 && (r.x + r.w / 2.0 - 615.0).abs() < 1.0 && (r.y - (330.0 + gap)).abs() < 1.0);
+        assert!(found, "no 360 wide box centred a gap under the i: {:?}", ui.boxes().into_iter().filter(|(_, r, _)| (r.w - 360.0).abs() < 1.0).collect::<Vec<_>>());
+        assert!(Shows::intercept(&s, &crate::toolkit::input::Input::Focus(false), false).is_some(), "leaving the window does not shut it");
+        s.hosted.as_mut().unwrap().show("default-apps");
+        assert!(s.hosted.as_ref().unwrap().info_box().is_none(), "going to another page leaves it open");
     }
 
     #[test]

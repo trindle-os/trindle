@@ -91,7 +91,7 @@ common-updating-no-reason = 未能完成，也没有给出原因。
 common-updating-failed = 未能完成。{ $why }
 
 # Red words beside an update that was never started. { $why } is the end of a sentence such as "because no administrator's password was given."
-common-updating-not-installed = 未能安装，{ $why }
+common-updating-not-installed = 未安装，{ $why }
 
 # SAFETY: needs a human review before it ships
 # End of a sentence saying why a step was refused: the password box was closed. It follows "because".
@@ -260,11 +260,11 @@ common-x11-would-not-start = Xwayland 没有启动
 # Second line of that notice, when the desktop will try the older-programs display again soon.
 common-x11-try-again = 请一分钟后再试
 
-# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each dot with what it means.
-common-in-use-key = 圆点的含义
+# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each mark with what it means.
+common-in-use-key = 标记含义
 
-# Under the dots in that key: where a dot shows up.
-common-in-use-where = 圆点出现在屏幕顶部中间和窗口标签上。
+# Under the marks in that key: where a mark shows up. On the screen it is a half circle hung from the top edge; on a window tab it is a small dot.
+common-in-use-where = 半圆挂在屏幕顶部中间。窗口标签上显示小圆点。
 
 # SAFETY: needs a human review before it ships
 # Screen reader name of the microphone dot and its row, and the line shown on pointing at the dots, when no program is named.
@@ -290,9 +290,9 @@ common-in-use-screen = 屏幕正在被录制
 # Line on pointing at the dots, and its screen reader name, when programs record the screen. { $who } is the programs' names.
 common-in-use-screen-by = { $who } 正在录制屏幕
 
-# SAFETY: needs a human review before it ships
 # Screen reader name of the input dot and its row, and the line shown on pointing at the dots, when no program is named: the mouse and keyboard are in another program's hands.
-common-in-use-input = 鼠标和键盘正在使用中
+# SAFETY: needs a human review before it ships
+common-in-use-input = 鼠标键盘被占用
 
 # SAFETY: needs a human review before it ships
 # Line on pointing at the dots, and its screen reader name, when programs have taken the mouse and keyboard. { $who } is the programs' names.
@@ -307,10 +307,10 @@ common-in-use-files = 你复制的文件正在被读取
 common-in-use-files-by = { $who } 正在读取你复制的文件
 
 # The ring's who-is-using-what row while a plugin reaches devices on the local network.
-common-in-use-home-network = 本地网络正在使用
+common-in-use-home-network = 本地网络使用中
 
 # The same with the plugin's name.
-common-in-use-home-network-by = { $who } 正在使用本地网络
+common-in-use-home-network-by = { $who } 在用本地网络
 
 # The ring's who-is-using-what row while a plugin uses scanners and USB devices.
 common-in-use-usb = 扫描仪和 USB 设备正在使用
@@ -380,6 +380,9 @@ common-no-driver-class-bluetooth = Bluetooth
 common-no-driver-class-sound = 声音
 
 common-no-driver-class-graphics = 显卡
+
+# Said of a device with no driver that nothing is known about. The name is its name, or its two hex numbers.
+common-no-driver-device-none = { $name } 没有驱动程序。
 
 # The small round button beside a failure message that opens Help at the page
 # about it. Its tip, and the name a screen reader says.

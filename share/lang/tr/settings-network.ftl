@@ -41,10 +41,10 @@ settings-network-access-open = parolanızla açılır
 settings-network-access-change = parolanızla açılır ve değiştirilir
 
 # Small line of a shared folder: anyone on the local network may open it.
-settings-network-access-guests-open = yerel ağdaki herkes açabilir
+settings-network-access-guests-open = yakındaki herkes açabilir
 
 # Small line of a shared folder: anyone on the local network may change it.
-settings-network-access-guests-change = yerel ağdaki herkes değiştirebilir
+settings-network-access-guests-change = yakındaki herkes değiştirebilir
 
 # Small line of a shared folder: where it is, then who may do what with it; both are already written.
 settings-network-shared-sub = { $place }: { $access }

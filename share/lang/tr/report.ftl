@@ -9,7 +9,7 @@ report-title-crash = Bir şeyler ters gitti. Rapor gönderilsin mi?
 
 # Under the title: what a report holds, and what it never holds.
 # SAFETY: needs a human review before it ships
-report-summary = Bu, hatayı, bilgisayarın bir özetini ve günlüğün son satırlarını gönderir; adlar, e-posta adresleri, ağ adresleri ve Wi-Fi adları çıkarılır. Günlük satırlarında dosya adları ve web adresleri yine de bulunabilir. Dosyalarınızı ve parolalarınızı göndermez.
+report-summary = Bu, yazdıklarınızı, bilgisayarınızın ayrıntılarını, bu açılışın hatalarını ve Trindle'ın günlüğünü gönderir. Trindle'ın topladıklarından adlar ve adresler (e-posta, ağ, Wi-Fi) çıkarılır. Dosya adları ve web adresleri günlük satırlarında yine de görünebilir. Dosyalarınızı ve parolalarınızı göndermez.
 
 # Big typing box in the middle of the window, shown quietly while empty.
 report-what-doing = Ne oldu?
@@ -58,12 +58,6 @@ report-checking = Denetleniyor.
 
 # Why a report is waiting: Buildmorphic had too many reports at once and the report is tried again later.
 report-too-many = Aynı anda çok fazla rapor var.
-
-# Written beside the Send button once the report has been sent.
-report-already-sent = Zaten gönderildi.
-
-# Written under the typing box when Save is pressed a second time.
-report-already-saved = Zaten kaydedildi.
 
 # Written beside the buttons while a report that could not be sent waits for the computer to be online.
 report-waiting = Bağlantı bekleniyor.
@@ -167,10 +161,7 @@ report-picture-damaged = Resim bozuk.
 
 report-picture-unreadable = Okunamadı.
 
-
-
 report-sent-as-bug = Gönderildi. Hata raporu numaranız { $number }. Teşekkürler.
-
 
 # Under the title, beta only: why a report matters and what it holds.
 report-beta = Trindle beta aşamasında. Raporlar anonimdir: adlar, e-posta adresleri ve ev klasörleri çıkarılır. Kullanıcı adı isteğe bağlıdır.

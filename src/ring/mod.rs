@@ -10,6 +10,8 @@ pub mod drives;
 pub mod icons_run;
 pub mod layout;
 pub mod magnify;
+
+pub const RING_GONE: std::time::Duration = std::time::Duration::from_millis(400);
 pub mod kept;
 pub mod label_window;
 pub mod chosen;

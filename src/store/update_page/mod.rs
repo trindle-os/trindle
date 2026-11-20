@@ -1,7 +1,7 @@
 //! The Updates page: one check for everything and one card for each area.
 //! Each update also goes in alone from its own button, taking the same turn
 //! as Install all (common::updating), so only one runs. Debian's packages
-//! are made to fit each other, so they go in as one group. What is held
+//! go in as one group. What is held
 //! back (common::held, shared with the ring) is left out of every count.
 
 pub(super) mod cards;
@@ -41,6 +41,8 @@ const SECURITY_ROW: &str = "up:security";
 
 const TRINDLE_ROW: &str = "up:trindle";
 const DEBIAN_ROW: &str = "up:debian";
+
+const REMIND_ROW: &str = "up:remind";
 
 const PART_ICON: &str = "application-x-addon-symbolic";
 
@@ -140,7 +142,11 @@ pub struct UpdatesPage {
 
     pub(super) security_off: bool,
 
+    pub(super) reminded: Option<usize>,
+
     sizes: HashMap<String, u64>,
+
+    origins: HashMap<String, String>,
 
     jobs: u32,
 

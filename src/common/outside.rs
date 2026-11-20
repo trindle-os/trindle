@@ -463,6 +463,8 @@ mod tests {
             std::fs::create_dir_all(top.join("proc/self/ns")).unwrap();
             std::fs::create_dir_all(top.join("proc/net")).unwrap();
             std::os::unix::fs::symlink("mnt:[1]", top.join("proc/self/ns/mnt")).unwrap();
+
+            std::fs::write(top.join("trindle.conf"), "outside_network=yes\n").unwrap();
             FakeProc(top)
         }
 
@@ -512,8 +514,11 @@ mod tests {
         fake.tcp(TCP);
         let both = fake.watch().look();
         assert_eq!(FakeProc::names(&both), [("firefox-esr", true, true), ("mousepad", false, true), ("trindle-helper", false, true)]);
-        std::fs::write(fake.0.join("trindle.conf"), "outside_files=no\n").unwrap();
+        std::fs::write(fake.0.join("trindle.conf"), "outside_files=no\noutside_network=yes\n").unwrap();
         assert_eq!(FakeProc::names(&fake.watch().look()), [("firefox-esr", true, false)]);
+        std::fs::write(fake.0.join("trindle.conf"), "").unwrap();
+        assert_eq!(FakeProc::names(&fake.watch().look()), [("firefox-esr", false, true), ("mousepad", false, true), ("trindle-helper", false, true)],
+                   "by default a program using the network is not told");
         std::fs::write(fake.0.join("trindle.conf"), "outside_files=no\noutside_network=no\n").unwrap();
         assert!(fake.watch().look().is_empty(), "a look that is off is not made");
     }
@@ -534,7 +539,7 @@ mod tests {
     #[test]
     fn the_network_is_looked_at_only_when_a_new_connection_is_made() {
         let fake = FakeProc::new("net");
-        std::fs::write(fake.0.join("trindle.conf"), "outside_files=no\n").unwrap();
+        std::fs::write(fake.0.join("trindle.conf"), "outside_files=no\noutside_network=yes\n").unwrap();
         fake.tcp(TCP);
         let mut watch = fake.watch();
         assert!(watch.look().is_empty());

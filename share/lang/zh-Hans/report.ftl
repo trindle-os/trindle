@@ -6,9 +6,9 @@ report-title-note = 报告问题
 # Window title when Trindle's ring opens it after one of Trindle's programs crashed.
 report-title-crash = 出了点问题。要发送报告吗？
 
-# SAFETY: needs a human review before it ships
 # Under the title: what a report holds, and what it never holds.
-report-summary = 这会发送错误、电脑摘要和日志的最后几行，其中的姓名、电子邮件地址、网络地址和 Wi-Fi 名称已被去掉。日志行中仍可能有文件名和网址。不会发送你的文件或密码。
+# SAFETY: needs a human review before it ships
+report-summary = 这会发送你写的文字、电脑信息、本次开机的错误和 Trindle 的日志。Trindle 收集的内容中，姓名和地址（电子邮件、网络、Wi-Fi）已被去掉。日志行中仍可能有文件名和网址。不会发送你的文件或密码。
 
 # Big typing box in the middle of the window, shown quietly while empty.
 report-what-doing = 发生了什么？
@@ -57,12 +57,6 @@ report-checking = 正在检查。
 
 # Why a report is waiting: Buildmorphic had too many reports at once and the report is tried again later.
 report-too-many = 同时收到的报告太多。
-
-# Written beside the Send button once the report has been sent.
-report-already-sent = 已发送。
-
-# Written under the typing box when Save is pressed a second time.
-report-already-saved = 已保存。
 
 # Written beside the buttons while a report that could not be sent waits for the computer to be online.
 report-waiting = 正在等待网络连接。
@@ -166,9 +160,7 @@ report-picture-damaged = 图片已损坏。
 
 report-picture-unreadable = 无法读取。
 
-
 report-sent-as-bug = 已发送。问题报告编号：{ $number }。谢谢。
-
 
 # Under the title, beta only: why a report matters and what it holds.
 report-beta = Trindle 目前处于测试阶段。报告是匿名的，其中的姓名、电子邮件地址和主文件夹都已去掉。用户名可填可不填。

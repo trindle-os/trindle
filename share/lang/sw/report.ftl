@@ -7,7 +7,7 @@ report-title-note = Ripoti tatizo
 report-title-crash = Kuna kitu kimeharibika. Tuma ripoti?
 
 # Under the title: what a report holds, and what it never holds.
-report-summary = Hii hutuma kosa, muhtasari wa kompyuta na mistari ya mwisho ya kumbukumbu, huku majina, anwani za barua pepe, anwani za mtandao na majina ya Wi-Fi yakiondolewa. Majina ya faili na anwani za wavuti bado zinaweza kuwa katika mistari ya kumbukumbu. Haitumi faili zako wala nywila zako.
+report-summary = Hii hutuma maneno yako, maelezo ya kompyuta, makosa ya kuwasha huku na kumbukumbu ya Trindle. Majina na anwani (barua pepe, mtandao, Wi-Fi) huondolewa kwenye kile Trindle inachokusanya. Majina ya faili na anwani za wavuti bado zinaweza kuonekana kwenye mistari ya kumbukumbu. Haitumi faili zako wala nywila zako.
 
 # Big typing box in the middle of the window, shown quietly while empty.
 report-what-doing = Nini kilitokea?
@@ -53,12 +53,6 @@ report-checking = Inakagua.
 
 # Why a report is waiting: Buildmorphic had too many reports at once and the report is tried again later.
 report-too-many = Ripoti nyingi mno kwa wakati mmoja.
-
-# Written beside the Send button once the report has been sent.
-report-already-sent = Imeshatumwa.
-
-# Written under the typing box when Save is pressed a second time.
-report-already-saved = Imeshahifadhiwa.
 
 # Written beside the buttons while a report that could not be sent waits for the computer to be online.
 report-waiting = Inasubiri muunganisho.
@@ -162,10 +156,7 @@ report-picture-damaged = Picha imeharibika.
 
 report-picture-unreadable = Imeshindwa kuisoma.
 
-
-
 report-sent-as-bug = Imetumwa. Nambari ya ripoti yako ya hitilafu ni { $number }. Asante.
-
 
 # Under the title, beta only: why a report matters and what it holds.
 report-beta = Trindle iko katika hatua ya beta. Ripoti hazitambulishi mtu: majina, anwani za barua pepe na folda za nyumbani huondolewa. Jina la mtumiaji ni la hiari.

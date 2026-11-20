@@ -91,7 +91,7 @@ common-updating-no-reason = No terminó. No se dio ningún motivo.
 common-updating-failed = No terminó. { $why }
 
 # Red words beside an update that was never started. { $why } is the end of a sentence such as "because no administrator's password was given."
-common-updating-not-installed = No se instaló, { $why }
+common-updating-not-installed = No instalado, { $why }
 
 # SAFETY: needs a human review before it ships
 # End of a sentence saying why a step was refused: the password box was closed. It follows "because".
@@ -250,11 +250,11 @@ common-x11-would-not-start = Xwayland no se inició
 # Second line of that notice, when the desktop will try the older-programs display again soon.
 common-x11-try-again = Inténtalo de nuevo en un minuto
 
-# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each dot with what it means.
-common-in-use-key = Qué significan los puntos
+# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each mark with what it means.
+common-in-use-key = Qué significan las marcas
 
-# Under the dots in that key: where a dot shows up.
-common-in-use-where = Los puntos aparecen en la parte superior central de la pantalla y en las pestañas de las ventanas.
+# Under the marks in that key: where a mark shows up. On the screen it is a half circle hung from the top edge; on a window tab it is a small dot.
+common-in-use-where = Los semicírculos cuelgan del centro del borde superior de la pantalla. Las pestañas de las ventanas muestran puntos pequeños.
 
 # Screen reader name of the microphone dot and its row, and the line shown on pointing at the dots, when no program is named.
 common-in-use-microphone = Micrófono en uso
@@ -275,7 +275,7 @@ common-in-use-screen = Se está grabando la pantalla
 common-in-use-screen-by = { $who } está grabando la pantalla
 
 # Screen reader name of the input dot and its row, and the line shown on pointing at the dots, when no program is named: the mouse and keyboard are in another program's hands.
-common-in-use-input = Ratón y teclado en uso
+common-in-use-input = Ratón/teclado ocupados
 
 # Line on pointing at the dots, and its screen reader name, when programs have taken the mouse and keyboard. { $who } is the programs' names.
 common-in-use-input-by = { $who } está usando tu teclado y tu ratón
@@ -287,10 +287,10 @@ common-in-use-files = Se están leyendo los archivos que copiaste
 common-in-use-files-by = { $who } está leyendo los archivos que copiaste
 
 # The ring's who-is-using-what row while a plugin reaches devices on the local network.
-common-in-use-home-network = Red local en uso
+common-in-use-home-network = Red local usada
 
 # The same with the plugin's name.
-common-in-use-home-network-by = Red local en uso por { $who }
+common-in-use-home-network-by = Red local usada por { $who }
 
 # The ring's who-is-using-what row while a plugin uses scanners and USB devices.
 common-in-use-usb = Escáneres y dispositivos USB en uso
@@ -356,6 +356,9 @@ common-no-driver-class-bluetooth = Bluetooth
 common-no-driver-class-sound = sonido
 
 common-no-driver-class-graphics = gráficos
+
+# Said of a device with no driver that nothing is known about. The name is its name, or its two hex numbers.
+common-no-driver-device-none = { $name } no tiene controlador.
 
 # The small round button beside a failure message that opens Help at the page
 # about it. Its tip, and the name a screen reader says.

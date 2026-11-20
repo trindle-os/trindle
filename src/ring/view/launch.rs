@@ -1,7 +1,5 @@
 //! Starting programs and tools from the ring, and the favourites it keeps.
 
-use std::time::Duration;
-
 use crate::common::{apps, favourites};
 use crate::common::run::spawn;
 use crate::ring::{magnify, store};
@@ -19,12 +17,12 @@ impl Face {
         }
     }
 
-    pub(super) fn toggle_magnifier(&mut self, from: Option<(i32, i32, i32, i32)>) {
+    pub(super) fn toggle_magnifier(&mut self) {
         if magnify::on() {
             return magnify::stop();
         }
         self.close();
-        magnify::start(&self.ctx, from, || {});
+        magnify::start(&self.ctx, || {});
     }
 
     pub(super) fn run_after_closing(&mut self, argv: &'static [&'static str]) {
@@ -32,7 +30,7 @@ impl Face {
             return self.say(t!("ring-could-not-open"), REFUSED_SECONDS);
         }
         self.close();
-        self.ctx.lp.after(Duration::from_millis(400), move || {
+        self.ctx.lp.after(crate::ring::RING_GONE, move || {
             spawn(argv);
         });
     }
@@ -102,10 +100,7 @@ impl Face {
     pub(super) fn use_tool(&mut self, key: &str) {
         match key {
             "screenshot" => self.run_after_closing(&["trindle-screenshot"]),
-            "magnifier" => {
-                let r = self.pressed_at;
-                self.toggle_magnifier(Some((r[0] as i32, r[1] as i32, r[2] as i32, r[3] as i32)));
-            }
+            "magnifier" => self.toggle_magnifier(),
             "eye-dropper" => self.run(&["trindle-eye-dropper", crate::screenshot::colours::TAKE]),
             "settings" => self.settings(None),
 

@@ -3149,6 +3149,7 @@ dependencies = [
  "toml",
  "tracing",
  "tracing-subscriber",
+ "trindle-common",
  "trindle-help",
  "trindle-toolkit",
  "wayland-client",
@@ -3167,7 +3168,7 @@ dependencies = [
 [[package]]
 name = "trindle-common"
 version = "0.9.1-beta.4"
-source = "git+https://github.com/trindle-os/trindle-toolkit?rev=4f188cdef76a3c3072148d2e58d30c26de9dd7dd#4f188cdef76a3c3072148d2e58d30c26de9dd7dd"
+source = "git+https://github.com/trindle-os/trindle-toolkit?rev=6cda075f3ce5b00c17343707e06189302281ce06#6cda075f3ce5b00c17343707e06189302281ce06"
 dependencies = [
  "libc",
 ]
@@ -3175,7 +3176,7 @@ dependencies = [
 [[package]]
 name = "trindle-help"
 version = "0.9.1-beta.4"
-source = "git+https://github.com/trindle-os/trindle-help?rev=634f633a39286c1af7ea89b8de4781cb3daccf02#634f633a39286c1af7ea89b8de4781cb3daccf02"
+source = "git+https://github.com/trindle-os/trindle-help?rev=62b05bd7a4f8396aa512724673622c64b2d9216c#62b05bd7a4f8396aa512724673622c64b2d9216c"
 dependencies = [
  "image",
  "libc",
@@ -3187,7 +3188,7 @@ dependencies = [
 [[package]]
 name = "trindle-toolkit"
 version = "0.9.1-beta.4"
-source = "git+https://github.com/trindle-os/trindle-toolkit?rev=4f188cdef76a3c3072148d2e58d30c26de9dd7dd#4f188cdef76a3c3072148d2e58d30c26de9dd7dd"
+source = "git+https://github.com/trindle-os/trindle-toolkit?rev=6cda075f3ce5b00c17343707e06189302281ce06#6cda075f3ce5b00c17343707e06189302281ce06"
 dependencies = [
  "ab_glyph_rasterizer",
  "accesskit",

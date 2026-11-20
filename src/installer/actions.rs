@@ -7,7 +7,7 @@ use std::process::{Child, Command, Stdio};
 use std::rc::Rc;
 use std::time::Duration;
 
-use super::{ABOUT_YOU, DISK_PASSWORD, READY, this_machine, steps, FRAME, Installer, Machine, Msg, PAGE_COUNT, RUNNING, SLIDE, roll, tour};
+use super::{ABOUT_YOU, DISK_PASSWORD, KEYBOARD, LANGUAGE, READY, TONGUE, this_machine, steps, FRAME, Installer, Machine, Msg, PAGE_COUNT, RUNNING, SLIDE, roll, tour};
 use super::pages::{half_way, matching};
 use super::plan::{self, Lock, Plan, Where};
 use crate::common::live_language;
@@ -28,6 +28,7 @@ impl Installer {
             page: 0,
             machine,
             find: Default::default(),
+            tall: f32::MAX,
             tried: String::new(),
             disk_one: Zeroizing::default(),
             disk_two: Zeroizing::default(),
@@ -44,6 +45,7 @@ impl Installer {
             share: 0.0,
             failed: false,
             problems: Vec::new(),
+            refusal: None,
             helper: None,
             stopping: false,
             stuck: false,
@@ -130,6 +132,8 @@ impl Installer {
                     Some(t!("installer-memory-short"))
                 } else if p.locale.is_empty() {
                     Some(t!("installer-missing-language"))
+                } else if p.trindle_language.is_empty() {
+                    Some(t!("installer-missing-trindle-language"))
                 } else if p.layout.is_empty() {
                     Some(t!("installer-missing-keyboard"))
                 } else if p.timezone.is_empty() {
@@ -173,10 +177,9 @@ impl Installer {
 
     fn choose_language(&mut self, locale: &str) {
         self.plan.locale = locale.to_string();
-        let tags = live_language::for_locale(locale);
-        if live_language::differs(&tags) {
-            live_language::switch(tags);
-            self.retitle.set(true);
+        let near = plan::nearest_tongue(locale);
+        if self.machine.tongues.iter().any(|(c, _)| *c == near) {
+            self.choose_tongue(&near);
         }
         let (layout, variant) = plan::layout_for(locale);
         let key = format!("{layout}\t{variant}");
@@ -190,6 +193,15 @@ impl Installer {
         }
     }
 
+    fn choose_tongue(&mut self, code: &str) {
+        self.plan.trindle_language = code.to_string();
+        let tags = live_language::for_locale(code);
+        if live_language::differs(&tags) {
+            live_language::switch(tags);
+            self.retitle.set(true);
+        }
+    }
+
     fn choose_keyboard(&mut self, key: &str) {
         let (layout, variant) = key.split_once('\t').unwrap_or((key, ""));
         self.plan.layout = layout.to_string();
@@ -199,14 +211,16 @@ impl Installer {
 
     pub(super) fn pick(&mut self, field: usize, at: usize) {
         let items = match field {
-            0 => &self.machine.locales,
-            1 => &self.machine.keyboards,
+            LANGUAGE => &self.machine.locales,
+            KEYBOARD => &self.machine.keyboards,
+            TONGUE => &self.machine.tongues,
             _ => &self.machine.zones,
         };
         let Some(key) = matching(items, &self.find[field]).get(at).map(|(k, _)| k.clone()) else { return };
         match field {
-            0 => self.choose_language(&key),
-            1 => self.choose_keyboard(&key),
+            LANGUAGE => self.choose_language(&key),
+            KEYBOARD => self.choose_keyboard(&key),
+            TONGUE => self.choose_tongue(&key),
             _ => self.plan.timezone = key,
         }
     }
@@ -223,6 +237,7 @@ impl Installer {
         };
         self.plan.disk_id = self.machine.disks.iter().find(|d| d.dev == whole).map(|d| d.id.clone()).unwrap_or_default();
         self.plan.target = Some(target);
+        self.refusal = None;
     }
 
     pub(super) fn disk_typed(&mut self) {
@@ -238,7 +253,7 @@ impl Installer {
     }
 
     pub(super) fn install(&mut self) {
-        if !self.terms {
+        if !self.terms || self.helper.is_some() {
             return;
         }
         if !self.arm() {
@@ -273,6 +288,7 @@ impl Installer {
         self.helper = None;
         let mut kept = Plan::default().with_swap();
         kept.locale = std::mem::take(&mut self.plan.locale);
+        kept.trindle_language = std::mem::take(&mut self.plan.trindle_language);
         kept.layout = std::mem::take(&mut self.plan.layout);
         kept.variant = std::mem::take(&mut self.plan.variant);
         kept.timezone = std::mem::take(&mut self.plan.timezone);
@@ -307,9 +323,15 @@ impl Installer {
     }
 
     pub(super) fn start(&mut self) {
-        self.show(ABOUT_YOU);
+        self.armed = false;
+        self.refusal = None;
+        self.problems.clear();
         self.doing = t!("installer-getting-ready").into();
         self.share = 0.0;
+
+        let (choices, size) = self.swap_now();
+        self.plan.swap &= !choices.is_empty();
+        self.plan.swap_gib = size;
         let json = serde_json::to_string(&self.plan).unwrap_or_default();
         let helper: &[&str] = if run::have("sudo") {
             &["sudo", "-n", "trindle-installer", "--run"]
@@ -330,11 +352,20 @@ impl Installer {
         }
     }
 
-    pub(super) fn disk_changed(&mut self, said: &str) {
-        self.fail(&plain(said));
+    pub(super) fn refused(&mut self, code: i32, said: &str) {
+        self.helper = None;
+        let why = plain(said);
+        if code == steps::REFUSED {
+            self.show(READY);
+            self.refusal = Some((String::new(), why));
+            return;
+        }
+        let refused = self.plan.disk();
         self.plan.target = None;
         self.plan.disk_id.clear();
-        if self.rereading {
+        self.show(1);
+        self.refusal = Some((refused, why));
+        if code != steps::CHANGED || self.rereading {
             return;
         }
         self.rereading = true;
@@ -409,6 +440,9 @@ impl Installer {
         }
         if let Some((percent, what)) = line.trim().split_once(' ') {
             if let Ok(n) = percent.parse::<f32>() {
+                if self.page == READY {
+                    self.show(ABOUT_YOU);
+                }
                 if !self.failed {
 
                     self.share = crate::common::gentle::share(n.clamp(0.0, 100.0) as u64, 100, None, false);
@@ -447,7 +481,8 @@ pub(super) fn ended(status: std::io::Result<std::process::ExitStatus>, said: Str
     match status {
         Ok(status) if status.code() == Some(steps::STOPPED) => Msg::Stopped(true),
         Ok(status) if status.code() == Some(steps::STUCK) => Msg::Stopped(false),
-        Ok(status) if status.code() == Some(steps::CHANGED) => Msg::DiskChanged(said),
+        Ok(status) if matches!(status.code(), Some(steps::CHANGED | steps::REFUSED | steps::DISK_REFUSED)) =>
+            Msg::Refused(status.code().unwrap_or_default(), said),
         Ok(status) if status.success() => Msg::Finished(Ok(())),
         Ok(status) if said.trim().is_empty() => Msg::Finished(Err(status.to_string())),
         Ok(_) => Msg::Finished(Err(said)),
@@ -476,4 +511,15 @@ fn use_keyboard(layout: &str, variant: &str) {
         ("XKB_DEFAULT_VARIANT", (!variant.is_empty()).then_some(variant)),
     ];
     let _ = crate::common::files::update_env(&file, &changes);
+}
+
+impl Installer {
+
+    pub(super) fn swap_now(&self) -> (Vec<u64>, u64) {
+        let memory = self.machine.memory;
+        let choices = self.plan.swap_choices(&self.machine.disks, memory);
+        let chosen = if self.plan.swap_gib == 0 { memory } else { self.plan.swap_gib };
+        let size = if choices.contains(&chosen) { chosen } else { choices.first().copied().unwrap_or(memory) };
+        (choices, size)
+    }
 }

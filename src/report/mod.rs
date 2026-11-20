@@ -29,6 +29,7 @@ mod picture;
 pub mod probe;
 pub mod scrub;
 pub mod send;
+pub mod system;
 mod which;
 mod room;
 mod window;
@@ -104,13 +105,6 @@ pub fn server() -> Server {
 
 pub fn github() -> String {
     setting(GITHUB_KEY).trim().to_string()
-}
-
-pub fn already() -> &'static str {
-    t!("report-already-saved")
-}
-pub fn already_sent() -> &'static str {
-    t!("report-already-sent")
 }
 
 pub fn not_taken() -> &'static str {
@@ -245,17 +239,21 @@ fn programs() -> Vec<&'static str> {
 
 fn read_log() -> String {
     let n = LOG_LINES.to_string();
-    let mut argv = vec!["journalctl", "--user", "--no-pager", "-q", "-o", "short-iso", "-n", n.as_str()];
+    let own = crate::common::run::text(&own_log_argv(&n));
+    first_with_lines(own, || crate::common::run::text(&unit_log_argv(&n)))
+}
+
+fn own_log_argv(n: &str) -> Vec<&str> {
+    let mut argv = vec!["journalctl", "--user", "--no-pager", "-q", "-o", "short-iso", "-b", "-r", "-n", n];
     for p in programs() {
         argv.push("-t");
         argv.push(p);
     }
-    let own = crate::common::run::text(&argv);
-    first_with_lines(own, || crate::common::run::text(&unit_log_argv(&n)))
+    argv
 }
 
 fn unit_log_argv(n: &str) -> Vec<&str> {
-    vec!["journalctl", "--user", "--no-pager", "-q", "-o", "short-iso", "-n", n, "-u", "trindle-*"]
+    vec!["journalctl", "--user", "--no-pager", "-q", "-o", "short-iso", "-b", "-r", "-n", n, "-u", "trindle-*"]
 }
 
 fn first_with_lines(first: String, second: impl FnOnce() -> String) -> String {
@@ -271,8 +269,7 @@ fn model() -> String {
 }
 
 pub fn log_lines(raw: &str, who: &Who) -> Vec<String> {
-    let all: Vec<&str> = raw.lines().collect();
-    all[all.len().saturating_sub(LOG_LINES)..].iter().map(|l| scrub(l, who)).collect()
+    raw.lines().take(LOG_LINES).map(|l| scrub(l, who)).collect()
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
@@ -353,6 +350,12 @@ pub fn document(p: &Parts, who: &Who) -> String {
     document_in(p, who, &p.crash.map_or(send::OWN.to_string(), |c| send::slug_for(&c.program)))
 }
 
+fn hardware_field(hardware: &str, who: &Who) -> String {
+    let all = plain(hardware);
+    let (head, rest) = all.split_once('\n').unwrap_or((&all, ""));
+    format!("{head}\n{}", system::blanked(rest, |l| scrub(l, who))).trim_end().to_string()
+}
+
 fn document_in(p: &Parts, who: &Who, project: &str) -> String {
     let mut doc = serde_json::Map::new();
     doc.insert("kind".into(), json!(p.mode.word()));
@@ -363,12 +366,13 @@ fn document_in(p: &Parts, who: &Who, project: &str) -> String {
         }
     };
     put("version", cut(p.version, VERSION_MOST));
-    put("words", cut(&scrub(untagged(&plain(p.words).replace('\n', " ")).trim(), who), WORDS_MOST));
-    put("hardware", cut(&scrub(&plain(p.hardware), who), HARDWARE_MOST));
+
+    put("words", cut(untagged(&plain(p.words).replace('\n', " ")).trim(), WORDS_MOST));
+    put("hardware", cut(&hardware_field(p.hardware, who), HARDWARE_MOST));
     put("username", p.username.trim().to_string());
     put("github", p.github.trim().to_string());
     let mut log: Vec<String> = p.log.iter().map(|l| cut(&scrub(&plain(l), who), LINE_MOST)).collect();
-    log.drain(..log.len().saturating_sub(LOG_LINES));
+    log.truncate(LOG_LINES);
     let mut crash = p.crash.map(|c| (cut(&scrub(&plain(&c.program), who), PROGRAM_MOST), cut(&scrub(&plain(&c.signal), who), SIGNAL_MOST), cut(&scrub(&plain(&c.trace), who), TRACE_MOST)));
     loop {
         let mut whole = doc.clone();
@@ -386,7 +390,8 @@ fn document_in(p: &Parts, who: &Who, project: &str) -> String {
             return text;
         }
         if log.len() > 1 {
-            log.drain(..log.len().div_ceil(4));
+
+            log.truncate(log.len() - log.len().div_ceil(4));
         } else if let Some((_, _, trace)) = crash.as_mut().filter(|c| !c.2.is_empty()) {
             *trace = trace.chars().take(trace.chars().count() / 2).collect();
         } else if !log.is_empty() {
@@ -416,6 +421,8 @@ pub enum Msg {
 }
 
 enum Do {
+
+    Who(Who),
     Log(String),
     Hardware(Option<String>),
     Crash(Crash, String),
@@ -605,10 +612,8 @@ impl Reporter {
     }
 
     fn send_off(&self) -> Option<&'static str> {
-        if self.rejected {
+        if self.rejected || self.sent {
             Some("")
-        } else if self.sent {
-            Some(already_sent())
         } else if self.picture_busy {
             Some(t!("report-picture-reading"))
         } else if self.mode == Mode::Note && self.typed.trim().chars().count() < NOTE_LEAST {
@@ -775,9 +780,18 @@ impl Reporter {
         }
     }
 
+    fn leave_word(&self) -> &'static str {
+        if self.sent && (self.delivered || self.waiting.is_some()) {
+            t!("screenshot-close")
+        } else if self.mode == Mode::Note {
+            t!("report-cancel")
+        } else {
+            t!("report-dont-send")
+        }
+    }
+
     fn save(&mut self) {
         if self.saved.is_some() {
-            self.refusal = already().into();
             return;
         }
         if let Some(why) = self.refused() {
@@ -884,7 +898,7 @@ impl App for Reporter {
             None => {}
         }
         bottom.push(space());
-        bottom.push(button(CANCEL_ICON, if self.mode == Mode::Note { t!("report-cancel") } else { t!("report-dont-send") }).on_press(Msg::Cancel));
+        bottom.push(button(CANCEL_ICON, self.leave_word()).on_press(Msg::Cancel));
 
         if off.is_none() {
             bottom.push(button(SEND_ICON, t!("report-send")).on_press(Msg::Send));
@@ -960,5 +974,7 @@ mod tests;
 mod tests_send;
 #[cfg(test)]
 mod tests_window;
+#[cfg(test)]
+mod tests_system;
 #[cfg(test)]
 mod tests_picture;

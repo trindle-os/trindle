@@ -58,9 +58,6 @@ ring-cli-unknown = opsi tidak dikenal { $option }
 # Error printed in a terminal when --say is given no words.
 ring-cli-missing-say = argumen untuk --say tidak ada
 
-# Line in the ring's results when what was typed matches no app or favourite.
-ring-find-nothing = Tidak ada aplikasi atau favorit dengan nama itu
-
 # Tip of the round button on an app's menu that removes the app.
 # SAFETY: needs a human review before it ships
 ring-uninstall = Copot pemasangan
@@ -237,8 +234,6 @@ ring-startup-add = Mulai saat masuk
 
 ring-startup-remove = Berhenti mulai saat masuk
 
-
-
 # Help for the option that opens the shortcut list, or closes it when it is showing.
 ring-cli-shortcuts = Tampilkan daftar semua pintasan keyboard, atau sembunyikan daftarnya (Super dan K, kecuali Anda mengubahnya di Pengaturan)
 
@@ -248,7 +243,6 @@ ring-restarted = Dimulai ulang
 # Under the notice above.
 ring-restarted-why = Ring dan bagian pembantunya telah dimulai ulang.
 
-
 # Tip on the app menu's red button when removing the app did not work.
 ring-uninstall-failed = Tidak dapat mencopotnya.
 
@@ -257,3 +251,6 @@ ring-category-media-short = Suara
 
 # Line in the ring when a spoken command, such as turning the sound down, did not work.
 ring-voice-failed = Itu tidak berhasil.
+
+# Said under the ring when sleep, log out, restart or shut down is pressed while Trindle is being installed.
+ring-power-installing = Trindle sedang dipasang. Tunggu sampai selesai.

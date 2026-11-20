@@ -324,7 +324,7 @@ disks-mount = Montar
 disks-unmount = Desmontar
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = Hacer cambios
+disks-change-it = Cambiarlo
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = Nombre
@@ -504,7 +504,7 @@ disks-folder-appears = Aparece en { $dir }
 disks-startup-on = Se monta al arrancar en { $dir }
 
 # Words on a row when a part is set not to mount at start-up.
-disks-startup-off = No se monta al arrancar
+disks-startup-off = No se monta al inicio
 
 # Words on a row while a folder or start-up choice is being saved.
 disks-saving = Guardando

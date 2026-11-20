@@ -30,8 +30,8 @@ plugins-refused-not-signed = Trindle की प्लगइन सूची प�
 # Red line under Trindle's own plugins when the catalogue does not say which number it is.
 plugins-refused-no-number = Trindle की प्लगइन सूची में कोई संस्करण संख्या नहीं है, इसलिए Trindle ने उसे इस्तेमाल नहीं किया।
 
-# Red line under Trindle's own plugins when the catalogue is older than one accepted before. { $is } is its number; { $after } is the number accepted before.
-plugins-refused-older = Trindle ने इस प्लगइन सूची का इस्तेमाल नहीं किया, क्योंकि उसकी संस्करण संख्या { $is } पहले मानी गई संख्या { $after } से पुरानी है।
+# Red line under Trindle's own plugins when the catalogue is older than one accepted before.
+plugins-refused-older = Trindle ने इस प्लगइन सूची का इस्तेमाल नहीं किया, क्योंकि यह पहले इस्तेमाल की गई सूची से पुरानी है।
 
 # Red line under Trindle's own plugins when the catalogue is signed but cannot be read. { $why } says what is wrong with it.
 plugins-refused-unreadable = Trindle की प्लगइन सूची पर हस्ताक्षर हैं, पर उसे पढ़ा नहीं जा सकता, इसलिए Trindle ने उसे इस्तेमाल नहीं किया: { $why }

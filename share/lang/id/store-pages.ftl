@@ -549,7 +549,7 @@ store-src-added = { $what } ditambahkan dan dijaga tetap terbaru.
 store-src-no-program = { $what }. Sumber ditambahkan, tetapi programnya belum terpasang.
 
 # Under a maker's source whose program is installed another way.
-store-src-other-way = { $what } dipasang dengan cara lain.
+store-src-other-way = { $what }. Dipasang cara lain.
 
 # Tip of the round button that removes a maker's source and its program.
 # SAFETY: needs a human review before it ships

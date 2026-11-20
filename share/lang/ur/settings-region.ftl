@@ -11,7 +11,7 @@ settings-region-keywords = زبان علاقہ ملک فارمیٹ تاریخ ک
 settings-region-help = زبان اور فارمیٹ اگلی بار لاگ ان کرنے پر لاگو ہوتے ہیں۔
 
 # Said beside the Language and Formats lists once a choice is saved.
-settings-region-later = ہر جگہ دیکھنے کے لیے دوبارہ لاگ اِن کریں۔
+settings-region-later = اسے دیکھنے کے لیے دوبارہ لاگ اِن کریں۔
 
 # Shown while the page reads the computer.
 settings-region-looking = تلاش جاری ہے…

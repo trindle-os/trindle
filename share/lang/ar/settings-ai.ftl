@@ -189,3 +189,7 @@ settings-ai-keys = المفاتيح الممنوحة لبرامج الذكاء �
 # SAFETY: needs a human review before it ships
 # Help text of the keys card (the information button).
 settings-ai-keys-about = لا تحصل برامج الذكاء الاصطناعي أبدًا على المفاتيح والرموز الموجودة في جلستك. ولا تحصل إلا على المفتاح الذي تكتبه هنا.
+# Under the AI programs card, greyed, when none of the listed AI programs is on this computer.
+settings-ai-none-installed = لا توجد برامج ذكاء اصطناعي على هذا الحاسوب.
+# Under the box, when the program typed in to add is not on this computer.
+settings-ai-not-installed = هذا البرنامج غير موجود على هذا الحاسوب.

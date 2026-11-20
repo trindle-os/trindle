@@ -846,7 +846,7 @@ settings-help-topics-keys-step2-1 = Tek başına Super ya da Super ve Boşluk: h
 settings-help-topics-keys-step2-2 = Super ve Enter ya da Ctrl, Alt ve T: bir Terminal açar.
 
 # Help topic "Keyboard shortcuts": step 3 of the numbered steps at block 2.
-settings-help-topics-keys-step2-3 = Super ve I: Ayarlar'ı açar.
+settings-help-topics-keys-step2-3 = Super ve I: Ayarlar.
 
 # Help topic "Keyboard shortcuts": step 4 of the numbered steps at block 2.
 settings-help-topics-keys-step2-4 = Super ve L: kilitleme Ayarlar, Güç içinde açıldıktan sonra ekranı kilitler.

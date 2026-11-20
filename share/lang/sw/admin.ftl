@@ -373,8 +373,6 @@ admin-driver-virtual-camera = kamera pepe
 
 admin-language-in-use = { $code } ni lugha ambayo kompyuta hii huanzia nayo, kwa hiyo haiwezi kuondolewa.
 
-
-
 # The kernel or chip has no split-lock slowing to turn off.
 admin-split-lock-none = Kompyuta hii haina upunguzaji wa kasi wa split-lock wa kuzima.
 
@@ -400,13 +398,10 @@ admin-system-local-locked = Trindle haikuweza kuiweka /usr/local ikiweza kuandik
 admin-system-root-only = Ni root pekee anayeweza kuendesha hili, na si kupitia pkexec.
 
 # Switching the read-only system on where the system's disk is not Btrfs.
-admin-system-needs-btrfs = Hii inahitaji Btrfs.
-
+admin-system-needs-btrfs = Inahitaji Btrfs.
 
 # Red words in Settings when a restore swapped the systems but could not finish tidying up. { $why } is the reason.
 admin-restore-finish-later = Picha ya hali iko mahali pake, na kompyuta itaanza kutoka humo. Trindle haikuweza kumaliza kusafisha mfumo wa zamani. Itajaribu tena kompyuta itakapowashwa tena: { $why }
-
-
 
 # Red words in Settings when too many ports are open already. { $most } is a number.
 admin-ports-too-many = Unaweza kufungua milango isiyozidi { $most }.
@@ -451,3 +446,33 @@ admin-swap-resume-unread = Haikupata faili ya swap ilipo sasa, kwa hiyo kuamka k
 
 # Said when the swap file moved and the running system couldn't be told: hibernation is refused until the computer restarts.
 admin-swap-resume-restart = Hibernation itafanya kazi tena baada ya kuwasha upya.
+
+# Red words in Settings, Hardware, when Use the chip again is pressed while it is already running.
+admin-chip-busy = Chipu inawekwa tayari. Subiri ikamilike.
+
+# Red words in Settings, Hardware, when the disk password typed for Use the chip again is wrong.
+admin-chip-wrong-password = Hilo si nenosiri la diski.
+
+# Red words in Settings, Hardware, after several wrong disk passwords in a row.
+admin-chip-wait = Manenosiri mengi mabaya. Subiri dakika moja, kisha ujaribu tena.
+
+# Red words in Settings, Hardware, when the chip unlocked the disk at the last start after all.
+admin-chip-not-needed = Chipu ilifungua diski mara ya mwisho, kwa hiyo hakuna cha kufanya.
+
+# Red words in Settings, Hardware, when the disk is not the one the start-up screen noted.
+admin-chip-changed = Diski imebadilika. Anzisha upya, kisha ujaribu tena.
+
+# Red words in Settings, Hardware, when the computer's TPM security chip can't be found.
+admin-chip-none = Chipu ya usalama haipo. Iwashe kwenye BIOS, kisha ujaribu tena.
+
+# Red words in Settings, Hardware, when clevis, the tool that sets up the chip, is missing.
+admin-chip-no-clevis = Zana ya kuweka chipu, clevis, haijasakinishwa.
+
+# Red words in Settings, Hardware, when the disk has no room left for another key.
+admin-chip-no-slot = Diski haina nafasi ya ufunguo mwingine.
+
+# Red words in Settings, Hardware, when the chip couldn't be set up. The disk still opens with its password.
+admin-chip-not-sealed = Chipu haikuweza kuwekwa. Diski bado inafunguka kwa nenosiri.
+
+# Red words in Settings, Hardware, when the chip works again but its old key couldn't be removed.
+admin-chip-old-kept = Chipu inafanya kazi, lakini ufunguo wake wa zamani haukuondolewa.

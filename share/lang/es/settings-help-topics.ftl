@@ -855,7 +855,7 @@ settings-help-topics-keys-step2-1 = Super sola, o Super y Espacio: abrir o cerra
 settings-help-topics-keys-step2-2 = Super e Intro, o Ctrl, Alt y T: abrir una Terminal.
 
 # Help topic "Keyboard shortcuts": step 3 of the numbered steps at block 2.
-settings-help-topics-keys-step2-3 = Super e I: abrir Ajustes.
+settings-help-topics-keys-step2-3 = Super e I: Ajustes.
 
 # Help topic "Keyboard shortcuts": step 4 of the numbered steps at block 2.
 settings-help-topics-keys-step2-4 = Super y L: bloquear la pantalla, una vez activado el bloqueo en Ajustes, Energía.

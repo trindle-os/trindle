@@ -7,9 +7,9 @@ report-title-note = الإبلاغ عن مشكلة
 # Window title when Trindle's ring opens it after one of Trindle's programs crashed.
 report-title-crash = حدث خطأ. هل تريد إرسال تقرير؟
 
-# SAFETY: needs a human review before it ships
 # Under the title: what a report holds, and what it never holds.
-report-summary = يرسل هذا الخطأ وملخصًا عن حاسوبك وآخر أسطر السجل. تُحذف الأسماء وعناوين البريد الإلكتروني وعناوين الشبكة وأسماء شبكات Wi-Fi. قد تبقى أسماء الملفات وعناوين الويب في أسطر السجل. لا يرسل ملفاتك ولا كلمات مرورك.
+# SAFETY: needs a human review before it ships
+report-summary = يرسل هذا كلماتك وتفاصيل حاسوبك وأخطاء هذا التشغيل وسجل Trindle. تُحذف الأسماء والعناوين (البريد الإلكتروني والشبكة وWi-Fi) مما يجمعه Trindle. وقد تبقى أسماء الملفات وعناوين الويب في أسطر السجل. لا يرسل ملفاتك ولا كلمات مرورك.
 
 # Big typing box in the middle of the window, shown quietly while empty.
 report-what-doing = ماذا حدث؟
@@ -58,12 +58,6 @@ report-checking = جارٍ التحقق.
 
 # Why a report is waiting: Buildmorphic had too many reports at once and the report is tried again later.
 report-too-many = تقارير كثيرة في وقت واحد.
-
-# Written beside the Send button once the report has been sent.
-report-already-sent = أُرسل من قبل.
-
-# Written under the typing box when Save is pressed a second time.
-report-already-saved = حُفظ من قبل.
 
 # Written beside the buttons while a report that could not be sent waits for the computer to be online.
 report-waiting = بانتظار الاتصال.
@@ -167,10 +161,7 @@ report-picture-damaged = الصورة تالفة.
 
 report-picture-unreadable = تعذّرت قراءتها.
 
-
-
 report-sent-as-bug = أُرسل. رقم تقرير الخلل الخاص بك هو { $number }. شكرًا لك.
-
 
 # Under the title, beta only: why a report matters and what it holds.
 report-beta = Trindle في مرحلة تجريبية. التقارير مجهولة الهوية: تُحذف الأسماء وعناوين البريد الإلكتروني والمجلدات الرئيسية. اسم المستخدم اختياري.

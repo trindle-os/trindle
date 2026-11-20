@@ -78,3 +78,47 @@ fn every_change_to_a_window_reaches_the_panel() {
         assert_eq!(told(&mut rig).len(), 1, "a closed window stayed listed");
     });
 }
+
+#[test]
+fn a_window_that_goes_any_way_leaves_the_list() {
+    alone("rig::tests::panel_told::a_window_that_goes_any_way_leaves_the_list", |dir| {
+        let mut rig = Rig::new(dir);
+        let first = rig.join(ClientState::default());
+        let other = rig.join(ClientState::default());
+        let told = |rig: &mut Rig| {
+            rig.pump();
+            rig.state.refresh_panel();
+            rig.state.panel_told.len()
+        };
+        let behind = rig.window(other, false);
+        let surface = rig.window(first, false);
+        assert_eq!(told(&mut rig), 2);
+        assert!(rig.has_keyboard(first));
+
+        surface.attach(None, 0, 0);
+        surface.commit();
+        assert_eq!(told(&mut rig), 1, "a hidden window stayed listed");
+        assert_eq!(rig.state.toplevel_list.len(), 1, "a hidden window kept its handle");
+        assert!(rig.has_keyboard(other), "a hidden window kept the keyboard");
+        rig.show(first, &surface, 300, 200);
+        assert_eq!(told(&mut rig), 2, "a window shown again was not listed");
+
+        let server = rig.server_side(first, &surface);
+        rig.state.set_window_minimized(&server, true);
+        surface.attach(None, 0, 0);
+        surface.commit();
+        assert_eq!(told(&mut rig), 1, "a window hidden while minimised stayed listed");
+        rig.show(first, &surface, 300, 200);
+        assert_eq!(told(&mut rig), 2);
+
+        let (p, qh) = rig.program(first);
+        let blank = p.compositor.as_ref().expect("the compositor's global").create_surface(&qh, ());
+        p.wm.as_ref().expect("the windows' global").get_xdg_surface(&blank, &qh, ()).get_toplevel(&qh, ());
+        blank.commit();
+        assert_eq!(told(&mut rig), 2, "a window with nothing drawn was listed");
+
+        rig.hang_up(other);
+        drop(behind);
+        assert_eq!(told(&mut rig), 1, "a program that ended left its window listed");
+    });
+}

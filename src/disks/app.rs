@@ -123,7 +123,7 @@ impl App for Drives {
 
     fn intercept(&self, input: &Input, _keys: bool) -> Option<Msg> {
         match input {
-            Input::Key { sym: Keysym::Escape, .. } if self.help => Some(Msg::Help),
+            Input::Key { sym: Keysym::Escape, .. } | Input::Focus(false) if self.help => Some(Msg::Help),
             Input::Key { sym: Keysym::Escape, .. } => self.open.clone().map(Msg::Toggle),
             _ => None,
         }

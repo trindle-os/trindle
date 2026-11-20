@@ -230,7 +230,7 @@ mod tests {
     fn made_up(mime: &Path) -> Lists {
         let dir = mime.parent().unwrap().file_name().unwrap().to_string_lossy().into_owned();
         if dir.contains("slow") {
-            std::thread::sleep(std::time::Duration::from_secs(3));
+            std::thread::sleep(std::time::Duration::from_secs(60));
         }
         [format!("50:application/x-{dir}:*.{dir}\n"), String::new(), String::new()]
     }
@@ -251,7 +251,7 @@ mod tests {
 
         let began = std::time::Instant::now();
         let some = Mime::load_from(vec!["/far/slow".into(), "/here/own".into()], own, made_up, std::time::Duration::from_millis(60));
-        assert!(began.elapsed() < std::time::Duration::from_secs(2), "the start waited on a folder that had stopped answering");
+        assert!(began.elapsed() < std::time::Duration::from_secs(20), "the start waited on a folder that had stopped answering");
         assert_eq!(some.of("a.own").as_deref(), Some("application/x-own"));
         assert_eq!(some.of("a.slow"), None);
 

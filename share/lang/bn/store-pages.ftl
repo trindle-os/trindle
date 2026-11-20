@@ -570,7 +570,7 @@ store-src-added = { $what } যোগ করা হয়েছে এবং হ
 store-src-no-program = { $what }। উৎস যোগ করা হয়েছে, কিন্তু প্রোগ্রাম ইনস্টল করা নেই।
 
 # Under a maker's source whose program is installed another way.
-store-src-other-way = { $what } অন্যভাবে ইনস্টল করা হয়েছিল।
+store-src-other-way = { $what }। অন্যভাবে ইনস্টল করা।
 
 # Tip of the round button that removes a maker's source and its program.
 # SAFETY: needs a human review before it ships

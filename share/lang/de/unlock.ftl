@@ -26,3 +26,15 @@ unlock-turn-off = Ausschalten
 # Red line inside the card when Enter is pressed with nothing typed.
 # SAFETY: needs a human review before it ships
 unlock-type-first = Gib das Passwort ein und drücke dann die Eingabetaste
+
+# Line under the box when the disk is set up to be opened by the computer's TPM security chip and the chip did not open it this start (a firmware update, a BIOS reset or a changed Secure Boot setting can cause it).
+unlock-chip-refused = Der Sicherheitschip hat nicht entsperrt. Ein BIOS-Update kann es sein.
+
+# Second line under unlock-chip-refused: how to have the chip unlock the disk again. "Settings", "Hardware" and "Use the chip again" must match the names in Settings.
+unlock-chip-refused-fix = Zum Einschalten: Einstellungen, Hardware, Chip wieder verwenden.
+
+# Line under the box when the disk is set up to be opened by the computer's TPM security chip and no chip could be found this start.
+unlock-chip-missing = Sicherheitschip nicht gefunden. Vielleicht ist er im BIOS aus.
+
+# Second line under unlock-chip-missing: how to have the chip unlock the disk again.
+unlock-chip-missing-fix = Schalte ihn im BIOS wieder ein, um ohne Passwort zu starten.

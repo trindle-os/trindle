@@ -324,7 +324,7 @@ disks-mount = Unganisha
 disks-unmount = Tenganisha
 
 # Tip of the round button on a part that opens the box of changes.
-disks-change-it = Fanya mabadiliko
+disks-change-it = Ibadilishe
 
 # Placeholder of the typing boxes for a part's name, and label of its row.
 disks-name = Jina
@@ -503,7 +503,7 @@ disks-folder-appears = Inaonekana katika { $dir }
 disks-startup-on = Huunganishwa wakati wa kuwasha katika { $dir }
 
 # Words on a row when a part is set not to mount at start-up.
-disks-startup-off = Haiunganishwi wakati wa kuwasha
+disks-startup-off = Haiunganishwi unapowasha
 
 # Words on a row while a folder or start-up choice is being saved.
 disks-saving = Inahifadhi

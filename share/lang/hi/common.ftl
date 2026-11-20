@@ -235,11 +235,11 @@ common-x11-would-not-start = Xwayland शुरू नहीं हुआ
 # Second line of that notice, when the desktop will try the older-programs display again soon.
 common-x11-try-again = एक मिनट में फिर कोशिश करें
 
-# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each dot with what it means.
-common-in-use-key = बिंदुओं का मतलब
+# Head of the card in Settings, Permissions, and of the page in Welcome, that shows each mark with what it means.
+common-in-use-key = निशानों का मतलब
 
-# Under the dots in that key: where a dot shows up.
-common-in-use-where = बिंदु स्क्रीन के ऊपर बीच में और विंडो के टैब पर दिखाई देते हैं।
+# Under the marks in that key: where a mark shows up. On the screen it is a half circle hung from the top edge; on a window tab it is a small dot.
+common-in-use-where = आधे गोले स्क्रीन के ऊपर बीच से लटकते हैं। विंडो के टैब पर छोटे बिंदु दिखते हैं।
 
 # Screen reader name of the microphone dot and its row, and the line shown on pointing at the dots, when no program is named.
 common-in-use-microphone = माइक्रोफ़ोन उपयोग में है
@@ -260,7 +260,7 @@ common-in-use-screen = स्क्रीन रिकॉर्ड हो रह
 common-in-use-screen-by = स्क्रीन { $who } द्वारा रिकॉर्ड की जा रही है
 
 # Screen reader name of the input dot and its row, and the line shown on pointing at the dots, when no program is named: the mouse and keyboard are in another program's hands.
-common-in-use-input = माउस और कीबोर्ड किसी और के हाथ में हैं
+common-in-use-input = माउस और कीबोर्ड व्यस्त
 
 # Line on pointing at the dots, and its screen reader name, when programs have taken the mouse and keyboard. { $who } is the programs' names.
 common-in-use-input-by = { $who } आपका कीबोर्ड और माउस इस्तेमाल कर रहा है
@@ -272,10 +272,10 @@ common-in-use-files = आपकी कॉपी की गई फ़ाइले
 common-in-use-files-by = { $who } आपकी कॉपी की गई फ़ाइलें पढ़ रहा है
 
 # The ring's who-is-using-what row while a plugin reaches devices on the local network.
-common-in-use-home-network = स्थानीय नेटवर्क उपयोग में है
+common-in-use-home-network = स्थानीय नेटवर्क उपयोग में
 
 # The same with the plugin's name.
-common-in-use-home-network-by = स्थानीय नेटवर्क { $who } द्वारा उपयोग में है
+common-in-use-home-network-by = स्थानीय नेटवर्क { $who } के उपयोग में
 
 # The ring's who-is-using-what row while a plugin uses scanners and USB devices.
 common-in-use-usb = स्कैनर और USB डिवाइस उपयोग में हैं
@@ -341,6 +341,9 @@ common-no-driver-class-bluetooth = Bluetooth
 common-no-driver-class-sound = ध्वनि
 
 common-no-driver-class-graphics = ग्राफ़िक्स
+
+# Said of a device with no driver that nothing is known about. The name is its name, or its two hex numbers.
+common-no-driver-device-none = { $name } का कोई ड्राइवर नहीं है।
 
 # The small round button beside a failure message that opens Help at the page
 # about it. Its tip, and the name a screen reader says.

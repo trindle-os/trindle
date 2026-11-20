@@ -108,3 +108,7 @@ settings-ai-add-key = Add a key
 settings-ai-keys = Keys given to AI programs
 # Help text of the keys card (the information button).
 settings-ai-keys-about = AI programs never get the keys and tokens in your session. They only get a key that you type here.
+# Under the AI programs card, greyed, when none of the listed AI programs is on this computer.
+settings-ai-none-installed = No AI programs on this computer.
+# Under the box, when the program typed in to add is not on this computer.
+settings-ai-not-installed = That program isn't on this computer.

@@ -252,6 +252,7 @@ const NOT_PEOPLE_FILES: &[(&str, &str)] = &[
     ("ring/mod.rs", "the usage line of a command"),
     ("report/probe.rs", "the body of a bug report, English for the people who read it"),
     ("report/which.rs", "the body of a bug report, English for the people who read it"),
+    ("report/system.rs", "the body of a bug report, English for the people who read it"),
     ("plugins/catalogue/publisher.rs", "output of the catalogue maker's tool, for the person publishing"),
     ("plugins/shortcuts.rs", "section names and XML written into files"),
     ("plugins/menu.rs", "section names written into files"),

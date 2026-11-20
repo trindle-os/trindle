@@ -28,9 +28,9 @@ settings-network-access-open = open with your password
 # Small line of a shared folder: who may open and change it with a password.
 settings-network-access-change = open and change with your password
 # Small line of a shared folder: anyone on the local network may open it.
-settings-network-access-guests-open = anyone on the local network can open
+settings-network-access-guests-open = anyone nearby can open
 # Small line of a shared folder: anyone on the local network may change it.
-settings-network-access-guests-change = anyone on the local network can change
+settings-network-access-guests-change = anyone nearby can change
 # Small line of a shared folder: where it is, then who may do what with it; both are already written.
 settings-network-shared-sub = { $place }: { $access }
 # Tip of the round button that stops sharing a folder; the folder's name follows.

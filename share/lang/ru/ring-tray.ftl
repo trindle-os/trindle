@@ -158,3 +158,5 @@ ring-tray-full = В кольце уже четыре значка. Сначал�
 
 # Name of the updates button when nothing is known to wait and Settings has looking for updates by itself switched off.
 ring-updates-off = Проверка выключена
+# Name of the updates button when a restart to finish installing was put off with Remind me later and the time has come.
+ring-updates-restart = Перезагрузите, чтобы завершить установку

@@ -72,13 +72,15 @@ installer-arm = Kurmak için yeniden tıklayın
 installer-arm-erase = Silip kurmak için yeniden tıklayın
 
 # Note beside Next on the first page while no language is chosen.
-installer-missing-language = Bir dil seçin
+installer-missing-language = Dil seçin
+# Note beside Next on the first page while Trindle's language is not chosen.
+installer-missing-trindle-language = Trindle'ın dilini seçin
 
 # Note beside Next on the first page while no keyboard is chosen.
 installer-missing-keyboard = Bir klavye seçin
 
 # Note beside Next on the first page while no time zone is chosen.
-installer-missing-time = Bir saat dilimi seçin
+installer-missing-time = Saat dilimi seçin
 
 # Note beside Next on the disk page while no disk is chosen.
 # SAFETY: needs a human review before it ships
@@ -105,10 +107,12 @@ installer-missing-password = Parolanızı iki kez yazın. İkisi de aynı olmal�
 installer-welcome-title = { $name } uygulamasına hoş geldiniz
 
 # Sentence under the title of the first page.
-installer-welcome-help = Dilinizi seçin; Trindle klavyeyi ve saat dilimini ona göre ayarlar, ikisini de değiştirebilirsiniz.
+installer-welcome-help = Dilinizi seçin; Trindle gerisini ona göre ayarlar.
 
-# Head of the card for choosing the language, and the name of its search box.
+# Head of the card for choosing the computer's language (dates, spelling, other programs), and the name of its search box.
 installer-language = Dil
+# Label beside the box at the right of the first page's sentence, for choosing the language of Trindle's own words (only those Trindle has).
+installer-trindle-language = Trindle'ın dili
 
 # Head of the card for choosing the keyboard, and the name of its search box.
 installer-keyboard = Klavye
@@ -396,8 +400,8 @@ installer-privacy-chip-none = Bu bilgisayarda şifrelenmiş bir diskin kilidini 
 # In the card about the chip when the disk is not being encrypted, on a computer with no chip Trindle can use.
 installer-privacy-no-chip-none = Bu bilgisayarda Trindle'ın kullanabileceği bir TPM yongası yok.
 
-# Words of the language row: the keyboard and time zone chosen.
-installer-ready-language = { $keyboard } klavye, { $zone } saati.
+# Words of the language row: Trindle's language (its own name), the keyboard and the time zone chosen.
+installer-ready-language = Trindle { $trindle } dilinde, { $keyboard } klavye, { $zone } saati.
 
 # Title of the page shown while the install runs.
 installer-installing-title = { $name } kuruluyor
@@ -541,7 +545,7 @@ installer-live-speak = Sesinizi kullanın
 installer-live-speak-line = Halkanın ortasına dokunun ve ne istediğinizi söyleyin.
 
 # Line under it when voice control has to be added.
-installer-live-speak-add = Ayarlar'da Halka bölümünden Sesli denetimi ekle düğmesine basın. Sonra ortaya dokunup konuşun.
+installer-live-speak-add = Trindle kurulduktan sonra Ayarlar'da Halka bölümünden sesli denetimi ekleyin.
 
 # Name of the third thing to do.
 installer-live-tab = Hepsi halkada
@@ -597,7 +601,7 @@ installer-step-settings = Ayarlar yazılıyor
 installer-step-account = Hesabınız oluşturuluyor
 
 # Foot of the install page while the stick's own parts are taken out.
-installer-step-live-parts = USB belleğin ek parçaları kaldırılıyor
+installer-step-live-parts = Canlı ek parçalar kaldırılıyor
 
 # Foot of the install page while the start-up files are made.
 installer-step-startup = Açılış dosyaları oluşturuluyor
@@ -685,6 +689,9 @@ installer-copy-failed = Sistem kopyalanamadı. { $why }
 # Red line at the foot: there is not enough room for a swap file.
 installer-swap-no-room = Takas dosyası için yer yok.
 
+# Under the swap file switch when the chosen disk or space is too small for one; the switch is then off and cannot be turned on.
+installer-swap-too-small = Bu alan takas dosyası için çok küçük.
+
 # Red line at the foot: the swap file's place on the disk cannot be read.
 installer-swap-unreadable = Takas dosyasının diskteki yeri okunamadı.
 
@@ -708,8 +715,8 @@ installer-tour-ring-foot = Nelerin açık olduğunu görün, panoyu kullanın ve
 # Red line at the foot: the chosen disk is the stick Trindle started from.
 installer-disk-is-stick = { $dev }, Trindle'ın çalıştığı bellektir.
 
-# Red line at the foot: something on the chosen disk is mounted or swapped to.
-installer-disk-in-use = { $dev } kullanımda. Onu kullanan her şeyi kapatın, sonra yeniden deneyin.
+# Red words under the disk, back on the disk page: something on the chosen disk is mounted, swapped to or open.
+installer-disk-in-use = { $dev } kullanımda. Onu kullanan her şeyi kapatın, sonra yeniden seçin.
 
 # Said beside how far the install has got, once it has started.
 installer-started = Kuruluyor
@@ -755,8 +762,8 @@ installer-done-problems = Her şey ayarlanamadı
 # Red line under the disk password boxes: the computer gave no random numbers, so no passphrase could be made.
 installer-suggest-failed = Trindle bir parola oluşturamadı. Kendi parolanızı yazın.
 
-# Red line at the foot: the disk was swapped for another after the list was read.
-installer-disk-changed = { $dev }, gösterilen disk değil. Geri dönüp diski yeniden seçin.
+# Red words on the disk page: the disk was swapped for another after the list was read.
+installer-disk-changed = { $dev }, gösterilen disk değil. Diski yeniden seçin.
 
 # Red line at the foot: a disk with an old-style partition table cannot be shared with.
 installer-no-gpt = { $dev } GPT bölüm tablosu kullanmıyor, bu yüzden Trindle, üzerindeki mevcut verilerle birlikte kurulamaz.
@@ -778,3 +785,39 @@ installer-disk-named = { $what }, { $dev }
 
 # Red line at the foot: a program the installer runs stopped before it had all it was given.
 installer-run-stopped = { $program }, gereken her şey hazır olmadan durdu: { $why }
+
+# Red words on the last page: the TPM chip could not be set up to open the disk, so the disk password is asked for at every start.
+installer-chip-not-set-up = TPM yongası kurulamadı, bu yüzden bilgisayar her açıldığında disk parolası istenecek.
+
+# Red words on the last page: the keyboard for the disk password screen could not be set, so it may be the American one.
+installer-start-keyboard-failed = Trindle kuruldu, ancak disk parolası ekranı Amerikan klavyesi kullanıyor olabilir.
+
+# Red words on the last page: the login screen could not be switched on; { $why } is the reason.
+installer-login-screen-failed = Trindle kuruldu, ancak giriş ekranı açılamadı: { $why }
+
+# Red words on the last page: Trindle could not be set to take its own updates; { $why } is the reason.
+installer-updates-held = Trindle kuruldu, ancak kendi güncellemelerini henüz almayacak: { $why }
+
+# Red words on the last page: earlier versions of people's files (home snapshots) could not be switched on.
+installer-home-snapshots-failed = Trindle kuruldu, ancak dosyalarınızın önceki sürümleri kapalı. Bunları Ayarlar, Anlık görüntüler bölümünden açabilirsiniz.
+
+# Red words on the last page: Trindle could not be added to the computer's own start-up list; { $why } is the reason.
+installer-firmware-entry-failed = Trindle kuruldu, ancak kendini bilgisayarın açılış listesine ekleyemedi: { $why }
+
+# Red line: the account the stick ran as could not be removed from the new system, so the install stopped.
+installer-live-account-left = Bellek çubuğunun { $user } hesabı yeni sistemden kaldırılamadı.
+
+# Under the swap file's switch when a size smaller than memory is chosen.
+installer-swap-no-hibernate = Bu bilgisayarın belleğinden küçük, bu yüzden hazırda bekletilemez.
+
+# In the swap size list: the size of the computer's memory, which hibernating needs.
+installer-swap-size-hibernate = { $gb } GB, hazırda bekletmek için yeterli
+
+# In the swap size list: a smaller size.
+installer-swap-size = { $gb } GB
+
+# Tip of the swap size list.
+installer-swap-size-tip = Takas dosyasının boyutu
+
+# Why logind holds off sleep and shutting down while the installer changes the disk (shown by systemd-inhibit --list).
+installer-power-held = Trindle kuruluyor

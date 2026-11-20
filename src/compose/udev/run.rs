@@ -315,6 +315,7 @@ fn watch_cards(handle: &LoopHandle<'static, Compose<UdevData>>, udev_backend: Ud
 fn start_services(state: &mut Compose<UdevData>, event_loop: &Loop) {
     state.watch_settings();
     state.watch_in_use();
+    state.watch_game_power();
     super::woken::watch(&event_loop.handle());
     if crate::session::launch().greeter {
         state.session_ready();

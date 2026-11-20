@@ -125,6 +125,16 @@ store-upd-install-n =
 # SAFETY: needs a human review before it ships
 # Main button that restarts the computer.
 store-upd-restart-now = Şimdi yeniden başlat
+# Beside Restart now: the box that puts the restart off, then the ring's Updates button reminds. Its answers are the choices below.
+store-upd-remind-later = Daha sonra hatırlat
+# Red words under the headline when the Remind me later time could not be saved; the reason follows.
+store-upd-remind-not-saved = Hatırlatma kaydedilemedi: { $why }.
+# One answer in the Remind me later box.
+store-upd-remind-hours =
+    { $n ->
+        [one] 1 saat sonra
+       *[other] { $n } saat sonra
+    }
 
 # Main button that checks for updates.
 store-upd-check-for = Güncellemeleri denetle
@@ -224,23 +234,11 @@ store-upd-debian-count =
        *[other] { $n } güncelleme, birlikte kurulur
     }
 
-# On a row of Debian's updates: where it comes from.
-store-upd-from-debian = Kaynak: Debian
-
 # Under Debian's rows: how many of them show.
 store-upd-debian-showing = { $total } Debian güncellemesinden { $shown } tanesi gösteriliyor.
 
 # Note on the Trindle and Debian card: which version of Trindle the computer has.
 store-upd-has-trindle = Bu bilgisayarda Trindle { $version } var.
-
-# Heading of the Trindle and Debian card.
-store-upd-card-system = Trindle ve Debian
-
-# Note on the Trindle and Debian card: why Debian's packages have one button.
-store-upd-debian-why = Debian paketleri birlikte çalışacak şekilde hazırlanır. Yalnızca birini kurmak başkalarını da kurabilir ya da onları uyumsuz bırakabilir, bu yüzden hepsi birlikte kurulur.
-
-# Note on the Trindle and Debian card: why no row has a Hold back button.
-store-upd-not-held = Trindle'ın ve Debian'ın güncellemeleri tüm bilgisayar için güvenlik düzeltmeleri getirir, bu yüzden bekletilemez.
 
 # Heading of the card about the daily security updates.
 store-upd-card-security = Güvenlik güncellemeleri
@@ -305,7 +303,6 @@ store-patch-not-fetched = Trindle { $package } { $version } paketini indiremedi.
 # Said when a security fix for a boxed app was downloaded but isn't there to use.
 store-patch-not-found = Trindle indirdiği paketi bulamadı.
 
-
 # Headline of Updates with looking for updates by itself switched off in Settings and no check pressed yet.
 store-upd-off = Otomatik güncelleme denetimi kapalı.
 
@@ -326,3 +323,4 @@ store-upd-stopped-all = Durduruldu. Devam etmek için yeniden Kur'a basın.
 
 # Note under the Apps card.
 store-upd-steam-restarts = Steam, çalışan oyun kalmayınca yeniden başlar.
+

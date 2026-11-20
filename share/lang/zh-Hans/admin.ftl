@@ -382,7 +382,6 @@ admin-driver-virtual-camera = 虚拟摄像头
 
 admin-language-in-use = { $code } 是这台电脑启动时使用的语言，所以无法移除。
 
-
 # The kernel or chip has no split-lock slowing to turn off.
 admin-split-lock-none = 这台电脑没有可以关闭的拆分锁减速。
 
@@ -408,12 +407,10 @@ admin-system-local-locked = Trindle 无法保持 /usr/local 可写：{ $why }
 admin-system-root-only = 只有 root 才能运行，且不能通过 pkexec 运行。
 
 # Switching the read-only system on where the system's disk is not Btrfs.
-admin-system-needs-btrfs = 这需要 Btrfs。
-
+admin-system-needs-btrfs = 需要 Btrfs。
 
 # Red words in Settings when a restore swapped the systems but could not finish tidying up. { $why } is the reason.
 admin-restore-finish-later = 快照已就位，电脑将从它启动。Trindle 无法完成对旧系统的清理，会在电脑下次启动时再试一次：{ $why }
-
 
 # Red words in Settings when too many ports are open already. { $most } is a number.
 admin-ports-too-many = 你最多可以开放 { $most } 个端口。
@@ -459,3 +456,33 @@ admin-swap-resume-unread = 找不到交换文件现在的位置，从休眠中�
 
 # Said when the swap file moved and the running system couldn't be told: hibernation is refused until the computer restarts.
 admin-swap-resume-restart = 重启后，休眠就能再用了。
+
+# Red words in Settings, Hardware, when Use the chip again is pressed while it is already running.
+admin-chip-busy = 芯片正在设置中。请等它完成。
+
+# Red words in Settings, Hardware, when the disk password typed for Use the chip again is wrong.
+admin-chip-wrong-password = 这不是磁盘密码。
+
+# Red words in Settings, Hardware, after several wrong disk passwords in a row.
+admin-chip-wait = 输错的密码太多。请等一分钟再试。
+
+# Red words in Settings, Hardware, when the chip unlocked the disk at the last start after all.
+admin-chip-not-needed = 上次启动时芯片已解锁磁盘，无需操作。
+
+# Red words in Settings, Hardware, when the disk is not the one the start-up screen noted.
+admin-chip-changed = 开机后磁盘已变化。请重启后再试。
+
+# Red words in Settings, Hardware, when the computer's TPM security chip can't be found.
+admin-chip-none = 没有找到安全芯片。请在 BIOS 中打开它，再试一次。
+
+# Red words in Settings, Hardware, when clevis, the tool that sets up the chip, is missing.
+admin-chip-no-clevis = 设置芯片的工具 clevis 没有安装。
+
+# Red words in Settings, Hardware, when the disk has no room left for another key.
+admin-chip-no-slot = 磁盘没有空位再存放密钥。
+
+# Red words in Settings, Hardware, when the chip couldn't be set up. The disk still opens with its password.
+admin-chip-not-sealed = 无法设置芯片。磁盘仍可用密码打开。
+
+# Red words in Settings, Hardware, when the chip works again but its old key couldn't be removed.
+admin-chip-old-kept = 芯片已可再次使用，但无法删除它的旧密钥。

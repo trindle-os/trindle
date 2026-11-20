@@ -36,9 +36,9 @@ plugins-refused-not-signed = Trindle 的插件目录不是用 Trindle 的密钥�
 # Red line under Trindle's own plugins when the catalogue does not say which number it is.
 plugins-refused-no-number = Trindle 的插件目录没有版本号，所以 Trindle 没有使用它。
 
+# Red line under Trindle's own plugins when the catalogue is older than one accepted before.
 # SAFETY: needs a human review before it ships
-# Red line under Trindle's own plugins when the catalogue is older than one accepted before. { $is } is its number; { $after } is the number accepted before.
-plugins-refused-older = Trindle 没有使用这份插件目录，因为它的版本号 { $is } 比之前接受的版本号 { $after } 更旧。
+plugins-refused-older = Trindle 没有使用这份插件目录，因为它比之前用过的目录更旧。
 
 # SAFETY: needs a human review before it ships
 # Red line under Trindle's own plugins when the catalogue is signed but cannot be read. { $why } says what is wrong with it.

@@ -82,6 +82,21 @@ pub fn tile(icon: &str, name: &str, end: Vec<Node<Msg>>, body: Vec<Node<Msg>>, (
     card(column(all).gap(CARD_GAP)).height(Length::Fill).beside().span(least, most, theme::bento().words)
 }
 
+pub fn tile_far(icon: &str, name: &str, far: Vec<Node<Msg>>, body: Vec<Node<Msg>>, (least, most): (u8, u8)) -> Node<Msg> {
+    let mut all = vec![far_row(icon, name, far)];
+    all.extend(body);
+    card(column(all).gap(CARD_GAP)).height(Length::Fill).beside().span(least, most, theme::bento().words)
+}
+
+fn far_row(icon: &str, name: &str, far: Vec<Node<Msg>>) -> Node<Msg> {
+    if far.is_empty() {
+        return head(icon, name, Vec::new());
+    }
+    let mut top = vec![head(icon, name, Vec::new()).width(Length::Fill)];
+    top.extend(far);
+    row(top).gap(theme::sheet().gap).centred()
+}
+
 pub fn rows_tile(icon: &str, name: &str, end: Vec<Node<Msg>>, body: Vec<Node<Msg>>, (least, most): (u8, u8)) -> Node<Msg> {
     let mut all = vec![head(icon, name, end)];
     all.extend(body);
@@ -93,14 +108,7 @@ pub fn list_card(icon: &str, name: &str, body: Vec<Node<Msg>>) -> Node<Msg> {
 }
 
 pub fn list_card_with(icon: &str, name: &str, far: Vec<Node<Msg>>, body: Vec<Node<Msg>>) -> Node<Msg> {
-    let top = if far.is_empty() {
-        head(icon, name, Vec::new())
-    } else {
-        let mut top = vec![head(icon, name, Vec::new()).width(Length::Fill)];
-        top.extend(far);
-        row(top).gap(theme::sheet().gap).centred()
-    };
-    let mut all = vec![top];
+    let mut all = vec![far_row(icon, name, far)];
     all.extend(body);
     card(column(all).gap(CARD_GAP))
 }

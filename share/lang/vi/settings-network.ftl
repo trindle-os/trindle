@@ -41,11 +41,11 @@ settings-network-access-change = mở và sửa bằng mật khẩu của bạn
 
 # Small line of a shared folder: anyone on the local network may open it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-open = ai trong mạng cục bộ cũng có thể mở
+settings-network-access-guests-open = ai ở gần cũng có thể mở
 
 # Small line of a shared folder: anyone on the local network may change it.
 # SAFETY: needs a human review before it ships
-settings-network-access-guests-change = ai trong mạng cục bộ cũng có thể sửa
+settings-network-access-guests-change = ai ở gần cũng có thể sửa
 
 # Small line of a shared folder: where it is, then who may do what with it; both are already written.
 settings-network-shared-sub = { $place }: { $access }
